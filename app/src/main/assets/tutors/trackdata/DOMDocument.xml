@@ -1,0 +1,46 @@
+<DOMDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" currentTimeline="1" xflVersion="2.1" creatorInfo="Adobe Flash Professional CS5.5" platform="Windows" versionInfo="Saved by Adobe Flash Windows 11.5 build 349" majorVersion="11" minorVersion="5" buildNumber="349" objectsSnapTo="false" nextSceneIdentifier="2" playOptionsPlayLoop="false" playOptionsPlayPages="false" playOptionsPlayFrameActions="false">
+     <folders>
+          <DOMFolderItem name="audio" itemID="569d53a4-000001de" isExpanded="true"/>
+          <DOMFolderItem name="audio/en" itemID="56a797c5-000001e0" isExpanded="true"/>
+          <DOMFolderItem name="audio/sw" itemID="56ae7b18-000001f6"/>
+          <DOMFolderItem name="session_manager" itemID="56a68f58-000001db" isExpanded="true"/>
+          <DOMFolderItem name="Templates" itemID="56ae7afb-000001f1" isExpanded="true"/>
+     </folders>
+     <media>
+          <DOMSoundItem name="audio/en/before and after something.mp3" itemID="56a7c7f4-000001ef" sourceExternalFilepath="../trackdata/LIBRARY/audio/en/before and after something.mp3" sourceLastImported="1453823972" externalFileCRC32="3225968108" externalFileSize="16392" href="audio/en/before and after something.mp3" soundDataHRef="M 1 1453149255.dat" format="11kHz 16bit Mono" sampleCount="27378"/>
+          <DOMSoundItem name="audio/en/great.mp3" itemID="56b67dff-000001e4" sourceExternalFilepath="../trackdata/LIBRARY/audio/en/great.mp3" sourceLastImported="1453823972" href="audio/en/great.mp3" soundDataHRef="M 3 1454800354.dat" format="11kHz 16bit Mono" sampleCount="16662"/>
+     </media>
+     <symbols>
+          <Include href="session_manager/WT_SIMPLE_ABS.xml" loadImmediate="false" itemID="56a7d395-000001f7" lastModified="1454800397"/>
+          <Include href="session_manager/WT_SIMPLE_ABSB.xml" loadImmediate="false" itemID="56a7d38a-000001f5" lastModified="1453839248"/>
+          <Include href="session_manager/WT_SIMPLE_SEQ.xml" loadImmediate="false" itemID="56a2473a-000001df" lastModified="1453586427"/>
+          <Include href="Templates/ABS_TEMPLATE.xml" loadImmediate="false" itemID="56ae7ae1-000001ed" lastModified="1454800415"/>
+          <Include href="Templates/REL_TEMPLATE.xml" loadImmediate="false" itemID="56ae7b55-000001fc" lastModified="1454800447"/>
+     </symbols>
+     <timelines>
+          <DOMTimeline name="Scene 1">
+               <layers>
+                    <DOMLayer name="Layer 1" color="#4FFF4F" current="true" isSelected="true">
+                         <frames>
+                              <DOMFrame index="0" keyMode="9728">
+                                   <elements/>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+               </layers>
+          </DOMTimeline>
+     </timelines>
+     <PrinterSettings/>
+     <publishHistory>
+          <PublishItem publishSize="558" publishTime="1453227634"/>
+          <PublishItem publishSize="556" publishTime="1453151206"/>
+          <PublishItem publishSize="8365" publishTime="1453151194"/>
+          <PublishItem publishSize="556" publishTime="1453151177"/>
+          <PublishItem publishSize="555" publishTime="1453151158"/>
+          <PublishItem publishSize="8343" publishTime="1453149817"/>
+          <PublishItem publishSize="8341" publishTime="1453149791"/>
+          <PublishItem publishSize="8670" publishTime="1453149772"/>
+          <PublishItem publishSize="8775" publishTime="1453149744" publishDebug="true"/>
+          <PublishItem publishSize="8670" publishTime="1453149692"/>
+     </publishHistory>
+</DOMDocument>

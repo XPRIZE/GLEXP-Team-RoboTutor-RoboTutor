@@ -1,0 +1,41 @@
+{
+    "copyright":"Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.",
+    "license":"Licensed under the Apache License, Version 2.0 (the 'License');",
+
+    "tutorname":"Session Manager",
+    "root_activity":"activity_main",
+    "version":"0.1.0",
+
+	"scenedata": [
+	  {
+		"name":"SSessionManager",
+		"oncreate":[
+		  {
+			"kind":"object",
+			"named":"SBlueBG",
+			"prop":"guid",
+			"value":"SSessionManager_SBLUEBG"
+		  }
+		],
+		"onpreenter":[
+		  {
+			"kind":"actiontrack",
+			"descr":"CCA_STP_DIF_COR_Audio1",
+			"features":"FTR_STP_STATE1"
+		  }
+		]
+	  },
+	  {
+		"name":"writing_tutor",
+		"oncreate":[
+
+		],
+		"onpreenter":[
+
+		]
+	  }
+	]
+}
+
+
+

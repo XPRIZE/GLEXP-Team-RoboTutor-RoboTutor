@@ -1,0 +1,224 @@
+{
+  "animatorMap": {
+    "COMMENT": "Animation Graph for the Word Writing Tutor",
+
+    "session_manager": {
+
+      "type": "ANIMATOR",
+      "name": "Word copying tutor",
+      "COMMENT": "This is where you describe your tutor",
+      "version": "1.0.0",
+      "rootnode": "ORANGE_STATE",
+
+      "nodeMap": {
+
+        "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        "INTRO_STATE": {
+          "type": "NODE",
+          "COMMENT": "Intro Clip",
+          "maptype":"actionMap",
+          "mapname": "INTRO_STATE_TRACK",
+          "preenter": [
+            "B1_ATTACH_ORANGE"
+          ],
+          "preexit": [
+            "B1_DEATTACH"
+          ],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "CORRECT"
+            }
+          ]
+        },
+
+        "ORANGE_STATE": {
+          "type": "NODE",
+          "COMMENT": "Intro Clip",
+          "maptype":"actionMap",
+          "mapname": "PlayColor",
+          "preenter": [
+            "B2_ATTACH_PINK"
+          ],
+          "preexit": [
+            "B2_DEATTACH","SET_COLOR_PRPL","OrangeTimerCancel"
+          ],
+          "edges": [
+            {
+              "constraint":"",
+              "edge": "CORRECT"
+            }
+          ]
+        },
+
+        "PINK_STATE": {
+          "type": "NODE",
+          "COMMENT": "Intro Clip",
+          "maptype":"actionMap",
+          "mapname":"PlayPink",
+          "preenter": [
+            "B3_ATTACH_PURPLE"
+          ],
+          "preexit": [
+            "B3_DEATTACH"
+          ],
+          "edges": [
+            {
+              "constraint":"",
+              "edge": "CORRECT"
+            }
+          ]
+        },
+
+
+        "PURPLE_STATE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname": "PlayPurple",
+          "preenter": [
+            "B4_ATTACH_ORANGE"
+          ],
+          "preexit": [
+            "B4_DEATTACH"
+          ],
+          "edges": [
+            {
+              "constraint":"",
+              "edge": "CORRECT"
+            }
+          ]
+        },
+
+        "CORRECT": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname": "CORRECT_TRACK",
+          "preenter": [
+            "B5_ATTACH_PINK"
+          ],
+          "preexit": [
+            "B5_DEATTACH"
+          ],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "INTRO_STATE"
+            }
+          ]
+        },
+
+        "NEXTSCENE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname": "NEXTSCENE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+          ]
+        }
+      },
+
+      "moduleMap": {
+
+        "COMMENT": "@@@@@  CModules  @@@@@",
+
+        "PLAYCORRECT": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "great.mp3", "features": ""}
+          ]
+        },
+        "PLAYWRONG": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "great.mp3", "features": ""}
+          ]
+        }
+      },
+
+      "actionMap": {
+        "VAR_COLOR":{"type":"TString", "value":"orange.mp3", "features": "" },
+        "VAR_POINTER":{"type":"TReference", "value":"VAR_COLOR", "features": "" },
+
+        "OrangeTimer": {"type": "TIMER", "id":"OrangeTimer", "startdelay":"0", "period":"2000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PlayOrange", "features": "" },
+        "OrangeTimerCancel": {"type": "TIMER", "id":"OrangeTimer", "action":"CANCEL", "features": "" },
+
+        "onTimoutIf": {"type": "CONDITION", "If": "", "Then":"Action1", "Else":"Action2" },
+
+        "GotoOrange": {"type": "COMMAND", "cmd": "GOTONODE", "id":"ORANGE_STATE", "features": "" },
+        "GotoPurple": {"type": "COMMAND", "cmd": "GOTONODE", "id":"PURPLE_STATE", "features": "" },
+        "GotoPink": {"type": "COMMAND", "cmd": "GOTONODE", "id":"PINK_STATE", "features": "" },
+
+        "PlayOrange":{"type": "AUDIO", "command": "PLAY", "soundsource": "orange.mp3", "features": ""},
+        "PlayPurple":{"type": "AUDIO", "command": "PLAY", "soundsource": "purple.mp3", "features": ""},
+        "PlayPink":{"type": "AUDIO", "command": "PLAY", "soundsource": "pink.mp3", "features": ""},
+
+        "PlayColor":{"type": "AUDIO", "command": "PLAY", "soundsource": "{{VAR_COLOR}}", "features": ""},
+        "SET_COLOR_PRPL":{"type":"COMMAND", "id":"VAR_COLOR", "method":"=", "value":"purple.mp3", "features": "" },
+
+        "INTRO_STATE_TRACK": {"type": "TIMELINE", "trackname": "WT_SIMPLE_ABS", "features": ""},
+        "USERINPUT_TRACK": {"type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": ""},
+        "CORRECT_TRACK": {"type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": ""},
+        "WRONG_TRACK": {"type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": "" },
+        "GREAT": {"type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": "" },
+
+        "B1_ATTACH_ORANGE": {"type": "COMMAND", "id": "Sbutton1", "method": "setButtonBehavior", "parms": "GotoOrange:String"},
+        "B1_DEATTACH": {"type": "COMMAND", "id": "Sbutton1", "method": "setButtonBehavior", "parms": "NULL:String"},
+
+        "B2_ATTACH_PINK": {"type": "COMMAND", "id": "Sbutton2", "method": "setButtonBehavior", "parms": "GotoPink:String"},
+        "B2_DEATTACH": {"type": "COMMAND", "id": "Sbutton2", "method": "setButtonBehavior", "parms": "NULL:String"},
+
+        "B3_ATTACH_PURPLE": {"type": "COMMAND", "id": "Sbutton3", "method": "setButtonBehavior", "parms": "GotoPurple:String"},
+        "B3_DEATTACH": {"type": "COMMAND", "id": "Sbutton3", "method": "setButtonBehavior", "parms": "NULL:String"},
+
+        "B4_ATTACH_ORANGE": {"type": "COMMAND", "id": "Sbutton4", "method": "setButtonBehavior", "parms": "GotoOrange:String"},
+        "B4_DEATTACH": {"type": "COMMAND", "id": "Sbutton4", "method": "setButtonBehavior", "parms": "NULL:String"},
+
+        "B5_ATTACH_PINK": {"type": "COMMAND", "id": "Sbutton5", "method": "setButtonBehavior", "parms": "GotoPink:String"},
+        "B5_DEATTACH": {"type": "COMMAND", "id": "Sbutton5", "method": "setButtonBehavior", "parms": "NULL:String"},
+
+        "B5_ATTACH_NEXT": {"type": "COMMAND", "id": "Sbutton5", "method": "setButtonBehavior", "parms": "NEXT:String"},
+
+        "NEXTSCENE": {
+          "type": "COMMAND", "cmd": "gotoNextScene"
+        }
+      },
+
+      "constraintMap": {
+
+        "COMMENT": "@@@@@  CConstraints @@@@@ ",
+
+        "COND_PASS": {
+          "type": "CONDITION",
+          "If": "FTR_NOWORDS && FTR_RIGHT",
+          "Then":"",
+          "Else":""
+        },
+        "FTR_NOWORDS": {
+          "type": "CONDITION",
+          "test": "FTR_NOWORDS"
+        },
+        "FTR_WORDS": {
+          "type": "CONDITION",
+          "test": "!FTR_NOWORDS"
+        },
+        "FTR_RIGHT": {
+          "type": "CONDITION",
+          "test": "FTR_RIGHT"
+        },
+        "FTR_WRONG": {
+          "type": "CONDITION",
+          "test": "!FTR_RIGHT"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,119 @@
+{	
+	"WordCopyTutor":
+	{	
+		"COMMENT":"This is where you describe your tutor",
+		"type":"animation",
+		"version":"1.0.0",
+	
+		"CNodes":
+		{	
+			"COMMENT":"@@@@@  CNodes @@@@@ ",
+						
+			"INTRO_STATE":{"COMMENT":"Intro Clip",
+					"type":"node",
+					"preenter":	["GB_DISABLE","FW_DISABLE"],
+					"preexit" : ["GETWORD"],
+					"state"   : [], 
+					"edges":
+							[
+								{"constraint":"","edge":"USERINPUT"}
+							]
+					},
+					
+			"USERINPUT":{"COMMENT":"When module is complete - move to next scene in the scenegraph",
+					"type":"node",
+					"preenter":	["GB_ENABLE","FW_ENABLE"],
+					"preexit" : ["GB_DISABLE","FW_DISABLE","TESTRESULT"],
+					"state"   : [""], 
+					"edges":
+							[
+								{"constraint":"FTR_RIGHT","edge":"CORRECT"},
+								{"constraint":"","edge":"WRONG"}
+							]
+					},												
+									
+			"CORRECT":{"COMMENT":"When module is complete - move to next scene in the scenegraph",
+					"type":"node",
+					"preenter":	[],
+					"preexit" : ["GETWORD"],
+					"module"  : ["PLAYCORRECT"], 
+					"edges":
+							[
+								{"constraint":"FTR_NOWORDS","edge":"NEXTSCENE"},
+								{"constraint":"","edge":"USERINPUT"}
+							]
+					},												
+									
+					
+			"WRONG":{"COMMENT":"When module is complete - move to next scene in the scenegraph",
+					"type":"node",
+					"preenter":	[],
+					"preexit" : ["GETWORD"],
+					"module"  : ["PLAYWRONG"], 
+					"edges":
+							[
+								{"constraint":"FTR_NOWORDS","edge":"NEXTSCENE"},
+								{"constraint":"","edge":"USERINPUT"}
+							]
+					},												
+									
+					
+					
+			"NEXTSCENE":{"COMMENT":"When module is complete - move to next scene in the scenegraph",
+					"type":"node",
+					"preenter":	[],
+					"preexit" : [],
+					"state"   : ["NEXTSCENE"], 
+					"edges":
+							[
+							]
+					}															
+		},		
+
+		"CModules":
+		{
+			"COMMENT":"@@@@@  CModules  @@@@@",
+					
+			"PLAYCORRECT":	[
+								{"target":"MEDIAPLAYER","Method":"play", "value":"correctsw.mp3", "feature":"FTR_SWAHILI"},
+								{"target":"MEDIAPLAYER","Method":"play", "value":"correcten.mp3", "feature":"FTR_ENGLISH"}
+						  	],
+			"PLAYWRONG":	[
+								{"target":"MEDIAPLAYER","Method":"play", "value":"wrongsw.mp3", "feature":"FTR_SWAHILI"},
+								{"target":"MEDIAPLAYER","Method":"play", "value":"wrongen.mp3", "feature":"FTR_ENGLISH"}
+					  		]
+		},
+	
+			
+		"CActions":
+		{
+			"COMMENT":"@@@@@  CActions @@@@@ ",
+					
+			"NEXTSCENE":{"type":"action", "cmd":"gotoNextScene"},
+			
+			"GB_NAVINC":{"target":"goButton","Method":"setBehavior", "value":"NavIncrementEvent"},
+			
+			"GB_DISABLE":{"target":"goButton","Method":"enable", "value":"false"},
+			"GB_ENABLE":{"target":"goButton","Method":"enable", "value":"true"},
+			
+			"FW_DISABLE":{"target":"fingerWriter","Method":"enable", "value":"false"},
+			"FW_ENABLE":{"target":"fingerWriter","Method":"enable", "value":"true"},
+			
+			"PLAYCORRECT":{"target":"MEDIAPLAYER","Method":"play", "value":"correct.mp3"},
+			"PLAYWRONG":{"target":"MEDIAPLAYER","Method":"play", "value":"correct.mp3"},
+			
+			"GETWORD": {"target":"WordList", "Method":"Increment"}
+		},
+	
+		"CConstraints":
+		{
+			"COMMENT":"@@@@@  CConstraints @@@@@ ",
+			
+			"FTR_NOWORDS":{"cmd":"test", "code":"FTR_NOWORDS"},
+			"FTR_WORDS":{"cmd":"test", "code":"!FTR_NOWORDS"},
+			
+			"FTR_RIGHT":{"cmd":"test", "code":"FTR_RIGHT"},
+			"FTR_WRONG":{"cmd":"test", "code":"!FTR_RIGHT"}
+		}		
+	}
+}

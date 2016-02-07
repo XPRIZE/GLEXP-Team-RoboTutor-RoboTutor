@@ -1,0 +1,373 @@
+{
+  "animatorMap": {
+    "COMMENT": "Animation Graph for the Word Writing Tutor",
+
+    "session_manager": {
+
+      "type": "ANIMATOR",
+      "name": "Word copying tutor",
+      "COMMENT": "This is where you describe your tutor",
+      "version": "1.0.0",
+      "rootnode": "INTRO_STATE",
+
+      "nodeMap": {
+
+        "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        "INTRO_STATE": {
+          "type": "NODE",
+          "COMMENT": "Intro Clip",
+          "maptype":"actionMap",
+          "mapname": "INTRO_STATE_TRACK",
+          "preenter": [
+            "COMPPARTESTEQUATE-PASS",
+            "COMPPARTESTEQUATE-FAIL",
+            "PARTESTEQUATE-PASS",
+            "PARTESTEQUATE-FAIL",
+            "TESTEQUATE-PASS",
+            "TESTEQUATE-FAIL",
+            "TESTNEQUATE-PASS",
+            "TESTNEQUATE-FAIL",
+            "TESTAND-PASS",
+            "TESTAND-FAIL",
+            "TESTOR-PASS",
+            "TESTOR-FAIL",
+            "SETVALUES",
+            "B5_ATTACH"
+          ],
+          "preexit": [
+            "B5_DEATTACH"
+          ],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "USERINPUT"
+            }
+          ]
+        },
+
+        "USERINPUT": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname": "USERINPUT_TRACK",
+          "preenter": [
+          ],
+          "preexit": [
+          ],
+          "edges": [
+            {
+              "constraint":"FTR_RIGHT",
+              "edge": "CORRECT"
+            },
+            {
+              "constraint": "",
+              "edge": "WRONG"
+            }
+          ]
+        },
+
+        "CORRECT": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname": "CORRECT_TRACK",
+          "preenter": [],
+          "preexit": [
+            "GETWORD"
+          ],
+          "edges": [
+            {
+              "constraint": "FTR_NOWORDS",
+              "edge": "NEXTSCENE"
+            },
+            {
+              "constraint": "",
+              "edge": "USERINPUT"
+            }
+          ]
+        },
+
+        "WRONG": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname": "WRONG_TRACK",
+          "preenter": [],
+          "preexit": [
+            "GETWORD"
+          ],
+          "edges": [
+            {
+              "constraint": "FTR_NOWORDS",
+              "edge": "NEXTSCENE"
+            },
+            {
+              "constraint": "",
+              "edge": "INTRO_STATE"
+            }
+          ]
+        },
+        "NEXTSCENE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname": "NEXTSCENE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+          ]
+        }
+      },
+
+      "moduleMap": {
+
+        "COMMENT": "@@@@@  CModules  @@@@@",
+
+        "COMPPARTESTEQUATE-PASS": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "TBoolean", "name":"TESTB1", "value":"true", "features": ""},
+            {"type": "TInteger", "name":"TEST2", "value":"2", "features": ""},
+            {"type": "TInteger", "name":"TEST3", "value":"2", "features": ""},
+            {"type": "CONDITION", "If": "(TEST2 == TEST3) && TESTB1", "Then":"ValueSET1", "Else":"ValueSET2"}
+          ]
+        },
+        "COMPPARTESTEQUATE-FAIL": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "TBoolean", "name":"TESTB1", "value":"false", "features": ""},
+            {"type": "TInteger", "name":"TEST2", "value":"2", "features": ""},
+            {"type": "TInteger", "name":"TEST3", "value":"2", "features": ""},
+            {"type": "CONDITION", "If": "(TEST2 == TEST3) && TESTB1", "Then":"ValueSET1", "Else":"ValueSET2"}
+          ]
+        },
+
+        "PARTESTEQUATE-PASS": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "TInteger", "name":"TEST2", "value":"2", "features": ""},
+            {"type": "TInteger", "name":"TEST3", "value":"2", "features": ""},
+            {"type": "CONDITION", "If": "(TEST2 == TEST3)", "Then":"ValueSET1", "Else":"ValueSET2"}
+          ]
+        },
+        "PARTESTEQUATE-FAIL": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "TInteger", "name":"TEST2", "value":"2", "features": ""},
+            {"type": "TInteger", "name":"TEST3", "value":"3", "features": ""},
+            {"type": "CONDITION", "If": "(TEST2 == TEST3)", "Then":"ValueSET1", "Else":"ValueSET2"}
+          ]
+        },
+        "TESTEQUATE-PASS": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "TInteger", "name":"TEST2", "value":"2", "features": ""},
+            {"type": "TInteger", "name":"TEST3", "value":"2", "features": ""},
+            {"type": "CONDITION", "If": "TEST2 == TEST3", "Then":"ValueSET1", "Else":"ValueSET2"}
+          ]
+        },
+        "TESTEQUATE-FAIL": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "TInteger", "name":"TEST2", "value":"2", "features": ""},
+            {"type": "TInteger", "name":"TEST3", "value":"3", "features": ""},
+            {"type": "CONDITION", "If": "TEST2 == TEST3", "Then":"ValueSET1", "Else":"ValueSET2"}
+          ]
+        },
+        "TESTNEQUATE-PASS": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "TInteger", "name":"TEST2", "value":"2", "features": ""},
+            {"type": "TInteger", "name":"TEST3", "value":"3", "features": ""},
+            {"type": "CONDITION", "If": "TEST2 != TEST3", "Then":"ValueSET1", "Else":"ValueSET2"}
+          ]
+        },
+        "TESTNEQUATE-FAIL": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "TInteger", "name":"TEST2", "value":"2", "features": ""},
+            {"type": "TInteger", "name":"TEST3", "value":"2", "features": ""},
+            {"type": "CONDITION", "If": "TEST2 != TEST3", "Then":"ValueSET1", "Else":"ValueSET2"}
+          ]
+        },
+        "TESTAND-PASS": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "TBoolean", "name":"TESTB1", "value":"true", "features": ""},
+            {"type": "TBoolean", "name":"TESTB2", "value":"true", "features": ""},
+            {"type": "CONDITION", "If": "TESTB1 && TESTB2", "Then":"ValueSET1", "Else":"ValueSET2"}
+          ]
+        },
+        "TESTAND-FAIL": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "TBoolean", "name":"TESTB1", "value":"true", "features": ""},
+            {"type": "TBoolean", "name":"TESTB2", "value":"false", "features": ""},
+            {"type": "CONDITION", "If": "TESTB1 && TESTB2", "Then":"ValueSET1", "Else":"ValueSET2"}
+          ]
+        },
+        "TESTOR-PASS": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "TBoolean", "name":"TESTB1", "value":"false", "features": ""},
+            {"type": "TBoolean", "name":"TESTB2", "value":"true", "features": ""},
+            {"type": "CONDITION", "If": "TESTB1 || TESTB2", "Then":"ValueSET1", "Else":"ValueSET2"}
+          ]
+        },
+        "TESTOR-FAIL": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "TBoolean", "name":"TESTB1", "value":"false", "features": ""},
+            {"type": "TBoolean", "name":"TESTB2", "value":"false", "features": ""},
+            {"type": "CONDITION", "If": "TESTB1 || TESTB2", "Then":"ValueSET1", "Else":"ValueSET2"}
+          ]
+        },
+
+
+
+        "SETVALUES": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "TBoolean", "name":"TESTB1", "value":"true", "features": ""},
+            {"type": "TBoolean", "name":"TESTB2", "value":"true", "features": ""},
+            {"type": "TBoolean", "name":"TESTB3", "value":"false", "features": ""},
+            {"type": "TBoolean", "name":"TESTB4", "value":"false", "features": ""},
+            {"type": "TInteger", "name":"TEST2", "value":"2", "features": ""},
+            {"type": "TInteger", "name":"TEST3", "value":"2", "features": ""},
+            {"type": "CONDITION", "If": "TESTB1 && TESTB2", "Then":"ValueSET1", "Else":"ValueSET2"}
+          ]
+        },
+
+
+        "ValueSET1": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "TBoolean", "name":"PLAYING", "value":"false", "features": ""},
+            {"type": "COMMAND", "id":"PLAYING", "method":"=", "value":"true", "features": ""},
+            {"type": "TInteger", "name":"PLAY_COUNT", "value":"0", "features": ""},
+            {"type": "COMMAND", "id":"PLAY_COUNT", "method":"+", "value":"1", "features": ""},
+            {"type": "COMMAND", "id":"PLAY_COUNT", "method":"-", "value":"4", "features": ""}
+          ]
+        },
+        "ValueSET2": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "TBoolean", "name":"PLAYING", "value":"true", "features": ""},
+            {"type": "COMMAND", "id":"PLAYING", "method":"=", "value":"true", "features": ""},
+            {"type": "TInteger", "name":"PLAY_COUNT", "value":"10", "features": ""},
+            {"type": "COMMAND", "id":"PLAY_COUNT", "method":"+", "value":"1", "features": ""},
+            {"type": "COMMAND", "id":"PLAY_COUNT", "method":"-", "value":"8", "features": ""}
+          ]
+        },
+        "PLAYCORRECT": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "great.mp3", "features": ""}
+          ]
+        },
+        "PLAYWRONG": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "great.mp3", "features": ""}
+          ]
+        }
+      },
+
+      "actionMap": {
+
+        "my_action": {"type": "TIMER", "name": "hint_timeout", "duration":"20", "repeat":"false", "action":"START", "ontimer":"ACTION_NAME", "features": "" },
+
+        "COMMENT": "@@@@@  CActions @@@@@ ",
+
+        "INTRO_STATE_TRACK": {
+          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABS", "features": ""
+        },
+        "USERINPUT_TRACK": {
+          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": ""
+        },
+        "CORRECT_TRACK": {
+          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": ""
+        },
+        "WRONG_TRACK": {
+          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": ""
+        },
+
+
+        "B5_ATTACH": {
+          "type": "COMMAND", "id": "button5", "method": "setButtonBehavior", "parms": "STOP:String"
+        },
+        "B5_DEATTACH": {
+          "type": "COMMAND", "id": "button5", "method": "setButtonBehavior", "parms": "NULL:String"
+        },
+
+
+        "NEXTSCENE": {
+          "type": "COMMAND", "cmd": "gotoNextScene"
+        }
+      },
+
+      "constraintMap": {
+
+        "COMMENT": "@@@@@  CConstraints @@@@@ ",
+
+        "COND_PASS": {
+          "type": "CONDITION",
+          "If": "FTR_NOWORDS && FTR_RIGHT",
+          "Then":"",
+          "Else":""
+        },
+        "FTR_NOWORDS": {
+          "type": "CONDITION",
+          "test": "FTR_NOWORDS"
+        },
+        "FTR_WORDS": {
+          "type": "CONDITION",
+          "test": "!FTR_NOWORDS"
+        },
+        "FTR_RIGHT": {
+          "type": "CONDITION",
+          "test": "FTR_RIGHT"
+        },
+        "FTR_WRONG": {
+          "type": "CONDITION",
+          "test": "!FTR_RIGHT"
+        }
+      }
+    }
+  }
+}

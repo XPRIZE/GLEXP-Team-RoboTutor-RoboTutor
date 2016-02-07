@@ -1,0 +1,46 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="session_manager/WT_SIMPLE_ABS" itemID="56a7d395-000001f7" lastModified="1454800397">
+  <timeline>
+    <DOMTimeline name="WT_SIMPLE_ABS" currentFrame="63">
+      <layers>
+        <DOMLayer name="Scripts" color="#9933CC" autoNamed="false" heightLiteral="18">
+          <frames>
+            <DOMFrame index="0" duration="164" name="START" labelType="name" keyMode="9728">
+              <Actionscript>
+                <script><![CDATA[{
+  "parser":"A",
+  
+  "type": "MODULE",
+  "reuse":true,
+  "COMMENT": "????",
+  "tracks": [
+	{"type": "AUDIO", "command": "PLAY", "soundsource": "great.mp3", "features": ""}
+  ]
+}]]></script>
+              </Actionscript>
+              <elements/>
+            </DOMFrame>
+            <DOMFrame index="164" keyMode="9728">
+              <elements/>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+        <DOMLayer name="Audio" color="#4FFF4F" current="true" isSelected="true" autoNamed="false" heightLiteral="18">
+          <frames>
+            <DOMFrame index="0" duration="48" keyMode="9728" soundName="audio/en/before and after something.mp3" soundSync="stream">
+              <SoundEnvelope>
+                <SoundEnvelopePoint level0="32768" level1="32768"/>
+              </SoundEnvelope>
+              <elements/>
+            </DOMFrame>
+            <DOMFrame index="48" duration="117" keyMode="9728" soundName="audio/en/great.mp3" soundSync="stream">
+              <SoundEnvelope>
+                <SoundEnvelopePoint level0="32768" level1="32768"/>
+              </SoundEnvelope>
+              <elements/>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

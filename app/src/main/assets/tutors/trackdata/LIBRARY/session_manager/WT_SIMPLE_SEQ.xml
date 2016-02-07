@@ -1,0 +1,69 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="session_manager/WT_SIMPLE_SEQ" itemID="56a2473a-000001df" lastModified="1453586427">
+  <timeline>
+    <DOMTimeline name="WT_SIMPLE_SEQ">
+      <layers>
+        <DOMLayer name="Mixed" color="#FF800A" current="true" isSelected="true" autoNamed="false" heightLiteral="18">
+          <frames>
+            <DOMFrame index="0" duration="7" name="TTS" labelType="name" keyMode="9728">
+              <Actionscript>
+                <script><![CDATA[{
+  "type": "MODULE",
+  "reuse":true,
+  "COMMENT": "????",
+  "tracks": [
+	{"TTSsource":"{{var_name}}","features":""},
+	{"TTSsource":"This is a test","features":""}
+  ]
+}
+
+
+{
+  "type": "MODULE",
+  "reuse":true,
+  "COMMENT": "????",
+  "tracks": [
+	{"type": "AUDIO", "soundsource": "correctsw.mp3", "features": "FTR_SWAHILI"},
+	{"type": "TTS",   "say": "sample thing to say", "voice":"voice_code", "features": "FTR_ENGLISH"}
+  ]
+}
+]]></script>
+              </Actionscript>
+              <elements/>
+            </DOMFrame>
+            <DOMFrame index="7" duration="5" keyMode="9728">
+              <Actionscript>
+                <script><![CDATA[{
+  "type": "MODULE",
+  "reuse":true,
+  "COMMENT": "????",
+  "tracks": [
+			 
+  ]
+}
+]]></script>
+              </Actionscript>
+              <elements/>
+            </DOMFrame>
+            <DOMFrame index="12" duration="7" name="AUDIO" labelType="name" keyMode="9728">
+              <Actionscript>
+                <script><![CDATA[{
+  "type": "MODULE",
+  "reuse":true,
+  "COMMENT": "????",
+  "tracks": [
+	{"soundsource":"{{var_name}}","features":""},
+  ]
+}
+]]></script>
+              </Actionscript>
+              <elements/>
+            </DOMFrame>
+            <DOMFrame index="19" duration="146" keyMode="9728">
+              <elements/>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

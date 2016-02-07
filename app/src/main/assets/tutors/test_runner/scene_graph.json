@@ -1,0 +1,78 @@
+{
+	"type": "scenegraph",
+	"name": "MyTutor",
+	"version": "1.0.0",
+	"CNodes": {
+		"COMMENT": "@@@@@@@@@@@@  CNodes @@@@@@@@@@@@@@@",
+		"Scene_1": {
+			"COMMENT": "Scene_1",
+			"type": "module",
+			"name": "Scene_1",
+			"edges": [
+				{
+					"constraint": "",
+					"edge": "END_CLOAK"
+				},
+			]
+		},
+		"END_CLOAK": {
+			"COMMENT": "End Cloak - Allows LogManager to gracefully shutdown the session",
+			"type": "module",
+			"name": "END_CLOAK",
+			"edges": []
+		}
+	},
+	"CModules": {
+		"COMMENT": "@@@@@@@@@@@@  CModules @@@@@@@@@@@@@@@",
+		"Scene_1": {
+			"instanceNode": "",
+			"reuse": true,
+			"scenes": [
+				{
+					"name": "activity_tutor",
+					"classname": "scenes.CStdScene",
+					"features": "",
+					"enqueue": "true",
+					"create": "false",
+					"persist": "false",
+					"ischeckpnt": "true"
+				}
+			]
+		},
+		"END_CLOAK": {
+			"instanceNode": "",
+			"reuse": true,
+			"scenes": [
+				{
+					"name": "SendCloak",
+					"classname": "CEndCloak",
+					"features": "",
+					"enqueue": "true",
+					"create": "false",
+					"persist": "false",
+					"ischeckpnt": "true",
+					"object": "null"
+				}
+			]
+		}
+	},
+	"CConstraints": {
+		"COMMENT": "@@@@@@@@@  CConstraints @@@@@@@@@@@@"
+	},
+	"CSkills": {
+		"COMMENT": "@@@@@@@@@@  CSkills @@@@@@@@@@@@@@@",
+		"Skill1": {
+			"description": "Skill description",
+			"pL": 0.125,
+			"pT": 0.046667,
+			"pG": 0.1,
+			"pS": 0.1
+		},
+		"Skill2": {
+			"description": "Skill description",
+			"pL": 0.212,
+			"pT": 0.247,
+			"pG": 0.4,
+			"pS": 0.21
+		}
+	}

@@ -1,0 +1,21 @@
+{
+    "language":"LANG_EN",
+
+	"scenedata": [
+	  {
+		"id":"session_manager",
+
+		"oncreate":[
+            {"id":"Sbutton1", "method":"setText", "parms":":String", "features":""},
+            {"id":"Sbutton2", "method":"setText", "parms":"Touch For Pink:String", "features":""},
+		    {"id":"Sbutton3", "method":"setText", "parms":"Purple:String", "features":""},
+		    {"id":"Sbutton4", "method":"setText", "parms":"Orange 2sec delay:String", "features":""},
+		    {"id":"Sbutton5", "method":"setText", "parms":":String", "features":""}
+		]
+      }
+	],
+  	"navigatorType":"SIMPLE_NAVIGATOR"
+}
+
+
+
