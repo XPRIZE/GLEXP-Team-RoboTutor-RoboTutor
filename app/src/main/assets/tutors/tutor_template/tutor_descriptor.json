@@ -1,65 +1,16 @@
 {
-    "language":"LANG_EN",
+  "language":"LANG_EN",
 
-	"scenedata": [
-	  {
-		"id":"session_manager",
+  "scenedata": [
+	{
+	  "id":"my_tutor_name",
 
-		"scene_layout": [
-		  {
-			"id": "session_layout",
-            "classname": "CPercentSceneLayout",
-
-			"layouts": [
-			  {
-				"layout_width": "match_parent",
-				"layout_height": "match_parent",
-				"paddingBottom": "16dp",
-				"paddingLeft": "16dp",
-				"paddingRight": "16dp",
-				"paddingTop": "16dp",
-				"features":""
-			  }
-			],
-
-			"children": [
-			  {
-                "id": "session_text",
-                "classname":"CTutorTextView",
-
-				"layouts": [
-				  {
-					"layout_width": "wrap_content",
-					"layout_height": "wrap_content",
-					"features":""
-				  }
-				],
-
-                "children": [],
-				"features":""
-			  }
-			],
-
-			"features":""
-		  }
-		],
-
-		"oncreate":[
-            {"id":"Sbutton1", "method":"setText", "parms":"My Button 1:String", "features":""},
-            {"id":"Sbutton2", "method":"setText", "parms":"My Button 2:String", "features":""},
-		    {"id":"Sbutton3", "method":"setText", "parms":"My Button 3:String", "features":""},
-		    {"id":"Sbutton4", "method":"setText", "parms":"My Button 4:String", "features":""},
-		    {"id":"Sbutton5", "method":"setText", "parms":"My Button 5:String", "features":""}
-		],
-		"onenter":[
-		  {"execute":"actiontrack", "spec":"English_Intro", "features":"FTR_LANG_EN"},
-		  {"execute":"actiontrack", "spec":"Swahili_Intro", "features":"FTR_LANG_SW"}
-		],
-        "features":""
-      }
-	],
-  	"navigatorType":"SIMPLE_NAVIGATOR"
+	  "oncreate":[
+	  ],
+	  "onenter":[
+	  ],
+	  "features":""
+	}
+  ],
+  "navigatorType":"SIMPLE_NAVIGATOR"
 }
-
-
-
