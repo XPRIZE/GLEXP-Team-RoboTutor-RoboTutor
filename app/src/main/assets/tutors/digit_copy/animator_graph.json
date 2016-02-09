@@ -1,0 +1,192 @@
+{
+  "animatorMap": {
+    "COMMENT": "Animation Graph for the Word Writing Tutor",
+
+    "session_manager": {
+
+      "type": "ANIMATOR",
+      "title": "Word copying tutor",
+      "COMMENT": "This is where you describe your tutor",
+      "version": "1.0.0",
+      "rootnode": "INTRO_STATE",
+
+      "nodeMap": {
+
+        "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        "INTRO_STATE": {
+          "type": "NODE",
+          "COMMENT": "Intro Clip",
+          "maptype":"actionMap",
+          "mapname": "INTRO_STATE_TRACK",
+          "preenter": [
+            "B5_ATTACH"
+          ],
+          "preexit": [
+            "B5_DEATTACH"
+          ],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "USERINPUT"
+            }
+          ]
+        },
+
+        "USERINPUT": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname": "USERINPUT_TRACK",
+          "preenter": [
+          ],
+          "preexit": [
+          ],
+          "edges": [
+            {
+              "constraint":"FTR_RIGHT",
+              "edge": "CORRECT"
+            },
+            {
+              "constraint": "",
+              "edge": "WRONG"
+            }
+          ]
+        },
+
+        "CORRECT": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname": "CORRECT_TRACK",
+          "preenter": [],
+          "preexit": [
+            "GETWORD"
+          ],
+          "edges": [
+            {
+              "constraint": "FTR_NOWORDS",
+              "edge": "NEXTSCENE"
+            },
+            {
+              "constraint": "",
+              "edge": "USERINPUT"
+            }
+          ]
+        },
+
+        "WRONG": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname": "WRONG_TRACK",
+          "preenter": [],
+          "preexit": [
+            "GETWORD"
+          ],
+          "edges": [
+            {
+              "constraint": "FTR_NOWORDS",
+              "edge": "NEXTSCENE"
+            },
+            {
+              "constraint": "",
+              "edge": "INTRO_STATE"
+            }
+          ]
+        },
+        "NEXTSCENE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname": "NEXTSCENE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+          ]
+        }
+      },
+
+      "moduleMap": {
+
+        "COMMENT": "@@@@@  CModules  @@@@@",
+
+        "PLAYCORRECT": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "great.mp3", "features": ""}
+          ]
+        },
+        "PLAYWRONG": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "great.mp3", "features": ""}
+          ]
+        }
+      },
+
+      "actionMap": {
+
+        "my_action": {"type": "TIMER", "name": "hint_timeout", "duration":"20", "repeat":"false", "action":"START", "ontimer":"ACTION_NAME", "features": "" },
+
+        "COMMENT": "@@@@@  CActions @@@@@ ",
+
+        "INTRO_STATE_TRACK": {
+          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABS", "features": ""
+        },
+        "USERINPUT_TRACK": {
+          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": ""
+        },
+        "CORRECT_TRACK": {
+          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": ""
+        },
+        "WRONG_TRACK": {
+          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": ""
+        },
+
+
+        "B5_ATTACH": {
+          "type": "COMMAND", "id": "button5", "method": "setButtonBehavior", "parms": "STOP:String"
+        },
+        "B5_DEATTACH": {
+          "type": "COMMAND", "id": "button5", "method": "setButtonBehavior", "parms": "NULL:String"
+        },
+
+
+        "NEXTSCENE": {
+          "type": "COMMAND", "cmd": "gotoNextScene"
+        }
+      },
+
+      "constraintMap": {
+
+        "COMMENT": "@@@@@  CConstraints @@@@@ ",
+
+        "FTR_NOWORDS": {
+          "type": "CONDITION",
+          "cmd": "test",
+          "code": "FTR_NOWORDS"
+        },
+        "FTR_WORDS": {
+          "type": "CONDITION",
+          "cmd": "test",
+          "code": "!FTR_NOWORDS"
+        },
+        "FTR_RIGHT": {
+          "type": "CONDITION",
+          "cmd": "test",
+          "code": "FTR_RIGHT"
+        },
+        "FTR_WRONG": {
+          "type": "CONDITION",
+          "cmd": "test",
+          "code": "!FTR_RIGHT"
+        }
+      }
+    }
+  }
+}
