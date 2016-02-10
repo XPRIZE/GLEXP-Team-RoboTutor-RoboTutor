@@ -1,12 +1,12 @@
 {
   "animatorMap": {
-    "COMMENT": "Animation Graph for the Word Writing Tutor",
+    "COMMENT": "Animation Graph for the Digit Copy Tutor",
 
-    "session_manager": {
+    "digit_copy": {
 
       "type": "ANIMATOR",
-      "title": "Word copying tutor",
-      "COMMENT": "This is where you describe your tutor",
+      "title": "Digit copying tutor",
+      "COMMENT": "This tutor is designed for copying single digit numbers 0-9.",
       "version": "1.0.0",
       "rootnode": "INTRO_STATE",
 
@@ -19,87 +19,142 @@
           "COMMENT": "Intro Clip",
           "maptype":"actionMap",
           "mapname": "INTRO_STATE_TRACK",
-          "preenter": [
-            "B5_ATTACH"
-          ],
-          "preexit": [
-            "B5_DEATTACH"
-          ],
+          "preenter":["GB_DISABLE","FW_DISABLE","USE_SWAHILI"],
+          "state"   :["PLAYINTRO"],
+          "preexit" :["GETCHAR"],
           "edges": [
             {
               "constraint": "",
-              "edge": "USERINPUT"
+              "edge": "NEWCHAR"
             }
           ]
         },
 
-        "USERINPUT": {
-          "type": "NODE",
-          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+        "NEWCHAR":{
+          "COMMENT":"This node presents a digit for user to copy.",
+          "type":"node",
+          "preenter":["GB_DISABLE","FW_DISABLE","USE_SWAHILI","REMOVECHAR","REMOVEMODEL"],
+          "state"   :["DISPLAYCHAR","PLAYDCHAR1","PLAYCHAR2"],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"USERINPUT"}
+          ]
+        },
+
+        "USERINPUT":{
+          "COMMENT":"When module is complete - move to next scene in the scenegraph",
+          "type":"node",
           "maptype":"actionMap",
           "mapname": "USERINPUT_TRACK",
-          "preenter": [
-          ],
-          "preexit": [
-          ],
-          "edges": [
-            {
-              "constraint":"FTR_RIGHT",
-              "edge": "CORRECT"
-            },
-            {
-              "constraint": "",
-              "edge": "WRONG"
-            }
-          ]
+          "preenter":["FW_ENABLE"],
+          "state"   :[],
+          "preexit" :["FW_DISABLE","TESTRESULT"],
+          "edges":
+          [
+            {"constraint":"FTR_RIGHT","edge":"CORRECT"},
+            {"constraint":"FTR_WRONG","edge":"WRONG"},
+            {"constraint":"FTR_UNRECOGNIZED","edge":"UNRECOGNIZED"},
+            {"constraint":"","edge":"HESITATION"}						]
         },
 
-        "CORRECT": {
-          "type": "NODE",
-          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+        "CORRECT":{
+          "COMMENT":"When user inputs a correct answer...",
+          "type":"node",
           "maptype":"actionMap",
           "mapname": "CORRECT_TRACK",
-          "preenter": [],
-          "preexit": [
-            "GETWORD"
-          ],
-          "edges": [
-            {
-              "constraint": "FTR_NOWORDS",
-              "edge": "NEXTSCENE"
-            },
-            {
-              "constraint": "",
-              "edge": "USERINPUT"
-            }
+          "preenter":[],
+          "state"   :["PLAYCORRECT"],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
+            {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
+            {"constraint":"","edge":"NEXTCHAR"}
           ]
         },
 
-        "WRONG": {
-          "type": "NODE",
-          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+        "WRONG":{
+          "COMMENT":"When user inputs an incorrect answer...",
+          "type":"node",
           "maptype":"actionMap",
           "mapname": "WRONG_TRACK",
-          "preenter": [],
-          "preexit": [
-            "GETWORD"
-          ],
-          "edges": [
-            {
-              "constraint": "FTR_NOWORDS",
-              "edge": "NEXTSCENE"
-            },
-            {
-              "constraint": "",
-              "edge": "INTRO_STATE"
-            }
+          "preenter":[],
+          "state"   :["MARKINRED","PLAYWRONG"],
+          "preexit" :["REMOVECHAR"],
+          "edges":
+          [
+
+            {"constraint":"","edge":"USERINPUT"}
           ]
         },
+
+        "UNRECOGNIZED":{
+          "COMMENT":"When the recognizer fails to identify the input...",
+          "type":"node",
+          "maptype":"actionMap",
+          "mapname": "UNRECOGNIZED_TRACK",
+          "preenter":[],
+          "state"   :["MARKINRED","PLAYUNRECOGNIZED"],
+          "preexit" :["REMOVECHAR"],
+          "edges":
+          [
+            {"constraint":"","edge":"USERINPUT"}
+          ]
+        },
+
+        "HESITATION":{
+          "COMMENT":"When the user doesn't write anything...",
+          "type":"node",
+          "maptype":"actionMap",
+          "mapname": "HESITATION_TRACK",
+          "preenter":[],
+          "state"   :["PLAYCHAR2"],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"USERINPUT"}
+          ]
+        },
+
+        "NEXTCHAR":{
+          "COMMENT": "Move to a new digit.",
+          "type":"node",
+          "preenter":[],
+          "state"   :["PLAYNEXT"],
+          "preexit" :["GETCHAR"],
+          "edges":
+          [
+            {"constraint":"","edge":"NEWMODEL"}
+          ]
+        },
+
+        "EXITCLIP1": {
+          "COMMENT":"Exit Clip for ALL_CORRECT",
+          "type":"node",
+          "preenter":[],
+          "state"   :["PLAYEXIT1"],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"NEXTSCENE"}
+          ]
+        },
+
+        "EXITCLIP2": {"COMMENT":"Exit Clip for NOT_ALL_CORRECT",
+          "type":"node",
+          "preenter":[],
+          "state"   :["PLAYEXIT2"],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"NEXTSCENE"}
+          ]
+        },
+
         "NEXTSCENE": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"actionMap",
-          "mapname": "NEXTSCENE",
           "preenter": [],
           "preexit": [],
           "edges": [
@@ -111,20 +166,58 @@
 
         "COMMENT": "@@@@@  CModules  @@@@@",
 
+//        "PLAYINTRO":	[
+//          "MP_NAVINC",
+//          {"target":"MEDIAPLAYER","Method":"play", "value":"intro_sw.mp3", "feature":"FTR_SWAHILI"},
+//          {"target":"MEDIAPLAYER","Method":"play", "value":"intro_en.mp3", "feature":"FTR_ENGLISH"}
+//        ],
+
+        "PLAYINTRO":{
+          "type": "MODULE",
+          "reuse":false,
+          "COMMENT": "Tutor says: Now let’s practice writing some numbers.",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "intro.mp3", "features": ""}
+          ]
+        },
+
+        "PLAYEXIT1":{
+          "type": "MODULE",
+          "reuse":false,
+          "COMMENT": "Tutor says: You wrote all of them correctly!.",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "exit1.mp3", "features": ""}
+          ]
+        },
+
+        "PLAYEXIT2":{
+          "type": "MODULE",
+          "reuse":false,
+          "COMMENT": "Tutor says: Good job! Next time you can do better!.",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "good job.mp3", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "exit2.mp3", "features": ""}
+            //allow playing two audio files here.
+          ]
+        },
+
         "PLAYCORRECT": {
           "type": "MODULE",
           "reuse":true,
-          "COMMENT": "????",
+          "COMMENT": "Tutor says: good!",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "great.mp3", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "good.mp3", "features": ""}
           ]
         },
+
         "PLAYWRONG": {
           "type": "MODULE",
           "reuse":true,
-          "COMMENT": "????",
+          "COMMENT": "Tutor says",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "great.mp3", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "that looks like the number.mp3", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "charprompt_{{rec_char}}", "features": ""},  // a value returned by the recognizer
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "try again.mp3", "features": ""}
           ]
         }
       },
@@ -147,16 +240,12 @@
         "WRONG_TRACK": {
           "type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": ""
         },
-
-
         "B5_ATTACH": {
           "type": "COMMAND", "id": "button5", "method": "setButtonBehavior", "parms": "STOP:String"
         },
         "B5_DEATTACH": {
           "type": "COMMAND", "id": "button5", "method": "setButtonBehavior", "parms": "NULL:String"
         },
-
-
         "NEXTSCENE": {
           "type": "COMMAND", "cmd": "gotoNextScene"
         }
@@ -166,25 +255,60 @@
 
         "COMMENT": "@@@@@  CConstraints @@@@@ ",
 
-        "FTR_NOWORDS": {
+        "COND_PASS1": {
           "type": "CONDITION",
-          "cmd": "test",
-          "code": "FTR_NOWORDS"
+          "If": "FTR_NOWORDS && ALL_CORRECT",
+          "Then":"",
+          "Else":""
         },
-        "FTR_WORDS": {
+
+        "COND_PASS2": {
           "type": "CONDITION",
-          "cmd": "test",
-          "code": "!FTR_NOWORDS"
+          "If": "FTR_NOWORDS && NOT_ALL_CORRECT",
+          "Then":"",
+          "Else":""
         },
-        "FTR_RIGHT": {
+
+        "FTR_NOWORDS":{
           "type": "CONDITION",
-          "cmd": "test",
-          "code": "FTR_RIGHT"
+          "cmd":"test",
+          "code":"FTR_NOWORDS"
         },
-        "FTR_WRONG": {
+
+        "FTR_WORDS":{
           "type": "CONDITION",
-          "cmd": "test",
-          "code": "!FTR_RIGHT"
+          "cmd":"test",
+          "code":"!FTR_NOWORDS"
+        },
+
+        "ALL_CORRECT":{
+          "type": "CONDITION",
+          "cmd":"test",
+          "code":"ALL_CORRECT"
+        },
+
+        "NOT_ALL_CORRECT":{
+          "type": "CONDITION",
+          "cmd":"test",
+          "code":"!ALL_CORRECT"
+        },
+
+        "FTR_RIGHT":{
+          "type": "CONDITION",
+          "cmd":"test",
+          "code":"FTR_RIGHT"
+        },
+
+        "FTR_WRONG":{
+          "type": "CONDITION",
+          "cmd":"test",
+          "code":"FTR_WRONG"
+        },
+
+        "FTR_UNRECOGNIZED":{
+          "type": "CONDITION",
+          "cmd":"test",
+          "code":"FTR_UNRECOGNIZED"
         }
       }
     }
