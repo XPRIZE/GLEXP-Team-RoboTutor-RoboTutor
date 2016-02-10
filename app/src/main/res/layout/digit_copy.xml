@@ -1,6 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<cmu.xprize.robotutor.tutorengine.widgets.core.CScenePercentLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/digit_copy">
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/Sbanner"
+        android:layout_width="match_parent"
+        android:paddingLeft="25dp"
+        app:layout_heightPercent="12%"
+        android:background="#800"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:textColor="#FFF"
+        android:text="This is the Banner Area."/>
+
+    <xprize.cmu.textedit.CResponseView
+        android:id="@+id/Sstimulus"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="25dp"
+        app:layout_heightPercent="12%"
+        app:isResponse="false"
+        android:layout_below="@id/Banner"
+        android:background="#FFF"
+        android:gravity="center_vertical"
+        android:textSize="30sp" />
+
+    <xprize.cmu.textedit.CResponseView
+        android:id="@+id/Sresponse"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="25dp"
+        app:layout_heightPercent="12%"
+        app:isResponse="true"
+        app:linkedView="@id/Sstimulus"
+        android:layout_below="@id/Sstimulus"
+        android:background="#0D0"
+        android:gravity="center_vertical"
+        android:textSize="30sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        app:layout_heightPercent="76%"
+        android:layout_below="@id/Sresponse"
+        android:background="#eef">
+
+        <xprize.cmu.textedit.CWritingComp
+            android:id="@+id/SwritingComp"
+            app:linkedView="@id/Sresponse"
+            android:layout_width="250dp"
+            android:layout_height="333dp"
+            android:layout_centerInParent="true"
+            android:background="#ccc" />
+    </RelativeLayout>
+
+</cmu.xprize.robotutor.tutorengine.widgets.core.CScenePercentLayout>
