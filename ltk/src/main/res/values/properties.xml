@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="CResponseView">
+    <declare-styleable name="CStimResp">
         <attr name="isResponse" format="boolean" />
         <attr name="linkedView" format="reference"/>
     </declare-styleable>

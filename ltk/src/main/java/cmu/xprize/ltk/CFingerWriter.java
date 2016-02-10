@@ -35,7 +35,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-public class CWritingComp extends View implements OnTouchListener {
+public class CFingerWriter extends View implements OnTouchListener {
 
     private Context            mContext;
     private ITextSink          mLinkedView;
@@ -71,17 +71,17 @@ public class CWritingComp extends View implements OnTouchListener {
 
 
 
-    public CWritingComp(Context context) {
+    public CFingerWriter(Context context) {
         super(context);
         init(context, null);
     }
 
-    public CWritingComp(Context context, AttributeSet attrs) {
+    public CFingerWriter(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public CWritingComp(Context context, AttributeSet attrs, int defStyle) {
+    public CFingerWriter(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs);
     }
@@ -96,11 +96,11 @@ public class CWritingComp extends View implements OnTouchListener {
         if(attrs != null) {
             TypedArray a = context.getTheme().obtainStyledAttributes(
                     attrs,
-                    R.styleable.CResponseView,
+                    R.styleable.CStimResp,
                     0, 0);
 
             try {
-                mLinkedViewID = a.getResourceId(R.styleable.CResponseView_linkedView, 0);
+                mLinkedViewID = a.getResourceId(R.styleable.CStimResp_linkedView, 0);
             } finally {
                 a.recycle();
             }

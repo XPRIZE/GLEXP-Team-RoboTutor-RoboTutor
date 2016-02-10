@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 
-public class CResponseView extends LinearLayout implements View.OnClickListener, ITextSink {
+public class CStimResp extends LinearLayout implements View.OnClickListener, ITextSink {
 
     private Context       mContext;
     private StringBuilder mString;
@@ -20,7 +20,7 @@ public class CResponseView extends LinearLayout implements View.OnClickListener,
     private int[]         mLexEnds;             // records location of the end of lexemes in mDisplayText string
     private boolean       mEmpty = false;
 
-    private CResponseView mLinkedView;
+    private CStimResp mLinkedView;
     private int           mLinkedViewID;
 
     private boolean       mComparing      = false;
@@ -43,19 +43,19 @@ public class CResponseView extends LinearLayout implements View.OnClickListener,
     final private float aRatio = 1.5f;
 
 
-    public CResponseView(Context context) {
+    public CStimResp(Context context) {
         super(context);
         init(context, null);
     }
 
 
-    public CResponseView(Context context, AttributeSet attrs) {
+    public CStimResp(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
 
-    public CResponseView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CStimResp(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
@@ -67,12 +67,12 @@ public class CResponseView extends LinearLayout implements View.OnClickListener,
         if(attrs != null) {
             TypedArray a = context.getTheme().obtainStyledAttributes(
                     attrs,
-                    R.styleable.CResponseView,
+                    R.styleable.CStimResp,
                     0, 0);
 
             try {
-                mIsResponse   = a.getBoolean(R.styleable.CResponseView_isResponse, false);
-                mLinkedViewID = a.getResourceId(R.styleable.CResponseView_linkedView, 0);
+                mIsResponse   = a.getBoolean(R.styleable.CStimResp_isResponse, false);
+                mLinkedViewID = a.getResourceId(R.styleable.CStimResp_linkedView, 0);
             } finally {
                 a.recycle();
             }
@@ -302,7 +302,7 @@ public class CResponseView extends LinearLayout implements View.OnClickListener,
                 if (mComparing) {
                     PercentRelativeLayout parentview = (PercentRelativeLayout)getParent();
 
-                    mLinkedView = (CResponseView)parentview.findViewById(mLinkedViewID);
+                    mLinkedView = (CStimResp)parentview.findViewById(mLinkedViewID);
                     mLinkLex    = mLinkedView.getString().split(" ");
                 }
             } catch (NullPointerException exp) {
@@ -311,7 +311,7 @@ public class CResponseView extends LinearLayout implements View.OnClickListener,
     }
 
 
-    public void setLinkedView(CResponseView respView) {
+    public void setLinkedView(CStimResp respView) {
         mLinkedView = respView;
     }
 

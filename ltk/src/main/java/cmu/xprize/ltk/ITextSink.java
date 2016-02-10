@@ -6,6 +6,6 @@ package cmu.xprize.ltk;
 public interface ITextSink {
 
     public void addChar(String newChar);
-    public void setLinkedView(CResponseView respView);
+    public void setLinkedView(CStimResp respView);
 
 }
