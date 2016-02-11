@@ -18,10 +18,9 @@
           "type": "NODE",
           "COMMENT": "Intro Clip",
           "maptype":"actionMap",
-          "mapname": "INTRO_STATE_TRACK",
-          "preenter":["GB_DISABLE","FW_DISABLE","USE_SWAHILI"],
-          "state"   :["PLAYINTRO"],
-          "preexit" :["GETCHAR"],
+          "mapname": "PLAYINTRO",
+          "preenter":["GB_DISABLE","FW_DISABLE"],
+          "preexit" :[],
           "edges": [
             {
               "constraint": "",
@@ -33,8 +32,9 @@
         "NEWCHAR":{
           "COMMENT":"This node presents a digit for user to copy.",
           "type":"node",
-          "preenter":["GB_DISABLE","FW_DISABLE","USE_SWAHILI","REMOVECHAR","REMOVEMODEL"],
-          "state"   :["DISPLAYCHAR","PLAYDCHAR1","PLAYCHAR2"],
+          "preenter":["GETCHAR","DISPLAYCHAR"],
+          "maptype":"actionMap",
+          "mapname": "PLAYCHAR_TRACK",
           "preexit" :[],
           "edges":
           [
@@ -42,14 +42,15 @@
           ]
         },
 
+        //How to set time limit for the recognizer?
         "USERINPUT":{
           "COMMENT":"When module is complete - move to next scene in the scenegraph",
           "type":"node",
-          "maptype":"actionMap",
-          "mapname": "USERINPUT_TRACK",
+          "maptype":"???",
+          "mapname": "???",
           "preenter":["FW_ENABLE"],
           "state"   :[],
-          "preexit" :["FW_DISABLE","TESTRESULT"],
+          "preexit" :["FW_DISABLE"],
           "edges":
           [
             {"constraint":"FTR_RIGHT","edge":"CORRECT"},
@@ -62,15 +63,14 @@
           "COMMENT":"When user inputs a correct answer...",
           "type":"node",
           "maptype":"actionMap",
-          "mapname": "CORRECT_TRACK",
+          "mapname": "PLAYCORRECT",
           "preenter":[],
-          "state"   :["PLAYCORRECT"],
-          "preexit" :[],
+          "preexit" :["REMOVEINPUT","REMOVEMODEL"],
           "edges":
           [
             {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
             {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
-            {"constraint":"","edge":"NEXTCHAR"}
+            {"constraint":"","edge":"NEWCHAR"}
           ]
         },
 
@@ -79,9 +79,8 @@
           "type":"node",
           "maptype":"actionMap",
           "mapname": "WRONG_TRACK",
-          "preenter":[],
-          "state"   :["MARKINRED","PLAYWRONG"],
-          "preexit" :["REMOVECHAR"],
+          "preenter":["MARKINRED"],
+          "preexit" :["REMOVEINPUT"],
           "edges":
           [
 
@@ -94,9 +93,8 @@
           "type":"node",
           "maptype":"actionMap",
           "mapname": "UNRECOGNIZED_TRACK",
-          "preenter":[],
-          "state"   :["MARKINRED","PLAYUNRECOGNIZED"],
-          "preexit" :["REMOVECHAR"],
+          "preenter":["MARKRED"],
+          "preexit" :["REMOVEINPUT"],
           "edges":
           [
             {"constraint":"","edge":"USERINPUT"}
@@ -109,7 +107,6 @@
           "maptype":"actionMap",
           "mapname": "HESITATION_TRACK",
           "preenter":[],
-          "state"   :["PLAYCHAR2"],
           "preexit" :[],
           "edges":
           [
@@ -117,23 +114,12 @@
           ]
         },
 
-        "NEXTCHAR":{
-          "COMMENT": "Move to a new digit.",
-          "type":"node",
-          "preenter":[],
-          "state"   :["PLAYNEXT"],
-          "preexit" :["GETCHAR"],
-          "edges":
-          [
-            {"constraint":"","edge":"NEWMODEL"}
-          ]
-        },
-
         "EXITCLIP1": {
           "COMMENT":"Exit Clip for ALL_CORRECT",
           "type":"node",
+          "maptype":"actionMap",
+          "mapname": "EXIT1_TRACK",
           "preenter":[],
-          "state"   :["PLAYEXIT1"],
           "preexit" :[],
           "edges":
           [
@@ -143,8 +129,9 @@
 
         "EXITCLIP2": {"COMMENT":"Exit Clip for NOT_ALL_CORRECT",
           "type":"node",
+          "maptype":"actionMap",
+          "mapname": "EXIT2_TRACK",
           "preenter":[],
-          "state"   :["PLAYEXIT2"],
           "preexit" :[],
           "edges":
           [
@@ -166,45 +153,10 @@
 
         "COMMENT": "@@@@@  CModules  @@@@@",
 
-//        "PLAYINTRO":	[
-//          "MP_NAVINC",
-//          {"target":"MEDIAPLAYER","Method":"play", "value":"intro_sw.mp3", "feature":"FTR_SWAHILI"},
-//          {"target":"MEDIAPLAYER","Method":"play", "value":"intro_en.mp3", "feature":"FTR_ENGLISH"}
-//        ],
-
-        "PLAYINTRO":{
-          "type": "MODULE",
-          "reuse":false,
-          "COMMENT": "Tutor says: Now let’s practice writing some numbers.",
-          "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "intro.mp3", "features": ""}
-          ]
-        },
-
-        "PLAYEXIT1":{
-          "type": "MODULE",
-          "reuse":false,
-          "COMMENT": "Tutor says: You wrote all of them correctly!.",
-          "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "exit1.mp3", "features": ""}
-          ]
-        },
-
-        "PLAYEXIT2":{
-          "type": "MODULE",
-          "reuse":false,
-          "COMMENT": "Tutor says: Good job! Next time you can do better!.",
-          "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "good job.mp3", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "exit2.mp3", "features": ""}
-            //allow playing two audio files here.
-          ]
-        },
-
         "PLAYCORRECT": {
           "type": "MODULE",
           "reuse":true,
-          "COMMENT": "Tutor says: good!",
+          "COMMENT": "???",
           "tracks": [
             {"type": "AUDIO", "command": "PLAY", "soundsource": "good.mp3", "features": ""}
           ]
@@ -213,7 +165,7 @@
         "PLAYWRONG": {
           "type": "MODULE",
           "reuse":true,
-          "COMMENT": "Tutor says",
+          "COMMENT": "???",
           "tracks": [
             {"type": "AUDIO", "command": "PLAY", "soundsource": "that looks like the number.mp3", "features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "charprompt_{{rec_char}}", "features": ""},  // a value returned by the recognizer
@@ -228,24 +180,75 @@
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "INTRO_STATE_TRACK": {
-          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABS", "features": ""
+        "PLAYINTRO":{"type": "AUDIO", "command": "PLAY", "soundsource": "Now let’s practice writing some some numbers.wav", "features": ""},
+        "PLAYCORRECT":{"type": "AUDIO", "command": "PLAY", "soundsource": "Good.wav", "features": ""},
+
+        "GB_DISABLE":{"target":"goButton","Method":"enable", "value":"false"},
+        //disable Go button
+        "GB_ENABLE":{"target":"goButton","Method":"enable", "value":"true"},
+        //enable Go button
+
+        "FW_DISABLE":{},
+        //disable FingerWriting
+        "FW_ENABLE":{},
+        //enable FingerWriting
+
+        "GETCHAR":{},
+        //get a new digit from the list.
+
+        "REMOVEINPUT":{},
+        //remove the preview string
+
+        "REMOVEMODEL":{},
+        //remove the stimulus
+
+        "DISPLAYCHAR":{},
+        //display the stimulus (value of "GETCHAR")
+
+        "MARKRED":{},
+        //mark the preview string in red color
+
+        "PLAYCHAR_TRACK":{
+          "type": "TIMELINE","trackname": "???", "features": ""
         },
-        "USERINPUT_TRACK": {
-          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": ""
+        // 1: This is the number.wav
+        // 2: {{VAR_CHAR}} the stimulus digit
+        // 3: Please write the number.wav
+        // 4: with your finger.wav
+
+        "WRONG_TRACK":{
+          "type": "TIMELINE","trackname": "???", "features": ""
         },
-        "CORRECT_TRACK": {
-          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": ""
+        // 1: That looks like.wav
+        // 2: {{VAR_CHAR}} the recognized digit
+        // 3: Try again.wav
+
+        "UNRECOGNIZED_TRACK":{
+          "type": "TIMELINE","trackname": "???", "features": ""
         },
-        "WRONG_TRACK": {
-          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": ""
+        // 1: Huh.wav
+        // 2: That doesn't look like.wav
+        // 3. {{VAR_CHAR}} the stimulus digit
+        // 4: Try again.wav
+
+        "HESITATION_TRACK":{
+          "type": "TIMELINE","trackname": "???", "features": ""
         },
-        "B5_ATTACH": {
-          "type": "COMMAND", "id": "button5", "method": "setButtonBehavior", "parms": "STOP:String"
+        // 1: Please write the number.wav
+        // 2: {{VAR_CHAR}} the stimulus digit
+
+        "EXIT1_TRACK":{
+          "type": "TIMELINE","trackname": "???", "features": ""
         },
-        "B5_DEATTACH": {
-          "type": "COMMAND", "id": "button5", "method": "setButtonBehavior", "parms": "NULL:String"
+        // 1: Good job.wav
+        // 2: You wrote all of them correctly.wav
+
+        "EXIT1_TRACK":{
+          "type": "TIMELINE","trackname": "???", "features": ""
         },
+        // 1: Good job.wav
+        // 2: Next time you can do better.wav
+
         "NEXTSCENE": {
           "type": "COMMAND", "cmd": "gotoNextScene"
         }

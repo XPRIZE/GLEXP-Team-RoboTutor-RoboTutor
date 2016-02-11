@@ -24,7 +24,7 @@
         android:paddingLeft="25dp"
         app:layout_heightPercent="12%"
         app:isResponse="false"
-        android:layout_below="@id/Banner"
+        android:layout_below="@id/Sbanner"
         android:background="#FFF"
         android:gravity="center_vertical"
         android:textSize="30sp" />
