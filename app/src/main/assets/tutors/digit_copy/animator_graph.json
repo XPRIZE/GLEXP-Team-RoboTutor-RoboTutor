@@ -32,9 +32,9 @@
         "NEWCHAR":{
           "COMMENT":"This node presents a digit for user to copy.",
           "type":"node",
-          "preenter":["GETCHAR","DISPLAYCHAR"],
-          "maptype":"actionMap",
-          "mapname": "PLAYCHAR_TRACK",
+          "preenter":["GETCHAR"],
+          "maptype":"moduleMap",
+          "mapname": "PLAYCHAR",
           "preexit" :[],
           "edges":
           [
@@ -42,21 +42,20 @@
           ]
         },
 
-        //How to set time limit for the recognizer?
         "USERINPUT":{
           "COMMENT":"When module is complete - move to next scene in the scenegraph",
           "type":"node",
-          "maptype":"???",
-          "mapname": "???",
-          "preenter":["FW_ENABLE"],
-          "state"   :[],
+          "maptype":"moduleMap",
+          "mapname": "FINGERWRITING",
+          "preenter":["FW_ENABLE","REMINDER_TIMER"],
           "preexit" :["FW_DISABLE"],
           "edges":
           [
             {"constraint":"FTR_RIGHT","edge":"CORRECT"},
             {"constraint":"FTR_WRONG","edge":"WRONG"},
-            {"constraint":"FTR_UNRECOGNIZED","edge":"UNRECOGNIZED"},
-            {"constraint":"","edge":"HESITATION"}						]
+            {"constraint":"FTR_UNRECOGNIZED","edge":"UNRECOGNIZED"}
+            //{"constraint":"","edge":"HESITATION"}
+          ] //???lack of a default edge here
         },
 
         "CORRECT":{
@@ -77,9 +76,9 @@
         "WRONG":{
           "COMMENT":"When user inputs an incorrect answer...",
           "type":"node",
-          "maptype":"actionMap",
-          "mapname": "WRONG_TRACK",
-          "preenter":["MARKINRED"],
+          "maptype":"moduleMap",
+          "mapname": "PLAYWRONG",
+          "preenter":[],
           "preexit" :["REMOVEINPUT"],
           "edges":
           [
@@ -91,9 +90,9 @@
         "UNRECOGNIZED":{
           "COMMENT":"When the recognizer fails to identify the input...",
           "type":"node",
-          "maptype":"actionMap",
-          "mapname": "UNRECOGNIZED_TRACK",
-          "preenter":["MARKRED"],
+          "maptype":"moduleMap",
+          "mapname": "PLAYUNRECOGNIZED",
+          "preenter":[],
           "preexit" :["REMOVEINPUT"],
           "edges":
           [
@@ -101,24 +100,24 @@
           ]
         },
 
-        "HESITATION":{
-          "COMMENT":"When the user doesn't write anything...",
-          "type":"node",
-          "maptype":"actionMap",
-          "mapname": "HESITATION_TRACK",
-          "preenter":[],
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"","edge":"USERINPUT"}
-          ]
-        },
+//        "HESITATION":{
+//          "COMMENT":"When the user doesn't write anything...",
+//          "type":"node",
+//          "maptype":"moduleMap",
+//          "mapname": "PLAYHESITATION",
+//          "preenter":[],
+//          "preexit" :[],
+//          "edges":
+//          [
+//            {"constraint":"","edge":"USERINPUT"}
+//          ]
+//        },
 
         "EXITCLIP1": {
           "COMMENT":"Exit Clip for ALL_CORRECT",
           "type":"node",
-          "maptype":"actionMap",
-          "mapname": "EXIT1_TRACK",
+          "maptype":"moduleMap",
+          "mapname": "PLAYEXIT1",
           "preenter":[],
           "preexit" :[],
           "edges":
@@ -129,8 +128,8 @@
 
         "EXITCLIP2": {"COMMENT":"Exit Clip for NOT_ALL_CORRECT",
           "type":"node",
-          "maptype":"actionMap",
-          "mapname": "EXIT2_TRACK",
+          "maptype":"moduleMap",
+          "mapname": "PLAYEXIT2",
           "preenter":[],
           "preexit" :[],
           "edges":
@@ -153,25 +152,95 @@
 
         "COMMENT": "@@@@@  CModules  @@@@@",
 
-        "PLAYCORRECT": {
+        "PLAYCHAR": {
           "type": "MODULE",
           "reuse":true,
-          "COMMENT": "???",
+          "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "good.mp3", "features": ""}
+            {"type":"","command":"DISPLAY","id":"","source":"{{Sstimulus.value}}???","mode":"flow","features": ""},//display the stimulus (value of "GETCHAR")
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "This is the number.mp3", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""}, //the stimulus digit
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3", "mode":"flow", "features": ""},
+            {"type": "AUDIO","command": "PLAY", "soundsource": "with your finger.mp3", "mode":"flow", "features": ""}
+          ]
+        },
+
+        "FINGERWRITING":{
+          "type":"MODULE",
+          "reuse":true,
+          "COMMENT": "FingerWriting Module",
+          "tracks": [
+            {"type": "COMMAND", "id": "SwritingComp", "method": "onStartWriting", "parms": "CANCEL_REMINDER:String"},
+            // This would call the cancel reminder action below when the user starts writing
+            {"type": "COMMAND", "id": "SwritingComp", "method": "onRecognitionComplete", "parms": "NEXT:String"}
+            // This would increment the animation_graph when it is in a wait state.  e.g if it is sitting at the end of a stream audio clip
           ]
         },
 
         "PLAYWRONG": {
           "type": "MODULE",
           "reuse":true,
-          "COMMENT": "???",
+          "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "that looks like the number.mp3", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "charprompt_{{rec_char}}", "features": ""},  // a value returned by the recognizer
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "try again.mp3", "features": ""}
+            {"type": "???", "command": "FLAG", "id":"???", "value":"red","mode":"flow(???)","method":"???","features": ""}, //flag the incorrect string in red color
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "that looks like.mp3", "mode":"flow","features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SwritingComp.recChar}}.mp3","mode":"flow", "features": ""},  // the recognizer output
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
+          ]
+        },
+
+        "PLAYUNRECOGNIZED": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "???", "command": "FLAG", "id":"???", "value":"red","mode":"flow(???)","method":"???","features": ""}, //flag the incorrect string in red color
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Huh.mp3", "mode":"flow","features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "That doesnt look like.mp3", "mode":"flow","features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3","mode":"flow", "features": ""}, //the stimulus digit
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
+          ]
+        },
+
+        "PLAYHESITATION":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""} //the stimulus digit
+          ]
+        },
+
+        "PLAYEXIT1":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "You wrote all of them correctly.mp3",   "mode":"flow", "features": ""}
+          ]
+        },
+
+        "PLAYEXIT2":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Next time you can do better.mp3",   "mode":"flow", "features": ""}
+          ]
+        },
+
+        "PLAYCORRECT": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "good.mp3", "features": ""}
           ]
         }
+
       },
 
       "actionMap": {
@@ -180,74 +249,32 @@
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "PLAYINTRO":{"type": "AUDIO", "command": "PLAY", "soundsource": "Now let’s practice writing some some numbers.wav", "features": ""},
-        "PLAYCORRECT":{"type": "AUDIO", "command": "PLAY", "soundsource": "Good.wav", "features": ""},
+        "PLAYINTRO":{"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some some numbers.mp3", "features": ""},
+        "PLAYCORRECT":{"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3", "features": ""},
+
+        "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"10000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PLAYHESITATION", "features": "" },
+        //set the waiting time limit as 10 seconds
+
+        "CANCEL_REMINDER": {"type": "TIMER", "id":"ReminderTimer", "action":"CANCEL", "features": "" },
 
         "GB_DISABLE":{"target":"goButton","Method":"enable", "value":"false"},
         //disable Go button
         "GB_ENABLE":{"target":"goButton","Method":"enable", "value":"true"},
         //enable Go button
 
-        "FW_DISABLE":{},
+        "FW_DISABLE":{???},
         //disable FingerWriting
         "FW_ENABLE":{},
         //enable FingerWriting
 
-        "GETCHAR":{},
+        "GETCHAR":{???},
         //get a new digit from the list.
 
-        "REMOVEINPUT":{},
+        "REMOVEINPUT":{???},
         //remove the preview string
 
-        "REMOVEMODEL":{},
+        "REMOVEMODEL":{???},
         //remove the stimulus
-
-        "DISPLAYCHAR":{},
-        //display the stimulus (value of "GETCHAR")
-
-        "MARKRED":{},
-        //mark the preview string in red color
-
-        "PLAYCHAR_TRACK":{
-          "type": "TIMELINE","trackname": "???", "features": ""
-        },
-        // 1: This is the number.wav
-        // 2: {{VAR_CHAR}} the stimulus digit
-        // 3: Please write the number.wav
-        // 4: with your finger.wav
-
-        "WRONG_TRACK":{
-          "type": "TIMELINE","trackname": "???", "features": ""
-        },
-        // 1: That looks like.wav
-        // 2: {{VAR_CHAR}} the recognized digit
-        // 3: Try again.wav
-
-        "UNRECOGNIZED_TRACK":{
-          "type": "TIMELINE","trackname": "???", "features": ""
-        },
-        // 1: Huh.wav
-        // 2: That doesn't look like.wav
-        // 3. {{VAR_CHAR}} the stimulus digit
-        // 4: Try again.wav
-
-        "HESITATION_TRACK":{
-          "type": "TIMELINE","trackname": "???", "features": ""
-        },
-        // 1: Please write the number.wav
-        // 2: {{VAR_CHAR}} the stimulus digit
-
-        "EXIT1_TRACK":{
-          "type": "TIMELINE","trackname": "???", "features": ""
-        },
-        // 1: Good job.wav
-        // 2: You wrote all of them correctly.wav
-
-        "EXIT2_TRACK":{
-          "type": "TIMELINE","trackname": "???", "features": ""
-        },
-        // 1: Good job.wav
-        // 2: Next time you can do better.wav
 
         "NEXTSCENE": {
           "type": "COMMAND", "cmd": "gotoNextScene"
