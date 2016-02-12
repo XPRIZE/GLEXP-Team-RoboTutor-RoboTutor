@@ -8,11 +8,29 @@
       "name": "Word copying tutor",
       "COMMENT": "This is where you describe your tutor",
       "version": "1.0.0",
-      "rootnode": "AUDIOFLOW_STATE",
+      "rootnode": "ABS_TIMELINE_STATE",
 
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        "ABS_TIMELINE_STATE": {
+          "type": "NODE",
+          "COMMENT": "Test of stream mode audio",
+          "maptype":"actionMap",
+          "mapname": "ABS_TIMELINE_TEST1",
+          "preenter": [
+          ],
+          "preexit": [
+          ],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "AUDIOSTREAM_STATE"
+            }
+          ]
+        },
+
 
         "AUDIOFLOW_STATE": {
           "type": "NODE",
@@ -333,6 +351,9 @@
       },
 
       "actionMap": {
+
+        "ABS_TIMELINE_TEST1": {"type": "TIMELINE", "trackname": "TR_SIMPLE_ABS1", "features": ""},
+        "REL_TIMELINE_TEST1": {"type": "TIMELINE", "trackname": "TR_SIMPLE_REL1", "features": ""},
 
         "my_action": {"type": "TIMER", "name": "hint_timeout", "duration":"20", "repeat":"false", "action":"START", "ontimer":"ACTION_NAME", "features": "" },
 
