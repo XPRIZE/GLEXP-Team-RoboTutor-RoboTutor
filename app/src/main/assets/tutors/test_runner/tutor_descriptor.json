@@ -3,7 +3,7 @@
 
 	"scenedata": [
 	  {
-		"id":"session_manager",
+		"id":"test_runner",
 
 		"scene_layout": [
 		  {
@@ -45,11 +45,11 @@
 		],
 
 		"oncreate":[
-            {"id":"Sbutton1", "method":"setText", "parms":"My Button 1:String", "features":""},
-            {"id":"Sbutton2", "method":"setText", "parms":"My Button 2:String", "features":""},
-		    {"id":"Sbutton3", "method":"setText", "parms":"My Button 3:String", "features":""},
-		    {"id":"Sbutton4", "method":"setText", "parms":"My Button 4:String", "features":""},
-		    {"id":"Sbutton5", "method":"setText", "parms":"My Button 5:String", "features":""}
+            {"id":"Sbutton1", "method":"setText", "parms":"Test Runner 1:String", "features":""},
+            {"id":"Sbutton2", "method":"setText", "parms":"Test Runner 2:String", "features":""},
+		    {"id":"Sbutton3", "method":"setText", "parms":"Test Runner 3:String", "features":""},
+		    {"id":"Sbutton4", "method":"setText", "parms":"Test Runner 4:String", "features":""},
+		    {"id":"Sbutton5", "method":"setText", "parms":"Test Runner 5:String", "features":""}
 		],
 		"onenter":[
 		  {"execute":"actiontrack", "spec":"English_Intro", "features":"FTR_LANG_EN"},

@@ -185,14 +185,10 @@ public class type_action extends graph_node {
 
                     _method.invoke(sceneMap.get(id), iparms);
 
-                } catch (SecurityException e) {
-
-                } catch (NoSuchMethodException e) {
-
-                } catch (InvocationTargetException e) {
+                } catch(Exception e) {
                     e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "ERROR: ApplyNode: " + id + "  " + method + "  " + e);
+                    System.exit(1);
                 }
                 break;
             }

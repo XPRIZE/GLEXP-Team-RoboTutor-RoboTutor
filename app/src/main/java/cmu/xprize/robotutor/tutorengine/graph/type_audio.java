@@ -56,6 +56,7 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
 
     // json loadable fields
     public String        command;
+    public String        mode        = TCONST.AUDIOEVENT;
     public String        lang;
     public String        soundsource;
     public long          index = 0;
@@ -200,6 +201,9 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
         mPlayer.seekTo(0);
         mPlaying = false;
 
+        if(mode.equals(TCONST.AUDIOSTREAM))
+            CTutor.mTutorNavigator.onButtonNext();
+
         if(listener != null) {
             listener.onCompletion(mp);
         }
@@ -232,17 +236,7 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
         }
 
         // Update the path to the sound source file
-        if(langPath != null) {
-
-            int offset = soundsource.lastIndexOf("/");
-
-            if(offset == -1) {
-                soundsource = langPath + "/" + soundsource;
-            }
-            else {
-                soundsource = langPath + soundsource.substring(offset);
-            }
-        }
+        soundsource = langPath + "/" + soundsource;
 
         mSoundSource = soundsource;
         mSourcePath  = TCONST.TUTORROOT + "/" + TCONST.TDATA + "/" + mSoundSource;

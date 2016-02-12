@@ -148,7 +148,7 @@ public class graph_node implements ILoadableObject, IScriptable {
                 node.applyNode();
 
             } catch (Exception e) {
-                Log.d(TAG, "Symbol not found: " + nodeName);
+                Log.e(TAG, "ERROR: map:" + mapSet.toString());
                 System.exit(1);
             }
         }

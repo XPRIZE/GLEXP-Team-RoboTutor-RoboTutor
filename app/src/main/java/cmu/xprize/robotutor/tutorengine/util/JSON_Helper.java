@@ -387,6 +387,7 @@ public class JSON_Helper {
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
                                     Log.e(TAG, "Null Object in :" + nJsonObj);
+                                    System.exit(1);
                                 }
                             }
 
@@ -407,21 +408,27 @@ public class JSON_Helper {
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                Log.e(TAG, "ERROR: parseSelf:" + e);
+                                System.exit(1);
                             }
                         }
                     }
                 }
 
             } catch (JSONException e) {
-                // Just ignore items where there is no JSON data
                 e.printStackTrace();
                 Log.e(TAG, "ERROR: parseSelf:" + e);
+                System.exit(1);
+
             } catch (InstantiationException e) {
                 e.printStackTrace();
                 Log.e(TAG, "ERROR: parseSelf:" + e);
+                System.exit(1);
+
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
                 Log.e(TAG, "ERROR: parseSelf:" + e);
+                System.exit(1);
             }
         }
     }

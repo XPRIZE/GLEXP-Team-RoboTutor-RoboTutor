@@ -382,22 +382,22 @@ public class type_actiontrack extends type_action {
 
         protected int       mDepth = 0;
 
-        public CTrackLayer(XmlPullParser xpp) throws IOException, XmlPullParserException {
+        public CTrackLayer(XmlPullParser xpparser) throws IOException, XmlPullParserException {
 
-            xpp.require(XmlPullParser.START_TAG, null, "DOMLayer");
+            xpparser.require(XmlPullParser.START_TAG, null, "DOMLayer");
 
-            mLayerName = xpp.getAttributeValue(null, "name");
+            mLayerName = xpparser.getAttributeValue(null, "name");
 
-            while (xpp.next() != XmlPullParser.END_TAG) {
+            while (xpparser.next() != XmlPullParser.END_TAG) {
 
-                if (xpp.getEventType() == XmlPullParser.END_TAG) {
+                if (xpparser.getEventType() == XmlPullParser.END_TAG) {
                     mDepth--;
                     continue;
                 }
-                if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                if (xpparser.getEventType() != XmlPullParser.START_TAG) {
                     continue;
                 }
-                String name = xpp.getName();
+                String name = xpparser.getName();
 
                 // Starts by looking for the entry tag
                 switch(name) {
@@ -412,7 +412,7 @@ public class type_actiontrack extends type_action {
                         switch(mLayerName) {
                             case TCONST.SCRIPT:
                                 _trackType = TCONST.ABSOLUTE_TYPE;
-                                mframes.add(new CScriptFrame(xpp));
+                                mframes.add(new CScriptFrame(xpparser));
                                 break;
 
                             case TCONST.MIXED:
@@ -421,10 +421,10 @@ public class type_actiontrack extends type_action {
 
                             case TCONST.AUDIO:
                                 // Audio tracks can have sound assets or they can use a script
-                                if(xpp.getAttributeValue(null, "soundName") == null)
-                                    mframes.add(new CScriptFrame(xpp));
+                                if(xpparser.getAttributeValue(null, "soundName") == null)
+                                    mframes.add(new CScriptFrame(xpparser));
                                 else
-                                    mframes.add(new CAudioFrame(xpp));
+                                    mframes.add(new CAudioFrame(xpparser));
                                 break;
 
                         }
@@ -432,7 +432,7 @@ public class type_actiontrack extends type_action {
 
                     default:
                         // Skip unrecognized tags
-                        skip(xpp);
+                        skip(xpparser);
                         break;
                 }
             }
@@ -475,13 +475,13 @@ public class type_actiontrack extends type_action {
 
         private int          mDepth = 0;
 
-        public CScriptFrame(XmlPullParser xpp) throws IOException, XmlPullParserException {
+        public CScriptFrame(XmlPullParser xpparser) throws IOException, XmlPullParserException {
 
-            xpp.require(XmlPullParser.START_TAG, null, "DOMFrame");
+            xpparser.require(XmlPullParser.START_TAG, null, "DOMFrame");
 
-            mName     = xpp.getAttributeValue(null, "name");
-            mIndex    = getSafeInteger(xpp.getAttributeValue(null, "index"));
-            mDuration = getSafeInteger(xpp.getAttributeValue(null, "duration"));
+            mName     = xpparser.getAttributeValue(null, "name");
+            mIndex    = getSafeInteger(xpparser.getAttributeValue(null, "index"));
+            mDuration = getSafeInteger(xpparser.getAttributeValue(null, "duration"));
 
             // If any of the frames have a name then we need to generate a frame map
             // to allow vectoring to named frames from scripts.
@@ -489,18 +489,18 @@ public class type_actiontrack extends type_action {
             if(mName != null)
                 _needsMap = true;
 
-            while((xpp.next() != XmlPullParser.END_TAG) || (mDepth > 0)) {
-                Log.i(TAG, "Event: " + xpp.getName() + "  Type: " + xpp.getEventType());
+            while((xpparser.next() != XmlPullParser.END_TAG) || (mDepth > 0)) {
+                Log.i(TAG, "Event: " + xpparser.getName() + "  Type: " + xpparser.getEventType());
 
-                if (xpp.getEventType() == XmlPullParser.END_TAG) {
+                if (xpparser.getEventType() == XmlPullParser.END_TAG) {
                     mDepth--;
                     continue;
                 }
-                if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                if (xpparser.getEventType() != XmlPullParser.START_TAG) {
                     continue;
                 }
 
-                String name = xpp.getName();
+                String name = xpparser.getName();
 
                 // Starts by looking for the entry tag
                 switch(name) {
@@ -510,12 +510,12 @@ public class type_actiontrack extends type_action {
                         break;
 
                     case "script":
-                        mScript = new CFrameScript(xpp);
+                        mScript = new CFrameScript(xpparser);
                         break;
 
                     default:
                         // Skip unrecognized tags
-                        skip(xpp);
+                        skip(xpparser);
                         break;
                 }
             }
@@ -606,6 +606,10 @@ public class type_actiontrack extends type_action {
                 mDuration    = getSafeInteger(xpp.getAttributeValue(null, "duration"));
                 mLast        = mIndex + mDuration;
                 mSoundSource = xpp.getAttributeValue(null, "soundName");
+
+                // NOTE: THIS IS FLASH SPECIFIC
+                // we strip off the Flash  audio/en/
+                mSoundSource = mSoundSource.substring(9);
 
                 // Note we pass the relative start location of this audio track - for seek purposes
                 String jsonCode = "{\"action\":\"AUDIO\", \"command\":\"PAUSE\", \"soundsource\":\"" + mSoundSource +
@@ -736,7 +740,7 @@ public class type_actiontrack extends type_action {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(false);
 
-            XmlPullParser xpp = factory.newPullParser();
+            XmlPullParser xpparser = factory.newPullParser();
 
             if(CTutorEngine.CacheSource.equals(TCONST.ASSETS)) {
                 in = CTutor.mAssetManager.open(factoryPATH);
@@ -746,18 +750,18 @@ public class type_actiontrack extends type_action {
                 in = new FileInputStream(filePath);
             }
 
-            xpp.setInput(in, null);
+            xpparser.setInput(in, null);
 
-            int eventType = xpp.getEventType();
+            int eventType = xpparser.getEventType();
 
             while (eventType != XmlPullParser.END_DOCUMENT) {
                 if(eventType == XmlPullParser.START_DOCUMENT) {
-                    Log.i(TAG, "XPP_INFO: Start document:" + xpp.getName());
+                    Log.i(TAG, "XPP_INFO: Start document:" + xpparser.getName());
 
                 } else if(eventType == XmlPullParser.START_TAG) {
-                    Log.i(TAG, "XPP_INFO: Start TAG: " + xpp.getName());
+                    Log.i(TAG, "XPP_INFO: Start TAG: " + xpparser.getName());
 
-                    String name = xpp.getName();
+                    String name = xpparser.getName();
 
                     // Starts by looking for the entry tag
                     switch(name) {
@@ -772,24 +776,24 @@ public class type_actiontrack extends type_action {
                             break;
 
                         case "DOMLayer":
-                            CTrackLayer nlayer = new CTrackLayer(xpp);
+                            CTrackLayer nlayer = new CTrackLayer(xpparser);
                             mLayerMap.put(nlayer.getName(), nlayer);
                             break;
 
                         default:
                             // Skip unrecognized tags
-                            skip(xpp);
+                            skip(xpparser);
                             break;
                     }
 
                 } else if(eventType == XmlPullParser.END_TAG) {
-                    Log.i(TAG, "XPP_INFO: End TAG: " + xpp.getName());
+                    Log.i(TAG, "XPP_INFO: End TAG: " + xpparser.getName());
                     mDepth--;
 
                 } else if(eventType == XmlPullParser.TEXT) {
-                    Log.i(TAG, "XPP_INFO: Element Text: " + xpp.getText() );
+                    Log.i(TAG, "XPP_INFO: Element Text: " + xpparser.getText());
                 }
-                eventType = xpp.next();
+                eventType = xpparser.next();
             }
 
         } catch (XmlPullParserException e) {

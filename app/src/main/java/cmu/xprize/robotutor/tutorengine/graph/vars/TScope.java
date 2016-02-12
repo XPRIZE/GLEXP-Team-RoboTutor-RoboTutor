@@ -75,6 +75,10 @@ public class TScope implements IScope {
 
 
     public void put(String key, IScriptable obj) {
+        if(map.containsKey(key)) {
+            Log.e(TAG, "Duplicate Key : " + key);
+            System.exit(1);
+        }
         map.put(key,obj);
     }
 
