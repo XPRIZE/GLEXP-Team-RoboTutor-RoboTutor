@@ -128,4 +128,5 @@ public class TCONST {
 
     public static final String AUDIOEVENT  = "event";
     public static final String AUDIOSTREAM = "stream";
+    public static final String AUDIOFLOW   = "flow";
 }

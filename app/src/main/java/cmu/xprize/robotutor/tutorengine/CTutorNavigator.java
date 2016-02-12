@@ -144,7 +144,7 @@ public class CTutorNavigator implements ITutorNavigator{
         // i.e. You either want it to trigger the next step in the animationGraph or the sceneGraph
         // reset _fSceneGraph if you want the next button to drive the animationGraph
         //
-        if(_fSceneGraph || mTutorAnimator.next().equals(TCONST.NONE)) {
+        if(_fSceneGraph || mTutorAnimator.next().equals(TCONST.NEXTSCENE)) {
             gotoNextScene();
         }
         else

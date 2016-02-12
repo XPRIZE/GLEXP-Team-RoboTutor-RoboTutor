@@ -114,7 +114,13 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
             preEnter();
             play();
 
-            status = TCONST.WAIT;
+            // Events return done - so they may play on top of each other.
+            // streams and flows WAIT until completion before continuing.
+            //
+            if(mode.equals(TCONST.AUDIOEVENT))
+                status = TCONST.DONE;
+            else
+                status = TCONST.WAIT;
         }
 
         return status;
@@ -201,7 +207,9 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
         mPlayer.seekTo(0);
         mPlaying = false;
 
-        if(mode.equals(TCONST.AUDIOSTREAM))
+        // Flows automatically increment to next animation node.
+        //
+        if(mode.equals(TCONST.AUDIOFLOW))
             CTutor.mTutorNavigator.onButtonNext();
 
         if(listener != null) {

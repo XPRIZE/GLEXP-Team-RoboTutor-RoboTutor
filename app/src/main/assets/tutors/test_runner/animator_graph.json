@@ -8,11 +8,28 @@
       "name": "Word copying tutor",
       "COMMENT": "This is where you describe your tutor",
       "version": "1.0.0",
-      "rootnode": "AUDIOEVENT_STATE",
+      "rootnode": "AUDIOFLOW_STATE",
 
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        "AUDIOFLOW_STATE": {
+          "type": "NODE",
+          "COMMENT": "Test of stream mode audio",
+          "maptype":"moduleMap",
+          "mapname": "AUDIOFLOW_MOD",
+          "preenter": [
+          ],
+          "preexit": [
+          ],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "AUDIOSTREAM_STATE"
+            }
+          ]
+        },
 
         "AUDIOSTREAM_STATE": {
           "type": "NODE",
@@ -20,6 +37,7 @@
           "maptype":"moduleMap",
           "mapname": "AUDIOSTREAM_MOD",
           "preenter": [
+            "B1_ATTACH"
           ],
           "preexit": [
           ],
@@ -37,7 +55,6 @@
           "maptype":"moduleMap",
           "mapname": "AUDIOEVENT_MOD",
           "preenter": [
-            "B1_ATTACH"
           ],
           "preexit": [
           ],
@@ -96,6 +113,17 @@
       "moduleMap": {
 
         "COMMENT": "@@@@@  CModules  @@@@@",
+
+        "AUDIOFLOW_MOD": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "test/orange.mp3", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "test/pink.mp3",   "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "test/purple.mp3", "mode":"flow", "features": ""}
+          ]
+        },
 
         "AUDIOSTREAM_MOD": {
           "type": "MODULE",
