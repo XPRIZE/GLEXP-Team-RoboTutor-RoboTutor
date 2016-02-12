@@ -35,8 +35,7 @@ public class scene_animator extends graph_node implements ILoadableObject{
 
     // State fields
     private graph_node   _currNode;
-    private String       _currAnimation;
-    private String       _prevAnimation;
+    private String       _nodeState;
 
     private HashMap<String, Integer> _pFeatures = new HashMap<String, Integer>();
 
@@ -103,29 +102,29 @@ public class scene_animator extends graph_node implements ILoadableObject{
 
             // Increment the animation polymorphically
 
-            _currAnimation = _currNode.next();
+            _nodeState = _currNode.next();
 
             // If the node is exhausted move to next node
 
-            if (_currAnimation.equals(TCONST.NONE)) {
+            if (_nodeState.equals(TCONST.NONE)) {
                 _currNode = _currNode.nextNode();
 
                 if (_currNode != null) {
                     Log.d(TAG, "Running Node: " + _currNode.name);
 
                     // Apply action nodes
-                    _currAnimation =_currNode.applyNode();
+                    _nodeState =_currNode.applyNode();
+                }
+                else {
+                    _nodeState = TCONST.NEXTSCENE;
+                    break;
                 }
             }
 
-        } while (_currAnimation.equals(TCONST.DONE) && (_currNode != null));
+        } while (!_nodeState.equals(TCONST.WAIT) && !_nodeState.equals(TCONST.NEXTSCENE));
 
-        // Remember a context in which to do constraint testing for graph Node transitions.
-        // i.e. the constraints are tested within the context of the last valid Animation
 
-        _prevAnimation = _currAnimation;
-
-        return _currAnimation;
+        return _nodeState;
     }
 
 

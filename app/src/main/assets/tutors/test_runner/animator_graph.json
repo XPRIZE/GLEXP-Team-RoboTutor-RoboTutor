@@ -1,20 +1,72 @@
 {
   "animatorMap": {
-    "COMMENT": "Animation Graph for the Word Writing Tutor",
+    "COMMENT": "Test Runner Animation Graph",
 
-    "session_manager": {
+    "test_runner": {
 
       "type": "ANIMATOR",
       "name": "Word copying tutor",
       "COMMENT": "This is where you describe your tutor",
       "version": "1.0.0",
-      "rootnode": "INTRO_STATE",
+      "rootnode": "AUDIOFLOW_STATE",
 
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
 
-        "INTRO_STATE": {
+        "AUDIOFLOW_STATE": {
+          "type": "NODE",
+          "COMMENT": "Test of stream mode audio",
+          "maptype":"moduleMap",
+          "mapname": "AUDIOFLOW_MOD",
+          "preenter": [
+          ],
+          "preexit": [
+          ],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "AUDIOSTREAM_STATE"
+            }
+          ]
+        },
+
+        "AUDIOSTREAM_STATE": {
+          "type": "NODE",
+          "COMMENT": "Test of stream mode audio",
+          "maptype":"moduleMap",
+          "mapname": "AUDIOSTREAM_MOD",
+          "preenter": [
+            "B1_ATTACH"
+          ],
+          "preexit": [
+          ],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "AUDIOEVENT_STATE"
+            }
+          ]
+        },
+
+        "AUDIOEVENT_STATE": {
+          "type": "NODE",
+          "COMMENT": "Test of stream mode audio",
+          "maptype":"moduleMap",
+          "mapname": "AUDIOEVENT_MOD",
+          "preenter": [
+          ],
+          "preexit": [
+          ],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "AUDIOSTREAM_STATE"
+            }
+          ]
+        },
+
+        "CONDTEST_STATE": {
           "type": "NODE",
           "COMMENT": "Intro Clip",
           "maptype":"actionMap",
@@ -46,69 +98,7 @@
           ]
         },
 
-        "USERINPUT": {
-          "type": "NODE",
-          "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"actionMap",
-          "mapname": "USERINPUT_TRACK",
-          "preenter": [
-          ],
-          "preexit": [
-          ],
-          "edges": [
-            {
-              "constraint":"FTR_RIGHT",
-              "edge": "CORRECT"
-            },
-            {
-              "constraint": "",
-              "edge": "WRONG"
-            }
-          ]
-        },
-
-        "CORRECT": {
-          "type": "NODE",
-          "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"actionMap",
-          "mapname": "CORRECT_TRACK",
-          "preenter": [],
-          "preexit": [
-            "GETWORD"
-          ],
-          "edges": [
-            {
-              "constraint": "FTR_NOWORDS",
-              "edge": "NEXTSCENE"
-            },
-            {
-              "constraint": "",
-              "edge": "USERINPUT"
-            }
-          ]
-        },
-
-        "WRONG": {
-          "type": "NODE",
-          "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"actionMap",
-          "mapname": "WRONG_TRACK",
-          "preenter": [],
-          "preexit": [
-            "GETWORD"
-          ],
-          "edges": [
-            {
-              "constraint": "FTR_NOWORDS",
-              "edge": "NEXTSCENE"
-            },
-            {
-              "constraint": "",
-              "edge": "INTRO_STATE"
-            }
-          ]
-        },
-        "NEXTSCENE": {
+        "SCENE_END": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
           "maptype":"actionMap",
@@ -123,6 +113,40 @@
       "moduleMap": {
 
         "COMMENT": "@@@@@  CModules  @@@@@",
+
+        "AUDIOFLOW_MOD": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "test/orange.mp3", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "test/pink.mp3",   "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "test/purple.mp3", "mode":"flow", "features": ""}
+          ]
+        },
+
+        "AUDIOSTREAM_MOD": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "test/orange.mp3", "mode":"stream", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "test/pink.mp3",   "mode":"stream", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "test/purple.mp3", "mode":"stream", "features": ""}
+          ]
+        },
+
+        "AUDIOEVENT_MOD": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "test/orange.mp3", "mode":"event", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "test/pink.mp3",   "mode":"event", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "test/purple.mp3", "mode":"event", "features": ""}
+          ]
+        },
+
 
         "COMPPARTESTEQUATE-PASS": {
           "type": "MODULE",
@@ -313,32 +337,16 @@
         "my_action": {"type": "TIMER", "name": "hint_timeout", "duration":"20", "repeat":"false", "action":"START", "ontimer":"ACTION_NAME", "features": "" },
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
+        "INTRO_STATE_TRACK":{"type": "AUDIO", "command": "PLAY", "soundsource": "test/orange.mp3", "mode":"stream", "features": ""},
 
-        "INTRO_STATE_TRACK": {
-          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABS", "features": ""
-        },
-        "USERINPUT_TRACK": {
-          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": ""
-        },
-        "CORRECT_TRACK": {
-          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": ""
-        },
-        "WRONG_TRACK": {
-          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": ""
-        },
+        "B1_ATTACH": {"type": "COMMAND", "id": "Sbutton1", "method": "setButtonBehavior", "parms": "NEXT:String"},
+        "B1_DETACH": {"type": "COMMAND", "id": "Sbutton1", "method": "setButtonBehavior", "parms": "null:String"},
 
+        "B5_ATTACH": {"type": "COMMAND", "id": "Sbutton5", "method": "setButtonBehavior", "parms": "STOP:String"},
+        "B5_DEATTACH": {"type": "COMMAND", "id": "Sbutton5", "method": "setButtonBehavior", "parms": "NULL:String"},
 
-        "B5_ATTACH": {
-          "type": "COMMAND", "id": "button5", "method": "setButtonBehavior", "parms": "STOP:String"
-        },
-        "B5_DEATTACH": {
-          "type": "COMMAND", "id": "button5", "method": "setButtonBehavior", "parms": "NULL:String"
-        },
-
-
-        "NEXTSCENE": {
-          "type": "COMMAND", "cmd": "gotoNextScene"
-        }
+        "NEXT": {"type": "COMMAND", "cmd": "NEXT" },
+        "NEXTSCENE": {"type": "COMMAND", "cmd": "NEXTSCENE" }
       },
 
       "constraintMap": {

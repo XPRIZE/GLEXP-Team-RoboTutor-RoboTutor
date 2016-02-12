@@ -54,7 +54,7 @@ public class graph_module extends graph_node implements ILoadableObject, IScope 
     @Override
     public String next() {
 
-        String         nextTrackClass = TCONST.NONE;
+        String         moduleState = TCONST.NONE;
         String         features;
         boolean        featurePass    = false;
 
@@ -63,8 +63,8 @@ public class graph_module extends graph_node implements ILoadableObject, IScope 
 
         while(_ndx < tracks.length)
         {
-            nextAction     = tracks[_ndx];
-            nextTrackClass = null;
+            nextAction  = tracks[_ndx];
+            moduleState = null;
 
             _ndx++;
 
@@ -106,7 +106,7 @@ public class graph_module extends graph_node implements ILoadableObject, IScope 
                 {
                     Log.d(TAG, "Animation Feature: " + features + " passed:" + featurePass);
 
-                    nextTrackClass = nextAction.applyNode();
+                    moduleState = nextAction.applyNode();
 
                     break;		// leave the loop
                 }
@@ -114,26 +114,28 @@ public class graph_module extends graph_node implements ILoadableObject, IScope 
             else break;
         }
 
+        // When the module is complete reset it
+        //
+        if(moduleState.equals(TCONST.NONE))
+            resetNode();
 
-        return nextTrackClass;
+        return moduleState;
     }
 
 
     @Override
     public String applyNode() {
 
-        String _currAnimation;
+        String moduleState;
 
         do {
             // Increment the animation polymorphically
 
-            _currAnimation = next();
+            moduleState = next();
 
-        }while(!_currAnimation.equals(TCONST.NONE));
+        }while(moduleState.equals(TCONST.DONE));
 
-        resetNode();
-
-        return TCONST.DONE;
+        return moduleState;
     }
 
 
@@ -148,9 +150,7 @@ public class graph_module extends graph_node implements ILoadableObject, IScope 
         if(_ndx >= tracks.length)
         {
             if(reuse)
-            {
                 _ndx = 0;
-            }
         }
 
     }

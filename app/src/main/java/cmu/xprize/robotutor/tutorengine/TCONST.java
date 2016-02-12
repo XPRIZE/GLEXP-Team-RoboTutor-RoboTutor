@@ -120,8 +120,13 @@ public class TCONST {
     public static final char EOT = '\04';
 
     // type_action - command types
-    public static final String GOTONODE = "GOTONODE";
+    public static final String GOTONODE  = "GOTONODE";
+    public static final String NEXTSCENE = "NEXTSCENE";
 
     // Intrinsic types
-    public static final String TREFERENCE = "TReference";
+    public static final String TREFERENCE  = "TReference";
+
+    public static final String AUDIOEVENT  = "event";
+    public static final String AUDIOSTREAM = "stream";
+    public static final String AUDIOFLOW   = "flow";
 }
