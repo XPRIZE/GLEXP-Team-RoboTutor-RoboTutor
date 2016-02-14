@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
@@ -43,6 +44,8 @@ public class CFingerWriter extends View implements OnTouchListener {
 
     private Path               mPath;
     private Paint              mPaint;
+    private Paint              mPaintBase;
+    private Paint              mPaintUpper;
     private float              mX, mY;
 
     private static final float TOLERANCE = 5;
@@ -135,6 +138,27 @@ public class CFingerWriter extends View implements OnTouchListener {
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeWidth(4);
         mPaint.setAntiAlias(true);
+
+        // Create a paint object to deine the line parameters
+        mPaintBase = new Paint();
+
+        mPaintBase.setColor(getResources().getColor(R.color.fingerWriterBackground));
+        mPaintBase.setStyle(Paint.Style.STROKE);
+        mPaintBase.setStrokeJoin(Paint.Join.ROUND);
+        mPaintBase.setStrokeWidth(6);
+        mPaintBase.setAntiAlias(true);
+
+        // Create a paint object to deine the line parameters
+        mPaintUpper = new Paint();
+
+        mPaintUpper.setColor(getResources().getColor(R.color.fingerWriterBackground));
+        mPaintUpper.setStyle(Paint.Style.STROKE);
+        mPaintUpper.setStrokeJoin(Paint.Join.ROUND);
+        mPaintUpper.setStrokeWidth(6);
+        mPaintUpper.setAlpha(100);
+        mPaintUpper.setPathEffect(new DashPathEffect(new float[]{25f,12f},0f));
+        mPaintUpper.setAntiAlias(true);
+
 
         this.setOnTouchListener(this);
 
@@ -307,14 +331,27 @@ public class CFingerWriter extends View implements OnTouchListener {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        float topLine  = getHeight() / 3;
+        float baseLine = topLine * 2;
+
+        Path linePath = new Path();
+        linePath.moveTo(0, topLine);
+        linePath.lineTo(getWidth(), topLine);
+
+        canvas.drawPath(linePath,  mPaintUpper);
+        canvas.drawLine(0, baseLine, getWidth(), baseLine, mPaintBase);
+
         // Immediate mode graphics -
         // Redraw the current path
         canvas.drawPath(mPath, mPaint);
     }
 
+
     private void clear() {
+
         // Create a path object to hold the vector stream
         mPath               = new Path();
+
         _currentStroke      = null;
         _currentStrokeStore = null;
 

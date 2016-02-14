@@ -111,7 +111,8 @@ public class CTutorAnimator {
         try {
             loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutorName + "/" + TCONST.AGDESC)), scope);
         } catch (JSONException e) {
-            Log.d(TAG, "error");
+            Log.d(TAG, "JSON FORMAT ERROR : " + e);
+            System.exit(1);
         }
     }
 

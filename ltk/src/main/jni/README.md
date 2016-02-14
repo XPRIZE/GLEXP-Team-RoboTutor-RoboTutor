@@ -10,3 +10,22 @@ the jniLibs folder which is where Android Studio expects shared libraries.
 e.g. 
 
     ndk-build NDK_LIBS_OUT="../jniLibs"
+    
+    
+To Build you need to update the PATHH variable to point to the jni folder in your dev environment.
+
+If you refactor the ltk source to a different package you need to update the path in the class 
+specification. 
+ 
+ lipiJni.cpp 
+ lipiJni.h 
+
+i.e. Java_cmu_xprize_ltk_LipiTKJNIInterface
+
+
+You also need to update the marshalling references to reflect package changes.
+env->FindClass("cmu/xprize/ltk/RecResult");
+
+
+To control debugging log output in Android see   LTKLoggerUtil.cpp : ANDROID_LOG
+

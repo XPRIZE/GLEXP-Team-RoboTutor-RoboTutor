@@ -2,7 +2,7 @@
 
 <!-- NOTE: The id of the topmost container below must match the XML filename -->
 
-<cmu.xprize.robotutor.tutorengine.widgets.core.CScenePercentLayout
+<cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -49,4 +49,4 @@
         android:layout_centerVertical="true"
         android:background="#ff0" />
 
-</cmu.xprize.robotutor.tutorengine.widgets.core.CScenePercentLayout>
+</cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>

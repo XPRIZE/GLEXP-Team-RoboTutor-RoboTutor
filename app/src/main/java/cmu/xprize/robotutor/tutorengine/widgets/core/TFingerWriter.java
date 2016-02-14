@@ -32,6 +32,10 @@ import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 
 public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 
+
+    private float aspect = 1.12f;  // w/h
+
+
     public TFingerWriter(Context context) {
         super(context);
     }
@@ -49,6 +53,29 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     public void init(Context context, AttributeSet attrs) {
 
     }
+
+
+    @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
+    {
+        int finalWidth, finalHeight;
+
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec );
+
+        int originalWidth  = MeasureSpec.getSize(widthMeasureSpec);
+        int originalHeight = MeasureSpec.getSize(heightMeasureSpec);
+
+        finalWidth  = (int)(originalHeight * aspect);
+        finalHeight = originalHeight;
+
+        setMeasuredDimension(finalWidth, finalHeight);
+
+//        setMeasuredDimension(getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec),
+//                getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec));
+//        super.onMeasure(
+//                MeasureSpec.makeMeasureSpec(finalWidth, MeasureSpec.EXACTLY),
+//                MeasureSpec.makeMeasureSpec(finalHeight, MeasureSpec.EXACTLY));
+    }
+
 
     @Override
     public void setName(String name) {

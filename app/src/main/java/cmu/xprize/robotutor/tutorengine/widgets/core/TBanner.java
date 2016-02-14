@@ -50,6 +50,7 @@ public class TBanner extends CBanner implements ITutorObjectImpl {
 
     }
 
+
     @Override
     public void setName(String name) {
 

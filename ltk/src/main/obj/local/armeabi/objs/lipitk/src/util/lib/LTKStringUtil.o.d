@@ -1,7 +1,7 @@
 D:/Projects/GitHUB/RoboTutor/ltk/src/main/obj/local/armeabi/objs/lipitk/./src/util/lib/LTKStringUtil.o: \
  D:/Projects/GitHUB/RoboTutor/ltk/src/main/jni/./src/util/lib/LTKStringUtil.cpp \
  D:/Projects/GitHUB/RoboTutor/ltk/src/main/jni/./src/util/lib/LTKStringUtil.h \
- D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKInc.h \
+ D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKInc.h \
  C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/exception \
  C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/iostream \
  C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/fstream \
@@ -14,17 +14,17 @@ D:/Projects/GitHUB/RoboTutor/ltk/src/main/obj/local/armeabi/objs/lipitk/./src/ut
  C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/cfloat \
  C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/cmath \
  C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/ctime \
- D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKMacros.h \
- D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKTypes.h \
- D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKInc.h \
+ D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKMacros.h \
+ D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKTypes.h \
+ D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKInc.h \
  D:/Projects/GitHUB/RoboTutor/ltk/src/main/jni/./src/util/lib/LTKLoggerUtil.h \
- D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKLogger.h \
- D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKLoggerInterface.h \
+ D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKLogger.h \
+ D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKLoggerInterface.h \
  C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/sstream
 
 D:/Projects/GitHUB/RoboTutor/ltk/src/main/jni/./src/util/lib/LTKStringUtil.h:
 
-D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKInc.h:
+D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKInc.h:
 
 C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/exception:
 
@@ -50,16 +50,16 @@ C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/cmath:
 
 C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/ctime:
 
-D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKMacros.h:
+D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKMacros.h:
 
-D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKTypes.h:
+D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKTypes.h:
 
-D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKInc.h:
+D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKInc.h:
 
 D:/Projects/GitHUB/RoboTutor/ltk/src/main/jni/./src/util/lib/LTKLoggerUtil.h:
 
-D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKLogger.h:
+D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKLogger.h:
 
-D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKLoggerInterface.h:
+D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKLoggerInterface.h:
 
 C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/sstream:

@@ -4,25 +4,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
     android:clipChildren="false"
     android:background="@drawable/bannerbox">
 
     <!-- in Relative layout - views have to be defined before being referenced -->
     <ImageButton
+        android:id="@+id/Sbackbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_heightPercent="80%"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/back_button"
+        android:visibility="gone"
+        android:background="@null"/>
+
+
+    <ImageButton
         android:id="@+id/levelSelector"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_heightPercent="80%"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         app:layout_marginRightPercent="4%"
         android:alpha=".9"
         android:src="@drawable/level_button"
+        android:visibility="gone"
         android:background="@null"/>
 
-    <edu.cmu.xprize.compoundcompsample1.Persona
+    <cmu.xprize.banner.persona.Persona
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_heightPercent="80%"
         android:layout_centerInParent="true"/>
 
@@ -30,12 +45,14 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/exitButton"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_heightPercent="80%"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         app:layout_marginLeftPercent="8%"
         android:alpha=".9"
         android:src="@drawable/exit_button"
+        android:visibility="gone"
         android:background="@null"/>
 
 </android.support.percent.PercentRelativeLayout>

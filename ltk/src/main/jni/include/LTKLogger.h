@@ -1,21 +1,21 @@
 /*****************************************************************************************
 * Copyright (c) 2007 Hewlett-Packard Development Company, L.P.
-* Permission is hereby granted, free of charge, to any person obtaining a copy of 
-* this software and associated documentation files (the "Software"), to deal in 
-* the Software without restriction, including without limitation the rights to use, 
-* copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the 
-* Software, and to permit persons to whom the Software is furnished to do so, 
+* Permission is hereby granted, free of charge, to any person obtaining a copy of
+* this software and associated documentation files (the "Software"), to deal in
+* the Software without restriction, including without limitation the rights to use,
+* copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+* Software, and to permit persons to whom the Software is furnished to do so,
 * subject to the following conditions:
 *
-* The above copyright notice and this permission notice shall be included in all 
+* The above copyright notice and this permission notice shall be included in all
 * copies or substantial portions of the Software.
 *
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-* INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-* PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+* INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+* PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
 * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
-* CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
-* OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+* CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+* OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *****************************************************************************************/
 
 /************************************************************************
@@ -29,7 +29,7 @@
 /************************************************************************
  * FILE DESCR: Definition of the Debug Logging Module
  *
- * CONTENTS:   
+ * CONTENTS:
  *
  * AUTHOR:     Balaji R.
  *
@@ -49,9 +49,9 @@
 */
 
 /** @brief A concrete class that implements the logger interface
-* @class LTKLogger 
+* @class LTKLogger
 */
-class LTKLogger : public LTKLoggerInterface 
+class LTKLogger : public LTKLoggerInterface
 {
 
 private:
@@ -117,11 +117,11 @@ public:
 	 *
 	 * @return reference to an output stream object
 	 */
-	
+
 	ostream& operator()(const EDebugLevel& debugLevel, const string& fileName, int lineNumber = 0);
-	
+
 	// @}
-	
+
 	/**
 	 * @name Methods
 	 */
@@ -129,7 +129,7 @@ public:
 	// @{
 
 	/**
-	 * This is a  method sets the log level of the messages to be considered for 
+	 * This is a  method sets the log level of the messages to be considered for
 	 * redirecting to the log file
 	 * @param debugLevel log level of the messages to be considered
 	 * @return SUCCESS on successful set operation
@@ -147,7 +147,7 @@ public:
 	 void setLogFileName(const string& logFileName);
 
 	/**
-	 * This is a  method which returns the log level of the messages to be considered for 
+	 * This is a  method which returns the log level of the messages to be considered for
 	 * redirecting to the log file
 	 * @return the log level of the messages to be considered for redirecting to the log file
 	 */
@@ -177,8 +177,7 @@ public:
 
 	// @}
 
-	
+
 };
 
 #endif
-

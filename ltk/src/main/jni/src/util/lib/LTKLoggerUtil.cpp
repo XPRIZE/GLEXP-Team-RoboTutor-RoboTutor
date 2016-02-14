@@ -1,21 +1,21 @@
 /*****************************************************************************************
 * Copyright (c) 2007 Hewlett-Packard Development Company, L.P.
-* Permission is hereby granted, free of charge, to any person obtaining a copy of 
-* this software and associated documentation files (the "Software"), to deal in 
-* the Software without restriction, including without limitation the rights to use, 
-* copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the 
-* Software, and to permit persons to whom the Software is furnished to do so, 
+* Permission is hereby granted, free of charge, to any person obtaining a copy of
+* this software and associated documentation files (the "Software"), to deal in
+* the Software without restriction, including without limitation the rights to use,
+* copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+* Software, and to permit persons to whom the Software is furnished to do so,
 * subject to the following conditions:
 *
-* The above copyright notice and this permission notice shall be included in all 
+* The above copyright notice and this permission notice shall be included in all
 * copies or substantial portions of the Software.
 *
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-* INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-* PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+* INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+* PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
 * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
-* CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
-* OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+* CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+* OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *****************************************************************************************/
 
 /************************************************************************
@@ -26,11 +26,11 @@
  * $Author: sharmnid $
  *
  ************************************************************************/
- 
+
 /************************************************************************
  * FILE DESCR: Implementation of the String Splitter Module
  *
- * CONTENTS: 
+ * CONTENTS:
  *	tokenizeString
  *
  * AUTHOR:     Balaji R.
@@ -54,20 +54,23 @@
 #include <windows.h>
 #endif
 
+// define to enable android logging
+//#define ANDROID_LOG
+
 void* LTKLoggerUtil::m_libHandleLogger = NULL;
 LTKOSUtil* LTKLoggerUtil::m_ptrOSUtil = NULL;
 FN_PTR_LOGMESSAGE LTKLoggerUtil::module_logMessage = NULL;
 FN_PTR_STARTLOG LTKLoggerUtil::module_startLogger = NULL;
 FN_PTR_GETINSTANCE LTKLoggerUtil::module_getInstanceLogger = NULL;
 FN_PTR_DESTROYINSTANCE LTKLoggerUtil::module_destroyLogger = NULL;
-ofstream LTKLoggerUtil::m_emptyStream; 
+ofstream LTKLoggerUtil::m_emptyStream;
 
 /****************************************************************************
 * AUTHOR		: Nidhi Sharma
 * DATE			: 09-Jul-2007
 * NAME			: LTKLoggerUtil
-* DESCRIPTION	: 
-* ARGUMENTS		: 
+* DESCRIPTION	:
+* ARGUMENTS		:
 * RETURNS		:
 * NOTES			:
 * CHANGE HISTROY
@@ -82,8 +85,8 @@ LTKLoggerUtil::LTKLoggerUtil(){}
 * AUTHOR		: Nidhi Sharma
 * DATE			: 09-Jul-2007
 * NAME			: createLogger
-* DESCRIPTION	: 
-* ARGUMENTS		: 
+* DESCRIPTION	:
+* ARGUMENTS		:
 * RETURNS		:
 * NOTES			:
 * CHANGE HISTROY
@@ -93,18 +96,18 @@ LTKLoggerUtil::LTKLoggerUtil(){}
 int LTKLoggerUtil::createLogger(const string& lipiRoot)
 {
 #if 0
-	/* Android port : commenting the load of shared object and also mapping of functions 
+	/* Android port : commenting the load of shared object and also mapping of functions
 	 * as there is only one shared object.
 	 */
 
-    void* functionHandle = NULL; 
+    void* functionHandle = NULL;
 	m_ptrOSUtil = LTKOSUtilFactory::getInstance();
 
-    int iErrorCode = m_ptrOSUtil->loadSharedLib(lipiRoot, 
-                                                LOGGER_MODULE_STR, 
+    int iErrorCode = m_ptrOSUtil->loadSharedLib(lipiRoot,
+                                                LOGGER_MODULE_STR,
                                                 &m_libHandleLogger);
 
-	
+
     if(iErrorCode != SUCCESS)
     {
 		delete m_ptrOSUtil;
@@ -115,7 +118,7 @@ int LTKLoggerUtil::createLogger(const string& lipiRoot)
     if (module_getInstanceLogger == NULL)
     {
         iErrorCode = m_ptrOSUtil->getFunctionAddress(m_libHandleLogger,
-                                                     "getLoggerInstance", 
+                                                     "getLoggerInstance",
                                                      &functionHandle);
         if(iErrorCode != SUCCESS)
     	{
@@ -134,7 +137,7 @@ int LTKLoggerUtil::createLogger(const string& lipiRoot)
     if (module_destroyLogger == NULL)
     {
         iErrorCode = m_ptrOSUtil->getFunctionAddress(m_libHandleLogger,
-                                                     "destroyLogger", 
+                                                     "destroyLogger",
                                                      &functionHandle);
         if(iErrorCode != SUCCESS)
     	{
@@ -146,21 +149,21 @@ int LTKLoggerUtil::createLogger(const string& lipiRoot)
 
     	functionHandle = NULL;
     }
-    
+
 	delete m_ptrOSUtil;
 #endif
-	
+
     return SUCCESS;
- 
+
 }
 
 /*****************************************************************************
 * AUTHOR		: Nidhi Sharma
-* DATE			: 
+* DATE			:
 * NAME			: destroyLogger
-* DESCRIPTION	: 
-* ARGUMENTS		: 
-* RETURNS		: 
+* DESCRIPTION	:
+* ARGUMENTS		:
+* RETURNS		:
 * NOTES			:
 * CHANGE HISTROY
 * Author			Date				Description of change
@@ -183,11 +186,11 @@ int LTKLoggerUtil::destroyLogger()
 
 /*****************************************************************************
 * AUTHOR		: Nidhi Sharma
-* DATE			: 
+* DATE			:
 * NAME			: getAddressLoggerFunctions
-* DESCRIPTION	: 
-* ARGUMENTS		: 
-* RETURNS		: 
+* DESCRIPTION	:
+* ARGUMENTS		:
+* RETURNS		:
 * NOTES			:
 * CHANGE HISTROY
 * Author			Date				Description of change
@@ -199,7 +202,7 @@ int LTKLoggerUtil::configureLogger(const string& logFile, LTKLogger::EDebugLevel
 	 * as there is only one shared object.
 	 */
 
-     void* functionHandle = NULL; 
+     void* functionHandle = NULL;
      int returnVal = SUCCESS;
 
      FN_PTR_SETLOGFILENAME module_setLogFileName = NULL;
@@ -209,13 +212,13 @@ int LTKLoggerUtil::configureLogger(const string& logFile, LTKLogger::EDebugLevel
     {
         LTKReturnError(ELOGGER_LIBRARY_NOT_LOADED);
     }
-    
+
     m_ptrOSUtil = LTKOSUtilFactory::getInstance();
 
     if ( logFile.length() != 0 )
     {
         returnVal = m_ptrOSUtil->getFunctionAddress(m_libHandleLogger,
-                                                    "setLoggerFileName", 
+                                                    "setLoggerFileName",
                                                     &functionHandle);
 
         if(returnVal != SUCCESS)
@@ -228,15 +231,15 @@ int LTKLoggerUtil::configureLogger(const string& logFile, LTKLogger::EDebugLevel
     	functionHandle = NULL;
 
         module_setLogFileName(logFile);
-    	
+
     }
     else
     {
-		LTKReturnError(EINVALID_LOG_FILENAME); 
+		LTKReturnError(EINVALID_LOG_FILENAME);
     }
-    
+
     returnVal = m_ptrOSUtil->getFunctionAddress(m_libHandleLogger,
-                                                "setLoggerLevel", 
+                                                "setLoggerLevel",
                                                 &functionHandle);
 
     if(returnVal != SUCCESS)
@@ -259,33 +262,33 @@ int LTKLoggerUtil::configureLogger(const string& logFile, LTKLogger::EDebugLevel
 	logger->setLogLevel(logLevel);
 
     return SUCCESS;
-    
+
 }
 
 
 /*****************************************************************************
 * AUTHOR		: Nidhi Sharma
-* DATE			: 
+* DATE			:
 * NAME			: getAddressLoggerFunctions
-* DESCRIPTION	: 
-* ARGUMENTS		: 
-* RETURNS		: 
+* DESCRIPTION	:
+* ARGUMENTS		:
+* RETURNS		:
 * NOTES			:
 * CHANGE HISTROY
 * Author			Date				Description of change
 *****************************************************************************/
 int LTKLoggerUtil::getAddressLoggerFunctions()
 {
-    void* functionHandle = NULL; 
+    void* functionHandle = NULL;
     int returnVal = SUCCESS;
 
 
     //start log
-    
+
     if (module_startLogger == NULL )
     {
         returnVal = m_ptrOSUtil->getFunctionAddress(m_libHandleLogger,
-                                                    "startLogger", 
+                                                    "startLogger",
                                                     &functionHandle);
 
         if(returnVal != SUCCESS)
@@ -304,7 +307,7 @@ int LTKLoggerUtil::getAddressLoggerFunctions()
     if (module_logMessage == NULL)
     {
         returnVal = m_ptrOSUtil->getFunctionAddress(m_libHandleLogger,
-                                                    "logMessage", 
+                                                    "logMessage",
                                                     &functionHandle);
 
         if(returnVal != SUCCESS)
@@ -314,22 +317,22 @@ int LTKLoggerUtil::getAddressLoggerFunctions()
 
         module_logMessage = (FN_PTR_LOGMESSAGE)functionHandle;
 
-    	functionHandle = NULL;    
-    
+    	functionHandle = NULL;
+
     }
-    
-	
+
+
 	return SUCCESS;
-	
+
 }
 
 /*****************************************************************************
 * AUTHOR		: Nidhi Sharma
 * DATE			: 15-Jul-2008
 * NAME			: nidhi
-* DESCRIPTION	: 
-* ARGUMENTS		: 
-* RETURNS		: 
+* DESCRIPTION	:
+* ARGUMENTS		:
+* RETURNS		:
 * NOTES			:
 * CHANGE HISTROY
 * Author			Date				Description of change
@@ -363,7 +366,7 @@ ostream& LTKLoggerUtil::logMessage(LTKLogger::EDebugLevel logLevel, string inStr
     {
         int returnVal = getAddressLoggerFunctions();
 
-        if(returnVal != SUCCESS)	
+        if(returnVal != SUCCESS)
     	{
 			delete m_ptrOSUtil;
     	    return m_emptyStream;
@@ -376,9 +379,11 @@ ostream& LTKLoggerUtil::logMessage(LTKLogger::EDebugLevel logLevel, string inStr
 
 #define APPNAME "LIPITK_NATIVE"
 
+#ifdef ANDROID_LOG
     __android_log_print(ANDROID_LOG_INFO, APPNAME, "%s : %d", inStr.c_str(), lineNumber );
+#endif // #ifdef ANDROID_LOG
 
-	/* Android port :  get an instance of logger instance and invoke overloaded operator() 
+	/* Android port :  get an instance of logger instance and invoke overloaded operator()
 	 * from LTKLogger.cpp. As logger is implemented as a singleton class, only one instance
 	 * is returned irrespective of how many times getLoggerInstance() is called.
 	 */
@@ -410,6 +415,8 @@ void LTKLoggerUtil::AlogMessage(LTKLogger::EDebugLevel logLevel, string msg, str
      */
 #define APPNAME "LIPITK_NATIVE"
 
+#ifdef ANDROID_LOG
     __android_log_print(ANDROID_LOG_INFO, APPNAME, "%s | %s : %d", msg.c_str(), inStr.c_str(), lineNumber );
+#endif  // #ifdef ANDROID_LOG
 
 }

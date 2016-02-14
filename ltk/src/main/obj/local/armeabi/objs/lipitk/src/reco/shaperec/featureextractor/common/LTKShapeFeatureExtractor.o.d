@@ -1,8 +1,8 @@
 D:/Projects/GitHUB/RoboTutor/ltk/src/main/obj/local/armeabi/objs/lipitk/./src/reco/shaperec/featureextractor/common/LTKShapeFeatureExtractor.o: \
  D:/Projects/GitHUB/RoboTutor/ltk/src/main/jni/./src/reco/shaperec/featureextractor/common/LTKShapeFeatureExtractor.cpp \
  D:/Projects/GitHUB/RoboTutor/ltk/src/main/jni/./src/reco/shaperec/featureextractor/common/LTKShapeFeatureExtractor.h \
- D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKTypes.h \
- D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKInc.h \
+ D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKTypes.h \
+ D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKInc.h \
  C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/exception \
  C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/iostream \
  C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/fstream \
@@ -15,15 +15,15 @@ D:/Projects/GitHUB/RoboTutor/ltk/src/main/obj/local/armeabi/objs/lipitk/./src/re
  C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/cfloat \
  C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/cmath \
  C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/ctime \
- D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKShapeFeatureMacros.h \
- D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKRefCountedPtr.h \
- D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKErrorsList.h
+ D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKShapeFeatureMacros.h \
+ D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKRefCountedPtr.h \
+ D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKErrorsList.h
 
 D:/Projects/GitHUB/RoboTutor/ltk/src/main/jni/./src/reco/shaperec/featureextractor/common/LTKShapeFeatureExtractor.h:
 
-D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKTypes.h:
+D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKTypes.h:
 
-D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKInc.h:
+D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKInc.h:
 
 C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/exception:
 
@@ -49,8 +49,8 @@ C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/cmath:
 
 C:/Dev/Android/AndroidNDK/sources/cxx-stl/gnu-libstdc++/4.8/include/ctime:
 
-D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKShapeFeatureMacros.h:
+D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKShapeFeatureMacros.h:
 
-D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKRefCountedPtr.h:
+D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKRefCountedPtr.h:
 
-D:\Projects\GitHUB\WritingTutor\app\src\main\jni//include/LTKErrorsList.h:
+D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni//include/LTKErrorsList.h:

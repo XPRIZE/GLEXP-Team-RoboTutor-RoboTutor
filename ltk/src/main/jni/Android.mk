@@ -1,6 +1,6 @@
 LOCAL_PATH := $(call my-dir)
 
-PATHH := D:\Projects\GitHUB\WritingTutor\app\src\main\jni/
+PATHH := D:\Projects\GitHUB\RoboTutor\ltk\src\main\jni/
 
 include $(CLEAR_VARS)
 

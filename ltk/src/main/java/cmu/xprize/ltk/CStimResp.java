@@ -20,7 +20,7 @@ public class CStimResp extends LinearLayout implements View.OnClickListener, ITe
     private int[]         mLexEnds;             // records location of the end of lexemes in mDisplayText string
     private boolean       mEmpty = false;
 
-    private CStimResp mLinkedView;
+    private CStimResp     mLinkedView;
     private int           mLinkedViewID;
 
     private boolean       mComparing      = false;
@@ -129,7 +129,7 @@ public class CStimResp extends LinearLayout implements View.OnClickListener, ITe
             //
             addText(-1, TCONST_SPACE, height, layoutParams);
 
-            // We add all the mLexemes with a trailing space to allow navigation to add a word
+            // We add all the mLexemes with a trailing space to allow them to add a word
             // to the end
             for (int i1 = 0, lexOff = 0 ,lNdx = 0; i1 < mLexemes.length; i1++) {
 
