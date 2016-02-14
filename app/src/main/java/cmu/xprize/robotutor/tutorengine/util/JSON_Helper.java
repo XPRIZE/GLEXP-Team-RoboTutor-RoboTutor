@@ -105,6 +105,7 @@ public class JSON_Helper {
 
     static public String cacheData(String fileName) {
 
+        InputStream in;
         AssetManager assetManager = CTutorEngine.Activity.getAssets();
 
         StringBuilder buffer = new StringBuilder();
@@ -118,28 +119,31 @@ public class JSON_Helper {
             if ((Environment.MEDIA_MOUNTED.equals(state)) ||
                     (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state))) {
 
-                // Cache the JSON Spec
+                // Cache the JSON Spec -
+                // We can load from Android Assets or from an external file based on the
+                // CacheSource setting
+                //
                 if(CTutorEngine.CacheSource.equals(TCONST.ASSETS)) {
-                    InputStream in = assetManager.open(fileName);
-                    BufferedReader br = new BufferedReader(new InputStreamReader(in));
-                    String line = null;
 
-                    while ((line = br.readLine()) != null)
-                        buffer.append(line);
+                    in = assetManager.open(fileName);
 
-                    in.close();
                 } else {
                     String filePath = RoboTutor.EXTERNFILES + "/" + fileName;
 
-                    FileInputStream in = new FileInputStream(filePath);
-                    BufferedReader br = new BufferedReader(new InputStreamReader(in));
-                    String line = null;
-
-                    while ((line = br.readLine()) != null)
-                        buffer.append(line);
-
-                    in.close();
+                    in = new FileInputStream(filePath);
                 }
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+                String line = null;
+
+                // Filter Comments out of the json source
+                //
+                while ((line = br.readLine()) != null) {
+                    line = line.replaceFirst("//.*$","");
+                    buffer.append(line);
+                }
+                in.close();
+
                 Log.d(TAG, "NOTICE: SceneDescr - Loaded.");
 
             } else {
@@ -319,7 +323,8 @@ public class JSON_Helper {
                                         eObj = elemClass.newInstance();
                                     }
                                     catch(Exception e) {
-                                        Log.e(TAG, "No Class map for intrinsic Type:" + elem.getString("type"));
+                                        Log.e(TAG, "Check Syntax on Element: " + key);
+                                        Log.e(TAG, "Probable missing 'type': " + e);
                                         System.exit(1);
                                     }
                                 }
@@ -387,7 +392,6 @@ public class JSON_Helper {
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
                                     Log.e(TAG, "Null Object in :" + nJsonObj);
-                                    System.exit(1);
                                 }
                             }
 
@@ -408,27 +412,23 @@ public class JSON_Helper {
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                Log.e(TAG, "ERROR: parseSelf:" + e);
-                                System.exit(1);
                             }
                         }
                     }
                 }
 
             } catch (JSONException e) {
+                // Just ignore items where there is no JSON data
                 e.printStackTrace();
                 Log.e(TAG, "ERROR: parseSelf:" + e);
-                System.exit(1);
 
             } catch (InstantiationException e) {
                 e.printStackTrace();
                 Log.e(TAG, "ERROR: parseSelf:" + e);
-                System.exit(1);
 
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
                 Log.e(TAG, "ERROR: parseSelf:" + e);
-                System.exit(1);
             }
         }
     }
