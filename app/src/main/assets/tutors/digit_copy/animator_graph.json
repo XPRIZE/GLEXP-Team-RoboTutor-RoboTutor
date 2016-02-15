@@ -19,7 +19,8 @@
           "COMMENT": "Intro Clip",
           "maptype":"actionMap",
           "mapname": "PLAYINTRO",
-          "preenter":["SET_DATASOURCE","GB_DISABLE","FW_DISABLE"],
+          // temp-----"preenter":["SET_DATASOURCE","GB_DISABLE","FW_DISABLE"],
+          // temp ---- "preenter":["GB_DISABLE","FW_DISABLE"],
           "preexit" :[],
           "edges": [
             {
@@ -141,6 +142,8 @@
         "NEXTSCENE": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname":"GOTONEXTSCENE",
           "preenter": [],
           "preexit": [],
           "edges": [
@@ -232,17 +235,17 @@
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "mode":"flow", "features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Next time you can do better.mp3",   "mode":"flow", "features": ""}
           ]
-        },
-
-        "PLAYCORRECT": {
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "good.mp3", "features": ""}
-          ]
         }
 
+//        "PLAYCORRECT": {
+//          "type": "MODULE",
+//          "reuse":true,
+//          "COMMENT": "TBD",
+//          "tracks": [
+//            {"type": "AUDIO", "command": "PLAY", "soundsource": "good.mp3", "features": ""}
+//          ]
+//        }
+//
       },
 
       "actionMap": {
@@ -251,7 +254,7 @@
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "file:<path...>/digit_copy.txt:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[3,1,5,2,3,8,5,3,2,3]:Strings","features":""},
 
         "PLAYINTRO":{"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some some numbers.mp3", "features": ""},
         "PLAYCORRECT":{"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3", "features": ""},
@@ -283,7 +286,7 @@
         "REMOVESTIMULUS":{"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "FALSE:Boolean","features":""},
         //remove the stimulus
 
-        "NEXTSCENE": {
+        "GOTONEXTSCENE": {
           "type": "COMMAND", "cmd": "gotoNextScene"
         }
       },
