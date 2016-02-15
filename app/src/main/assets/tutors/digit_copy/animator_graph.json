@@ -19,8 +19,8 @@
           "COMMENT": "Intro Clip",
           "maptype":"actionMap",
           "mapname": "PLAYINTRO",
-          // temp-----"preenter":["SET_DATASOURCE","GB_DISABLE","FW_DISABLE"],
-          // temp ---- "preenter":["GB_DISABLE","FW_DISABLE"],
+          "preenter":["SET_DATASOURCE","FW_DISABLE"],
+          //temp ---- "preenter":["GB_DISABLE","FW_DISABLE"],
           "preexit" :[],
           "edges": [
             {
@@ -254,7 +254,7 @@
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[3,1,5,2,3,8,5,3,2,3]:Strings","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[3,1,5,2,3,8,5,3,2,3]:String","features":""},
 
         "PLAYINTRO":{"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some some numbers.mp3", "features": ""},
         "PLAYCORRECT":{"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3", "features": ""},
