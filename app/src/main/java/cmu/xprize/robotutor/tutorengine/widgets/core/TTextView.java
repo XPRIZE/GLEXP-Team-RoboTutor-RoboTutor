@@ -40,21 +40,16 @@ public class TTextView extends TextView implements ITutorObjectImpl {
 
     public TTextView(Context context) {
         super(context);
-
         init(context, null);
     }
 
-
     public TTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         init(context, attrs);
     }
 
-
     public TTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
         init(context, attrs);
     }
 
@@ -62,6 +57,26 @@ public class TTextView extends TextView implements ITutorObjectImpl {
         mSceneObject = new CTutorObjectDelegate(this);
         mSceneObject.init(context, attrs);
     }
+
+
+    //************************************************************************
+    //************************************************************************
+    // Tutor methods  Start
+
+
+
+    //** Special Object methods for missing method parameter type combinations
+
+    public void setText(String text) {
+        super.setText(text);
+    }
+
+    // Tutor methods  End
+    //************************************************************************
+    //************************************************************************
+
+
+
 
     @Override
     public void setName(String name) {
@@ -98,11 +113,5 @@ public class TTextView extends TextView implements ITutorObjectImpl {
         return mSceneObject;
     }
 
-
-    //** Special Object methods for missing method parameter type combinations
-
-    public void setText(String text) {
-        super.setText(text);
-    }
 
 }

@@ -41,19 +41,16 @@ public class TScenePercentLayout extends PercentRelativeLayout implements ITutor
 
     public TScenePercentLayout(Context context) {
         super(context);
-
         init(context, null);
     }
 
     public TScenePercentLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         init(context, attrs);
     }
 
     public TScenePercentLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
         init(context, attrs);
     }
 
@@ -62,6 +59,20 @@ public class TScenePercentLayout extends PercentRelativeLayout implements ITutor
         mTutorScene = new CTutorSceneDelegate(this);
         mTutorScene.init(context, attrs);
     }
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // Tutor methods  Start
+
+
+
+    // Tutor methods  End
+    //************************************************************************
+    //************************************************************************
+
+
 
     @Override
     public void setName(String name) {

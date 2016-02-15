@@ -39,29 +39,52 @@ public class TButton extends Button implements ITutorObjectImpl {
 
     public TButton(Context context) {
         super(context);
-
         init(context, null);
     }
 
-
     public TButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         init(context, attrs);
     }
 
-
     public TButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
         init(context, attrs);
     }
 
     public void init(Context context, AttributeSet attrs) {
         mSceneObject = new CTutorObjectDelegate(this);
         mSceneObject.init(context, attrs);
-
     }
+
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // Tutor methods  Start
+
+
+    //** Special Object methods for missing method parameter type combinations -
+    //   e.g. This is the simplest way instead of using CharSequence
+
+    public void setText(String text) {
+        super.setText(text);
+    }
+
+
+    //** Custom Object Methods
+
+    public void setButtonBehavior(String command) {
+        mSceneObject.setButtonBehavior(command);
+    }
+
+
+    // Tutor methods  End
+    //************************************************************************
+    //************************************************************************
+
+
 
     @Override
     public void setName(String name) {
@@ -98,19 +121,5 @@ public class TButton extends Button implements ITutorObjectImpl {
         return mSceneObject;
     }
 
-
-    //** Special Object methods for missing method parameter type combinations -
-    //   e.g. This is the simplest way instead of using CharSequence
-
-    public void setText(String text) {
-        super.setText(text);
-    }
-
-
-    //** Custom Object Methods
-
-    public void setButtonBehavior(String command) {
-        mSceneObject.setButtonBehavior(command);
-    }
 
 }

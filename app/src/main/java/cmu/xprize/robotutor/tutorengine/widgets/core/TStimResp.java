@@ -27,25 +27,32 @@ import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 
 public class TStimResp extends CStimResp implements ITutorObjectImpl {
 
+
+    private CTutorObjectDelegate mSceneObject;
     private float aspect = 0.82f;  // w/h
 
     public TStimResp(Context context) {
         super(context);
+        init(context, null);
     }
 
     public TStimResp(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init(context, null);
     }
 
     public TStimResp(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init(context, null);
     }
 
 
     @Override
     public void init(Context context, AttributeSet attrs) {
-    }
+        mSceneObject = new CTutorObjectDelegate(this);
+        mSceneObject.init(context, attrs);
 
+    }
 
     @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
     {
@@ -69,39 +76,52 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
     }
 
 
+    //************************************************************************
+    //************************************************************************
+    // Tutor methods  Start
+
+    public void setDataSource(String dataSource) {
+
+    }
+
+
+    // Tutor methods  End
+    //************************************************************************
+    //************************************************************************
+
 
     @Override
     public void setName(String name) {
-
+        mSceneObject.setName(name);
     }
 
     @Override
     public String name() {
-        return null;
+        return mSceneObject.name();
     }
 
     @Override
     public void setParent(ITutorSceneImpl mParent) {
-
+        mSceneObject.setParent(mParent);
     }
 
     @Override
     public void setTutor(CTutor tutor) {
-
+        mSceneObject.setTutor(tutor);
     }
 
     @Override
     public void setNavigator(ITutorNavigator navigator) {
-
+        mSceneObject.setNavigator(navigator);
     }
 
     @Override
     public void setLogManager(ITutorLogManager logManager) {
-
+        mSceneObject.setLogManager(logManager);
     }
 
     @Override
     public CTutorObjectDelegate getimpl() {
-        return null;
+        return mSceneObject;
     }
 }

@@ -27,6 +27,7 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import cmu.xprize.robotutor.tutorengine.TCONST;
@@ -49,7 +50,7 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
     private boolean      mDeferredSeek  = false;
     private long         mSeekPoint     = 0;
 
-    private String       cachedSource    = "";
+    private String       cachedSource   = "";
 
     private OnCompletionListener listener;
 
@@ -99,8 +100,13 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
                 mPlayer.setOnCompletionListener(this);
                 mPlayer.prepareAsync();
             }
+
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "Audio Error: " + e);
+            System.exit(1);
+
         } catch (Exception e) {
-            Log.d(TAG, "Audio frame format error: " + e);
+            Log.e(TAG, "Audio frame format error: " + e);
         }
     }
 
@@ -244,9 +250,7 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
         }
 
         // Update the path to the sound source file
-        soundsource = langPath + "/" + soundsource;
-
-        mSoundSource = soundsource;
+        mSoundSource = langPath + "/" + soundsource;
         mSourcePath  = TCONST.TUTORROOT + "/" + TCONST.TDATA + "/" + mSoundSource;
     }
 

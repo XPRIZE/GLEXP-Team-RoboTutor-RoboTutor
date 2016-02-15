@@ -24,6 +24,8 @@ import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
  */
 public class TRect extends View  implements ITutorObjectImpl {
 
+    private CTutorObjectDelegate mSceneObject;
+
     private Paint mPaint;
     private Rect  mRegion = new Rect();
     
@@ -39,14 +41,13 @@ public class TRect extends View  implements ITutorObjectImpl {
 
     public TRect(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
         init(context, attrs);
     }
 
     @Override
     public void init(Context context, AttributeSet attrs) {
-
-
+        mSceneObject = new CTutorObjectDelegate(this);
+        mSceneObject.init(context, attrs);
 
         // Create a paint object to deine the line parameters
         mPaint = new Paint();
@@ -54,42 +55,6 @@ public class TRect extends View  implements ITutorObjectImpl {
         mPaint.setColor(Color.WHITE);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setAntiAlias(false);
-    }
-
-
-    @Override
-    public void setName(String name) {
-
-    }
-
-    @Override
-    public String name() {
-        return null;
-    }
-
-    @Override
-    public void setParent(ITutorSceneImpl mParent) {
-
-    }
-
-    @Override
-    public void setTutor(CTutor tutor) {
-
-    }
-
-    @Override
-    public void setNavigator(ITutorNavigator navigator) {
-
-    }
-
-    @Override
-    public void setLogManager(ITutorLogManager logManager) {
-
-    }
-
-    @Override
-    public CTutorObjectDelegate getimpl() {
-        return null;
     }
 
 
@@ -123,6 +88,53 @@ public class TRect extends View  implements ITutorObjectImpl {
     }
 
 
+
+    //************************************************************************
+    //************************************************************************
+    // Tutor methods  Start
+
+
+
+    // Tutor methods  End
+    //************************************************************************
+    //************************************************************************
+
+
+
+    @Override
+    public void setName(String name) {
+        mSceneObject.setName(name);
+    }
+
+    @Override
+    public String name() {
+        return mSceneObject.name();
+    }
+
+    @Override
+    public void setParent(ITutorSceneImpl mParent) {
+        mSceneObject.setParent(mParent);
+    }
+
+    @Override
+    public void setTutor(CTutor tutor) {
+        mSceneObject.setTutor(tutor);
+    }
+
+    @Override
+    public void setNavigator(ITutorNavigator navigator) {
+        mSceneObject.setNavigator(navigator);
+    }
+
+    @Override
+    public void setLogManager(ITutorLogManager logManager) {
+        mSceneObject.setLogManager(logManager);
+    }
+
+    @Override
+    public CTutorObjectDelegate getimpl() {
+        return mSceneObject;
+    }
 
 
 }

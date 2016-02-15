@@ -41,19 +41,16 @@ public class TSceneRelativeLayout extends RelativeLayout implements ITutorSceneI
 
     public TSceneRelativeLayout(Context context) {
         super(context);
-
         init(context, null);
     }
 
     public TSceneRelativeLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         init(context, attrs);
     }
 
     public TSceneRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
         init(context, attrs);
     }
 
@@ -61,6 +58,20 @@ public class TSceneRelativeLayout extends RelativeLayout implements ITutorSceneI
         mTutorScene = new CTutorSceneDelegate(this);
         mTutorScene.init(context, attrs);
     }
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // Tutor methods  Start
+
+
+
+    // Tutor methods  End
+    //************************************************************************
+    //************************************************************************
+
+
 
     @Override
     public void setName(String name) {

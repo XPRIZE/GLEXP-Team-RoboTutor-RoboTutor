@@ -2,6 +2,7 @@ package cmu.xprize.robotutor.tutorengine;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -46,7 +47,12 @@ public class CTutorObjectDelegate implements ITutorObject, Button.OnClickListene
 //        System.out.println(context.getResources().getResourceTypeName(mOwnerView.getId()));
 
         // Load attributes
-        mTutorId = context.getResources().getResourceEntryName(mOwnerView.getId());
+        try {
+            mTutorId = context.getResources().getResourceEntryName(mOwnerView.getId());
+        }
+        catch(Exception e) {
+            Log.w(TAG, "Warning: Unnamed Delegate" + e);
+        }
 
     }
 

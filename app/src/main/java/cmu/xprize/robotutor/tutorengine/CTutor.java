@@ -306,40 +306,50 @@ public class CTutor implements ILoadableObject {
     }
 
 
-    public void automateScene(ITutorSceneImpl newScene, scene_descriptor scenedata) {
-
-        ITutorObject child;
+    public void automateScene(ITutorSceneImpl tutorContainer, scene_descriptor scenedata) {
 
         // Propogate to children
         //
-        HashMap map = new HashMap();
+        HashMap childMap = new HashMap();
 
         // Record each SCENE Object
         //
-        scenedata.instance = newScene;
-        scenedata.children = map;
+        scenedata.instance = tutorContainer;
+        scenedata.children = childMap;
 
-        newScene.setParent(mTutorContainer);
-        newScene.setTutor(this);
-        newScene.setNavigator(mTutorNavigator);
-        newScene.setLogManager(mTutorLogManager);
+        tutorContainer.setParent(mTutorContainer);
+        tutorContainer.setTutor(this);
+        tutorContainer.setNavigator(mTutorNavigator);
+        tutorContainer.setLogManager(mTutorLogManager);
 
-        int count = ((ViewGroup) newScene).getChildCount();
+        mapChildren(tutorContainer, childMap);
+    }
+
+    private void mapChildren(ITutorSceneImpl tutorContainer, HashMap childMap) {
+
+        ITutorObject child;
+
+        int count = ((ViewGroup) tutorContainer).getChildCount();
 
         // Iterate through all children
         for (int i = 0; i < count; i++) {
             try {
-                child = (ITutorObject) ((ViewGroup) newScene).getChildAt(i);
+                child = (ITutorObject) ((ViewGroup) tutorContainer).getChildAt(i);
 
-                map.put(child.name(), child);
+                childMap.put(child.name(), child);
 
-                child.setParent(newScene);
+                child.setParent(tutorContainer);
                 child.setTutor(this);
                 child.setNavigator(mTutorNavigator);
                 child.setLogManager(mTutorLogManager);
-            } catch (ClassCastException e) {
-                Log.e(TAG, "ERROR: Non-ITutor child view in:" + newScene.name());
 
+                if(child instanceof ITutorSceneImpl) {
+                    mapChildren((ITutorSceneImpl)child, childMap);
+                }
+
+            } catch (ClassCastException e) {
+                Log.e(TAG, "ERROR: Non-ITutor child view in:" + tutorContainer.name());
+                System.exit(1);
             }
         }
     }

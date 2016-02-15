@@ -32,57 +32,81 @@ import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 
 
 public class TBanner extends CBanner implements ITutorObjectImpl {
+
+    private CTutorObjectDelegate mSceneObject;
+
+
     public TBanner(Context context) {
         super(context);
+        init(context, null);
     }
 
     public TBanner(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init(context, attrs);
     }
 
     public TBanner(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        init(context, attrs);
     }
 
 
     @Override
     public void init(Context context, AttributeSet attrs) {
-
+        mSceneObject = new CTutorObjectDelegate(this);
+        mSceneObject.init(context, attrs);
     }
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // Tutor methods  Start
+
+
+
+    // Tutor methods  End
+    //************************************************************************
+    //************************************************************************
+
+
 
 
     @Override
     public void setName(String name) {
-
+    mSceneObject.setName(name);
     }
 
     @Override
     public String name() {
-        return null;
+        return mSceneObject.name();
     }
 
     @Override
     public void setParent(ITutorSceneImpl mParent) {
-
+        mSceneObject.setParent(mParent);
     }
 
     @Override
     public void setTutor(CTutor tutor) {
-
+        mSceneObject.setTutor(tutor);
     }
 
     @Override
     public void setNavigator(ITutorNavigator navigator) {
-
+        mSceneObject.setNavigator(navigator);
     }
 
     @Override
     public void setLogManager(ITutorLogManager logManager) {
-
+        mSceneObject.setLogManager(logManager);
     }
+
 
     @Override
     public CTutorObjectDelegate getimpl() {
-        return null;
+        return mSceneObject;
     }
+
 }

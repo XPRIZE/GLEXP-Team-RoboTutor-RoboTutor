@@ -23,6 +23,7 @@ package cmu.xprize.robotutor.tutorengine;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import java.util.List;
@@ -80,6 +81,7 @@ public class CTutorSceneDelegate implements ITutorScene {
 
     public ViewGroup getOwner() {return mOwnerViewGroup;}
 
+    final private String TAG = "CTutorSceneDelegate";
 
     //*** ITutorObject implementation
 
@@ -89,13 +91,12 @@ public class CTutorSceneDelegate implements ITutorScene {
         mContext = context;
 
         // Load attributes
-        final TypedArray a = context.obtainStyledAttributes(
-                attrs, R.styleable.tutor);
-
-        mTutorId = a.getString(
-                R.styleable.tutor_tutorId);
-
-        a.recycle();
+        try {
+            mTutorId = context.getResources().getResourceEntryName(mOwnerViewGroup.getId());
+        }
+        catch(Exception e) {
+            Log.w(TAG, "Warning: Unnamed Delegate" + e);
+        }
 
     }
 

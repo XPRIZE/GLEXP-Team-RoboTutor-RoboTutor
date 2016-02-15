@@ -66,6 +66,7 @@ public class type_action extends graph_node {
     static {
         classMap.put("string", String.class);
         classMap.put("bool", Boolean.class);
+        classMap.put("boolean", Boolean.class);
         classMap.put("int", Integer.class);
         classMap.put("float", Float.class);
         classMap.put("byte", Byte.class);
@@ -107,7 +108,7 @@ public class type_action extends graph_node {
      */
     @Override
     public String applyNode() {
-        Map sceneMap = CTutorNavigator.getChildMap();
+        Map childMap = CTutorNavigator.getChildMap();
 
         if(cmd != null) {
             switch(cmd) {
@@ -164,30 +165,26 @@ public class type_action extends graph_node {
                     try {
                         iparms[i2] = pcls[i2].getConstructor(new Class[]{String.class}).newInstance(parmList.get(i1 - 1));
 
-                    } catch (InstantiationException e) {
+                    } catch(Exception e) {
                         e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchMethodException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, "ERROR: " + id + " - Method: <" + method + "> Not Found: " + e);
+                        System.exit(1);
                     }
                 }
 
                 try {
                     //Method _method = Button.class.getMethod("setText", CharSequence.class);
 
-                    Log.d(TAG, sceneMap.get(id).toString());
-                    sceneMap.get(id).getClass();
+                    Log.d(TAG, childMap.get(id).toString());
+                    childMap.get(id).getClass();
 
-                    Method _method = sceneMap.get(id).getClass().getMethod(method, pcls);
+                    Method _method = childMap.get(id).getClass().getMethod(method, pcls);
 
-                    _method.invoke(sceneMap.get(id), iparms);
+                    _method.invoke(childMap.get(id), iparms);
 
                 } catch(Exception e) {
                     e.printStackTrace();
-                    Log.e(TAG, "ERROR: ApplyNode: " + id + "  " + method + "  " + e);
+                    Log.e(TAG, "ERROR: ApplyNode: " + id + "  " + e);
                     System.exit(1);
                 }
                 break;

@@ -42,21 +42,16 @@ public class TView extends View implements ITutorObjectImpl {
 
     public TView(Context context) {
         super(context);
-
         init(context, null);
     }
 
-
     public TView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         init(context, attrs);
     }
 
-
     public TView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
         init(context, attrs);
     }
 
