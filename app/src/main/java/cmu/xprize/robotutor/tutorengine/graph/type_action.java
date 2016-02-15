@@ -147,45 +147,51 @@ public class type_action extends graph_node {
                     break;
 
                 default:
-                // The parameters come in - Name:Class:Name:Class...
-                // So odd elements are parameter names and the subsequent
-                // element is its encoded base type.
+                    // The parameters come in - Name:Class:Name:Class...
+                    // So odd elements are parameter names and the subsequent
+                    // element is its encoded base type.
 
-                List<String> parmList = Arrays.asList(parms.split(":"));
+                    Class[]  pcls   = null;
+                    Object[] iparms = null;
 
-                Class[] pcls = new Class[parmList.size() / 2];
-                Object[] iparms = new Object[parmList.size() / 2];
+                    if(parms != null) {
+                        List<String> parmList = Arrays.asList(parms.split(":"));
 
-                for (int i1 = 1, i2 = 0; i1 < parmList.size(); i1 += 2) {
-                    parmList.set(i1, parmList.get(i1).toLowerCase());
-                    pcls[i2] = classMap.get(parmList.get(i1));
+                        pcls = new Class[parmList.size() / 2];
+                        iparms = new Object[parmList.size() / 2];
+
+                        for (int i1 = 1, i2 = 0; i1 < parmList.size(); i1 += 2) {
+                            parmList.set(i1, parmList.get(i1).toLowerCase());
+                            pcls[i2] = classMap.get(parmList.get(i1));
+
+                            try {
+                                iparms[i2] = pcls[i2].getConstructor(new Class[]{String.class}).newInstance(parmList.get(i1 - 1));
+
+                            } catch (Exception e) {
+                                // TODO: Update this exception -  it is actually an invalid parm type error
+                                e.printStackTrace();
+                                Log.e(TAG, "ERROR: " + id + " - Method: <" + method + "> Not Found: " + e);
+                                System.exit(1);
+                            }
+                        }
+                    }
 
                     try {
-                        iparms[i2] = pcls[i2].getConstructor(new Class[]{String.class}).newInstance(parmList.get(i1 - 1));
+                        //Method _method = Button.class.getMethod("setText", CharSequence.class);
+
+                        Log.d(TAG, childMap.get(id).toString());
+                        childMap.get(id).getClass();
+
+                        Method _method = childMap.get(id).getClass().getMethod(method, pcls);
+
+                        _method.invoke(childMap.get(id), iparms);
 
                     } catch(Exception e) {
                         e.printStackTrace();
-                        Log.e(TAG, "ERROR: " + id + " - Method: <" + method + "> Not Found: " + e);
+                        Log.e(TAG, "ERROR: ApplyNode: " + id + "  " + e);
                         System.exit(1);
                     }
-                }
-
-                try {
-                    //Method _method = Button.class.getMethod("setText", CharSequence.class);
-
-                    Log.d(TAG, childMap.get(id).toString());
-                    childMap.get(id).getClass();
-
-                    Method _method = childMap.get(id).getClass().getMethod(method, pcls);
-
-                    _method.invoke(childMap.get(id), iparms);
-
-                } catch(Exception e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "ERROR: ApplyNode: " + id + "  " + e);
-                    System.exit(1);
-                }
-                break;
+                    break;
             }
         }
 

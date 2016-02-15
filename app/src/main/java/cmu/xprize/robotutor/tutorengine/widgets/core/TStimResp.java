@@ -88,6 +88,8 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
     }
 
 
+
+
     //************************************************************************
     //************************************************************************
     // Tutor methods  Start
@@ -130,10 +132,17 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
 
     }
 
+    public void show(Boolean showHide) {
+
+
+    }
+
 
     // Tutor methods  End
     //************************************************************************
     //************************************************************************
+
+
 
 
     @Override

@@ -189,7 +189,7 @@ public class TScope implements IScope {
 
                             default:
                                 // TODO: Manage Syntax Errors
-                                Log.e(TAG, "Missing '}}' in expression" + source);
+                                Log.e(TAG, "Missing '}}' in expression: " + source);
                                 System.exit(1);
 
                         }

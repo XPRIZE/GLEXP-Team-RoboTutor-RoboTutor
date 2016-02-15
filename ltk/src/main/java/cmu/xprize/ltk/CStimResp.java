@@ -333,6 +333,10 @@ public class CStimResp extends LinearLayout implements View.OnClickListener, ITe
 
 
     public void next() {
+        setText(_data[_dataIndex]);
+        initText();
+        _dataIndex++;
+
 
     }
 
