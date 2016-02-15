@@ -81,7 +81,7 @@
         android:background="@color/fingerWriterBackground">
 
         <cmu.xprize.robotutor.tutorengine.widgets.core.TFingerWriter
-            android:id="@+id/SwritingComp"
+            android:id="@+id/SfingerWriter"
             app:linkedView="@id/Sresponse"
             app:layout_heightPercent="90%"
             android:layout_width="wrap_content"
