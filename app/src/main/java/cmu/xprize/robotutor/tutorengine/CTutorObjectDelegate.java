@@ -6,7 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import cmu.xprize.common.TCONST;
+import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.IScriptable;
 
 // This is just a convenience to simplify the syntax in type_action execution

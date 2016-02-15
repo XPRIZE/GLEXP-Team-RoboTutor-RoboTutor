@@ -17,7 +17,7 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.common;
+package cmu.xprize.util;
 
 // global tutor constants
 

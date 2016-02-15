@@ -31,7 +31,7 @@ import java.util.Map;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorNavigator;
-import cmu.xprize.common.TCONST;
+import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
 public class type_action extends graph_node {

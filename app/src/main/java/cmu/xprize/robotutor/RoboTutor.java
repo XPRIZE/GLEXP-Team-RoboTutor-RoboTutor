@@ -27,7 +27,7 @@ import java.io.IOException;
 
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.common.TCONST;
+import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutorAssetManager;
 
 

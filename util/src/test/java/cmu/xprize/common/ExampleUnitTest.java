@@ -1,4 +1,4 @@
-package cmu.xprize.common;
+package cmu.xprize.util;
 
 import org.junit.Test;
 

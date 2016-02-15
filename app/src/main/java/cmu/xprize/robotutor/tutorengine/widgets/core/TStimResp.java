@@ -16,10 +16,8 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 
-import cmu.xprize.common.TCONST;
+import cmu.xprize.util.TCONST;
 import cmu.xprize.ltk.CStimResp;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorObjectDelegate;
@@ -33,6 +31,7 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
 
 
     private CTutorObjectDelegate mSceneObject;
+
     private float aspect = 0.82f;  // w/h
 
     private static final String  TAG = TStimResp.class.getSimpleName();
@@ -93,6 +92,11 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
     //************************************************************************
     // Tutor methods  Start
 
+
+    /**
+     *
+     * @param dataSource
+     */
     public void setDataSource(String dataSource) {
 
         try {
@@ -115,6 +119,15 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
             Log.e(TAG, "Invalid Data Source for : " + name());
             System.exit(1);
         }
+
+        // Pass an array of strings as the data source.
+        //
+        setDataSource(dataSource.split(","));
+    }
+
+
+    public void next() {
+
     }
 
 

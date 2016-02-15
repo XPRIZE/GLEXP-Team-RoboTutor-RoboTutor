@@ -5,8 +5,11 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import cmu.xprize.util.TCONST;
 
 public class CStimResp extends LinearLayout implements View.OnClickListener, ITextSink {
 
@@ -19,6 +22,9 @@ public class CStimResp extends LinearLayout implements View.OnClickListener, ITe
     private String[]      mLinkLex;
     private int[]         mLexEnds;             // records location of the end of lexemes in mDisplayText string
     private boolean       mEmpty = false;
+
+    private String[]      _data;
+    private int           _dataIndex = 0;
 
     private CStimResp     mLinkedView;
     private int           mLinkedViewID;
@@ -315,5 +321,19 @@ public class CStimResp extends LinearLayout implements View.OnClickListener, ITe
         mLinkedView = respView;
     }
 
+
+    //**************** Data Source Management
+
+
+    public void setDataSource(String[] dataSource) {
+
+        _data      = dataSource;
+        _dataIndex = 0;
+    }
+
+
+    public void next() {
+
+    }
 
 }

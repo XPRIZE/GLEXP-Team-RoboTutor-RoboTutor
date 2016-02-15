@@ -24,7 +24,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-import cmu.xprize.common.TCONST;
+import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
 import cmu.xprize.robotutor.RoboTutor;

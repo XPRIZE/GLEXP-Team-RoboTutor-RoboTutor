@@ -35,7 +35,7 @@ import android.view.ViewGroup;
 import java.io.File;
 import java.util.ArrayList;
 
-import cmu.xprize.common.TCONST;
+import cmu.xprize.util.TCONST;
 
 
 public class CFingerWriter extends View implements OnTouchListener {

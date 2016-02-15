@@ -34,5 +34,5 @@ dependencies {
     compile 'com.android.support:percent:23.1.0'
     compile project(':banner')
     compile project(':ltk')
-    compile project(':common')
+    compile project(':util')
 }
