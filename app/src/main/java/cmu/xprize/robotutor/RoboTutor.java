@@ -25,10 +25,9 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.robotutor.tutorengine.TCONST;
+import cmu.xprize.common.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutorAssetManager;
 
 

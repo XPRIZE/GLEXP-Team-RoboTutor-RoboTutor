@@ -35,12 +35,15 @@ import android.view.ViewGroup;
 import java.io.File;
 import java.util.ArrayList;
 
+import cmu.xprize.common.TCONST;
+
 
 public class CFingerWriter extends View implements OnTouchListener {
 
     private Context            mContext;
     private ITextSink          mLinkedView;
     private int                mLinkedViewID = -1;
+    protected boolean _enabled = false;
 
     private Path               mPath;
     private Paint              mPaint;
@@ -59,6 +62,8 @@ public class CFingerWriter extends View implements OnTouchListener {
 
     private Stroke             _currentStroke;
     private ArrayList<Stroke>  _currentStrokeStore;
+    private int[]              _screenCoord = new int[2];
+    private Boolean            _watchable = false;
 
     private RecogDelay            _counter;
     private long                  _time;
@@ -159,13 +164,38 @@ public class CFingerWriter extends View implements OnTouchListener {
         mPaintUpper.setPathEffect(new DashPathEffect(new float[]{25f,12f},0f));
         mPaintUpper.setAntiAlias(true);
 
-
-        this.setOnTouchListener(this);
-
         _counter = new RecogDelay(RECDELAY, RECDELAYNT);
 
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(getContext());
+    }
+
+
+    /**
+     * Enable or Disable the finger writer
+     * @param enableState
+     */
+    protected void enableFW(Boolean enableState) {
+
+        if(enableState) {
+            _enabled = enableState;
+            this.setOnTouchListener(this);
+        }
+        else {
+            _enabled = enableState;
+            this.setOnTouchListener(null);
+        }
+    }
+
+
+    /**
+     * Enable or disable persona messages.  Whether or not the persona will
+     * watch finger motion
+     *
+     * @param watchEnabled
+     */
+    protected void enablePersonaWatch(Boolean watchEnabled) {
+        _watchable = watchEnabled;
     }
 
 
@@ -176,7 +206,7 @@ public class CFingerWriter extends View implements OnTouchListener {
      * @param y
      */
     private void startTouch(float x, float y) {
-        PointF p;
+        PointF touchPt;
 
         if (_counter != null)
             _counter.cancel();
@@ -184,9 +214,9 @@ public class CFingerWriter extends View implements OnTouchListener {
         if (_currentStroke == null)
             _currentStroke = new Stroke();
 
-        p = new PointF(x, y);
+        touchPt = new PointF(x, y);
 
-        _currentStroke.addPoint(p);
+        _currentStroke.addPoint(touchPt);
 
         // Add Root node
         mPath.moveTo(x, y);
@@ -196,6 +226,7 @@ public class CFingerWriter extends View implements OnTouchListener {
         mY = y;
 
         invalidate();
+        broadcastLocation(TCONST.LOOKATSTART, touchPt);
     }
 
 
@@ -213,7 +244,7 @@ public class CFingerWriter extends View implements OnTouchListener {
             return "o";
         }
 
-        Log.d(TAG,"getRecChar is - " + _recChars[id]);
+        Log.d(TAG, "getRecChar is - " + _recChars[id]);
         return _recChars[id];
     }
 
@@ -241,20 +272,21 @@ public class CFingerWriter extends View implements OnTouchListener {
      * @param y
      */
     private void moveTouch(float x, float y) {
-        PointF p;
+        PointF touchPt;
 
         // only update if we've moved more than the jitter tolerance
         if(testPointTolerance(x,y)){
 
-            p = new PointF(x, y);
+            touchPt = new PointF(x, y);
 
-            _currentStroke.addPoint(p);
+            _currentStroke.addPoint(touchPt);
 
             mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
             mX = x;
             mY = y;
 
             invalidate();
+            broadcastLocation(TCONST.LOOKAT, touchPt);
         }
     }
 
@@ -265,20 +297,21 @@ public class CFingerWriter extends View implements OnTouchListener {
      *
      */
     private void endTouch(float x, float y) {
-        PointF p;
+        PointF touchPt;
 
         _counter.start();
+
+        touchPt = new PointF(mX, mY);
 
         // Only add a new point to the glyph if it is outside the jitter tolerance
         if(testPointTolerance(x,y)) {
 
-            p = new PointF(mX, mY);
-
-            _currentStroke.addPoint(p);
+            _currentStroke.addPoint(touchPt);
 
             mPath.lineTo(x, y);
             invalidate();
         }
+        broadcastLocation(TCONST.LOOKATEND, touchPt);
 
         // We always add the next stoke to the glyph set
         if (_currentStrokeStore == null)
@@ -295,9 +328,10 @@ public class CFingerWriter extends View implements OnTouchListener {
 
 
     public boolean onTouch(View view, MotionEvent event) {
-        PointF p;
         long   delta;
         final int action = event.getAction();
+
+        super.onTouchEvent(event);
 
         // inhibit input while the recognizer is thinking
         //
@@ -329,6 +363,7 @@ public class CFingerWriter extends View implements OnTouchListener {
         return false;
     }
 
+
     @Override
     protected void onDraw(Canvas canvas) {
         float topLine  = getHeight() / 3;
@@ -344,6 +379,20 @@ public class CFingerWriter extends View implements OnTouchListener {
         // Immediate mode graphics -
         // Redraw the current path
         canvas.drawPath(mPath, mPaint);
+    }
+
+
+    private void broadcastLocation(String Action, PointF touchPt) {
+
+        if(_watchable) {
+            getLocationOnScreen(_screenCoord);
+
+            // Let the persona know where to look
+            Intent msg = new Intent(Action);
+            msg.putExtra(TCONST.SCREENPOINT, new float[]{touchPt.x + _screenCoord[0], (float) touchPt.y + _screenCoord[1]});
+
+            bManager.sendBroadcast(msg);
+        }
     }
 
 

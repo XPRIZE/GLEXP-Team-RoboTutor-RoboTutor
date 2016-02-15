@@ -23,7 +23,6 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -32,9 +31,8 @@ import java.util.Map;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorNavigator;
-import cmu.xprize.robotutor.tutorengine.TCONST;
+import cmu.xprize.common.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
 
 public class type_action extends graph_node {
 

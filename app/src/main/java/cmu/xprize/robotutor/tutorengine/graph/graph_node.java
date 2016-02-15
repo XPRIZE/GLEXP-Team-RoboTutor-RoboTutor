@@ -24,7 +24,7 @@ import android.util.Log;
 import org.json.JSONObject;
 
 import cmu.xprize.robotutor.tutorengine.ILoadableObject;
-import cmu.xprize.robotutor.tutorengine.TCONST;
+import cmu.xprize.common.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;

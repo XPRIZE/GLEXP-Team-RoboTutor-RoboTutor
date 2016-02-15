@@ -33,10 +33,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import cmu.xprize.robotutor.tutorengine.graph.IScriptable;
+import cmu.xprize.common.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.robotutor.tutorengine.graph.scene_initializer;
 import cmu.xprize.robotutor.tutorengine.graph.type_action;

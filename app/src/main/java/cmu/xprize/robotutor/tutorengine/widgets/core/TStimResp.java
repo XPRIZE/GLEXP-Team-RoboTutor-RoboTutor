@@ -15,8 +15,11 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 
+import cmu.xprize.common.TCONST;
 import cmu.xprize.ltk.CStimResp;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorObjectDelegate;
@@ -24,12 +27,17 @@ import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
 
 public class TStimResp extends CStimResp implements ITutorObjectImpl {
 
 
     private CTutorObjectDelegate mSceneObject;
     private float aspect = 0.82f;  // w/h
+
+    private static final String  TAG = TStimResp.class.getSimpleName();
+
+
 
     public TStimResp(Context context) {
         super(context);
@@ -76,12 +84,37 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
     }
 
 
+    private void cachedataSource() {
+
+    }
+
+
     //************************************************************************
     //************************************************************************
     // Tutor methods  Start
 
     public void setDataSource(String dataSource) {
 
+        try {
+            if (dataSource.startsWith("file|")) {
+                dataSource = dataSource.substring(5);
+
+                JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.TDESC + "/" + dataSource);
+
+            } else if (dataSource.startsWith("db|")) {
+                dataSource = dataSource.substring(3);
+
+            } else if (dataSource.startsWith("[")) {
+                dataSource = dataSource.substring(1, dataSource.length()-1);
+
+            } else {
+                throw (new Exception("test"));
+            }
+        }
+        catch (Exception e) {
+            Log.e(TAG, "Invalid Data Source for : " + name());
+            System.exit(1);
+        }
     }
 
 

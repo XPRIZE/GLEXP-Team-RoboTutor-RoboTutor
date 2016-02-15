@@ -28,12 +28,10 @@ import android.util.Log;
 import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 
-import cmu.xprize.robotutor.tutorengine.TCONST;
+import cmu.xprize.common.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
 
 public class type_audio extends type_action implements OnPreparedListener, OnCompletionListener {
 

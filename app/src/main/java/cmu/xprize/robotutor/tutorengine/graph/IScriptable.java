@@ -19,7 +19,6 @@
 
 package cmu.xprize.robotutor.tutorengine.graph;
 
-import cmu.xprize.robotutor.tutorengine.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
 
 public interface IScriptable {

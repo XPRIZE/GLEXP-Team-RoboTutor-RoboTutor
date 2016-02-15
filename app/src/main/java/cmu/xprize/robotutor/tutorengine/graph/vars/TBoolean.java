@@ -22,14 +22,8 @@ package cmu.xprize.robotutor.tutorengine.graph.vars;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Map;
-
-import cmu.xprize.robotutor.tutorengine.CTutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ILoadableObject;
-import cmu.xprize.robotutor.tutorengine.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.IScriptable;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
 
 public class TBoolean extends TVarBase implements ILoadableObject, IScriptable {
 

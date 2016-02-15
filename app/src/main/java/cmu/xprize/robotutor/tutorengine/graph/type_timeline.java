@@ -44,11 +44,11 @@ import java.util.TimerTask;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
-import cmu.xprize.robotutor.tutorengine.TCONST;
+import cmu.xprize.common.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
 
-public class type_actiontrack extends type_action {
+public class type_timeline extends type_action {
 
     private TScope                       mScope;
 
@@ -81,7 +81,7 @@ public class type_actiontrack extends type_action {
     public String                    trackname;
 
 
-    public type_actiontrack() {
+    public type_timeline() {
 
     }
 

@@ -3,12 +3,11 @@ package cmu.xprize.robotutor.tutorengine.graph;
 
 import android.util.Log;
 
-import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.TCONST;
+import cmu.xprize.common.TCONST;
 
 /**
  *

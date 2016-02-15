@@ -25,12 +25,10 @@ import org.json.JSONObject;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ILoadableObject;
-import cmu.xprize.robotutor.tutorengine.TCONST;
+import cmu.xprize.common.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TFloat;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
 
 public class type_cond extends type_action implements ILoadableObject {

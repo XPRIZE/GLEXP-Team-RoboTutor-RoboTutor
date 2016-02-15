@@ -22,10 +22,7 @@ package cmu.xprize.robotutor.tutorengine.graph.vars;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 import cmu.xprize.robotutor.tutorengine.ILoadableObject;
-import cmu.xprize.robotutor.tutorengine.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.IScriptable;
 
 public class TFloat extends TVarBase implements ILoadableObject, IScriptable {

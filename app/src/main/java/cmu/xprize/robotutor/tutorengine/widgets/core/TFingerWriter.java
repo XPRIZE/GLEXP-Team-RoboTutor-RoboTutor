@@ -90,8 +90,24 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     //************************************************************************
     // Tutor methods  Start
 
+    /**
+     * Forward enable request to the base control class -
+     *
+     * @param enableState
+     */
     public void enable(Boolean enableState) {
 
+        enableFW(enableState);
+    }
+
+    /**
+     * Forward enable request to the base control class -
+     *
+     * @param enableState
+     */
+    public void personaWatch(Boolean enableState) {
+
+        enablePersonaWatch(enableState);
     }
 
 

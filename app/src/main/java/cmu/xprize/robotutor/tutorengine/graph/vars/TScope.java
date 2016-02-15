@@ -23,7 +23,7 @@ import android.util.Log;
 
 import java.util.HashMap;
 
-import cmu.xprize.robotutor.tutorengine.TCONST;
+import cmu.xprize.common.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.IScope;
 import cmu.xprize.robotutor.tutorengine.graph.IScriptable;
 

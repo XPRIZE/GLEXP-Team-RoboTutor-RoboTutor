@@ -22,14 +22,10 @@ package cmu.xprize.robotutor.tutorengine.graph.vars;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import cmu.xprize.robotutor.tutorengine.ILoadableObject;
-import cmu.xprize.robotutor.tutorengine.TCONST;
+import cmu.xprize.common.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.IScriptable;
 import cmu.xprize.robotutor.tutorengine.graph.type_action;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
 
 // TVarBase is the mechanism through which Iscriptable is imposed on built-in types
 //

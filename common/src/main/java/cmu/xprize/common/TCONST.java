@@ -17,7 +17,7 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.robotutor.tutorengine;
+package cmu.xprize.common;
 
 // global tutor constants
 
@@ -129,4 +129,10 @@ public class TCONST {
     public static final String AUDIOEVENT  = "event";
     public static final String AUDIOSTREAM = "stream";
     public static final String AUDIOFLOW   = "flow";
+
+    public static final String   LOOKATSTART  = "PERSONA_LOOKAT_START";
+    public static final String   LOOKAT       = "PERSONA_LOOKAT";
+    public static final String   LOOKATEND    = "PERSONA_LOOKAT_END";
+    public static final String   SCREENPOINT  = "SCREENPOINT";
+
 }

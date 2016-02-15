@@ -21,14 +21,13 @@ package cmu.xprize.robotutor.tutorengine;
 
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ViewGroup;
 
 import java.util.List;
 
-import cmu.xprize.robotutor.R;
+import cmu.xprize.common.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 
 /**
