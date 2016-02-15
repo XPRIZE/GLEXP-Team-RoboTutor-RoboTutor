@@ -17,7 +17,7 @@
         "INTRO_STATE": {
           "type": "NODE",
           "COMMENT": "Intro Clip",
-          "maptype":"actionMap",
+          "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
           "preenter":["SET_DATASOURCE","FW_DISABLE"],
           //temp ---- "preenter":["GB_DISABLE","FW_DISABLE"],
@@ -62,7 +62,7 @@
         "CORRECT":{
           "COMMENT":"When user inputs a correct answer...",
           "type":"node",
-          "maptype":"actionMap",
+          "maptype":"moduleMap",
           "mapname": "PLAYCORRECT",
           "preenter":[],
           "preexit" :["REMOVERESPONSE","REMOVESTIMULUS"],
@@ -155,6 +155,15 @@
 
         "COMMENT": "@@@@@  CModules  @@@@@",
 
+        "PLAYINTRO":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some numbers.mp3", "mode":"flow", "features": ""}
+          ]
+        },
+
         "PLAYCHAR": {
           "type": "MODULE",
           "reuse":true,
@@ -179,6 +188,15 @@
             {"type": "COMMAND", "id": "SwritingComp", "method": "onRecognitionComplete", "parms": "NEXT:String"}
             // This would increment the animation_graph when it is in a wait state.  e.g if it is sitting at the end of a stream audio clip
             //{"type": "COMMAND", "id": "Sresponse", "method": "show", "parms": "TRUE:Boolean","features":""}
+          ]
+        },
+
+        "PLAYCORRECT":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","mode":"flow", "features": ""}
           ]
         },
 
@@ -255,9 +273,6 @@
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
         "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[3,1,5,2,3,8,5,3,2,3]:String","features":""},
-
-        "PLAYINTRO":{"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some some numbers.mp3", "features": ""},
-        "PLAYCORRECT":{"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3", "features": ""},
 
         "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"10000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PLAYHESITATION", "features": "" },
         //set the waiting time limit as 10 seconds
