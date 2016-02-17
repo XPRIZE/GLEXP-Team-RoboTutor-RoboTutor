@@ -121,14 +121,34 @@ public class CTutor implements ILoadableObject {
             language = engLanguage;
 
         loadSceneNavigator();
-
-
-        // TODO: REMOVE THIS - TEMP DEV CODE
-//        CActionTrack track = new CActionTrack(mTutorName, "WT_SIMPLE_ABS");
-//        track.play();
-        // TODO: REMOVE THIS - TEMP DEV CODE
     }
 
+
+    static public ITutorObject getViewById(int findme, ViewGroup container) {
+        ITutorObject foundView = null;
+
+        if(container == null)
+            container = (ViewGroup)mTutorContainer;
+
+        try {
+            for (int i = 0; (foundView == null) && (i < container.getChildCount()); ++i) {
+
+                ITutorObject nextChild = (ITutorObject) container.getChildAt(i);
+
+                if (((View) nextChild).getId() == findme) {
+                    foundView = nextChild;
+                    break;
+                } else {
+                    if (nextChild instanceof ViewGroup)
+                        foundView = getViewById(findme, (ViewGroup) nextChild);
+                }
+            }
+        }
+        catch (Exception e) {
+            Log.i(TAG, "View walk error: " + e);
+        }
+        return foundView;
+    }
 
 
     static public TScope getScope() {
@@ -422,7 +442,7 @@ public class CTutor implements ILoadableObject {
 
     // udpate the working feature set for this instance
     //
-    public void setAddFeature(String feature)
+    static public void setAddFeature(String feature)
     {
         // Add new features - no duplicates
 
@@ -435,7 +455,7 @@ public class CTutor implements ILoadableObject {
 
     // udpate the working feature set for this instance
     //
-    public void setDelFeature(String feature) {
+    static public void setDelFeature(String feature) {
         int fIndex;
 
         // remove features - no duplicates
@@ -456,16 +476,17 @@ public class CTutor implements ILoadableObject {
         {
             return (fFeatures.indexOf(element.substring(1)) != -1)? false:true;
         }
-        else
-            return (fFeatures.indexOf(element) != -1)? true:false;
+        else {
+            return (fFeatures.indexOf(element) != -1) ? true : false;
+        }
     }
 
 
     // test possibly compound features
     //
     static public boolean testFeatureSet(String featSet) {
-        List<String> disjFeat = Arrays.asList(featSet.split(":"));  // Disjunctive features
-        List<String> conjFeat;                                      // Conjunctive features
+        List<String> disjFeat = Arrays.asList(featSet.split("\\|"));   // | Disjunctive features
+        List<String> conjFeat;                                          // & Conjunctive features
 
         // match a null set - i.e. empty string means the object is not feature constrained
 
@@ -477,7 +498,7 @@ public class CTutor implements ILoadableObject {
 
         for (String dfeature : disjFeat)
         {
-            conjFeat = Arrays.asList(dfeature.split(","));
+            conjFeat = Arrays.asList(dfeature.split("\\&"));
 
             // Check that all conjunctive features are set in fFeatures 
 

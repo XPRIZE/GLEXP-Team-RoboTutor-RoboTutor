@@ -23,24 +23,21 @@
         android:layout_below="@id/Sbanner"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_heightPercent="9%" >
+        app:layout_heightPercent="9%"
+        android:background="@color/respContainerColor">
 
-        <cmu.xprize.robotutor.tutorengine.widgets.core.TRect
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-        <cmu.xprize.robotutor.tutorengine.widgets.core.TStimResp
+        <cmu.xprize.robotutor.tutorengine.widgets.core.TStimRespBase
             android:id="@+id/Sstimulus"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            app:layout_heightPercent="70%"
+            app:layout_heightPercent="80%"
             app:aspectratio="0.83"
             app:isResponse="false"
-            android:background="@color/stimulusBackground"
             android:gravity="center"
-            android:textSize="25sp" />
+            android:background="@color/stimulusBackground"
+            android:textColor="@color/stimulustext" />
 
     </cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>
 
@@ -50,24 +47,22 @@
         android:layout_below="@id/Sstimcontainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_heightPercent="14%" >
+        app:layout_heightPercent="14%"
+        android:background="@color/respContainerColor">
 
-        <cmu.xprize.robotutor.tutorengine.widgets.core.TRect
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-        <cmu.xprize.robotutor.tutorengine.widgets.core.TStimResp
+        <cmu.xprize.robotutor.tutorengine.widgets.core.TStimRespBase
             android:id="@+id/Sresponse"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            app:layout_heightPercent="72%"
+            app:layout_heightPercent="80%"
             app:aspectratio="0.83"
             app:isResponse="true"
             app:linkedView="@id/Sstimulus"
-            android:background="@color/responseBackground"
             android:gravity="center"
-            android:textSize="30sp" />
+            android:textStyle="bold"
+            android:background="@color/responseBackground"
+            android:textColor="@color/responsetext" />
 
     </cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>
 

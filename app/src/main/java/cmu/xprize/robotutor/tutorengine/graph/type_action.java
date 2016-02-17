@@ -106,12 +106,22 @@ public class type_action extends graph_node {
      */
     @Override
     public String applyNode() {
-        Map childMap = CTutorNavigator.getChildMap();
+
+        String returnState = TCONST.DONE;
+        Map    childMap    = CTutorNavigator.getChildMap();
 
         if(cmd != null) {
             switch(cmd) {
                 case TCONST.GOTONODE:
                     CTutor.gotoNode(id);
+                    break;
+
+                case TCONST.NEXT:
+                    CTutor.mTutorNavigator.onButtonNext();
+                    break;
+
+                case TCONST.WAIT:
+                    returnState = TCONST.WAIT;
                     break;
             }
         }
@@ -154,13 +164,14 @@ public class type_action extends graph_node {
                     Class[]  pcls   = null;
                     Object[] iparms = null;
 
+                    // TODO: Fixup support for , delimited parm lists
                     if(parms != null) {
                         List<String> parmList = Arrays.asList(parms.split(":"));
 
                         pcls = new Class[parmList.size() / 2];
                         iparms = new Object[parmList.size() / 2];
 
-                        for (int i1 = 1, i2 = 0; i1 < parmList.size(); i1 += 2) {
+                        for (int i1 = 1, i2 = 0; i1 < parmList.size(); i1 += 2, i2++) {
                             parmList.set(i1, parmList.get(i1).toLowerCase());
                             pcls[i2] = classMap.get(parmList.get(i1));
 
@@ -195,7 +206,7 @@ public class type_action extends graph_node {
             }
         }
 
-        return TCONST.DONE;
+        return returnState;
     }
 
 

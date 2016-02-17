@@ -323,13 +323,13 @@ public class Persona extends View {
     private void postDelayedStare() {
 
         if(canStare) {
-            Log.i(TAG, "Posting Stare Request");
+            //Log.i(TAG, "Posting Stare Request");
             stareHandler.postDelayed(stareAnimate, stareDelay);
         }
     }
 
     private void cancelStare() {
-        Log.i(TAG, "Cancelling Stare Request");
+        //Log.i(TAG, "Cancelling Stare Request");
 
         stareHandler.removeCallbacks(stareAnimate);
         stareAnimation.cancel();
@@ -358,7 +358,7 @@ public class Persona extends View {
 
             stareAnimation = new AnimatorSet();
 
-            Log.i(TAG, "Starting Stare");
+            //Log.i(TAG, "Starting Stare");
 
             stareColl.add(createStareAnimation(leftEye, "pupilX",  leftEye.getEyeLocation().x));
             stareColl.add(createStareAnimation(leftEye, "pupilY",  leftEye.getEyeLocation().y));
@@ -395,7 +395,7 @@ public class Persona extends View {
             float bvar = r.nextFloat() * blinkVar;
             long blinkTime = (long) (blinkPeriod - (blinkVar / 2) + bvar);
 
-            Log.i("PERSONA:", "Blink Time|Var: " + blinkTime + " | " + bvar);
+            //Log.i("PERSONA:", "Blink Time|Var: " + blinkTime + " | " + bvar);
 
             blinkCnt = (r.nextFloat() < blinkDbl) ? 3 : 1;
 
@@ -428,7 +428,7 @@ public class Persona extends View {
     public void startBlink() {
         animation = new AnimatorSet();
 
-        Log.i(TAG, "Starting Blink");
+        //Log.i(TAG, "Starting Blink");
 
         animation.addListener(new Animator.AnimatorListener() {
 
@@ -445,7 +445,7 @@ public class Persona extends View {
             @Override
             public void onAnimationEnd(Animator arg0) {
                 if(canBlink) {
-                    Log.i(TAG, "Animation End");
+                    //Log.i(TAG, "Animation End");
                     isBlinking = false;
                     blinkTimer.purge();
                     blinkTimer = null;

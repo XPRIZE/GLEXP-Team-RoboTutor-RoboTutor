@@ -133,24 +133,12 @@ public class CTutorNavigator implements ITutorNavigator{
      */
     public void onButtonNext() {
 
-        // debounce the next button - i.e. disallow multiple clicks on same next instance
-        // protect against recurrent calls
-
-        if(_inNavigation)
-                     return;
-
-        _inNavigation = true;
-
         // The next button can target either the scenegraph or the animationgraph.
         // i.e. You either want it to trigger the next step in the animationGraph or the sceneGraph
         // reset _fSceneGraph if you want the next button to drive the animationGraph
         //
         if(_fSceneGraph || mTutorAnimator.next().equals(TCONST.NEXTSCENE)) {
             gotoNextScene();
-        }
-        else
-        {
-            _inNavigation = false;
         }
     }
 
@@ -402,13 +390,6 @@ public class CTutorNavigator implements ITutorNavigator{
         String newScene = "";
         String redScene = "";
 
-        //@@ Mod Sep 27 2011 - protect against recurrent calls
-
-        if(_inNavigation)
-            return;
-
-        _inNavigation = true;
-
         // The next button can target either the scenegraph or the animationgraph.
         // i.e. You either want it to trigger the next step in the animationGraph or the sceneGraph
         // reset _fSceneGraph if you want the next button to drive the animationGraph
@@ -478,10 +459,6 @@ public class CTutorNavigator implements ITutorNavigator{
         navigatedata[_sceneCurr].instance.onEnterScene();
 
         mTutorAnimator.enterScene(navigatedata[_sceneCurr].id);
-
-        //@@ Mod Sep 27 2011 - protect against recursive calls
-
-        _inNavigation = false;
     }
 
 
