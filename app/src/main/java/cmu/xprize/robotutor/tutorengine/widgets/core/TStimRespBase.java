@@ -40,6 +40,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
     private CTutorObjectDelegate mSceneObject;
 
     private float aspect   = 0.82f;  // w/h
+    private int   _wrong   = 0;
     private int   _correct = 0;
 
     private static final String  TAG = TStimResp.class.getSimpleName();
@@ -117,12 +118,13 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
             }
             else {
                 CTutor.setAddFeature(TCONST.FWINCORRECT);
+                _wrong++;
             }
 
             // Set a flag if they're all correct when we are out of data
             //
             if(mLinkedView.dataExhausted()) {
-                if(mLinkedView.allCorrect(_correct))
+                if(_wrong == 0)
                     CTutor.setAddFeature(TCONST.FWALLCORRECT);
             }
         }
@@ -140,6 +142,13 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
      * @param dataSource
      */
     public void setDataSource(String dataSource) {
+
+        _correct = 0;
+        _wrong   = 0;
+        CTutor.setDelFeature(TCONST.FWALLCORRECT);
+        CTutor.setDelFeature(TCONST.FWCORRECT);
+        CTutor.setDelFeature(TCONST.FWINCORRECT);
+
 
         try {
             if (dataSource.startsWith("file|")) {
@@ -170,13 +179,17 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
     public void next() {
 
+        CTutor.setDelFeature(TCONST.FWALLCORRECT);
+        CTutor.setDelFeature(TCONST.FWCORRECT);
+        CTutor.setDelFeature(TCONST.FWINCORRECT);
+
         super.next();
 
         // update the response variable  "<Sstimulus>.value"
         CTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
 
         if(dataExhausted())
-            CTutor.setDelFeature(TCONST.FTR_EOI);
+            CTutor.setAddFeature(TCONST.FTR_EOI);
     }
 
     public void show(Boolean showHide) {
@@ -188,9 +201,6 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
         super.clear();
 
-        CTutor.setDelFeature(TCONST.FWALLCORRECT);
-        CTutor.setDelFeature(TCONST.FWCORRECT);
-        CTutor.setDelFeature(TCONST.FWINCORRECT);
     }
 
 

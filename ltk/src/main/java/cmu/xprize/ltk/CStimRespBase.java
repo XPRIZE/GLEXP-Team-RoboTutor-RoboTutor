@@ -179,15 +179,20 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IT
 
     public void next() {
 
-        if (_data != null) {
-            updateText(_data.get(_dataIndex));
+        try {
+            if (_data != null) {
+                updateText(_data.get(_dataIndex));
 
-            _dataIndex++;
-        } else {
-            Log.e(TAG, "Error no DataSource : ");
+                _dataIndex++;
+            } else {
+                Log.e(TAG, "Error no DataSource : ");
+                System.exit(1);
+            }
+        }
+        catch(Exception e) {
+            Log.e(TAG, "Data Exhuasted: call past end of data");
             System.exit(1);
         }
-
     }
 
     public void show(Boolean showHide) {
