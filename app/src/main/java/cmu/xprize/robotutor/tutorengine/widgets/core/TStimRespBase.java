@@ -194,9 +194,27 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
     }
 
 
-    public void flagError(Boolean flagState, String Color) {
+    public void setBackGround(String Color) {
 
-        super.flagError(flagState, Color);
+        super.setBackGround(Color);
+    }
+
+
+    public void setForeGround(String Color) {
+
+        super.setForeGround(Color);
+    }
+
+
+    /**
+     * Deprecated Feb 17 2016
+     *
+     * @param flagState
+     * @param Color
+     */
+    public void flagError(Boolean flagState, String Color) {
+        Log.e(TAG, "Unsuppported Function: " + "flagError");
+        System.exit(1);
     }
 
 
