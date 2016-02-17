@@ -41,6 +41,7 @@ public class type_action extends graph_node {
     // json loadable
     public String          id;
     public String          cmd;
+    public String          mode = TCONST.AUDIOEVENT;
     public String          value;
 
     public String          method;          // Invokes method with parms. using apply

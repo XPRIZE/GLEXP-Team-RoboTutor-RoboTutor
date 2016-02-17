@@ -120,7 +120,9 @@ public class type_timeline extends type_action {
 
             // Reset for next time around
             gotoAndStop(0);
-            CTutor.mTutorNavigator.onButtonNext();
+
+            if(mode == TCONST.AUDIOFLOW)
+                CTutor.mTutorNavigator.onButtonNext();
         }
         else {
             // do post increment so we catch the zero frame

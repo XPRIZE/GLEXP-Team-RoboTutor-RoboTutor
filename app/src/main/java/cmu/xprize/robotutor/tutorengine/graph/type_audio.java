@@ -55,7 +55,6 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
 
     // json loadable fields
     public String        command;
-    public String        mode        = TCONST.AUDIOEVENT;
     public String        lang;
     public String        soundsource;
     public long          index = 0;
