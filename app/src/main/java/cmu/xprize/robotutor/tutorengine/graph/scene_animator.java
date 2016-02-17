@@ -69,6 +69,7 @@ public class scene_animator extends graph_node implements ILoadableObject{
         if(_currNode != null) {
             Log.d(TAG, "Running Node: " + _currNode.name);
 
+            _currNode.preEnter();
             _currNode.applyNode();
         }
         else {
