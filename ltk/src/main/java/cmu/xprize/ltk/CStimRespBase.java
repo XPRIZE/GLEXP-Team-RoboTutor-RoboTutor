@@ -25,6 +25,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -46,6 +47,18 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IT
 
     protected CStimRespBase  mLinkedView;
     protected int            mLinkedViewID;
+
+    static private HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
+
+    //
+    // This is used to map "type" (class names) used in json HashMap specs to real classes
+
+    static {
+        colorMap.put("wrong", new Integer(0xffff0000));
+        colorMap.put("normal", new Integer(0xff000000));
+    }
+
+
 
     final static public String TAG = "CStimRespBase";
 
@@ -189,8 +202,24 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IT
         updateText("");
     }
 
-    public void flagError(Boolean flagState, String Color) {
+    public void setBackGround(String Color) {
+        try {
+            setBackgroundColor(colorMap.get(Color));
+        }
+        catch(Exception e) {
+            Log.e(TAG, "Invalid Color Name: "  + Color + " : " + e);
+            System.exit(1);
+        }
+    }
 
+    public void setForeGround(String Color) {
+        try {
+            setTextColor(colorMap.get(Color));
+        }
+        catch(Exception e) {
+            Log.e(TAG, "Invalid Color Name: "  + Color + " : " + e);
+            System.exit(1);
+        }
     }
 
 
