@@ -74,7 +74,7 @@ public class type_cond extends type_action implements ILoadableObject {
                 break;
 
             case TCONST.TRUE:
-                result = false;
+                result = true;
                 break;
 
             default:
