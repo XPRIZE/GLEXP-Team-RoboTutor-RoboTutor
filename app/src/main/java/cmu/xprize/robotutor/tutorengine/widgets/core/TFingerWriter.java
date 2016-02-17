@@ -29,6 +29,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.robotutor.tutorengine.graph.IScriptable;
 
 public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 
@@ -90,30 +91,47 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     //************************************************************************
     // Tutor methods  Start
 
-    /**
-     * Forward enable request to the base control class -
-     *
-     * @param enableState
-     */
-    public void enable(Boolean enableState) {
+    public void enable(Boolean enable) {
 
-        enableFW(enableState);
+        enableFW(enable);
     }
 
-    /**
-     * Forward enable request to the base control class -
-     *
-     * @param enableState
-     */
-    public void personaWatch(Boolean enableState) {
 
-        enablePersonaWatch(enableState);
+    public void personaWatch(Boolean enable) {
+
+        super.personaWatch(enable);
     }
 
+
+    public void onStartWriting(String symbol) {
+        super.onStartWriting(symbol);
+    }
+
+
+    public void onRecognitionComplete(String symbol) {
+        super.onRecognitionComplete(symbol);
+    }
+
+
+    protected void applyEventNode(String nodeName) {
+        IScriptable obj = null;
+
+        if(nodeName != null && !nodeName.equals("")) {
+            try {
+                obj = CTutor.getScope().mapSymbol(nodeName);
+                obj.applyNode();
+
+            } catch (Exception e) {
+                // TODO: Manage invalid Behavior
+                e.printStackTrace();
+            }
+        }
+    }
 
     // Tutor methods  End
     //************************************************************************
     //************************************************************************
+
 
 
 

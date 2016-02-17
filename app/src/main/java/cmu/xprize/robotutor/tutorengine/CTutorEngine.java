@@ -19,6 +19,10 @@
 
 package cmu.xprize.robotutor.tutorengine;
 
+import android.app.Activity;
+import android.view.View;
+import android.view.ViewGroup;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,6 +41,7 @@ public class CTutorEngine {
 
     private static TScope                   mRootScope;
 
+
     private static CTutorEngine             mTutorEngine;
     private static HashMap<String, CTutor>  mTutors = new HashMap<String, CTutor>();
     private static CTutor                   mTutorActive;
@@ -45,7 +50,7 @@ public class CTutorEngine {
     private String                          mTutorDescrPath;
     private String                          mJSONspec;
 
-    static public RoboTutor                 Activity;
+    static public RoboTutor Activity;
     static public ITutorSceneImpl           TutorContainer;
     static public ITutorLogManager          TutorLogManager;
 
@@ -56,7 +61,6 @@ public class CTutorEngine {
     // json loadable
     public String                           defTutor;
     static public String                    language;
-
 
     final static public  String CacheSource = TCONST.ASSETS;                // assets or extern
     final static private String TAG         = "CTUTOR_ENGINE";
@@ -74,6 +78,7 @@ public class CTutorEngine {
 
 
     static public CTutorEngine getTutorEngine(RoboTutor context, ITutorSceneImpl tutorContainer) {
+
         if(mTutorEngine == null) {
             mTutorEngine = new CTutorEngine(context, tutorContainer);
         }
@@ -85,6 +90,11 @@ public class CTutorEngine {
     static public TScope getScope() {
 
         return mRootScope;
+    }
+
+
+    static public Activity getActivity() {
+        return Activity;
     }
 
 

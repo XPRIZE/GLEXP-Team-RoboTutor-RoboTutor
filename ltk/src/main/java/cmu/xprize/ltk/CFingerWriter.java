@@ -43,7 +43,7 @@ public class CFingerWriter extends View implements OnTouchListener {
     private Context            mContext;
     private ITextSink          mLinkedView;
     private int                mLinkedViewID = -1;
-    protected boolean _enabled = false;
+    protected boolean          _enabled = false;
 
     private Path               mPath;
     private Paint              mPaint;
@@ -64,6 +64,10 @@ public class CFingerWriter extends View implements OnTouchListener {
     private ArrayList<Stroke>  _currentStrokeStore;
     private int[]              _screenCoord = new int[2];
     private Boolean            _watchable = false;
+
+    private Boolean            _touchStarted = false;
+    private String             _onStartWriting;
+    private String             _onRecognition;
 
     private RecogDelay            _counter;
     private long                  _time;
@@ -121,8 +125,9 @@ public class CFingerWriter extends View implements OnTouchListener {
         Log.d("JNI", "Path: " + path);
 
         try {
-            _recognizer = new LipiTKJNIInterface(path, "SHAPEREC_ALPHANUM");
-//            _recognizer = new LipiTKJNIInterface(path, "SHAPEREC_NUMERALS");
+            // TODO : Manage Recognizers
+//            _recognizer = new LipiTKJNIInterface(path, "SHAPEREC_ALPHANUM");
+            _recognizer = new LipiTKJNIInterface(path, "SHAPEREC_NUMERALS");
 
             _recognizer.initialize();
         }
@@ -161,42 +166,17 @@ public class CFingerWriter extends View implements OnTouchListener {
         mPaintUpper.setStrokeJoin(Paint.Join.ROUND);
         mPaintUpper.setStrokeWidth(6);
         mPaintUpper.setAlpha(100);
-        mPaintUpper.setPathEffect(new DashPathEffect(new float[]{25f,12f},0f));
+        mPaintUpper.setPathEffect(new DashPathEffect(new float[]{25f, 12f}, 0f));
         mPaintUpper.setAntiAlias(true);
 
         _counter = new RecogDelay(RECDELAY, RECDELAYNT);
 
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(getContext());
+
+        //this.setOnTouchListener(this);
     }
 
-
-    /**
-     * Enable or Disable the finger writer
-     * @param enableState
-     */
-    protected void enableFW(Boolean enableState) {
-
-        if(enableState) {
-            _enabled = enableState;
-            this.setOnTouchListener(this);
-        }
-        else {
-            _enabled = enableState;
-            this.setOnTouchListener(null);
-        }
-    }
-
-
-    /**
-     * Enable or disable persona messages.  Whether or not the persona will
-     * watch finger motion
-     *
-     * @param watchEnabled
-     */
-    protected void enablePersonaWatch(Boolean watchEnabled) {
-        _watchable = watchEnabled;
-    }
 
 
     /**
@@ -207,6 +187,11 @@ public class CFingerWriter extends View implements OnTouchListener {
      */
     private void startTouch(float x, float y) {
         PointF touchPt;
+
+        if(!_touchStarted) {
+            _touchStarted = true;
+            applyEventNode(_onStartWriting);
+        }
 
         if (_counter != null)
             _counter.cancel();
@@ -331,34 +316,37 @@ public class CFingerWriter extends View implements OnTouchListener {
         long   delta;
         final int action = event.getAction();
 
-        super.onTouchEvent(event);
+        // TODO: switch back to setting onTouchListener
+        if(_enabled) {
+            super.onTouchEvent(event);
 
-        // inhibit input while the recognizer is thinking
-        //
-        if(!_isRecognizing) {
+            // inhibit input while the recognizer is thinking
+            //
+            if (!_isRecognizing) {
 
-            float x = event.getX();
-            float y = event.getY();
+                float x = event.getX();
+                float y = event.getY();
 
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    _prevTime = _time = System.nanoTime();
-                    startTouch(x, y);
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    _time = System.nanoTime();
-                    moveTouch(x, y);
-                    break;
-                case MotionEvent.ACTION_UP:
-                    _time = System.nanoTime();
-                    endTouch(x, y);
-                    break;
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        _prevTime = _time = System.nanoTime();
+                        startTouch(x, y);
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        _time = System.nanoTime();
+                        moveTouch(x, y);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        _time = System.nanoTime();
+                        endTouch(x, y);
+                        break;
+                }
+                delta = _time - _prevTime;
+
+                //Log.i(TAG, "Touch Time: " + _time + "  :  " + delta);
+                return true;
+
             }
-            delta = _time - _prevTime;
-
-            Log.i(TAG, "Touch Time: " + _time + "  :  " + delta);
-            return true;
-
         }
         return false;
     }
@@ -476,8 +464,9 @@ public class CFingerWriter extends View implements OnTouchListener {
 
             _recStrokes = null;
 
-            String configFileDirectory = _recognizer.getLipiDirectory() + "/projects/alphanumeric/config/";
-//            String configFileDirectory = _recognizer.getLipiDirectory() + "/projects/demonumerals/config/";
+            // TODO : Manage Recognizers
+//            String configFileDirectory = _recognizer.getLipiDirectory() + "/projects/alphanumeric/config/";
+            String configFileDirectory = _recognizer.getLipiDirectory() + "/projects/demonumerals/config/";
 
             _recChars = new String[_recResults.length];
 
@@ -498,6 +487,9 @@ public class CFingerWriter extends View implements OnTouchListener {
 
             // Let anyone interested know there is a new recognition set available
             bManager.sendBroadcast(new Intent(RECMSG));
+
+            // Do any on rec behaviors
+            applyEventNode(_onRecognition);
         }
 
 
@@ -515,5 +507,70 @@ public class CFingerWriter extends View implements OnTouchListener {
                 _recStrokes[s] = _currentStrokeStore.get(s);
         }
     }
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // Tutor methods  Start
+
+
+    /**
+     * Enable or Disable the finger writer
+     * @param enableState
+     */
+    protected void enableFW(Boolean enableState) {
+
+        _enabled = enableState;
+
+        if(enableState) {
+            // Reset the flag so onStartWriting events will fire
+            _touchStarted = false;
+            this.setOnTouchListener(this);
+
+        }
+        else {
+            this.setOnTouchListener(null);
+        }
+    }
+
+
+    /**
+     * Enable or disable persona messages.  Whether or not the persona will
+     * watch finger motion
+     *
+     * @param watchEnabled
+     */
+    protected void personaWatch(Boolean watchEnabled) {
+
+        _watchable = watchEnabled;
+    }
+
+
+    public void onStartWriting(String symbol) {
+        _onStartWriting = symbol;
+    }
+
+
+    public void onRecognitionComplete(String symbol) {
+        _onRecognition = symbol;
+    }
+
+
+    // Must override in TClass
+    // So this in the TClass domain where TScope lives
+    protected void applyEventNode(String nodeName) {
+    }
+
+
+    // Tutor methods  End
+    //************************************************************************
+    //************************************************************************
+
+
+
+
+
+
 }
 

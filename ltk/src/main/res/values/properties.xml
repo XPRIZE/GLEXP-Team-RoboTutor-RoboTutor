@@ -4,5 +4,6 @@
         <attr name="isResponse" format="boolean" />
         <attr name="linkedView" format="reference"/>
         <attr name="aspectratio" format="float"/>
+        <attr name="textcolor" format="color" />
     </declare-styleable>
 </resources>

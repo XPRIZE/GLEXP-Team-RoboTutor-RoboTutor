@@ -184,12 +184,24 @@ public class graph_node implements ILoadableObject, IScriptable {
     // IScriptable
     @Override
     public TBoolean OR(IScriptable RHS, boolean lneg, boolean rneg) {
-        return null;
+        boolean result = false;
+
+        if((Boolean)evaluate(lneg) || (Boolean)RHS.evaluate(rneg)) {
+            result = true;
+        }
+
+        return new TBoolean(result);
     }
 
     @Override
     public TBoolean AND(IScriptable RHS, boolean lneg, boolean rneg) {
-        return null;
+        boolean result = false;
+
+        if((Boolean)evaluate(lneg) && (Boolean)RHS.evaluate(rneg)) {
+            result = true;
+        }
+
+        return new TBoolean(result);
     }
 
     @Override

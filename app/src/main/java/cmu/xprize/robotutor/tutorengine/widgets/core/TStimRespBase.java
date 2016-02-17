@@ -16,7 +16,14 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
+import cmu.xprize.ltk.CStimRespBase;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.ltk.CStimResp;
 import cmu.xprize.robotutor.tutorengine.CTutor;
@@ -27,28 +34,29 @@ import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
 
-public class TStimResp extends CStimResp implements ITutorObjectImpl {
+public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
 
     private CTutorObjectDelegate mSceneObject;
 
-    private float aspect = 0.82f;  // w/h
+    private float aspect   = 0.82f;  // w/h
+    private int   _correct = 0;
 
     private static final String  TAG = TStimResp.class.getSimpleName();
 
 
 
-    public TStimResp(Context context) {
+    public TStimRespBase(Context context) {
         super(context);
         init(context, null);
     }
 
-    public TStimResp(Context context, AttributeSet attrs) {
+    public TStimRespBase(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, null);
     }
 
-    public TStimResp(Context context, AttributeSet attrs, int defStyleAttr) {
+    public TStimRespBase(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, null);
     }
@@ -58,7 +66,6 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
     public void init(Context context, AttributeSet attrs) {
         mSceneObject = new CTutorObjectDelegate(this);
         mSceneObject.init(context, attrs);
-
     }
 
     @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
@@ -72,6 +79,8 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
 
         finalWidth  = (int)(originalHeight * aspect);
         finalHeight = originalHeight;
+
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, finalHeight * 0.7f);
 
         setMeasuredDimension(finalWidth, finalHeight);
 
@@ -87,6 +96,37 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
 
     }
 
+
+    @Override
+    public void addChar(String newChar) {
+
+        super.addChar(newChar);
+
+        // update the response variable  "<Sresponse>.value"
+        CTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
+
+        if(mLinkedView == null)
+            mLinkedView = (TStimRespBase)CTutor.getViewById(mLinkedViewID, null);
+
+        if(mLinkedView != null) {
+            String Stimulus = mLinkedView.getValue();
+
+            if(mValue.equals(Stimulus)) {
+                CTutor.setAddFeature(TCONST.FWCORRECT);
+                _correct++;
+            }
+            else {
+                CTutor.setAddFeature(TCONST.FWINCORRECT);
+            }
+
+            // Set a flag if they're all correct when we are out of data
+            //
+            if(mLinkedView.dataExhausted()) {
+                if(mLinkedView.allCorrect(_correct))
+                    CTutor.setAddFeature(TCONST.FWALLCORRECT);
+            }
+        }
+    }
 
 
 
@@ -129,10 +169,36 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
 
 
     public void next() {
+
         super.next();
+
+        // update the response variable  "<Sstimulus>.value"
+        CTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
+
+        if(dataExhausted())
+            CTutor.setDelFeature(TCONST.FTR_EOI);
     }
 
-    public void show(Boolean showHide) {  }
+    public void show(Boolean showHide) {
+
+        super.show(showHide);
+    }
+
+    public void clear() {
+
+        super.clear();
+
+        CTutor.setDelFeature(TCONST.FWALLCORRECT);
+        CTutor.setDelFeature(TCONST.FWCORRECT);
+        CTutor.setDelFeature(TCONST.FWINCORRECT);
+    }
+
+
+    public void flagError(Boolean flagState, String Color) {
+
+        super.flagError(flagState, Color);
+    }
+
 
 
     // Tutor methods  End

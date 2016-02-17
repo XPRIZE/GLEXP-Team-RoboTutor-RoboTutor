@@ -84,12 +84,15 @@ public class TCONST {
     public static final String SEQUENTIAL_TYPE = "SEQUENTIAL_TYPE";
     public static final String UNKNOWN_TYPE    = "UNKNOWN_TYPE";
 
-    public static final String PLAY            = "PLAY";
-    public static final String STOP            = "STOP";
-    public static final String PAUSE           = "PAUSE";
+    // Main Loop states
     public static final String DONE            = "DONE";
     public static final String WAIT            = "WAIT";
     public static final String NONE            = "NONE";
+
+    public static final String PLAY            = "PLAY";
+    public static final String STOP            = "STOP";
+    public static final String NEXT            = "NEXT";
+    public static final String PAUSE           = "PAUSE";
     public static final String START           = "START";
     public static final String CANCEL          = "CANCEL";
     public static final String CREATE          = "CREATE";
@@ -130,9 +133,16 @@ public class TCONST {
     public static final String AUDIOSTREAM = "stream";
     public static final String AUDIOFLOW   = "flow";
 
-    public static final String   LOOKATSTART  = "PERSONA_LOOKAT_START";
-    public static final String   LOOKAT       = "PERSONA_LOOKAT";
-    public static final String   LOOKATEND    = "PERSONA_LOOKAT_END";
-    public static final String   SCREENPOINT  = "SCREENPOINT";
+    public static final String   LOOKATSTART = "PERSONA_LOOKAT_START";
+    public static final String   LOOKAT      = "PERSONA_LOOKAT";
+    public static final String   LOOKATEND   = "PERSONA_LOOKAT_END";
+    public static final String   SCREENPOINT = "SCREENPOINT";
 
+    public static final String FWCORRECT    = "FTR_RIGHT";
+    public static final String FWINCORRECT  = "FTR_WRONG";
+    public static final String FTR_EOI      = "FTR_NOWORDS";
+    public static final String FWALLCORRECT = "ALL_CORRECT";
+
+    public static final String FALSE        = "FALSE";
+    public static final String TRUE         = "TRUE";
 }

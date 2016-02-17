@@ -82,6 +82,10 @@ public class TScope implements IScope {
         map.put(key,obj);
     }
 
+    public void addUpdate(String key, IScriptable obj) {
+        map.put(key,obj);
+    }
+
 
     /**
      * Scan the string for variables - {{symbol_name}}  and replace them in the result with
@@ -144,7 +148,7 @@ public class TScope implements IScope {
                         if ((tChar >= 'A' && tChar <= 'Z') ||
                                 (tChar >= 'a' && tChar <= 'z') ||
                                 (tChar >= '0' && tChar <= '9') ||
-                                (tChar == '_')) {
+                                (tChar == '.') || (tChar == '_')) {
 
                             Symbol.append(tChar);
                             _i1++;

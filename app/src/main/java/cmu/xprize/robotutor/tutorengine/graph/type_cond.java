@@ -64,6 +64,26 @@ public class type_cond extends type_action implements ILoadableObject {
         return TCONST.DONE;
     }
 
+    public boolean evaluateThenElse(String ThenElse, boolean inverse) {
+
+        boolean result = false;
+
+        switch(ThenElse.toUpperCase()) {
+            case TCONST.FALSE:
+                result = false;
+                break;
+
+            case TCONST.TRUE:
+                result = false;
+                break;
+
+            default:
+                result = applyScript(Then, inverse);
+                break;
+        }
+
+        return inverse? !result:result;
+    }
 
     public Object evaluate(boolean inverse) {
 
@@ -77,17 +97,18 @@ public class type_cond extends type_action implements ILoadableObject {
                 result = Iff(If.trim(), TCONST.STARTSTATE, 0);
 
                 if(result) {
-                    result = applyScript(Then, inverse);
+                    result = evaluateThenElse(Then, inverse);
                 }
                 else {
-                    result = applyScript(Else, inverse);
+                    result = evaluateThenElse(Else, inverse);
                 }
             }
         }
 
         // catch Iff exceptions
         catch(Exception e) {
-            // TODO: manage Iff errors
+            Log.e(TAG, "Constraint Format Error: " + e);
+            System.exit(1);
         }
 
         return result;
