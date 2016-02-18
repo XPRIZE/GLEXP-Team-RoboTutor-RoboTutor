@@ -42,6 +42,8 @@ public class CTutorAnimator {
     // State fields
     private scene_animator _currAnimator;
 
+    static private HashMap<String, Integer> _pFeatures;
+
 
     // json loadable
     public HashMap<String,scene_animator> animatorMap;
@@ -54,6 +56,7 @@ public class CTutorAnimator {
 
         mTutorName = tutorName;
         mScope     = tutorScope;
+        _pFeatures = new HashMap<String, Integer>();
 
         loadAnimatorFactory(mScope);
     }
@@ -86,14 +89,38 @@ public class CTutorAnimator {
     }
 
 
-    public String next() {
+    public String applyNode() {
 
-        return _currAnimator.next();
+        return _currAnimator.applyNode();
     }
 
     public String gotoNode(String nodeName) {
 
         return _currAnimator.gotoNode(nodeName);
+    }
+
+
+    static public int queryPFeature(String pid, int size, int cycle) {
+        int iter = 0;
+
+        // On subsequent accesses we increment the iteration count
+        // If it has surpassed the size of the pFeature array we cycle on the last 'cycle' entries
+
+        if (_pFeatures.containsKey(pid)) {
+            iter = _pFeatures.get(pid) + 1;
+
+            if (iter >= size) {
+                iter = size - cycle;
+            }
+
+            _pFeatures.put(pid, iter);
+        }
+
+        // On first touch we have to create the property
+
+        else _pFeatures.put(pid, 0);
+
+        return iter;
     }
 
 

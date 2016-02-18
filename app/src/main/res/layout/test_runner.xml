@@ -2,7 +2,7 @@
 
 <!-- NOTE: The id of the topmost container below must match the XML filename -->
 
-<cmu.xprize.robotutor.tutorengine.widgets.core.CScenePercentLayout
+<cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -13,6 +13,7 @@
     <cmu.xprize.robotutor.tutorengine.widgets.core.TButton
         android:id="@+id/Sbutton1"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_heightPercent="10%"
         app:layout_marginTopPercent="19%"
         android:background="#f00" />
@@ -21,6 +22,7 @@
         android:id="@+id/Sbutton2"
         android:layout_below="@+id/Sbutton1"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_heightPercent="20%"
         app:layout_marginLeftPercent="29%"
         android:background="#0f0" />
@@ -29,6 +31,7 @@
         android:id="@+id/Sbutton3"
         android:layout_below="@+id/Sbutton4"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_heightPercent="30%"
         android:background="#00f" />
 
@@ -36,6 +39,7 @@
         android:id="@+id/Sbutton4"
         android:layout_below="@+id/Sbutton2"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_heightPercent="10%"
         app:layout_marginBottomPercent="2%"
         android:background="#0ff" />
@@ -44,9 +48,10 @@
         android:id="@+id/Sbutton5"
         android:layout_alignParentEnd="true"
         android:layout_width="80dp"
+        android:layout_height="match_parent"
         app:layout_heightPercent="25%"
         app:layout_marginRightPercent="12%"
         android:layout_centerVertical="true"
         android:background="#ff0" />
 
-</cmu.xprize.robotutor.tutorengine.widgets.core.CScenePercentLayout>
+</cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>

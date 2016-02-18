@@ -37,8 +37,6 @@ public class scene_animator extends graph_node implements ILoadableObject{
     private graph_node   _currNode;
     private String       _nodeState;
 
-    private HashMap<String, Integer> _pFeatures = new HashMap<String, Integer>();
-
 
     // json loadable fields
     public String  version;
@@ -50,7 +48,6 @@ public class scene_animator extends graph_node implements ILoadableObject{
     public HashMap actionMap;
     public HashMap choiceMap;
     public HashMap constraintMap;
-
 
     static private final String TAG = "ANIMATOR";
 
@@ -85,7 +82,7 @@ public class scene_animator extends graph_node implements ILoadableObject{
      * @return The
      */
     @Override
-    public String next() {
+    public String applyNode() {
 
         // When we retrieve the "next" node we automatically apply it
         // This may result in a simple state change - method call etc.
@@ -102,7 +99,7 @@ public class scene_animator extends graph_node implements ILoadableObject{
 
             // Increment the animation polymorphically
 
-            _nodeState = _currNode.next();
+            _nodeState = _currNode.applyNode();
 
             // If the node is exhausted move to next node
 
@@ -111,9 +108,6 @@ public class scene_animator extends graph_node implements ILoadableObject{
 
                 if (_currNode != null) {
                     Log.d(TAG, "Running Node: " + _currNode.name);
-
-                    // Apply action nodes
-                    _nodeState =_currNode.applyNode();
                 }
                 else {
                     _nodeState = TCONST.NEXTSCENE;
@@ -156,30 +150,6 @@ public class scene_animator extends graph_node implements ILoadableObject{
         _currNode.preEnter();
 
         return _currNode.applyNode();
-    }
-
-
-    public int queryPFeature(String pid, int size, int cycle) {
-        int iter = 0;
-
-        // On subsequent accesses we increment the iteration count
-        // If it has surpassed the size of the pFeature array we cycle on the last 'cycle' entries
-
-        if (_pFeatures.containsKey(pid)) {
-            iter = _pFeatures.get(pid) + 1;
-
-            if (iter >= size) {
-                iter = size - cycle;
-            }
-
-            _pFeatures.put(pid, iter);
-        }
-
-        // On first touch we have to create the property
-
-        else _pFeatures.put(pid, 0);
-
-        return iter;
     }
 
 }

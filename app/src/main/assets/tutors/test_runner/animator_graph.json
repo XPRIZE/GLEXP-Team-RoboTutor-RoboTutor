@@ -8,11 +8,40 @@
       "name": "Word copying tutor",
       "COMMENT": "This is where you describe your tutor",
       "version": "1.0.0",
-      "rootnode": "ABS_TIMELINE_STATE",
+      "rootnode": "PFEATURE_STATE1",
 
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        "PFEATURE_STATE1": {
+          "type": "NODE",
+          "COMMENT": "Test of pfeatures",
+          "maptype":"moduleMap",
+          "mapname": "PFEATURE_TSTA",
+          "preenter": [
+          ],
+          "preexit": [
+          ],
+          "edges": [
+            { "constraint": "", "edge": "PFEATURE_STATE2"  }
+          ]
+        },
+
+        "PFEATURE_STATE2": {
+          "type": "NODE",
+          "COMMENT": "Test of pfeatures",
+          "maptype":"moduleMap",
+          "mapname": "PFEATURE_TSTB",
+          "preenter": [
+          ],
+          "preexit": [
+          ],
+          "edges": [
+            { "constraint": "", "edge": "PFEATURE_STATE1"  }
+          ]
+        },
+
 
         "ABS_TIMELINE_STATE": {
           "type": "NODE",
@@ -30,7 +59,6 @@
             }
           ]
         },
-
 
         "AUDIOFLOW_STATE": {
           "type": "NODE",
@@ -131,6 +159,26 @@
       "moduleMap": {
 
         "COMMENT": "@@@@@  CModules  @@@@@",
+
+        "PFEATURE_TSTA": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "test/orange.mp3", "mode":"flow", "pid":"PFTR_TST", "$P":"1|0", "cycle":"1", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "test/pink.mp3",   "mode":"flow", "pid":"PFTR_TSTB", "$P":"1|.5", "cycle":"1", "features": ""}
+          ]
+        },
+
+        "PFEATURE_TSTB": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "test/purple.mp3", "mode":"flow", "features": ""}
+          ]
+        },
+
 
         "AUDIOFLOW_MOD": {
           "type": "MODULE",

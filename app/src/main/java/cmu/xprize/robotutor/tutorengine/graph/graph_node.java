@@ -89,7 +89,7 @@ public class graph_node implements ILoadableObject, IScriptable {
 
 
 
-    public String next() {
+    private String next() {
         return TCONST.NONE;
     }
 
