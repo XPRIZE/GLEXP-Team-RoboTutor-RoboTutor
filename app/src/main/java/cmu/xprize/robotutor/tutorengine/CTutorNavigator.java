@@ -137,7 +137,7 @@ public class CTutorNavigator implements ITutorNavigator{
         // i.e. You either want it to trigger the next step in the animationGraph or the sceneGraph
         // reset _fSceneGraph if you want the next button to drive the animationGraph
         //
-        if(_fSceneGraph || mTutorAnimator.next().equals(TCONST.NEXTSCENE)) {
+        if(_fSceneGraph || mTutorAnimator.applyNode().equals(TCONST.NEXTSCENE)) {
             gotoNextScene();
         }
     }
@@ -394,46 +394,43 @@ public class CTutorNavigator implements ITutorNavigator{
         // i.e. You either want it to trigger the next step in the animationGraph or the sceneGraph
         // reset _fSceneGraph if you want the next button to drive the animationGraph
         //
-        if(_fSceneGraph || _sceneCurr == 0 || mTutorAnimator.next().equals(TCONST.NONE)) {
+        if (_sceneCurr < _sceneCnt) {
 
-            if (_sceneCurr < _sceneCnt) {
+            // remember current frame
+            //
+            if (traceMode)
+                Log.d(TAG, "scenePrev: " + _scenePrev + "  - sceneCurr: " + _sceneCurr);
+            _scenePrev = _sceneCurr;
 
-                // remember current frame
-                //
-                if (traceMode)
-                    Log.d(TAG, "scenePrev: " + _scenePrev + "  - sceneCurr: " + _sceneCurr);
-                _scenePrev = _sceneCurr;
+            // Do scene Specific termination
+            //
+            if (traceMode)
+                Log.d(TAG, "navigatedata[_sceneCurr]: " + navigatedata[_sceneCurr].id);
 
-                // Do scene Specific termination
-                //
-                if (traceMode)
-                    Log.d(TAG, "navigatedata[_sceneCurr]: " + navigatedata[_sceneCurr].id);
+            navigatedata[_scenePrev].instance.onExitScene();
 
-                navigatedata[_scenePrev].instance.onExitScene();
+            // increment the current scene - this is feature reactive
+            sceneCurrINC();
 
-                // increment the current scene - this is feature reactive
-                sceneCurrINC();
-
-                if (navigatedata[_sceneCurr].instance == null) {
-                    mTutor.instantiateScene(navigatedata[_sceneCurr]);
-                }
-
-                //@@ Action Logging
-                //            var logData:Object = {'navevent':'navnext', 'curscene':_scenePrev, 'newscene':redScene};
-                //            //var xmlVal:XML = <navnext curscene={_scenePrev} newscene={redScene}/>
-                //
-                //            gLogR.logNavEvent(logData);
-                //@@ Action Logging
-
-                // On exit behaviors
-
-
-                // Do the scene transitions
-                //            prntTutor.xitions.addEventListener(Event.COMPLETE, doEnterScene);
-                //            prntTutor.xitions.gotoScene(redScene);
-
-                doEnterScene();
+            if (navigatedata[_sceneCurr].instance == null) {
+                mTutor.instantiateScene(navigatedata[_sceneCurr]);
             }
+
+            //@@ Action Logging
+            //            var logData:Object = {'navevent':'navnext', 'curscene':_scenePrev, 'newscene':redScene};
+            //            //var xmlVal:XML = <navnext curscene={_scenePrev} newscene={redScene}/>
+            //
+            //            gLogR.logNavEvent(logData);
+            //@@ Action Logging
+
+            // On exit behaviors
+
+
+            // Do the scene transitions
+            //            prntTutor.xitions.addEventListener(Event.COMPLETE, doEnterScene);
+            //            prntTutor.xitions.gotoScene(redScene);
+
+            doEnterScene();
         }
     }
 

@@ -57,15 +57,15 @@ public class type_timeline extends type_action {
 
     private LoaderThread              _loaderThread;
     private boolean                   _isLoading     = false;
-    private boolean                   _deferredPlay  = false;
     private boolean                   _needsMap      = false;
     private HashMap<String, Integer>  _frameMap      = new HashMap<>();
 
-    protected Timer                   _timer       = null;
-    protected boolean                 _playing     = false;
-    protected TimerTask               _frameTask   = null;
-    protected CBaseFrame              _currAudio   = null;
-    protected CScriptFrame            _currScript  = null;
+    protected Timer                   _timer         = null;
+    protected boolean                 _playing       = false;
+    private boolean                   _deferredPlay  = false;
+    protected TimerTask               _frameTask     = null;
+    protected CBaseFrame              _currAudio     = null;
+    protected CScriptFrame            _currScript    = null;
 
     protected long                    _currFrame = 0;
     protected long                    _seekFrame = 0;               // current seek point
@@ -85,21 +85,30 @@ public class type_timeline extends type_action {
 
     }
 
-    @Override
-    public String next() {
-        String status = TCONST.NONE;
-
-        stop();
-
-        return status;
-    }
+//    @Override
+//    public String next() {
+//        String status = TCONST.NONE;
+//
+//        stop();
+//
+//        return status;
+//    }
 
     @Override
     public String applyNode() {
 
-        play();
+        String status;
 
-        return TCONST.WAIT;
+        if(_playing | _deferredPlay) {
+            stop();
+            status = TCONST.NONE;
+        }
+        else {
+            play();
+            status = TCONST.WAIT;
+        }
+
+        return status;
     }
 
 
@@ -574,7 +583,7 @@ public class type_timeline extends type_action {
             while(!_scriptState.equals(TCONST.NONE) ||
                    _scriptState.equals(TCONST.WAIT)) {
 
-                _scriptState = mScript.next();
+                _scriptState = mScript.applyNode();
 
             };
 
