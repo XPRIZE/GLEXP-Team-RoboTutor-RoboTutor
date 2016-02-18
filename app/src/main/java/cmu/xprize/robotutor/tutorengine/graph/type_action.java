@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.CTutorAnimator;
 import cmu.xprize.robotutor.tutorengine.CTutorNavigator;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
@@ -77,11 +78,12 @@ public class type_action extends graph_node {
 
     public boolean testPFeature() {
 
-        int   iter = _parent.queryPFeature(pid, _prob.length, cycle);
+        int   iter = CTutorAnimator.queryPFeature(pid, _prob.length, cycle);
         float rand = (float)Math.random();
 
         // It's important to be < not <= because if we have 0 prob we never want it to fire.
 
+        Log.d(TAG, "PFeature: " + ((rand < Float.parseFloat(_prob[iter]))? "passed":"failed"));
         return (rand < Float.parseFloat(_prob[iter]));
     }
 
@@ -232,7 +234,7 @@ public class type_action extends graph_node {
         // If there are probabilities defined for the feature
         // generate an array of the prob for iterations of this pid
         if($P != null)
-            _prob = $P.split("|");
+            _prob = $P.split("\\|");
     }
 
 }

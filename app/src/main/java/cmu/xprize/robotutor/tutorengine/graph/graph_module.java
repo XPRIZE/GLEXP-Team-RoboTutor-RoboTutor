@@ -30,7 +30,7 @@ import cmu.xprize.robotutor.tutorengine.CTutor;
 public class graph_module extends graph_node implements ILoadableObject, IScope {
 
     private int               _ndx = 0;
-    type_action               nextAction;
+    type_action               _nextAction;
 
     // json loadable fields
     public type_action[]      tracks;
@@ -52,25 +52,24 @@ public class graph_module extends graph_node implements ILoadableObject, IScope 
 
 
     @Override
-    public String next() {
+    public String applyNode() {
 
         String         moduleState = TCONST.NONE;
         String         features;
-        boolean        featurePass    = false;
+        boolean        featurePass = false;
+
 
         // If new scene has features, check that it is being used in the current tutor feature set
         // Note: You must ensure that there is a match for the last scene in the sequence
 
-        while(_ndx < tracks.length)
-        {
-            nextAction  = tracks[_ndx];
-            moduleState = null;
-
-            _ndx++;
-
-            if(nextAction != null)
+        do {
+            if(_ndx < tracks.length)
             {
-                features = nextAction.features;
+                _nextAction = tracks[_ndx];
+
+                _ndx++;
+
+                features = _nextAction.features;
 
                 // If this scene is not in the feature set for the tutor then check the next one.
 
@@ -82,9 +81,9 @@ public class graph_module extends graph_node implements ILoadableObject, IScope 
                     {
                         // Check Probability Feature if present
 
-                        if(nextAction.hasPFeature())
+                        if(_nextAction.hasPFeature())
                         {
-                            featurePass = nextAction.testPFeature();
+                            featurePass = _nextAction.testPFeature();
                         }
                     }
                 }
@@ -95,45 +94,39 @@ public class graph_module extends graph_node implements ILoadableObject, IScope 
                 {
                     // Check Probability Feature if present
 
-                    if(nextAction.hasPFeature())
+                    if(_nextAction.hasPFeature())
                     {
-                        featurePass = nextAction.testPFeature();
+                        featurePass = _nextAction.testPFeature();
                     }
                     else featurePass = true;
                 }
 
+                // If the feature test passes then fire the event.
+                // Otherwise set flag to indicate event was completed/skipped in this case
                 if(featurePass)
                 {
                     Log.d(TAG, "Animation Feature: " + features + " passed:" + featurePass);
 
-                    moduleState = nextAction.applyNode();
+                    moduleState = _nextAction.applyNode();
 
                     break;		// leave the loop
                 }
+                else {
+                    Log.i(TAG, "Feature Test Failed: ");
+                    moduleState = TCONST.DONE;
+                }
             }
-            else break;
-        }
+            else {
+                moduleState = TCONST.NONE;
+                break;
+            }
+
+        }while(moduleState.equals(TCONST.DONE));
 
         // When the module is complete reset it
         //
         if(moduleState.equals(TCONST.NONE))
             resetNode();
-
-        return moduleState;
-    }
-
-
-    @Override
-    public String applyNode() {
-
-        String moduleState;
-
-        do {
-            // Increment the animation polymorphically
-
-            moduleState = next();
-
-        }while(moduleState.equals(TCONST.DONE));
 
         return moduleState;
     }
