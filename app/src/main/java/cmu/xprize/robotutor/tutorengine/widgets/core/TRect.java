@@ -136,6 +136,10 @@ public class TRect extends View  implements ITutorObjectImpl {
         return mSceneObject;
     }
 
+    @Override
+    public void zoomInOut(Float scale, Long duration) {
+        mSceneObject.zoomInOut(scale, duration);
+    }
 
 }
 

@@ -113,5 +113,9 @@ public class TTextView extends TextView implements ITutorObjectImpl {
         return mSceneObject;
     }
 
+    @Override
+    public void zoomInOut(Float scale, Long duration) {
+        mSceneObject.zoomInOut(scale, duration);
+    }
 
 }

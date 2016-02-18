@@ -1,10 +1,17 @@
 package cmu.xprize.robotutor.tutorengine;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
+
+import java.util.ArrayList;
 
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.IScriptable;
@@ -25,6 +32,7 @@ public class CTutorObjectDelegate implements ITutorObject, Button.OnClickListene
     protected ITutorLogManager  mLogManager;
 
     private String              mClickBehavior;
+    private AnimatorSet         _animatorSets;
 
 
     final private String TAG = "ITutorObject";
@@ -86,6 +94,60 @@ public class CTutorObjectDelegate implements ITutorObject, Button.OnClickListene
             mClickBehavior = command;
             mOwnerView.setOnClickListener(this);
         }
+    }
+
+
+    private Animator createFloatAnimator(String prop, float endPt, long duration ,int repeat, int mode ) {
+
+        ValueAnimator   vAnimator = null;
+
+        vAnimator = ObjectAnimator.ofFloat(mOwnerView, prop, endPt).setDuration(duration);
+
+        vAnimator.setInterpolator(new AccelerateInterpolator(2.0f));
+        vAnimator.setRepeatCount(repeat);
+        vAnimator.setRepeatMode(mode);
+
+        vAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mOwnerView.invalidate();
+            }
+        });
+
+        return vAnimator;
+    }
+
+
+    public void zoomInOut(float scale, long duration ) {
+
+        AnimatorSet animation = new AnimatorSet();
+
+        animation.addListener(new Animator.AnimatorListener() {
+
+            @Override
+            public void onAnimationCancel(Animator arg0) {
+                //Functionality here
+            }
+
+            @Override
+            public void onAnimationStart(Animator arg0) {
+                //Functionality here
+            }
+
+            @Override
+            public void onAnimationEnd(Animator arg0) {
+                //Functionality here
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator arg0) {
+                //Functionality here
+            }
+        });
+
+        animation.play(createFloatAnimator("scaleX", scale, duration, 1, ValueAnimator.REVERSE)).with(createFloatAnimator("scaleY", scale, duration, 1, ValueAnimator.REVERSE));
+
+        animation.start();
     }
 
 
