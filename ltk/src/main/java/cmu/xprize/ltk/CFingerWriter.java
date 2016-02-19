@@ -58,7 +58,7 @@ public class CFingerWriter extends View implements OnTouchListener {
     private boolean            _isRecognizing = false;
     private Stroke[]           _recStrokes;
     private RecResult[]        _recResults;
-    private String[]           _recChars;
+    protected String[]         _recChars;
 
     private Stroke             _currentStroke;
     private ArrayList<Stroke>  _currentStrokeStore;
@@ -76,7 +76,7 @@ public class CFingerWriter extends View implements OnTouchListener {
     private LocalBroadcastManager bManager;
     public static String          RECMSG = "CHAR_RECOG";
 
-    private static final String   TAG = "WritingComp";
+    private static final String   TAG = "CFingerWriter";
 
     private static int            RECDELAY   = 400;              // Just want the end timeout
     private static int            RECDELAYNT = RECDELAY+500;      // inhibit ticks
@@ -397,6 +397,15 @@ public class CFingerWriter extends View implements OnTouchListener {
 
 
     /**
+     * pass results to linked view
+     * @param linkedViewID
+     */
+    protected void updateLinkedView(int linkedViewID) {
+        // Called polymorphically - subclass handles
+    }
+
+
+    /**
      * This is how recognition is initiated - if the user stops writing for a
      * predefined period we assume they are finished writing.
      */
@@ -476,14 +485,8 @@ public class CFingerWriter extends View implements OnTouchListener {
 
             _isRecognizing = false;
 
-            // If we are linked to a textSink then send it the new character
-            if(mLinkedViewID != -1) {
-                ViewGroup parentview = (ViewGroup)getParent().getParent();
-
-                mLinkedView = (ITextSink)parentview.findViewById(mLinkedViewID);
-
-                mLinkedView.addChar(_recChars[0]);
-            }
+            // send the result to the stimresp that is linked
+            updateLinkedView(mLinkedViewID);
 
             // Let anyone interested know there is a new recognition set available
             bManager.sendBroadcast(new Intent(RECMSG));
