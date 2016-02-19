@@ -107,6 +107,9 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
             }
             catch(Exception e) {
                 Log.d(TAG, "FingerWriter: probable empty result" + e);
+
+                // Send special unrecognized sequence
+                linkedView.addChar("???");
             }
         }
     }

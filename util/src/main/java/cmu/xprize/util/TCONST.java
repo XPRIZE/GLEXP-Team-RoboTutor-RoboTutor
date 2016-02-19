@@ -140,6 +140,7 @@ public class TCONST {
 
     public static final String FWCORRECT    = "FTR_RIGHT";
     public static final String FWINCORRECT  = "FTR_WRONG";
+    public static final String FWUNKNOWN    = "FTR_UNRECOGNIZED";
     public static final String FTR_EOI      = "FTR_NOWORDS";
     public static final String FWALLCORRECT = "ALL_CORRECT";
 

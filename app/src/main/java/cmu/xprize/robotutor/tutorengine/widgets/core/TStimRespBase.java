@@ -110,22 +110,28 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
             mLinkedView = (TStimRespBase)CTutor.getViewById(mLinkedViewID, null);
 
         if(mLinkedView != null) {
-            String Stimulus = mLinkedView.getValue();
 
-            if(mValue.equals(Stimulus)) {
-                CTutor.setAddFeature(TCONST.FWCORRECT);
-                _correct++;
-            }
-            else {
-                CTutor.setAddFeature(TCONST.FWINCORRECT);
+            if(newChar.equals("???")) {
+                CTutor.setAddFeature(TCONST.FWUNKNOWN);
                 _wrong++;
             }
+            else {
+                String Stimulus = mLinkedView.getValue();
 
-            // Set a flag if they're all correct when we are out of data
-            //
-            if(mLinkedView.dataExhausted()) {
-                if(_wrong == 0)
-                    CTutor.setAddFeature(TCONST.FWALLCORRECT);
+                if (mValue.equals(Stimulus)) {
+                    CTutor.setAddFeature(TCONST.FWCORRECT);
+                    _correct++;
+                } else {
+                    CTutor.setAddFeature(TCONST.FWINCORRECT);
+                    _wrong++;
+                }
+
+                // Set a flag if they're all correct when we are out of data
+                //
+                if (mLinkedView.dataExhausted()) {
+                    if (_wrong == 0)
+                        CTutor.setAddFeature(TCONST.FWALLCORRECT);
+                }
             }
         }
     }
