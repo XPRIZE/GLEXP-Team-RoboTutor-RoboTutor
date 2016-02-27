@@ -8,11 +8,27 @@
       "name": "Word copying tutor",
       "COMMENT": "This is where you describe your tutor",
       "version": "1.0.0",
-      "rootnode": "ORANGE_STATE",
+      "rootnode": "TEST_STATE",
 
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        "TEST_STATE": {
+          "type": "NODE",
+          "COMMENT": "Intro Clip",
+          "maptype":"actionMap",
+          "mapname": "WAIT",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "CORRECT"
+            }
+          ]
+        },
+
 
         "INTRO_STATE": {
           "type": "NODE",
@@ -110,7 +126,7 @@
           ]
         },
 
-        "NEXTSCENE": {
+        "NEXT-SCENE": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
           "maptype":"actionMap",
@@ -145,6 +161,7 @@
       },
 
       "actionMap": {
+        "WAIT":{"type": "COMMAND", "cmd": "WAIT" },
         "VAR_COLOR":{"type":"TString", "value":"orange.mp3", "features": "" },
         "VAR_POINTER":{"type":"TReference", "value":"VAR_COLOR", "features": "" },
 

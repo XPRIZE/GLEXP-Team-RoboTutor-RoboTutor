@@ -5,13 +5,50 @@
 	  {
 		"id":"session_manager",
 
-		"oncreate":[
-            {"id":"Sbutton1", "method":"setText", "parms":":String", "features":""},
-            {"id":"Sbutton2", "method":"setText", "parms":"Touch For Pink:String", "features":""},
-		    {"id":"Sbutton3", "method":"setText", "parms":"Purple:String", "features":""},
-		    {"id":"Sbutton4", "method":"setText", "parms":"Orange 2sec delay:String", "features":""},
-		    {"id":"Sbutton5", "method":"setText", "parms":":String", "features":""}
-		]
+		"layout": {
+		  "TScenePercentLayout": {
+			"layout": {
+			  "width": "match_parent",
+			  "height": "match_parent",
+			  "padding": "30dp",
+			  "alley_count": "4",
+			  "orientation": "vertical"
+            },
+
+			"children": {
+			  "TMn_Alley": {
+				"layout": {
+				  "width": "wrap_content",
+				  "height": "wrap_content",
+				  "alignParentBottom": "true",
+				  "alignParentRight": "true"
+				},
+				"children":{},
+				"textSize":"32sp",
+				"text":"Done"
+			  },
+			  "TButton": {
+				"layout": {
+				  "width": "wrap_content",
+				  "height": "wrap_content",
+				  "alignParentBottom": "true",
+				  "alignParentRight": "true"
+				},
+				"children":{},
+				"textSize":"32sp",
+				"text":"Done"
+			  }
+			}
+		  }
+		}
+
+//		"oncreate":[
+//            {"id":"Sbutton1", "method":"setText", "parms":":String", "features":""},
+//            {"id":"Sbutton2", "method":"setText", "parms":"Touch For Pink:String", "features":""},
+//		    {"id":"Sbutton3", "method":"setText", "parms":"Purple:String", "features":""},
+//		    {"id":"Sbutton4", "method":"setText", "parms":"Orange 2sec delay:String", "features":""},
+//		    {"id":"Sbutton5", "method":"setText", "parms":":String", "features":""}
+//		]
       }
 	],
   	"navigatorType":"SIMPLE_NAVIGATOR"

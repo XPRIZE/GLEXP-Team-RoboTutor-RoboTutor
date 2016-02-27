@@ -379,8 +379,12 @@ public class CTutor implements ILoadableObject {
 
         type_action[] createCmds    = _sceneMap.get(scenedata.id).oncreate;
 
-        for(type_action cmd : createCmds) {
-            cmd.applyNode();
+        // Can have an empty JSON array - so filter that out
+        if(createCmds != null) {
+
+            for (type_action cmd : createCmds) {
+                cmd.applyNode();
+            }
         }
     }
 
