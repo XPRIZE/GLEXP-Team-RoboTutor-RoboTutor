@@ -2,6 +2,7 @@ package cmu.xprize.mn_component;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 
 public class CMn_Alley extends android.support.percent.PercentRelativeLayout{
 
@@ -26,5 +27,6 @@ public class CMn_Alley extends android.support.percent.PercentRelativeLayout{
 
 
     }
+
 
 }

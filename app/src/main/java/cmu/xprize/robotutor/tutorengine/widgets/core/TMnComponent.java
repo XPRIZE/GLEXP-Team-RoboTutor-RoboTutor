@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 import cmu.xprize.mn_component.CMn_Component;
+import cmu.xprize.mn_component.CMn_Icons;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;

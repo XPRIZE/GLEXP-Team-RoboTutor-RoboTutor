@@ -2,45 +2,59 @@
 <android.support.percent.PercentRelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:clipChildren="false">
+    android:background="#4F4">
 
     <!-- in Relative layout - views have to be defined before being referenced -->
     <Button
         android:id="@+id/Splus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_heightPercent="10%"
+        app:layout_heightPercent="8%"
+        app:layout_marginPercent="1%"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/button_plusminus"/>
+        android:background="@drawable/button_plusminus"
+        android:gravity="center"
+        android:text="+"
+        android:textSize="24sp"/>
 
-    <cmu.xprize.mn_component.CIconContainer
+    <cmu.xprize.mn_component.CMn_Icons
         android:id="@+id/SiconSet"
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/Snumber" />
+        app:layout_heightPercent="58%"
+        app:layout_marginPercent="1%"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/Snumber"
+        android:background="#0Df"/>
 
-    <TextView
+    <cmu.xprize.mn_component.CMn_Text
         android:id="@+id/Snumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_heightPercent="20%"
+        app:layout_heightPercent="18%"
+        app:layout_marginPercent="1%"
         android:layout_above="@+id/Sminus"
-        android:background="@drawable/text_box"
-        android:visibility="visible"/>
+        android:background="#38F"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:text="test"
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/Sminus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_heightPercent="10%"
+        app:layout_heightPercent="8%"
+        app:layout_marginPercent="1%"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/button_plusminus"/>
+        android:background="@drawable/button_plusminus"
+        android:gravity="center"
+        android:text="-"
+        android:textSize="24sp"/>
 
 </android.support.percent.PercentRelativeLayout>
