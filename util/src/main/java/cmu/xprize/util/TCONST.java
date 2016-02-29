@@ -42,6 +42,7 @@ public class TCONST {
     static final public String SNDESC          = "navigator_descriptor.json";
     static final public String AGDESC          = "animator_graph.json";
     static final public String TDATA           = "trackdata/LIBRARY";
+    static final public String TASSETS         = "assets";
     static final public String DEFAULT         = "default";
 
     // CTutorNavigator Constants

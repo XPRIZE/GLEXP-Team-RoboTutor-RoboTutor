@@ -60,6 +60,11 @@ public class TView extends View implements ITutorObjectImpl {
         mSceneObject.init(context, attrs);
     }
 
+
+    public void setDataSource(String dataSource) {
+
+    }
+
     @Override
     public void setName(String name) {
         mSceneObject.setName(name);

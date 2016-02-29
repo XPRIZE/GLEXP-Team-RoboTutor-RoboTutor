@@ -60,6 +60,10 @@ public class TSceneRelativeLayout extends RelativeLayout implements ITutorSceneI
     }
 
 
+    public void setDataSource(String dataSource) {
+
+    }
+
 
     //************************************************************************
     //************************************************************************

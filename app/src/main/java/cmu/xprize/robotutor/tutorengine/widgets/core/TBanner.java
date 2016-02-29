@@ -59,6 +59,10 @@ public class TBanner extends CBanner implements ITutorObjectImpl {
     }
 
 
+    public void setDataSource(String dataSource) {
+
+    }
+
 
     //************************************************************************
     //************************************************************************

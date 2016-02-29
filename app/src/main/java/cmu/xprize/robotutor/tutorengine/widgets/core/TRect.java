@@ -58,6 +58,11 @@ public class TRect extends View  implements ITutorObjectImpl {
     }
 
 
+    public void setDataSource(String dataSource) {
+
+    }
+
+
     /**
      * @param widthMeasureSpec
      * @param heightMeasureSpec

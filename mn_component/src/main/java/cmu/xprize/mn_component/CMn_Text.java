@@ -1,11 +1,20 @@
 package cmu.xprize.mn_component;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.TextView;
 
 public class CMn_Text extends TextView {
+
+    private Paint borderPaint;
+    private int _eyeStrokeColor = 0xDDFFFFFF;
+    private int _eyeStrokeWidth = 2;
 
     private float aspect  = 1f;  // w/h
     private int   mHeight = 100;
@@ -29,6 +38,10 @@ public class CMn_Text extends TextView {
 
 
     private void init(Context context, AttributeSet attrs) {
+        borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        borderPaint.setStyle(Paint.Style.STROKE);
+        borderPaint.setColor(_eyeStrokeColor);
+        borderPaint.setStrokeWidth(_eyeStrokeWidth);
     }
 
     @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
@@ -79,6 +92,28 @@ public class CMn_Text extends TextView {
 
         //MUST CALL THIS
         setMeasuredDimension(width, height);
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+
+        if(changed) {
+            setTextSize(mHeight * 0.5f);
+            setTypeface(getTypeface(), Typeface.BOLD);
+        }
+
+        super.onLayout(changed, l, t, r, b);
+    }
+
+    @Override
+    public void onDraw(Canvas canvas) {
+
+        Rect viewRegion = new Rect();
+        getDrawingRect(viewRegion);
+
+        canvas.drawRoundRect(new RectF(viewRegion), 5, 5, borderPaint);
+
+        super.onDraw(canvas);
     }
 
 

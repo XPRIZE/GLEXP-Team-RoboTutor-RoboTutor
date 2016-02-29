@@ -69,6 +69,11 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     }
 
 
+    public void setDataSource(String dataSource) {
+
+    }
+
+
     @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
     {
         int finalWidth, finalHeight;

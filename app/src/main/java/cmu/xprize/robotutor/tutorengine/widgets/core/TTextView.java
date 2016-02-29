@@ -59,6 +59,11 @@ public class TTextView extends TextView implements ITutorObjectImpl {
     }
 
 
+    public void setDataSource(String dataSource) {
+
+    }
+
+
     //************************************************************************
     //************************************************************************
     // Tutor methods  Start

@@ -100,6 +100,11 @@ public class CTutorSceneDelegate implements ITutorScene {
     }
 
     @Override
+    public void setDataSource(String dataSource) {
+
+    }
+
+    @Override
     public void setName(String name) { mTutorId = name; }
 
     @Override

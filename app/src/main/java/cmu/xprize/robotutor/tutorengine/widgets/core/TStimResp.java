@@ -122,7 +122,7 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
             System.exit(1);
         }
 
-        // Pass an array of strings as the data source.
+        // Pass an array of strings as the data source to the base object
         //
         setDataSource(dataSource.split(","));
     }

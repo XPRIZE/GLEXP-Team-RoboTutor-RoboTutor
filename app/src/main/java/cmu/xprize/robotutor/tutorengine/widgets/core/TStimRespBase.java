@@ -151,16 +151,16 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
         _correct = 0;
         _wrong   = 0;
+
         CTutor.setDelFeature(TCONST.FWALLCORRECT);
         CTutor.setDelFeature(TCONST.FWCORRECT);
         CTutor.setDelFeature(TCONST.FWINCORRECT);
-
 
         try {
             if (dataSource.startsWith("file|")) {
                 dataSource = dataSource.substring(5);
 
-                JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.TDESC + "/" + dataSource);
+                JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.TASSETS + "/" + dataSource);
 
             } else if (dataSource.startsWith("db|")) {
                 dataSource = dataSource.substring(3);
