@@ -23,11 +23,13 @@ import android.util.Log;
 
 import java.util.HashMap;
 
-import cmu.xprize.robotutor.tutorengine.ILoadableObject;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
+import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 
-public class graph_module extends graph_node implements ILoadableObject, IScope {
+public class graph_module extends graph_node implements ILoadableObject {
 
     private int               _ndx = 0;
     type_action               _nextAction;
@@ -151,9 +153,9 @@ public class graph_module extends graph_node implements ILoadableObject, IScope 
 
     // Symbol resolution - This allows local maps within modules.
     //
-    public IScriptable mapSymbol(String symbolName) throws Exception {
+    public IScriptable2 mapSymbol(String symbolName) throws Exception {
 
-        IScriptable result = null;
+        IScriptable2 result = null;
 
         if(actionMap != null && ((result = (type_action) actionMap.get(symbolName)) == null)) {
 

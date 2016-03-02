@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="CMn_Component">
-        <attr name="numAlley" format="integer" />
         <attr name="radAlley" format="float"/>
+        <attr name="dataSource" format="string"/>
     </declare-styleable>
 </resources>

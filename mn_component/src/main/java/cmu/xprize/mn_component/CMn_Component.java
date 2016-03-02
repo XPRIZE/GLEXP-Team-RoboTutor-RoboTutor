@@ -11,19 +11,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-public class CMn_Component extends LinearLayout{
+public class CMn_Component extends LinearLayout implements ILoadableObject{
 
-    private Context      mContext;
-    private LinearLayout mAlleyContainer;
-    private int          mAlleyCount = 0;
-    private float        mAlleyRadius;
+    private   Context      mContext;
+    private   float        mAlleyRadius;
+    private   int          mAlleyMargin = 3;
+    protected String       mDataSource;
+
+    private   ArrayList<CMn_Alley> _alleys = new ArrayList<>();
+    private   int                  _dataIndex = 0;
+    private   int                  _mnindex;
+
+    // json loadable
+    public CMn_Data[]      dataSource;
 
     static final String TAG = "CMn_Component";
+
 
     public CMn_Component(Context context) {
         super(context);
@@ -41,7 +55,7 @@ public class CMn_Component extends LinearLayout{
     }
 
 
-    private void init(Context context, AttributeSet attrs) {
+    public void init(Context context, AttributeSet attrs) {
 
         mContext = context;
 
@@ -53,20 +67,93 @@ public class CMn_Component extends LinearLayout{
                     0, 0);
 
             try {
-                mAlleyCount  = a.getInteger(R.styleable.CMn_Component_numAlley, 2);
                 mAlleyRadius = a.getFloat(R.styleable.CMn_Component_radAlley, 0.25f);
+                mDataSource  = a.getString(R.styleable.CMn_Component_dataSource);
             } finally {
                 a.recycle();
             }
         }
+    }
 
-        for(int i1 = 0 ; i1 < mAlleyCount ; i1++ ) {
-            addAlley(0);
+
+    public void setDataSource(CMn_Data[] _dataSource) {
+
+        dataSource = _dataSource;
+        _dataIndex = 0;
+    }
+
+
+    public void next() {
+
+        try {
+            if (dataSource != null) {
+                updateDataSet(dataSource[_dataIndex]);
+
+                _dataIndex++;
+            } else {
+                Log.e(TAG, "Error no DataSource : ");
+                System.exit(1);
+            }
+        }
+        catch(Exception e) {
+            Log.e(TAG, "Data Exhuasted: call past end of data");
+            System.exit(1);
         }
     }
 
 
-    private void addAlley(int margin) {
+    public boolean dataExhausted() {
+        return (_dataIndex >= dataSource.length)? true:false;
+    }
+
+
+    private void updateDataSet(CMn_Data data) {
+
+        int delta = data.dataset.length -_alleys.size();
+
+        // More alleys than we need
+        if(delta < 0) {
+            while(delta > 0) {
+                trimAlley();
+                delta--;
+            }
+        }
+        // Fewer alleys than we need
+        else if(delta > 0) {
+            while(delta > 0) {
+                addAlley();
+                delta--;
+            }
+        }
+
+        // decode the index of the missing number
+        //
+        switch(data.mn_index) {
+            case TCONST.RAND:
+                _mnindex = (int)Math.random() * data.maxvalue;
+                break;
+
+            case TCONST.MINUSONE:
+                for(int i1 = 0 ; i1 < data.dataset.length ; i1++) {
+                    if(data.dataset[i1] == 0) {
+                        _mnindex = i1;
+                        break;
+                    }
+                }
+                break;
+
+            default:
+                _mnindex = Integer.parseInt(data.mn_index);
+                break;
+        }
+
+        for(int i1 = 0 ; i1 < data.dataset.length ; i1++) {
+            _alleys.get(i1).setData(data, i1, _mnindex);
+        }
+    }
+
+
+    private CMn_Alley addAlley() {
 
         // Defining the layout parameters of the TextView
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -74,13 +161,35 @@ public class CMn_Component extends LinearLayout{
                 LinearLayout.LayoutParams.MATCH_PARENT);
 
         lp.weight     = 1;
-        lp.leftMargin = margin;
+        lp.leftMargin = mAlleyMargin;
 
         // Setting the parameters on the TextView
         CMn_Alley alley = new CMn_Alley(mContext);
         alley.setLayoutParams(lp);
 
+        _alleys.add(alley);
+
         addView(alley);
+
+        return alley;
+    }
+
+
+    private void trimAlley() {
+
+       removeView(_alleys.get(_alleys.size()-1));
+
+        _alleys.remove(_alleys.size()-1);
+    }
+
+
+    private void delAllAlley() {
+
+        for(CMn_Alley alley: _alleys) {
+            removeView(alley);
+        }
+
+        _alleys.clear();
     }
 
 
@@ -91,22 +200,18 @@ public class CMn_Component extends LinearLayout{
 
 
 
-    //**  Data Source Management
+    //************ Serialization
 
 
     /**
+     * Load the data source
      *
-     * @param dataSource
+     * @param jsonData
      */
-    public void setDataSource(JSONObject dataSource) {
+    @Override
+    public void loadJSON(JSONObject jsonData, IScope scope) {
 
-        try {
-                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.TASSETS + "/" + dataSource);
-        }
-        catch (Exception e) {
-            Log.e(TAG, "Invalid Data Source : ");
-            System.exit(1);
-        }
-
+        JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
+        _dataIndex = 0;
     }
 }

@@ -17,22 +17,17 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import cmu.xprize.ltk.CStimRespBase;
-import cmu.xprize.robotutor.tutorengine.CTutorEngine;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
+import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
-import cmu.xprize.ltk.CStimResp;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
 
 public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
@@ -191,7 +186,8 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
         super.next();
 
-        // update the response variable  "<Sstimulus>.value"
+        // update the Scope response variable  "<Sstimulus>.value"
+        //
         CTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
 
         if(dataExhausted())

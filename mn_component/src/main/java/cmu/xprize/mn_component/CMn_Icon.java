@@ -1,28 +1,55 @@
 package cmu.xprize.mn_component;
 
-import android.content.Context;
-import android.util.AttributeSet;
-import android.view.View;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
 
-/**
- * Created by Kevin on 2/29/2016.
- */
-public class CMn_Icon extends View {
+import cmu.xprize.util.TCONST;
+
+public class CMn_Icon  {
+
+    private int _iconStrokeColor = 0xFF000000;
+    private int _iconFillColor   = 0xFF000000;
+    private int _iconStrokeWidth = 2;
+
+    private RectF   mBounds;
+    private String  mIconType = TCONST.OVALICON;
+    private Paint   mIconPaint;
+    private float   mRadius = 10;
 
 
-    public CMn_Icon(Context context) {
-        super(context);
+    static final private String TAG ="CMn_Icon";
+
+
+    public CMn_Icon() {
+
+        mIconPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mIconPaint.setStyle(Paint.Style.STROKE);
+        mIconPaint.setColor(_iconStrokeColor);
+        mIconPaint.setStrokeWidth(_iconStrokeWidth);
     }
 
-    public CMn_Icon(Context context, AttributeSet attrs) {
-        super(context, attrs);
+
+    public void onDraw(Canvas canvas) {
+
+        switch(mIconType) {
+            case TCONST.OVALICON:
+                canvas.drawOval(mBounds, mIconPaint);
+                break;
+
+            case TCONST.RECTICON:
+                canvas.drawRoundRect(mBounds, mRadius, mRadius, mIconPaint);
+                break;
+        }
     }
 
-    public CMn_Icon(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+
+    public void updateIconBounds(float x, float y, float width, float height) {
+
+        mBounds.left   = x;
+        mBounds.right  = x + width;
+        mBounds.top    = y;
+        mBounds.bottom = y + height;
     }
-
-
-
 
 }

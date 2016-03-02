@@ -46,27 +46,23 @@ import java.util.Map;
  */
 public class JSON_Helper {
 
-    static public HashMap<String, Class> _classMap = new HashMap<String, Class>();
     static public AssetManager           _assetManager;
     static public String                 _cacheSource;
     static public String                 _externFiles;
 
-    //
-    // This is used to map "type" (class names) used in json HashMap specs to real classes
-
-    static {
-        _classMap.put("string", String.class);
-        _classMap.put("bool", Boolean.class);
-        _classMap.put("int", Integer.class);
-        _classMap.put("float", Float.class);
-        _classMap.put("byte", Byte.class);
-        _classMap.put("long", Long.class);
-        _classMap.put("short", Short.class);
-        _classMap.put("object", Object.class);
-    }
 
     static private final String TAG = "JSON_HELPER";
 
+
+    public JSON_Helper(AssetManager am, String cs, String ef) {
+        set_assetManager(am);
+        set_cacheSource(cs);
+        set_externFiles(ef);
+    }
+
+    static public void set_assetManager(AssetManager am) { _assetManager = am; }
+    static public void set_cacheSource(String cs) { _cacheSource = cs; }
+    static public void set_externFiles(String ef) { _externFiles = ef; }
 
     static public String cacheData(String fileName) {
 
@@ -168,10 +164,6 @@ public class JSON_Helper {
             try {
                 // we don't care about the value only whether if there is a field there
                 if(jsonObj.has(fieldName)) {
-
-
-                    if(fieldName.equals("repeat"))
-                        Log.d(TAG,"STOP");
 
                     // Most of our fields are Strings so handle them as efficiently as possible
                     if(fieldClass.equals(String.class)) {
@@ -303,9 +295,13 @@ public class JSON_Helper {
                                 // This overrides any names assigned in the subtype spec
                                 ((IScriptable)eObj).setName(key);
 
-                                // Add the new object to the scope
-                                scope.put(key, (IScriptable)eObj);
-                                Log.i(TAG, "Adding to scope: " + key);
+                                // Add the new object to the scope - if it is a scoped object
+                                // it may just be a data source etc.
+
+                                if(scope != null) {
+                                    scope.put(key, (IScriptable) eObj);
+                                    Log.i(TAG, "Adding to scope: " + key);
+                                }
                             }
                         }
                     }
@@ -329,6 +325,9 @@ public class JSON_Helper {
 
                                     if (elemClass.equals(String.class)) {
                                         eObj = nArr.getString(i);
+                                    }
+                                    else if (elemClass.equals(int.class)) {
+                                        eObj = nArr.getInt(i);
                                     }
                                     else {
                                         nJsonObj = nArr.getJSONObject(i);
@@ -383,16 +382,20 @@ public class JSON_Helper {
 
             } catch (JSONException e) {
                 // Just ignore items where there is no JSON data
-                e.printStackTrace();
+                //e.printStackTrace();
                 Log.e(TAG, "ERROR: parseSelf:" + e);
+                System.exit(1);
 
             } catch (InstantiationException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 Log.e(TAG, "ERROR: parseSelf:" + e);
+                System.exit(1);
 
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 Log.e(TAG, "ERROR: parseSelf:" + e);
+                System.exit(1);
+
             }
         }
     }

@@ -17,30 +17,20 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.robotutor.tutorengine.graph;
+package cmu.xprize.robotutor.tutorengine.graph.vars;
 
 import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
+import cmu.xprize.util.IScriptable;
 
-public interface IScriptable {
+public interface IScriptable2 extends IScriptable {
 
-    public String getName();
-    public String getType();
-    public Object getValue();
-    public String toString();
+    public TBoolean OR(IScriptable2 RHS, boolean lneg, boolean rneg);
+    public TBoolean AND(IScriptable2 RHS, boolean lneg, boolean rneg);
+    public TBoolean LT(IScriptable2 RHS);
+    public TBoolean LTEQ(IScriptable2 RHS);
+    public TBoolean GT(IScriptable2 RHS);
+    public TBoolean GTEQ(IScriptable2 RHS);
+    public TBoolean EQ(IScriptable2 RHS);
+    public TBoolean NEQ(IScriptable2 RHS);
 
-    public TBoolean OR(IScriptable RHS, boolean lneg, boolean rneg);
-    public TBoolean AND(IScriptable RHS, boolean lneg, boolean rneg);
-    public TBoolean LT(IScriptable RHS);
-    public TBoolean LTEQ(IScriptable RHS);
-    public TBoolean GT(IScriptable RHS);
-    public TBoolean GTEQ(IScriptable RHS);
-    public TBoolean EQ(IScriptable RHS);
-    public TBoolean NEQ(IScriptable RHS);
-
-    public void set(String value);
-    public void add(String value);
-    public void subtract(String value);
-
-    public Object evaluate(boolean neg);
-    public String applyNode();
 }

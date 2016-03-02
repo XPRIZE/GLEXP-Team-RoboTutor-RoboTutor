@@ -1,5 +1,9 @@
 {
-  "mnData": [
-    {"type":"SHOWICONS,SHOWNUM","data":[2,3,5],"mn_index":"rand"}
-  ]
+  "dataSource": [
+      {"type":"Mn_Data", "options": "SHOWICONS,SHOWNUM", "dataset":[2,3,5]    , "maxvalue":5, "mn_index": "random"},
+      {"type":"Mn_Data", "options": "SHOWICONS,SHOWNUM", "dataset":[4,7,3,5]  , "maxvalue":8, "mn_index": "1"},
+      {"type":"Mn_Data", "options": "SHOWICONS,SHOWNUM", "dataset":[6,8,3,5]  , "maxvalue":8, "mn_index": "2"},
+      {"type":"Mn_Data", "options": "SHOWICONS,SHOWNUM", "dataset":[2,0,6,4]  , "maxvalue":8, "mn_index": "-1"},
+      {"type":"Mn_Data", "options": "SHOWICONS,SHOWNUM", "dataset":[2,3,5,6,7], "maxvalue":7, "mn_index": "random"}
+    ]
 }

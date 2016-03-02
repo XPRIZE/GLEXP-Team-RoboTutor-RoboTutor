@@ -17,6 +17,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 
+import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.ltk.CStimResp;
 import cmu.xprize.robotutor.tutorengine.CTutor;
@@ -25,7 +26,6 @@ import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
 
 public class TStimResp extends CStimResp implements ITutorObjectImpl {
 

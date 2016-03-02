@@ -22,10 +22,8 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.ViewGroup;
 
 import cmu.xprize.ltk.CFingerWriter;
-import cmu.xprize.ltk.CStimRespBase;
 import cmu.xprize.ltk.ITextSink;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorObjectDelegate;
@@ -33,7 +31,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.robotutor.tutorengine.graph.IScriptable;
+import cmu.xprize.util.IScriptable;
 
 public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 

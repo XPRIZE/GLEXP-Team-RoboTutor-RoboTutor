@@ -13,10 +13,12 @@ import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
+import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
 public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
+
+    private CTutorObjectDelegate mSceneObject;
 
 
     static final private String TAG = "TMnComponent";
@@ -24,22 +26,22 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
 
     public TMnComponent(Context context) {
         super(context);
-        init(context, null);
+        initT(context, null);
     }
 
     public TMnComponent(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context, attrs);
+        initT(context, attrs);
     }
 
     public TMnComponent(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context, attrs);
+        initT(context, attrs);
     }
 
-    @Override
-    public void init(Context context, AttributeSet attrs) {
-
+    public void initT(Context context, AttributeSet attrs) {
+        mSceneObject = new CTutorObjectDelegate(this);
+        mSceneObject.init(context, attrs);
     }
 
 
@@ -53,19 +55,18 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
             if (dataSource.startsWith("file|")) {
                 dataSource = dataSource.substring(5);
 
-                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.TASSETS + "/" + dataSource);
-
-                setDataSource(new JSONObject(jsonData));
+                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + CTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataSource);
+                loadJSON(new JSONObject(jsonData), null);
 
             } else if (dataSource.startsWith("db|")) {
-                dataSource = dataSource.substring(3);
+
 
             } else if (dataSource.startsWith("{")) {
 
-                setDataSource(new JSONObject(dataSource));
+                loadJSON(new JSONObject(dataSource), null);
 
             } else {
-                throw (new Exception("test"));
+                throw (new Exception("BadDataSource"));
             }
         }
         catch (Exception e) {
@@ -74,45 +75,53 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
         }
     }
 
+    public void next() {
+
+        super.next();
+
+        if(dataExhausted())
+            CTutor.setAddFeature(TCONST.FTR_EOI);
+    }
 
 
     @Override
     public void setName(String name) {
-
+        mSceneObject.setName(name);
     }
 
     @Override
     public String name() {
-        return null;
+        return mSceneObject.name();
     }
 
     @Override
     public void setParent(ITutorSceneImpl mParent) {
-
+        mSceneObject.setParent(mParent);
     }
 
     @Override
     public void setTutor(CTutor tutor) {
-
+        mSceneObject.setTutor(tutor);
     }
 
     @Override
     public void setNavigator(ITutorNavigator navigator) {
-
+        mSceneObject.setNavigator(navigator);
     }
 
     @Override
     public void setLogManager(ITutorLogManager logManager) {
-
+        mSceneObject.setLogManager(logManager);
     }
+
 
     @Override
     public CTutorObjectDelegate getimpl() {
-        return null;
+        return mSceneObject;
     }
 
     @Override
     public void zoomInOut(Float scale, Long duration) {
-
+        mSceneObject.zoomInOut(scale, duration);
     }
 }

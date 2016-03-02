@@ -147,4 +147,8 @@ public class TCONST {
 
     public static final String FALSE        = "FALSE";
     public static final String TRUE         = "TRUE";
+    public static final String OVALICON     = "OVALICON";
+    public static final String RECTICON     = "RECTICON";
+    public static final String RAND         = "random";
+    public static final String MINUSONE     = "-1";
 }

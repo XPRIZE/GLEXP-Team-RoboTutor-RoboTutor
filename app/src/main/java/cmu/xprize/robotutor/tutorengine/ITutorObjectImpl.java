@@ -5,9 +5,9 @@ import android.util.AttributeSet;
 
 public interface ITutorObjectImpl extends ITutorObject {
 
-    void init(Context context, AttributeSet attrs);
+    public void init(Context context, AttributeSet attrs);
 
-    CTutorObjectDelegate getimpl();
+    public CTutorObjectDelegate getimpl();
 
     public void zoomInOut(Float scale, Long duration);
 }

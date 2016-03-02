@@ -23,21 +23,20 @@ import android.util.Log;
 
 import java.util.HashMap;
 
+import cmu.xprize.util.IScriptable;
 import cmu.xprize.util.TCONST;
-import cmu.xprize.robotutor.tutorengine.graph.IScope;
-import cmu.xprize.robotutor.tutorengine.graph.IScriptable;
 
 
-public class TScope implements IScope {
+public class TScope implements IScope2 {
 
     // There is one toplevel scope created by scene_animator
     //
     private static TScope rootScope = null;
 
-    private HashMap<String, IScriptable> map;
-    private HashMap<String, TScope>      scopes = null;
-    private TScope                       parent = null;
-    private String                       name;
+    private HashMap<String, IScriptable2> map;
+    private HashMap<String, TScope>       scopes = null;
+    private TScope                        parent = null;
+    private String                        name;
 
     static private final String TAG = "TScope";
 
@@ -73,8 +72,11 @@ public class TScope implements IScope {
         scopes.put(key, scope);
     }
 
-
     public void put(String key, IScriptable obj) {
+        put(key, (IScriptable2) obj);
+    }
+
+    public void put(String key, IScriptable2 obj) {
         if(map.containsKey(key)) {
             Log.e(TAG, "Duplicate Key : " + key);
             System.exit(1);
@@ -82,7 +84,7 @@ public class TScope implements IScope {
         map.put(key,obj);
     }
 
-    public void addUpdate(String key, IScriptable obj) {
+    public void addUpdate(String key, IScriptable2 obj) {
         map.put(key,obj);
     }
 
@@ -103,7 +105,7 @@ public class TScope implements IScope {
         StringBuilder  result    = new StringBuilder();
         String         parseStr  = source + TCONST.EOT;
 
-        IScriptable    resultObj = null;
+        IScriptable2    resultObj = null;
 
         try {
             do {
@@ -217,9 +219,9 @@ public class TScope implements IScope {
 
     // Look up the inheritance chain to find the object
     //
-    public IScriptable mapSymbol(String name) throws  Exception {
-        IScriptable tarObject = null;
-        TScope      currScope = this;
+    public IScriptable2 mapSymbol(String name) throws  Exception {
+        IScriptable2 tarObject = null;
+        TScope       currScope = this;
 
         if(!name.equals("")) {
             try {

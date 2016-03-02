@@ -35,3 +35,4 @@ public interface IScriptable {
     public Object evaluate(boolean neg);
     public String applyNode();
 }
+

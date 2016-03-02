@@ -11,10 +11,8 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 
-import java.util.ArrayList;
-
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.util.TCONST;
-import cmu.xprize.robotutor.tutorengine.graph.IScriptable;
 
 // This is just a convenience to simplify the syntax in type_action execution
 
@@ -153,7 +151,7 @@ public class CTutorObjectDelegate implements ITutorObject, Button.OnClickListene
 
     @Override
     public void onClick(View v) {
-        IScriptable obj = null;
+        IScriptable2 obj = null;
 
         switch(mClickBehavior) {
             case TCONST.GOTONEXTSCENE:

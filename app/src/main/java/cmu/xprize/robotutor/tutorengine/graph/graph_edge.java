@@ -21,11 +21,11 @@ package cmu.xprize.robotutor.tutorengine.graph;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
-import cmu.xprize.robotutor.tutorengine.ILoadableObject;
+import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
+import cmu.xprize.util.IScope;
+import cmu.xprize.util.JSON_Helper;
 
 public class graph_edge implements ILoadableObject {
 
@@ -83,10 +83,11 @@ public class graph_edge implements ILoadableObject {
     // *** Serialization
 
 
-    public void loadJSON(JSONObject jsonObj, TScope scope) {
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
 
-        mScope = scope;
-        JSON_Helper.parseSelf(jsonObj, this, scope);
+        mScope = (TScope)scope;
+        JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
     }
 
 

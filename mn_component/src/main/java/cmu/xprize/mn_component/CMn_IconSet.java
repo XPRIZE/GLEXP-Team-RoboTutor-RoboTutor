@@ -12,21 +12,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
+
+import cmu.xprize.util.View_Helper;
+
+
 public class CMn_IconSet extends View {
 
     private Paint borderPaint;
-    private int _eyeStrokeColor = 0xFF000000;
-    private int _eyeStrokeWidth = 2;
+
+    private int _containerStrokeColor = 0xFF000000;
+    private int _containerFillColor   = 0xFF000000;
+    private int _containerStrokeWidth = 2;
 
     private int mMaxBalls   = 10;
     private int mNumBalls   = (int)(Math.random() * 9) + 1;
+    private int mBallSize;
     private int mBallMargin = 3;
+
+    private ArrayList<CMn_Icon> _icons = new ArrayList<>();
 
     private float mRadMul;
     private float mRadius;
 
+    private Rect mBorderRegion = new Rect();
 
-    static final String TAG = "CMn_Icons";
+
+    static final String TAG = "CMn_IconSet";
 
 
     public CMn_IconSet(Context context) {
@@ -52,30 +64,19 @@ public class CMn_IconSet extends View {
 
         borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         borderPaint.setStyle(Paint.Style.STROKE);
-        borderPaint.setColor(_eyeStrokeColor);
-        borderPaint.setStrokeWidth(_eyeStrokeWidth);
-    }
-
-
-    public void addIcon() {
+        borderPaint.setColor(_containerStrokeColor);
+        borderPaint.setStrokeWidth(_containerStrokeWidth);
     }
 
 
     @Override
     public void onDraw(Canvas canvas) {
 
-        int borderRegion = getHeight();
+        canvas.drawRoundRect(new RectF(mBorderRegion), mRadius, mRadius, borderPaint);
 
-        int ballSize     = (borderRegion - (mBallMargin * (mMaxBalls+1))) / mMaxBalls;
-        int borderHeight = (mBallMargin * (mNumBalls+1)) + (ballSize * mNumBalls);
-
-        Rect viewRegion = new Rect();
-        getDrawingRect(viewRegion);
-
-        viewRegion.top += borderRegion - borderHeight;
-
-        canvas.drawRoundRect(new RectF(viewRegion), mRadius, mRadius, borderPaint);
-
+        for(CMn_Icon icon : _icons) {
+            icon.onDraw(canvas);
+        }
     }
 
 
@@ -86,28 +87,74 @@ public class CMn_IconSet extends View {
     }
 
 
-    public void setBorder() {
+    public void setMaxIcons(int maxIconCount ) {
 
-        int borderRegion = getHeight();
+        mMaxBalls = maxIconCount;
+        mBallSize = (getHeight() - (mBallMargin * (mMaxBalls+1))) / mMaxBalls;
 
-        int ballSize     = (borderRegion - (mBallMargin * (mMaxBalls+1))) / mMaxBalls;
-        int borderHeight = (mBallMargin * (mNumBalls+1)) + (ballSize * mNumBalls);
+        updateBorder();
+    }
 
-        Rect viewRegion = new Rect();
-        getDrawingRect(viewRegion);
 
-        viewRegion.top += borderRegion - borderHeight;
+    public void setIconCount(int numIcons) {
 
-        //canvas.drawRoundRect(new RectF(viewRegion), 50, 50, borderPaint);
+        int delta = numIcons -_icons.size();
 
+        // More alleys than we need
+        if(delta < 0) {
+            while(delta > 0) {
+                trimIcon();
+                delta--;
+            }
+        }
+        // Fewer alleys than we need
+        else if(delta > 0) {
+            while(delta > 0) {
+                addIcon();
+                delta--;
+            }
+        }
+
+        float yOffset = mBallMargin;
+        float xOffset = (getWidth() - mBallSize) / 2;
+
+        for(int i1 = 0 ; i1 < numIcons ; i1++) {
+            _icons.get(i1).updateIconBounds(xOffset, yOffset, mBallSize, mBallSize);
+        }
+    }
+
+
+    private CMn_Icon addIcon() {
+
+        // Setting the parameters on the TextView
+        CMn_Icon icon = new CMn_Icon();
+
+        _icons.add(icon);
+
+        return icon;
+    }
+
+
+    private void trimIcon() {
+
+        _icons.remove(_icons.size()-1);
+    }
+
+
+    public void updateBorder() {
+
+        int borderHeight = (mBallMargin * (mNumBalls+1)) + (mBallSize * mNumBalls);
+
+        getDrawingRect(mBorderRegion);
+
+        mBorderRegion.top += getHeight() - borderHeight;
     }
 
 
     @Override
     public void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
     {
-
-        int desiredWidth = 1000;
+        int desiredWidth  = 1000;
         int desiredHeight = 1000;
 
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -133,25 +180,21 @@ public class CMn_IconSet extends View {
             Log.d(TAG, "Height Using UNSPECIFIED: " + height);
         }
 
-        View sibling = (View)getViewById(R.id.Snumber, (ViewGroup)getParent());
+        View sibling = (View) View_Helper.getViewById(R.id.Snumber, (ViewGroup)getParent());
 
         //Measure Width
         if (widthMode == MeasureSpec.EXACTLY) {
 
-            //Can't be bigger than...
             width = sibling.getWidth();
             Log.d(TAG, "Width Using EXACTLY: " + width);
+
         } else if (widthMode == MeasureSpec.AT_MOST) {
 
-//            View sibling = (View)getViewById(R.id.Snumber, (ViewGroup)getParent());
-//
-//            //Can't be bigger than...
-//            width = sibling.getWidth();
             width = sibling.getWidth();
-
             Log.d(TAG, "Width Using AT MOST: " + width);
+
         } else {
-            //Be whatever you want
+
             width = sibling.getWidth();
             Log.d(TAG, "Width Using UNSPECIFIED: " + width);
         }
@@ -167,34 +210,10 @@ public class CMn_IconSet extends View {
         if(changed)
         {
             setCornerRadius(0.33f);
+            updateBorder();
+
             super.onLayout(changed, left, top, right, bottom);
         }
+
     }
-
-
-    public View getViewById(int findme, ViewGroup container) {
-        View foundView = null;
-
-        if(container != null) {
-
-            try {
-                for (int i = 0; (foundView == null) && (i < container.getChildCount()); ++i) {
-
-                    View nextChild = (View) container.getChildAt(i);
-
-                    if (((View) nextChild).getId() == findme) {
-                        foundView = nextChild;
-                        break;
-                    } else {
-                        if (nextChild instanceof ViewGroup)
-                            foundView = getViewById(findme, (ViewGroup) nextChild);
-                    }
-                }
-            } catch (Exception e) {
-                Log.i(TAG, "View walk error: " + e);
-            }
-        }
-        return foundView;
-    }
-
 }

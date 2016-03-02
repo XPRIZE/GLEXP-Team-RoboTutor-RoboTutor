@@ -27,11 +27,19 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.util.IScope;
+import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.scene_animator;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
 
+
+/**
+ * A CTutorAnimator represents a collection of the animation graphs for each scene
+ * that constitutes the tutor.
+ *
+ */
 public class CTutorAnimator {
 
     private TScope           mScope;
@@ -40,7 +48,7 @@ public class CTutorAnimator {
     private String           mSceneName;
 
     // State fields
-    private scene_animator _currAnimator;
+    private scene_animator _sceneAnimator;
 
     static private HashMap<String, Integer> _pFeatures;
 
@@ -58,45 +66,49 @@ public class CTutorAnimator {
         mScope     = tutorScope;
         _pFeatures = new HashMap<String, Integer>();
 
-        loadAnimatorFactory(mScope);
+        loadAnimatorFactory((IScope)mScope);
     }
 
 
+    /**
+     * Called when initially entering a scene
+     * @param sceneName
+     */
     public void enterScene(String sceneName) {
 
         mSceneName = sceneName;
 
         try {
-            _currAnimator = (scene_animator)mScope.mapSymbol(mSceneName);
+            _sceneAnimator = (scene_animator)mScope.mapSymbol(mSceneName);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        _currAnimator.seekRoot();
+        _sceneAnimator.seekRoot();
     }
 
 
     public void play() {
-        if(_currAnimator != null)
-                _currAnimator.play();
+        if(_sceneAnimator != null)
+                _sceneAnimator.play();
     }
 
 
     public void stop() {
-        if(_currAnimator != null)
-            _currAnimator.stop();
+        if(_sceneAnimator != null)
+            _sceneAnimator.stop();
     }
 
 
     public String applyNode() {
 
-        return _currAnimator.applyNode();
+        return _sceneAnimator.applyNode();
     }
 
     public String gotoNode(String nodeName) {
 
-        return _currAnimator.gotoNode(nodeName);
+        return _sceneAnimator.gotoNode(nodeName);
     }
 
 
@@ -132,7 +144,7 @@ public class CTutorAnimator {
      * from assets/tutors/<tutorname>/tutor_descriptor.json
      *
      */
-    private void loadAnimatorFactory(TScope scope) {
+    private void loadAnimatorFactory(IScope scope) {
 
         try {
             loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutorName + "/" + TCONST.AGDESC)), scope);
@@ -142,9 +154,9 @@ public class CTutorAnimator {
         }
     }
 
-    public void loadJSON(JSONObject jsonObj, TScope scope) {
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
 
-        JSON_Helper.parseSelf(jsonObj, this, scope);
+        JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
 
     }
 

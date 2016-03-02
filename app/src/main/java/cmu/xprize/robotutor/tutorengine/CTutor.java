@@ -34,13 +34,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IScope;
+import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.robotutor.tutorengine.graph.scene_initializer;
 import cmu.xprize.robotutor.tutorengine.graph.type_action;
 import cmu.xprize.robotutor.tutorengine.graph.type_timer;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
 
 
 /**
@@ -544,7 +547,7 @@ public class CTutor implements ILoadableObject {
     private void loadTutorFactory() {
 
         try {
-            loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutorName + "/" + TCONST.TDESC)), mTutorScope);
+            loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutorName + "/" + TCONST.TDESC)), (IScope)mTutorScope);
 
         } catch (JSONException e) {
             Log.d(TAG, "error");
@@ -552,9 +555,9 @@ public class CTutor implements ILoadableObject {
     }
 
 
-    public void loadJSON(JSONObject jsonObj, TScope scope) {
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
 
-        JSON_Helper.parseSelf(jsonObj, this, scope);
+        JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
 
         // Use setLanguage to properly configure the language feature
         if(language != null)
