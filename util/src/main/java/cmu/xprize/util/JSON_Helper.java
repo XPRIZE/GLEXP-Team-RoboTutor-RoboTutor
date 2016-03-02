@@ -17,7 +17,7 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.robotutor.tutorengine.util;
+package cmu.xprize.util;
 
 import android.content.res.AssetManager;
 import android.os.Environment;
@@ -39,73 +39,34 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import cmu.xprize.robotutor.RoboTutor;
-import cmu.xprize.robotutor.tutorengine.CTutorEngine;
-import cmu.xprize.robotutor.tutorengine.ILoadableObject;
-import cmu.xprize.util.TCONST;
-import cmu.xprize.robotutor.tutorengine.graph.IScriptable;
-import cmu.xprize.robotutor.tutorengine.graph.type_action;
-import cmu.xprize.robotutor.tutorengine.graph.type_timeline;
-import cmu.xprize.robotutor.tutorengine.graph.type_audio;
-import cmu.xprize.robotutor.tutorengine.graph.type_cond;
-import cmu.xprize.robotutor.tutorengine.graph.graph_module;
-import cmu.xprize.robotutor.tutorengine.graph.graph_node;
-import cmu.xprize.robotutor.tutorengine.graph.type_timer;
-import cmu.xprize.robotutor.tutorengine.graph.type_tts;
-import cmu.xprize.robotutor.tutorengine.graph.scene_animator;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TChar;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TFloat;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TReference;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
+
 
 /**
  * Global helper to cache spec files from the tutor assets folder
  */
 public class JSON_Helper {
 
-    static public HashMap<String, Class> classMap = new HashMap<String, Class>();
+    static public AssetManager           _assetManager;
+    static public String                 _cacheSource;
+    static public String                 _externFiles;
 
-    //
-    // This is used to map "type" (class names) used in json HashMap specs to real classes
-
-    static {
-        classMap.put("ANIMATOR", scene_animator.class);
-        classMap.put("NODE", graph_node.class);
-        classMap.put("MODULE", graph_module.class);
-        classMap.put("TIMELINE", type_timeline.class);
-        classMap.put("COMMAND", type_action.class);
-        classMap.put("CONDITION", type_cond.class);
-        classMap.put("TTS", type_tts.class);
-        classMap.put("AUDIO", type_audio.class);
-        classMap.put("TIMER", type_timer.class);
-
-        classMap.put("TReference", TReference.class);
-        classMap.put("TBoolean", TBoolean.class);
-        classMap.put("TString", TString.class);
-        classMap.put("TInteger", TInteger.class);
-        classMap.put("TFloat", TFloat.class);
-        classMap.put("TChar", TChar.class);
-
-        classMap.put("string", String.class);
-        classMap.put("bool", Boolean.class);
-        classMap.put("int", Integer.class);
-        classMap.put("float", Float.class);
-        classMap.put("byte", Byte.class);
-        classMap.put("long", Long.class);
-        classMap.put("short", Short.class);
-        classMap.put("object", Object.class);
-    }
 
     static private final String TAG = "JSON_HELPER";
 
 
+    public JSON_Helper(AssetManager am, String cs, String ef) {
+        set_assetManager(am);
+        set_cacheSource(cs);
+        set_externFiles(ef);
+    }
+
+    static public void set_assetManager(AssetManager am) { _assetManager = am; }
+    static public void set_cacheSource(String cs) { _cacheSource = cs; }
+    static public void set_externFiles(String ef) { _externFiles = ef; }
+
     static public String cacheData(String fileName) {
 
         InputStream in;
-        AssetManager assetManager = CTutorEngine.Activity.getAssets();
 
         StringBuilder buffer = new StringBuilder();
         byte[] databuffer    = new byte[1024];
@@ -122,12 +83,12 @@ public class JSON_Helper {
                 // We can load from Android Assets or from an external file based on the
                 // CacheSource setting
                 //
-                if(CTutorEngine.CacheSource.equals(TCONST.ASSETS)) {
+                if(_cacheSource.equals(TCONST.ASSETS)) {
 
-                    in = assetManager.open(fileName);
+                    in = _assetManager.open(fileName);
 
                 } else {
-                    String filePath = RoboTutor.EXTERNFILES + "/" + fileName;
+                    String filePath = _externFiles + "/" + fileName;
 
                     in = new FileInputStream(filePath);
                 }
@@ -175,7 +136,7 @@ public class JSON_Helper {
      * @param self
      * @return
      */
-    static public void parseSelf(JSONObject jsonObj, Object self, TScope scope) {
+    static public void parseSelf(JSONObject jsonObj, Object self, HashMap<String, Class> classMap, IScope scope) {
 
         // determine the class of the object that wants to be expanded
         Class tClass = self.getClass();
@@ -203,10 +164,6 @@ public class JSON_Helper {
             try {
                 // we don't care about the value only whether if there is a field there
                 if(jsonObj.has(fieldName)) {
-
-
-                    if(fieldName.equals("repeat"))
-                        Log.d(TAG,"STOP");
 
                     // Most of our fields are Strings so handle them as efficiently as possible
                     if(fieldClass.equals(String.class)) {
@@ -336,11 +293,15 @@ public class JSON_Helper {
 
                                 // Associate the node with its Map name
                                 // This overrides any names assigned in the subtype spec
-                                ((graph_node)eObj).name = key;
+                                ((IScriptable)eObj).setName(key);
 
-                                // Add the new object to the scope
-                                scope.put(key, (IScriptable)eObj);
-                                Log.i(TAG, "Adding to scope: " + key);
+                                // Add the new object to the scope - if it is a scoped object
+                                // it may just be a data source etc.
+
+                                if(scope != null) {
+                                    scope.put(key, (IScriptable) eObj);
+                                    Log.i(TAG, "Adding to scope: " + key);
+                                }
                             }
                         }
                     }
@@ -364,6 +325,9 @@ public class JSON_Helper {
 
                                     if (elemClass.equals(String.class)) {
                                         eObj = nArr.getString(i);
+                                    }
+                                    else if (elemClass.equals(int.class)) {
+                                        eObj = nArr.getInt(i);
                                     }
                                     else {
                                         nJsonObj = nArr.getJSONObject(i);
@@ -418,16 +382,20 @@ public class JSON_Helper {
 
             } catch (JSONException e) {
                 // Just ignore items where there is no JSON data
-                e.printStackTrace();
+                //e.printStackTrace();
                 Log.e(TAG, "ERROR: parseSelf:" + e);
+                System.exit(1);
 
             } catch (InstantiationException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 Log.e(TAG, "ERROR: parseSelf:" + e);
+                System.exit(1);
 
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 Log.e(TAG, "ERROR: parseSelf:" + e);
+                System.exit(1);
+
             }
         }
     }

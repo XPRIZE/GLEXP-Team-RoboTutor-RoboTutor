@@ -60,6 +60,10 @@ public class TSceneFrameLayout extends FrameLayout implements ITutorSceneImpl {
     }
 
 
+    public void setDataSource(String dataSource) {
+
+    }
+
 
     //************************************************************************
     //************************************************************************

@@ -7,6 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.util.TCONST;
 
 /**
@@ -95,7 +96,7 @@ public class type_timer extends graph_node {
         _frameTask = new TimerTask() {
             @Override
             public void run() {
-                IScriptable obj = null;
+                IScriptable2 obj = null;
 
                 try {
                     obj = CTutor.getScope().mapSymbol(ontimer);

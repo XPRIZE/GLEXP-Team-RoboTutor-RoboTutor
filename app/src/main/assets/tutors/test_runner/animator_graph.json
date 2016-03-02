@@ -8,11 +8,14 @@
       "name": "Word copying tutor",
       "COMMENT": "This is where you describe your tutor",
       "version": "1.0.0",
-      "rootnode": "PFEATURE_STATE1",
+      "rootnode": "CONDTEST_STATE",
 
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        // PFEATURE_STATE1 - run through a sequence of audio using pfeatures to select
+        // clips stochastically
 
         "PFEATURE_STATE1": {
           "type": "NODE",
@@ -42,6 +45,9 @@
           ]
         },
 
+
+        // Timeline test series -
+        // TODO: Flash Timelines have been lost
 
         "ABS_TIMELINE_STATE": {
           "type": "NODE",
@@ -112,6 +118,8 @@
           ]
         },
 
+        // Test conditionals
+        //
         "CONDTEST_STATE": {
           "type": "NODE",
           "COMMENT": "Intro Clip",

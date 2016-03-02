@@ -61,6 +61,10 @@ public class TScenePercentLayout extends PercentRelativeLayout implements ITutor
     }
 
 
+    public void setDataSource(String dataSource) {
+
+    }
+
 
     //************************************************************************
     //************************************************************************

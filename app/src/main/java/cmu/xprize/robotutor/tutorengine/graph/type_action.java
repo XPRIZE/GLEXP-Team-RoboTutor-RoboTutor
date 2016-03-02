@@ -32,6 +32,7 @@ import java.util.Map;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorAnimator;
 import cmu.xprize.robotutor.tutorengine.CTutorNavigator;
+import cmu.xprize.util.IScope;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
@@ -224,7 +225,7 @@ public class type_action extends graph_node {
      * @param scope
      */
     @Override
-    public void loadJSON(JSONObject jsonObj, TScope scope) {
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
 
         // Always call super to init _scope - or do it yourself
         //

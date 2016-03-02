@@ -19,17 +19,17 @@
 
 package cmu.xprize.robotutor.tutorengine.graph;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import cmu.xprize.robotutor.tutorengine.ILoadableObject;
+import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.robotutor.tutorengine.ITutorObject;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
+import cmu.xprize.util.IScope;
+import cmu.xprize.util.JSON_Helper;
 
 /**
  * Scene Descriptors are used for simple CTutorNavigator instances
@@ -66,10 +66,11 @@ public class scene_descriptor implements ILoadableObject {
     // *** Serialization
 
 
-    public void loadJSON(JSONObject jsonObj, TScope scope) {
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
 
-        _scope = scope;
+        _scope = (TScope)scope;
 
-        JSON_Helper.parseSelf(jsonObj, this, scope);
+        JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
     }
 }

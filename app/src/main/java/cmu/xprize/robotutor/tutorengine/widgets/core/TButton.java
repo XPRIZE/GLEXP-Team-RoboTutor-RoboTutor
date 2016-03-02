@@ -58,6 +58,9 @@ public class TButton extends Button implements ITutorObjectImpl {
     }
 
 
+    public void setDataSource(String dataSource) {
+
+    }
 
 
     //************************************************************************

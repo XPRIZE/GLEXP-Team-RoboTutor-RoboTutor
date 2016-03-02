@@ -24,7 +24,8 @@ import android.util.Log;
 import org.json.JSONObject;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.ILoadableObject;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
+import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TFloat;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
@@ -116,8 +117,8 @@ public class type_cond extends type_action implements ILoadableObject {
 
 
     private boolean applyScript(String script, boolean inverse) {
-        IScriptable obj    = null;
-        boolean     result = false;
+        IScriptable2 obj    = null;
+        boolean      result = false;
 
         try {
             // If we see '{' we assume a json spec for an action object and
@@ -131,7 +132,7 @@ public class type_cond extends type_action implements ILoadableObject {
             // Otherwise we assume that it is a single Symbol
             else {
                 if (obj == null)
-                    obj = getScope().mapSymbol(script);
+                    obj = (IScriptable2)getScope().mapSymbol(script);
 
                 result = Boolean.parseBoolean(obj.applyNode());
             }
@@ -161,15 +162,15 @@ public class type_cond extends type_action implements ILoadableObject {
         String         parseStr  = code + TCONST.EOT;
         boolean        DecimalPt = false;
 
-        IScriptable LHS          = null;            // Left hand side of binary expression
-        IScriptable RHS          = null;            // Right hand side of binary expression
+        IScriptable2   LHS       = null;            // Left hand side of binary expression
+        IScriptable2   RHS       = null;            // Right hand side of binary expression
         boolean        LNegate   = false;
         boolean        RNegate   = false;
         boolean        negate    = false;
         int            binaryOp  = TCONST.NOOP;
 
-        IScriptable resultObj = null;
-        boolean     result    = false;
+        IScriptable2  resultObj = null;
+        boolean       result    = false;
 
         try {
             do {
@@ -440,7 +441,7 @@ public class type_cond extends type_action implements ILoadableObject {
 
                     case TCONST.RESOLVESYMBOL:
 
-                        resultObj = getScope().mapSymbol(Symbol.toString());
+                        resultObj = (IScriptable2)getScope().mapSymbol(Symbol.toString());
 
                         if(Property.length() != 0) {
                             //resultObj = resultObj.mapProperty(Property.toString());

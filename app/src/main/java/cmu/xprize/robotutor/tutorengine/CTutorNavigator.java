@@ -28,13 +28,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IScope;
+import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
 
 
-public class CTutorNavigator implements ITutorNavigator{
+public class CTutorNavigator implements ITutorNavigator, ILoadableObject{
 
     private static TScope                     mRootScope;
 
@@ -380,6 +383,11 @@ public class CTutorNavigator implements ITutorNavigator{
     }
 
 
+    public void tutorLoop() {
+
+    }
+
+
     /**
      * gotoNextScene manual entry point
      */
@@ -514,16 +522,18 @@ public class CTutorNavigator implements ITutorNavigator{
     private void loadNavigatorDescr() {
 
         try {
-            loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutorName + "/" + TCONST.SNDESC)), mRootScope);
+            loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutorName + "/" + TCONST.SNDESC)), (IScope)mRootScope);
         } catch (JSONException e) {
             Log.d(TAG, "Error" );
         }
     }
 
-    public void loadJSON(JSONObject jsonObj, TScope scope) {
+
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
         int i1 = 0;
 
-        JSON_Helper.parseSelf(jsonObj, this, scope);
+        JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
 
         // shortcut to length
         _sceneCnt = navigatedata.length;

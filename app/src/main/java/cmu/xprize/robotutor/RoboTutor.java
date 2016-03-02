@@ -27,6 +27,7 @@ import java.io.IOException;
 
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutorAssetManager;
 
@@ -60,6 +61,7 @@ public class RoboTutor extends Activity {
         tutorContainer = (ITutorSceneImpl)findViewById(R.id.tutor_manager);
 
         EXTERNFILES = getApplicationContext().getExternalFilesDir("").getPath();
+
 
         // [kw] TODO: Put this off in a worker thread and let the UI continue.
         CTutorAssetManager tutorAssetManager = new CTutorAssetManager(getApplicationContext());

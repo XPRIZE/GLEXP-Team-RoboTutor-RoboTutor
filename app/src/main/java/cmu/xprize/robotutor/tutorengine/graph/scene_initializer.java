@@ -21,11 +21,10 @@ package cmu.xprize.robotutor.tutorengine.graph;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
-import cmu.xprize.robotutor.tutorengine.ILoadableObject;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
+import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IScope;
+import cmu.xprize.util.JSON_Helper;
 
 public class scene_initializer implements ILoadableObject {
 
@@ -37,8 +36,10 @@ public class scene_initializer implements ILoadableObject {
     public type_action[]  onenter;
     public String          features;
 
-    public void loadJSON(JSONObject jsonObj, TScope scope) {
 
-        JSON_Helper.parseSelf(jsonObj, this, scope);
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
+
+        JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
     }
 }
