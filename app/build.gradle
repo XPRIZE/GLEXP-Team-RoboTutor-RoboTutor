@@ -35,4 +35,5 @@ dependencies {
     compile project(':banner')
     compile project(':ltk')
     compile project(':util')
+    compile project(':mn_component')
 }

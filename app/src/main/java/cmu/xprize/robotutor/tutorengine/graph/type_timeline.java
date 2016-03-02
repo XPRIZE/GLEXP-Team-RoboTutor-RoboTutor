@@ -44,6 +44,7 @@ import java.util.TimerTask;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
+import cmu.xprize.util.IScope;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
@@ -555,7 +556,7 @@ public class type_timeline extends type_action {
 
                 try {
                     // TODO : add scoping
-                    mScript.loadJSON(new JSONObject(xpp.getText()), mScope);
+                    mScript.loadJSON(new JSONObject(xpp.getText()), (IScope)mScope);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -635,7 +636,7 @@ public class type_timeline extends type_action {
                 mPlayer = new type_audio();
 
                 try {
-                    mPlayer.loadJSON(new JSONObject(jsonCode), mScope);
+                    mPlayer.loadJSON(new JSONObject(jsonCode), (IScope)mScope);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -808,9 +809,11 @@ public class type_timeline extends type_action {
             }
 
         } catch (XmlPullParserException e) {
-            Log.e(TAG, "ERROR: XML Spec Invalid: " + factoryPATH + e.getMessage());
+            Log.e(TAG, "ERROR: XML Spec Invalid: " + e.getMessage());
+            System.exit(1);
         } catch (IOException e) {
-            Log.e(TAG, "ERROR: XML Spec Invalid: " + factoryPATH + e.getMessage());
+            Log.e(TAG, "ERROR: XML Spec Invalid: " + e.getMessage());
+            System.exit(1);
         }
     }
 
@@ -869,11 +872,11 @@ public class type_timeline extends type_action {
     // *** Serialization
 
     @Override
-    public void loadJSON(JSONObject jsonObj, TScope scope) {
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
 
         super.loadJSON(jsonObj, scope);
 
-        mScope = new TScope(name, scope);
+        mScope = new TScope(name, (TScope)scope);
 
         _trackType = TCONST.ABSOLUTE_TYPE;
 

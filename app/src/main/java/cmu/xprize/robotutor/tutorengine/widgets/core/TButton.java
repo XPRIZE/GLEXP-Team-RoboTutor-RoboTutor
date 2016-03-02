@@ -58,6 +58,9 @@ public class TButton extends Button implements ITutorObjectImpl {
     }
 
 
+    public void setDataSource(String dataSource) {
+
+    }
 
 
     //************************************************************************
@@ -121,5 +124,9 @@ public class TButton extends Button implements ITutorObjectImpl {
         return mSceneObject;
     }
 
+    @Override
+    public void zoomInOut(Float scale, Long duration) {
+        mSceneObject.zoomInOut(scale, duration);
+    }
 
 }

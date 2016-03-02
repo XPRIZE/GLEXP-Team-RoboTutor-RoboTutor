@@ -26,9 +26,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
-/**
- * Created by Kevin on 12/2/2015.
- */
+
 public class PersonaEye {
 
     private PersonaEyeLid   eyeLid;

@@ -21,15 +21,17 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import cmu.xprize.ltk.CFingerWriter;
+import cmu.xprize.ltk.ITextSink;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.robotutor.tutorengine.graph.IScriptable;
+import cmu.xprize.util.IScriptable;
 
 public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 
@@ -37,6 +39,8 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     private CTutorObjectDelegate mSceneObject;
 
     private float aspect = 1.12f;  // w/h
+
+    private static final String   TAG = "TFingerWriter";
 
 
     public TFingerWriter(Context context) {
@@ -63,6 +67,11 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     }
 
 
+    public void setDataSource(String dataSource) {
+
+    }
+
+
     @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
     {
         int finalWidth, finalHeight;
@@ -82,6 +91,30 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 //        super.onMeasure(
 //                MeasureSpec.makeMeasureSpec(finalWidth, MeasureSpec.EXACTLY),
 //                MeasureSpec.makeMeasureSpec(finalHeight, MeasureSpec.EXACTLY));
+    }
+
+
+    @Override
+    protected void updateLinkedView(int linkedViewID) {
+        // If we are linked to a textSink then send it the new character
+        if(linkedViewID != -1) {
+            ITextSink linkedView = (ITextSink)CTutor.getViewById(linkedViewID, null);
+
+            if(linkedView == null) {
+                Log.e(TAG, "FingerWriter Component does not have LinkView");
+                System.exit(1);
+            }
+
+            try {
+                linkedView.addChar(_recChars[0]);
+            }
+            catch(Exception e) {
+                Log.d(TAG, "FingerWriter: probable empty result" + e);
+
+                // Send special unrecognized sequence
+                linkedView.addChar("???");
+            }
+        }
     }
 
 
@@ -134,7 +167,6 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 
 
 
-
     @Override
     public void setName(String name) {
         mSceneObject.setName(name);
@@ -168,5 +200,10 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     @Override
     public CTutorObjectDelegate getimpl() {
         return mSceneObject;
+    }
+
+    @Override
+    public void zoomInOut(Float scale, Long duration) {
+        mSceneObject.zoomInOut(scale, duration);
     }
 }

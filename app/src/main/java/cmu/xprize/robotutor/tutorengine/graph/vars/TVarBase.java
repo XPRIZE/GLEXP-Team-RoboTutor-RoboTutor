@@ -22,14 +22,14 @@ package cmu.xprize.robotutor.tutorengine.graph.vars;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import cmu.xprize.robotutor.tutorengine.ILoadableObject;
+import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IScope;
 import cmu.xprize.util.TCONST;
-import cmu.xprize.robotutor.tutorengine.graph.IScriptable;
 import cmu.xprize.robotutor.tutorengine.graph.type_action;
 
 // TVarBase is the mechanism through which Iscriptable is imposed on built-in types
 //
-public class TVarBase extends type_action implements ILoadableObject, IScriptable {
+public class TVarBase extends type_action implements ILoadableObject, IScriptable2 {
 
     private TScope _scope;
 
@@ -63,7 +63,7 @@ public class TVarBase extends type_action implements ILoadableObject, IScriptabl
      * @return
      */
     @Override
-    public TBoolean OR(IScriptable RHS, boolean lneg, boolean rneg) {
+    public TBoolean OR(IScriptable2 RHS, boolean lneg, boolean rneg) {
 
         Object lLHS =  getValue();
         Object lRHS =  RHS.getValue();
@@ -72,7 +72,7 @@ public class TVarBase extends type_action implements ILoadableObject, IScriptabl
     }
 
     @Override
-    public TBoolean AND(IScriptable RHS, boolean lneg, boolean rneg) {
+    public TBoolean AND(IScriptable2 RHS, boolean lneg, boolean rneg) {
 
         Object lLHS =  getValue();
         Object lRHS =  RHS.getValue();
@@ -80,32 +80,32 @@ public class TVarBase extends type_action implements ILoadableObject, IScriptabl
         return new TBoolean((Boolean)(lneg? !(Boolean)lLHS : lLHS) && (Boolean)(lneg? !(Boolean)lRHS : lRHS));    }
 
     @Override
-    public TBoolean LT(IScriptable RHS) {
+    public TBoolean LT(IScriptable2 RHS) {
         return null;
     }
 
     @Override
-    public TBoolean LTEQ(IScriptable RHS) {
+    public TBoolean LTEQ(IScriptable2 RHS) {
         return null;
     }
 
     @Override
-    public TBoolean GT(IScriptable RHS) {
+    public TBoolean GT(IScriptable2 RHS) {
         return null;
     }
 
     @Override
-    public TBoolean GTEQ(IScriptable RHS) {
+    public TBoolean GTEQ(IScriptable2 RHS) {
         return null;
     }
 
     @Override
-    public TBoolean EQ(IScriptable RHS) {
+    public TBoolean EQ(IScriptable2 RHS) {
         return new TBoolean(getValue() == RHS.getValue());
     }
 
     @Override
-    public TBoolean NEQ(IScriptable RHS) {
+    public TBoolean NEQ(IScriptable2 RHS) {
         return new TBoolean(getValue() != RHS.getValue());
     }
 
@@ -143,10 +143,10 @@ public class TVarBase extends type_action implements ILoadableObject, IScriptabl
     // since they know their own types and can apply them without
     // using reflection.
     @Override
-    public void loadJSON(JSONObject jsonObj, TScope scope) {
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
 
         // Record the scope the variable should be created in if it is instantiated
-        _scope = scope;
+        _scope = (TScope)scope;
 
         try {
             type = jsonObj.getString("type");

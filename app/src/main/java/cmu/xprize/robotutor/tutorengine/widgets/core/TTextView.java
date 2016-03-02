@@ -59,6 +59,11 @@ public class TTextView extends TextView implements ITutorObjectImpl {
     }
 
 
+    public void setDataSource(String dataSource) {
+
+    }
+
+
     //************************************************************************
     //************************************************************************
     // Tutor methods  Start
@@ -113,5 +118,9 @@ public class TTextView extends TextView implements ITutorObjectImpl {
         return mSceneObject;
     }
 
+    @Override
+    public void zoomInOut(Float scale, Long duration) {
+        mSceneObject.zoomInOut(scale, duration);
+    }
 
 }

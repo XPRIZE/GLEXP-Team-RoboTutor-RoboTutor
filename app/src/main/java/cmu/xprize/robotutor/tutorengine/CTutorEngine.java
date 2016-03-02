@@ -20,24 +20,25 @@
 package cmu.xprize.robotutor.tutorengine;
 
 import android.app.Activity;
-import android.view.View;
-import android.view.ViewGroup;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IScope;
+import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
 import cmu.xprize.robotutor.RoboTutor;
 
 /**
  * The tutor engine is a singleton
  *
  */
-public class CTutorEngine {
+public class CTutorEngine implements ILoadableObject {
 
     private static TScope                   mRootScope;
 
@@ -74,6 +75,9 @@ public class CTutorEngine {
         Activity        = context;
         TutorContainer  = tutorContainer;
         TutorLogManager = new CTutorLogManager();
+
+        // Initialize the JSON Helper statics - just throw away the object.
+        new JSON_Helper(Activity.getAssets(), CacheSource, RoboTutor.EXTERNFILES);
     }
 
 
@@ -141,7 +145,11 @@ public class CTutorEngine {
      */
     public void loadEngineDescr() {
 
-        loadJSON(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.EDESC), mRootScope);
+        try {
+            loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.EDESC)), (IScope)mRootScope);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -150,13 +158,9 @@ public class CTutorEngine {
      *
      * @param jsonData
      */
-    public void loadJSON(String jsonData, TScope scope) {
+    @Override
+    public void loadJSON(JSONObject jsonData, IScope scope) {
 
-        try {
-            JSON_Helper.parseSelf(new JSONObject(jsonData), this, scope);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+      JSON_Helper.parseSelf(jsonData, this, CClassMap2.classMap, scope);
     }
 }

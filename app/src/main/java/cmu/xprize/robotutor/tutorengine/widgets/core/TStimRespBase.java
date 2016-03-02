@@ -17,22 +17,17 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import cmu.xprize.ltk.CStimRespBase;
-import cmu.xprize.robotutor.tutorengine.CTutorEngine;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
+import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
-import cmu.xprize.ltk.CStimResp;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
 
 public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
@@ -110,22 +105,28 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
             mLinkedView = (TStimRespBase)CTutor.getViewById(mLinkedViewID, null);
 
         if(mLinkedView != null) {
-            String Stimulus = mLinkedView.getValue();
 
-            if(mValue.equals(Stimulus)) {
-                CTutor.setAddFeature(TCONST.FWCORRECT);
-                _correct++;
-            }
-            else {
-                CTutor.setAddFeature(TCONST.FWINCORRECT);
+            if(newChar.equals("???")) {
+                CTutor.setAddFeature(TCONST.FWUNKNOWN);
                 _wrong++;
             }
+            else {
+                String Stimulus = mLinkedView.getValue();
 
-            // Set a flag if they're all correct when we are out of data
-            //
-            if(mLinkedView.dataExhausted()) {
-                if(_wrong == 0)
-                    CTutor.setAddFeature(TCONST.FWALLCORRECT);
+                if (mValue.equals(Stimulus)) {
+                    CTutor.setAddFeature(TCONST.FWCORRECT);
+                    _correct++;
+                } else {
+                    CTutor.setAddFeature(TCONST.FWINCORRECT);
+                    _wrong++;
+                }
+
+                // Set a flag if they're all correct when we are out of data
+                //
+                if (mLinkedView.dataExhausted()) {
+                    if (_wrong == 0)
+                        CTutor.setAddFeature(TCONST.FWALLCORRECT);
+                }
             }
         }
     }
@@ -145,16 +146,16 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
         _correct = 0;
         _wrong   = 0;
+
         CTutor.setDelFeature(TCONST.FWALLCORRECT);
         CTutor.setDelFeature(TCONST.FWCORRECT);
         CTutor.setDelFeature(TCONST.FWINCORRECT);
-
 
         try {
             if (dataSource.startsWith("file|")) {
                 dataSource = dataSource.substring(5);
 
-                JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.TDESC + "/" + dataSource);
+                JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.TASSETS + "/" + dataSource);
 
             } else if (dataSource.startsWith("db|")) {
                 dataSource = dataSource.substring(3);
@@ -185,7 +186,8 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
         super.next();
 
-        // update the response variable  "<Sstimulus>.value"
+        // update the Scope response variable  "<Sstimulus>.value"
+        //
         CTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
 
         if(dataExhausted())
@@ -270,4 +272,10 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
     public CTutorObjectDelegate getimpl() {
         return mSceneObject;
     }
+
+    @Override
+    public void zoomInOut(Float scale, Long duration) {
+        mSceneObject.zoomInOut(scale, duration);
+    }
+
 }

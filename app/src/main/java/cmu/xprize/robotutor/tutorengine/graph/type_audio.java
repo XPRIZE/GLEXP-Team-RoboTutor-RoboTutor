@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 
+import cmu.xprize.util.IScope;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
@@ -114,7 +115,7 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
 
         // play on creation if command indicates
         if(command.equals(TCONST.PLAY)) {
-            preEnter();
+            //preEnter();       ## duplicate if this is Root node
             play();
 
             // Events return done - so they may play on top of each other.
@@ -225,8 +226,8 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
     // *** Serialization
 
 
-
-    public void loadJSON(JSONObject jsonObj, TScope scope) {
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
 
         String langPath;
 

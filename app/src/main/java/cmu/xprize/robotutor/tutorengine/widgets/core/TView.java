@@ -60,6 +60,11 @@ public class TView extends View implements ITutorObjectImpl {
         mSceneObject.init(context, attrs);
     }
 
+
+    public void setDataSource(String dataSource) {
+
+    }
+
     @Override
     public void setName(String name) {
         mSceneObject.setName(name);
@@ -93,6 +98,11 @@ public class TView extends View implements ITutorObjectImpl {
     @Override
     public CTutorObjectDelegate getimpl() {
         return mSceneObject;
+    }
+
+    @Override
+    public void zoomInOut(Float scale, Long duration) {
+        mSceneObject.zoomInOut(scale, duration);
     }
 
 }

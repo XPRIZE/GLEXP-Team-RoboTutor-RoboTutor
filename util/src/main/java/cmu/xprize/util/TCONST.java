@@ -42,6 +42,7 @@ public class TCONST {
     static final public String SNDESC          = "navigator_descriptor.json";
     static final public String AGDESC          = "animator_graph.json";
     static final public String TDATA           = "trackdata/LIBRARY";
+    static final public String TASSETS         = "assets";
     static final public String DEFAULT         = "default";
 
     // CTutorNavigator Constants
@@ -88,6 +89,7 @@ public class TCONST {
     public static final String DONE            = "DONE";
     public static final String WAIT            = "WAIT";
     public static final String NONE            = "NONE";
+    public static final String READY           = "READY";
 
     public static final String PLAY            = "PLAY";
     public static final String STOP            = "STOP";
@@ -140,9 +142,14 @@ public class TCONST {
 
     public static final String FWCORRECT    = "FTR_RIGHT";
     public static final String FWINCORRECT  = "FTR_WRONG";
+    public static final String FWUNKNOWN    = "FTR_UNRECOGNIZED";
     public static final String FTR_EOI      = "FTR_NOWORDS";
     public static final String FWALLCORRECT = "ALL_CORRECT";
 
     public static final String FALSE        = "FALSE";
     public static final String TRUE         = "TRUE";
+    public static final String OVALICON     = "OVALICON";
+    public static final String RECTICON     = "RECTICON";
+    public static final String RAND         = "random";
+    public static final String MINUSONE     = "-1";
 }
