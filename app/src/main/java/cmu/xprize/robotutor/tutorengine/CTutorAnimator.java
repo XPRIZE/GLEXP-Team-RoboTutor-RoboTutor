@@ -74,7 +74,7 @@ public class CTutorAnimator {
      * Called when initially entering a scene
      * @param sceneName
      */
-    public void enterScene(String sceneName) {
+    public String enterScene(String sceneName) {
 
         mSceneName = sceneName;
 
@@ -85,7 +85,7 @@ public class CTutorAnimator {
             e.printStackTrace();
         }
 
-        _sceneAnimator.seekRoot();
+        return applyNode();
     }
 
 

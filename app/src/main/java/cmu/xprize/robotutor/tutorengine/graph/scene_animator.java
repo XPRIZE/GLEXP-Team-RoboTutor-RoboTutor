@@ -52,26 +52,34 @@ public class scene_animator extends graph_node implements ILoadableObject{
     static private final String TAG = "ANIMATOR";
 
 
-    public scene_animator() { }
+    public scene_animator() {
+        _currNode = this;
+    }
 
 
-    public void seekRoot() {
+    public String next() {
+        String result = TCONST.READY;
+
         try {
             _currNode = (graph_node) getScope().mapSymbol(rootnode);
         }
         catch(Exception e) {
-            // TODO: manage root node not found
+            Log.d(TAG, "Root Node not found");
+            System.exit(1);
         }
 
         if(_currNode != null) {
             Log.d(TAG, "Running Node: " + _currNode.name);
 
             _currNode.preEnter();
-            _currNode.applyNode();
+            result = TCONST.READY;
         }
         else {
             Log.d(TAG, "No Root Node for Scene");
+            result = TCONST.NEXTSCENE;
         }
+
+        return result;
     }
 
 
@@ -98,21 +106,36 @@ public class scene_animator extends graph_node implements ILoadableObject{
         if (_currNode != null) do {
 
             // Increment the animation polymorphically
+            // Simple nodes will always return:
+            //      NONE (the node is exhausted - no more actions)
+            //
+            // Complex nodes may return:
+            //      READY(start state)
+            //      WAIT (last node action result) or
+            //      NONE (the node is exhausted - no more actions)
 
-            _nodeState = _currNode.applyNode();
+            _nodeState = _currNode.next();
 
             // If the node is exhausted move to next node
 
-            if (_nodeState.equals(TCONST.NONE)) {
-                _currNode = _currNode.nextNode();
+            switch(_nodeState) {
 
-                if (_currNode != null) {
+                case TCONST.NONE:
+                    _currNode = _currNode.nextNode();
+
+                    if (_currNode == null) {
+                        _nodeState = TCONST.NEXTSCENE;
+                        break;
+                    }
+                    // otherwise fall through and apply next node action
+
+                case TCONST.WAIT:
+                case TCONST.READY:
+                case TCONST.DONE:
+
                     Log.d(TAG, "Running Node: " + _currNode.name);
-                }
-                else {
-                    _nodeState = TCONST.NEXTSCENE;
+                    _nodeState = _currNode.applyNode();
                     break;
-                }
             }
 
         } while (!_nodeState.equals(TCONST.WAIT) && !_nodeState.equals(TCONST.NEXTSCENE));

@@ -89,6 +89,7 @@ public class TCONST {
     public static final String DONE            = "DONE";
     public static final String WAIT            = "WAIT";
     public static final String NONE            = "NONE";
+    public static final String READY           = "READY";
 
     public static final String PLAY            = "PLAY";
     public static final String STOP            = "STOP";

@@ -809,9 +809,11 @@ public class type_timeline extends type_action {
             }
 
         } catch (XmlPullParserException e) {
-            Log.e(TAG, "ERROR: XML Spec Invalid: " + factoryPATH + e.getMessage());
+            Log.e(TAG, "ERROR: XML Spec Invalid: " + e.getMessage());
+            System.exit(1);
         } catch (IOException e) {
-            Log.e(TAG, "ERROR: XML Spec Invalid: " + factoryPATH + e.getMessage());
+            Log.e(TAG, "ERROR: XML Spec Invalid: " + e.getMessage());
+            System.exit(1);
         }
     }
 

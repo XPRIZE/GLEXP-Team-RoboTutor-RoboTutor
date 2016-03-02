@@ -9,13 +9,15 @@ import android.widget.Button;
 
 import cmu.xprize.util.View_Helper;
 
-public class CMn_Alley extends android.support.percent.PercentRelativeLayout{
+public class CMn_Alley extends android.support.percent.PercentRelativeLayout {
 
     private Button      Splus;
     private Button      Sminus;
     private CMn_IconSet SiconSet;
     private CMn_Text    Snumber;
 
+    private int         mMaxValue;
+    private int         mCurValue;
 
     static final String TAG = "CMn_Alley";
 
@@ -39,10 +41,34 @@ public class CMn_Alley extends android.support.percent.PercentRelativeLayout{
     private void init(Context context, AttributeSet attrs) {
         inflate(getContext(), R.layout.mn_comp_vert, this);
 
-        Splus    = (Button) View_Helper.getViewById(R.id.Splus, (ViewGroup)getParent());
-        Sminus   = (Button) View_Helper.getViewById(R.id.Sminus, (ViewGroup)getParent());
-        SiconSet = (CMn_IconSet) View_Helper.getViewById(R.id.SiconSet, (ViewGroup)getParent());
-        Snumber  = (CMn_Text) View_Helper.getViewById(R.id.Snumber, (ViewGroup)getParent());
+        Splus    = (Button) View_Helper.getViewById(R.id.Splus, this);
+        Sminus   = (Button) View_Helper.getViewById(R.id.Sminus, this);
+        SiconSet = (CMn_IconSet) View_Helper.getViewById(R.id.SiconSet, this);
+        Snumber  = (CMn_Text) View_Helper.getViewById(R.id.Snumber, this);
+
+        Splus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (mCurValue < mMaxValue) {
+                    updateValue(mCurValue + 1, true);
+                }
+            }
+        });
+
+        Sminus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (mCurValue > 1) {
+                    updateValue(mCurValue - 1, true);
+                }
+            }
+        });
+    }
+
+    private void updateValue(int newValue, boolean invalidate) {
+
+        mCurValue = newValue;
+
+        Snumber.setText(String.valueOf(newValue));
+        SiconSet.setIconCount(newValue, invalidate);
     }
 
 
@@ -50,16 +76,22 @@ public class CMn_Alley extends android.support.percent.PercentRelativeLayout{
 
         int visible = (index == mnIndex)? View.VISIBLE: View.INVISIBLE;
 
+        mMaxValue = data.maxvalue;
+
         Splus.setVisibility(visible);
         Sminus.setVisibility(visible);
+        SiconSet.setMaxIcons(mMaxValue);
 
         if(visible == View.INVISIBLE) {
-            Snumber.setText(String.valueOf(data.dataset[index]));
+            updateValue(data.dataset[index], false);
         }
         else {
-            Snumber.setText("");
+            updateValue(0, false);
         }
 
-        SiconSet.setMaxIcons(data.maxvalue);
+    }
+
+    public boolean isCorrect(int corValue) {
+        return mCurValue == corValue;
     }
 }

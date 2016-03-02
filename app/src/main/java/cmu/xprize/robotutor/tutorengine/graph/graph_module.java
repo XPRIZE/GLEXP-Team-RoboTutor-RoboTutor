@@ -31,7 +31,8 @@ import cmu.xprize.robotutor.tutorengine.CTutor;
 
 public class graph_module extends graph_node implements ILoadableObject {
 
-    private int               _ndx = 0;
+    private int               _ndx;
+    private String            _moduleState;
     type_action               _nextAction;
 
     // json loadable fields
@@ -54,12 +55,38 @@ public class graph_module extends graph_node implements ILoadableObject {
 
 
     @Override
+    public void preEnter()
+    {
+        resetNode();
+        super.preEnter();
+    }
+
+
+    /**
+     * As with all overrides of "next" it should only ever be called from applyNode in
+     * scene_animator
+     *
+     * @return
+     */
+    @Override
+    public String next() {
+
+        if(_nextAction != null)
+            _nextAction.preExit();
+
+        if(_ndx >= tracks.length)
+            _moduleState = TCONST.NONE;
+
+        return _moduleState;
+    }
+
+
+
+    @Override
     public String applyNode() {
 
-        String         moduleState = TCONST.NONE;
         String         features;
         boolean        featurePass = false;
-
 
         // If new scene has features, check that it is being used in the current tutor feature set
         // Note: You must ensure that there is a match for the last scene in the sequence
@@ -109,28 +136,26 @@ public class graph_module extends graph_node implements ILoadableObject {
                 {
                     Log.d(TAG, "Animation Feature: " + features + " passed:" + featurePass);
 
-                    moduleState = _nextAction.applyNode();
+                    _nextAction.preEnter();
+
+                    _moduleState = _nextAction.applyNode();
 
                     break;		// leave the loop
                 }
                 else {
                     Log.i(TAG, "Feature Test Failed: ");
-                    moduleState = TCONST.DONE;
+                    _moduleState = TCONST.DONE;
                 }
             }
             else {
-                moduleState = TCONST.NONE;
+                _moduleState = TCONST.NONE;
                 break;
             }
 
-        }while(moduleState.equals(TCONST.DONE));
+        }while(_moduleState.equals(TCONST.DONE));
 
-        // When the module is complete reset it
-        //
-        if(moduleState.equals(TCONST.NONE))
-            resetNode();
 
-        return moduleState;
+        return _moduleState;
     }
 
 
@@ -144,8 +169,10 @@ public class graph_module extends graph_node implements ILoadableObject {
 
         if(_ndx >= tracks.length)
         {
-            if(reuse)
-                _ndx = 0;
+            if(reuse) {
+                _ndx         = 0;
+                _moduleState = TCONST.READY;
+            }
         }
 
     }

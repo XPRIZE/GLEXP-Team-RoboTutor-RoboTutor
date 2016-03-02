@@ -32,11 +32,15 @@ public class CMn_Component extends LinearLayout implements ILoadableObject{
     private   ArrayList<CMn_Alley> _alleys = new ArrayList<>();
     private   int                  _dataIndex = 0;
     private   int                  _mnindex;
+    private   int                  _difValue;
+    private   int                  _corValue;
+
 
     // json loadable
     public CMn_Data[]      dataSource;
 
     static final String TAG = "CMn_Component";
+    private boolean correct;
 
 
     public CMn_Component(Context context) {
@@ -99,6 +103,7 @@ public class CMn_Component extends LinearLayout implements ILoadableObject{
             Log.e(TAG, "Data Exhuasted: call past end of data");
             System.exit(1);
         }
+
     }
 
 
@@ -130,7 +135,7 @@ public class CMn_Component extends LinearLayout implements ILoadableObject{
         //
         switch(data.mn_index) {
             case TCONST.RAND:
-                _mnindex = (int)Math.random() * data.maxvalue;
+                _mnindex = (int)(Math.random() * data.dataset.length);
                 break;
 
             case TCONST.MINUSONE:
@@ -147,9 +152,40 @@ public class CMn_Component extends LinearLayout implements ILoadableObject{
                 break;
         }
 
+        // Calc the correct value
+        // We make he assumption that any two consequtive numbers may be used to
+        // calculate the interval and that there are a minimum of 3 numbers
+        //
+        switch(_mnindex) {
+            case 0:
+                _difValue = Math.abs(data.dataset[1] - data.dataset[2]);
+                _corValue = data.dataset[1] - _difValue;
+                break;
+
+            case 1:
+                _difValue = Math.abs(data.dataset[0] - data.dataset[2]);
+                _corValue = data.dataset[2] - _difValue;
+                break;
+
+            default:
+                _difValue = Math.abs(data.dataset[0] - data.dataset[1]);
+                _corValue = data.dataset[_mnindex-1] + _difValue;
+                break;
+        }
+
+
+        // Apply the dataset to the alleys
         for(int i1 = 0 ; i1 < data.dataset.length ; i1++) {
             _alleys.get(i1).setData(data, i1, _mnindex);
         }
+    }
+
+
+    protected boolean isCorrect() {
+
+        boolean correct = _alleys.get(_mnindex).isCorrect(_corValue);
+
+        return correct;
     }
 
 
@@ -179,7 +215,7 @@ public class CMn_Component extends LinearLayout implements ILoadableObject{
 
        removeView(_alleys.get(_alleys.size()-1));
 
-        _alleys.remove(_alleys.size()-1);
+        _alleys.remove(_alleys.size() - 1);
     }
 
 
@@ -214,4 +250,5 @@ public class CMn_Component extends LinearLayout implements ILoadableObject{
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
         _dataIndex = 0;
     }
+
 }

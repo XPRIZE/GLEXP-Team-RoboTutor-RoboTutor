@@ -25,10 +25,10 @@ public class CMn_IconSet extends View {
     private int _containerFillColor   = 0xFF000000;
     private int _containerStrokeWidth = 2;
 
-    private int mMaxBalls   = 10;
-    private int mNumBalls   = (int)(Math.random() * 9) + 1;
+    private int mMaxBalls;
+    private int mNumBalls;
     private int mBallSize;
-    private int mBallMargin = 3;
+    private int mBallMargin = 5;
 
     private ArrayList<CMn_Icon> _icons = new ArrayList<>();
 
@@ -90,15 +90,14 @@ public class CMn_IconSet extends View {
     public void setMaxIcons(int maxIconCount ) {
 
         mMaxBalls = maxIconCount;
-        mBallSize = (getHeight() - (mBallMargin * (mMaxBalls+1))) / mMaxBalls;
-
-        updateBorder();
     }
 
 
-    public void setIconCount(int numIcons) {
+    public void setIconCount(int numIcons, boolean update) {
 
-        int delta = numIcons -_icons.size();
+        mNumBalls = numIcons;
+
+        int delta = mNumBalls -_icons.size();
 
         // More alleys than we need
         if(delta < 0) {
@@ -115,12 +114,9 @@ public class CMn_IconSet extends View {
             }
         }
 
-        float yOffset = mBallMargin;
-        float xOffset = (getWidth() - mBallSize) / 2;
 
-        for(int i1 = 0 ; i1 < numIcons ; i1++) {
-            _icons.get(i1).updateIconBounds(xOffset, yOffset, mBallSize, mBallSize);
-        }
+        if(update)
+            requestLayout();
     }
 
 
@@ -137,17 +133,7 @@ public class CMn_IconSet extends View {
 
     private void trimIcon() {
 
-        _icons.remove(_icons.size()-1);
-    }
-
-
-    public void updateBorder() {
-
-        int borderHeight = (mBallMargin * (mNumBalls+1)) + (mBallSize * mNumBalls);
-
-        getDrawingRect(mBorderRegion);
-
-        mBorderRegion.top += getHeight() - borderHeight;
+        _icons.remove(_icons.size() - 1);
     }
 
 
@@ -185,17 +171,17 @@ public class CMn_IconSet extends View {
         //Measure Width
         if (widthMode == MeasureSpec.EXACTLY) {
 
-            width = sibling.getWidth();
+            width = sibling.getMeasuredWidth();
             Log.d(TAG, "Width Using EXACTLY: " + width);
 
         } else if (widthMode == MeasureSpec.AT_MOST) {
 
-            width = sibling.getWidth();
+            width = sibling.getMeasuredWidth();
             Log.d(TAG, "Width Using AT MOST: " + width);
 
         } else {
 
-            width = sibling.getWidth();
+            width = sibling.getMeasuredWidth();
             Log.d(TAG, "Width Using UNSPECIFIED: " + width);
         }
 
@@ -207,13 +193,48 @@ public class CMn_IconSet extends View {
     @Override
     public void onLayout(boolean changed, int left, int top, int right, int bottom) {
 
-        if(changed)
+        //if(changed)
         {
-            setCornerRadius(0.33f);
+            setCornerRadius(0.43f);
+
+            mBallSize = (getHeight() - (mBallMargin * (mMaxBalls+1))) / mMaxBalls;
+
             updateBorder();
+
+            layoutIcons();
 
             super.onLayout(changed, left, top, right, bottom);
         }
 
     }
+
+    /**
+     * Update the size of the Alley - If there are no balls default to 2 so it looks like
+     * a number 0
+     */
+    public void updateBorder() {
+
+        int freeSpace = (mNumBalls == 0)? 2:mNumBalls;
+
+        int borderHeight = (mBallMargin * (freeSpace+1)) + (mBallSize * freeSpace);
+
+        getDrawingRect(mBorderRegion);
+
+        mBorderRegion.top += getHeight() - borderHeight;
+    }
+
+
+    private void layoutIcons() {
+
+        float yOffset = mBorderRegion.top + mBallMargin;
+        float xOffset = (getWidth() - mBallSize) / 2;
+
+        for(int i1 = 0 ; i1 < mNumBalls ; i1++) {
+            _icons.get(i1).updateIconBounds(xOffset, yOffset, mBallSize, mBallSize);
+
+            yOffset += mBallSize + mBallMargin;
+        }
+    }
+
+
 }

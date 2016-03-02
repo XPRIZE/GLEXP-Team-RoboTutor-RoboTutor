@@ -13,6 +13,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
@@ -44,6 +45,9 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
         mSceneObject.init(context, attrs);
     }
 
+    //**********************************************************
+    //**********************************************************
+    //*****************  Tutor Interface
 
     /**
      *
@@ -75,7 +79,10 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
         }
     }
 
+
     public void next() {
+
+        reset();
 
         super.next();
 
@@ -83,6 +90,30 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
             CTutor.setAddFeature(TCONST.FTR_EOI);
     }
 
+
+    public TBoolean test() {
+        boolean correct = isCorrect();
+
+        if(correct)
+            CTutor.setAddFeature("FTR_RIGHT");
+        else
+            CTutor.setAddFeature("FTR_WRONG");
+
+        return new TBoolean(correct);
+    }
+
+
+    public void reset() {
+
+        CTutor.setDelFeature("FTR_RIGHT");
+        CTutor.setDelFeature("FTR_WRONG");
+    }
+
+
+
+    //**********************************************************
+    //**********************************************************
+    //*****************  Common Tutor Object Methods
 
     @Override
     public void setName(String name) {

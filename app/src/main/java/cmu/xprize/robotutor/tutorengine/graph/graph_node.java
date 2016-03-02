@@ -93,8 +93,12 @@ public class graph_node implements ILoadableObject, IScriptable2 {
     public Object getValue() { return null; }
 
 
-
-    private String next() {
+    /**
+     * Next allows modules to loop through multiple actions in a node.
+     *
+     * @return
+     */
+    public String next() {
         return TCONST.NONE;
     }
 
@@ -122,7 +126,9 @@ public class graph_node implements ILoadableObject, IScriptable2 {
     }
 
 
+    // TODO: Ideally this would be protected
     // Used by Animation graph to init root animation
+    // Note: Modules use this to reinisitalize themselves
 
     public void preEnter()
     {
@@ -132,6 +138,8 @@ public class graph_node implements ILoadableObject, IScriptable2 {
         }
     }
 
+
+    // TODO: Ideally this would be protected
     // Used by Animation graph to init root animation
 
     public void preExit()
@@ -141,6 +149,7 @@ public class graph_node implements ILoadableObject, IScriptable2 {
             apply(preexit);
         }
     }
+
 
     // preenter / preexit action resolution.
     //

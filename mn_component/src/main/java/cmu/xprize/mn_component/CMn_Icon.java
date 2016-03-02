@@ -13,9 +13,9 @@ public class CMn_Icon  {
     private int _iconStrokeWidth = 2;
 
     private RectF   mBounds;
-    private String  mIconType = TCONST.OVALICON;
+    private String  mIconType;
     private Paint   mIconPaint;
-    private float   mRadius = 10;
+    private float   mRadius;
 
 
     static final private String TAG ="CMn_Icon";
@@ -27,6 +27,10 @@ public class CMn_Icon  {
         mIconPaint.setStyle(Paint.Style.STROKE);
         mIconPaint.setColor(_iconStrokeColor);
         mIconPaint.setStrokeWidth(_iconStrokeWidth);
+
+        mBounds   = new RectF();
+        mIconType = TCONST.OVALICON;
+        mRadius   = 10;
     }
 
 
