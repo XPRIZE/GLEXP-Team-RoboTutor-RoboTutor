@@ -40,6 +40,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
+import cmu.xprize.util.IReadyListener;
 import cmu.xprize.util.TimerUtils;
 import edu.cmu.pocketsphinx.FsgModel;
 import edu.cmu.pocketsphinx.Hypothesis;
@@ -54,6 +55,8 @@ import edu.cmu.pocketsphinx.Segment;
  */
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class Listener {
+
+    private IReadyListener tutorRoot;
 
     // Some configuration parameters an app might want to set:
 
@@ -176,6 +179,7 @@ public class Listener {
      * our modified SpeechRecognizer object wrapping the pocketsphinx decoder
      */
     private SpeechRecognizer recognizer;
+    private ListenerAssets   assets;
 
     private boolean IS_LOGGING = false;
 
@@ -229,8 +233,10 @@ public class Listener {
     public Listener(String userID) {
         this.userID = userID;
         configFile = null;
+
         // decoder setup deferred until init() call.
     }
+
 
     /**
      * construct Listener to setup decoder from a pocketsphinx config file. For path arguments config file must contain
@@ -242,42 +248,39 @@ public class Listener {
     public Listener(String userID, File config) {
         this.userID = userID;
         configFile = config;
+
         // decoder setup deferred until init() call.
     }
+
 
     /**
      * Initialize the listener
      *
      * @param context -- application context for locating resources and external storage
      */
-    public void init(Context context, String langFTR) {
+    public void setLanguage(String langFTR) {
 
-        try {
-            // Configure the phonetic rules that will be used by the decoder
-            // TODO: Need to make phoneme lang rules dynamic so we may have multiple recognizers
-            //
-            Phoneme.setTargetLanguage(langFTR);
+        // Configure the phonetic rules that will be used by the decoder
+        // TODO: Need to make phoneme lang rules dynamic so we may have multiple recognizers
+        //
+        Phoneme.setTargetLanguage(langFTR);
 
-            // initialize recognizer for our app
-            //
-            ListenerAssets assets = new ListenerAssets(context);
-
-            setupRecognizer(assets.getExternalDir(), configFile, langMap.get(langFTR));
-
-        } catch (IOException e) {
-            // TODO: Manage exceptions
-        }
+        // initialize recognizer for our task
+        //
+        setupRecognizer(assets.getExternalDir(), configFile, langMap.get(langFTR));
     }
 
 
     /**
      * Utility method to initialize the listener assets folder
      *
-     * @param context
+     * @param callback
      */
-    public void configListener(Context context) {
-        new listenerConfigTask().execute(context);
+    public void configListener(IReadyListener callback) {
 
+        tutorRoot = callback;
+
+        new listenerConfigTask().execute((Context)callback);
     }
 
 
@@ -299,12 +302,13 @@ public class Listener {
                 // sync assets from resources to filesystem via ListenerAssets class
                 // This takes a modest but noticeable amount of time
                 //
-                ListenerAssets assets = new ListenerAssets(params[0]);
+                assets = new ListenerAssets(params[0]);
                 assets.syncAssets();
                 result = true;
 
             } catch (IOException e) {
                 // TODO: Manage exceptions
+                Log.d("ASR", "init Failed: " + e);
                 result = false;
             }
 
@@ -314,9 +318,18 @@ public class Listener {
         @Override
         protected void onPostExecute(Boolean result) {
             isReady = result;
+            tutorRoot.onServiceReady("ASR", isReady? 1:0);
         }
     }
 
+
+    /**
+     * used by tutor root to test service availability
+     * @return
+     */
+    public boolean isReady() {
+        return isReady;
+    }
 
 
     /**
@@ -445,14 +458,14 @@ public class Listener {
                             // a few other settings we might want to experiment with:
 
                             // threshold for voice activity detection:
-                    .setFloat("-vad_threshold", VAD_THRESHOLD)            // default 2.0
+                    .setFloat("-vad_threshold", VAD_THRESHOLD)              // default 2.0
                             // other vad parameters:
-                            // .setInteger("vad_postspeech", 50)				// default 50 (centiseconds)
-                            // .setInteger("vad_prespeech", 10)					// default 10 (centiseconds)
+                            // .setInteger("vad_postspeech", 50)		    // default 50 (centiseconds)
+                            // .setInteger("vad_prespeech", 10)				// default 10 (centiseconds)
 
-                            // .setFloat("-silprob", 0.005f)					// default 0.005
-                    .setFloat("-fillprob", FILLPROB)                    // default 1e-8f
-                            // .setFloat("-wip", 0.65f)							// default 0.65
+                            // .setFloat("-silprob", 0.005f)				// default 0.005
+                    .setFloat("-fillprob", FILLPROB)                        // default 1e-8f
+                            // .setFloat("-wip", 0.65f)						// default 0.65
 
                     .getRecognizer();
         }
@@ -461,7 +474,7 @@ public class Listener {
         logMath = new LogMath();
 
         // use a private implementation to receive events from pocketsphinx
-        recognizer.addListener(new PocketSphinxListenerI());
+        recognizer.addListener(new IPocketSphinxListener());
     }
 
 
@@ -699,7 +712,7 @@ public class Listener {
     // private inner class to hide our event listener implementation.
     // We receive these events from the SpeechRecognizer object for our own use, and send similar events from the
     // IAsrEventListener interface to our client app
-    private class PocketSphinxListenerI implements ITutorListener {
+    private class IPocketSphinxListener implements ITutorListener {
         @Override
         public void onPartialResult(Hypothesis hypothesis) {
             // Log.i("onPartialResult", hypothesis.getHypstr());
@@ -739,7 +752,7 @@ public class Listener {
         }
 
 
-    } // end PocketSphinxListenerI
+    } // end IPocketSphinxListener
 
 
     // handle a partial or final hypothesis from pocketsphinx
@@ -768,13 +781,17 @@ public class Listener {
 
         // optional: strip last hyp word if it is not terminated by silence because it is unreliable
         String[] wordsToUse = asrWords;
+
         if (Listener.LAST_WORD_LAG) {
+
             // Find word of last segment in the segmentation detail
             String lastSegmentWord = null;
+
             for (Segment s : segments) {
                 lastSegmentWord = s.getWord();
                 Log.d("ASR","segment word: " + lastSegmentWord);
             }
+
             // Last segment could be silence or filler. Just ensure last segment != last hyp word
             if (lastSegmentWord != null && lastSegmentWord.equals(asrWords[asrWords.length - 1])) {
                 Log.i("lag", "ignoring trailing hypword " + lastSegmentWord);
@@ -917,8 +934,10 @@ public class Listener {
         // search last row to find best possible alignment of last hypWord
         int hLast = heardWords.size() - 1;
         int best_alignment = -1;
+
         MultiMatchScore best = new MultiMatchScore();
         MultiMatchScore multiMatchScore[] = multiMatchScores.get(hLast);
+
         for (int i = 0; i < costCalcWords; i++) {
             if (multiMatchScore[i].cost < best.cost ||
                     (multiMatchScore[i].cost == best.cost && multiMatchScore[i].nMatches > best.nMatches)) {

@@ -38,6 +38,10 @@ public class TInteger extends TVarBase implements ILoadableObject, IScriptable {
         _value = Integer.parseInt(string);
     }
 
+    public TInteger(int  num) {
+        _value = num;
+    }
+
     @Override
     public void set(String value) {
         _value = Integer.parseInt(value);

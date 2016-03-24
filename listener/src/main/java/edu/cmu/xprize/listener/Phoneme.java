@@ -53,9 +53,9 @@ import java.util.Locale;
 
 public class Phoneme {
 
-// This is used to map "language features" to the assocaited dictionary filenames
-// these are located in the assets/sync/models/lm
-// Note: on Android these are case sensitive filenames
+    // This is used to map "language features" to the associated dictionary filenames
+    // these are located in the assets/sync/models/lm
+    // Note: on Android these are case sensitive filenames
 
     static private HashMap<String, Class> langMap = new HashMap<String, Class>();
 

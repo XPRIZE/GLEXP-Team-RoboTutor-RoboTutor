@@ -85,7 +85,7 @@ public class Num2Word {
      * @return
      */
     public static String transform(int num, String language) {
-        if (language.equalsIgnoreCase("Swahili")) {
+        if (language.equalsIgnoreCase("LANG_SW")) {
             return Num2Swahili(num);
         } else { // language.equalsIgnoreCase("English")
             return Num2English(num);

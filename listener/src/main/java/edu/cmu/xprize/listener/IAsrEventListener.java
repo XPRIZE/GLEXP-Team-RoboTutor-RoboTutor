@@ -20,5 +20,6 @@ public interface IAsrEventListener {
 
 
     void onASREvent(int eventType);
+
 }
 

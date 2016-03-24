@@ -168,4 +168,10 @@ public class TCONST {
     public static final int INSPEECH = 1;
     public static final int SAYWORD           = 2;
 
+    public static final String STORYDATA    = "story_data.json";
+    public static final String STORYINDEX   = "story_index.json";
+    public static final String SOURCEFILE   = "file|";
+
+    public static final String TTS          = "TTS";
+    public static final String ASR          = "ASR";
 }

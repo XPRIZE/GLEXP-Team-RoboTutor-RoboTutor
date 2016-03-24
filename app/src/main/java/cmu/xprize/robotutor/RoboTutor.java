@@ -20,19 +20,20 @@
 package cmu.xprize.robotutor;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
 import java.io.IOException;
 
+import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.util.JSON_Helper;
+import cmu.xprize.util.IReadyListener;
 import cmu.xprize.util.ProgressLoading;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutorAssetManager;
+import cmu.xprize.util.TTSsynthesizer;
 import edu.cmu.xprize.listener.Listener;
 
 
@@ -46,17 +47,21 @@ import edu.cmu.xprize.listener.Listener;
  * <h3>Developer Overview</h3>
  *
  */
-public class RoboTutor extends Activity {
+public class RoboTutor extends Activity implements IReadyListener {
 
-    private CTutorEngine    tutorEngine;
-    private ITutorSceneImpl tutorContainer;
-    private ProgressLoading progressLoading;
+    private CTutorEngine        tutorEngine;
+    private ITutorSceneImpl     tutorContainer;
+    private ProgressLoading     progressLoading;
 
-    static public String EXTERNFILES;
+    public TTSsynthesizer       TTS;
+    public Listener             ASR;
+    static public String        EXTERNFILES;
 
     static private boolean isReady = false;
 
-    private final String TAG = "RoboTutor";
+
+    private final  String  TAG = "RoboTutor";
+
 
 
     @Override
@@ -65,21 +70,31 @@ public class RoboTutor extends Activity {
 
         setContentView(R.layout.robo_tutor);
 
-        progressLoading = new ProgressLoading(this);
-        progressLoading.show();
-
         // Get the primary container for tutor scenes
         tutorContainer = (ITutorSceneImpl)findViewById(R.id.tutor_manager);
 
         EXTERNFILES = getApplicationContext().getExternalFilesDir("").getPath();
 
-        // Start an async task to update the listener assets if required.
+        // Create the common TTS service
+        // Async
         //
-        Listener listener = new Listener("configassets");
-        listener.configListener(this);
+        TTS = new TTSsynthesizer(this);
+        TTS.initializeTTS(this);
+
+        // Start an async task to update the listener assets if required.
+        // Async
+        //
+        ASR = new Listener("configassets");
+        ASR.configListener(this);
 
         // Start the async task to initialize the tutor
+        //
         new tutorConfigTask().execute();
+
+        // Show the loader
+        //
+        progressLoading = new ProgressLoading(this);
+        progressLoading.show();
     }
 
 
@@ -127,8 +142,53 @@ public class RoboTutor extends Activity {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            progressLoading.hide();
             isReady = result;
+
+            onServiceReady("ROOT", result ? 1 : 0);
+        }
+    }
+
+
+    /**
+     * Callback used by services to announce ready state
+     * @param serviceName
+     */
+    @Override
+    public void onServiceReady(String serviceName, int status) {
+        Log.i("TutorEngine",serviceName + " : is : " + status);
+
+        // As the services come online push a global reference to CTutor
+        //
+        switch(serviceName) {
+            case TCONST.TTS:
+                CTutor.TTS = TTS;
+                break;
+
+            case TCONST.ASR:
+                CTutor.ASR = ASR;
+                break;
+
+
+        }
+
+        startEngine();
+    }
+
+
+    /**
+     * Start the tutor engine once everything is intialized.
+     *
+     * There are several async init tasks and they all call this when they're finished.
+     * The last one ready passes all the tests and starts the engine.
+     *
+     * TODO: Manage initialization failures
+     *
+     */
+    private void startEngine() {
+
+        if(TTS.isReady() && ASR.isReady() && isReady) {
+
+            progressLoading.hide();
 
             // Initialize the Engine - set the EXTERN File path for file installs
             // Load the default tutor defined in assets/tutors/engine_descriptor.json
@@ -137,4 +197,7 @@ public class RoboTutor extends Activity {
             tutorEngine.initialize();
         }
     }
+
+
+
 }

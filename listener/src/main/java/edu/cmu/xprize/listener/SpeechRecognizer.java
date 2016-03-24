@@ -54,6 +54,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.concurrent.Exchanger;
 
 import cmu.xprize.util.TCONST;
 import edu.cmu.pocketsphinx.Config;
@@ -191,6 +192,10 @@ public class SpeechRecognizer {
     }
 
 
+    /**
+     *
+     * @param pausing
+     */
     public void setPauseRecognizer(boolean pausing) {
 
         if(recognizerThread != null) {
@@ -227,8 +232,13 @@ public class SpeechRecognizer {
                 isPausedRecognizer = true;
 
                 synchronized (recognizerThread) {
+
                     // Wait for the monitor - i.e. the thread to yield
                     Log.i("ASR", "Paused Thread");
+
+                    // Ensure hypothesis output queue is emptied so there is nothing to process while paused
+                    //
+                    mainHandler.removeCallbacks(prevHypothesis);
                 }
             }
         }
@@ -393,11 +403,17 @@ public class SpeechRecognizer {
 
                 String     lastAudioEvent = TCONST.UNKNOWN_TYPE;
 
-                AudioRecord recorder = new AudioRecord(
-                        AudioSource.VOICE_RECOGNITION, sampleRate,
-                        AudioFormat.CHANNEL_IN_MONO,
-                        AudioFormat.ENCODING_PCM_16BIT, 8192);
+                AudioRecord recorder = null;
 
+                try {
+                    recorder = new AudioRecord(
+                            AudioSource.VOICE_RECOGNITION, sampleRate,
+                            AudioFormat.CHANNEL_IN_MONO,
+                            AudioFormat.ENCODING_PCM_16BIT, 8192);
+                }
+                catch(Exception e) {
+                    Log.d("ASR", "AudioRecorder Create Failed: " + e);
+                }
                 isRunningRecognizer = true;
 
                 Log.i("ASR", "Start session");
@@ -412,7 +428,6 @@ public class SpeechRecognizer {
                     //
                     if (isPausedRecognizer) {
                         try {
-                            Log.i("ASR","Recognizer Paused");
                             recorder.stop();
                             isRecording = false;
 
@@ -434,8 +449,10 @@ public class SpeechRecognizer {
                             // TODO: understand why interrupt causes freeze in wait state
                             // You should not interrupt() while in a wait
                             //
-                            while(isPausedRecognizer)
+                            while(isPausedRecognizer) {
+                                Log.i("ASR","Recognizer Paused");
                                 recognizerThread.wait();
+                            }
 
                         } catch (InterruptedException e) {
                             Log.i("ASR","Wait Exception");

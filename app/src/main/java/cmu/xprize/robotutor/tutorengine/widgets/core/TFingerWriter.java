@@ -122,10 +122,15 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 
     //************************************************************************
     //************************************************************************
-    // Tutor methods  Start
+    // Tutor scriptiable methods  Start
+
+
+    public void setRecognizer(String recogId) {
+        super.setRecognizer(recogId);
+    }
+
 
     public void enable(Boolean enable) {
-
         enableFW(enable);
     }
 
