@@ -36,4 +36,6 @@ dependencies {
     compile project(':ltk')
     compile project(':util')
     compile project(':mn_component')
+    compile project(':listener')
+    compile project(':rt_component')
 }

@@ -44,6 +44,8 @@ import cmu.xprize.robotutor.tutorengine.graph.scene_initializer;
 import cmu.xprize.robotutor.tutorengine.graph.type_action;
 import cmu.xprize.robotutor.tutorengine.graph.type_timer;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
+import cmu.xprize.util.TTSsynthesizer;
+import edu.cmu.xprize.listener.Listener;
 
 
 /**
@@ -74,16 +76,21 @@ public class CTutor implements ILoadableObject {
     static public String                        mTutorName;
     static public AssetManager                  mAssetManager;
 
-    static private int _framendx = 0;
+    static private int                          _framendx = 0;
 
     private HashMap<String, scene_initializer>  _sceneMap = new HashMap<String, scene_initializer>();
     static HashMap<String, type_timer>          _timerMap = new HashMap<String, type_timer>();
+
+    static public TTSsynthesizer                TTS;
+    static public Listener                      ASR;
+    static public String                        LANG;
 
     // json loadable
     static public scene_initializer[] scenedata;
     static public String              language;
     static public String              engLanguage;
     static public String              navigatorType;
+
 
     // This is used to map Language identifiers in tutor_decriptor to audio subdir names
     static public HashMap<String, String> langMap = new HashMap<String, String>();
@@ -170,7 +177,7 @@ public class CTutor implements ILoadableObject {
 
     static public String getLanguage() {
 
-        return langMap.get(language);
+        return langMap.get(LANG);
     }
 
 
@@ -183,7 +190,7 @@ public class CTutor implements ILoadableObject {
     // The language ID is also used as a feature to permit conditioning on language
     // within scripts.
     public void setLanguage(String lang) {
-        language = lang;
+        LANG = lang;
         setAddFeature(lang);
     }
 

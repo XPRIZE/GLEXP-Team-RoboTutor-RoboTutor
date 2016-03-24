@@ -1,0 +1,32 @@
+{
+  "navigatedata": [
+    {
+      "name": "TUTORROOT-PLACEKEEPER",
+      "classname": "unknown",
+
+      "title": "Do Not modify or remove this element",
+      "page":  "This scenedata entry is replaced at load time",
+      "comment": "Replaced by main tutor layout - e.g. activity_tutor.xml",
+
+      "enqueue": "false",
+      "create": "false",
+      "persist": "true",
+      "ischeckpnt": "false",
+      "features": ""
+    },
+    {
+      "id": "story_reading",
+      "classname": "",
+
+      "title": "Story Reading Tutor",
+      "page": "Page:1",
+      "comment":"",
+
+      "enqueue": "true",
+      "create": "false",
+      "persist": "false",
+      "ischeckpnt": "true",
+      "features": ""
+    }
+  ]
+}
