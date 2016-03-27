@@ -16,7 +16,7 @@ import cmu.xprize.util.TCONST;
 
 // This is just a convenience to simplify the syntax in type_action execution
 
-public class CTutorObjectDelegate implements ITutorObject, Button.OnClickListener {
+public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
 
     private View                mOwnerView;
 
@@ -37,7 +37,7 @@ public class CTutorObjectDelegate implements ITutorObject, Button.OnClickListene
 
 
     // Attach this functionality to the View
-    public CTutorObjectDelegate(View owner) {
+    public CObjectDelegate(View owner) {
         mOwnerView = owner;
     }
 
@@ -61,6 +61,11 @@ public class CTutorObjectDelegate implements ITutorObject, Button.OnClickListene
         }
 
     }
+
+    public CTutor tutor() {
+        return mTutor;
+    }
+
 
     // Tutor Object Methods
     @Override
@@ -156,16 +161,16 @@ public class CTutorObjectDelegate implements ITutorObject, Button.OnClickListene
         switch(mClickBehavior) {
             case TCONST.GOTONEXTSCENE:
             case TCONST.GOTONEXT:
-                CTutor.mTutorNavigator.onButtonNext();
+                mTutor.mTutorNavigator.onButtonNext();
                 break;
 
             case TCONST.STOP:
-                CTutor.mTutorAnimator.stop();
+                mTutor.mTutorAnimator.stop();
                 break;
 
             default:
                 try {
-                    obj = CTutor.getScope().mapSymbol(mClickBehavior);
+                    obj = mTutor.getScope().mapSymbol(mClickBehavior);
                     obj.applyNode();
 
                 } catch (Exception e) {

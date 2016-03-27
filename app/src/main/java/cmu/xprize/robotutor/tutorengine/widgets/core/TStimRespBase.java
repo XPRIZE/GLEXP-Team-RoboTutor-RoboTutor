@@ -23,7 +23,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.CTutorObjectDelegate;
+import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
@@ -32,7 +32,8 @@ import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
 
-    private CTutorObjectDelegate mSceneObject;
+    private CTutor          mTutor;
+    private CObjectDelegate mSceneObject;
 
     private float aspect   = 0.82f;  // w/h
     private int   _wrong   = 0;
@@ -60,7 +61,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
     @Override
     public void init(Context context, AttributeSet attrs) {
-        mSceneObject = new CTutorObjectDelegate(this);
+        mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
     }
 
@@ -99,25 +100,25 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
         super.addChar(newChar);
 
         // update the response variable  "<Sresponse>.value"
-        CTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
+        mTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
 
         if(mLinkedView == null)
-            mLinkedView = (TStimRespBase)CTutor.getViewById(mLinkedViewID, null);
+            mLinkedView = (TStimRespBase)mTutor.getViewById(mLinkedViewID, null);
 
         if(mLinkedView != null) {
 
             if(newChar.equals("???")) {
-                CTutor.setAddFeature(TCONST.FWUNKNOWN);
+                mTutor.setAddFeature(TCONST.FWUNKNOWN);
                 _wrong++;
             }
             else {
                 String Stimulus = mLinkedView.getValue();
 
                 if (mValue.equals(Stimulus)) {
-                    CTutor.setAddFeature(TCONST.FWCORRECT);
+                    mTutor.setAddFeature(TCONST.FWCORRECT);
                     _correct++;
                 } else {
-                    CTutor.setAddFeature(TCONST.FWINCORRECT);
+                    mTutor.setAddFeature(TCONST.FWINCORRECT);
                     _wrong++;
                 }
 
@@ -125,7 +126,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
                 //
                 if (mLinkedView.dataExhausted()) {
                     if (_wrong == 0)
-                        CTutor.setAddFeature(TCONST.FWALLCORRECT);
+                        mTutor.setAddFeature(TCONST.FWALLCORRECT);
                 }
             }
         }
@@ -147,9 +148,9 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
         _correct = 0;
         _wrong   = 0;
 
-        CTutor.setDelFeature(TCONST.FWALLCORRECT);
-        CTutor.setDelFeature(TCONST.FWCORRECT);
-        CTutor.setDelFeature(TCONST.FWINCORRECT);
+        mTutor.setDelFeature(TCONST.FWALLCORRECT);
+        mTutor.setDelFeature(TCONST.FWCORRECT);
+        mTutor.setDelFeature(TCONST.FWINCORRECT);
 
         try {
             if (dataSource.startsWith("file|")) {
@@ -180,18 +181,18 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
     public void next() {
 
-        CTutor.setDelFeature(TCONST.FWALLCORRECT);
-        CTutor.setDelFeature(TCONST.FWCORRECT);
-        CTutor.setDelFeature(TCONST.FWINCORRECT);
+        mTutor.setDelFeature(TCONST.FWALLCORRECT);
+        mTutor.setDelFeature(TCONST.FWCORRECT);
+        mTutor.setDelFeature(TCONST.FWINCORRECT);
 
         super.next();
 
         // update the Scope response variable  "<Sstimulus>.value"
         //
-        CTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
+        mTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
 
         if(dataExhausted())
-            CTutor.setAddFeature(TCONST.FTR_EOI);
+            mTutor.setAddFeature(TCONST.FTR_EOI);
     }
 
     public void show(Boolean showHide) {
@@ -255,6 +256,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
     @Override
     public void setTutor(CTutor tutor) {
+        mTutor = tutor;
         mSceneObject.setTutor(tutor);
     }
 
@@ -269,7 +271,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
     }
 
     @Override
-    public CTutorObjectDelegate getimpl() {
+    public CObjectDelegate getimpl() {
         return mSceneObject;
     }
 

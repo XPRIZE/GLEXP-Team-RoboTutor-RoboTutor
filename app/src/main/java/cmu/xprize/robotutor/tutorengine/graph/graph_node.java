@@ -23,17 +23,18 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
-import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
 
-public class graph_node implements ILoadableObject, IScriptable2 {
+public class graph_node implements ILoadableObject2, IScriptable2 {
 
-    private IScope          _scope;
+    protected IScope2       _scope;
 
     // json loadable fields
     public String           parser;      // Used to distinguish different Flash content parsers
@@ -54,7 +55,7 @@ public class graph_node implements ILoadableObject, IScriptable2 {
     }
 
 
-    protected IScope getScope() {
+    protected IScope2 getScope() {
         if(_scope == null) {
             Log.e(TAG, "Engine Error: Invalid Scope on Object: " + name);
             System.exit(1);
@@ -257,9 +258,8 @@ public class graph_node implements ILoadableObject, IScriptable2 {
 
     // *** Serialization
 
-
     @Override
-    public void loadJSON(JSONObject jsonObj, IScope scope) {
+    public void loadJSON(JSONObject jsonObj, IScope2 scope) {
 
         // CRITICAL
         // Capture the scope for this node -
@@ -269,4 +269,12 @@ public class graph_node implements ILoadableObject, IScriptable2 {
 
         JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
     }
+
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
+        Log.d(TAG, "Loader iteration");
+        loadJSON(jsonObj, (IScope2) scope);
+    }
 }
+
+

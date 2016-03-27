@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
@@ -37,7 +38,7 @@ import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
 
-public class CTutorNavigator implements ITutorNavigator, ILoadableObject{
+public class CSceneNavigator implements ITutorNavigator, ILoadableObject2 {
 
     private static TScope                     mRootScope;
 
@@ -50,7 +51,7 @@ public class CTutorNavigator implements ITutorNavigator, ILoadableObject{
     protected CTutor                          mTutor;
     protected String                          mTutorName;
     protected ITutorLogManager                mLogManager;
-    protected CTutorAnimator                  mTutorAnimator;
+    protected CSceneAnimator mTutorAnimator;
 
     // json loadable
     static public scene_descriptor[]          navigatedata;
@@ -63,15 +64,16 @@ public class CTutorNavigator implements ITutorNavigator, ILoadableObject{
     static private boolean                           _fSceneGraph = false;
 
 
-    final private String       TAG       = "CTutorNavigator";
+    final private String       TAG       = "CSceneNavigator";
 
 
 
     /**
+     *
      */
-    public CTutorNavigator(CTutor tutor, String name, TScope tutorScope) {
+    public CSceneNavigator(CTutor tutor, String name, TScope tutorScope) {
 
-        mRootScope = new TScope(name + "-SceneNavigator", tutorScope);      // Use a unique namespace
+        mRootScope = new TScope(tutor, name + "-SceneNavigator", tutorScope);      // Use a unique namespace
 
         mTutor     = tutor;
         mTutorName = name;
@@ -80,7 +82,7 @@ public class CTutorNavigator implements ITutorNavigator, ILoadableObject{
 
         loadNavigatorDescr();
 
-        mTutorAnimator = new CTutorAnimator(CTutor.mTutorName, tutorScope);
+        mTutorAnimator = new CSceneAnimator(mTutor, tutorScope);
     }
 
     // Initialize the pointer to the tutor root scene
@@ -91,7 +93,7 @@ public class CTutorNavigator implements ITutorNavigator, ILoadableObject{
     }
 
     @Override
-    public CTutorAnimator getAnimator() {
+    public CSceneAnimator getAnimator() {
         return mTutorAnimator;
     }
 
@@ -239,7 +241,7 @@ public class CTutorNavigator implements ITutorNavigator, ILoadableObject{
         {
             // If this scene is not in the feature set for the tutor then check the next one.
 
-            if(!CTutor.testFeatureSet(features)) _sceneCurr++;
+            if(!mTutor.testFeatureSet(features)) _sceneCurr++;
             else break;
         }
 
@@ -261,7 +263,7 @@ public class CTutorNavigator implements ITutorNavigator, ILoadableObject{
         {
             // If this scene is not in the feature set for the tutor then check the next one.
 
-            if(!CTutor.testFeatureSet(features)) _sceneCurr--;
+            if(!mTutor.testFeatureSet(features)) _sceneCurr--;
             else break;
         }
 
@@ -451,7 +453,7 @@ public class CTutorNavigator implements ITutorNavigator, ILoadableObject{
 
         // increment the global frame ID - for logging
 
-        CTutor.incFrameNdx();
+        mTutor.incFrameNdx();
 
         //## Mod Sep 12 2013 - This is a special case to handle the first preenter event for an animationGraph.
         //                     The root node of the animation graph is parsed in the preEnter stage of the scene
@@ -522,7 +524,7 @@ public class CTutorNavigator implements ITutorNavigator, ILoadableObject{
     private void loadNavigatorDescr() {
 
         try {
-            loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutorName + "/" + TCONST.SNDESC)), (IScope)mRootScope);
+            loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutorName + "/" + TCONST.SNDESC)), (IScope2)mRootScope);
         } catch (JSONException e) {
             Log.d(TAG, "Error" );
         }
@@ -530,7 +532,7 @@ public class CTutorNavigator implements ITutorNavigator, ILoadableObject{
 
 
     @Override
-    public void loadJSON(JSONObject jsonObj, IScope scope) {
+    public void loadJSON(JSONObject jsonObj, IScope2 scope) {
         int i1 = 0;
 
         JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
@@ -543,6 +545,12 @@ public class CTutorNavigator implements ITutorNavigator, ILoadableObject{
             scene.index = i1++;
             _navMap.put(scene.id, scene);
         }
+    }
+
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
+        Log.d(TAG, "Loader iteration");
+        loadJSON(jsonObj, (IScope2) scope);
     }
 
 }

@@ -23,13 +23,14 @@ import android.util.Log;
 
 import java.util.HashMap;
 
+import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 
-public class graph_module extends graph_node implements ILoadableObject {
+public class graph_module extends graph_node implements ILoadableObject2 {
 
     private int               _ndx;
     private String            _moduleState;
@@ -104,7 +105,7 @@ public class graph_module extends graph_node implements ILoadableObject {
 
                 if(!features.equals(""))
                 {
-                    featurePass = CTutor.testFeatureSet(features);
+                    featurePass = _scope.tutor().testFeatureSet(features);
 
                     if(featurePass)
                     {

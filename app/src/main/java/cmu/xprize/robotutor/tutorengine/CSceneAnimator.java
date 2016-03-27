@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -36,14 +37,15 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
 
 /**
- * A CTutorAnimator represents a collection of the animation graphs for each scene
+ * A CSceneAnimator represents a collection of the animation graphs for each scene
  * that constitutes the tutor.
  *
  */
-public class CTutorAnimator {
+public class CSceneAnimator {
 
     private TScope           mScope;
 
+    protected CTutor         mTutor;
     private String           mTutorName;
     private String           mSceneName;
 
@@ -57,16 +59,16 @@ public class CTutorAnimator {
     public HashMap<String,scene_animator> animatorMap;
 
 
-    final private String TAG = "CTutorAnimator";
+    final private String TAG = "CSceneAnimator";
 
 
-    public CTutorAnimator(String tutorName, TScope tutorScope) {
+    public CSceneAnimator(CTutor tutor, TScope tutorScope) {
 
-        mTutorName = tutorName;
+        mTutor     = tutor;
         mScope     = tutorScope;
         _pFeatures = new HashMap<String, Integer>();
 
-        loadAnimatorFactory((IScope)mScope);
+        loadAnimatorFactory((IScope2)mScope);
     }
 
 
@@ -144,17 +146,17 @@ public class CTutorAnimator {
      * from assets/tutors/<tutorname>/tutor_descriptor.json
      *
      */
-    private void loadAnimatorFactory(IScope scope) {
+    private void loadAnimatorFactory(IScope2 scope) {
 
         try {
-            loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutorName + "/" + TCONST.AGDESC)), scope);
+            loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.mTutorName + "/" + TCONST.AGDESC)), scope);
         } catch (JSONException e) {
             Log.e(TAG, "JSON FORMAT ERROR: " + TCONST.AGDESC + " : " + e);
             System.exit(1);
         }
     }
 
-    public void loadJSON(JSONObject jsonObj, IScope scope) {
+    public void loadJSON(JSONObject jsonObj, IScope2 scope) {
 
         JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
 

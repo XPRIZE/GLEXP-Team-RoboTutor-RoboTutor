@@ -19,14 +19,18 @@
 
 package cmu.xprize.robotutor.tutorengine.graph;
 
+import android.util.Log;
+
 import org.json.JSONObject;
 
+import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
-public class scene_layout implements ILoadableObject {
+public class scene_layout implements ILoadableObject2 {
 
     // json loadable
     public String layout_width;
@@ -37,9 +41,18 @@ public class scene_layout implements ILoadableObject {
     public String paddingTop;
     public String features;
 
+    static private final String TAG = "scene_layout";
+
+
     @Override
-    public void loadJSON(JSONObject jsonObj, IScope scope) {
+    public void loadJSON(JSONObject jsonObj, IScope2 scope) {
 
         JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
+    }
+
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
+        Log.d(TAG, "Loader iteration");
+        loadJSON(jsonObj, (IScope2) scope);
     }
 }

@@ -25,7 +25,7 @@ import android.view.View;
 
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.CTutorObjectDelegate;
+import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -35,7 +35,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
  */
 public class TView extends View implements ITutorObjectImpl {
 
-    private CTutorObjectDelegate mSceneObject;
+    private CObjectDelegate mSceneObject;
 
     final private String TAG = "TView";
 
@@ -56,7 +56,7 @@ public class TView extends View implements ITutorObjectImpl {
     }
 
     public void init(Context context, AttributeSet attrs) {
-        mSceneObject = new CTutorObjectDelegate(this);
+        mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
     }
 
@@ -96,7 +96,7 @@ public class TView extends View implements ITutorObjectImpl {
     }
 
     @Override
-    public CTutorObjectDelegate getimpl() {
+    public CObjectDelegate getimpl() {
         return mSceneObject;
     }
 
