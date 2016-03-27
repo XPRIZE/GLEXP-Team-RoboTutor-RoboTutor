@@ -256,7 +256,7 @@ public class Listener {
     /**
      * Initialize the listener
      *
-     * @param context -- application context for locating resources and external storage
+     * @param langFTR -- application context for locating resources and external storage
      */
     public void setLanguage(String langFTR) {
 
@@ -902,6 +902,11 @@ public class Listener {
                 //@@ TODO: remove this dependency
 //                if (!ReadingTutorActivity.isWordCredited(s))
 //                    break;
+                // This is an experiment - should eliminate matches past expected word.
+                // TODO: TEST -> probably needs to be updated dynamically
+                if(s >= iExpected)
+                    break;
+
                 int mismatchCostHere = mismatchCost(hypWords[h], sentenceWords[s]);    // match cost this position
                 int matchesHere = asrWordMatches(hypWords[h], sentenceWords[s]) ? 1 : 0;
 
