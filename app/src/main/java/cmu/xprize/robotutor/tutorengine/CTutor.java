@@ -59,13 +59,13 @@ public class CTutor implements ILoadableObject {
     // This is the root scope in which all top level objects and variables are defined
     // May have child scopes for local variables -
 
-    private static TScope                        mTutorScope;
+    static private TScope                        mTutorScope;
 
-    private static HashMap<String, ITutorScene>  mScenes  = new HashMap<String, ITutorScene>();
-    private static HashMap<String, ITutorObject> mObjects = new HashMap<String, ITutorObject>();
+    static private HashMap<String, ITutorScene>  mScenes  = new HashMap<String, ITutorScene>();
+    static private HashMap<String, ITutorObject> mObjects = new HashMap<String, ITutorObject>();
 
-    private static ArrayList<String>            fFeatures = new ArrayList<String>();
-    private static ArrayList<String>            fDefaults = new ArrayList<String>();
+    static private ArrayList<String>            fFeatures = new ArrayList<String>();
+    static private ArrayList<String>            fDefaults = new ArrayList<String>();
 
     static public Context                       mContext;
     static public ITutorLogManager              mTutorLogManager;
@@ -99,8 +99,8 @@ public class CTutor implements ILoadableObject {
         langMap.put("LANG_SW", "audio/sw");
     }
 
-    private static final String  TAG   = LayoutInflater.class.getSimpleName();
-    private static final boolean DEBUG = false;
+    static private final String  TAG   = LayoutInflater.class.getSimpleName();
+    static private final boolean DEBUG = false;
 
 
 
