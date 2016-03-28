@@ -21,7 +21,7 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.ltk.CStimResp;
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.CTutorObjectDelegate;
+import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
@@ -30,7 +30,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 public class TStimResp extends CStimResp implements ITutorObjectImpl {
 
 
-    private CTutorObjectDelegate mSceneObject;
+    private CObjectDelegate mSceneObject;
 
     private float aspect = 0.82f;  // w/h
 
@@ -56,7 +56,7 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
 
     @Override
     public void init(Context context, AttributeSet attrs) {
-        mSceneObject = new CTutorObjectDelegate(this);
+        mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
 
     }
@@ -173,7 +173,7 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
     }
 
     @Override
-    public CTutorObjectDelegate getimpl() {
+    public CObjectDelegate getimpl() {
         return mSceneObject;
     }
 

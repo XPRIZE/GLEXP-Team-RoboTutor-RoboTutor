@@ -20,6 +20,7 @@
 package cmu.xprize.robotutor;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -70,10 +71,15 @@ public class RoboTutor extends Activity implements IReadyListener {
 
         setContentView(R.layout.robo_tutor);
 
-        // Get the primary container for tutor scenes
-        tutorContainer = (ITutorSceneImpl)findViewById(R.id.tutor_manager);
+        // Get the primary container for tutors
+        tutorContainer = (ITutorSceneImpl)findViewById(R.id.tutor_container);
 
         EXTERNFILES = getApplicationContext().getExternalFilesDir("").getPath();
+
+        // Debug - determine platform dependent memory limit
+        ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        int memAvail = am.getMemoryClass();
+        Log.i(TAG, "Available Memory: " + memAvail);
 
         // Create the common TTS service
         // Async
@@ -170,7 +176,6 @@ public class RoboTutor extends Activity implements IReadyListener {
 
 
         }
-
         startEngine();
     }
 
@@ -197,7 +202,4 @@ public class RoboTutor extends Activity implements IReadyListener {
             tutorEngine.initialize();
         }
     }
-
-
-
 }

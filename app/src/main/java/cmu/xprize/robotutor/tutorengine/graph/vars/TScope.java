@@ -23,6 +23,7 @@ import android.util.Log;
 
 import java.util.HashMap;
 
+import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.util.IScriptable;
 import cmu.xprize.util.TCONST;
 
@@ -33,6 +34,8 @@ public class TScope implements IScope2 {
     //
     private static TScope rootScope = null;
 
+    private CTutor                        mTutor;
+
     private HashMap<String, IScriptable2> map;
     private HashMap<String, TScope>       scopes = null;
     private TScope                        parent = null;
@@ -41,7 +44,9 @@ public class TScope implements IScope2 {
     static private final String TAG = "TScope";
 
 
-    public TScope(String scopeName, TScope Parent) {
+    public TScope(CTutor ltutor, String scopeName, TScope Parent) {
+
+        mTutor = ltutor;
         name   = scopeName;
         map    = new HashMap<>();
         scopes = new HashMap<>();
@@ -58,6 +63,14 @@ public class TScope implements IScope2 {
     }
 
 
+    public CTutor tutor() {
+        return mTutor;
+    }
+
+    public String tutorName() {
+        return mTutor.getTutorName();
+    }
+
     static public TScope root() {
         return rootScope;
     }
@@ -72,6 +85,13 @@ public class TScope implements IScope2 {
         scopes.put(key, scope);
     }
 
+    
+    /**
+     * This permits external modules to call back into the tutor scriptable architecture
+     *
+     * @param key
+     * @param obj
+     */
     public void put(String key, IScriptable obj) {
         put(key, (IScriptable2) obj);
     }

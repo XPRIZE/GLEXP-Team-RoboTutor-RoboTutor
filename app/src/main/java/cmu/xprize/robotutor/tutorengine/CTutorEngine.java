@@ -20,12 +20,14 @@
 package cmu.xprize.robotutor.tutorengine;
 
 import android.app.Activity;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
@@ -38,10 +40,9 @@ import cmu.xprize.robotutor.RoboTutor;
  * The tutor engine is a singleton
  *
  */
-public class CTutorEngine implements ILoadableObject {
+public class CTutorEngine implements ILoadableObject2 {
 
     private static TScope                   mRootScope;
-
 
     private static CTutorEngine             mTutorEngine;
     private static HashMap<String, CTutor>  mTutors = new HashMap<String, CTutor>();
@@ -64,13 +65,13 @@ public class CTutorEngine implements ILoadableObject {
     static public String                    language;
 
     final static public  String CacheSource = TCONST.ASSETS;                // assets or extern
-    final static private String TAG         = "CTUTOR_ENGINE";
+    final static private String TAG         = "CTutorEngine";
 
 
 
     private CTutorEngine(RoboTutor context, ITutorSceneImpl tutorContainer) {
 
-        mRootScope      = new TScope("root", null);
+        mRootScope      = new TScope(null, "root", null);
 
         Activity        = context;
         TutorContainer  = tutorContainer;
@@ -146,7 +147,7 @@ public class CTutorEngine implements ILoadableObject {
     public void loadEngineDescr() {
 
         try {
-            loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.EDESC)), (IScope)mRootScope);
+            loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.EDESC)), (IScope2)mRootScope);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -159,8 +160,14 @@ public class CTutorEngine implements ILoadableObject {
      * @param jsonData
      */
     @Override
-    public void loadJSON(JSONObject jsonData, IScope scope) {
+    public void loadJSON(JSONObject jsonData, IScope2 scope) {
 
       JSON_Helper.parseSelf(jsonData, this, CClassMap2.classMap, scope);
     }
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
+        Log.d(TAG, "Loader iteration");
+        loadJSON(jsonObj, (IScope2) scope);
+    }
+
 }

@@ -21,46 +21,34 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.TextView;
+import android.view.ViewGroup;
+import android.widget.ViewFlipper;
 
+import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
+import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
-import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
-import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 
+public class TSceneFlipperLayout extends ViewFlipper implements ITutorSceneImpl {
 
-public class TTextView extends TextView implements ITutorObjectImpl {
+    private CSceneDelegate mTutorScene;
 
-    private CObjectDelegate mSceneObject;
-
-    final private String TAG = "TTutorView";
-
-
-    public TTextView(Context context) {
+    public TSceneFlipperLayout(Context context) {
         super(context);
         init(context, null);
     }
 
-    public TTextView(Context context, AttributeSet attrs) {
+    public TSceneFlipperLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public TTextView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init(context, attrs);
-    }
-
+    @Override
     public void init(Context context, AttributeSet attrs) {
-        mSceneObject = new CObjectDelegate(this);
-        mSceneObject.init(context, attrs);
-    }
-
-
-    public void setDataSource(String dataSource) {
-
+        mTutorScene = new CSceneDelegate(this);
+        mTutorScene.init(context, attrs);
     }
 
 
@@ -70,57 +58,70 @@ public class TTextView extends TextView implements ITutorObjectImpl {
 
 
 
-    //** Special Object methods for missing method parameter type combinations
-
-    public void setText(String text) {
-        super.setText(text);
-    }
-
     // Tutor methods  End
     //************************************************************************
     //************************************************************************
 
 
-
-
     @Override
     public void setName(String name) {
-        mSceneObject.setName(name);
+        mTutorScene.setName(name);
     }
 
     @Override
     public String name() {
-        return mSceneObject.name();
+        return mTutorScene.name();
     }
 
     @Override
     public void setParent(ITutorSceneImpl mParent) {
-        mSceneObject.setParent(mParent);
+        mTutorScene.setParent(mParent);
     }
 
     @Override
     public void setTutor(CTutor tutor) {
-        mSceneObject.setTutor(tutor);
+        mTutorScene.setTutor(tutor);
     }
 
     @Override
     public void setNavigator(ITutorNavigator navigator) {
-        mSceneObject.setNavigator(navigator);
+        mTutorScene.setNavigator(navigator);
     }
 
     @Override
     public void setLogManager(ITutorLogManager logManager) {
-        mSceneObject.setLogManager(logManager);
+        mTutorScene.setLogManager(logManager);
+    }
+
+
+    @Override
+    public CSceneDelegate getimpl() {
+        return mTutorScene;
+    }
+
+
+    @Override
+    public ViewGroup getOwner() {
+        return mTutorScene.getOwner();
     }
 
     @Override
-    public CObjectDelegate getimpl() {
-        return mSceneObject;
+    public String preEnterScene(scene_descriptor scene, String Direction) {
+        return mTutorScene.preEnterScene(scene, Direction);
     }
 
     @Override
-    public void zoomInOut(Float scale, Long duration) {
-        mSceneObject.zoomInOut(scale, duration);
+    public void onEnterScene() {
+        mTutorScene.onEnterScene();
     }
 
+    @Override
+    public String preExitScene(String Direction, int sceneCurr) {
+        return mTutorScene.preExitScene(Direction, sceneCurr);
+    }
+
+    @Override
+    public void onExitScene() {
+        mTutorScene.onExitScene();
+    }
 }

@@ -24,6 +24,7 @@ import android.util.Log;
 
 import java.util.HashMap;
 
+import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.TCONST;
 
@@ -31,7 +32,7 @@ import cmu.xprize.util.TCONST;
 /**
  * This represents the top level animation graph object
  */
-public class scene_animator extends graph_node implements ILoadableObject{
+public class scene_animator extends graph_node implements ILoadableObject2 {
 
     // State fields
     private graph_node   _currNode;

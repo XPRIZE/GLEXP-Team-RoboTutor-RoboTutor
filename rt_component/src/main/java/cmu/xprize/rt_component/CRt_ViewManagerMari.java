@@ -424,6 +424,14 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
 
             expectedWordIndex = getFirstUncreditedWord();
 
+            // Tell the listerner when to stop matching words.  We don't want to match words
+            // past the current expected word or they will be highlighted
+            // This is a MARi induced constraint
+            // TODO: make it so we don't need this - use matched past the next word to flag
+            // a missed word
+            //
+            mListener.updateNextWordIndex(expectedWordIndex);
+
             // Update the sentence text display to show credit, expected word
             //
             UpdateSentenceDisplay();

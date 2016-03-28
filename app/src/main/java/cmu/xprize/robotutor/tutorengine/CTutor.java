@@ -20,6 +20,7 @@
 package cmu.xprize.robotutor.tutorengine;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,11 +30,14 @@ import android.view.ViewGroup;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
@@ -52,44 +56,45 @@ import edu.cmu.xprize.listener.Listener;
  *  Each Tutor instance is represented by a CTutor
  *
  */
-public class CTutor implements ILoadableObject {
+public class CTutor implements ILoadableObject2 {
 
     private boolean traceMode = false;
 
     // This is the root scope in which all top level objects and variables are defined
     // May have child scopes for local variables -
 
-    private static TScope                        mTutorScope;
+    private TScope                        mTutorScope;
 
-    private static HashMap<String, ITutorScene>  mScenes  = new HashMap<String, ITutorScene>();
-    private static HashMap<String, ITutorObject> mObjects = new HashMap<String, ITutorObject>();
+    private HashMap<String, ITutorScene>  mScenes  = new HashMap<String, ITutorScene>();
+    private HashMap<String, ITutorObject> mObjects = new HashMap<String, ITutorObject>();
 
-    private static ArrayList<String>            fFeatures = new ArrayList<String>();
-    private static ArrayList<String>            fDefaults = new ArrayList<String>();
+    private ArrayList<String>            fFeatures = new ArrayList<String>();
+    private ArrayList<String>            fDefaults = new ArrayList<String>();
 
-    static public Context                       mContext;
-    static public ITutorLogManager              mTutorLogManager;
-    static public ITutorNavigator               mTutorNavigator;
-    static public CTutorAnimator                mTutorAnimator;
-    static public ITutorSceneImpl               mTutorContainer;
+    public Context                       mContext;
+    public ITutorLogManager              mTutorLogManager;
+    public ITutorNavigator               mTutorNavigator;
+    public CSceneAnimator                mTutorAnimator;
+    public ITutorSceneImpl               mTutorContainer;
 
-    static public String                        mTutorName;
-    static public AssetManager                  mAssetManager;
+    public String                        mTutorName;
+    public AssetManager                  mAssetManager;
 
-    static private int                          _framendx = 0;
+    private int                          _framendx = 0;
 
     private HashMap<String, scene_initializer>  _sceneMap = new HashMap<String, scene_initializer>();
-    static HashMap<String, type_timer>          _timerMap = new HashMap<String, type_timer>();
+    HashMap<String, type_timer>                 _timerMap = new HashMap<String, type_timer>();
 
     static public TTSsynthesizer                TTS;
     static public Listener                      ASR;
     static public String                        LANG;
 
     // json loadable
-    static public scene_initializer[] scenedata;
-    static public String              language;
-    static public String              engLanguage;
-    static public String              navigatorType;
+    public scene_initializer[] scenedata;
+    public String              language;
+    public String              navigatorType;
+
+    public String              engLanguage;
 
 
     // This is used to map Language identifiers in tutor_decriptor to audio subdir names
@@ -99,14 +104,14 @@ public class CTutor implements ILoadableObject {
         langMap.put("LANG_SW", "audio/sw");
     }
 
-    private static final String  TAG   = LayoutInflater.class.getSimpleName();
-    private static final boolean DEBUG = false;
+    static private final String  TAG   = LayoutInflater.class.getSimpleName();
+    static private final boolean DEBUG = false;
 
 
 
     public CTutor(Context context, String name, ITutorSceneImpl tutorContainer, ITutorLogManager logManager, TScope rootScope, String tarLanguage) {
 
-        mTutorScope      = new TScope(name, rootScope);
+        mTutorScope      = new TScope(this, name, rootScope);
         mContext         = context;
         mTutorName       = name;
         mTutorContainer  = tutorContainer;
@@ -134,7 +139,7 @@ public class CTutor implements ILoadableObject {
     }
 
 
-    static public ITutorObject getViewById(int findme, ViewGroup container) {
+    public ITutorObject getViewById(int findme, ViewGroup container) {
         ITutorObject foundView = null;
 
         if(container == null)
@@ -161,7 +166,7 @@ public class CTutor implements ILoadableObject {
     }
 
 
-    static public TScope getScope() {
+    public TScope getScope() {
         return mTutorScope;
     }
 
@@ -175,13 +180,13 @@ public class CTutor implements ILoadableObject {
     }
 
 
-    static public String getLanguage() {
+    public String getLanguage() {
 
         return langMap.get(LANG);
     }
 
 
-    static public String mapLanguage(String _language) {
+    public String mapLanguage(String _language) {
 
         return langMap.get(_language);
     }
@@ -199,22 +204,34 @@ public class CTutor implements ILoadableObject {
 
 
     // TODO: Manage name collisions
-    static public void createTimer(String id, type_timer timer) {
+    public void createTimer(String id, type_timer timer) {
         _timerMap.put(id, timer);
     }
 
 
-    static public type_timer removeTimer(String id) {
+    public type_timer removeTimer(String id) {
         return _timerMap.remove(id);
     }
 
 
-    static public type_timer mapTimer(String id) {
+    public type_timer mapTimer(String id) {
         return _timerMap.get(id);
     }
 
+    public InputStream openAsset(String path) throws IOException {
+        return mAssetManager.open(path);
+    }
 
-    static public boolean hasTimer(String id) {
+    public AssetFileDescriptor openFD(String path) throws IOException {
+        return mAssetManager.openFd(path);
+    }
+
+    public void eventNext() {
+        mTutorNavigator.onButtonNext();
+    }
+
+
+    public boolean hasTimer(String id) {
         return _timerMap.containsKey(id);
     }
 
@@ -222,7 +239,7 @@ public class CTutor implements ILoadableObject {
 
     // framendx is a simple counter used it uniquely id a scene instance for logging
     //
-    static public void incFrameNdx() {
+    public void incFrameNdx() {
         _framendx++;
     }
 
@@ -254,25 +271,25 @@ public class CTutor implements ILoadableObject {
     }
 
 
-    static public void add(String Id, ITutorObject obj) {
+    public void add(String Id, ITutorObject obj) {
 
         mObjects.put(Id, obj);
     }
 
 
-    static public ITutorObject get(String Id) {
+    public ITutorObject get(String Id) {
 
         return mObjects.get(Id);
     }
 
 
-    static public void addScene(String Id, ITutorScene obj) {
+    public void addScene(String Id, ITutorScene obj) {
 
         mScenes.put(Id, obj);
     }
 
 
-    static public ITutorScene getScene(String Id) {
+    public ITutorScene getScene(String Id) {
 
         return mScenes.get(Id);
     }
@@ -291,7 +308,7 @@ public class CTutor implements ILoadableObject {
 
         switch(navigatorType) {
             case TCONST.SIMPLENAV:
-                mTutorNavigator = new CTutorNavigator(this, mTutorName, mTutorScope);
+                mTutorNavigator = new CSceneNavigator(this, mTutorName, mTutorScope);
                 break;
 
             case TCONST.GRAPHNAV:
@@ -456,7 +473,7 @@ public class CTutor implements ILoadableObject {
 
     // udpate the working feature set for this instance
     //
-    static public void setAddFeature(String feature)
+    public void setAddFeature(String feature)
     {
         // Add new features - no duplicates
 
@@ -469,7 +486,7 @@ public class CTutor implements ILoadableObject {
 
     // udpate the working feature set for this instance
     //
-    static public void setDelFeature(String feature) {
+    public void setDelFeature(String feature) {
         int fIndex;
 
         // remove features - no duplicates
@@ -484,7 +501,7 @@ public class CTutor implements ILoadableObject {
     //## Mod Jul 01 2012 - Support for NOT operation on features.
     //
     //	
-    static private boolean testFeature(String element)
+    private boolean testFeature(String element)
     {
         if(element.charAt(0) == '!')
         {
@@ -498,7 +515,7 @@ public class CTutor implements ILoadableObject {
 
     // test possibly compound features
     //
-    static public boolean testFeatureSet(String featSet) {
+    public boolean testFeatureSet(String featSet) {
         List<String> disjFeat = Arrays.asList(featSet.split("\\|"));   // | Disjunctive features
         List<String> conjFeat;                                          // & Conjunctive features
 
@@ -525,17 +542,17 @@ public class CTutor implements ILoadableObject {
     }
 
 
-    static public String getTutorName() {
+    public String getTutorName() {
         return mTutorName;
     }
 
 
-    static public AssetManager getAssetManager() {
+    public AssetManager getAssetManager() {
         return mAssetManager;
     }
 
 
-    static public void gotoNode(String nodeID) {
+    public void gotoNode(String nodeID) {
         mTutorAnimator.gotoNode(nodeID);
     }
 
@@ -554,7 +571,7 @@ public class CTutor implements ILoadableObject {
     private void loadTutorFactory() {
 
         try {
-            loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutorName + "/" + TCONST.TDESC)), (IScope)mTutorScope);
+            loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutorName + "/" + TCONST.TDESC)), (IScope2)mTutorScope);
 
         } catch (JSONException e) {
             Log.d(TAG, "error");
@@ -562,7 +579,7 @@ public class CTutor implements ILoadableObject {
     }
 
 
-    public void loadJSON(JSONObject jsonObj, IScope scope) {
+    public void loadJSON(JSONObject jsonObj, IScope2 scope) {
 
         JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
 
@@ -575,6 +592,11 @@ public class CTutor implements ILoadableObject {
         for(scene_initializer scene : scenedata) {
             _sceneMap.put(scene.id, scene);
         }
+    }
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
+        Log.d(TAG, "Loader iteration");
+        loadJSON(jsonObj, (IScope2) scope);
     }
 
 }

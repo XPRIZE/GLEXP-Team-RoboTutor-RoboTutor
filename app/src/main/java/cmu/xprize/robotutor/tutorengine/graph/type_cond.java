@@ -24,6 +24,7 @@ import android.util.Log;
 import org.json.JSONObject;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.TCONST;
@@ -32,7 +33,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
 
 
-public class type_cond extends type_action implements ILoadableObject {
+public class type_cond extends type_action implements ILoadableObject2 {
 
     // json loadable fields
     public String   type;     // used by loader to disambiguate object type
@@ -92,7 +93,7 @@ public class type_cond extends type_action implements ILoadableObject {
 
         try {
             if (test != null) {
-                result = CTutor.testFeatureSet(test);
+                result = _scope.tutor().testFeatureSet(test);
 
             } else if (If != null) {
                 result = Iff(If.trim(), TCONST.STARTSTATE, 0);

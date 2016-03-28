@@ -192,6 +192,7 @@ public class Listener {
     // state for the current ListenFor operation
     private String sentenceWords[];             // array of sentence words to hear
     private int    iExpected = 0;               // index of expected next word in sentence
+    private int    iNextWord = 0;               // Next word expected.
     private HeardWord[] heardWords = null;      // latest total aligned hypothesis
     private String captureLabel = "";           // label for capture, logging files
     private long   sentenceStartTime;           // time in ms since epoch
@@ -256,7 +257,7 @@ public class Listener {
     /**
      * Initialize the listener
      *
-     * @param context -- application context for locating resources and external storage
+     * @param langFTR -- application context for locating resources and external storage
      */
     public void setLanguage(String langFTR) {
 
@@ -337,6 +338,13 @@ public class Listener {
      */
     public void setEventListener(IAsrEventListener callbackSink) {
         eventListener = callbackSink;
+    }
+
+    /**
+     * Attach event listener to receive notification callbacks
+     */
+    public void updateNextWordIndex(int next) {
+        iNextWord = next > 0? next:0;
     }
 
     /**
@@ -902,6 +910,11 @@ public class Listener {
                 //@@ TODO: remove this dependency
 //                if (!ReadingTutorActivity.isWordCredited(s))
 //                    break;
+                // This is an experiment - should eliminate matches past expected word.
+                // TODO: TEST -> probably needs to be updated dynamically
+                if(s > iNextWord)
+                    break;
+
                 int mismatchCostHere = mismatchCost(hypWords[h], sentenceWords[s]);    // match cost this position
                 int matchesHere = asrWordMatches(hypWords[h], sentenceWords[s]) ? 1 : 0;
 

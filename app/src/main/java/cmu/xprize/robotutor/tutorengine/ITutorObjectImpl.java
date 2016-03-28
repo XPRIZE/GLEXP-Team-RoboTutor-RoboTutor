@@ -7,7 +7,7 @@ public interface ITutorObjectImpl extends ITutorObject {
 
     public void init(Context context, AttributeSet attrs);
 
-    public CTutorObjectDelegate getimpl();
+    public CObjectDelegate getimpl();
 
     public void zoomInOut(Float scale, Long duration);
 }

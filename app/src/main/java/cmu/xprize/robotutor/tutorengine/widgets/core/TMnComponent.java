@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import cmu.xprize.mn_component.CMn_Component;
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.CTutorObjectDelegate;
+import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
@@ -19,7 +19,8 @@ import cmu.xprize.util.TCONST;
 
 public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
 
-    private CTutorObjectDelegate mSceneObject;
+    private CTutor          mTutor;
+    private CObjectDelegate mSceneObject;
 
 
     static final private String TAG = "TMnComponent";
@@ -41,7 +42,7 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
     }
 
     public void initT(Context context, AttributeSet attrs) {
-        mSceneObject = new CTutorObjectDelegate(this);
+        mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
     }
 
@@ -59,7 +60,7 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
             if (dataSource.startsWith("file|")) {
                 dataSource = dataSource.substring(5);
 
-                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + CTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataSource);
+                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataSource);
                 loadJSON(new JSONObject(jsonData), null);
 
             } else if (dataSource.startsWith("db|")) {
@@ -87,7 +88,7 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
         super.next();
 
         if(dataExhausted())
-            CTutor.setAddFeature(TCONST.FTR_EOI);
+            mTutor.setAddFeature(TCONST.FTR_EOI);
     }
 
 
@@ -95,9 +96,9 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
         boolean correct = isCorrect();
 
         if(correct)
-            CTutor.setAddFeature("FTR_RIGHT");
+            mTutor.setAddFeature("FTR_RIGHT");
         else
-            CTutor.setAddFeature("FTR_WRONG");
+            mTutor.setAddFeature("FTR_WRONG");
 
         return new TBoolean(correct);
     }
@@ -105,8 +106,8 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
 
     public void reset() {
 
-        CTutor.setDelFeature("FTR_RIGHT");
-        CTutor.setDelFeature("FTR_WRONG");
+        mTutor.setDelFeature("FTR_RIGHT");
+        mTutor.setDelFeature("FTR_WRONG");
     }
 
 
@@ -132,6 +133,7 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
 
     @Override
     public void setTutor(CTutor tutor) {
+        mTutor = tutor;
         mSceneObject.setTutor(tutor);
     }
 
@@ -147,7 +149,7 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
 
 
     @Override
-    public CTutorObjectDelegate getimpl() {
+    public CObjectDelegate getimpl() {
         return mSceneObject;
     }
 

@@ -34,7 +34,7 @@ import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
  * All ITutorScene's use an instance of this to drive scene functionality
  *
  */
-public class CTutorSceneDelegate implements ITutorScene {
+public class CSceneDelegate implements ITutorScene {
 
     private ViewGroup           mOwnerViewGroup;
 
@@ -44,7 +44,7 @@ public class CTutorSceneDelegate implements ITutorScene {
 
     protected ITutorScene       mParent;
     protected CTutor            mTutor;
-    protected CTutorAnimator    mAnimator;
+    protected CSceneAnimator mAnimator;
     protected ITutorNavigator   mNavigator;
     protected ITutorLogManager  mLogManager;
 
@@ -64,23 +64,23 @@ public class CTutorSceneDelegate implements ITutorScene {
     // We support 3 types of scene drivers
     // ActionTracks    - simple instances of CActionTrack object with audio/events
     // ActionSequences - sequences of CActionTracks
-    // AnimationGraphs = full CTutorAnimator support for complex sequences
+    // AnimationGraphs = full CSceneAnimator support for complex sequences
 
     private String	seqID;
     private List    seqTrack;
     private int     seqIndex;
 
-    private CTutorAnimator animationGraph;
+    private CSceneAnimator animationGraph;
 
 
     // Attach the View to this functionality
-    public CTutorSceneDelegate(ViewGroup owner) {
+    public CSceneDelegate(ViewGroup owner) {
         mOwnerViewGroup = owner;
     }
 
     public ViewGroup getOwner() {return mOwnerViewGroup;}
 
-    final private String TAG = "CTutorSceneDelegate";
+    final private String TAG = "CSceneDelegate";
 
     //*** ITutorObject implementation
 

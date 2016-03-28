@@ -11,24 +11,26 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.CTutorObjectDelegate;
+import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.rt_component.CRt_Component;
 import cmu.xprize.rt_component.ICRt_ViewManager;
-import cmu.xprize.util.IScriptable;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.Listener;
 
 public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
-    private CTutorObjectDelegate mSceneObject;
+    private CTutor               mTutor;
+    private CObjectDelegate      mSceneObject;
+
     private Listener             mListener;
     private String               mLanguage;
     private boolean              mIndexLoaded = false;
@@ -65,7 +67,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
     public void initT(Context context, AttributeSet attrs) {
 
-        mSceneObject = new CTutorObjectDelegate(this);
+        mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
 
         // Default to English language stories
@@ -81,21 +83,21 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
     public void publishTargetWord(String word) {
         // update the response variable  "<SreadingComp>.nextword"
-        CTutor.getScope().addUpdate(name() + ".nextword", new TString(word));
+        mTutor.getScope().addUpdate(name() + ".nextword", new TString(word));
 
     }
 
 
     public void publishTargetWordIndex(int index) {
         // update the response variable  "<SreadingComp>.nextword"
-        CTutor.getScope().addUpdate(name() + ".wordindex", new TInteger(index));
+        mTutor.getScope().addUpdate(name() + ".wordindex", new TInteger(index));
 
     }
 
 
     public void publishTargetSentence(String sentence) {
         // update the response variable  "<SreadingComp>.sentence"
-        CTutor.getScope().addUpdate(name() + ".sentence", new TString(sentence));
+        mTutor.getScope().addUpdate(name() + ".sentence", new TString(sentence));
 
     }
 
@@ -127,7 +129,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
             if (dataSource.startsWith("file|")) {
                 dataSource = dataSource.substring(5);
 
-                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + CTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + mLanguage + "/" + dataSource);
+                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + mLanguage + "/" + dataSource);
                 loadJSON(new JSONObject(jsonData), null);
 
             } else if (dataSource.startsWith("db|")) {
@@ -173,7 +175,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
                         e.printStackTrace();
                     }
 
-                    String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + CTutor.getTutorName() + "/" + TCONST.TASSETS +
+                    String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS +
                                                             "/" + mLanguage + "/" + dataSource[i1].folder + "/" + TCONST.STORYDATA);
 
                     mViewManager.loadJSON(new JSONObject(jsonData), null);
@@ -201,7 +203,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
         super.next();
 
         if(dataExhausted())
-            CTutor.setAddFeature(TCONST.FTR_EOI);
+            mTutor.setAddFeature(TCONST.FTR_EOI);
     }
 
 
@@ -209,9 +211,9 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
         boolean correct = isCorrect();
 
         if(correct)
-            CTutor.setAddFeature("FTR_RIGHT");
+            mTutor.setAddFeature("FTR_RIGHT");
         else
-            CTutor.setAddFeature("FTR_WRONG");
+            mTutor.setAddFeature("FTR_WRONG");
 
         return new TBoolean(correct);
     }
@@ -219,17 +221,17 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
     public void reset() {
 
-        CTutor.setDelFeature("FTR_RIGHT");
-        CTutor.setDelFeature("FTR_WRONG");
+        mTutor.setDelFeature("FTR_RIGHT");
+        mTutor.setDelFeature("FTR_WRONG");
     }
 
 
     protected void applyEventNode(String nodeName) {
-        IScriptable obj = null;
+        IScriptable2 obj = null;
 
         if(nodeName != null && !nodeName.equals("")) {
             try {
-                obj = CTutor.getScope().mapSymbol(nodeName);
+                obj = mTutor.getScope().mapSymbol(nodeName);
                 obj.applyNode();
 
             } catch (Exception e) {
@@ -266,6 +268,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
     @Override
     public void setTutor(CTutor tutor) {
+        mTutor = tutor;
         mSceneObject.setTutor(tutor);
     }
 
@@ -281,7 +284,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
 
     @Override
-    public CTutorObjectDelegate getimpl() {
+    public CObjectDelegate getimpl() {
         return mSceneObject;
     }
 

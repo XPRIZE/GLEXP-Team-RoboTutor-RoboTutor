@@ -19,15 +19,19 @@
 
 package cmu.xprize.robotutor.tutorengine.graph;
 
+import android.util.Log;
+
 import org.json.JSONObject;
 
+import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
-public class graph_edge implements ILoadableObject {
+public class graph_edge implements ILoadableObject2 {
 
     private TScope      mScope;
 
@@ -84,11 +88,16 @@ public class graph_edge implements ILoadableObject {
 
 
     @Override
-    public void loadJSON(JSONObject jsonObj, IScope scope) {
+    public void loadJSON(JSONObject jsonObj, IScope2 scope) {
 
         mScope = (TScope)scope;
         JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
     }
 
 
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
+        Log.d(TAG, "Loader iteration");
+        loadJSON(jsonObj, (IScope2) scope);
+    }
 }

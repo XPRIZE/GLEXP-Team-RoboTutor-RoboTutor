@@ -44,6 +44,7 @@ import java.util.TimerTask;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
@@ -132,7 +133,7 @@ public class type_timeline extends type_action {
             gotoAndStop(0);
 
             if(mode == TCONST.AUDIOFLOW)
-                CTutor.mTutorNavigator.onButtonNext();
+                _scope.tutor().eventNext();
         }
         else {
             // do post increment so we catch the zero frame
@@ -556,7 +557,7 @@ public class type_timeline extends type_action {
 
                 try {
                     // TODO : add scoping
-                    mScript.loadJSON(new JSONObject(xpp.getText()), (IScope)mScope);
+                    mScript.loadJSON(new JSONObject(xpp.getText()), (IScope2)mScope);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -636,7 +637,7 @@ public class type_timeline extends type_action {
                 mPlayer = new type_audio();
 
                 try {
-                    mPlayer.loadJSON(new JSONObject(jsonCode), (IScope)mScope);
+                    mPlayer.loadJSON(new JSONObject(jsonCode), (IScope2)mScope);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -708,7 +709,7 @@ public class type_timeline extends type_action {
         @Override
         protected String doInBackground(Void... unsued) {
 
-            loadTrack(TCONST.TUTORROOT + "/" + TCONST.TDATA + "/" + CTutor.mTutorName + "/" + trackname + ".xml");
+            loadTrack(TCONST.TUTORROOT + "/" + TCONST.TDATA + "/" + _scope.tutorName() + "/" + trackname + ".xml");
             Log.d(TAG, "ActionTrack Loaded");
 
             return null;
@@ -755,7 +756,7 @@ public class type_timeline extends type_action {
             XmlPullParser xpparser = factory.newPullParser();
 
             if(CTutorEngine.CacheSource.equals(TCONST.ASSETS)) {
-                in = CTutor.mAssetManager.open(factoryPATH);
+                in = _scope.tutor().openAsset(factoryPATH);
             } else {
                 String filePath = RoboTutor.EXTERNFILES + "/" + factoryPATH;
 
@@ -872,11 +873,11 @@ public class type_timeline extends type_action {
     // *** Serialization
 
     @Override
-    public void loadJSON(JSONObject jsonObj, IScope scope) {
+    public void loadJSON(JSONObject jsonObj, IScope2 scope) {
 
         super.loadJSON(jsonObj, scope);
 
-        mScope = new TScope(name, (TScope)scope);
+        mScope = new TScope(scope.tutor(), name, (TScope)scope);
 
         _trackType = TCONST.ABSOLUTE_TYPE;
 

@@ -22,6 +22,7 @@ package cmu.xprize.robotutor.tutorengine.graph.vars;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.TCONST;
@@ -29,7 +30,7 @@ import cmu.xprize.robotutor.tutorengine.graph.type_action;
 
 // TVarBase is the mechanism through which Iscriptable is imposed on built-in types
 //
-public class TVarBase extends type_action implements ILoadableObject, IScriptable2 {
+public class TVarBase extends type_action implements ILoadableObject2, IScriptable2 {
 
     private TScope _scope;
 
@@ -143,7 +144,7 @@ public class TVarBase extends type_action implements ILoadableObject, IScriptabl
     // since they know their own types and can apply them without
     // using reflection.
     @Override
-    public void loadJSON(JSONObject jsonObj, IScope scope) {
+    public void loadJSON(JSONObject jsonObj, IScope2 scope) {
 
         // Record the scope the variable should be created in if it is instantiated
         _scope = (TScope)scope;

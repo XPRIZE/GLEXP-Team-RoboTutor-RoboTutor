@@ -26,17 +26,17 @@ import android.util.Log;
 import cmu.xprize.ltk.CFingerWriter;
 import cmu.xprize.ltk.ITextSink;
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.CTutorObjectDelegate;
+import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.util.IScriptable;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 
 public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 
-
-    private CTutorObjectDelegate mSceneObject;
+    private CTutor          mTutor;
+    private CObjectDelegate mSceneObject;
 
     private float aspect = 1.12f;  // w/h
 
@@ -61,7 +61,7 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 
     @Override
     public void init(Context context, AttributeSet attrs) {
-        mSceneObject = new CTutorObjectDelegate(this);
+        mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
 
     }
@@ -98,7 +98,7 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     protected void updateLinkedView(int linkedViewID) {
         // If we are linked to a textSink then send it the new character
         if(linkedViewID != -1) {
-            ITextSink linkedView = (ITextSink)CTutor.getViewById(linkedViewID, null);
+            ITextSink linkedView = (ITextSink)mTutor.getViewById(linkedViewID, null);
 
             if(linkedView == null) {
                 Log.e(TAG, "FingerWriter Component does not have LinkView");
@@ -152,11 +152,11 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 
 
     protected void applyEventNode(String nodeName) {
-        IScriptable obj = null;
+        IScriptable2 obj = null;
 
         if(nodeName != null && !nodeName.equals("")) {
             try {
-                obj = CTutor.getScope().mapSymbol(nodeName);
+                obj = mTutor.getScope().mapSymbol(nodeName);
                 obj.applyNode();
 
             } catch (Exception e) {
@@ -189,6 +189,7 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 
     @Override
     public void setTutor(CTutor tutor) {
+        mTutor = tutor;
         mSceneObject.setTutor(tutor);
     }
 
@@ -203,7 +204,7 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     }
 
     @Override
-    public CTutorObjectDelegate getimpl() {
+    public CObjectDelegate getimpl() {
         return mSceneObject;
     }
 
