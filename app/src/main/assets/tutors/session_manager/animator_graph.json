@@ -19,7 +19,7 @@
           "COMMENT": "Intro Clip",
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
-          "preenter":["SET_DATASOURCE","NEXT_DATASET"],
+          "preenter":[],
           "preexit" :[],
           "edges": [
               {"constraint":"FTR_RIGHT","edge":"CORRECT"},
