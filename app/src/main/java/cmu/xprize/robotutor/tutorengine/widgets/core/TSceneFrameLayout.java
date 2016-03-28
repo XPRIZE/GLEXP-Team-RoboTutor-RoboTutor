@@ -24,8 +24,8 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.CTutorSceneDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -34,7 +34,7 @@ import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 
 public class TSceneFrameLayout extends FrameLayout implements ITutorSceneImpl {
 
-    private CTutorSceneDelegate mTutorScene;
+    private CSceneDelegate mTutorScene;
 
     final private String TAG = "CSceneFrameLayout";
 
@@ -55,10 +55,14 @@ public class TSceneFrameLayout extends FrameLayout implements ITutorSceneImpl {
     }
 
     public void init(Context context, AttributeSet attrs) {
-        mTutorScene = new CTutorSceneDelegate(this);
+        mTutorScene = new CSceneDelegate(this);
         mTutorScene.init(context, attrs);
     }
 
+
+    public void setDataSource(String dataSource) {
+
+    }
 
 
     //************************************************************************
@@ -105,7 +109,7 @@ public class TSceneFrameLayout extends FrameLayout implements ITutorSceneImpl {
 
 
     @Override
-    public CTutorSceneDelegate getimpl() {
+    public CSceneDelegate getimpl() {
         return mTutorScene;
     }
 

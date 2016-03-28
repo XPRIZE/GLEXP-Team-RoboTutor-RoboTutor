@@ -3,22 +3,22 @@
 <!--Notes:
 
     This base layout object must implement ITutorScene
-    It must have id : tutor_manager
+    It must have id : tutor_container
     It may contain ITutorObjects
 
-    See: TutorActivity.java for code-behind
+    See: cmu.xprize.robotutor.RoboTutor.java for code-behind
 
     TODO: find a way to get rid of android:id and just use a non-native tutorid
 -->
 
-<cmu.xprize.robotutor.tutorengine.widgets.core.TSceneFrameLayout
+<cmu.xprize.robotutor.tutorengine.widgets.core.TSceneFlipperLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/tutor_manager"
-    android:background="#666">
+    android:id="@+id/tutor_container"
+    android:animateFirstView="true"
+    android:background="#00FF7F">
 
-</cmu.xprize.robotutor.tutorengine.widgets.core.TSceneFrameLayout>
+</cmu.xprize.robotutor.tutorengine.widgets.core.TSceneFlipperLayout>

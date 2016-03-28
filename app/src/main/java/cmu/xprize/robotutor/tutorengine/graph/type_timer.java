@@ -7,6 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.util.TCONST;
 
 /**
@@ -44,7 +45,7 @@ public class type_timer extends graph_node {
 
         type_timer obj = null;
 
-        if(!CTutor.hasTimer(id)) {
+        if(!_scope.tutor().hasTimer(id)) {
             switch (action) {
 
                 case TCONST.CREATEANDSTART:
@@ -53,7 +54,7 @@ public class type_timer extends graph_node {
                 case TCONST.CREATE:
                     _timer     = new Timer(id);
                     _reference = false;
-                    CTutor.createTimer(id, this);
+                    _scope.tutor().createTimer(id, this);
                     break;
             }
         }
@@ -61,7 +62,7 @@ public class type_timer extends graph_node {
         if(_reference) {
 
             try {
-                obj = (type_timer) CTutor.mapTimer(id);
+                obj = (type_timer) _scope.tutor().mapTimer(id);
 
                 // Apply the reference action to the actual timer
                 if(obj != null) {
@@ -95,10 +96,10 @@ public class type_timer extends graph_node {
         _frameTask = new TimerTask() {
             @Override
             public void run() {
-                IScriptable obj = null;
+                IScriptable2 obj = null;
 
                 try {
-                    obj = CTutor.getScope().mapSymbol(ontimer);
+                    obj = _scope.mapSymbol(ontimer);
                     obj.applyNode();
 
                     if (!repeat)
@@ -133,7 +134,7 @@ public class type_timer extends graph_node {
 
             _playing = false;
 
-            CTutor.removeTimer(id);
+            _scope.tutor().removeTimer(id);
         }
     }
 }

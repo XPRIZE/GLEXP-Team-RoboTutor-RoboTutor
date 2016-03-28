@@ -42,6 +42,7 @@ public class TCONST {
     static final public String SNDESC          = "navigator_descriptor.json";
     static final public String AGDESC          = "animator_graph.json";
     static final public String TDATA           = "trackdata/LIBRARY";
+    static final public String TASSETS         = "assets";
     static final public String DEFAULT         = "default";
 
     // CTutorNavigator Constants
@@ -88,6 +89,7 @@ public class TCONST {
     public static final String DONE            = "DONE";
     public static final String WAIT            = "WAIT";
     public static final String NONE            = "NONE";
+    public static final String READY           = "READY";
 
     public static final String PLAY            = "PLAY";
     public static final String STOP            = "STOP";
@@ -140,9 +142,36 @@ public class TCONST {
 
     public static final String FWCORRECT    = "FTR_RIGHT";
     public static final String FWINCORRECT  = "FTR_WRONG";
+    public static final String FWUNKNOWN    = "FTR_UNRECOGNIZED";
     public static final String FTR_EOI      = "FTR_NOWORDS";
     public static final String FWALLCORRECT = "ALL_CORRECT";
 
     public static final String FALSE        = "FALSE";
     public static final String TRUE         = "TRUE";
+    public static final String OVALICON     = "OVALICON";
+    public static final String RECTICON     = "RECTICON";
+    public static final String RAND         = "random";
+    public static final String MINUSONE     = "-1";
+
+    // PocketSphinx Recognizer Constants
+    public static final int UNKNOWNEVENT_TYPE  = 0;
+    public static final int TIMEDSILENCE_EVENT = 1;
+    public static final int TIMEDSOUND_EVENT   = 2;
+    public static final int TIMEDWORD_EVENT    = 4;
+    public static final int ALLTIMED_EVENTS    = 7;
+    public static final int SILENCE_EVENT      = 8;
+    public static final int SOUND_EVENT        = 16;
+    public static final int WORD_EVENT         = 32;
+    public static final int TIMEDSTART_EVENT   = 64;
+
+    public static final int NOINTERVENTION    = 0;
+    public static final int INSPEECH = 1;
+    public static final int SAYWORD           = 2;
+
+    public static final String STORYDATA    = "story_data.json";
+    public static final String STORYINDEX   = "story_index.json";
+    public static final String SOURCEFILE   = "file|";
+
+    public static final String TTS          = "TTS";
+    public static final String ASR          = "ASR";
 }

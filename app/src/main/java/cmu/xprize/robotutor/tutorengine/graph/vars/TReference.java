@@ -23,11 +23,12 @@ package cmu.xprize.robotutor.tutorengine.graph.vars;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import cmu.xprize.robotutor.tutorengine.ILoadableObject;
-import cmu.xprize.robotutor.tutorengine.graph.IScriptable;
+import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
+import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IScope;
 
 
-public class TReference  extends TVarBase implements ILoadableObject, IScriptable {
+public class TReference  extends TVarBase implements ILoadableObject2, IScriptable2 {
 
     private String _value;
 
@@ -56,7 +57,8 @@ public class TReference  extends TVarBase implements ILoadableObject, IScriptabl
      * @param jsonObj
      * @param scope
      */
-    public void loadJSON(JSONObject jsonObj, TScope scope) {
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope2 scope) {
 
         super.loadJSON(jsonObj, scope);
 

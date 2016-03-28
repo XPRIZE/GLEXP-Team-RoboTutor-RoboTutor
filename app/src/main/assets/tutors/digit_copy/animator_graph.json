@@ -171,7 +171,6 @@
           "COMMENT": "TBD",
           "tracks": [
             {"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "TRUE:Boolean","features":""},
-            {"type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":""},
             // Sstimulus
             {"type": "AUDIO", "command": "PLAY", "soundsource": "This is the number.mp3", "mode":"flow", "features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""}, //the stimulus digit

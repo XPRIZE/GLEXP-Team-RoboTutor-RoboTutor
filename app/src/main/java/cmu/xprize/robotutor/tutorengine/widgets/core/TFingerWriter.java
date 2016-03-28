@@ -21,22 +21,26 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import cmu.xprize.ltk.CFingerWriter;
+import cmu.xprize.ltk.ITextSink;
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.CTutorObjectDelegate;
+import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.robotutor.tutorengine.graph.IScriptable;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 
 public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 
-
-    private CTutorObjectDelegate mSceneObject;
+    private CTutor          mTutor;
+    private CObjectDelegate mSceneObject;
 
     private float aspect = 1.12f;  // w/h
+
+    private static final String   TAG = "TFingerWriter";
 
 
     public TFingerWriter(Context context) {
@@ -57,8 +61,13 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 
     @Override
     public void init(Context context, AttributeSet attrs) {
-        mSceneObject = new CTutorObjectDelegate(this);
+        mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
+
+    }
+
+
+    public void setDataSource(String dataSource) {
 
     }
 
@@ -85,14 +94,43 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     }
 
 
+    @Override
+    protected void updateLinkedView(int linkedViewID) {
+        // If we are linked to a textSink then send it the new character
+        if(linkedViewID != -1) {
+            ITextSink linkedView = (ITextSink)mTutor.getViewById(linkedViewID, null);
+
+            if(linkedView == null) {
+                Log.e(TAG, "FingerWriter Component does not have LinkView");
+                System.exit(1);
+            }
+
+            try {
+                linkedView.addChar(_recChars[0]);
+            }
+            catch(Exception e) {
+                Log.d(TAG, "FingerWriter: probable empty result" + e);
+
+                // Send special unrecognized sequence
+                linkedView.addChar("???");
+            }
+        }
+    }
+
+
 
 
     //************************************************************************
     //************************************************************************
-    // Tutor methods  Start
+    // Tutor scriptiable methods  Start
+
+
+    public void setRecognizer(String recogId) {
+        super.setRecognizer(recogId);
+    }
+
 
     public void enable(Boolean enable) {
-
         enableFW(enable);
     }
 
@@ -114,11 +152,11 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 
 
     protected void applyEventNode(String nodeName) {
-        IScriptable obj = null;
+        IScriptable2 obj = null;
 
         if(nodeName != null && !nodeName.equals("")) {
             try {
-                obj = CTutor.getScope().mapSymbol(nodeName);
+                obj = mTutor.getScope().mapSymbol(nodeName);
                 obj.applyNode();
 
             } catch (Exception e) {
@@ -131,7 +169,6 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     // Tutor methods  End
     //************************************************************************
     //************************************************************************
-
 
 
 
@@ -152,6 +189,7 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 
     @Override
     public void setTutor(CTutor tutor) {
+        mTutor = tutor;
         mSceneObject.setTutor(tutor);
     }
 
@@ -166,7 +204,7 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     }
 
     @Override
-    public CTutorObjectDelegate getimpl() {
+    public CObjectDelegate getimpl() {
         return mSceneObject;
     }
 
