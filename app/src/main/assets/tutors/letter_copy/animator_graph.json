@@ -8,11 +8,28 @@
       "title": "Letter copying tutor",
       "COMMENT": "This tutor is designed for copying letter A-Z and a-z.",
       "version": "1.0.0",
-      "rootnode": "INTRO_STATE",
+      "rootnode": "SET_FW_REC",
 
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
+
+
+        "SET_FW_REC": {
+          "type": "NODE",
+          "COMMENT": "",
+          "maptype":"actionMap",
+          "mapname": "FW_SET_REC",
+          "preenter":[],
+          "preexit" :[],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "INTRO_STATE"
+            }
+          ]
+        },
+
 
         "INTRO_STATE": {
           "type": "NODE",
@@ -277,6 +294,8 @@
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
         "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[A,B,C]:String","features":""},
+
+        "FW_SET_REC":{"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_ALPHA:String","features":""},
 
         "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HESITATION_TRACK", "features": "" },
         //set the waiting time limit as 10 seconds
