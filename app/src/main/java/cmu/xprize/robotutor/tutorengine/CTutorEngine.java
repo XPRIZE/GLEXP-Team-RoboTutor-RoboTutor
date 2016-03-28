@@ -65,7 +65,7 @@ public class CTutorEngine implements ILoadableObject2 {
     static public String                    language;
 
     final static public  String CacheSource = TCONST.ASSETS;                // assets or extern
-    final static private String TAG         = "CTUTOR_ENGINE";
+    final static private String TAG         = "CTutorEngine";
 
 
 

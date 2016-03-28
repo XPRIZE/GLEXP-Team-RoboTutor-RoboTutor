@@ -71,8 +71,8 @@ public class RoboTutor extends Activity implements IReadyListener {
 
         setContentView(R.layout.robo_tutor);
 
-        // Get the primary container for tutor scenes
-        tutorContainer = (ITutorSceneImpl)findViewById(R.id.tutor_manager);
+        // Get the primary container for tutors
+        tutorContainer = (ITutorSceneImpl)findViewById(R.id.tutor_container);
 
         EXTERNFILES = getApplicationContext().getExternalFilesDir("").getPath();
 
@@ -176,7 +176,6 @@ public class RoboTutor extends Activity implements IReadyListener {
 
 
         }
-
         startEngine();
     }
 
@@ -203,7 +202,4 @@ public class RoboTutor extends Activity implements IReadyListener {
             tutorEngine.initialize();
         }
     }
-
-
-
 }
