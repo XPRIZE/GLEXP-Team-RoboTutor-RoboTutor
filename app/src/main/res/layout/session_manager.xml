@@ -9,7 +9,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/session_manager"
-    android:background="#F3DB">
+    android:background="#00FF7F">
 
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TSmComponent
+        android:id="@+id/SsmComponent"
+        app:layout_heightPercent="100%"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>

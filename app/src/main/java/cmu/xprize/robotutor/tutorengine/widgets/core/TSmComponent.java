@@ -1,4 +1,24 @@
+//*********************************************************************************
+//
+//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
+//    Copyright(c) Kevin Willows All Rights Reserved
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+//*********************************************************************************
+
 package cmu.xprize.robotutor.tutorengine.widgets.core;
+
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -6,45 +26,47 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
-import cmu.xprize.mn_component.CMn_Component;
-import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
+import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
+import cmu.xprize.sm_component.CSm_Component;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
+public class TSmComponent extends CSm_Component implements ITutorObjectImpl {
 
-    private CTutor          mTutor;
-    private CObjectDelegate mSceneObject;
+    private CTutor               mTutor;
+    private CObjectDelegate      mSceneObject;
+
+    static final private String TAG = "TSmComponent";
 
 
-    static final private String TAG = "TMnComponent";
 
-
-    public TMnComponent(Context context) {
+    public TSmComponent(Context context) {
         super(context);
         initT(context, null);
     }
 
-    public TMnComponent(Context context, AttributeSet attrs) {
+    public TSmComponent(Context context, AttributeSet attrs) {
         super(context, attrs);
         initT(context, attrs);
     }
 
-    public TMnComponent(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public TSmComponent(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
         initT(context, attrs);
     }
 
     public void initT(Context context, AttributeSet attrs) {
+
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
     }
+
 
     //**********************************************************
     //**********************************************************
@@ -81,35 +103,6 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
         }
     }
 
-
-    public void next() {
-
-        reset();
-
-        super.next();
-
-        if(dataExhausted())
-            mTutor.setAddFeature(TCONST.FTR_EOI);
-    }
-
-
-    public TBoolean test() {
-        boolean correct = isCorrect();
-
-        if(correct)
-            mTutor.setAddFeature("FTR_RIGHT");
-        else
-            mTutor.setAddFeature("FTR_WRONG");
-
-        return new TBoolean(correct);
-    }
-
-
-    public void reset() {
-
-        mTutor.setDelFeature("FTR_RIGHT");
-        mTutor.setDelFeature("FTR_WRONG");
-    }
 
 
 
