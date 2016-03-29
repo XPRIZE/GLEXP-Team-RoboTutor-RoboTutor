@@ -5,15 +5,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PointF;
 import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.Region;
 import android.util.AttributeSet;
 import android.view.View;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.CTutorObjectDelegate;
+import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
@@ -24,7 +21,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
  */
 public class TRect extends View  implements ITutorObjectImpl {
 
-    private CTutorObjectDelegate mSceneObject;
+    private CObjectDelegate mSceneObject;
 
     private Paint mPaint;
     private Rect  mRegion = new Rect();
@@ -46,7 +43,7 @@ public class TRect extends View  implements ITutorObjectImpl {
 
     @Override
     public void init(Context context, AttributeSet attrs) {
-        mSceneObject = new CTutorObjectDelegate(this);
+        mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
 
         // Create a paint object to deine the line parameters
@@ -55,6 +52,11 @@ public class TRect extends View  implements ITutorObjectImpl {
         mPaint.setColor(Color.WHITE);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setAntiAlias(false);
+    }
+
+
+    public void setDataSource(String dataSource) {
+
     }
 
 
@@ -132,10 +134,14 @@ public class TRect extends View  implements ITutorObjectImpl {
     }
 
     @Override
-    public CTutorObjectDelegate getimpl() {
+    public CObjectDelegate getimpl() {
         return mSceneObject;
     }
 
+    @Override
+    public void zoomInOut(Float scale, Long duration) {
+        mSceneObject.zoomInOut(scale, duration);
+    }
 
 }
 

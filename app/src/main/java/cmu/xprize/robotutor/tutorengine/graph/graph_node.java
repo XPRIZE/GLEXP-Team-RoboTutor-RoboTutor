@@ -23,15 +23,18 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
-import cmu.xprize.robotutor.tutorengine.ILoadableObject;
+import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
+import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.util.IScope;
+import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
 
-public class graph_node implements ILoadableObject, IScriptable {
+public class graph_node implements ILoadableObject2, IScriptable2 {
 
-    private TScope          _scope;
+    protected IScope2       _scope;
 
     // json loadable fields
     public String           parser;      // Used to distinguish different Flash content parsers
@@ -52,7 +55,7 @@ public class graph_node implements ILoadableObject, IScriptable {
     }
 
 
-    protected TScope getScope() {
+    protected IScope2 getScope() {
         if(_scope == null) {
             Log.e(TAG, "Engine Error: Invalid Scope on Object: " + name);
             System.exit(1);
@@ -62,7 +65,7 @@ public class graph_node implements ILoadableObject, IScriptable {
     }
 
 
-    // IScriptable
+    // IScriptable2
     @Override
     public void set(String value) {
 
@@ -79,6 +82,9 @@ public class graph_node implements ILoadableObject, IScriptable {
     }
 
     @Override
+    public void setName(String newName) {  name = newName; }
+
+    @Override
     public String getName() { return name; }
 
     @Override
@@ -88,7 +94,11 @@ public class graph_node implements ILoadableObject, IScriptable {
     public Object getValue() { return null; }
 
 
-
+    /**
+     * Next allows modules to loop through multiple actions in a node.
+     *
+     * @return
+     */
     public String next() {
         return TCONST.NONE;
     }
@@ -117,7 +127,9 @@ public class graph_node implements ILoadableObject, IScriptable {
     }
 
 
+    // TODO: Ideally this would be protected
     // Used by Animation graph to init root animation
+    // Note: Modules use this to reinisitalize themselves
 
     public void preEnter()
     {
@@ -127,6 +139,8 @@ public class graph_node implements ILoadableObject, IScriptable {
         }
     }
 
+
+    // TODO: Ideally this would be protected
     // Used by Animation graph to init root animation
 
     public void preExit()
@@ -137,13 +151,14 @@ public class graph_node implements ILoadableObject, IScriptable {
         }
     }
 
+
     // preenter / preexit action resolution.
     //
     private void apply(String[] mapSet) {
 
         for (String nodeName : mapSet) {
             try {
-                IScriptable node = getScope().mapSymbol(nodeName);
+                IScriptable2 node = (IScriptable2)getScope().mapSymbol(nodeName);
 
                 node.applyNode();
 
@@ -170,20 +185,20 @@ public class graph_node implements ILoadableObject, IScriptable {
     public void resetNode() {}
 
 
-    public IScriptable mapReference(String refName) {
+    public IScriptable2 mapReference(String refName) {
 
         return null;
     }
 
-    public IScriptable mapProperty(String propName) {
+    public IScriptable2 mapProperty(String propName) {
 
         return null;
     }
 
 
-    // IScriptable
+    // IScriptable2
     @Override
-    public TBoolean OR(IScriptable RHS, boolean lneg, boolean rneg) {
+    public TBoolean OR(IScriptable2 RHS, boolean lneg, boolean rneg) {
         boolean result = false;
 
         if((Boolean)evaluate(lneg) || (Boolean)RHS.evaluate(rneg)) {
@@ -194,7 +209,7 @@ public class graph_node implements ILoadableObject, IScriptable {
     }
 
     @Override
-    public TBoolean AND(IScriptable RHS, boolean lneg, boolean rneg) {
+    public TBoolean AND(IScriptable2 RHS, boolean lneg, boolean rneg) {
         boolean result = false;
 
         if((Boolean)evaluate(lneg) && (Boolean)RHS.evaluate(rneg)) {
@@ -205,32 +220,32 @@ public class graph_node implements ILoadableObject, IScriptable {
     }
 
     @Override
-    public TBoolean LT(IScriptable RHS) {
+    public TBoolean LT(IScriptable2 RHS) {
         return null;
     }
 
     @Override
-    public TBoolean LTEQ(IScriptable RHS) {
+    public TBoolean LTEQ(IScriptable2 RHS) {
         return null;
     }
 
     @Override
-    public TBoolean GT(IScriptable RHS) {
+    public TBoolean GT(IScriptable2 RHS) {
         return null;
     }
 
     @Override
-    public TBoolean GTEQ(IScriptable RHS) {
+    public TBoolean GTEQ(IScriptable2 RHS) {
         return null;
     }
 
     @Override
-    public TBoolean EQ(IScriptable RHS) {
+    public TBoolean EQ(IScriptable2 RHS) {
         return null;
     }
 
     @Override
-    public TBoolean NEQ(IScriptable RHS) {
+    public TBoolean NEQ(IScriptable2 RHS) {
         return null;
     }
 
@@ -243,8 +258,8 @@ public class graph_node implements ILoadableObject, IScriptable {
 
     // *** Serialization
 
-
-    public void loadJSON(JSONObject jsonObj, TScope scope) {
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope2 scope) {
 
         // CRITICAL
         // Capture the scope for this node -
@@ -252,6 +267,14 @@ public class graph_node implements ILoadableObject, IScriptable {
         //
         _scope = scope;
 
-        JSON_Helper.parseSelf(jsonObj, this, scope);
+        JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
+    }
+
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
+        Log.d(TAG, "Loader iteration");
+        loadJSON(jsonObj, (IScope2) scope);
     }
 }
+
+

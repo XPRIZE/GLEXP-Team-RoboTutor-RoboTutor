@@ -30,10 +30,10 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import cmu.xprize.util.TCONST;
 
@@ -54,16 +54,18 @@ public class CFingerWriter extends View implements OnTouchListener {
     private static final float TOLERANCE = 5;
 
     private LipiTKJNIInterface _recognizer;
+    private String             _configFolder;
+    private boolean            _initialized   = false;
     private RecognizerThread   _recThread;
     private boolean            _isRecognizing = false;
     private Stroke[]           _recStrokes;
     private RecResult[]        _recResults;
-    private String[]           _recChars;
+    protected String[]         _recChars;
 
     private Stroke             _currentStroke;
     private ArrayList<Stroke>  _currentStrokeStore;
-    private int[]              _screenCoord = new int[2];
-    private Boolean            _watchable = false;
+    private int[]              _screenCoord  = new int[2];
+    private Boolean            _watchable    = false;
 
     private Boolean            _touchStarted = false;
     private String             _onStartWriting;
@@ -76,10 +78,29 @@ public class CFingerWriter extends View implements OnTouchListener {
     private LocalBroadcastManager bManager;
     public static String          RECMSG = "CHAR_RECOG";
 
-    private static final String   TAG = "WritingComp";
-
     private static int            RECDELAY   = 400;              // Just want the end timeout
-    private static int            RECDELAYNT = RECDELAY+500;      // inhibit ticks
+    private static int            RECDELAYNT = RECDELAY+500;     // inhibit ticks
+
+    // This is used to map "recognizer types" to LTK project ids
+    //
+    static public HashMap<String, String> recogMap = new HashMap<String, String>();
+
+    static {
+        recogMap.put("ENG_STD_ALPHA", "SHAPEREC_ALPHANUM");
+        recogMap.put("ENG_STD_NUM", "SHAPEREC_NUMERALS");
+    }
+
+    // This is used to map "recognizer types" to LTK project folders
+    //
+    static public HashMap<String, String> folderMap = new HashMap<String, String>();
+
+    static {
+        folderMap.put("ENG_STD_ALPHA", "/projects/alphanumeric/config/");
+        folderMap.put("ENG_STD_NUM", "/projects/demonumerals/config/");
+    }
+
+
+    private static final String   TAG = "CFingerWriter";
 
 
 
@@ -118,28 +139,6 @@ public class CFingerWriter extends View implements OnTouchListener {
             }
         }
 
-        // Initialize lipitk
-        File externalFileDir = getContext().getExternalFilesDir(null);
-        String path = externalFileDir.getPath();
-
-        Log.d("JNI", "Path: " + path);
-
-        try {
-            // TODO : Manage Recognizers
-//            _recognizer = new LipiTKJNIInterface(path, "SHAPEREC_ALPHANUM");
-            _recognizer = new LipiTKJNIInterface(path, "SHAPEREC_NUMERALS");
-
-            _recognizer.initialize();
-        }
-        catch(Exception e)
-        {
-            Log.d(TAG, "Cannot create Recognizer - Error:1");
-            System.exit(1);
-        }
-
-        // reset the internal state
-        clear();
-
         // Create a paint object to deine the line parameters
         mPaint = new Paint();
 
@@ -176,7 +175,6 @@ public class CFingerWriter extends View implements OnTouchListener {
 
         //this.setOnTouchListener(this);
     }
-
 
 
     /**
@@ -397,6 +395,15 @@ public class CFingerWriter extends View implements OnTouchListener {
 
 
     /**
+     * pass results to linked view
+     * @param linkedViewID
+     */
+    protected void updateLinkedView(int linkedViewID) {
+        // Called polymorphically - subclass handles
+    }
+
+
+    /**
      * This is how recognition is initiated - if the user stops writing for a
      * predefined period we assume they are finished writing.
      */
@@ -463,27 +470,16 @@ public class CFingerWriter extends View implements OnTouchListener {
             }
 
             _recStrokes = null;
-
-            // TODO : Manage Recognizers
-//            String configFileDirectory = _recognizer.getLipiDirectory() + "/projects/alphanumeric/config/";
-            String configFileDirectory = _recognizer.getLipiDirectory() + "/projects/demonumerals/config/";
-
-            _recChars = new String[_recResults.length];
+            _recChars   = new String[_recResults.length];
 
             for (int i = 0; i < _recChars.length; i++) {
-                _recChars[i] = _recognizer.getSymbolName(_recResults[i].Id, configFileDirectory);
+                _recChars[i] = _recognizer.getSymbolName(_recResults[i].Id, _configFolder);
             }
 
             _isRecognizing = false;
 
-            // If we are linked to a textSink then send it the new character
-            if(mLinkedViewID != -1) {
-                ViewGroup parentview = (ViewGroup)getParent().getParent();
-
-                mLinkedView = (ITextSink)parentview.findViewById(mLinkedViewID);
-
-                mLinkedView.addChar(_recChars[0]);
-            }
+            // send the result to the stimresp that is linked
+            updateLinkedView(mLinkedViewID);
 
             // Let anyone interested know there is a new recognition set available
             bManager.sendBroadcast(new Intent(RECMSG));
@@ -516,21 +512,56 @@ public class CFingerWriter extends View implements OnTouchListener {
 
 
     /**
+     * TODO: rewrite the LTK project format
+     * @param recogId
+     */
+    public void setRecognizer(String recogId) {
+
+        _initialized = false;
+
+        // Initialize lipitk
+        File externalFileDir = getContext().getExternalFilesDir(null);
+        String path = externalFileDir.getPath();
+
+        Log.d("JNI", "Path: " + path);
+
+        try {
+            _recognizer   = new LipiTKJNIInterface(path, recogMap.get(recogId));
+            _configFolder = _recognizer.getLipiDirectory() + folderMap.get(recogId);
+
+            _recognizer.initialize();
+            _initialized = true;
+        }
+        catch(Exception e)
+        {
+            // TODO: Manage initialization errors more effectively
+            Log.d(TAG, "Cannot create Recognizer - Error:1");
+            System.exit(1);
+        }
+
+        // reset the internal state
+        clear();
+    }
+
+
+    /**
      * Enable or Disable the finger writer
      * @param enableState
      */
     protected void enableFW(Boolean enableState) {
 
-        _enabled = enableState;
+        if(_initialized) {
 
-        if(enableState) {
-            // Reset the flag so onStartWriting events will fire
-            _touchStarted = false;
-            this.setOnTouchListener(this);
+            _enabled = enableState;
 
-        }
-        else {
-            this.setOnTouchListener(null);
+            if (enableState) {
+                // Reset the flag so onStartWriting events will fire
+                _touchStarted = false;
+                this.setOnTouchListener(this);
+
+            } else {
+                this.setOnTouchListener(null);
+            }
         }
     }
 
@@ -558,7 +589,8 @@ public class CFingerWriter extends View implements OnTouchListener {
 
 
     // Must override in TClass
-    // So this in the TClass domain where TScope lives
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
     protected void applyEventNode(String nodeName) {
     }
 
@@ -566,11 +598,6 @@ public class CFingerWriter extends View implements OnTouchListener {
     // Tutor methods  End
     //************************************************************************
     //************************************************************************
-
-
-
-
-
 
 }
 

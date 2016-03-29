@@ -19,15 +19,18 @@
 
 package cmu.xprize.robotutor.tutorengine.graph;
 
+import android.util.Log;
+
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IScope;
+import cmu.xprize.util.JSON_Helper;
 
-import cmu.xprize.robotutor.tutorengine.ILoadableObject;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
-
-public class scene_view implements ILoadableObject {
+public class scene_view implements ILoadableObject2 {
 
     // json loadable
     public String          id;
@@ -36,8 +39,18 @@ public class scene_view implements ILoadableObject {
     public scene_view[]     children;
     public String          features;
 
-    public void loadJSON(JSONObject jsonObj, TScope scope) {
+    static private final String TAG = "scene_view";
 
-        JSON_Helper.parseSelf(jsonObj, this, scope);
+
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope2 scope) {
+
+        JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
+    }
+
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
+        Log.d(TAG, "Loader iteration");
+        loadJSON(jsonObj, (IScope2) scope);
     }
 }

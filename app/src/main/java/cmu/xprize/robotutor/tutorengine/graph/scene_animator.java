@@ -24,20 +24,19 @@ import android.util.Log;
 
 import java.util.HashMap;
 
-import cmu.xprize.robotutor.tutorengine.ILoadableObject;
+import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
+import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.TCONST;
 
 
 /**
  * This represents the top level animation graph object
  */
-public class scene_animator extends graph_node implements ILoadableObject{
+public class scene_animator extends graph_node implements ILoadableObject2 {
 
     // State fields
     private graph_node   _currNode;
     private String       _nodeState;
-
-    private HashMap<String, Integer> _pFeatures = new HashMap<String, Integer>();
 
 
     // json loadable fields
@@ -51,30 +50,37 @@ public class scene_animator extends graph_node implements ILoadableObject{
     public HashMap choiceMap;
     public HashMap constraintMap;
 
-
     static private final String TAG = "ANIMATOR";
 
 
-    public scene_animator() { }
+    public scene_animator() {
+        _currNode = this;
+    }
 
 
-    public void seekRoot() {
+    public String next() {
+        String result = TCONST.READY;
+
         try {
             _currNode = (graph_node) getScope().mapSymbol(rootnode);
         }
         catch(Exception e) {
-            // TODO: manage root node not found
+            Log.d(TAG, "Root Node not found");
+            System.exit(1);
         }
 
         if(_currNode != null) {
             Log.d(TAG, "Running Node: " + _currNode.name);
 
             _currNode.preEnter();
-            _currNode.applyNode();
+            result = TCONST.READY;
         }
         else {
             Log.d(TAG, "No Root Node for Scene");
+            result = TCONST.NEXTSCENE;
         }
+
+        return result;
     }
 
 
@@ -85,7 +91,7 @@ public class scene_animator extends graph_node implements ILoadableObject{
      * @return The
      */
     @Override
-    public String next() {
+    public String applyNode() {
 
         // When we retrieve the "next" node we automatically apply it
         // This may result in a simple state change - method call etc.
@@ -101,24 +107,36 @@ public class scene_animator extends graph_node implements ILoadableObject{
         if (_currNode != null) do {
 
             // Increment the animation polymorphically
+            // Simple nodes will always return:
+            //      NONE (the node is exhausted - no more actions)
+            //
+            // Complex nodes may return:
+            //      READY(start state)
+            //      WAIT (last node action result) or
+            //      NONE (the node is exhausted - no more actions)
 
             _nodeState = _currNode.next();
 
             // If the node is exhausted move to next node
 
-            if (_nodeState.equals(TCONST.NONE)) {
-                _currNode = _currNode.nextNode();
+            switch(_nodeState) {
 
-                if (_currNode != null) {
+                case TCONST.NONE:
+                    _currNode = _currNode.nextNode();
+
+                    if (_currNode == null) {
+                        _nodeState = TCONST.NEXTSCENE;
+                        break;
+                    }
+                    // otherwise fall through and apply next node action
+
+                case TCONST.WAIT:
+                case TCONST.READY:
+                case TCONST.DONE:
+
                     Log.d(TAG, "Running Node: " + _currNode.name);
-
-                    // Apply action nodes
-                    _nodeState =_currNode.applyNode();
-                }
-                else {
-                    _nodeState = TCONST.NEXTSCENE;
+                    _nodeState = _currNode.applyNode();
                     break;
-                }
             }
 
         } while (!_nodeState.equals(TCONST.WAIT) && !_nodeState.equals(TCONST.NEXTSCENE));
@@ -156,30 +174,6 @@ public class scene_animator extends graph_node implements ILoadableObject{
         _currNode.preEnter();
 
         return _currNode.applyNode();
-    }
-
-
-    public int queryPFeature(String pid, int size, int cycle) {
-        int iter = 0;
-
-        // On subsequent accesses we increment the iteration count
-        // If it has surpassed the size of the pFeature array we cycle on the last 'cycle' entries
-
-        if (_pFeatures.containsKey(pid)) {
-            iter = _pFeatures.get(pid) + 1;
-
-            if (iter >= size) {
-                iter = size - cycle;
-            }
-
-            _pFeatures.put(pid, iter);
-        }
-
-        // On first touch we have to create the property
-
-        else _pFeatures.put(pid, 0);
-
-        return iter;
     }
 
 }

@@ -27,13 +27,13 @@ import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.CTutorObjectDelegate;
+import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 
 
 public class TTextView extends TextView implements ITutorObjectImpl {
 
-    private CTutorObjectDelegate mSceneObject;
+    private CObjectDelegate mSceneObject;
 
     final private String TAG = "TTutorView";
 
@@ -54,8 +54,13 @@ public class TTextView extends TextView implements ITutorObjectImpl {
     }
 
     public void init(Context context, AttributeSet attrs) {
-        mSceneObject = new CTutorObjectDelegate(this);
+        mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
+    }
+
+
+    public void setDataSource(String dataSource) {
+
     }
 
 
@@ -109,9 +114,13 @@ public class TTextView extends TextView implements ITutorObjectImpl {
     }
 
     @Override
-    public CTutorObjectDelegate getimpl() {
+    public CObjectDelegate getimpl() {
         return mSceneObject;
     }
 
+    @Override
+    public void zoomInOut(Float scale, Long duration) {
+        mSceneObject.zoomInOut(scale, duration);
+    }
 
 }

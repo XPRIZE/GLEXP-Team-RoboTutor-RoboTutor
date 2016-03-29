@@ -17,20 +17,20 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 
+import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.ltk.CStimResp;
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.CTutorObjectDelegate;
+import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.robotutor.tutorengine.util.JSON_Helper;
 
 public class TStimResp extends CStimResp implements ITutorObjectImpl {
 
 
-    private CTutorObjectDelegate mSceneObject;
+    private CObjectDelegate mSceneObject;
 
     private float aspect = 0.82f;  // w/h
 
@@ -56,7 +56,7 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
 
     @Override
     public void init(Context context, AttributeSet attrs) {
-        mSceneObject = new CTutorObjectDelegate(this);
+        mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
 
     }
@@ -122,7 +122,7 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
             System.exit(1);
         }
 
-        // Pass an array of strings as the data source.
+        // Pass an array of strings as the data source to the base object
         //
         setDataSource(dataSource.split(","));
     }
@@ -173,7 +173,12 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
     }
 
     @Override
-    public CTutorObjectDelegate getimpl() {
+    public CObjectDelegate getimpl() {
         return mSceneObject;
+    }
+
+    @Override
+    public void zoomInOut(Float scale, Long duration) {
+        mSceneObject.zoomInOut(scale, duration);
     }
 }

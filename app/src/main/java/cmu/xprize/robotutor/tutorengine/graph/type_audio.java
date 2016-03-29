@@ -29,6 +29,8 @@ import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.util.IScope;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
@@ -87,7 +89,7 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
 
                 mPlayer = new MediaPlayer();
 
-                AssetFileDescriptor soundData = CTutor.getAssetManager().openFd(pathResolved);
+                AssetFileDescriptor soundData = _scope.tutor().openFD(pathResolved);
 
                 Log.d(TAG, "Audio Loading: " + pathResolved);
 
@@ -114,7 +116,7 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
 
         // play on creation if command indicates
         if(command.equals(TCONST.PLAY)) {
-            preEnter();
+            //preEnter();       ## duplicate if this is Root node
             play();
 
             // Events return done - so they may play on top of each other.
@@ -213,7 +215,7 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
         // Flows automatically increment to next animation node.
         //
         if(mode.equals(TCONST.AUDIOFLOW))
-            CTutor.mTutorNavigator.onButtonNext();
+            _scope.tutor().eventNext();
 
         if(listener != null) {
             listener.onCompletion(mp);
@@ -225,8 +227,8 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
     // *** Serialization
 
 
-
-    public void loadJSON(JSONObject jsonObj, TScope scope) {
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope2 scope) {
 
         String langPath;
 
@@ -240,10 +242,10 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
         // e.g. LANG_SW | LANG_EN | LANG_FR
 
         if(lang != null) {
-            langPath = CTutor.mapLanguage(lang);
+            langPath = _scope.tutor().mapLanguage(lang);
         }
         else {
-            langPath = CTutor.getLanguage();
+            langPath = _scope.tutor().getLanguage();
         }
 
         // Update the path to the sound source file

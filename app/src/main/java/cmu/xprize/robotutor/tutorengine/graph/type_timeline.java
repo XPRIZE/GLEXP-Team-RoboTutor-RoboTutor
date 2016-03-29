@@ -44,6 +44,8 @@ import java.util.TimerTask;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.util.IScope;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
@@ -57,15 +59,15 @@ public class type_timeline extends type_action {
 
     private LoaderThread              _loaderThread;
     private boolean                   _isLoading     = false;
-    private boolean                   _deferredPlay  = false;
     private boolean                   _needsMap      = false;
     private HashMap<String, Integer>  _frameMap      = new HashMap<>();
 
-    protected Timer                   _timer       = null;
-    protected boolean                 _playing     = false;
-    protected TimerTask               _frameTask   = null;
-    protected CBaseFrame              _currAudio   = null;
-    protected CScriptFrame            _currScript  = null;
+    protected Timer                   _timer         = null;
+    protected boolean                 _playing       = false;
+    private boolean                   _deferredPlay  = false;
+    protected TimerTask               _frameTask     = null;
+    protected CBaseFrame              _currAudio     = null;
+    protected CScriptFrame            _currScript    = null;
 
     protected long                    _currFrame = 0;
     protected long                    _seekFrame = 0;               // current seek point
@@ -85,21 +87,30 @@ public class type_timeline extends type_action {
 
     }
 
-    @Override
-    public String next() {
-        String status = TCONST.NONE;
-
-        stop();
-
-        return status;
-    }
+//    @Override
+//    public String next() {
+//        String status = TCONST.NONE;
+//
+//        stop();
+//
+//        return status;
+//    }
 
     @Override
     public String applyNode() {
 
-        play();
+        String status;
 
-        return TCONST.WAIT;
+        if(_playing | _deferredPlay) {
+            stop();
+            status = TCONST.NONE;
+        }
+        else {
+            play();
+            status = TCONST.WAIT;
+        }
+
+        return status;
     }
 
 
@@ -122,7 +133,7 @@ public class type_timeline extends type_action {
             gotoAndStop(0);
 
             if(mode == TCONST.AUDIOFLOW)
-                CTutor.mTutorNavigator.onButtonNext();
+                _scope.tutor().eventNext();
         }
         else {
             // do post increment so we catch the zero frame
@@ -546,7 +557,7 @@ public class type_timeline extends type_action {
 
                 try {
                     // TODO : add scoping
-                    mScript.loadJSON(new JSONObject(xpp.getText()), mScope);
+                    mScript.loadJSON(new JSONObject(xpp.getText()), (IScope2)mScope);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -574,7 +585,7 @@ public class type_timeline extends type_action {
             while(!_scriptState.equals(TCONST.NONE) ||
                    _scriptState.equals(TCONST.WAIT)) {
 
-                _scriptState = mScript.next();
+                _scriptState = mScript.applyNode();
 
             };
 
@@ -626,7 +637,7 @@ public class type_timeline extends type_action {
                 mPlayer = new type_audio();
 
                 try {
-                    mPlayer.loadJSON(new JSONObject(jsonCode), mScope);
+                    mPlayer.loadJSON(new JSONObject(jsonCode), (IScope2)mScope);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -698,7 +709,7 @@ public class type_timeline extends type_action {
         @Override
         protected String doInBackground(Void... unsued) {
 
-            loadTrack(TCONST.TUTORROOT + "/" + TCONST.TDATA + "/" + CTutor.mTutorName + "/" + trackname + ".xml");
+            loadTrack(TCONST.TUTORROOT + "/" + TCONST.TDATA + "/" + _scope.tutorName() + "/" + trackname + ".xml");
             Log.d(TAG, "ActionTrack Loaded");
 
             return null;
@@ -745,7 +756,7 @@ public class type_timeline extends type_action {
             XmlPullParser xpparser = factory.newPullParser();
 
             if(CTutorEngine.CacheSource.equals(TCONST.ASSETS)) {
-                in = CTutor.mAssetManager.open(factoryPATH);
+                in = _scope.tutor().openAsset(factoryPATH);
             } else {
                 String filePath = RoboTutor.EXTERNFILES + "/" + factoryPATH;
 
@@ -799,9 +810,11 @@ public class type_timeline extends type_action {
             }
 
         } catch (XmlPullParserException e) {
-            Log.e(TAG, "ERROR: XML Spec Invalid: " + factoryPATH + e.getMessage());
+            Log.e(TAG, "ERROR: XML Spec Invalid: " + e.getMessage());
+            System.exit(1);
         } catch (IOException e) {
-            Log.e(TAG, "ERROR: XML Spec Invalid: " + factoryPATH + e.getMessage());
+            Log.e(TAG, "ERROR: XML Spec Invalid: " + e.getMessage());
+            System.exit(1);
         }
     }
 
@@ -860,11 +873,11 @@ public class type_timeline extends type_action {
     // *** Serialization
 
     @Override
-    public void loadJSON(JSONObject jsonObj, TScope scope) {
+    public void loadJSON(JSONObject jsonObj, IScope2 scope) {
 
         super.loadJSON(jsonObj, scope);
 
-        mScope = new TScope(name, scope);
+        mScope = new TScope(scope.tutor(), name, (TScope)scope);
 
         _trackType = TCONST.ABSOLUTE_TYPE;
 

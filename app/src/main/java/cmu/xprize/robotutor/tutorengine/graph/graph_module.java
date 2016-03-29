@@ -23,14 +23,18 @@ import android.util.Log;
 
 import java.util.HashMap;
 
-import cmu.xprize.robotutor.tutorengine.ILoadableObject;
+import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
+import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 
-public class graph_module extends graph_node implements ILoadableObject, IScope {
+public class graph_module extends graph_node implements ILoadableObject2 {
 
-    private int               _ndx = 0;
-    type_action               nextAction;
+    private int               _ndx;
+    private String            _moduleState;
+    type_action               _nextAction;
 
     // json loadable fields
     public type_action[]      tracks;
@@ -52,39 +56,64 @@ public class graph_module extends graph_node implements ILoadableObject, IScope 
 
 
     @Override
+    public void preEnter()
+    {
+        resetNode();
+        super.preEnter();
+    }
+
+
+    /**
+     * As with all overrides of "next" it should only ever be called from applyNode in
+     * scene_animator
+     *
+     * @return
+     */
+    @Override
     public String next() {
 
-        String         moduleState = TCONST.NONE;
+        if(_nextAction != null)
+            _nextAction.preExit();
+
+        if(_ndx >= tracks.length)
+            _moduleState = TCONST.NONE;
+
+        return _moduleState;
+    }
+
+
+
+    @Override
+    public String applyNode() {
+
         String         features;
-        boolean        featurePass    = false;
+        boolean        featurePass = false;
 
         // If new scene has features, check that it is being used in the current tutor feature set
         // Note: You must ensure that there is a match for the last scene in the sequence
 
-        while(_ndx < tracks.length)
-        {
-            nextAction  = tracks[_ndx];
-            moduleState = null;
-
-            _ndx++;
-
-            if(nextAction != null)
+        do {
+            if(_ndx < tracks.length)
             {
-                features = nextAction.features;
+                _nextAction = tracks[_ndx];
+
+                _ndx++;
+
+                features = _nextAction.features;
 
                 // If this scene is not in the feature set for the tutor then check the next one.
 
                 if(!features.equals(""))
                 {
-                    featurePass = CTutor.testFeatureSet(features);
+                    featurePass = _scope.tutor().testFeatureSet(features);
 
                     if(featurePass)
                     {
                         // Check Probability Feature if present
 
-                        if(nextAction.hasPFeature())
+                        if(_nextAction.hasPFeature())
                         {
-                            featurePass = nextAction.testPFeature();
+                            featurePass = _nextAction.testPFeature();
                         }
                     }
                 }
@@ -95,47 +124,39 @@ public class graph_module extends graph_node implements ILoadableObject, IScope 
                 {
                     // Check Probability Feature if present
 
-                    if(nextAction.hasPFeature())
+                    if(_nextAction.hasPFeature())
                     {
-                        featurePass = nextAction.testPFeature();
+                        featurePass = _nextAction.testPFeature();
                     }
                     else featurePass = true;
                 }
 
+                // If the feature test passes then fire the event.
+                // Otherwise set flag to indicate event was completed/skipped in this case
                 if(featurePass)
                 {
                     Log.d(TAG, "Animation Feature: " + features + " passed:" + featurePass);
 
-                    moduleState = nextAction.applyNode();
+                    _nextAction.preEnter();
+
+                    _moduleState = _nextAction.applyNode();
 
                     break;		// leave the loop
                 }
+                else {
+                    Log.i(TAG, "Feature Test Failed: ");
+                    _moduleState = TCONST.DONE;
+                }
             }
-            else break;
-        }
+            else {
+                _moduleState = TCONST.NONE;
+                break;
+            }
 
-        // When the module is complete reset it
-        //
-        if(moduleState.equals(TCONST.NONE))
-            resetNode();
-
-        return moduleState;
-    }
+        }while(_moduleState.equals(TCONST.DONE));
 
 
-    @Override
-    public String applyNode() {
-
-        String moduleState;
-
-        do {
-            // Increment the animation polymorphically
-
-            moduleState = next();
-
-        }while(moduleState.equals(TCONST.DONE));
-
-        return moduleState;
+        return _moduleState;
     }
 
 
@@ -149,8 +170,10 @@ public class graph_module extends graph_node implements ILoadableObject, IScope 
 
         if(_ndx >= tracks.length)
         {
-            if(reuse)
-                _ndx = 0;
+            if(reuse) {
+                _ndx         = 0;
+                _moduleState = TCONST.READY;
+            }
         }
 
     }
@@ -158,9 +181,9 @@ public class graph_module extends graph_node implements ILoadableObject, IScope 
 
     // Symbol resolution - This allows local maps within modules.
     //
-    public IScriptable mapSymbol(String symbolName) throws Exception {
+    public IScriptable2 mapSymbol(String symbolName) throws Exception {
 
-        IScriptable result = null;
+        IScriptable2 result = null;
 
         if(actionMap != null && ((result = (type_action) actionMap.get(symbolName)) == null)) {
 

@@ -30,9 +30,11 @@ import java.util.List;
 import java.util.Map;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.CTutorNavigator;
+import cmu.xprize.robotutor.tutorengine.CSceneAnimator;
+import cmu.xprize.robotutor.tutorengine.CSceneNavigator;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.util.IScope;
 import cmu.xprize.util.TCONST;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
 public class type_action extends graph_node {
 
@@ -77,11 +79,12 @@ public class type_action extends graph_node {
 
     public boolean testPFeature() {
 
-        int   iter = _parent.queryPFeature(pid, _prob.length, cycle);
+        int   iter = CSceneAnimator.queryPFeature(pid, _prob.length, cycle);
         float rand = (float)Math.random();
 
         // It's important to be < not <= because if we have 0 prob we never want it to fire.
 
+        Log.d(TAG, "PFeature: " + ((rand < Float.parseFloat(_prob[iter]))? "passed":"failed"));
         return (rand < Float.parseFloat(_prob[iter]));
     }
 
@@ -109,16 +112,16 @@ public class type_action extends graph_node {
     public String applyNode() {
 
         String returnState = TCONST.DONE;
-        Map    childMap    = CTutorNavigator.getChildMap();
+        Map    childMap    = CSceneNavigator.getChildMap();
 
         if(cmd != null) {
             switch(cmd) {
                 case TCONST.GOTONODE:
-                    CTutor.gotoNode(id);
+                    _scope.tutor().gotoNode(id);
                     break;
 
                 case TCONST.NEXT:
-                    CTutor.mTutorNavigator.onButtonNext();
+                    _scope.tutor().eventNext();
                     break;
 
                 case TCONST.WAIT:
@@ -222,7 +225,7 @@ public class type_action extends graph_node {
      * @param scope
      */
     @Override
-    public void loadJSON(JSONObject jsonObj, TScope scope) {
+    public void loadJSON(JSONObject jsonObj, IScope2 scope) {
 
         // Always call super to init _scope - or do it yourself
         //
@@ -232,7 +235,7 @@ public class type_action extends graph_node {
         // If there are probabilities defined for the feature
         // generate an array of the prob for iterations of this pid
         if($P != null)
-            _prob = $P.split("|");
+            _prob = $P.split("\\|");
     }
 
 }
