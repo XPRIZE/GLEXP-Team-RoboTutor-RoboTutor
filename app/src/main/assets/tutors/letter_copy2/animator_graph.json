@@ -8,35 +8,18 @@
       "title": "Letter copying tutor",
       "COMMENT": "This tutor is designed for copying letter A-Z and a-z.",
       "version": "1.0.0",
-      "rootnode": "SET_FW_REC",
+      "rootnode": "INTRO_STATE",
 
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
-
-
-        "SET_FW_REC": {
-          "type": "NODE",
-          "COMMENT": "",
-          "maptype":"actionMap",
-          "mapname": "FW_SET_REC",
-          "preenter":[],
-          "preexit" :[],
-          "edges": [
-            {
-              "constraint": "",
-              "edge": "INTRO_STATE"
-            }
-          ]
-        },
-
 
         "INTRO_STATE": {
           "type": "NODE",
           "COMMENT": "Intro Clip",
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
-          "preenter":["SET_DATASOURCE","FW_DISABLE"],
+          "preenter":["SET_DATASOURCE","FW_SET_REC","FW_DISABLE"],
           //temp ---- "preenter":["GB_DISABLE","FW_DISABLE"],
           "preexit" :[],
           "edges": [
