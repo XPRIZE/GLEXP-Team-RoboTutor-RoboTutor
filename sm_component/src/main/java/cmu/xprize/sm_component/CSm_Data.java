@@ -17,32 +17,25 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.mn_component;
+package cmu.xprize.sm_component;
 
 import org.json.JSONObject;
 
-import cmu.xprize.util.CClassMap;
-import cmu.xprize.util.ILoadableObject;
-import cmu.xprize.util.IScope;
-import cmu.xprize.util.JSON_Helper;
+import cmu.xprize.util.*;
 
-public class CMn_Data implements ILoadableObject{
+public class CSm_Data implements ILoadableObject {
 
     // json loadable
-    public String        options;
-    public int[]         dataset;
-    public int           maxvalue;
-    public String        mn_index;
+
 
 
 
     //************ Serialization
 
 
-
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
 
-        JSON_Helper.parseSelf(jsonObj, this, CClassMap.classMap, scope);
+        JSON_Helper.parseSelf(jsonObj, this, cmu.xprize.util.CClassMap.classMap, scope);
     }
 }

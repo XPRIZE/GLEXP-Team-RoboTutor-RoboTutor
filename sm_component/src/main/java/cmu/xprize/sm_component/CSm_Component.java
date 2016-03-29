@@ -36,7 +36,7 @@ public class CSm_Component extends ScrollView implements ILoadableObject {
     private Context                 mContext;
 
     // json loadable
-    public CMn_Data[]      dataSource;
+    public CSm_Data[]      dataSource;
 
     static final String TAG = "CMn_Component";
 
