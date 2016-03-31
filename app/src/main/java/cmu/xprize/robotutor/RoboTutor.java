@@ -29,8 +29,7 @@ import java.io.IOException;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
-import cmu.xprize.robotutor.tutorengine.ITutorSceneAnimator;
-import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.robotutor.tutorengine.ITutorManager;
 import cmu.xprize.util.IReadyListener;
 import cmu.xprize.util.ProgressLoading;
 import cmu.xprize.util.TCONST;
@@ -52,7 +51,7 @@ import edu.cmu.xprize.listener.Listener;
 public class RoboTutor extends Activity implements IReadyListener {
 
     private CTutorEngine        tutorEngine;
-    private ITutorSceneAnimator tutorContainer;
+    private ITutorManager tutorContainer;
     private ProgressLoading     progressLoading;
 
     public TTSsynthesizer       TTS;
@@ -73,7 +72,7 @@ public class RoboTutor extends Activity implements IReadyListener {
         setContentView(R.layout.robo_tutor);
 
         // Get the primary container for tutors
-        tutorContainer = (ITutorSceneAnimator)findViewById(R.id.tutor_container);
+        tutorContainer = (ITutorManager)findViewById(R.id.tutor_container);
 
         EXTERNFILES = getApplicationContext().getExternalFilesDir("").getPath();
 
@@ -200,7 +199,6 @@ public class RoboTutor extends Activity implements IReadyListener {
             // Load the default tutor defined in assets/tutors/engine_descriptor.json
             // TODO: Handle tutor creation failure
             tutorEngine = CTutorEngine.getTutorEngine(RoboTutor.this, tutorContainer);
-            tutorEngine.initialize();
         }
     }
 }

@@ -37,7 +37,8 @@
       "description":"writing",
       "background":"#D9FFFF",
       "data": [
-      { "type":"Sm_Data", "intent": "letter_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy" }
+        { "type":"Sm_Data", "intent": "letter_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy" },
+        { "type":"Sm_Data", "intent": "letter_copy2", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy2" }
 
       ]
     },

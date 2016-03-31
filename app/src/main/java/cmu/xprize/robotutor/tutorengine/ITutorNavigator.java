@@ -3,7 +3,7 @@ package cmu.xprize.robotutor.tutorengine;
 public interface ITutorNavigator {
 
     public void initTutorContainer(ITutorSceneImpl rootScene);
-    public CSceneAnimator getAnimator();
+    public CSceneGraph getAnimator();
 
     public void questionStart();
     public void questionComplete();

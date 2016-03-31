@@ -37,11 +37,11 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
 
 /**
- * A CSceneAnimator represents a collection of the animation graphs for each scene
+ * A CSceneGraph represents a collection of the animation graphs for each scene
  * that constitutes the tutor.
  *
  */
-public class CSceneAnimator {
+public class CSceneGraph {
 
     private TScope           mScope;
 
@@ -59,10 +59,10 @@ public class CSceneAnimator {
     public HashMap<String,scene_animator> animatorMap;
 
 
-    final private String TAG = "CSceneAnimator";
+    final private String TAG = "CSceneGraph";
 
 
-    public CSceneAnimator(CTutor tutor, TScope tutorScope) {
+    public CSceneGraph(CTutor tutor, TScope tutorScope) {
 
         mTutor     = tutor;
         mScope     = tutorScope;
