@@ -161,7 +161,7 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some numbers.mp3", "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now we will practice writing some letters.mp3", "mode":"flow", "features": ""}
           ]
         },
 
@@ -276,7 +276,7 @@
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[A,B,C]:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[A,B,C,D,E]:String","features":""},
 
         "FW_SET_REC":{"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_ALPHA:String","features":""},
 
@@ -285,7 +285,7 @@
 
         "CANCEL_REMINDER": {"type": "TIMER", "id":"ReminderTimer", "action":"CANCEL", "features": "" },
 
-        "HESITATION_TRACK": {"type": "TIMELINE", "trackname": "LETTER_HES", "features": ""},
+        "HESITATION_TRACK": {"type": "TIMELINE", "trackname": "LETTER_INPUT_HES", "features": ""},
 
         "GB_DISABLE":{"type": "COMMAND", "id": "SgoButton", "method": "enable", "parms": "FALSE:Boolean","features":""},
         //disable Go button
