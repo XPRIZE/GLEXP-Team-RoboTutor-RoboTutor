@@ -20,6 +20,9 @@
 package cmu.xprize.robotutor.tutorengine;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -53,7 +56,7 @@ public class CTutorEngine implements ILoadableObject2 {
     private String                          mJSONspec;
 
     static public RoboTutor Activity;
-    static public ITutorSceneImpl           TutorContainer;
+    static public ITutorSceneAnimator       TutorContainer;
     static public ITutorLogManager          TutorLogManager;
 
     // You can override the language used in all tutors by placing a
@@ -69,7 +72,7 @@ public class CTutorEngine implements ILoadableObject2 {
 
 
 
-    private CTutorEngine(RoboTutor context, ITutorSceneImpl tutorContainer) {
+    private CTutorEngine(RoboTutor context, ITutorSceneAnimator tutorContainer) {
 
         mRootScope      = new TScope(null, "root", null);
 
@@ -82,7 +85,7 @@ public class CTutorEngine implements ILoadableObject2 {
     }
 
 
-    static public CTutorEngine getTutorEngine(RoboTutor context, ITutorSceneImpl tutorContainer) {
+    static public CTutorEngine getTutorEngine(RoboTutor context, ITutorSceneAnimator tutorContainer) {
 
         if(mTutorEngine == null) {
             mTutorEngine = new CTutorEngine(context, tutorContainer);
@@ -133,6 +136,61 @@ public class CTutorEngine implements ILoadableObject2 {
 
         mTutorActive = new CTutor(Activity, defTutor, TutorContainer, TutorLogManager, mRootScope, language);
 
+    }
+
+
+    // Scriptable Launch command
+    //
+    static public void launch(String intent, String intentData) {
+
+        Intent extIntent = new Intent();
+        String extPackage;
+
+        switch(intentData) {
+            case "native":
+                mTutorActive = new CTutor(Activity, intent, TutorContainer, TutorLogManager, mRootScope, language);
+
+                mTutorActive.launchTutor();
+                break;
+
+            case "browser":
+
+                extIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("file:///" + intent));
+
+                getActivity().startActivity(extIntent);
+
+                break;
+
+            default:
+
+                // This a special allowance for MARi which placed there activities in a different
+                // package from there app - so we check for intent of the form "<pkgPath>:<appPath>"
+                //
+                String[] intParts = intent.split(":");
+
+                // If it is "<pkgPath>:<appPath>"
+                //
+                if(intParts.length > 1) {
+                    extPackage = intParts[0];
+                    intent     = intParts[1];
+                }
+                // Otherwise we expect the activities to be right off the package.
+                //
+                else {
+                    extPackage = intent.substring(0, intent.lastIndexOf('.'));
+                }
+
+                extIntent.setClassName(extPackage, intent);
+                extIntent.putExtra("intentdata", intentData);
+
+                try {
+                    getActivity().startActivity(extIntent);
+                }
+                catch(Exception e) {
+                    Log.e(TAG, "Launch Error: " + e + " : " + intent);
+                }
+                break;
+        }
     }
 
 

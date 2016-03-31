@@ -106,7 +106,10 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
             }
 
             try {
-                linkedView.addChar(_recChars[0]);
+                // If there is a hypothesis then return the most likely
+                //
+                if(_recChars.size() > 0)
+                    linkedView.addChar(_recChars.get(0));
             }
             catch(Exception e) {
                 Log.d(TAG, "FingerWriter: probable empty result" + e);
@@ -127,6 +130,10 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 
     public void setRecognizer(String recogId) {
         super.setRecognizer(recogId);
+    }
+
+    public void setRecognizer(String recogId, String subset) {
+        super.setRecognizer(recogId, subset);
     }
 
 

@@ -75,7 +75,7 @@ public class CTutor implements ILoadableObject2 {
     public ITutorLogManager              mTutorLogManager;
     public ITutorNavigator               mTutorNavigator;
     public CSceneAnimator                mTutorAnimator;
-    public ITutorSceneImpl               mTutorContainer;
+    public ITutorSceneAnimator           mTutorContainer;
 
     public String                        mTutorName;
     public AssetManager                  mAssetManager;
@@ -97,6 +97,10 @@ public class CTutor implements ILoadableObject2 {
     public String              engLanguage;
 
 
+    private int index = 0;  // test debug
+
+
+
     // This is used to map Language identifiers in tutor_decriptor to audio subdir names
     static public HashMap<String, String> langMap = new HashMap<String, String>();
     static {
@@ -109,7 +113,7 @@ public class CTutor implements ILoadableObject2 {
 
 
 
-    public CTutor(Context context, String name, ITutorSceneImpl tutorContainer, ITutorLogManager logManager, TScope rootScope, String tarLanguage) {
+    public CTutor(Context context, String name, ITutorSceneAnimator tutorContainer, ITutorLogManager logManager, TScope rootScope, String tarLanguage) {
 
         mTutorScope      = new TScope(this, name, rootScope);
         mContext         = context;
@@ -226,10 +230,6 @@ public class CTutor implements ILoadableObject2 {
         return mAssetManager.openFd(path);
     }
 
-    public void eventNext() {
-        mTutorNavigator.onButtonNext();
-    }
-
 
     public boolean hasTimer(String id) {
         return _timerMap.containsKey(id);
@@ -339,7 +339,11 @@ public class CTutor implements ILoadableObject2 {
 
         tarScene.setVisibility(View.VISIBLE);
 
-        mTutorContainer.getOwner().addView(tarScene);
+        ViewGroup.LayoutParams params = tarScene.getLayoutParams();
+
+//        mTutorContainer.removeAllViews();
+        mTutorContainer.addView(tarScene, index);
+        mTutorContainer.setDisplayedChild(index++);
 
         // Generate the automation hooks
         automateScene((ITutorSceneImpl) tarScene, scenedata);
@@ -552,6 +556,12 @@ public class CTutor implements ILoadableObject2 {
     }
 
 
+    // Scriptable graph next command
+    public void eventNext() {
+        mTutorNavigator.onButtonNext();
+    }
+
+    // Scriptable graph goto command
     public void gotoNode(String nodeID) {
         mTutorAnimator.gotoNode(nodeID);
     }

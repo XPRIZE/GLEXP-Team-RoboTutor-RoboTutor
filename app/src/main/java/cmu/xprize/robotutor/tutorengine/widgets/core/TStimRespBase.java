@@ -153,8 +153,8 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
         mTutor.setDelFeature(TCONST.FWINCORRECT);
 
         try {
-            if (dataSource.startsWith("file|")) {
-                dataSource = dataSource.substring(5);
+            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
+                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
 
                 JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.TASSETS + "/" + dataSource);
 

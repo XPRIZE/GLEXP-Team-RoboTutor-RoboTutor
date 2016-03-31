@@ -9,40 +9,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/session_manager"
-    android:background="#F3DB">
+    android:background="#00FF7F">
 
-    <cmu.xprize.robotutor.tutorengine.widgets.core.TBanner
-        android:id="@+id/Sbanner"
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TSmComponent
+        android:id="@+id/SsmComponent"
+        app:layout_heightPercent="100%"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_heightPercent="10%"
-        android:background="#800"
-        android:gravity="center" />
-
-    <cmu.xprize.robotutor.tutorengine.widgets.core.TMnComponent
-        android:id="@+id/SmnComponent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal"
-        app:layout_heightPercent="80%"
-        app:layout_marginTopPercent="15%"
-        app:layout_marginRightPercent="12%"
-        app:layout_marginLeftPercent="10%"
-        app:radAlley="0.33"
-        android:background="#0000"/>
-
-    <cmu.xprize.robotutor.tutorengine.widgets.core.TButton
-        android:id="@+id/SdoneButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        app:layout_marginBottomPercent="25%"
-        app:layout_marginRightPercent="2%"
-        android:padding="5dp"
-        android:textSize="32sp"
-        android:text="Done"
-        android:background="@drawable/button_background"/>
+        android:layout_height="match_parent" />
 
 </cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>

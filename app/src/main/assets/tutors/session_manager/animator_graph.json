@@ -17,9 +17,9 @@
         "INTRO_STATE": {
           "type": "NODE",
           "COMMENT": "Intro Clip",
-          "maptype":"moduleMap",
-          "mapname": "PLAYINTRO",
-          "preenter":["SET_DATASOURCE","NEXT_DATASET"],
+          "maptype":"actionMap",
+          "mapname": "PAUSE",
+          "preenter":["SET_DATASOURCE","SET_LAUNCHER"],
           "preexit" :[],
           "edges": [
               {"constraint":"FTR_RIGHT","edge":"CORRECT"},
@@ -100,9 +100,14 @@
       "actionMap": {
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "SmnComponent", "method": "setDataSource", "parms": "file|mn_data.json:String","features":""},
-        "NEXT_DATASET":{"type": "COMMAND", "id": "SmnComponent", "method": "next" ,"features":""},
+
+        "SET_LAUNCHER":{"type": "COMMAND", "id": "SsmComponent", "method": "onTutorSelect", "parms": "LAUNCH_TUTOR:String"},
+        "LAUNCH_TUTOR":{"type": "COMMAND", "cmd": "LAUNCH-TUTOR", "parms":"{{SsmComponent.intent}}:String|{{SsmComponent.intentData}}:String" },
+
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "SsmComponent", "method": "setDataSource", "parms": "[file]sm_data.json:String","features":""},
+        "NEXT_DATASET":{"type": "COMMAND", "id": "SsmComponent", "method": "next" ,"features":""},
         "B1_ATTACH": {"type": "COMMAND", "id": "SdoneButton", "method": "setButtonBehavior", "parms": "NEXT:String"},
+        "FW_SET_REC":{"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_ALPHA:String|[a-z&&[^qx]]:String","features":""},
 
         "PLAYORANGE":{"type": "AUDIO", "command": "PLAY", "soundsource": "test/orange.mp3", "mode":"flow", "features": ""},
         "PLAYPINK":{"type": "AUDIO", "command": "PLAY", "soundsource": "test/pink.mp3", "mode":"stream", "features": ""},
