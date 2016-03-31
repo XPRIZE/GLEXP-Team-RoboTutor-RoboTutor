@@ -19,28 +19,10 @@
 
 package cmu.xprize.sm_component;
 
-import org.json.JSONObject;
+/**
+ * Created by Kevin on 3/30/2016.
+ */
+public interface ILauncherButton {
 
-import cmu.xprize.util.ILoadableObject;
-import cmu.xprize.util.IScope;
-import cmu.xprize.util.JSON_Helper;
-
-
-public class CSm_Data implements ILoadableObject {
-
-    // json loadable
-    public String       intent;
-    public String       intentdata;
-    public String       buttontype;
-    public String       buttonvalue;
-
-
-    //************ Serialization
-
-
-    @Override
-    public void loadJSON(JSONObject jsonObj, IScope scope) {
-
-        JSON_Helper.parseSelf(jsonObj, this, CClassMap.classMap, scope);
-    }
+    public void buildInterface(CSm_Data buttonData);
 }

@@ -11,7 +11,7 @@
     TODO: find a way to get rid of android:id and just use a non-native tutorid
 -->
 
-<cmu.xprize.robotutor.tutorengine.widgets.core.TSceneFlipperLayout
+<cmu.xprize.robotutor.tutorengine.widgets.core.TSceneAnimatorLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -21,4 +21,4 @@
     android:animateFirstView="true"
     android:background="#00FF7F">
 
-</cmu.xprize.robotutor.tutorengine.widgets.core.TSceneFlipperLayout>
+</cmu.xprize.robotutor.tutorengine.widgets.core.TSceneAnimatorLayout>

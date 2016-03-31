@@ -32,6 +32,7 @@ import java.util.Map;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CSceneAnimator;
 import cmu.xprize.robotutor.tutorengine.CSceneNavigator;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.TCONST;
@@ -116,15 +117,37 @@ public class type_action extends graph_node {
 
         if(cmd != null) {
             switch(cmd) {
-                case TCONST.GOTONODE:
+
+                // System level command to launch a new Tutor Instance.
+                //
+                case TCONST.CMD_LAUNCH:
+                    try {
+                        // We demand a parm list of the form intent:String|intentdata:String
+                        //
+                        List<String> parmList = Arrays.asList(parms.split("[:\\|]"));
+
+                        // Resolve any variables in the parameters.
+                        // Session manager uses TScope variables to store intents
+                        //
+                        String intent     = getScope().resolveTemplate(parmList.get(0));
+                        String intentData = getScope().resolveTemplate(parmList.get(2));
+
+                        CTutorEngine.launch(intent, intentData);
+                    }
+                    catch(Exception e) {
+                        Log.e(TAG, "Launch Command Invalid: " + e);
+                    }
+                    break;
+
+                case TCONST.CMD_GOTO:
                     _scope.tutor().gotoNode(id);
                     break;
 
-                case TCONST.NEXT:
+                case TCONST.CMD_NEXT:
                     _scope.tutor().eventNext();
                     break;
 
-                case TCONST.WAIT:
+                case TCONST.CMD_WAIT:
                     returnState = TCONST.WAIT;
                     break;
             }
@@ -161,26 +184,37 @@ public class type_action extends graph_node {
                     break;
 
                 default:
-                    // The parameters come in - Name:Class:Name:Class...
-                    // So odd elements are parameter names and the subsequent
-                    // element is its encoded base type.
+                    // The parameters come in - Name:Class|Name:Class...
+                    // So in the split array the odd elements are parameter values and the
+                    // even elements are the associated base-Class(type).
 
-                    Class[]  pcls   = null;
+                    Class[]  pType  = null;
                     Object[] iparms = null;
 
                     // TODO: Fixup support for , delimited parm lists
+                    // TODO: This will require FSM or REGEX processing to allow : and | in strings.
+                    //
                     if(parms != null) {
-                        List<String> parmList = Arrays.asList(parms.split(":"));
 
-                        pcls = new Class[parmList.size() / 2];
+                        // Break up the parms specification - "parms":"value:type|value:type..."
+                        //
+                        List<String> parmList = Arrays.asList(parms.split("[:\\|]"));
+
+                        // Create the arrays
+                        pType  = new Class[parmList.size() / 2];
                         iparms = new Object[parmList.size() / 2];
 
                         for (int i1 = 1, i2 = 0; i1 < parmList.size(); i1 += 2, i2++) {
-                            parmList.set(i1, parmList.get(i1).toLowerCase());
-                            pcls[i2] = classMap.get(parmList.get(i1));
 
+                            // Force lowercase on classname (type) and translate to Class object
+                            //
+                            parmList.set(i1, parmList.get(i1).toLowerCase());
+                            pType[i2] = classMap.get(parmList.get(i1));
+
+                            // Generate the actual parameter object to pass to the method
+                            //
                             try {
-                                iparms[i2] = pcls[i2].getConstructor(new Class[]{String.class}).newInstance(parmList.get(i1 - 1));
+                                iparms[i2] = pType[i2].getConstructor(new Class[]{String.class}).newInstance(parmList.get(i1 - 1));
 
                             } catch (Exception e) {
                                 // TODO: Update this exception -  it is actually an invalid parm type error
@@ -192,12 +226,13 @@ public class type_action extends graph_node {
                     }
 
                     try {
-                        //Method _method = Button.class.getMethod("setText", CharSequence.class);
-
+                        // Find the target object by its id
+                        // get the method on the target and apply it with the parameter array created above.
+                        //
                         Log.d(TAG, childMap.get(id).toString());
                         childMap.get(id).getClass();
 
-                        Method _method = childMap.get(id).getClass().getMethod(method, pcls);
+                        Method _method = childMap.get(id).getClass().getMethod(method, pType);
 
                         _method.invoke(childMap.get(id), iparms);
 

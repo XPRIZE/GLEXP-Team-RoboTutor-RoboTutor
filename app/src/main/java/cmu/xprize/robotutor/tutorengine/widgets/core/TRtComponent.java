@@ -145,8 +145,8 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
     public void setDataSource(String dataSource) {
 
         try {
-            if (dataSource.startsWith("file|")) {
-                dataSource = dataSource.substring(5);
+            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
+                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
 
                 String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + mLanguage + "/" + dataSource);
                 loadJSON(new JSONObject(jsonData), null);

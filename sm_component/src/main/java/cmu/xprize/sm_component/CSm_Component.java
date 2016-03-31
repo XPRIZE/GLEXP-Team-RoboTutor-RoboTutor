@@ -20,25 +20,30 @@
 package cmu.xprize.sm_component;
 
 import android.content.Context;
-import android.support.percent.PercentRelativeLayout;
-import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
-public class CSm_Component extends ScrollView implements ILoadableObject {
+public class CSm_Component extends ScrollView implements ILoadableObject, ILaunchListener {
 
-    private Context                 mContext;
+    private Context                     mContext;
+    private LinearLayout                mContainer;
+    private ArrayList<CSm_RowContainer> mRows;
 
     // json loadable
-    public CSm_Data[]      dataSource;
+    public CSm_Class[]      dataSource;
 
-    static final String TAG = "CMn_Component";
+    static final String TAG = "CSm_Component";
 
 
     public CSm_Component(Context context) {
@@ -61,11 +66,69 @@ public class CSm_Component extends ScrollView implements ILoadableObject {
         inflate(getContext(), R.layout.smcomp_layout, this);
 
         mContext = context;
+
+        mContainer = (LinearLayout)findViewById(R.id.SclassContainer);
+    }
+
+
+    private void buildInterface() {
+
+        mRows = new ArrayList<>();
+        mContainer.removeAllViews();
+
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService
+                (Context.LAYOUT_INFLATER_SERVICE);
+
+        for (CSm_Class Row : dataSource) {
+
+            Log.d(TAG, "Creating Sm Row : " + Row.description);
+
+            CSm_RowContainer newRow = new CSm_RowContainer(mContext);
+
+            newRow.buildInterface(Row, this);
+
+            mRows.add(newRow);
+            mContainer.addView(newRow);
+        }
+
+        requestLayout();
+        invalidate();
+    }
+
+
+    /**
+     * This must be overridden in the tutor T subclass to initialize variables in the
+     * tutor scope.
+     *
+     * @param intent
+     * @param intentData
+     */
+    public void setTutorIntent(String intent, String intentData) {
+    }
+
+
+    /**
+     * This must be overridden in the tutor T subclass to initialize variables in the
+     * tutor scope.
+     *
+     * @param symbol
+     */
+    public void onTutorSelect(String symbol) {
+    }
+
+
+    /**
+     * This must be overridden in the tutor T subclass to initialize variables in the
+     * tutor scope.
+     *
+    */
+    protected void applyEventNode(String nodeName) {
     }
 
 
 
     //************ Serialization
+
 
 
     /**
@@ -77,5 +140,7 @@ public class CSm_Component extends ScrollView implements ILoadableObject {
     public void loadJSON(JSONObject jsonData, IScope scope) {
 
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
+
+        buildInterface();
     }
 }

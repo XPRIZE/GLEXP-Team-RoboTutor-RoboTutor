@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="RoboTutor"
+            android:name=".RoboTutor"
             android:screenOrientation="sensorLandscape"
             android:configChanges="orientation|screenSize">
             <intent-filter>

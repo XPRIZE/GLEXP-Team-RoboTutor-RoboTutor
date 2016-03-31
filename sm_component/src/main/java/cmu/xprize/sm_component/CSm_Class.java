@@ -25,14 +25,13 @@ import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
-
-public class CSm_Data implements ILoadableObject {
+public class CSm_Class implements ILoadableObject {
 
     // json loadable
-    public String       intent;
-    public String       intentdata;
-    public String       buttontype;
-    public String       buttonvalue;
+    public String      description;
+    public String      background;
+    public CSm_Data[]  data;
+
 
 
     //************ Serialization

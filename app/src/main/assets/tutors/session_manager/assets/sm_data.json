@@ -1,9 +1,81 @@
 {
+  // Session Manager v0.0.1 Data set.
+  //
+  // Supports multple rows with classes of activities.
+  // This data is ordered in both dimensions,
+  // To add a new Row:
+  //    Create a new Json Object in the dataSource array
+  //    "type" is the classMap for the IloadableObject class for the Row of buttons
+  //    For each tutor in the Row add an Sm_Data json Object describing the tutor
+  //
+  //    "intent" is the tutor name for natives or the full intent for intent based tutors.
+  //    "intentdata" is extra data for the intent
+  //        'native' tutors run in the TED engine and have access to all tutor features.
+  //        'browser' activities are not supported currently
+  //        <Intent> activities run in a webview or are std apps and are initiated through an intent
+  //
+  //    "buttontype" is 'text' or 'image'
+  //    "buttonvalue" is the ascii string for the text or the Drawable used for images.
+  //
+  // Note: Don't actually need the type elements.  It would infer the type from the
+  //       array type in the variable declaration.
+
   "dataSource": [
-    {"type":"Mn_Data", "options": "SHOWICONS,SHOWNUM", "dataset":[1,3,5]    , "maxvalue":5, "mn_index": "random"},
-    {"type":"Mn_Data", "options": "SHOWICONS,SHOWNUM", "dataset":[4,5,6,7]  , "maxvalue":8, "mn_index": "1"},
-    {"type":"Mn_Data", "options": "SHOWICONS,SHOWNUM", "dataset":[1,3,5,7]  , "maxvalue":8, "mn_index": "2"},
-    {"type":"Mn_Data", "options": "SHOWICONS,SHOWNUM", "dataset":[2,0,4,5]  , "maxvalue":8, "mn_index": "-1"},
-    {"type":"Mn_Data", "options": "SHOWICONS,SHOWNUM", "dataset":[2,3,4,5,6], "maxvalue":7, "mn_index": "random"}
+
+    { 
+      "type":"Sm_Class",
+      "description":"numeric",
+      "background":"#b9FFb9",
+      "data": [
+          { "type":"Sm_Data", "intent": "digit_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy"}
+
+        ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"writing",
+      "background":"#D9FFFF",
+      "data": [
+      { "type":"Sm_Data", "intent": "letter_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy" }
+
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"reading",
+      "background":"#b9FFb9",
+      "data": [
+        { "type":"Sm_Data", "intent": "com.carney.readingtutor:com.carney.activity.ReadingTutorActivity", "intentdata":"read", "buttontype":"text" , "buttonvalue":"Reading Tutor Ext" }
+//        { "type":"Sm_Data", "intent": "story_reading", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Reading Tutor" }
+
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_numeracy",
+      "background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=shapes&difficulty=easy", "buttontype":"text" , "buttonvalue":"ShapePop1" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=shapes&difficulty=hard", "buttontype":"text" , "buttonvalue":"ShapePop2" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers&difficulty=easy", "buttontype":"text" , "buttonvalue":"NumberPop1" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers&difficulty=hard", "buttontype":"text" , "buttonvalue":"NumberPop2" }
+      ]
+    }
+
+//    {
+//      "type":"Sm_Class",
+//      "description":"fluency_numeracy in Browser",
+//      "background":"#b9FFb9",
+//      "data": [
+//        { "type":"Sm_Data", "intent": "android_asset/games/bubblepop/index.html?level=shapes&difficulty=easy", "intentdata":"browser", "buttontype":"text" , "buttonvalue":"ShapePop1" },
+//        { "type":"Sm_Data", "intent": "android_asset/games/bubblepop/index.html?level=shapes&difficulty=hard", "intentdata":"browser", "buttontype":"text" , "buttonvalue":"ShapePop2" },
+//        { "type":"Sm_Data", "intent": "android_asset/games/bubblepop/index.html?level=numbers&difficulty=easy", "intentdata":"browser", "buttontype":"text" , "buttonvalue":"NumberPop1" },
+//        { "type":"Sm_Data", "intent": "android_asset/games/bubblepop/index.html?level=numbers&difficulty=hard", "intentdata":"browser", "buttontype":"text" , "buttonvalue":"NumberPop2" }
+//      ]
+//    }
+
   ]
 }

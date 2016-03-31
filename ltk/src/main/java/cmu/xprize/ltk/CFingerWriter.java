@@ -34,6 +34,8 @@ import android.view.View.OnTouchListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cmu.xprize.util.TCONST;
 
@@ -60,7 +62,8 @@ public class CFingerWriter extends View implements OnTouchListener {
     private boolean            _isRecognizing = false;
     private Stroke[]           _recStrokes;
     private RecResult[]        _recResults;
-    protected String[]         _recChars;
+    protected ArrayList<String>_recChars;
+    private String             _constraint;
 
     private Stroke             _currentStroke;
     private ArrayList<Stroke>  _currentStrokeStore;
@@ -173,6 +176,8 @@ public class CFingerWriter extends View implements OnTouchListener {
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(getContext());
 
+        // Initialize the path object
+        clear();
         //this.setOnTouchListener(this);
     }
 
@@ -227,8 +232,8 @@ public class CFingerWriter extends View implements OnTouchListener {
             return "o";
         }
 
-        Log.d(TAG, "getRecChar is - " + _recChars[id]);
-        return _recChars[id];
+        Log.d(TAG, "getRecChar is - " + _recChars.get(id));
+        return _recChars.get(id);
     }
 
 
@@ -459,33 +464,47 @@ public class CFingerWriter extends View implements OnTouchListener {
 
 
         /** OnPostExecute is guaranteed to run on the UI thread so we can update the view etc
-        // TODO: update this to do something useful
+         * TODO: update this to do something useful
+         * TODO: fix the way we process the constraint.
         */
         @Override
         protected void onPostExecute(String sResponse) {
+
             clear();
+            Pattern pattern = Pattern.compile(_constraint);
 
             for (RecResult result : _recResults) {
                 Log.e("jni", "ShapeID = " + result.Id + " Confidence = " + result.Confidence);
             }
 
             _recStrokes = null;
-            _recChars   = new String[_recResults.length];
+            _recChars   = new ArrayList<String>();
 
-            for (int i = 0; i < _recChars.length; i++) {
-                _recChars[i] = _recognizer.getSymbolName(_recResults[i].Id, _configFolder);
+            for (int i = 0; i < _recResults.length ; i++) {
+               String recChar = _recognizer.getSymbolName(_recResults[i].Id, _configFolder);
+
+                Matcher matcher = pattern.matcher(recChar);
+
+                if(matcher.find()) {
+                    _recChars.add(recChar);
+                }
             }
 
             _isRecognizing = false;
 
-            // send the result to the stimresp that is linked
-            updateLinkedView(mLinkedViewID);
+            // Don't do any processing if there isn't a hypothesis
 
-            // Let anyone interested know there is a new recognition set available
-            bManager.sendBroadcast(new Intent(RECMSG));
+            if(_recChars.size() > 0) {
 
-            // Do any on rec behaviors
-            applyEventNode(_onRecognition);
+                // send the result to the stimresp that is linked
+                updateLinkedView(mLinkedViewID);
+
+                // Let anyone interested know there is a new recognition set available
+                bManager.sendBroadcast(new Intent(RECMSG));
+
+                // Do any on rec behaviors
+                applyEventNode(_onRecognition);
+            }
         }
 
 
@@ -518,6 +537,7 @@ public class CFingerWriter extends View implements OnTouchListener {
     public void setRecognizer(String recogId) {
 
         _initialized = false;
+        _constraint = ".";          // By default don't filter anything
 
         // Initialize lipitk
         File externalFileDir = getContext().getExternalFilesDir(null);
@@ -541,6 +561,19 @@ public class CFingerWriter extends View implements OnTouchListener {
 
         // reset the internal state
         clear();
+    }
+
+
+    /**
+     * TODO: rewrite the LTK project format
+     * @param recogId
+     */
+    public void setRecognizer(String recogId, String subset) {
+
+        // Add a regex that will filter the recognized input.
+        //
+        setRecognizer(recogId);
+        _constraint = subset;
     }
 
 

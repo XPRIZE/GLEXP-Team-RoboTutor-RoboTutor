@@ -102,8 +102,8 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
     public void setDataSource(String dataSource) {
 
         try {
-            if (dataSource.startsWith("file|")) {
-                dataSource = dataSource.substring(5);
+            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
+                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
 
                 JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.TDESC + "/" + dataSource);
 

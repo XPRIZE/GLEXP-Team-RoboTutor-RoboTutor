@@ -32,7 +32,9 @@ import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.sm_component.CSm_Component;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -41,6 +43,8 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl {
 
     private CTutor               mTutor;
     private CObjectDelegate      mSceneObject;
+
+    private String               mSymbol;
 
     static final private String TAG = "TSmComponent";
 
@@ -79,8 +83,8 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl {
     public void setDataSource(String dataSource) {
 
         try {
-            if (dataSource.startsWith("file|")) {
-                dataSource = dataSource.substring(5);
+            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
+                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
 
                 String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataSource);
                 // Load the datasource in the component module - i.e. the superclass
@@ -104,6 +108,47 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl {
     }
 
 
+    /**
+     * The session manager set the \<varname\>.intent and intentData scoped variables
+     * for use by the scriptable Launch command. see type_action
+     *
+     * @param intent
+     * @param intentData
+     */
+    @Override
+    public void setTutorIntent(String intent, String intentData) {
+
+        // update the response variable  "<Sresponse>.value"
+
+        mTutor.getScope().addUpdate(name() + ".intent", new TString(intent));
+        mTutor.getScope().addUpdate(name() + ".intentData", new TString(intentData));
+
+        applyEventNode(mSymbol);
+    }
+
+
+
+    @Override
+    public void onTutorSelect(String symbol) {
+        mSymbol = symbol;
+    }
+
+
+    @Override
+    protected void applyEventNode(String nodeName) {
+        IScriptable2 obj = null;
+
+        if(nodeName != null && !nodeName.equals("")) {
+            try {
+                obj = mTutor.getScope().mapSymbol(nodeName);
+                obj.applyNode();
+
+            } catch (Exception e) {
+                // TODO: Manage invalid Behavior
+                e.printStackTrace();
+            }
+        }
+    }
 
 
     //**********************************************************
