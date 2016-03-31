@@ -1,12 +1,12 @@
 {
   "animatorMap": {
-    "COMMENT": "Animation Graph for the Digit Copy Tutor",
+    "COMMENT": "Animation Graph for the Letter Copy Tutor",
 
-    "digit_copy": {
+    "letter_copy2": {
 
       "type": "ANIMATOR",
-      "title": "Digit copying tutor",
-      "COMMENT": "This tutor is designed for copying single digit numbers 0-9.",
+      "title": "Letter copying tutor",
+      "COMMENT": "This tutor is designed for copying letter A-Z and a-z.",
       "version": "1.0.0",
       "rootnode": "INTRO_STATE",
 
@@ -31,7 +31,7 @@
         },
 
         "NEWCHAR":{
-          "COMMENT":"This node presents a digit for user to copy.",
+          "COMMENT":"This node presents a letter for user to copy.",
           "type":"node",
           "preenter":["GETCHAR"],
           "maptype":"moduleMap",
@@ -161,7 +161,7 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some numbers.mp3", "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now we will practice writing some letters.mp3", "mode":"flow", "features": ""}
           ]
         },
 
@@ -171,9 +171,10 @@
           "COMMENT": "TBD",
           "tracks": [
             {"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "TRUE:Boolean","features":""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":""},
             // Sstimulus
             //{"type": "AUDIO", "command": "PLAY", "soundsource": "This is the number.mp3", "mode":"flow", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""} //the stimulus digit
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""}
             //{"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3", "mode":"flow", "features": ""},
             //{"type": "AUDIO","command": "PLAY", "soundsource": "with your finger.mp3", "mode":"flow", "features": ""}
           ]
@@ -223,7 +224,7 @@
             {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""}, //flag the incorrect string in red color
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Huh.mp3", "mode":"flow","features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "That doesnt look like.mp3", "mode":"flow","features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3","mode":"flow", "features": ""}, //the stimulus digit
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3","mode":"flow", "features": ""}, //the stimulus
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
           ]
         },
@@ -234,7 +235,7 @@
 //          "COMMENT": "TBD",
 //          "tracks": [
 //            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3", "mode":"event", "features": ""},
-//            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"event", "features": ""} //the stimulus digit
+//            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"event", "features": ""} //the stimulus
 //          ]
 //        },
 
@@ -275,16 +276,16 @@
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[0,1]:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[A,B,C,D,E]:String","features":""},
 
-        "FW_SET_REC":{"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_NUM:String","features":""},
+        "FW_SET_REC":{"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_ALPHA:String","features":""},
 
         "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HESITATION_TRACK", "features": "" },
         //set the waiting time limit as 10 seconds
 
         "CANCEL_REMINDER": {"type": "TIMER", "id":"ReminderTimer", "action":"CANCEL", "features": "" },
 
-        "HESITATION_TRACK": {"type": "TIMELINE", "trackname": "HES_ABS", "features": ""},
+        "HESITATION_TRACK": {"type": "TIMELINE", "trackname": "LETTER_INPUT_HES", "features": ""},
 
         "GB_DISABLE":{"type": "COMMAND", "id": "SgoButton", "method": "enable", "parms": "FALSE:Boolean","features":""},
         //disable Go button
@@ -297,7 +298,7 @@
         //enable FingerWriting
 
         "GETCHAR":{"type": "COMMAND", "id": "Sstimulus", "method": "next" ,"features":""},
-        //get a new digit from the list.
+        //get a new character from the list.
 
         //"GETRESPONSE":{"type": "COMMAND", "id": "Sresponse", "method": "???" ,"features":""},
         //get the recognized character from the recognizer???
