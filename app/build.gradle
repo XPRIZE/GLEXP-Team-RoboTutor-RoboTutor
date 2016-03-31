@@ -9,7 +9,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0"
+        versionName "0.0.9"
     }
     buildTypes {
         release {
@@ -38,4 +38,5 @@ dependencies {
     compile project(':mn_component')
     compile project(':listener')
     compile project(':rt_component')
+    compile project(':sm_component')
 }

@@ -28,6 +28,8 @@ public class LipiTKJNIInterface {
         _project = project;
     }
 
+
+    // TODO: Fix this - It's NUTS
     public String getSymbolName(int id,String project_config_dir)
     {
         String line;

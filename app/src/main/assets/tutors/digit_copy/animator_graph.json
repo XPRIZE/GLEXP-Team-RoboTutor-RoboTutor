@@ -19,7 +19,7 @@
           "COMMENT": "Intro Clip",
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
-          "preenter":["SET_DATASOURCE","FW_DISABLE"],
+          "preenter":["SET_DATASOURCE","FW_SET_REC","FW_DISABLE"],
           //temp ---- "preenter":["GB_DISABLE","FW_DISABLE"],
           "preexit" :[],
           "edges": [
@@ -172,10 +172,10 @@
           "tracks": [
             {"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "TRUE:Boolean","features":""},
             // Sstimulus
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "This is the number.mp3", "mode":"flow", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""}, //the stimulus digit
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3", "mode":"flow", "features": ""},
-            {"type": "AUDIO","command": "PLAY", "soundsource": "with your finger.mp3", "mode":"flow", "features": ""}
+            //{"type": "AUDIO", "command": "PLAY", "soundsource": "This is the number.mp3", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""} //the stimulus digit
+            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3", "mode":"flow", "features": ""},
+            //{"type": "AUDIO","command": "PLAY", "soundsource": "with your finger.mp3", "mode":"flow", "features": ""}
           ]
         },
 
@@ -276,6 +276,8 @@
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
         "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[0,1]:String","features":""},
+
+        "FW_SET_REC":{"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_NUM:String","features":""},
 
         "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HESITATION_TRACK", "features": "" },
         //set the waiting time limit as 10 seconds

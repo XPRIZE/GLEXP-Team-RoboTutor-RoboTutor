@@ -29,6 +29,7 @@ import java.io.IOException;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
+import cmu.xprize.robotutor.tutorengine.ITutorSceneAnimator;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.util.IReadyListener;
 import cmu.xprize.util.ProgressLoading;
@@ -51,7 +52,7 @@ import edu.cmu.xprize.listener.Listener;
 public class RoboTutor extends Activity implements IReadyListener {
 
     private CTutorEngine        tutorEngine;
-    private ITutorSceneImpl     tutorContainer;
+    private ITutorSceneAnimator tutorContainer;
     private ProgressLoading     progressLoading;
 
     public TTSsynthesizer       TTS;
@@ -72,7 +73,7 @@ public class RoboTutor extends Activity implements IReadyListener {
         setContentView(R.layout.robo_tutor);
 
         // Get the primary container for tutors
-        tutorContainer = (ITutorSceneImpl)findViewById(R.id.tutor_container);
+        tutorContainer = (ITutorSceneAnimator)findViewById(R.id.tutor_container);
 
         EXTERNFILES = getApplicationContext().getExternalFilesDir("").getPath();
 
