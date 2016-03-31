@@ -36,7 +36,7 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
 /**
- * Scene Descriptors are used for simple CSceneNavigator instances
+ * Scene Descriptors are used for simple CTutorGraph instances
  * which use a linear list of scenes
  */
 public class scene_descriptor implements ILoadableObject2 {

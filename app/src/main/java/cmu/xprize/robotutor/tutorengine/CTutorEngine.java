@@ -20,7 +20,6 @@
 package cmu.xprize.robotutor.tutorengine;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -32,7 +31,6 @@ import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
-import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -56,7 +54,7 @@ public class CTutorEngine implements ILoadableObject2 {
     private String                          mJSONspec;
 
     static public RoboTutor Activity;
-    static public ITutorSceneAnimator       TutorContainer;
+    static public ITutorManager             TutorContainer;
     static public ITutorLogManager          TutorLogManager;
 
     // You can override the language used in all tutors by placing a
@@ -71,8 +69,13 @@ public class CTutorEngine implements ILoadableObject2 {
     final static private String TAG         = "CTutorEngine";
 
 
-
-    private CTutorEngine(RoboTutor context, ITutorSceneAnimator tutorContainer) {
+    /**
+     * TutorEngine is a Singleton
+     *
+     * @param context
+     * @param tutorContainer
+     */
+    private CTutorEngine(RoboTutor context, ITutorManager tutorContainer) {
 
         mRootScope      = new TScope(null, "root", null);
 
@@ -82,10 +85,28 @@ public class CTutorEngine implements ILoadableObject2 {
 
         // Initialize the JSON Helper statics - just throw away the object.
         new JSON_Helper(Activity.getAssets(), CacheSource, RoboTutor.EXTERNFILES);
+
+        initialize();
     }
 
 
-    static public CTutorEngine getTutorEngine(RoboTutor context, ITutorSceneAnimator tutorContainer) {
+    private void initialize() {
+
+        loadEngineDescr();
+        addTutor(defTutor);
+
+        mTutorActive.launchTutor();
+    }
+
+
+    /**
+     * Retrieve the one and only tutorEngine object
+     *
+     * @param context
+     * @param tutorContainer
+     * @return
+     */
+    static public CTutorEngine getTutorEngine(RoboTutor context, ITutorManager tutorContainer) {
 
         if(mTutorEngine == null) {
             mTutorEngine = new CTutorEngine(context, tutorContainer);
@@ -106,35 +127,9 @@ public class CTutorEngine implements ILoadableObject2 {
     }
 
 
-    static public void add(String Id, ITutorObject obj) {
+    private void addTutor(String tutorName) {
 
-        mTutorActive.add(Id, obj);
-    }
-
-
-    static public ITutorObject get(String Id) {
-
-        return mTutorActive.get(Id);
-    }
-
-
-    public void clear() {
-        mTutorActive.clear();
-    }
-
-
-    public void initialize() {
-
-        loadEngineDescr();
-        loadDefTutor();
-
-        mTutorActive.launchTutor();
-    }
-
-
-    private void loadDefTutor() {
-
-        mTutorActive = new CTutor(Activity, defTutor, TutorContainer, TutorLogManager, mRootScope, language);
+        mTutorActive = new CTutor(Activity, tutorName, TutorContainer, TutorLogManager, mRootScope, language);
 
     }
 
