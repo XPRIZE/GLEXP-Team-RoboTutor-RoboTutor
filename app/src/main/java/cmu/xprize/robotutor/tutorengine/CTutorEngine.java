@@ -57,6 +57,8 @@ public class CTutorEngine implements ILoadableObject2 {
     static public ITutorManager             TutorContainer;
     static public ITutorLogManager          TutorLogManager;
 
+    static HashMap<String,CTutor>            tutorMap = new HashMap<>();
+
     // You can override the language used in all tutors by placing a
     // "language":"LANG_EN", spec in the TCONST.EDESC replacing EN with
     // the desired language id
@@ -90,15 +92,6 @@ public class CTutorEngine implements ILoadableObject2 {
     }
 
 
-    private void initialize() {
-
-        loadEngineDescr();
-        addTutor(defTutor);
-
-        mTutorActive.launchTutor();
-    }
-
-
     /**
      * Retrieve the one and only tutorEngine object
      *
@@ -116,6 +109,14 @@ public class CTutorEngine implements ILoadableObject2 {
     }
 
 
+    private void initialize() {
+
+        loadEngineDescr();
+        addTutor(defTutor);
+        launchTutor(defTutor);
+    }
+
+
     static public TScope getScope() {
 
         return mRootScope;
@@ -127,10 +128,18 @@ public class CTutorEngine implements ILoadableObject2 {
     }
 
 
-    private void addTutor(String tutorName) {
+    static private void addTutor(String tutorName) {
 
-        mTutorActive = new CTutor(Activity, tutorName, TutorContainer, TutorLogManager, mRootScope, language);
+        CTutor newTutor = new CTutor(Activity, tutorName, TutorContainer, TutorLogManager, mRootScope, language);
 
+        tutorMap.put(tutorName, newTutor);
+    }
+
+
+    static private void launchTutor(String tutorName) {
+
+        CTutor tutor = tutorMap.get(tutorName);
+        tutor.launchTutor();
     }
 
 
@@ -143,9 +152,8 @@ public class CTutorEngine implements ILoadableObject2 {
 
         switch(intentData) {
             case "native":
-                mTutorActive = new CTutor(Activity, intent, TutorContainer, TutorLogManager, mRootScope, language);
-
-                mTutorActive.launchTutor();
+                addTutor(intent);
+                launchTutor(intent);
                 break;
 
             case "browser":

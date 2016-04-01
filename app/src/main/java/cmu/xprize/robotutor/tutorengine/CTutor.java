@@ -416,8 +416,11 @@ public class CTutor implements ILoadableObject2 {
     }
 
 
-    // generate the working feature set for this instance
-    //
+    /**
+     * generate the working feature set for this instance
+     *
+     * @param featSet
+     */
     public void setTutorFeatures(String featSet) {
         List<String> featArray = new ArrayList<String>();
 
@@ -441,9 +444,11 @@ public class CTutor implements ILoadableObject2 {
     }
 
 
-    // get : delimited string of features
-    //## Mod Oct 16 2012 - logging support
-    //
+    /**
+     *  get : delimited string of features
+     * ## Mod Oct 16 2012 - logging support
+     *
+     */
     public String getFeatures() {
         StringBuilder builder = new StringBuilder();
 
@@ -456,9 +461,12 @@ public class CTutor implements ILoadableObject2 {
     }
 
 
-    // set : delimited string of features
-    //## Mod Dec 03 2013 - DB state support
-    //
+    /**
+     * set : delimited string of features
+     * ## Mod Dec 03 2013 - DB state support
+     *
+     * @param ftrSet
+     */
     public void setFeatures(String ftrSet) {
         // Add new features - no duplicates
         List<String> featArray = Arrays.asList(ftrSet.split(","));
