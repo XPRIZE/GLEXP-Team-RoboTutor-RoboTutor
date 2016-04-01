@@ -83,6 +83,10 @@ public class type_timeline extends type_action {
     public String                    trackname;
 
 
+    final static public String TAG = "type_timeline";
+
+
+
     public type_timeline() {
 
     }
@@ -746,7 +750,7 @@ public class type_timeline extends type_action {
 
     public void loadTrack(String factoryPATH)  {
 
-        InputStream in;
+        InputStream in     = null;
         int         mDepth = 0;
 
         try {
@@ -755,12 +759,20 @@ public class type_timeline extends type_action {
 
             XmlPullParser xpparser = factory.newPullParser();
 
-            if(CTutorEngine.CacheSource.equals(TCONST.ASSETS)) {
-                in = _scope.tutor().openAsset(factoryPATH);
-            } else {
-                String filePath = RoboTutor.EXTERNFILES + "/" + factoryPATH;
+            try {
+                if (CTutorEngine.CacheSource.equals(TCONST.ASSETS)) {
 
-                in = new FileInputStream(filePath);
+                    in = _scope.tutor().openAsset(factoryPATH);
+
+                } else {
+                    String filePath = RoboTutor.EXTERNFILES + "/" + factoryPATH;
+
+                    in = new FileInputStream(filePath);
+                }
+            }
+            catch(Exception e) {
+                Log.e(TAG, "ERROR: Flash resource: " + e);
+                System.exit(1);
             }
 
             xpparser.setInput(in, null);
