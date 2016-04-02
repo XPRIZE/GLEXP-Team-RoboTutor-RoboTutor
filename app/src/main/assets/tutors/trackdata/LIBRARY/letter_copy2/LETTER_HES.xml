@@ -14,7 +14,7 @@
   "reuse":true,
   "COMMENT": "????",
   "tracks": [
-	{"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3", "features": ""}
+	{"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.valueUC}}.mp3", "features": ""}
   ]
 }]]></script>
               </Actionscript>

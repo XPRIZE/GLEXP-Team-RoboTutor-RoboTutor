@@ -174,7 +174,7 @@
             {"type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":""},
             // Sstimulus
             //{"type": "AUDIO", "command": "PLAY", "soundsource": "This is the number.mp3", "mode":"flow", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.valueUC}}.mp3",   "mode":"flow", "features": ""}
             //{"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3", "mode":"flow", "features": ""},
             //{"type": "AUDIO","command": "PLAY", "soundsource": "with your finger.mp3", "mode":"flow", "features": ""}
           ]
@@ -224,7 +224,7 @@
             {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""}, //flag the incorrect string in red color
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Huh.mp3", "mode":"flow","features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "That doesnt look like.mp3", "mode":"flow","features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3","mode":"flow", "features": ""}, //the stimulus
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.valueUC}}.mp3","mode":"flow", "features": ""}, //the stimulus
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
           ]
         },
@@ -276,16 +276,16 @@
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[A,B,C,D,E]:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[a,b,c]:String","features":""},
 
-        "FW_SET_REC":{"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_ALPHA:String","features":""},
+        "FW_SET_REC":{"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_ALPHA:String|[a-z&&[^qx]]:String","features":""},
 
         "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HESITATION_TRACK", "features": "" },
         //set the waiting time limit as 10 seconds
 
         "CANCEL_REMINDER": {"type": "TIMER", "id":"ReminderTimer", "action":"CANCEL", "features": "" },
 
-        "HESITATION_TRACK": {"type": "TIMELINE", "trackname": "LETTER_INPUT_HES", "features": ""},
+        "HESITATION_TRACK": {"type": "TIMELINE", "trackname": "LETTER_HES", "features": ""},
 
         "GB_DISABLE":{"type": "COMMAND", "id": "SgoButton", "method": "enable", "parms": "FALSE:Boolean","features":""},
         //disable Go button
