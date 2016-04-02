@@ -5,7 +5,7 @@ import android.view.View;
 /**
  * Created by Kevin on 3/31/2016.
  */
-public interface ITutorSceneAnimator extends ITutorSceneImpl {
+public interface ITutorManager extends ITutorSceneImpl {
 
     public void addView(View newView);
     public void addView(View newView, int index);

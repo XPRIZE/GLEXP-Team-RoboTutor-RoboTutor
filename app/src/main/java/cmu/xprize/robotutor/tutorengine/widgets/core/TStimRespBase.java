@@ -101,6 +101,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
         // update the response variable  "<Sresponse>.value"
         mTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
+        mTutor.getScope().addUpdate(name() + ".valueUC", new TString(mValue.toUpperCase()));
 
         if(mLinkedView == null)
             mLinkedView = (TStimRespBase)mTutor.getViewById(mLinkedViewID, null);
@@ -190,6 +191,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
         // update the Scope response variable  "<Sstimulus>.value"
         //
         mTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
+        mTutor.getScope().addUpdate(name() + ".valueUC", new TString(mValue.toUpperCase()));
 
         if(dataExhausted())
             mTutor.setAddFeature(TCONST.FTR_EOI);

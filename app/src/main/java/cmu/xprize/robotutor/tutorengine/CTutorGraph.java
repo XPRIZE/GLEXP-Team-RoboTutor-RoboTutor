@@ -30,7 +30,6 @@ import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
-import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -38,7 +37,7 @@ import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
 
-public class CSceneNavigator implements ITutorNavigator, ILoadableObject2 {
+public class CTutorGraph implements ITutorNavigator, ILoadableObject2 {
 
     private static TScope                     mRootScope;
 
@@ -51,7 +50,7 @@ public class CSceneNavigator implements ITutorNavigator, ILoadableObject2 {
     protected CTutor                          mTutor;
     protected String                          mTutorName;
     protected ITutorLogManager                mLogManager;
-    protected CSceneAnimator mTutorAnimator;
+    protected CSceneGraph                     mSceneAnimator;
 
     // json loadable
     static public scene_descriptor[]          navigatedata;
@@ -64,14 +63,18 @@ public class CSceneNavigator implements ITutorNavigator, ILoadableObject2 {
     static private boolean                           _fSceneGraph = false;
 
 
-    final private String       TAG       = "CSceneNavigator";
-
+    final private String       TAG       = "CTutorGraph";
 
 
     /**
      *
+     *
+     *
+     * @param tutor
+     * @param name
+     * @param tutorScope
      */
-    public CSceneNavigator(CTutor tutor, String name, TScope tutorScope) {
+    public CTutorGraph(CTutor tutor, String name, TScope tutorScope) {
 
         mRootScope = new TScope(tutor, name + "-SceneNavigator", tutorScope);      // Use a unique namespace
 
@@ -82,7 +85,7 @@ public class CSceneNavigator implements ITutorNavigator, ILoadableObject2 {
 
         loadNavigatorDescr();
 
-        mTutorAnimator = new CSceneAnimator(mTutor, tutorScope);
+        mSceneAnimator = new CSceneGraph(mTutor, tutorScope);
     }
 
     // Initialize the pointer to the tutor root scene
@@ -93,8 +96,8 @@ public class CSceneNavigator implements ITutorNavigator, ILoadableObject2 {
     }
 
     @Override
-    public CSceneAnimator getAnimator() {
-        return mTutorAnimator;
+    public CSceneGraph getAnimator() {
+        return mSceneAnimator;
     }
 
 
@@ -142,7 +145,7 @@ public class CSceneNavigator implements ITutorNavigator, ILoadableObject2 {
         // i.e. You either want it to trigger the next step in the animationGraph or the sceneGraph
         // reset _fSceneGraph if you want the next button to drive the animationGraph
         //
-        if(_fSceneGraph || mTutorAnimator.applyNode().equals(TCONST.NEXTSCENE)) {
+        if(_fSceneGraph || mSceneAnimator.applyNode().equals(TCONST.NEXTSCENE)) {
             gotoNextScene();
         }
     }
@@ -465,7 +468,7 @@ public class CSceneNavigator implements ITutorNavigator, ILoadableObject2 {
         //
         navigatedata[_sceneCurr].instance.onEnterScene();
 
-        mTutorAnimator.enterScene(navigatedata[_sceneCurr].id);
+        mSceneAnimator.enterScene(navigatedata[_sceneCurr].id);
     }
 
 

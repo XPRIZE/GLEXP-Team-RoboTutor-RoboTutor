@@ -165,7 +165,7 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
                 break;
 
             case TCONST.STOP:
-                mTutor.mTutorAnimator.stop();
+                mTutor.mSceneAnimator.stop();
                 break;
 
             default:
