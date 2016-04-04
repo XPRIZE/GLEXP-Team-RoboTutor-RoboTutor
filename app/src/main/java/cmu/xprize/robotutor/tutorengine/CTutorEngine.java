@@ -169,6 +169,13 @@ public class CTutorEngine implements ILoadableObject2 {
     }
 
 
+    static public void killTutor(String tutorName) {
+
+        tutorMap.remove(tutorName);
+        sceneMap.remove(tutorName);
+    }
+
+
     static private void launchTutor(String tutorName) {
 
         CTutor tutor = tutorMap.get(tutorName);
