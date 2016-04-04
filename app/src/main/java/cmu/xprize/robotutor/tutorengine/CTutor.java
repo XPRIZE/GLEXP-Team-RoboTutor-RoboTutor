@@ -72,14 +72,14 @@ public class CTutor implements ILoadableObject2 {
 
     public Context                       mContext;
     public ITutorLogManager              mTutorLogManager;
-    public ITutorNavigator               mTutorNavigator;
+    public ITutorNavigator               mTutorAnimator;
     public CSceneGraph                   mSceneAnimator;
-    public ITutorManager mTutorContainer;
+    public ITutorManager                 mTutorContainer;
 
     public String                        mTutorName;
     public AssetManager                  mAssetManager;
 
-    private int                          _framendx = 0;
+    private int                                 _framendx = 0;
 
     private HashMap<String, scene_initializer>  _sceneMap = new HashMap<String, scene_initializer>();
     HashMap<String, type_timer>                 _timerMap = new HashMap<String, type_timer>();
@@ -145,16 +145,16 @@ public class CTutor implements ILoadableObject2 {
 
         switch(navigatorType) {
             case TCONST.SIMPLENAV:
-                mTutorNavigator = new CTutorGraph(this, mTutorName, mTutorScope);
+                mTutorAnimator = new CTutorGraph(this, mTutorName, mTutorContainer, mTutorScope);
                 break;
 
             case TCONST.GRAPHNAV:
-                //mTutorNavigator = new CSceneGraphNavigator(mTutorName);
+                //mTutorAnimator = new CSceneGraphNavigator(mTutorName);
                 break;
         }
 
-        mTutorNavigator.initTutorContainer(mTutorContainer);
-        mSceneAnimator = mTutorNavigator.getAnimator();
+        mTutorAnimator.initTutorContainer(mTutorContainer);
+        mSceneAnimator = mTutorAnimator.getAnimator();
     }
 
 
@@ -195,7 +195,21 @@ public class CTutor implements ILoadableObject2 {
      */
     public void launchTutor() {
 
-        mTutorNavigator.gotoNextScene();
+        mTutorAnimator.gotoNextScene(true);
+    }
+
+
+    /**
+     * This is where the tutor stops
+     */
+    public void endTutor() {
+
+
+    }
+
+
+    public ITutorNavigator getTutorGraph() {
+        return mTutorAnimator;
     }
 
 
@@ -298,28 +312,12 @@ public class CTutor implements ILoadableObject2 {
     }
 
 
-    public void addScene(String Id, ITutorScene obj) {
-
-        mScenes.put(Id, obj);
-    }
-
-
-    public ITutorScene getScene(String Id) {
-
-        return mScenes.get(Id);
-    }
-
-
-    public void clear() {
-        if(mScenes != null)
-            mScenes.clear();
-
-        if(mObjects != null)
-            mObjects.clear();
-    }
-
-
-    // Scene Creation / Destruction
+    /**
+     *  Scene Creation / Destruction
+     *
+     * @param scenedata
+     * @return
+     */
     public View instantiateScene(scene_descriptor scenedata) {
 
         int i1;
@@ -337,8 +335,8 @@ public class CTutor implements ILoadableObject2 {
 
         tarScene.setVisibility(View.VISIBLE);
 
-        mTutorContainer.addView(tarScene, index);
-        mTutorContainer.setDisplayedChild(index++);
+//        mTutorContainer.addView(tarScene, index);
+//        mTutorContainer.setDisplayedChild(index++);
 
         // Generate the automation hooks
         automateScene((ITutorSceneImpl) tarScene, scenedata);
@@ -363,7 +361,7 @@ public class CTutor implements ILoadableObject2 {
 
         tutorContainer.setParent(mTutorContainer);
         tutorContainer.setTutor(this);
-        tutorContainer.setNavigator(mTutorNavigator);
+        tutorContainer.setNavigator(mTutorAnimator);
         tutorContainer.setLogManager(mTutorLogManager);
 
         mapChildren(tutorContainer, childMap);
@@ -385,7 +383,7 @@ public class CTutor implements ILoadableObject2 {
 
                 child.setParent(tutorContainer);
                 child.setTutor(this);
-                child.setNavigator(mTutorNavigator);
+                child.setNavigator(mTutorAnimator);
                 child.setLogManager(mTutorLogManager);
 
                 if(child instanceof ITutorSceneImpl) {
@@ -417,7 +415,7 @@ public class CTutor implements ILoadableObject2 {
 
 
     /**
-     * generate the working feature set for this instance
+     * generate the working feature set for this tutor instance
      *
      * @param featSet
      */
@@ -562,7 +560,7 @@ public class CTutor implements ILoadableObject2 {
 
     // Scriptable graph next command
     public void eventNext() {
-        mTutorNavigator.onButtonNext();
+        mSceneAnimator.onNextNode();
     }
 
     // Scriptable graph goto command

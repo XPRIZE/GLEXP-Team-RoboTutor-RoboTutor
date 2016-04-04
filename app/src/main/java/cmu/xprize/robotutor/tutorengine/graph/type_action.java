@@ -37,8 +37,6 @@ import cmu.xprize.util.TCONST;
 
 public class type_action extends graph_node {
 
-    private scene_animator _parent;
-
     // json loadable
     public String          id;
     public String          cmd;
@@ -111,7 +109,7 @@ public class type_action extends graph_node {
     public String applyNode() {
 
         String returnState = TCONST.DONE;
-        Map    childMap    = CTutorGraph.getChildMap();
+        Map    childMap    = _scope.graph().getChildMap();
 
         if(cmd != null) {
             switch(cmd) {

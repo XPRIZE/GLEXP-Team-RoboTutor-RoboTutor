@@ -19,18 +19,9 @@
 
 package cmu.xprize.robotutor.tutorengine;
 
-import android.view.View;
 import android.view.animation.Animation;
 
-public interface ITutorManager extends ITutorSceneImpl {
+public interface ITutorNavListener extends Animation.AnimationListener {
 
-    public void addView(ITutorSceneImpl newView, Animation.AnimationListener callback);
-
-    public void pushView(boolean push);
-    public void popView(boolean push, Animation.AnimationListener callback);
-
-    public void addView(View newView, int index);
-    public void setDisplayedChild(int index);
-    public void removeAllViews();
-
+    public void doEnterScene();
 }
