@@ -21,9 +21,13 @@ package cmu.xprize.robotutor;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.widget.TextView;
 
 import java.io.IOException;
 
@@ -51,7 +55,7 @@ import edu.cmu.xprize.listener.Listener;
 public class RoboTutor extends Activity implements IReadyListener {
 
     private CTutorEngine        tutorEngine;
-    private ITutorManager tutorContainer;
+    private ITutorManager       tutorContainer;
     private ProgressLoading     progressLoading;
 
     public TTSsynthesizer       TTS;
@@ -101,6 +105,11 @@ public class RoboTutor extends Activity implements IReadyListener {
         //
         progressLoading = new ProgressLoading(this);
         progressLoading.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
 
@@ -201,4 +210,106 @@ public class RoboTutor extends Activity implements IReadyListener {
             tutorEngine = CTutorEngine.getTutorEngine(RoboTutor.this, tutorContainer);
         }
     }
+
+
+    /**
+     * TODO: Manage the back button
+     */
+    @Override
+    public void onBackPressed() {
+        Log.i(TAG, "Back Button Pressed");
+
+        if(tutorEngine != null) {
+            if(!tutorEngine.onBackButton()) {
+                super.onBackPressed();
+            }
+        }
+    }
+
+
+
+    /***  State Management  ****************/
+
+
+    /**
+     *
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(TAG, "Starting Robotutor: On-Screen");
+    }
+
+
+    /**
+     *  requery DB Cursors here
+     */
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.i(TAG, "Restarting Robotutor");
+    }
+
+
+    /**
+     *  Deactivate DB Cursors here
+     */
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i(TAG, "Stopping Robotutor: Off-Screen");
+    }
+
+
+    /**
+     * This callback is mostly used for saving any persistent state the activity is editing, to
+     * present a "edit in place" model to the user and making sure nothing is lost if there are
+     * not enough resources to start the new activity without first killing this one. This is also
+     * a good place to do things like stop animations and other things that consume a noticeable
+     * amount of CPU in order to make the switch to the next activity as fast as possible, or to
+     * close resources that are exclusive access such as the camera.
+     *
+     */
+    @Override
+    protected void onPause() {
+
+        super.onPause();
+        Log.i(TAG, "Pausing Robotutor");
+
+        SharedPreferences.Editor prefs = getPreferences(Context.MODE_PRIVATE).edit();
+    }
+
+
+    /**
+     *
+     */
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+        Log.i(TAG, "Resuming Robotutor");
+
+        SharedPreferences prefs = getPreferences(0);
+
+        String restoredText = prefs.getString("text", null);
+        if (restoredText != null) {
+        }
+    }
+
+
+    /**
+     * In general onSaveInstanceState(Bundle) is used to save per-instance state in the activity
+     *
+     * @param outState
+     */
+    @Override
+    protected void onSaveInstanceState (Bundle outState) {
+        super.onResume();
+        Log.i(TAG, "Resuming Robotutor");
+
+
+    }
+
+
 }
+

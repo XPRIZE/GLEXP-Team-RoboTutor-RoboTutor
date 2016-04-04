@@ -27,9 +27,12 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
         import android.view.animation.AnimationUtils;
         import android.widget.ViewAnimator;
 
+        import java.util.ArrayList;
+
         import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
         import cmu.xprize.robotutor.tutorengine.CTutor;
         import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
+        import cmu.xprize.robotutor.tutorengine.ITutorNavListener;
         import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
         import cmu.xprize.robotutor.tutorengine.ITutorManager;
         import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -39,7 +42,11 @@ public class TSceneAnimatorLayout extends ViewAnimator implements ITutorManager 
 
     private Context        mContext;
     private CSceneDelegate mTutorScene;
+    private int            mTutorCount = 0;
     private Animation      slide_in_left, slide_out_right;
+
+    private ArrayList<ITutorSceneImpl>  stack = new ArrayList<>();
+
 
     public TSceneAnimatorLayout(Context context) {
         super(context);
@@ -71,8 +78,47 @@ public class TSceneAnimatorLayout extends ViewAnimator implements ITutorManager 
 
 
     @Override
+    public void addView(ITutorSceneImpl newView, Animation.AnimationListener callback) {
+
+        int insertNdx = super.getChildCount();
+        super.addView((View)newView, insertNdx);
+        super.setDisplayedChild(insertNdx);
+
+        slide_in_left.setAnimationListener(callback);
+    }
+
+    @Override
+    public void pushView(boolean push) {
+
+        View child = getChildAt(0);
+
+        if(push) {
+            stack.add((ITutorSceneImpl)child);
+            mTutorCount++;
+        }
+
+        // Don't automatically pop the only tutor
+        if(mTutorCount > 1)
+            super.removeView(child);
+    }
+
+
+    @Override
+    public void popView(boolean push, Animation.AnimationListener callback) {
+
+        ITutorSceneImpl scene = stack.remove(0);
+        addView(scene, callback);
+    }
+
+
+    @Override
     public void addView(View newView, int index) {
         super.addView(newView, index);
+    }
+
+    @Override
+    public void removeView(View delView) {
+        super.removeView(delView);
     }
 
 

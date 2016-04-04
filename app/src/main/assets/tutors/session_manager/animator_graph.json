@@ -22,37 +22,9 @@
           "preenter":["SET_DATASOURCE","SET_LAUNCHER"],
           "preexit" :[],
           "edges": [
-              {"constraint":"FTR_RIGHT","edge":"CORRECT"},
-              {"constraint":"","edge":"WRONG"}
+              {"constraint":"","edge":"NEXTSCENE"}
           ]
         },
-
-        "CORRECT":{
-          "COMMENT":"When user inputs a correct answer...",
-          "type":"node",
-          "maptype":"moduleMap",
-          "mapname": "PLAYCORRECT",
-          "preenter":[],
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"","edge":"NEWCHAR"}
-          ]
-        },
-
-        "WRONG":{
-          "COMMENT":"When user inputs an incorrect answer...",
-          "type":"node",
-          "maptype":"moduleMap",
-          "mapname": "PLAYWRONG",
-          "preenter":[],
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"","edge":"USERINPUT"}
-          ]
-        },
-
 
         "NEXTSCENE": {
           "type": "NODE",

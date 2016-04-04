@@ -21,6 +21,7 @@ package cmu.xprize.robotutor.tutorengine;
 
 
 import android.util.Log;
+import android.view.animation.Animation;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,9 +38,9 @@ import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
 
-public class CTutorGraph implements ITutorNavigator, ILoadableObject2 {
+public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation.AnimationListener {
 
-    private static TScope                     mRootScope;
+    private TScope                            mRootScope;
 
     private boolean                           traceMode     = false;
     private int                               _sceneCnt     = 0;
@@ -49,18 +50,19 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2 {
     protected ITutorScene                     mParent;
     protected CTutor                          mTutor;
     protected String                          mTutorName;
+    protected ITutorManager                   mTutorContainer;
     protected ITutorLogManager                mLogManager;
     protected CSceneGraph                     mSceneAnimator;
 
     // json loadable
-    static public scene_descriptor[]          navigatedata;
+    public scene_descriptor[]                navigatedata;
 
 
     // State data
-    static private HashMap<String, scene_descriptor> _navMap = new HashMap<String, scene_descriptor>();
-    static private int                               _scenePrev;
-    static private int                               _sceneCurr;
-    static private boolean                           _fSceneGraph = false;
+    private HashMap<String, scene_descriptor> _navMap = new HashMap<String, scene_descriptor>();
+    private int                               _scenePrev;
+    private int                               _sceneCurr;
+    private boolean                           _push = false;
 
 
     final private String       TAG       = "CTutorGraph";
@@ -74,18 +76,20 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2 {
      * @param name
      * @param tutorScope
      */
-    public CTutorGraph(CTutor tutor, String name, TScope tutorScope) {
+    public CTutorGraph(CTutor tutor, String name, ITutorManager tutorContainer, TScope tutorScope) {
 
         mRootScope = new TScope(tutor, name + "-SceneNavigator", tutorScope);      // Use a unique namespace
 
-        mTutor     = tutor;
-        mTutorName = name;
+        mTutor          = tutor;
+        mTutorName      = name;
+        mTutorContainer = tutorContainer;
+
         _sceneCurr = 0;
         _scenePrev = 0;
 
         loadNavigatorDescr();
 
-        mSceneAnimator = new CSceneGraph(mTutor, tutorScope);
+        mSceneAnimator = new CSceneGraph(mTutor, tutorScope, this);
     }
 
     // Initialize the pointer to the tutor root scene
@@ -105,7 +109,8 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2 {
      *
      * @return The result maps child names to Views
      */
-    static public HashMap getChildMap() {
+    @Override
+    public HashMap getChildMap() {
 
         return navigatedata[_sceneCurr].children;
     }
@@ -116,7 +121,8 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2 {
      * @param sceneName
      * @return  The result maps child names to Views
      */
-    static public HashMap getChildMapByName(String sceneName) {
+    @Override
+    public HashMap getChildMapByName(String sceneName) {
 
         return _navMap.get(sceneName).children;
     }
@@ -124,29 +130,16 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2 {
 
 //***************** Navigation Behaviors *******************************
 
+
     // Intra Scene Navigation
 
-
     /**
-     * Used to set the nextButton 
+     * TODO: Key function - add detail comment
      */
-    static public void setButtonBehavior(String action) {
-        if(action == TCONST.GOTONEXTSCENE) _fSceneGraph = true;
-                                     else  _fSceneGraph = false;
-    }
+    public void onNextScene() {
 
-
-    /**
-     * gotoNextScene Event driven entry point
-     */
-    public void onButtonNext() {
-
-        // The next button can target either the scenegraph or the animationgraph.
-        // i.e. You either want it to trigger the next step in the animationGraph or the sceneGraph
-        // reset _fSceneGraph if you want the next button to drive the animationGraph
-        //
-        if(_fSceneGraph || mSceneAnimator.applyNode().equals(TCONST.NEXTSCENE)) {
-            gotoNextScene();
+        if(gotoNextScene(false).equals(TCONST.ENDTUTOR)) {
+            mTutor.endTutor();
         }
     }
 
@@ -396,23 +389,29 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2 {
     /**
      * gotoNextScene manual entry point
      */
-    public void gotoNextScene() {
+    @Override
+    public String gotoNextScene(boolean push) {
+
+        String result = TCONST.ENDTUTOR;
 
         if(traceMode) Log.i(TAG, "gotoNextScene: ");
 
         String newScene = "";
         String redScene = "";
 
-        // The next button can target either the scenegraph or the animationgraph.
-        // i.e. You either want it to trigger the next step in the animationGraph or the sceneGraph
-        // reset _fSceneGraph if you want the next button to drive the animationGraph
-        //
+        // Local push - used in onAnimationEnd to save previous scene on stack when starting
+        // a new tutor
+        _push = push;
+
         if (_sceneCurr < _sceneCnt) {
+
+            result = TCONST.CONTINUETUTOR;
 
             // remember current frame
             //
             if (traceMode)
                 Log.d(TAG, "scenePrev: " + _scenePrev + "  - sceneCurr: " + _sceneCurr);
+
             _scenePrev = _sceneCurr;
 
             // Do scene Specific termination
@@ -437,26 +436,34 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2 {
             //@@ Action Logging
 
             // On exit behaviors
+            navigatedata[_sceneCurr].instance.onExitScene();
 
-
-            // Do the scene transitions
-            //            prntTutor.xitions.addEventListener(Event.COMPLETE, doEnterScene);
-            //            prntTutor.xitions.gotoScene(redScene);
-
-            doEnterScene();
+            // Do the scene transition - add callback for when IN animation ends
+            mTutorContainer.addView(navigatedata[_sceneCurr].instance, this);
         }
+        return result;
     }
 
+
+    /** Animation Listener START *************************/
+    //
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
 
     // Performed immediately after scene is fully onscreen
     //@@ Mod Jul 18 2013 - public -> private
     //
-    private void doEnterScene() {
+    @Override
+    public void onAnimationEnd(Animation animation) {
         if(traceMode) Log.d(TAG, "doEnterScene: " + _sceneCurr);
 
         // increment the global frame ID - for logging
 
         mTutor.incFrameNdx();
+        mTutorContainer.pushView(_push);
 
         //## Mod Sep 12 2013 - This is a special case to handle the first preenter event for an animationGraph.
         //                     The root node of the animation graph is parsed in the preEnter stage of the scene
@@ -469,7 +476,16 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2 {
         navigatedata[_sceneCurr].instance.onEnterScene();
 
         mSceneAnimator.enterScene(navigatedata[_sceneCurr].id);
+
     }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
+    }
+
+    //
+    /** Animation Listener END *************************/
 
 
     //************* Event Handlers
@@ -500,7 +516,7 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2 {
     {
         if(traceMode) Log.d(TAG, "Force Increment Question: ");
 
-        gotoNextScene();
+        gotoNextScene(false);
 
     }
 
