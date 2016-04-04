@@ -24,7 +24,8 @@ import android.view.animation.Animation;
 
 public interface ITutorManager extends ITutorSceneImpl {
 
-    public void addView(ITutorSceneImpl newView, Animation.AnimationListener callback);
+    public void addView(ITutorSceneImpl newView);
+    public void setAnimationListener(Animation.AnimationListener callback);
 
     public void pushView(boolean push);
     public void popView(boolean push, Animation.AnimationListener callback);
