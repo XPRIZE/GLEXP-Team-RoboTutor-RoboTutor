@@ -403,9 +403,9 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation
         // a new tutor
         _push = push;
 
-        if (_sceneCurr < _sceneCnt) {
-
-            result = TCONST.CONTINUETUTOR;
+        // TODO: This is a stopgap until we have full tutorgraph capabilities.
+        ///
+        if (_sceneCurr < _sceneCnt-1) {
 
             // remember current frame
             //
@@ -439,7 +439,10 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation
             navigatedata[_sceneCurr].instance.onExitScene();
 
             // Do the scene transition - add callback for when IN animation ends
-            mTutorContainer.addView(navigatedata[_sceneCurr].instance, this);
+            mTutorContainer.setAnimationListener(this);
+            mTutorContainer.addView(navigatedata[_sceneCurr].instance);
+
+            result = TCONST.CONTINUETUTOR;
         }
         return result;
     }
@@ -459,6 +462,8 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation
     @Override
     public void onAnimationEnd(Animation animation) {
         if(traceMode) Log.d(TAG, "doEnterScene: " + _sceneCurr);
+
+        mTutorContainer.setAnimationListener(null);
 
         // increment the global frame ID - for logging
 
