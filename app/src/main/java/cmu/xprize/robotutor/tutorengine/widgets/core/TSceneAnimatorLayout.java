@@ -78,16 +78,11 @@ public class TSceneAnimatorLayout extends ViewAnimator implements ITutorManager 
 
 
     @Override
-    public void addView(ITutorSceneImpl newView) {
+    public void addView(ITutorSceneImpl newView, Animation.AnimationListener callback) {
 
         int insertNdx = super.getChildCount();
-        super.addView((View) newView, insertNdx);
+        super.addView((View)newView, insertNdx);
         super.setDisplayedChild(insertNdx);
-    }
-
-
-    @Override
-    public void setAnimationListener(Animation.AnimationListener callback) {
 
         slide_in_left.setAnimationListener(callback);
     }
@@ -98,13 +93,13 @@ public class TSceneAnimatorLayout extends ViewAnimator implements ITutorManager 
         View child = getChildAt(0);
 
         if(push) {
-            stack.add(0, (ITutorSceneImpl)child);
+            stack.add((ITutorSceneImpl)child);
             mTutorCount++;
         }
 
         // Don't automatically pop the only tutor
-//        if(mTutorCount > 1)
-//            super.removeView(child);
+        if(mTutorCount > 1)
+            super.removeView(child);
     }
 
 
@@ -112,10 +107,7 @@ public class TSceneAnimatorLayout extends ViewAnimator implements ITutorManager 
     public void popView(boolean push, Animation.AnimationListener callback) {
 
         ITutorSceneImpl scene = stack.remove(0);
-
-        int index = indexOfChild((View)scene);
-
-        super.setDisplayedChild(index);
+        addView(scene, callback);
     }
 
 

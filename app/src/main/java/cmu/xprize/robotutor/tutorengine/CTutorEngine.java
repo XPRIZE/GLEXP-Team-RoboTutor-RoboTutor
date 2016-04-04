@@ -168,12 +168,6 @@ public class CTutorEngine implements ILoadableObject2 {
         sceneMap.put(tutorName, new HashMap<>());
     }
 
-    static public void killTutor(String tutorName) {
-
-        tutorMap.remove(tutorName);
-        sceneMap.remove(tutorName);
-    }
-
 
     static private void launchTutor(String tutorName) {
 

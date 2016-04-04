@@ -211,7 +211,7 @@
           "tracks": [
             {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""}, //flag the incorrect string in red color
             {"type": "AUDIO", "command": "PLAY", "soundsource": "That looks like.mp3", "mode":"flow","features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sresponse.valueUC}}.mp3","mode":"flow", "features": ""},  // the recognizer output
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sresponse.value}}.mp3","mode":"flow", "features": ""},  // the recognizer output
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
           ]
         },

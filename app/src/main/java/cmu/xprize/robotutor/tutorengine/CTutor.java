@@ -203,8 +203,8 @@ public class CTutor implements ILoadableObject2 {
      * This is where the tutor stops
      */
     public void endTutor() {
-        mTutorContainer.popView(false, null);
-        CTutorEngine.killTutor(mTutorName);
+
+
     }
 
 
