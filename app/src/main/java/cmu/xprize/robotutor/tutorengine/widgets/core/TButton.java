@@ -57,6 +57,12 @@ public class TButton extends Button implements ITutorObjectImpl {
         mSceneObject.init(context, attrs);
     }
 
+    @Override
+    public void onDestroy() {
+        mSceneObject.onDestroy();
+    }
+
+
 
     public void setDataSource(String dataSource) {
 

@@ -51,6 +51,12 @@ public class TSceneFlipperLayout extends ViewFlipper implements ITutorSceneImpl 
         mTutorScene.init(context, attrs);
     }
 
+    @Override
+    public void onDestroy() {
+        mTutorScene.onDestroy();
+    }
+
+
 
     //************************************************************************
     //************************************************************************

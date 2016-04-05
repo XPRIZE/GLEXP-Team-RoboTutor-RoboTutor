@@ -59,6 +59,12 @@ public class TSceneFrameLayout extends FrameLayout implements ITutorSceneImpl {
         mTutorScene.init(context, attrs);
     }
 
+    @Override
+    public void onDestroy() {
+        mTutorScene.onDestroy();
+    }
+
+
 
     public void setDataSource(String dataSource) {
 

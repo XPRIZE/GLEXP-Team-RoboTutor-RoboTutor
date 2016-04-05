@@ -25,6 +25,7 @@ import android.util.AttributeSet;
 public interface ITutorObject {
 
     public void init(Context context, AttributeSet attrs);
+    public void onDestroy();
 
     public void   setName(String name);
     public String name();
