@@ -29,15 +29,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cmu.xprize.robotutor.tutorengine.CSceneGraph;
-import cmu.xprize.robotutor.tutorengine.CTutorGraph;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.util.TCONST;
 
 public class type_action extends graph_node {
-
-    private scene_animator _parent;
 
     // json loadable
     public String          id;
@@ -78,7 +74,7 @@ public class type_action extends graph_node {
 
     public boolean testPFeature() {
 
-        int   iter = CSceneGraph.queryPFeature(pid, _prob.length, cycle);
+        int   iter = _scope.sceneGraph().queryPFeature(pid, _prob.length, cycle);
         float rand = (float)Math.random();
 
         // It's important to be < not <= because if we have 0 prob we never want it to fire.
@@ -111,7 +107,7 @@ public class type_action extends graph_node {
     public String applyNode() {
 
         String returnState = TCONST.DONE;
-        Map    childMap    = CTutorGraph.getChildMap();
+        Map    childMap    = _scope.tutorGraph().getChildMap();
 
         if(cmd != null) {
             switch(cmd) {

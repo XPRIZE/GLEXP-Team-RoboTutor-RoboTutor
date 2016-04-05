@@ -48,11 +48,12 @@ public class CSceneGraph {
     protected CTutor         mTutor;
     private String           mTutorName;
     private String           mSceneName;
+    private CTutorGraph      mTutorAnimator;
 
     // State fields
     private scene_animator _sceneAnimator;
 
-    static private HashMap<String, Integer> _pFeatures;
+    private HashMap<String, Integer> _pFeatures;
 
 
     // json loadable
@@ -62,13 +63,26 @@ public class CSceneGraph {
     final private String TAG = "CSceneGraph";
 
 
-    public CSceneGraph(CTutor tutor, TScope tutorScope) {
+    public CSceneGraph(CTutor tutor, TScope tutorScope, CTutorGraph tutorGraph) {
 
-        mTutor     = tutor;
-        mScope     = tutorScope;
+        mTutor         = tutor;
+        mScope         = tutorScope;
+        mTutorAnimator = tutorGraph;
+
         _pFeatures = new HashMap<String, Integer>();
 
         loadAnimatorFactory((IScope2)mScope);
+    }
+
+
+    /**
+     * TODO: Key function - add detail comment
+     */
+    public void onNextNode() {
+
+        if(applyNode().equals(TCONST.NEXTSCENE)) {
+            mTutorAnimator.onNextScene();
+        }
     }
 
 
@@ -108,13 +122,14 @@ public class CSceneGraph {
         return _sceneAnimator.applyNode();
     }
 
+
     public String gotoNode(String nodeName) {
 
         return _sceneAnimator.gotoNode(nodeName);
     }
 
 
-    static public int queryPFeature(String pid, int size, int cycle) {
+    public int queryPFeature(String pid, int size, int cycle) {
         int iter = 0;
 
         // On subsequent accesses we increment the iteration count

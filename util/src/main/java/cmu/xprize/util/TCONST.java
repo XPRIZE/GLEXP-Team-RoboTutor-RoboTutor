@@ -47,6 +47,10 @@ public class TCONST {
 
     // CTutorNavigator Constants
 
+
+    public static final String ENDTUTOR        = "END_TUTOR";
+    public static final String CONTINUETUTOR   = "CONTINUE_TUTOR";
+
     public static final String OKNAV           = "OKNAV";
     public static final String CANCELNAV       = "CANCELNAV";
     public static final String WOZGOTO         = "WOZGOTO";
@@ -61,8 +65,7 @@ public class TCONST {
     // Navigator types
     final static public String SIMPLENAV       = "SIMPLE_NAVIGATOR";
     final static public String GRAPHNAV        = "GRAPH_NAVIGATOR";
-    public static final String GOTONEXTSCENE   = "NAVNEXT";
-    public static final String GOTONEXT        = "NEXT";
+    public static final String NEXTNODE        = "NEXTNODE";
     public static final String NEXTSCENE       = "NEXTSCENE";
 
 
@@ -177,4 +180,5 @@ public class TCONST {
 
     public static final String TTS          = "TTS";
     public static final String ASR          = "ASR";
+
 }

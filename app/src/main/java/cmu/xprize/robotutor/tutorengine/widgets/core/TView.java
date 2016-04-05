@@ -30,9 +30,6 @@ import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 
-/**
- * Created by Kevin on 1/10/2016.
- */
 public class TView extends View implements ITutorObjectImpl {
 
     private CObjectDelegate mSceneObject;
@@ -58,6 +55,11 @@ public class TView extends View implements ITutorObjectImpl {
     public void init(Context context, AttributeSet attrs) {
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
+    }
+
+    @Override
+    public void onDestroy() {
+        mSceneObject.onDestroy();
     }
 
 

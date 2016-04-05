@@ -46,6 +46,13 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
         mSceneObject.init(context, attrs);
     }
 
+    @Override
+    public void onDestroy() {
+        mSceneObject.onDestroy();
+    }
+
+
+
     //**********************************************************
     //**********************************************************
     //*****************  Tutor Interface

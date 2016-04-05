@@ -58,6 +58,12 @@ public class TTextView extends TextView implements ITutorObjectImpl {
         mSceneObject.init(context, attrs);
     }
 
+    @Override
+    public void onDestroy() {
+        mSceneObject.onDestroy();
+    }
+
+
 
     public void setDataSource(String dataSource) {
 
