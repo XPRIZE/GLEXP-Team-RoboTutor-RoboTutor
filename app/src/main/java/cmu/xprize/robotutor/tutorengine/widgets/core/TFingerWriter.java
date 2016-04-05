@@ -67,6 +67,12 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     }
 
 
+    @Override
+    public void onDestroy() {
+        mSceneObject.onDestroy();
+    }
+
+
     public void setDataSource(String dataSource) {
 
     }

@@ -65,6 +65,14 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
         mSceneObject.init(context, attrs);
     }
 
+    @Override
+    public void onDestroy() {
+        mSceneObject.onDestroy();
+    }
+
+
+
+
     @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
     {
         int finalWidth, finalHeight;

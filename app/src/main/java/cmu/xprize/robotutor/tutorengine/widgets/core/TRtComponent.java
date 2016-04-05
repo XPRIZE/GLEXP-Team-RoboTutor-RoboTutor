@@ -99,6 +99,12 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
         prepareListener(CTutor.ASR, CTutor.TTS);
     }
 
+    @Override
+    public void onDestroy() {
+        mSceneObject.onDestroy();
+    }
+
+
 
     public void publishTargetWord(String word) {
         // update the response variable  "<SreadingComp>.nextword"

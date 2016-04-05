@@ -100,6 +100,12 @@ public class CSceneDelegate implements ITutorScene {
     }
 
     @Override
+    public void onDestroy() {
+
+    }
+
+
+    @Override
     public void setName(String name) { mTutorId = name; }
 
     @Override

@@ -60,6 +60,12 @@ public class TScenePercentLayout extends PercentRelativeLayout implements ITutor
         mTutorScene.init(context, attrs);
     }
 
+    @Override
+    public void onDestroy() {
+        mTutorScene.onDestroy();
+    }
+
+
 
     public void setDataSource(String dataSource) {
 

@@ -62,6 +62,15 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
 
     }
 
+    /**
+     *  Release listeners and resources
+     *
+     */
+    public void onDestroy() {
+        setButtonBehavior("null");
+    }
+
+    
     public CTutor tutor() {
         return mTutor;
     }

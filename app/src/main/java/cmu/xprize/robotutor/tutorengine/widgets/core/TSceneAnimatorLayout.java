@@ -70,6 +70,12 @@ public class TSceneAnimatorLayout extends ViewAnimator implements ITutorManager 
         setInAnimation(slide_in_left);
     }
 
+    @Override
+    public void onDestroy() {
+        mTutorScene.onDestroy();
+    }
+
+
 
     @Override
     public void addView(View newView) {

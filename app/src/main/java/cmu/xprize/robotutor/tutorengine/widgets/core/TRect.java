@@ -55,6 +55,12 @@ public class TRect extends View  implements ITutorObjectImpl {
     }
 
 
+    @Override
+    public void onDestroy() {
+        mSceneObject.onDestroy();
+    }
+
+
     public void setDataSource(String dataSource) {
 
     }

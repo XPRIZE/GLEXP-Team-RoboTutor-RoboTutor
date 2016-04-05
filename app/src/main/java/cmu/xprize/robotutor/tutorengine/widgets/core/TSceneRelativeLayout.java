@@ -59,6 +59,12 @@ public class TSceneRelativeLayout extends RelativeLayout implements ITutorSceneI
         mTutorScene.init(context, attrs);
     }
 
+    @Override
+    public void onDestroy() {
+        mTutorScene.onDestroy();
+    }
+
+
 
     public void setDataSource(String dataSource) {
 
