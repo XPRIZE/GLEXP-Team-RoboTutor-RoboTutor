@@ -75,6 +75,7 @@ public class CTutor implements ILoadableObject2 {
     public ITutorNavigator               mTutorAnimator;
     public CSceneGraph                   mSceneAnimator;
     public ITutorManager                 mTutorContainer;
+    public ViewGroup                     mSceneContainer;
 
     public String                        mTutorName;
     public AssetManager                  mAssetManager;
@@ -158,11 +159,15 @@ public class CTutor implements ILoadableObject2 {
     }
 
 
+    public void setSceneContainer(ViewGroup container) {
+        mSceneContainer = container;
+    }
+
     public ITutorObject getViewById(int findme, ViewGroup container) {
         ITutorObject foundView = null;
 
         if(container == null)
-            container = (ViewGroup)mTutorContainer;
+            container = (ViewGroup)mSceneContainer;
 
         try {
             for (int i = 0; (foundView == null) && (i < container.getChildCount()); ++i) {
@@ -210,6 +215,10 @@ public class CTutor implements ILoadableObject2 {
 
     public ITutorNavigator getTutorGraph() {
         return mTutorAnimator;
+    }
+
+    public CSceneGraph getSceneGraph() {
+        return mSceneAnimator;
     }
 
 

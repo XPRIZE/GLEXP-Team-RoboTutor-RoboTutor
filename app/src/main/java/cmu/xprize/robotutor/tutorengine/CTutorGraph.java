@@ -21,6 +21,7 @@ package cmu.xprize.robotutor.tutorengine;
 
 
 import android.util.Log;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 
 import org.json.JSONException;
@@ -427,6 +428,10 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation
             if (navigatedata[_sceneCurr].instance == null) {
                 mTutor.instantiateScene(navigatedata[_sceneCurr]);
             }
+
+            // Update the tutor SceneContainer used to enumerate components.
+            //
+            mTutor.setSceneContainer((ViewGroup)navigatedata[_sceneCurr].instance);
 
             //@@ Action Logging
             //            var logData:Object = {'navevent':'navnext', 'curscene':_scenePrev, 'newscene':redScene};

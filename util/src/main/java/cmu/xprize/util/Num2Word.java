@@ -1,13 +1,30 @@
+//*********************************************************************************
+//
+//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
+//    Copyright(c) Haonan Sun All Rights Reserved
+//    Copyright(c) Abhinav Gupta All Rights Reserved
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+//*********************************************************************************
+
 package cmu.xprize.util;
 
-/**
- * Created by haonansun on 15/11/30.
- */
+import java.util.Random;
+import java.util.Scanner;
+
+
 public class Num2Word {
-    /*
-    English numerals
-     */
-    private static String EnglishZero = "zero";
     private static String[] EnglishInTwentyWords = {
             "",
             "one",
@@ -44,11 +61,10 @@ public class Num2Word {
             "ninety",
     };
 
-    /*
-    RulesSwahili numerals
-     */
-    private static String SwahiliZero = "sifuri";
-    private static String[] SwahiliInTenWords = {
+    // TODO: 15/12/1 check the online swahili cheetsheet
+
+    public static String SwahiliZero = "sifuri";
+    public static String[] SwahiliInTenWords = {
             "",
             "moja",
             "mbili",
@@ -62,7 +78,7 @@ public class Num2Word {
             "kumi",
     };
 
-    private static String[] SwahiliTens = {
+    public static String[] SwahiliTens = {
             "",
             "kumi",
             "ishirini",
@@ -75,17 +91,32 @@ public class Num2Word {
             "tisini",
     };
 
+    public static void main(String[] args) {
+
+        Random randomGenerator = new Random();
+        int num;
+
+        String language = "Swahili";
+        Scanner in = new Scanner(System.in);
+        while (true) {
+            num = in.nextInt();
+            System.out.println("Number: \t" + num);
+            System.out.println(language + ":\t" + transform(num, language));
+            System.out.println("--------------------------------------------------");
+        }
+
+    }
 
     /**
      * convert 0~999,999 to English Words
-     * convert 0~9,999 to RulesSwahili Words
+     * convert 0~9,999 to Swahili Words
      *
      * @param num
      * @param language
      * @return
      */
     public static String transform(int num, String language) {
-        if (language.equalsIgnoreCase("LANG_SW")) {
+        if (language.equalsIgnoreCase("Swahili")) {
             return Num2Swahili(num);
         } else { // language.equalsIgnoreCase("English")
             return Num2English(num);
@@ -95,7 +126,7 @@ public class Num2Word {
     private static String Num2English(int num) {
 
         if (num == 0) {
-            return EnglishZero;
+            return "zero";
         } else if (num <= 999) {
             return SmallNum2English(num);
         } else {

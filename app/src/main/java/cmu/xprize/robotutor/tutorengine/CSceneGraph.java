@@ -53,7 +53,7 @@ public class CSceneGraph {
     // State fields
     private scene_animator _sceneAnimator;
 
-    static private HashMap<String, Integer> _pFeatures;
+    private HashMap<String, Integer> _pFeatures;
 
 
     // json loadable
@@ -129,7 +129,7 @@ public class CSceneGraph {
     }
 
 
-    static public int queryPFeature(String pid, int size, int cycle) {
+    public int queryPFeature(String pid, int size, int cycle) {
         int iter = 0;
 
         // On subsequent accesses we increment the iteration count

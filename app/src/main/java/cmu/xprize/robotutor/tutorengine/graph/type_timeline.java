@@ -170,8 +170,10 @@ public class type_timeline extends type_action {
 
         seek(_currFrame);
 
-        if(_currAudio != null)
+        if(_currAudio != null && _currAudio.isPlaying == false) {
+            _currAudio.isPlaying = true;
             _currAudio.play();
+        }
 
         // Run the script and then clear it so it doesn't refire on the
         // next frame
@@ -218,8 +220,10 @@ public class type_timeline extends type_action {
         switch(_trackType) {
             case TCONST.ABSOLUTE_TYPE:
                 if(_playing) {
-                    if (_currAudio != null)
+                    if (_currAudio != null) {
+                        _currAudio.isPlaying = false;
                         _currAudio.stop();
+                    }
 
                     if (_frameTask != null)
                         _frameTask.cancel();
@@ -322,10 +326,17 @@ public class type_timeline extends type_action {
             // and audio clips cannot overlap
 
             if ((script.mIndex <= seekPnt) && (script.mLast >= seekPnt)) {
+
                 // If we are seeking to a point within an audio clip then set it up as the
                 // current clip
-                if(recordCurr)
+                if(recordCurr) {
                     _currAudio = (CAudioFrame) script;
+
+                    // If we are sitting on the audio start frame then reset isPlaying
+                    // so it will start if the timeline is reused
+                    // TODO: Need more sophisticated way to manage audio durations.
+                    if(_currAudio.mIndex == seekPnt) _currAudio.isPlaying = false;
+                }
 
                 // Check if this is the next closest start event to the seek point
                 if((script.mIndex >= seekPnt) && (script.mIndex < nextEvent)) {
@@ -364,7 +375,7 @@ public class type_timeline extends type_action {
 
         _nextFrame = scanFrames(seekPnt, true);
 
-        // If there is an event coincident with the seek point (most commonly) then we need to
+        // If there is an event coincident with the seek point then we need to
         // scan for the next event past the seek point.
 
         if(_seekFrame == _nextFrame) {
@@ -478,6 +489,8 @@ public class type_timeline extends type_action {
         public int    mIndex;
         public int    mLast;
         public int    mDuration;
+
+        public boolean isPlaying;
 
         protected void play() {}
         protected void stop() {}
@@ -609,11 +622,15 @@ public class type_timeline extends type_action {
 
         private int          mDepth = 0;
         private String       mSoundSource;
-        private type_audio mPlayer;
+        private type_audio   mPlayer;
 
         public CAudioFrame(XmlPullParser xpp) throws IOException, XmlPullParserException {
 
             xpp.require(XmlPullParser.START_TAG, null, "DOMFrame");
+
+            // Initialize flag - used so we don't play a clip that is already playing
+            //
+            isPlaying = false;
 
             try {
                 String tindex = xpp.getAttributeValue(null, "index");

@@ -23,6 +23,7 @@ import android.util.Log;
 
 import java.util.HashMap;
 
+import cmu.xprize.robotutor.tutorengine.CSceneGraph;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
@@ -71,8 +72,13 @@ public class TScope implements IScope2 {
     }
 
     @Override
-    public ITutorNavigator graph() {
+    public ITutorNavigator tutorGraph() {
         return mTutor.getTutorGraph();
+    }
+
+    @Override
+    public CSceneGraph sceneGraph() {
+        return mTutor.getSceneGraph();
     }
 
     @Override

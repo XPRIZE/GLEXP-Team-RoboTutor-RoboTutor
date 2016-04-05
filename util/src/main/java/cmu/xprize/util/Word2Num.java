@@ -1,29 +1,48 @@
+//*********************************************************************************
+//
+//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
+//    Copyright(c) Haonan Sun All Rights Reserved
+//    Copyright(c) Abhinav Gupta All Rights Reserved
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+//*********************************************************************************
+
 package cmu.xprize.util;
 
-import java.util.HashMap;
+import java.util.*;
 
-/**
- * Created by haonansun on 15/12/1.
- */
 public class Word2Num {
 
     private static HashMap<String, Integer> SwahiliInTenMap;
     private static HashMap<String, Integer> SwahiliTensMap;
     private static HashMap<String, Integer> EnglishNumeralMap;
+    private static List<Integer> NumberList;
+    
+    public static List transform(String word, String language) {
 
-    public static Integer Transform(String word, String language) {
-
-        InitializeSwahili();
-        InitializeEnglish();
-
+        NumberList = new ArrayList<Integer>();
         String[] words = word.split(" ");
         if (words.length == 0) {
             return null;
         }
-        return Transform(words, language);
+        int rsl = transform(words, language);
+        return NumberList;
     }
 
-    public static int Transform(String[] words, String language) {
+    private static int transform(String[] words, String language) {
+        
+        initialize();
         if (language.equalsIgnoreCase("Swahili")) {
             return SwahiliWord2Num(words);
         } else {
@@ -31,70 +50,97 @@ public class Word2Num {
         }
     }
 
-    public static int EnglishWord2Num(String[] words) {
+    private static void initialize() {
+        InitializeEnglish();
+        InitializeSwahili();
+    }
+
+    private static int EnglishWord2Num(String[] words) {
 
         int rsl = 0;
         int thousandIdx = words.length;
+        int thousandstr;
 
         for (int i = 0; i < words.length; i++) {
-            if (words[i] == "Thousand") {
+            if (words[i].equalsIgnoreCase("thousand")) {
                 thousandIdx = i;
+                break;
             }
         }
 
-        String[] tmp = new String[thousandIdx - 1];
+        String[] tmp = new String[thousandIdx];
         for (int i = 0; i < thousandIdx; i++) {
             tmp[i] = words[i];
         }
-        rsl += EnglishWord2SmallNum(tmp);
+        int getans = EnglishWord2SmallNum(0, tmp);
+        
+        if (getans >= 0){
+            rsl += getans;
+        }
+        else {
+            return -1;
+        }
 
         if (thousandIdx == words.length) {
             return rsl;
-        } else {
-            tmp = new String[words.length - thousandIdx];
+        } 
+        else {
+            thousandstr = rsl * 1000;
+            if(rsl != 0){
+                NumberList.add(thousandstr);
+            }
+            tmp = new String[words.length - thousandIdx - 1];
             for (int i = 0; i < tmp.length; i++) {
                 tmp[i] = words[thousandIdx + 1 + i];
             }
-            return rsl * 1000 + EnglishWord2Num(tmp);
+            getans = EnglishWord2SmallNum(thousandstr, tmp);
+            if (getans > 0) {
+                int ans = thousandstr + getans;
+                return ans;
+            }
+            else {
+                return -1;
+            }
         }
 
     }
 
-    /**
-     * 0 ~ 999
-     *
-     * @param words
-     * @return
-     */
-    public static int EnglishWord2SmallNum(String[] words) {
+    private static int EnglishWord2SmallNum(int thousandstr, String[] words) {
+        
         int rsl = 0;
+        String notFound;
         for (int i = 0; i < words.length; i++) {
-            if (words[i] != "hundred") {
-                if (SwahiliTensMap.containsKey(words[i])) {
-                    rsl += SwahiliTensMap.get(words[i]);
+            if (!words[i].equalsIgnoreCase("hundred")) {
+                if (EnglishNumeralMap.containsKey(words[i])) {
+                    int val = EnglishNumeralMap.get(words[i]);
+                    rsl += val;
+                    NumberList.add(thousandstr + rsl);
+                    
                 } else {
-                    rsl += SwahiliTensMap.get(words[i]);
+                    return -100000;
                 }
             } else {
                 rsl *= 100;
+                NumberList.add(thousandstr + rsl);
             }
         }
         return rsl;
     }
 
-    public static int SwahiliWord2Num(String[] words) {
+    private static int SwahiliWord2Num(String[] words) {
+        
         int rsl = 0;
         int idx = 0;
 
-        if (words[idx] == "elfu") {
+        if (words[idx].equalsIgnoreCase("elfu")) {
             rsl += SwahiliInTenMap.get(words[idx + 1]) * 1000;
-
+            NumberList.add(rsl);
             idx += 2;
 
             if (idx >= words.length) {
                 return rsl;
             } else {
-                if (words[idx] != "na") {
+                if (!words[idx].equalsIgnoreCase("na")) {
                     return rsl;
                 } else {
                     idx += 1;
@@ -103,15 +149,15 @@ public class Word2Num {
         }
 
 
-        if (words[idx] == "mia" && idx < words.length) {
+        if (words[idx].equalsIgnoreCase("mia") && idx < words.length) {
             rsl += SwahiliInTenMap.get(words[idx + 1]) * 100;
-
+            NumberList.add(rsl);
             idx += 2;
 
             if (idx >= words.length) {
                 return rsl;
             } else {
-                if (words[idx] != "na") {
+                if (!words[idx].equalsIgnoreCase("na")) {
                     return rsl;
                 } else {
                     idx += 1;
@@ -121,11 +167,12 @@ public class Word2Num {
 
         if (SwahiliTensMap.containsKey(words[idx])) {
             rsl += SwahiliTensMap.get(words[idx]);
+            NumberList.add(rsl);
             idx += 1;
             if (idx >= words.length) {
                 return rsl;
             } else {
-                if (words[idx] != "na") {
+                if (!words[idx].equalsIgnoreCase("na")) {
                     return rsl;
                 } else {
                     idx += 1;
@@ -134,17 +181,15 @@ public class Word2Num {
         }
 
         rsl += SwahiliInTenMap.get(words[idx]);
-
+        NumberList.add(rsl);
         return rsl;
 
     }
 
     private static void InitializeSwahili() {
 
-        /*
-        Initialization
-         */
         SwahiliInTenMap = new HashMap<>();
+
         SwahiliInTenMap.put("sifuri", 0);
         SwahiliInTenMap.put("moja", 1);
         SwahiliInTenMap.put("mbili", 2);
@@ -157,6 +202,7 @@ public class Word2Num {
         SwahiliInTenMap.put("tisa", 9);
 
         SwahiliTensMap = new HashMap<>();
+
         SwahiliTensMap.put("kumi", 10);
         SwahiliTensMap.put("ishirini", 20);
         SwahiliTensMap.put("thelathini", 30);
@@ -164,7 +210,7 @@ public class Word2Num {
         SwahiliTensMap.put("hamsini", 50);
         SwahiliTensMap.put("sitini", 60);
         SwahiliTensMap.put("sabini", 70);
-        SwahiliTensMap.put("themanini", 90);
+        SwahiliTensMap.put("themanini", 80);
         SwahiliTensMap.put("tisini", 90);
 
     }
@@ -206,4 +252,3 @@ public class Word2Num {
 
     }
 }
-
