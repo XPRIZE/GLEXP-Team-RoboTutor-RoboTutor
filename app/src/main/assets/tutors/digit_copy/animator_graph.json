@@ -55,7 +55,7 @@
             {"constraint":"FTR_RIGHT","edge":"CORRECT"},
             {"constraint":"FTR_WRONG","edge":"WRONG"},
             //{"constraint":"","edge":"UNRECOGNIZED"}
-	        {"constraint":"FTR_UNRECOGNIZED","edge":"UNRECOGNIZED"}
+	        {"constraint":"","edge":"UNRECOGNIZED"}
             //{"constraint":"","edge":"HESITATION"}
           ]
         },
@@ -171,7 +171,7 @@
           "COMMENT": "TBD",
           "tracks": [
             {"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "TRUE:Boolean","features":""},
-            // Sstimulus
+            {"type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":""},
             //{"type": "AUDIO", "command": "PLAY", "soundsource": "This is the number.mp3", "mode":"flow", "features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""} //the stimulus digit
             //{"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3", "mode":"flow", "features": ""},
@@ -275,7 +275,7 @@
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[0,1]:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[0,1,2,3,4,5,6,7,8,9]:String","features":""},
 
         "FW_SET_REC":{"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_NUM:String","features":""},
 
