@@ -220,7 +220,7 @@ public class RoboTutor extends Activity implements IReadyListener {
         Log.i(TAG, "Back Button Pressed");
 
         if(tutorEngine != null) {
-            if(!tutorEngine.onBackButton()) {
+            if(tutorEngine.onBackButton()) {
                 super.onBackPressed();
             }
         }

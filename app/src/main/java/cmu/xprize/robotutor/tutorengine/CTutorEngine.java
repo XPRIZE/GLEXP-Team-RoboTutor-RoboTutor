@@ -169,6 +169,11 @@ public class CTutorEngine implements ILoadableObject2 {
     }
 
 
+    static public void pauseTutor() {
+
+    }
+
+
     static public void killTutor(String tutorName) {
 
         tutorMap.remove(tutorName);
@@ -181,6 +186,8 @@ public class CTutorEngine implements ILoadableObject2 {
         CTutor tutor = tutorMap.get(tutorName);
         tutor.launchTutor();
     }
+
+
 
 
     // Scriptable Launch command
