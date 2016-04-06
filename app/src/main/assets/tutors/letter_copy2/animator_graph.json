@@ -257,9 +257,29 @@
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "mode":"flow", "features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Next time you can do better.mp3",   "mode":"flow", "features": ""}
           ]
+        },
+
+        "SET_DATASOURCE":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,r,s,t,u,v,w,y,z]:String","features":"FTR_LC"},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,R,S,T,U,V,W,Y,Z]:String","features":"FTR_UC"}
+          ]
+        },
+
+        "FW_SET_REC":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_ALPHA:String|[a-z&&[^qx]]:String","features":"FTR_LC"},
+            {"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_ALPHA:String|[A-Z&&[^QX]]:String","features":"FTR_UC"}
+          ]
         }
 
-//        "PLAYCORRECT": {
+        //        "PLAYCORRECT": {
 //          "type": "MODULE",
 //          "reuse":true,
 //          "COMMENT": "TBD",
@@ -275,10 +295,6 @@
         "my_action": {"type": "TIMER", "name": "hint_timeout", "duration":"20", "repeat":"false", "action":"START", "ontimer":"ACTION_NAME", "features": "" },
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
-
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,r,s,t,u,v,w,y,z]:String","features":""},
-
-        "FW_SET_REC":{"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_ALPHA:String|[a-z&&[^qx]]:String","features":""},
 
         "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HESITATION_TRACK", "features": "" },
         //set the waiting time limit as 10 seconds

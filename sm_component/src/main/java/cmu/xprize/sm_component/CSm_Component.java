@@ -103,7 +103,7 @@ public class CSm_Component extends ScrollView implements ILoadableObject, ILaunc
      * @param intent
      * @param intentData
      */
-    public void setTutorIntent(String intent, String intentData) {
+    public void setTutorIntent(String intent, String intentData, String features) {
     }
 
 

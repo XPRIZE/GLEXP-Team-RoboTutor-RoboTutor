@@ -33,6 +33,7 @@ public class CSm_Data implements ILoadableObject {
     public String       intentdata;
     public String       buttontype;
     public String       buttonvalue;
+    public String       features;
 
 
     //************ Serialization

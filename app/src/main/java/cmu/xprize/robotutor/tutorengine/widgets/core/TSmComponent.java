@@ -122,12 +122,13 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl {
      * @param intentData
      */
     @Override
-    public void setTutorIntent(String intent, String intentData) {
+    public void setTutorIntent(String intent, String intentData, String features) {
 
         // update the response variable  "<Sresponse>.value"
 
         mTutor.getScope().addUpdate(name() + ".intent", new TString(intent));
         mTutor.getScope().addUpdate(name() + ".intentData", new TString(intentData));
+        mTutor.getScope().addUpdate(name() + ".features", new TString(features));
 
         applyEventNode(mSymbol);
     }
