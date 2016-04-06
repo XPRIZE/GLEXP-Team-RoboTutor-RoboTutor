@@ -5,8 +5,8 @@
     "letter_copy2": {
 
       "type": "ANIMATOR",
-      "title": "Letter copying tutor",
-      "COMMENT": "This tutor is designed for copying letter A-Z and a-z.",
+      "title": "Lower case letter copying tutor",
+      "COMMENT": "This tutor is designed for copying letter a-z.",
       "version": "1.0.0",
       "rootnode": "INTRO_STATE",
 
@@ -55,7 +55,7 @@
             {"constraint":"FTR_RIGHT","edge":"CORRECT"},
             {"constraint":"FTR_WRONG","edge":"WRONG"},
             //{"constraint":"","edge":"UNRECOGNIZED"}
-	        {"constraint":"FTR_UNRECOGNIZED","edge":"UNRECOGNIZED"}
+	        {"constraint":"","edge":"UNRECOGNIZED"}
             //{"constraint":"","edge":"HESITATION"}
           ]
         },
@@ -211,7 +211,7 @@
           "tracks": [
             {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""}, //flag the incorrect string in red color
             {"type": "AUDIO", "command": "PLAY", "soundsource": "That looks like.mp3", "mode":"flow","features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sresponse.value}}.mp3","mode":"flow", "features": ""},  // the recognizer output
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sresponse.valueUC}}.mp3","mode":"flow", "features": ""},  // the recognizer output
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
           ]
         },
@@ -276,7 +276,7 @@
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[a,b,c]:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,r,s,t,u,v,w,y,z]:String","features":""},
 
         "FW_SET_REC":{"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_ALPHA:String|[a-z&&[^qx]]:String","features":""},
 
