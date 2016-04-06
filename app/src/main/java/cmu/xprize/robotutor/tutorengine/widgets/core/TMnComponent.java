@@ -46,6 +46,13 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
         mSceneObject.init(context, attrs);
     }
 
+    @Override
+    public void onDestroy() {
+        mSceneObject.onDestroy();
+    }
+
+
+
     //**********************************************************
     //**********************************************************
     //*****************  Tutor Interface
@@ -56,11 +63,13 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
      */
     public void setDataSource(String dataSource) {
 
+        // TODO: globally make startWith type TCONST
         try {
-            if (dataSource.startsWith("file|")) {
-                dataSource = dataSource.substring(5);
+            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
+                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
 
                 String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataSource);
+                // Load the datasource in the component module - i.e. the superclass
                 loadJSON(new JSONObject(jsonData), null);
 
             } else if (dataSource.startsWith("db|")) {

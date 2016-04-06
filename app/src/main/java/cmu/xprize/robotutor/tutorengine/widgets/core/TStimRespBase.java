@@ -65,6 +65,14 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
         mSceneObject.init(context, attrs);
     }
 
+    @Override
+    public void onDestroy() {
+        mSceneObject.onDestroy();
+    }
+
+
+
+
     @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
     {
         int finalWidth, finalHeight;
@@ -101,6 +109,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
         // update the response variable  "<Sresponse>.value"
         mTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
+        mTutor.getScope().addUpdate(name() + ".valueUC", new TString(mValue.toUpperCase()));
 
         if(mLinkedView == null)
             mLinkedView = (TStimRespBase)mTutor.getViewById(mLinkedViewID, null);
@@ -153,8 +162,8 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
         mTutor.setDelFeature(TCONST.FWINCORRECT);
 
         try {
-            if (dataSource.startsWith("file|")) {
-                dataSource = dataSource.substring(5);
+            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
+                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
 
                 JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.TASSETS + "/" + dataSource);
 
@@ -190,6 +199,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
         // update the Scope response variable  "<Sstimulus>.value"
         //
         mTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
+        mTutor.getScope().addUpdate(name() + ".valueUC", new TString(mValue.toUpperCase()));
 
         if(dataExhausted())
             mTutor.setAddFeature(TCONST.FTR_EOI);

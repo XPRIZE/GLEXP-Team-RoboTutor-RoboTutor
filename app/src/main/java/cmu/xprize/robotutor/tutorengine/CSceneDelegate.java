@@ -44,7 +44,7 @@ public class CSceneDelegate implements ITutorScene {
 
     protected ITutorScene       mParent;
     protected CTutor            mTutor;
-    protected CSceneAnimator mAnimator;
+    protected CSceneGraph mAnimator;
     protected ITutorNavigator   mNavigator;
     protected ITutorLogManager  mLogManager;
 
@@ -64,13 +64,13 @@ public class CSceneDelegate implements ITutorScene {
     // We support 3 types of scene drivers
     // ActionTracks    - simple instances of CActionTrack object with audio/events
     // ActionSequences - sequences of CActionTracks
-    // AnimationGraphs = full CSceneAnimator support for complex sequences
+    // AnimationGraphs = full CSceneGraph support for complex sequences
 
     private String	seqID;
     private List    seqTrack;
     private int     seqIndex;
 
-    private CSceneAnimator animationGraph;
+    private CSceneGraph animationGraph;
 
 
     // Attach the View to this functionality
@@ -98,6 +98,12 @@ public class CSceneDelegate implements ITutorScene {
         }
 
     }
+
+    @Override
+    public void onDestroy() {
+
+    }
+
 
     @Override
     public void setName(String name) { mTutorId = name; }

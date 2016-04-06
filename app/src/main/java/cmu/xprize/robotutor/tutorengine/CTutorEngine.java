@@ -20,16 +20,18 @@
 package cmu.xprize.robotutor.tutorengine;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
-import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -37,7 +39,11 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.RoboTutor;
 
 /**
- * The tutor engine is a singleton
+ * The tutor engine provides top-level control over the tutor lifecycle and can support multiple
+ * simultaneous tutors.  On creation the tutor engine will instantiate and launch the DefTutor
+ * specified in the TCONST.EDESC Json tutor engine specification file.
+ *
+ * CTutorEngine is a singleton
  *
  */
 public class CTutorEngine implements ILoadableObject2 {
@@ -53,8 +59,11 @@ public class CTutorEngine implements ILoadableObject2 {
     private String                          mJSONspec;
 
     static public RoboTutor Activity;
-    static public ITutorSceneImpl           TutorContainer;
+    static public ITutorManager             TutorContainer;
     static public ITutorLogManager          TutorLogManager;
+
+    static HashMap<String,CTutor>           tutorMap = new HashMap<>();
+    static HashMap<String,HashMap>          sceneMap = new HashMap<>();
 
     // You can override the language used in all tutors by placing a
     // "language":"LANG_EN", spec in the TCONST.EDESC replacing EN with
@@ -68,8 +77,18 @@ public class CTutorEngine implements ILoadableObject2 {
     final static private String TAG         = "CTutorEngine";
 
 
-
-    private CTutorEngine(RoboTutor context, ITutorSceneImpl tutorContainer) {
+    /**
+     * TutorEngine is a Singleton
+     *
+     * Load and generate the root tutor - This root tutor may be a single-topic tutor
+     * or a mananger interface "tutor" permitting access to other sub-tutors.  So if you have complex
+     * content management (i.e. student models) it/they should be embodied in the manager interface
+     * component logic.
+     *
+     * @param context
+     * @param tutorContainer
+     */
+    private CTutorEngine(RoboTutor context, ITutorManager tutorContainer) {
 
         mRootScope      = new TScope(null, "root", null);
 
@@ -77,18 +96,56 @@ public class CTutorEngine implements ILoadableObject2 {
         TutorContainer  = tutorContainer;
         TutorLogManager = new CTutorLogManager();
 
+        // TODO: is this initialization required?
         // Initialize the JSON Helper statics - just throw away the object.
+        //
         new JSON_Helper(Activity.getAssets(), CacheSource, RoboTutor.EXTERNFILES);
+
+        // Load the TCONST.EDESC and generate the root tutor
+        //
+        loadEngineDescr();
+        addTutor(defTutor);
+
+        launchTutor(defTutor);
     }
 
 
-    static public CTutorEngine getTutorEngine(RoboTutor context, ITutorSceneImpl tutorContainer) {
+    /**
+     * Retrieve the one and only tutorEngine object
+     *
+     * @param context
+     * @param tutorContainer
+     * @return
+     */
+    static public CTutorEngine getTutorEngine(RoboTutor context, ITutorManager tutorContainer) {
 
         if(mTutorEngine == null) {
             mTutorEngine = new CTutorEngine(context, tutorContainer);
         }
 
         return mTutorEngine;
+    }
+
+
+    public static void addTutorScene(String tutorName, String sceneName, ITutorScene scene) {
+
+        HashMap scenes = sceneMap.get(tutorName);
+
+        scenes.put(sceneName, scene);
+    }
+
+    public void showTutorScene() {
+
+    }
+
+    /**
+     * Called from the Activity when the back button is pressed.
+     *
+     */
+    public boolean onBackButton() {
+        boolean result = false;
+
+        return result;
     }
 
 
@@ -103,36 +160,80 @@ public class CTutorEngine implements ILoadableObject2 {
     }
 
 
-    static public void add(String Id, ITutorObject obj) {
+    static private void addTutor(String tutorName) {
 
-        mTutorActive.add(Id, obj);
+        CTutor newTutor = new CTutor(Activity, tutorName, TutorContainer, TutorLogManager, mRootScope, language);
+
+        tutorMap.put(tutorName, newTutor);
+        sceneMap.put(tutorName, new HashMap<>());
     }
 
 
-    static public ITutorObject get(String Id) {
+    static public void killTutor(String tutorName) {
 
-        return mTutorActive.get(Id);
+        tutorMap.remove(tutorName);
+        sceneMap.remove(tutorName);
     }
 
 
-    public void clear() {
-        mTutorActive.clear();
+    static private void launchTutor(String tutorName) {
+
+        CTutor tutor = tutorMap.get(tutorName);
+        tutor.launchTutor();
     }
 
 
-    public void initialize() {
+    // Scriptable Launch command
+    //
+    static public void launch(String intent, String intentData) {
 
-        loadEngineDescr();
-        loadDefTutor();
+        Intent extIntent = new Intent();
+        String extPackage;
 
-        mTutorActive.launchTutor();
-    }
+        switch(intentData) {
+            case "native":
+                addTutor(intent);
+                launchTutor(intent);
+                break;
 
+            case "browser":
 
-    private void loadDefTutor() {
+                extIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("file:///" + intent));
 
-        mTutorActive = new CTutor(Activity, defTutor, TutorContainer, TutorLogManager, mRootScope, language);
+                getActivity().startActivity(extIntent);
 
+                break;
+
+            default:
+
+                // This a special allowance for MARi which placed there activities in a different
+                // package from there app - so we check for intent of the form "<pkgPath>:<appPath>"
+                //
+                String[] intParts = intent.split(":");
+
+                // If it is "<pkgPath>:<appPath>"
+                //
+                if(intParts.length > 1) {
+                    extPackage = intParts[0];
+                    intent     = intParts[1];
+                }
+                // Otherwise we expect the activities to be right off the package.
+                //
+                else {
+                    extPackage = intent.substring(0, intent.lastIndexOf('.'));
+                }
+
+                extIntent.setClassName(extPackage, intent);
+                extIntent.putExtra("intentdata", intentData);
+
+                try {
+                    getActivity().startActivity(extIntent);
+                }
+                catch(Exception e) {
+                    Log.e(TAG, "Launch Error: " + e + " : " + intent);
+                }
+                break;
+        }
     }
 
 

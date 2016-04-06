@@ -62,6 +62,15 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
 
     }
 
+    /**
+     *  Release listeners and resources
+     *
+     */
+    public void onDestroy() {
+        setButtonBehavior("null");
+    }
+
+    
     public CTutor tutor() {
         return mTutor;
     }
@@ -158,14 +167,20 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
     public void onClick(View v) {
         IScriptable2 obj = null;
 
+        // TODO: Ultimately we want to instantiate scope symbols for built-in behaviors like NODENEXT
+        //
         switch(mClickBehavior) {
-            case TCONST.GOTONEXTSCENE:
-            case TCONST.GOTONEXT:
-                mTutor.mTutorNavigator.onButtonNext();
+
+            case TCONST.NEXTSCENE:
+                mTutor.mTutorAnimator.onNextScene();
+                break;
+
+            case TCONST.NEXTNODE:
+                mTutor.mSceneAnimator.onNextNode();
                 break;
 
             case TCONST.STOP:
-                mTutor.mTutorAnimator.stop();
+                mTutor.mSceneAnimator.stop();
                 break;
 
             default:

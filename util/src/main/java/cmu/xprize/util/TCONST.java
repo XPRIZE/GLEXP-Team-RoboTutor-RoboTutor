@@ -47,6 +47,10 @@ public class TCONST {
 
     // CTutorNavigator Constants
 
+
+    public static final String ENDTUTOR        = "END_TUTOR";
+    public static final String CONTINUETUTOR   = "CONTINUE_TUTOR";
+
     public static final String OKNAV           = "OKNAV";
     public static final String CANCELNAV       = "CANCELNAV";
     public static final String WOZGOTO         = "WOZGOTO";
@@ -61,8 +65,8 @@ public class TCONST {
     // Navigator types
     final static public String SIMPLENAV       = "SIMPLE_NAVIGATOR";
     final static public String GRAPHNAV        = "GRAPH_NAVIGATOR";
-    public static final String GOTONEXTSCENE   = "NAVNEXT";
-    public static final String GOTONEXT        = "NEXT";
+    public static final String NEXTNODE        = "NEXTNODE";
+    public static final String NEXTSCENE       = "NEXTSCENE";
 
 
     // CActionTrack track types
@@ -125,8 +129,10 @@ public class TCONST {
     public static final char EOT = '\04';
 
     // type_action - command types
-    public static final String GOTONODE  = "GOTONODE";
-    public static final String NEXTSCENE = "NEXTSCENE";
+    public static final String CMD_WAIT    = "WAIT";
+    public static final String CMD_GOTO    = "GOTONODE";
+    public static final String CMD_NEXT    = "NEXT";
+    public static final String CMD_LAUNCH  = "LAUNCH-TUTOR";
 
     // Intrinsic types
     public static final String TREFERENCE  = "TReference";
@@ -170,8 +176,9 @@ public class TCONST {
 
     public static final String STORYDATA    = "story_data.json";
     public static final String STORYINDEX   = "story_index.json";
-    public static final String SOURCEFILE   = "file|";
+    public static final String SOURCEFILE   = "[file]";
 
     public static final String TTS          = "TTS";
     public static final String ASR          = "ASR";
+
 }
