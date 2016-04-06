@@ -75,6 +75,6 @@ public class CSm_Button extends Button implements ILauncherButton, View.OnClickL
      */
     @Override
     public void onClick(View v) {
-        mComponent.setTutorIntent(mData.intent, mData.intentdata);
+        mComponent.setTutorIntent(mData.intent, mData.intentdata, mData.features);
     }
 }

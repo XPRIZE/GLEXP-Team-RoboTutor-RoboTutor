@@ -111,7 +111,7 @@ public class CTutor implements ILoadableObject2 {
 
 
 
-    public CTutor(Context context, String name, ITutorManager tutorContainer, ITutorLogManager logManager, TScope rootScope, String tarLanguage) {
+    public CTutor(Context context, String name, ITutorManager tutorContainer, ITutorLogManager logManager, TScope rootScope, String tarLanguage, String featSet) {
 
         mTutorScope      = new TScope(this, name, rootScope);
         mContext         = context;
@@ -120,6 +120,8 @@ public class CTutor implements ILoadableObject2 {
         mTutorLogManager = logManager;
 
         mAssetManager    = context.getAssets();
+
+        setTutorFeatures(featSet);
 
         // Remember what language the engine wants to use - need to override after TutorDesc
         // has been inflated
@@ -431,7 +433,7 @@ public class CTutor implements ILoadableObject2 {
     public void setTutorFeatures(String featSet) {
         List<String> featArray = new ArrayList<String>();
 
-        if(featSet.length() > 0)
+        if(featSet != null && featSet.length() > 0)
             featArray = Arrays.asList(featSet.split(":"));
 
         fFeatures = new ArrayList<String>();

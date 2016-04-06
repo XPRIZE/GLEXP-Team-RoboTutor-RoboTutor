@@ -37,9 +37,8 @@
       "description":"writing",
       "background":"#b9FFb9",
       "data": [
-        { "type":"Sm_Data", "intent": "letter_copy1", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy 1" },
-        { "type":"Sm_Data", "intent": "letter_copy2", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy 2" }
-
+        { "type":"Sm_Data", "intent": "letter_copy2", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy 1", "features":"FTR_LC" },
+        { "type":"Sm_Data", "intent": "letter_copy2", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy 2", "features":"FTR_UC"  }
       ]
     },
 
