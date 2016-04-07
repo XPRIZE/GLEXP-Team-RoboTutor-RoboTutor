@@ -79,6 +79,7 @@ public class CTutor implements ILoadableObject2 {
 
     public String                        mTutorName;
     public AssetManager                  mAssetManager;
+    public boolean                       mTutorActive = false;
 
     private int                                 _framendx = 0;
 
@@ -201,7 +202,7 @@ public class CTutor implements ILoadableObject2 {
      * This is where the tutor gets kick started
      */
     public void launchTutor() {
-
+        mTutorActive = true;
         mTutorAnimator.gotoNextScene(true);
     }
 
@@ -210,8 +211,17 @@ public class CTutor implements ILoadableObject2 {
      * This is where the tutor stops
      */
     public void endTutor() {
-        mTutorContainer.popView(false, null);
-        CTutorEngine.killTutor(mTutorName);
+
+        // Only ever pop once per tutor
+        // TODO: this will change - at the moment may be called multiple times during shutdown.
+        // e.g. from a stream flow.
+
+        if(mTutorActive) {
+            mTutorActive = false;
+
+            mTutorContainer.popView(false, null);
+            CTutorEngine.killTutor(mTutorName);
+        }
     }
 
 

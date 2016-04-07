@@ -40,7 +40,7 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
     // NOTE: we run at a Flash default of 24fps - which is the units int which
     // index and duration are calibrated
 
-    private MediaPlayer  mPlayer;
+    private MediaPlayer  mPlayer        = null;
     private String       mSoundSource;
     private String       mSourcePath;
 
@@ -51,6 +51,7 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
     private long         mSeekPoint     = 0;
 
     private String       cachedSource   = "";
+    private boolean      cacheAudio     = false;
 
     private OnCompletionListener listener;
 
@@ -82,7 +83,12 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
 
             // If the sound source doesn't change then we play the source we have already
             // reduces play latency.
-            if(!cachedSource.equals(pathResolved)) {
+            if(!cacheAudio || !cachedSource.equals(pathResolved)) {
+
+                if(mPlayer != null) {
+                    mPlayer.release();
+                    mPlayer = null;
+                }
 
                 cachedSource = pathResolved;
                 mIsReady     = false;
@@ -132,6 +138,8 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
     }
 
 
+    // TODO : need tighter control over media player lifetime - running out of resources
+    // since they aren't being released.
     public void play() {
 
         if(!mPlaying) {
@@ -208,10 +216,14 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
     @Override
     public void onCompletion(MediaPlayer mp) {
 
-        mPlayer.pause();
-        mPlayer.seekTo(0);
-        mPlaying = false;
-
+        try {
+            mPlayer.pause();
+            mPlayer.seekTo(0);
+            mPlaying = false;
+        }
+        catch(Exception e) {
+            Log.e(TAG, "Audio state error:" + e);
+        }
         // Flows automatically increment to next animation node.
         //
         if(mode.equals(TCONST.AUDIOFLOW))
