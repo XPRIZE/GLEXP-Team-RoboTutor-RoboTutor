@@ -86,6 +86,7 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
             if(!cacheAudio || !cachedSource.equals(pathResolved)) {
 
                 if(mPlayer != null) {
+                    mPlayer.reset();
                     mPlayer.release();
                     mPlayer = null;
                 }
@@ -188,7 +189,7 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
     public void seekTo(int frameTime) {
 
         // No errors occur - but don't try to seek past the end
-        if(frameTime < mPlayer.getDuration())
+        if(mPlayer != null && frameTime < mPlayer.getDuration())
             mPlayer.seekTo(frameTime);
     }
 
@@ -217,9 +218,17 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
     public void onCompletion(MediaPlayer mp) {
 
         try {
-            mPlayer.pause();
-            mPlayer.seekTo(0);
-            mPlaying = false;
+
+            if(mPlayer != null) {
+                mPlayer.pause();
+                mPlayer.seekTo(0);
+                mPlaying = false;
+
+                // TODO: Manage audioplayers more intelligently
+                mPlayer.reset();
+                mPlayer.release();
+                mPlayer = null;
+            }
         }
         catch(Exception e) {
             Log.e(TAG, "Audio state error:" + e);
