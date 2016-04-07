@@ -42,10 +42,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import cmu.xprize.robotutor.RoboTutor;
-import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
-import cmu.xprize.util.IScope;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
@@ -170,8 +168,8 @@ public class type_timeline extends type_action {
 
         seek(_currFrame);
 
-        if(_currAudio != null && _currAudio.isPlaying == false) {
-            _currAudio.isPlaying = true;
+        if(_currAudio != null && _currAudio.hasPlayed == false) {
+            _currAudio.hasPlayed = true;
             _currAudio.play();
         }
 
@@ -221,7 +219,7 @@ public class type_timeline extends type_action {
             case TCONST.ABSOLUTE_TYPE:
                 if(_playing) {
                     if (_currAudio != null) {
-                        _currAudio.isPlaying = false;
+                        _currAudio.hasPlayed = false;
                         _currAudio.stop();
                     }
 
@@ -332,10 +330,10 @@ public class type_timeline extends type_action {
                 if(recordCurr) {
                     _currAudio = (CAudioFrame) script;
 
-                    // If we are sitting on the audio start frame then reset isPlaying
+                    // If we are sitting on the audio start frame then reset hasPlayed
                     // so it will start if the timeline is reused
                     // TODO: Need more sophisticated way to manage audio durations.
-                    if(_currAudio.mIndex == seekPnt) _currAudio.isPlaying = false;
+                    if(_currAudio.mIndex == seekPnt) _currAudio.hasPlayed = false;
                 }
 
                 // Check if this is the next closest start event to the seek point
@@ -388,7 +386,7 @@ public class type_timeline extends type_action {
             // There is no audio and no events in the future.  _nextFrame == TCONST.MAXTRACKLENGTH
         }
 
-        if(_currAudio != null) {
+        if(_currAudio != null && !_currAudio.hasPlayed) {
             // If there is an audio track ensure that it is loaded
             ((CAudioFrame)_currAudio).mPlayer.preEnter();
 
@@ -490,7 +488,7 @@ public class type_timeline extends type_action {
         public int    mLast;
         public int    mDuration;
 
-        public boolean isPlaying;
+        public boolean hasPlayed;
 
         protected void play() {}
         protected void stop() {}
@@ -630,7 +628,7 @@ public class type_timeline extends type_action {
 
             // Initialize flag - used so we don't play a clip that is already playing
             //
-            isPlaying = false;
+            hasPlayed = false;
 
             try {
                 String tindex = xpp.getAttributeValue(null, "index");

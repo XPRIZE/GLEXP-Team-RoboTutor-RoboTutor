@@ -25,7 +25,7 @@
     {
       "type":"Sm_Class",
       "description":"numeric",
-      "background":"#D9FFFF",
+      "background":"#b9FFb9",
       "data": [
           { "type":"Sm_Data", "intent": "digit_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy"}
 
@@ -35,23 +35,23 @@
     {
       "type":"Sm_Class",
       "description":"writing",
-      "background":"#b9FFb9",
+      "background":"#D9FFFF",
       "data": [
         { "type":"Sm_Data", "intent": "letter_copy2", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy 1", "features":"FTR_LC" },
         { "type":"Sm_Data", "intent": "letter_copy2", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy 2", "features":"FTR_UC"  }
       ]
     },
 
-    {
-      "type":"Sm_Class",
-      "description":"reading",
-      "background":"#D9FFFF",
-      "data": [
-        { "type":"Sm_Data", "intent": "com.carney.readingtutor:com.carney.activity.ReadingTutorActivity", "intentdata":"read", "buttontype":"text" , "buttonvalue":"Reading Tutor Ext" },
-        { "type":"Sm_Data", "intent": "story_reading", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Reading Tutor" }
-
-      ]
-    },
+//    {
+//      "type":"Sm_Class",
+//      "description":"reading",
+//      "background":"#D9FFFF",
+//      "data": [
+//        { "type":"Sm_Data", "intent": "com.carney.readingtutor:com.carney.activity.ReadingTutorActivity", "intentdata":"read", "buttontype":"text" , "buttonvalue":"Reading Tutor Ext" },
+//        { "type":"Sm_Data", "intent": "story_reading", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Reading Tutor" }
+//
+//      ]
+//    },
 
     {
       "type":"Sm_Class",

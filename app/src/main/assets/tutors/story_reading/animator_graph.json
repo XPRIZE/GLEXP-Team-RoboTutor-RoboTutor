@@ -19,7 +19,7 @@
           "COMMENT": "Intro Clip",
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
-          "preenter":["SET_LANGUAGE","SET_STORYNAME","NEXT_DATASET"],
+          "preenter":["SET_VERSION","SET_LANGUAGE","SET_STORYNAME","NEXT_DATASET"],
           "preexit" :[],
           "edges": [
             {"constraint":"FTR_RIGHT","edge":"CORRECT"},
@@ -100,6 +100,7 @@
       "actionMap": {
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
+        "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.1.1.1:String","features":""},
         "SET_LANGUAGE":{"type": "COMMAND", "id": "SrtComponent", "method": "setLanguage", "parms": "LANG_EN:String","features":""},
         "SET_STORYNAME":{"type": "COMMAND", "id": "SrtComponent", "method": "setStory", "parms": "The Golden Goose:String","features":""},
 
