@@ -71,6 +71,7 @@ public class CTutorEngine implements ILoadableObject2 {
 
     // json loadable
     public String                           defTutor;
+    public String                           defFeatures;
     static public String                    language;
 
     final static public  String CacheSource = TCONST.ASSETS;                // assets or extern
@@ -104,7 +105,7 @@ public class CTutorEngine implements ILoadableObject2 {
         // Load the TCONST.EDESC and generate the root tutor
         //
         loadEngineDescr();
-        addTutor(defTutor);
+        addTutor(defTutor, defFeatures);
 
         launchTutor(defTutor);
     }
@@ -160,9 +161,9 @@ public class CTutorEngine implements ILoadableObject2 {
     }
 
 
-    static private void addTutor(String tutorName) {
+    static private void addTutor(String tutorName, String features) {
 
-        CTutor newTutor = new CTutor(Activity, tutorName, TutorContainer, TutorLogManager, mRootScope, language);
+        CTutor newTutor = new CTutor(Activity, tutorName, TutorContainer, TutorLogManager, mRootScope, language, features);
 
         tutorMap.put(tutorName, newTutor);
         sceneMap.put(tutorName, new HashMap<>());
@@ -192,14 +193,18 @@ public class CTutorEngine implements ILoadableObject2 {
 
     // Scriptable Launch command
     //
-    static public void launch(String intent, String intentData) {
+    static public void launch(String intent, String intentData, String features ) {
 
         Intent extIntent = new Intent();
         String extPackage;
 
         switch(intentData) {
+            // Create a native tutor with the given base features
+            // These features are used to determine basic tutor functionality when
+            // multiple tutors share a single scenegraph
+            //
             case "native":
-                addTutor(intent);
+                addTutor(intent, features);
                 launchTutor(intent);
                 break;
 
@@ -232,6 +237,7 @@ public class CTutorEngine implements ILoadableObject2 {
 
                 extIntent.setClassName(extPackage, intent);
                 extIntent.putExtra("intentdata", intentData);
+                extIntent.putExtra("features", features);
 
                 try {
                     getActivity().startActivity(extIntent);

@@ -125,8 +125,9 @@ public class type_action extends graph_node {
                         //
                         String intent     = getScope().resolveTemplate(parmList.get(0));
                         String intentData = getScope().resolveTemplate(parmList.get(2));
+                        String features   = getScope().resolveTemplate(parmList.get(4));
 
-                        CTutorEngine.launch(intent, intentData);
+                        CTutorEngine.launch(intent, intentData, features);
                     }
                     catch(Exception e) {
                         Log.e(TAG, "Launch Command Invalid: " + e);

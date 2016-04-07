@@ -73,7 +73,7 @@ public class CSm_ImageButton extends ImageButton implements ILauncherButton, Vie
      */
     @Override
     public void onClick(View v) {
-        mComponent.setTutorIntent(mData.intent, mData.intentdata);
+        mComponent.setTutorIntent(mData.intent, mData.intentdata, mData.features);
     }
 
 }
