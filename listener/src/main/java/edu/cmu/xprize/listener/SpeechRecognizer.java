@@ -440,13 +440,14 @@ public class SpeechRecognizer {
                                 recorder.stop();
                                 do {
                                     nread = recorder.read(buffer, 0, buffer.length);
+
                                 }while(nread > 0);
                             }
 
                             // PAUSED_TAG
                             // Notes:
                             // Waits should always be in loops like this
-                            // TODO: understand why interrupt causes freeze in wait state
+                            // TODO: understand why interrupt causes freeze while in wait state
                             // You should not interrupt() while in a wait
                             //
                             while(isPausedRecognizer) {

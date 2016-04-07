@@ -51,7 +51,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IT
     static private HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
 
     //
-    // This is used to map "type" (class names) used in json HashMap specs to real classes
+    // This is used to map "states" to colors
 
     static {
         colorMap.put("wrong", new Integer(0xffff0000));
