@@ -21,8 +21,10 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.TextView;
 
 import cmu.xprize.banner.CBanner;
+import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
@@ -34,6 +36,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 public class TBanner extends CBanner implements ITutorObjectImpl {
 
     private CObjectDelegate mSceneObject;
+    private TTextView       mVersion;
 
 
     public TBanner(Context context) {
@@ -56,6 +59,9 @@ public class TBanner extends CBanner implements ITutorObjectImpl {
     public void init(Context context, AttributeSet attrs) {
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
+
+        mVersion = (TTextView)findViewById(R.id.StutorVersion);
+        //mVersion.setText("v.0.0.1");  @DEBUG
     }
 
     @Override
@@ -74,6 +80,10 @@ public class TBanner extends CBanner implements ITutorObjectImpl {
     //************************************************************************
     // Tutor methods  Start
 
+
+    public void setVersionID(String versionID) {
+        mVersion.setText(versionID);
+    }
 
 
     // Tutor methods  End

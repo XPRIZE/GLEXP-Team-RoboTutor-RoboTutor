@@ -10,6 +10,31 @@
     android:background="@drawable/bannerbox">
 
     <!-- in Relative layout - views have to be defined before being referenced -->
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TTextView
+        android:id="@+id/StutorVersion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|top"
+        android:text=""
+        android:textSize="15sp"
+        android:textColor="#FFF" />
+
+
+    <ImageButton
+        android:id="@+id/SlevelSelector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_heightPercent="80%"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/StutorVersion"
+        app:layout_marginRightPercent="4%"
+        android:alpha=".9"
+        android:src="@drawable/level_button"
+        android:visibility="gone"
+        android:background="@null"/>
+
+
     <ImageButton
         android:id="@+id/Sbackbutton"
         android:layout_width="wrap_content"
@@ -22,27 +47,14 @@
         android:background="@null"/>
 
 
-    <ImageButton
-        android:id="@+id/levelSelector"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_heightPercent="80%"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        app:layout_marginRightPercent="4%"
-        android:alpha=".9"
-        android:src="@drawable/level_button"
-        android:visibility="gone"
-        android:background="@null"/>
-
     <cmu.xprize.banner.persona.Persona
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_heightPercent="80%"
         android:layout_centerInParent="true"/>
 
+
     <ImageButton
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/exitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,5 +66,6 @@
         android:src="@drawable/exit_button"
         android:visibility="gone"
         android:background="@null"/>
+
 
 </android.support.percent.PercentRelativeLayout>
