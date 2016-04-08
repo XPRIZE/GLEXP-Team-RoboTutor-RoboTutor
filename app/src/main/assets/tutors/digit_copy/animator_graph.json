@@ -33,7 +33,7 @@
         "NEWCHAR":{
           "COMMENT":"This node presents a digit for user to copy.",
           "type":"node",
-          "preenter":["GETCHAR"],
+          "preenter":["GETCHAR","FW_ENABLE"],
           "maptype":"moduleMap",
           "mapname": "PLAYCHAR",
           "preexit" :[],
