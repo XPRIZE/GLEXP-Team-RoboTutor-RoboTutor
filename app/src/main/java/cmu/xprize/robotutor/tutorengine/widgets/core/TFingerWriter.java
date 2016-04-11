@@ -38,7 +38,7 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
 
-    private float aspect = 1.12f;  // w/h
+    private float aspect = 0.5433f;  // w/h
 
     private static final String   TAG = "TFingerWriter";
 
