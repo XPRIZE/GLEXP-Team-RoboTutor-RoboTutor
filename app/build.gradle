@@ -39,4 +39,5 @@ dependencies {
     compile project(':listener')
     compile project(':rt_component')
     compile project(':sm_component')
+    compile project(':fw_component')
 }
