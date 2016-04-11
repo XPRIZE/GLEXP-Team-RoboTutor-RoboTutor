@@ -17,7 +17,7 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.ltk;
+package cmu.xprize.fw_component;
 
 public interface ITextSink {
 

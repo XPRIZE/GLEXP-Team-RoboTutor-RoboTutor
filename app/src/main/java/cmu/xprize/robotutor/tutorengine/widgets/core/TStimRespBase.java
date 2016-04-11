@@ -18,7 +18,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 
-import cmu.xprize.ltk.CStimRespBase;
+import cmu.xprize.fw_component.CStimRespBase;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;

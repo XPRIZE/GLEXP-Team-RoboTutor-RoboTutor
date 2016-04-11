@@ -17,7 +17,7 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.ltk;
+package cmu.xprize.fw_component;
 
 import android.content.Context;
 import android.graphics.Canvas;

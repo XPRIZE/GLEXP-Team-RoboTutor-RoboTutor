@@ -17,7 +17,7 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.ltk;
+package cmu.xprize.fw_component;
 
 import android.content.Context;
 import android.content.Intent;
@@ -43,6 +43,9 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cmu.xprize.ltk.LipiTKJNIInterface;
+import cmu.xprize.ltk.RecResult;
+import cmu.xprize.ltk.Stroke;
 import cmu.xprize.util.TCONST;
 
 

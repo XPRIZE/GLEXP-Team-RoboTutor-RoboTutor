@@ -23,8 +23,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import cmu.xprize.ltk.CFingerWriter;
-import cmu.xprize.ltk.ITextSink;
+import cmu.xprize.fw_component.CFingerWriter;
+import cmu.xprize.fw_component.ITextSink;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
