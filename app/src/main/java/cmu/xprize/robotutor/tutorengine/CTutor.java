@@ -39,6 +39,7 @@ import java.util.List;
 
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.util.CPreferenceCache;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -123,6 +124,10 @@ public class CTutor implements ILoadableObject2 {
         mAssetManager    = context.getAssets();
 
         setTutorFeatures(featSet);
+
+        // Update the unique instance string for the tutor
+        //
+        CPreferenceCache.updateTutorInstance(name);
 
         // Remember what language the engine wants to use - need to override after TutorDesc
         // has been inflated

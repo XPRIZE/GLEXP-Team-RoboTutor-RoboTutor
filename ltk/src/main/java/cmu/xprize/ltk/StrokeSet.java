@@ -37,6 +37,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.TimeZone;
 
+import cmu.xprize.util.CPreferenceCache;
 import cmu.xprize.util.TCONST;
 
 /**
@@ -60,7 +61,7 @@ public class StrokeSet {
     private Float                 _glyphBaseLine;
     private Float                 _fontBaseLine;
 
-    private final static String DATA_PATH = Environment.getExternalStorageDirectory() + "/AzRecorderFree/";
+    private final static String DATA_PATH = Environment.getExternalStorageDirectory() + TCONST.ROBOTUTOR_FOLDER;
 
     private static String      TAG  = "StrokeSet";
 
@@ -243,9 +244,12 @@ public class StrokeSet {
             if (!outputFile.exists())
                        outputFile.mkdir();
 
-            // Append Glyph Data to file
-            outPath += TCONST.GLYPHLOG;
+            // Generate a tutor instance-unique id for the log name
+            // This won't change until the tutor changes
+            //
+            outPath += TCONST.GLYPHLOG + CPreferenceCache.getPrefID(TCONST.CURRENT_TUTOR) + TCONST.JSONLOG;
 
+            // Append Glyph Data to file
             try {
                 out = new FileWriter(outPath, TCONST.APPEND);
 

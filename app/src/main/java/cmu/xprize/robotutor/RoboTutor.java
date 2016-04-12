@@ -26,14 +26,13 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.widget.TextView;
 
 import java.io.IOException;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorManager;
+import cmu.xprize.util.CPreferenceCache;
 import cmu.xprize.util.IReadyListener;
 import cmu.xprize.util.ProgressLoading;
 import cmu.xprize.util.TCONST;
@@ -101,6 +100,10 @@ public class RoboTutor extends Activity implements IReadyListener {
         //
         new tutorConfigTask().execute();
 
+        // Update the globally accessible id object for this engine instance.
+        //
+        CPreferenceCache.initLogPreference(this);
+
         // Show the loader
         //
         progressLoading = new ProgressLoading(this);
@@ -111,6 +114,7 @@ public class RoboTutor extends Activity implements IReadyListener {
     protected void onDestroy() {
         super.onDestroy();
     }
+
 
 
     /**

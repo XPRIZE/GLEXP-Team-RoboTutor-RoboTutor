@@ -185,7 +185,8 @@ public class TCONST {
     public static final String TTS         = "TTS";
     public static final String ASR         = "ASR";
 
-    public static final String GLYPHLOG    = "glyph_log.json";
+    public static final String GLYPHLOG    = "glyphlog_";
+    public static final String JSONLOG     = ".json";
     public static final boolean APPEND     = true;
 
     // LTK messaging constants
@@ -193,4 +194,9 @@ public class TCONST {
     public static final String FW_VALUE    = "FW_VALUE";
     public static final String FW_EOI      = "FW_EOI";
     public static final String FW_RESPONSE = "FW_RESPONSE";
+    public static final String ROBOTUTOR_FOLDER = "/RoboTutor/";
+
+    // Preference keys
+    public static final String ENGINE_INSTANCE = "engine_instance";
+    public static final String CURRENT_TUTOR   = "tutor";
 }
