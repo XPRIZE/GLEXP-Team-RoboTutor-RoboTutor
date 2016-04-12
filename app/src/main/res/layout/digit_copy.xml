@@ -79,6 +79,7 @@
             android:id="@+id/SfingerWriter"
             app:linkedView="@id/Sresponse"
             app:layout_heightPercent="90%"
+            app:aspectratio="0.5433"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"

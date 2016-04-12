@@ -19,115 +19,194 @@
 
 package cmu.xprize.ltk;
 
-import android.graphics.Paint;
-import android.graphics.PointF;
-import android.graphics.RectF;
-import android.os.Bundle;
-
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-//
-// Stroke
-//
-// Keeps track of a list of points
-// and how they should be drawn
-//
-public class Stroke {
+import android.graphics.Path;
+import android.graphics.Point;
+import android.graphics.PointF;
+import android.util.Log;
+
+import cmu.xprize.ltk.AffineXform;
+
+
+/**
+ *
+ */
+public class Stroke  {
+
+    // The list of points in this stroke
+
+    private ArrayList<StrokePoint> _points;
+
+    // Animation replay variables
+
+    private Point       nPoint;
+    private Point       lPoint;
+    private int         oldIndex;
+    private Path        strokePath;
+
+    final private String TAG = "StrokeClass";
+
+
+
     public Stroke() {
-        _points = new ArrayList<PointF>();
-        _paint = new Paint();
-
-        // Just use a random color for now
-        _paint.setARGB(255, getRandColor(), getRandColor(), getRandColor());
+        _points  = new ArrayList<StrokePoint>();
     }
 
-    /// Debundles the given stroke
-    public Stroke(Bundle stroke) {
+
+    public Stroke(PointF point, long time) {
         this();
-
-        // Restore the points from the bundle
-        int pointCount = stroke.getInt("PointCount");
-        for (int i = 0; i < pointCount; i++) {
-            float x = stroke.getFloat("PointX" + i);
-            float y = stroke.getFloat("PointY" + i);
-            addPoint(new PointF(x,y));
-        }
-
-        // Restore the Paint from the bundle
-        _paint.setColor(stroke.getInt("PaintColor"));
-        _paint.setStrokeWidth(stroke.getFloat("PaintStrokeWidth"));
+        addPoint(point, time);
     }
 
-    private int getRandColor() {
-        int rand = (int)Math.round(Math.random() * 255);
-        return rand;
+
+    public Stroke(PointF origin) {
+        this(origin, System.currentTimeMillis());
     }
 
-    // Adds the given point to this stroke
-    public void addPoint(PointF point) {
-        _points.add(point);
 
-        addPointToBoundingBox(point);
-    }
-
-    // Expands the bounding box to accommodate the given point if necessary
-    private void addPointToBoundingBox(PointF point) {
-        if (_boundingBox == null) {
-            _boundingBox = new RectF(point.x, point.y, point.x, point.y);
-            return;
-        }
-
-        // Expand the bounding box to include it, if necessary
-        _boundingBox.union(point.x, point.y);
-    }
-
-    public ArrayList<PointF> getPoints() {
+    public ArrayList<StrokePoint> getPoints() {
         return _points;
     }
+
+
+    public PointF getPoint() {
+        return _points.get(0)._point;
+    }
+
+
+    public long getTime() {
+        return _points.get(0)._time;
+    }
+
+
+    // Adds the given point to this stroke
+    public void addPoint(PointF point, long time) {
+
+        _points.add(new StrokePoint(point, time));
+    }
+
+
+    //************************************************************************
+    //** JNI access methods
+    // LTK uses these methods in JNI code to access the contents of a stroke
+    // in the Native domain
 
     public int getNumberOfPoints() {
         return _points.size();
     }
 
     public PointF getPointAt(int index) {
-        return _points.get(index);
+        return _points.get(index).getPoint();
     }
 
-    public RectF getBoundingBox() {
-        return _boundingBox;
+    //** JNI access methods
+    //************************************************************************
+
+
+    public Path startReplaySegments(AffineXform xForm) {
+
+        nPoint = new Point();
+        lPoint = new Point(xForm.getOrigX(), xForm.getOrigY());
+        strokePath = new Path();
+
+        strokePath.moveTo(lPoint.x, lPoint.y);
+
+        Log.i(TAG, "Next Point: " + 0 + " : " + xForm.getOrigX() + " : " + xForm.getOrigX());
+
+        oldIndex = 1;
+
+        return strokePath;
     }
 
-    public Paint getPaint() {
-        return _paint;
+    public Path addReplaySegments(AffineXform xForm, int index) {
+
+        for(int i1 = oldIndex ; i1 <= index ; i1++)
+        {
+            nPoint.x = (int)((_points.get(i1).getX() * xForm.getScaleX()) + xForm.getOffsetX());
+            nPoint.y = (int)((_points.get(i1).getY() * xForm.getScaleY()) + xForm.getOffsetY());
+
+            Log.i(TAG, "Next Point: " + i1 + " : " + nPoint.x + " : " + nPoint.y );
+            Log.i(TAG, "Last Point: " + i1 + " : " + lPoint.x + " : " + lPoint.y );
+
+            strokePath.quadTo(lPoint.x, lPoint.y, (nPoint.x + lPoint.x) / 2, (nPoint.y + lPoint.y) / 2);
+
+            lPoint = nPoint;
+        }
+
+        oldIndex = index + 1;
+
+        return strokePath;
     }
 
-    public void setPaint(Paint p) {
-        _paint = p;
+
+    public PointF getReplayPoint(AffineXform xForm, int index) {
+        PointF ipoint = new PointF();
+
+        ipoint.x = (int)((_points.get(index).getX() * xForm.getScaleX()) + xForm.getOffsetX());
+        ipoint.y = (int)((_points.get(index).getY() * xForm.getScaleY()) + xForm.getOffsetY());
+
+        return ipoint;
     }
 
-    /// Bundles this stroke
-//    public Bundle bundle() {
-//        Bundle result = new Bundle();
-//
-//        // Write the points into the bundle
-//        result.putInt("PointCount", getNumberOfPoints());
-//        for (int i = 0; i < getNumberOfPoints(); i++) {
-//            result.putFloat("PointX" + i, _points.get(i).x);
-//            result.putFloat("PointY" + i, _points.get(i).y);
-//        }
-//
-//        // Write the Paint into the bundle
-//        result.putInt("PaintColor", _paint.getColor());
-//        result.putFloat("PaintStrokeWidth", _paint.getStrokeWidth());
-//
-//        return result;
-//    }
 
-    // The list of points in this stroke
-    private ArrayList<PointF> _points;
 
-    private RectF _boundingBox = null;
+    public void normalizeStroke(float normalX, float normalY, long  cTime ) {
 
-    // The paint to use when drawing this stroke
-    private Paint _paint;
+        ArrayList<StrokePoint> normalPoints = new ArrayList<StrokePoint>();
+        cTime =  _points.get(0).getTime();
+
+        for (int i1 = 0 ; i1 < _points.size() ; i1++)
+        {
+
+            Log.i(TAG, "Normal Point: " + (long)(_points.get(i1).getX() - normalX) + " : " + (long)(_points.get(i1).getY() - normalY) + " delta : " + (long)(_points.get(i1).getTime() - cTime));
+
+            long pTime =  _points.get(i1).getTime();
+
+            normalPoints.add(new StrokePoint(_points.get(i1).getX() - normalX, _points.get(i1).getY() - normalY, pTime - cTime));
+
+            cTime = pTime;
+        }
+
+        _points = normalPoints;
+    }
+
+
+    public class StrokePoint {
+
+        private PointF _point;
+        private Long _time;
+
+        StrokePoint(PointF point, long time) {
+            _point = point;
+            _time = time;
+        }
+
+        StrokePoint(float x, float y, long time) {
+            _point = new PointF(x, y);
+            _time = time;
+        }
+
+        public PointF getPoint() {
+            return _point;
+        }
+
+        public float getX() {
+            return _point.x;
+        }
+
+        public float getY() {
+            return _point.y;
+        }
+
+        public long getTime() {
+            return _time;
+        }
+    }
+
+    public Iterator<StrokePoint> iterator() {
+        return _points.iterator();
+    }
 }

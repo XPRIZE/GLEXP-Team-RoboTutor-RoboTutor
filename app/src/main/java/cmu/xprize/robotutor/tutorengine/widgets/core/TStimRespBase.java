@@ -14,11 +14,14 @@
 package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 
-import cmu.xprize.ltk.CStimRespBase;
+import cmu.xprize.fw_component.CStimRespBase;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -35,7 +38,6 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
 
-    private float aspect   = 0.82f;  // w/h
     private int   _wrong   = 0;
     private int   _correct = 0;
 
@@ -73,57 +75,28 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
 
 
-    @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
-    {
-        int finalWidth, finalHeight;
-
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec );
-
-        int originalWidth  = MeasureSpec.getSize(widthMeasureSpec);
-        int originalHeight = MeasureSpec.getSize(heightMeasureSpec);
-
-        finalWidth  = (int)(originalHeight * aspect);
-        finalHeight = originalHeight;
-
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, finalHeight * 0.7f);
-
-        setMeasuredDimension(finalWidth, finalHeight);
-
-//        setMeasuredDimension(getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec),
-//                getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec));
-//        super.onMeasure(
-//                MeasureSpec.makeMeasureSpec(finalWidth, MeasureSpec.EXACTLY),
-//                MeasureSpec.makeMeasureSpec(finalHeight, MeasureSpec.EXACTLY));
-    }
-
-
     private void cachedataSource() {
 
     }
 
 
     @Override
-    public void addChar(String newChar) {
+    public void updateText(String newChar) {
 
-        super.addChar(newChar);
+        super.updateText(newChar);
 
-        // update the response variable  "<Sresponse>.value"
-        mTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
-        mTutor.getScope().addUpdate(name() + ".valueUC", new TString(mValue.toUpperCase()));
+        if(mIsResponse) {
 
-        if(mLinkedView == null)
-            mLinkedView = (TStimRespBase)mTutor.getViewById(mLinkedViewID, null);
+            // update the response variable  "<Sresponse>.value"
+            mTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
+            mTutor.getScope().addUpdate(name() + ".valueUC", new TString(mValue.toUpperCase()));
 
-        if(mLinkedView != null) {
-
-            if(newChar.equals("???")) {
+            if (newChar.equals("???")) {
                 mTutor.setAddFeature(TCONST.FWUNKNOWN);
                 _wrong++;
-            }
-            else {
-                String Stimulus = mLinkedView.getValue();
+            } else {
 
-                if (mValue.equals(Stimulus)) {
+                if (mValue.equals(mStimulus)) {
                     mTutor.setAddFeature(TCONST.FWCORRECT);
                     _correct++;
                 } else {
@@ -133,11 +106,15 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
                 // Set a flag if they're all correct when we are out of data
                 //
-                if (mLinkedView.dataExhausted()) {
+                if (_dataEOI) {
                     if (_wrong == 0)
                         mTutor.setAddFeature(TCONST.FWALLCORRECT);
                 }
             }
+
+
+            // Do any on rec behaviors
+            applyEventNode(_onRecognition);
         }
     }
 
@@ -201,8 +178,18 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
         mTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
         mTutor.getScope().addUpdate(name() + ".valueUC", new TString(mValue.toUpperCase()));
 
-        if(dataExhausted())
+        if(dataExhausted()) {
+
+            // set the script 'Feature'
             mTutor.setAddFeature(TCONST.FTR_EOI);
+
+            // For stimulus controls broadcast the change so the response knows
+            // Let interested listeners know the stimulus has been exhausted
+            //
+            Intent msg = new Intent(TCONST.FW_EOI);
+
+            bManager.sendBroadcast(msg);
+        }
     }
 
     public void show(Boolean showHide) {
@@ -228,6 +215,10 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
         super.setForeGround(Color);
     }
 
+    public void onRecognitionComplete(String symbol) {
+        super.onRecognitionComplete(symbol);
+    }
+
 
     /**
      * Deprecated Feb 17 2016
@@ -240,6 +231,21 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
         System.exit(1);
     }
 
+
+    protected void applyEventNode(String nodeName) {
+        IScriptable2 obj = null;
+
+        if(nodeName != null && !nodeName.equals("")) {
+            try {
+                obj = mTutor.getScope().mapSymbol(nodeName);
+                obj.applyNode();
+
+            } catch (Exception e) {
+                // TODO: Manage invalid Behavior
+                e.printStackTrace();
+            }
+        }
+    }
 
 
     // Tutor methods  End

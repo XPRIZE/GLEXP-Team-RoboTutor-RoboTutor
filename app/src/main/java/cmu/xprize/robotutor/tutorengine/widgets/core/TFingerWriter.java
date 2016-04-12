@@ -23,8 +23,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import cmu.xprize.ltk.CFingerWriter;
-import cmu.xprize.ltk.ITextSink;
+import cmu.xprize.fw_component.CFingerWriter;
+import cmu.xprize.fw_component.ITextSink;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
@@ -38,9 +38,10 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
 
-    private float aspect = 1.12f;  // w/h
+    private ITextSink       mLinkedView;
 
     private static final String   TAG = "TFingerWriter";
+
 
 
     public TFingerWriter(Context context) {
@@ -61,6 +62,8 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 
     @Override
     public void init(Context context, AttributeSet attrs) {
+        super.init(context, attrs);
+
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
 
@@ -78,55 +81,17 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     }
 
 
-    @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
-    {
-        int finalWidth, finalHeight;
+    private void linkView(int linkedViewID) {
 
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec );
+        if(mLinkedView == null) {
+            mLinkedView = (ITextSink) mTutor.getViewById(linkedViewID, null);
 
-        int originalWidth  = MeasureSpec.getSize(widthMeasureSpec);
-        int originalHeight = MeasureSpec.getSize(heightMeasureSpec);
-
-        finalWidth  = (int)(originalHeight * aspect);
-        finalHeight = originalHeight;
-
-        setMeasuredDimension(finalWidth, finalHeight);
-
-//        setMeasuredDimension(getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec),
-//                getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec));
-//        super.onMeasure(
-//                MeasureSpec.makeMeasureSpec(finalWidth, MeasureSpec.EXACTLY),
-//                MeasureSpec.makeMeasureSpec(finalHeight, MeasureSpec.EXACTLY));
-    }
-
-
-    @Override
-    protected void updateLinkedView(int linkedViewID) {
-        // If we are linked to a textSink then send it the new character
-        if(linkedViewID != -1) {
-            ITextSink linkedView = (ITextSink)mTutor.getViewById(linkedViewID, null);
-
-            if(linkedView == null) {
+            if (mLinkedView == null) {
                 Log.e(TAG, "FingerWriter Component does not have LinkView");
                 System.exit(1);
             }
-
-            try {
-                // If there is a hypothesis then return the most likely
-                //
-                if(_recChars.size() > 0)
-                    linkedView.addChar(_recChars.get(0));
-            }
-            catch(Exception e) {
-                Log.d(TAG, "FingerWriter: probable empty result" + e);
-
-                // Send special unrecognized sequence
-                linkedView.addChar("???");
-            }
         }
     }
-
-
 
 
     //************************************************************************
@@ -156,11 +121,6 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 
     public void onStartWriting(String symbol) {
         super.onStartWriting(symbol);
-    }
-
-
-    public void onRecognitionComplete(String symbol) {
-        super.onRecognitionComplete(symbol);
     }
 
 

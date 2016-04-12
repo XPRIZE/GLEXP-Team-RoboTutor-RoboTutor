@@ -17,29 +17,37 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.ltk;
+package cmu.xprize.fw_component;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.support.percent.PercentRelativeLayout;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 
+import cmu.xprize.util.TCONST;
 
-public class CStimRespBase extends TextView  implements View.OnClickListener, ITextSink {
+
+public class CStimRespBase extends TextView  implements View.OnClickListener  {
 
     private Context       mContext;
 
-    private boolean       mIsResponse;
+    // Used by control in response mode to maintain state info
+    protected String      mStimulus;
+    protected String      mResponse;
+    protected boolean     mIsResponse;
+
     private String[]      mLexemes;
     private String[]      mLinkLex;
     private int[]         mLexEnds;             // records location of the end of lexemes in mDisplayText string
@@ -50,12 +58,16 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IT
 
     private List<String>  _data;
     private int           _dataIndex = 0;
+    protected boolean     _dataEOI   = false;
+    protected String      _onRecognition;
 
-    protected CStimRespBase  mLinkedView;
-    protected int            mLinkedViewID;
+    protected float       mAspect;           //   = 0.82f w/h
+
+    protected LocalBroadcastManager bManager;
+
+
 
     static private HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
-
     //
     // This is used to map "states" to colors
 
@@ -64,9 +76,9 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IT
         colorMap.put("normal", new Integer(0xff000000));
     }
 
-
-
     final static public String TAG = "CStimRespBase";
+
+
 
 
     public CStimRespBase(Context context) {
@@ -96,24 +108,72 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IT
 
             try {
                 mIsResponse   = a.getBoolean(R.styleable.CStimResp_isResponse, false);
-                mLinkedViewID = a.getResourceId(R.styleable.CStimResp_linkedView, 0);
+                mAspect       = a.getFloat(R.styleable.CStimResp_aspectratio, 1.0f);
                 mTextColor    = getCurrentTextColor();
             } finally {
                 a.recycle();
             }
         }
+
+        // Capture the local broadcast manager
+        bManager = LocalBroadcastManager.getInstance(getContext());
+
+        IntentFilter filter = new IntentFilter(TCONST.FW_STIMULUS);
+        filter.addAction(TCONST.FW_RESPONSE);
+        filter.addAction(TCONST.FW_EOI);
+        bManager.registerReceiver(new ChangeReceiver(), filter);
     }
 
 
-    @Override
-    public void addChar(String newChar) {
+    class ChangeReceiver extends BroadcastReceiver {
+        public void onReceive (Context context, Intent intent) {
 
-        updateText(newChar);
+            switch(intent.getAction()) {
+
+                case TCONST.FW_STIMULUS:
+                    if (mIsResponse) {
+                        mStimulus = intent.getStringExtra(TCONST.FW_VALUE);
+                    }
+                    break;
+
+                case TCONST.FW_RESPONSE:
+                    if (mIsResponse) {
+                        mResponse = intent.getStringExtra(TCONST.FW_VALUE);
+                        updateText(mResponse);
+                    }
+                    break;
+
+                case TCONST.FW_EOI:
+                    _dataEOI = true;        // tell the response that the data is exhausted
+                    break;
+            }
+        }
     }
 
 
-    @Override
-    public void setLinkedView(CStimResp respView) {
+
+
+    @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
+    {
+        int finalWidth, finalHeight;
+
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec );
+
+        int originalWidth  = MeasureSpec.getSize(widthMeasureSpec);
+        int originalHeight = MeasureSpec.getSize(heightMeasureSpec);
+
+        finalWidth  = (int)(originalHeight * mAspect);
+        finalHeight = originalHeight;
+
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, finalHeight * 0.7f);
+
+        setMeasuredDimension(finalWidth, finalHeight);
+
+//        setMeasuredDimension(getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec),
+//                getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec));
+//        super.onMeasure(
+//                MeasureSpec.makeMeasureSpec(finalWidth, MeasureSpec.EXACTLY),
+//                MeasureSpec.makeMeasureSpec(finalHeight, MeasureSpec.EXACTLY));
     }
 
 
@@ -122,10 +182,20 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IT
 
     }
 
-    private void updateText(String newValue) {
+    protected void updateText(String newValue) {
 
         mValue = newValue;
         setText(mValue);
+
+        // For stimulus controls broadcast the change
+        if(!mIsResponse) {
+            // Let interested listeners know the stimulus has changed
+            //
+            Intent msg = new Intent(TCONST.FW_STIMULUS);
+            msg.putExtra(TCONST.FW_VALUE, newValue);
+
+            bManager.sendBroadcast(msg);
+        }
     }
 
     public boolean allCorrect(int numCorrect) {
@@ -136,35 +206,6 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IT
     public boolean dataExhausted() {
         return (_dataIndex >= _data.size())? true:false;
     }
-
-//    // We work left to right matching string lexemes
-//    // If there is an error in a lexeme we hightlight the error.
-//    // The remainder of the string is dehighlighted - indicating an indeterminate state
-//    //
-//    public void compareLinked(boolean compare) {
-//
-//        // This is only a valid call on response view types
-//        if(mIsResponse) {
-//
-//            mComparing = compare;
-//            try {
-//                if (mComparing) {
-//                    PercentRelativeLayout parentview = (PercentRelativeLayout)getParent();
-//
-//                    mLinkedView = (CStimResp)parentview.findViewById(mLinkedViewID);
-//                    mLinkLex    = mLinkedView.getString().split(" ");
-//                }
-//            } catch (NullPointerException exp) {
-//            }
-//        }
-//    }
-//
-//
-//    public void setLinkedView(CStimResp respView) {
-//        mLinkedView = respView;
-//    }
-//
-
 
 
 
@@ -177,6 +218,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IT
 
         _data      = new ArrayList<String>(Arrays.asList(dataSource));
         _dataIndex = 0;
+        _dataEOI   = false;
     }
 
     public String getValue() {
@@ -208,9 +250,12 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IT
         setVisibility(mShowState? View.VISIBLE:View.INVISIBLE);
     }
 
+    /**
+     * Note that we must not call updateText here.
+     */
     public void clear() {
 
-        updateText("");
+        setText("");
     }
 
     public void setBackGround(String Color) {
@@ -232,6 +277,18 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IT
             System.exit(1);
         }
     }
+
+    public void onRecognitionComplete(String symbol) {
+        _onRecognition = symbol;
+    }
+
+
+    // Must override in TClass
+    // TClass domain provides access to tutor scriptables
+    //
+    protected void applyEventNode(String nodeName) {
+    }
+
 
 
     // Tutor methods  End
