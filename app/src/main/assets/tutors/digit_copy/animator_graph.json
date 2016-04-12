@@ -186,7 +186,7 @@
           "tracks": [
             {"type": "COMMAND", "id": "SfingerWriter", "method": "onStartWriting", "parms": "CANCEL_REMINDER:String"},
             // This would call the cancel reminder action below when the user starts writing
-            {"type": "COMMAND", "id": "SfingerWriter", "method": "onRecognitionComplete", "parms": "NEXT:String"},
+            {"type": "COMMAND", "id": "Sresponse", "method": "onRecognitionComplete", "parms": "NEXT:String"},
             // This would increment the animation_graph when it is in a wait state.  e.g if it is sitting at the end of a stream audio clip
             {"type": "COMMAND", "cmd": "WAIT" }
             //{"type": "COMMAND", "id": "Sresponse", "method": "show", "parms": "TRUE:Boolean","features":""}
