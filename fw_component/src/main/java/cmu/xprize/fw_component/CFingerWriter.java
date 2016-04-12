@@ -19,8 +19,10 @@
 
 package cmu.xprize.fw_component;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -56,9 +58,11 @@ public class CFingerWriter extends View implements OnTouchListener {
     private ITextSink          mLinkedView;
     private int                mLinkedViewID = -1;
     protected boolean          _enabled = false;
+    protected float            mAspect = 1;  // w/h
 
     private float              mTopLine;
     private float              mBaseLine;
+    private boolean            mLogGlyphs = true;
 
     private Path               mPath;
     private Paint              mPaint;
@@ -72,6 +76,7 @@ public class CFingerWriter extends View implements OnTouchListener {
     private String             _configFolder;
     private boolean            _initialized   = false;
     private RecognizerThread   _recThread;
+    private String             _recogId;                // for logging
     private boolean            _isRecognizing = false;
 
     private Stroke[]           _recStrokes;
@@ -85,14 +90,15 @@ public class CFingerWriter extends View implements OnTouchListener {
 
     private Boolean            _touchStarted = false;
     private String             _onStartWriting;
-    private String             _onRecognition;
 
     private RecogDelay            _counter;
     private long                  _time;
     private long                  _prevTime;
 
+    private String             mResponse;
+    private String             mStimulus;
+
     private LocalBroadcastManager bManager;
-    public static String          RECMSG = "CHAR_RECOG";
 
     private static int            RECDELAY   = 400;              // Just want the end timeout
     private static int            RECDELAYNT = RECDELAY+500;     // inhibit ticks
@@ -139,7 +145,7 @@ public class CFingerWriter extends View implements OnTouchListener {
      * Common object initialization for all constructors
      *
      */
-    private void init(Context context, AttributeSet attrs ) {
+    protected void init(Context context, AttributeSet attrs ) {
         mContext = context;
 
         if(attrs != null) {
@@ -150,6 +156,7 @@ public class CFingerWriter extends View implements OnTouchListener {
 
             try {
                 mLinkedViewID = a.getResourceId(R.styleable.CStimResp_linkedView, 0);
+                mAspect       = a.getFloat(R.styleable.CStimResp_aspectratio, 1.0f);
             } finally {
                 a.recycle();
             }
@@ -189,8 +196,46 @@ public class CFingerWriter extends View implements OnTouchListener {
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(getContext());
 
+        IntentFilter filter = new IntentFilter(TCONST.FW_STIMULUS);
+        bManager.registerReceiver(new ChangeReceiver(), filter);
+
         // Initialize the path object
         clearStroke();
+    }
+
+
+    class ChangeReceiver extends BroadcastReceiver {
+        public void onReceive (Context context, Intent intent) {
+
+            switch(intent.getAction()) {
+
+                case TCONST.FW_STIMULUS:
+                    mStimulus = intent.getStringExtra(TCONST.FW_VALUE);
+                    break;
+            }
+        }
+    }
+
+
+    @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
+    {
+        int finalWidth, finalHeight;
+
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec );
+
+        int originalWidth  = MeasureSpec.getSize(widthMeasureSpec);
+        int originalHeight = MeasureSpec.getSize(heightMeasureSpec);
+
+        finalWidth  = (int)(originalHeight * mAspect);
+        finalHeight = originalHeight;
+
+        setMeasuredDimension(finalWidth, finalHeight);
+
+//        setMeasuredDimension(getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec),
+//                getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec));
+//        super.onMeasure(
+//                MeasureSpec.makeMeasureSpec(finalWidth, MeasureSpec.EXACTLY),
+//                MeasureSpec.makeMeasureSpec(finalHeight, MeasureSpec.EXACTLY));
     }
 
 
@@ -421,16 +466,6 @@ public class CFingerWriter extends View implements OnTouchListener {
 
 
     /**
-     * pass results to linked view
-     * @param linkedViewID
-     */
-    protected void updateLinkedView(int linkedViewID) {
-        // Called polymorphically - subclass handles
-    }
-
-
-
-    /**
      * This is how recognition is initiated - if the user stops writing for a
      * predefined period we assume they are finished writing.
      * Here it is used to dictate when a glyph is complete.
@@ -472,7 +507,6 @@ public class CFingerWriter extends View implements OnTouchListener {
      */
     class RecognizerThread extends AsyncTask<Void, Void, String> {
 
-
         RecognizerThread() {
         }
 
@@ -498,7 +532,6 @@ public class CFingerWriter extends View implements OnTouchListener {
         @Override
         protected void onPostExecute(String sResponse) {
 
-            clearStroke();
             Pattern pattern = Pattern.compile(_constraint);
 
             for (RecResult result : _recResults) {
@@ -524,15 +557,23 @@ public class CFingerWriter extends View implements OnTouchListener {
 
             if(_recChars.size() > 0) {
 
-                // send the result to the stimresp that is linked
-                updateLinkedView(mLinkedViewID);
+                mResponse = _recChars.get(0);
 
                 // Let anyone interested know there is a new recognition set available
-                bManager.sendBroadcast(new Intent(RECMSG));
+                Intent msg = new Intent(TCONST.FW_RESPONSE);
+                msg.putExtra(TCONST.FW_VALUE, mResponse);
 
-                // Do any on rec behaviors
-                applyEventNode(_onRecognition);
+                bManager.sendBroadcast(msg);
             }
+
+            // TODO: check for performance issues and run this in a separate thread if required.
+            //
+            if(mLogGlyphs)
+                _currentGlyph.writeGlyphToLog(_recogId, _constraint, mStimulus, mResponse);
+
+            // reset the stroke data
+            //
+            clearStroke();
         }
 
 
@@ -573,6 +614,7 @@ public class CFingerWriter extends View implements OnTouchListener {
         Log.d("JNI", "Path: " + path);
 
         try {
+            _recogId      = recogId;
             _recognizer   = new LipiTKJNIInterface(path, recogMap.get(recogId));
             _configFolder = _recognizer.getLipiDirectory() + folderMap.get(recogId);
 
@@ -640,11 +682,6 @@ public class CFingerWriter extends View implements OnTouchListener {
 
     public void onStartWriting(String symbol) {
         _onStartWriting = symbol;
-    }
-
-
-    public void onRecognitionComplete(String symbol) {
-        _onRecognition = symbol;
     }
 
 

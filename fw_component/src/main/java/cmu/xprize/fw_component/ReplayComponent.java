@@ -332,14 +332,14 @@ public class ReplayComponent extends View implements Animator.AnimatorListener {
         RectF glyphBounds  = glyph.getGlyphBoundingBox();
 
         switch(type) {
-            // Draw relative to replay box with variable aspect ratio of replay box
+            // Draw relative to replay box with variable mAspect ratio of replay box
             //
             case "ABS_VAR_ASPECT":
                 scaleX = vscaleX;
                 scaleY = vscaleY;
                 break;
 
-            // Draw relative to replay box with aspect ratio of the glyph bounding box -
+            // Draw relative to replay box with mAspect ratio of the glyph bounding box -
             // use ratio of replaybox height to glyph height as scale factor
             // Horizontally center about the replayRegion.
             //
@@ -350,7 +350,7 @@ public class ReplayComponent extends View implements Animator.AnimatorListener {
                 replayRegion.left += (replayRegion.width() - (glyphBounds.width() * scaleX)) / 2;
                 break;
 
-            // Draw relative to the baseline with aspect ratio of the glyph bounding box -
+            // Draw relative to the baseline with mAspect ratio of the glyph bounding box -
             // use ratio of replaybox height to glyph height as scale factor
             // Horizontally center about the replayRegion.
             //
