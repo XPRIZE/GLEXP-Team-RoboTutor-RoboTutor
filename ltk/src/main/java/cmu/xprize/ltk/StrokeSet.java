@@ -21,13 +21,23 @@ package cmu.xprize.ltk;
 
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.os.Environment;
 import android.util.JsonWriter;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.StringWriter;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.TimeZone;
+
+import cmu.xprize.util.TCONST;
 
 /**
  * A StrokeSet represents a single glyph where each elemental stroke is a part
@@ -49,6 +59,8 @@ public class StrokeSet {
     private RectF                 _fontBoundingBox  = null;
     private Float                 _glyphBaseLine;
     private Float                 _fontBaseLine;
+
+    private final static String DATA_PATH = Environment.getExternalStorageDirectory() + "/AzRecorderFree/";
 
     private static String      TAG  = "StrokeSet";
 
@@ -79,7 +91,6 @@ public class StrokeSet {
     public void terminateGlyph() {
 
         normalizeGlyph();
-        serializeGlyph();
     }
 
 
@@ -177,7 +188,6 @@ public class StrokeSet {
     }
 
 
-
     public class StrokeInfo {
 
         private Stroke _stroke;
@@ -212,34 +222,79 @@ public class StrokeSet {
     }
 
 
+    /**
+     * Note that this is currently XPrize log specific.
+     * TODO: make general Purpose
+     */
+    public void writeGlyphToLog(String recog, String constraint, String recChar, String stimChar) {
+        FileWriter out = null;
+
+        String state = Environment.getExternalStorageState();
+
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+
+            String[] files = null;
+            String outPath;
+
+            // Validate output folder
+            outPath = DATA_PATH;
+            File outputFile = new File(outPath);
+
+            if (!outputFile.exists())
+                       outputFile.mkdir();
+
+            // Append Glyph Data to file
+            outPath += TCONST.GLYPHLOG;
+
+            try {
+                out = new FileWriter(outPath, TCONST.APPEND);
+
+                // Throws if there is a JSON serializatin error
+                //
+                out.write(serializeGlyph(recog, constraint, recChar, stimChar));
+                out.close();
+            }
+            catch(Exception e) {
+                Log.e(TAG, "Glyph Serialization Error: " + e);
+            }
+        }
+    }
 
 
-    public boolean serializeGlyph() {
+    public String serializeGlyph(String recog, String constraint, String recChar, String stimChar) throws IOException {
 
-        JsonWriter writer = new JsonWriter(new StringWriter());
+        StringWriter outString = new StringWriter();
+        JsonWriter   writer    = new JsonWriter(outString);
 
-        try {
-            writer.setIndent("  ");
+        writer.setIndent("  ");
 
-            writer.beginObject();
-            writer.name("glyphstrokes");
+        writer.beginObject();
+
+            DateFormat df = DateFormat.getDateTimeInstance();
+            df.setTimeZone(TimeZone.getTimeZone("UTC"));
+            String datetime = df.format(new Date());
+
+            writer.name("time").value(datetime);
+            writer.name("recognizer").value(recog);
+            writer.name("constraint").value(constraint);
+            writer.name("resp").value(recChar);
+            writer.name("stim").value(stimChar);
+
+            writeNamedRectF(writer, "gBounds", _glyphBoundingBox);
+            writeNamedRectF(writer, "fBounds", _fontBoundingBox);
+            writer.name("gBase").value(_glyphBaseLine);
+            writer.name("fBase").value(_fontBaseLine);
+
+            writer.name("strokes");
             writeStrokeInfo(writer, _strokeInfoList);
 
-            writeNamedRectF(writer, "glyphBounds", _glyphBoundingBox);
-            writeNamedRectF(writer, "fontBounds", _fontBoundingBox);
-            writer.name("glyphBaseLine").value(_glyphBaseLine);
-            writer.name("fontBaseLine").value(_fontBaseLine);
-            writer.endObject();
+        writer.endObject();
 
-            writer.close();
-        }
-        catch(Exception e) {
-
-        }
+        writer.close();
 
         Log.i(TAG, "GlyphData" + writer.toString());
 
-        return true;
+        return outString.toString();
     }
 
     public void writeStrokeInfo(JsonWriter writer, ArrayList<StrokeInfo> strokes) throws IOException {
@@ -248,10 +303,10 @@ public class StrokeSet {
 
         for (StrokeInfo stroke : strokes) {
             writer.beginObject();
-            writer.name("stroke");
-            writeStroke(writer, stroke._stroke);
             writer.name("time").value(stroke._time);
             writer.name("duration").value(stroke._duration);
+            writer.name("stroke");
+            writeStroke(writer, stroke._stroke);
             writer.endObject();
         }
         writer.endArray();
@@ -262,23 +317,26 @@ public class StrokeSet {
         writer.beginArray();
 
         for (Stroke.StrokePoint point : stroke.getPoints()) {
-            writer.beginObject();
-            writer.name("point");
+//            writer.beginObject();
+//            writer.name("p");
+
             writePoint(writer, point.getPoint());
-            writer.name("time").value(point.getTime());
-            writer.endObject();
+            writer.value(point.getTime());
+
+//            writer.name("t").value(point.getTime());
+//            writer.endObject();
         }
         writer.endArray();
     }
 
     public void writePoint(JsonWriter writer, PointF point) throws IOException {
 
-        writer.beginArray();
+//        writer.beginArray();
 
         writer.value(point.x);
         writer.value(point.y);
 
-        writer.endArray();
+//        writer.endArray();
     }
 
     public void writeNamedRectF(JsonWriter writer, String name, RectF rect) throws IOException {

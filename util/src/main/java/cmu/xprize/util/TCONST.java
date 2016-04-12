@@ -21,6 +21,10 @@ package cmu.xprize.util;
 
 // global tutor constants
 
+import android.content.Context;
+
+import java.io.File;
+
 public class TCONST {
 
     // JSON parameter constants
@@ -141,10 +145,10 @@ public class TCONST {
     public static final String AUDIOSTREAM = "stream";
     public static final String AUDIOFLOW   = "flow";
 
-    public static final String   LOOKATSTART = "PERSONA_LOOKAT_START";
-    public static final String   LOOKAT      = "PERSONA_LOOKAT";
-    public static final String   LOOKATEND   = "PERSONA_LOOKAT_END";
-    public static final String   SCREENPOINT = "SCREENPOINT";
+    public static final String LOOKATSTART = "PERSONA_LOOKAT_START";
+    public static final String LOOKAT      = "PERSONA_LOOKAT";
+    public static final String LOOKATEND   = "PERSONA_LOOKAT_END";
+    public static final String SCREENPOINT = "SCREENPOINT";
 
     public static final String FWCORRECT    = "FTR_RIGHT";
     public static final String FWINCORRECT  = "FTR_WRONG";
@@ -170,15 +174,23 @@ public class TCONST {
     public static final int WORD_EVENT         = 32;
     public static final int TIMEDSTART_EVENT   = 64;
 
-    public static final int NOINTERVENTION    = 0;
-    public static final int INSPEECH = 1;
-    public static final int SAYWORD           = 2;
+    public static final int NOINTERVENTION = 0;
+    public static final int INSPEECH       = 1;
+    public static final int SAYWORD        = 2;
 
-    public static final String STORYDATA    = "story_data.json";
-    public static final String STORYINDEX   = "story_index.json";
-    public static final String SOURCEFILE   = "[file]";
+    public static final String STORYDATA   = "story_data.json";
+    public static final String STORYINDEX  = "story_index.json";
+    public static final String SOURCEFILE  = "[file]";
 
-    public static final String TTS          = "TTS";
-    public static final String ASR          = "ASR";
+    public static final String TTS         = "TTS";
+    public static final String ASR         = "ASR";
 
+    public static final String GLYPHLOG    = "glyph_log.json";
+    public static final boolean APPEND     = true;
+
+    // LTK messaging constants
+    public static final String FW_STIMULUS = "FW_UPDATED";
+    public static final String FW_VALUE    = "FW_VALUE";
+    public static final String FW_EOI      = "FW_EOI";
+    public static final String FW_RESPONSE = "FW_RESPONSE";
 }
