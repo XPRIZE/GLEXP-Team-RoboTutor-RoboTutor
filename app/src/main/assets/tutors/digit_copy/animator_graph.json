@@ -19,7 +19,7 @@
           "COMMENT": "Intro Clip",
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
-          "preenter":["SET_DATASOURCE","FW_SET_REC","FW_DISABLE"],
+          "preenter":["SET_VERSION","SET_DATASOURCE","FW_SET_REC","FW_DISABLE"],
           //temp ---- "preenter":["GB_DISABLE","FW_DISABLE"],
           "preexit" :[],
           "edges": [
@@ -274,6 +274,8 @@
         "my_action": {"type": "TIMER", "name": "hint_timeout", "duration":"20", "repeat":"false", "action":"START", "ontimer":"ACTION_NAME", "features": "" },
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
+
+        "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
 
         "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[0,1,2,3,4,5,6,7,8,9]:String","features":""},
 
