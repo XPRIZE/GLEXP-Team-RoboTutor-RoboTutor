@@ -129,4 +129,8 @@ public class TTextView extends TextView implements ITutorObjectImpl {
         mSceneObject.zoomInOut(scale, duration);
     }
 
+    @Override
+    public void setAlpha(Float alpha) {
+        mSceneObject.setAlpha(alpha);
+    }
 }

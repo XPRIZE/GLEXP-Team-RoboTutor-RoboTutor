@@ -296,4 +296,8 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
         mSceneObject.zoomInOut(scale, duration);
     }
 
+    @Override
+    public void setAlpha(Float alpha) {
+        mSceneObject.setAlpha(alpha);
+    }
 }

@@ -187,4 +187,9 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
     public void zoomInOut(Float scale, Long duration) {
         mSceneObject.zoomInOut(scale, duration);
     }
+
+    @Override
+    public void setAlpha(Float alpha) {
+        mSceneObject.setAlpha(alpha);
+    }
 }

@@ -107,4 +107,8 @@ public class TView extends View implements ITutorObjectImpl {
         mSceneObject.zoomInOut(scale, duration);
     }
 
+    @Override
+    public void setAlpha(Float alpha) {
+        mSceneObject.setAlpha(alpha);
+    }
 }

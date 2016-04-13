@@ -10,4 +10,5 @@ public interface ITutorObjectImpl extends ITutorObject {
     public CObjectDelegate getimpl();
 
     public void zoomInOut(Float scale, Long duration);
+    public void setAlpha(Float alpha);
 }

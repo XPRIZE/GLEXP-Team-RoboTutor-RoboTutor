@@ -32,6 +32,7 @@ import java.io.IOException;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorManager;
+import cmu.xprize.robotutor.tutorengine.widgets.core.TTextView;
 import cmu.xprize.util.CPreferenceCache;
 import cmu.xprize.util.IReadyListener;
 import cmu.xprize.util.ProgressLoading;

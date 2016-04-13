@@ -162,6 +162,10 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
         animation.start();
     }
 
+    public void setAlpha(Float alpha) {
+        mOwnerView.setAlpha(alpha);
+    }
+
 
     @Override
     public void onClick(View v) {
