@@ -43,48 +43,35 @@ import cmu.xprize.rt_component.CRt_Component;
 import cmu.xprize.rt_component.ICRt_ViewManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
-import edu.cmu.xprize.listener.Listener;
+import edu.cmu.xprize.listener.ListenerBase;
+import edu.cmu.xprize.listener.ListenerPLRT;
 
 public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
     private CTutor               mTutor;
     private CObjectDelegate      mSceneObject;
 
-    private Listener             mListener;
-    private String               mLanguage;
-    private boolean              mIndexLoaded = false;
 
-    // This is used to map "language features" to the story resources
-    // these are located in the assets/<lang>
-    // Note: on Android these are case sensitive filenames
-
-    static private HashMap<String, String> langMap = new HashMap<String, String>();
-
-    static {
-        langMap.put("LANG_EN", "en");
-        langMap.put("LANG_SW", "sw");
-    }
-
-    static final private String TAG = "TMnComponent";
+    static final private String TAG = "TRtComponent";
 
 
 
     public TRtComponent(Context context) {
         super(context);
-        initT(context, null);
     }
 
     public TRtComponent(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initT(context, attrs);
     }
 
     public TRtComponent(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initT(context, attrs);
     }
 
-    public void initT(Context context, AttributeSet attrs) {
+    @Override
+    public void init(Context context, AttributeSet attrs) {
+
+        super.init(context, attrs);
 
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
@@ -92,11 +79,10 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
         // Default to English language stories
         //
         mLanguage = langMap.get("LANG_EN");
-        mListener = CTutor.ASR;
 
         // Push the ASR listener reference into the super class in the Java domain
         //
-        prepareListener(CTutor.ASR, CTutor.TTS);
+        prepareListener(CTutor.TTS);
     }
 
     @Override
@@ -140,7 +126,9 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
         super.setLanguage(language);
 
-        mLanguage = langMap.get(language);
+        // At the moment
+        // The data source is the language specific story index file.
+        //
         setDataSource( TCONST.SOURCEFILE + TCONST.STORYINDEX);
     }
 
@@ -154,7 +142,9 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
             if (dataSource.startsWith(TCONST.SOURCEFILE)) {
                 dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
 
-                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + mLanguage + "/" + dataSource);
+                DATASOURCEPATH = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + mLanguage + "/";
+
+                String jsonData = JSON_Helper.cacheData(DATASOURCEPATH + dataSource);
                 loadJSON(new JSONObject(jsonData), null);
 
             } else if (dataSource.startsWith("db|")) {
@@ -172,8 +162,6 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
             Log.e(TAG, "Invalid Data Source for : " + name());
             System.exit(1);
         }
-
-        mIndexLoaded = true;
     }
 
 
@@ -186,32 +174,27 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
             if(storyName.equals(dataSource[i1].story)) {
 
+                // Generate a cached path to the story asset data
+                //
+                EXTERNPATH =DATASOURCEPATH + dataSource[i1].folder + "/";
+
                 Class<?> storyClass = viewClassMap.get(dataSource[i1].viewtype);
 
                 try {
-                    try {
+                    // Generate the View manager for the story -
+                    //
+                    mViewManager = (ICRt_ViewManager)storyClass.getConstructor(new Class[]{CRt_Component.class, ListenerBase.class}).newInstance(this,mListener);
+                    mViewManager.setPublishListener(this);
 
-                        mViewManager = (ICRt_ViewManager)storyClass.getConstructor(new Class[]{CRt_Component.class, Listener.class}).newInstance(this,mListener);
-                        mViewManager.setPublishListener(this);
-
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchMethodException e) {
-                        e.printStackTrace();
-                    }
-
-                    String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS +
-                                                            "/" + mLanguage + "/" + dataSource[i1].folder + "/" + TCONST.STORYDATA);
+                    String jsonData = JSON_Helper.cacheData(EXTERNPATH + TCONST.STORYDATA);
 
                     mViewManager.loadJSON(new JSONObject(jsonData), null);
 
-                } catch (InstantiationException e) {
+                } catch (Exception e) {
                     // TODO: Manage Exceptions
                     e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Story Parse Error: " + e);
+                    System.exit(1);
                 }
 
                 // we're done

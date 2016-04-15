@@ -21,10 +21,10 @@ package cmu.xprize.rt_component;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,10 +38,9 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TTSsynthesizer;
 import cmu.xprize.util.TCONST;
-import cmu.xprize.util.TimerUtils;
 import edu.cmu.xprize.listener.IAsrEventListener;
-import edu.cmu.xprize.listener.Listener;
-
+import edu.cmu.xprize.listener.ListenerBase;
+import edu.cmu.xprize.listener.ListenerPLRT;
 
 
 /**
@@ -52,8 +51,9 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     private Context                 mContext;
     private String                  word;
 
-    private Listener                listener;
-    private TTSsynthesizer          synthesizer;
+    protected ListenerBase          mListener;
+    protected TTSsynthesizer        mSynthesizer;
+    protected String                mLanguage;
 
     protected ICRt_ViewManager      mViewManager;                                   // Created in TRt_Component sub-class
     protected String                mDataSource;
@@ -83,8 +83,24 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     private String                  _timedSoundEvent;       // Time since noise began
     private String                  _timedWordEvent;        // Time since last word recognized
 
+    protected String                DATASOURCEPATH;
+    protected String                EXTERNPATH;
+
+
 
     public static String            RECOGLANG;
+
+
+    // This is used to map "language features" to the story resources
+    // these are located in the assets/<lang>
+    // Note: on Android these are case sensitive filenames
+
+    static protected HashMap<String, String> langMap = new HashMap<String, String>();
+
+    static {
+        langMap.put("LANG_EN", "en");
+        langMap.put("LANG_SW", "sw");
+    }
 
     // This is used to map "type" (class names) in the index to real classes
     //
@@ -129,14 +145,15 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     }
 
 
-    protected void prepareListener(Listener rootListener, TTSsynthesizer rootTTS) {
+    protected void prepareListener(TTSsynthesizer rootTTS) {
 
+        // Generate a Project Listen type listener
         // Attach the speech recognizer.
-        listener = rootListener;
-        listener.setEventListener(this);
+        mListener = new ListenerPLRT();
+        mListener.setEventListener(this);
 
         // attach TTS
-        synthesizer = rootTTS;
+        mSynthesizer = rootTTS;
     }
 
 
@@ -147,9 +164,9 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     protected void onPause() {
 
         // stop listening abortively whenever app pauses or stops (moves to background)
-        if (listener != null) {
-            listener.deleteLogFiles();
-            listener.cancel();
+        if (mListener != null) {
+            mListener.deleteLogFiles();
+            mListener.cancel();
         }
     }
 
@@ -164,7 +181,7 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
 
     protected void onRestart() {
 
-        mViewManager.switchSentence(currentIndex);
+        //mViewManager.switchSentence(currentIndex);
     }
 
 
@@ -178,7 +195,7 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     }
 
     protected void onDestroy() {
-        synthesizer.shutDown();
+        mSynthesizer.shutDown();
     }
 
     //****** Activity state support END
@@ -198,7 +215,7 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
 
 
     @Override
-    public void onUpdate(Listener.HeardWord[] heardWords, boolean finalResult) {
+    public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult) {
 
         mViewManager.onUpdate(heardWords, finalResult);             // update current sentence state and redraw
     }
@@ -267,19 +284,19 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
         // (In this case we are breaking when there is an intervention - but it could be as
         // fine grained a the user stopping for 300ms for example)
         //
-        // Pause the listener and set it up for a new utterance
+        // Pause the mListener and set it up for a new utterance
         //
-        listener.reInitializeListener(true);
-        listener.listenFor(sentenceWords, expectedWordIndex);
+        mListener.reInitializeListener(true);
+        mListener.listenFor(sentenceWords, expectedWordIndex);
         say("kutamka hivyo, " + sentenceWords[expectedWordIndex]);
-        listener.setPauseListener(false);
+        mListener.setPauseListener(false);
     }
 
 
     public void speakTargetSentence() {   // to speak the entire Target word sentence
 
         say("Usijali, i itakuwa kusoma kwa ajili yenu." + currentSentence);
-        mViewManager.nextSentence();
+        mViewManager.nextSentence(this, EXTERNPATH);
     }
 
 
@@ -288,17 +305,17 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
      */
     public void say(String prompt) {
 
-        listener.setPauseListener(true);
-        synthesizer.speak(prompt);
+        mListener.setPauseListener(true);
+        mSynthesizer.speak(prompt);
 
-        while (synthesizer.isSpeaking()) {
+        while (mSynthesizer.isSpeaking()) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        listener.setPauseListener(false);
+        mListener.setPauseListener(false);
     }
 
 
@@ -308,12 +325,14 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
      */
     public void setLanguage(String language) {
 
+        mLanguage = langMap.get(language);
+
         // TODO: manage language switching - currently ASR uses CTutor default language
-        //listener.init(mContext, RECOGLANG);
+        //
         RECOGLANG = language;
 
-        // Configure the listener for out story
-        listener.setLanguage(language);
+        // Configure the mListener for out story
+        mListener.setLanguage(language);
     }
 
 
@@ -346,7 +365,7 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
                 _timedWordEvent = symbol;
                 break;
         }
-        listener.configTimedEvent(eventType, timeOut, reset);
+        mListener.configTimedEvent(eventType, timeOut, reset);
     }
 
 
@@ -354,7 +373,7 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
 
         int eventType = CEventMap.eventMap.get(eventString);
 
-        listener.configTimedEvent(eventType, Long.MAX_VALUE, true);
+        mListener.configTimedEvent(eventType, Long.MAX_VALUE, true);
     }
 
 
@@ -393,7 +412,7 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
         try {
             if (mViewManager != null) {
 
-                mViewManager.nextSentence();
+                mViewManager.nextSentence(this, EXTERNPATH);
 
             } else {
                 Log.e(TAG, "Error no DataSource : ");
@@ -401,7 +420,7 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
             }
         }
         catch(Exception e) {
-            Log.e(TAG, "Data Exhuasted: call past end of data");
+            Log.e(TAG, "Data Exhuasted: next called past end of data");
             System.exit(1);
         }
 
@@ -412,6 +431,15 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
         return mViewManager.endOfData();
     }
 
+    /**
+     * Callback to obtain ImageView
+     *
+     * @return
+     */
+    @Override
+    public View getImageView() {
+        return mPageIImage;
+    }
 
 
     //************ Serialization

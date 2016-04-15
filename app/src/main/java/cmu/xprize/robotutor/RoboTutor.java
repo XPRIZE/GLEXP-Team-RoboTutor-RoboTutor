@@ -39,7 +39,7 @@ import cmu.xprize.util.ProgressLoading;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutorAssetManager;
 import cmu.xprize.util.TTSsynthesizer;
-import edu.cmu.xprize.listener.Listener;
+import edu.cmu.xprize.listener.ListenerBase;
 
 
 /**
@@ -59,7 +59,7 @@ public class RoboTutor extends Activity implements IReadyListener {
     private ProgressLoading     progressLoading;
 
     public TTSsynthesizer       TTS;
-    public Listener             ASR;
+    public ListenerBase         ASR;
     static public String        EXTERNFILES;
 
     static private boolean isReady = false;
@@ -91,10 +91,12 @@ public class RoboTutor extends Activity implements IReadyListener {
         TTS = new TTSsynthesizer(this);
         TTS.initializeTTS(this);
 
-        // Start an async task to update the listener assets if required.
-        // Async
+        // Create an inert listener for asset initialization only
+        // Start the configListener async task to update the listener assets only if required.
+        // This moves the listener assets to a local folder where they are accessible by the
+        // NDK code (PocketSphinx)
         //
-        ASR = new Listener("configassets");
+        ASR = new ListenerBase("configassets");
         ASR.configListener(this);
 
         // Start the async task to initialize the tutor
@@ -183,12 +185,6 @@ public class RoboTutor extends Activity implements IReadyListener {
             case TCONST.TTS:
                 CTutor.TTS = TTS;
                 break;
-
-            case TCONST.ASR:
-                CTutor.ASR = ASR;
-                break;
-
-
         }
         startEngine();
     }
@@ -206,6 +202,9 @@ public class RoboTutor extends Activity implements IReadyListener {
     private void startEngine() {
 
         if(TTS.isReady() && ASR.isReady() && isReady) {
+
+            // Delete the asset loader utility ASR object
+            ASR = null;
 
             progressLoading.hide();
 
