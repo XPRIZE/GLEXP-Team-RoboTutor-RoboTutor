@@ -1,0 +1,29 @@
+2016.3.12
+@Iris
+1. record new audio files
+Put the English and Swahili audio prompts here
+https://docs.google.com/spreadsheets/d/11feAhhQqrpJC2waSpOkReMiG3SwmNOofrkir3JljmVM/edit#gid=9838815
+Will need Jack's help to edit and confirm them.
+
+2. New components the numberSpeaking tutor needs
+(1) Json components
+-LISTENER_DISABLE [name]
+
+-LISTENER_ENABLE [name]
+
+-GET_NUMBER [retrieve the result of Word2Num.java from the Listener]
+Abhinav will help to modify the word2num.java codes.
+
+-GET_NUMBER_WORDS [retrieve the result of Num2Word.java from the Listener]
+
+-HEARD_RIGHT_NUMBER [true if Word2Num equals the stimuli]
+
+-HEARD_MULTI-WORD_NUMBER [true if !HEARD_RIGHT_NUMBER and Num2Word has multiple words]
+
+-HEARD_SINGLE-WORD_NUMBER [true if !HEARD_RIGHT_NUMBER and Num2Word has a single word]
+
+(2) UI components
+Jack suggested we implement a simplest version with:
+- The banner
+- The stimulus
+- The response
