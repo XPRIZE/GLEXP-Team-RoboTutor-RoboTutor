@@ -42,16 +42,16 @@
       ]
     },
 
-//    {
-//      "type":"Sm_Class",
-//      "description":"reading",
-//      "background":"#D9FFFF",
-//      "data": [
-//        { "type":"Sm_Data", "intent": "com.carney.readingtutor:com.carney.activity.ReadingTutorActivity", "intentdata":"read", "buttontype":"text" , "buttonvalue":"Reading Tutor Ext" },
-//        { "type":"Sm_Data", "intent": "story_reading", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Reading Tutor" }
-//
-//      ]
-//    },
+    {
+      "type":"Sm_Class",
+      "description":"reading",
+      "background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data", "intent": "com.carney.readingtutor:com.carney.activity.ReadingTutorActivity", "intentdata":"read", "buttontype":"text" , "buttonvalue":"Reading Tutor Ext" },
+        { "type":"Sm_Data", "intent": "story_reading", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Reading Tutor" }
+
+      ]
+    },
 
     {
       "type":"Sm_Class",
