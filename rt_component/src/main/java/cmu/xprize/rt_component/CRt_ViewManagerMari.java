@@ -41,7 +41,7 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.Num2Word;
 import cmu.xprize.util.TCONST;
-import edu.cmu.xprize.listener.Listener;
+import edu.cmu.xprize.listener.ListenerBase;
 
 
 /**
@@ -50,7 +50,8 @@ import edu.cmu.xprize.listener.Listener;
  */
 public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
 
-    private Listener                mListener;
+    private ListenerBase            mListener;
+    private IVManListener           mOwner;
     private TextView                mPageText;
 
     // state for the current sentence
@@ -74,17 +75,16 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
     // json loadable
     public String        parser;
     public String        data[];
-    public CMari_Data rhymes[];
+    public CMari_Data    rhymes[];
 
 
     static final String TAG = "CRt_ViewManagerMari";
 
 
-    public CRt_ViewManagerMari(CRt_Component parent, Listener listener) {
+    public CRt_ViewManagerMari(CRt_Component parent, ListenerBase listener) {
 
         mPageText = (TextView) parent.findViewById(R.id.SstoryText);
         mListener = listener;
-
     }
 
 
@@ -110,7 +110,7 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
 
         for (int i = 0; i < creditLevel.length; i++) {
 
-            if (creditLevel[i] != Listener.HeardWord.MATCH_EXACT) {
+            if (creditLevel[i] != ListenerBase.HeardWord.MATCH_EXACT) {
                 result = i;
                 break;
             }
@@ -132,15 +132,15 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
             String styledWord = words[i];                           // default plain
 
             // show credit status with color
-            if (creditLevel[i] == Listener.HeardWord.MATCH_EXACT) {     // match found, but not credited
+            if (creditLevel[i] == ListenerBase.HeardWord.MATCH_EXACT) {     // match found, but not credited
 
                 styledWord = "<font color='#00B600'>" + styledWord + "</font>";
 
-            } else if (creditLevel[i] == Listener.HeardWord.MATCH_MISCUE) {  // wrongly read
+            } else if (creditLevel[i] == ListenerBase.HeardWord.MATCH_MISCUE) {  // wrongly read
 
                 styledWord = "<font color='red'>" + styledWord + "</font>";
 
-            } else if (creditLevel[i] == Listener.HeardWord.MATCH_TRUNCATION) { //  heard only half the word
+            } else if (creditLevel[i] == ListenerBase.HeardWord.MATCH_TRUNCATION) { //  heard only half the word
 
             } else {
 
@@ -253,7 +253,7 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
      */
     public boolean isWordCredited(int index) {
         return index >= 0 &&
-                (index == 0 || (creditLevel[index - 1] == Listener.HeardWord.MATCH_EXACT));
+                (index == 0 || (creditLevel[index - 1] == ListenerBase.HeardWord.MATCH_EXACT));
     }
 
 
@@ -267,7 +267,7 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
 
         for (int cl : creditLevel) {
 
-            if (cl == Listener.HeardWord.MATCH_EXACT)
+            if (cl == ListenerBase.HeardWord.MATCH_EXACT)
                 n += 1;
         }
         return n;
@@ -288,10 +288,12 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
      * Show the next available sentence to the user
      */
     @Override
-    public void nextSentence() {
+    public void nextSentence(IVManListener callback, String assetPath) {
+
         if(mListener != null)
             mListener.deleteLogFiles();
 
+        mOwner = callback;
         switchSentence(currentIndex + 1);      // for now just loop around single story
     }
 
@@ -301,8 +303,7 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
      *
      * @param index index of the sentence that needs to be initialized
      */
-    @Override
-    public boolean switchSentence(int index) {
+    private boolean switchSentence(int index) {
 
         boolean result = true;
 
@@ -334,7 +335,7 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
             currentSentence = sentences.get(currentIndex).trim() + ".";
 
             // get array or words to hear for new sentence
-            sentenceWords = Listener.textToWords(currentSentence);
+            sentenceWords = ListenerBase.textToWords(currentSentence);
 
             // reset all aggregate hyp info for new sentence
             // fills default value 0 = MATCH_UNKNOWN
@@ -360,7 +361,7 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
 
 
     @Override
-    public void onUpdate(Listener.HeardWord[] heardWords, boolean finalResult) {
+    public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult) {
 
         // TODO: Change to setPauseRecognizer to flush the queue should obviate the need for
         // changingSentence test.  Validate this is the case.
@@ -385,7 +386,7 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
             // schedule advance after short delay to allow time to see last word credited on screen
             new Handler().postDelayed(new Runnable() {
                 public void run() {
-                    nextSentence();
+                    nextSentence(mOwner, null);
                     changingSentence = false;
                 }
             }, 100);
@@ -396,7 +397,7 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
     /**
      * @param heardWords Update the sentence credit level with the credit level of the heard words
      */
-    private void updateSentence(Listener.HeardWord[] heardWords) {
+    private void updateSentence(ListenerBase.HeardWord[] heardWords) {
 
         Log.d("ASR", "New Hypothesis Set:");
 
@@ -407,11 +408,11 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
             for (int i = 0; i < creditLevel.length; i++) {
 
                 // don't touch words with permanent credit
-                if (creditLevel[i] != Listener.HeardWord.MATCH_EXACT)
-                    creditLevel[i]  = Listener.HeardWord.MATCH_UNKNOWN;
+                if (creditLevel[i] != ListenerBase.HeardWord.MATCH_EXACT)
+                    creditLevel[i]  = ListenerBase.HeardWord.MATCH_UNKNOWN;
             }
 
-            for (Listener.HeardWord hw : heardWords) {
+            for (ListenerBase.HeardWord hw : heardWords) {
 
                 Log.d("ASR", "Heard:" + hw.hypWord);
 

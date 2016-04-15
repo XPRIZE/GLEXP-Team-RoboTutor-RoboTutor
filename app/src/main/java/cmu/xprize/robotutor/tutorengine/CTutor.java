@@ -49,7 +49,7 @@ import cmu.xprize.robotutor.tutorengine.graph.type_action;
 import cmu.xprize.robotutor.tutorengine.graph.type_timer;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.util.TTSsynthesizer;
-import edu.cmu.xprize.listener.Listener;
+import edu.cmu.xprize.listener.ListenerBase;
 
 
 /**
@@ -97,7 +97,6 @@ public class CTutor implements ILoadableObject2 {
     private int index = 0;  // test debug
 
     static public TTSsynthesizer                TTS;
-    static public Listener                      ASR;
     static public String                        LANG;
 
 

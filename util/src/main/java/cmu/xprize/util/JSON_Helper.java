@@ -64,6 +64,10 @@ public class JSON_Helper {
     static public void set_cacheSource(String cs) { _cacheSource = cs; }
     static public void set_externFiles(String ef) { _externFiles = ef; }
 
+    static public AssetManager assetManager() {
+        return _assetManager;
+    }
+
     static public String cacheData(String fileName) {
 
         InputStream in;
@@ -152,6 +156,7 @@ public class JSON_Helper {
         for (Field field : fields) {
 
             Class<?> fieldClass = field.getType();
+            Class<?> fieldTyoe  = field.getClass();
             String   className  = fieldClass.toString();
             String   fieldName  = field.getName();
             Object   field_obj  = null;
@@ -313,52 +318,62 @@ public class JSON_Helper {
                         //
                         if (fieldClass.isArray()) {
 
+                            // Get the array on the 1st dimension for the field (attribute)
                             nArr = jsonObj.getJSONArray(fieldName);
 
                             Class<?> elemClass = fieldClass.getComponentType();
 
                             Object field_Array = Array.newInstance(elemClass, nArr.length());
 
-                            for (int i = 0; i < nArr.length(); i++) {
-                                try {
-                                    Object eObj;
+                            field.set(self, parseArray(jsonObj, self, classMap, scope, nArr, elemClass, field_Array));
 
-                                    if (elemClass.equals(String.class)) {
-                                        eObj = nArr.getString(i);
-                                    }
-                                    else if (elemClass.equals(int.class)) {
-                                        eObj = nArr.getInt(i);
-                                    }
-                                    else {
-                                        nJsonObj = nArr.getJSONObject(i);
 
-                                        // If the element has a type field then assume it is a subtype
-                                        // of the array component type and instantiate it by type
-                                        if (nJsonObj.has("type")) {
-                                            Class<?> subClass = classMap.get(nJsonObj.getString("type"));
-
-                                            System.out.printf("class type:%s\n", subClass.getName());
-                                            eObj = subClass.newInstance();
-                                        }
-
-                                        // Otherwise use the array component type by default.
-                                        else {
-                                            System.out.printf("class type:%s\n", elemClass.getName());
-                                            eObj = elemClass.newInstance();
-                                        }
-
-                                        ((ILoadableObject) eObj).loadJSON(nJsonObj, scope);
-                                    }
-
-                                    Array.set(field_Array, i, eObj);
-
-                                } catch (NullPointerException e) {
-                                    e.printStackTrace();
-                                    Log.e(TAG, "Null Object in :" + nJsonObj);
-                                }
-                            }
-
-                            field.set(self, field_Array);
+//                            nArr = jsonObj.getJSONArray(fieldName);
+//
+//                            Class<?> elemClass = fieldClass.getComponentType();
+//
+//                            Object field_Array = Array.newInstance(elemClass, nArr.length());
+//
+//                            for (int i = 0; i < nArr.length(); i++) {
+//                                try {
+//                                    Object eObj;
+//
+//                                    if (elemClass.equals(String.class)) {
+//                                        eObj = nArr.getString(i);
+//                                    }
+//                                    else if (elemClass.equals(int.class)) {
+//                                        eObj = nArr.getInt(i);
+//                                    }
+//                                    else {
+//                                        nJsonObj = nArr.getJSONObject(i);
+//
+//                                        // If the element has a type field then assume it is a subtype
+//                                        // of the array component type and instantiate it by type
+//                                        if (nJsonObj.has("type")) {
+//                                            Class<?> subClass = classMap.get(nJsonObj.getString("type"));
+//
+//                                            System.out.printf("class type:%s\n", subClass.getName());
+//                                            eObj = subClass.newInstance();
+//                                        }
+//
+//                                        // Otherwise use the array component type by default.
+//                                        else {
+//                                            System.out.printf("class type:%s\n", elemClass.getName());
+//                                            eObj = elemClass.newInstance();
+//                                        }
+//
+//                                        ((ILoadableObject) eObj).loadJSON(nJsonObj, scope);
+//                                    }
+//
+//                                    Array.set(field_Array, i, eObj);
+//
+//                                } catch (NullPointerException e) {
+//                                    e.printStackTrace();
+//                                    Log.e(TAG, "Null Object in :" + nJsonObj);
+//                                }
+//                            }
+//
+//                            field.set(self, field_Array);
                         }
 
                         // otherwise assume it is a discrete object of ILoadable type
@@ -399,4 +414,77 @@ public class JSON_Helper {
             }
         }
     }
+
+
+    /**
+     *
+     *   Support parsing multidimesnsional arrays.
+     *
+     * @param jsonObj
+     * @param self
+     * @param classMap
+     * @param scope
+     * @param nArr
+     * @param elemClass
+     * @param field_Array
+     * @return
+     * @throws JSONException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    static Object parseArray(JSONObject jsonObj, Object self, HashMap<String, Class> classMap, IScope scope, JSONArray  nArr, Class<?> elemClass, Object field_Array ) throws JSONException, IllegalAccessException, InstantiationException {
+
+        JSONObject nJsonObj = null;
+        JSONArray  subArr;
+
+        for (int i = 0; i < nArr.length(); i++) {
+            try {
+                Object eObj;
+
+                if (elemClass.isArray()) {
+                    subArr = nArr.getJSONArray(i);
+
+                    Class<?> subElemClass = elemClass.getComponentType();
+                    Object subField_Array = Array.newInstance(subElemClass, subArr.length());
+
+                    eObj =  parseArray(jsonObj, self, classMap, scope, subArr, subElemClass, subField_Array);
+                }
+                else if (elemClass.equals(String.class)) {
+                    eObj = nArr.getString(i);
+                }
+                else if (elemClass.equals(int.class)) {
+                    eObj = nArr.getInt(i);
+                }
+                else {
+                    nJsonObj = nArr.getJSONObject(i);
+
+                    // If the element has a type field then assume it is a subtype
+                    // of the array component type and instantiate it by type
+                    if (nJsonObj.has("type")) {
+                        Class<?> subClass = classMap.get(nJsonObj.getString("type"));
+
+                        System.out.printf("class type:%s\n", subClass.getName());
+                        eObj = subClass.newInstance();
+                    }
+
+                    // Otherwise use the array component type by default.
+                    else {
+                        System.out.printf("class type:%s\n", elemClass.getName());
+                        eObj = elemClass.newInstance();
+                    }
+
+                    ((ILoadableObject) eObj).loadJSON(nJsonObj, scope);
+                }
+
+                Array.set(field_Array, i, eObj);
+
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                Log.e(TAG, "Null Object in :" + nJsonObj);
+            }
+        }
+
+        return field_Array;
+    }
+
 }

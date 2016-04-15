@@ -19,15 +19,20 @@
 
 package cmu.xprize.rt_component;
 
+import android.graphics.BitmapFactory;
 import android.graphics.PointF;
+import android.os.Handler;
 import android.text.Html;
 import android.text.Layout;
 import android.text.Spanned;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import cmu.xprize.util.CPersonaObservable;
@@ -35,7 +40,7 @@ import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
-import edu.cmu.xprize.listener.Listener;
+import edu.cmu.xprize.listener.ListenerBase;
 
 
 /**
@@ -44,11 +49,16 @@ import edu.cmu.xprize.listener.Listener;
  */
 public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
-    private Listener                mListener;
+    private ListenerBase            mListener;
+    private IVManListener           mOwner;
+    private String                  mAsset;
     private TextView                mPageText;
 
-    // state for the current sentence
-    private int                     currentIndex           = 0;             // current sentence index in story, -1 if unset
+    // state for the current story
+    // African Story Book data is
+    private int                     currentPageNdx         = 0;             // current page index within a story,        -1 if unset
+    private int                     currentParaNdx         = 0;             // current paragrph index within a page,     -1 if unset
+    private int                     currentIndex           = -1;            // current sentence index within a paragraph -1 if unset
 
     private int                     completeSentenceIndex  = 0;
     private String                  sentenceWords[];                        // current sentence words to hear
@@ -57,8 +67,10 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     private ArrayList<String>       sentences              = null;          //list of sentences of the given passage
     private String                  currentSentence;                        //currently displayed sentence that need to be recognized
+
     private String                  completedSentencesFmtd = "";
     private String                  completedSentences     = "";
+    private boolean                 changingSentence       = false;
 
     private IVManListener           _publishListener;
 
@@ -80,9 +92,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     static final String TAG = "CRt_ViewManagerMari";
 
 
-    public CRt_ViewManagerASB(CRt_Component parent) {
+    public CRt_ViewManagerASB(CRt_Component parent, ListenerBase listener) {
 
         mPageText = (TextView) parent.findViewById(R.id.SstoryText);
+        mListener = listener;
+        sentences = new ArrayList<>();
     }
 
 
@@ -98,7 +112,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      */
     private int getFirstUncreditedWord() {
         for (int i = 0; i < creditLevel.length; i++)
-            if (creditLevel[i] != Listener.HeardWord.MATCH_EXACT)
+            if (creditLevel[i] != ListenerBase.HeardWord.MATCH_EXACT)
                 return i;
         return -1;
     }
@@ -117,15 +131,15 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             String styledWord = words[i];                           // default plain
 
             // show credit status with color
-            if (creditLevel[i] == Listener.HeardWord.MATCH_EXACT) {     // match found, but not credited
+            if (creditLevel[i] == ListenerBase.HeardWord.MATCH_EXACT) {     // match found, but not credited
 
                 styledWord = "<font color='#00B600'>" + styledWord + "</font>";
 
-            } else if (creditLevel[i] == Listener.HeardWord.MATCH_MISCUE) {  // wrongly read
+            } else if (creditLevel[i] == ListenerBase.HeardWord.MATCH_MISCUE) {  // wrongly read
 
                 styledWord = "<font color='red'>" + styledWord + "</font>";
 
-            } else if (creditLevel[i] == Listener.HeardWord.MATCH_TRUNCATION) { //  heard only half the word
+            } else if (creditLevel[i] == ListenerBase.HeardWord.MATCH_TRUNCATION) { //  heard only half the word
 
             } else {
 
@@ -227,7 +241,36 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     }
 
     @Override
-    public void onUpdate(Listener.HeardWord[] heardWords, boolean finalResult) {
+    public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult) {
+
+        // TODO: Change to setPauseRecognizer to flush the queue should obviate the need for
+        // changingSentence test.  Validate this is the case.
+        //
+        // The recongnizer runs asynchronously so ensure we don't process any
+        // hypotheses while we are changing sentences otherwise it can skip a sentence.
+        // This is because nextSentence is also called asynchronously
+        //
+        if(changingSentence || finalResult) {
+            Log.d("ASR", "Ignoring Hypothesis");
+            return;
+        }
+
+        updateSentence(heardWords);             // update current sentence state and redraw
+
+        // move on if all words in current sentence have been read
+        if(sentenceComplete()) {
+
+            changingSentence = true;
+            mListener.setPauseListener(true);
+
+            // schedule advance after short delay to allow time to see last word credited on screen
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    nextSentence(mOwner, null);
+                    changingSentence = false;
+                }
+            }, 100);
+        }
 
     }
 
@@ -236,8 +279,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      * @param index
      * @return
      */
-    public boolean isWordCredited(int index) {
-        return index >= 0 && (index == 0 || creditLevel[index - 1] == Listener.HeardWord.MATCH_EXACT);
+    private boolean isWordCredited(int index) {
+        return index >= 0 && (index == 0 || creditLevel[index - 1] == ListenerBase.HeardWord.MATCH_EXACT);
     }
 
 
@@ -245,13 +288,17 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      * Get number of exact matches
      * @return
      */
-    public int getNumWordsCredited() {
+    private int getNumWordsCredited() {
         int n = 0;
         for (int cl : creditLevel) {
-            if (cl == Listener.HeardWord.MATCH_EXACT)
+            if (cl == ListenerBase.HeardWord.MATCH_EXACT)
                 n += 1;
         }
         return n;
+    }
+
+    private boolean sentenceComplete() {
+        return getNumWordsCredited() >= sentenceWords.length;
     }
 
 
@@ -259,8 +306,13 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      * Show the next available sentence to the user
      */
     @Override
-    public void nextSentence() {
+    public void nextSentence(IVManListener owner, String assetPath) {
+
+        mOwner = owner;
+        mAsset = assetPath;
+
         mListener.deleteLogFiles();
+
         switchSentence(currentIndex + 1);      // for now just loop around single story
     }
 
@@ -270,15 +322,32 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      *
      * @param index index of the sentence that needs to be initialized
      */
-    @Override
-    public boolean switchSentence(int index) {
+    private boolean switchSentence(int index) {
 
         boolean result = true;
+
+        if(index == 0) {
+            try {
+                InputStream in = JSON_Helper.assetManager().open(mAsset + data[currentPageNdx].image);
+
+                ((ImageView)mOwner.getImageView()).setImageBitmap(BitmapFactory.decodeStream(in));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            sentences.clear();
+
+            for(String sentence : data[currentPageNdx].text[currentParaNdx]) {
+                sentences.add(sentence);
+            }
+        }
 
         // We've exhausted all the sentences in the story
         if (index == sentences.size()) {
 
             Log.d("ASR", "End of Story");
+
             // Kill off the mListener.
             // When this returns the recognizerThread is dead and the mic
             // has been disconnected.
@@ -289,20 +358,21 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         }
         else {
             if (index > 0) {  // to set grey color for the finished sentence
+
                 completedSentencesFmtd = "<font color='grey'>";
                 completedSentences = "";
                 for (int i = completeSentenceIndex; i < index; i++) {
                     completedSentences += sentences.get(i);
-                    completedSentences += ". ";
+                    completedSentences += "  ";
                 }
                 completedSentencesFmtd += completedSentences;
                 completedSentencesFmtd += "</font>";
             }
             currentIndex = index % sentences.size();
-            currentSentence = sentences.get(currentIndex).trim() + ".";
+            currentSentence = sentences.get(currentIndex).trim();
 
             // get array or words to hear for new sentence
-            sentenceWords = Listener.textToWords(currentSentence);
+            sentenceWords = ListenerBase.textToWords(currentSentence);
 
             // reset all aggregate hyp info for new sentence
             // fills default value 0 = MATCH_UNKNOWN
@@ -327,21 +397,27 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     /**
      * @param heardWords Update the sentence credit level with the credit level of the heard words
      */
-    public void updateSentence(Listener.HeardWord[] heardWords) {
+    private void updateSentence(ListenerBase.HeardWord[] heardWords) {
 
         Log.d("ASR", "New Hypothesis Set:");
 
         if (heardWords.length >= 1) {
 
-            // record credit level of sentence words
+            // Reset partial credit level of sentence words
+            //
             for (int i = 0; i < creditLevel.length; i++) {
-                if (creditLevel[i] != Listener.HeardWord.MATCH_EXACT)            // don't touch words with permanent credit
-                    creditLevel[i] = 0;
+
+                // don't touch words with permanent credit
+                if (creditLevel[i] != ListenerBase.HeardWord.MATCH_EXACT)
+                    creditLevel[i]  = ListenerBase.HeardWord.MATCH_UNKNOWN;
             }
 
-            for (Listener.HeardWord hw : heardWords) {
-                Log.d("ASR", "Heard:" +hw.hypWord);
+            for (ListenerBase.HeardWord hw : heardWords) {
+
+                Log.d("ASR", "Heard:" + hw.hypWord);
+
                 // assign the highest credit found among all hypothesis words
+                //
                 if (hw.matchLevel >= creditLevel[hw.iSentenceWord]) {
                     creditLevel[hw.iSentenceWord] = hw.matchLevel;
                 }
@@ -349,7 +425,16 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
             expectedWordIndex = getFirstUncreditedWord();
 
+            // Tell the listerner when to stop matching words.  We don't want to match words
+            // past the current expected word or they will be highlighted
+            // This is a MARi induced constraint
+            // TODO: make it so we don't need this - use matched past the next word to flag
+            // a missed word
+            //
+            mListener.updateNextWordIndex(expectedWordIndex);
+
             // Update the sentence text display to show credit, expected word
+            //
             UpdateSentenceDisplay();
         }
     }

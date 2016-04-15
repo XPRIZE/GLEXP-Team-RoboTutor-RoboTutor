@@ -16,7 +16,7 @@ public interface IAsrEventListener {
     /**
      * Called when partial recognition result is available.
      */
-    void onUpdate(Listener.HeardWord heardWords[], boolean finalResult);
+    void onUpdate(ListenerBase.HeardWord heardWords[], boolean finalResult);
 
 
     void onASREvent(int eventType);

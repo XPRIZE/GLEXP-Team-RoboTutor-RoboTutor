@@ -20,15 +20,14 @@
 package cmu.xprize.rt_component;
 
 import cmu.xprize.util.ILoadableObject;
-import edu.cmu.xprize.listener.Listener;
+import edu.cmu.xprize.listener.ListenerBase;
 
 public interface ICRt_ViewManager extends ILoadableObject {
 
     public void setPublishListener(IVManListener publishListener);
     public boolean endOfData();
 
-    public void onUpdate(Listener.HeardWord[] heardWords, boolean finalResult);
-    public void nextSentence();
-    public boolean switchSentence(int index);
+    public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult);
+    public void nextSentence(IVManListener callback, String AssetPath);
 
 }

@@ -49,296 +49,25 @@ import edu.cmu.pocketsphinx.Segment;
 
 
 /**
- * The main Android Listener class. Encapsulates a SpeechRecognizer2 object to manage the pocketsphinx decoder
+ * This is the basic Project Listen Reading Tutor implementation
+ *
+ * The main Android Listener class. Encapsulates a SpeechRecognizer object to manage the pocketsphinx decoder
  * Implements algorithms from the Project Listen Reading Tutor to customize and enhance the speech recognition
  * for the task of oral reading.
  */
-@TargetApi(Build.VERSION_CODES.GINGERBREAD)
-public class Listener {
-
-    private IReadyListener tutorRoot;
-
-    // Some configuration parameters an app might want to set:
-
-    /**
-     * weight to assign to our language models. Higher weights bias the recognizer towards the model-expected word
-     */
-    private static int LMWEIGHT = 9;
-
-    // Listener-specific parameters
-
-    /**
-     * Lag behind the last hypothesis word if not followed by silence since it may be unreliable
-     */
-    private static boolean LAST_WORD_LAG = false;
-    /**
-     * align heard words left to right with sentence words
-     */
-    private static boolean ALIGN_L2R = false;
-
-    // parameters passed through to pocketsphinx
-
-    /**
-     * pocketsphinx threshold signal-to-noise ratio for voice activity detection, default 2.0
-     */
-    private static float VAD_THRESHOLD = 2.0f;
-
-    /**
-     * pocketsphinx filler probability: higher than default
-     */
-    private static float FILLPROB = 1e-3f;
-
-    /**
-     * class used to hold info about heard words in recognition results.
-     */
-    static public class HeardWord {
-
-        /**
-         * hypothesis word text as in dictionary (upper case) without pronunciation tag
-         */
-        public String hypWord;
-
-        /**
-         * 0-based index of aligned sentence word, -1 if none
-         */
-        public int iSentenceWord;        // index of aligned sentence word, -1 if none
-
-        /**
-         * degree of match to sentence word coded as follows
-         */
-        public int matchLevel;
-
-
-        /**
-         * default value: no information
-         */
-        public static final int MATCH_UNKNOWN = 0;
-        /**
-         * heard wrong word
-         */
-        public static final int MATCH_MISCUE = 1;
-        /**
-         * heard truncated prefix of word
-         */
-        public static final int MATCH_TRUNCATION = 2;
-        /**
-         * heard exact match
-         */
-        public static final int MATCH_EXACT = 3;
-
-
-        /**
-         * start time of word, milliseconds since epoch
-         */
-        public long startTime;
-        /**
-         * end time of word, milliseconds since epoch
-         */
-        public long endTime;
-        /**
-         * start of word in centiseconds since utterance start
-         */
-        public long startFrame;
-        /**
-         * end of word in centiseconds since utterance start
-         */
-        public long endFrame;
-        /**
-         * start time of utterance, ms since epoch
-         */
-        public long utteranceStartTime;
-        /**
-         * utterance ID used for capture file
-         */
-        public String utteranceId;
-        /**
-         * ms of silence that preceded word
-         */
-        public int silence;
-        /**
-         * ms from end of reading of previous sentence word to start of this one
-         */
-        public int latency;
-
-        protected HeardWord(String asrWord) {
-            hypWord = asrWordText(asrWord);            // strip any pronunciation tags
-            iSentenceWord = -1;
-            matchLevel = MATCH_UNKNOWN;
-            startTime = -1;
-            endTime = -1;
-            startFrame = -1;
-            endFrame = -1;
-            utteranceStartTime = -1;
-            utteranceId = "";
-            silence = -1;
-            latency = -1;
-        }
-    }
-
-    /**
-     * our modified SpeechRecognizer object wrapping the pocketsphinx decoder
-     */
-    private SpeechRecognizer recognizer;
-    private ListenerAssets   assets;
-
-    private boolean IS_LOGGING = false;
-
-    private File    configFile;                // config file to use, null => default
-    private File    modelsDir;                 // saved model directory
-    private LogMath logMath;                   // needed for creating Fsgs
-
-    private String   userID;                   // User ID
+public class ListenerPLRT extends ListenerBase {
 
     // state for the current ListenFor operation
+
     private String sentenceWords[];             // array of sentence words to hear
     private int    iExpected = 0;               // index of expected next word in sentence
     private int    iNextWord = 0;               // Next word expected.
     private HeardWord[] heardWords = null;      // latest total aligned hypothesis
-    private String captureLabel = "";           // label for capture, logging files
     private long   sentenceStartTime;           // time in ms since epoch
     private long   sentenceStartSamples;        // sample counter at sentence start, for adjusting frame numbers
     private final int SAMPLES_PER_FRAME = 160;  // number of samples in a centisecond frame at 16000 samples/sec
     private boolean speaking = false;           // speaking state. [currently unused]
 
-    // to work around pocketsphinx timing bug: when recognizing continuously across silent pauses,
-    // after a pause hyp words from a speech segments before the pause have their reported frame times
-    // changed. We use this to save the original pre-pause results
-    private HeardWord[] prePauseResult = null;  // saved results from utterances prior to pause
-
-    private BufferedWriter bw = null;           // for writing language model files
-
-    private IAsrEventListener eventListener;    // where to send client notification callbacks
-
-    private static final String SENTENCE_SEARCH = "sentence";    // label for our search in decoder
-
-    // This is used to map language "Features" to the associated dictionary filenames
-    // Dictionary files are located in the assets/sync/models/lm
-    // Note: on Android these are case sensitive filenames
-    //
-    static private HashMap<String, String> langMap = new HashMap<String, String>();
-
-    static {
-        langMap.put("LANG_EN", "CMU07A-CAPS.DIC");
-        langMap.put("LANG_SW", "SWAHILI.DIC");
-    }
-
-    static private boolean isReady = false;
-
-
-
-    /**
-     * construct Listener using default pocketsphinx config settings
-     *
-     * @param userID -- string identifying the user. will be prepended to capture files
-     */
-    public Listener(String userID) {
-        this.userID = userID;
-        configFile = null;
-
-        // decoder setup deferred until init() call.
-    }
-
-
-    /**
-     * construct Listener to setup decoder from a pocketsphinx config file. For path arguments config file must contain
-     * absolute paths on the Android device.
-     *
-     * @param userID -- string identifying the user. will be prepended to capture files
-     * @param config -- file of pocketsphinx config settings
-     */
-    public Listener(String userID, File config) {
-        this.userID = userID;
-        configFile = config;
-
-        // decoder setup deferred until init() call.
-    }
-
-
-    /**
-     * Initialize the listener
-     *
-     * @param langFTR -- application context for locating resources and external storage
-     */
-    public void setLanguage(String langFTR) {
-
-        // Configure the phonetic rules that will be used by the decoder
-        // TODO: Need to make phoneme lang rules dynamic so we may have multiple recognizers
-        //
-        Phoneme.setTargetLanguage(langFTR);
-
-        // initialize recognizer for our task
-        //
-        setupRecognizer(assets.getExternalDir(), configFile, langMap.get(langFTR));
-    }
-
-
-    /**
-     * Utility method to initialize the listener assets folder
-     *
-     * @param callback
-     */
-    public void configListener(IReadyListener callback) {
-
-        tutorRoot = callback;
-
-        new listenerConfigTask().execute((Context)callback);
-    }
-
-
-    /**
-     * Moves new assets to an external folder so the Sphinx code can access it.
-     *
-     */
-    class listenerConfigTask extends AsyncTask<Context, Void, Boolean> {
-
-        @Override
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected Boolean doInBackground(Context... params) {
-
-            boolean result = false;
-            try {
-                // sync assets from resources to filesystem via ListenerAssets class
-                // This takes a modest but noticeable amount of time
-                //
-                assets = new ListenerAssets(params[0]);
-                assets.syncAssets();
-                result = true;
-
-            } catch (IOException e) {
-                // TODO: Manage exceptions
-                Log.d("ASR", "init Failed: " + e);
-                result = false;
-            }
-
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            isReady = result;
-            tutorRoot.onServiceReady("ASR", isReady? 1:0);
-        }
-    }
-
-
-    /**
-     * used by tutor root to test service availability
-     * @return
-     */
-    public boolean isReady() {
-        return isReady;
-    }
-
-
-    /**
-     * Attach event listener to receive notification callbacks
-     */
-    public void setEventListener(IAsrEventListener callbackSink) {
-        eventListener = callbackSink;
-    }
 
     /**
      * Attach event listener to receive notification callbacks
@@ -402,39 +131,13 @@ public class Listener {
         }
     }
 
-    /**
-     * Stop the listener. Will send final hypothesis event
-     */
-    public void stop() {
-        if (recognizer != null)
-            recognizer.stop();
-    }
-
-    /**
-     * Cancel the listener. Does not send final hypothesis event
-     */
-    public void cancel() {
-        if (recognizer != null)
-            recognizer.cancel();
-    }
-
-    /**
-     * utility function to convert text string into canonical-format word array
-     *
-     * @param text -- text string including punctuation
-     */
-    public static String[] textToWords(String text) {
-        // TODO: strip word-final or -initial apostrophes as in James' or 'cause.
-        // Currently assuming hyphenated expressions split into two Asr words.
-        return text.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
-    }
-
 	/*
      *  Implementation
 	 */
 
     // construct and initialize the speech recognizer
-    private void setupRecognizer(File assetsDir, File configFile, String langDictionary) {
+    @Override
+    protected void setupRecognizer(File assetsDir, File configFile, String langDictionary) {
 
         // save path to modelsDir for use when finding fsgs
         modelsDir = new File(assetsDir, "models");
@@ -466,13 +169,13 @@ public class Listener {
                             // a few other settings we might want to experiment with:
 
                             // threshold for voice activity detection:
-                    .setFloat("-vad_threshold", VAD_THRESHOLD)              // default 2.0
+                    .setFloat("-vad_threshold", LCONST.VAD_THRESHOLD)       // default 2.0
                             // other vad parameters:
                             // .setInteger("vad_postspeech", 50)		    // default 50 (centiseconds)
                             // .setInteger("vad_prespeech", 10)				// default 10 (centiseconds)
 
                             // .setFloat("-silprob", 0.005f)				// default 0.005
-                    .setFloat("-fillprob", FILLPROB)                        // default 1e-8f
+                    .setFloat("-fillprob", LCONST.FILLPROB)                 // default 1e-8f
                             // .setFloat("-wip", 0.65f)						// default 0.65
 
                     .getRecognizer();
@@ -503,21 +206,6 @@ public class Listener {
     }
 
 
-    /**
-     * get the path to the capture file for given utterance label
-     */
-    private File getCaptureFile(String utteranceLabel) {
-        return new File(recognizer.rawLogDir, utteranceLabel + ".wav");
-    }
-
-
-    public void deleteLogFiles() {
-        if (recognizer == null)
-            return;
-        new File(recognizer.rawLogDir, captureLabel + "-log.txt").delete();
-        new File(recognizer.rawLogDir, captureLabel + ".raw").delete();
-    }
-
     //------------------------------------------------------------------------------------------------
     // helpers for dealing with "asrWords": word strings as they occur in the pronunciation dictionary:
     //    - upper-case by our convention
@@ -527,25 +215,17 @@ public class Listener {
     //------------------------------------------------------------------------------------------------
 
     /**
-     * return word text stripped from possible parenthesized alternate pronunciation tag in sphinx result words
-     */
-    private static String asrWordText(String taggedWord) {
-        int iParen = taggedWord.indexOf('(');
-        return (iParen >= 0) ? taggedWord.substring(0, iParen) : taggedWord;
-    }
-
-    /**
      * true if sphinx dictionary asrWord is an exact match to sentence word
      */
     private static boolean asrWordMatches(String asrWord, String sentenceWord) {
-        return asrWordText(asrWord).equals(sentenceWord);
+        return HeardWord.asrWordText(asrWord).equals(sentenceWord);
     }
 
     /**
      * true if sphinx dictionary asrWord is a truncation of sentence word
      */
     private static boolean asrWordIsTruncationOf(String asrWord, String sentenceWord) {
-        return asrWordText(asrWord).equals("START_" + sentenceWord);
+        return HeardWord.asrWordText(asrWord).equals("START_" + sentenceWord);
     }
 
     /**
@@ -668,7 +348,7 @@ public class Listener {
         }
 
         // now read it back in to get pocketsphinx to build the fsg
-        return new FsgModel(fsgFile.getPath(), logMath, LMWEIGHT);
+        return new FsgModel(fsgFile.getPath(), logMath, LCONST.LMWEIGHT);
     }
 
     private void AddFSGTransition(int from, int to, double prob, String word) throws IOException {
@@ -701,26 +381,11 @@ public class Listener {
         }
     }
 
-    public void setPauseListener(boolean pauseListener) {
-        recognizer.setPauseRecognizer(pauseListener);
-    }
-
-    public void reInitializeListener(boolean restartListener) {
-        recognizer.setRestartListener(restartListener);
-    }
-
-    public void configTimedEvent(int eventType, long newTimeout, boolean reset) {
-        recognizer.configTimedEvent(eventType, newTimeout, reset);
-    }
-
-    public void configStaticEvent(int eventType, boolean listen) {
-        recognizer.configStaticEvent(eventType, listen);
-    }
-
     // private inner class to hide our event listener implementation.
     // We receive these events from the SpeechRecognizer object for our own use, and send similar events from the
     // IAsrEventListener interface to our client app
     private class IPocketSphinxListener implements ITutorListener {
+
         @Override
         public void onPartialResult(Hypothesis hypothesis) {
             // Log.i("onPartialResult", hypothesis.getHypstr());
@@ -760,7 +425,7 @@ public class Listener {
         }
 
 
-    } // end IPocketSphinxListener
+    }
 
 
     // handle a partial or final hypothesis from pocketsphinx
@@ -790,7 +455,7 @@ public class Listener {
         // optional: strip last hyp word if it is not terminated by silence because it is unreliable
         String[] wordsToUse = asrWords;
 
-        if (Listener.LAST_WORD_LAG) {
+        if (LCONST.LAST_WORD_LAG) {
 
             // Find word of last segment in the segmentation detail
             String lastSegmentWord = null;
@@ -870,7 +535,7 @@ public class Listener {
     // cost of jump from position i to j
     private int jumpCost(int from, int to) {
         // different cost when LeftToRight alignment is configured
-        if (ALIGN_L2R)
+        if (LCONST.ALIGN_L2R)
             return jumpCostL2R(from, to);
 
         // else normal "chase the reader" alignment
@@ -997,7 +662,7 @@ public class Listener {
         int h = 0;            // index of next hypword to match
         for (Segment s : segments) {
             if (h < heardWords.length &&
-                    asrWordText(s.getWord()).equals(asrWordText(heardWords[h].hypWord))) {    // segment matches next hyp word
+                    HeardWord.asrWordText(s.getWord()).equals(HeardWord.asrWordText(heardWords[h].hypWord))) {    // segment matches next hyp word
 
                 // fill in utterance boilerplate
                 heardWords[h].utteranceStartTime = sentenceStartTime;
