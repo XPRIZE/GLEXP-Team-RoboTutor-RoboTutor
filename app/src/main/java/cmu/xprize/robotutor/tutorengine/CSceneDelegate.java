@@ -118,6 +118,9 @@ public class CSceneDelegate implements ITutorScene {
     public void setTutor(CTutor tutor) { mTutor = tutor; }
 
     @Override
+    public void postInflate() {}
+
+    @Override
     public void setNavigator(ITutorNavigator navigator) { mNavigator = navigator; }
 
     @Override

@@ -40,6 +40,7 @@ import cmu.xprize.util.TTSsynthesizer;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.IAsrEventListener;
 import edu.cmu.xprize.listener.ListenerBase;
+import edu.cmu.xprize.listener.ListenerJSGF;
 import edu.cmu.xprize.listener.ListenerPLRT;
 
 
@@ -87,20 +88,11 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     protected String                EXTERNPATH;
 
 
+    // json loadable
+    //
+    public CData_Index[]      dataSource;
 
-    public static String            RECOGLANG;
 
-
-    // This is used to map "language features" to the story resources
-    // these are located in the assets/<lang>
-    // Note: on Android these are case sensitive filenames
-
-    static protected HashMap<String, String> langMap = new HashMap<String, String>();
-
-    static {
-        langMap.put("LANG_EN", "en");
-        langMap.put("LANG_SW", "sw");
-    }
 
     // This is used to map "type" (class names) in the index to real classes
     //
@@ -110,10 +102,6 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
         viewClassMap.put("ASB_Data", CRt_ViewManagerASB.class);
         viewClassMap.put("MARi_Data", CRt_ViewManagerMari.class);
     }
-
-    // json loadable
-    public CData_Index[]      dataSource;
-
 
     static final String TAG = "CRt_Component";
 
@@ -150,6 +138,7 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
         // Generate a Project Listen type listener
         // Attach the speech recognizer.
         mListener = new ListenerPLRT();
+//        mListener = new ListenerJSGF();
         mListener.setEventListener(this);
 
         // attach TTS
@@ -325,13 +314,10 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
      */
     public void setLanguage(String language) {
 
-        mLanguage = langMap.get(language);
+        mLanguage = TCONST.langMap.get(language);
 
-        // TODO: manage language switching - currently ASR uses CTutor default language
+        // Configure the mListener for our story
         //
-        RECOGLANG = language;
-
-        // Configure the mListener for out story
         mListener.setLanguage(language);
     }
 
@@ -440,6 +426,7 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     public View getImageView() {
         return mPageIImage;
     }
+
 
 
     //************ Serialization

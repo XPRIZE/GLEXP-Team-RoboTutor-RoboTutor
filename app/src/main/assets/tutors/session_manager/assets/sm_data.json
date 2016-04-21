@@ -25,11 +25,21 @@
     {
       "type":"Sm_Class",
       "description":"numeric",
-      "background":"#b9FFb9",
+      "background":"#D9FFFF",
       "data": [
           { "type":"Sm_Data", "intent": "digit_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy"}
 
         ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"numeric",
+      "background":"#b9FFb9",
+      "data": [
+        { "type":"Sm_Data", "intent": "number_speaking", "intentdata":"native", "buttontype":"text" , "buttonvalue":"number speaking"}
+
+      ]
     },
 
     {

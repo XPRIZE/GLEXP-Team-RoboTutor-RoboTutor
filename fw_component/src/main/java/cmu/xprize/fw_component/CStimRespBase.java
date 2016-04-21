@@ -19,12 +19,10 @@
 
 package cmu.xprize.fw_component;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.TypedArray;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -36,38 +34,45 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import cmu.xprize.util.CEvent;
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventDispatcher;
+import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.TCONST;
 
 
-public class CStimRespBase extends TextView  implements View.OnClickListener  {
+public class CStimRespBase extends TextView  implements View.OnClickListener, IEventListener, IEventDispatcher {
 
-    private Context       mContext;
+    private Context             mContext;
+    public List<IEventListener> mListeners = new ArrayList<IEventListener>();
+    protected List<String>      mLinkedViews;
+    protected boolean           mListenerConfigured = false;
 
     // Used by control in response mode to maintain state info
-    protected String      mStimulus;
-    protected String      mResponse;
-    protected boolean     mIsResponse;
+    protected String        mStimulus;
+    protected String        mResponse;
+    protected boolean       mIsResponse;
 
-    private String[]      mLexemes;
-    private String[]      mLinkLex;
-    private int[]         mLexEnds;             // records location of the end of lexemes in mDisplayText string
-    private boolean       mEmpty = false;
-    private int           mTextColor;
-    public  String        mValue;
-    protected boolean     mShowState;
+    private String[]        mLexemes;
+    private String[]        mLinkLex;
+    private int[]           mLexEnds;             // records location of the end of lexemes in mDisplayText string
+    private boolean         mEmpty = false;
+    private int             mTextColor;
+    public  String          mValue;
+    protected boolean       mShowState;
 
-    private List<String>  _data;
-    private int           _dataIndex = 0;
-    protected boolean     _dataEOI   = false;
-    protected String      _onRecognition;
+    protected List<String>  _data;
+    protected int           _dataIndex = 0;
+    protected boolean       _dataEOI   = false;
+    protected String        _onRecognition;
 
-    protected float       mAspect;           //   = 0.82f w/h
+    protected float         mAspect;           //   = 0.82f w/h
 
-    protected LocalBroadcastManager bManager;
+    static public String TAG = "CStimRespBase";
 
 
 
-    static private HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
+    static protected HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
     //
     // This is used to map "states" to colors
 
@@ -76,7 +81,6 @@ public class CStimRespBase extends TextView  implements View.OnClickListener  {
         colorMap.put("normal", new Integer(0xff000000));
     }
 
-    final static public String TAG = "CStimRespBase";
 
 
 
@@ -97,7 +101,9 @@ public class CStimRespBase extends TextView  implements View.OnClickListener  {
     }
 
 
-    private void init(Context context, AttributeSet attrs) {
+    public void init(Context context, AttributeSet attrs) {
+        String linkedViews;
+
         mContext = context;
 
         if(attrs != null) {
@@ -107,50 +113,81 @@ public class CStimRespBase extends TextView  implements View.OnClickListener  {
                     0, 0);
 
             try {
-                mIsResponse   = a.getBoolean(R.styleable.CStimResp_isResponse, false);
-                mAspect       = a.getFloat(R.styleable.CStimResp_aspectratio, 1.0f);
-                mTextColor    = getCurrentTextColor();
+                mIsResponse = a.getBoolean(R.styleable.CStimResp_isResponse, false);
+                mAspect     = a.getFloat(R.styleable.CStimResp_aspectratio, 1.0f);
+                linkedViews = a.getNonResourceString(R.styleable.CStimResp_linked_views);
+                mTextColor  = getCurrentTextColor();
+
+                mLinkedViews = Arrays.asList(linkedViews.split(","));
+
             } finally {
                 a.recycle();
             }
         }
-
-        // Capture the local broadcast manager
-        bManager = LocalBroadcastManager.getInstance(getContext());
-
-        IntentFilter filter = new IntentFilter(TCONST.FW_STIMULUS);
-        filter.addAction(TCONST.FW_RESPONSE);
-        filter.addAction(TCONST.FW_EOI);
-        bManager.registerReceiver(new ChangeReceiver(), filter);
     }
 
 
-    class ChangeReceiver extends BroadcastReceiver {
-        public void onReceive (Context context, Intent intent) {
+    //***********************************************************
+    // Event Listener/Dispatcher - Start
 
-            switch(intent.getAction()) {
+    /**
+     * Must be Overridden to access mTutor
+     * @param linkedView
+     */
+    @Override
+    public void addEventListener(String linkedView) {
+    }
 
-                case TCONST.FW_STIMULUS:
-                    if (mIsResponse) {
-                        mStimulus = intent.getStringExtra(TCONST.FW_VALUE);
-                    }
-                    break;
+    @Override
+    public void dispatchEvent(IEvent event) {
 
-                case TCONST.FW_RESPONSE:
-                    if (mIsResponse) {
-                        mResponse = intent.getStringExtra(TCONST.FW_VALUE);
-                        updateText(mResponse);
-                    }
-                    break;
-
-                case TCONST.FW_EOI:
-                    _dataEOI = true;        // tell the response that the data is exhausted
-                    break;
-            }
+        for (IEventListener listener : mListeners) {
+            listener.onEvent(event);
         }
     }
 
+    /**
+     *
+     * @param event
+     */
+    @Override
+    public void onEvent(IEvent event) {
 
+        switch(event.getType()) {
+
+            // Message from Stimiulus variant to share state with response variant
+            case TCONST.FW_STIMULUS:
+                if (mIsResponse) {
+                    mStimulus = (String)event.getString(TCONST.FW_VALUE);
+
+                    preProcessStimulus();
+                }
+                break;
+
+            // Message from the recognizer to update the response state
+            case TCONST.FW_RESPONSE:
+                if (mIsResponse) {
+                    mResponse = (String)event.getString(TCONST.FW_VALUE);
+                    updateText(mResponse);
+                }
+                break;
+
+            case TCONST.FW_EOI:
+                _dataEOI = true;        // tell the response that the data is exhausted
+                break;
+        }
+    }
+
+    // Event Listener/Dispatcher - End
+    //***********************************************************
+
+
+
+    // Override in sub-class to provide non-standard stimulus processing.
+    // e.g. turn a stimulus of "6" into an expected response of "six"
+    //
+    protected void preProcessStimulus() {
+    }
 
 
     @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
@@ -182,6 +219,12 @@ public class CStimRespBase extends TextView  implements View.OnClickListener  {
 
     }
 
+
+    /**
+     * Ths Stimulus variant of the control broadcasts its value to the response which is the
+     *
+     * @param newValue
+     */
     protected void updateText(String newValue) {
 
         mValue = newValue;
@@ -191,10 +234,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener  {
         if(!mIsResponse) {
             // Let interested listeners know the stimulus has changed
             //
-            Intent msg = new Intent(TCONST.FW_STIMULUS);
-            msg.putExtra(TCONST.FW_VALUE, newValue);
-
-            bManager.sendBroadcast(msg);
+            dispatchEvent( new CEvent(TCONST.FW_STIMULUS, TCONST.FW_VALUE, newValue));
         }
     }
 
@@ -209,9 +249,9 @@ public class CStimRespBase extends TextView  implements View.OnClickListener  {
 
 
 
-    //************************************************************************
-    //************************************************************************
-    // Tutor methods  Start
+    //**********************************************************
+    //**********************************************************
+    //*****************  Scripting Interface
 
 
     public void setDataSource(String[] dataSource) {
@@ -221,25 +261,31 @@ public class CStimRespBase extends TextView  implements View.OnClickListener  {
         _dataEOI   = false;
     }
 
+
     public String getValue() {
         return mValue;
     }
 
+
     public void next() {
 
-        try {
-            if (_data != null) {
-                updateText(_data.get(_dataIndex));
+        // May only call next on stimulus variants
+        //
+        if(!mIsResponse) {
 
-                _dataIndex++;
-            } else {
-                Log.e(TAG, "Error no DataSource : ");
+            try {
+                if (_data != null) {
+                    updateText(_data.get(_dataIndex));
+
+                    _dataIndex++;
+                } else {
+                    Log.e(TAG, "Error no DataSource : ");
+                    System.exit(1);
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Data Exhuasted: call past end of data");
                 System.exit(1);
             }
-        }
-        catch(Exception e) {
-            Log.e(TAG, "Data Exhuasted: call past end of data");
-            System.exit(1);
         }
     }
 
@@ -250,6 +296,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener  {
         setVisibility(mShowState? View.VISIBLE:View.INVISIBLE);
     }
 
+
     /**
      * Note that we must not call updateText here.
      */
@@ -257,6 +304,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener  {
 
         setText("");
     }
+
 
     public void setBackGround(String Color) {
         try {
@@ -267,6 +315,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener  {
             System.exit(1);
         }
     }
+
 
     public void setForeGround(String Color) {
         try {
@@ -289,9 +338,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener  {
     protected void applyEventNode(String nodeName) {
     }
 
-
-
-    // Tutor methods  End
+    // Scripting Interface  End
     //************************************************************************
     //************************************************************************
 

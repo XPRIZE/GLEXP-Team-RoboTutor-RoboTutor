@@ -41,7 +41,9 @@ import android.view.View.OnTouchListener;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,14 +51,20 @@ import cmu.xprize.ltk.LipiTKJNIInterface;
 import cmu.xprize.ltk.RecResult;
 import cmu.xprize.ltk.Stroke;
 import cmu.xprize.ltk.StrokeSet;
+import cmu.xprize.util.CEvent;
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventDispatcher;
+import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.TCONST;
 
 
-public class CFingerWriter extends View implements OnTouchListener {
+public class CFingerWriter extends View implements OnTouchListener, IEventDispatcher, IEventListener {
 
-    private Context            mContext;
-    private ITextSink          mLinkedView;
-    private int                mLinkedViewID = -1;
+    private Context             mContext;
+    public List<IEventListener> mListeners = new ArrayList<IEventListener>();
+    protected List<String>      mLinkedViews;
+    protected boolean           mListenerConfigured = false;
+
     protected boolean          _enabled = false;
     protected float            mAspect = 1;  // w/h
 
@@ -95,8 +103,8 @@ public class CFingerWriter extends View implements OnTouchListener {
     private long                  _time;
     private long                  _prevTime;
 
-    private String             mResponse;
-    private String             mStimulus;
+    private String                mResponse;
+    private String                mStimulus;
 
     private LocalBroadcastManager bManager;
 
@@ -146,6 +154,8 @@ public class CFingerWriter extends View implements OnTouchListener {
      *
      */
     protected void init(Context context, AttributeSet attrs ) {
+        String linkedViews;
+
         mContext = context;
 
         if(attrs != null) {
@@ -155,8 +165,11 @@ public class CFingerWriter extends View implements OnTouchListener {
                     0, 0);
 
             try {
-                mLinkedViewID = a.getResourceId(R.styleable.CStimResp_linkedView, 0);
-                mAspect       = a.getFloat(R.styleable.CStimResp_aspectratio, 1.0f);
+                linkedViews = a.getNonResourceString(R.styleable.CStimResp_linked_views);
+                mAspect     = a.getFloat(R.styleable.CStimResp_aspectratio, 1.0f);
+
+                mLinkedViews = Arrays.asList(linkedViews.split(","));
+
             } finally {
                 a.recycle();
             }
@@ -196,25 +209,58 @@ public class CFingerWriter extends View implements OnTouchListener {
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(getContext());
 
-        IntentFilter filter = new IntentFilter(TCONST.FW_STIMULUS);
-        bManager.registerReceiver(new ChangeReceiver(), filter);
-
         // Initialize the path object
         clearStroke();
     }
 
 
-    class ChangeReceiver extends BroadcastReceiver {
-        public void onReceive (Context context, Intent intent) {
+    //***********************************************************
+    // Event Listener/Dispatcher - Start
 
-            switch(intent.getAction()) {
+    /**
+     * Must be Overridden to access mTutor
+     * @param linkedView
+     */
+    @Override
+    public void addEventListener(String linkedView) {
+    }
 
-                case TCONST.FW_STIMULUS:
-                    mStimulus = intent.getStringExtra(TCONST.FW_VALUE);
-                    break;
+    @Override
+    public void dispatchEvent(IEvent event) {
+
+        // Do defferred listeners configuration - this cannot be done until after the
+        // view has been inflated so cannot be in init()
+        //
+        if(!mListenerConfigured) {
+            for (String linkedView : mLinkedViews) {
+                addEventListener(linkedView);
             }
+            mListenerConfigured = true;
+        }
+        for (IEventListener listener : mListeners) {
+            listener.onEvent(event);
         }
     }
+
+    /**
+     *
+     * @param event
+     */
+    @Override
+    public void onEvent(IEvent event) {
+
+        switch(event.getType()) {
+
+            // Message from Stimiulus variant to share state with response variant
+            case TCONST.FW_STIMULUS:
+                    mStimulus = (String)event.getString(TCONST.FW_VALUE);
+                break;
+        }
+    }
+
+    // Event Listener/Dispatcher - End
+    //***********************************************************
+
 
 
     @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
@@ -560,10 +606,15 @@ public class CFingerWriter extends View implements OnTouchListener {
                 mResponse = _recChars.get(0);
 
                 // Let anyone interested know there is a new recognition set available
-                Intent msg = new Intent(TCONST.FW_RESPONSE);
-                msg.putExtra(TCONST.FW_VALUE, mResponse);
+                // Do synchronous update
+                //
+                dispatchEvent( new CEvent(TCONST.FW_RESPONSE, TCONST.FW_VALUE, mResponse));
 
-                bManager.sendBroadcast(msg);
+                // TODO : Remove this after testing
+//                Intent msg = new Intent(TCONST.FW_RESPONSE);
+//                msg.putExtra(TCONST.FW_VALUE, mResponse);
+//
+//                bManager.sendBroadcast(msg);
             }
 
             // TODO: check for performance issues and run this in a separate thread if required.

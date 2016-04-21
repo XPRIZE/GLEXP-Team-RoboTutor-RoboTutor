@@ -72,7 +72,7 @@ public class CTutorEngine implements ILoadableObject2 {
     // json loadable
     public String                           defTutor;
     public String                           defFeatures;
-    static public String                    language;
+    static public String                    language;                       // Accessed from a static context
 
     final static public  String CacheSource = TCONST.ASSETS;                // assets or extern
     final static private String TAG         = "CTutorEngine";

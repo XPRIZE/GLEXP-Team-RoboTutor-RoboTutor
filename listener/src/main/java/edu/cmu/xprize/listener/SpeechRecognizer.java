@@ -52,6 +52,7 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.concurrent.Exchanger;
@@ -79,30 +80,36 @@ public class SpeechRecognizer {
      * the pocketsphinx Decoder, public so clients can access decoder methods
      */
     public Decoder decoder;
+
+    //private HashMap<String, Decoder> decoderMap;
+
     /**
      * total number of samples passed to the decoder in the stream. Need to subtract off utterance start frame
      * to map stream-based frame counts pocketsphinx returns to utterance-based counts we want. Volatile since
      * modified by the background thread capturing from the microphone
      */
     public volatile long nSamples;
+    public short         mPeak = 0;
+
     /**
      * size of the buffer to use. For mapping stream-based frame time, we want buffer size to be a multiple of
      * centisecond frame size = 160.  This size receives updated hypothesis 10 times a second
      */
-    private static final int BUFFER_SIZE = 1600;        // 1/10 seconds worth at 16 Khz
+    private static final int BUFFER_SIZE = 1600;            // 1/10 seconds worth at 16 Khz
     /**
      * directory where raw audio captures stored
      */
     public String rawLogDir;
 
-    private Thread recognizerThread;                    // background thread handling audio data
+    private Thread recognizerThread;                        // background thread handling audio data
+
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private final Collection<ITutorListener> listeners = new HashSet<>();
 
-    private final int        sampleRate;                   // for sample rate check
-    private volatile boolean isPausedRecognizer  = false;  // start in the paused state
+    private final int        sampleRate;                    // for sample rate check
+    private volatile boolean isPausedRecognizer  = false;   // start in the paused state
     private volatile boolean isRunningRecognizer = true;
-    private volatile boolean isDecoding          = false;  // start in the not decoding state
+    private volatile boolean isDecoding          = false;   // start in the not decoding state
 
     private ASREvents eventManager;
 
@@ -380,8 +387,10 @@ public class SpeechRecognizer {
      */
     private final class RecognizerThread extends Thread {
 
-        private final String label;                    // label for the current capture
+        private final String label;                     // label for the current capture
         private boolean      isRecording = false;
+        private long         ASRTimer;                  // Used for benchmarking
+
 
         // constructor stores utterance id used to name capture file
         public RecognizerThread(String uttid, String rawLogDir) {
@@ -505,10 +514,20 @@ public class SpeechRecognizer {
 
                     } else if (nread > 0) {
 
+                        publishRMS(buffer, nread);
+
+                        // Reset the Hypothesis Flag - We don't want to emit events unless
+                        // there has been an actual change of hypothesis
+                        //
+                        hypChanged = false;
+
+                            //ASRTimer = System.currentTimeMillis();
                         decoder.processRaw(buffer, nread, false, false);
+                            //Log.d("ASR", "Time in processRaw: " + (System.currentTimeMillis() - ASRTimer));
+
                         nSamples += nread;
 
-                        // InSpeech seems to be true whenever there is a signal heard at the mic
+                        // InSpeech is true whenever there is a signal heard at the mic above threshold
                         // i.e. false means relative silence -
                         //
                         if (decoder.getInSpeech() != inSpeech) {
@@ -534,7 +553,9 @@ public class SpeechRecognizer {
 
                         // Get the hypothesis words from the Sphinx decoder
                         //
+                            //ASRTimer = System.currentTimeMillis();
                         Hypothesis hypothesis = decoder.hyp();
+                            //Log.d("ASR", "Time in Decoder: " + (System.currentTimeMillis() - ASRTimer));
 
                         // If there is a valid hypothesis string from the decoder continue
                         // Once the decoder returns a hypothesis it will not go back to
@@ -606,6 +627,31 @@ public class SpeechRecognizer {
                 // convert raw capture to wav format
                 //convertRawToWav(new File(captureDir, label + ".raw"), new File(captureDir, label + ".wav"));
             }
+        }
+    }
+
+
+    private void publishRMS(short[] buffer, int count) {
+
+        double sum = 0;
+        Short  peak= 0;
+
+        if(count > 0) {
+            for (int i1 = 0; i1 < count; i1++) {
+                Short sample = buffer[i1];
+
+                sum = Math.pow(sample, 2);
+
+                if(sample > peak)
+                    peak = sample;
+
+                if(sample > mPeak)
+                    mPeak = sample;
+            }
+
+            double RMS = Math.sqrt(sum / count);
+
+           // Log.i("RMS", "Double: " + RMS + "  - Sample: " + count + "  - local Peak: " + peak + "  - Peak: " + mPeak);
         }
     }
 

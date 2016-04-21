@@ -32,6 +32,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
+import cmu.xprize.util.IEventListener;
 
 public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
 
@@ -76,22 +77,16 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     }
 
 
+    @Override
+    public void addEventListener(String linkedView) {
+
+        mListeners.add((IEventListener) mTutor.getViewByName(linkedView));
+    }
+
     public void setDataSource(String dataSource) {
 
     }
 
-
-    private void linkView(int linkedViewID) {
-
-        if(mLinkedView == null) {
-            mLinkedView = (ITextSink) mTutor.getViewById(linkedViewID, null);
-
-            if (mLinkedView == null) {
-                Log.e(TAG, "FingerWriter Component does not have LinkView");
-                System.exit(1);
-            }
-        }
-    }
 
 
     //************************************************************************
@@ -164,6 +159,22 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     public void setTutor(CTutor tutor) {
         mTutor = tutor;
         mSceneObject.setTutor(tutor);
+    }
+
+    // Do deferred configuration - anything that cannot be done until after the
+    // view has been inflated and init'd - where it is connected to the TutorEngine
+    //
+    @Override
+    public void postInflate() {
+
+        // Do deferred listeners configuration - this cannot be done until after the
+        //
+        if(!mListenerConfigured) {
+            for (String linkedView : mLinkedViews) {
+                addEventListener(linkedView);
+            }
+            mListenerConfigured = true;
+        }
     }
 
     @Override

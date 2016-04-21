@@ -24,35 +24,104 @@ import java.util.*;
 
 public class Word2Num {
 
-    private static HashMap<String, Integer> SwahiliInTenMap;
-    private static HashMap<String, Integer> SwahiliTensMap;
-    private static HashMap<String, Integer> EnglishNumeralMap;
     private static List<Integer> NumberList;
-    
+
+    // This is used to map "language features" to the story resources
+    // these are located in the assets/<lang>
+    // Note: on Android these are case sensitive filenames
+
+    private final static HashMap<String, Integer> SwahiliInTenMap = new HashMap<>();
+
+    static {
+        SwahiliInTenMap.put("sifuri", 0);
+        SwahiliInTenMap.put("moja", 1);
+        SwahiliInTenMap.put("mbili", 2);
+        SwahiliInTenMap.put("tatu", 3);
+        SwahiliInTenMap.put("nne", 4);
+        SwahiliInTenMap.put("tano", 5);
+        SwahiliInTenMap.put("sita", 6);
+        SwahiliInTenMap.put("saba", 7);
+        SwahiliInTenMap.put("nane", 8);
+        SwahiliInTenMap.put("tisa", 9);
+    }
+
+    private final static HashMap<String, Integer> SwahiliTensMap = new HashMap<>();
+
+    static {
+        SwahiliTensMap.put("kumi", 10);
+        SwahiliTensMap.put("ishirini", 20);
+        SwahiliTensMap.put("thelathini", 30);
+        SwahiliTensMap.put("arobaini", 40);
+        SwahiliTensMap.put("hamsini", 50);
+        SwahiliTensMap.put("sitini", 60);
+        SwahiliTensMap.put("sabini", 70);
+        SwahiliTensMap.put("themanini", 80);
+        SwahiliTensMap.put("tisini", 90);
+    }
+
+    private final static HashMap<String, Integer> EnglishNumeralMap = new HashMap<>();
+
+    static {
+        EnglishNumeralMap.put("zero", 0);
+
+        EnglishNumeralMap.put("one", 1);
+        EnglishNumeralMap.put("two", 2);
+        EnglishNumeralMap.put("three", 3);
+        EnglishNumeralMap.put("four", 4);
+        EnglishNumeralMap.put("five", 5);
+        EnglishNumeralMap.put("six", 6);
+        EnglishNumeralMap.put("seven", 7);
+        EnglishNumeralMap.put("eight", 8);
+        EnglishNumeralMap.put("nine", 9);
+
+        EnglishNumeralMap.put("ten", 10);
+        EnglishNumeralMap.put("eleven", 11);
+        EnglishNumeralMap.put("twelve", 12);
+        EnglishNumeralMap.put("thirteen", 13);
+        EnglishNumeralMap.put("fourteen", 14);
+        EnglishNumeralMap.put("fifteen", 15);
+        EnglishNumeralMap.put("sixteen", 16);
+        EnglishNumeralMap.put("seventeen", 17);
+        EnglishNumeralMap.put("eighteen", 18);
+        EnglishNumeralMap.put("nineteen", 19);
+
+        EnglishNumeralMap.put("twenty", 20);
+        EnglishNumeralMap.put("thirty", 30);
+        EnglishNumeralMap.put("forty", 40);
+        EnglishNumeralMap.put("fifty", 50);
+        EnglishNumeralMap.put("sixty", 60);
+        EnglishNumeralMap.put("seventy", 70);
+        EnglishNumeralMap.put("eighty", 80);
+        EnglishNumeralMap.put("ninety", 90);
+    }
+
+
+
     public static List transform(String word, String language) {
 
-        NumberList = new ArrayList<Integer>();
         String[] words = word.split(" ");
         if (words.length == 0) {
             return null;
         }
+
         int rsl = transform(words, language);
+
         return NumberList;
     }
 
-    private static int transform(String[] words, String language) {
-        
-        initialize();
-        if (language.equalsIgnoreCase("Swahili")) {
+    public static int transform(String[] words, String language) {
+
+        NumberList = new ArrayList<Integer>();
+
+        if (language.equalsIgnoreCase("sw")) {
             return SwahiliWord2Num(words);
         } else {
             return EnglishWord2Num(words);
         }
     }
 
-    private static void initialize() {
-        InitializeEnglish();
-        InitializeSwahili();
+    public static List getNumberList() {
+        return NumberList;
     }
 
     private static int EnglishWord2Num(String[] words) {
@@ -186,69 +255,70 @@ public class Word2Num {
 
     }
 
-    private static void InitializeSwahili() {
+//    private static void InitializeSwahili() {
+//
+//        SwahiliInTenMap = new HashMap<>();
+//
+//        SwahiliInTenMap.put("sifuri", 0);
+//        SwahiliInTenMap.put("moja", 1);
+//        SwahiliInTenMap.put("mbili", 2);
+//        SwahiliInTenMap.put("tatu", 3);
+//        SwahiliInTenMap.put("nne", 4);
+//        SwahiliInTenMap.put("tano", 5);
+//        SwahiliInTenMap.put("sita", 6);
+//        SwahiliInTenMap.put("saba", 7);
+//        SwahiliInTenMap.put("nane", 8);
+//        SwahiliInTenMap.put("tisa", 9);
+//
+//        SwahiliTensMap = new HashMap<>();
+//
+//        SwahiliTensMap.put("kumi", 10);
+//        SwahiliTensMap.put("ishirini", 20);
+//        SwahiliTensMap.put("thelathini", 30);
+//        SwahiliTensMap.put("arobaini", 40);
+//        SwahiliTensMap.put("hamsini", 50);
+//        SwahiliTensMap.put("sitini", 60);
+//        SwahiliTensMap.put("sabini", 70);
+//        SwahiliTensMap.put("themanini", 80);
+//        SwahiliTensMap.put("tisini", 90);
+//
+//    }
+//
+//    private static void InitializeEnglish() {
+//        EnglishNumeralMap = new HashMap<>();
+//
+//        EnglishNumeralMap.put("zero", 0);
+//
+//        EnglishNumeralMap.put("one", 1);
+//        EnglishNumeralMap.put("two", 2);
+//        EnglishNumeralMap.put("three", 3);
+//        EnglishNumeralMap.put("four", 4);
+//        EnglishNumeralMap.put("five", 5);
+//        EnglishNumeralMap.put("six", 6);
+//        EnglishNumeralMap.put("seven", 7);
+//        EnglishNumeralMap.put("eight", 8);
+//        EnglishNumeralMap.put("nine", 9);
+//
+//        EnglishNumeralMap.put("ten", 10);
+//        EnglishNumeralMap.put("eleven", 11);
+//        EnglishNumeralMap.put("twelve", 12);
+//        EnglishNumeralMap.put("thirteen", 13);
+//        EnglishNumeralMap.put("fourteen", 14);
+//        EnglishNumeralMap.put("fifteen", 15);
+//        EnglishNumeralMap.put("sixteen", 16);
+//        EnglishNumeralMap.put("seventeen", 17);
+//        EnglishNumeralMap.put("eighteen", 18);
+//        EnglishNumeralMap.put("nineteen", 19);
+//
+//        EnglishNumeralMap.put("twenty", 20);
+//        EnglishNumeralMap.put("thirty", 30);
+//        EnglishNumeralMap.put("forty", 40);
+//        EnglishNumeralMap.put("fifty", 50);
+//        EnglishNumeralMap.put("sixty", 60);
+//        EnglishNumeralMap.put("seventy", 70);
+//        EnglishNumeralMap.put("eighty", 80);
+//        EnglishNumeralMap.put("ninety", 90);
+//
+//    }
 
-        SwahiliInTenMap = new HashMap<>();
-
-        SwahiliInTenMap.put("sifuri", 0);
-        SwahiliInTenMap.put("moja", 1);
-        SwahiliInTenMap.put("mbili", 2);
-        SwahiliInTenMap.put("tatu", 3);
-        SwahiliInTenMap.put("nne", 4);
-        SwahiliInTenMap.put("tano", 5);
-        SwahiliInTenMap.put("sita", 6);
-        SwahiliInTenMap.put("saba", 7);
-        SwahiliInTenMap.put("nane", 8);
-        SwahiliInTenMap.put("tisa", 9);
-
-        SwahiliTensMap = new HashMap<>();
-
-        SwahiliTensMap.put("kumi", 10);
-        SwahiliTensMap.put("ishirini", 20);
-        SwahiliTensMap.put("thelathini", 30);
-        SwahiliTensMap.put("arobaini", 40);
-        SwahiliTensMap.put("hamsini", 50);
-        SwahiliTensMap.put("sitini", 60);
-        SwahiliTensMap.put("sabini", 70);
-        SwahiliTensMap.put("themanini", 80);
-        SwahiliTensMap.put("tisini", 90);
-
-    }
-
-    private static void InitializeEnglish() {
-        EnglishNumeralMap = new HashMap<>();
-
-        EnglishNumeralMap.put("zero", 0);
-
-        EnglishNumeralMap.put("one", 1);
-        EnglishNumeralMap.put("two", 2);
-        EnglishNumeralMap.put("three", 3);
-        EnglishNumeralMap.put("four", 4);
-        EnglishNumeralMap.put("five", 5);
-        EnglishNumeralMap.put("six", 6);
-        EnglishNumeralMap.put("seven", 7);
-        EnglishNumeralMap.put("eight", 8);
-        EnglishNumeralMap.put("nine", 9);
-
-        EnglishNumeralMap.put("ten", 10);
-        EnglishNumeralMap.put("eleven", 11);
-        EnglishNumeralMap.put("twelve", 12);
-        EnglishNumeralMap.put("thirteen", 13);
-        EnglishNumeralMap.put("fourteen", 14);
-        EnglishNumeralMap.put("fifteen", 15);
-        EnglishNumeralMap.put("sixteen", 16);
-        EnglishNumeralMap.put("seventeen", 17);
-        EnglishNumeralMap.put("eighteen", 18);
-        EnglishNumeralMap.put("nineteen", 19);
-
-        EnglishNumeralMap.put("twenty", 20);
-        EnglishNumeralMap.put("thirty", 30);
-        EnglishNumeralMap.put("forty", 40);
-        EnglishNumeralMap.put("fifty", 50);
-        EnglishNumeralMap.put("sixty", 60);
-        EnglishNumeralMap.put("seventy", 70);
-        EnglishNumeralMap.put("eighty", 80);
-        EnglishNumeralMap.put("ninety", 90);
-
-    }
 }

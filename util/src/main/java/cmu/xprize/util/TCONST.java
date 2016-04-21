@@ -24,8 +24,35 @@ package cmu.xprize.util;
 import android.content.Context;
 
 import java.io.File;
+import java.util.HashMap;
 
 public class TCONST {
+
+    public static final String NUMDATA_HEADER = "{\n" + "\"dataSource\": ";
+
+
+    // This is used to map "language features" to the story resources
+    // these are located in the assets/<lang>
+    // Note: on Android these are case sensitive filenames
+
+    static public HashMap<String, String> numberMap = new HashMap<String, String>();
+
+    static {
+        numberMap.put("LANG_EN", "AND,ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,TEN,ELEVEN,TWELVE,THIRTEEN,FORTEEN,FIFTEEN,SIXTEEN,SEVENTEEN,EIGHTEEN,NINETEEN,TWENTY,THIRTY,FORTY,FIFTY,SIXTY,SEVENTY,EIGHTY,NINETY,HUNDRED,THOUSAND,MILLION");
+        numberMap.put("LANG_SW", "NA,SIFURI,MOJA,MBILI,TATU,NNE,TANO,SITA,SABA,NANE,TISA,KUMI,ISHIRINI,THELATHINI,AROBAINI,HAMSINI,SITINI,SABINI,THEMANINI,TISINI,MIA,ELFU,MILIONI");
+    }
+
+    // This is used to map "language features" to the story resources
+    // these are located in the assets/<lang>
+    // Note: on Android these are case sensitive filenames
+
+    static public HashMap<String, String> langMap = new HashMap<String, String>();
+
+    static {
+        langMap.put("LANG_EN", "en");
+        langMap.put("LANG_SW", "sw");
+    }
+
 
     // JSON parameter constants
 
@@ -46,6 +73,7 @@ public class TCONST {
     static final public String SNDESC          = "navigator_descriptor.json";
     static final public String AGDESC          = "animator_graph.json";
     static final public String TDATA           = "trackdata/LIBRARY";
+    static final public String AUDIOPATH       = "audio";
     static final public String TASSETS         = "assets";
     static final public String DEFAULT         = "default";
 
@@ -195,6 +223,12 @@ public class TCONST {
     public static final String FW_EOI      = "FW_EOI";
     public static final String FW_RESPONSE = "FW_RESPONSE";
     public static final String ROBOTUTOR_FOLDER = "/RoboTutor/";
+
+    // Listener Control message types
+    public static final String LISTENER_RESPONSE = "LISTENER_RESPONSE";
+
+    // TTS command constants
+    public static final String SAY               = "TTS_SAY";
 
     // Preference keys
     public static final String ENGINE_INSTANCE = "engine_instance";

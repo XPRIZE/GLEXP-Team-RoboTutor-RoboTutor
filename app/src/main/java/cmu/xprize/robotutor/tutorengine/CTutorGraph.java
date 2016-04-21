@@ -466,6 +466,7 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation
     //
     @Override
     public void onAnimationEnd(Animation animation) {
+
         if(traceMode) Log.d(TAG, "doEnterScene: " + _sceneCurr);
 
         mTutorContainer.setAnimationListener(null);
@@ -486,7 +487,6 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation
         navigatedata[_sceneCurr].instance.onEnterScene();
 
         mSceneAnimator.enterScene(navigatedata[_sceneCurr].id);
-
     }
 
     @Override

@@ -90,6 +90,9 @@ public class TSceneFlipperLayout extends ViewFlipper implements ITutorSceneImpl 
     }
 
     @Override
+    public void postInflate() {}
+
+    @Override
     public void setNavigator(ITutorNavigator navigator) {
         mTutorScene.setNavigator(navigator);
     }

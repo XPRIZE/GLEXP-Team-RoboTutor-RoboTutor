@@ -18,6 +18,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 import cmu.xprize.fw_component.CStimResp;
+import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutor;
@@ -53,7 +54,6 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
         init(context, null);
     }
 
-
     @Override
     public void init(Context context, AttributeSet attrs) {
         mSceneObject = new CObjectDelegate(this);
@@ -66,6 +66,10 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
         mSceneObject.onDestroy();
     }
 
+ //   @Override
+    public void addEventListener(String linkedView) {
+        //mListeners.add((IEventListener) mTutor.getViewById(linkedViewID, null));
+    }
 
     @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
     {
@@ -167,6 +171,9 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
     public void setTutor(CTutor tutor) {
         mSceneObject.setTutor(tutor);
     }
+
+    @Override
+    public void postInflate() {}
 
     @Override
     public void setNavigator(ITutorNavigator navigator) {

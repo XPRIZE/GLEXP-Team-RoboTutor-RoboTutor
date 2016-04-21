@@ -105,6 +105,9 @@ public class TScenePercentLayout extends PercentRelativeLayout implements ITutor
     }
 
     @Override
+    public void postInflate() {}
+
+    @Override
     public void setNavigator(ITutorNavigator navigator) {
         mTutorScene.setNavigator(navigator);
     }

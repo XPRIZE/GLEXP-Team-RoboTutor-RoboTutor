@@ -116,6 +116,9 @@ public class TButton extends Button implements ITutorObjectImpl {
     }
 
     @Override
+    public void postInflate() {}
+
+    @Override
     public void setNavigator(ITutorNavigator navigator) {
         mSceneObject.setNavigator(navigator);
     }

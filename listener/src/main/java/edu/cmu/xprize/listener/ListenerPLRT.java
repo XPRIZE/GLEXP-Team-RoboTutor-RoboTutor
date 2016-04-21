@@ -59,21 +59,22 @@ public class ListenerPLRT extends ListenerBase {
 
     // state for the current ListenFor operation
 
-    private String sentenceWords[];             // array of sentence words to hear
-    private int    iExpected = 0;               // index of expected next word in sentence
-    private int    iNextWord = 0;               // Next word expected.
-    private HeardWord[] heardWords = null;      // latest total aligned hypothesis
-    private long   sentenceStartTime;           // time in ms since epoch
-    private long   sentenceStartSamples;        // sample counter at sentence start, for adjusting frame numbers
-    private final int SAMPLES_PER_FRAME = 160;  // number of samples in a centisecond frame at 16000 samples/sec
-    private boolean speaking = false;           // speaking state. [currently unused]
+    private String      sentenceWords[];             // array of sentence words to hear
+    private int         iExpected = 0;               // index of expected next word in sentence
+    private int         iNextWord = 0;               // Next word expected.
+    private HeardWord[] heardWords = null;           // latest total aligned hypothesis
+    private long        sentenceStartTime;           // time in ms since epoch
+    private long        sentenceStartSamples;        // sample counter at sentence start, for adjusting frame numbers
+    private final int   SAMPLES_PER_FRAME = 160;     // number of samples in a centisecond frame at 16000 samples/sec
+    private boolean     useTruncations = false;      // Flag whether or not to use truncations.
+    private boolean     speaking = false;            // speaking state. [currently unused]
 
 
     /**
      * Attach event listener to receive notification callbacks
      */
     public void updateNextWordIndex(int next) {
-        iNextWord = next > 0? next:0;
+        iNextWord = next;
     }
 
     /**
@@ -119,7 +120,7 @@ public class ListenerPLRT extends ListenerBase {
             // record start time now
             sentenceStartTime = System.currentTimeMillis();
 
-            TimerUtils.startTimer();
+            //TimerUtils.startTimer();
 
             // start background thread for capturing audio from microphone
             recognizer.startListening(SENTENCE_SEARCH, captureLabel);
@@ -131,78 +132,62 @@ public class ListenerPLRT extends ListenerBase {
         }
     }
 
-	/*
-     *  Implementation
-	 */
 
-    // construct and initialize the speech recognizer
+	/**
+     * Construct and initialize the speech recognizer
+	 */
     @Override
     protected void setupRecognizer(File assetsDir, File configFile, String langDictionary) {
 
-        // save path to modelsDir for use when finding fsgs
-        modelsDir = new File(assetsDir, "models");
-
-        // if caller specified a configFile, take parameters from that.
-        // In this config file must specify *all* non-default pocketsphinx parameters
-        if (configFile != null) {
-            recognizer = SpeechRecognizerSetup.setupFromFile(configFile).getRecognizer();
-
-        } else {    // init using default config parameters
-
-            // create pocketsphinx SpeechRecognizer using the SpeechRecognizer2Setup factory method
-            recognizer = SpeechRecognizerSetup.defaultSetup()
-                    // our pronunciation dictionary
-                    //.setDictionary(new File(modelsDir, "lm/CMU07A-CAPS.DIC"))
-                    .setDictionary(new File(modelsDir, "lm/" + langDictionary))
-
-                            // our acoustic model
-                    .setAcousticModel(new File(modelsDir, "hmm/en-us-semi"))
-
-                            // this automatically logs raw audio to the specified directory:
-                    .setRawLogDir(assetsDir)
-
-		              /* can't get sphinx logfile on Android, log messages go to LogCat facility instead
-                        .setString("-logfn", new File(assetsDir, logName).getPath())
-		               */
-                    .setBoolean("-verbose", true)            // maximum log output
-
-                            // a few other settings we might want to experiment with:
-
-                            // threshold for voice activity detection:
-                    .setFloat("-vad_threshold", LCONST.VAD_THRESHOLD)       // default 2.0
-                            // other vad parameters:
-                            // .setInteger("vad_postspeech", 50)		    // default 50 (centiseconds)
-                            // .setInteger("vad_prespeech", 10)				// default 10 (centiseconds)
-
-                            // .setFloat("-silprob", 0.005f)				// default 0.005
-                    .setFloat("-fillprob", LCONST.FILLPROB)                 // default 1e-8f
-                            // .setFloat("-wip", 0.65f)						// default 0.65
-
-                    .getRecognizer();
-        }
-
-        // save a log math object to use when constructing FsgModels.
-        logMath = new LogMath();
+        super.setupRecognizer(assetsDir, configFile, langDictionary);
 
         // use a private implementation to receive events from pocketsphinx
         recognizer.addListener(new IPocketSphinxListener());
     }
 
 
-    // end current sentence
-    // TODO: eliminate this and just reset the current decoder as with a restart after
-    // an intervention
-    public void endSentence() {
+    // private inner class to hide our event listener implementation.
+    // We receive these events from the SpeechRecognizer object for our own use, and send similar events from the
+    // IAsrEventListener interface to our client app
+    private class IPocketSphinxListener implements ITutorListener {
 
-        // stopping recognizer this way will send final hypothesis events
-        if(recognizer != null)
-            recognizer.stop();
+        @Override
+        public void onPartialResult(Hypothesis hypothesis) {
+             Log.i("ASR", "Part Hyp: " + hypothesis.getHypstr());
+            processHypothesis(hypothesis, false);
+        }
 
-        // reset state for new sentence
-        sentenceWords = null;
-        iExpected = 0;
+        @Override
+        public void onResult(Hypothesis hypothesis) {
+            Log.i("ASR", "Final Hyp: " + hypothesis.getHypstr());
+            processHypothesis(hypothesis, true);
+        }
 
-        heardWords = null;
+        @Override
+        public void onBeginningOfSpeech() {
+            speaking = true;
+
+            // forward to listener client app
+            if (eventListener != null)
+                eventListener.onBeginningOfSpeech();
+        }
+
+        @Override
+        public void onEndOfSpeech() {
+            speaking = false;
+
+            // starting a pause: remember the alignment and timing results
+            prePauseResult = heardWords;
+
+            // forward to listener client app
+            if (eventListener != null)
+                eventListener.onEndOfSpeech();
+        }
+
+        @Override
+        public void onASREvent(int eventType) {
+            eventListener.onASREvent(eventType);
+        }
     }
 
 
@@ -263,7 +248,7 @@ public class ListenerPLRT extends ListenerBase {
             }
 
             // ensure START_ words for truncated readings are in dictionary
-            if (recognizer.decoder.lookupWord(startWord(word)) == null) {
+            if(useTruncations && recognizer.decoder.lookupWord(startWord(word)) == null) {
                 addTruncations(word);
             }
         }
@@ -307,7 +292,7 @@ public class ListenerPLRT extends ListenerBase {
                 }
 
                 // truncations not yet implemented for words not in dictionary
-                if (recognizer.decoder.lookupWord(startWord(wordsToHear[i])) != null) {
+                if(useTruncations && recognizer.decoder.lookupWord(startWord(wordsToHear[i])) != null) {
                     //emit word i truncation for transition from state i to state i with probability PrTruncate
                     AddFSGTransition(i, i, PrTruncate, startWord(wordsToHear[i]));
 
@@ -381,53 +366,6 @@ public class ListenerPLRT extends ListenerBase {
         }
     }
 
-    // private inner class to hide our event listener implementation.
-    // We receive these events from the SpeechRecognizer object for our own use, and send similar events from the
-    // IAsrEventListener interface to our client app
-    private class IPocketSphinxListener implements ITutorListener {
-
-        @Override
-        public void onPartialResult(Hypothesis hypothesis) {
-            // Log.i("onPartialResult", hypothesis.getHypstr());
-            processHypothesis(hypothesis, false);
-        }
-
-        @Override
-        public void onResult(Hypothesis hypothesis) {
-            // Log.i("onResult", hypothesis.getHypstr());
-            processHypothesis(hypothesis, true);
-        }
-
-        @Override
-        public void onBeginningOfSpeech() {
-            speaking = true;
-
-            // forward to listener client app
-            if (eventListener != null)
-                eventListener.onBeginningOfSpeech();
-        }
-
-        @Override
-        public void onEndOfSpeech() {
-            speaking = false;
-
-            // starting a pause: remember the alignment and timing results
-            prePauseResult = heardWords;
-
-            // forward to listener client app
-            if (eventListener != null)
-                eventListener.onEndOfSpeech();
-        }
-
-        @Override
-        public void onASREvent(int eventType) {
-            eventListener.onASREvent(eventType);
-        }
-
-
-    }
-
-
     // handle a partial or final hypothesis from pocketsphinx
     private void processHypothesis(Hypothesis hypothesis, Boolean finalResult) {
 
@@ -484,7 +422,8 @@ public class ListenerPLRT extends ListenerBase {
             // fill in detailed word timing metrics
             getWordTimes(heardWords, sentenceWords, segments);
 
-            // post update to client app
+            // post update to client component
+            //
             if (eventListener != null) {
                 eventListener.onUpdate(heardWords, finalResult);
             }
@@ -525,7 +464,7 @@ public class ListenerPLRT extends ListenerBase {
         if (asrWordMatches(hypWord, sentenceWord))
             return 0;
 
-        if (asrWordIsTruncationOf(hypWord, sentenceWord))
+        if(useTruncations && asrWordIsTruncationOf(hypWord, sentenceWord))
             return 0;
 
         // else mismatch
@@ -577,7 +516,7 @@ public class ListenerPLRT extends ListenerBase {
 //                    break;
                 // This is an experiment - should eliminate matches past expected word.
                 // TODO: TEST -> probably needs to be updated dynamically
-                if(s > iNextWord)
+                if(s > iNextWord+1)
                     break;
 
                 int mismatchCostHere = mismatchCost(hypWords[h], sentenceWords[s]);    // match cost this position
@@ -634,7 +573,7 @@ public class ListenerPLRT extends ListenerBase {
             // record match type
             if (asrWordMatches(hypWords[h], sentenceWords[best_alignment]))
                 heardWord.matchLevel = HeardWord.MATCH_EXACT;
-            else if (asrWordIsTruncationOf(hypWords[h], sentenceWords[best_alignment]))
+            else if(useTruncations && asrWordIsTruncationOf(hypWords[h], sentenceWords[best_alignment]))
                 heardWord.matchLevel = HeardWord.MATCH_TRUNCATION;
             else if (!hypWords[h].isEmpty())    // sanity check
                 heardWord.matchLevel = HeardWord.MATCH_MISCUE;
@@ -693,7 +632,7 @@ public class ListenerPLRT extends ListenerBase {
     }
 
     // add in latency and silence measurements for heard words
-    void addLatency(HeardWord[] heardWords) {
+    private void addLatency(HeardWord[] heardWords) {
         for (int h = 0; h < heardWords.length; h++) {
             HeardWord hw = heardWords[h];        // current hyp word
 
@@ -722,23 +661,10 @@ public class ListenerPLRT extends ListenerBase {
         }
     }
 
-    /**
-     * get the  path to the hypothesis log file for given utterance label
-     */
-    private File getHypLogFile(String utteranceLabel) {
-        // store it alongside the captured audio file
-        return new File(recognizer.rawLogDir, utteranceLabel + "-log.txt");
-    }
-
-    /**
-     * get time stamp string for current time in milliseconds
-     */
-    static public String timestampMillis() {
-        return new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss.SSS", Locale.US).format(new Date(System.currentTimeMillis()));
-    }
 
     // create and write header of hypothesis log file.
-    private void beginHypLog() {
+    @Override
+    protected void beginHypLog() {
         Log.i("beginHypLog", "starting hypothesis log");
         try {
             File hypLog = getHypLogFile(captureLabel);
@@ -765,31 +691,5 @@ public class ListenerPLRT extends ListenerBase {
         }
     }
 
-    // log a partial hypothesis
-    private void logHyp(String timestamp, String hyp, List<Segment> segments, HeardWord[] heardWords) {
-        try {
-            File hypLog = getHypLogFile(captureLabel);
-            BufferedWriter bw = new BufferedWriter(new FileWriter(hypLog.getPath(), true));    // appends
-
-            // write out both the raw result with pocketsphinx times for debugging, and
-            // then the adjusted times we have computed for comparison with offline results
-            bw.write("## FROM GET PARTIAL RESULT:\n");        // as in reading tutor
-            bw.write("    TIME: " + timestamp + "\n");
-            bw.write("  DECODER OUTPUT: " + hyp + "\n");
-            bw.write("  RAW SEGMENTS:\n");
-            for (Segment s : segments) {
-                bw.write(s.getWord() + " " + s.getStartFrame() + " " + s.getEndFrame() + "\n");
-            }
-            bw.write("  SEGMENTATION:\n");
-            for (HeardWord hw : heardWords) {
-                bw.write(hw.hypWord + " " + hw.startFrame + " " + hw.endFrame + "\n");
-            }
-            bw.write("\n");
-
-            bw.close();
-        } catch (Exception e) {
-            Log.e("logHyp", "Error writing hypothesis log file " + e.getMessage());
-        }
-    }
 
 } // end Listener class

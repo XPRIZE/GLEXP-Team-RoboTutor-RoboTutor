@@ -114,6 +114,9 @@ public class TBanner extends CBanner implements ITutorObjectImpl {
     }
 
     @Override
+    public void postInflate() {}
+
+    @Override
     public void setNavigator(ITutorNavigator navigator) {
         mSceneObject.setNavigator(navigator);
     }

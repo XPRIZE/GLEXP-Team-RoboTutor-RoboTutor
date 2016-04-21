@@ -233,7 +233,7 @@ public class type_action extends graph_node {
 
                     } catch(Exception e) {
                         e.printStackTrace();
-                        Log.e(TAG, "ERROR: Apply Method: " + method + "   Parms: "+ parms + " : " + e);
+                        Log.e(TAG, "ERROR: "+ id + " - Apply Method: " + method + "   Parms: "+ parms + " : " + e);
                         System.exit(1);
                     }
                     break;

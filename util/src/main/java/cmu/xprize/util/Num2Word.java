@@ -61,7 +61,7 @@ public class Num2Word {
             "ninety",
     };
 
-    // TODO: 15/12/1 check the online swahili cheetsheet
+    // TODO: 15/12/1 check the online swahili cheat sheet
 
     public static String SwahiliZero = "sifuri";
     public static String[] SwahiliInTenWords = {
@@ -96,7 +96,7 @@ public class Num2Word {
         Random randomGenerator = new Random();
         int num;
 
-        String language = "Swahili";
+        String language = "sw";
         Scanner in = new Scanner(System.in);
         while (true) {
             num = in.nextInt();
@@ -116,7 +116,7 @@ public class Num2Word {
      * @return
      */
     public static String transform(int num, String language) {
-        if (language.equalsIgnoreCase("Swahili")) {
+        if (language.equalsIgnoreCase("sw")) {
             return Num2Swahili(num);
         } else { // language.equalsIgnoreCase("English")
             return Num2English(num);

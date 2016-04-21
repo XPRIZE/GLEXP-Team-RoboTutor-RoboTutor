@@ -104,6 +104,9 @@ public class TSceneFrameLayout extends FrameLayout implements ITutorSceneImpl {
     }
 
     @Override
+    public void postInflate() {}
+
+    @Override
     public void setNavigator(ITutorNavigator navigator) {
         mTutorScene.setNavigator(navigator);
     }

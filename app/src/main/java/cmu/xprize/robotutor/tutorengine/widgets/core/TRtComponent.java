@@ -52,7 +52,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
     private CObjectDelegate      mSceneObject;
 
 
-    static final private String TAG = "TRtComponent";
+    static private String TAG = "TRtComponent";
 
 
 
@@ -78,7 +78,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
         // Default to English language stories
         //
-        mLanguage = langMap.get("LANG_EN");
+        mLanguage = TCONST.langMap.get("LANG_EN");
 
         // Push the ASR listener reference into the super class in the Java domain
         //
@@ -116,7 +116,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
     //**********************************************************
     //**********************************************************
-    //*****************  Tutor Interface
+    //*****************  Scripting Interface
 
     /**
      * @param language
@@ -249,7 +249,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
         }
     }
 
-    // Tutor methods  End
+    // Scripting Interface  End
     //************************************************************************
     //************************************************************************
 
@@ -279,6 +279,9 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
         mTutor = tutor;
         mSceneObject.setTutor(tutor);
     }
+
+    @Override
+    public void postInflate() {}
 
     @Override
     public void setNavigator(ITutorNavigator navigator) {

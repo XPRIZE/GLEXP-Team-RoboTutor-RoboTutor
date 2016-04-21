@@ -21,8 +21,11 @@ import android.util.Log;
 import android.util.TypedValue;
 
 import cmu.xprize.fw_component.CStimRespBase;
+import cmu.xprize.fw_component.ISrListener;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
+import cmu.xprize.util.CEvent;
+import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutor;
@@ -63,6 +66,9 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
     @Override
     public void init(Context context, AttributeSet attrs) {
+
+        super.init(context, attrs);
+
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
     }
@@ -73,6 +79,11 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
     }
 
 
+    @Override
+    public void addEventListener(String linkedView) {
+
+        mListeners.add((IEventListener) mTutor.getViewByName(linkedView));
+    }
 
 
     private void cachedataSource() {
@@ -186,9 +197,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
             // For stimulus controls broadcast the change so the response knows
             // Let interested listeners know the stimulus has been exhausted
             //
-            Intent msg = new Intent(TCONST.FW_EOI);
-
-            bManager.sendBroadcast(msg);
+            dispatchEvent(new CEvent(TCONST.FW_EOI));
         }
     }
 
@@ -274,6 +283,22 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
     public void setTutor(CTutor tutor) {
         mTutor = tutor;
         mSceneObject.setTutor(tutor);
+    }
+
+    // Do deferred configuration - anything that cannot be done until after the
+    // view has been inflated and init'd - where it is connected to the TutorEngine
+    //
+    @Override
+    public void postInflate() {
+
+        // Do deferred listeners configuration - this cannot be done until after the
+        //
+        if(!mListenerConfigured) {
+            for (String linkedView : mLinkedViews) {
+                addEventListener(linkedView);
+            }
+            mListenerConfigured = true;
+        }
     }
 
     @Override

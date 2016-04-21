@@ -180,6 +180,9 @@ public class TSceneAnimatorLayout extends ViewAnimator implements ITutorManager 
     }
 
     @Override
+    public void postInflate() {}
+
+    @Override
     public void setNavigator(ITutorNavigator navigator) {
         mTutorScene.setNavigator(navigator);
     }

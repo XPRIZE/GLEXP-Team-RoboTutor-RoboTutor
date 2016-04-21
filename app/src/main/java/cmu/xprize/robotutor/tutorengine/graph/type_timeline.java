@@ -191,7 +191,7 @@ public class type_timeline extends type_action {
 
                 if (!_isLoading) {
 
-                    _timer     = new Timer(trackname);
+                    _timer = new Timer(trackname);
                     _frameTask = new TimerTask() {
                         @Override
                         public void run() {

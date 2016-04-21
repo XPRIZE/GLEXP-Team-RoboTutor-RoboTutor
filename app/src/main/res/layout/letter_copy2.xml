@@ -28,6 +28,7 @@
 
         <cmu.xprize.robotutor.tutorengine.widgets.core.TStimRespBase
             android:id="@+id/Sstimulus"
+            app:linked_views="Sresponse,SfingerWriter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
@@ -52,13 +53,13 @@
 
         <cmu.xprize.robotutor.tutorengine.widgets.core.TStimRespBase
             android:id="@+id/Sresponse"
+            app:linked_views="Sstimulus"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             app:layout_heightPercent="80%"
             app:aspectratio="0.83"
             app:isResponse="true"
-            app:linkedView="@id/Sstimulus"
             android:gravity="center"
             android:textStyle="bold"
             android:background="@color/responseBackground"
@@ -77,7 +78,7 @@
 
         <cmu.xprize.robotutor.tutorengine.widgets.core.TFingerWriter
             android:id="@+id/SfingerWriter"
-            app:linkedView="@id/Sresponse"
+            app:linked_views="Sresponse"
             app:layout_heightPercent="90%"
             app:aspectratio="0.5433"
             android:layout_width="wrap_content"

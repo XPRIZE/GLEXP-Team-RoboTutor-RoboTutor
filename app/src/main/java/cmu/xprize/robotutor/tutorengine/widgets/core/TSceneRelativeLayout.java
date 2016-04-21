@@ -104,6 +104,9 @@ public class TSceneRelativeLayout extends RelativeLayout implements ITutorSceneI
     }
 
     @Override
+    public void postInflate() {}
+
+    @Override
     public void setNavigator(ITutorNavigator navigator) {
         mTutorScene.setNavigator(navigator);
     }
