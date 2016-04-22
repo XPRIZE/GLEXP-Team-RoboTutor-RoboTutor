@@ -23,11 +23,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
@@ -44,7 +40,6 @@ import cmu.xprize.rt_component.ICRt_ViewManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
-import edu.cmu.xprize.listener.ListenerPLRT;
 
 public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
@@ -94,21 +89,21 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
     public void publishTargetWord(String word) {
         // update the response variable  "<SreadingComp>.nextword"
-        mTutor.getScope().addUpdate(name() + ".nextword", new TString(word));
+        mTutor.getScope().addUpdateVar(name() + ".nextword", new TString(word));
 
     }
 
 
     public void publishTargetWordIndex(int index) {
         // update the response variable  "<SreadingComp>.nextword"
-        mTutor.getScope().addUpdate(name() + ".wordindex", new TInteger(index));
+        mTutor.getScope().addUpdateVar(name() + ".wordindex", new TInteger(index));
 
     }
 
 
     public void publishTargetSentence(String sentence) {
         // update the response variable  "<SreadingComp>.sentence"
-        mTutor.getScope().addUpdate(name() + ".sentence", new TString(sentence));
+        mTutor.getScope().addUpdateVar(name() + ".sentence", new TString(sentence));
 
     }
 
@@ -234,6 +229,12 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
     }
 
 
+    /**
+     *  Apply Events in the Tutor Domain.
+     *
+     * @param nodeName
+     */
+    @Override
     protected void applyEventNode(String nodeName) {
         IScriptable2 obj = null;
 

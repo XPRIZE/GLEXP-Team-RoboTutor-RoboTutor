@@ -120,7 +120,7 @@ public class TScope implements IScope2 {
         map.put(key,obj);
     }
 
-    public void addUpdate(String key, IScriptable2 obj) {
+    public void addUpdateVar(String key, IScriptable2 obj) {
         map.put(key,obj);
     }
 

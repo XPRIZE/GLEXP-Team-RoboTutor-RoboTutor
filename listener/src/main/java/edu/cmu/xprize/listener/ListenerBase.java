@@ -304,12 +304,20 @@ public class ListenerBase {
         recognizer.setRestartListener(restartListener);
     }
 
-    public void configTimedEvent(int eventType, long newTimeout, boolean reset) {
-        recognizer.configTimedEvent(eventType, newTimeout, reset);
+    public void configTimedEvent(int eventType, long newTimeout) {
+        recognizer.configTimedEvent(eventType, newTimeout);
     }
 
-    public void configStaticEvent(int eventType, boolean listen) {
-        recognizer.configStaticEvent(eventType, listen);
+    public void resetTimedEvent(int eventType) {
+        recognizer.resetTimedEvent(eventType);
+    }
+
+    public void configStaticEvent(int eventType) {
+        recognizer.configStaticEvent(eventType);
+    }
+
+    public void resetStaticEvent(int eventType) {
+        recognizer.resetStaticEvent(eventType);
     }
 
 

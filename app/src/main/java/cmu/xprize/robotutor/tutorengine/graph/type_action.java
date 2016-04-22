@@ -131,6 +131,7 @@ public class type_action extends graph_node {
                     }
                     catch(Exception e) {
                         Log.e(TAG, "Launch Command Invalid: " + e);
+                        System.exit(1);
                     }
                     break;
 

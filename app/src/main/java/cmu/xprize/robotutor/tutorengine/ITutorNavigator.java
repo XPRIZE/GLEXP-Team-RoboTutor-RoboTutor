@@ -24,6 +24,8 @@ import java.util.HashMap;
 public interface ITutorNavigator {
 
     public void initTutorContainer(ITutorSceneImpl rootScene);
+    public void onDestroy();
+
     public CSceneGraph getAnimator();
     public HashMap getChildMap();
     public HashMap getChildMapByName(String sceneName);

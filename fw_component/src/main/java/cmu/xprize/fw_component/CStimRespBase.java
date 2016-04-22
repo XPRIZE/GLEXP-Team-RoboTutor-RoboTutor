@@ -64,6 +64,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
     protected List<String>  _data;
     protected int           _dataIndex = 0;
     protected boolean       _dataEOI   = false;
+
     protected String        _onRecognition;
 
     protected float         mAspect;           //   = 0.82f w/h
@@ -114,7 +115,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
 
             try {
                 mIsResponse = a.getBoolean(R.styleable.CStimResp_isResponse, false);
-                mAspect     = a.getFloat(R.styleable.CStimResp_aspectratio, 1.0f);
+                mAspect     = a.getFloat(R.styleable.CStimResp_aspectratio, -1.0f);
                 linkedViews = a.getNonResourceString(R.styleable.CStimResp_linked_views);
                 mTextColor  = getCurrentTextColor();
 
@@ -199,7 +200,12 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
         int originalWidth  = MeasureSpec.getSize(widthMeasureSpec);
         int originalHeight = MeasureSpec.getSize(heightMeasureSpec);
 
-        finalWidth  = (int)(originalHeight * mAspect);
+        if(mAspect >= 0) {
+            finalWidth = (int) (originalHeight * mAspect);
+        }
+        else  {
+            finalWidth = (int) (originalWidth);
+        }
         finalHeight = originalHeight;
 
         setTextSize(TypedValue.COMPLEX_UNIT_PX, finalHeight * 0.7f);

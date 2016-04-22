@@ -73,7 +73,8 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
 
     @Override
     public void onDestroy() {
-
+        if(mListener != null)
+                mListener.stop();
     }
 
 
@@ -164,8 +165,11 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
             System.exit(1);
         }
 
-        if(dataExhausted())
-            mTutor.setAddFeature(TCONST.FTR_EOI);
+        // Kill the recognizer thread and set the End Of Data flag
+        //
+        if(dataExhausted()) {
+            mTutor.setAddFeature(TCONST.FTR_EOD);
+        }
     }
 
 
@@ -192,10 +196,16 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
 
     }
     public void onRecognitionComplete(String symbol) {
-
+        super.onRecognitionComplete(symbol);
     }
 
 
+    /**
+     *  Apply Events in the Tutor Domain.
+     *
+     * @param nodeName
+     */
+    @Override
     protected void applyEventNode(String nodeName) {
         IScriptable2 obj = null;
 
@@ -253,7 +263,8 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
     @Override
     public void postInflate() {
 
-        // Do deferred listeners configuration - this cannot be done until after the
+        // Do deferred listeners configuration - this cannot be done until after the inflation
+        // and CTutor.childMap is complete
         //
         if(!mListenerConfigured) {
             for (String linkedView : mLinkedViews) {

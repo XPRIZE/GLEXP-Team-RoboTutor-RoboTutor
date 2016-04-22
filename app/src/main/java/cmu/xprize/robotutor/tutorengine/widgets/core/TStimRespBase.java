@@ -14,14 +14,10 @@
 package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 
 import cmu.xprize.fw_component.CStimRespBase;
-import cmu.xprize.fw_component.ISrListener;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.CEvent;
@@ -99,8 +95,8 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
         if(mIsResponse) {
 
             // update the response variable  "<Sresponse>.value"
-            mTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
-            mTutor.getScope().addUpdate(name() + ".valueUC", new TString(mValue.toUpperCase()));
+            mTutor.getScope().addUpdateVar(name() + ".value", new TString(mValue));
+            mTutor.getScope().addUpdateVar(name() + ".valueUC", new TString(mValue.toUpperCase()));
 
             if (newChar.equals("???")) {
                 mTutor.setAddFeature(TCONST.FWUNKNOWN);
@@ -186,8 +182,8 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
         // update the Scope response variable  "<Sstimulus>.value"
         //
-        mTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
-        mTutor.getScope().addUpdate(name() + ".valueUC", new TString(mValue.toUpperCase()));
+        mTutor.getScope().addUpdateVar(name() + ".value", new TString(mValue));
+        mTutor.getScope().addUpdateVar(name() + ".valueUC", new TString(mValue.toUpperCase()));
 
         if(dataExhausted()) {
 

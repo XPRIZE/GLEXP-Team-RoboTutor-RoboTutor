@@ -17,10 +17,8 @@
         "INTRO_STATE": {
           "type": "NODE",
           "COMMENT": "Intro Clip",
-//          "maptype":"actionMap",
-//          "mapname": "PAUSE",
-          "maptype":"moduleMap",
-          "mapname": "PLAYINTRO",
+          "maptype":"actionMap",
+          "mapname": "PAUSE",
           "preenter":["SET_DATASOURCE","SET_LAUNCHER"],
           "preexit" :[],
           "edges": [

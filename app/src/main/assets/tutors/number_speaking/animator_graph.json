@@ -48,12 +48,14 @@
           "maptype":"moduleMap",
           "mapname": "LISTENING",
           "preenter":["LISTENER_ENABLE"],
-          "preexit" :["LISTENER_DISABLE"],
+          "preexit" :["LISTENER_DISABLE","REMOVERESPONSE","REMOVESTIMULUS"],
           "edges":
           [
-            {"constraint":"HEARD_RIGHT_NUMBER","edge":"CORRECT"},
-            {"constraint":"HEARD_MULTI-WORD_NUMBER", "edge":"NOT_CORRECT1"},
-            {"constraint":"HEARD_SINGLE-WORD_NUMBER", "edge":"NOT_CORRECT2"}
+//            {"constraint":"HEARD_RIGHT_NUMBER","edge":"CORRECT"},
+//            {"constraint":"HEARD_MULTI-WORD_NUMBER", "edge":"NOT_CORRECT1"},
+//            {"constraint":"HEARD_SINGLE-WORD_NUMBER", "edge":"NOT_CORRECT2"}
+            {"constraint":"END_OF_DATA","edge":"NEXTSCENE"},
+            {"constraint":"","edge":"NEW_NUMBER"}
           ]
         },
 
@@ -147,8 +149,10 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "TTS", "command": "SAY", "content": "Tafadhali kuzungumza idadi sauti", "features": "LANG_SW"},
-            {"type": "TTS", "command": "SAY", "content": "Please speak the number aloud",    "features": "LANG_EN"}
+            {"type": "COMMAND", "id": "Sresponse", "method": "onRecognitionComplete", "parms": "NEXT:String"},
+
+            {"type": "TTS", "command": "SAY", "content": "Tafadhali kuzungumza idadi sauti", "rate":"1.2", "features": "LANG_SW"},
+            {"type": "TTS", "command": "SAY", "content": "Please speak the number aloud", "features": "LANG_EN"}
           ]
         },
 
@@ -250,9 +254,11 @@
 
         "STOP": {"type": "COMMAND", "cmd": "WAIT" },
 
+        "INIT_TTS_RATE": {"type": "TTS", "command": "SET_RATE", "rate":"1.2", "features": "LANG_SW"},
+
         "GETNUMWORDS":{"type": "COMMAND", "id": "", "method": "", "parms": "", "features": ""},
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[4,27,179]:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[23,27,179]:String","features":""},
 
         "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HESITATION_TRACK", "features": "" },
 
@@ -308,6 +314,11 @@
         "FTR_WORDS":{
           "type": "CONDITION",
           "test":"!FTR_NOWORDS"
+        },
+
+        "END_OF_DATA":{
+          "type": "CONDITION",
+          "test":"FTR_EOD"
         },
 
         "ALL_CORRECT":{

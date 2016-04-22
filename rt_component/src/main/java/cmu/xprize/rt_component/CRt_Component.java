@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cmu.xprize.util.CEventMap;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -40,7 +41,6 @@ import cmu.xprize.util.TTSsynthesizer;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.IAsrEventListener;
 import edu.cmu.xprize.listener.ListenerBase;
-import edu.cmu.xprize.listener.ListenerJSGF;
 import edu.cmu.xprize.listener.ListenerPLRT;
 
 
@@ -76,7 +76,7 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     private int                     expectedWordIndex     = 0;                      // index of expected next word in sentence
     private static int[]            creditLevel           = null;                   // per-word credit level according to current hyp
 
-    // Tutor scriptable events
+    // Tutor scriptable ASR events
     private String                  _silenceEvent;          // Instant silence begins
     private String                  _soundEvent;            // Instant a sound is heard
     private String                  _wordEvent;             // Instant a word is recognized
@@ -322,11 +322,12 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     }
 
 
-    public void configTimedEvent(String symbol, String eventString, int timeOut, boolean reset) {
+    public void configureEvent(String symbol, String eventString) {
 
         int eventType = CEventMap.eventMap.get(eventString);
 
         switch(eventType) {
+
             case TCONST.SILENCE_EVENT:
                 _silenceEvent = symbol;
                 break;
@@ -338,6 +339,22 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
             case TCONST.WORD_EVENT:
                 _wordEvent = symbol;
                 break;
+        }
+        mListener.configStaticEvent(eventType);
+    }
+    public void clearEvent(String eventString) {
+
+        int eventType = CEventMap.eventMap.get(eventString);
+
+        mListener.resetStaticEvent(eventType);
+    }
+
+
+    public void configureEvent(String symbol, String eventString, int timeOut) {
+
+        int eventType = CEventMap.eventMap.get(eventString);
+
+        switch(eventType) {
 
             case TCONST.TIMEDSILENCE_EVENT:
                 _timedSilenceEvent = symbol;
@@ -351,15 +368,13 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
                 _timedWordEvent = symbol;
                 break;
         }
-        mListener.configTimedEvent(eventType, timeOut, reset);
+        mListener.configTimedEvent(eventType, timeOut);
     }
-
-
     public void clearTimedEvent(String eventString) {
 
         int eventType = CEventMap.eventMap.get(eventString);
 
-        mListener.configTimedEvent(eventType, Long.MAX_VALUE, true);
+        mListener.resetTimedEvent(eventType);
     }
 
 

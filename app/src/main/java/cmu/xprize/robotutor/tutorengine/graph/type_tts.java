@@ -37,8 +37,9 @@ public class type_tts extends type_action {
 
     // json loadable fields
     public String        command;
-    public String        content;
-    public String        lang;
+    public String        content    = "";
+    public String        language   = "";
+    public float         rate       = 0f;
 
 
     public type_tts() {
@@ -59,23 +60,43 @@ public class type_tts extends type_action {
 
         String status = TCONST.DONE;
 
-        // play on creation if command indicates
-        if(command.equals(TCONST.SAY)) {
+        switch(command) {
+            case TCONST.SAY:
+                say();
+                break;
 
-            say(content);
+            case TCONST.SET_RATE:
+                setRate();
+                break;
         }
 
         return status;
     }
 
 
+    private void setRate() {
+
+        mSynthesizer.setSpeechRate(rate);
+
+    }
+
+    private void setLanguage() {
+
+        mSynthesizer.setLanguage(language);
+
+    }
+
     /**
      *
      */
-    public void say(String prompt) {
+    private void say() {
 
         //mListener.setPauseListener(true);
-        mSynthesizer.speak(prompt);
+
+        setRate();
+        setLanguage();
+
+        mSynthesizer.speak(content);
 
         while (mSynthesizer.isSpeaking()) {
             try {
@@ -84,9 +105,40 @@ public class type_tts extends type_action {
                 e.printStackTrace();
             }
         }
+
         //mListener.setPauseListener(false);
     }
 
 
 
+    // *** Serialization
+
+
+    /**
+     * Load the object from the factory data
+     *
+     * @param jsonObj
+     * @param scope
+     */
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope2 scope) {
+
+        // Always call super to init _scope - or do it yourself
+        //
+        super.loadJSON(jsonObj, scope);
+
+        // Custom post processing.
+        // If rate and language are not initialized use defaults
+        //
+        if(rate == 0)
+            rate = 1.0f;
+
+        // If unset use the current tutor default language
+        //
+        if(language.equals(""))
+            language = scope.tutor().getLanguageFeature();
+
+        // TODO:  We also want to connect up the ASR
+
+    }
 }

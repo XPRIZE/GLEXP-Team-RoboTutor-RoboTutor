@@ -160,11 +160,13 @@ public class TCONST {
 
     public static final char EOT = '\04';
 
+
     // type_action - command types
     public static final String CMD_WAIT    = "WAIT";
     public static final String CMD_GOTO    = "GOTONODE";
     public static final String CMD_NEXT    = "NEXT";
     public static final String CMD_LAUNCH  = "LAUNCH-TUTOR";
+
 
     // Intrinsic types
     public static final String TREFERENCE  = "TReference";
@@ -182,6 +184,7 @@ public class TCONST {
     public static final String FWINCORRECT  = "FTR_WRONG";
     public static final String FWUNKNOWN    = "FTR_UNRECOGNIZED";
     public static final String FTR_EOI      = "FTR_NOWORDS";
+    public static final String FTR_EOD      = "FTR_EOD";
     public static final String FWALLCORRECT = "ALL_CORRECT";
 
     public static final String FALSE        = "FALSE";
@@ -191,16 +194,25 @@ public class TCONST {
     public static final String RAND         = "random";
     public static final String MINUSONE     = "-1";
 
+
     // PocketSphinx Recognizer Constants
     public static final int UNKNOWNEVENT_TYPE  = 0;
-    public static final int TIMEDSILENCE_EVENT = 1;
-    public static final int TIMEDSOUND_EVENT   = 2;
-    public static final int TIMEDWORD_EVENT    = 4;
-    public static final int ALLTIMED_EVENTS    = 7;
-    public static final int SILENCE_EVENT      = 8;
-    public static final int SOUND_EVENT        = 16;
-    public static final int WORD_EVENT         = 32;
-    public static final int TIMEDSTART_EVENT   = 64;
+
+    public static final int TIMEDSTART_EVENT   = 0x01;
+    public static final int TIMEDSILENCE_EVENT = 0x02;
+    public static final int TIMEDSOUND_EVENT   = 0x04;
+    public static final int TIMEDWORD_EVENT    = 0x08;
+
+    public static final int ALLTIMED_EVENTS    = 0x0F;
+
+    public static final int SILENCE_EVENT      = 0x10;
+    public static final int SOUND_EVENT        = 0x20;
+    public static final int WORD_EVENT         = 0x40;
+
+    public static final int ALLSTATIC_EVENTS   = 0x70;
+
+    public static final int ALL_EVENTS         = 0xFFFFFFFF;
+
 
     public static final int NOINTERVENTION = 0;
     public static final int INSPEECH       = 1;
@@ -217,6 +229,7 @@ public class TCONST {
     public static final String JSONLOG     = ".json";
     public static final boolean APPEND     = true;
 
+
     // LTK messaging constants
     public static final String FW_STIMULUS = "FW_UPDATED";
     public static final String FW_VALUE    = "FW_VALUE";
@@ -224,11 +237,15 @@ public class TCONST {
     public static final String FW_RESPONSE = "FW_RESPONSE";
     public static final String ROBOTUTOR_FOLDER = "/RoboTutor/";
 
+
     // Listener Control message types
     public static final String LISTENER_RESPONSE = "LISTENER_RESPONSE";
 
+
     // TTS command constants
-    public static final String SAY               = "TTS_SAY";
+    public static final String SAY             = "SAY";
+    public static final String SET_RATE        = "SET_RATE";
+
 
     // Preference keys
     public static final String ENGINE_INSTANCE = "engine_instance";

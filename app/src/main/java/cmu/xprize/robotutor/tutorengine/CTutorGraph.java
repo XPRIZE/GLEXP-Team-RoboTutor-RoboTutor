@@ -29,6 +29,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
@@ -126,6 +128,39 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation
     public HashMap getChildMapByName(String sceneName) {
 
         return _navMap.get(sceneName).children;
+    }
+
+
+    /**
+     * Walk the scene descriptors and kill off any remaining scenes
+     */
+    public void onDestroy() {
+
+        for(scene_descriptor scene : navigatedata) {
+
+            // Do the destruction depth first
+            //
+            if(scene.instance != null) {
+
+                // If the scene has children - allow them to shutdown gracefully
+                //
+                if(scene.children != null) {
+                    Iterator<?> tObjects = scene.children.entrySet().iterator();
+
+                    // Perform component level cleanup first
+                    //
+                    while(tObjects.hasNext() ) {
+                        Map.Entry entry = (Map.Entry) tObjects.next();
+
+                        ((ITutorObject)(entry.getValue())).onDestroy();
+                    }
+                }
+
+                // Then tell the container to destruct
+                //
+                scene.instance.onDestroy();
+            }
+        }
     }
 
 
@@ -441,7 +476,7 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation
             //@@ Action Logging
 
             // On exit behaviors
-            navigatedata[_sceneCurr].instance.onExitScene();
+            navigatedata[_scenePrev].instance.onExitScene();
 
             // Do the scene transition - add callback for when IN animation ends
             mTutorContainer.setAnimationListener(this);
@@ -554,6 +589,7 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation
 
         try {
             loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutorName + "/" + TCONST.SNDESC)), (IScope2)mRootScope);
+
         } catch (JSONException e) {
             Log.d(TAG, "Error" );
         }
@@ -578,6 +614,7 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation
 
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
+
         Log.d(TAG, "Loader iteration");
         loadJSON(jsonObj, (IScope2) scope);
     }

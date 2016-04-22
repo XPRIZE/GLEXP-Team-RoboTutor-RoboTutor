@@ -131,6 +131,13 @@ public class CTutor implements ILoadableObject2 {
     }
 
 
+    /**
+     *
+     */
+    public void onDestroy() {
+    }
+
+
     private void inflateTutor() {
 
         // Load the "tutor_descriptor.json" file
@@ -230,6 +237,8 @@ public class CTutor implements ILoadableObject2 {
             mTutorActive = false;
 
             mTutorContainer.popView(false, null);
+            mTutorAnimator.onDestroy();
+
             CTutorEngine.killTutor(mTutorName);
         }
     }

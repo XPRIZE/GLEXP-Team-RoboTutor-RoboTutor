@@ -177,6 +177,12 @@ public class CTutorEngine implements ILoadableObject2 {
 
     static public void killTutor(String tutorName) {
 
+        // Get the tutor being killed and do a depth first destruction to allow
+        // components to release resources etc.
+        //
+        mTutorActive = tutorMap.get(tutorName);
+        mTutorActive.onDestroy();
+
         tutorMap.remove(tutorName);
         sceneMap.remove(tutorName);
     }

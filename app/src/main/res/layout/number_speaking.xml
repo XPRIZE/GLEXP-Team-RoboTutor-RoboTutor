@@ -36,7 +36,6 @@
             android:layout_centerHorizontal="true"
             app:layout_heightPercent="20%"
             app:layout_marginBottomPercent="7%"
-            app:aspectratio="0.83"
             app:isResponse="false"
             android:gravity="center"
             android:text=""
@@ -65,7 +64,7 @@
             app:isResponse="true"
             android:paddingTop="10dp"
             android:gravity="center"
-            android:text=""
+            android:text="TEST"
             android:textStyle="bold"
             android:background="@color/fingerWriterBackground"
             android:textColor="@color/responsetext" /> <!--remember to delete the text!-->

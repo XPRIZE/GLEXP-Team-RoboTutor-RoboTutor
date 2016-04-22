@@ -168,6 +168,7 @@ public class JSON_Helper {
 
             try {
                 // we don't care about the value only whether if there is a field there
+                //TODO: fill out JSONExceptions error messages
                 if(jsonObj.has(fieldName)) {
 
                     // Most of our fields are Strings so handle them as efficiently as possible
@@ -178,6 +179,7 @@ public class JSON_Helper {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            System.exit(1);
                         }
                     }
 
@@ -189,6 +191,19 @@ public class JSON_Helper {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            System.exit(1);
+                        }
+                    }
+
+                    // Most of our fields are Strings so handle them as efficiently as possible
+                    else if(className.equals("float")) {
+
+                        try {
+                            field.setFloat(self, Float.parseFloat(jsonObj.getString(fieldName)));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            System.exit(1);
                         }
                     }
 
@@ -200,6 +215,7 @@ public class JSON_Helper {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            System.exit(1);
                         }
                     }
 
@@ -212,6 +228,7 @@ public class JSON_Helper {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            System.exit(1);
                         }
                     }
 
@@ -223,6 +240,7 @@ public class JSON_Helper {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            System.exit(1);
                         }
                     }
 
