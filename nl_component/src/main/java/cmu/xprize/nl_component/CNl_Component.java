@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cmu.xprize.fw_component.CStimRespBase;
-import cmu.xprize.util.CEvent;
 import cmu.xprize.util.CEventMap;
 import cmu.xprize.util.Num2Word;
 import cmu.xprize.util.TCJSGF;
@@ -62,6 +61,7 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
     private static int[]            creditLevel            = null;          // per-word credit level according to current hyp
     private int                     expectedWordIndex      = 0;             // index of expected next word in sentence
     private boolean                 missingConjTolerant    = true;          // Do you need "AND" between number words
+    private boolean                 repeatedWordIntolerant = true;          // Indicate repeated word errors.
     private String                  cachedLanguageFeature;
     private String                  conjunction;
 
@@ -281,13 +281,36 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
         boolean Error     = false;
         int     ErrorType = 0;
         int     maxPlace  = 0;
+        int     maxHeard  = 0;
 
-        mResponseTextList = new ArrayList<String>();
+        mResponseTextList   = new ArrayList<String>();
 
         if (heardWords.length >= 1) {
 
-            for(int i = 0 ; i < mStimulusTextList.length ; i++)
+            for(int i = 0 ; i < mStimulusTextList.length ; i++) {
                 mResponseTextList.add("");
+            }
+
+            // Reprocess the HeardWords hypothesis to allow incorrect repeated numbers.
+            // e.g. If the stimulus is 179 and the user says 171 the second '1' will have
+            // an iSentenceWord of 0 instead of 2
+            // This is to make the screen updates more responsive to user input. Otherwise when
+            // they say 171 in response to a stimulus of 179 there would be no update.
+            //
+            // If the user makes a repeated word mistake there will be a heardword with an
+            // iSentence position that is behind where the previous word was
+            //  MIA:0 | MOJA:1 | NA:2 | SABINI:3 | NA:4 | MOJA:1 |
+            // So in this case we update the last MOJA iSentenceWord to :5
+            //
+            if(repeatedWordIntolerant && heardWords.length > 1) {
+                for (int i = 1; i < heardWords.length; i++) {
+                    if(heardWords[i].iSentenceWord < i) {
+                        Log.i("ASR", "Repeated Word <error>");
+                        heardWords[i].iSentenceWord = i;
+                        break;
+                    }
+                }
+            }
 
             String logString = "";
             for (int i = 0; i < heardWords.length; i++) {
@@ -297,6 +320,7 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
 
             // Place the words in order
             // Loop throught as many words as are in the stimulus
+            //
             for (int i1 = 0; i1 < mStimulusTextList.length; i1++) {
 
                 // Assign the most recent one to it's associated place value

@@ -274,7 +274,7 @@
 
         "GETNUMWORDS":{"type": "COMMAND", "id": "", "method": "", "parms": "", "features": ""},
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[179,179,179,179,179,179,179,179,124,38,179]:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[1,19,42,10,11,111,100,7,124,38,479]:String","features":""},
 
         "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HESITATION_TRACK", "features": "" },
 
