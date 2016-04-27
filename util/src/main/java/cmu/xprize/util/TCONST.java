@@ -31,9 +31,7 @@ public class TCONST {
     public static final String NUMDATA_HEADER = "{\n" + "\"dataSource\": ";
 
 
-    // This is used to map "language features" to the story resources
-    // these are located in the assets/<lang>
-    // Note: on Android these are case sensitive filenames
+    //*** Reading Tutor compatible string combinations
 
     static public HashMap<String, String> numberMap = new HashMap<String, String>();
 
@@ -41,6 +39,7 @@ public class TCONST {
         numberMap.put("LANG_EN", "AND,ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,TEN,ELEVEN,TWELVE,THIRTEEN,FORTEEN,FIFTEEN,SIXTEEN,SEVENTEEN,EIGHTEEN,NINETEEN,TWENTY,THIRTY,FORTY,FIFTY,SIXTY,SEVENTY,EIGHTY,NINETY,HUNDRED,THOUSAND,MILLION");
         numberMap.put("LANG_SW", "NA,SIFURI,MOJA,MBILI,TATU,NNE,TANO,SITA,SABA,NANE,TISA,KUMI,ISHIRINI,THELATHINI,AROBAINI,HAMSINI,SITINI,SABINI,THEMANINI,TISINI,MIA,ELFU,MILIONI");
     }
+
 
     // This is used to map "language features" to the story resources
     // these are located in the assets/<lang>
@@ -97,8 +96,10 @@ public class TCONST {
     // Navigator types
     final static public String SIMPLENAV       = "SIMPLE_NAVIGATOR";
     final static public String GRAPHNAV        = "GRAPH_NAVIGATOR";
-    public static final String NEXTNODE        = "NEXTNODE";
+    public static final String NEXT_NODE       = "NEXT_NODE";
     public static final String NEXTSCENE       = "NEXTSCENE";
+    public static final String FIRST_SCENE     = "GOTO_FIRST_SCENE";
+
 
 
     // CActionTrack track types
@@ -130,11 +131,13 @@ public class TCONST {
     public static final String PLAY            = "PLAY";
     public static final String STOP            = "STOP";
     public static final String NEXT            = "NEXT";
+    public static final String GOTO_NODE       = "GOTO_NODE";
     public static final String PAUSE           = "PAUSE";
     public static final String START           = "START";
     public static final String CANCEL          = "CANCEL";
     public static final String CREATE          = "CREATE";
     public static final String CREATEANDSTART  = "CREATEANDSTART";
+    public static final String ENTER_SCENE     = "ENTER_SCENE";
 
     // Condition parser FSM states
     public static final int STARTSTATE = 0;
@@ -250,4 +253,19 @@ public class TCONST {
     // Preference keys
     public static final String ENGINE_INSTANCE = "engine_instance";
     public static final String CURRENT_TUTOR   = "tutor";
+
+
+    // Number Listeneing Component Error Codes
+    public static final String ERR_SINGLEDIGIT = "Single Digit Error";
+    public static final String ERR_MULTIDIGIT  = "Multi Digit Error";
+
+
+    // Generic error codes
+    public static final String GENERIC_RIGHT = "FTR_RIGHT";
+    public static final String GENERIC_WRONG = "FTR_WRONG";
+    public static final boolean TRUE_ERROR   = true;
+    public static final boolean TRUE_NOERROR = true;
+    public static final boolean FALSE_NOERROR = false;
+    public static final boolean FALSE_ERROR = false;
+
 }

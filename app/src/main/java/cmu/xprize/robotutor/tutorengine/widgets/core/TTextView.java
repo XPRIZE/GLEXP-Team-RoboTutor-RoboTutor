@@ -24,7 +24,7 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
-import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
+import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
@@ -113,7 +113,7 @@ public class TTextView extends TextView implements ITutorObjectImpl {
     public void postInflate() {}
 
     @Override
-    public void setNavigator(ITutorNavigator navigator) {
+    public void setNavigator(ITutorGraph navigator) {
         mSceneObject.setNavigator(navigator);
     }
 

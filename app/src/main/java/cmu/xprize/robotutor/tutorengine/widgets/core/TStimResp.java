@@ -18,13 +18,12 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 import cmu.xprize.fw_component.CStimResp;
-import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
-import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
+import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 
@@ -176,7 +175,7 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
     public void postInflate() {}
 
     @Override
-    public void setNavigator(ITutorNavigator navigator) {
+    public void setNavigator(ITutorGraph navigator) {
         mSceneObject.setNavigator(navigator);
     }
 

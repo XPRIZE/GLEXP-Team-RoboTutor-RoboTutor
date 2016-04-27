@@ -27,11 +27,11 @@ import cmu.xprize.nl_component.CNl_Component;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
-import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
+import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -47,6 +47,9 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
 
     private int             _wrong   = 0;
     private int             _correct = 0;
+
+    // Field names for he place values
+    private String[]       placeValue = {".ones",".tens",".hundreds",".thousands",".millions",".billions"};
 
     static final private String TAG = "TRtComponent";
 
@@ -102,6 +105,26 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
     }
 
 
+    /**
+     * Publish the Stimulus value as Scope variables for script access
+     */
+    protected void publishStimulus() {
+
+        // Publish the Stimulus state
+        if(!mIsResponse) {
+            // publish the number of digits in the stimulus - e.g. Sstimulus.digits
+            //
+            mTutor.getScope().addUpdateVar(name() + ".digits", new TInteger(mStimulus.length()));
+
+            // publish the Place Values for the stimulus - e.g. for 12 Sstimulus.ones <2> Sstimulus.tens <1> etc
+            //
+            for (int i = 0, place = mStimulus.length() - 1; i < mStimulus.length(); i++, place--) {
+                mTutor.getScope().addUpdateVar(name() + placeValue[i], new TInteger((Integer) mStimulusList.get(place)));
+            }
+        }
+    }
+
+
     //**********************************************************
     //**********************************************************
     //*****************  Scripting Interface
@@ -152,7 +175,15 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
 
         try {
             if (_data != null) {
-                updateText(_data.get(_dataIndex));
+                mStimulus = _data.get(_dataIndex);
+                preProcessStimulus();
+
+                updateText(mStimulus);
+
+                // Publish scriptable variables for the stimulus state
+                //
+                if(!mIsResponse)
+                    publishStimulus();
 
                 _dataIndex++;
             } else {
@@ -173,23 +204,32 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
     }
 
 
-    public TBoolean test() {
-        boolean correct = false; //isCorrect();
-
-        if(correct)
-            mTutor.setAddFeature("FTR_RIGHT");
-        else
-            mTutor.setAddFeature("FTR_WRONG");
-
-        return new TBoolean(correct);
-    }
-
-
     public void reset() {
 
-        mTutor.setDelFeature("FTR_RIGHT");
-        mTutor.setDelFeature("FTR_WRONG");
+        mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
+        mTutor.setDelFeature(TCONST.GENERIC_WRONG);
+
+        // Clear the scope variables.
+        //
+        mTutor.getScope().addUpdateVar(name() + ".digits", null);
+
+        // Clear the Place Values for the stimulus
+        //
+        for( int i = 0  ; i < placeValue.length ; i++) {
+            mTutor.getScope().addUpdateVar(name() + placeValue[i], null);
+        }
     }
+
+
+    @Override
+    protected void updateOutcomeState(boolean error) {
+
+        if(error == TCONST.TRUE_ERROR)
+            mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+        else
+            mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
+    }
+
 
 
     public void onStartTalking(String symbol) {
@@ -275,7 +315,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
     }
 
     @Override
-    public void setNavigator(ITutorNavigator navigator) {
+    public void setNavigator(ITutorGraph navigator) {
         mSceneObject.setNavigator(navigator);
     }
 

@@ -78,7 +78,8 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
     // This is used to map "states" to colors
 
     static {
-        colorMap.put("wrong", new Integer(0xffff0000));
+        colorMap.put("wrong",  new Integer(0xffff0000));
+        colorMap.put("right",  new Integer(0xff00ff00));
         colorMap.put("normal", new Integer(0xff000000));
     }
 
@@ -158,17 +159,16 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
 
             // Message from Stimiulus variant to share state with response variant
             case TCONST.FW_STIMULUS:
-                if (mIsResponse) {
-                    mStimulus = (String)event.getString(TCONST.FW_VALUE);
+                mStimulus = (String)event.getString(TCONST.FW_VALUE);
 
-                    preProcessStimulus();
-                }
+                preProcessStimulus();
                 break;
 
             // Message from the recognizer to update the response state
             case TCONST.FW_RESPONSE:
+                mResponse = (String)event.getString(TCONST.FW_VALUE);
+
                 if (mIsResponse) {
-                    mResponse = (String)event.getString(TCONST.FW_VALUE);
                     updateText(mResponse);
                 }
                 break;
@@ -183,10 +183,11 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
     //***********************************************************
 
 
-
-    // Override in sub-class to provide non-standard stimulus processing.
-    // e.g. turn a stimulus of "6" into an expected response of "six"
-    //
+    /**
+     *  Override in sub-class to provide non-standard stimulus processing.
+     *  e.g. turn a stimulus of "6" into an expected response of "six"
+     * This is only ever to be called on a Stimulus Object
+     */
     protected void preProcessStimulus() {
     }
 

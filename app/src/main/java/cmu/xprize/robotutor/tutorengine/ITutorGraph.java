@@ -21,24 +21,20 @@ package cmu.xprize.robotutor.tutorengine;
 
 import java.util.HashMap;
 
-public interface ITutorNavigator {
+public interface ITutorGraph {
 
     public void initTutorContainer(ITutorSceneImpl rootScene);
+
     public void onDestroy();
 
+    public void post(String command);
+
     public CSceneGraph getAnimator();
+
     public HashMap getChildMap();
+
     public HashMap getChildMapByName(String sceneName);
-
-    public void questionStart();
-    public void questionComplete();
-    public void goBackScene();
-    public void goNextScene();
-    public void goToNamedScene(String name);
-
-    public void goToScene(String tarScene);
 
     public String gotoNextScene(boolean push);
 
-    public void onNextScene();
 }

@@ -64,7 +64,7 @@
             app:isResponse="true"
             android:paddingTop="10dp"
             android:gravity="center"
-            android:text="TEST"
+            android:text=""
             android:textStyle="bold"
             android:background="@color/fingerWriterBackground"
             android:textColor="@color/responsetext" /> <!--remember to delete the text!-->

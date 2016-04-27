@@ -74,7 +74,8 @@ public class SpeechRecognizer {
     /**
      * the pocketsphinx Decoder, public so clients can access decoder methods
      */
-    public Decoder decoder;
+    public Decoder  decoder;
+    private boolean wantFinal = false;
 
     //private HashMap<String, Decoder> decoderMap;
 
@@ -295,7 +296,13 @@ public class SpeechRecognizer {
             Log.i("ASR", "Stopped");
 
             final Hypothesis hypothesis = decoder.hyp();
-            postResult(hypothesis, true);
+
+            // Note that the way the listener architecture works currently you will have stopped
+            // processing results by the time this happens so in general you don't want the final
+            // hypothesis.
+            //
+            if(wantFinal)
+                postResult(hypothesis, true);
         }
         return result;
     }
@@ -538,7 +545,7 @@ public class SpeechRecognizer {
                             // 1. The last time the mic heard anything
                             // 2. The last time the mic went silent.
 
-                            Log.i("ASR","State Changed: " + inSpeech);
+                            //Log.i("ASR","State Changed: " + inSpeech);
 
                             if(inSpeech) {
                                 eventManager.fireStaticEvent(TCONST.SOUND_EVENT);

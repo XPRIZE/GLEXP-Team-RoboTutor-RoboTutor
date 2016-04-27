@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.TCONST;
@@ -363,15 +364,22 @@ public class type_cond extends type_action implements ILoadableObject2 {
                     case TCONST.PARSEIDENT:
                         tChar = parseStr.charAt(_i1);
 
-                        if(tChar ==  '.') {
-                            _i1++;
-                            state = TCONST.PARSEPROP;
-                            continue;
-                        }
-                        else if ((tChar >= 'A' && tChar <= 'Z') ||
+                        // Not currently used.  All properties are intended to be exposed as
+                        // fully qualified variables in the Scope - e.g "Sstimulus.digit" is the
+                        // name of a preoperty - we don't actually access fields of Java
+                        // objects directly
+                        //
+//                        if(tChar ==  '.') {
+//                            _i1++;
+//                            state = TCONST.PARSEPROP;
+//                            continue;
+//                        }
+//                        else
+                        if ((tChar >= 'A' && tChar <= 'Z') ||
                                 (tChar >= 'a' && tChar <= 'z') ||
                                 (tChar >= '0' && tChar <= '9') ||
-                                (tChar == '_')) {
+                                (tChar == '_')                 ||
+                                (tChar == '.')) {
                             Symbol.append(tChar);
                             _i1++;
                         } else {
@@ -385,14 +393,15 @@ public class type_cond extends type_action implements ILoadableObject2 {
                         break;
 
                     // Parse tbe ...}} off the end of a variable
+                    //TODO: bug if Object has field like Sstimulus.digit
                     case TCONST.PARSEVAR:
                         tChar = parseStr.charAt(_i1);
 
                         switch (tChar) {
-                            case '.':
-                                _i1++;
-                                state = TCONST.PARSEPROP;
-                                continue;
+//                            case '.':
+//                                _i1++;
+//                                state = TCONST.PARSEPROP;
+//                                continue;
 
                             case ' ':
                             case '\t':
@@ -404,7 +413,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
 
                             case '}':
                                 if (parseStr.charAt(_i1 + 1) == '}') {
-                                    _i1++;
+                                    _i1+=2;
                                     state = TCONST.RESOLVESYMBOL;
                                 }
                                 break;
@@ -559,5 +568,6 @@ public class type_cond extends type_action implements ILoadableObject2 {
 
         return result;
     }
+
 
 }

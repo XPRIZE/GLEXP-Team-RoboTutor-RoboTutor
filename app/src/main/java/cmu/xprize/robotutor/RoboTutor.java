@@ -62,16 +62,16 @@ public class RoboTutor extends Activity implements IReadyListener {
     public ListenerBase         ASR;
     static public String        EXTERNFILES;
 
-    static private boolean isReady = false;
+    private boolean             isReady = false;
 
 
-    private final  String  TAG = "RoboTutor";
-
+    private final  String  TAG = "CRoboTutor";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreate: ");
 
         setContentView(R.layout.robo_tutor);
 
@@ -80,44 +80,21 @@ public class RoboTutor extends Activity implements IReadyListener {
 
         EXTERNFILES = getApplicationContext().getExternalFilesDir("").getPath();
 
-        // Debug - determine platform dependent memory limit
-        ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-        int memAvail = am.getMemoryClass();
-        Log.i(TAG, "Available Memory: " + memAvail);
-
-        // Create the common TTS service
-        // Async
-        //
-        TTS = new TTSsynthesizer(this);
-        TTS.initializeTTS(this);
-
-        // Create an inert listener for asset initialization only
-        // Start the configListener async task to update the listener assets only if required.
-        // This moves the listener assets to a local folder where they are accessible by the
-        // NDK code (PocketSphinx)
-        //
-        ASR = new ListenerBase("configassets");
-        ASR.configListener(this);
-
-        // Start the async task to initialize the tutor
-        //
-        new tutorConfigTask().execute();
-
-        // Update the globally accessible id object for this engine instance.
-        //
-        CPreferenceCache.initLogPreference(this);
-
         // Show the loader
         //
         progressLoading = new ProgressLoading(this);
         progressLoading.show();
     }
 
+
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-    }
 
+        super.onDestroy();
+        Log.i(TAG, "onDestroy: ");
+
+
+    }
 
 
     /**
@@ -177,7 +154,8 @@ public class RoboTutor extends Activity implements IReadyListener {
      */
     @Override
     public void onServiceReady(String serviceName, int status) {
-        Log.i("TutorEngine",serviceName + " : is : " + status);
+
+        Log.i(TAG, "onServiceReady: " + serviceName + " : is : " + status);
 
         // As the services come online push a global reference to CTutor
         //
@@ -201,6 +179,8 @@ public class RoboTutor extends Activity implements IReadyListener {
      */
     private void startEngine() {
 
+        Log.i(TAG, "startEngine");
+
         if(TTS.isReady() && ASR.isReady() && isReady) {
 
             // Delete the asset loader utility ASR object
@@ -221,7 +201,7 @@ public class RoboTutor extends Activity implements IReadyListener {
      */
     @Override
     public void onBackPressed() {
-        Log.i(TAG, "Back Button Pressed");
+        Log.i(TAG, "onBackPressed");
 
         if(tutorEngine != null) {
             if(tutorEngine.onBackButton()) {
@@ -240,8 +220,38 @@ public class RoboTutor extends Activity implements IReadyListener {
      */
     @Override
     protected void onStart() {
+
         super.onStart();
-        Log.i(TAG, "Starting Robotutor: On-Screen");
+        Log.i(TAG, "onStart Robotutor: On-Screen");
+
+        // Debug - determine platform dependent memory limit
+        ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        int memAvail = am.getMemoryClass();
+        Log.i(TAG, "Available Memory: " + memAvail);
+
+        // Create the common TTS service
+        // Async
+        //
+        TTS = new TTSsynthesizer(this);
+        TTS.initializeTTS(this);
+
+        // Create an inert listener for asset initialization only
+        // Start the configListener async task to update the listener assets only if required.
+        // This moves the listener assets to a local folder where they are accessible by the
+        // NDK code (PocketSphinx)
+        //
+        ASR = new ListenerBase("configassets");
+        ASR.configListener(this);
+
+        // Start the async task to initialize the tutor
+        //
+        new tutorConfigTask().execute();
+
+        // Update the globally accessible id object for this engine instance.
+        //
+        CPreferenceCache.initLogPreference(this);
+
+
     }
 
 
@@ -251,7 +261,7 @@ public class RoboTutor extends Activity implements IReadyListener {
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.i(TAG, "Restarting Robotutor");
+        Log.i(TAG, "onRestart Robotutor");
     }
 
 
@@ -261,7 +271,7 @@ public class RoboTutor extends Activity implements IReadyListener {
     @Override
     protected void onStop() {
         super.onStop();
-        Log.i(TAG, "Stopping Robotutor: Off-Screen");
+        Log.i(TAG, "onStop Robotutor: Off-Screen");
     }
 
 
@@ -278,7 +288,7 @@ public class RoboTutor extends Activity implements IReadyListener {
     protected void onPause() {
 
         super.onPause();
-        Log.i(TAG, "Pausing Robotutor");
+        Log.i(TAG, "onPause Robotutor");
 
         SharedPreferences.Editor prefs = getPreferences(Context.MODE_PRIVATE).edit();
     }
@@ -309,7 +319,7 @@ public class RoboTutor extends Activity implements IReadyListener {
     @Override
     protected void onSaveInstanceState (Bundle outState) {
         super.onResume();
-        Log.i(TAG, "Resuming Robotutor");
+        Log.i(TAG, "onSaveInstanceState Robotutor");
 
 
     }

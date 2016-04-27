@@ -19,28 +19,21 @@
 
 package cmu.xprize.nl_component;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.res.TypedArray;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import cmu.xprize.fw_component.CStimRespBase;
+import cmu.xprize.util.CEvent;
 import cmu.xprize.util.CEventMap;
-import cmu.xprize.util.ILoadableObject;
-import cmu.xprize.util.IScope;
-import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.Num2Word;
+import cmu.xprize.util.TCJSGF;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.util.TTSsynthesizer;
 import cmu.xprize.util.Word2Num;
@@ -56,18 +49,21 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
     protected String                DATASOURCEPATH;
     protected String                EXTERNPATH;
 
-    private int                     mStimulusNumber;
-    private String                  mStimulusText;
-    private List                    mStimulusList;
-    private String[]                mStimulusTextList;
+    protected int                     mStimulusNumber;
+    protected String                  mStimulusText;
+    protected List                    mStimulusList;
+    protected String[]                mStimulusTextList;
 
-    private int                     mResponseNumber;
-    private String                  mResponseText;
-    private List                    mResponseList;
-    private ArrayList<String>       mResponseTextList;
+    protected int                     mResponseNumber;
+    protected String                  mResponseText;
+    protected List                    mResponseList;
+    protected ArrayList<String>       mResponseTextList;
 
     private static int[]            creditLevel            = null;          // per-word credit level according to current hyp
     private int                     expectedWordIndex      = 0;             // index of expected next word in sentence
+    private boolean                 missingConjTolerant    = true;          // Do you need "AND" between number words
+    private String                  cachedLanguageFeature;
+    private String                  conjunction;
 
     // Tutor scriptable ASR events
     private String                  _silenceEvent;          // Instant silence begins
@@ -134,11 +130,13 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
     }
 
 
-    // mStimulus contains the string representation of the data source in numeric form e.g. "34"
-    // mStimulusList contain the array of positional integers that comprise the number e.g. [3,4]
-    // Obtain its mStimulusNumber integer equivalent e.g. "930" = 930
-    // Convert it to a mStimulusText string representation e.g. 102 = "one hundred and two"
-    //
+    /**
+     * mStimulus contains the string representation of the data source in numeric form e.g. "34"
+     * mStimulusList contain the array of positional integers that comprise the number e.g. [3,4]
+     * Obtain its mStimulusNumber integer equivalent e.g. "930" = 930
+     * Convert it to a mStimulusText string representation e.g. 102 = "one hundred and two"
+     *
+     */
     @Override
     protected void preProcessStimulus() {
 
@@ -151,7 +149,7 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
         }
 
         mStimulusNumber   = Integer.parseInt(mStimulus);
-        mStimulusText     = Num2Word.transform(mStimulusNumber, getLanguage());
+        mStimulusText     = Num2Word.transform(mStimulusNumber, getLanguage()).toUpperCase();
         mStimulusTextList = mStimulusText.split(" ");
     }
 
@@ -165,15 +163,22 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
                 //
                 if (mListener != null) {
 
+                    // Cache the language feature (e.g. "LANG_EN") and
+                    // the language specific conjunction used in numbers e.g. "AND"
+                    // as in 100 and 23
+                    //
+                    cachedLanguageFeature = getLanguageFeature();
+                    conjunction           = TCJSGF.conjMap.get(cachedLanguageFeature);
+
                     // We use the stimiulus as the base string to listen for and
                     // add all the other numbers as distractors
                     //
-                    String[] distractors = (TCONST.numberMap.get(getLanguageFeature()).split(","));
+                    String[] distractors = (TCONST.numberMap.get(cachedLanguageFeature).split(","));
 
                     ArrayList<String> combo = new ArrayList<String>();
 
                     for(String elem : mStimulusTextList) {
-                        combo.add(elem);
+                        combo.add(elem.toUpperCase());
                     }
 
                     for(String elem : distractors) {
@@ -186,6 +191,9 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
                 }
 
               // mListener.listenFor(TCONST.numberMap.get(getLanguageFeature()).split(","), 0);
+            }
+            else  {
+                mListener.setPauseListener(true);
             }
         }
         catch(Exception e) {
@@ -253,7 +261,6 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
 
 
 
-
     //****************************************************************************
     //*********************  Speech Recognition Interface - Start
 
@@ -270,20 +277,73 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
     @Override
     public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult) {
 
-        boolean Correct = true;
+        boolean Correct   = false;
+        boolean Error     = false;
+        int     ErrorType = 0;
+        int     maxPlace  = 0;
+
         mResponseTextList = new ArrayList<String>();
 
         if (heardWords.length >= 1) {
 
+            for(int i = 0 ; i < mStimulusTextList.length ; i++)
+                mResponseTextList.add("");
+
+            String logString = "";
+            for (int i = 0; i < heardWords.length; i++) {
+                logString += heardWords[i].hypWord.toUpperCase() + ":" + heardWords[i].iSentenceWord + " | ";
+            }
+            Log.i("ASR", "New HypSet: "  + logString);
+
+            // Place the words in order
+            // Loop throught as many words as are in the stimulus
             for (int i1 = 0; i1 < mStimulusTextList.length; i1++) {
+
+                // Assign the most recent one to it's associated place value
+                // This may result in empty place values and may place some values in the
+                // wrong spot.
+                //
                 for (int i2 = 0; i2 < heardWords.length; i2++) {
                     if(heardWords[i2].iSentenceWord == i1) {
-                        mResponseTextList.add(heardWords[i2].hypWord.toLowerCase());
+                        mResponseTextList.set(i1, heardWords[i2].hypWord.toUpperCase());
+
+                        // Track the max place where we have placed a word to limit the
+                        // conjuntion insertion below
+                        if(i1 > maxPlace) maxPlace = i1;
+                    }
+                }
+            }
+
+            // Insert missing conjunctions
+            // If we are tolerant of missing conjunctions then if there we are looking
+            // at a conj in the stimulus that is not in the response insert it
+            //
+            if(missingConjTolerant) {
+
+                for (int i1 = 0; i1 <= maxPlace; i1++) {
+
+                    String respElem = mResponseTextList.get(i1);
+
+                    // If the stimulus place value is a conjunction and the response
+                    // isn't then either insert it or replace an empty element
+                    //
+                    if (mStimulusTextList[i1].equals(conjunction)) {
+                        if(!respElem.equals(conjunction)) {
+                            if(respElem.equals("")) {
+                                Log.i("ASR", "Conjunction Insertion");
+                                mResponseTextList.set(i1, conjunction);
+                            }
+                            else {
+                                mResponseTextList.add(i1, conjunction);
+                            }
+                        }
                     }
                 }
             }
 
             try {
+                // Note that Word2Num is not missingConj Tolerant in fact it's fussy
+                //
                 mResponseNumber = Word2Num.transform(mResponseTextList.toArray(new String[mResponseTextList.size()]), getLanguage());
                 mResponse = new Integer(mResponseNumber).toString();
                 mResponseList = Word2Num.getNumberList();
@@ -298,24 +358,61 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
 
                 bManager.sendBroadcast(msg);
 
+
                 Log.d("ASR", "Stimulus: " + TextUtils.join(" ", mStimulusTextList));
                 Log.d("ASR", "Response: " + TextUtils.join(" ", mResponseTextList));
 
                 for (int i1 = 0; i1 < mStimulusTextList.length; i1++) {
 
-                    if(i1 >= mResponseTextList.size() || !mStimulusTextList[i1].equals(mResponseTextList.get(i1))) {
-                        Correct = false;
+                    String subElem = mResponseTextList.get(i1);
+
+                    // If we run out of response just continue.
+                    //
+                    if(subElem == "") {
+                        expectedWordIndex = i1;
+                        break;
+                    }
+                    // Check if the next element matches
+                    //
+                    else if(!mStimulusTextList[i1].equals(subElem)) {
+                        ErrorType = mStimulusList.size();
+                        Error     = TCONST.TRUE_ERROR;
+                        Correct   = false;
+                        break;
+                    }
+                    // Note - don't use the response length here as it may have been made
+                    // longer than the stimulus by a conj insertion or repeated word.
+                    //
+                    else if(i1 >= mStimulusTextList.length-1) {
+                        Correct   = true;
                         break;
                     }
                 }
-                if(Correct)
+                if(Correct) {
+                    updateOutcomeState(TCONST.FALSE_NOERROR);
                     applyEventNode(_onRecognition);
+                }
+                else if(Error) {
+                    updateOutcomeState(TCONST.TRUE_ERROR);
+                    applyEventNode(_onRecognition);
+                }
+                else {
+                    mListener.updateNextWordIndex(expectedWordIndex);
+                }
 
             } catch (Exception e) {
                 Log.e("ASR", "Number Parser" + e);
               //  System.exit(1);
             }
         }
+    }
+
+
+    /**
+     * Override in tutor domain to update scriptable elements
+     * @param error
+     */
+    protected void updateOutcomeState(boolean error) {
     }
 
 

@@ -58,7 +58,7 @@ public class CTutorEngine implements ILoadableObject2 {
     private String                          mTutorDescrPath;
     private String                          mJSONspec;
 
-    static public RoboTutor Activity;
+    static public RoboTutor                 Activity;
     static public ITutorManager             TutorContainer;
     static public ITutorLogManager          TutorLogManager;
 

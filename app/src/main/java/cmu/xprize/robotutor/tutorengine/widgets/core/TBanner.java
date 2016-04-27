@@ -21,14 +21,13 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 import cmu.xprize.banner.CBanner;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
-import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
+import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 
@@ -117,7 +116,7 @@ public class TBanner extends CBanner implements ITutorObjectImpl {
     public void postInflate() {}
 
     @Override
-    public void setNavigator(ITutorNavigator navigator) {
+    public void setNavigator(ITutorGraph navigator) {
         mSceneObject.setNavigator(navigator);
     }
 

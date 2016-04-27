@@ -109,6 +109,13 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     // TODO: check if it is possible for the hypothesis to chamge between last update and final hyp
     public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult) {
 
+        String logString = "";
+        for (int i = 0; i < heardWords.length; i++) {
+            logString += heardWords[i].hypWord.toLowerCase() + ":" + heardWords[i].iSentenceWord + " | ";
+        }
+        Log.i("ASR", "New HypSet: "  + logString);
+
+
         // TODO: Change to setPauseRecognizer to flush the queue should obviate the need for
         // changingSentence test.  Validate this is the case.
         //

@@ -22,6 +22,8 @@ package cmu.xprize.robotutor.tutorengine;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,8 +76,8 @@ public class CTutor implements ILoadableObject2 {
 
     public Context                       mContext;
     public ITutorLogManager              mTutorLogManager;
-    public ITutorNavigator               mTutorAnimator;
-    public CSceneGraph                   mSceneAnimator;
+    public ITutorGraph mTutorGraph;
+    public CSceneGraph                   mSceneGraph;
     public ITutorManager                 mTutorContainer;
     public ViewGroup                     mSceneContainer;
 
@@ -87,6 +89,8 @@ public class CTutor implements ILoadableObject2 {
 
     private HashMap<String, scene_initializer>  _sceneMap = new HashMap<String, scene_initializer>();
     HashMap<String, type_timer>                 _timerMap = new HashMap<String, type_timer>();
+
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     // json loadable
     public scene_initializer[] scenedata;
@@ -146,20 +150,53 @@ public class CTutor implements ILoadableObject2 {
     }
 
 
+    public class Queue implements Runnable {
+
+        protected final String _command;
+
+        public Queue(String command) {
+            _command = command;
+        }
+
+        @Override
+        public void run() {
+
+            switch(_command) {
+                case TCONST.ENDTUTOR:
+                    endTutor();
+                    break;
+
+
+            }
+        }
+    }
+
+
+    /**
+     * Post a command to the scenegraph queue
+     *
+     * @param command
+     */
+    public void post(String command) {
+
+        mainHandler.post(new Queue(command));
+    }
+
+
     private void loadSceneNavigator() {
 
         switch(navigatorType) {
             case TCONST.SIMPLENAV:
-                mTutorAnimator = new CTutorGraph(this, mTutorName, mTutorContainer, mTutorScope);
+                mTutorGraph = new CTutorGraph(this, mTutorName, mTutorContainer, mTutorScope);
                 break;
 
             case TCONST.GRAPHNAV:
-                //mTutorAnimator = new CSceneGraphNavigator(mTutorName);
+                //mTutorGraph = new CSceneGraphNavigator(mTutorName);
                 break;
         }
 
-        mTutorAnimator.initTutorContainer(mTutorContainer);
-        mSceneAnimator = mTutorAnimator.getAnimator();
+        mTutorGraph.initTutorContainer(mTutorContainer);
+        mSceneGraph = mTutorGraph.getAnimator();
     }
 
 
@@ -176,7 +213,7 @@ public class CTutor implements ILoadableObject2 {
      */
     public View getViewByName(String findme) {
 
-        HashMap map = mTutorAnimator.getChildMap();
+        HashMap map = mTutorGraph.getChildMap();
 
         return (View)map.get(findme);
     }
@@ -220,7 +257,7 @@ public class CTutor implements ILoadableObject2 {
      */
     public void launchTutor() {
         mTutorActive = true;
-        mTutorAnimator.gotoNextScene(true);
+        mTutorGraph.post(TCONST.FIRST_SCENE);
     }
 
 
@@ -237,19 +274,19 @@ public class CTutor implements ILoadableObject2 {
             mTutorActive = false;
 
             mTutorContainer.popView(false, null);
-            mTutorAnimator.onDestroy();
+            mTutorGraph.onDestroy();
 
             CTutorEngine.killTutor(mTutorName);
         }
     }
 
 
-    public ITutorNavigator getTutorGraph() {
-        return mTutorAnimator;
+    public ITutorGraph getTutorGraph() {
+        return mTutorGraph;
     }
 
     public CSceneGraph getSceneGraph() {
-        return mSceneAnimator;
+        return mSceneGraph;
     }
 
 
@@ -418,7 +455,7 @@ public class CTutor implements ILoadableObject2 {
 
         tutorContainer.setParent(mTutorContainer);
         tutorContainer.setTutor(this);
-        tutorContainer.setNavigator(mTutorAnimator);
+        tutorContainer.setNavigator(mTutorGraph);
         tutorContainer.setLogManager(mTutorLogManager);
 
         mapChildren(tutorContainer, childMap);
@@ -456,7 +493,7 @@ public class CTutor implements ILoadableObject2 {
 
                 child.setParent(tutorContainer);
                 child.setTutor(this);
-                child.setNavigator(mTutorAnimator);
+                child.setNavigator(mTutorGraph);
                 child.setLogManager(mTutorLogManager);
 
                 if(child instanceof ITutorSceneImpl) {
@@ -633,12 +670,12 @@ public class CTutor implements ILoadableObject2 {
 
     // Scriptable graph next command
     public void eventNext() {
-        mSceneAnimator.onNextNode();
+        mSceneGraph.post(TCONST.NEXT_NODE);
     }
 
     // Scriptable graph goto command
     public void gotoNode(String nodeID) {
-        mSceneAnimator.gotoNode(nodeID);
+        mSceneGraph.post(TCONST.GOTO_NODE, nodeID);
     }
 
 

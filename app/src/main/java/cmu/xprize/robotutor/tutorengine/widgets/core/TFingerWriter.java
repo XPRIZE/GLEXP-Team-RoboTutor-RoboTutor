@@ -21,14 +21,13 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import cmu.xprize.fw_component.CFingerWriter;
 import cmu.xprize.fw_component.ITextSink;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
-import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
+import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
@@ -178,7 +177,7 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
     }
 
     @Override
-    public void setNavigator(ITutorNavigator navigator) {
+    public void setNavigator(ITutorGraph navigator) {
         mSceneObject.setNavigator(navigator);
     }
 

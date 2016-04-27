@@ -26,7 +26,7 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
 
     protected ITutorSceneImpl   mParent;
     protected CTutor            mTutor;
-    protected ITutorNavigator   mNavigator;
+    protected ITutorGraph mNavigator;
     protected ITutorLogManager  mLogManager;
 
     private String              mClickBehavior;
@@ -92,7 +92,7 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
     public void postInflate() {}
 
     @Override
-    public void setNavigator(ITutorNavigator navigator) { mNavigator = navigator; }
+    public void setNavigator(ITutorGraph navigator) { mNavigator = navigator; }
 
     @Override
     public void setLogManager(ITutorLogManager logManager) { mLogManager = logManager; }
@@ -179,15 +179,15 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
         switch(mClickBehavior) {
 
             case TCONST.NEXTSCENE:
-                mTutor.mTutorAnimator.onNextScene();
+                mTutor.mTutorGraph.post(TCONST.NEXTSCENE);
                 break;
 
-            case TCONST.NEXTNODE:
-                mTutor.mSceneAnimator.onNextNode();
+            case TCONST.NEXT_NODE:
+                mTutor.mSceneGraph.post(TCONST.NEXT_NODE);
                 break;
 
             case TCONST.STOP:
-                mTutor.mSceneAnimator.stop();
+                mTutor.mSceneGraph.post(TCONST.STOP);
                 break;
 
             default:

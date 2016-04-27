@@ -20,6 +20,8 @@
 package cmu.xprize.robotutor.tutorengine;
 
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -41,7 +43,7 @@ import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
 
-public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation.AnimationListener {
+public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.AnimationListener {
 
     private TScope                            mRootScope;
 
@@ -56,6 +58,8 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation
     protected ITutorManager                   mTutorContainer;
     protected ITutorLogManager                mLogManager;
     protected CSceneGraph                     mSceneAnimator;
+
+    private final Handler                     mainHandler = new Handler(Looper.getMainLooper());
 
     // json loadable
     public scene_descriptor[]                navigatedata;
@@ -95,6 +99,82 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation
         mSceneAnimator = new CSceneGraph(mTutor, tutorScope, this);
     }
 
+
+    /**
+     * Walk the scene descriptors and kill off any remaining scenes
+     */
+    public void onDestroy() {
+
+        for(scene_descriptor scene : navigatedata) {
+
+            // Do the destruction depth first
+            //
+            if(scene.instance != null) {
+
+                // If the scene has children - allow them to shutdown gracefully
+                //
+                if(scene.children != null) {
+                    Iterator<?> tObjects = scene.children.entrySet().iterator();
+
+                    // Perform component level cleanup first
+                    //
+                    while(tObjects.hasNext() ) {
+                        Map.Entry entry = (Map.Entry) tObjects.next();
+
+                        ((ITutorObject)(entry.getValue())).onDestroy();
+                    }
+                }
+
+                // Then tell the container to destruct
+                //
+                scene.instance.onDestroy();
+            }
+        }
+    }
+
+
+    public class Queue implements Runnable {
+
+        protected String _command;
+
+        public Queue(String command) {
+            _command = command;
+        }
+
+        @Override
+        public void run() {
+
+            switch(_command) {
+
+                case TCONST.FIRST_SCENE:
+
+                    gotoNextScene(true);
+                    break;
+
+                case TCONST.NEXTSCENE:
+
+                    if(gotoNextScene(false).equals(TCONST.ENDTUTOR)) {
+
+                        mainHandler.post(mTutor.new Queue(TCONST.ENDTUTOR));
+                    }
+                    break;
+
+
+            }
+        }
+    }
+
+    /**
+     * Post a command to the tutorgraph queue
+     *
+     * @param command
+     */
+    public void post(String command) {
+
+        mainHandler.post(new Queue(command));
+    }
+
+
     // Initialize the pointer to the tutor root scene
     //
     public void initTutorContainer(ITutorSceneImpl rootScene) {
@@ -131,108 +211,9 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation
     }
 
 
-    /**
-     * Walk the scene descriptors and kill off any remaining scenes
-     */
-    public void onDestroy() {
-
-        for(scene_descriptor scene : navigatedata) {
-
-            // Do the destruction depth first
-            //
-            if(scene.instance != null) {
-
-                // If the scene has children - allow them to shutdown gracefully
-                //
-                if(scene.children != null) {
-                    Iterator<?> tObjects = scene.children.entrySet().iterator();
-
-                    // Perform component level cleanup first
-                    //
-                    while(tObjects.hasNext() ) {
-                        Map.Entry entry = (Map.Entry) tObjects.next();
-
-                        ((ITutorObject)(entry.getValue())).onDestroy();
-                    }
-                }
-
-                // Then tell the container to destruct
-                //
-                scene.instance.onDestroy();
-            }
-        }
-    }
-
 
 //***************** Navigation Behaviors *******************************
 
-
-    // Intra Scene Navigation
-
-    /**
-     * TODO: Key function - add detail comment
-     */
-    public void onNextScene() {
-
-        if(gotoNextScene(false).equals(TCONST.ENDTUTOR)) {
-            mTutor.endTutor();
-        }
-    }
-
-
-    /**
-     */
-    private void traceGraphEdge() {
-//
-//        var nextScene:CGraphScene;
-//        var scene:CWOZSceneSequence = _rootGraph.sceneInstance() as CWOZSceneSequence;
-//
-//        // debounce the next button - i.e. disallow multiple clicks on same next instance
-//        // protect against recurrent calls
-//
-//        if(_inNavigation)
-//                     return;
-//
-//        _inNavigation = true;
-//
-//        // The next button can target either the scenegraph or the animationgraph.
-//        // i.e. You either want it to trigger the next step in the animationGraph or the sceneGraph
-//        // reset _fSceneGraph if you want the next button to drive the animationGraph
-//        //
-//        if(_fSceneGraph || scene == null || scene.nextGraphAnimation(true) == null)
-//        {
-//            nextScene = _rootGraph.nextScene();
-//
-//            if(_currScene != nextScene && nextScene != null)
-//            {
-//                _history.push(_rootGraph.node, nextScene);
-//            }
-//
-//            else if(nextScene == null)
-//                enQueueTerminateEvent();
-//
-//            // Do the scene Transition
-//
-//            _xType = "WOZNEXT";
-//
-//            if(_currScene != nextScene && nextScene != null)
-//            {
-//                seekToScene(nextScene);
-//            }
-//
-//            // We aren't going to be navigating so reset the flag to allow
-//            // future attempts.
-//
-//            else
-//            {
-//                _inNavigation = false;
-//            }
-//        }
-//        else
-//        {
-//            _inNavigation = false;
-//        }
-    }
 
 
     //*********************************************
@@ -243,6 +224,7 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation
 
     //*************** Navigator getter setters -
     // these within a subclass to set the root of a navigation sequence
+
     protected int getScenePrev() {
         return _scenePrev;
     }
@@ -311,114 +293,6 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation
         // returns the scene ordinal in the sequence array or 0
         //
         return _navMap.get(tarScene).index;
-    }
-    
-
-
-    public void goToScene(String tarScene) {
-
-        if(traceMode) Log.i(TAG, "goToScene: ");
-
-        int    ordScene;
-        String newScene = "";
-        String redScene = "";
-
-        //@@ Mod Sep 27 2011 - protect against recurrent calls
-
-        if(_inNavigation)
-            return;
-
-        _inNavigation = true;
-        _xType        = TCONST.WOZGOTO;
-
-        // Find the ordinal for the requested scene Label
-        //
-        ordScene = findSceneOrd(tarScene);
-
-        // If we don't find the requested scene just skip it
-        //
-        if(ordScene >= 0)
-        {
-            if(traceMode) Log.i(TAG, "Nav GoTo Found: " + tarScene);
-
-            // remember current frame
-
-            _scenePrev = _sceneCurr;
-
-            switch(redScene = navigatedata[_sceneCurr].instance.preExitScene("WOZGOTO", _sceneCurr))
-            {
-                case TCONST.CANCELNAV: 						// Do not allow scene to change
-                    _inNavigation = false;
-
-                    return;
-
-                case TCONST.OKNAV: 							// Move to GOTO scene
-                    _sceneCurr = ordScene;
-                    break;
-
-                default: 								// Goto the scene defined by the current scene
-                    _sceneCurr = findSceneOrd(redScene);
-            }
-
-            // Do scene Specific initialization - scene returns the Label of the desired target scene
-            // This allows the scene to do redirection
-            // We allow iterative redirection
-            //
-            for(redScene = navigatedata[_sceneCurr].id; !redScene.equals(newScene) ; )
-            {
-                //*** Create scene on demand
-                //
-                if(navigatedata[_sceneCurr].instance == null)
-                {
-                    mTutor.instantiateScene(navigatedata[_sceneCurr]);
-                }
-
-                newScene = redScene;
-
-                redScene = navigatedata[_sceneCurr].instance.preEnterScene(navigatedata[_sceneCurr], TCONST.WOZGOTO);
-
-                //@@@ NOTE: either discontinue support for redirection through PreEnterScene - or manage scene creation and destruction here
-
-                if(redScene.equals(TCONST.WOZNEXT))
-                {
-                    sceneCurrINC();
-                    redScene = navigatedata[_sceneCurr].id;
-                }
-                if(redScene.equals(TCONST.WOZBACK))
-                {
-                    sceneCurrDEC();
-                    redScene = navigatedata[_sceneCurr].id;
-                }
-                // Find the ordinal for the requested scene Label
-                //
-                else
-                    _sceneCurr = findSceneOrd(redScene);
-            }
-
-            //@@ Action Logging
-//            var logData:Object = {'navevent':'navgoto', 'curscene':scenePrev, 'newscene':redScene};
-//            //var xmlVal:XML = <navgoto curscene={scenePrev} newscene={redScene}/>
-//
-//            gLogR.logNavEvent(logData);
-            //@@ Action Logging
-
-            // On exit behaviors
-
-            navigatedata[_scenePrev].instance.onExitScene();
-
-            // Initialize the stategraph for the new scene
-
-
-            // Do the scene transitions
-
-//            prntTutor.xitions.addEventListener(Event.COMPLETE, doEnterScene);
-//            prntTutor.xitions.gotoScene(redScene);
-        }
-    }
-
-
-    public void tutorLoop() {
-
     }
 
 
@@ -521,7 +395,8 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation
         //
         navigatedata[_sceneCurr].instance.onEnterScene();
 
-        mSceneAnimator.enterScene(navigatedata[_sceneCurr].id);
+        mSceneAnimator.post(TCONST.ENTER_SCENE, navigatedata[_sceneCurr].id);
+        mSceneAnimator.post(TCONST.NEXT_NODE);
     }
 
     @Override
@@ -533,48 +408,10 @@ public class CTutorGraph implements ITutorNavigator, ILoadableObject2, Animation
     /** Animation Listener END *************************/
 
 
-    //************* Event Handlers
-
-    public void questionStart()
-    {
-        if(traceMode) Log.d(TAG, "Start of Question: ");
-
-    }
-
-
-    public void questionComplete()
-    {
-        if(traceMode) Log.d(TAG, "Question Complete: ");
-
-    }
-
-
-    public void goBackScene()
-    {
-        if(traceMode) Log.d(TAG, "Force Decrement Question: ");
-
-//        gotoPrevScene();
-    }
-
-
-    public void goNextScene()
-    {
-        if(traceMode) Log.d(TAG, "Force Increment Question: ");
-
-        gotoNextScene(false);
-
-    }
-
-
-    public void goToNamedScene(String name)
-    {
-        if(traceMode) Log.d(TAG, "Force Increment Question: ");
-
-        goToScene(name);
-    }
 
 
     //************ Serialization
+
 
 
     /**

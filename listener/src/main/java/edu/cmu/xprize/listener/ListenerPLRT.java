@@ -74,6 +74,7 @@ public class ListenerPLRT extends ListenerBase {
      * Attach event listener to receive notification callbacks
      */
     public void updateNextWordIndex(int next) {
+        Log.d("ASR", "Update NextWord: " + iNextWord);
         iNextWord = next;
     }
 
@@ -153,14 +154,20 @@ public class ListenerPLRT extends ListenerBase {
 
         @Override
         public void onPartialResult(Hypothesis hypothesis) {
-             Log.i("ASR", "Part Hyp: " + hypothesis.getHypstr());
-            processHypothesis(hypothesis, false);
+            // NOTE: that hypothesis may be null during shutdown
+            if(hypothesis != null) {
+                Log.i("ASR", "Part Hyp: " + hypothesis.getHypstr());
+                processHypothesis(hypothesis, false);
+            }
         }
 
         @Override
         public void onResult(Hypothesis hypothesis) {
-            Log.i("ASR", "Final Hyp: " + hypothesis.getHypstr());
-            processHypothesis(hypothesis, true);
+            // NOTE: that hypothesis may be null during shutdown
+            if(hypothesis != null) {
+                Log.i("ASR", "Final Hyp: " + hypothesis.getHypstr());
+                processHypothesis(hypothesis, true);
+            }
         }
 
         @Override
