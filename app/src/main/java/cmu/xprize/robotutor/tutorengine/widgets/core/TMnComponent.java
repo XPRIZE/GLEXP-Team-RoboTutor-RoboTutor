@@ -10,7 +10,7 @@ import cmu.xprize.mn_component.CMn_Component;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
-import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
+import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
@@ -147,7 +147,10 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
     }
 
     @Override
-    public void setNavigator(ITutorNavigator navigator) {
+    public void postInflate() {}
+
+    @Override
+    public void setNavigator(ITutorGraph navigator) {
         mSceneObject.setNavigator(navigator);
     }
 

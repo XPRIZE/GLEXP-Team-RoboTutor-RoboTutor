@@ -23,16 +23,12 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
-import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
+import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
@@ -44,7 +40,6 @@ import cmu.xprize.rt_component.ICRt_ViewManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
-import edu.cmu.xprize.listener.ListenerPLRT;
 
 public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
@@ -52,7 +47,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
     private CObjectDelegate      mSceneObject;
 
 
-    static final private String TAG = "TRtComponent";
+    static private String TAG = "TRtComponent";
 
 
 
@@ -78,7 +73,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
         // Default to English language stories
         //
-        mLanguage = langMap.get("LANG_EN");
+        mLanguage = TCONST.langMap.get("LANG_EN");
 
         // Push the ASR listener reference into the super class in the Java domain
         //
@@ -94,21 +89,21 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
     public void publishTargetWord(String word) {
         // update the response variable  "<SreadingComp>.nextword"
-        mTutor.getScope().addUpdate(name() + ".nextword", new TString(word));
+        mTutor.getScope().addUpdateVar(name() + ".nextword", new TString(word));
 
     }
 
 
     public void publishTargetWordIndex(int index) {
         // update the response variable  "<SreadingComp>.nextword"
-        mTutor.getScope().addUpdate(name() + ".wordindex", new TInteger(index));
+        mTutor.getScope().addUpdateVar(name() + ".wordindex", new TInteger(index));
 
     }
 
 
     public void publishTargetSentence(String sentence) {
         // update the response variable  "<SreadingComp>.sentence"
-        mTutor.getScope().addUpdate(name() + ".sentence", new TString(sentence));
+        mTutor.getScope().addUpdateVar(name() + ".sentence", new TString(sentence));
 
     }
 
@@ -116,7 +111,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
     //**********************************************************
     //**********************************************************
-    //*****************  Tutor Interface
+    //*****************  Scripting Interface
 
     /**
      * @param language
@@ -234,6 +229,12 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
     }
 
 
+    /**
+     *  Apply Events in the Tutor Domain.
+     *
+     * @param nodeName
+     */
+    @Override
     protected void applyEventNode(String nodeName) {
         IScriptable2 obj = null;
 
@@ -249,7 +250,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
         }
     }
 
-    // Tutor methods  End
+    // Scripting Interface  End
     //************************************************************************
     //************************************************************************
 
@@ -281,7 +282,10 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
     }
 
     @Override
-    public void setNavigator(ITutorNavigator navigator) {
+    public void postInflate() {}
+
+    @Override
+    public void setNavigator(ITutorGraph navigator) {
         mSceneObject.setNavigator(navigator);
     }
 

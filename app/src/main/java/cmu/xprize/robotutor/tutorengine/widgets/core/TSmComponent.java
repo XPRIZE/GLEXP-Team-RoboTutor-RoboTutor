@@ -29,11 +29,10 @@ import org.json.JSONObject;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
-import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
+import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.sm_component.CSm_Component;
 import cmu.xprize.util.JSON_Helper;
@@ -126,9 +125,9 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl {
 
         // update the response variable  "<Sresponse>.value"
 
-        mTutor.getScope().addUpdate(name() + ".intent", new TString(intent));
-        mTutor.getScope().addUpdate(name() + ".intentData", new TString(intentData));
-        mTutor.getScope().addUpdate(name() + ".features", new TString(features));
+        mTutor.getScope().addUpdateVar(name() + ".intent", new TString(intent));
+        mTutor.getScope().addUpdateVar(name() + ".intentData", new TString(intentData));
+        mTutor.getScope().addUpdateVar(name() + ".features", new TString(features));
 
         applyEventNode(mSymbol);
     }
@@ -184,7 +183,10 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl {
     }
 
     @Override
-    public void setNavigator(ITutorNavigator navigator) {
+    public void postInflate() {}
+
+    @Override
+    public void setNavigator(ITutorGraph navigator) {
         mSceneObject.setNavigator(navigator);
     }
 

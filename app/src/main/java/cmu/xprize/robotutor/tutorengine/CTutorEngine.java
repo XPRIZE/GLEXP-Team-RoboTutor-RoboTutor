@@ -58,7 +58,7 @@ public class CTutorEngine implements ILoadableObject2 {
     private String                          mTutorDescrPath;
     private String                          mJSONspec;
 
-    static public RoboTutor Activity;
+    static public RoboTutor                 Activity;
     static public ITutorManager             TutorContainer;
     static public ITutorLogManager          TutorLogManager;
 
@@ -72,7 +72,7 @@ public class CTutorEngine implements ILoadableObject2 {
     // json loadable
     public String                           defTutor;
     public String                           defFeatures;
-    static public String                    language;
+    static public String                    language;                       // Accessed from a static context
 
     final static public  String CacheSource = TCONST.ASSETS;                // assets or extern
     final static private String TAG         = "CTutorEngine";
@@ -176,6 +176,12 @@ public class CTutorEngine implements ILoadableObject2 {
 
 
     static public void killTutor(String tutorName) {
+
+        // Get the tutor being killed and do a depth first destruction to allow
+        // components to release resources etc.
+        //
+        mTutorActive = tutorMap.get(tutorName);
+        mTutorActive.onDestroy();
 
         tutorMap.remove(tutorName);
         sceneMap.remove(tutorName);

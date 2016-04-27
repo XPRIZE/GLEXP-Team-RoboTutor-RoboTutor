@@ -14,17 +14,17 @@
 
     <cmu.xprize.robotutor.tutorengine.widgets.core.TSmComponent
         android:id="@+id/SsmComponent"
-        app:layout_heightPercent="95%"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:layout_heightPercent="95%" />
 
     <cmu.xprize.robotutor.tutorengine.widgets.core.TVersionView
         android:id="@+id/StutorVersion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_below="@+id/SsmComponent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_heightPercent="6%"
         android:gravity="left|center_vertical"
-        app:layout_heightPercent="5%"
         android:textSize="20sp"
         android:textColor="#FFF"
         android:background="#3c6b3c"/>

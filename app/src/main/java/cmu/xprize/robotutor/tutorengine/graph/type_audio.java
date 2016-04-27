@@ -37,7 +37,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
 public class type_audio extends type_action implements OnPreparedListener, OnCompletionListener {
 
-    // NOTE: we run at a Flash default of 24fps - which is the units int which
+    // NOTE: we run at a Flash default of 24fps - which is the units in which
     // index and duration are calibrated
 
     private MediaPlayer  mPlayer        = null;
@@ -270,7 +270,7 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
         }
 
         // Update the path to the sound source file
-        mSoundSource = langPath + "/" + soundsource;
+        mSoundSource = TCONST.AUDIOPATH + "/" + langPath + "/" + soundsource;
         mSourcePath  = TCONST.TUTORROOT + "/" + TCONST.TDATA + "/" + mSoundSource;
     }
 

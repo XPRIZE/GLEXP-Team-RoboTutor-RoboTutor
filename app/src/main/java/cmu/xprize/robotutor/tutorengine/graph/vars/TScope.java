@@ -25,8 +25,7 @@ import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.CSceneGraph;
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.CTutorGraph;
-import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
+import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.util.IScriptable;
 import cmu.xprize.util.TCONST;
 
@@ -72,7 +71,7 @@ public class TScope implements IScope2 {
     }
 
     @Override
-    public ITutorNavigator tutorGraph() {
+    public ITutorGraph tutorGraph() {
         return mTutor.getTutorGraph();
     }
 
@@ -120,8 +119,11 @@ public class TScope implements IScope2 {
         map.put(key,obj);
     }
 
-    public void addUpdate(String key, IScriptable2 obj) {
-        map.put(key,obj);
+    public void addUpdateVar(String key, IScriptable2 obj) {
+        if(obj == null)
+            map.remove(key);
+        else
+            map.put(key,obj);
     }
 
 

@@ -27,7 +27,7 @@ import android.widget.FrameLayout;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
-import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
+import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 
@@ -104,7 +104,10 @@ public class TSceneFrameLayout extends FrameLayout implements ITutorSceneImpl {
     }
 
     @Override
-    public void setNavigator(ITutorNavigator navigator) {
+    public void postInflate() {}
+
+    @Override
+    public void setNavigator(ITutorGraph navigator) {
         mTutorScene.setNavigator(navigator);
     }
 

@@ -96,7 +96,7 @@ public class CStimResp extends LinearLayout implements View.OnClickListener, ITe
 
             try {
                 mIsResponse   = a.getBoolean(R.styleable.CStimResp_isResponse, false);
-                mLinkedViewID = a.getResourceId(R.styleable.CStimResp_linkedView, 0);
+                //mLinkedViewID = a.getResourceId(R.styleable.CStimResp_linked_view, 0);
             } finally {
                 a.recycle();
             }
@@ -326,7 +326,7 @@ public class CStimResp extends LinearLayout implements View.OnClickListener, ITe
                 if (mComparing) {
                     PercentRelativeLayout parentview = (PercentRelativeLayout)getParent();
 
-                    mLinkedView = (CStimResp)parentview.findViewById(mLinkedViewID);
+                   // mLinkedView = (CStimResp)parentview.findViewById(mLinkedViewID);
                     mLinkLex    = mLinkedView.getString().split(" ");
                 }
             } catch (NullPointerException exp) {

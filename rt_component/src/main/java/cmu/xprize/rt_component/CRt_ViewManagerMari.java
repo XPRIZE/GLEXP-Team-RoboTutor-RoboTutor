@@ -99,23 +99,90 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
     }
 
 
-    /**
-     * Get the first uncredited word of the current sentence
-     *
-     * @return index of uncredited word
-     */
-    private int getFirstUncreditedWord() {
+    @Override
+    public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult) {
 
-        int result = -1;
-
-        for (int i = 0; i < creditLevel.length; i++) {
-
-            if (creditLevel[i] != ListenerBase.HeardWord.MATCH_EXACT) {
-                result = i;
-                break;
-            }
+        String logString = "";
+        for (int i = 0; i < heardWords.length; i++) {
+            logString += heardWords[i].hypWord.toLowerCase() + ":" + heardWords[i].iSentenceWord + " | ";
         }
-        return result;
+        Log.i("ASR", "New HypSet: "  + logString);
+
+
+        // TODO: Change to setPauseRecognizer to flush the queue should obviate the need for
+        // changingSentence test.  Validate this is the case.
+        //
+        // The recongnizer runs asynchronously so ensure we don't process any
+        // hypotheses while we are changing sentences otherwise it can skip a sentence.
+        // This is because nextSentence is also called asynchronously
+        //
+        if(changingSentence || finalResult) {
+            Log.d("ASR", "Ignoring Hypothesis");
+            return;
+        }
+
+        updateSentence(heardWords);             // update current sentence state and redraw
+
+        // move on if all words in current sentence have been read
+        if(sentenceComplete()) {
+
+            changingSentence = true;
+            mListener.setPauseListener(true);
+
+            // schedule advance after short delay to allow time to see last word credited on screen
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    nextSentence(mOwner, null);
+                    changingSentence = false;
+                }
+            }, 100);
+        }
+    }
+
+
+    /**
+     * @param heardWords Update the sentence credit level with the credit level of the heard words
+     */
+    private void updateSentence(ListenerBase.HeardWord[] heardWords) {
+
+        Log.d("ASR", "New Hypothesis Set:");
+
+        if (heardWords.length >= 1) {
+
+            // Reset partial credit level of sentence words
+            //
+            for (int i = 0; i < creditLevel.length; i++) {
+
+                // don't touch words with permanent credit
+                if (creditLevel[i] != ListenerBase.HeardWord.MATCH_EXACT)
+                    creditLevel[i]  = ListenerBase.HeardWord.MATCH_UNKNOWN;
+            }
+
+            for (ListenerBase.HeardWord hw : heardWords) {
+
+                Log.d("ASR", "Heard:" + hw.hypWord);
+
+                // assign the highest credit found among all hypothesis words
+                //
+                if (hw.matchLevel >= creditLevel[hw.iSentenceWord]) {
+                    creditLevel[hw.iSentenceWord] = hw.matchLevel;
+                }
+            }
+
+            expectedWordIndex = getFirstUncreditedWord();
+
+            // Tell the listerner when to stop matching words.  We don't want to match words
+            // past the current expected word or they will be highlighted
+            // This is a MARi induced constraint
+            // TODO: make it so we don't need this - use matched past the next word to flag
+            // a missed word
+            //
+            mListener.updateNextWordIndex(expectedWordIndex);
+
+            // Update the sentence text display to show credit, expected word
+            //
+            UpdateSentenceDisplay();
+        }
     }
 
 
@@ -218,6 +285,27 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
         }
         return point;
     }
+
+
+    /**
+     * Get the first uncredited word of the current sentence
+     *
+     * @return index of uncredited word
+     */
+    private int getFirstUncreditedWord() {
+
+        int result = 0;
+
+        for (int i = 0; i < creditLevel.length; i++) {
+
+            if (creditLevel[i] != ListenerBase.HeardWord.MATCH_EXACT) {
+                result = i;
+                break;
+            }
+        }
+        return result;
+    }
+
 
 
     /**
@@ -357,86 +445,6 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
         }
 
         return result;
-    }
-
-
-    @Override
-    public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult) {
-
-        // TODO: Change to setPauseRecognizer to flush the queue should obviate the need for
-        // changingSentence test.  Validate this is the case.
-        //
-        // The recongnizer runs asynchronously so ensure we don't process any
-        // hypotheses while we are changing sentences otherwise it can skip a sentence.
-        // This is because nextSentence is also called asynchronously
-        //
-        if(changingSentence || finalResult) {
-            Log.d("ASR", "Ignoring Hypothesis");
-            return;
-        }
-
-        updateSentence(heardWords);             // update current sentence state and redraw
-
-        // move on if all words in current sentence have been read
-        if(sentenceComplete()) {
-
-            changingSentence = true;
-            mListener.setPauseListener(true);
-
-            // schedule advance after short delay to allow time to see last word credited on screen
-            new Handler().postDelayed(new Runnable() {
-                public void run() {
-                    nextSentence(mOwner, null);
-                    changingSentence = false;
-                }
-            }, 100);
-        }
-    }
-
-
-    /**
-     * @param heardWords Update the sentence credit level with the credit level of the heard words
-     */
-    private void updateSentence(ListenerBase.HeardWord[] heardWords) {
-
-        Log.d("ASR", "New Hypothesis Set:");
-
-        if (heardWords.length >= 1) {
-
-            // Reset partial credit level of sentence words
-            //
-            for (int i = 0; i < creditLevel.length; i++) {
-
-                // don't touch words with permanent credit
-                if (creditLevel[i] != ListenerBase.HeardWord.MATCH_EXACT)
-                    creditLevel[i]  = ListenerBase.HeardWord.MATCH_UNKNOWN;
-            }
-
-            for (ListenerBase.HeardWord hw : heardWords) {
-
-                Log.d("ASR", "Heard:" + hw.hypWord);
-
-                // assign the highest credit found among all hypothesis words
-                //
-                if (hw.matchLevel >= creditLevel[hw.iSentenceWord]) {
-                    creditLevel[hw.iSentenceWord] = hw.matchLevel;
-                }
-            }
-
-            expectedWordIndex = getFirstUncreditedWord();
-
-            // Tell the listerner when to stop matching words.  We don't want to match words
-            // past the current expected word or they will be highlighted
-            // This is a MARi induced constraint
-            // TODO: make it so we don't need this - use matched past the next word to flag
-            // a missed word
-            //
-            mListener.updateNextWordIndex(expectedWordIndex);
-
-            // Update the sentence text display to show credit, expected word
-            //
-            UpdateSentenceDisplay();
-        }
     }
 
 

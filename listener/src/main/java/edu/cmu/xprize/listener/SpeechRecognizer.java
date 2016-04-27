@@ -49,12 +49,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Locale;
-import java.util.concurrent.Exchanger;
 
 import cmu.xprize.util.TCONST;
 import edu.cmu.pocketsphinx.Config;
@@ -78,31 +74,38 @@ public class SpeechRecognizer {
     /**
      * the pocketsphinx Decoder, public so clients can access decoder methods
      */
-    public Decoder decoder;
+    public Decoder  decoder;
+    private boolean wantFinal = false;
+
+    //private HashMap<String, Decoder> decoderMap;
+
     /**
      * total number of samples passed to the decoder in the stream. Need to subtract off utterance start frame
      * to map stream-based frame counts pocketsphinx returns to utterance-based counts we want. Volatile since
      * modified by the background thread capturing from the microphone
      */
     public volatile long nSamples;
+    public short         mPeak = 0;
+
     /**
      * size of the buffer to use. For mapping stream-based frame time, we want buffer size to be a multiple of
      * centisecond frame size = 160.  This size receives updated hypothesis 10 times a second
      */
-    private static final int BUFFER_SIZE = 1600;        // 1/10 seconds worth at 16 Khz
+    private static final int BUFFER_SIZE = 1600;            // 1/10 seconds worth at 16 Khz
     /**
      * directory where raw audio captures stored
      */
     public String rawLogDir;
 
-    private Thread recognizerThread;                    // background thread handling audio data
+    private Thread recognizerThread;                        // background thread handling audio data
+
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private final Collection<ITutorListener> listeners = new HashSet<>();
 
-    private final int        sampleRate;                   // for sample rate check
-    private volatile boolean isPausedRecognizer  = false;  // start in the paused state
+    private final int        sampleRate;                    // for sample rate check
+    private volatile boolean isPausedRecognizer  = false;   // start in the paused state
     private volatile boolean isRunningRecognizer = true;
-    private volatile boolean isDecoding          = false;  // start in the not decoding state
+    private volatile boolean isDecoding          = false;   // start in the not decoding state
 
     private ASREvents eventManager;
 
@@ -285,6 +288,7 @@ public class SpeechRecognizer {
      * @return true if recognition was actually stopped
      */
     public boolean stop() {
+
         Log.i("ASR", "Stop Recognition Thread");
         boolean result = stopRecognizerThread();
 
@@ -292,7 +296,13 @@ public class SpeechRecognizer {
             Log.i("ASR", "Stopped");
 
             final Hypothesis hypothesis = decoder.hyp();
-            postResult(hypothesis, true);
+
+            // Note that the way the listener architecture works currently you will have stopped
+            // processing results by the time this happens so in general you don't want the final
+            // hypothesis.
+            //
+            if(wantFinal)
+                postResult(hypothesis, true);
         }
         return result;
     }
@@ -305,9 +315,12 @@ public class SpeechRecognizer {
      * @return true if recognition was actually canceled
      */
     public boolean cancel() {
+
+        Log.i("ASR", "Stop Recognition Thread");
         boolean result = stopRecognizerThread();
+
         if (result) {
-            Log.i(TAG, "Cancel recognition");
+            Log.i("ASR", "Cancelled recognition");
         }
         return result;
     }
@@ -380,8 +393,10 @@ public class SpeechRecognizer {
      */
     private final class RecognizerThread extends Thread {
 
-        private final String label;                    // label for the current capture
+        private final String label;                     // label for the current capture
         private boolean      isRecording = false;
+        private long         ASRTimer;                  // Used for benchmarking
+
 
         // constructor stores utterance id used to name capture file
         public RecognizerThread(String uttid, String rawLogDir) {
@@ -417,6 +432,7 @@ public class SpeechRecognizer {
                 isRunningRecognizer = true;
 
                 Log.i("ASR", "Start session");
+                eventManager.updateStartTime(TCONST.TIMEDSTART_EVENT, TCONST.UNKNOWNEVENT_TYPE);
 
                 // Collect audio samples continuously while not paused and until the
                 // Thread is killed.  This allow UI/UX activity while the listener is still
@@ -505,10 +521,20 @@ public class SpeechRecognizer {
 
                     } else if (nread > 0) {
 
+                        publishRMS(buffer, nread);
+
+                        // Reset the Hypothesis Flag - We don't want to emit events unless
+                        // there has been an actual change of hypothesis
+                        //
+                        hypChanged = false;
+
+                            //ASRTimer = System.currentTimeMillis();
                         decoder.processRaw(buffer, nread, false, false);
+                            //Log.d("ASR", "Time in processRaw: " + (System.currentTimeMillis() - ASRTimer));
+
                         nSamples += nread;
 
-                        // InSpeech seems to be true whenever there is a signal heard at the mic
+                        // InSpeech is true whenever there is a signal heard at the mic above threshold
                         // i.e. false means relative silence -
                         //
                         if (decoder.getInSpeech() != inSpeech) {
@@ -519,7 +545,7 @@ public class SpeechRecognizer {
                             // 1. The last time the mic heard anything
                             // 2. The last time the mic went silent.
 
-                            Log.i("ASR","State Changed: " + inSpeech);
+                            //Log.i("ASR","State Changed: " + inSpeech);
 
                             if(inSpeech) {
                                 eventManager.fireStaticEvent(TCONST.SOUND_EVENT);
@@ -534,7 +560,9 @@ public class SpeechRecognizer {
 
                         // Get the hypothesis words from the Sphinx decoder
                         //
+                            //ASRTimer = System.currentTimeMillis();
                         Hypothesis hypothesis = decoder.hyp();
+                            //Log.d("ASR", "Time in Decoder: " + (System.currentTimeMillis() - ASRTimer));
 
                         // If there is a valid hypothesis string from the decoder continue
                         // Once the decoder returns a hypothesis it will not go back to
@@ -585,12 +613,12 @@ public class SpeechRecognizer {
 
                             // If there is a new Hypothesis then process it
                             postResult(hypothesis, false);
-
-                        } else {
-                            // Watch for timed event firings (timeouts)
-                            eventManager.fireTimedEvents();
                         }
                     }
+
+                    // While running we continuously watch for timed event firings (timeouts)
+                    //
+                    eventManager.fireTimedEvents();
                 }
 
                 Log.i("ASR","Stop session");
@@ -606,6 +634,31 @@ public class SpeechRecognizer {
                 // convert raw capture to wav format
                 //convertRawToWav(new File(captureDir, label + ".raw"), new File(captureDir, label + ".wav"));
             }
+        }
+    }
+
+
+    private void publishRMS(short[] buffer, int count) {
+
+        double sum = 0;
+        Short  peak= 0;
+
+        if(count > 0) {
+            for (int i1 = 0; i1 < count; i1++) {
+                Short sample = buffer[i1];
+
+                sum = Math.pow(sample, 2);
+
+                if(sample > peak)
+                    peak = sample;
+
+                if(sample > mPeak)
+                    mPeak = sample;
+            }
+
+            double RMS = Math.sqrt(sum / count);
+
+           // Log.i("RMS", "Double: " + RMS + "  - Sample: " + count + "  - local Peak: " + peak + "  - Peak: " + mPeak);
         }
     }
 
@@ -739,17 +792,33 @@ public class SpeechRecognizer {
     }
 
 
-    public void configTimedEvent(int eventType, long newTimeout, boolean reset) {
-        eventManager.configTimedEvent(eventType, newTimeout, reset);
+    public void configTimedEvent(int eventType, long newTimeout) {
+        eventManager.configTimedEvent(eventType, newTimeout);
     }
 
-    public void configStaticEvent(int eventType, boolean listen) {
-        eventManager.configStaticEvent(eventType, listen);
+    public void resetTimedEvent(int eventType) {
+        eventManager.resetTimedEvent(eventType);
+    }
+
+    public void configStaticEvent(int eventType) {
+        eventManager.configStaticEvent(eventType, true);
+    }
+
+    public void resetStaticEvent(int eventType) {
+        eventManager.configStaticEvent(eventType, false);
     }
 
 
     /**
-     * ASREvents is a thread safe way to manage events that occur within the recognizerThread
+     *  ASREvents is a thread safe way to manage events that occur within the recognizerThread
+     *
+     *  The Timed events work by setting a WaitFor.. flag which then waits for the associated
+     *  static event to occur at which point the triggered flag is set and the timer starts.
+     *
+     *  NOTE:
+     *  You can add new types here as desired to handle different event combinations. But never
+     *  change the nature of event types to avoid breaking systems that depend upon the event types
+     *  behavior.
      *
      */
     private class ASREvents {
@@ -761,7 +830,12 @@ public class SpeechRecognizer {
         private boolean listenForSound   = false;
         private boolean listenForWords   = false;
 
-        private long lastWordAttempt;
+        private boolean WaitAfterStart   = false;
+        private boolean WaitAfterSilence = false;
+        private boolean WaitAfterSound   = false;
+        private boolean WaitAfterWord    = false;
+
+        private long lastWordHeard;
         private long lastSoundHeard;
         private long lastSilence;
         private long startTime;
@@ -773,13 +847,13 @@ public class SpeechRecognizer {
 
         private long silenceTimeout;
         private long NoiseTimeout;
-        private long wordAttemptTimeout;
+        private long wordHeardTimeout;
         private long startTimeOut;
 
-        private boolean isStartTriggered       = true;
-        private boolean isSilenceTriggered     = true;
-        private boolean isNoiseTriggered       = true;
-        private boolean isWordAttemptTriggered = true;
+        private boolean isStartTriggered    = true;
+        private boolean isSilenceTriggered  = true;
+        private boolean isNoiseTriggered    = false;
+        private boolean isWordTriggered     = false;
 
 
         public ASREvents() {
@@ -787,47 +861,107 @@ public class SpeechRecognizer {
         }
 
 
-        public synchronized void configTimedEvent(int eventType, long newTimeout, boolean reset) {
+        /**
+         *  The three base events (TIMEDSILENCE_EVENT TIMEDSOUND_EVENT TIMEDWORD_EVENT) operate on
+         *  the assuumption that we are setting a timer for the NEXT time they occur.  i.e. When
+         *  that state is REentered (we ignore that current state).
+         *
+         *  The TIMEDSTART_EVENT is the exception as it is, by default, in the triggered state then
+         *  the recognizer starts.
+         *
+         * @param eventType
+         * @param newTimeout
+         */
+        public synchronized void configTimedEvent(int eventType, long newTimeout) {
 
             switch(eventType) {
+
+                case TCONST.TIMEDSTART_EVENT:
+                    Log.d("ASR", "CONFIG TIMED WORD: " + newTimeout);
+                    startTimeOut     = newTimeout;
+                    WaitAfterStart   = true;
+                    // isStartTriggered = false; This is only ever done once
+                    break;
+
                 case TCONST.TIMEDSILENCE_EVENT:
-                    Log.d("ASR", "CONFIG TIMED SILENCE: " + newTimeout + " : " + reset);
+                    Log.d("ASR", "CONFIG TIMED SILENCE: " + newTimeout);
                     silenceTimeout     = newTimeout;
+                    WaitAfterSilence   = true;
                     isSilenceTriggered = false;
-                    if(reset)
-                        lastSilence = System.currentTimeMillis();
                     break;
 
                 case TCONST.TIMEDSOUND_EVENT:
-                    Log.d("ASR", "CONFIG TIMED SOUND: " + newTimeout + " : " + reset);
+                    Log.d("ASR", "CONFIG TIMED SOUND: " + newTimeout);
                     NoiseTimeout     = newTimeout;
+                    WaitAfterSound   = true;
                     isNoiseTriggered = false;
-                    if(reset)
-                        lastSoundHeard = System.currentTimeMillis();
                     break;
 
                 case TCONST.TIMEDWORD_EVENT:
-                    Log.d("ASR", "CONFIG TIMED WORD: " + newTimeout + " : " + reset);
-                    wordAttemptTimeout     = newTimeout;
-                    isWordAttemptTriggered = false;
-                    if(reset)
-                        lastWordAttempt = System.currentTimeMillis();
-                    break;
-
-                case TCONST.TIMEDSTART_EVENT:
-                    Log.d("ASR", "CONFIG TIMED WORD: " + newTimeout + " : " + reset);
-                    startTimeOut     = newTimeout;
-                    isStartTriggered = false;
-                    if(reset)
-                        startTime = System.currentTimeMillis();
+                    Log.d("ASR", "CONFIG TIMED WORD: " + newTimeout);
+                    wordHeardTimeout     = newTimeout;
+                    WaitAfterWord        = true;
+                    isWordTriggered = false;
                     break;
             }
         }
 
 
+        /**
+         *  Reset and disable any
+         *
+         * @param resetMap
+         */
+        public synchronized void resetTimedEvent(int resetMap) {
+
+            if((resetMap & TCONST.TIMEDSTART_EVENT) != 0) {
+
+                Log.d("ASR", "RESET TIMED START: ");
+                WaitAfterStart   = false;
+                isStartTriggered = false;
+                startTimeOut     = Long.MAX_VALUE;
+                startTime        = Long.MAX_VALUE;
+            }
+
+            if((resetMap & TCONST.TIMEDSILENCE_EVENT) != 0) {
+
+                Log.d("ASR", "RESET TIMED SILENCE: ");
+                WaitAfterSilence   = false;
+                isSilenceTriggered = false;
+                silenceTimeout     = Long.MAX_VALUE;
+                lastSilence        = Long.MAX_VALUE;
+            }
+
+            if((resetMap & TCONST.TIMEDSOUND_EVENT) != 0) {
+                Log.d("ASR", "RESET TIMED SOUND: ");
+                WaitAfterSound   = false;
+                isNoiseTriggered = false;
+                NoiseTimeout     = Long.MAX_VALUE;
+                lastSoundHeard   = Long.MAX_VALUE;
+            }
+
+            if((resetMap & TCONST.TIMEDWORD_EVENT) != 0) {
+
+                Log.d("ASR", "RESET TIMED WORD: ");
+                WaitAfterWord    = false;
+                isWordTriggered  = false;
+                wordHeardTimeout = Long.MAX_VALUE;
+                lastWordHeard    = Long.MAX_VALUE;
+            }
+        }
+
+
+        /**
+         *  Enable or disable various static event types.  These are events that occur whenever a
+         *  defined state is entered.
+         *
+         * @param eventType
+         * @param listen
+         */
         public synchronized void configStaticEvent(int eventType, boolean listen) {
 
             switch(eventType) {
+
                 case TCONST.SILENCE_EVENT:
                     listenForSilence  = listen;
                     break;
@@ -844,6 +978,42 @@ public class SpeechRecognizer {
         }
 
 
+        /**
+         * Update the start times for timed events
+         *
+         *      Silence - time in silence
+         *      Sound   - time since sound level last reached threshold
+         *      Word    = time since last hypothesis change
+         *
+         *  This is where timed event types are "triggered" which sets their start time and their
+         *  triggered flag which is consummed in fireTimedEvents
+         *
+         *   The timed silence event is the time in total silence - which is actually a difficult
+         *   state to stay in - if the mic picks up anything we leave this state - restarted each
+         *   time you enter silence.
+         *
+         *   The timed sound event is the time since any sound aboce threshold was heard and may
+         *   include a silence gap after.  After a silence gap this would be restarted each
+         *   time the mic exceeds threshold.
+         *
+         *   The timed word event is the time since the last hypothesis change.  restarted after
+         *   each hypothesis change -
+         *
+         *  When the mic goes silent
+         *      - set silenceTriggered flag and the start time
+         *
+         *  When we hear a sound
+         *      - set soundTriggered flag and the start time
+         *      - reset silence
+         *
+         *  When we hear a word
+         *      - set wordTriggered flag and the start time
+         *      - reset silence
+         *      - reset sound
+         *
+         * @param eventType
+         * @param resetMap
+         */
         public synchronized void updateStartTime(int eventType, int resetMap) {
 
             lastAudioEvent  = eventType;
@@ -851,47 +1021,66 @@ public class SpeechRecognizer {
             audioEventTimer = System.currentTimeMillis();
 
             switch (eventType) {
+                case TCONST.UNKNOWNEVENT_TYPE:
+                    //noop
+                    break;
+
+                case TCONST.TIMEDSTART_EVENT:
+                    isStartTriggered = true;
+                    startTime        = audioEventTimer;
+                    break;
                 case TCONST.TIMEDSILENCE_EVENT:
-                    lastSilence = audioEventTimer;
+                    isSilenceTriggered = true;
+                    lastSilence        = audioEventTimer;
                     break;
                 case TCONST.TIMEDSOUND_EVENT:
-                    lastSoundHeard = audioEventTimer;
+                    isNoiseTriggered = true;
+                    lastSoundHeard   = audioEventTimer;
                     break;
                 case TCONST.TIMEDWORD_EVENT:
-                    lastWordAttempt = audioEventTimer;
+                    isWordTriggered = true;
+                    lastWordHeard   = audioEventTimer;
                     break;
             }
 
             if((resetMap & TCONST.TIMEDSILENCE_EVENT) != 0) {
-                lastSilence = Long.MAX_VALUE;
+                isSilenceTriggered = false;
+                lastSilence        = Long.MAX_VALUE;
             }
             if((resetMap & TCONST.TIMEDSOUND_EVENT) != 0) {
-                lastSoundHeard = Long.MAX_VALUE;
+                isNoiseTriggered = false;
+                lastSoundHeard   = Long.MAX_VALUE;
             }
             if((resetMap & TCONST.TIMEDWORD_EVENT) != 0) {
-                lastWordAttempt = Long.MAX_VALUE;
+                isWordTriggered = false;
+                lastWordHeard   = Long.MAX_VALUE;
             }
         }
 
 
+        /**
+         * Fire the single event that indicate a particular state has begun
+         *
+         * @param eventType
+         */
         public synchronized void fireStaticEvent(int eventType) {
 
             switch (eventType) {
                 case TCONST.SILENCE_EVENT:
                     if(listenForSilence) {
-                        Log.i("ASR", "Word Attempt Timout Triggered");
+                        Log.i("ASR", "Silence Started");
                         mainHandler.post(new timeOutEvent(TCONST.SILENCE_EVENT));
                     }
                     break;
                 case TCONST.SOUND_EVENT:
                     if(listenForSound) {
-                        Log.i("ASR", "Word Attempt Timout Triggered");
+                        Log.i("ASR", "Sound Heard");
                         mainHandler.post(new timeOutEvent(TCONST.SOUND_EVENT));
                     }
                     break;
                 case TCONST.WORD_EVENT:
                     if(listenForWords) {
-                        Log.i("ASR", "Word Attempt Timout Triggered");
+                        Log.i("ASR", "Word Heard - Hyp updated");
                         mainHandler.post(new timeOutEvent(TCONST.WORD_EVENT));
                     }
                     break;
@@ -899,54 +1088,59 @@ public class SpeechRecognizer {
         }
 
 
+        /**
+         *  We ccnstantly watch for timed events within the reognizer thread.  This is called on each
+         *  iteration and the "WaitAfter..." flags dictate which timed events are actively watched.
+         *
+         *  Note we may fire multiple event types in one call to this method.
+         *
+         *  See #configTimedEvent
+         */
         public synchronized void fireTimedEvents() {
 
             // lastSilence is the time since the mic went silent
             // lastSoundHeard is the time since the mic started hearing sound
-            // lastWordAttempt is the time since they said an intelligible word
+            // lastWordHeard is the time since they said an intelligible word (hyp changed)
 
             long time = System.currentTimeMillis();
 
             startGap   = (time - startTime);
             silenceGap = (time - lastSilence);
             NoiseGap   = (time - lastSoundHeard);
-            attemptGap = (time - lastWordAttempt);
+            attemptGap = (time - lastWordHeard);
 
-            if (attemptGap > wordAttemptTimeout) {
+            if (WaitAfterStart && isStartTriggered) {
 
-                if (!isWordAttemptTriggered) {
-                    Log.i("ASR", "Word Attempt Timout Triggered");
-                    mainHandler.post(new timeOutEvent(TCONST.TIMEDWORD_EVENT));
-                    isWordAttemptTriggered = true;
-                }
-            }
-
-            else if (NoiseGap > NoiseTimeout) {
-
-                if (!isNoiseTriggered) {
-                    Log.i("ASR", "Noise Timout Triggered");
-                    mainHandler.post(new timeOutEvent(TCONST.TIMEDSOUND_EVENT));
-                    isNoiseTriggered = true;
-                }
-            }
-
-            else if (silenceGap > silenceTimeout) {
-
-                if (!isSilenceTriggered) {
-                    Log.i("ASR", "Silence Timout Triggered");
-                    mainHandler.post(new timeOutEvent(TCONST.TIMEDSILENCE_EVENT));
-                    isSilenceTriggered = true;
-                }
-            }
-
-            else if (startGap > startTimeOut) {
-
-                if (!isStartTriggered) {
-                    Log.i("ASR", "Start Timout Triggered");
+                if (startGap > startTimeOut) {
+                    Log.i("ASR", "Start Timout Fired");
                     mainHandler.post(new timeOutEvent(TCONST.TIMEDSTART_EVENT));
-                    isStartTriggered = true;
                 }
             }
+
+            else if (WaitAfterSilence && isSilenceTriggered) {
+
+                if (silenceGap > silenceTimeout) {
+                    Log.i("ASR", "Silence Timout Fired");
+                    mainHandler.post(new timeOutEvent(TCONST.TIMEDSILENCE_EVENT));
+                }
+            }
+
+            else if (WaitAfterSound && isNoiseTriggered) {
+
+                if (NoiseGap > NoiseTimeout) {
+                    Log.i("ASR", "Noise Timout Fired");
+                    mainHandler.post(new timeOutEvent(TCONST.TIMEDSOUND_EVENT));
+                }
+            }
+
+            else if(WaitAfterWord && isWordTriggered) {
+
+                if (attemptGap > wordHeardTimeout) {
+                    Log.i("ASR", "Word Attempt Timout Fired");
+                    mainHandler.post(new timeOutEvent(TCONST.TIMEDWORD_EVENT));
+                }
+            }
+
         }
     }
 

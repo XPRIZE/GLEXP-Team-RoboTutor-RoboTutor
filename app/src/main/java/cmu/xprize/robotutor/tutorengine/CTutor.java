@@ -22,6 +22,8 @@ package cmu.xprize.robotutor.tutorengine;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +37,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
@@ -49,7 +53,6 @@ import cmu.xprize.robotutor.tutorengine.graph.type_action;
 import cmu.xprize.robotutor.tutorengine.graph.type_timer;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.util.TTSsynthesizer;
-import edu.cmu.xprize.listener.ListenerBase;
 
 
 /**
@@ -73,8 +76,8 @@ public class CTutor implements ILoadableObject2 {
 
     public Context                       mContext;
     public ITutorLogManager              mTutorLogManager;
-    public ITutorNavigator               mTutorAnimator;
-    public CSceneGraph                   mSceneAnimator;
+    public ITutorGraph mTutorGraph;
+    public CSceneGraph                   mSceneGraph;
     public ITutorManager                 mTutorContainer;
     public ViewGroup                     mSceneContainer;
 
@@ -87,25 +90,20 @@ public class CTutor implements ILoadableObject2 {
     private HashMap<String, scene_initializer>  _sceneMap = new HashMap<String, scene_initializer>();
     HashMap<String, type_timer>                 _timerMap = new HashMap<String, type_timer>();
 
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+
     // json loadable
     public scene_initializer[] scenedata;
     public String              language;
     public String              navigatorType;
 
-    public String              engLanguage;
+    public String engineLanguage;
 
     private int index = 0;  // test debug
 
-    static public TTSsynthesizer                TTS;
-    static public String                        LANG;
+    static public TTSsynthesizer            TTS;
+    static public String                    LANG_FEATURE;
 
-
-    // This is used to map Language identifiers in tutor_decriptor to audio subdir names
-    static public HashMap<String, String> langMap = new HashMap<String, String>();
-    static {
-        langMap.put("LANG_EN", "audio/en");
-        langMap.put("LANG_SW", "audio/sw");
-    }
 
     static private final String  TAG   = LayoutInflater.class.getSimpleName();
     static private final boolean DEBUG = false;
@@ -128,11 +126,19 @@ public class CTutor implements ILoadableObject2 {
         //
         CPreferenceCache.updateTutorInstance(name);
 
-        // Remember what language the engine wants to use - need to override after TutorDesc
-        // has been inflated
-        engLanguage = tarLanguage;
+        // Configure the initial language based on the engine setting - tutor may override
+        // if "language" is set in JSON image
+        //
+        setLanguage(tarLanguage);
 
         inflateTutor();
+    }
+
+
+    /**
+     *
+     */
+    public void onDestroy() {
     }
 
 
@@ -140,12 +146,40 @@ public class CTutor implements ILoadableObject2 {
 
         // Load the "tutor_descriptor.json" file
         loadTutorFactory();
-
-        // Let the Engine override and tutor setting for language
-        if(engLanguage != null)
-            language = engLanguage;
-
         loadSceneNavigator();
+    }
+
+
+    public class Queue implements Runnable {
+
+        protected final String _command;
+
+        public Queue(String command) {
+            _command = command;
+        }
+
+        @Override
+        public void run() {
+
+            switch(_command) {
+                case TCONST.ENDTUTOR:
+                    endTutor();
+                    break;
+
+
+            }
+        }
+    }
+
+
+    /**
+     * Post a command to the scenegraph queue
+     *
+     * @param command
+     */
+    public void post(String command) {
+
+        mainHandler.post(new Queue(command));
     }
 
 
@@ -153,22 +187,38 @@ public class CTutor implements ILoadableObject2 {
 
         switch(navigatorType) {
             case TCONST.SIMPLENAV:
-                mTutorAnimator = new CTutorGraph(this, mTutorName, mTutorContainer, mTutorScope);
+                mTutorGraph = new CTutorGraph(this, mTutorName, mTutorContainer, mTutorScope);
                 break;
 
             case TCONST.GRAPHNAV:
-                //mTutorAnimator = new CSceneGraphNavigator(mTutorName);
+                //mTutorGraph = new CSceneGraphNavigator(mTutorName);
                 break;
         }
 
-        mTutorAnimator.initTutorContainer(mTutorContainer);
-        mSceneAnimator = mTutorAnimator.getAnimator();
+        mTutorGraph.initTutorContainer(mTutorContainer);
+        mSceneGraph = mTutorGraph.getAnimator();
     }
 
 
     public void setSceneContainer(ViewGroup container) {
         mSceneContainer = container;
     }
+
+
+    /**
+     * Return the view within the current scene container
+     *
+     * @param findme
+     * @return
+     */
+    public View getViewByName(String findme) {
+
+        HashMap map = mTutorGraph.getChildMap();
+
+        return (View)map.get(findme);
+    }
+
+
 
     public ITutorObject getViewById(int findme, ViewGroup container) {
         ITutorObject foundView = null;
@@ -207,7 +257,7 @@ public class CTutor implements ILoadableObject2 {
      */
     public void launchTutor() {
         mTutorActive = true;
-        mTutorAnimator.gotoNextScene(true);
+        mTutorGraph.post(TCONST.FIRST_SCENE);
     }
 
 
@@ -224,38 +274,57 @@ public class CTutor implements ILoadableObject2 {
             mTutorActive = false;
 
             mTutorContainer.popView(false, null);
+            mTutorGraph.onDestroy();
+
             CTutorEngine.killTutor(mTutorName);
         }
     }
 
 
-    public ITutorNavigator getTutorGraph() {
-        return mTutorAnimator;
+    public ITutorGraph getTutorGraph() {
+        return mTutorGraph;
     }
 
     public CSceneGraph getSceneGraph() {
-        return mSceneAnimator;
+        return mSceneGraph;
     }
 
 
+    //**************************************************************************
+    // Language management
+
     public String getLanguage() {
 
-        return langMap.get(LANG);
+        return TCONST.langMap.get(LANG_FEATURE);
+    }
+    public String getLanguageFeature() {
+
+        return LANG_FEATURE;
     }
 
 
     public String mapLanguage(String _language) {
 
-        return langMap.get(_language);
+        return TCONST.langMap.get(_language);
     }
 
 
     // The language ID is also used as a feature to permit conditioning on language
     // within scripts.
+    //
     public void setLanguage(String lang) {
-        LANG = lang;
+
+        // Remove any active language - Only want one language feature active
+        setDelFeature(LANG_FEATURE);
+
+        // Update language
+        LANG_FEATURE = lang;
         setAddFeature(lang);
     }
+
+    // Language management
+    //**************************************************************************
+
 
 
     //*************  Timer Management
@@ -386,10 +455,21 @@ public class CTutor implements ILoadableObject2 {
 
         tutorContainer.setParent(mTutorContainer);
         tutorContainer.setTutor(this);
-        tutorContainer.setNavigator(mTutorAnimator);
+        tutorContainer.setNavigator(mTutorGraph);
         tutorContainer.setLogManager(mTutorLogManager);
 
         mapChildren(tutorContainer, childMap);
+
+        Iterator<?> tObjects = childMap.entrySet().iterator();
+
+        // post create / inflate / init / map - here everything is created including the
+        // view map to permit findViewByName
+        //
+        while(tObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            ((ITutorObject)(entry.getValue())).postInflate();
+        }
     }
 
 
@@ -404,11 +484,16 @@ public class CTutor implements ILoadableObject2 {
             try {
                 child = (ITutorObject) ((ViewGroup) tutorContainer).getChildAt(i);
 
+                if(childMap.containsKey(child.name())) {
+                    Log.e(TAG, "ERROR: Duplicate child view in:" + tutorContainer.name());
+                    System.exit(1);
+                }
+
                 childMap.put(child.name(), child);
 
                 child.setParent(tutorContainer);
                 child.setTutor(this);
-                child.setNavigator(mTutorAnimator);
+                child.setNavigator(mTutorGraph);
                 child.setLogManager(mTutorLogManager);
 
                 if(child instanceof ITutorSceneImpl) {
@@ -585,12 +670,12 @@ public class CTutor implements ILoadableObject2 {
 
     // Scriptable graph next command
     public void eventNext() {
-        mSceneAnimator.onNextNode();
+        mSceneGraph.post(TCONST.NEXT_NODE);
     }
 
     // Scriptable graph goto command
     public void gotoNode(String nodeID) {
-        mSceneAnimator.gotoNode(nodeID);
+        mSceneGraph.post(TCONST.GOTO_NODE, nodeID);
     }
 
 
@@ -620,7 +705,7 @@ public class CTutor implements ILoadableObject2 {
 
         JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
 
-        // Use setLanguage to properly configure the language feature
+        // Use setLanguage to properly override the Engine language feature
         if(language != null)
             setLanguage(language);
 

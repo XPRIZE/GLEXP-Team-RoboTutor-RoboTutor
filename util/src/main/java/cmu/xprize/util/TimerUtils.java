@@ -15,6 +15,9 @@ public class TimerUtils {
     private static long totalTime;
     private static boolean pauseTimer;
 
+    private static final  String  TAG = "TimerUtils";
+
+
     public static void startTimer(){
         pauseTimer = false;
         printTimer();
@@ -50,7 +53,7 @@ public class TimerUtils {
             @Override
             public void run() {
                 while (!pauseTimer){
-                    Log.d("timer", formatTime(totalTime + System.currentTimeMillis() - startTime));
+                    Log.d(TAG, formatTime(totalTime + System.currentTimeMillis() - startTime));
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {

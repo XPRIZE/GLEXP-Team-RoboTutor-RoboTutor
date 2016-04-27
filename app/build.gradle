@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "cmu.xprize.robotutor"
         minSdkVersion 19
-        targetSdkVersion 23
+        targetSdkVersion 22
         versionCode 1
         versionName "0.1.7"
     }
@@ -40,4 +40,5 @@ dependencies {
     compile project(':rt_component')
     compile project(':sm_component')
     compile project(':fw_component')
+    compile project(':nl_component')
 }

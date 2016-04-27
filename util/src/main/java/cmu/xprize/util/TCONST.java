@@ -24,8 +24,34 @@ package cmu.xprize.util;
 import android.content.Context;
 
 import java.io.File;
+import java.util.HashMap;
 
 public class TCONST {
+
+    public static final String NUMDATA_HEADER = "{\n" + "\"dataSource\": ";
+
+
+    //*** Reading Tutor compatible string combinations
+
+    static public HashMap<String, String> numberMap = new HashMap<String, String>();
+
+    static {
+        numberMap.put("LANG_EN", "AND,ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,TEN,ELEVEN,TWELVE,THIRTEEN,FORTEEN,FIFTEEN,SIXTEEN,SEVENTEEN,EIGHTEEN,NINETEEN,TWENTY,THIRTY,FORTY,FIFTY,SIXTY,SEVENTY,EIGHTY,NINETY,HUNDRED,THOUSAND,MILLION");
+        numberMap.put("LANG_SW", "NA,SIFURI,MOJA,MBILI,TATU,NNE,TANO,SITA,SABA,NANE,TISA,KUMI,ISHIRINI,THELATHINI,AROBAINI,HAMSINI,SITINI,SABINI,THEMANINI,TISINI,MIA,ELFU,MILIONI");
+    }
+
+
+    // This is used to map "language features" to the story resources
+    // these are located in the assets/<lang>
+    // Note: on Android these are case sensitive filenames
+
+    static public HashMap<String, String> langMap = new HashMap<String, String>();
+
+    static {
+        langMap.put("LANG_EN", "en");
+        langMap.put("LANG_SW", "sw");
+    }
+
 
     // JSON parameter constants
 
@@ -46,6 +72,7 @@ public class TCONST {
     static final public String SNDESC          = "navigator_descriptor.json";
     static final public String AGDESC          = "animator_graph.json";
     static final public String TDATA           = "trackdata/LIBRARY";
+    static final public String AUDIOPATH       = "audio";
     static final public String TASSETS         = "assets";
     static final public String DEFAULT         = "default";
 
@@ -69,8 +96,10 @@ public class TCONST {
     // Navigator types
     final static public String SIMPLENAV       = "SIMPLE_NAVIGATOR";
     final static public String GRAPHNAV        = "GRAPH_NAVIGATOR";
-    public static final String NEXTNODE        = "NEXTNODE";
+    public static final String NEXT_NODE       = "NEXT_NODE";
     public static final String NEXTSCENE       = "NEXTSCENE";
+    public static final String FIRST_SCENE     = "GOTO_FIRST_SCENE";
+
 
 
     // CActionTrack track types
@@ -102,11 +131,13 @@ public class TCONST {
     public static final String PLAY            = "PLAY";
     public static final String STOP            = "STOP";
     public static final String NEXT            = "NEXT";
+    public static final String GOTO_NODE       = "GOTO_NODE";
     public static final String PAUSE           = "PAUSE";
     public static final String START           = "START";
     public static final String CANCEL          = "CANCEL";
     public static final String CREATE          = "CREATE";
     public static final String CREATEANDSTART  = "CREATEANDSTART";
+    public static final String ENTER_SCENE     = "ENTER_SCENE";
 
     // Condition parser FSM states
     public static final int STARTSTATE = 0;
@@ -132,11 +163,13 @@ public class TCONST {
 
     public static final char EOT = '\04';
 
+
     // type_action - command types
     public static final String CMD_WAIT    = "WAIT";
     public static final String CMD_GOTO    = "GOTONODE";
     public static final String CMD_NEXT    = "NEXT";
     public static final String CMD_LAUNCH  = "LAUNCH-TUTOR";
+
 
     // Intrinsic types
     public static final String TREFERENCE  = "TReference";
@@ -154,6 +187,7 @@ public class TCONST {
     public static final String FWINCORRECT  = "FTR_WRONG";
     public static final String FWUNKNOWN    = "FTR_UNRECOGNIZED";
     public static final String FTR_EOI      = "FTR_NOWORDS";
+    public static final String FTR_EOD      = "FTR_EOD";
     public static final String FWALLCORRECT = "ALL_CORRECT";
 
     public static final String FALSE        = "FALSE";
@@ -163,16 +197,25 @@ public class TCONST {
     public static final String RAND         = "random";
     public static final String MINUSONE     = "-1";
 
+
     // PocketSphinx Recognizer Constants
     public static final int UNKNOWNEVENT_TYPE  = 0;
-    public static final int TIMEDSILENCE_EVENT = 1;
-    public static final int TIMEDSOUND_EVENT   = 2;
-    public static final int TIMEDWORD_EVENT    = 4;
-    public static final int ALLTIMED_EVENTS    = 7;
-    public static final int SILENCE_EVENT      = 8;
-    public static final int SOUND_EVENT        = 16;
-    public static final int WORD_EVENT         = 32;
-    public static final int TIMEDSTART_EVENT   = 64;
+
+    public static final int TIMEDSTART_EVENT   = 0x01;
+    public static final int TIMEDSILENCE_EVENT = 0x02;
+    public static final int TIMEDSOUND_EVENT   = 0x04;
+    public static final int TIMEDWORD_EVENT    = 0x08;
+
+    public static final int ALLTIMED_EVENTS    = 0x0F;
+
+    public static final int SILENCE_EVENT      = 0x10;
+    public static final int SOUND_EVENT        = 0x20;
+    public static final int WORD_EVENT         = 0x40;
+
+    public static final int ALLSTATIC_EVENTS   = 0x70;
+
+    public static final int ALL_EVENTS         = 0xFFFFFFFF;
+
 
     public static final int NOINTERVENTION = 0;
     public static final int INSPEECH       = 1;
@@ -189,6 +232,7 @@ public class TCONST {
     public static final String JSONLOG     = ".json";
     public static final boolean APPEND     = true;
 
+
     // LTK messaging constants
     public static final String FW_STIMULUS = "FW_UPDATED";
     public static final String FW_VALUE    = "FW_VALUE";
@@ -196,7 +240,32 @@ public class TCONST {
     public static final String FW_RESPONSE = "FW_RESPONSE";
     public static final String ROBOTUTOR_FOLDER = "/RoboTutor/";
 
+
+    // Listener Control message types
+    public static final String LISTENER_RESPONSE = "LISTENER_RESPONSE";
+
+
+    // TTS command constants
+    public static final String SAY             = "SAY";
+    public static final String SET_RATE        = "SET_RATE";
+
+
     // Preference keys
     public static final String ENGINE_INSTANCE = "engine_instance";
     public static final String CURRENT_TUTOR   = "tutor";
+
+
+    // Number Listeneing Component Error Codes
+    public static final String ERR_SINGLEDIGIT = "Single Digit Error";
+    public static final String ERR_MULTIDIGIT  = "Multi Digit Error";
+
+
+    // Generic error codes
+    public static final String GENERIC_RIGHT = "FTR_RIGHT";
+    public static final String GENERIC_WRONG = "FTR_WRONG";
+    public static final boolean TRUE_ERROR   = true;
+    public static final boolean TRUE_NOERROR = true;
+    public static final boolean FALSE_NOERROR = false;
+    public static final boolean FALSE_ERROR = false;
+
 }

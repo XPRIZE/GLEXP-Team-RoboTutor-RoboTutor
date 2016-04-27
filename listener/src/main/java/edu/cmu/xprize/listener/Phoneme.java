@@ -45,6 +45,8 @@ Modifications to support multiple languages: Copyright(c) 2016  Kevin Willows
 */
 
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -65,21 +67,23 @@ public class Phoneme {
     }
 
     static private IPhonemeRules tarLang;
+    static private String  TAG = "Phoneme";
 
 
     public static void setTargetLanguage(String targetlang) {
 
-        Class<?> phonemeClass = langMap.get(targetlang);
-
-        System.out.printf("Phoneme class type:%s\n", phonemeClass.getName());
-
         try {
+            Class<?> phonemeClass = langMap.get(targetlang);
+
             tarLang = (IPhonemeRules)phonemeClass.newInstance();
 
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            //System.out.printf("Phoneme class type:%s\n", phonemeClass.getName());
+
+        }
+        catch (Exception e) {
+
+            Log.e(TAG, "Langauge configuration error: " + e);
+            System.exit(1);
         }
     }
 

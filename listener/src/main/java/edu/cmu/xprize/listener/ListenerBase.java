@@ -81,7 +81,8 @@ public class ListenerBase {
 
     protected IAsrEventListener eventListener;    // where to send client notification callbacks
 
-    protected static final String SENTENCE_SEARCH = "sentence";    // label for our search in decoder
+    protected static final String SENTENCE_SEARCH = "sentence";       // label for our search in decoder
+    protected static final String JSGF_SEARCH     = "jsgf_search";    // label for our search in decoder
 
     // This is used to map language "Features" to the associated dictionary filenames
     // Dictionary files are located in the assets/sync/models/lm
@@ -94,7 +95,8 @@ public class ListenerBase {
         langMap.put("LANG_SW", "SWAHILI.DIC");
     }
 
-    static private boolean isReady = false;
+    static private boolean       isReady = false;
+    static private String  TAG = "ListenerBase";
 
 
     public ListenerBase() {
@@ -158,12 +160,68 @@ public class ListenerBase {
         new listenerConfigTask().execute((Context) callback);
     }
 
-    // construct and initialize the speech recognizer
-    //
+
+    /**
+     * Construct and initialize the speech recognizer
+     */
     protected void setupRecognizer(File assetsDir, File configFile, String langDictionary) {
+
+        try {
+            // save path to modelsDir for use when finding fsgs
+            modelsDir = new File(assetsDir, "models");
+
+            // if caller specified a configFile, take parameters from that.
+            // In this config file must specify *all* non-default pocketsphinx parameters
+            if (configFile != null) {
+                recognizer = SpeechRecognizerSetup.setupFromFile(configFile).getRecognizer();
+
+            } else {    // init using default config parameters
+
+                // create pocketsphinx SpeechRecognizer using the SpeechRecognizer2Setup factory method
+                recognizer = SpeechRecognizerSetup.defaultSetup()
+                        // our pronunciation dictionary
+                        //.setDictionary(new File(modelsDir, "lm/CMU07A-CAPS.DIC"))
+                        .setDictionary(new File(modelsDir, "lm/" + langDictionary))
+
+                                // our acoustic model
+                        .setAcousticModel(new File(modelsDir, "hmm/en-us-semi"))
+
+                                // this automatically logs raw audio to the specified directory:
+                        .setRawLogDir(assetsDir)
+
+		              /* can't get sphinx logfile on Android, log messages go to LogCat facility instead
+                        .setString("-logfn", new File(assetsDir, logName).getPath())
+		               */
+                        .setBoolean("-verbose", true)            // maximum log output
+
+                                // a few other settings we might want to experiment with:
+
+                                // threshold for voice activity detection:
+                        .setFloat("-vad_threshold", LCONST.VAD_THRESHOLD)       // default 2.0
+                                // other vad parameters:
+                                // .setInteger("vad_postspeech", 50)		    // default 50 (centiseconds)
+                                // .setInteger("vad_prespeech", 10)				// default 10 (centiseconds)
+
+                                // .setFloat("-silprob", 0.005f)				// default 0.005
+                        .setFloat("-fillprob", LCONST.FILLPROB)                 // default 1e-8f
+                                // .setFloat("-wip", 0.65f)						// default 0.65
+
+                        .getRecognizer();
+            }
+
+            // save a log math object to use when constructing FsgModels.
+            logMath = new LogMath();
+        }
+        catch (Exception e) {
+
+            Log.e(TAG, "Recognizer configuration error: " + e);
+            System.exit(1);
+        }
     }
 
-        /**
+
+
+    /**
          * Moves new assets to an external folder so the Sphinx code can access it.
          *
          */
@@ -246,12 +304,20 @@ public class ListenerBase {
         recognizer.setRestartListener(restartListener);
     }
 
-    public void configTimedEvent(int eventType, long newTimeout, boolean reset) {
-        recognizer.configTimedEvent(eventType, newTimeout, reset);
+    public void configTimedEvent(int eventType, long newTimeout) {
+        recognizer.configTimedEvent(eventType, newTimeout);
     }
 
-    public void configStaticEvent(int eventType, boolean listen) {
-        recognizer.configStaticEvent(eventType, listen);
+    public void resetTimedEvent(int eventType) {
+        recognizer.resetTimedEvent(eventType);
+    }
+
+    public void configStaticEvent(int eventType) {
+        recognizer.configStaticEvent(eventType);
+    }
+
+    public void resetStaticEvent(int eventType) {
+        recognizer.resetStaticEvent(eventType);
     }
 
 
@@ -380,6 +446,59 @@ public class ListenerBase {
         // TODO: strip word-final or -initial apostrophes as in James' or 'cause.
         // Currently assuming hyphenated expressions split into two Asr words.
         return text.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+    }
+
+
+
+    /***** Logging */
+
+
+
+    /**
+     * get the  path to the hypothesis log file for given utterance label
+     */
+    protected File getHypLogFile(String utteranceLabel) {
+        // store it alongside the captured audio file
+        return new File(recognizer.rawLogDir, utteranceLabel + "-log.txt");
+    }
+
+    /**
+     * get time stamp string for current time in milliseconds
+     */
+    protected String timestampMillis() {
+        return new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss.SSS", Locale.US).format(new Date(System.currentTimeMillis()));
+    }
+
+    // create and write header of hypothesis log file.
+    protected void beginHypLog() {
+        Log.i("beginHypLog", "starting hypothesis log");
+    }
+
+    // log a partial hypothesis
+    protected void logHyp(String timestamp, String hyp, List<Segment> segments, HeardWord[] heardWords) {
+        try {
+            File hypLog = getHypLogFile(captureLabel);
+            BufferedWriter bw = new BufferedWriter(new FileWriter(hypLog.getPath(), true));    // appends
+
+            // write out both the raw result with pocketsphinx times for debugging, and
+            // then the adjusted times we have computed for comparison with offline results
+            bw.write("## FROM GET PARTIAL RESULT:\n");        // as in reading tutor
+            bw.write("    TIME: " + timestamp + "\n");
+            bw.write("  DECODER OUTPUT: " + hyp + "\n");
+            bw.write("  RAW SEGMENTS:\n");
+            for (Segment s : segments) {
+                bw.write(s.getWord() + " " + s.getStartFrame() + " " + s.getEndFrame() + "\n");
+            }
+            bw.write("  SEGMENTATION:\n");
+            for (HeardWord hw : heardWords) {
+                bw.write(hw.hypWord + " " + hw.startFrame + " " + hw.endFrame + "\n");
+            }
+            bw.write("\n");
+
+            bw.close();
+        } catch (Exception e) {
+            Log.e("logHyp", "Error writing hypothesis log file " + e.getMessage());
+        }
     }
 
 

@@ -20,6 +20,8 @@
 package cmu.xprize.robotutor.tutorengine;
 
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -29,7 +31,6 @@ import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
-import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.scene_animator;
@@ -41,14 +42,16 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
  * that constitutes the tutor.
  *
  */
-public class CSceneGraph {
+public class CSceneGraph  {
 
     private TScope           mScope;
 
     protected CTutor         mTutor;
     private String           mTutorName;
     private String           mSceneName;
-    private CTutorGraph      mTutorAnimator;
+    private CTutorGraph      mTutorGraph;
+
+    private final Handler    mainHandler = new Handler(Looper.getMainLooper());
 
     // State fields
     private scene_animator _sceneAnimator;
@@ -65,67 +68,93 @@ public class CSceneGraph {
 
     public CSceneGraph(CTutor tutor, TScope tutorScope, CTutorGraph tutorGraph) {
 
-        mTutor         = tutor;
-        mScope         = tutorScope;
-        mTutorAnimator = tutorGraph;
+        mTutor      = tutor;
+        mScope      = tutorScope;
+        mTutorGraph = tutorGraph;
 
         _pFeatures = new HashMap<String, Integer>();
 
-        loadAnimatorFactory((IScope2)mScope);
+        loadSceneGraphFactory((IScope2)mScope);
     }
 
 
     /**
-     * TODO: Key function - add detail comment
+     * This is the central processsing point of CSceneGraph - It is a message driven pattern
+     * on the UI thread.
      */
-    public void onNextNode() {
+    public class Queue implements Runnable {
 
-        if(applyNode().equals(TCONST.NEXTSCENE)) {
-            mTutorAnimator.onNextScene();
+        protected String _command;
+        protected String _target;
+
+        public Queue(String command) {
+            _command = command;
         }
+
+        public Queue(String command, String target) {
+            _command = command;
+            _target  = target;
+        }
+
+        @Override
+        public void run() {
+
+            switch(_command) {
+                case TCONST.ENTER_SCENE:
+
+                    mSceneName = _target;
+
+                    try {
+                        _sceneAnimator = (scene_animator)mScope.mapSymbol(mSceneName);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+
+                case TCONST.NEXT_NODE:
+                    switch (_sceneAnimator.applyNode()) {
+
+                        case TCONST.NEXTSCENE:
+                            mTutorGraph.post(TCONST.NEXTSCENE);
+                            break;
+                    }
+                    break;
+
+                case TCONST.PLAY:
+                    _sceneAnimator.play();
+                    break;
+
+                case TCONST.STOP:
+                    _sceneAnimator.stop();
+                    break;
+
+                case TCONST.GOTO_NODE:
+                    _sceneAnimator.gotoNode(_target);
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Post a command to this scenegraph queue
+     *
+     * @param command
+     */
+    public void post(String command) {
+
+        mainHandler.post(new Queue(command));
     }
 
 
     /**
-     * Called when initially entering a scene
-     * @param sceneName
+     * Post a command and target to this scenegraph queue
+     *
+     * @param command
      */
-    public String enterScene(String sceneName) {
+    public void post(String command, String target) {
 
-        mSceneName = sceneName;
-
-        try {
-            _sceneAnimator = (scene_animator)mScope.mapSymbol(mSceneName);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return applyNode();
-    }
-
-
-    public void play() {
-        if(_sceneAnimator != null)
-                _sceneAnimator.play();
-    }
-
-
-    public void stop() {
-        if(_sceneAnimator != null)
-            _sceneAnimator.stop();
-    }
-
-
-    public String applyNode() {
-
-        return _sceneAnimator.applyNode();
-    }
-
-
-    public String gotoNode(String nodeName) {
-
-        return _sceneAnimator.gotoNode(nodeName);
+        mainHandler.post(new Queue(command, target));
     }
 
 
@@ -153,7 +182,9 @@ public class CSceneGraph {
     }
 
 
+
     //************ Serialization
+
 
 
     /**
@@ -161,11 +192,13 @@ public class CSceneGraph {
      * from assets/tutors/<tutorname>/tutor_descriptor.json
      *
      */
-    private void loadAnimatorFactory(IScope2 scope) {
+    private void loadSceneGraphFactory(IScope2 scope) {
 
         try {
             loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.mTutorName + "/" + TCONST.AGDESC)), scope);
+
         } catch (JSONException e) {
+
             Log.e(TAG, "JSON FORMAT ERROR: " + TCONST.AGDESC + " : " + e);
             System.exit(1);
         }

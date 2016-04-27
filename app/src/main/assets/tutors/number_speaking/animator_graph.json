@@ -19,13 +19,12 @@
           "COMMENT": "Intro Clip",
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
-          "preenter":["SET_DATASOURCE","LISTENER_DISABLE"],
-          //temp ---- "preenter":["GB_DISABLE","FW_DISABLE"],
+          "preenter":["SET_DATASOURCE"],
           "preexit" :[],
           "edges": [
             {
               "constraint": "",
-              "edge": "NEWNUM"
+              "edge": "NEW_NUMBER"
             }
           ]
         },
@@ -33,10 +32,10 @@
         "NEW_NUMBER":{
           "COMMENT":"This node presents a number for user to speak.",
           "type":"node",
-          "preenter":["GET_NUMBER"],
+          "preenter":["GETNUM"],
           "maptype":"moduleMap",
           "mapname": "SHOW_NUMBER",
-          "preexit" :["GET_NUMBER_WORDS"], //?
+          "preexit" :[],
           "edges":
           [
             {"constraint":"","edge":"USERINPUT"}
@@ -48,15 +47,15 @@
           "type":"node",
           "maptype":"moduleMap",
           "mapname": "LISTENING",
-          "preenter":["LISTENER_ENABLE","REMINDER_TIMER"],
-          "preexit" :["LISTENER_DISABLE", "RESPONSE_TO_NUMBER"],
+          "preenter":["LISTENER_ENABLE"],
+          "preexit" :["LISTENER_DISABLE"],
           "edges":
           [
-            {"constraint":"HEARD_RIGHT_NUMBER","edge":"CORRECT"},
-            {"constraint":"HEARD_MULTI-WORD_NUMBER", "edge":"NOT_CORRECT1"},
-            {"constraint":"HEARD_SINGLE-WORD_NUMBER", "edge":"NOT_CORRECT2"}
-	        //{"constraint":"HEARDNONUMBER","edge":"WRONG"}, //in case of future ambition
-            //{"constraint": "HEARDNONNUMBER","edge":"WRONG"} //in case of future ambition
+            {"constraint":"FTR_RIGHT",     "edge":"CORRECT"},
+            {"constraint":"WRONG_1_DIGIT", "edge":"NOT_CORRECT1"},
+            {"constraint":"WRONG_2_DIGIT", "edge":"NOT_CORRECT2"},
+            {"constraint":"",              "edge":"NOT_CORRECT3"}
+            // The default edge is for Thousands remediation.
           ]
         },
 
@@ -69,14 +68,14 @@
           "preexit" :["REMOVERESPONSE","REMOVESTIMULUS"],
           "edges":
           [
-            {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
-            {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
-            {"constraint":"","edge":"NEW_NUMBER"}
+            {"constraint":"ALL_CORRECT" ,"edge":"EXITCLIP1"},
+            {"constraint":"SOME_CORRECT","edge":"EXITCLIP2"},
+            {"constraint":""            ,"edge":"NEW_NUMBER"}
           ]
         },
 
         "NOT_CORRECT1":{
-          "COMMENT":"When user speaks an incorrect answer...",
+          "COMMENT":"When user speaks an incorrect answer for single digit number...",
           "type":"node",
           "maptype":"moduleMap",
           "mapname": "REMEDIATE1",
@@ -84,13 +83,14 @@
           "preexit" :["REMOVERESPONSE"],
           "edges":
           [
-
-            {"constraint":"","edge":"USERINPUT"}
+            {"constraint":"ALL_CORRECT" ,"edge":"EXITCLIP1"},
+            {"constraint":"SOME_CORRECT","edge":"EXITCLIP2"},
+            {"constraint":"","edge":"NEW_NUMBER"}
           ]
         },
 
         "NOT_CORRECT2":{
-          "COMMENT":"When user speaks an incorrect answer...",
+          "COMMENT":"When user speaks an incorrect answer for two digit number...",
           "type":"node",
           "maptype":"moduleMap",
           "mapname": "REMEDIATE2",
@@ -98,23 +98,28 @@
           "preexit" :["REMOVERESPONSE"],
           "edges":
           [
-
-            {"constraint":"","edge":"USERINPUT"}
+            {"constraint":"ALL_CORRECT" ,"edge":"EXITCLIP1"},
+            {"constraint":"SOME_CORRECT","edge":"EXITCLIP2"},
+            {"constraint":"","edge":"NEW_NUMBER"}
           ]
         },
 
-//        "HESITATION":{
-//          "COMMENT":"When the user doesn't write anything...",
-//          "type":"node",
-//          "maptype":"moduleMap",
-//          "mapname": "PLAYHESITATION",
-//          "preenter":[],
-//          "preexit" :[],
-//          "edges":
-//          [
-//            {"constraint":"","edge":"USERINPUT"}
-//          ]
-//        },
+
+        "NOT_CORRECT3":{
+          "COMMENT":"When user speaks an incorrect answer for three digit number...",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "REMEDIATE3",
+          "preenter":[],
+          "preexit" :["REMOVERESPONSE"],
+          "edges":
+          [
+            {"constraint":"ALL_CORRECT" ,"edge":"EXITCLIP1"},
+            {"constraint":"SOME_CORRECT","edge":"EXITCLIP2"},
+            {"constraint":"","edge":"NEW_NUMBER"}
+          ]
+        },
+
 
         "EXITCLIP1": {
           "COMMENT":"Exit Clip for ALL_CORRECT",
@@ -162,20 +167,10 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "\\?.mp3", "mode":"flow", "features": ""}
-          ]
-        },
+            {"type": "COMMAND", "id": "Sresponse", "method": "onRecognitionComplete", "parms": "NEXT:String"},
 
-        "SHOWNUM": {
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-            {"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "TRUE:Boolean","features":""},
-            {"type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":""},
-            // Sstimulus
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please say this number aloud.mp3", "mode":"flow", "features": ""}
-
+            {"type": "TTS", "command": "SAY", "content": "Tafadhali kuzungumza idadi sauti", "rate":"1.2", "features": "LANG_SW"},
+            {"type": "TTS", "command": "SAY", "content": "Please speak the number aloud", "features": "LANG_EN"}
           ]
         },
 
@@ -184,11 +179,11 @@
           "reuse":true,
           "COMMENT": "Listening Module",
           "tracks": [
-            {"type": "COMMAND", "id": "\\?", "method": "\\?", "parms": "\\?"},
-            // This would call the cancel reminder action below when the user starts speaking
-            {"type": "COMMAND", "id": "\\?", "method": "\\?", "parms": "\\?"},
-            // This would detect the completion of spoken input
-            {"type": "COMMAND", "cmd": "WAIT" } //STILL TBD
+            {"type": "COMMAND", "id": "Sresponse", "method": "onStartTalking", "parms": "CANCEL_REMINDER:String"},
+            // This would call the cancel reminder action below when the user starts writing
+            {"type": "COMMAND", "id": "Sresponse", "method": "onRecognitionComplete", "parms": "NEXT:String"},
+            // This would increment the animation_graph when it is in a wait state.  e.g if it is sitting at the end of a stream audio clip
+            {"type": "COMMAND", "cmd": "WAIT" }
             //{"type": "COMMAND", "id": "Sresponse", "method": "show", "parms": "TRUE:Boolean","features":""}
           ]
         },
@@ -198,8 +193,7 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "id": "Sresponse", "method": "\\?", "parms": "\\?", "features": ""}, //display the spoken input
-            {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "normal:String","features":""}, //set the correct string in normal color
+            {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "right:String","features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","mode":"flow", "features": ""}
           ]
         },
@@ -209,9 +203,8 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "id": "Sresponse", "method": "\\?", "parms": "\\?", "features": ""}, //display the spoken input
-            {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""}, //flag the incorrect string in red color
-            //ADD AUDIO PROMPTS FOR INDICATING PLACE VALUE--we will need a function for returning place value
+            {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
           ]
         },
 
@@ -220,29 +213,40 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "id": "Sresponse", "method": "\\?", "parms": "\\?", "features": ""}, //display the spoken input
-            {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""}, //flag the incorrect string in red color
-            //Say: "This number is numToWords(stimulus)"
+            {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
           ]
         },
 
-        //        "PLAYHESITATION":{
-//          "type": "MODULE",
-//          "reuse":true,
-//          "COMMENT": "TBD",
-//          "tracks": [
-//            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3", "mode":"event", "features": ""},
-//            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"event", "features": ""} //the stimulus digit
-//          ]
-//        },
+        "REMEDIATE3": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
+          ]
+        },
+
+        "SHOW_NUMBER": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "normal:String","features":""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "TRUE:Boolean","features":""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":""}
+          ]
+        },
+
 
         "PLAYEXIT1":{
           "type": "MODULE",
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "mode":"flow", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "You said all of them correctly.mp3",   "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3",                       "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "You said all of them correctly.mp3", "mode":"flow", "features": ""}
           ]
         },
 
@@ -251,20 +255,11 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "mode":"flow", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Next time you can do better.mp3",   "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3",                    "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Next time you can do better.mp3", "mode":"flow", "features": ""}
           ]
         }
 
-//        "PLAYCORRECT": {
-//          "type": "MODULE",
-//          "reuse":true,
-//          "COMMENT": "TBD",
-//          "tracks": [
-//            {"type": "AUDIO", "command": "PLAY", "soundsource": "good.mp3", "features": ""}
-//          ]
-//        }
-//
       },
 
       "actionMap": {
@@ -273,42 +268,37 @@
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "RESPONSE_TO_NUMBER":{}, //result of wordsToNum(response)
+        "STOP": {"type": "COMMAND", "cmd": "WAIT" },
 
-        "GETNUMWORDS":{"type": "COMMAND", "id": "\\?", "method": "\\?", "parms": "\\?", "features": ""},
+        "INIT_TTS_RATE": {"type": "TTS", "command": "SET_RATE", "rate":"1.2", "features": "LANG_SW"},
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[4,27,179]:String","features":""},
+        "GETNUMWORDS":{"type": "COMMAND", "id": "", "method": "", "parms": "", "features": ""},
+
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[1,19,42,10,11,111,100,7,124,38,479]:String","features":""},
 
         "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HESITATION_TRACK", "features": "" },
-        //set the waiting time limit as 10 seconds
 
         "CANCEL_REMINDER": {"type": "TIMER", "id":"ReminderTimer", "action":"CANCEL", "features": "" },
 
-        "HESITATION_TRACK": {"type": "TIMELINE", "trackname": "HES_ABS", "features": ""},
+        "HESITATION_TRACK": {"type": "COMMAND", "id": "Sstimulus", "features": ""},
 
         "GB_DISABLE":{"type": "COMMAND", "id": "SgoButton", "method": "enable", "parms": "FALSE:Boolean","features":""},
-        //disable Go button
-        "GB_ENABLE":{"type": "COMMAND", "id": "SgoButton", "method": "enable", "parms": "TRUE:Boolean","features":""},
-        //enable Go button
 
-        "LISTENER_DISABLE":{"type": "COMMAND", "id": "//?", "method": "enable", "parms": "FALSE:Boolean","features":""},
-        //disable the listener
-        "LISTENER_ENABLE":{"type": "COMMAND", "id": "//?", "method": "enable", "parms": "TRUE:Boolean","features":""},
-        //enable the listener
+        "GB_ENABLE":{"type": "COMMAND", "id": "SgoButton", "method": "enable", "parms": "TRUE:Boolean","features":""},
+
+
+        "LISTENER_DISABLE":{"type": "COMMAND", "id": "Sresponse", "method": "listen", "parms": "FALSE:Boolean","features":""},
+
+        "LISTENER_ENABLE":{"type": "COMMAND", "id": "Sresponse", "method": "listen", "parms": "TRUE:Boolean","features":""},
+
 
         "GETNUM":{"type": "COMMAND", "id": "Sstimulus", "method": "next" ,"features":""},
-        //get a new number from the list.
-
-        //"GETRESPONSE":{"type": "COMMAND", "id": "Sresponse", "method": "???" ,"features":""},
-        //get the recognized character from the recognizer???
 
         "SHOWRESPONSE":{"type": "COMMAND", "id": "Sresponse", "method": "show", "parms": "TRUE:Boolean","features":""},
         "REMOVERESPONSE":{"type": "COMMAND", "id": "Sresponse", "method": "clear", "features":""},
-        //remove the preview string
 
         "SHOWSTIMULUS":{"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "TRUE:Boolean","features":""},
         "REMOVESTIMULUS":{"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "FALSE:Boolean","features":""},
-        //remove the stimulus
 
         "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "gotoNextScene"},
         "NEXT": {"type": "COMMAND", "cmd": "NEXT"  }
@@ -318,34 +308,37 @@
 
         "COMMENT": "@@@@@  CConstraints @@@@@ ",
 
-        "HEARD_RIGHT_NUMBER": {}, //TBD
-
-        "HEARD_MULTI-WORD_NUMBER": {}, //TWO CONDITIONS: not correct and with place value
-
-        "HEARD_SINGLE-WORD_NUMBER": {}, //TBD
-
-        "COND_PASS1": {
+        "WRONG_1_DIGIT": {
           "type": "CONDITION",
-          "If": "NO_NUMBERS_LEFT && ALL_CORRECT",
+          "If": "{{Sstimulus.digits}}==1",
           "Then":"true",
           "Else":"false"
         },
 
-        "COND_PASS2": {
+        "WRONG_2_DIGIT": {
           "type": "CONDITION",
-          "If": "NO_NUMBERS_LEFT && NOT_ALL_CORRECT",
+          "If": "{{Sstimulus.digits}}==2",
           "Then":"true",
           "Else":"false"
         },
 
-        "NO_NUMBERS_LEFT":{
+        "All_CORRECT": {
           "type": "CONDITION",
-          "test":"NO_NUMBERS_LEFT"
+          "If": "END_OF_DATA && ALL_CORRECT",
+          "Then":"true",
+          "Else":"false"
         },
 
-        "FTR_WORDS":{
+        "SOME_CORRECT": {
           "type": "CONDITION",
-          "test":"!FTR_NOWORDS"
+          "If": "END_OF_DATA && NOT_ALL_CORRECT",
+          "Then":"true",
+          "Else":"false"
+        },
+
+        "END_OF_DATA":{
+          "type": "CONDITION",
+          "test":"FTR_EOD"
         },
 
         "ALL_CORRECT":{

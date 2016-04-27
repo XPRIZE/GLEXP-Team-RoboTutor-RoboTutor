@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cmu.xprize.util.CEventMap;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -75,7 +76,7 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     private int                     expectedWordIndex     = 0;                      // index of expected next word in sentence
     private static int[]            creditLevel           = null;                   // per-word credit level according to current hyp
 
-    // Tutor scriptable events
+    // Tutor scriptable ASR events
     private String                  _silenceEvent;          // Instant silence begins
     private String                  _soundEvent;            // Instant a sound is heard
     private String                  _wordEvent;             // Instant a word is recognized
@@ -87,20 +88,11 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     protected String                EXTERNPATH;
 
 
+    // json loadable
+    //
+    public CData_Index[]      dataSource;
 
-    public static String            RECOGLANG;
 
-
-    // This is used to map "language features" to the story resources
-    // these are located in the assets/<lang>
-    // Note: on Android these are case sensitive filenames
-
-    static protected HashMap<String, String> langMap = new HashMap<String, String>();
-
-    static {
-        langMap.put("LANG_EN", "en");
-        langMap.put("LANG_SW", "sw");
-    }
 
     // This is used to map "type" (class names) in the index to real classes
     //
@@ -110,10 +102,6 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
         viewClassMap.put("ASB_Data", CRt_ViewManagerASB.class);
         viewClassMap.put("MARi_Data", CRt_ViewManagerMari.class);
     }
-
-    // json loadable
-    public CData_Index[]      dataSource;
-
 
     static final String TAG = "CRt_Component";
 
@@ -150,6 +138,7 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
         // Generate a Project Listen type listener
         // Attach the speech recognizer.
         mListener = new ListenerPLRT();
+//        mListener = new ListenerJSGF();
         mListener.setEventListener(this);
 
         // attach TTS
@@ -325,22 +314,20 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
      */
     public void setLanguage(String language) {
 
-        mLanguage = langMap.get(language);
+        mLanguage = TCONST.langMap.get(language);
 
-        // TODO: manage language switching - currently ASR uses CTutor default language
+        // Configure the mListener for our story
         //
-        RECOGLANG = language;
-
-        // Configure the mListener for out story
         mListener.setLanguage(language);
     }
 
 
-    public void configTimedEvent(String symbol, String eventString, int timeOut, boolean reset) {
+    public void configureEvent(String symbol, String eventString) {
 
         int eventType = CEventMap.eventMap.get(eventString);
 
         switch(eventType) {
+
             case TCONST.SILENCE_EVENT:
                 _silenceEvent = symbol;
                 break;
@@ -352,6 +339,22 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
             case TCONST.WORD_EVENT:
                 _wordEvent = symbol;
                 break;
+        }
+        mListener.configStaticEvent(eventType);
+    }
+    public void clearEvent(String eventString) {
+
+        int eventType = CEventMap.eventMap.get(eventString);
+
+        mListener.resetStaticEvent(eventType);
+    }
+
+
+    public void configureEvent(String symbol, String eventString, int timeOut) {
+
+        int eventType = CEventMap.eventMap.get(eventString);
+
+        switch(eventType) {
 
             case TCONST.TIMEDSILENCE_EVENT:
                 _timedSilenceEvent = symbol;
@@ -365,15 +368,13 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
                 _timedWordEvent = symbol;
                 break;
         }
-        mListener.configTimedEvent(eventType, timeOut, reset);
+        mListener.configTimedEvent(eventType, timeOut);
     }
-
-
     public void clearTimedEvent(String eventString) {
 
         int eventType = CEventMap.eventMap.get(eventString);
 
-        mListener.configTimedEvent(eventType, Long.MAX_VALUE, true);
+        mListener.resetTimedEvent(eventType);
     }
 
 
@@ -440,6 +441,7 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     public View getImageView() {
         return mPageIImage;
     }
+
 
 
     //************ Serialization

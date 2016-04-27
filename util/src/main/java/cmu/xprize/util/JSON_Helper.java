@@ -168,6 +168,7 @@ public class JSON_Helper {
 
             try {
                 // we don't care about the value only whether if there is a field there
+                //TODO: fill out JSONExceptions error messages
                 if(jsonObj.has(fieldName)) {
 
                     // Most of our fields are Strings so handle them as efficiently as possible
@@ -177,7 +178,9 @@ public class JSON_Helper {
                             field.set(self, jsonObj.getString(fieldName));
 
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            //e.printStackTrace();
+                            Log.e(TAG, "field conversion: " + e);
+                            System.exit(1);
                         }
                     }
 
@@ -188,7 +191,22 @@ public class JSON_Helper {
                             field.set(self, jsonObj.getBoolean(fieldName));
 
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            //e.printStackTrace();
+                            Log.e(TAG, "field conversion: " + e);
+                            System.exit(1);
+                        }
+                    }
+
+                    // Most of our fields are Strings so handle them as efficiently as possible
+                    else if(className.equals("float")) {
+
+                        try {
+                            field.setFloat(self, Float.parseFloat(jsonObj.getString(fieldName)));
+
+                        } catch (JSONException e) {
+                            //e.printStackTrace();
+                            Log.e(TAG, "field conversion: " + e);
+                            System.exit(1);
                         }
                     }
 
@@ -199,7 +217,9 @@ public class JSON_Helper {
                             field.set(self, jsonObj.getBoolean(fieldName));
 
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            //e.printStackTrace();
+                            Log.e(TAG, "field conversion: " + e);
+                            System.exit(1);
                         }
                     }
 
@@ -211,7 +231,9 @@ public class JSON_Helper {
                             field.set(self, jsonObj.getLong(fieldName));
 
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            //e.printStackTrace();
+                            Log.e(TAG, "field conversion: " + e);
+                            System.exit(1);
                         }
                     }
 
@@ -222,7 +244,9 @@ public class JSON_Helper {
                             field.set(self, jsonObj.getInt(fieldName));
 
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            //e.printStackTrace();
+                            Log.e(TAG, "field conversion: " + e);
+                            System.exit(1);
                         }
                     }
 
@@ -437,51 +461,54 @@ public class JSON_Helper {
         JSONObject nJsonObj = null;
         JSONArray  subArr;
 
-        for (int i = 0; i < nArr.length(); i++) {
-            try {
-                Object eObj;
+        try {
+            for (int i = 0; i < nArr.length(); i++) {
+                try {
+                    Object eObj;
 
-                if (elemClass.isArray()) {
-                    subArr = nArr.getJSONArray(i);
+                    if (elemClass.isArray()) {
+                        subArr = nArr.getJSONArray(i);
 
-                    Class<?> subElemClass = elemClass.getComponentType();
-                    Object subField_Array = Array.newInstance(subElemClass, subArr.length());
+                        Class<?> subElemClass = elemClass.getComponentType();
+                        Object subField_Array = Array.newInstance(subElemClass, subArr.length());
 
-                    eObj =  parseArray(jsonObj, self, classMap, scope, subArr, subElemClass, subField_Array);
-                }
-                else if (elemClass.equals(String.class)) {
-                    eObj = nArr.getString(i);
-                }
-                else if (elemClass.equals(int.class)) {
-                    eObj = nArr.getInt(i);
-                }
-                else {
-                    nJsonObj = nArr.getJSONObject(i);
+                        eObj = parseArray(jsonObj, self, classMap, scope, subArr, subElemClass, subField_Array);
+                    } else if (elemClass.equals(String.class)) {
+                        eObj = nArr.getString(i);
+                    } else if (elemClass.equals(int.class)) {
+                        eObj = nArr.getInt(i);
+                    } else {
+                        nJsonObj = nArr.getJSONObject(i);
 
-                    // If the element has a type field then assume it is a subtype
-                    // of the array component type and instantiate it by type
-                    if (nJsonObj.has("type")) {
-                        Class<?> subClass = classMap.get(nJsonObj.getString("type"));
+                        // If the element has a type field then assume it is a subtype
+                        // of the array component type and instantiate it by type
+                        if (nJsonObj.has("type")) {
+                            Class<?> subClass = classMap.get(nJsonObj.getString("type"));
 
-                        System.out.printf("class type:%s\n", subClass.getName());
-                        eObj = subClass.newInstance();
+                            System.out.printf("class type:%s\n", subClass.getName());
+                            eObj = subClass.newInstance();
+                        }
+
+                        // Otherwise use the array component type by default.
+                        else {
+                            System.out.printf("class type:%s\n", elemClass.getName());
+                            eObj = elemClass.newInstance();
+                        }
+
+                        ((ILoadableObject) eObj).loadJSON(nJsonObj, scope);
                     }
 
-                    // Otherwise use the array component type by default.
-                    else {
-                        System.out.printf("class type:%s\n", elemClass.getName());
-                        eObj = elemClass.newInstance();
-                    }
+                    Array.set(field_Array, i, eObj);
 
-                    ((ILoadableObject) eObj).loadJSON(nJsonObj, scope);
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Null Object in :" + nJsonObj);
                 }
-
-                Array.set(field_Array, i, eObj);
-
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-                Log.e(TAG, "Null Object in :" + nJsonObj);
             }
+        }
+        catch(Exception e) {
+            Log.e(TAG, "Json Array Format Error: " + e);
+            System.exit(1);
         }
 
         return field_Array;

@@ -14,21 +14,20 @@
 package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 
 import cmu.xprize.fw_component.CStimRespBase;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
+import cmu.xprize.util.CEvent;
+import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
-import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
+import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 
@@ -63,6 +62,9 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
     @Override
     public void init(Context context, AttributeSet attrs) {
+
+        super.init(context, attrs);
+
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
     }
@@ -73,6 +75,11 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
     }
 
 
+    @Override
+    public void addEventListener(String linkedView) {
+
+        mListeners.add((IEventListener) mTutor.getViewByName(linkedView));
+    }
 
 
     private void cachedataSource() {
@@ -88,8 +95,8 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
         if(mIsResponse) {
 
             // update the response variable  "<Sresponse>.value"
-            mTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
-            mTutor.getScope().addUpdate(name() + ".valueUC", new TString(mValue.toUpperCase()));
+            mTutor.getScope().addUpdateVar(name() + ".value", new TString(mValue));
+            mTutor.getScope().addUpdateVar(name() + ".valueUC", new TString(mValue.toUpperCase()));
 
             if (newChar.equals("???")) {
                 mTutor.setAddFeature(TCONST.FWUNKNOWN);
@@ -175,8 +182,8 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
         // update the Scope response variable  "<Sstimulus>.value"
         //
-        mTutor.getScope().addUpdate(name() + ".value", new TString(mValue));
-        mTutor.getScope().addUpdate(name() + ".valueUC", new TString(mValue.toUpperCase()));
+        mTutor.getScope().addUpdateVar(name() + ".value", new TString(mValue));
+        mTutor.getScope().addUpdateVar(name() + ".valueUC", new TString(mValue.toUpperCase()));
 
         if(dataExhausted()) {
 
@@ -186,9 +193,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
             // For stimulus controls broadcast the change so the response knows
             // Let interested listeners know the stimulus has been exhausted
             //
-            Intent msg = new Intent(TCONST.FW_EOI);
-
-            bManager.sendBroadcast(msg);
+            dispatchEvent(new CEvent(TCONST.FW_EOI));
         }
     }
 
@@ -276,8 +281,24 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
         mSceneObject.setTutor(tutor);
     }
 
+    // Do deferred configuration - anything that cannot be done until after the
+    // view has been inflated and init'd - where it is connected to the TutorEngine
+    //
     @Override
-    public void setNavigator(ITutorNavigator navigator) {
+    public void postInflate() {
+
+        // Do deferred listeners configuration - this cannot be done until after the
+        //
+        if(!mListenerConfigured) {
+            for (String linkedView : mLinkedViews) {
+                addEventListener(linkedView);
+            }
+            mListenerConfigured = true;
+        }
+    }
+
+    @Override
+    public void setNavigator(ITutorGraph navigator) {
         mSceneObject.setNavigator(navigator);
     }
 

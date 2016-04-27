@@ -100,9 +100,13 @@
       "actionMap": {
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
+
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
-        "SET_LANGUAGE":{"type": "COMMAND", "id": "SrtComponent", "method": "setLanguage", "parms": "LANG_SW:String","features":""},
-        "SET_STORYNAME":{"type": "COMMAND", "id": "SrtComponent", "method": "setStory", "parms": "Ajali mbaya:String","features":""},
+        "SET_LANGUAGE":{"type": "COMMAND", "id": "SrtComponent", "method": "setLanguage", "parms": "LANG_EN:String","features":""},
+        "SET_STORYNAME":{"type": "COMMAND", "id": "SrtComponent", "method": "setStory", "parms": "The Golden Goose:String","features":""},
+
+//        "SET_LANGUAGE":{"type": "COMMAND", "id": "SrtComponent", "method": "setLanguage", "parms": "LANG_SW:String","features":""},
+//        "SET_STORYNAME":{"type": "COMMAND", "id": "SrtComponent", "method": "setStory", "parms": "Ajali mbaya:String","features":""},
 
         "NEXT_DATASET":{"type": "COMMAND", "id": "SrtComponent", "method": "next" ,"features":""},
         "B1_ATTACH": {"type": "COMMAND", "id": "SdoneButton", "method": "setButtonBehavior", "parms": "NEXT:String"},

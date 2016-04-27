@@ -5,12 +5,16 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.util.Log;
 
+import org.w3c.dom.Text;
+
 import java.util.Locale;
 
 public class TTSsynthesizer implements OnInitListener
 {
     private final Context   context;
     private Locale          mLocale;
+    private String          mCurrentLocale = "";
+    private float           mCurrentRate   = 0;
     private TextToSpeech    tts;
     private boolean         readyToSpeak = false;
     private IReadyListener tutorRoot;
@@ -59,6 +63,26 @@ public class TTSsynthesizer implements OnInitListener
 
 
     /**
+     * Sets the speech rate.
+     *
+     * This has no effect on any pre-recorded speech.
+     */
+    public int setSpeechRate(float speechRate) {
+
+        int result = TextToSpeech.SUCCESS;
+
+        if(speechRate != 0 && mCurrentRate != speechRate) {
+            result =  tts.setSpeechRate(speechRate);
+
+            if(result == TextToSpeech.SUCCESS)
+                    mCurrentRate = speechRate;
+        }
+
+        return result;
+    }
+
+
+    /**
      * used by tutor root to test service availability
      * @return
      */
@@ -74,16 +98,21 @@ public class TTSsynthesizer implements OnInitListener
      */
     public void setLanguage(String langFeature) {
 
-        switch(langFeature) {
-            case "LANG_SW":
-                mLocale = new Locale("swa","TZA","female;lxk");
-                break;
+        if(langFeature != null && !langFeature.equals("") && mCurrentLocale != langFeature) {
 
-            case "LANG_EN":
-                mLocale = new Locale("en","USA","female;slt");
-                break;
+            switch (langFeature) {
+                case "LANG_SW":
+                    mLocale = new Locale("swa", "TZA", "female;lxk");
+                    break;
+
+                case "LANG_EN":
+                    mLocale = new Locale("en", "USA", "female;slt");
+                    break;
+            }
+            tts.setLanguage(mLocale);
+
+            mCurrentLocale = langFeature;
         }
-        tts.setLanguage(mLocale);
     }
 
 

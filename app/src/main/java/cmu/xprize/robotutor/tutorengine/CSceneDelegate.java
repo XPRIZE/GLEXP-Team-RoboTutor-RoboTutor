@@ -45,7 +45,7 @@ public class CSceneDelegate implements ITutorScene {
     protected ITutorScene       mParent;
     protected CTutor            mTutor;
     protected CSceneGraph mAnimator;
-    protected ITutorNavigator   mNavigator;
+    protected ITutorGraph mNavigator;
     protected ITutorLogManager  mLogManager;
 
 
@@ -118,7 +118,10 @@ public class CSceneDelegate implements ITutorScene {
     public void setTutor(CTutor tutor) { mTutor = tutor; }
 
     @Override
-    public void setNavigator(ITutorNavigator navigator) { mNavigator = navigator; }
+    public void postInflate() {}
+
+    @Override
+    public void setNavigator(ITutorGraph navigator) { mNavigator = navigator; }
 
     @Override
     public void setLogManager(ITutorLogManager logManager) { mLogManager = logManager; }

@@ -17,26 +17,11 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.robotutor.tutorengine;
+package cmu.xprize.fw_component;
 
-import java.util.HashMap;
+public interface ISrListener {
 
-public interface ITutorNavigator {
-
-    public void initTutorContainer(ITutorSceneImpl rootScene);
-    public CSceneGraph getAnimator();
-    public HashMap getChildMap();
-    public HashMap getChildMapByName(String sceneName);
-
-    public void questionStart();
-    public void questionComplete();
-    public void goBackScene();
-    public void goNextScene();
-    public void goToNamedScene(String name);
-
-    public void goToScene(String tarScene);
-
-    public String gotoNextScene(boolean push);
-
-    public void onNextScene();
+    public void onStimulusUpdate(String newStimulus);
+    public void onResponseUpdate(String newResponse);
+    public void onEndOfData();
 }

@@ -31,8 +31,9 @@ public interface ITutorObject {
     public String name();
 
     public void setParent(ITutorSceneImpl mParent);
+    public void postInflate();
     public void setTutor(CTutor tutor);
-    public void setNavigator(ITutorNavigator navigator);
+    public void setNavigator(ITutorGraph navigator);
     public void setLogManager(ITutorLogManager logManager);
 
 }

@@ -23,7 +23,7 @@ import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
-import cmu.xprize.robotutor.tutorengine.ITutorNavigator;
+import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 
@@ -53,7 +53,6 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
         init(context, null);
     }
 
-
     @Override
     public void init(Context context, AttributeSet attrs) {
         mSceneObject = new CObjectDelegate(this);
@@ -66,6 +65,10 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
         mSceneObject.onDestroy();
     }
 
+ //   @Override
+    public void addEventListener(String linkedView) {
+        //mListeners.add((IEventListener) mTutor.getViewById(linkedViewID, null));
+    }
 
     @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
     {
@@ -169,7 +172,10 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
     }
 
     @Override
-    public void setNavigator(ITutorNavigator navigator) {
+    public void postInflate() {}
+
+    @Override
+    public void setNavigator(ITutorGraph navigator) {
         mSceneObject.setNavigator(navigator);
     }
 

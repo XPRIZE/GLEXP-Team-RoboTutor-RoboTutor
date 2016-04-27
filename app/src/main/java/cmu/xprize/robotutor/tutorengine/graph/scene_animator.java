@@ -58,32 +58,6 @@ public class scene_animator extends graph_node implements ILoadableObject2 {
     }
 
 
-    public String next() {
-        String result = TCONST.READY;
-
-        try {
-            _currNode = (graph_node) getScope().mapSymbol(rootnode);
-        }
-        catch(Exception e) {
-            Log.d(TAG, "Root Node not found");
-            System.exit(1);
-        }
-
-        if(_currNode != null) {
-            Log.d(TAG, "Running Node: " + _currNode.name);
-
-            _currNode.preEnter();
-            result = TCONST.READY;
-        }
-        else {
-            Log.d(TAG, "No Root Node for Scene");
-            result = TCONST.NEXTSCENE;
-        }
-
-        return result;
-    }
-
-
     /**
      * increments the curranimation polymorphically
      * potentially called recursively if currNode is a subgraph.
@@ -143,6 +117,33 @@ public class scene_animator extends graph_node implements ILoadableObject2 {
 
 
         return _nodeState;
+    }
+
+
+    @Override
+    public String next() {
+        String result = TCONST.READY;
+
+        try {
+            _currNode = (graph_node) getScope().mapSymbol(rootnode);
+        }
+        catch(Exception e) {
+            Log.d(TAG, "Root Node not found");
+            System.exit(1);
+        }
+
+        if(_currNode != null) {
+            Log.d(TAG, "Running Node: " + _currNode.name);
+
+            _currNode.preEnter();
+            result = TCONST.READY;
+        }
+        else {
+            Log.d(TAG, "No Root Node for Scene");
+            result = TCONST.NEXTSCENE;
+        }
+
+        return result;
     }
 
 
