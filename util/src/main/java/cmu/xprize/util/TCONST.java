@@ -47,9 +47,13 @@ public class TCONST {
 
     static public HashMap<String, String> langMap = new HashMap<String, String>();
 
+    public static final String LANG_EN = "LANG_EN";
+    public static final String LANG_SW = "LANG_SW";
+
+    // This maps features to 2 letter codes used to build filepaths.
     static {
-        langMap.put("LANG_EN", "en");
-        langMap.put("LANG_SW", "sw");
+        langMap.put(LANG_EN, "en");
+        langMap.put(LANG_SW, "sw");
     }
 
 
