@@ -9,7 +9,7 @@ import cmu.xprize.util.IScope;
 public interface IScope2 extends IScope {
 
     public CTutor          tutor();
-    public ITutorGraph tutorGraph();
+    public ITutorGraph     tutorGraph();
     public CSceneGraph     sceneGraph();
     public String          tutorName();
     public IScriptable2    mapSymbol(String symbolName) throws Exception;

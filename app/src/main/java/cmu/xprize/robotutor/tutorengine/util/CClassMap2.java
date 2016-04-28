@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.graph.graph_module;
 import cmu.xprize.robotutor.tutorengine.graph.graph_node;
-import cmu.xprize.robotutor.tutorengine.graph.scene_animator;
+import cmu.xprize.robotutor.tutorengine.graph.scene_node;
 import cmu.xprize.robotutor.tutorengine.graph.type_action;
 import cmu.xprize.robotutor.tutorengine.graph.type_audio;
 import cmu.xprize.robotutor.tutorengine.graph.type_cond;
@@ -29,7 +29,7 @@ public class CClassMap2 {
     // This is used to map "type" (class names) used in json HashMap specs to real classes
 
     static {
-        classMap.put("ANIMATOR", scene_animator.class);
+        classMap.put("ANIMATOR", scene_node.class);
         classMap.put("NODE", graph_node.class);
         classMap.put("MODULE", graph_module.class);
         classMap.put("TIMELINE", type_timeline.class);

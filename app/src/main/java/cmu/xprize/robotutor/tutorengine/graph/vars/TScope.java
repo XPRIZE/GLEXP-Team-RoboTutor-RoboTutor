@@ -32,7 +32,7 @@ import cmu.xprize.util.TCONST;
 
 public class TScope implements IScope2 {
 
-    // There is one toplevel scope created by scene_animator
+    // There is one toplevel scope created by scene_node
     //
     private static TScope rootScope = null;
 

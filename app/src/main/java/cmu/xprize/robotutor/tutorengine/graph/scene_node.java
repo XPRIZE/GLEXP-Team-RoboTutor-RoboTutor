@@ -32,7 +32,7 @@ import cmu.xprize.util.TCONST;
 /**
  * This represents the top level animation graph object
  */
-public class scene_animator extends graph_node implements ILoadableObject2 {
+public class scene_node extends graph_node implements ILoadableObject2 {
 
     // State fields
     private graph_node   _currNode;
@@ -50,52 +50,50 @@ public class scene_animator extends graph_node implements ILoadableObject2 {
     public HashMap choiceMap;
     public HashMap constraintMap;
 
-    static private final String TAG = "ANIMATOR";
+    static private final String TAG = "scene_node";
 
 
-    public scene_animator() {
+    /**
+     * The scene_node for
+     */
+    public scene_node() {
         _currNode = this;
     }
 
 
     /**
-     * increments the curranimation polymorphically
-     * potentially called recursively if currNode is a subgraph.
+     *  Increments the curranimation polymorphically
+     *  potentially called recursively if currNode is a subgraph.
      *
      * @return The
      */
     @Override
     public String applyNode() {
 
-        // When we retrieve the "next" node we automatically apply it
-        // This may result in a simple state change - method call etc.
-        // this returns TCONST.DONE indicating the event is complete
-        //
-        // It may start a process that need to complete before continuing.
-        // returning TCONST.WAIT indicating that next will be driven by a
-        // completion event - or some external user event.
-        //
-        // A result of TCONST.NONE indicated the source node is exhausted.
-        // which will drive a search for the next node
-        //
-        if (_currNode != null) do {
+        if (_currNode != null) {
 
-            // Increment the animation polymorphically
-            // Simple nodes will always return:
+            // This is the mechanism by which Modules step through multiple internal actions
+            // However this is polymorphic where:
+            //
+            // Simple (Action type) nodes will always return:
             //      NONE (the node is exhausted - no more actions)
             //
-            // Complex nodes may return:
+            // Complex (Module type) nodes may return:
             //      READY(start state)
             //      WAIT (last node action result) or
             //      NONE (the node is exhausted - no more actions)
 
             _nodeState = _currNode.next();
 
-            // If the node is exhausted move to next node
-
             switch(_nodeState) {
 
+                // If the node is exhausted move to next node
+
                 case TCONST.NONE:
+
+                    // When we retrieve the "next" node we automatically apply it
+                    // by falling through
+
                     _currNode = _currNode.nextNode();
 
                     if (_currNode == null) {
@@ -108,13 +106,20 @@ public class scene_animator extends graph_node implements ILoadableObject2 {
                 case TCONST.READY:
                 case TCONST.DONE:
 
+                    // This may result in a simple state change - method call etc.
+                    // which returns TCONST.DONE indicating the event is complete
+                    //
+                    // It may start a process that needs to complete before continuing.
+                    //
+                    // A result of TCONST.NONE indicated the complex source node is exhausted.
+                    // which will drive a search for the next node
+                    //
+
                     Log.d(TAG, "Running Node: " + _currNode.name);
                     _nodeState = _currNode.applyNode();
                     break;
             }
-
-        } while (!_nodeState.equals(TCONST.WAIT) && !_nodeState.equals(TCONST.NEXTSCENE));
-
+        }
 
         return _nodeState;
     }

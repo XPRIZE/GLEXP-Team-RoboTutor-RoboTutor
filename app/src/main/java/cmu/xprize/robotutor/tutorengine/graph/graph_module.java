@@ -32,7 +32,7 @@ import cmu.xprize.robotutor.tutorengine.CTutor;
 
 public class graph_module extends graph_node implements ILoadableObject2 {
 
-    private int               _ndx;
+    private int               _ndx = 0;
     private String            _moduleState;
     type_action               _nextAction;
 
@@ -64,8 +64,8 @@ public class graph_module extends graph_node implements ILoadableObject2 {
 
 
     /**
-     * As with all overrides of "next" it should only ever be called from applyNode in
-     * scene_animator
+     * As with all overrides  - "next" should only ever be called from applyNode in
+     * scene_node
      *
      * @return
      */
@@ -82,7 +82,11 @@ public class graph_module extends graph_node implements ILoadableObject2 {
     }
 
 
-
+    /**
+     * TODO: externalize the loop mechanism so we can interrupt more readily
+     *
+     * @return
+     */
     @Override
     public String applyNode() {
 

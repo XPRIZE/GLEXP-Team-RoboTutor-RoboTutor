@@ -56,8 +56,8 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
     protected CTutor                          mTutor;
     protected String                          mTutorName;
     protected ITutorManager                   mTutorContainer;
+    protected CSceneGraph                     mSceneGraph;
     protected ITutorLogManager                mLogManager;
-    protected CSceneGraph                     mSceneAnimator;
 
     private final Handler                     mainHandler = new Handler(Looper.getMainLooper());
 
@@ -96,7 +96,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
 
         loadNavigatorDescr();
 
-        mSceneAnimator = new CSceneGraph(mTutor, tutorScope, this);
+        mSceneGraph = new CSceneGraph(mTutor, tutorScope, this);
     }
 
 
@@ -184,7 +184,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
 
     @Override
     public CSceneGraph getAnimator() {
-        return mSceneAnimator;
+        return mSceneGraph;
     }
 
 
@@ -395,8 +395,8 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
         //
         navigatedata[_sceneCurr].instance.onEnterScene();
 
-        mSceneAnimator.post(TCONST.ENTER_SCENE, navigatedata[_sceneCurr].id);
-        mSceneAnimator.post(TCONST.NEXT_NODE);
+        mSceneGraph.post(TCONST.ENTER_SCENE, navigatedata[_sceneCurr].id);
+        mSceneGraph.post(TCONST.NEXT_NODE);
     }
 
     @Override

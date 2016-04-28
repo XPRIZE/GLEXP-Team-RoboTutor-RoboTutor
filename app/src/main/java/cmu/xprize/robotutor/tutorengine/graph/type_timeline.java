@@ -89,14 +89,6 @@ public class type_timeline extends type_action {
 
     }
 
-//    @Override
-//    public String next() {
-//        String status = TCONST.NONE;
-//
-//        stop();
-//
-//        return status;
-//    }
 
     @Override
     public String applyNode() {

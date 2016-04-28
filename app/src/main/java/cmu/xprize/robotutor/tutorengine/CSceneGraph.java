@@ -28,12 +28,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
+import cmu.xprize.robotutor.tutorengine.graph.scene_node;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
-import cmu.xprize.robotutor.tutorengine.graph.scene_animator;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
 
@@ -52,15 +54,16 @@ public class CSceneGraph  {
     private CTutorGraph      mTutorGraph;
 
     private final Handler    mainHandler = new Handler(Looper.getMainLooper());
+    private HashMap          queueMap = new HashMap();
 
     // State fields
-    private scene_animator _sceneAnimator;
+    private scene_node       _sceneNode;
 
     private HashMap<String, Integer> _pFeatures;
 
 
     // json loadable
-    public HashMap<String,scene_animator> animatorMap;
+    public HashMap<String,scene_node> animatorMap;
 
 
     final private String TAG = "CSceneGraph";
@@ -99,41 +102,89 @@ public class CSceneGraph  {
         @Override
         public void run() {
 
+            queueMap.remove(this);
+
             switch(_command) {
                 case TCONST.ENTER_SCENE:
 
                     mSceneName = _target;
 
                     try {
-                        _sceneAnimator = (scene_animator)mScope.mapSymbol(mSceneName);
+                        _sceneNode = (scene_node)mScope.mapSymbol(mSceneName);
 
                     } catch (Exception e) {
                         e.printStackTrace();
+                        Log.e(TAG, "Scene not found for SceneGraph");
+                        System.exit(1);
                     }
                     break;
 
                 case TCONST.NEXT_NODE:
-                    switch (_sceneAnimator.applyNode()) {
+
+                    switch (_sceneNode.applyNode()) {
+
+                        // TCONST.NEXTSCENE is used to end the current scene and step through to the
+                        // next scene in the TutorGraph.
 
                         case TCONST.NEXTSCENE:
                             mTutorGraph.post(TCONST.NEXTSCENE);
+                            break;
+
+                        // TCONST.WAIT indicates that next node will be driven by a
+                        // completion event still running- or some external user event.
+
+                        case TCONST.WAIT:
+                            break;
+
+                        default:
+                            post(TCONST.NEXT_NODE);
                             break;
                     }
                     break;
 
                 case TCONST.PLAY:
-                    _sceneAnimator.play();
+                    _sceneNode.play();
                     break;
 
                 case TCONST.STOP:
-                    _sceneAnimator.stop();
+                    _sceneNode.stop();
                     break;
 
                 case TCONST.GOTO_NODE:
-                    _sceneAnimator.gotoNode(_target);
+                    _sceneNode.gotoNode(_target);
                     break;
             }
         }
+    }
+
+
+    /**
+     * Remove any pending scenegraph commands.
+     *
+     */
+    private void flushQueue() {
+
+        Iterator<?> tObjects = queueMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            mainHandler.removeCallbacks((Queue)(entry.getValue()));
+        }
+
+    }
+
+    /**
+     * Keep a mapping of pending messages so we can flush the queue if we want to terminate
+     * the tutor before it finishes naturally.
+     *
+     * @param qCommand
+     */
+    private void enQueue(Queue qCommand) {
+
+        queueMap.put(qCommand, qCommand);
+
+        mainHandler.post(qCommand);
     }
 
     /**
@@ -143,7 +194,7 @@ public class CSceneGraph  {
      */
     public void post(String command) {
 
-        mainHandler.post(new Queue(command));
+        enQueue(new Queue(command));
     }
 
 
@@ -154,7 +205,7 @@ public class CSceneGraph  {
      */
     public void post(String command, String target) {
 
-        mainHandler.post(new Queue(command, target));
+        enQueue(new Queue(command, target));
     }
 
 
