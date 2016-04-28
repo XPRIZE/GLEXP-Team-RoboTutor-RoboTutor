@@ -12,9 +12,9 @@ public class CEventMap {
     // This is used to map "type" (class names) used in json HashMap specs to real classes
 
     static {
-        eventMap.put("SILENCE", TCONST.SILENCE_EVENT);
-        eventMap.put("SOUND", TCONST.SOUND_EVENT);
-        eventMap.put("WORD", TCONST.WORD_EVENT);
+        eventMap.put("SILENCE_EVENT", TCONST.SILENCE_EVENT);
+        eventMap.put("SOUND_EVENT", TCONST.SOUND_EVENT);
+        eventMap.put("WORD_EVENT", TCONST.WORD_EVENT);
         eventMap.put("SILENCE_TIMEOUT", TCONST.TIMEDSILENCE_EVENT);
         eventMap.put("SOUND_TIMEOUT", TCONST.TIMEDSOUND_EVENT);
         eventMap.put("WORD_TIMEOUT", TCONST.TIMEDWORD_EVENT);

@@ -255,9 +255,10 @@ public class TCONST {
     public static final String CURRENT_TUTOR   = "tutor";
 
 
-    // Number Listeneing Component Error Codes
+    // Number Listeneing Component
     public static final String ERR_SINGLEDIGIT = "Single Digit Error";
     public static final String ERR_MULTIDIGIT  = "Multi Digit Error";
+    public static final String TEXT_FIELD = ".text";
 
 
     // Generic error codes

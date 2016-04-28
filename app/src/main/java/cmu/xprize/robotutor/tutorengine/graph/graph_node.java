@@ -154,9 +154,9 @@ public class graph_node implements ILoadableObject2, IScriptable2 {
 
     // preenter / preexit action resolution.
     //
-    private void apply(String[] mapSet) {
+    private void apply(String[] commandSet) {
 
-        for (String nodeName : mapSet) {
+        for (String nodeName : commandSet) {
             try {
                 IScriptable2 node = (IScriptable2)getScope().mapSymbol(nodeName);
 

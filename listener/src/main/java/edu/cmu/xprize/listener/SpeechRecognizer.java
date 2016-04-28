@@ -1059,11 +1059,16 @@ public class SpeechRecognizer {
 
 
         /**
-         * Fire the single event that indicate a particular state has begun
+         *  Fire the single event that indicate a particular state has begun
+         *  At the moment these are one shot events - i.e. reset when fired
          *
          * @param eventType
          */
         public synchronized void fireStaticEvent(int eventType) {
+
+            // Auto reset static event handler
+            //
+            configStaticEvent(eventType, false);
 
             switch (eventType) {
                 case TCONST.SILENCE_EVENT:
@@ -1092,6 +1097,8 @@ public class SpeechRecognizer {
          *  We ccnstantly watch for timed events within the reognizer thread.  This is called on each
          *  iteration and the "WaitAfter..." flags dictate which timed events are actively watched.
          *
+         *  At the moment these are one shot events - i.e. reset when fired
+         *
          *  Note we may fire multiple event types in one call to this method.
          *
          *  See #configTimedEvent
@@ -1112,6 +1119,8 @@ public class SpeechRecognizer {
             if (WaitAfterStart && isStartTriggered) {
 
                 if (startGap > startTimeOut) {
+                    resetTimedEvent(TCONST.TIMEDSTART_EVENT);
+
                     Log.i("ASR", "Start Timout Fired");
                     mainHandler.post(new timeOutEvent(TCONST.TIMEDSTART_EVENT));
                 }
@@ -1120,6 +1129,8 @@ public class SpeechRecognizer {
             else if (WaitAfterSilence && isSilenceTriggered) {
 
                 if (silenceGap > silenceTimeout) {
+                    resetTimedEvent(TCONST.TIMEDSILENCE_EVENT);
+
                     Log.i("ASR", "Silence Timout Fired");
                     mainHandler.post(new timeOutEvent(TCONST.TIMEDSILENCE_EVENT));
                 }
@@ -1128,6 +1139,8 @@ public class SpeechRecognizer {
             else if (WaitAfterSound && isNoiseTriggered) {
 
                 if (NoiseGap > NoiseTimeout) {
+                    resetTimedEvent(TCONST.TIMEDSOUND_EVENT);
+
                     Log.i("ASR", "Noise Timout Fired");
                     mainHandler.post(new timeOutEvent(TCONST.TIMEDSOUND_EVENT));
                 }
@@ -1136,6 +1149,8 @@ public class SpeechRecognizer {
             else if(WaitAfterWord && isWordTriggered) {
 
                 if (attemptGap > wordHeardTimeout) {
+                    resetTimedEvent(TCONST.TIMEDWORD_EVENT);
+
                     Log.i("ASR", "Word Attempt Timout Fired");
                     mainHandler.post(new timeOutEvent(TCONST.TIMEDWORD_EVENT));
                 }

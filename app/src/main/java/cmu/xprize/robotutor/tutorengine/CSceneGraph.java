@@ -131,7 +131,7 @@ public class CSceneGraph  {
                             break;
 
                         // TCONST.WAIT indicates that next node will be driven by a
-                        // completion event still running- or some external user event.
+                        // completion event from the current action or some external user event.
 
                         case TCONST.WAIT:
                             break;

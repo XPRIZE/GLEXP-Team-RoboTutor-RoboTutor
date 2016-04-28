@@ -64,6 +64,7 @@ public class type_action extends graph_node {
         classMap.put("bool", Boolean.class);
         classMap.put("boolean", Boolean.class);
         classMap.put("int", Integer.class);
+        classMap.put("integer", Integer.class);
         classMap.put("float", Float.class);
         classMap.put("byte", Byte.class);
         classMap.put("long", Long.class);

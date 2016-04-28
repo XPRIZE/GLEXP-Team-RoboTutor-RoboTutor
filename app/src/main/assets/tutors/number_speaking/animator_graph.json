@@ -47,7 +47,7 @@
           "type":"node",
           "maptype":"moduleMap",
           "mapname": "LISTENING",
-          "preenter":["LISTENER_ENABLE"],
+          "preenter":["LISTENER_ENABLE","HESTITATION_TIMER","SET_WORD_EVENT"],
           "preexit" :["LISTENER_DISABLE"],
           "edges":
           [
@@ -198,6 +198,16 @@
           ]
         },
 
+        "HESITATION_PROMPT":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "TTS", "command": "SAY", "content": "Tafadhali kuzungumza idadi sauti", "rate":"1.2", "features": "LANG_SW"},
+            {"type": "TTS", "command": "SAY", "content": "Please speak the number aloud", "features": "LANG_EN"}
+          ]
+        },
+
         "REMEDIATE1": {
           "type": "MODULE",
           "reuse":true,
@@ -273,6 +283,12 @@
         "INIT_TTS_RATE": {"type": "TTS", "command": "SET_RATE", "rate":"1.2", "features": "LANG_SW"},
 
         "GETNUMWORDS":{"type": "COMMAND", "id": "", "method": "", "parms": "", "features": ""},
+
+        "HESTITATION_TIMER": {"type": "COMMAND", "id":"Sresponse", "method":"configureTimedEvent", "parms": "START_TIMEOUT:String|HESITATION_PROMPT:String|5000:Integer", "features": "" },
+        "HESTITATION_RESET": {"type": "COMMAND", "id":"Sresponse", "method":"clearTimedEvent",     "parms": "START_TIMEOUT:String",                                       "features": "" },
+
+        "SET_WORD_EVENT":   {"type": "COMMAND", "id":"Sresponse", "method":"configureEvent", "parms": "WORD_EVENT:String|HESTITATION_RESET:String", "features": "" },
+        "RESET_WORD_EVENT": {"type": "COMMAND", "id":"Sresponse", "method":"clearEvent",     "parms": "WORD_EVENT:String",                          "features": "" },
 
         "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[1,19,42,10,11,111,100,7,124,38,479]:String","features":""},
 

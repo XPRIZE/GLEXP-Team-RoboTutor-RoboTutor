@@ -48,15 +48,15 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
     protected String                DATASOURCEPATH;
     protected String                EXTERNPATH;
 
-    protected int                     mStimulusNumber;
-    protected String                  mStimulusText;
-    protected List                    mStimulusList;
-    protected String[]                mStimulusTextList;
+    protected int                   mStimulusNumber;
+    protected String                mStimulusText;
+    protected List                  mStimulusNumList;
+    protected String[]              mStimulusTextList;
 
-    protected int                     mResponseNumber;
-    protected String                  mResponseText;
-    protected List                    mResponseList;
-    protected ArrayList<String>       mResponseTextList;
+    protected int                   mResponseNumber;
+    protected String                mResponseText;
+    protected List                  mResponseList;
+    protected ArrayList<String>     mResponseTextList;
 
     private static int[]            creditLevel            = null;          // per-word credit level according to current hyp
     private int                     expectedWordIndex      = 0;             // index of expected next word in sentence
@@ -72,6 +72,8 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
     private String                  _timedSilenceEvent;     // Time since silence began
     private String                  _timedSoundEvent;       // Time since noise began
     private String                  _timedWordEvent;        // Time since last word recognized
+    private String                  _timedStartEvent;       // Time since recognizer started listening
+
 
     private LocalBroadcastManager bManager;
 
@@ -132,7 +134,7 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
 
     /**
      * mStimulus contains the string representation of the data source in numeric form e.g. "34"
-     * mStimulusList contain the array of positional integers that comprise the number e.g. [3,4]
+     * mStimulusNumList contain the array of positional integers that comprise the number e.g. [3,4]
      * Obtain its mStimulusNumber integer equivalent e.g. "930" = 930
      * Convert it to a mStimulusText string representation e.g. 102 = "one hundred and two"
      *
@@ -142,10 +144,10 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
 
         String[] stimElem =  mStimulus.split("(?!^)");
 
-        mStimulusList = new ArrayList<Integer>();
+        mStimulusNumList = new ArrayList<Integer>();
 
         for(String elem : stimElem) {
-            mStimulusList.add(Integer.parseInt(elem));
+            mStimulusNumList.add(Integer.parseInt(elem));
         }
 
         mStimulusNumber   = Integer.parseInt(mStimulus);
@@ -204,7 +206,7 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
     }
 
 
-    public void configureEvent(String symbol, String eventString) {
+    public void configureEvent(String eventString, String symbol) {
 
         int eventType = CEventMap.eventMap.get(eventString);
 
@@ -232,7 +234,7 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
     }
 
 
-    public void configureEvent(String symbol, String eventString, int timeOut) {
+    public void configureTimedEvent(String eventString, String symbol, Integer timeOut) {
 
         int eventType = CEventMap.eventMap.get(eventString);
 
@@ -248,6 +250,10 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
 
             case TCONST.TIMEDWORD_EVENT:
                 _timedWordEvent = symbol;
+                break;
+
+            case TCONST.TIMEDSTART_EVENT:
+                _timedStartEvent = symbol;
                 break;
         }
         mListener.configTimedEvent(eventType, timeOut);
@@ -399,7 +405,7 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
                     // Check if the next element matches
                     //
                     else if(!mStimulusTextList[i1].equals(subElem)) {
-                        ErrorType = mStimulusList.size();
+                        ErrorType = mStimulusNumList.size();
                         Error     = TCONST.TRUE_ERROR;
                         Correct   = false;
                         break;
@@ -440,114 +446,6 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
     }
 
 
-    /**
-     * @param heardWords Update the sentence credit level with the credit level of the heard words
-     */
-    private void updateSentence(ListenerBase.HeardWord[] heardWords) {
-
-        Log.d("ASR", "New Hypothesis Set:");
-
-        if (heardWords.length >= 1) {
-
-            // Reset partial credit level of sentence words
-            //
-            for (int i = 0; i < creditLevel.length; i++) {
-
-                // don't touch words with permanent credit
-                if (creditLevel[i] != ListenerBase.HeardWord.MATCH_EXACT)
-                    creditLevel[i]  = ListenerBase.HeardWord.MATCH_UNKNOWN;
-            }
-
-            for (ListenerBase.HeardWord hw : heardWords) {
-
-                Log.d("ASR", "Heard:" + hw.hypWord);
-
-                // assign the highest credit found among all hypothesis words
-                //
-                if (hw.matchLevel >= creditLevel[hw.iSentenceWord]) {
-                    creditLevel[hw.iSentenceWord] = hw.matchLevel;
-                }
-            }
-
-            expectedWordIndex = getFirstUncreditedWord();
-
-            // Tell the listerner when to stop matching words.  We don't want to match words
-            // past the current expected word or they will be highlighted
-            // This is a MARi induced constraint
-            // TODO: make it so we don't need this - use matched past the next word to flag
-            // a missed word
-            //
-            mListener.updateNextWordIndex(expectedWordIndex);
-
-            // Update the sentence text display to show credit, expected word
-            //
-            UpdateSentenceDisplay();
-        }
-    }
-
-
-    /**
-     * Update the displayed sentence based on the newly calculated credit level
-     */
-    private void UpdateSentenceDisplay() {
-
-        String fmtSentence = "";
-        String[] words = mStimulusText.split("\\s+");
-
-        for (int i = 0; i < words.length; i++) {
-
-            String styledWord = words[i];                           // default plain
-
-            // show credit status with color
-            if (creditLevel[i] == ListenerBase.HeardWord.MATCH_EXACT) {     // match found, but not credited
-
-                styledWord = "<font color='#00B600'>" + styledWord + "</font>";
-
-            } else if (creditLevel[i] == ListenerBase.HeardWord.MATCH_MISCUE) {  // wrongly read
-
-                styledWord = "<font color='red'>" + styledWord + "</font>";
-
-            } else if (creditLevel[i] == ListenerBase.HeardWord.MATCH_TRUNCATION) { //  heard only half the word
-
-            } else {
-
-            }
-
-            if (i == expectedWordIndex) {// style the next expected word
-                styledWord.replace("<u>", "");
-                styledWord.replace("</u>", "");
-                styledWord = "<u>" + styledWord + "</u>";
-
-                //  Publish the word to the component so it can set a scritable varable
-                //_publishListener.publishTargetWord(styledWord);
-            }
-
-            fmtSentence += styledWord + " ";
-
-        }
-        fmtSentence += "<br>";
-    }
-
-
-    /**
-     * Get the first uncredited word of the current sentence
-     *
-     * @return index of uncredited word
-     */
-    private int getFirstUncreditedWord() {
-
-        int result = 0;
-
-        for (int i = 0; i < creditLevel.length; i++) {
-
-            if (creditLevel[i] != ListenerBase.HeardWord.MATCH_EXACT) {
-                result = i;
-                break;
-            }
-        }
-        return result;
-    }
-
 
     @Override
     public void onASREvent(int eventType) {
@@ -582,6 +480,11 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
             case TCONST.TIMEDWORD_EVENT:
                 Log.d("ASR", "WORD TIMEOUT");
                 applyEventNode(_timedWordEvent);
+                break;
+
+            case TCONST.TIMEDSTART_EVENT:
+                Log.d("ASR", "START TIMEOUT");
+                applyEventNode(_timedStartEvent);
                 break;
         }
     }

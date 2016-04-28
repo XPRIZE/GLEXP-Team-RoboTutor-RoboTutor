@@ -83,7 +83,7 @@ public class graph_module extends graph_node implements ILoadableObject2 {
 
 
     /**
-     * TODO: externalize the loop mechanism so we can interrupt more readily
+     * TODO: Examine externalize the loop mechanism so we can interrupt more readily
      *
      * @return
      */

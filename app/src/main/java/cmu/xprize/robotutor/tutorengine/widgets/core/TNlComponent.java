@@ -32,8 +32,10 @@ import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.JSON_Helper;
+import cmu.xprize.util.Num2Word;
 import cmu.xprize.util.TCONST;
 
 
@@ -116,10 +118,17 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
             //
             mTutor.getScope().addUpdateVar(name() + ".digits", new TInteger(mStimulus.length()));
 
-            // publish the Place Values for the stimulus - e.g. for 12 Sstimulus.ones <2> Sstimulus.tens <1> etc
+            // publish the Place Values for the stimulus - e.g.
+            //      for 12  Sstimulus.ones <2> Sstimulus.tens <10>
+            //      for 154 Sstimulus.ones <4> Sstimulus.tens <50> Sstimulus.hundreds <100>
+            //      etc
             //
             for (int i = 0, place = mStimulus.length() - 1; i < mStimulus.length(); i++, place--) {
-                mTutor.getScope().addUpdateVar(name() + placeValue[i], new TInteger((Integer) mStimulusList.get(place)));
+
+                int placeNum = (int) ((Integer) mStimulusNumList.get(place) * Math.pow(10,i));
+
+                mTutor.getScope().addUpdateVar(name() + placeValue[i], new TInteger(placeNum));
+                mTutor.getScope().addUpdateVar(name() + placeValue[i] + TCONST.TEXT_FIELD, new TString(Num2Word.transform(placeNum, getLanguage())));
             }
         }
     }
@@ -217,6 +226,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
         //
         for( int i = 0  ; i < placeValue.length ; i++) {
             mTutor.getScope().addUpdateVar(name() + placeValue[i], null);
+            mTutor.getScope().addUpdateVar(name() + placeValue[i] + TCONST.TEXT_FIELD, null);
         }
     }
 
@@ -235,9 +245,12 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
     public void onStartTalking(String symbol) {
 
     }
+
     public void onRecognitionComplete(String symbol) {
         super.onRecognitionComplete(symbol);
     }
+
+
 
 
     /**
