@@ -139,17 +139,6 @@ public class CTutorEngine implements ILoadableObject2 {
 
     }
 
-
-    /**
-     * This is primarily intended as a development API to allow updating the working language
-     * at runtime.
-     * @param newLang
-     */
-    static public void changeDefaultLanguage(String newLang) {
-        language = newLang;
-    }
-
-
     /**
      * Called from the Activity when the back button is pressed.
      *

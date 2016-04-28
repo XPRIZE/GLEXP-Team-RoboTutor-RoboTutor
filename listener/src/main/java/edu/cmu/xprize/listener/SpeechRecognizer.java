@@ -162,9 +162,6 @@ public class SpeechRecognizer {
             recognizerThread.start();
         }
 
-        Log.i("ASR", "Start session");
-        eventManager.updateStartTime(TCONST.TIMEDSTART_EVENT, TCONST.ALL_EVENTS);
-
         return true;
     }
 
@@ -434,6 +431,8 @@ public class SpeechRecognizer {
                 }
                 isRunningRecognizer = true;
 
+                Log.i("ASR", "Start session");
+                eventManager.updateStartTime(TCONST.TIMEDSTART_EVENT, TCONST.UNKNOWNEVENT_TYPE);
 
                 // Collect audio samples continuously while not paused and until the
                 // Thread is killed.  This allow UI/UX activity while the listener is still
@@ -1106,8 +1105,7 @@ public class SpeechRecognizer {
          */
         public synchronized void fireTimedEvents() {
 
-            // startTime is the listener last started listening
-            // lastSilence is the time since the mic went silent and stayed silent
+            // lastSilence is the time since the mic went silent
             // lastSoundHeard is the time since the mic started hearing sound
             // lastWordHeard is the time since they said an intelligible word (hyp changed)
 
