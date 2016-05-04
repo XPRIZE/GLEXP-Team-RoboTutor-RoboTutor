@@ -69,7 +69,7 @@ public class TCJSGF {
 
     static {
         powerMap.put("LANG_EN", "(HUNDRED THOUSAND MILLION)");
-        powerMap.put("LANG_SW", "(MIA ELFU MILIONI)");
+        powerMap.put("LANG_SW", "(MIA ELFU LAKI MILIONI)");
     }
 
 

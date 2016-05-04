@@ -19,6 +19,7 @@
 
 package cmu.xprize.robotutor.tutorengine.graph;
 
+
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -32,6 +33,7 @@ import java.util.Map;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.util.TCONST;
+
 
 public class type_action extends graph_node {
 
@@ -53,11 +55,8 @@ public class type_action extends graph_node {
 
 
     // To simplify json syntax we translate a pseudo "Class" type in json spec to true Java type.
-
+    //
     static public HashMap<String, Class> classMap = new HashMap<String, Class>();
-
-    final static public String TAG = "type_action";
-
 
     static {
         classMap.put("string", String.class);
@@ -71,6 +70,9 @@ public class type_action extends graph_node {
         classMap.put("short", Short.class);
         classMap.put("object", Object.class);
     }
+
+    final static public String TAG = "type_action";
+
 
 
     public boolean testPFeature() {

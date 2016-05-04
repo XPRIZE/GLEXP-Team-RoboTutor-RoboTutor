@@ -5,5 +5,6 @@ import edu.cmu.pocketsphinx.RecognitionListener;
 
 public interface ITutorListener extends RecognitionListener {
 
-    void onASREvent(int eventType);
+    public void onStableResult(String[] hypothesis);
+    public void onASREvent(int eventType);
 }

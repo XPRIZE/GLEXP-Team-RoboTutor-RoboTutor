@@ -26,10 +26,6 @@ public class Word2Num {
 
     private static List<Integer> NumberList;
 
-    // This is used to map "language features" to the story resources
-    // these are located in the assets/<lang>
-    // Note: on Android these are case sensitive filenames
-
     private final static HashMap<String, Integer> SwahiliInTenMap = new HashMap<>();
 
     static {

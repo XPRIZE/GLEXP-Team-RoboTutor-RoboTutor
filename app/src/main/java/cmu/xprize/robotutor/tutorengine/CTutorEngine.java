@@ -21,6 +21,7 @@ package cmu.xprize.robotutor.tutorengine;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.util.Log;
 
@@ -54,6 +55,8 @@ public class CTutorEngine implements ILoadableObject2 {
     private static HashMap<String, CTutor>  mTutors = new HashMap<String, CTutor>();
     private static CTutor                   mTutorActive;
     private static String                   mTutorName;
+    private AssetManager                    mAssetManager;
+    private CMediaManager                   mMediaManager;
 
     private String                          mTutorDescrPath;
     private String                          mJSONspec;
@@ -96,6 +99,12 @@ public class CTutorEngine implements ILoadableObject2 {
         Activity        = context;
         TutorContainer  = tutorContainer;
         TutorLogManager = new CTutorLogManager();
+        mAssetManager   = context.getAssets();
+
+        // Initialize the media manager singleton - it needs access to the App assets.
+        //
+        mMediaManager = CMediaManager.getInstance();
+        mMediaManager.setAssetManager(mAssetManager);
 
         // TODO: is this initialization required?
         // Initialize the JSON Helper statics - just throw away the object.

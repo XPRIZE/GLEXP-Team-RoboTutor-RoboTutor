@@ -40,6 +40,7 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder.AudioSource;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -49,6 +50,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -109,8 +111,15 @@ public class SpeechRecognizer {
 
     private ASREvents eventManager;
 
-    private ResultEvent nextHypothesis = null;
-    private ResultEvent prevHypothesis = null;
+    Hypothesis prevHypothesis = null;
+
+    private ResultEvent nextHypothesisEvt = null;
+    private ResultEvent prevHypothesisEvt = null;
+
+    private String[]        prevAsrWords;
+    private ArrayList<Long> wordLastChanged;
+    private Long            stableHypTime = 0L;
+    private String          publishType   = TCONST.STABLE_HYPOTHESES;
 
 
     protected SpeechRecognizer(Config config) {
@@ -244,7 +253,7 @@ public class SpeechRecognizer {
 
                     // Ensure hypothesis output queue is emptied so there is nothing to process while paused
                     //
-                    mainHandler.removeCallbacks(prevHypothesis);
+                    mainHandler.removeCallbacks(prevHypothesisEvt);
                 }
             }
         }
@@ -305,7 +314,7 @@ public class SpeechRecognizer {
             // hypothesis.
             //
             if(wantFinal)
-                postResult(hypothesis, true);
+                postResult(hypothesis, TCONST.FINAL_HYPOTHESIS);
         }
         return result;
     }
@@ -412,12 +421,9 @@ public class SpeechRecognizer {
 
             synchronized (recognizerThread) {
 
-                String     hypString;
-                boolean    hypChanged     = false;
                 boolean    flagsDirty     = true;
                 boolean    inSpeech       = false;
                 short[]    buffer         = new short[BUFFER_SIZE];
-                Hypothesis prevHypothesis = null;
 
                 String     lastAudioEvent = TCONST.UNKNOWN_TYPE;
 
@@ -498,10 +504,12 @@ public class SpeechRecognizer {
 
                         // label utterance with passed-in id
                         decoder.startUtt(label);
-                        inSpeech       = false;
-                        prevHypothesis = null;
-                        lastAudioEvent = TCONST.UNKNOWN_TYPE;
-                        isDecoding     = true;
+                        inSpeech        = false;
+                        prevHypothesis  = null;
+                        prevAsrWords    = new String[0];
+                        wordLastChanged = new ArrayList<Long>();
+                        lastAudioEvent  = TCONST.UNKNOWN_TYPE;
+                        isDecoding      = true;
                     }
 
                     // Ensure we are recording while the thread is running.
@@ -523,10 +531,6 @@ public class SpeechRecognizer {
 
                         publishRMS(buffer, nread);
 
-                        // Reset the Hypothesis Flag - We don't want to emit events unless
-                        // there has been an actual change of hypothesis
-                        //
-                        hypChanged = false;
 
                             //ASRTimer = System.currentTimeMillis();
                         decoder.processRaw(buffer, nread, false, false);
@@ -569,50 +573,15 @@ public class SpeechRecognizer {
                         // null even with long periods of silence.  i.e. Wait until they start speaking
                         //
                         if(hypothesis != null) {
+                            switch(publishType) {
+                                case TCONST.RAW_HYPOTHESES:
+                                    publishRawHypothesis(hypothesis);
+                                    break;
 
-                            // DEBUG
-                            hypString = hypothesis.getHypstr();
-
-                            // If this is the first Hypothesis
-                            // Record it so we can test for changes and set hypchanged flag
-                            //
-                            if (prevHypothesis == null) {
-                                prevHypothesis = hypothesis;
-                                hypChanged = true;
-
-                                Log.i("ASR", "First Hypothesis: " + hypString);
-
-                            } else {
-                                // If the hypothesis hasn't changed they have stopped speaking.
-                                // or are speaking Noise - not intelligible words
-                                // TODO: Route all event traffic through the eventManager
-                                //
-                                if (prevHypothesis.getHypstr().equals(hypothesis.getHypstr())) {
-                                    hypChanged = false;
-                                    //Log.i("ASR","Same Hypothesis: " + hypString);
-
-                                } else {
-                                    hypChanged     = true;
-                                    prevHypothesis = hypothesis;
-
-                                    Log.i("ASR", "Updated Hypothesis: " + hypString);
-                                }
+                                case TCONST.STABLE_HYPOTHESES:
+                                    publishStableHypothesis(hypothesis);
+                                    break;
                             }
-                        }
-
-                        // If the hypothesis has changed let the client know
-                        // Update the eventTimer to indicate the last thing that happened
-                        // Updating the word event resets silence and noise
-                        //
-                        if(hypChanged) {
-                            eventManager.fireStaticEvent(TCONST.WORD_EVENT);
-                            eventManager.updateStartTime(TCONST.TIMEDWORD_EVENT,
-                                    TCONST.TIMEDSILENCE_EVENT | TCONST.TIMEDSOUND_EVENT);
-
-                            Log.i("ASR", "Processing Hypothesis");
-
-                            // If there is a new Hypothesis then process it
-                            postResult(hypothesis, false);
                         }
                     }
 
@@ -633,6 +602,163 @@ public class SpeechRecognizer {
                 mainHandler.removeCallbacksAndMessages(null);
                 // convert raw capture to wav format
                 //convertRawToWav(new File(captureDir, label + ".raw"), new File(captureDir, label + ".wav"));
+            }
+        }
+    }
+
+
+    private void publishRawHypothesis(Hypothesis hypothesis ) {
+
+        boolean    hypChanged     = false;
+        String     hypString;
+
+        // Reset the Hypothesis Flag - We don't want to emit events unless
+        // there has been an actual change of hypothesis
+        //
+        hypChanged = false;
+
+        // DEBUG
+        hypString = hypothesis.getHypstr();
+
+        // If this is the first Hypothesis
+        // Record it so we can test for changes and set hypchanged flag
+        //
+        if (prevHypothesis == null) {
+            prevHypothesis = hypothesis;
+            hypChanged     = true;
+
+            Log.i("ASR", "First Hypothesis: " + hypString);
+
+        } else {
+
+            // If the hypothesis hasn't changed they have stopped speaking.
+            // or are speaking Noise - not intelligible words
+            //
+            if (prevHypothesis.getHypstr().equals(hypothesis.getHypstr())) {
+                hypChanged = false;
+                //Log.i("ASR","Same Hypothesis: " + hypString);
+
+            } else {
+                hypChanged     = true;
+                prevHypothesis = hypothesis;
+
+                Log.i("ASR", "Updated Hypothesis: " + hypString);
+            }
+        }
+
+        // If the hypothesis has changed let the client know
+        // Update the eventTimer to indicate the last thing that happened
+        // Updating the word event resets silence and noise
+        //
+        if(hypChanged) {
+            eventManager.fireStaticEvent(TCONST.WORD_EVENT);
+            eventManager.updateStartTime(TCONST.TIMEDWORD_EVENT,
+                    TCONST.TIMEDSILENCE_EVENT | TCONST.TIMEDSOUND_EVENT);
+
+            Log.i("ASR", "Processing Hypothesis");
+
+            // If there is a new Hypothesis then process it
+            postResult(hypothesis, TCONST.PARTIAL_HYPOTHESIS);
+        }
+    }
+
+
+    private void publishStableHypothesis(Hypothesis hypothesis) {
+
+        ArrayList<String>  resultSet     = new ArrayList<String>();;
+
+        boolean    hypStable    = false;
+        boolean    newStableHyp = false;
+        String     hypString;
+
+
+        // get the array of hypothesis words
+        //
+        hypString = hypothesis.getHypstr();
+        String[] asrWords = hypString.split("\\s+");
+
+
+        long currTime = System.currentTimeMillis();
+
+
+        // For new hypothesis words record their last changed time.
+        //
+        if (asrWords.length > prevAsrWords.length) {
+
+            for (int i1 = prevAsrWords.length; i1 < asrWords.length; i1++) {
+                wordLastChanged.add(currTime);
+                //Log.d("STABLE", "Word Start: " + asrWords[i1]);
+            }
+        }
+
+        //Log.d("STABLE", "asrWords    : " + TextUtils.join(" ", asrWords));
+        //Log.d("STABLE", "prevAsrWords: " + TextUtils.join(" ", prevAsrWords));
+
+        // Scan for new sequential words that have past their stable time tests
+        // (i.e. period which they have been unchanged)
+        // Note that asrWords can contract so we have to update the scan limit based on both
+        //
+        int maxScan = Math.min(prevAsrWords.length, asrWords.length);
+
+        for (int i1 = 0; i1 < maxScan; i1++) {
+
+            // If the word has changed - update its last changed time.
+            //
+            if (!asrWords[i1].equals(prevAsrWords[i1])) {
+                wordLastChanged.set(i1, currTime);
+                //Log.d("STABLE", "Word Changed: " + asrWords[i1] + " : " + prevAsrWords[i1]);
+                break;
+            }
+
+            // Otherwise add the word to the potential update hypothesis
+            // We only want to emit hypothesis sets with added, new entries.
+            //
+            else {
+                // Find words that have passed their stable test and set their lastChanged
+                // so they will not trigger on the next pass.  Then we emit all previously
+                // processed words and any newly triggered words.
+                //
+                if ((currTime - wordLastChanged.get(i1)) > TCONST.STABLE_TIME) {
+                    wordLastChanged.set(i1, Long.MAX_VALUE);
+                    newStableHyp = true;
+
+                    resultSet.add(asrWords[i1]);
+                    //Log.d("STABLE", "New word: " + asrWords[i1]);
+                }
+                // Don't look past the last word that hasn't passed its test
+                // i.e. we process stable words sequentially - this could be made
+                // optional if you want to have a look ahead.
+                //
+                else if (wordLastChanged.get(i1) != Long.MAX_VALUE) {
+                    //Log.d("STABLE", "unstable word: " + asrWords[i1]);
+                    break;
+                } else {
+                    resultSet.add(asrWords[i1]);
+                    //Log.d("STABLE", "old word: " + asrWords[i1]);
+                }
+            }
+        }
+
+        // Update the current word set
+        //
+        prevAsrWords = asrWords;
+
+        // If the hypothesis has changed let the client know
+        // Update the eventTimer to indicate the last event that occurred
+        // Updating the word event resets silence and noise
+        //
+        if (newStableHyp) {
+            eventManager.fireStaticEvent(TCONST.WORD_EVENT);
+            eventManager.updateStartTime(TCONST.TIMEDWORD_EVENT,
+                    TCONST.TIMEDSILENCE_EVENT | TCONST.TIMEDSOUND_EVENT);
+
+            //Log.d("STABLE", "Processing Hypothesis" + TextUtils.join(" ", resultSet));
+
+            // If there is a new Hypothesis then process it in the subclass of ListenerBase
+            try {
+                postResult(resultSet.toArray(new String[resultSet.size()]), TCONST.STABLE_HYPOTHESIS);
+            } catch (Exception e) {
+                Log.e(TAG, "error:" + e);
             }
         }
     }
@@ -713,19 +839,38 @@ public class SpeechRecognizer {
      * waste of time - the newer one is always a better hypothesis.
      *
      * @param hypothesis
-     * @param isFinal
+     * @param resultType
      */
-    private void postResult(Hypothesis hypothesis, boolean isFinal) {
+    private void postResult(Hypothesis hypothesis, String resultType) {
 
         // If there is a new Hypothesis then process it
         // Note- initial null is ignored in removeCallBacks
-        nextHypothesis = new ResultEvent(hypothesis, isFinal);
+        nextHypothesisEvt = new ResultEvent(hypothesis, resultType);
+
+        enQueueResult(nextHypothesisEvt);
+    }
+
+    private void postResult(String[] hypothesisSet, String resultType) {
+
+        // If there is a new Hypothesis then process it
+        // Note- initial null is ignored in removeCallBacks
+        nextHypothesisEvt = new ResultEvent(hypothesisSet, resultType);
+
+        enQueueResult(nextHypothesisEvt);
+    }
+
+    /**
+     * Common result queue management
+     *
+     * @param nextHypothesisEvt
+     */
+    private void enQueueResult(ResultEvent nextHypothesisEvt) {
 
         // remove last hypothesis if it hasn't been processed
-        mainHandler.removeCallbacks(prevHypothesis);
-        mainHandler.post(nextHypothesis);
+        mainHandler.removeCallbacks(prevHypothesisEvt);
+        mainHandler.post(nextHypothesisEvt);
 
-        prevHypothesis = nextHypothesis;
+        prevHypothesisEvt = nextHypothesisEvt;
     }
 
 
@@ -757,22 +902,36 @@ public class SpeechRecognizer {
 
     private class ResultEvent extends RecognitionEvent {
         protected final Hypothesis hypothesis;
-        private final boolean finalResult;
+        protected final String[]   hypothesisSet;
+        private   final String     resultType;
 
-
-        ResultEvent(Hypothesis hypothesis, boolean finalResult) {
-            this.hypothesis = hypothesis;
-            this.finalResult = finalResult;
+        ResultEvent(Hypothesis _hypothesis, String _resultType) {
+            this.hypothesis    = _hypothesis;
+            this.hypothesisSet = null;
+            this.resultType    = _resultType;
         }
 
+        ResultEvent(String[] _hypothesisSet, String _resultType) {
+            this.hypothesis    = null;
+            this.hypothesisSet = _hypothesisSet;
+            this.resultType    = _resultType;
+        }
 
         @Override
         protected void execute(ITutorListener listener) {
             Log.d("ASR", "In Result Thread");
-            if (finalResult)
-                listener.onResult(hypothesis);
-            else
-                listener.onPartialResult(hypothesis);
+
+            switch(resultType) {
+                case TCONST.FINAL_HYPOTHESIS:
+                    listener.onResult(hypothesis);
+                    break;
+                case TCONST.PARTIAL_HYPOTHESIS:
+                    listener.onPartialResult(hypothesis);
+                    break;
+                case TCONST.STABLE_HYPOTHESIS:
+                    listener.onStableResult(hypothesisSet);
+                    break;
+            }
         }
     }
 

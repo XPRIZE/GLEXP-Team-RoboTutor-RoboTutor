@@ -62,9 +62,13 @@ public class CStimResp extends LinearLayout implements View.OnClickListener, ITe
     private static final String TCONST_BACKGROUND    = "bgerrorhighlight";
 
     public static final String TCONST_SPACE        = "    ";
-    private static final String TAG = "CResponseView";
 
     final private float aRatio = 1.5f;
+
+    private static final String TAG = "CStimResp";
+
+
+
 
 
     public CStimResp(Context context) {
@@ -136,19 +140,19 @@ public class CStimResp extends LinearLayout implements View.OnClickListener, ITe
         int                       height;
 
         layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-        height       = 50; //getHeight();
+        height       = 50; //getHeight();  // TODO: check this
         mErrorIndex  = Integer.MAX_VALUE;       // reset
 
         if(mDisplayText != null) {
 
-            // We consider any space delimited string an editable item (lexeme - project internal name)
+            // We consider any space delimited string an editable item (lexeme - is a xprize project internal name)
+            //
             mLexemes = mDisplayText.split(" ");
             mEmpty   = mDisplayText.length() == 0;
             mLexEnds = new int[mLexemes.length*2];
 
             removeAllViews();
 
-            // TODO: add "    " TCONST
             // We always put a space a the beginning to allow them to add a word if they want.
             //
             addText(-1, TCONST_SPACE, height, layoutParams);
@@ -161,6 +165,7 @@ public class CStimResp extends LinearLayout implements View.OnClickListener, ITe
                 int index = i1 * 2;
 
                 // TODO: manage - is it a missing word or a typo at mErrorIndex
+                //
                 if(!mEmpty) {
                     if(mComparing) {
                         // Find primary error

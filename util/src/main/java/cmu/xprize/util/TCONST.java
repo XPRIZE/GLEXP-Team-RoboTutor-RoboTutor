@@ -263,15 +263,45 @@ public class TCONST {
     // Number Listeneing Component
     public static final String ERR_SINGLEDIGIT = "Single Digit Error";
     public static final String ERR_MULTIDIGIT  = "Multi Digit Error";
-    public static final String TEXT_FIELD = ".text";
+    public static final String TEXT_FIELD      = ".text";
 
 
     // Generic error codes
-    public static final String GENERIC_RIGHT = "FTR_RIGHT";
-    public static final String GENERIC_WRONG = "FTR_WRONG";
-    public static final boolean TRUE_ERROR   = true;
-    public static final boolean TRUE_NOERROR = true;
+    public static final String GENERIC_RIGHT  = "FTR_RIGHT";
+    public static final String GENERIC_WRONG  = "FTR_WRONG";
+    public static final boolean TRUE_ERROR    = true;
+    public static final boolean TRUE_NOERROR  = true;
     public static final boolean FALSE_NOERROR = false;
-    public static final boolean FALSE_ERROR = false;
+    public static final boolean FALSE_ERROR   = false;
+
+
+    // MediaManager constants.
+    public static final String MEDIA_AUDIO    = "MEDIA_AUDIO";
+    public static final String MEDIA_TIMELINE = "MEDIA_TIMELINE";
+
+
+    // ASR (automated speech recognition) constants
+    public static final Long   STABLE_TIME        = 300L;    // Time a word has to be stable before it is emitted.
+    public static final String FINAL_HYPOTHESIS   = "FINALHYPOTHESIS";
+    public static final String PARTIAL_HYPOTHESIS = "PARTIALHYPOTHESIS";
+    public static final String STABLE_HYPOTHESIS  = "STABLEHYPOTHESIS";
+
+    public static final String RAW_HYPOTHESES     = "RAWHYPOTHESES";
+    public static final String STABLE_HYPOTHESES  = "STABLEHYPOTHESES";
+
+    // Number parser states.
+    public static final int W2N_DIGIT = 2;
+    public static final int W2N_TENS  = 3;
+    public static final int W2N_POWER = 4;
+    public static final int W2N_CONJ  = 5;
+    public static final int W2N_EOD   = 6;
+    public static final int W2N_ERR   = 7;
+
+    public static final int UNSET = -1;
+
+    // Coordinating conjunction
+    public static final String CC_SW_NA  = "NA";
+    public static final String CC_EN_AND = "AND";
+    public static final String NUM_EOD   = "NUM_EOD";
 
 }

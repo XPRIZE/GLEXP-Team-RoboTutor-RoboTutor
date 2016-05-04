@@ -21,7 +21,6 @@ package cmu.xprize.robotutor.tutorengine.graph;
 
 
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -42,18 +41,19 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import cmu.xprize.robotutor.RoboTutor;
+import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
+import cmu.xprize.robotutor.tutorengine.IMediaListener;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
 
-public class type_timeline extends type_action {
+public class type_timeline extends type_action implements IMediaListener {
 
     private TScope                       mScope;
 
     private HashMap<String, CTrackLayer> mLayerMap  = new HashMap<String,CTrackLayer>();
-    private HashMap<String, MediaPlayer> mTrackData = new HashMap<String,MediaPlayer>();
 
     private LoaderThread              _loaderThread;
     private boolean                   _isLoading     = false;
@@ -76,6 +76,7 @@ public class type_timeline extends type_action {
     protected int                     _fps       = TCONST.FPS;
 
     private LocalBroadcastManager     bManager;
+    private CMediaManager             mMediaManager;
 
     // json loadable
     public String                    trackname;
@@ -86,25 +87,72 @@ public class type_timeline extends type_action {
 
 
     public type_timeline() {
-
+        mMediaManager = CMediaManager.getInstance();
     }
+
+
+    //*******************************************************
+    //**  Global Media Control Start
+
+    private boolean mWasPlaying = false;
+
+    @Override
+    public void globalPause() {
+
+        globalStop();
+    }
+
+    @Override
+    public void globalPlay() {
+
+        if(mWasPlaying) {
+            mWasPlaying = false;
+
+            spawnTimer();
+        }
+    }
+
+    @Override
+    public void globalStop() {
+
+        if(_playing) {
+            mWasPlaying = true;
+
+            killTimer();
+        }
+    }
+
+    @Override
+    public void onCompletion() {
+        // NOOP
+    }
+
+    //**  Global Media Control Start
+    //*******************************************************
 
 
     @Override
     public String applyNode() {
 
-        String status;
+        play();
+
+        return TCONST.WAIT;
+    }
+
+
+    @Override
+    public String next() {
+
+        String status = TCONST.READY;
 
         if(_playing | _deferredPlay) {
             stop();
             status = TCONST.NONE;
         }
-        else {
-            play();
-            status = TCONST.WAIT;
-        }
 
-        return status;
+        String result = TCONST.READY;
+
+        return result;
     }
 
 
@@ -183,16 +231,10 @@ public class type_timeline extends type_action {
 
                 if (!_isLoading) {
 
-                    _timer = new Timer(trackname);
-                    _frameTask = new TimerTask() {
-                        @Override
-                        public void run() {
-                            onNextAbsFrame();
-                        }
-                    };
-                    _timer.scheduleAtFixedRate(_frameTask, 0, 1000 / 24);
-
+                    spawnTimer();
                     _playing = true;
+
+                    mMediaManager.createTimeLine(trackname, this);
                 } else
                     _deferredPlay = true;
                 break;
@@ -202,27 +244,39 @@ public class type_timeline extends type_action {
                 break;
         }
     }
+    private void spawnTimer() {
+
+        Log.i(TAG, "Spawn timeline Timer");
+        _timer = new Timer(trackname);
+
+        _frameTask = new TimerTask() {
+            @Override
+            public void run() {
+                onNextAbsFrame();
+            }
+        };
+        _timer.scheduleAtFixedRate(_frameTask, 0, 1000 / 24);
+    }
 
 
     @Override
     public void stop() {
 
         switch(_trackType) {
+
             case TCONST.ABSOLUTE_TYPE:
+
                 if(_playing) {
                     if (_currAudio != null) {
                         _currAudio.hasPlayed = false;
                         _currAudio.stop();
                     }
 
-                    if (_frameTask != null)
-                        _frameTask.cancel();
-
-                    _timer.cancel();
-                    _timer     = null;
-                    _frameTask = null;
+                    killTimer();
 
                     _playing = false;
+
+                    mMediaManager.removeTimeLine(trackname);
                 }
                 else if(_deferredPlay)
                     _deferredPlay = false;
@@ -231,6 +285,16 @@ public class type_timeline extends type_action {
             case TCONST.SEQUENTIAL_TYPE:
                 break;
         }
+    }
+    private void killTimer() {
+
+        Log.i(TAG, "Kill timeline Timer");
+        if (_frameTask != null)
+            _frameTask.cancel();
+
+        _timer.cancel();
+        _timer     = null;
+        _frameTask = null;
     }
 
 
@@ -387,8 +451,6 @@ public class type_timeline extends type_action {
             }
         }
     }
-
-
 
     // Component parts - derived from the Flash xml structure
 

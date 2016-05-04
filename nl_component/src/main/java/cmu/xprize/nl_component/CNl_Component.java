@@ -61,6 +61,7 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
     private static int[]            creditLevel            = null;          // per-word credit level according to current hyp
     private int                     expectedWordIndex      = 0;             // index of expected next word in sentence
     private boolean                 missingConjTolerant    = true;          // Do you need "AND" between number words
+    private boolean                 addedConjTolerant      = true;          // English tends to false positive conjunctions (AND)
     private boolean                 repeatedWordIntolerant = true;          // Indicate repeated word errors.
     private String                  cachedLanguageFeature;
     private String                  conjunction;
@@ -114,7 +115,22 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
 
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(getContext());
+
+        // Have connector sub-class in the tutor domain Inject the listener into the MediaManager
+        setListener(mListener);
     }
+
+
+    /**
+     * @Override in Tutor Domain to allow the MediaManageer direct access to the recognizer
+     */
+    public void setListener(ListenerBase listener) {}
+
+
+    /**
+     * @Override in Tutor Domain to allow the MediaManageer direct access to the recognizer
+     */
+    public void removeListener(ListenerBase listener) {}
 
 
     /**
@@ -311,7 +327,7 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
             if(repeatedWordIntolerant && heardWords.length > 1) {
                 for (int i = 1; i < heardWords.length; i++) {
                     if(heardWords[i].iSentenceWord < i) {
-                        Log.i("ASR", "Repeated Word <error>");
+                        Log.d("ASR", "Repeated Word <error>");
                         heardWords[i].iSentenceWord = i;
                         break;
                     }
@@ -322,7 +338,7 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
             for (int i = 0; i < heardWords.length; i++) {
                 logString += heardWords[i].hypWord.toUpperCase() + ":" + heardWords[i].iSentenceWord + " | ";
             }
-            Log.i("ASR", "New HypSet: "  + logString);
+            Log.d("ASR", "New HypSet: "  + logString);
 
             // Place the words in order
             // Loop throught as many words as are in the stimulus
@@ -344,6 +360,29 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
                 }
             }
 
+            // Prune out false positive conjunctions
+            // e.g for a stimulus of 100 it hears ONE AND...
+            //
+            if(addedConjTolerant) {
+
+                for (int i1 = 0; i1 <= maxPlace; i1++) {
+
+                    // If the response is a conjunction and the stimulus
+                    // isn't then remove the response conjunction (false positive) and
+                    // retest the element if we aren't at the end of the reponse set
+                    //
+                    if(!mStimulusTextList[i1].equals(conjunction)) {
+                        if(mResponseTextList.get(i1).equals(conjunction)) {
+                            Log.d("ASR", "Conjunction pruned" );
+                            mResponseTextList.remove(i1);
+
+                            if(i1 == maxPlace) break;
+                            i1--;
+                        }
+                    }
+                }
+            }
+
             // Insert missing conjunctions
             // If we are tolerant of missing conjunctions then if there we are looking
             // at a conj in the stimulus that is not in the response insert it
@@ -360,7 +399,7 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
                     if (mStimulusTextList[i1].equals(conjunction)) {
                         if(!respElem.equals(conjunction)) {
                             if(respElem.equals("")) {
-                                Log.i("ASR", "Conjunction Insertion");
+                                Log.d("ASR", "Conjunction Insertion");
                                 mResponseTextList.set(i1, conjunction);
                             }
                             else {
@@ -371,16 +410,30 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
                 }
             }
 
+            // Prune the "" entries so they don't cause errors in Word2Num.
+            //
+            for(int i1 = 0 ; i1 < mResponseTextList.size() ; i1++) {
+                if(mResponseTextList.get(i1).equals("")) {
+                    mResponseTextList.remove(i1--);
+                }
+            }
+
             try {
-                // Note that Word2Num is not missingConj Tolerant in fact it's fussy
+                // Note that Word2Num is not tolerant of missing Conjunctions - in fact it's fussy
+                // Word2Num will return -1 for certain error modes
                 //
                 mResponseNumber = Word2Num.transform(mResponseTextList.toArray(new String[mResponseTextList.size()]), getLanguage());
-                mResponse = new Integer(mResponseNumber).toString();
-                mResponseList = Word2Num.getNumberList();
+
+                mResponse       = new Integer(mResponseNumber).toString();
+                mResponseList   = Word2Num.getNumberList();
+
+                Log.d("ASR", "ResponseNumber: " + mResponseNumber);
+                Log.d("ASR", "ResponseString: " + mResponse);
 
                 // We update the control directly in this case - unlike the base component
                 //
-                updateText(mResponse);
+                if(mResponseNumber != -1)
+                    updateText(mResponse);
 
                 // Let anyone interested know there is a new recognition set available
                 Intent msg = new Intent(TCONST.LISTENER_RESPONSE);
@@ -392,11 +445,14 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
                 Log.d("ASR", "Stimulus: " + TextUtils.join(" ", mStimulusTextList));
                 Log.d("ASR", "Response: " + TextUtils.join(" ", mResponseTextList));
 
-                for (int i1 = 0; i1 < mStimulusTextList.length; i1++) {
+                int size = Math.min(mStimulusTextList.length,mResponseTextList.size());
+
+                for (int i1 = 0; i1 < size; i1++) {
 
                     String subElem = mResponseTextList.get(i1);
 
                     // If we run out of response just continue.
+                    // Note this is only relevant when not pruning "" entries
                     //
                     if(subElem == "") {
                         expectedWordIndex = i1;
@@ -405,6 +461,8 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
                     // Check if the next element matches
                     //
                     else if(!mStimulusTextList[i1].equals(subElem)) {
+                        expectedWordIndex = i1;
+
                         ErrorType = mStimulusNumList.size();
                         Error     = TCONST.TRUE_ERROR;
                         Correct   = false;
@@ -424,11 +482,17 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener {
                 }
                 else if(Error) {
                     updateOutcomeState(TCONST.TRUE_ERROR);
-                    applyEventNode(_onRecognition);
+
+                    // If they've uttered as many words as are in the stimulus and they are
+                    // still incorrect emit a recognition event to terminate.
+                    //
+                    if(mStimulusTextList.length == mResponseTextList.size())
+                        applyEventNode(_onRecognition);
                 }
-                else {
-                    mListener.updateNextWordIndex(expectedWordIndex);
-                }
+
+                // Update the expected word in MultiMatch
+                //
+                mListener.updateNextWordIndex(expectedWordIndex);
 
             } catch (Exception e) {
                 Log.e("ASR", "Number Parser" + e);

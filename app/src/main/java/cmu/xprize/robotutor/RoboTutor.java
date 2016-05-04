@@ -29,6 +29,7 @@ import android.util.Log;
 
 import java.io.IOException;
 
+import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorManager;
@@ -57,6 +58,7 @@ public class RoboTutor extends Activity implements IReadyListener {
     private CTutorEngine        tutorEngine;
     private ITutorManager       tutorContainer;
     private ProgressLoading     progressLoading;
+    private CMediaManager       mMediaManager;
 
     public TTSsynthesizer       TTS;
     public ListenerBase         ASR;
@@ -79,6 +81,10 @@ public class RoboTutor extends Activity implements IReadyListener {
         tutorContainer = (ITutorManager)findViewById(R.id.tutor_container);
 
         EXTERNFILES = getApplicationContext().getExternalFilesDir("").getPath();
+
+        // Initialize the media manager singleton - it needs access to the App assets.
+        //
+        mMediaManager = CMediaManager.getInstance();
 
         // Show the loader
         //
@@ -161,7 +167,7 @@ public class RoboTutor extends Activity implements IReadyListener {
         //
         switch(serviceName) {
             case TCONST.TTS:
-                CTutor.TTS = TTS;
+                mMediaManager.setTTS(TTS);
                 break;
         }
         startEngine();
