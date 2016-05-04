@@ -25,6 +25,7 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
@@ -43,8 +44,9 @@ import edu.cmu.xprize.listener.ListenerBase;
 
 public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
-    private CTutor               mTutor;
-    private CObjectDelegate      mSceneObject;
+    private CTutor           mTutor;
+    private CObjectDelegate  mSceneObject;
+    private CMediaManager    mMediaManager;
 
 
     static private String TAG = "TRtComponent";
@@ -70,6 +72,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
+        mMediaManager = CMediaManager.getInstance();
 
         // Default to English language stories
         //
@@ -77,7 +80,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
         // Push the ASR listener reference into the super class in the Java domain
         //
-        prepareListener(CTutor.TTS);
+        prepareListener(mMediaManager.getTTS());
     }
 
     @Override
@@ -107,6 +110,21 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
     }
 
+    /**
+     *  Inject the listener into the MediaManageer
+     */
+    @Override
+    public void setListener(ListenerBase listener) {
+        mMediaManager.setListener(listener);
+    }
+
+    /**
+     *  Remove the listener from the MediaManageer
+     */
+    @Override
+    public void removeListener(ListenerBase listener) {
+        mMediaManager.removeListener(listener);
+    }
 
 
     //**********************************************************

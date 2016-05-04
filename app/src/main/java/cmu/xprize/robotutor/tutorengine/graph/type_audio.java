@@ -19,42 +19,31 @@
 
 package cmu.xprize.robotutor.tutorengine.graph;
 
-import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnPreparedListener;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.util.Log;
 
 import org.json.JSONObject;
 
-import java.io.FileNotFoundException;
-
+import cmu.xprize.robotutor.tutorengine.CMediaManager;
+import cmu.xprize.robotutor.tutorengine.IMediaListener;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
-import cmu.xprize.util.IScope;
 import cmu.xprize.util.TCONST;
-import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
-public class type_audio extends type_action implements OnPreparedListener, OnCompletionListener {
+
+/**
+ * Media players are special objects as there is a system wide limit on how many can be active
+ * at one time.  As a result we centralize creation and management of MediaPlayers to CMediaManager
+ * where we can cache players across tutors as well as play/pause etc them globally
+ */
+public class type_audio extends type_action implements IMediaListener {
 
     // NOTE: we run at a Flash default of 24fps - which is the units in which
     // index and duration are calibrated
 
-    private MediaPlayer  mPlayer        = null;
-    private String       mSoundSource;
-    private String       mSourcePath;
+    private CMediaManager                 mMediaManager;
+    private CMediaManager.mediaController mPlayer;
 
-    private boolean      mPlaying       = false;
-    private boolean      mIsReady       = false;
-    private boolean      mDeferredStart = false;
-    private boolean      mDeferredSeek  = false;
-    private long         mSeekPoint     = 0;
-
-    private String       cachedSource   = "";
-    private boolean      cacheAudio     = false;
-
-    private OnCompletionListener listener;
-
+    private String                        mSoundSource;
+    private String                        mSourcePath;
 
     // json loadable fields
     public String        command;
@@ -62,58 +51,92 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
     public String        soundsource;
     public long          index = 0;
 
+    final static public String TAG = "type_audio";
+
+
 
     public type_audio() {
+
+        mMediaManager = CMediaManager.getInstance();
     }
+
+    public void onDestroy() {
+
+        mMediaManager.detachMediaPlayer(this);
+    }
+
+    //*******************************************************
+    //**  Global Media Control Start
+
+    private boolean mWasPlaying = false;
+
+    @Override
+    public void globalPause() {
+
+        if(mPlayer.isPlaying()) {
+            mWasPlaying = true;
+
+            mPlayer.stop();
+        }
+    }
+
+    @Override
+    public void globalPlay() {
+
+        if(mWasPlaying) {
+            mWasPlaying = false;
+
+            mPlayer.play();
+        }
+    }
+
+    @Override
+    public void globalStop() {
+
+        if(mPlayer.isPlaying()) {
+            mWasPlaying = true;
+
+            mPlayer.releasePlayer();
+        }
+    }
+
+    /**
+     * Listen to the MediaController for completion events.
+     *
+     */
+    @Override
+    public void onCompletion() {
+
+        // Release the mediaController for reuse
+        //
+        if(mPlayer != null)
+            mPlayer.detach();
+
+        // Flows automatically increment to next scenegraph node.
+        //
+        if(mode.equals(TCONST.AUDIOFLOW))
+            _scope.tutor().eventNext();
+    }
+
+    //**  Global Media Control Start
+    //*******************************************************
+
 
 
     /**
-     * TODO: Look at disposing of Media Players once scene is finished - optimization
+     *
      */
     @Override
     public void preEnter()
     {
         super.preEnter();
 
-        // Custom post processing.
-        // If there are probabilities defined for the feature
-        // generate an array of the prob for iterations of this pid
-        try {
-            String pathResolved = getScope().resolveTemplate(mSourcePath);
+        String pathResolved = getScope().resolveTemplate(mSourcePath);
 
-            // If the sound source doesn't change then we play the source we have already
-            // reduces play latency.
-            if(!cacheAudio || !cachedSource.equals(pathResolved)) {
-
-                if(mPlayer != null) {
-                    mPlayer.reset();
-                    mPlayer.release();
-                    mPlayer = null;
-                }
-
-                cachedSource = pathResolved;
-                mIsReady     = false;
-
-                mPlayer = new MediaPlayer();
-
-                AssetFileDescriptor soundData = _scope.tutor().openFD(pathResolved);
-
-                Log.d(TAG, "Audio Loading: " + pathResolved);
-
-                mPlayer.setDataSource(soundData.getFileDescriptor(), soundData.getStartOffset(), soundData.getLength());
-                soundData.close();
-                mPlayer.setOnPreparedListener(this);
-                mPlayer.setOnCompletionListener(this);
-                mPlayer.prepareAsync();
-            }
-
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, "Audio Error: " + e);
-            System.exit(1);
-
-        } catch (Exception e) {
-            Log.e(TAG, "Audio frame format error: " + e);
-        }
+        // This allocates a MediaPController for use by this audio_node. The media controller
+        // is a managed global resource of CMediaManager
+        //
+        mPlayer = mMediaManager.attachMediaPlayer(pathResolved, this);
     }
 
 
@@ -123,7 +146,7 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
 
         // play on creation if command indicates
         if(command.equals(TCONST.PLAY)) {
-            //preEnter();       ## duplicate if this is Root node
+
             play();
 
             // Events return done - so they may play on top of each other.
@@ -139,113 +162,44 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
     }
 
 
-    // TODO : need tighter control over media player lifetime - running out of resources
-    // since they aren't being released.
     public void play() {
 
-        if(!mPlaying) {
-            if(mIsReady) {
-                mPlayer.start();
-                mPlaying = true;
-            }
-            else
-                mDeferredStart = true;
-        }
+        if(mPlayer != null)
+            mPlayer.play();
     }
 
 
     public void stop() {
 
-        pause();
-        seek(0L);
+        if(mPlayer != null)
+            mPlayer.stop();
     }
 
 
     public void pause() {
-        if(mPlaying)
-            mPlayer.pause();
 
-        mPlaying = false;
+        if(mPlayer != null)
+            mPlayer.pause();
     }
 
 
     public void seek(long frame) {
 
-        // calc relative frame to seek to
-
-        mSeekPoint = frame - index;
-
-        if(mIsReady) {
-            int iframe = (int) (frame * 1000 / TCONST.FPS);
-
-            seekTo(iframe);
-        }
-        else
-            mDeferredSeek = true;
-
+        if(mPlayer != null)
+            mPlayer.seek(frame);
     }
 
 
     public void seekTo(int frameTime) {
 
-        // No errors occur - but don't try to seek past the end
-        if(mPlayer != null && frameTime < mPlayer.getDuration())
+        if(mPlayer != null)
             mPlayer.seekTo(frameTime);
-    }
-
-
-    public void setOnCompletionListener(OnCompletionListener callback) {
-        listener = callback;
-    }
-
-
-    @Override
-    public void onPrepared(MediaPlayer mp) {
-
-        mIsReady = true;
-
-        // If seek was called before we were ready play
-        if(mDeferredSeek)
-            seek(mSeekPoint);
-
-        // If play was called before we were ready play
-        if(mDeferredStart)
-            play();
-    }
-
-
-    @Override
-    public void onCompletion(MediaPlayer mp) {
-
-        try {
-
-            if(mPlayer != null) {
-                mPlayer.pause();
-                mPlayer.seekTo(0);
-                mPlaying = false;
-
-                // TODO: Manage audioplayers more intelligently
-                mPlayer.reset();
-                mPlayer.release();
-                mPlayer = null;
-            }
-        }
-        catch(Exception e) {
-            Log.e(TAG, "Audio state error:" + e);
-        }
-        // Flows automatically increment to next animation node.
-        //
-        if(mode.equals(TCONST.AUDIOFLOW))
-            _scope.tutor().eventNext();
-
-        if(listener != null) {
-            listener.onCompletion(mp);
-        }
     }
 
 
 
     // *** Serialization
+
 
 
     @Override
@@ -263,10 +217,10 @@ public class type_audio extends type_action implements OnPreparedListener, OnCom
         // e.g. LANG_SW | LANG_EN | LANG_FR
 
         if(lang != null) {
-            langPath = _scope.tutor().mapLanguage(lang);
+            langPath = mMediaManager.mapLanguage(lang);
         }
         else {
-            langPath = _scope.tutor().getLanguage();
+            langPath = mMediaManager.getLanguage(_scope.tutor());
         }
 
         // Update the path to the sound source file

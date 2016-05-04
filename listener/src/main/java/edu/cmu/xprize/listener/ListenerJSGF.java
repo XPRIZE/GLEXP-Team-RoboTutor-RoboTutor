@@ -259,6 +259,12 @@ public class ListenerJSGF extends ListenerBase {
     private class IPocketSphinxListener implements ITutorListener {
 
         @Override
+        public void onStableResult(String[] hypothesis) {
+            Log.i("ASR", "Part Hyp: " + TextUtils.join(" ", hypothesis));
+            processHypothesis(hypothesis);
+        }
+
+        @Override
         public void onPartialResult(Hypothesis hypothesis) {
             Log.i("ASR", "Part Hyp: " + hypothesis.getHypstr());
             processHypothesis(hypothesis, false);
@@ -297,8 +303,16 @@ public class ListenerJSGF extends ListenerBase {
         }
     }
 
+
     // handle a partial or final hypothesis from pocketsphinx
     private void processHypothesis(Hypothesis hypothesis, Boolean finalResult) {
+
+
+    }
+
+
+    // handle a partial or final hypothesis from pocketsphinx
+    private void processHypothesis(String[] hypothesis) {
 
     }
 

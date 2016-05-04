@@ -146,6 +146,18 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     }
 
 
+    /**
+     * @Override in Tutor Domain to allow the MediaManageer direct access to the recognizer
+     */
+    public void setListener(ListenerBase listener) {}
+
+
+    /**
+     * @Override in Tutor Domain to allow the MediaManageer direct access to the recognizer
+     */
+    public void removeListener(ListenerBase listener) {}
+
+
 
     //*************************************************
     //****** Activity state support START

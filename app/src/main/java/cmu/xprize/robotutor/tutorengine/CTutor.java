@@ -52,7 +52,6 @@ import cmu.xprize.robotutor.tutorengine.graph.scene_initializer;
 import cmu.xprize.robotutor.tutorengine.graph.type_action;
 import cmu.xprize.robotutor.tutorengine.graph.type_timer;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
-import cmu.xprize.util.TTSsynthesizer;
 
 
 /**
@@ -67,6 +66,7 @@ public class CTutor implements ILoadableObject2 {
     // May have child scopes for local variables -
 
     private TScope                        mTutorScope;
+    private CMediaManager                 mMediaManager;
 
     private HashMap<String, ITutorScene>  mScenes  = new HashMap<String, ITutorScene>();
     private HashMap<String, ITutorObject> mObjects = new HashMap<String, ITutorObject>();
@@ -86,9 +86,7 @@ public class CTutor implements ILoadableObject2 {
     public boolean                       mTutorActive = false;
 
     private int                                 _framendx = 0;
-
     private HashMap<String, scene_initializer>  _sceneMap = new HashMap<String, scene_initializer>();
-    HashMap<String, type_timer>                 _timerMap = new HashMap<String, type_timer>();
 
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
@@ -100,10 +98,6 @@ public class CTutor implements ILoadableObject2 {
     public String engineLanguage;
 
     private int index = 0;  // test debug
-
-    static public TTSsynthesizer            TTS;
-    static public String                    LANG_FEATURE;
-
 
     static private final String  TAG   = LayoutInflater.class.getSimpleName();
     static private final boolean DEBUG = false;
@@ -119,6 +113,7 @@ public class CTutor implements ILoadableObject2 {
         mTutorLogManager = logManager;
 
         mAssetManager    = context.getAssets();
+        mMediaManager    = CMediaManager.getInstance();
 
         setTutorFeatures(featSet);
 
@@ -126,10 +121,10 @@ public class CTutor implements ILoadableObject2 {
         //
         CPreferenceCache.updateTutorInstance(name);
 
-        // Configure the initial language based on the engine setting - tutor may override
-        // if "language" is set in JSON image
+        // Configure the initial language based on the engine_descriptor JSON setting -
+        // tutor may override if "language" is set in tutor_description JSON image
         //
-        setLanguage(tarLanguage);
+        mMediaManager.setLanguageFeature(this, tarLanguage);
 
         inflateTutor();
     }
@@ -293,71 +288,32 @@ public class CTutor implements ILoadableObject2 {
     //**************************************************************************
     // Language management
 
-    public String getLanguage() {
-
-        return TCONST.langMap.get(LANG_FEATURE);
-    }
-    public String getLanguageFeature() {
-
-        return LANG_FEATURE;
-    }
-
-
-    public String mapLanguage(String _language) {
-
-        return TCONST.langMap.get(_language);
-    }
-
-
     // The language ID is also used as a feature to permit conditioning on language
     // within scripts.
     //
-    public void setLanguage(String lang) {
+    public void updateLanguageFeature(String langFtr) {
 
         // Remove any active language - Only want one language feature active
-        setDelFeature(LANG_FEATURE);
+        setDelFeature(CMediaManager.getLanguageFeature(this));
 
-        // Update language
-        LANG_FEATURE = lang;
-        setAddFeature(lang);
+        setAddFeature(langFtr);
     }
 
     // Language management
     //**************************************************************************
 
 
-
-    //*************  Timer Management
-
-
-    // TODO: Manage name collisions
-    public void createTimer(String id, type_timer timer) {
-        _timerMap.put(id, timer);
-    }
-
-
-    public type_timer removeTimer(String id) {
-        return _timerMap.remove(id);
-    }
-
-
-    public type_timer mapTimer(String id) {
-        return _timerMap.get(id);
-    }
-
+    /**
+     * This provides sceneGraph nodes access to the Assetmanager through their scopes
+     * mTutor field
+     *
+     * @param path
+     * @return
+     * @throws IOException
+     */
     public InputStream openAsset(String path) throws IOException {
         return mAssetManager.open(path);
     }
-
-    public AssetFileDescriptor openFD(String path) throws IOException {
-        return mAssetManager.openFd(path);
-    }
-
-
-    public boolean hasTimer(String id) {
-        return _timerMap.containsKey(id);
-    }
-
 
 
     // framendx is a simple counter used it uniquely id a scene instance for logging
@@ -705,9 +661,9 @@ public class CTutor implements ILoadableObject2 {
 
         JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
 
-        // Use setLanguage to properly override the Engine language feature
+        // Use updateLanguageFeature to properly override the Engine language feature
         if(language != null)
-            setLanguage(language);
+            mMediaManager.setLanguageFeature(this, language);
 
         // Create a associative cache for the initialization data
         //

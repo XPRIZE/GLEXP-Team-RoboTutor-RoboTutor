@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 
+import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.util.TCONST;
@@ -32,6 +33,7 @@ import cmu.xprize.util.TTSsynthesizer;
 
 public class type_tts extends type_action {
 
+    private CMediaManager  mMediaManager;
     private TTSsynthesizer mSynthesizer;
 
 
@@ -43,7 +45,8 @@ public class type_tts extends type_action {
 
 
     public type_tts() {
-        mSynthesizer = CTutor.TTS;
+        mMediaManager = CMediaManager.getInstance();
+        mSynthesizer  = mMediaManager.getTTS();
     }
 
     /**
@@ -136,7 +139,7 @@ public class type_tts extends type_action {
         // If unset use the current tutor default language
         //
         if(language.equals(""))
-            language = scope.tutor().getLanguageFeature();
+            language = mMediaManager.getLanguageFeature(scope.tutor());
 
         // TODO:  We also want to connect up the ASR
 

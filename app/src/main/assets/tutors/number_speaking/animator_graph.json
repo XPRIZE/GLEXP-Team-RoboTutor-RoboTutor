@@ -32,7 +32,7 @@
         "NEW_NUMBER":{
           "COMMENT":"This node presents a number for user to speak.",
           "type":"node",
-          "preenter":["GETNUM"],
+          "preenter":["GETNUM","SETPLACEVALUE"],
           "maptype":"moduleMap",
           "mapname": "SHOW_NUMBER",
           "preexit" :[],
@@ -198,6 +198,15 @@
           ]
         },
 
+        "SETPLACEVALUE":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "2:Integer|wrong:String","features":""}
+          ]
+        },
+
         "HESITATION_PROMPT":{
           "type": "MODULE",
           "reuse":true,
@@ -290,7 +299,7 @@
         "SET_WORD_EVENT":   {"type": "COMMAND", "id":"Sresponse", "method":"configureEvent", "parms": "WORD_EVENT:String|HESTITATION_RESET:String", "features": "" },
         "RESET_WORD_EVENT": {"type": "COMMAND", "id":"Sresponse", "method":"clearEvent",     "parms": "WORD_EVENT:String",                          "features": "" },
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[1,19,42,10,11,111,100,7,124,38,479]:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[1,19,42,479]:String","features":""},
 
         "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HESITATION_TRACK", "features": "" },
 

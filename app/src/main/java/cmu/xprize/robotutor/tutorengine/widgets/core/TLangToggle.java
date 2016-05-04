@@ -25,6 +25,7 @@
         import android.view.View;
         import android.widget.ToggleButton;
 
+        import cmu.xprize.robotutor.tutorengine.CMediaManager;
         import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
         import cmu.xprize.robotutor.tutorengine.CTutor;
         import cmu.xprize.robotutor.tutorengine.CTutorEngine;
@@ -38,6 +39,7 @@ public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
+    private CMediaManager   mMediaManager;
 
     private Boolean         mLangState = false;
 
@@ -73,7 +75,8 @@ public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.
 
     @Override
     public void onClick(View v) {
-        mLangState = !mLangState;
+        mLangState    = !mLangState;
+        mMediaManager = CMediaManager.getInstance();
 
         CTutorEngine.changeDefaultLanguage(mLangState? TCONST.LANG_EN: TCONST.LANG_SW);
     }
@@ -109,7 +112,7 @@ public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.
     @Override
     public void postInflate() {
 
-        mLangState = (mTutor.getLanguageFeature() == TCONST.LANG_EN);
+        mLangState = (mMediaManager.getLanguageFeature(mTutor) == TCONST.LANG_EN);
         setChecked(mLangState);
     }
 

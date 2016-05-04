@@ -9,6 +9,10 @@ import org.w3c.dom.Text;
 
 import java.util.Locale;
 
+/**
+ * TODO: this should be a singleton
+ * TODO: Add stop / pause / restart
+ */
 public class TTSsynthesizer implements OnInitListener
 {
     private final Context   context;

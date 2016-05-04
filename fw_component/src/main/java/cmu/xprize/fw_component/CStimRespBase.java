@@ -23,6 +23,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -64,6 +67,8 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
     protected List<String>  _data;
     protected int           _dataIndex = 0;
     protected boolean       _dataEOI   = false;
+
+    protected String[]      _placeValueColor = new String[20];
 
     protected String        _onRecognition;
 
@@ -228,18 +233,59 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
 
 
     /**
+     * Do any requested place value hightlihgting before displaying the text
+     *
+      * @return
+     */
+    private SpannableStringBuilder doPlaceValueHighlight() {
+
+        SpannableStringBuilder str = new SpannableStringBuilder(mValue);
+
+        try {
+            for (int i1 = 1; i1 < mValue.length() + 1 ; i1++) {
+
+                if (_placeValueColor[i1] != null) {
+
+                    int place = (mValue.length() - i1);
+
+                    str.setSpan(
+                            new ForegroundColorSpan(colorMap.get(_placeValueColor[i1])),
+                            place,
+                            place + 1,
+                            SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE
+                    );
+                }
+            }
+        }
+        catch(Exception e) {
+            // Just ignore it if we go beyond 20 characters - which will cause and error
+            str = new SpannableStringBuilder(mValue);
+        }
+
+        return str;
+    }
+
+
+    /**
      * Ths Stimulus variant of the control broadcasts its value to the response which is the
      *
      * @param newValue
      */
     protected void updateText(String newValue) {
 
-        mValue = newValue;
-        setText(mValue);
+        boolean changed = false;
 
-        // For stimulus controls broadcast the change
-        if(!mIsResponse) {
-            // Let interested listeners know the stimulus has changed
+        if(mValue != newValue) changed = true;
+
+        mValue = newValue;
+
+        setText(doPlaceValueHighlight());
+
+        // For stimulus controls broadcast the change - ignore style changes
+        //
+        if(!mIsResponse && changed) {
+
+            // Let interested listeners know the stimulus has changed -
             //
             dispatchEvent( new CEvent(TCONST.FW_STIMULUS, TCONST.FW_VALUE, newValue));
         }
@@ -325,6 +371,9 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
 
 
     public void setForeGround(String Color) {
+
+        clearPlaceValueColors();
+
         try {
             setTextColor(colorMap.get(Color));
         }
@@ -333,6 +382,32 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
             System.exit(1);
         }
     }
+
+
+    /**
+     * Allow scripted control over individual characters -
+     * Used primarily for number highlighting
+     * @param place
+     * @param color
+     */
+    public void setPlaceValueColor(Integer place, String color) {
+
+        if(place <= 0 || color == "")
+            clearPlaceValueColors();
+        else {
+            _placeValueColor[place] = color;
+        }
+
+        // update the display
+        updateText(mValue);
+    }
+    private void clearPlaceValueColors() {
+
+        for(int i1 = 0 ; i1 < _placeValueColor.length ; i1++) {
+            _placeValueColor[i1] = null;
+        }
+    }
+
 
     public void onRecognitionComplete(String symbol) {
         _onRecognition = symbol;

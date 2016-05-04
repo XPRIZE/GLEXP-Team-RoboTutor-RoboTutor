@@ -69,7 +69,6 @@ public class ListenerPLRT extends ListenerBase {
     private boolean     useTruncations = false;      // Flag whether or not to use truncations.
     private boolean     speaking = false;            // speaking state. [currently unused]
 
-
     /**
      * Attach event listener to receive notification callbacks
      */
@@ -151,6 +150,15 @@ public class ListenerPLRT extends ListenerBase {
     // We receive these events from the SpeechRecognizer object for our own use, and send similar events from the
     // IAsrEventListener interface to our client app
     private class IPocketSphinxListener implements ITutorListener {
+
+        @Override
+        public void onStableResult(String[] hypothesis) {
+            // NOTE: that hypothesis may be null during shutdown
+            if(hypothesis != null) {
+                Log.i("ASR", "Part Hyp: " + hypothesis);
+                processHypothesis(hypothesis, false);
+            }
+        }
 
         @Override
         public void onPartialResult(Hypothesis hypothesis) {
@@ -373,20 +381,30 @@ public class ListenerPLRT extends ListenerBase {
         }
     }
 
+
     // handle a partial or final hypothesis from pocketsphinx
+    //
     private void processHypothesis(Hypothesis hypothesis, Boolean finalResult) {
 
-        String timestamp = timestampMillis();    // save receipt timestamp for logging
-
         if (hypothesis == null) return;
+
+        // get array of hypothesis words
+        String[] asrWords = hypothesis.getHypstr().split("\\s+");
+
+        processHypothesis(asrWords, finalResult);
+    }
+
+
+    // handle a partial or final hypothesis from pocketsphinx
+    //
+    private void processHypothesis(String[] asrWords, Boolean finalResult) {
+
+        String timestamp = timestampMillis();    // save receipt timestamp for logging
 
         if (sentenceWords == null) {
             Log.w("processHypothesis", "null sentenceWords, hyp ignored");
             return;
         }
-
-        // get array of hypothesis words
-        String[] asrWords = hypothesis.getHypstr().split("\\s+");
 
         if (asrWords.length < 1)
             return;
@@ -437,7 +455,7 @@ public class ListenerPLRT extends ListenerBase {
 
             // log the partial hypothesis
             if(IS_LOGGING)
-                logHyp(timestamp, hypothesis.getHypstr(), segments, heardWords);
+                logHyp(timestamp, TextUtils.join(" ", asrWords), segments, heardWords);
         }
     }
 

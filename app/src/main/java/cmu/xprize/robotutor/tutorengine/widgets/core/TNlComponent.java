@@ -24,6 +24,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 import cmu.xprize.nl_component.CNl_Component;
+import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
@@ -37,6 +38,7 @@ import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.Num2Word;
 import cmu.xprize.util.TCONST;
+import edu.cmu.xprize.listener.ListenerBase;
 
 
 /**
@@ -46,6 +48,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
+    private CMediaManager   mMediaManager;
 
     private int             _wrong   = 0;
     private int             _correct = 0;
@@ -74,6 +77,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
 
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
+        mMediaManager = CMediaManager.getInstance();
     }
 
     @Override
@@ -89,13 +93,28 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
         mListeners.add((IEventListener) mTutor.getViewByName(linkedView));
     }
 
+    /**
+     *  Inject the listener into the MediaManageer
+     */
+    @Override
+    public void setListener(ListenerBase listener) {
+        mMediaManager.setListener(listener);
+    }
+
+    /**
+     *  Remove the listener from the MediaManageer
+     */
+    @Override
+    public void removeListener(ListenerBase listener) {
+        mMediaManager.removeListener(listener);
+    }
 
     /**
      * Return tutor current working language
      */
     @Override
     public String getLanguage() {
-        return mTutor.getLanguage();
+        return mMediaManager.getLanguage(mTutor);
     }
 
     /**
@@ -103,7 +122,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
      */
     @Override
     public String getLanguageFeature() {
-        return mTutor.getLanguageFeature();
+        return mMediaManager.getLanguageFeature(mTutor);
     }
 
 
@@ -307,7 +326,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
         // Push the TTS reference into the super class in the Java domain - Note that this must
         // be done after inflation as mTutor must have been initialized for getLanguage callback
         //
-        prepareListener(CTutor.TTS);
+        prepareListener(mMediaManager.getTTS());
     }
 
     // Do deferred configuration - anything that cannot be done until after the
