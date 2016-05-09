@@ -19,60 +19,23 @@
 
 package cmu.xprize.robotutor.tutorengine.graph.vars;
 
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
-import cmu.xprize.util.ILoadableObject;
-import cmu.xprize.util.IScope;
+import cmu.xprize.robotutor.tutorengine.graph.graph_node;
 
 
-public class TReference  extends TVarBase implements ILoadableObject2, IScriptable2 {
+public class type_array extends graph_node {
 
-    private String _value;
+    public IArraySource _owner;
+    public String       _listName;
 
-    public TReference() {
 
+    public type_array(IArraySource owner, String listName ) {
+        _owner    = owner;
+        _listName = listName;
     }
 
-    public TReference(String string) {
-        _value = string;
-    }
-
-
-    @Override
-    public String getValue() {
-        return _value;
-    }
-
-
-    // *** Serialization
-
-
-    /**
-     * As TBoolean objects are loaded from JSON the TVarBase initializes the type and name
-     * while the values are set per class polymorphically
-     *
-     * @param jsonObj
-     * @param scope
-     */
-    @Override
-    public void loadJSON(JSONObject jsonObj, IScope2 scope) {
-
-        super.loadJSON(jsonObj, scope);
-
-        try {
-            _value = jsonObj.getString("value");
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
     public String resolve(int index) {
-        return null;
+
+        return _owner.deReference(_listName, index);
     }
 
     @Override

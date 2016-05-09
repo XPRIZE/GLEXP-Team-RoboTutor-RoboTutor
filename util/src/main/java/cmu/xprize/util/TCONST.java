@@ -28,7 +28,7 @@ import java.util.HashMap;
 
 public class TCONST {
 
-    public static final String NUMDATA_HEADER = "{\n" + "\"dataSource\": ";
+    public static final String NUMDATA_HEADER   = "{\n" + "\"dataSource\": ";
 
 
     //*** Reading Tutor compatible string combinations
@@ -148,11 +148,12 @@ public class TCONST {
     public static final int STARTSTATE = 0;
     public static final int PARSESTATE = 1;
     public static final int PARSEIDENT = 2;
-    public static final int PARSENUM = 3;
-    public static final int PARSEVAR = 4;
-    public static final int PARSEPROP = 5;
-    public static final int RESOLVESYMBOL = 6;
-    public static final int ENDSUBEXPR = 7;
+    public static final int PARSEINDEX = 3;
+    public static final int PARSENUM = 4;
+    public static final int PARSEVAR = 5;
+    public static final int PARSEPROP = 6;
+    public static final int RESOLVESYMBOL = 7;
+    public static final int ENDSUBEXPR = 8;
     public static final int BUILDEXPR = 100;
 
     // Binary Operations
@@ -219,6 +220,8 @@ public class TCONST {
 
     public static final int ALLSTATIC_EVENTS   = 0x70;
 
+    public static final int RECOGNITION_EVENT  = 0x100;
+
     public static final int ALL_EVENTS         = 0xFFFFFFFF;
 
 
@@ -243,6 +246,7 @@ public class TCONST {
     public static final String FW_VALUE    = "FW_VALUE";
     public static final String FW_EOI      = "FW_EOI";
     public static final String FW_RESPONSE = "FW_RESPONSE";
+
     public static final String ROBOTUTOR_FOLDER = "/RoboTutor/";
 
 
@@ -261,9 +265,19 @@ public class TCONST {
 
 
     // Number Listeneing Component
-    public static final String ERR_SINGLEDIGIT = "Single Digit Error";
-    public static final String ERR_MULTIDIGIT  = "Multi Digit Error";
-    public static final String TEXT_FIELD      = ".text";
+    private static final String[]    placeValue = {".ones",".tens",".hundreds",".thousands",".millions",".billions"};
+
+    public static final String ERR_SINGLEDIGIT  = "Single Digit Error";
+    public static final String ERR_MULTIDIGIT   = "Multi Digit Error";
+    public static final String TEXT_FIELD       = ".text";
+
+    public static final String PLRT             = "PLRT";
+    public static final String JSGF             = "JSGF";
+
+    public static final String DIGIT_STRING_VAR = "DIGIT_STRING_VAR";
+    public static final String PLACE_STRING_VAR = "PLACE_STRING_VAR";
+    public static final String DIGIT_TEXT_VAR   = "DIGIT_TEXT_VAR";
+    public static final String PLACE_TEXT_VAR   = "PLACE_TEXT_VAR";
 
 
     // Generic error codes
@@ -290,18 +304,45 @@ public class TCONST {
     public static final String STABLE_HYPOTHESES  = "STABLEHYPOTHESES";
 
     // Number parser states.
-    public static final int W2N_DIGIT = 2;
-    public static final int W2N_TENS  = 3;
-    public static final int W2N_POWER = 4;
-    public static final int W2N_CONJ  = 5;
-    public static final int W2N_EOD   = 6;
-    public static final int W2N_ERR   = 7;
+    public static final int W2N_ZERO     = 1;
+    public static final int W2N_DIGIT    = 2;
+    public static final int W2N_TENS     = 3;
+    public static final int W2N_HUNDREDS = 4;
+    public static final int W2N_POWER    = 5;
+    public static final int W2N_CONJ     = 6;
+    public static final int W2N_EOD      = 7;
+    public static final int W2N_ERR      = 8;
+    public static final int W2N_POWER_MULTIPLIER = 9;
 
     public static final int UNSET = -1;
+
+    // W2N Error Warnings
+    public static final int NO_ERROR                     = 0;       //
+    public static final int ERRW2N_LEADING_CONJ          = 1;       // leading NA
+    public static final int ERRW2N_NO_DATA               = 2;       // empty string passed in
+    public static final int ERRW2N_NONTERM_ZERO          = 3;       // zero must always be alone - This occurs when something follows or proceeds zero
+    public static final int ERRW2N_MISSING_CONJ          = 4;       // We don't tolerate missing NA in swahili
+    public static final int ERRW2N_MISSING_HUNDRED_MULTI = 5;       // They uttered tens/hundreds/power after mia
+    public static final int ERRW2N_HUNDRED_ADDED_CONJ    = 6;       // They added a na after mia
+    public static final int ERRW2N_INCREASING_POWER      = 7;       // They've uttered an increasing power sequnce - e.g. thousand .. million
+    public static final int ERRW2N_REPEATED_POWER        = 8;       // They've uttered a second power e.g. million thousand
+    public static final int ERRW2N_POWER_CONJ            = 9;       // They've uttered a power followed by na
+    public static final int ERRW2N_INCREASING_MULTIPLIER = 10;      // power multiples must be monotonically recreasing 100's - 10's - 1's
+    public static final int ERRW2N_REPEAT_CONJ           = 11;      // na na
+    public static final int ERRW2N_INTERNAL              = 12;      // shouldn't occur
+    public static final int ERRW2N_ZERO_HUNDRED_MULTI    = 13;      // mia sifuri
+
+    public static final int NO_WARNING                = 0;          //
+    public static final int W2N_HYPOTHESIS            = 1;          // This is potentially a complete utterance
+    public static final int W2N_DANGLING_HUNDRED_WARN = 2;          // mia with no multiplier yet
+    public static final int W2N_DANGLING_POWER_WARN   = 3;          // power with no multiplier yet
+    public static final int W2N_DANGLING_CONJ_WARN    = 4;          // conjunction with no follow on value
 
     // Coordinating conjunction
     public static final String CC_SW_NA  = "NA";
     public static final String CC_EN_AND = "AND";
     public static final String NUM_EOD   = "NUM_EOD";
+
+
 
 }

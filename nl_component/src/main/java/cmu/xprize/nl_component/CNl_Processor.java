@@ -17,23 +17,24 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.robotutor.tutorengine.graph.vars;
+package cmu.xprize.nl_component;
 
-import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
-import cmu.xprize.util.IScriptable;
+import edu.cmu.xprize.listener.ListenerBase;
 
-public interface IScriptable2 extends IScriptable {
+public interface CNl_Processor {
 
-    public TBoolean OR(IScriptable2 RHS, boolean lneg, boolean rneg);
-    public TBoolean AND(IScriptable2 RHS, boolean lneg, boolean rneg);
-    public TBoolean LT(IScriptable2 RHS);
-    public TBoolean LTEQ(IScriptable2 RHS);
-    public TBoolean GT(IScriptable2 RHS);
-    public TBoolean GTEQ(IScriptable2 RHS);
-    public TBoolean EQ(IScriptable2 RHS);
-    public TBoolean NEQ(IScriptable2 RHS);
+    void setListener(ListenerBase   mListener);
 
-    public String resolve(int index);
-    public int getIntValue();
+    int getLength();
+    String getString();
+    int getValue();
+    String getText();
 
+    String deReference(String _listName, int index);
+
+    void preProcessStimulus(String stimulusString);
+
+    void listen(Boolean enable);
+
+    void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult);
 }

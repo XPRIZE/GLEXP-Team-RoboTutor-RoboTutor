@@ -31,9 +31,12 @@ import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IArraySource;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
+import cmu.xprize.robotutor.tutorengine.graph.vars.type_array;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.Num2Word;
@@ -44,7 +47,7 @@ import edu.cmu.xprize.listener.ListenerBase;
 /**
  * Scriptable number listener component
  */
-public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
+public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IArraySource{
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
@@ -53,10 +56,10 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
     private int             _wrong   = 0;
     private int             _correct = 0;
 
-    // Field names for he place values
-    private String[]       placeValue = {".ones",".tens",".hundreds",".thousands",".millions",".billions"};
 
     static final private String TAG = "TRtComponent";
+
+
 
     public TNlComponent(Context context) {
         super(context);
@@ -78,12 +81,39 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
         mMediaManager = CMediaManager.getInstance();
+
+        // Create a listener to process the ASR input
+        // Note this ability to switch processors is primarily for development purposes to
+        // test different listener designs
+        //
+        createInputProcessor(TCONST.PLRT);
     }
+
 
     @Override
     public void onDestroy() {
         if(mListener != null)
                 mListener.stop();
+
+        // Publish the Stimulus state
+        if(!mIsResponse) {
+
+            TScope scope = mTutor.getScope();
+
+            // Clear the scope variables
+            //
+            scope.addUpdateVar(name() + ".digits", null);
+            scope.addUpdateVar(name() + ".value",  null);
+            scope.addUpdateVar(name() + ".string", null);
+            scope.addUpdateVar(name() + ".text",   null);
+
+            // Clear the scope variables
+            //
+            scope.addUpdateVar(name() + TCONST.DIGIT_STRING_VAR, null);
+            scope.addUpdateVar(name() + TCONST.PLACE_STRING_VAR, null);
+            scope.addUpdateVar(name() + TCONST.DIGIT_TEXT_VAR, null);
+            scope.addUpdateVar(name() + TCONST.PLACE_TEXT_VAR, null);
+        }
     }
 
 
@@ -128,26 +158,52 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
 
     /**
      * Publish the Stimulus value as Scope variables for script access
+     * We have several things
+     *
+     * sStimulus.digits      - 3  (number of digits)
+     *
+     * sStimulus.String      - "238"
+     * sStimulus.Value       - 238
+     * sStimulus.Text        - "two hundred and thirty eight"
+     *
+     * sStimulus.DigitString - ["2", "3", "8"]
+     * sStimulus.DigitValue  - [2, 3, 8]
+     * sStimulus.DigitText   - ["two", "three", "eight"]
+     *
+     * sStimulus.PlaceString - ["200", "30", "8"]
+     * sStimulus.PlaceValue  - [200, 30, 8]
+     * sStimulus.Placetext   - ["two hundred", "thirty", "eight"]
+     *
      */
     protected void publishStimulus() {
 
         // Publish the Stimulus state
         if(!mIsResponse) {
+
+            TScope scope = mTutor.getScope();
+
             // publish the number of digits in the stimulus - e.g. Sstimulus.digits
             //
-            mTutor.getScope().addUpdateVar(name() + ".digits", new TInteger(mStimulus.length()));
+            scope.addUpdateVar(name() + ".digits", new TInteger(mInputProcessor.getLength()));
+            scope.addUpdateVar(name() + ".value",  new TString(mInputProcessor.getString()));
+            scope.addUpdateVar(name() + ".string", new TInteger(mInputProcessor.getValue()));
+            scope.addUpdateVar(name() + ".text",   new TString(mInputProcessor.getText()));
 
             // publish the Place Values for the stimulus - e.g.
-            //      for 12  Sstimulus.ones <2> Sstimulus.tens <10>
-            //      for 154 Sstimulus.ones <4> Sstimulus.tens <50> Sstimulus.hundreds <100>
-            //      etc
             //
-            for (int i = 0, place = mStimulus.length() - 1; i < mStimulus.length(); i++, place--) {
+            // If we haven't published this component before create the type_array objects
+            // to access the state variables from scripts
+            //
+            try {
+                if(!scope.containsSymbol("sStimulus.DigitString")) {
 
-                int placeNum = (int) ((Integer) mStimulusNumList.get(place) * Math.pow(10,i));
+                    scope.addUpdateVar(name() + TCONST.DIGIT_STRING_VAR, new type_array(this, TCONST.DIGIT_STRING_VAR));
+                    scope.addUpdateVar(name() + TCONST.PLACE_STRING_VAR, new type_array(this, TCONST.PLACE_STRING_VAR));
+                    scope.addUpdateVar(name() + TCONST.DIGIT_TEXT_VAR, new type_array(this, TCONST.DIGIT_TEXT_VAR));
+                    scope.addUpdateVar(name() + TCONST.PLACE_TEXT_VAR, new type_array(this, TCONST.PLACE_TEXT_VAR));
+                }
 
-                mTutor.getScope().addUpdateVar(name() + placeValue[i], new TInteger(placeNum));
-                mTutor.getScope().addUpdateVar(name() + placeValue[i] + TCONST.TEXT_FIELD, new TString(Num2Word.transform(placeNum, getLanguage())));
+            } catch (Exception e) {
             }
         }
     }
@@ -156,6 +212,16 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
     //**********************************************************
     //**********************************************************
     //*****************  Scripting Interface
+
+
+    // This provides access to the Stimulus array values as Strings
+    //
+    @Override
+    public String deReference(String _listName, int index) {
+
+        return mInputProcessor.deReference(_listName, index);
+    }
+
 
     /**
      *
@@ -203,10 +269,10 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
 
         try {
             if (_data != null) {
-                mStimulus = _data.get(_dataIndex);
+                mStimulusString = _data.get(_dataIndex);
                 preProcessStimulus();
 
-                updateText(mStimulus);
+                updateText(mStimulusString);
 
                 // Publish scriptable variables for the stimulus state
                 //
@@ -237,21 +303,11 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
         mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
         mTutor.setDelFeature(TCONST.GENERIC_WRONG);
 
-        // Clear the scope variables.
-        //
-        mTutor.getScope().addUpdateVar(name() + ".digits", null);
-
-        // Clear the Place Values for the stimulus
-        //
-        for( int i = 0  ; i < placeValue.length ; i++) {
-            mTutor.getScope().addUpdateVar(name() + placeValue[i], null);
-            mTutor.getScope().addUpdateVar(name() + placeValue[i] + TCONST.TEXT_FIELD, null);
-        }
     }
 
 
     @Override
-    protected void updateOutcomeState(boolean error) {
+    public void updateOutcomeState(boolean error) {
 
         if(error == TCONST.TRUE_ERROR)
             mTutor.setAddFeature(TCONST.GENERIC_WRONG);
@@ -278,7 +334,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
      * @param nodeName
      */
     @Override
-    protected void applyEventNode(String nodeName) {
+    public void applyEventNode(String nodeName) {
         IScriptable2 obj = null;
 
         if(nodeName != null && !nodeName.equals("")) {

@@ -98,4 +98,14 @@ public class TInteger extends TVarBase implements ILoadableObject2, IScriptable2
             e.printStackTrace();
         }
     }
+
+    @Override
+    public String resolve(int index) {
+        return null;
+    }
+
+    @Override
+    public int getIntValue() {
+        return _value;
+    }
 }

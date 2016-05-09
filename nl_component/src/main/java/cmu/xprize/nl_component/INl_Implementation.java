@@ -17,23 +17,15 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.robotutor.tutorengine.graph.vars;
+package cmu.xprize.nl_component;
 
-import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
-import cmu.xprize.util.IScriptable;
+public interface INl_Implementation {
+    public String getLanguage();
+    public String getLanguageFeature();
 
-public interface IScriptable2 extends IScriptable {
+    public void updateOutcomeState(boolean error);
+    public void applyEventNode(String nodeName);
 
-    public TBoolean OR(IScriptable2 RHS, boolean lneg, boolean rneg);
-    public TBoolean AND(IScriptable2 RHS, boolean lneg, boolean rneg);
-    public TBoolean LT(IScriptable2 RHS);
-    public TBoolean LTEQ(IScriptable2 RHS);
-    public TBoolean GT(IScriptable2 RHS);
-    public TBoolean GTEQ(IScriptable2 RHS);
-    public TBoolean EQ(IScriptable2 RHS);
-    public TBoolean NEQ(IScriptable2 RHS);
-
-    public String resolve(int index);
-    public int getIntValue();
-
+    public void updateText(String newValue);
+    public void onASREvent(int eventType);
 }

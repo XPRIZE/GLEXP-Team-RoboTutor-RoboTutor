@@ -111,6 +111,16 @@ public class TVarBase extends type_action implements ILoadableObject2, IScriptab
     }
 
     @Override
+    public String resolve(int index) {
+        return null;
+    }
+
+    @Override
+    public int getIntValue() {
+        return 0;
+    }
+
+    @Override
     public void set(String value) {
 
     }
