@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.IOException;
@@ -73,20 +74,6 @@ public class RoboTutor extends Activity implements IReadyListener {
     private final  String  TAG = "CRoboTutor";
 
 
-    static private ArrayList<ArrayList<String>> w2ntest = new ArrayList<ArrayList<String>>();
-
-    static {
-        w2ntest.add(new ArrayList<>(Arrays.asList("mia")));
-        w2ntest.add(new ArrayList<>(Arrays.asList("mia","moja")));
-        w2ntest.add(new ArrayList<>(Arrays.asList("mia","moja","na","mbili")));
-        w2ntest.add(new ArrayList<>(Arrays.asList("mia")));
-        w2ntest.add(new ArrayList<>(Arrays.asList("mia")));
-        w2ntest.add(new ArrayList<>(Arrays.asList("mia")));
-        w2ntest.add(new ArrayList<>(Arrays.asList("mia")));
-        w2ntest.add(new ArrayList<>(Arrays.asList("mia")));
-        w2ntest.add(new ArrayList<>(Arrays.asList("mia")));
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,15 +81,6 @@ public class RoboTutor extends Activity implements IReadyListener {
         Log.i(TAG, "onCreate: ");
 
         setContentView(R.layout.robo_tutor);
-
-
-        for(ArrayList<String> elem : w2ntest) {
-            long result = Word2NumFSM.transformSW(elem);
-
-            Log.i(TAG, "result: " + result);
-        }
-
-
 
         // Get the primary container for tutors
         tutorContainer = (ITutorManager)findViewById(R.id.tutor_container);

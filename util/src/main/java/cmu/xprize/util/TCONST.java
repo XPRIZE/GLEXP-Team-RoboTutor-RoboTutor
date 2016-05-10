@@ -307,36 +307,52 @@ public class TCONST {
     public static final int W2N_ZERO     = 1;
     public static final int W2N_DIGIT    = 2;
     public static final int W2N_TENS     = 3;
-    public static final int W2N_HUNDREDS = 4;
-    public static final int W2N_POWER    = 5;
-    public static final int W2N_CONJ     = 6;
-    public static final int W2N_EOD      = 7;
-    public static final int W2N_ERR      = 8;
-    public static final int W2N_POWER_MULTIPLIER = 9;
+    public static final int W2N_TEENS    = 4;
+    public static final int W2N_HUNDREDS = 5;
+    public static final int W2N_POWER    = 6;
+    public static final int W2N_CONJ     = 7;
+    public static final int W2N_EOD      = 8;
+    public static final int W2N_ERR      = 9;
+
+    public static final int W2N_VALUE_UPDATE    = 10;
+    public static final int W2N_MULTIPLE_UPDATE = 11;
 
     public static final int UNSET = -1;
 
     // W2N Error Warnings
     public static final int NO_ERROR                     = 0;       //
-    public static final int ERRW2N_LEADING_CONJ          = 1;       // leading NA
-    public static final int ERRW2N_NO_DATA               = 2;       // empty string passed in
-    public static final int ERRW2N_NONTERM_ZERO          = 3;       // zero must always be alone - This occurs when something follows or proceeds zero
-    public static final int ERRW2N_MISSING_CONJ          = 4;       // We don't tolerate missing NA in swahili
-    public static final int ERRW2N_MISSING_HUNDRED_MULTI = 5;       // They uttered tens/hundreds/power after mia
-    public static final int ERRW2N_HUNDRED_ADDED_CONJ    = 6;       // They added a na after mia
-    public static final int ERRW2N_INCREASING_POWER      = 7;       // They've uttered an increasing power sequnce - e.g. thousand .. million
-    public static final int ERRW2N_REPEATED_POWER        = 8;       // They've uttered a second power e.g. million thousand
-    public static final int ERRW2N_POWER_CONJ            = 9;       // They've uttered a power followed by na
-    public static final int ERRW2N_INCREASING_MULTIPLIER = 10;      // power multiples must be monotonically recreasing 100's - 10's - 1's
-    public static final int ERRW2N_REPEAT_CONJ           = 11;      // na na
-    public static final int ERRW2N_INTERNAL              = 12;      // shouldn't occur
-    public static final int ERRW2N_ZERO_HUNDRED_MULTI    = 13;      // mia sifuri
+    public static final int ERRW2N_NO_DATA               = 1;       // empty string set passed in
+    public static final int ERRW2N_LEADING_CONJ          = 2;       // leading NA
+    public static final int ERRW2N_NONTERM_ZERO          = 3;       // zero must always be alone - This occurs when something follows zero
+    public static final int ERRW2N_NONSOLITARY_ZERO      = 4;       // zero must always be alone - This occurs when something proceeds zero
+    public static final int ERRW2N_MISSING_CONJ          = 5;       // We don't tolerate missing NA in swahili
+    public static final int ERRW2N_MISSING_HUNDRED_MULTI = 6;       // They uttered tens/hundreds/power after mia
+    public static final int ERRW2N_HUNDRED_ADDED_CONJ    = 7;       // They added a na after mia
+    public static final int ERRW2N_INCREASING_POWER      = 8;       // They've uttered an increasing power sequnce - e.g. thousand .. million
+    public static final int ERRW2N_REPEATED_POWER        = 9;       // They've uttered a second power e.g. million thousand
+    public static final int ERRW2N_POWER_CONJ            = 10;      // They've uttered a power followed by na
+    public static final int ERRW2N_INCREASING_MULTIPLIER = 11;      // power multiples must be monotonically recreasing 100's - 10's - 1's
+    public static final int ERRW2N_REPEATED_CONJ         = 12;      // na na
+    public static final int ERRW2N_INTERNAL              = 13;      // shouldn't occur
+    public static final int ERRW2N_ZERO_HUNDRED_MULTI    = 14;      // mia sifuri
+    public static final int ERRW2N_INVALID_TEXT          = 15;      // The input text is invalid - should not happen in practice
+
+    // English specific
+    public static final int ERRW2N_LEADING_HUNDRED       = 16;      // Can't start by saying 'hundred'
+    public static final int ERRW2N_LEADING_POWER         = 17;      // Can't start by saying 'thousand' etc
+    public static final int ERRW2N_REPEATED_HUNDRED      = 18;      // Hundred Hundred
+
+
+
+    public static final String[] W2N_ERRORMSG = {"NO_ERROR","NO_DATA","LEADING_CONJ","NONTERM_ZERO","NONSOLITARY_ZERO","MISSING_CONJ","MISSING_HUNDRED_MULTI","HUNDRED_ADDED_CONJ","INCREASING_POWER","REPEATED_POWER","POWER_CONJ","INCREASING_MULTIPLIER","REPEAT_CONJ","INTERNAL","ZERO_HUNDRED_MULTI","INVALID_TEXT"};
 
     public static final int NO_WARNING                = 0;          //
     public static final int W2N_HYPOTHESIS            = 1;          // This is potentially a complete utterance
     public static final int W2N_DANGLING_HUNDRED_WARN = 2;          // mia with no multiplier yet
     public static final int W2N_DANGLING_POWER_WARN   = 3;          // power with no multiplier yet
     public static final int W2N_DANGLING_CONJ_WARN    = 4;          // conjunction with no follow on value
+
+    public static final String[] W2N_WARNMSG = {"NO_WARNING","HYPOTHESIS","DANGLING_HUNDRED_WARN","DANGLING_POWER_WARN","DANGLING_CONJ_WARN"};
 
     // Coordinating conjunction
     public static final String CC_SW_NA  = "NA";

@@ -27,6 +27,7 @@ import java.util.List;
 
 
 /*
+
     Swahili Number System Rules - Spoken language rules
 
     digit00 = "sifuri"
@@ -47,9 +48,11 @@ import java.util.List;
 
     powerNgroup = powerNgroup100 | powerNgroup10 | powerNgroup1
 
-    Number1000s = powerNgroup{n},[na, powerNgroup(n-1)],...,[na, powerNgroup(0)],[na, Number100] | [na, Number10] | [na Number1]}
+    Number1000s = powerNgroup{n},[na, powerNgroup(n-1)],...,[na, powerNgroup(0)],[na, Number100] | [na, Number10] | [na digit19]}
 
     Number = Number1000s | Number100 | Number10 | digit19 | digit0
+
+
 
 
     If these aren't the rules then it becomes very complicated to construct a number
@@ -144,6 +147,37 @@ import java.util.List;
     .
     .
     .
+Random number: 4169
+Word sequence: elfu nne na mia moja na sitini na tisa
+Transformation: [4000, 4100, 4160, 4169]
+--------------------
+Random number: 8194
+Word sequence: elfu nane na mia moja na tisini na nne
+Transformation: [8000, 8100, 8190, 8194]
+--------------------
+Random number: 7341
+Word sequence: elfu saba na mia tatu na arobaini na moja
+Transformation: [7000, 7300, 7340, 7341]
+--------------------
+Random number: 68
+Word sequence: sitini na nane
+Transformation: [60, 68]
+--------------------
+Random number: 7634
+Word sequence: elfu saba na mia sita na thelathini na nne
+Transformation: [7000, 7600, 7630, 7634]
+--------------------
+Random number: 7720
+Word sequence: elfu saba na mia saba na ishirini
+Transformation: [7000, 7700, 7720]
+--------------------
+Random number: 5094
+Word sequence: elfu tano na tisini na nne
+Transformation: [5000, 5090, 5094]
+--------------------
+Random number: 9040
+Word sequence: elfu tisa na arobaini
+Transformation: [9000, 9040]
 
 
 */
@@ -279,12 +313,17 @@ public class Word2NumFSM {
 
 
 
+    private final static HashMap<String, Integer> English_digit00 = new HashMap<>();
+
+    static {
+        Swahili_digit00.put("zero", 0);
+        Swahili_digit00.put("ZERO", 0);
+    }
+
 
     private final static HashMap<String, Integer> EnglishDigitMap = new HashMap<>();
 
     static {
-        EnglishDigitMap.put("zero", 0);
-
         EnglishDigitMap.put("one", 1);
         EnglishDigitMap.put("two", 2);
         EnglishDigitMap.put("three", 3);
@@ -294,8 +333,6 @@ public class Word2NumFSM {
         EnglishDigitMap.put("seven", 7);
         EnglishDigitMap.put("eight", 8);
         EnglishDigitMap.put("nine", 9);
-
-        EnglishDigitMap.put("ZERO", 0);
 
         EnglishDigitMap.put("ONE", 1);
         EnglishDigitMap.put("TWO", 2);
@@ -359,19 +396,30 @@ public class Word2NumFSM {
     }
 
 
-    private final static HashMap<String, Integer> EnglishPower = new HashMap<>();
+    private final static HashMap<String, Long> EnglishPowerMap = new HashMap<>();
 
     static {
-        EnglishPower.put("hundred", 100);
-        EnglishPower.put("thousand",1000);
-        EnglishPower.put("million", 1000000);
-        EnglishPower.put("billion", 1000000000);
+        EnglishPowerMap.put("thousand",1000L);
+        EnglishPowerMap.put("million", 1000000L);
+        EnglishPowerMap.put("billion", 1000000000L);
+        EnglishPowerMap.put("trillion", 1000000000000L);
+        EnglishPowerMap.put("quadrillion", 1000000000000000L);
 
-        EnglishPower.put("HUNDRED", 100);
-        EnglishPower.put("THOUSAND",1000);
-        EnglishPower.put("MILLION", 1000000);
-        EnglishPower.put("BILLION", 1000000000);
+        EnglishPowerMap.put("THOUSAND",1000L);
+        EnglishPowerMap.put("MILLION", 1000000L);
+        EnglishPowerMap.put("BILLION", 1000000000L);
+        EnglishPowerMap.put("TRILLION", 1000000000000L);
+        EnglishPowerMap.put("QUADRILLION", 1000000000000000L);
     }
+
+    private final static HashMap<String, Integer> EnglishHundredMap = new HashMap<>();
+
+    static {
+        EnglishHundredMap.put("hundred", 100);
+        EnglishHundredMap.put("HUNDRED", 100);
+    }
+
+
 
     private final static HashMap<String, String> conjMap = new HashMap<>();
 
@@ -381,7 +429,25 @@ public class Word2NumFSM {
     }
 
 
-    public Word2NumFSM() {
+
+    static public int errorCode = TCONST.NO_ERROR;
+    static public int warnCode  = TCONST.NO_WARNING;
+
+
+    static public long transform(ArrayList<String> words, String langFeature) {
+        long result = 0;
+
+        switch(langFeature) {
+            case TCONST.LANG_SW:
+                result = transformSW( words);
+                break;
+
+            case TCONST.LANG_EN:
+                result = transformEN( words);
+                break;
+        }
+
+        return result;
     }
 
 
@@ -389,26 +455,30 @@ public class Word2NumFSM {
 
         int state = TCONST.W2N_ERR;
 
+        String ucWord = word.toUpperCase();
+
         switch(langFtr) {
             case TCONST.LANG_SW:
 
-                if(Swahili_digit00.containsKey(word))     state = TCONST.W2N_ZERO;
-                else if(Swahili_digit19.containsKey(word))state = TCONST.W2N_DIGIT;
-                else if(Swahili_tens.containsKey(word))   state = TCONST.W2N_TENS;
-                else if(Swahili_mia.containsKey(word))    state = TCONST.W2N_HUNDREDS;
-                else if(Swahili_power.containsKey(word))  state = TCONST.W2N_POWER;
-                else if(Swahili_na.containsKey(word))     state = TCONST.W2N_CONJ;
-                else if(word.equals(TCONST.NUM_EOD))      state = TCONST.W2N_EOD;
+                if(Swahili_digit00.containsKey(ucWord))     state = TCONST.W2N_ZERO;
+                else if(Swahili_digit19.containsKey(ucWord))state = TCONST.W2N_DIGIT;
+                else if(Swahili_tens.containsKey(ucWord))   state = TCONST.W2N_TENS;
+                else if(Swahili_mia.containsKey(ucWord))    state = TCONST.W2N_HUNDREDS;
+                else if(Swahili_power.containsKey(ucWord))  state = TCONST.W2N_POWER;
+                else if(ucWord.equals(TCONST.CC_SW_NA))     state = TCONST.W2N_CONJ;
+                else if(ucWord.equals(TCONST.NUM_EOD))      state = TCONST.W2N_EOD;
                 break;
 
             case TCONST.LANG_EN:
 
-                if(EnglishDigitMap.containsKey(word))      state = TCONST.W2N_DIGIT;
-                else if(EnglishTeensMap.containsKey(word)) state = TCONST.W2N_TENS;
-                else if(EnglishTensMap.containsKey(word))  state = TCONST.W2N_POWER;
-                else if(EnglishPower.containsKey(word))    state = TCONST.W2N_POWER;
-                else if(word.equals(TCONST.CC_EN_AND))     state = TCONST.W2N_CONJ;
-                else if(word.equals(TCONST.NUM_EOD))       state = TCONST.W2N_EOD;
+                if(English_digit00.containsKey(ucWord))        state = TCONST.W2N_ZERO;
+                else if(EnglishDigitMap.containsKey(ucWord))   state = TCONST.W2N_DIGIT;
+                else if(EnglishTeensMap.containsKey(ucWord))   state = TCONST.W2N_TEENS;
+                else if(EnglishTensMap.containsKey(ucWord))    state = TCONST.W2N_TENS;
+                else if(EnglishHundredMap.containsKey(ucWord)) state = TCONST.W2N_HUNDREDS;
+                else if(EnglishPowerMap.containsKey(ucWord))      state = TCONST.W2N_POWER;
+                else if(ucWord.equals(TCONST.CC_EN_AND))       state = TCONST.W2N_CONJ;
+                else if(ucWord.equals(TCONST.NUM_EOD))         state = TCONST.W2N_EOD;
                 break;
         }
 
@@ -416,66 +486,112 @@ public class Word2NumFSM {
     }
 
 
-    static public long transformSW(ArrayList<String> words)  {
+    /**
+     *
+     *     digit00 = "sifuri"
+     *     digit19 = "moja" | "mbili" | "tatu" | "nne" | "tano" | "sita" | "saba" | "nane" | "tisa"
+     *     tens    = "kumi" | "ishirini" | "thelathini" | "arobaini" | "hamsini" | "sitini" | "sabini" | "themanini" | "tisini"
+     *     mia     = "mia"
+     *     power   = "elfu" | "milioni" | "bilioni" | "trilioni" | "kwadrilioni"
+     *     na      = "na"
+     *
+     *     hundreds = (mia, digit19)
+     *
+     *     Number10    = tens, [na digit19]}
+     *     Number100   = hundreds, [na, Number10] | [na digit19]
+     *
+     *     powerNgroup1   = power{n}, digit19
+     *     powerNgroup10  = power{n}, tens, [na, powerNgroup1]
+     *     powerNgroup100 = power{n}, hundreds, [na, powerNgroup10] | [na, powerNgroup1]
+     *
+     *     powerNgroup = powerNgroup100 | powerNgroup10 | powerNgroup1
+     *
+     *     Number1000s = powerNgroup{n},[na, powerNgroup(n-1)],...,[na, powerNgroup(0)],[na, Number100] | [na, Number10] | [na digit19]}
+     *
+     *     Number = Number1000s | Number100 | Number10 | digit19 | digit0
+     *
+     *
+     * @param words
+     * @return
+     */
+    static private long transformSW(ArrayList<String> words)  {
 
         int nextState;
         int state  = TCONST.STARTSTATE;
         int index  = 0;
-        int multi  = TCONST.UNSET;
 
         long value     = 0;
 
         long power     = 0;
         long prevPower = 0;
 
-        long multiplier = 0;
-        long prevMultiplier  = Long.MAX_VALUE;
+        long multiplier     = TCONST.UNSET;
+        long prevMultiplier = TCONST.UNSET;
 
-        int errorCode = TCONST.NO_ERROR;
-        int warnCode  = TCONST.NO_WARNING;
+        errorCode = TCONST.NO_ERROR;
+        warnCode  = TCONST.NO_WARNING;
 
         words.add(TCONST.NUM_EOD);
 
         try {
 
             do {
-
                 nextState = getValueType(words.get(index), TCONST.LANG_SW);
 
                 switch (state) {
 
+                    // Determine the start state
                     // Number = Number1000s | Number100 | Number10 | digit19 | digit0
 
                     case TCONST.STARTSTATE:
 
                         switch (nextState) {
+
+                            // Can start with a digit multiple i.e. < 1000
+                            //
                             case TCONST.W2N_ZERO:
+                                value    = 0;
+                                index++;                            // consume the token
+
                             case TCONST.W2N_DIGIT:
                             case TCONST.W2N_TENS:
                             case TCONST.W2N_HUNDREDS:
+                                power          = 1;                 // Start with 10^0
+                                prevPower      = 1;                 // Cause an error if this is followed by a power
+                                prevMultiplier = Long.MAX_VALUE;    // Allow any multiplier to start
+                                state          = nextState;         // Move to the next state
+                                break;
+
+                            // Or can start with a power multiple - i.e. 1000 1000,000 etc
+                            //
                             case TCONST.W2N_POWER:
-                                state = nextState;
+                                prevPower      = Long.MAX_VALUE;    // Allow any power to start
+                                prevMultiplier = Long.MAX_VALUE;    // Allow any multiplier to start
+                                state          = nextState;         // Move to the next state
                                 break;
 
                             case TCONST.W2N_CONJ:
                                 errorCode = TCONST.ERRW2N_LEADING_CONJ;
-                                state = TCONST.W2N_EOD;
+                                state     = TCONST.W2N_EOD;
                                 break;
 
                             case TCONST.W2N_EOD:
                                 errorCode = TCONST.ERRW2N_NO_DATA;
+                                state     = TCONST.W2N_EOD;
+                                break;
+
+                            case TCONST.W2N_ERR:
+                                errorCode = TCONST.ERRW2N_INVALID_TEXT;
                                 state = TCONST.W2N_EOD;
                                 break;
                         }
                         break;
 
 
-                    // Number = digit0
+                    // Number = digit0 - must be solitary
 
                     case TCONST.W2N_ZERO:
 
-                        value    = 0;
-
                         switch (nextState) {
                             case TCONST.W2N_ZERO:
                             case TCONST.W2N_DIGIT:
@@ -485,95 +601,65 @@ public class Word2NumFSM {
                             case TCONST.W2N_CONJ:
 
                                 errorCode = TCONST.ERRW2N_NONTERM_ZERO;
+                                state     = TCONST.W2N_EOD;
+                                break;
+
+                            case TCONST.W2N_EOD:
+                                //
+                                // This is a valid terminal utterance
+                                //
+                                warnCode = TCONST.W2N_HYPOTHESIS;
+                                state    = TCONST.W2N_EOD;
+                                break;
+
+                            case TCONST.W2N_ERR:
+                                errorCode = TCONST.ERRW2N_INVALID_TEXT;
                                 state = TCONST.W2N_EOD;
                                 break;
                         }
                         break;
 
-                    // Number = X | digit19
+
+                    // recover the value
 
                     case TCONST.W2N_DIGIT:
 
-                        value    += Swahili_digit19.get(words.get(index++));
-                        prevPower = Long.MAX_VALUE;  // Cause an error if this is followed by a power
-
-                        switch (nextState) {
-                            case TCONST.W2N_ZERO:
-
-                                errorCode = TCONST.ERRW2N_NONTERM_ZERO;
-                                state = TCONST.W2N_EOD;
-                                break;
-
-                            case TCONST.W2N_DIGIT:
-                            case TCONST.W2N_TENS:
-                            case TCONST.W2N_HUNDREDS:
-                            case TCONST.W2N_POWER:
-
-                                errorCode = TCONST.ERRW2N_MISSING_CONJ;
-                                state = TCONST.W2N_EOD;
-                                break;
-
-                            case TCONST.W2N_CONJ:
-                                break;
-
-                            case TCONST.W2N_EOD:
-                                warnCode = TCONST.W2N_HYPOTHESIS;
-                                state = TCONST.W2N_EOD;
-                                break;
-                        }
+                        multiplier = Swahili_digit19.get(words.get(index++));
+                        state      = TCONST.W2N_VALUE_UPDATE;                // Enter pseudo state
                         break;
 
-                    // Number = X | Number10 |
+
+                    // recover the value
 
                     case TCONST.W2N_TENS:
 
-                        value   += Swahili_tens.get(words.get(index++));
-                        prevPower = Long.MAX_VALUE;  // Cause an error if this is followed by a power
-
-                        switch (nextState) {
-                            case TCONST.W2N_ZERO:
-
-                                errorCode = TCONST.ERRW2N_NONTERM_ZERO;
-                                state = TCONST.W2N_EOD;
-                                break;
-
-                            case TCONST.W2N_DIGIT:
-                            case TCONST.W2N_TENS:
-                            case TCONST.W2N_HUNDREDS:
-                            case TCONST.W2N_POWER:
-                                errorCode = TCONST.ERRW2N_MISSING_CONJ;
-                                state = TCONST.W2N_EOD;
-                                break;
-
-                            case TCONST.W2N_CONJ:
-                                break;
-
-                            case TCONST.W2N_EOD:
-                                warnCode = TCONST.W2N_HYPOTHESIS;
-                                state = TCONST.W2N_EOD;
-                                break;
-                        }
+                        multiplier = Swahili_tens.get(words.get(index++));
+                        state      = TCONST.W2N_VALUE_UPDATE;                // Enter pseudo state
                         break;
 
-                    // Number = X | Number100 |
-                    // Number100   = hundreds, [na, Number10] | [na digit19]
+
+                    // recover the value
+                    // hundreds = (mia, digit19)
 
                     case TCONST.W2N_HUNDREDS:
 
-                        index++;
+                        index++;        // Consume the leading "mia"
+
                         nextState = getValueType(words.get(index), TCONST.LANG_SW);
-                        prevPower  = Long.MAX_VALUE;  // Cause an error if this is followed by a power
 
                         switch(nextState) {
                             case TCONST.W2N_ZERO:
 
                                 errorCode = TCONST.ERRW2N_ZERO_HUNDRED_MULTI;
-                                state = TCONST.W2N_EOD;
+                                state     = TCONST.W2N_EOD;
                                 break;
 
                             case TCONST.W2N_DIGIT:
 
-                                value += Swahili_digit19.get(words.get(index++)) * 100;
+                                multiplier = Swahili_digit19.get(words.get(index)) * 100;
+
+                                index++;                                     // Consume the digit
+                                state      = TCONST.W2N_VALUE_UPDATE;        // Enter pseudo state
                                 break;
 
                             case TCONST.W2N_TENS:
@@ -581,30 +667,90 @@ public class Word2NumFSM {
                             case TCONST.W2N_POWER:
 
                                 errorCode = TCONST.ERRW2N_MISSING_HUNDRED_MULTI;
-                                state = TCONST.W2N_EOD;
+                                state     = TCONST.W2N_EOD;
                                 break;
 
                             case TCONST.W2N_CONJ:
 
                                 errorCode = TCONST.ERRW2N_HUNDRED_ADDED_CONJ;
-                                state = TCONST.W2N_EOD;
+                                state     = TCONST.W2N_EOD;
                                 break;
 
                             case TCONST.W2N_EOD:
                                 warnCode = TCONST.W2N_DANGLING_HUNDRED_WARN;
+                                state    = TCONST.W2N_EOD;
+                                break;
+
+                            case TCONST.W2N_ERR:
+                                errorCode = TCONST.ERRW2N_INVALID_TEXT;
                                 state = TCONST.W2N_EOD;
                                 break;
                         }
                         break;
 
-                    // Number = Number1000s |
+
+                    case TCONST.W2N_VALUE_UPDATE:
+
+                        if(multiplier >= prevMultiplier) {
+
+                            errorCode = TCONST.ERRW2N_INCREASING_MULTIPLIER;
+                            state = TCONST.W2N_EOD;
+                        }
+                        else {
+                            prevMultiplier = multiplier;
+                        }
+
+                        value += power * multiplier;
+
+                        switch (nextState) {
+                            case TCONST.W2N_ZERO:
+                                errorCode = TCONST.ERRW2N_NONSOLITARY_ZERO;
+                                state     = TCONST.W2N_EOD;
+                                break;
+
+                            case TCONST.W2N_DIGIT:
+                            case TCONST.W2N_TENS:
+                            case TCONST.W2N_HUNDREDS:
+                            case TCONST.W2N_POWER:
+                                errorCode = TCONST.ERRW2N_MISSING_CONJ;
+                                state     = TCONST.W2N_EOD;
+                                break;
+
+                            case TCONST.W2N_CONJ:
+                                //
+                                // This will be the conjunction to the next power
+                                //
+                                index++;                            // consume the token
+
+                                state = nextState;
+                                break;
+
+                            case TCONST.W2N_EOD:
+                                //
+                                // This is a valid number utterance - note that they may not be finished speaking.
+                                //
+                                warnCode = TCONST.W2N_HYPOTHESIS;
+                                state    = TCONST.W2N_EOD;
+                                break;
+
+                            case TCONST.W2N_ERR:
+                                errorCode = TCONST.ERRW2N_INVALID_TEXT;
+                                state = TCONST.W2N_EOD;
+                                break;                        }
+                        break;
+
+
+                    // A power multiple - i.e. 1000 1000,000 etc
+                    // powerNgroup
 
                     case TCONST.W2N_POWER:
 
                         power = Swahili_power.get(words.get(index++));
 
-                        // It's an error if the power is increasing it may repeat for different mulipliers 1 , 10 , 100
+                        // It's an error if the power is increasing
                         // e.g.  thousand -> million
+                        //
+                        // It may repeat for different mulipliers 1 , 10 , 100
                         //
                         if(power > prevPower) {
 
@@ -622,87 +768,331 @@ public class Word2NumFSM {
 
                             prevPower = power;
 
+                            nextState = getValueType(words.get(index), TCONST.LANG_SW);
+
                             switch (nextState) {
                                 case TCONST.W2N_ZERO:
 
-                                    errorCode = TCONST.ERRW2N_NONTERM_ZERO;
-                                    state = TCONST.W2N_EOD;
+                                    errorCode = TCONST.ERRW2N_NONSOLITARY_ZERO;
+                                    state     = TCONST.W2N_EOD;
                                     break;
 
                                 case TCONST.W2N_DIGIT:
-
-                                    // It's an error if the multiplier is increasing or repeated
-                                    // e.g.  10 -> 100
-                                    // elfu * 10 -> elfu * 100
-                                    //
-                                    multiplier  = Swahili_digit19.get(words.get(index++));
-                                    nextState = TCONST.W2N_POWER_MULTIPLIER;
-                                    break;
-
                                 case TCONST.W2N_TENS:
-
-                                    multiplier  = Swahili_tens.get(words.get(index++));
-                                    nextState = TCONST.W2N_POWER_MULTIPLIER;
-                                    break;
-
                                 case TCONST.W2N_HUNDREDS:
-
-                                    index++;
-                                    nextState = getValueType(words.get(index), TCONST.LANG_SW);
-
-                                    switch(nextState) {
-
-                                        case TCONST.W2N_ZERO:
-
-                                            errorCode = TCONST.ERRW2N_NONTERM_ZERO;
-                                            state = TCONST.W2N_EOD;
-                                            break;
-
-                                        case TCONST.W2N_DIGIT:
-                                            multiplier  = Swahili_digit19.get(words.get(index++)) * 100;
-                                            nextState = TCONST.W2N_POWER_MULTIPLIER;
-                                            break;
-
-                                        case TCONST.W2N_TENS:
-                                        case TCONST.W2N_HUNDREDS:
-                                        case TCONST.W2N_POWER:
-
-                                            errorCode = TCONST.ERRW2N_MISSING_HUNDRED_MULTI;
-                                            state = TCONST.W2N_EOD;
-                                            break;
-
-                                        case TCONST.W2N_CONJ:
-
-                                            errorCode = TCONST.ERRW2N_HUNDRED_ADDED_CONJ;
-                                            state = TCONST.W2N_EOD;
-                                            break;
-
-                                        case TCONST.W2N_EOD:
-                                            warnCode = TCONST.W2N_DANGLING_HUNDRED_WARN;
-                                            state = TCONST.W2N_EOD;
-                                            break;
-                                    }
+                                    //
+                                    // This will be the power multiplier
+                                    //
+                                    state = nextState;
                                     break;
 
                                 case TCONST.W2N_POWER:
                                     errorCode = TCONST.ERRW2N_REPEATED_POWER;
-                                    state = TCONST.W2N_EOD;
+                                    state     = TCONST.W2N_EOD;
                                     break;
 
                                 case TCONST.W2N_CONJ:
                                     errorCode = TCONST.ERRW2N_POWER_CONJ;
-                                    state = TCONST.W2N_EOD;
+                                    state     = TCONST.W2N_EOD;
                                     break;
 
                                 case TCONST.W2N_EOD:
                                     warnCode = TCONST.W2N_DANGLING_POWER_WARN;
-                                    state = TCONST.W2N_EOD;
+                                    state    = TCONST.W2N_EOD;
                                     break;
-                            }
+
+                                case TCONST.W2N_ERR:
+                                    errorCode = TCONST.ERRW2N_INVALID_TEXT;
+                                    state = TCONST.W2N_EOD;
+                                    break;                            }
                         }
                         break;
 
-                    case TCONST.W2N_POWER_MULTIPLIER:
+
+                    case TCONST.W2N_CONJ:
+
+                        switch (nextState) {
+                            case TCONST.W2N_ZERO:
+
+                                errorCode = TCONST.ERRW2N_NONSOLITARY_ZERO;
+                                state     = TCONST.W2N_EOD;
+                                break;
+
+                            // Conjunction to value < 1000
+                            //
+                            case TCONST.W2N_DIGIT:
+                            case TCONST.W2N_TENS:
+                            case TCONST.W2N_HUNDREDS:
+
+                                prevMultiplier = Long.MAX_VALUE;    // Allow any multiplier to start
+
+                                power     = 1;                      // Na followed by non-power will be value < 1000
+                                prevPower = 1;                      // Cause an error if this is followed by a power
+                                state     = nextState;
+                                break;
+
+                            // Conjunction to power 1000 or more i.e. 10^3 10^6 etc
+                            //
+                            case TCONST.W2N_POWER:
+
+                                prevMultiplier = Long.MAX_VALUE;    // Allow any multiplier to start
+                                state          = nextState;
+                                break;
+
+                            case TCONST.W2N_CONJ:
+
+                                errorCode = TCONST.ERRW2N_REPEATED_CONJ;
+                                state     = TCONST.W2N_EOD;
+                                break;
+
+                            case TCONST.W2N_EOD:
+
+                                warnCode = TCONST.W2N_DANGLING_CONJ_WARN;
+                                state    = TCONST.W2N_EOD;
+                                break;
+
+                            case TCONST.W2N_ERR:
+                                errorCode = TCONST.ERRW2N_INVALID_TEXT;
+                                state = TCONST.W2N_EOD;
+                                break;
+                        }
+                        break;
+
+                    // We should never loop on this
+                    case TCONST.W2N_EOD:
+
+                        errorCode = TCONST.ERRW2N_INTERNAL;
+                        state = TCONST.W2N_EOD;
+                        break;
+
+                    case TCONST.W2N_ERR:
+
+                        errorCode = TCONST.ERRW2N_INVALID_TEXT;
+                        state = TCONST.W2N_EOD;
+                        break;
+                }
+
+            } while (state != TCONST.W2N_EOD);
+        }
+        catch(Exception e) {
+            Log.e("W2N", "Error: " + e );
+        }
+
+        // remove the EOD marker
+        words.remove(words.size() - 1);
+
+        return value;
+    }
+
+
+    /**
+     *     digit0  = "zero"
+     *     digit19 = "one" | "two" | "three" | "four" | "five" | "six" | "seven" | "eight" | "nine"
+     *     teens   = "eleven" | "twelve" | "thirteen" | "forteen" | "fifteen" | "sixteen" | "seventeen" | "eighteen" | "nineteen"
+     *     tens    = "ten" | "twenty" | "thirty" | "forty" | "fifty" | "sixty" | "seventy" | "eighty" | "ninety"
+     *
+     *     HUNDRED = "hundred"
+     *
+     *     power = "thousand" | "million" | "billion" | "trillion" | "quadrillion"
+     *
+     *     AND = "and"
+     *
+     *     000 = digit0
+     *     00x = digit19
+     *     0x0 = tens
+     *     01x = teens
+     *     0xx = tens, digit
+     *     x00 = digit19, HUNDRED
+     *     x0x = digit19, HUNDRED, [AND], digit
+     *     xx0 = digit19, HUNDRED, [AND], tens
+     *     x1x = digit19, HUNDRED, [AND], teens
+     *     xxx = digit19, HUNDRED, [AND], tens, digit
+     *
+     *     NumberGroup = (00x | 0x0 | 01x | 0xx | x00 | x0x | xx0 | x1x | xxx)
+     *
+     *     Number = {[NumberGroup,[power(i)]],[NumberGroup,[power(i-1)],...,[NumberGroup,[power(0)]],NumberGroup | 000}
+     *
+     *     Word sequnec: two hundred and thirty five thousand six hundred and eighty seven
+     *     Tranformtion: [2, 200, 230, 235, 235000, 235600, 235680, 235687
+     *
+     * @param words
+     * @return
+     */
+    static private int transformEN(ArrayList<String> words)  {
+
+        int nextState;
+        int state  = TCONST.STARTSTATE;
+        int index  = 0;
+
+        long value     = 0;
+
+        long power     = 0;
+        long prevPower = 0;
+
+        long multiplier     = TCONST.UNSET;
+        long prevMultiplier = TCONST.UNSET;
+
+        errorCode = TCONST.NO_ERROR;
+        warnCode  = TCONST.NO_WARNING;
+
+        words.add(TCONST.NUM_EOD);
+
+        try {
+
+            nextState = getValueType(words.get(index), TCONST.LANG_EN);
+
+            do {
+                nextState = getValueType(words.get(index), TCONST.LANG_EN);
+
+                switch (state) {
+                    //
+                    case TCONST.STARTSTATE:
+                        switch (nextState) {
+
+                            // Can start with a digit multiple i.e. < 1000
+                            //
+                            case TCONST.W2N_ZERO:
+                                value    = 0;
+                                index++;                            // consume the token
+                                state          = nextState;         // Move to the next state
+                                break;
+
+                            case TCONST.W2N_DIGIT:
+                            case TCONST.W2N_TENS:
+                            case TCONST.W2N_TEENS:
+                                state          = nextState;         // Move to the next state
+                                break;
+
+                            case TCONST.W2N_HUNDREDS:
+                                errorCode = TCONST.ERRW2N_LEADING_HUNDRED;
+                                state     = TCONST.W2N_EOD;
+
+                            // Or can start with a power multiple - i.e. 1000 1000,000 etc
+                            //
+                            case TCONST.W2N_POWER:
+                                errorCode = TCONST.ERRW2N_LEADING_POWER;
+                                state     = TCONST.W2N_EOD;
+
+                            case TCONST.W2N_CONJ:
+                                errorCode = TCONST.ERRW2N_LEADING_CONJ;
+                                state     = TCONST.W2N_EOD;
+                                break;
+
+                            case TCONST.W2N_EOD:
+                                errorCode = TCONST.ERRW2N_NO_DATA;
+                                state     = TCONST.W2N_EOD;
+                                break;
+
+                            case TCONST.W2N_ERR:
+                                errorCode = TCONST.ERRW2N_INVALID_TEXT;
+                                state = TCONST.W2N_EOD;
+                                break;
+                        }
+                        break;
+                        break;
+
+                    // Number = digit0 - must be solitary
+
+                    case TCONST.W2N_ZERO:
+
+                        switch (nextState) {
+                            case TCONST.W2N_ZERO:
+                            case TCONST.W2N_DIGIT:
+                            case TCONST.W2N_TENS:
+                            case TCONST.W2N_HUNDREDS:
+                            case TCONST.W2N_POWER:
+                            case TCONST.W2N_CONJ:
+
+                                errorCode = TCONST.ERRW2N_NONTERM_ZERO;
+                                state     = TCONST.W2N_EOD;
+                                break;
+
+                            case TCONST.W2N_EOD:
+                                //
+                                // This is a valid terminal utterance
+                                //
+                                warnCode = TCONST.W2N_HYPOTHESIS;
+                                state    = TCONST.W2N_EOD;
+                                break;
+
+                            case TCONST.W2N_ERR:
+                                errorCode = TCONST.ERRW2N_INVALID_TEXT;
+                                state = TCONST.W2N_EOD;
+                                break;
+                        }
+                        break;
+
+                    // recover the value
+
+                    case TCONST.W2N_DIGIT:
+
+                        multiplier = EnglishDigitMap.get(words.get(index++));
+                        state      = TCONST.W2N_VALUE_UPDATE;                // Enter pseudo state
+                        break;
+
+
+                    // recover the value
+
+                    case TCONST.W2N_TENS:
+
+                        multiplier = EnglishTensMap.get(words.get(index++));
+                        state      = TCONST.W2N_VALUE_UPDATE;                // Enter pseudo state
+                        break;
+
+                    // recover the value
+
+                    case TCONST.W2N_TEENS:
+
+                        multiplier = EnglishTeensMap.get(words.get(index++));
+                        state      = TCONST.W2N_VALUE_UPDATE;                // Enter pseudo state
+                        break;
+
+
+                    // recover the value
+                    // hundreds = (mia, digit19)
+
+                    case TCONST.W2N_HUNDREDS:
+
+                        index++;        // Consume the leading "mia"
+
+                        nextState = getValueType(words.get(index), TCONST.LANG_SW);
+
+                        switch(nextState) {
+                            case TCONST.W2N_ZERO:
+                                errorCode = TCONST.ERRW2N_ZERO_HUNDRED_MULTI;
+                                state     = TCONST.W2N_EOD;
+                                break;
+
+                            case TCONST.W2N_DIGIT:
+                            case TCONST.W2N_TENS:
+                            case TCONST.W2N_TEENS:
+                                state     = nextState;
+                                break;
+
+                            case TCONST.W2N_HUNDREDS:
+                                errorCode = TCONST.ERRW2N_REPEATED_HUNDRED;
+                                state     = TCONST.W2N_EOD;
+                                break;
+
+                            case TCONST.W2N_POWER:
+                            case TCONST.W2N_CONJ:
+                                state     = nextState;
+                                break;
+
+                            case TCONST.W2N_EOD:
+                                warnCode = TCONST.W2N_HYPOTHESIS;
+                                state    = TCONST.W2N_EOD;
+                                break;
+
+                            case TCONST.W2N_ERR:
+                                errorCode = TCONST.ERRW2N_INVALID_TEXT;
+                                state = TCONST.W2N_EOD;
+                                break;
+                        }
+
+                        break;
+
+                    case TCONST.W2N_MULTIPLE_UPDATE:
 
                         if(multiplier >= prevMultiplier) {
 
@@ -717,8 +1107,8 @@ public class Word2NumFSM {
 
                         switch (nextState) {
                             case TCONST.W2N_ZERO:
-                                errorCode = TCONST.ERRW2N_NONTERM_ZERO;
-                                state = TCONST.W2N_EOD;
+                                errorCode = TCONST.ERRW2N_NONSOLITARY_ZERO;
+                                state     = TCONST.W2N_EOD;
                                 break;
 
                             case TCONST.W2N_DIGIT:
@@ -726,165 +1116,49 @@ public class Word2NumFSM {
                             case TCONST.W2N_HUNDREDS:
                             case TCONST.W2N_POWER:
                                 errorCode = TCONST.ERRW2N_MISSING_CONJ;
-                                state = TCONST.W2N_EOD;
+                                state     = TCONST.W2N_EOD;
                                 break;
 
                             case TCONST.W2N_CONJ:
-                                index++;
+                                //
+                                // This will be the conjunction to the next power
+                                //
+                                index++;                            // consume the token
+
+                                state = nextState;
                                 break;
 
                             case TCONST.W2N_EOD:
+                                //
+                                // This is a valid number utterance - note that they may not be finished speaking.
+                                //
                                 warnCode = TCONST.W2N_HYPOTHESIS;
-                                state = TCONST.W2N_EOD;
+                                state    = TCONST.W2N_EOD;
                                 break;
-                        }
+
+                            case TCONST.W2N_ERR:
+                                errorCode = TCONST.ERRW2N_INVALID_TEXT;
+                                state = TCONST.W2N_EOD;
+                                break;                        }
                         break;
 
+
+                    case TCONST.W2N_POWER:
+                        break;
 
                     case TCONST.W2N_CONJ:
-
-                        switch (nextState) {
-                            case TCONST.W2N_ZERO:
-                                errorCode = TCONST.ERRW2N_NONTERM_ZERO;
-                                state = TCONST.W2N_EOD;
-                                break;
-
-                            case TCONST.W2N_DIGIT:
-                            case TCONST.W2N_TENS:
-                            case TCONST.W2N_HUNDREDS:
-                            case TCONST.W2N_POWER:
-                                break;
-
-                            case TCONST.W2N_CONJ:
-                                errorCode = TCONST.ERRW2N_REPEAT_CONJ;
-                                state = TCONST.W2N_EOD;
-                                break;
-
-                            case TCONST.W2N_EOD:
-                                warnCode = TCONST.W2N_DANGLING_CONJ_WARN;
-                                state = TCONST.W2N_EOD;
-                                break;
-                        }
                         break;
 
-                    // We should never loop on this
                     case TCONST.W2N_EOD:
+                        break;
 
-                        errorCode = TCONST.ERRW2N_INTERNAL;
-                        state = TCONST.W2N_EOD;
+                    case TCONST.W2N_ERR:
                         break;
                 }
-
             } while (state != TCONST.W2N_EOD);
         }
         catch(Exception e) {
-            Log.e("W2N", "Error: " + e );
         }
-
-
-        return value;
-    }
-
-    private int transformEN(ArrayList<String> words)  {
-
-        int nextState;
-        int state  = TCONST.STARTSTATE;
-        int index  = 0;
-        int multi  = TCONST.UNSET;
-        int result = TCONST.UNSET;
-
-        words.add(TCONST.NUM_EOD);
-
-//        try {
-
-//            nextState = getValueType(words.get(index), langFtr);
-//
-//            do {
-//
-//                state     = nextState;
-//                nextState = getValueType(words.get(index), langFtr);
-//
-//                switch (state) {
-//                    //
-//                    case TCONST.STARTSTATE:
-//
-//                        switch (langFtr) {
-//
-//                            case TCONST.LANG_EN:
-//                                switch (state) {
-//
-//                                }
-//                                break;
-//
-//                            case TCONST.LANG_SW:
-//                                switch (state) {
-//                                    case TCONST.W2N_ZERO:
-//                                        value = 0;
-//
-//                                        if(nextState != TCONST.W2N_EOD) {
-//
-//                                        }
-//                                        break;
-//
-//                                    case TCONST.W2N_DIGIT:
-//
-//
-//
-//                                    case TCONST.W2N_POWER:
-//                                        break;
-//
-//                                    case TCONST.W2N_CONJ:
-//                                        break;
-//
-//                                    case TCONST.W2N_EOD:
-//                                        break;
-//                                }
-//                                break;
-//                        }
-//                        break;
-//
-//                    case TCONST.W2N_ZERO:
-//
-//
-//                        break;
-//
-//                    case TCONST.W2N_DIGIT:
-//
-//                        state = getValueType(words.get(index), langFtr);
-//
-//                        switch (langFtr) {
-//                            case TCONST.LANG_EN:
-//                                switch (state) {
-//
-//                                }
-//                                break;
-//
-//                            case TCONST.LANG_SW:
-//
-//                                break;
-//                        }
-//                        break;
-//
-//                    case TCONST.W2N_TENS:
-//                        break;
-//
-//                    case TCONST.W2N_POWER:
-//                        break;
-//
-//                    case TCONST.W2N_CONJ:
-//                        break;
-//
-//                    case TCONST.W2N_EOD:
-//                        break;
-//
-//
-//
-//
-//                }
-//            } while (state != TCONST.W2N_EOD);
-//        }
-//        catch(Exception e) {
-//        }
 
 
         return result;

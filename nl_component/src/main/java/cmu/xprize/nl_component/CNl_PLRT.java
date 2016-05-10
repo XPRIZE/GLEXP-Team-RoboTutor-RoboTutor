@@ -34,6 +34,7 @@ import cmu.xprize.util.Num2Word;
 import cmu.xprize.util.TCJSGF;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.util.Word2Num;
+import cmu.xprize.util.Word2NumFSM;
 import edu.cmu.xprize.listener.ListenerBase;
 
 public class CNl_PLRT implements CNl_Processor {
@@ -43,7 +44,7 @@ public class CNl_PLRT implements CNl_Processor {
 
     private ListenerBase            mListener;
 
-    protected boolean               missingConjTolerant    = true;          // Do you need "AND" between number words
+    protected boolean               missingConjTolerant    = false;         // Do you need "AND" between number words
     protected boolean               addedConjTolerant      = true;          // English tends to false positive conjunctions (AND)
     protected boolean               repeatedWordIntolerant = true;          // Indicate repeated word errors.
     protected String                cachedLanguageFeature;
@@ -64,7 +65,7 @@ public class CNl_PLRT implements CNl_Processor {
     protected ArrayList<String>     mStimulusPlaceString;
     protected ArrayList<String>     mStimulusPlaceText;
 
-    protected int                   mResponseNumber;
+    protected long                  mResponseNumber;
     protected String                mResponseText;
     protected List                  mResponseList;
     protected ArrayList<String>     mResponseTextList;
@@ -382,17 +383,12 @@ public class CNl_PLRT implements CNl_Processor {
             }
 
             try {
-                // Note that Word2Num is not tolerant of missing Conjunctions - in fact it's fussy
-                // Word2Num will return -1 for certain error modes
-                //
-                String[] num2Parse = mResponseTextList.toArray(new String[mResponseTextList.size()]);
 
                 Log.d("ASR", "Parsing: " + TextUtils.join(" ", mResponseTextList));
 
-                mResponseNumber = Word2Num.transform(num2Parse, _Owner.getLanguage());
+                mResponseNumber = Word2NumFSM.transform(mResponseTextList, _Owner.getLanguageFeature());
 
-                mResponseString = new Integer(mResponseNumber).toString();
-                mResponseList   = Word2Num.getNumberList();
+                mResponseString = new Long(mResponseNumber).toString();
 
                 Log.d("ASR", "ResponseNumber: " + mResponseNumber);
                 Log.d("ASR", "ResponseString: " + mResponseString);
@@ -418,17 +414,13 @@ public class CNl_PLRT implements CNl_Processor {
 
                     String subElem = mResponseTextList.get(i1);
 
-                    // If we run out of response just continue.
-                    // Note this is only relevant when not pruning "" entries
+                    // track the next expected digit
                     //
-                    if(subElem == "") {
-                        expectedWordIndex = i1;
-                        break;
-                    }
+                    expectedWordIndex = i1;
+
                     // Check if the next element matches
                     //
-                    else if(!mStimulusComp.get(i1).equals(subElem)) {
-                        expectedWordIndex = i1;
+                    if(!mStimulusComp.get(i1).equals(subElem)) {
 
                         ErrorType = mStimulusDigitValue.size();
                         Error     = TCONST.TRUE_ERROR;
@@ -453,7 +445,7 @@ public class CNl_PLRT implements CNl_Processor {
                     // If they've uttered as many words as are in the stimulus and they are
                     // still incorrect emit a recognition event to terminate.
                     //
-                    if(mStimulusComp.size() == mResponseTextList.size())
+                    //if(mStimulusComp.size() == mResponseTextList.size())
                         _Owner.onASREvent(TCONST.RECOGNITION_EVENT);
                 }
 
