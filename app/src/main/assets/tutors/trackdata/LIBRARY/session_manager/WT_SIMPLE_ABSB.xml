@@ -14,10 +14,7 @@
         </DOMLayer>
         <DOMLayer name="Audio" color="#4FFF4F" current="true" isSelected="true" autoNamed="false" heightLiteral="18">
           <frames>
-            <DOMFrame index="0" duration="96" keyMode="9728" soundName="great.mp3" soundSync="stream">
-              <SoundEnvelope>
-                <SoundEnvelopePoint level0="32768" level1="32768"/>
-              </SoundEnvelope>
+            <DOMFrame index="0" duration="96" keyMode="9728">
               <elements/>
             </DOMFrame>
           </frames>

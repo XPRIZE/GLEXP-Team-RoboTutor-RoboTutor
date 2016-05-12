@@ -133,6 +133,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
 
         // Publish the Stimulus state
         if(!mIsResponse) {
+
             // publish the number of digits in the stimulus - e.g. Sstimulus.digits
             //
             mTutor.getScope().addUpdateVar(name() + ".digits", new TInteger(mStimulus.length()));
@@ -166,7 +167,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl{
         _correct = 0;
         _wrong   = 0;
 
-        mTutor.setDelFeature(TCONST.FWALLCORRECT);
+        mTutor.setDelFeature(TCONST.ALL_CORRECT);
         mTutor.setDelFeature(TCONST.FWCORRECT);
         mTutor.setDelFeature(TCONST.FWINCORRECT);
 

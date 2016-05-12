@@ -22,7 +22,7 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-public class CMn_Component extends LinearLayout implements ILoadableObject{
+public class CMn_Component extends LinearLayout implements ILoadableObject, IValueListener{
 
     private   Context      mContext;
     private   float        mAlleyRadius;
@@ -32,7 +32,6 @@ public class CMn_Component extends LinearLayout implements ILoadableObject{
     private   ArrayList<CMn_Alley> _alleys = new ArrayList<>();
     private   int                  _dataIndex = 0;
     private   int                  _mnindex;
-    private   int                  _difValue;
     private   int                  _corValue;
 
 
@@ -112,7 +111,7 @@ public class CMn_Component extends LinearLayout implements ILoadableObject{
     }
 
 
-    private void updateDataSet(CMn_Data data) {
+    protected void updateDataSet(CMn_Data data) {
 
         int delta = data.dataset.length -_alleys.size();
 
@@ -152,27 +151,9 @@ public class CMn_Component extends LinearLayout implements ILoadableObject{
                 break;
         }
 
-        // Calc the correct value
-        // We make he assumption that any two consequtive numbers may be used to
-        // calculate the interval and that there are a minimum of 3 numbers
+        // Record the correct value
         //
-        switch(_mnindex) {
-            case 0:
-                _difValue = Math.abs(data.dataset[1] - data.dataset[2]);
-                _corValue = data.dataset[1] - _difValue;
-                break;
-
-            case 1:
-                _difValue = Math.abs(data.dataset[0] - data.dataset[2]);
-                _corValue = data.dataset[2] - _difValue;
-                break;
-
-            default:
-                _difValue = Math.abs(data.dataset[0] - data.dataset[1]);
-                _corValue = data.dataset[_mnindex-1] + _difValue;
-                break;
-        }
-
+        _corValue = data.dataset[_mnindex];
 
         // Apply the dataset to the alleys
         for(int i1 = 0 ; i1 < data.dataset.length ; i1++) {
@@ -189,6 +170,16 @@ public class CMn_Component extends LinearLayout implements ILoadableObject{
     }
 
 
+    public boolean allCorrect(int numCorrect) {
+        return (numCorrect == dataSource.length);
+    }
+
+
+    public void UpdateValue(int value) {
+
+    }
+
+
     private CMn_Alley addAlley() {
 
         // Defining the layout parameters of the TextView
@@ -200,7 +191,7 @@ public class CMn_Component extends LinearLayout implements ILoadableObject{
         lp.leftMargin = mAlleyMargin;
 
         // Setting the parameters on the TextView
-        CMn_Alley alley = new CMn_Alley(mContext);
+        CMn_Alley alley = new CMn_Alley(mContext, this);
         alley.setLayoutParams(lp);
 
         _alleys.add(alley);

@@ -165,6 +165,7 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
         animation.start();
     }
 
+
     public void setAlpha(Float alpha) {
         mOwnerView.setAlpha(alpha);
     }
@@ -176,29 +177,33 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
 
         // TODO: Ultimately we want to instantiate scope symbols for built-in behaviors like NODENEXT
         //
-        switch(mClickBehavior) {
+        if(mClickBehavior != null) {
 
-            case TCONST.NEXTSCENE:
-                mTutor.mTutorGraph.post(TCONST.NEXTSCENE);
-                break;
+            switch (mClickBehavior) {
 
-            case TCONST.NEXT_NODE:
-                mTutor.mSceneGraph.post(TCONST.NEXT_NODE);
-                break;
+                case TCONST.NEXTSCENE:
+                    mTutor.mTutorGraph.post(TCONST.NEXTSCENE);
+                    break;
 
-            case TCONST.STOP:
-                mTutor.mSceneGraph.post(TCONST.STOP);
-                break;
+                case TCONST.NEXT_NODE:
+                    mTutor.mSceneGraph.post(TCONST.NEXT_NODE);
+                    break;
 
-            default:
-                try {
-                    obj = mTutor.getScope().mapSymbol(mClickBehavior);
-                    obj.applyNode();
+                case TCONST.STOP:
+                    mTutor.mSceneGraph.post(TCONST.STOP);
+                    break;
 
-                } catch (Exception e) {
-                    // TODO: Manage invalid Button Behavior
-                    e.printStackTrace();
-                }
+                default:
+                    try {
+                        obj = mTutor.getScope().mapSymbol(mClickBehavior);
+                        obj.preEnter();
+                        obj.applyNode();
+
+                    } catch (Exception e) {
+                        // TODO: Manage invalid Button Behavior
+                        e.printStackTrace();
+                    }
+            }
         }
     }
 

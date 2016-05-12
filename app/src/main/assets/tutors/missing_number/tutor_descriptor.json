@@ -1,0 +1,37 @@
+{
+	//    "language":"LANG_SW",
+
+	"scenedata": [
+	  {
+		"id":"missing_number",
+
+        "oncreate":[
+        ],
+
+        "onenter":[
+        ],
+
+        "features":""
+        }
+	],
+
+    // This maps soundpackages in type_audio (the soundMap <key>) to audio resources
+    //
+    // The effect sound packages are special as it is not language sensitive
+    //
+    // type     - the classMap2 type
+    // language - the language feature to use - see TCONST.LANG_AUTO
+    // path     - the resource path relative to assets/tutors/trackdata/LIBRARY/audio/<language>
+
+    "soundMap" : {
+      "tutor_effect":  {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/missing_number"},
+      "xprize_effect": {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/global"},
+      "default":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/missing_number"},
+      "xprize":        {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global"}
+    },
+
+  	"navigatorType":"SIMPLE_NAVIGATOR"
+}
+
+
+

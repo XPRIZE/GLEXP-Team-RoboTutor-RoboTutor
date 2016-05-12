@@ -256,7 +256,9 @@ public class JSON_Helper {
 
                         nJsonObj = jsonObj.getJSONObject(fieldName);
 
-                        Map field_Map = new HashMap<String, Object>();
+                        HashMap<String, Object> field_Map = new HashMap<String, Object>();
+
+                        field.set(self,field_Map);
 
                         Iterator<?> keys = nJsonObj.keys();
 
@@ -264,6 +266,10 @@ public class JSON_Helper {
 
                             String key  = (String)keys.next();
                             Object eObj = null;
+
+//                            if(key.equals("CANCEL_HESITATION_TIMER")) {
+//                                Log.i(TAG, "THERE");
+//                            }
 
                             // Throw away comment fields
                             if(!key.equals("COMMENT")) {
@@ -320,16 +326,24 @@ public class JSON_Helper {
 
                                 ((ILoadableObject) eObj).loadJSON(elem, scope);
 
-                                // Associate the node with its Map name
-                                // This overrides any names assigned in the subtype spec
-                                ((IScriptable)eObj).setName(key);
+                                // Initialize graph mode types
+                                //
+                                if(eObj instanceof IScriptable) {
 
-                                // Add the new object to the scope - if it is a scoped object
-                                // it may just be a data source etc.
+                                    // Associate the node with its Map name
+                                    // This overrides any names assigned in the subtype spec
+                                    ((IScriptable) eObj).setName(key);
 
-                                if(scope != null) {
-                                    scope.put(key, (IScriptable) eObj);
-                                    Log.i(TAG, "Adding to scope: " + key);
+                                    // Add the new object to the scope - if it is a scoped object
+                                    // it may just be a data source etc.
+
+                                    if (scope != null) {
+                                        scope.put(key, (IScriptable) eObj);
+                                        Log.i(TAG, "Adding to scope: " + key);
+                                    }
+                                }
+                                else {
+                                    field_Map.put(key, eObj);
                                 }
                             }
                         }
@@ -421,17 +435,17 @@ public class JSON_Helper {
 
             } catch (JSONException e) {
                 // Just ignore items where there is no JSON data
-                //e.printStackTrace();
+                e.printStackTrace();
                 Log.e(TAG, "ERROR: parseSelf:" + e);
                 System.exit(1);
 
             } catch (InstantiationException e) {
-                //e.printStackTrace();
+                e.printStackTrace();
                 Log.e(TAG, "ERROR: parseSelf:" + e);
                 System.exit(1);
 
             } catch (IllegalAccessException e) {
-                //e.printStackTrace();
+                e.printStackTrace();
                 Log.e(TAG, "ERROR: parseSelf:" + e);
                 System.exit(1);
 
@@ -507,6 +521,7 @@ public class JSON_Helper {
             }
         }
         catch(Exception e) {
+            e.printStackTrace();
             Log.e(TAG, "Json Array Format Error: " + e);
             System.exit(1);
         }
