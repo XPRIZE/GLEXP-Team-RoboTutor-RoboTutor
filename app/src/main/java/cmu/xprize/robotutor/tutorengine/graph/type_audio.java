@@ -19,8 +19,6 @@
 
 package cmu.xprize.robotutor.tutorengine.graph;
 
-import android.media.MediaPlayer;
-
 import org.json.JSONObject;
 
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
@@ -49,6 +47,7 @@ public class type_audio extends type_action implements IMediaListener {
     public String        command;
     public String        lang;
     public String        soundsource;
+    public String        soundpackage;
     public long          index = 0;
 
     final static public String TAG = "type_audio";
@@ -216,12 +215,7 @@ public class type_audio extends type_action implements IMediaListener {
         // An audio source can force a language by setting "lang" to a known language ID
         // e.g. LANG_SW | LANG_EN | LANG_FR
 
-        if(lang != null) {
-            langPath = mMediaManager.mapLanguage(lang);
-        }
-        else {
-            langPath = mMediaManager.getLanguage(_scope.tutor());
-        }
+        langPath = mMediaManager.mapMediaPackage(_scope.tutor(), soundpackage, lang);
 
         // Update the path to the sound source file
         mSoundSource = TCONST.AUDIOPATH + "/" + langPath + "/" + soundsource;

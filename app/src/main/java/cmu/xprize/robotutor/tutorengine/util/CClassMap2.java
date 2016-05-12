@@ -2,6 +2,7 @@ package cmu.xprize.robotutor.tutorengine.util;
 
 import java.util.HashMap;
 
+import cmu.xprize.robotutor.tutorengine.CMediaPackage;
 import cmu.xprize.robotutor.tutorengine.graph.graph_module;
 import cmu.xprize.robotutor.tutorengine.graph.graph_node;
 import cmu.xprize.robotutor.tutorengine.graph.scene_node;
@@ -54,5 +55,7 @@ public class CClassMap2 {
         classMap.put("long", Long.class);
         classMap.put("short", Short.class);
         classMap.put("object", Object.class);
+
+        classMap.put("SOUNDMAP", CMediaPackage.class);
     }
 }

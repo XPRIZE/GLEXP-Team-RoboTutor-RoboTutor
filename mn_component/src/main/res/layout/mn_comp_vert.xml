@@ -28,19 +28,7 @@
         app:layout_heightPercent="58%"
         app:layout_marginPercent="1%"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/Snumber" />
-
-    <cmu.xprize.mn_component.CMn_Text
-        android:id="@+id/Snumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_heightPercent="18%"
-        app:layout_marginPercent="1%"
-        android:layout_above="@+id/Sminus"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:text="6"
-        android:visibility="visible" />
+        android:layout_above="@+id/Sminus" />
 
     <Button
         android:id="@+id/Sminus"
@@ -48,11 +36,23 @@
         android:layout_height="wrap_content"
         app:layout_heightPercent="8%"
         app:layout_marginPercent="1%"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_above="@+id/Snumber"
         android:background="@drawable/button_background"
         android:gravity="center"
         android:text="-"
         android:textSize="24sp"/>
+
+    <cmu.xprize.mn_component.CMn_Text
+        android:id="@+id/Snumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_heightPercent="18%"
+        app:layout_marginPercent="1%"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:text=""
+        android:visibility="visible" />
 
 </android.support.percent.PercentRelativeLayout>

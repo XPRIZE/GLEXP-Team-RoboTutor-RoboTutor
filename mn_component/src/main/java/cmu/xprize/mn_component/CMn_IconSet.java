@@ -28,12 +28,14 @@ public class CMn_IconSet extends View {
     private int mMaxBalls;
     private int mNumBalls;
     private int mBallSize;
-    private int mBallMargin = 5;
+    private int mBallMargin = 10;
 
     private ArrayList<CMn_Icon> _icons = new ArrayList<>();
 
     private float mRadMul;
     private float mRadius;
+
+    private int DEFAULT_MIN = 1;
 
     private Rect mBorderRegion = new Rect();
 
@@ -99,21 +101,23 @@ public class CMn_IconSet extends View {
 
         int delta = mNumBalls -_icons.size();
 
-        // More alleys than we need
+        // More icons than we need
+        //
         if(delta < 0) {
-            while(delta > 0) {
+            while(delta < 0) {
                 trimIcon();
-                delta--;
+                delta++;
             }
         }
-        // Fewer alleys than we need
+
+        // Fewer icons than we need
+        //
         else if(delta > 0) {
             while(delta > 0) {
                 addIcon();
                 delta--;
             }
         }
-
 
         if(update)
             requestLayout();
@@ -152,6 +156,7 @@ public class CMn_IconSet extends View {
         int height;
 
         //Measure Height
+
         if (heightMode == MeasureSpec.EXACTLY) {
             //Must be this size
             height = heightSize;
@@ -214,7 +219,7 @@ public class CMn_IconSet extends View {
      */
     public void updateBorder() {
 
-        int freeSpace = (mNumBalls == 0)? 2:mNumBalls;
+        int freeSpace = (mNumBalls == 0)? DEFAULT_MIN:mNumBalls;
 
         int borderHeight = (mBallMargin * (freeSpace+1)) + (mBallSize * freeSpace);
 

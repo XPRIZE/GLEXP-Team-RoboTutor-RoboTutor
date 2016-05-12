@@ -33,6 +33,7 @@ public interface IScriptable {
     public void subtract(String value);
 
     public Object evaluate(boolean neg);
+    public void preEnter();
     public String applyNode();
 }
 

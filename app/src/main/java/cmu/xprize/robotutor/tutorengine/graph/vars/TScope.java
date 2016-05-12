@@ -111,6 +111,7 @@ public class TScope implements IScope2 {
         put(key, (IScriptable2) obj);
     }
 
+
     public void put(String key, IScriptable2 obj) {
         if(map.containsKey(key)) {
             Log.e(TAG, "Duplicate Key : " + key);
@@ -119,7 +120,9 @@ public class TScope implements IScope2 {
         map.put(key,obj);
     }
 
+
     public void addUpdateVar(String key, IScriptable2 obj) {
+
         if(obj == null)
             map.remove(key);
         else

@@ -142,6 +142,14 @@ public class type_action extends graph_node {
                     _scope.tutor().gotoNode(id);
                     break;
 
+                case TCONST.CMD_SET_FEATURE:
+                    _scope.tutor().setAddFeature(value);
+                    break;
+
+                case TCONST.CMD_DEL_FEATURE:
+                    _scope.tutor().setDelFeature(value);
+                    break;
+
                 case TCONST.CMD_NEXT:
                     _scope.tutor().eventNext();
                     break;

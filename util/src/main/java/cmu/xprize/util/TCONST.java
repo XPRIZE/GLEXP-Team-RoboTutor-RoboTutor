@@ -30,7 +30,6 @@ public class TCONST {
 
     public static final String NUMDATA_HEADER = "{\n" + "\"dataSource\": ";
 
-
     //*** Reading Tutor compatible string combinations
 
     static public HashMap<String, String> numberMap = new HashMap<String, String>();
@@ -47,15 +46,16 @@ public class TCONST {
 
     static public HashMap<String, String> langMap = new HashMap<String, String>();
 
-    public static final String LANG_EN = "LANG_EN";
-    public static final String LANG_SW = "LANG_SW";
+    public static final String LANG_AUTO   = "LANG_AUTO";
+    public static final String LANG_EFFECT = "LANG_EFFECT";
+    public static final String LANG_EN     = "LANG_EN";
+    public static final String LANG_SW     = "LANG_SW";
 
     // This maps features to 2 letter codes used to build filepaths.
     static {
-        langMap.put("LANG_EN", "en");
-        langMap.put("LANG_SW", "sw");
-        langMap.put(LANG_EN, "en");
-        langMap.put(LANG_SW, "sw");
+        langMap.put(LANG_EFFECT, "effect");
+        langMap.put(LANG_EN,     "en");
+        langMap.put(LANG_SW,     "sw");
     }
 
     // JSON parameter constants
@@ -139,6 +139,8 @@ public class TCONST {
     public static final String GOTO_NODE       = "GOTO_NODE";
     public static final String PAUSE           = "PAUSE";
     public static final String START           = "START";
+    public static final String RESET           = "RESET";
+    public static final String RESTART         = "RESTART";
     public static final String CANCEL          = "CANCEL";
     public static final String CREATE          = "CREATE";
     public static final String CREATEANDSTART  = "CREATEANDSTART";
@@ -170,10 +172,12 @@ public class TCONST {
 
 
     // type_action - command types
-    public static final String CMD_WAIT    = "WAIT";
-    public static final String CMD_GOTO    = "GOTONODE";
-    public static final String CMD_NEXT    = "NEXT";
-    public static final String CMD_LAUNCH  = "LAUNCH-TUTOR";
+    public static final String CMD_WAIT         = "WAIT";
+    public static final String CMD_GOTO         = "GOTONODE";
+    public static final String CMD_NEXT         = "NEXT";
+    public static final String CMD_LAUNCH       = "LAUNCH-TUTOR";
+    public static final String CMD_SET_FEATURE  = "FEATURE-ADD";
+    public static final String CMD_DEL_FEATURE  = "FEATURE-DEL";
 
 
     // Intrinsic types
@@ -193,7 +197,7 @@ public class TCONST {
     public static final String FWUNKNOWN    = "FTR_UNRECOGNIZED";
     public static final String FTR_EOI      = "FTR_NOWORDS";
     public static final String FTR_EOD      = "FTR_EOD";
-    public static final String FWALLCORRECT = "ALL_CORRECT";
+    public static final String ALL_CORRECT  = "ALL_CORRECT";
 
     public static final String FALSE        = "FALSE";
     public static final String TRUE         = "TRUE";
@@ -276,8 +280,9 @@ public class TCONST {
 
 
     // MediaManager constants.
-    public static final String MEDIA_AUDIO    = "MEDIA_AUDIO";
-    public static final String MEDIA_TIMELINE = "MEDIA_TIMELINE";
+    public static final String MEDIA_AUDIO           = "MEDIA_AUDIO";
+    public static final String MEDIA_TIMELINE        = "MEDIA_TIMELINE";
+    public static final String DEFAULT_SOUND_PACKAGE = "default";
 
 
     // ASR (automated speech recognition) constants
@@ -303,5 +308,7 @@ public class TCONST {
     public static final String CC_SW_NA  = "NA";
     public static final String CC_EN_AND = "AND";
     public static final String NUM_EOD   = "NUM_EOD";
+
+
 
 }

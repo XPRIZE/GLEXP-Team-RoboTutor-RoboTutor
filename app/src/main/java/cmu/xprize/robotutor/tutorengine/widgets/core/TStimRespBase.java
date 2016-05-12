@@ -115,7 +115,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
                 //
                 if (_dataEOI) {
                     if (_wrong == 0)
-                        mTutor.setAddFeature(TCONST.FWALLCORRECT);
+                        mTutor.setAddFeature(TCONST.ALL_CORRECT);
                 }
             }
 
@@ -141,7 +141,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
         _correct = 0;
         _wrong   = 0;
 
-        mTutor.setDelFeature(TCONST.FWALLCORRECT);
+        mTutor.setDelFeature(TCONST.ALL_CORRECT);
         mTutor.setDelFeature(TCONST.FWCORRECT);
         mTutor.setDelFeature(TCONST.FWINCORRECT);
 
@@ -174,7 +174,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
 
     public void next() {
 
-        mTutor.setDelFeature(TCONST.FWALLCORRECT);
+        mTutor.setDelFeature(TCONST.ALL_CORRECT);
         mTutor.setDelFeature(TCONST.FWCORRECT);
         mTutor.setDelFeature(TCONST.FWINCORRECT);
 

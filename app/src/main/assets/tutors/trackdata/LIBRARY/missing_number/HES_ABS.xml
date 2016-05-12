@@ -1,0 +1,41 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="missing_number/HES_ABS" itemID="5732629c-00000148" lastModified="1462987022">
+  <timeline>
+    <DOMTimeline name="HES_ABS" currentFrame="78">
+      <layers>
+        <DOMLayer name="Scripts" color="#9933CC" current="true" isSelected="true" autoNamed="false" heightLiteral="18">
+          <frames>
+            <DOMFrame index="0" duration="78" keyMode="9728">
+              <elements/>
+            </DOMFrame>
+            <DOMFrame index="78" duration="86" name="START" labelType="name" keyMode="9728">
+              <Actionscript>
+                <script><![CDATA[{
+  "type": "MODULE",
+  "reuse":true,
+  "COMMENT": "????",
+  "tracks": [
+	//{"type": "AUDIO", "command": "PLAY", "soundsource": "{{SMissingNumber.value}}.mp3", "features": ""}
+  ]
+}]]></script>
+              </Actionscript>
+              <elements/>
+            </DOMFrame>
+            <DOMFrame index="164" keyMode="9728">
+              <elements/>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+        <DOMLayer name="Audio" color="#4FFF4F" autoNamed="false" heightLiteral="18">
+          <frames>
+            <DOMFrame index="0" duration="165" keyMode="9728" soundName="audio/sw/Please write the number.mp3" soundSync="stream">
+              <SoundEnvelope>
+                <SoundEnvelopePoint level0="32768" level1="32768"/>
+              </SoundEnvelope>
+              <elements/>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>
