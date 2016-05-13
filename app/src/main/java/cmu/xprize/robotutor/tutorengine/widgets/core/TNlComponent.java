@@ -232,7 +232,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
         _correct = 0;
         _wrong   = 0;
 
-        mTutor.setDelFeature(TCONST.FWALLCORRECT);
+        mTutor.setDelFeature(TCONST.ALL_CORRECT);
         mTutor.setDelFeature(TCONST.FWCORRECT);
         mTutor.setDelFeature(TCONST.FWINCORRECT);
 
