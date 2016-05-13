@@ -160,6 +160,7 @@ public class graph_node implements ILoadableObject2, IScriptable2 {
             try {
                 IScriptable2 node = (IScriptable2)getScope().mapSymbol(nodeName);
 
+                node.preEnter();
                 node.applyNode();
 
             } catch (Exception e) {

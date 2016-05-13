@@ -7,13 +7,14 @@ import android.util.Log;
 import org.json.JSONObject;
 
 import cmu.xprize.mn_component.CMn_Component;
+import cmu.xprize.mn_component.CMn_Data;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
@@ -49,19 +50,75 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
     @Override
     public void onDestroy() {
         mSceneObject.onDestroy();
+        mTutor.getScope().addUpdateVar(name() + ".value", null);
     }
 
+
+    @Override
+    public void UpdateValue(int value) {
+
+        // update the Scope response variable  "<varname>.value"
+        //
+        mTutor.getScope().addUpdateVar(name() + ".value", new TInteger(value));
+
+        boolean correct = isCorrect();
+
+        reset();
+
+        if(correct)
+            mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
+        else
+            mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+    }
+
+
+    private void reset() {
+
+        mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
+        mTutor.setDelFeature(TCONST.GENERIC_WRONG);
+    }
+
+
+    /**
+     * Preprocess the data set
+     *
+     * @param data
+     */
+    protected void updateDataSet(CMn_Data data) {
+
+        int index = 0;
+
+        mTutor.getScope().addUpdateVar(name() + ".numcol", new TInteger(data.dataset.length));
+
+        for(int elem : data.dataset) {
+            mTutor.getScope().addUpdateVar(name() + ".col" + index++, new TInteger(elem));
+        }
+
+        // Let the compoenent process the new data set
+        //
+        super.updateDataSet(data);
+    }
 
 
     //**********************************************************
     //**********************************************************
     //*****************  Tutor Interface
 
+
     /**
      *
      * @param dataSource
      */
     public void setDataSource(String dataSource) {
+
+        // Ensure flags are reset so we don't trigger reset of the ALLCORRECCT flag
+        // on the first pass.
+        //
+        reset();
+
+        // We make the assumption that all are correct until proven wrong
+        //
+        mTutor.setAddFeature(TCONST.ALL_CORRECT);
 
         // TODO: globally make startWith type TCONST
         try {
@@ -92,6 +149,13 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
 
     public void next() {
 
+        // If wrong reset ALLCORRECT
+        //
+        if(mTutor.testFeatureSet(TCONST.GENERIC_WRONG)) {
+
+            mTutor.setDelFeature(TCONST.ALL_CORRECT);
+        }
+
         reset();
 
         super.next();
@@ -101,24 +165,13 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
     }
 
 
-    public TBoolean test() {
-        boolean correct = isCorrect();
-
-        if(correct)
-            mTutor.setAddFeature("FTR_RIGHT");
-        else
-            mTutor.setAddFeature("FTR_WRONG");
-
-        return new TBoolean(correct);
+    public void enable(Boolean enable) {
     }
 
 
-    public void reset() {
-
-        mTutor.setDelFeature("FTR_RIGHT");
-        mTutor.setDelFeature("FTR_WRONG");
+    public void setButtonBehavior(String command) {
+        mSceneObject.setButtonBehavior(command);
     }
-
 
 
     //**********************************************************

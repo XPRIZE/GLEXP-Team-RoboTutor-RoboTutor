@@ -30,7 +30,7 @@ import cmu.xprize.util.TCONST;
  {"type": "TIMER", "id": "hint_timeout", "action": "STOP" },
  {"type": "TIMER", "id": "hint_timeout", "action": "CANCEL" }
  */
-public class type_timer extends graph_node implements IMediaListener {
+public class type_timer extends type_action implements IMediaListener {
 
     protected Timer     _timer     = null;
     protected String    _timerCmd  = TCONST.NONE;
@@ -97,6 +97,7 @@ public class type_timer extends graph_node implements IMediaListener {
         // NOOP
     }
 
+
     //**  Global Media Control Start
     //*******************************************************
 
@@ -122,9 +123,7 @@ public class type_timer extends graph_node implements IMediaListener {
                     _timerCmd = TCONST.START;
 
                 case TCONST.CREATE:
-                    _timer     = new Timer(id);
-                    _reference = false;
-                    mMediaManager.createTimer(id, this);
+                    createTimer();
                     break;
 
                 default:
@@ -159,6 +158,17 @@ public class type_timer extends graph_node implements IMediaListener {
                 startTimer();
                 break;
 
+            case TCONST.RESET:
+                stopTimer();
+                createTimer();
+                break;
+
+            case TCONST.RESTART:
+                stopTimer();
+                createTimer();
+                startTimer();
+                break;
+
             case TCONST.STOP:
             case TCONST.CANCEL:
                 stopTimer();
@@ -166,6 +176,13 @@ public class type_timer extends graph_node implements IMediaListener {
         }
 
         return TCONST.DONE;
+    }
+
+
+    private void createTimer() {
+        _timer     = new Timer(id);
+        _reference = false;
+        mMediaManager.createTimer(id, this);
     }
 
 

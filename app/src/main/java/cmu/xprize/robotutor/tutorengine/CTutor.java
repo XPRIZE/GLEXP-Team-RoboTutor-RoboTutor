@@ -91,9 +91,10 @@ public class CTutor implements ILoadableObject2 {
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     // json loadable
-    public scene_initializer[] scenedata;
-    public String              language;
-    public String              navigatorType;
+    public scene_initializer[]           scenedata;
+    public String                        language;
+    public String                        navigatorType;
+    public HashMap<String,CMediaPackage> soundMap;
 
     public String engineLanguage;
 
@@ -664,6 +665,10 @@ public class CTutor implements ILoadableObject2 {
         // Use updateLanguageFeature to properly override the Engine language feature
         if(language != null)
             mMediaManager.setLanguageFeature(this, language);
+
+        // push the soundMap into the MediaManager -
+        //
+        mMediaManager.setMediaPackage(this, soundMap);
 
         // Create a associative cache for the initialization data
         //

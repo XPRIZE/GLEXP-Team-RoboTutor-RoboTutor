@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- NOTE: The id of the topmost container below must match the XML filename -->
+
+<cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/missing_number"
+    android:background="#F3DB">
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TBanner
+        android:id="@+id/Sbanner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_heightPercent="10%"
+        android:background="#800"
+        android:gravity="center" />
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TMnComponent
+        android:id="@+id/SMissingNumber"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        app:layout_heightPercent="80%"
+        app:layout_marginTopPercent="15%"
+        app:layout_marginRightPercent="12%"
+        app:layout_marginLeftPercent="10%"
+        app:radAlley="0.33"
+        android:background="#0000"/>
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TButton
+        android:id="@+id/SdoneButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        app:layout_marginBottomPercent="25%"
+        app:layout_marginRightPercent="2%"
+        android:padding="5dp"
+        android:textSize="32sp"
+        android:text="Done"
+        android:background="@drawable/button_background"/>
+
+</cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>
