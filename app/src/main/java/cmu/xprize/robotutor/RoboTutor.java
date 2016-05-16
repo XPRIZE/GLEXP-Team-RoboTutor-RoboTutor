@@ -25,10 +25,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
+import cmu.W2N_UnitTest;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
@@ -40,6 +44,7 @@ import cmu.xprize.util.ProgressLoading;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutorAssetManager;
 import cmu.xprize.util.TTSsynthesizer;
+import cmu.xprize.util.Word2NumFSM;
 import edu.cmu.xprize.listener.ListenerBase;
 
 
@@ -70,10 +75,13 @@ public class RoboTutor extends Activity implements IReadyListener {
     private final  String  TAG = "CRoboTutor";
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate: ");
+
+        W2N_UnitTest test = new W2N_UnitTest();
 
         setContentView(R.layout.robo_tutor);
 

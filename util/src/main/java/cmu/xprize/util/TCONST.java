@@ -28,15 +28,15 @@ import java.util.HashMap;
 
 public class TCONST {
 
-    public static final String NUMDATA_HEADER = "{\n" + "\"dataSource\": ";
+    public static final String NUMDATA_HEADER   = "{\n" + "\"dataSource\": ";
 
     //*** Reading Tutor compatible string combinations
 
     static public HashMap<String, String> numberMap = new HashMap<String, String>();
 
     static {
-        numberMap.put("LANG_EN", "AND,ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,TEN,ELEVEN,TWELVE,THIRTEEN,FORTEEN,FIFTEEN,SIXTEEN,SEVENTEEN,EIGHTEEN,NINETEEN,TWENTY,THIRTY,FORTY,FIFTY,SIXTY,SEVENTY,EIGHTY,NINETY,HUNDRED,THOUSAND,MILLION");
-        numberMap.put("LANG_SW", "NA,SIFURI,MOJA,MBILI,TATU,NNE,TANO,SITA,SABA,NANE,TISA,KUMI,ISHIRINI,THELATHINI,AROBAINI,HAMSINI,SITINI,SABINI,THEMANINI,TISINI,MIA,ELFU,MILIONI");
+        numberMap.put("LANG_EN", "AND,ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,TEN,ELEVEN,TWELVE,THIRTEEN,FORTEEN,FIFTEEN,SIXTEEN,SEVENTEEN,EIGHTEEN,NINETEEN,TWENTY,THIRTY,FORTY,FIFTY,SIXTY,SEVENTY,EIGHTY,NINETY,HUNDRED,THOUSAND,MILLION,BILLION,TRILLION,QUADRILLION");
+        numberMap.put("LANG_SW", "NA,SIFURI,MOJA,MBILI,TATU,NNE,TANO,SITA,SABA,NANE,TISA,KUMI,ISHIRINI,THELATHINI,AROBAINI,HAMSINI,SITINI,SABINI,THEMANINI,TISINI,MIA,ELFU,MILIONI,BILIONI,TRILIONI,KWADRILIONI");
     }
 
 
@@ -150,11 +150,12 @@ public class TCONST {
     public static final int STARTSTATE = 0;
     public static final int PARSESTATE = 1;
     public static final int PARSEIDENT = 2;
-    public static final int PARSENUM = 3;
-    public static final int PARSEVAR = 4;
-    public static final int PARSEPROP = 5;
-    public static final int RESOLVESYMBOL = 6;
-    public static final int ENDSUBEXPR = 7;
+    public static final int PARSEINDEX = 3;
+    public static final int PARSENUM = 4;
+    public static final int PARSEVAR = 5;
+    public static final int PARSEPROP = 6;
+    public static final int RESOLVESYMBOL = 7;
+    public static final int ENDSUBEXPR = 8;
     public static final int BUILDEXPR = 100;
 
     // Binary Operations
@@ -223,6 +224,9 @@ public class TCONST {
 
     public static final int ALLSTATIC_EVENTS   = 0x70;
 
+    public static final int RECOGNITION_EVENT  = 0x100;
+    public static final int ERROR_EVENT        = 0x101;
+
     public static final int ALL_EVENTS         = 0xFFFFFFFF;
 
 
@@ -247,6 +251,7 @@ public class TCONST {
     public static final String FW_VALUE    = "FW_VALUE";
     public static final String FW_EOI      = "FW_EOI";
     public static final String FW_RESPONSE = "FW_RESPONSE";
+
     public static final String ROBOTUTOR_FOLDER = "/RoboTutor/";
 
 
@@ -265,9 +270,19 @@ public class TCONST {
 
 
     // Number Listeneing Component
-    public static final String ERR_SINGLEDIGIT = "Single Digit Error";
-    public static final String ERR_MULTIDIGIT  = "Multi Digit Error";
-    public static final String TEXT_FIELD      = ".text";
+    private static final String[]    placeValue = {".ones",".tens",".hundreds",".thousands",".millions",".billions"};
+
+    public static final String ERR_SINGLEDIGIT  = "Single Digit Error";
+    public static final String ERR_MULTIDIGIT   = "Multi Digit Error";
+    public static final String TEXT_FIELD       = ".text";
+
+    public static final String PLRT             = "PLRT";
+    public static final String JSGF             = "JSGF";
+
+    public static final String DIGIT_STRING_VAR = "DigitString";
+    public static final String PLACE_STRING_VAR = "PlaceString";
+    public static final String DIGIT_TEXT_VAR   = "DigitText";
+    public static final String PLACE_TEXT_VAR   = "PlaceText";
 
 
     // Generic error codes
@@ -295,14 +310,61 @@ public class TCONST {
     public static final String STABLE_HYPOTHESES  = "STABLEHYPOTHESES";
 
     // Number parser states.
-    public static final int W2N_DIGIT = 2;
-    public static final int W2N_TENS  = 3;
-    public static final int W2N_POWER = 4;
-    public static final int W2N_CONJ  = 5;
-    public static final int W2N_EOD   = 6;
-    public static final int W2N_ERR   = 7;
+    public static final int W2N_ZERO     = 1;
+    public static final int W2N_DIGIT    = 2;
+    public static final int W2N_TENS     = 3;
+    public static final int W2N_TEENS    = 4;
+    public static final int W2N_HUNDREDS = 5;
+    public static final int W2N_POWER    = 6;
+    public static final int W2N_CONJ     = 7;
+    public static final int W2N_EOD      = 8;
+    public static final int W2N_ERR      = 9;
+
+    public static final int W2N_VALUE_UPDATE    = 10;
 
     public static final int UNSET = -1;
+
+    // W2N Error Types
+    public static final int NO_ERROR                     = 0;       //
+    public static final int ERRW2N_NO_DATA               = 1;       // empty string set passed in
+    public static final int ERRW2N_LEADING_CONJ          = 2;       // leading NA
+    public static final int ERRW2N_NONTERM_ZERO          = 3;       // zero must always be alone - This occurs when something follows zero
+    public static final int ERRW2N_NONSOLITARY_ZERO      = 4;       // zero must always be alone - This occurs when something proceeds zero
+    public static final int ERRW2N_MISSING_CONJ          = 5;       // We don't tolerate missing NA in swahili
+    public static final int ERRW2N_MISSING_HUNDRED_MULTI = 6;       // They uttered tens/hundreds/power after mia
+    public static final int ERRW2N_HUNDRED_ADDED_CONJ    = 7;       // They added a na after mia
+    public static final int ERRW2N_INCREASING_POWER      = 8;       // They've uttered an increasing power sequnce - e.g. thousand .. million
+    public static final int ERRW2N_REPEATED_POWER        = 9;       // They've uttered a second power e.g. "million thousand"
+    public static final int ERRW2N_POWER_CONJ            = 10;      // They've uttered a power followed by na
+    public static final int ERRW2N_INCREASING_MULTIPLIER = 11;      // power multiples must be monotonically recreasing 100's - 10's - 1's
+    public static final int ERRW2N_REPEATED_CONJ         = 12;      // na na
+    public static final int ERRW2N_INTERNAL              = 13;      // shouldn't occur
+    public static final int ERRW2N_ZERO_HUNDRED_MULTI    = 14;      // mia sifuri
+    public static final int ERRW2N_INVALID_TEXT          = 15;      // The input text is invalid - should not happen in practice
+    public static final int ERRW2N_INVALID_CONJ          = 16;      // e.g. six and | twenty and | eleven and
+
+    // English specific
+    public static final int ERRW2N_LEADING_HUNDRED       = 30;      // Can't start by saying 'hundred'
+    public static final int ERRW2N_LEADING_POWER         = 31;      // Can't start by saying 'thousand' etc
+    public static final int ERRW2N_REPEATED_HUNDRED      = 32;      // Hundred Hundred
+
+    public static final int ERRW2N_REPEATED_DIGIT        = 33;      // e.g. saying "two seven"
+    public static final int ERRW2N_INVALID_DIGIT         = 34;      // e.g. saying "hundred two"
+    public static final int ERRW2N_INVALID_TENS          = 35;      // e.g. saying "tirteen hundred"
+    public static final int ERRW2N_INVALID_HUNDREDS      = 36;      // e.g. saying "thousand hundred"
+    public static final int ERRW2N_INVALID_POWER         = 37;      // e.g. saying "and thousand"
+
+
+    public static final String[] W2N_ERRORMSG = {"NO_ERROR","NO_DATA","LEADING_CONJ","NONTERM_ZERO","NONSOLITARY_ZERO","MISSING_CONJ","MISSING_HUNDRED_MULTI","HUNDRED_ADDED_CONJ","INCREASING_POWER","REPEATED_POWER","POWER_CONJ","INCREASING_MULTIPLIER","REPEAT_CONJ","INTERNAL","ZERO_HUNDRED_MULTI","INVALID_TEXT"};
+
+    // W2N Warning types
+    public static final int NO_WARNING                = 0;          //
+    public static final int W2N_HYPOTHESIS            = 1;          // This is potentially a complete utterance
+    public static final int W2N_DANGLING_HUNDRED_WARN = 2;          // mia with no multiplier yet
+    public static final int W2N_DANGLING_POWER_WARN   = 3;          // power with no multiplier yet
+    public static final int W2N_DANGLING_CONJ_WARN    = 4;          // conjunction with no follow on value
+
+    public static final String[] W2N_WARNMSG = {"NO_WARNING","HYPOTHESIS","DANGLING_HUNDRED_WARN","DANGLING_POWER_WARN","DANGLING_CONJ_WARN"};
 
     // Coordinating conjunction
     public static final String CC_SW_NA  = "NA";

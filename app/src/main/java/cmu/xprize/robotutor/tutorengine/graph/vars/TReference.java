@@ -69,4 +69,14 @@ public class TReference  extends TVarBase implements ILoadableObject2, IScriptab
             e.printStackTrace();
         }
     }
+
+    @Override
+    public String resolve(int index) {
+        return null;
+    }
+
+    @Override
+    public int getIntValue() {
+        return 0;
+    }
 }

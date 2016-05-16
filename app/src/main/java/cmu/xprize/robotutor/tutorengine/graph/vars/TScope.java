@@ -146,7 +146,9 @@ public class TScope implements IScope2 {
         StringBuilder  result    = new StringBuilder();
         String         parseStr  = source + TCONST.EOT;
 
-        IScriptable2    resultObj = null;
+        boolean        isArray   = false;
+        IScriptable2   arrayObj  = null;
+        IScriptable2   resultObj = null;
 
         try {
             do {
@@ -189,19 +191,46 @@ public class TScope implements IScope2 {
                     case TCONST.PARSEIDENT:
 
                         if ((tChar >= 'A' && tChar <= 'Z') ||
-                                (tChar >= 'a' && tChar <= 'z') ||
-                                (tChar >= '0' && tChar <= '9') ||
-                                (tChar == '.') || (tChar == '_')) {
+                            (tChar >= 'a' && tChar <= 'z') ||
+                            (tChar >= '0' && tChar <= '9') ||
+                            (tChar == '.') || (tChar == '_')) {
 
                             Symbol.append(tChar);
                             _i1++;
-                        } else {
+                        }
+
+                        // If the symbol references an array object we remember the symbol name and
+                        // continue parsing the input as a new symbol which may be either
+                        // another variable or a number representing the array index
+                        //
+                        else if (tChar == '[') {
+
+                            isArray  = true;
+                            arrayObj = mapSymbol(Symbol.toString());
+                            Symbol   = new StringBuilder();
+
+                            _i1++;
+                        }
+
+                        // If we find a closing bracket we process the array dereference request
+                        //
+                        else if (tChar == ']') {
+                            if(!isArray) {
+                                Log.e(TAG, "No open bracket [ found for array reference: " + Symbol + "> in expression" + source);
+                                System.exit(1);
+                            }
+
+                            _i1++;
+                            state = TCONST.PARSEVAR;
+                        }
+                        else {
                             state = TCONST.PARSEVAR;
                         }
 
                         break;
 
                     // Parse tbe ...}} off the end of a variable
+                    //
                     case TCONST.PARSEVAR:
 
                         switch (tChar) {
@@ -216,19 +245,44 @@ public class TScope implements IScope2 {
                             case '}':
                                 if (parseStr.charAt(_i1 + 1) == '}') {
                                     _i1++;
-                                    resultObj = mapSymbol(Symbol.toString());
 
-                                    if (resultObj == null) {
-                                        Log.e(TAG, "Symbol not found: <" + Symbol + "> in expression" + source);
-                                        System.exit(1);
+                                    // If not an array the Symbol is expected to be a scope variable which
+                                    // we dereference and append its string value to the output.
+                                    //
+                                    if(!isArray) {
+                                        resultObj = mapSymbol(Symbol.toString());
+
+                                        if (resultObj == null) {
+                                            Log.e(TAG, "Symbol not found: <" + Symbol + "> in expression" + source);
+                                            System.exit(1);
+                                        }
+
+                                        result.append(resultObj.toString());
+
+                                        // switch back to parsing string
+                                        _i1++;
+                                        state = TCONST.PARSESTATE;
+                                        Log.i(TAG, "Symbol Found: " + Symbol);
                                     }
 
-                                    result.append(resultObj.toString());
+                                    // If it is an array the arrayObj is a type_array object that resolves
+                                    // a java object and an indexed datasource within that object. Symbol is
+                                    // either a number or a scope variable representing a numeric index
+                                    //
+                                    else {
+                                        int index;
 
-                                    // switch back to parsing string
-                                    _i1++;
-                                    state = TCONST.PARSESTATE;
-                                    Log.i(TAG, "Symbol Found: " + Symbol);
+                                        try {
+                                            index = Integer.parseInt(Symbol.toString());
+                                        }
+                                        catch(Exception e) {
+                                            resultObj = mapSymbol(Symbol.toString());
+
+                                            index = resultObj.getIntValue();
+                                        }
+
+                                        result.append(arrayObj.resolve(index));
+                                    }
                                 }
                                 break;
 
@@ -262,23 +316,23 @@ public class TScope implements IScope2 {
     //
     public IScriptable2 mapSymbol(String name) throws  Exception {
         IScriptable2 tarObject = null;
-        TScope       currScope = this;
+        TScope currScope = this;
 
-        if(!name.equals("")) {
+        if (!name.equals("")) {
             try {
                 // Walk up the scope chain to try and find the named object
                 do {
                     tarObject = currScope.map.get(name);
 
-                    if(tarObject == null)
+                    if (tarObject == null)
                         currScope = currScope.getParentScope();
 
                 } while (tarObject == null);
 
-                while(tarObject.getType() == TCONST.TREFERENCE)  do {
+                while (tarObject.getType() == TCONST.TREFERENCE) do {
                     tarObject = currScope.map.get(tarObject.getValue());
 
-                    if(tarObject == null)
+                    if (tarObject == null)
                         currScope = currScope.getParentScope();
 
                 } while (tarObject == null);
@@ -292,4 +346,30 @@ public class TScope implements IScope2 {
 
         return tarObject;
     }
+
+    // Look up the inheritance chain to find the object
+    //
+    public boolean containsSymbol(String name) throws  Exception {
+        IScriptable2 tarObject = null;
+        TScope       currScope = this;
+
+        if(!name.equals("")) {
+            try {
+                // Walk up the scope chain to try and find the named object
+                do {
+                    tarObject = currScope.map.get(name);
+
+                    if(tarObject == null)
+                        currScope = currScope.getParentScope();
+
+                } while (tarObject == null);
+
+            } catch (Exception e) {
+                Log.i(TAG, "Symbol not contained : " + name);
+            }
+        }
+
+        return tarObject != null? true:false;
+    }
+
 }

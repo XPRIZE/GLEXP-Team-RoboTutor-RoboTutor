@@ -103,7 +103,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
                 _wrong++;
             } else {
 
-                if (mValue.equals(mStimulus)) {
+                if (mValue.equals(mStimulusString)) {
                     mTutor.setAddFeature(TCONST.FWCORRECT);
                     _correct++;
                 } else {
@@ -237,7 +237,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
     }
 
 
-    protected void applyEventNode(String nodeName) {
+    public void applyEventNode(String nodeName) {
         IScriptable2 obj = null;
 
         if(nodeName != null && !nodeName.equals("")) {

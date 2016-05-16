@@ -612,7 +612,7 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
 
                 // TODO : Remove this after testing
 //                Intent msg = new Intent(TCONST.FW_RESPONSE);
-//                msg.putExtra(TCONST.FW_VALUE, mResponse);
+//                msg.putExtra(TCONST.FW_VALUE, mResponseString);
 //
 //                bManager.sendBroadcast(msg);
             }

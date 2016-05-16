@@ -301,6 +301,14 @@ public class ListenerBase {
         recognizer.setPauseRecognizer(pauseListener);
     }
 
+    /**
+     * return whether or not the listener is alive and actively listening.
+     * @return
+     */
+    public boolean isListening() {
+       return recognizer.isListening();
+    }
+
     public void reInitializeListener(boolean restartListener) {
         recognizer.setRestartListener(restartListener);
     }

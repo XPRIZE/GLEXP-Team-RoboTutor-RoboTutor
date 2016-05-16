@@ -251,6 +251,16 @@ public class graph_node implements ILoadableObject2, IScriptable2 {
     }
 
     @Override
+    public String resolve(int index) {
+        return null;
+    }
+
+    @Override
+    public int getIntValue() {
+        return 0;
+    }
+
+    @Override
     public Object evaluate(boolean neg) {
         return false;
     }

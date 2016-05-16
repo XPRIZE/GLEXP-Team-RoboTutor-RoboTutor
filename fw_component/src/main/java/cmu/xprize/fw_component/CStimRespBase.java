@@ -20,10 +20,7 @@
 package cmu.xprize.fw_component;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
@@ -46,14 +43,14 @@ import cmu.xprize.util.TCONST;
 
 public class CStimRespBase extends TextView  implements View.OnClickListener, IEventListener, IEventDispatcher {
 
-    private Context             mContext;
+    protected Context           mContext;
     public List<IEventListener> mListeners = new ArrayList<IEventListener>();
     protected List<String>      mLinkedViews;
     protected boolean           mListenerConfigured = false;
 
     // Used by control in response mode to maintain state info
-    protected String        mStimulus;
-    protected String        mResponse;
+    protected String        mStimulusString;        // String representation - even for numbers e.g. "34"
+    protected String        mResponseString;        // String representation - even for numbers e.g. "34"
     protected boolean       mIsResponse;
 
     private String[]        mLexemes;
@@ -71,6 +68,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
     protected String[]      _placeValueColor = new String[20];
 
     protected String        _onRecognition;
+    protected String        _onRecognitionError;
 
     protected float         mAspect;           //   = 0.82f w/h
 
@@ -164,17 +162,17 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
 
             // Message from Stimiulus variant to share state with response variant
             case TCONST.FW_STIMULUS:
-                mStimulus = (String)event.getString(TCONST.FW_VALUE);
+                mStimulusString = (String)event.getString(TCONST.FW_VALUE);
 
                 preProcessStimulus();
                 break;
 
             // Message from the recognizer to update the response state
             case TCONST.FW_RESPONSE:
-                mResponse = (String)event.getString(TCONST.FW_VALUE);
+                mResponseString = (String)event.getString(TCONST.FW_VALUE);
 
                 if (mIsResponse) {
-                    updateText(mResponse);
+                    updateText(mResponseString);
                 }
                 break;
 
@@ -271,7 +269,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
      *
      * @param newValue
      */
-    protected void updateText(String newValue) {
+    public void updateText(String newValue) {
 
         boolean changed = false;
 
@@ -309,6 +307,8 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
 
     public void setDataSource(String[] dataSource) {
 
+        // _data takes the form - ["92","3","146"]
+        //
         _data      = new ArrayList<String>(Arrays.asList(dataSource));
         _dataIndex = 0;
         _dataEOI   = false;
@@ -413,11 +413,15 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
         _onRecognition = symbol;
     }
 
+    public void onRecognitionError(String symbol) {
+        _onRecognitionError = symbol;
+    }
+
 
     // Must override in TClass
     // TClass domain provides access to tutor scriptables
     //
-    protected void applyEventNode(String nodeName) {
+    public void applyEventNode(String nodeName) {
     }
 
     // Scripting Interface  End
