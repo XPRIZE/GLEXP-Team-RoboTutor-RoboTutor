@@ -77,6 +77,7 @@ public class CNl_PLRT implements CNl_Processor {
 
 
     public CNl_PLRT(INl_Implementation owner, Context context) {
+
         _Owner   = owner;
         _Context = context;
 

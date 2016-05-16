@@ -250,7 +250,9 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
         _correct = 0;
         _wrong   = 0;
 
-        mTutor.setDelFeature(TCONST.ALL_CORRECT);
+        // Assume all correct unless proven otherwise
+        //
+        mTutor.setAddFeature(TCONST.ALL_CORRECT);
         mTutor.setDelFeature(TCONST.FWCORRECT);
         mTutor.setDelFeature(TCONST.FWINCORRECT);
 
@@ -327,8 +329,10 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
     @Override
     public void updateOutcomeState(boolean error) {
 
-        if(error == TCONST.TRUE_ERROR)
+        if(error == TCONST.TRUE_ERROR) {
             mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+            mTutor.setDelFeature(TCONST.ALL_CORRECT);
+        }
         else
             mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
     }
