@@ -121,9 +121,24 @@ public class ListenerJSGF extends ListenerBase {
 
 
     public void listenFor(String[] wordsToHear, int startWord) {
+
+        // Ensure all the words are in the language model
+        //
         generateLM(wordsToHear);
-        listenFor(testGrammar);
+
+        // generate a grammar that allows any words
+        //
+        String grammar = "#JSGF V1.0;\n" + "\n" +
+                "grammar sentence;\n" +
+                "\n" +
+                "<word> = " + TextUtils.join("|", wordsToHear) + ";\n" +
+                "public <sentence> = <word> <word> <word> <word> <word> <word> <word> <word> <word> <word> <word>;\n";
+
+        // Listen for a sequence
+        //
+        listenFor(grammar);
     }
+
 
     public void listenFor(String jSgrammar) {
 

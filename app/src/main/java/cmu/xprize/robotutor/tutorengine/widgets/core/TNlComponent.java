@@ -87,11 +87,15 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
         // test different listener designs
         //
         createInputProcessor(TCONST.PLRT);
+        //createInputProcessor(TCONST.JSGF);
     }
 
 
     @Override
     public void onDestroy() {
+
+        mMediaManager.removeListener(mListener);
+
         if(mListener != null)
                 mListener.stop();
 
@@ -113,6 +117,9 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
             scope.addUpdateVar(name() + TCONST.PLACE_STRING_VAR, null);
             scope.addUpdateVar(name() + TCONST.DIGIT_TEXT_VAR, null);
             scope.addUpdateVar(name() + TCONST.PLACE_TEXT_VAR, null);
+
+            scope.addUpdateVar(name() + ".error", null);
+            scope.addUpdateVar(name() + ".warning", null);
         }
     }
 
@@ -162,17 +169,19 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
      *
      * sStimulus.digits      - 3  (number of digits)
      *
-     * sStimulus.String      - "238"
-     * sStimulus.Value       - 238
-     * sStimulus.Text        - "two hundred and thirty eight"
+     * sStimulusString      - "238"
+     * sStimulusValue       - 238
+     * sStimulusText        - "TWO HUNDRED THIRTY EIGHT"
      *
-     * sStimulus.DigitString - ["2", "3", "8"]
-     * sStimulus.DigitValue  - [2, 3, 8]
-     * sStimulus.DigitText   - ["two", "three", "eight"]
+     * Note: the lists are in order of increasing place value
      *
-     * sStimulus.PlaceString - ["200", "30", "8"]
-     * sStimulus.PlaceValue  - [200, 30, 8]
-     * sStimulus.Placetext   - ["two hundred", "thirty", "eight"]
+     * sStimulusDigitString - ["8", "3", "2"]
+     * sStimulusDigitValue  - [8, 3, 2]
+     * sStimulusDigitText   - ["EIGHT", "THREE", "TWO"]
+     *
+     * sStimulusPlaceString - ["8", "30", "200"]
+     * sStimulusPlaceValue  - [8, 30, 200]
+     * sStimulusPlacetext   - ["eight", "thirty", "two hundred"]
      *
      */
     protected void publishStimulus() {
@@ -206,6 +215,15 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
             } catch (Exception e) {
             }
         }
+    }
+
+    @Override
+    public void publishState(int error, int warn) {
+
+        TScope scope = mTutor.getScope();
+
+        scope.addUpdateVar(name() + ".error", new TInteger(error));
+        scope.addUpdateVar(name() + ".warning", new TInteger(warn));
     }
 
 
@@ -314,6 +332,8 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
         else
             mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
     }
+
+
 
 
 

@@ -3,6 +3,7 @@ package cmu.xprize.util;
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
+import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 
 import org.w3c.dom.Text;
@@ -13,7 +14,7 @@ import java.util.Locale;
  * TODO: this should be a singleton
  * TODO: Add stop / pause / restart
  */
-public class TTSsynthesizer implements OnInitListener
+public class TTSsynthesizer extends UtteranceProgressListener implements OnInitListener
 {
     private final Context   context;
     private Locale          mLocale;
@@ -21,7 +22,10 @@ public class TTSsynthesizer implements OnInitListener
     private float           mCurrentRate   = 0;
     private TextToSpeech    tts;
     private boolean         readyToSpeak = false;
-    private IReadyListener tutorRoot;
+    private IReadyListener  tutorRoot;
+
+    private IMediaManager   mMediaManager;
+    private boolean         isSpeaking = false;
 
     static final String FLITE_PACKAGE = "edu.cmu.xprize.flite";
 
@@ -63,6 +67,14 @@ public class TTSsynthesizer implements OnInitListener
         }
 
         tutorRoot.onServiceReady("TTS", readyToSpeak? 1:0);
+    }
+
+
+    /**
+     * Link to the tutor domain media manageer
+     */
+    public void setMediaManager(IMediaManager manager) {
+        mMediaManager = manager;
     }
 
 
@@ -122,7 +134,13 @@ public class TTSsynthesizer implements OnInitListener
 
 
     public void speak(String text) {
+
         if (readyToSpeak) {
+            tts. setOnUtteranceProgressListener(this);
+
+            if(mMediaManager != null)
+                mMediaManager.startSpeaking();
+
             tts.speak(text.toLowerCase(Locale.US), TextToSpeech.QUEUE_FLUSH, null);
         }
     }
@@ -130,21 +148,51 @@ public class TTSsynthesizer implements OnInitListener
 
     public boolean isSpeaking(){
 
-        boolean result = false;
-
         // Can get a dead object here - ignore
         try {
-            result = tts.isSpeaking();
+            isSpeaking = tts.isSpeaking();
+
+            if(!isSpeaking) {
+                isSpeaking = false;
+
+                if(mMediaManager != null)
+                    mMediaManager.stopSpeaking();
+            }
         }
         catch(Exception ex) {
             Log.d(TAG, "Possible Dead Object: " + ex);
+
+            isSpeaking = false;
+
+            if(mMediaManager != null)
+                mMediaManager.stopSpeaking();
         }
 
-        return result;
+        return isSpeaking;
     }
 
 
     public void shutDown(){
         tts.shutdown();
+    }
+
+
+    @Override
+    public void onStart(String utteranceId) {
+        isSpeaking = true;
+    }
+
+    @Override
+    public void onDone(String utteranceId) {
+        isSpeaking = false;
+        if(mMediaManager != null)
+            mMediaManager.stopSpeaking();
+    }
+
+    @Override
+    public void onError(String utteranceId) {
+        isSpeaking = false;
+        if(mMediaManager != null)
+            mMediaManager.stopSpeaking();
     }
 }

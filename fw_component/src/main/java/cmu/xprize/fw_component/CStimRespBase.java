@@ -68,6 +68,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
     protected String[]      _placeValueColor = new String[20];
 
     protected String        _onRecognition;
+    protected String        _onRecognitionError;
 
     protected float         mAspect;           //   = 0.82f w/h
 
@@ -410,6 +411,10 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
 
     public void onRecognitionComplete(String symbol) {
         _onRecognition = symbol;
+    }
+
+    public void onRecognitionError(String symbol) {
+        _onRecognitionError = symbol;
     }
 
 

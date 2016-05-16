@@ -388,6 +388,8 @@ public class CNl_PLRT implements CNl_Processor {
 
                 mResponseNumber = Word2NumFSM.transform(mResponseTextList, _Owner.getLanguageFeature());
 
+                _Owner.publishState(Word2NumFSM.errorCode, Word2NumFSM.warnCode);
+
                 mResponseString = new Long(mResponseNumber).toString();
 
                 Log.d("ASR", "ResponseNumber: " + mResponseNumber);

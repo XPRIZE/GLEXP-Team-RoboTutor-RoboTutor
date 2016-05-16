@@ -29,6 +29,7 @@ import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.graph.type_timeline;
 import cmu.xprize.robotutor.tutorengine.graph.type_timer;
+import cmu.xprize.util.IMediaManager;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.util.TTSsynthesizer;
 import edu.cmu.xprize.listener.ListenerBase;
@@ -47,7 +48,7 @@ import edu.cmu.xprize.listener.ListenerBase;
  *
  *
  */
-public class CMediaManager   {
+public class CMediaManager implements IMediaManager {
 
     private ArrayList<mediaController>      mControllerSet = new ArrayList<mediaController>();
     private HashMap<String, type_timer>     mTimerMap      = new HashMap<String, type_timer>();
@@ -87,6 +88,7 @@ public class CMediaManager   {
     //**************************************************************************
     // ASR management START
 
+    private boolean paused = false;
     /**
      *  Inject the listener into the MediaManageer
      */
@@ -101,6 +103,22 @@ public class CMediaManager   {
         mListener = null;
     }
 
+    private void pauseListener() {
+
+        if(mListener != null && mListener.isListening()) {
+            mListener.setPauseListener(true);
+            paused = true;
+        }
+    }
+
+    private void playListener() {
+
+        if(mListener != null && paused) {
+            mListener.setPauseListener(false);
+            paused = false;
+        }
+    }
+
     // ASR management END
     //**************************************************************************
 
@@ -109,15 +127,25 @@ public class CMediaManager   {
     //**************************************************************************
     // TTS management START
 
-    static public TTSsynthesizer getTTS() {
+    public TTSsynthesizer getTTS() {
 
         return TTS;
     }
 
-    static public void setTTS(TTSsynthesizer _tts) {
+    public void setTTS(TTSsynthesizer _tts) {
 
         TTS = _tts;
+        TTS.setMediaManager(this);
     }
+
+    public void startSpeaking() {
+        pauseListener();
+    }
+
+    public void stopSpeaking() {
+        playListener();
+    }
+
 
     // TTS management END
     //**************************************************************************
@@ -482,6 +510,9 @@ public class CMediaManager   {
                 if(mIsReady) {
                     mPlayer.start();
                     mPlaying = true;
+
+                    // TODO: this will need a tweak for background music etc.
+                    pauseListener();
                 }
                 else
                     mDeferredStart = true;
@@ -497,9 +528,10 @@ public class CMediaManager   {
 
 
         public void pause() {
-            if(mPlaying)
-               mPlayer.pause();
-
+            if(mPlaying) {
+                mPlayer.pause();
+                playListener();
+            }
             mPlaying = false;
         }
 

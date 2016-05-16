@@ -26,6 +26,8 @@ public interface INl_Implementation {
     public void updateOutcomeState(boolean error);
     public void applyEventNode(String nodeName);
 
+    public void publishState(int error, int warn);
+
     public void updateText(String newValue);
     public void onASREvent(int eventType);
 }

@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import cmu.W2N_UnitTest;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
@@ -79,6 +80,8 @@ public class RoboTutor extends Activity implements IReadyListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate: ");
+
+        W2N_UnitTest test = new W2N_UnitTest();
 
         setContentView(R.layout.robo_tutor);
 

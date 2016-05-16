@@ -1,7 +1,6 @@
-package cmu.xprize.common;
+package cmu;
 
 
-import android.app.ExpandableListActivity;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -82,46 +81,51 @@ public class W2N_UnitTest {
 
     static {
 
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("zero")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("one")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("two")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("three")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("four")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("five")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("six")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("seven")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("eight")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("nine")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("zero")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("one")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("two")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("three")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("four")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("five")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("six")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("seven")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("eight")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("nine")));
+//
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("ten")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("twenty")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("thirty")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("forty")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("fifty")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("sixty")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("seventy")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("eighty")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("ninety")));
 
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("ten")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("twenty")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("thirty")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("forty")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("fifty")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("sixty")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("seventy")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("eighty")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("ninety")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("one","hundred")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("two","hundred")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("three","hundred")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("four","hundred")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("five","hundred")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("six","hundred")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("seven","hundred")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("eight","hundred")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("nine","hundred")));
 
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("one","hundred")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("two","hundred")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("three","hundred")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("four","hundred")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("five","hundred")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("six","hundred")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("seven","hundred")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("eight","hundred")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("nine","hundred")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("ninety","three")));
+//        w2ntestEN.add(new ArrayList<>(Arrays.asList("forty","two")));
 
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("ninety","three")));
-        w2ntestEN.add(new ArrayList<>(Arrays.asList("forty","two")));
         w2ntestEN.add(new ArrayList<>(Arrays.asList("one","thousand","two","hundred")));
         w2ntestEN.add(new ArrayList<>(Arrays.asList("error")));
         w2ntestEN.add(new ArrayList<>(Arrays.asList("one","thousand","two","hundred","and","thirteen")));
+        w2ntestEN.add(new ArrayList<>(Arrays.asList("six","thousand","eight","hundred","and","two")));
+        w2ntestEN.add(new ArrayList<>(Arrays.asList("six","thousand","eight","hundred","and")));
+        w2ntestEN.add(new ArrayList<>(Arrays.asList("six","thousand","eight","hundred","two")));
+        w2ntestEN.add(new ArrayList<>(Arrays.asList("six","thousand","ten")));
     }
 
 
-    public  W2N_UnitTest() {
+    public W2N_UnitTest() {
 
         try {
             for (ArrayList<String> elem : w2ntestSW) {
@@ -131,14 +135,17 @@ public class W2N_UnitTest {
             }
 
 
-            for (ArrayList<String> elem : w2ntestSW) {
+            Log.i("W2NTEST", "result: ");
+
+            for (ArrayList<String> elem : w2ntestEN) {
                 long result = Word2NumFSM.transform(elem, "LANG_EN");
 
                 Log.i("W2NTEST", "result: " + result + "\tWarn: " + TCONST.W2N_WARNMSG[Word2NumFSM.warnCode] + "  Error: " + TCONST.W2N_ERRORMSG[Word2NumFSM.errorCode]);
             }
         }
         catch(Exception e) {
-            Log.e("TAG", "ERROR");
+            Log.e("W2N", "Exception: " + e );
+
         }
     }
 

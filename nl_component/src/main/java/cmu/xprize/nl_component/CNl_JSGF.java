@@ -141,6 +141,22 @@ public class CNl_JSGF implements CNl_Processor {
     }
 
 
+    /**
+     * sStimulusString      - "238"
+     * sStimulusValue       - 238
+     * sStimulusText        - "TWO HUNDRED THIRTY EIGHT"
+     *
+     * Note: the lists are in order of increasing place value
+     *
+     * sStimulusDigitString - ["8", "3", "2"]
+     * sStimulusDigitValue  - [8, 3, 2]
+     * sStimulusDigitText   - ["EIGHT", "THREE", "TWO"]
+     *
+     * sStimulusPlaceString - ["8", "30", "200"]
+     * sStimulusPlaceValue  - [8, 30, 200]
+     * sStimulusPlacetext   - ["eight", "thirty", "two hundred"]
+     *
+     */
     @Override
     public void preProcessStimulus(String stimulusString) {
 
@@ -198,25 +214,14 @@ public class CNl_JSGF implements CNl_Processor {
                     // as in 100 and 23
                     //
                     cachedLanguageFeature = _Owner.getLanguageFeature();
-                    conjunction           = TCJSGF.conjMap.get(cachedLanguageFeature);
 
                     // We use the stimiulus as the base string to listen for and
                     // add all the other numbers as distractors
                     //
-                    String[] distractors = (TCONST.numberMap.get(cachedLanguageFeature).split(","));
-
-                    ArrayList<String> combo = new ArrayList<String>();
-
-                    for(String elem : mStimulusComp) {
-                        combo.add(elem.toUpperCase());
-                    }
-
-                    for(String elem : distractors) {
-                        combo.add(elem);
-                    }
+                    String[] numberSet = (TCONST.numberMap.get(cachedLanguageFeature).toUpperCase().split(","));
 
                     mListener.reInitializeListener(true);
-                    mListener.listenFor(combo.toArray(new String[combo.size()]),0);
+                    mListener.listenFor(numberSet, 0);
                     mListener.setPauseListener(false);
                 }
 
@@ -233,13 +238,17 @@ public class CNl_JSGF implements CNl_Processor {
     }
 
 
-
-
     //****************************************************************************
     //*********************  Speech Recognition Interface - Start
 
     @Override
     public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult) {
+
+        String logString = "";
+        for (int i = 0; i < heardWords.length; i++) {
+            logString += heardWords[i].hypWord.toUpperCase() + ":" + heardWords[i].iSentenceWord + " | ";
+        }
+        Log.d("ASR", "New HypSet: "  + logString);
 
     }
 

@@ -48,23 +48,8 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener, I
     protected ListenerBase          mListener;
     protected TTSsynthesizer        mSynthesizer;
 
-    protected String                DATASOURCEPATH;
-    protected String                EXTERNPATH;
-
     protected String                mProcessorType;
     protected CNl_Processor         mInputProcessor;
-
-    protected int                   mResponseNumber;
-    protected String                mResponseText;
-    protected List                  mResponseList;
-    protected ArrayList<String>     mResponseTextList;
-
-    protected static int[]            creditLevel            = null;          // per-word credit level according to current hyp
-    protected boolean                 missingConjTolerant    = true;          // Do you need "AND" between number words
-    protected boolean                 addedConjTolerant      = true;          // English tends to false positive conjunctions (AND)
-    protected boolean                 repeatedWordIntolerant = true;          // Indicate repeated word errors.
-    protected String                  cachedLanguageFeature;
-    protected String                  conjunction;
 
     // Tutor scriptable ASR events
     protected String                  _silenceEvent;          // Instant silence begins
@@ -141,6 +126,12 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener, I
         mSynthesizer = rootTTS;
     }
 
+
+    /**
+     * @Override in Tutor Domain to publish W2N state data
+     */
+    public void publishState(int error, int warn) {
+    }
 
     /**
      * @Override in Tutor Domain to allow the MediaManageer direct access to the recognizer
@@ -317,6 +308,11 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener, I
             case TCONST.RECOGNITION_EVENT:
                 Log.d("ASR", "RECOGNITION EVENT");
                 applyEventNode(_onRecognition);
+                break;
+
+            case TCONST.ERROR_EVENT:
+                Log.d("ASR", "RECOGNITION EVENT");
+                applyEventNode(_onRecognitionError);
                 break;
 
             case TCONST.SILENCE_EVENT:
