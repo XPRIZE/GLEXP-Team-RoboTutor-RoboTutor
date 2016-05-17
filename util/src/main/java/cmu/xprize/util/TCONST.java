@@ -279,10 +279,10 @@ public class TCONST {
     public static final String PLRT             = "PLRT";
     public static final String JSGF             = "JSGF";
 
-    public static final String DIGIT_STRING_VAR = "DigitString";
-    public static final String PLACE_STRING_VAR = "PlaceString";
-    public static final String DIGIT_TEXT_VAR   = "DigitText";
-    public static final String PLACE_TEXT_VAR   = "PlaceText";
+    public static final String DIGIT_STRING_VAR = ".digitString";
+    public static final String PLACE_STRING_VAR = ".placeString";
+    public static final String DIGIT_TEXT_VAR   = ".digitText";
+    public static final String PLACE_TEXT_VAR   = ".placeText";
 
 
     // Generic error codes

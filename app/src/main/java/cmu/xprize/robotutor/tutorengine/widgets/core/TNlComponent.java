@@ -204,7 +204,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
             // to access the state variables from scripts
             //
             try {
-                if(!scope.containsSymbol("sStimulus.DigitString")) {
+                if(!scope.containsSymbol(name() + TCONST.DIGIT_STRING_VAR)) {
 
                     scope.addUpdateVar(name() + TCONST.DIGIT_STRING_VAR, new type_array(this, TCONST.DIGIT_STRING_VAR));
                     scope.addUpdateVar(name() + TCONST.PLACE_STRING_VAR, new type_array(this, TCONST.PLACE_STRING_VAR));

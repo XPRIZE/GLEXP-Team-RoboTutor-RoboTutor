@@ -9,7 +9,8 @@ android:background="#FFF">
 
 <ImageView
     android:id="@+id/SpageImage"
-    android:scaleType="centerInside"
+    android:scaleType="fitCenter"
+    android:layout_margin="30dp"
     app:layout_widthPercent="50%"
     android:layout_gravity="left"
     android:layout_width="match_parent"

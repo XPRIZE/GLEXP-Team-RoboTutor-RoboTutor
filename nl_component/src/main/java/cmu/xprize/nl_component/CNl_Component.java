@@ -161,19 +161,19 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener, I
 
 
     /**
-     * sStimulusString      - "238"
-     * sStimulusValue       - 238
-     * sStimulusText        - "TWO HUNDRED THIRTY EIGHT"
+     * sStimulus.String      - "238"
+     * sStimulus.Value       - 238
+     * sStimulus.Text        - "TWO HUNDRED THIRTY EIGHT"
      *
      * Note: the lists are in order of increasing place value
      *
-     * sStimulusDigitString - ["8", "3", "2"]
-     * sStimulusDigitValue  - [8, 3, 2]
-     * sStimulusDigitText   - ["EIGHT", "THREE", "TWO"]
+     * sStimulus.DigitString - ["8", "3", "2"]
+     * sStimulus.DigitValue  - [8, 3, 2]
+     * sStimulus.DigitText   - ["EIGHT", "THREE", "TWO"]
      *
-     * sStimulusPlaceString - ["8", "30", "200"]
-     * sStimulusPlaceValue  - [8, 30, 200]
-     * sStimulusPlacetext   - ["eight", "thirty", "two hundred"]
+     * sStimulus.PlaceString - ["8", "30", "200"]
+     * sStimulus.PlaceValue  - [8, 30, 200]
+     * sStimulus.Placetext   - ["eight", "thirty", "two hundred"]
      *
      */
     @Override
