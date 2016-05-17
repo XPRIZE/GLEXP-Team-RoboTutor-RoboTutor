@@ -13,6 +13,7 @@ import android.widget.TextView;
 public class CMn_Text extends TextView {
 
     private Paint borderPaint;
+
     private int _eyeStrokeColor = 0xDDFFFFFF;
     private int _eyeStrokeWidth = 2;
 
@@ -98,7 +99,7 @@ public class CMn_Text extends TextView {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
 
         if(changed) {
-            setTextSize(mHeight * 0.5f);
+            setTextSize(mHeight * 0.3f);
             setTypeface(getTypeface(), Typeface.BOLD);
         }
 

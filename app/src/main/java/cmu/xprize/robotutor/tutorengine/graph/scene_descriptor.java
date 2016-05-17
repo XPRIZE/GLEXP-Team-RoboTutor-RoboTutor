@@ -77,7 +77,12 @@ public class scene_descriptor implements ILoadableObject2 {
 
         _scope = (TScope)scope;
 
-        JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
+        try {
+            JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
+        }
+        catch(Exception e) {
+            Log.i(TAG, "Scene Load Failed: " + e);
+        }
     }
 
     @Override

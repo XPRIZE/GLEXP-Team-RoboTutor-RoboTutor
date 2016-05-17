@@ -84,4 +84,13 @@ public class TChar extends TVarBase implements ILoadableObject2, IScriptable2 {
         }
     }
 
+    @Override
+    public String resolve(int index) {
+        return null;
+    }
+
+    @Override
+    public int getIntValue() {
+        return 0;
+    }
 }

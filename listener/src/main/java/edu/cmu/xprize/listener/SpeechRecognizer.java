@@ -401,6 +401,23 @@ public class SpeechRecognizer {
 
 
     /**
+     * Access the listener active state
+     *
+     * @return
+     */
+    public synchronized boolean isListening() {
+
+        boolean _listening = false;
+
+        if(isRunningRecognizer && !isPausedRecognizer) {
+            _listening = true;
+        }
+
+        return _listening;
+    }
+
+
+    /**
      *
      */
     private final class RecognizerThread extends Thread {

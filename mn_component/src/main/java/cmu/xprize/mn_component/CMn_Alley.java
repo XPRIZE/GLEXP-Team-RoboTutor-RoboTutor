@@ -11,6 +11,9 @@ import cmu.xprize.util.View_Helper;
 
 public class CMn_Alley extends android.support.percent.PercentRelativeLayout {
 
+    private IValueListener _owner;
+    private boolean        _isMissingNumber;
+
     private Button      Splus;
     private Button      Sminus;
     private CMn_IconSet SiconSet;
@@ -24,6 +27,12 @@ public class CMn_Alley extends android.support.percent.PercentRelativeLayout {
 
     public CMn_Alley(Context context) {
         super(context);
+        init(context, null);
+    }
+
+    public CMn_Alley(Context context, IValueListener owner) {
+        super(context);
+        _owner = owner;     // callback target for value updates
         init(context, null);
     }
 
@@ -46,18 +55,23 @@ public class CMn_Alley extends android.support.percent.PercentRelativeLayout {
         SiconSet = (CMn_IconSet) View_Helper.getViewById(R.id.SiconSet, this);
         Snumber  = (CMn_Text) View_Helper.getViewById(R.id.Snumber, this);
 
+        // When plus or minus are pressed we also allow the component to perform any top level
+        // behaviors defined in scripts
+        //
         Splus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (mCurValue < mMaxValue) {
                     updateValue(mCurValue + 1, true);
+                    _owner.performClick();
                 }
             }
         });
 
         Sminus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (mCurValue > 1) {
+                if (mCurValue > 0) {
                     updateValue(mCurValue - 1, true);
+                    _owner.performClick();
                 }
             }
         });
@@ -69,12 +83,17 @@ public class CMn_Alley extends android.support.percent.PercentRelativeLayout {
 
         Snumber.setText(String.valueOf(newValue));
         SiconSet.setIconCount(newValue, invalidate);
+
+        if(_isMissingNumber)
+            _owner.UpdateValue(newValue);
     }
 
 
     public void setData(CMn_Data data, int index, int mnIndex) {
 
-        int visible = (index == mnIndex)? View.VISIBLE: View.INVISIBLE;
+        _isMissingNumber = (index == mnIndex)? true:false;
+
+        int visible = (_isMissingNumber)? View.VISIBLE: View.INVISIBLE;
 
         mMaxValue = data.maxvalue;
 
@@ -83,10 +102,10 @@ public class CMn_Alley extends android.support.percent.PercentRelativeLayout {
         SiconSet.setMaxIcons(mMaxValue);
 
         if(visible == View.INVISIBLE) {
-            updateValue(data.dataset[index], false);
+            updateValue(data.dataset[index], true);
         }
         else {
-            updateValue(0, false);
+            updateValue(0, true);
         }
 
     }

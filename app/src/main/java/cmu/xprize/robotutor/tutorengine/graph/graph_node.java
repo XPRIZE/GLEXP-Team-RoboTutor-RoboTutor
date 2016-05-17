@@ -160,6 +160,7 @@ public class graph_node implements ILoadableObject2, IScriptable2 {
             try {
                 IScriptable2 node = (IScriptable2)getScope().mapSymbol(nodeName);
 
+                node.preEnter();
                 node.applyNode();
 
             } catch (Exception e) {
@@ -247,6 +248,16 @@ public class graph_node implements ILoadableObject2, IScriptable2 {
     @Override
     public TBoolean NEQ(IScriptable2 RHS) {
         return null;
+    }
+
+    @Override
+    public String resolve(int index) {
+        return null;
+    }
+
+    @Override
+    public int getIntValue() {
+        return 0;
     }
 
     @Override

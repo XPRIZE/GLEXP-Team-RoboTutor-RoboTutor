@@ -58,8 +58,26 @@ public class graph_module extends graph_node implements ILoadableObject2 {
     @Override
     public void preEnter()
     {
-        resetNode();
         super.preEnter();
+    }
+
+
+    /**
+     * If we have exhausted the node check if it can be reused - if so reinitialize it for
+     * the next time it is called.
+     *
+     */
+    @Override
+    public void resetNode() {
+
+        if(_ndx >= tracks.length)
+        {
+            if(reuse) {
+                _ndx         = 0;
+                _moduleState = TCONST.READY;
+            }
+        }
+
     }
 
 
@@ -92,6 +110,10 @@ public class graph_module extends graph_node implements ILoadableObject2 {
 
         String         features;
         boolean        featurePass = false;
+
+        // If the node is completed and reusable then reset
+        //
+        resetNode();
 
         // If new scene has features, check that it is being used in the current tutor feature set
         // Note: You must ensure that there is a match for the last scene in the sequence
@@ -144,8 +166,6 @@ public class graph_module extends graph_node implements ILoadableObject2 {
                     _nextAction.preEnter();
 
                     _moduleState = _nextAction.applyNode();
-
-                    break;		// leave the loop
                 }
                 else {
                     Log.i(TAG, "Feature Test Failed: ");
@@ -161,25 +181,6 @@ public class graph_module extends graph_node implements ILoadableObject2 {
 
 
         return _moduleState;
-    }
-
-
-    /**
-     * If we have exhausted the node check if it can be reused - if so reinitialize it for
-     * the next time it is called.
-     *
-    */
-    @Override
-    public void resetNode() {
-
-        if(_ndx >= tracks.length)
-        {
-            if(reuse) {
-                _ndx         = 0;
-                _moduleState = TCONST.READY;
-            }
-        }
-
     }
 
 

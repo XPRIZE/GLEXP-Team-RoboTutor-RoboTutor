@@ -33,4 +33,7 @@ public interface IScriptable2 extends IScriptable {
     public TBoolean EQ(IScriptable2 RHS);
     public TBoolean NEQ(IScriptable2 RHS);
 
+    public String resolve(int index);
+    public int getIntValue();
+
 }

@@ -29,6 +29,7 @@ import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.graph.type_timeline;
 import cmu.xprize.robotutor.tutorengine.graph.type_timer;
+import cmu.xprize.util.IMediaManager;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.util.TTSsynthesizer;
 import edu.cmu.xprize.listener.ListenerBase;
@@ -47,11 +48,12 @@ import edu.cmu.xprize.listener.ListenerBase;
  *
  *
  */
-public class CMediaManager   {
+public class CMediaManager implements IMediaManager {
 
     private ArrayList<mediaController>      mControllerSet = new ArrayList<mediaController>();
     private HashMap<String, type_timer>     mTimerMap      = new HashMap<String, type_timer>();
     private HashMap<String, type_timeline>  mTimeLineMap   = new HashMap<String, type_timeline>();
+    private HashMap<CTutor, HashMap>        mMediaPackage  = new HashMap<>();
 
     private AssetManager                    mAssetManager;
     private ListenerBase                    mListener;
@@ -86,6 +88,7 @@ public class CMediaManager   {
     //**************************************************************************
     // ASR management START
 
+    private boolean paused = false;
     /**
      *  Inject the listener into the MediaManageer
      */
@@ -100,6 +103,22 @@ public class CMediaManager   {
         mListener = null;
     }
 
+    private void pauseListener() {
+
+        if(mListener != null && mListener.isListening()) {
+            mListener.setPauseListener(true);
+            paused = true;
+        }
+    }
+
+    private void playListener() {
+
+        if(mListener != null && paused) {
+            mListener.setPauseListener(false);
+            paused = false;
+        }
+    }
+
     // ASR management END
     //**************************************************************************
 
@@ -108,15 +127,25 @@ public class CMediaManager   {
     //**************************************************************************
     // TTS management START
 
-    static public TTSsynthesizer getTTS() {
+    public TTSsynthesizer getTTS() {
 
         return TTS;
     }
 
-    static public void setTTS(TTSsynthesizer _tts) {
+    public void setTTS(TTSsynthesizer _tts) {
 
         TTS = _tts;
+        TTS.setMediaManager(this);
     }
+
+    public void startSpeaking() {
+        pauseListener();
+    }
+
+    public void stopSpeaking() {
+        playListener();
+    }
+
 
     // TTS management END
     //**************************************************************************
@@ -142,6 +171,64 @@ public class CMediaManager   {
 
         tTutor.updateLanguageFeature(langFtr);
     }
+
+    public void setMediaPackage(CTutor tTutor, HashMap soundMap) {
+
+        mMediaPackage.put(tTutor, soundMap);
+    }
+
+
+    public String mapMediaPackage(CTutor tTutor, String packageName, String langOverride) {
+
+        HashMap<String,CMediaPackage> soundMap;
+        CMediaPackage   mediaPack;
+        String          autoLang;
+        String          soundPackage;
+
+        if(langOverride != null) {
+            autoLang = mapLanguage(langOverride);
+        }
+        else {
+            autoLang = getLanguage(tTutor);
+        }
+
+        try {
+            // If the tutor is configured for mediapackages in the tutor_descriptor
+            //
+            soundMap = mMediaPackage.get(tTutor);
+
+            if (soundMap != null) {
+
+                // If the user didn't define a sound package use the default
+                //
+                if (packageName == null)
+                    packageName = TCONST.DEFAULT_SOUND_PACKAGE;
+
+                mediaPack = soundMap.get(packageName);
+
+                switch (mediaPack.language) {
+                    case TCONST.LANG_AUTO:
+                        // Do nothing - Use the standard autoLang
+                        break;
+
+                    default:
+                        autoLang = mapLanguage(langOverride);
+                        break;
+                }
+
+                soundPackage = autoLang + "/" + mediaPack.path;
+
+            } else {
+                soundPackage = autoLang;
+            }
+        }
+        catch(Exception e) {
+            soundPackage = autoLang;
+        }
+
+        return soundPackage;
+    }
+
 
     static public String mapLanguage(String _language) {
 
@@ -423,6 +510,9 @@ public class CMediaManager   {
                 if(mIsReady) {
                     mPlayer.start();
                     mPlaying = true;
+
+                    // TODO: this will need a tweak for background music etc.
+                    pauseListener();
                 }
                 else
                     mDeferredStart = true;
@@ -438,9 +528,10 @@ public class CMediaManager   {
 
 
         public void pause() {
-            if(mPlaying)
-               mPlayer.pause();
-
+            if(mPlaying) {
+                mPlayer.pause();
+                playListener();
+            }
             mPlaying = false;
         }
 
