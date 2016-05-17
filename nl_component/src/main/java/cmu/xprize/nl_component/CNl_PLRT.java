@@ -142,7 +142,7 @@ public class CNl_PLRT implements CNl_Processor {
             System.exit(1);
         }
 
-        return null;
+        return result;
     }
 
 

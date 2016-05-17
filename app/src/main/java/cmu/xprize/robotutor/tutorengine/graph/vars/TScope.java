@@ -258,11 +258,6 @@ public class TScope implements IScope2 {
                                         }
 
                                         result.append(resultObj.toString());
-
-                                        // switch back to parsing string
-                                        _i1++;
-                                        state = TCONST.PARSESTATE;
-                                        Log.i(TAG, "Symbol Found: " + Symbol);
                                     }
 
                                     // If it is an array the arrayObj is a type_array object that resolves
@@ -283,6 +278,11 @@ public class TScope implements IScope2 {
 
                                         result.append(arrayObj.resolve(index));
                                     }
+
+                                    // switch back to parsing string
+                                    _i1++;
+                                    state = TCONST.PARSESTATE;
+                                    Log.i(TAG, "Symbol Found: " + Symbol);
                                 }
                                 break;
 
