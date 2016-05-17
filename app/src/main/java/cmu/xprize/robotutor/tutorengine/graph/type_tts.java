@@ -99,7 +99,9 @@ public class type_tts extends type_action {
         setRate();
         setLanguage();
 
-        mSynthesizer.speak(content);
+        String speechResolved = getScope().resolveTemplate(content);
+
+        mSynthesizer.speak(speechResolved);
 
         while (mSynthesizer.isSpeaking()) {
             try {
