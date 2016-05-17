@@ -21,6 +21,7 @@ package cmu.xprize.fw_component;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
@@ -239,6 +240,8 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
 
         SpannableStringBuilder str = new SpannableStringBuilder(mValue);
 
+        int color;
+
         try {
             for (int i1 = 1; i1 < mValue.length() + 1 ; i1++) {
 
@@ -246,8 +249,15 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
 
                     int place = (mValue.length() - i1);
 
+                    if(colorMap.containsKey(_placeValueColor[i1])) {
+                        color = colorMap.get(_placeValueColor[i1]);
+                    }
+                    else {
+                        color = Color.parseColor(_placeValueColor[i1]);
+                    }
+
                     str.setSpan(
-                            new ForegroundColorSpan(colorMap.get(_placeValueColor[i1])),
+                            new ForegroundColorSpan(color),
                             place,
                             place + 1,
                             SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE
