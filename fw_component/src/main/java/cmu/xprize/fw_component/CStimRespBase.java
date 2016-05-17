@@ -249,7 +249,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
 
                     int place = (mValue.length() - i1);
 
-                    if(_placeValueColor[i1].startsWith("normal")) {
+                    if(colorMap.containsKey(_placeValueColor[i1])) {
                         color = colorMap.get(_placeValueColor[i1]);
                     }
                     else {
