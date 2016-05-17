@@ -47,7 +47,7 @@
           "type":"node",
           "maptype":"moduleMap",
           "mapname": "LISTENING",
-          "preenter":["LISTENER_ENABLE","HESTITATION_TIMER","SET_WORD_EVENT"],
+          "preenter":["LISTENER_ENABLE","HESTITATION_TIMER"],//"SET_WORD_EVENT"
           "preexit" :["LISTENER_DISABLE"],
           "edges":
           [
@@ -219,7 +219,7 @@
           "tracks": [
             //{"type": "TTS", "command": "SAY", "content": "Tafadhali kuzungumza idadi sauti", "rate":"1.2", "features": "LANG_SW"},
             //{"type": "TTS", "command": "SAY", "content": "Please speak the number aloud", "features": "LANG_EN"}
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "What is this number.mp3","mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "What is this number.mp3","mode":"stream", "features": ""}
             //{"type": "AUDIO", "command": "PLAY", "soundsource": "Please say this number aloud.mp3","mode":"flow", "features": ""}
           ]
         },
@@ -245,14 +245,13 @@
             {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Huh.mp3","mode":"flow", "features": ""},
             //{"type": "AUDIO", "command": "PLAY", "soundsource": "This.mp3","mode":"flow", "features": ""},
-            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "2:Integer|wrong:String","features":""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "2:Integer|right:String","features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitString[1]}}.mp3","mode":"flow", "features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "means.mp3","mode":"flow", "features": ""},
             //place value for tens
             {"type": "TTS", "command": "SAY", "content": "{{Sstimulus.placeText[1]}}", "rate":"1.2", "features": "LANG_SW"},
             {"type": "TTS", "command": "SAY", "content": "{{Sstimulus.placeText[1]}}", "features": "LANG_EN"},
-            //{"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "2:Integer|right:String","features":""},
-            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "1:Integer|wrong:String","features":""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "1:Integer|right:String","features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitString[0]}}.mp3","mode":"flow", "features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "means.mp3","mode":"flow", "features": ""},
             //{"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "1:Integer|right:String","features":""},
