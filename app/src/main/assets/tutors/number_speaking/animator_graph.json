@@ -199,16 +199,9 @@
           "COMMENT": "TBD",
           "tracks": [
             {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "right:String","features":""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","mode":"flow", "features": ""}
-          ]
-        },
-
-        "SETPLACEVALUE":{
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "2:Integer|wrong:String","features":""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Yes.mp3","mode":"flow", "features": ""},
+            {"type": "TTS", "command": "SAY", "content": "{{Sstimulus.text}}", "rate":"1.2", "features": "LANG_SW"},
+            {"type": "TTS", "command": "SAY", "content": "{{Sstimulus.text}}", "features": "LANG_EN"}
           ]
         },
 
@@ -245,19 +238,21 @@
             {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Huh.mp3","mode":"flow", "features": ""},
             //{"type": "AUDIO", "command": "PLAY", "soundsource": "This.mp3","mode":"flow", "features": ""},
-            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "2:Integer|right:String","features":""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "2:Integer|yellow:String","features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitString[1]}}.mp3","mode":"flow", "features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "means.mp3","mode":"flow", "features": ""},
             //place value for tens
             {"type": "TTS", "command": "SAY", "content": "{{Sstimulus.placeText[1]}}", "rate":"1.2", "features": "LANG_SW"},
             {"type": "TTS", "command": "SAY", "content": "{{Sstimulus.placeText[1]}}", "features": "LANG_EN"},
-            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "1:Integer|right:String","features":""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "2:Integer|normal:String","features":""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "1:Integer|yellow:String","features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitString[0]}}.mp3","mode":"flow", "features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "means.mp3","mode":"flow", "features": ""},
             //{"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "1:Integer|right:String","features":""},
             //place value for ones
             {"type": "TTS", "command": "SAY", "content": "{{Sstimulus.placeText[0]}}", "rate":"1.2", "features": "LANG_SW"},
             {"type": "TTS", "command": "SAY", "content": "{{Sstimulus.placeText[0]}}", "features": "LANG_EN"},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "1:Integer|normal:String","features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "So this number is.mp3","mode":"flow", "features": ""},
             {"type": "TTS", "command": "SAY", "content": "{{Sstimulus.text}}", "rate":"1.2", "features": "LANG_SW"},
             {"type": "TTS", "command": "SAY", "content": "{{Sstimulus.text}}", "features": "LANG_EN"},
@@ -271,6 +266,33 @@
           "COMMENT": "TBD",
           "tracks": [
             {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Huh.mp3","mode":"flow", "features": ""},
+            //{"type": "AUDIO", "command": "PLAY", "soundsource": "This.mp3","mode":"flow", "features": ""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "3:Integer|yellow:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitString[2]}}.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "means.mp3","mode":"flow", "features": ""},
+            //place value for hundreds
+            {"type": "TTS", "command": "SAY", "content": "{{Sstimulus.placeText[2]}}", "rate":"1.2", "features": "LANG_SW"},
+            {"type": "TTS", "command": "SAY", "content": "{{Sstimulus.placeText[2]}}", "features": "LANG_EN"},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "3:Integer|normal:String","features":""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "2:Integer|yellow:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitString[1]}}.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "means.mp3","mode":"flow", "features": ""},
+            //place value for tens
+            {"type": "TTS", "command": "SAY", "content": "{{Sstimulus.placeText[1]}}", "rate":"1.2", "features": "LANG_SW"},
+            {"type": "TTS", "command": "SAY", "content": "{{Sstimulus.placeText[1]}}", "features": "LANG_EN"},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "2:Integer|normal:String","features":""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "1:Integer|yellow:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitString[0]}}.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "means.mp3","mode":"flow", "features": ""},
+            //{"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "1:Integer|right:String","features":""},
+            //place value for ones
+            {"type": "TTS", "command": "SAY", "content": "{{Sstimulus.placeText[0]}}", "rate":"1.2", "features": "LANG_SW"},
+            {"type": "TTS", "command": "SAY", "content": "{{Sstimulus.placeText[0]}}", "features": "LANG_EN"},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "1:Integer|normal:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "So this number is.mp3","mode":"flow", "features": ""},
+            {"type": "TTS", "command": "SAY", "content": "{{Sstimulus.text}}", "rate":"1.2", "features": "LANG_SW"},
+            {"type": "TTS", "command": "SAY", "content": "{{Sstimulus.text}}", "features": "LANG_EN"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
           ]
         },
@@ -315,7 +337,7 @@
         "SET_WORD_EVENT":   {"type": "COMMAND", "id":"Sresponse", "method":"configureEvent", "parms": "WORD_EVENT:String|HESTITATION_RESET:String", "features": "" },
         "RESET_WORD_EVENT": {"type": "COMMAND", "id":"Sresponse", "method":"clearEvent",     "parms": "WORD_EVENT:String",                          "features": "" },
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[23,19,2,3,4]:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[1,25,123]:String","features":""},
 
         "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HESITATION_TRACK", "features": "" },
 
