@@ -348,14 +348,17 @@ public class CMediaManager implements IMediaManager {
 
             controller = oldest;
 
-            // If we are repurposing an old controller then we need to release it and
+            // If we are re-purposing an old controller then we need to release it and
             // reset its dataSource.
             //
             if(controller != null) {
+
                 Log.i(TAG, "Re-purpose an existing MediaController");
 
                 controller.releasePlayer();
-                controller.createPlayer(dataSource);
+
+                controller.attach(owner);               // Need to reattach to a new owner
+                controller.createPlayer(dataSource);    // Update the datasource
             }
         }
 
@@ -601,7 +604,13 @@ public class CMediaManager implements IMediaManager {
 
             // Allow the owning node to do type specific processing of completion event.
             //
-            mOwner.onCompletion();
+            if(mOwner != null)
+                mOwner.onCompletion();
+            else {
+                Log.e(TAG, "invalid Owner");
+                System.exit(1);
+            }
+
         }
     }
 

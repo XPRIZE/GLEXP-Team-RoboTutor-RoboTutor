@@ -32,6 +32,7 @@ import java.util.Map;
 
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.TCONST;
 
 
@@ -133,8 +134,7 @@ public class type_action extends graph_node {
                         CTutorEngine.launch(intent, intentData, features);
                     }
                     catch(Exception e) {
-                        Log.e(TAG, "Launch Command Invalid: " + e);
-                        System.exit(1);
+                        CErrorManager.exit(TAG, "Launch Command Invalid: ", e, false);
                     }
                     break;
 
@@ -225,9 +225,7 @@ public class type_action extends graph_node {
 
                             } catch (Exception e) {
                                 // TODO: Update this exception -  it is actually an invalid parm type error
-                                e.printStackTrace();
-                                Log.e(TAG, "ERROR: " + id + " - Method: <" + method + "> Not Found: " + e);
-                                System.exit(1);
+                                CErrorManager.exit(TAG, "ERROR: " + id + " - Method: <" + method + "> Not Found: ", e, false);
                             }
                         }
                     }
@@ -244,9 +242,7 @@ public class type_action extends graph_node {
                         _method.invoke(childMap.get(id), iparms);
 
                     } catch(Exception e) {
-                        e.printStackTrace();
-                        Log.e(TAG, "ERROR: "+ id + " - Apply Method: " + method + "   Parms: "+ parms + " : " + e);
-                        System.exit(1);
+                        CErrorManager.exit(TAG, "ERROR: "+ id + " - Apply Method: " + method + "   Parms: "+ parms + " : ", e, false);
                     }
                     break;
             }

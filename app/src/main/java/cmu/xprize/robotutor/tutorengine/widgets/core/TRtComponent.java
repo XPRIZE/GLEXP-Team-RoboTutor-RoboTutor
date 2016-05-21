@@ -21,9 +21,6 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
-
-import org.json.JSONObject;
 
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CTutor;
@@ -34,15 +31,13 @@ import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.rt_component.CRt_Component;
-import cmu.xprize.rt_component.ICRt_ViewManager;
-import cmu.xprize.util.JSON_Helper;
+import cmu.xprize.rt_component.IRtComponent;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
 
-public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
+public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRtComponent {
 
     private CTutor           mTutor;
     private CObjectDelegate  mSceneObject;
@@ -61,9 +56,6 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
         super(context, attrs);
     }
 
-    public TRtComponent(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
 
     @Override
     public void init(Context context, AttributeSet attrs) {
@@ -83,32 +75,21 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
         prepareListener(mMediaManager.getTTS());
     }
 
+
     @Override
     public void onDestroy() {
         mSceneObject.onDestroy();
     }
 
 
+    @Override
+    public void publishValue(String varName, String value) {
 
-    public void publishTargetWord(String word) {
-        // update the response variable  "<SreadingComp>.nextword"
-        mTutor.getScope().addUpdateVar(name() + ".nextword", new TString(word));
-
-    }
-
-
-    public void publishTargetWordIndex(int index) {
-        // update the response variable  "<SreadingComp>.nextword"
-        mTutor.getScope().addUpdateVar(name() + ".wordindex", new TInteger(index));
+        // update the response variable  "<ComponentName>.<varName>"
+        mTutor.getScope().addUpdateVar(name() + varName, new TString(value));
 
     }
 
-
-    public void publishTargetSentence(String sentence) {
-        // update the response variable  "<SreadingComp>.sentence"
-        mTutor.getScope().addUpdateVar(name() + ".sentence", new TString(sentence));
-
-    }
 
     /**
      *  Inject the listener into the MediaManageer
@@ -118,6 +99,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
         mMediaManager.setListener(listener);
     }
 
+
     /**
      *  Remove the listener from the MediaManageer
      */
@@ -125,6 +107,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
     public void removeListener(ListenerBase listener) {
         mMediaManager.removeListener(listener);
     }
+
 
 
     //**********************************************************
@@ -142,78 +125,18 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
         // At the moment
         // The data source is the language specific story index file.
         //
-        setDataSource( TCONST.SOURCEFILE + TCONST.STORYINDEX);
+        super.setDataSource( TCONST.SOURCEFILE + TCONST.STORYINDEX, mTutor.getTutorName());
     }
 
 
     /**
-     * @param dataSource
-     */
-    public void setDataSource(String dataSource) {
-
-        try {
-            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
-                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
-
-                DATASOURCEPATH = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + mLanguage + "/";
-
-                String jsonData = JSON_Helper.cacheData(DATASOURCEPATH + dataSource);
-                loadJSON(new JSONObject(jsonData), null);
-
-            } else if (dataSource.startsWith("db|")) {
-
-
-            } else if (dataSource.startsWith("{")) {
-
-                loadJSON(new JSONObject(dataSource), null);
-
-            } else {
-                throw (new Exception("BadDataSource"));
-            }
-        }
-        catch (Exception e) {
-            Log.e(TAG, "Invalid Data Source for : " + name());
-            System.exit(1);
-        }
-    }
-
-
-    /**
+     * Defer to the base-class
+     *
      * @param storyName
      */
     public void setStory(String storyName) {
 
-        for(int i1 = 0 ; i1 < dataSource.length ; i1++ ) {
-
-            if(storyName.equals(dataSource[i1].story)) {
-
-                // Generate a cached path to the story asset data
-                //
-                EXTERNPATH =DATASOURCEPATH + dataSource[i1].folder + "/";
-
-                Class<?> storyClass = viewClassMap.get(dataSource[i1].viewtype);
-
-                try {
-                    // Generate the View manager for the story -
-                    //
-                    mViewManager = (ICRt_ViewManager)storyClass.getConstructor(new Class[]{CRt_Component.class, ListenerBase.class}).newInstance(this,mListener);
-                    mViewManager.setPublishListener(this);
-
-                    String jsonData = JSON_Helper.cacheData(EXTERNPATH + TCONST.STORYDATA);
-
-                    mViewManager.loadJSON(new JSONObject(jsonData), null);
-
-                } catch (Exception e) {
-                    // TODO: Manage Exceptions
-                    e.printStackTrace();
-                    Log.e(TAG, "Story Parse Error: " + e);
-                    System.exit(1);
-                }
-
-                // we're done
-                break;
-            }
-        }
+        super.setStory(storyName);
     }
 
 
@@ -244,6 +167,88 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
 
         mTutor.setDelFeature("FTR_RIGHT");
         mTutor.setDelFeature("FTR_WRONG");
+    }
+
+
+    @Override
+    public void zoomInOut(Float scale, Long duration) {
+        mSceneObject.zoomInOut(scale, duration);
+    }
+
+    @Override
+    public void setAlpha(Float alpha) {
+        mSceneObject.setAlpha(alpha);
+    }
+
+    @Override
+    public void seekToPage(int pageIndex) {
+        mViewManager.seekToPage(pageIndex);
+    }
+
+    @Override
+    public void nextPage() {
+        mViewManager.nextPage();
+    }
+
+    @Override
+    public void prevPage() {
+        mViewManager.prevPage();
+    }
+
+    @Override
+    public void seekToParagraph(int paraIndex) {
+        mViewManager.seekToParagraph(paraIndex);
+    }
+
+    @Override
+    public void nextPara() {
+        mViewManager.nextPara();
+    }
+
+    @Override
+    public void prevPara() {
+        mViewManager.prevPara();
+
+    }
+
+    @Override
+    public void seekToLine(int lineIndex) {
+        mViewManager.seekToLine(lineIndex);
+    }
+
+    @Override
+    public void nextLine() {
+        mViewManager.nextLine();
+    }
+
+    @Override
+    public void prevLine() {
+        mViewManager.prevLine();
+    }
+
+    @Override
+    public void seekToWord(int wordIndex) {
+        mViewManager.seekToWord(wordIndex);
+    }
+
+    @Override
+    public void nextWord() {
+        mViewManager.nextWord();
+    }
+
+    @Override
+    public void prevWord() {
+        mViewManager.prevWord();
+    }
+
+    @Override
+    public void setHighLight(String highlight) {
+        mViewManager.setHighLight(highlight);
+    }
+
+    @Override
+    public boolean endOfData() {
+        return mViewManager.endOfData();
     }
 
 
@@ -318,13 +323,4 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl {
         return mSceneObject;
     }
 
-    @Override
-    public void zoomInOut(Float scale, Long duration) {
-        mSceneObject.zoomInOut(scale, duration);
-    }
-
-    @Override
-    public void setAlpha(Float alpha) {
-        mSceneObject.setAlpha(alpha);
-    }
 }

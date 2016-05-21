@@ -27,6 +27,7 @@ import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TFloat;
@@ -191,6 +192,13 @@ public class type_cond extends type_action implements ILoadableObject2 {
                                 state = TCONST.ENDSUBEXPR;
                                 break;
 
+                            case '\'':
+                                // parse string expression
+                                _i1++;
+                                state = TCONST.PARSESTRING;
+                                break;
+
+
                             case '(':
                                 // parse subexpression
                                 _i1++;
@@ -325,6 +333,26 @@ public class type_cond extends type_action implements ILoadableObject2 {
                                     state = TCONST.PARSEIDENT;
                                 }
 
+                        }
+                        break;
+
+                    case TCONST.PARSESTRING:
+                        tChar = parseStr.charAt(_i1);
+
+                        switch (tChar) {
+                            case '\'':
+                                // parse string expression
+                                _i1++;
+                                resultObj = new TString(Symbol.toString());
+
+                                state = TCONST.BUILDEXPR;
+                                Log.i(TAG, "String Literal Found: " + Symbol);
+                                break;
+
+                            default:
+                                _i1++;
+                                Symbol.append(tChar);
+                                break;
                         }
                         break;
 

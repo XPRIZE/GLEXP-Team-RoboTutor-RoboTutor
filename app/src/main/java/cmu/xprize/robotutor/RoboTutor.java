@@ -38,6 +38,7 @@ import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorManager;
 import cmu.xprize.robotutor.tutorengine.widgets.core.TTextView;
+import cmu.xprize.util.CErrorDialog;
 import cmu.xprize.util.CPreferenceCache;
 import cmu.xprize.util.IReadyListener;
 import cmu.xprize.util.ProgressLoading;
@@ -81,7 +82,7 @@ public class RoboTutor extends Activity implements IReadyListener {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate: ");
 
-        W2N_UnitTest test = new W2N_UnitTest();
+        //W2N_UnitTest test = new W2N_UnitTest();
 
         setContentView(R.layout.robo_tutor);
 
@@ -106,8 +107,6 @@ public class RoboTutor extends Activity implements IReadyListener {
 
         super.onDestroy();
         Log.i(TAG, "onDestroy: ");
-
-
     }
 
 

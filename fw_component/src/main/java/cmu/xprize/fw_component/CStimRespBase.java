@@ -275,7 +275,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
 
 
     /**
-     * Ths Stimulus variant of the control broadcasts its value to the response which is the
+     * Ths Stimulus variant of the control broadcasts its value to the response variant
      *
      * @param newValue
      */
