@@ -21,12 +21,12 @@ package cmu.xprize.rt_component;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ViewAnimator;
 
 import org.json.JSONObject;
 
@@ -47,7 +47,7 @@ import edu.cmu.xprize.listener.ListenerPLRT;
 /**
  *  The Reading Tutor Component
  */
-public class CRt_Component extends PercentRelativeLayout implements IVManListener, IAsrEventListener, ILoadableObject {
+public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEventListener, ILoadableObject {
 
     private Context                 mContext;
     private String                  word;
@@ -56,7 +56,7 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     protected TTSsynthesizer        mSynthesizer;
     protected String                mLanguage;
 
-    protected ICRt_ViewManager      mViewManager;                                   // Created in TRt_Component sub-class
+    protected ICRt_ViewManager      mViewManager;                                   // Created in TRt_Component sub-class in the tutor domain
     protected String                mDataSource;
 
     private ArrayList<String>       sentences              = null;                  //list of sentences of the given passage
@@ -64,9 +64,6 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     private HashMap<String, String> suggestions            = null;
     private String                  completedSentencesFmtd = "";
     private String                  completedSentences     = "";
-
-    private ImageView               mPageIImage;
-    private TextView                mPageText;
 
     // state for the current sentence
     private int                     currentIndex          = 0;                      // current sentence index in story, -1 if unset
@@ -86,6 +83,16 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
 
     protected String                DATASOURCEPATH;
     protected String                EXTERNPATH;
+
+    protected String                _onRecognition;
+    protected String                _onRecognitionError;
+    protected boolean               _scrollVertical = false;
+
+
+    private Animation slide_left_to_right;
+    private Animation slide_right_to_left;
+    private Animation slide_bottom_up;
+    private Animation slide_top_down;
 
 
     // json loadable
@@ -117,10 +124,6 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
         init(context, attrs);
     }
 
-    public CRt_Component(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        init(context, attrs);
-    }
 
     public void init(Context context, AttributeSet attrs ) {
 
@@ -128,8 +131,12 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
 
         mContext = context;
 
-        mPageIImage = (ImageView) findViewById(R.id.SpageImage);
-        mPageText   = (TextView) findViewById(R.id.SstoryText);
+        slide_left_to_right  = AnimationUtils.loadAnimation(mContext, R.anim.slide_left_to_right);
+        slide_right_to_left  = AnimationUtils.loadAnimation(mContext, R.anim.slide_right_to_left);
+        slide_top_down       = AnimationUtils.loadAnimation(mContext, R.anim.slide_top_down);
+        slide_bottom_up      = AnimationUtils.loadAnimation(mContext, R.anim.slide_bottom_up);
+
+
     }
 
 
@@ -156,6 +163,47 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
      * @Override in Tutor Domain to allow the MediaManageer direct access to the recognizer
      */
     public void removeListener(ListenerBase listener) {}
+
+
+
+    //*************************************************
+    //****** ViewManager Support - START
+
+
+    public int addPage(View newView) {
+
+        int insertNdx = super.getChildCount();
+        super.addView((View) newView, insertNdx);
+
+        return insertNdx;
+    }
+
+
+    /**
+     *
+     * @param forward
+     * @param index
+     */
+    public void flipPage(boolean forward, int index) {
+
+        if(forward) {
+            if(_scrollVertical)
+                setInAnimation(slide_bottom_up);
+            else
+                setInAnimation(slide_right_to_left);
+        }
+        else {
+            if(_scrollVertical)
+                setInAnimation(slide_top_down);
+            else
+                setInAnimation(slide_left_to_right);
+        }
+        setDisplayedChild(index);
+    }
+
+
+    //****** ViewManager Support - START
+    //*************************************************
 
 
 
@@ -205,7 +253,7 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
 
 
     //****************************************************************************
-    //*********************  Speech Recognition Interface - Start
+    //*********************  Speech Recognition Interface (ASR) - Start
 
     @Override
     public void onBeginningOfSpeech() {}
@@ -226,6 +274,16 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     public void onASREvent(int eventType) {
 
         switch (eventType) {
+
+            case TCONST.RECOGNITION_EVENT:
+                Log.d("ASR", "RECOGNITION EVENT");
+                applyEventNode(_onRecognition);
+                break;
+
+            case TCONST.ERROR_EVENT:
+                Log.d("ASR", "RECOGNITION EVENT");
+                applyEventNode(_onRecognitionError);
+                break;
 
             case TCONST.SILENCE_EVENT:
                 Log.d("ASR", "SILENCE EVENT");
@@ -270,53 +328,25 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     // Tutor Scriptable methods  Start
 
 
-    /**
-     * Produce any random intervention if the user is silent for a specific time
-     */
-    public void promptToRead() {
-
-        say("Tafadhali sema neno hii kwa, sauti");
+    public void onRecognitionComplete(String symbol) {
+        _onRecognition = symbol;
     }
 
 
-    public void speakTargetWord() {    // to speak the Target word
-
-        // Utterance: An unbroken segment of speech
-        // (In this case we are breaking when there is an intervention - but it could be as
-        // fine grained a the user stopping for 300ms for example)
-        //
-        // Pause the mListener and set it up for a new utterance
-        //
-        mListener.reInitializeListener(true);
-        mListener.listenFor(sentenceWords, expectedWordIndex);
-        say("kutamka hivyo, " + sentenceWords[expectedWordIndex]);
-        mListener.setPauseListener(false);
+    public void onRecognitionError(String symbol) {
+        _onRecognitionError = symbol;
     }
+
 
 
     public void speakTargetSentence() {   // to speak the entire Target word sentence
 
-        say("Usijali, i itakuwa kusoma kwa ajili yenu." + currentSentence);
-        mViewManager.nextSentence(this, EXTERNPATH);
     }
 
-
     /**
-     *
      */
-    public void say(String prompt) {
+    public void speakTargetWord() {
 
-        mListener.setPauseListener(true);
-        mSynthesizer.speak(prompt);
-
-        while (mSynthesizer.isSpeaking()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        mListener.setPauseListener(false);
     }
 
 
@@ -396,14 +426,13 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     protected void applyEventNode(String nodeName) {
     }
 
-    public void publishTargetWord(String word) {
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishValue(String varName, String value) {
     }
 
-    public void publishTargetWordIndex(int index) {
-    }
-
-    public void publishTargetSentence(String sentence) {
-    }
 
 
     // Tutor methods  End
@@ -420,12 +449,87 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
     }
 
 
+    /**
+     *
+     * @param dataSource
+     */
+    public void setDataSource(String dataSource, String tutorName) {
+
+        try {
+            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
+                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
+
+                DATASOURCEPATH = TCONST.TUTORROOT + "/" + tutorName + "/" + TCONST.TASSETS + "/" + mLanguage + "/";
+
+                String jsonData = JSON_Helper.cacheData(DATASOURCEPATH + dataSource);
+                loadJSON(new JSONObject(jsonData), null);
+
+            } else if (dataSource.startsWith("db|")) {
+
+
+            } else if (dataSource.startsWith("{")) {
+
+                loadJSON(new JSONObject(dataSource), null);
+
+            } else {
+                throw (new Exception("BadDataSource"));
+            }
+        }
+        catch (Exception e) {
+            Log.e(TAG, "Invalid Data Source for : " + tutorName);
+            System.exit(1);
+        }
+    }
+
+
+    /**
+     * @param storyName
+     */
+    public void setStory(String storyName) {
+
+        for(int i1 = 0 ; i1 < dataSource.length ; i1++ ) {
+
+            if(storyName.equals(dataSource[i1].story)) {
+
+                // Generate a cached path to the story asset data
+                //
+                EXTERNPATH =DATASOURCEPATH + dataSource[i1].folder + "/";
+
+                Class<?> storyClass = viewClassMap.get(dataSource[i1].viewtype);
+
+                try {
+                    // Generate the View manager for the story - specified in the data
+                    //
+                    mViewManager = (ICRt_ViewManager)storyClass.getConstructor(new Class[]{CRt_Component.class, ListenerBase.class}).newInstance(this,mListener);
+
+                    String jsonData = JSON_Helper.cacheData(EXTERNPATH + TCONST.STORYDATA);
+
+                    mViewManager.loadJSON(new JSONObject(jsonData), null);
+
+                } catch (Exception e) {
+                    // TODO: Manage Exceptions
+                    e.printStackTrace();
+                    Log.e(TAG, "Story Parse Error: " + e);
+                    System.exit(1);
+                }
+
+                // Configure the view manager for the first line of the story.
+                //
+                mViewManager.initStory(this, EXTERNPATH);
+
+                // we're done
+                break;
+            }
+        }
+    }
+
+
     public void next() {
 
         try {
             if (mViewManager != null) {
 
-                mViewManager.nextSentence(this, EXTERNPATH);
+                mViewManager.nextWord();
 
             } else {
                 Log.e(TAG, "Error no DataSource : ");
@@ -433,7 +537,7 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
             }
         }
         catch(Exception e) {
-            Log.e(TAG, "Data Exhuasted: next called past end of data");
+            Log.e(TAG, "Data Exhuasted: next called past end of data" + e);
             System.exit(1);
         }
 
@@ -444,15 +548,6 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
         return mViewManager.endOfData();
     }
 
-    /**
-     * Callback to obtain ImageView
-     *
-     * @return
-     */
-    @Override
-    public View getImageView() {
-        return mPageIImage;
-    }
 
 
 
@@ -469,4 +564,5 @@ public class CRt_Component extends PercentRelativeLayout implements IVManListene
 
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
     }
+
 }

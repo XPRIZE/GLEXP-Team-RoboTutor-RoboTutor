@@ -156,6 +156,7 @@ public class TCONST {
     public static final int PARSEPROP = 6;
     public static final int RESOLVESYMBOL = 7;
     public static final int ENDSUBEXPR = 8;
+    public static final int PARSESTRING = 9;
     public static final int BUILDEXPR = 100;
 
     // Binary Operations
@@ -322,7 +323,8 @@ public class TCONST {
 
     public static final int W2N_VALUE_UPDATE    = 10;
 
-    public static final int UNSET = -1;
+    public static final int UNSET = -1;                             // NOTE: things a dependent upon this being -1
+    public static final int ZERO  = 0;
 
     // W2N Error Types
     public static final int NO_ERROR                     = 0;       //
@@ -371,6 +373,33 @@ public class TCONST {
     public static final String CC_EN_AND = "AND";
     public static final String NUM_EOD   = "NUM_EOD";
 
+    // ASB constants
+    public static final int NEXTPAGE =  1;
+    public static final int PREVPAGE = -1;
 
+
+    // READING Tutor State names  -- RTC Reading Tutor Component
+    public static final String EMPTY = "";
+
+    public static final int INCR = 1;
+    public static final int DECR = -1;
+
+    public static final String RTC_VAR_PAGESTATE  = ".pageState";
+    public static final String RTC_VAR_PARASTATE  = ".paraState";
+    public static final String RTC_VAR_LINESTATE  = ".lineState";
+    public static final String RTC__VAR_WORDSTATE = ".wordState";
+    public static final String LAST               = "LAST";
+    public static final String NOT_LAST           = "NOT_LAST";
+
+    public static final String RTC_VAR_STATE         = ".storyState";
+    public static final String RTC_PARAGRAPHCOMPLETE = "PARAGRAPH_COMPLETE";
+    public static final String RTC_PAGECOMPLETE      = "PAGE_COMPLETE";
+    public static final String RTC_STORYCMPLETE      = "STORY_COMPLETE";
+    public static final String RTC_LINECOMPLETE      = "LINE_COMPLETE";
+    public static final String RTC_CLEAR             = "";
+
+    public static final String RTC_VAR_WORD     = ".nextword";
+    public static final String RTC_VAR_INDEX    = ".wordindex";
+    public static final String RTC_VAR_SENTENCE = ".sentence";
 
 }

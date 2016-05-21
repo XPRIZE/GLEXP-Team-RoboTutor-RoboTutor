@@ -17,43 +17,29 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.rt_component;
+package cmu.xprize.util;
 
-import cmu.xprize.util.ILoadableObject;
-import edu.cmu.xprize.listener.ListenerBase;
+import android.util.Log;
 
-public interface ICRt_ViewManager extends ILoadableObject {
+/**
+ * This was added with Android Studio 2.1 and PIXEL C -- simple exit could cause the logcat
+ * to miss the error message
+ *
+ */
+public class CErrorManager {
 
-    public void initStory(IVManListener owner, String assetPath);
+    static public void exit(String TAG, String Msg, Exception e, boolean printTrace) {
 
-    void seekToPage(int pageIndex);
+        if(printTrace)
+            e.printStackTrace();
 
-    void nextPage();
+        Log.e(TAG, Msg + e);
 
-    void prevPage();
+        try {
+            Thread.sleep(400);
+        } catch (InterruptedException e1) {
+        }
 
-    void seekToParagraph(int paraIndex);
-
-    void nextPara();
-
-    void prevPara();
-
-    void seekToLine(int lineIndex);
-
-    void nextLine();
-
-    void prevLine();
-
-    void seekToWord(int wordIndex);
-
-    void nextWord();
-
-    void prevWord();
-
-    void setHighLight(String highlight);
-
-    public boolean endOfData();
-
-    public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult);
-
+        System.exit(1);
+    }
 }

@@ -19,12 +19,7 @@
 
 package cmu.xprize.rt_component;
 
-import cmu.xprize.util.ILoadableObject;
-import edu.cmu.xprize.listener.ListenerBase;
-
-public interface ICRt_ViewManager extends ILoadableObject {
-
-    public void initStory(IVManListener owner, String assetPath);
+public interface IRtComponent {
 
     void seekToPage(int pageIndex);
 
@@ -53,7 +48,5 @@ public interface ICRt_ViewManager extends ILoadableObject {
     void setHighLight(String highlight);
 
     public boolean endOfData();
-
-    public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult);
 
 }

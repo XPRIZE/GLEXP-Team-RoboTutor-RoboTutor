@@ -19,13 +19,14 @@
 
 package cmu.xprize.rt_component;
 
+import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
-import android.os.Handler;
 import android.text.Html;
 import android.text.Layout;
-import android.text.Spanned;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import cmu.xprize.util.CPersonaObservable;
 import cmu.xprize.util.ILoadableObject;
@@ -49,30 +51,49 @@ import edu.cmu.xprize.listener.ListenerBase;
  */
 public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
+    private Context                 mContext;
+
     private ListenerBase            mListener;
     private IVManListener           mOwner;
     private String                  mAsset;
+
+    private CRt_Component           mParent;
+    private ImageView               mPageImage;
     private TextView                mPageText;
 
-    // state for the current story
-    // African Story Book data is
-    private int                     currentPageNdx         = 0;             // current page index within a story,        -1 if unset
-    private int                     currentParaNdx         = 0;             // current paragrph index within a page,     -1 if unset
-    private int                     currentIndex           = -1;            // current sentence index within a paragraph -1 if unset
+    // ASB even odd page management
 
-    private int                     completeSentenceIndex  = 0;
-    private String                  sentenceWords[];                        // current sentence words to hear
-    private int                     expectedWordIndex      = 0;             // index of expected next word in sentence
-    private static int[]            creditLevel            = null;          // per-word credit level according to current hyp
+    private ViewGroup               mOddPage;
+    private ViewGroup               mEvenPage;
 
-    private ArrayList<String>       sentences              = null;          //list of sentences of the given passage
-    private String                  currentSentence;                        //currently displayed sentence that need to be recognized
+    private int                     mOddIndex;
+    private int                     mEvenIndex;
+    private int                     mCurrViewIndex;
+
+    // state for the current story - African Story Book
+
+    private String                  mCurrHighlight = "";
+    private int                     mCurrPage;
+    private boolean                 mLastPage;
+    private int                     mCurrPara;
+    private int                     mCurrLine;
+    private int                     mCurrWord;
+
+    private int                     mPageCount;
+    private int                     mParaCount;
+    private int                     mLineCount;
+    private int                     mWordCount;
+
+    private String                  wordsToDisplay[];                    // current sentence words to display - contain punctuation
+    private String                  wordsToSpeak[];                      // current sentence words to hear
+    private ArrayList<String>       wordsToListenFor;                    // current sentence words to build language model
+
+    private String                  rawSentence;                         //currently displayed sentence that need to be recognized
 
     private String                  completedSentencesFmtd = "";
     private String                  completedSentences     = "";
-    private boolean                 changingSentence       = false;
+    private ArrayList<String>       wordsSpoken;
 
-    private IVManListener           _publishListener;
 
     // json loadable
 
@@ -89,188 +110,474 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     public CASB_data     data[];
 
 
-    static final String TAG = "CRt_ViewManagerMari";
+    static final String TAG = "CRt_ViewManagerASB";
+
 
 
     public CRt_ViewManagerASB(CRt_Component parent, ListenerBase listener) {
 
-        mPageText = (TextView) parent.findViewById(R.id.SstoryText);
+        mParent = parent;
+        mContext = mParent.getContext();
+
+        mOddPage = (ViewGroup) android.support.percent.PercentRelativeLayout.inflate(mContext, R.layout.asb_oddpage, null);
+        mEvenPage = (ViewGroup) android.support.percent.PercentRelativeLayout.inflate(mContext, R.layout.asb_evenpage, null);
+
+        mOddPage.setVisibility(View.GONE);
+        mEvenPage.setVisibility(View.GONE);
+
+        mOddIndex  = mParent.addPage(mOddPage );
+        mEvenIndex = mParent.addPage(mEvenPage );
+
         mListener = listener;
-        sentences = new ArrayList<>();
     }
 
 
-    public void setPublishListener(IVManListener publishListener) {
-        _publishListener = publishListener;
+    /**
+     *
+     * @param owner
+     * @param assetPath
+     */
+    public void initStory(IVManListener owner, String assetPath) {
+
+        mOwner = owner;
+        mAsset = assetPath;
+
+        seekToPage(TCONST.ZERO);
+
+        startListening();
+
+        //TODO: CHECK
+        mParent.flipPage(true,mCurrViewIndex);
     }
 
+
+    /**
+     *  This configures the target display components to be populated with data.
+     *
+     *  mPageImage - mPageText
+     *
+     */
+    public void flipPage() {
+
+        // Note that we use zero based indexing so page zero is first page - i.e. odd
+        //
+        if(mCurrPage % 2 == 0) {
+
+            mCurrViewIndex = mOddIndex;
+            mPageImage = (ImageView) mOddPage.findViewById(R.id.SpageImage);
+            mPageText  = (TextView) mOddPage.findViewById(R.id.SstoryText);
+        }
+        else {
+
+            mCurrViewIndex = mEvenIndex;
+            mPageImage = (ImageView) mEvenPage.findViewById(R.id.SpageImage);
+            mPageText  = (TextView) mEvenPage.findViewById(R.id.SstoryText);
+        }
+    }
+
+
+    private void configurePageImage() {
+
+        try {
+            InputStream in = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image);
+
+            mPageImage.setImageBitmap(BitmapFactory.decodeStream(in));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Reconfigure for a specific page / paragraph / line (seeks to)
+     *
+     * @param currPage
+     * @param currPara
+     * @param currLine
+     */
+    private void setCurrentState(int currPage, int currPara, int currLine) {
+
+        completedSentencesFmtd = "";
+        wordsSpoken            = new ArrayList<>();
+
+        // If not seeking to the very first line
+        //
+        if(currPara > 0 || currLine > 0) {
+
+            for(int paraIndex = 0 ; paraIndex < currPara ; paraIndex++) {
+
+                for(int lineIndex = 0 ; lineIndex <  currLine ; lineIndex++) {
+
+                    rawSentence = data[currPage].text[currPara][currLine];
+                    wordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+
+                    // Add the previous line to the list of spoken words used to build the
+                    // language model - so it allows all on screen words to be spoken
+                    //
+                    for (String word : wordsToSpeak)
+                        wordsSpoken.add(word);
+
+                    completedSentences += rawSentence;
+                }
+
+                if(paraIndex < currPara)
+                    completedSentences += "<br><br>";
+            }
+
+            completedSentencesFmtd = "<font color='grey'>";
+            completedSentencesFmtd += completedSentences;
+            completedSentencesFmtd += "</font>";
+        }
+
+        mCurrPage = currPage;
+        mCurrPara = currPara;
+        mCurrLine = currLine;
+
+        mPageCount = data.length;
+        mParaCount = data[currPage].text.length;
+        mLineCount = data[currPage].text[currPara].length;
+
+        rawSentence = data[currPage].text[currPara][currLine];
+
+        // Words that are used to build the display text - include punctuation etc.
+        // But are in one-to-one correspondance with the wordsToSpeak
+        //
+        wordsToDisplay = rawSentence.trim().split("\\s+");
+
+        // TODO: strip word-final or -initial apostrophes as in James' or 'cause.
+        // Currently assuming hyphenated expressions split into two Asr words.
+        //
+        wordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+
+        mCurrWord  = TCONST.ZERO;
+        mWordCount = wordsToSpeak.length;
+
+        // Publish the state out to the scripting scope in the tutor
+        //
+        publishStateValues();
+    }
+
+
+    /**
+     * Push the state out to the tutor domain.
+     *
+     */
+    private void publishStateValues() {
+
+        String cummulativeState = TCONST.RTC_CLEAR;
+
+        // Set the scriptable flag indicating the current state.
+        //
+        if (mCurrWord >= mWordCount-1) {
+            cummulativeState = TCONST.RTC_LINECOMPLETE;
+            mParent.publishValue(TCONST.RTC__VAR_WORDSTATE, TCONST.LAST);
+        }
+        else
+            mParent.publishValue(TCONST.RTC__VAR_WORDSTATE, TCONST.NOT_LAST);
+
+        if (mCurrLine >= mLineCount) {
+            cummulativeState = TCONST.RTC_PARAGRAPHCOMPLETE;
+            mParent.publishValue(TCONST.RTC_VAR_LINESTATE, TCONST.LAST);
+        }
+        else
+            mParent.publishValue(TCONST.RTC_VAR_LINESTATE, TCONST.NOT_LAST);
+
+        if (mCurrPara >= mParaCount) {
+            cummulativeState = TCONST.RTC_PAGECOMPLETE;
+            mParent.publishValue(TCONST.RTC_VAR_PARASTATE, TCONST.LAST);
+        }
+        else
+            mParent.publishValue(TCONST.RTC_VAR_PARASTATE, TCONST.NOT_LAST);
+
+        if (mCurrPage >= mPageCount) {
+            cummulativeState = TCONST.RTC_STORYCMPLETE;
+            mParent.publishValue(TCONST.RTC_VAR_PAGESTATE, TCONST.LAST);
+        }
+        else
+            mParent.publishValue(TCONST.RTC_VAR_PAGESTATE, TCONST.NOT_LAST);
+
+        // Publish the cumulative state out to the scripting scope in the tutor
+        //
+        mParent.publishValue(TCONST.RTC_VAR_STATE, cummulativeState);
+
+    }
+
+
+    /**
+     *  Configure for specific Page
+     *  Assumes current story
+     *
+     * @param pageIndex
+     */
+    @Override
+    public void seekToPage(int pageIndex) {
+
+        mCurrPage = pageIndex;
+
+        if(mCurrPage > mPageCount-1) mCurrPage = mPageCount-1;
+        if(mCurrPage < TCONST.ZERO)  mCurrPage = TCONST.ZERO;
+
+        incPage(TCONST.ZERO);
+    }
 
     @Override
-    // TODO: check if it is possible for the hypothesis to chamge between last update and final hyp
-    public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult) {
+    public void nextPage() {
 
-        String logString = "";
-        for (int i = 0; i < heardWords.length; i++) {
-            logString += heardWords[i].hypWord.toLowerCase() + ":" + heardWords[i].iSentenceWord + " | ";
+        if(mCurrPage < mPageCount-1) {
+            incPage(TCONST.INCR);
         }
-        Log.i("ASR", "New HypSet: "  + logString);
 
+        //TODO: CHECK
+        mParent.flipPage(true, mCurrViewIndex);
+    }
+    @Override
+    public void prevPage() {
 
-        // TODO: Change to setPauseRecognizer to flush the queue should obviate the need for
-        // changingSentence test.  Validate this is the case.
+        if(mCurrPage > 0) {
+            incPage(TCONST.DECR);
+        }
+
+        //TODO: CHECK
+        mParent.flipPage(false, mCurrViewIndex);
+    }
+
+    private void incPage(int direction) {
+
+        mCurrPage += direction;
+
+        // Update the state vars
         //
-        // The recongnizer runs asynchronously so ensure we don't process any
-        // hypotheses while we are changing sentences otherwise it can skip a sentence.
-        // This is because nextSentence is also called asynchronously
+        setCurrentState(mCurrPage, mCurrPara, mCurrLine);
+
+        // This configures the target display components to be populated with data.
+        // mPageImage - mPageText
         //
-        if(changingSentence || finalResult) {
-            Log.d("ASR", "Ignoring Hypothesis");
-            return;
-        }
+        flipPage();
 
-        updateSentence(heardWords);             // update current sentence state and redraw
-
-        // move on if all words in current sentence have been read
-        if(sentenceComplete()) {
-
-            changingSentence = true;
-            mListener.setPauseListener(true);
-
-            // schedule advance after short delay to allow time to see last word credited on screen
-            new Handler().postDelayed(new Runnable() {
-                public void run() {
-                    nextSentence(mOwner, null);
-                    changingSentence = false;
-                }
-            }, 100);
-        }
-
+        configurePageImage();
     }
 
 
     /**
-     * @param heardWords Update the sentence credit level with the credit level of the heard words
+     *  Configure for specific Paragraph
+     *  Assumes current page
+     *
+     * @param paraIndex
      */
-    private void updateSentence(ListenerBase.HeardWord[] heardWords) {
+    @Override
+    public void seekToParagraph(int paraIndex) {
 
-        Log.d("ASR", "New Hypothesis Set:");
+        mCurrPara = paraIndex;
 
-        if (heardWords.length >= 1) {
+        if(mCurrPara > mParaCount-1) mCurrPara = mParaCount-1;
+        if(mCurrPara < TCONST.ZERO)  mCurrPara = TCONST.ZERO;
 
-            // Reset partial credit level of sentence words
-            //
-            for (int i = 0; i < creditLevel.length; i++) {
+        incPara(TCONST.ZERO);
+    }
 
-                // don't touch words with permanent credit
-                if (creditLevel[i] != ListenerBase.HeardWord.MATCH_EXACT)
-                    creditLevel[i]  = ListenerBase.HeardWord.MATCH_UNKNOWN;
-            }
+    @Override
+    public void nextPara() {
 
-            for (ListenerBase.HeardWord hw : heardWords) {
+        if(mCurrPara < mParaCount-1) {
+            incPara(TCONST.INCR);
+        }
+    }
+    @Override
+    public void prevPara() {
 
-                Log.d("ASR", "Heard:" + hw.hypWord);
+        if(mCurrPara > 0) {
+            incPara(TCONST.DECR);
+        }
+    }
 
-                // assign the highest credit found among all hypothesis words
-                //
-                if (hw.matchLevel >= creditLevel[hw.iSentenceWord]) {
-                    creditLevel[hw.iSentenceWord] = hw.matchLevel;
-                }
-            }
+    private void incPara(int incr) {
 
-            expectedWordIndex = getFirstUncreditedWord();
+        mCurrPara += incr;
 
-            // Tell the listerner when to stop matching words.  We don't want to match words
-            // past the current expected word or they will be highlighted
-            // This is a MARi induced constraint
-            // TODO: make it so we don't need this - use matched past the next word to flag
-            // a missed word
-            //
-            mListener.updateNextWordIndex(expectedWordIndex);
+        // Update the state vars
+        //
+        setCurrentState(mCurrPage, mCurrPara, mCurrLine);
+    }
 
-            // Update the sentence text display to show credit, expected word
-            //
-            UpdateSentenceDisplay();
+
+    /**
+     *  Configure for specific line
+     *  Assumes current page and paragraph
+     *
+     * @param lineIndex
+     */
+    @Override
+    public void seekToLine(int lineIndex) {
+
+        mCurrLine = lineIndex;
+
+        if(mCurrLine > mLineCount-1) mCurrLine = mLineCount-1;
+        if(mCurrLine < TCONST.ZERO)  mCurrLine = TCONST.ZERO;
+
+        incLine(TCONST.ZERO);
+    }
+
+    @Override
+    public void nextLine() {
+
+        if(mCurrLine < mLineCount-1) {
+            incLine(TCONST.INCR);
+        }
+    }
+    @Override
+    public void prevLine() {
+
+        if(mCurrLine > 0 ) {
+            incLine(TCONST.DECR);
+        }
+    }
+
+    private void incLine(int incr) {
+
+        mCurrLine += incr;
+
+        // Update the state vars
+        //
+        setCurrentState(mCurrPage, mCurrPara, mCurrLine);
+    }
+
+
+    /**
+     *  Configure for specific word
+     *  Assumes current page, paragraph and line
+     *
+     * @param wordIndex
+     */
+    @Override
+    public void seekToWord(int wordIndex) {
+
+        mCurrWord = wordIndex;
+
+        if(mCurrWord > mWordCount-1) mCurrWord = mWordCount-1;
+        if(mCurrWord < TCONST.ZERO)  mCurrWord = TCONST.ZERO;
+
+        // Update the state vars
+        //
+        setCurrentState(mCurrPage, mCurrPara, mCurrLine);
+
+        incWord(TCONST.ZERO);
+    }
+
+    @Override
+    public void nextWord() {
+
+        if(mCurrWord < mWordCount-1) {
+            incWord(TCONST.INCR);
+        }
+    }
+    @Override
+    public void prevWord() {
+
+        if(mCurrWord > 0) {
+            incWord(TCONST.DECR);
+        }
+    }
+
+    /**
+     * We assume this has been bounds checked prior to call
+     *
+     * There is one optimization here - when simply moving through the sentence we do not rebuild
+     * the entire state.  We just publish any change of state
+     *
+     * @param incr
+     */
+    private void incWord(int incr) {
+
+        mCurrWord += incr;
+
+        mCurrHighlight = TCONST.EMPTY;
+
+        startListening();
+    }
+
+
+    private void startListening() {
+
+        // Update the sentence highlighting
+        //
+        UpdateDisplay();
+
+        // We allow the user to say any of the onscreen words but set the priority order of how we would like them matched
+        //
+        // for the current target word.
+        // 1. Start with the target word on the target sentence
+        // 2. Add the words from there to the end of the sentence - just to permit them
+        // 3. Add the words alread spoken from the other lines - just to permit them
+        //
+        // "Permit them": So the language model is listening for them as possibilities.
+        //
+        wordsToListenFor = new ArrayList<>();
+
+        for (int i1 = mCurrWord; i1 < wordsToSpeak.length; i1++) {
+            wordsToListenFor.add(wordsToSpeak[i1]);
+        }
+        for (int i1 = 0; i1 < mCurrWord; i1++) {
+            wordsToListenFor.add(wordsToSpeak[i1]);
+        }
+        for (String word : wordsSpoken) {
+            wordsToListenFor.add(word);
+        }
+
+        // Start listening
+        //
+        if (mListener != null) {
+
+            mListener.reInitializeListener(true);
+
+            mListener.listenFor(wordsToListenFor.toArray(new String[wordsToListenFor.size()]), 0);
+            mListener.setPauseListener(false);
         }
     }
 
 
     /**
-     * Update the displayed sentence based on the newly calculated credit level
+     * Scipting mechanism to update target word highlight
+     * @param highlight
      */
-    private void UpdateSentenceDisplay() {
+    @Override
+    public void setHighLight(String highlight) {
+
+        mCurrHighlight = highlight;
+
+        UpdateDisplay();
+    }
+
+
+    /**
+     *  Update the displayed sentence
+     */
+    private void UpdateDisplay() {
 
         String fmtSentence = "";
-        String[] words = currentSentence.split("\\s+");
 
-        for (int i = 0; i < words.length; i++) {
+        for (int i = 0; i < wordsToDisplay.length; i++) {
 
-            String styledWord = words[i];                           // default plain
+            String styledWord = wordsToDisplay[i];                           // default plain
 
-            // show credit status with color
-            if (creditLevel[i] == ListenerBase.HeardWord.MATCH_EXACT) {     // match found, but not credited
+            if (i == mCurrWord) {// style the next expected word
 
-                styledWord = "<font color='#00B600'>" + styledWord + "</font>";
+                if(!mCurrHighlight.equals(TCONST.EMPTY))
+                    styledWord = "<font color='"+ mCurrHighlight + "'>" + styledWord + "</font>";
 
-            } else if (creditLevel[i] == ListenerBase.HeardWord.MATCH_MISCUE) {  // wrongly read
-
-                styledWord = "<font color='red'>" + styledWord + "</font>";
-
-            } else if (creditLevel[i] == ListenerBase.HeardWord.MATCH_TRUNCATION) { //  heard only half the word
-
-            } else {
-
-            }
-
-            if (i == expectedWordIndex) {// style the next expected word
-                styledWord.replace("<u>", "");
-                styledWord.replace("</u>", "");
                 styledWord = "<u>" + styledWord + "</u>";
             }
 
             fmtSentence += styledWord + " ";
-
         }
-        fmtSentence += "<br>";
-
-        Spanned test = Html.fromHtml(completedSentencesFmtd + fmtSentence);
 
         mPageText.setText(Html.fromHtml(completedSentencesFmtd + fmtSentence));
 
-        updateCompletedSentence();
-
-        broadcastActiveTextPos(mPageText, words);
+        broadcastActiveTextPos(mPageText, wordsToDisplay);
     }
 
 
     /**
-     * Get the first uncredited word of the current sentence
-     *
-     * @return index of uncredited word
-     */
-    private int getFirstUncreditedWord() {
-
-        int result = 0;
-
-        for (int i = 0; i < creditLevel.length; i++) {
-
-            if (creditLevel[i] != ListenerBase.HeardWord.MATCH_EXACT) {
-                result = i;
-                break;
-            }
-        }
-        return result;
-    }
-
-
-    /**
-     * Notes:
-     * XML story source text must be entered without extra space or linebreaks.
-     *
-     *     <selectlevel level="1">
-     *          <story story="1">
-     *              <part part="1">Uninterrupted text</part>
-     *          </story>
-     *
      *
      * @param text
      * @param words
@@ -278,181 +585,72 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      */
     private PointF broadcastActiveTextPos(TextView text, String[] words){
 
-        PointF point = new PointF(0,0);
-        int charPos  = 0;
-        int maxPos;
+        PointF  point   = new PointF(0,0);
+        int     charPos = 0;
+        int     maxPos;
 
-        if(expectedWordIndex >= 0) {
+        try {
+            Layout layout = text.getLayout();
 
-            for (int i1 = 0; i1 < expectedWordIndex; i1++) {
-                charPos += words[i1].length() + 1;
-            }
-            charPos += words[expectedWordIndex].length()-1;
-            charPos  = completedSentences.length() + charPos;
+            if(layout != null) {
 
-            // Note that sending a value greater than maxPos will corrupt the textView
-            //
-            maxPos  = text.getText().length();
-            charPos = (charPos > maxPos) ? maxPos : charPos;
+                // Point to the start of the Target sentence (mCurrLine)
+                charPos  = completedSentences.length();
 
-            try {
-                Layout layout = text.getLayout();
+                // Find the starting character of the current target word
+                for (int i1 = 0; i1 <= mCurrWord; i1++) {
+                    charPos += words[i1].length() + 1;
+                }
+
+                // Look at the end of the target word
+                charPos -= 1;
+
+                // Note that sending a value greater than maxPos will corrupt the textView - so
+                // guarantee this will never happen.
+                //
+                maxPos  = text.getText().length();
+                charPos = (charPos > maxPos) ? maxPos : charPos;
 
                 point.x = layout.getPrimaryHorizontal(charPos);
 
                 int y = layout.getLineForOffset(charPos);
-                point.y = layout.getLineBottom(y);
+                point.y = layout.getLineTop(y);
 
-            } catch (Exception exception) {
-                Log.d(TAG, "getActiveTextPos: " + exception.toString());
+                CPersonaObservable.broadcastLocation(text, TCONST.LOOKAT, point);
             }
 
-            CPersonaObservable.broadcastLocation(text, TCONST.LOOKAT, point);
+        } catch (Exception e) {
+            Log.d(TAG, "getActiveTextPos: " + e.toString());
         }
+
         return point;
     }
 
 
     /**
-     * to make auto scroll for the sentences
+     * This is where the incoming ASR data is processed.
+     *
+     *  TODO: check if it is possible for the hypothesis to chamge between last update and final hyp
      */
-    public void updateCompletedSentence() {
+    @Override
+    public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult) {
 
-        int height = mPageText.getHeight();
-        int scrollY = mPageText.getScrollY();
-        Layout layout = mPageText.getLayout();
-        int lastVisibleLineNumber = layout.getLineForVertical(scrollY + height);
-        int totalNoOfLines = mPageText.getLineCount() - 1;
-        if (lastVisibleLineNumber < totalNoOfLines) {
-            completeSentenceIndex = currentIndex;
-            completedSentencesFmtd = "";
-            completedSentences     = "";
+        String logString = "";
+
+        for (int i = 0; i < heardWords.length; i++) {
+            logString += heardWords[i].hypWord.toLowerCase() + ":" + heardWords[i].iSentenceWord + " | ";
         }
+        Log.i("ASR", "New HypSet: "  + logString);
+
+
+
+
     }
 
-
+    
     @Override
     public boolean endOfData() {
         return false;
-    }
-
-    /**
-     *
-     * @param index
-     * @return
-     */
-    private boolean isWordCredited(int index) {
-        return index >= 0 && (index == 0 || creditLevel[index - 1] == ListenerBase.HeardWord.MATCH_EXACT);
-    }
-
-
-    /**
-     * Get number of exact matches
-     * @return
-     */
-    private int getNumWordsCredited() {
-        int n = 0;
-        for (int cl : creditLevel) {
-            if (cl == ListenerBase.HeardWord.MATCH_EXACT)
-                n += 1;
-        }
-        return n;
-    }
-
-    private boolean sentenceComplete() {
-        return getNumWordsCredited() >= sentenceWords.length;
-    }
-
-
-    /**
-     * Show the next available sentence to the user
-     */
-    @Override
-    public void nextSentence(IVManListener owner, String assetPath) {
-
-        mOwner = owner;
-        mAsset = assetPath;
-
-        mListener.deleteLogFiles();
-
-        switchSentence(currentIndex + 1);      // for now just loop around single story
-    }
-
-
-    /**
-     * Initialize mListener with the specified sentence
-     *
-     * @param index index of the sentence that needs to be initialized
-     */
-    private boolean switchSentence(int index) {
-
-        boolean result = true;
-
-        if(index == 0) {
-            try {
-                InputStream in = JSON_Helper.assetManager().open(mAsset + data[currentPageNdx].image);
-
-                ((ImageView)mOwner.getImageView()).setImageBitmap(BitmapFactory.decodeStream(in));
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            sentences.clear();
-
-            for(String sentence : data[currentPageNdx].text[currentParaNdx]) {
-                sentences.add(sentence);
-            }
-        }
-
-        // We've exhausted all the sentences in the story
-        if (index == sentences.size()) {
-
-            Log.d("ASR", "End of Story");
-
-            // Kill off the mListener.
-            // When this returns the recognizerThread is dead and the mic
-            // has been disconnected.
-            if (mListener != null)
-                mListener.stop();
-
-            result = false;
-        }
-        else {
-            if (index > 0) {  // to set grey color for the finished sentence
-
-                completedSentencesFmtd = "<font color='grey'>";
-                completedSentences = "";
-                for (int i = completeSentenceIndex; i < index; i++) {
-                    completedSentences += sentences.get(i);
-                    completedSentences += "  ";
-                }
-                completedSentencesFmtd += completedSentences;
-                completedSentencesFmtd += "</font>";
-            }
-            currentIndex = index % sentences.size();
-            currentSentence = sentences.get(currentIndex).trim();
-
-            // get array or words to hear for new sentence
-            sentenceWords = ListenerBase.textToWords(currentSentence);
-
-            // reset all aggregate hyp info for new sentence
-            // fills default value 0 = MATCH_UNKNOWN
-            creditLevel = new int[sentenceWords.length];
-            expectedWordIndex = 0;
-
-            // show sentence and start listening for it
-            // If we are starting from the beginning of the sentence then end any current sentence
-            if (mListener != null) {
-                mListener.reInitializeListener(true);
-                mListener.listenFor(sentenceWords, 0);
-                mListener.setPauseListener(false);
-            }
-
-            UpdateSentenceDisplay();
-        }
-
-        return result;
     }
 
 

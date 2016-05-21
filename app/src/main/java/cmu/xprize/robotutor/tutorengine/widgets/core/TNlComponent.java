@@ -342,7 +342,6 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
 
 
     public void onStartTalking(String symbol) {
-
     }
 
     public void onRecognitionComplete(String symbol) {

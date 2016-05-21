@@ -19,7 +19,7 @@
         android:text="This is the Banner Area."/>
 
     <cmu.xprize.robotutor.tutorengine.widgets.core.TRtComponent
-        android:id="@+id/SrtComponent"
+        android:id="@+id/SstoryReading"
         android:layout_below="@+id/Sbanner"
         app:layout_heightPercent="90%"
         android:layout_width="match_parent"

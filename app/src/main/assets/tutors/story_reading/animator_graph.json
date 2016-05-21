@@ -19,11 +19,26 @@
           "COMMENT": "Intro Clip",
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
-          "preenter":["SET_VERSION","SET_LANGUAGE","SET_STORYNAME","NEXT_DATASET"],
+          "preenter":["SET_VERSION","SET_LANGUAGE","SET_STORYNAME"],
           "preexit" :[],
           "edges": [
+            {"constraint": "", "edge": "LISTEN"}
+          ]
+        },
+
+        "LISTEN":{
+          "COMMENT":"This node presents a number for user to speak.",
+          "type":"node",
+          "preenter":[],
+          "maptype":"moduleMap",
+          "mapname": "LISTENING",
+          "preexit" :[],
+          "edges":
+          [
             {"constraint":"FTR_RIGHT","edge":"CORRECT"},
-            {"constraint":"","edge":"WRONG"}
+            {"constraint":"FIRST_ATTEMPT","edge":"WRONG_1"},
+            {"constraint":"SECOND_ATTEMPT","edge":"WRONG_2"},
+            {"constraint":"","edge":"WRONG_3"}
           ]
         },
 
@@ -36,12 +51,12 @@
           "preexit" :[],
           "edges":
           [
-            {"constraint":"","edge":"NEWCHAR"}
+            {"constraint":"","edge":"NEXT_STEP"}
           ]
         },
 
-        "WRONG":{
-          "COMMENT":"When user inputs an incorrect answer...",
+        "WRONG_1":{
+          "COMMENT":"When user says an incorrect word...",
           "type":"node",
           "maptype":"moduleMap",
           "mapname": "PLAYWRONG",
@@ -49,10 +64,78 @@
           "preexit" :[],
           "edges":
           [
-            {"constraint":"","edge":"USERINPUT"}
+            {"constraint":"","edge":"NEXT_STEP"}
           ]
         },
 
+        "WRONG_2":{
+          "COMMENT":"When user says an incorrect word...",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "PLAYWRONG",
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"NEXT_STEP"}
+          ]
+        },
+
+        "WRONG_3":{
+          "COMMENT":"When user says an incorrect word...",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "PLAYWRONG",
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"NEXT_STEP"}
+          ]
+        },
+
+        "NEXT_STEP":{
+          "COMMENT":"When user inputs a correct answer...",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "CHECK_COMPLETE",
+          "preenter":["NEXT_WORD"],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"STORY_COMPLETE","edge":"NEXTSCENE"},
+            {"constraint":"PAGE_COMPLETE","edge":"NEXT_PAGE"},
+            {"constraint":"PARAGRAPH_COMPLETE","edge":"NEXT_LINE"},
+            {"constraint":"LINE_COMPLETE","edge":"NEXT_LINE"},
+            {"constraint":"","edge":"LISTEN"}
+          ]
+        },
+
+        // If you want it to automatically advance the page use - AUTO_PAGEFLIP
+        //
+        "NEXT_PAGE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"moduleMap",
+          "mapname":"MANUAL_PAGEFLIP",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint":"","edge":"LISTEN"}
+          ]
+        },
+
+        "NEXT_LINE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname":"EMPTY_ACTION",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint":"","edge":"LISTEN"}
+          ]
+        },
 
         "NEXTSCENE": {
           "type": "NODE",
@@ -74,7 +157,20 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "test/orange.mp3","mode":"stream", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "test/orange.mp3","mode":"flow", "features": ""}
+          ]
+        },
+
+        "LISTENING":{
+          "type":"MODULE",
+          "reuse":true,
+          "COMMENT": "Listening Module",
+          "tracks": [
+
+            {"type": "COMMAND", "id": "SstoryReading", "method": "onRecognitionComplete", "parms": "NEXT:String"},
+            // This would increment the animation_graph when it is in a wait state.  e.g if it is sitting at the end of a stream audio clip
+            {"type": "COMMAND", "cmd": "WAIT" }
+            //{"type": "COMMAND", "id": "Sresponse", "method": "show", "parms": "TRUE:Boolean","features":""}
           ]
         },
 
@@ -83,7 +179,22 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","mode":"flow", "features": ""}
+          ]
+        },
+
+        "CHECK_COMPLETE":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+          ]
+        },
+
+        "MANUAL_PAGEFLIP":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
           ]
         },
 
@@ -92,7 +203,6 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
           ]
         }
       },
@@ -103,27 +213,84 @@
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
 
-//        "SET_LANGUAGE":{"type": "COMMAND", "id": "SrtComponent", "method": "setLanguage", "parms": "LANG_EN:String","features":""},
-//        "SET_STORYNAME":{"type": "COMMAND", "id": "SrtComponent", "method": "setStory", "parms": "The Golden Goose:String","features":""},
+        "SET_LANGUAGE":{"type": "COMMAND", "id": "SstoryReading", "method": "setLanguage", "parms": "LANG_SW:String","features":""},
+        "SET_STORYNAME":{"type": "COMMAND", "id": "SstoryReading", "method": "setStory", "parms": "Ajali mbaya:String","features":""},
 
-        "SET_LANGUAGE":{"type": "COMMAND", "id": "SrtComponent", "method": "setLanguage", "parms": "LANG_SW:String","features":""},
-        "SET_STORYNAME":{"type": "COMMAND", "id": "SrtComponent", "method": "setStory", "parms": "Ajali mbaya:String","features":""},
+        "HESTITATION_TIMER": {"type": "COMMAND", "id":"SstoryReading", "method":"configureTimedEvent", "parms": "START_TIMEOUT:String|HESITATION_PROMPT:String|5000:Integer", "features": "" },
+        "HESTITATION_RESET": {"type": "COMMAND", "id":"SstoryReading", "method":"clearTimedEvent",     "parms": "START_TIMEOUT:String",                                       "features": "" },
 
-        "NEXT_DATASET":{"type": "COMMAND", "id": "SrtComponent", "method": "next" ,"features":""},
-        "B1_ATTACH": {"type": "COMMAND", "id": "SdoneButton", "method": "setButtonBehavior", "parms": "NEXT:String"},
+        "SET_WORD_EVENT":   {"type": "COMMAND", "id":"SstoryReading", "method":"configureEvent", "parms": "WORD_EVENT:String|HESTITATION_RESET:String", "features": "" },
+        "RESET_WORD_EVENT": {"type": "COMMAND", "id":"SstoryReading", "method":"clearEvent",     "parms": "WORD_EVENT:String",                          "features": "" },
 
-        "PLAYORANGE":{"type": "AUDIO", "command": "PLAY", "soundsource": "test/orange.mp3", "mode":"flow", "features": ""},
-        "PLAYPINK":{"type": "AUDIO", "command": "PLAY", "soundsource": "test/pink.mp3", "mode":"stream", "features": ""},
+
+        "SET_ONCLICK": {"type": "COMMAND", "id":"SstoryReading", "method":"setButtonBehavior",     "parms": "NEXT_PAGE:String", "features": "" },
+
+        "NEXT_WORD":{"type": "COMMAND", "id": "SstoryReading", "method": "nextWord" ,"features":""},
+        "NEXT_LINE":{"type": "COMMAND", "id": "SstoryReading", "method": "nextLine" ,"features":""},
+        "NEXT_PAGE":{"type": "COMMAND", "id": "SstoryReading", "method": "nextPage" ,"features":""},
+
+        "EMPTY_ACTION": {"type": "COMMAND", "cmd": "NOOP" },
         "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "NEXTSCENE" },
         "NEXT": {"type": "COMMAND", "cmd": "NEXT" },
         "PAUSE":{"type": "COMMAND", "cmd": "WAIT" }
-
       },
 
       "constraintMap": {
 
-        "COMMENT": "@@@@@  CConstraints @@@@@ "
+        "COMMENT": "@@@@@  CConstraints @@@@@ ",
 
+        "FIRST_ATTEMPT": {
+          "type": "CONDITION",
+          "If": "{{SstoryReading.attempt}}==1",
+          "Then":"true",
+          "Else":"false"
+        },
+
+        "SECOND_ATTEMPT": {
+          "type": "CONDITION",
+          "If": "{{SstoryReading.attempt}}==2",
+          "Then":"true",
+          "Else":"false"
+        },
+
+
+        "STORY_COMPLETE": {
+          "type": "CONDITION",
+          "If": "{{SstoryReading.storyState}}=='STORY_COMPLETE'",
+          "Then":"true",
+          "Else":"false"
+        },
+
+        "PAGE_COMPLETE": {
+          "type": "CONDITION",
+          "If": "{{SstoryReading.storyState}}=='PAGE_COMPLETE'",
+          "Then":"true",
+          "Else":"false"
+        },
+
+        "PARAGRAPH_COMPLETE": {
+          "type": "CONDITION",
+          "If": "{{SstoryReading.storyState}}=='PARAGRAPH_COMPLETE'",
+          "Then":"true",
+          "Else":"false"
+        },
+
+        "LINE_COMPLETE": {
+          "type": "CONDITION",
+          "If": "{{SstoryReading.storyState}}=='LINE_COMPLETE'",
+          "Then":"true",
+          "Else":"false"
+        },
+
+        "FTR_RIGHT":{
+          "type": "CONDITION",
+          "test":"FTR_RIGHT"
+        },
+
+        "FTR_WRONG":{
+          "type": "CONDITION",
+          "test":"FTR_WRONG"
+        }
       }
     }
   }

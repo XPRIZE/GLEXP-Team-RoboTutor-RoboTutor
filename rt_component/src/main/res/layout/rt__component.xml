@@ -1,35 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.percent.PercentRelativeLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:id="@+id/story_reading"
-android:background="#FFF">
-
-<ImageView
-    android:id="@+id/SpageImage"
-    android:scaleType="fitCenter"
-    android:layout_margin="30dp"
-    app:layout_widthPercent="50%"
-    android:layout_gravity="left"
+<ViewAnimator
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent">
 
-<TextView
-    android:id="@+id/SstoryText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:layout_heightPercent="87%"
-    app:layout_widthPercent="50%"
-    android:layout_toRightOf="@+id/SpageImage"
-    android:layout_marginTop="30dp"
-    android:layout_marginLeft="30dp"
-    android:layout_marginRight="30dp"
-    android:scrollbars="vertical"
-    android:gravity="center_vertical"
-    android:textColor="#000"
-    android:textSize="30sp" />
-
-</android.support.percent.PercentRelativeLayout>
+</ViewAnimator>
 
