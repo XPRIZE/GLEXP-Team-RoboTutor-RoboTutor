@@ -25,7 +25,7 @@ import android.util.Log;
 import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
-import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.TCONST;
 
 
@@ -133,8 +133,7 @@ public class scene_node extends graph_node implements ILoadableObject2 {
             _currNode = (graph_node) getScope().mapSymbol(rootnode);
         }
         catch(Exception e) {
-            Log.d(TAG, "Root Node not found");
-            System.exit(1);
+            CErrorManager.terminate(TAG,"Root Node not found", e, false);
         }
 
         if(_currNode != null) {

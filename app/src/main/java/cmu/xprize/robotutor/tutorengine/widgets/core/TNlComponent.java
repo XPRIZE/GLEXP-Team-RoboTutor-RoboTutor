@@ -21,7 +21,6 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import cmu.xprize.nl_component.CNl_Component;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
@@ -37,9 +36,9 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.robotutor.tutorengine.graph.vars.type_array;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.JSON_Helper;
-import cmu.xprize.util.Num2Word;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
 
@@ -273,8 +272,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
             }
         }
         catch (Exception e) {
-            Log.e(TAG, "Invalid Data Source for : " + name());
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Invalid Data Source for : " + name(), e, false);
         }
 
         // Pass an array of strings as the data source.
@@ -301,13 +299,11 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
 
                 _dataIndex++;
             } else {
-                Log.e(TAG, "Error no DataSource : ");
-                System.exit(1);
+                CErrorManager.terminate(TAG, "Error no DataSource : ", null, false);
             }
         }
         catch(Exception e) {
-            Log.e(TAG, "Data Exhuasted: call past end of data  - " + e);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Data Exhuasted: call past end of data  - ", e, false);
         }
 
         // Kill the recognizer thread and set the End Of Data flag

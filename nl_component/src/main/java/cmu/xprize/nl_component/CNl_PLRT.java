@@ -30,10 +30,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.Num2Word;
 import cmu.xprize.util.TCJSGF;
 import cmu.xprize.util.TCONST;
-import cmu.xprize.util.Word2Num;
 import cmu.xprize.util.Word2NumFSM;
 import edu.cmu.xprize.listener.ListenerBase;
 
@@ -138,8 +138,7 @@ public class CNl_PLRT implements CNl_Processor {
             }
         }
         catch(Exception e) {
-            Log.e(TAG, "deReference Error: " + _listName + " : Index : " + index + " : " + e);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "deReference Error: " + _listName + " : Index : " + index + " : ", e, false);
         }
 
         return result;
@@ -244,8 +243,7 @@ public class CNl_PLRT implements CNl_Processor {
             }
         }
         catch(Exception e) {
-            Log.e(TAG, "Data not initialized - " + e);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Data not initialized - ", e, false);
         }
     }
 
@@ -458,7 +456,6 @@ public class CNl_PLRT implements CNl_Processor {
 
             } catch (Exception e) {
                 Log.e("ASR", "Number Parser" + e);
-                //  System.exit(1);
             }
         }
     }

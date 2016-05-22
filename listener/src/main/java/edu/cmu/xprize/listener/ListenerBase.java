@@ -19,12 +19,8 @@
 
 package edu.cmu.xprize.listener;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedWriter;
@@ -32,18 +28,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.IReadyListener;
-import cmu.xprize.util.TimerUtils;
-import edu.cmu.pocketsphinx.FsgModel;
-import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.LogMath;
 import edu.cmu.pocketsphinx.Segment;
 
@@ -214,9 +205,7 @@ public class ListenerBase {
             logMath = new LogMath();
         }
         catch (Exception e) {
-
-            Log.e(TAG, "Recognizer configuration error: " + e);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Recognizer configuration error: ", e, false);
         }
     }
 

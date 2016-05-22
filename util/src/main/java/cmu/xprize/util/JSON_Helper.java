@@ -37,8 +37,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
-
 
 
 /**
@@ -178,7 +176,7 @@ public class JSON_Helper {
                             field.set(self, jsonObj.getString(fieldName));
 
                         } catch (JSONException e) {
-                            CErrorManager.exit(TAG, "field conversion:", e, false);
+                            CErrorManager.terminate(TAG, "field conversion:", e, false);
                         }
                     }
 
@@ -189,7 +187,7 @@ public class JSON_Helper {
                             field.set(self, jsonObj.getBoolean(fieldName));
 
                         } catch (JSONException e) {
-                            CErrorManager.exit(TAG, "field conversion:", e, false);
+                            CErrorManager.terminate(TAG, "field conversion:", e, false);
                         }
                     }
 
@@ -200,7 +198,7 @@ public class JSON_Helper {
                             field.setFloat(self, Float.parseFloat(jsonObj.getString(fieldName)));
 
                         } catch (JSONException e) {
-                            CErrorManager.exit(TAG, "field conversion:", e, false);
+                            CErrorManager.terminate(TAG, "field conversion:", e, false);
                         }
                     }
 
@@ -211,7 +209,7 @@ public class JSON_Helper {
                             field.set(self, jsonObj.getBoolean(fieldName));
 
                         } catch (JSONException e) {
-                            CErrorManager.exit(TAG, "field conversion:", e, false);
+                            CErrorManager.terminate(TAG, "field conversion:", e, false);
                         }
                     }
 
@@ -223,7 +221,7 @@ public class JSON_Helper {
                             field.set(self, jsonObj.getLong(fieldName));
 
                         } catch (JSONException e) {
-                            CErrorManager.exit(TAG, "field conversion:", e, false);
+                            CErrorManager.terminate(TAG, "field conversion:", e, false);
                         }
                     }
 
@@ -234,7 +232,7 @@ public class JSON_Helper {
                             field.set(self, jsonObj.getInt(fieldName));
 
                         } catch (JSONException e) {
-                            CErrorManager.exit(TAG, "field conversion:", e, false);
+                            CErrorManager.terminate(TAG, "field conversion:", e, false);
                         }
                     }
 
@@ -255,7 +253,7 @@ public class JSON_Helper {
                             String key  = (String)keys.next();
                             Object eObj = null;
 
-//                            if(key.equals("CANCEL_HESITATION_TIMER")) {
+//                            if(key.equals("SET_STORYNAME")) {
 //                                Log.i(TAG, "THERE");
 //                            }
 
@@ -302,7 +300,7 @@ public class JSON_Helper {
                                         eObj = elemClass.newInstance();
                                     }
                                     catch(Exception e) {
-                                        CErrorManager.exit(TAG, "Check Syntax on Element: " + key, e, false);
+                                        CErrorManager.terminate(TAG, "Check Syntax on Element: " + key, e, false);
                                     }
                                 }
 
@@ -419,7 +417,7 @@ public class JSON_Helper {
                 }
 
             } catch (Exception e) {
-                CErrorManager.exit(TAG, "ERROR: parseSelf:", e, true);
+                CErrorManager.terminate(TAG, "ERROR: parseSelf:", e, true);
             }
         }
     }
@@ -492,7 +490,7 @@ public class JSON_Helper {
             }
         }
         catch(Exception e) {
-            CErrorManager.exit(TAG, "Json Array Format Error: ", e, false);
+            CErrorManager.terminate(TAG, "Json Array Format Error: ", e, false);
         }
 
         return field_Array;

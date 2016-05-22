@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CEventMap;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
@@ -476,8 +477,7 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
             }
         }
         catch (Exception e) {
-            Log.e(TAG, "Invalid Data Source for : " + tutorName);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Invalid Data Source for : " + tutorName, e, false);
         }
     }
 
@@ -508,9 +508,7 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
 
                 } catch (Exception e) {
                     // TODO: Manage Exceptions
-                    e.printStackTrace();
-                    Log.e(TAG, "Story Parse Error: " + e);
-                    System.exit(1);
+                    CErrorManager.terminate(TAG, "Story Parse Error: ", e, false);
                 }
 
                 // Configure the view manager for the first line of the story.
@@ -532,13 +530,11 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
                 mViewManager.nextWord();
 
             } else {
-                Log.e(TAG, "Error no DataSource : ");
-                System.exit(1);
+                CErrorManager.terminate(TAG, "Error no DataSource : ", null, false);
             }
         }
         catch(Exception e) {
-            Log.e(TAG, "Data Exhuasted: next called past end of data" + e);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Data Exhuasted: next called past end of data", e, false);
         }
 
     }

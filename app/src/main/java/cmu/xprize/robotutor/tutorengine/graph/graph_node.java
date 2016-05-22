@@ -27,6 +27,7 @@ import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -57,8 +58,7 @@ public class graph_node implements ILoadableObject2, IScriptable2 {
 
     protected IScope2 getScope() {
         if(_scope == null) {
-            Log.e(TAG, "Engine Error: Invalid Scope on Object: " + name);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Engine Error: Invalid Scope on Object: " + name, null, false);
         }
 
         return _scope;
@@ -164,8 +164,7 @@ public class graph_node implements ILoadableObject2, IScriptable2 {
                 node.applyNode();
 
             } catch (Exception e) {
-                Log.e(TAG, "ERROR: Symbol Not found:" + nodeName + " : " + e);
-                System.exit(1);
+                CErrorManager.terminate(TAG, "ERROR: Symbol Not found:" + nodeName + " : ", e, false);
             }
         }
     }

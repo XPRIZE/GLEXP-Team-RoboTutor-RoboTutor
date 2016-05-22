@@ -2,7 +2,6 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -15,6 +14,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
@@ -141,8 +141,7 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
             }
         }
         catch (Exception e) {
-            Log.e(TAG, "Invalid Data Source for : " + name());
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Invalid Data Source for : " + name(), e, false);
         }
     }
 

@@ -23,12 +23,10 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
-import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
-import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
-import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TFloat;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
@@ -111,8 +109,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
 
         // catch Iff exceptions
         catch(Exception e) {
-            Log.e(TAG, "Constraint Format Error: " + e);
-            System.exit(1);
+            CErrorManager.terminate(TAG,"Constraint Format Error: ", e, false);
         }
 
         return result;
@@ -141,8 +138,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
             }
         }
         catch(Exception e) {
-            Log.e(TAG, "IFF Script error: " + script);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "IFF Script error: " + script, e, false);
         }
 
         return inverse? !result:result;
@@ -228,8 +224,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
 
                             case '!':
                                 if (negate) {
-                                    Log.e(TAG, "Unexpected '!' at: " + _i1 + " in " + code);
-                                    System.exit(1);
+                                    CErrorManager.terminate(TAG,  "Unexpected '!' at: " + _i1 + " in " + code, null, false);
                                 }
 
                                 _i1++;
@@ -247,8 +242,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                                     _i1++;
                                     state = TCONST.PARSEIDENT;
                                 } else {
-                                    Log.e(TAG, "Unexpected '{' at: " + _i1 + " in " + code);
-                                    System.exit(1);
+                                    CErrorManager.terminate(TAG,   "Unexpected '{' at: " + _i1 + " in " + code, null, false);
                                 }
                                 break;
 
@@ -258,8 +252,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                                     _i1++;
                                     binaryOp = TCONST.BOOLAND;
                                 } else {
-                                    Log.e(TAG, "Unexpected '&' at: " + _i1 + " in " + code);
-                                    System.exit(1);
+                                    CErrorManager.terminate(TAG,   "Unexpected '&' at: " + _i1 + " in " + code, null, false);
                                 }
                                 break;
 
@@ -268,9 +261,9 @@ public class type_cond extends type_action implements ILoadableObject2 {
                                 if (LHS != null && parseStr.charAt(_i1) == '|') {
                                     _i1++;
                                     binaryOp = TCONST.BOOLOR;
+
                                 } else {
-                                    Log.e(TAG, "Unexpected '|' at: " + _i1 + " in " + code);
-                                    System.exit(1);
+                                    CErrorManager.terminate(TAG,   "Unexpected '|' at: " + _i1 + " in " + code, null, false);
                                 }
                                 break;
 
@@ -279,9 +272,9 @@ public class type_cond extends type_action implements ILoadableObject2 {
                                 if (LHS != null && parseStr.charAt(_i1) == '=') {
                                     _i1++;
                                     binaryOp = TCONST.EQUALTO;
+
                                 } else {
-                                    Log.e(TAG, "Unexpected '=' at: " + _i1 + " in " + code);
-                                    System.exit(1);
+                                    CErrorManager.terminate(TAG,   "Unexpected '=' at: " + _i1 + " in " + code, null, false);
                                 }
                                 break;
 
@@ -295,8 +288,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                                         binaryOp = TCONST.LESSTHAN;
                                     }
                                 } else {
-                                    Log.e(TAG, "Unexpected '<' at: " + _i1 + " in " + code);
-                                    System.exit(1);
+                                    CErrorManager.terminate(TAG,   "Unexpected '<' at: " + _i1 + " in " + code, null, false);
                                 }
                                 break;
 
@@ -310,8 +302,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                                         binaryOp = TCONST.GREATERTHAN;
                                     }
                                 } else {
-                                    Log.e(TAG, "Unexpected '>' at: " + _i1 + " in " + code);
-                                    System.exit(1);
+                                    CErrorManager.terminate(TAG,   "Unexpected '>' at: " + _i1 + " in " + code, null, false);
                                 }
                                 break;
 
@@ -361,8 +352,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
 
                         if(tChar == '.') {
                             if(DecimalPt) {
-                                Log.e(TAG, "Unexpected '.' at: " + _i1 + " - in : " + code);
-                                System.exit(1);
+                                CErrorManager.terminate(TAG,   "Unexpected '.' at: " + _i1 + " in " + code, null, false);
                             }
 
                             Symbol.append(tChar);
@@ -458,8 +448,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                         tChar = parseStr.charAt(_i1);
 
                         if(tChar ==  '.') {
-                            Log.e(TAG, "IFF invalid expression: " + code);
-                            System.exit(1);
+                            CErrorManager.terminate(TAG, "IFF invalid expression: " + code, null, false);
                         }
                         else if ((tChar >= 'A' && tChar <= 'Z') ||
                                 (tChar >= 'a' && tChar <= 'z') ||
@@ -503,8 +492,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                         } else {
 
                             if(binaryOp == TCONST.NOOP) {
-                              Log.e(TAG, "Invalid Expression missing Operator: " + code);
-                              System.exit(1);
+                              CErrorManager.terminate(TAG, "Invalid Expression missing Operator: " + code, null, false);
                             }
                             RHS = resultObj;
                             RNegate = negate;
@@ -579,8 +567,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
         }
         catch(Exception e) {
             // TODO: Manage Syntax Errors
-            Log.e(TAG, "Invalid Expression: " + code);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Invalid Expression: " + code, null, false);
         }
 
         // Do terminal evaluation - must be boolean outcome
@@ -590,8 +577,8 @@ public class type_cond extends type_action implements ILoadableObject2 {
             Log.i(TAG, "(sub)Expression evaluates: " + result + "  :  " + code);
 
         } catch (Exception e) {
-            Log.e(TAG, "Value does not evaluate to boolean in expression: " + code);
-            System.exit(1);
+
+            CErrorManager.terminate(TAG,"Value does not evaluate to boolean in expression: " + code, null, false);
         }
 
         return result;

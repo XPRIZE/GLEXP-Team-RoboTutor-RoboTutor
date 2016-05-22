@@ -134,7 +134,7 @@ public class type_action extends graph_node {
                         CTutorEngine.launch(intent, intentData, features);
                     }
                     catch(Exception e) {
-                        CErrorManager.exit(TAG, "Launch Command Invalid: ", e, false);
+                        CErrorManager.terminate(TAG, "Launch Command Invalid: ", e, false);
                     }
                     break;
 
@@ -225,7 +225,7 @@ public class type_action extends graph_node {
 
                             } catch (Exception e) {
                                 // TODO: Update this exception -  it is actually an invalid parm type error
-                                CErrorManager.exit(TAG, "ERROR: " + id + " - Method: <" + method + "> Not Found: ", e, false);
+                                CErrorManager.terminate(TAG, "ERROR: " + id + " - Method: <" + method + "> Not Found: ", e, false);
                             }
                         }
                     }
@@ -242,7 +242,7 @@ public class type_action extends graph_node {
                         _method.invoke(childMap.get(id), iparms);
 
                     } catch(Exception e) {
-                        CErrorManager.exit(TAG, "ERROR: "+ id + " - Apply Method: " + method + "   Parms: "+ parms + " : ", e, false);
+                        CErrorManager.terminate(TAG, "ERROR: "+ id + " - Apply Method: " + method + "   Parms: "+ parms + " : ", e, false);
                     }
                     break;
             }

@@ -45,6 +45,7 @@ import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.IMediaListener;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
@@ -840,8 +841,8 @@ public class type_timeline extends type_action implements IMediaListener {
                 }
             }
             catch(Exception e) {
-                Log.e(TAG, "ERROR: Flash resource: " + e);
-                System.exit(1);
+
+                CErrorManager.terminate(TAG, "ERROR: Flash resource: ", e, false);
             }
 
             xpparser.setInput(in, null);
@@ -891,11 +892,12 @@ public class type_timeline extends type_action implements IMediaListener {
             }
 
         } catch (XmlPullParserException e) {
-            Log.e(TAG, "ERROR: XML Spec Invalid: " + e.getMessage());
-            System.exit(1);
+
+            CErrorManager.terminate(TAG, "ERROR: XML Spec Invalid: " , e, false);
+
         } catch (IOException e) {
-            Log.e(TAG, "ERROR: XML Spec Invalid: " + e.getMessage());
-            System.exit(1);
+
+            CErrorManager.terminate(TAG, "ERROR: XML Spec Invalid: ", e, false);
         }
     }
 

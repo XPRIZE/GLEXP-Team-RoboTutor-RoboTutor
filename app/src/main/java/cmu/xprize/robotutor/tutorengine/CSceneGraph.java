@@ -22,7 +22,6 @@ package cmu.xprize.robotutor.tutorengine;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +33,7 @@ import java.util.Map;
 import cmu.xprize.robotutor.tutorengine.graph.scene_node;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
@@ -102,57 +102,63 @@ public class CSceneGraph  {
         @Override
         public void run() {
 
-            queueMap.remove(this);
+            try {
 
-            switch(_command) {
-                case TCONST.ENTER_SCENE:
 
-                    mSceneName = _target;
+                queueMap.remove(this);
 
-                    try {
-                        _sceneNode = (scene_node)mScope.mapSymbol(mSceneName);
+                switch (_command) {
+                    case TCONST.ENTER_SCENE:
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Log.e(TAG, "Scene not found for SceneGraph");
-                        System.exit(1);
-                    }
-                    break;
+                        mSceneName = _target;
 
-                case TCONST.NEXT_NODE:
+                        try {
+                            _sceneNode = (scene_node) mScope.mapSymbol(mSceneName);
 
-                    switch (_sceneNode.applyNode()) {
+                        } catch (Exception e) {
 
-                        // TCONST.NEXTSCENE is used to end the current scene and step through to the
-                        // next scene in the TutorGraph.
+                            CErrorManager.terminate(TAG, "Scene not found for SceneGraph", e, false);
+                        }
+                        break;
 
-                        case TCONST.NEXTSCENE:
-                            mTutorGraph.post(TCONST.NEXTSCENE);
-                            break;
+                    case TCONST.NEXT_NODE:
 
-                        // TCONST.WAIT indicates that next node will be driven by a
-                        // completion event from the current action or some external user event.
+                        switch (_sceneNode.applyNode()) {
 
-                        case TCONST.WAIT:
-                            break;
+                            // TCONST.NEXTSCENE is used to end the current scene and step through to the
+                            // next scene in the TutorGraph.
 
-                        default:
-                            post(TCONST.NEXT_NODE);
-                            break;
-                    }
-                    break;
+                            case TCONST.NEXTSCENE:
+                                mTutorGraph.post(TCONST.NEXTSCENE);
+                                break;
 
-                case TCONST.PLAY:
-                    _sceneNode.play();
-                    break;
+                            // TCONST.WAIT indicates that next node will be driven by a
+                            // completion event from the current action or some external user event.
 
-                case TCONST.STOP:
-                    _sceneNode.stop();
-                    break;
+                            case TCONST.WAIT:
+                                break;
 
-                case TCONST.GOTO_NODE:
-                    _sceneNode.gotoNode(_target);
-                    break;
+                            default:
+                                post(TCONST.NEXT_NODE);
+                                break;
+                        }
+                        break;
+
+                    case TCONST.PLAY:
+                        _sceneNode.play();
+                        break;
+
+                    case TCONST.STOP:
+                        _sceneNode.stop();
+                        break;
+
+                    case TCONST.GOTO_NODE:
+                        _sceneNode.gotoNode(_target);
+                        break;
+                }
+            }
+            catch(Exception e) {
+                CErrorManager.terminate(TAG, "Run Error:", e, false);
             }
         }
     }
@@ -250,8 +256,7 @@ public class CSceneGraph  {
 
         } catch (JSONException e) {
 
-            Log.e(TAG, "JSON FORMAT ERROR: " + TCONST.AGDESC + " : " + e);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "JSON FORMAT ERROR: " + TCONST.AGDESC + " : ", e, false);
         }
     }
 

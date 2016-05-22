@@ -29,6 +29,7 @@ import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.graph.type_timeline;
 import cmu.xprize.robotutor.tutorengine.graph.type_timer;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.IMediaManager;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.util.TTSsynthesizer;
@@ -246,8 +247,7 @@ public class CMediaManager implements IMediaManager {
     public void createTimer(String key, type_timer owner) {
 
         if(mTimerMap.containsKey(key)) {
-            Log.e(TAG, "Duplicate Timer Name:" + key);
-            System.exit(1);
+            CErrorManager.terminate(TAG,  "Duplicate Timer Name:" + key, new Exception("no-exception"), false);
         }
         mTimerMap.put(key, owner);
     }
@@ -280,8 +280,7 @@ public class CMediaManager implements IMediaManager {
     public void createTimeLine(String key, type_timeline owner) {
 
         if(mTimeLineMap.containsKey(key)) {
-            Log.e(TAG, "Duplicate Timer Name:" + key);
-            System.exit(1);
+            CErrorManager.terminate(TAG,  "Duplicate Timer Name:" + key, new Exception("no-exception"), false);
         }
         mTimeLineMap.put(key, owner);
     }
@@ -607,8 +606,7 @@ public class CMediaManager implements IMediaManager {
             if(mOwner != null)
                 mOwner.onCompletion();
             else {
-                Log.e(TAG, "invalid Owner");
-                System.exit(1);
+                CErrorManager.terminate(TAG,  "invalid Owner", new Exception("no-exception"), false);
             }
 
         }

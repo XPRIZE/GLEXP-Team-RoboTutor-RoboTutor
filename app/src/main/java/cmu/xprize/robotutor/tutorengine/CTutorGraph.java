@@ -36,6 +36,7 @@ import java.util.Map;
 
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -144,22 +145,27 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
         @Override
         public void run() {
 
-            switch(_command) {
+            try {
+                switch (_command) {
 
-                case TCONST.FIRST_SCENE:
+                    case TCONST.FIRST_SCENE:
 
-                    gotoNextScene(true);
-                    break;
+                        gotoNextScene(true);
+                        break;
 
-                case TCONST.NEXTSCENE:
+                    case TCONST.NEXTSCENE:
 
-                    if(gotoNextScene(false).equals(TCONST.ENDTUTOR)) {
+                        if (gotoNextScene(false).equals(TCONST.ENDTUTOR)) {
 
-                        mainHandler.post(mTutor.new Queue(TCONST.ENDTUTOR));
-                    }
-                    break;
+                            mainHandler.post(mTutor.new Queue(TCONST.ENDTUTOR));
+                        }
+                        break;
 
 
+                }
+            }
+            catch(Exception e) {
+                CErrorManager.terminate(TAG, "Run Error:", e, false);
             }
         }
     }
@@ -349,7 +355,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
             //            gLogR.logNavEvent(logData);
             //@@ Action Logging
 
-            // On exit behaviors
+            // On terminate behaviors
             navigatedata[_scenePrev].instance.onExitScene();
 
             // Do the scene transition - add callback for when IN animation ends

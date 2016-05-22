@@ -20,7 +20,6 @@
 package cmu.xprize.robotutor.tutorengine;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.os.Handler;
 import android.os.Looper;
@@ -43,6 +42,7 @@ import java.util.Map;
 
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CPreferenceCache;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -50,7 +50,6 @@ import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.robotutor.tutorengine.graph.scene_initializer;
 import cmu.xprize.robotutor.tutorengine.graph.type_action;
-import cmu.xprize.robotutor.tutorengine.graph.type_timer;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
 
@@ -157,12 +156,17 @@ public class CTutor implements ILoadableObject2 {
         @Override
         public void run() {
 
-            switch(_command) {
-                case TCONST.ENDTUTOR:
-                    endTutor();
-                    break;
+            try {
+                switch (_command) {
+                    case TCONST.ENDTUTOR:
+                        endTutor();
+                        break;
 
 
+                }
+            }
+            catch(Exception e) {
+                CErrorManager.terminate(TAG, "Run Error:", e, false);
             }
         }
     }
@@ -442,8 +446,8 @@ public class CTutor implements ILoadableObject2 {
                 child = (ITutorObject) ((ViewGroup) tutorContainer).getChildAt(i);
 
                 if(childMap.containsKey(child.name())) {
-                    Log.e(TAG, "ERROR: Duplicate child view in:" + tutorContainer.name());
-                    System.exit(1);
+
+                    CErrorManager.terminate(TAG, "ERROR: Duplicate child view in:" + tutorContainer.name(),  new Exception("no-exception"), false);
                 }
 
                 childMap.put(child.name(), child);
@@ -458,8 +462,8 @@ public class CTutor implements ILoadableObject2 {
                 }
 
             } catch (ClassCastException e) {
-                Log.e(TAG, "ERROR: Non-ITutor child view in:" + tutorContainer.name());
-                System.exit(1);
+
+                CErrorManager.terminate(TAG, "ERROR: Non-ITutor child view in:" + tutorContainer.name(), e, false);
             }
         }
     }

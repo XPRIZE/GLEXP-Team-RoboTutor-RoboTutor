@@ -19,10 +19,8 @@
 
 package cmu.xprize.fw_component;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -51,6 +49,7 @@ import cmu.xprize.ltk.LipiTKJNIInterface;
 import cmu.xprize.ltk.RecResult;
 import cmu.xprize.ltk.Stroke;
 import cmu.xprize.ltk.StrokeSet;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CEvent;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.util.IEventDispatcher;
@@ -675,8 +674,7 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
         catch(Exception e)
         {
             // TODO: Manage initialization errors more effectively
-            Log.d(TAG, "Cannot create Recognizer - Error:1");
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Cannot create Recognizer - Error:1", e, false);
         }
 
         // reset the internal state
