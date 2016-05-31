@@ -83,6 +83,7 @@ public class Persona extends View {
     private TimerTask       blinkTask;
 
     private LocalBroadcastManager bManager;
+    private ChangeReceiver        bReceiver;
 
     private int[]           _screenCoord = new int[2];
     private static String   TAG          = "PERSONA";
@@ -93,6 +94,7 @@ public class Persona extends View {
     final public static String   LOOKAT       = "PERSONA_LOOKAT";
     final public static String   LOOKATEND    = "PERSONA_LOOKAT_END";
     final public static String   SCREENPOINT  = "SCREENPOINT";
+
 
     /**
      * Create a Persona object
@@ -128,7 +130,24 @@ public class Persona extends View {
         IntentFilter filter = new IntentFilter(LOOKATSTART);
         filter.addAction(LOOKAT);
         filter.addAction(LOOKATEND);
-        bManager.registerReceiver(new ChangeReceiver(), filter);
+
+        bReceiver = new ChangeReceiver();
+
+        bManager.registerReceiver(bReceiver, filter);
+    }
+
+
+    /**
+     * Release resources and diesconnect from broadcast Mananger
+     */
+    public void onDestroy() {
+
+        try {
+            setOnClickListener(null);
+            bManager.unregisterReceiver(bReceiver);
+        }
+        catch(Exception e) {
+        }
     }
 
 
@@ -220,6 +239,8 @@ public class Persona extends View {
 
     class ChangeReceiver extends BroadcastReceiver {
         public void onReceive (Context context, Intent intent) {
+
+            Log.d("Persona", "Broadcast recieved: ");
 
             float[] point = intent.getFloatArrayExtra(SCREENPOINT);
 

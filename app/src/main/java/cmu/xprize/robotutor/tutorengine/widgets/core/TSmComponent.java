@@ -22,9 +22,14 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import org.json.JSONObject;
 
+import cmu.xprize.robotutor.BuildConfig;
+import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
@@ -42,7 +47,7 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl {
 
     private CTutor               mTutor;
     private CObjectDelegate      mSceneObject;
-
+    private TLangToggle          mLangButton;
     private String               mSymbol;
 
     static final private String TAG = "TSmComponent";
@@ -74,7 +79,6 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl {
     public void onDestroy() {
         mSceneObject.onDestroy();
     }
-
 
 
     //**********************************************************
@@ -182,7 +186,22 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl {
     }
 
     @Override
-    public void postInflate() {}
+    public void postInflate() {
+
+        ViewGroup parent = (ViewGroup)getParent();
+
+        mLangButton = (TLangToggle)parent.findViewById(R.id.SlangToggle);
+        mLangButton.setTransformationMethod(null);
+
+        // Hide th language toggle on the release builds
+        //
+        if(!BuildConfig.DEBUG) {
+
+            mLangButton.setVisibility(View.GONE);
+
+            parent.requestLayout();
+        }
+    }
 
     @Override
     public void setNavigator(ITutorGraph navigator) {

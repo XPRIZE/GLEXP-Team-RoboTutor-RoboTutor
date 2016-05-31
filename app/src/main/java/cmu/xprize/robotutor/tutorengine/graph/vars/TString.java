@@ -54,6 +54,17 @@ public class TString extends TVarBase implements ILoadableObject2, IScriptable2 
     public Object getValue() { return _value; }
 
 
+    /**
+     * String comparison cannot use ==
+     *
+     * @param RHS
+     * @return
+     */
+    @Override
+    public TBoolean EQ(IScriptable2 RHS) {
+        return new TBoolean(getValue().equals(RHS.getValue()));
+    }
+
     @Override
     public String toString() {
 

@@ -219,8 +219,19 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
         super.setForeGround(Color);
     }
 
+
+    /**
+     * Deprecated - in favor of onRecognitionEvent
+     *
+     * @param symbol
+     */
     public void onRecognitionComplete(String symbol) {
-        super.onRecognitionComplete(symbol);
+        onRecognitionEvent(symbol);
+    }
+
+
+    public void onRecognitionEvent(String symbol) {
+        super.onRecognitionEvent(symbol);
     }
 
 

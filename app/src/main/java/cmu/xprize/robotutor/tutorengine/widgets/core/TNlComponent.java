@@ -23,6 +23,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 import cmu.xprize.nl_component.CNl_Component;
+import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
@@ -52,12 +53,14 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
     private CObjectDelegate mSceneObject;
     private CMediaManager   mMediaManager;
 
+    private String          debugHypSet;
+
     private int             _wrong   = 0;
     private int             _correct = 0;
 
 
     static final private String TAG = "TRtComponent";
-
+    private TTextView debugHypothesisView;
 
 
     public TNlComponent(Context context) {
@@ -159,6 +162,26 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
     @Override
     public String getLanguageFeature() {
         return mMediaManager.getLanguageFeature(mTutor);
+    }
+
+
+    /**
+     * Override in Tutor sub-class to access text view id in layout
+     * @param newValue
+     */
+    @Override
+    public void updateDebugText(String newValue) {
+
+        if(newValue == "") {
+            debugHypSet = "";
+        }
+        else {
+            if (debugHypothesisView == null)
+                debugHypothesisView = (TTextView) mTutor.getViewById(R.id.Shypothesis, null);
+
+            debugHypSet += newValue + "\n";
+            debugHypothesisView.setText(debugHypSet);
+        }
     }
 
 
@@ -290,7 +313,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
                 mStimulusString = _data.get(_dataIndex);
                 preProcessStimulus();
 
-                updateText(mStimulusString);
+                updateNumberString(mStimulusString);
 
                 // Publish scriptable variables for the stimulus state
                 //
@@ -340,8 +363,19 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
     public void onStartTalking(String symbol) {
     }
 
+
+    /**
+     * Deprecated - in favor of onRecognitionEvent
+     *
+     * @param symbol
+     */
     public void onRecognitionComplete(String symbol) {
-        super.onRecognitionComplete(symbol);
+        onRecognitionEvent(symbol);
+    }
+
+
+    public void onRecognitionEvent(String symbol) {
+        super.onRecognitionEvent(symbol);
     }
 
 

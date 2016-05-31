@@ -45,7 +45,7 @@ public class CNl_PLRT implements CNl_Processor {
     private ListenerBase            mListener;
 
     protected boolean               missingConjTolerant    = false;         // Do you need "AND" between number words
-    protected boolean               addedConjTolerant      = true;          // English tends to false positive conjunctions (AND)
+    protected boolean               addedConjTolerant      = false;         // English tends to false positive conjunctions (AND)
     protected boolean               repeatedWordIntolerant = true;          // Indicate repeated word errors.
     protected String                cachedLanguageFeature;
     protected String                conjunction;
@@ -53,9 +53,12 @@ public class CNl_PLRT implements CNl_Processor {
     protected String                mStimulusString;        // String representation - even for numbers e.g. "34"
     protected String                mResponseString;        // String representation - even for numbers e.g. "34"
 
-    protected int                   mStimulusValue;
-    protected String                mStimulusText;
-    protected List<String>          mStimulusComp;
+    protected int                   mStimulusValue;         // The stimulus number - 123
+    protected String                mStimulusText;          // The textual version - one hundred twenty three
+    protected List<String>          mStimulusTextList;      // A list of the component words ["one", "hundred", "twenty", "three"]
+
+    protected ArrayList<String>     mResponseTextList;      // The processed ASR hypothesis partial or complete - ["one", "hundred", "twenty"] - may contain errors
+    protected long                  mResponseNumber;        // The current number as spoken - derived ftom mResponseTextList
 
     protected ArrayList<Integer>    mStimulusDigitValue;
     protected List<String>          mStimulusDigitString;
@@ -65,10 +68,7 @@ public class CNl_PLRT implements CNl_Processor {
     protected ArrayList<String>     mStimulusPlaceString;
     protected ArrayList<String>     mStimulusPlaceText;
 
-    protected long                  mResponseNumber;
-    protected String                mResponseText;
-    protected List                  mResponseList;
-    protected ArrayList<String>     mResponseTextList;
+    private boolean DEBUG = true;
 
     protected LocalBroadcastManager bManager;
 
@@ -164,10 +164,10 @@ public class CNl_PLRT implements CNl_Processor {
     @Override
     public void preProcessStimulus(String stimulusString) {
 
-        mStimulusString = stimulusString;
-        mStimulusValue  = Integer.parseInt(mStimulusString);
-        mStimulusText   = Num2Word.transform(mStimulusValue, _Owner.getLanguage()).toUpperCase();
-        mStimulusComp   = Arrays.asList(mStimulusText.split(" "));
+        mStimulusString   = stimulusString;
+        mStimulusValue    = Integer.parseInt(mStimulusString);
+        mStimulusText     = Num2Word.transform(mStimulusValue, _Owner.getLanguage()).toUpperCase();
+        mStimulusTextList = Arrays.asList(mStimulusText.split(" "));
 
         // Note: the list is reordered (reversed) to access in terms of increasing place value
         // 238 = ["8", "3", "2"]
@@ -196,6 +196,10 @@ public class CNl_PLRT implements CNl_Processor {
 
             power *= 10;
         }
+
+        if(DEBUG)
+            _Owner.updateDebugText("");
+
     }
 
 
@@ -223,7 +227,7 @@ public class CNl_PLRT implements CNl_Processor {
 
                     ArrayList<String> combo = new ArrayList<String>();
 
-                    for(String elem : mStimulusComp) {
+                    for(String elem : mStimulusTextList) {
                         combo.add(elem.toUpperCase());
                     }
 
@@ -268,7 +272,7 @@ public class CNl_PLRT implements CNl_Processor {
 
         if (heardWords.length >= 1) {
 
-            for(int i = 0; i < mStimulusComp.size() ; i++) {
+            for(int i = 0; i < mStimulusTextList.size() ; i++) {
                 mResponseTextList.add("");
             }
 
@@ -293,16 +297,19 @@ public class CNl_PLRT implements CNl_Processor {
                 }
             }
 
+            // Build a debug log string
+            //
             String logString = "";
             for (int i = 0; i < heardWords.length; i++) {
                 logString += heardWords[i].hypWord.toUpperCase() + ":" + heardWords[i].iSentenceWord + " | ";
             }
             Log.d("ASR", "New HypSet: "  + logString);
 
+
             // Place the words in order
-            // Loop throught as many words as are in the stimulus
+            // Loop through as many words as are in the stimulus
             //
-            for (int i1 = 0; i1 < mStimulusComp.size(); i1++) {
+            for (int i1 = 0; i1 < mStimulusTextList.size(); i1++) {
 
                 // Assign the most recent one to it's associated place value
                 // This may result in empty place values and may place some values in the
@@ -319,28 +326,28 @@ public class CNl_PLRT implements CNl_Processor {
                 }
             }
 
-//            // Prune out false positive conjunctions
-//            // e.g for a stimulus of 100 it hears ONE AND...
-//            //
-//            if(addedConjTolerant) {
-//
-//                for (int i1 = 0; i1 <= maxPlace; i1++) {
-//
-//                    // If the response is a conjunction and the stimulus
-//                    // isn't then remove the response conjunction (false positive) and
-//                    // retest the element if we aren't at the end of the reponse set
-//                    //
-//                    if(!mStimulusComp.get(i1).equals(conjunction)) {
-//                        if(mResponseTextList.get(i1).equals(conjunction)) {
-//                            Log.d("ASR", "Conjunction pruned" );
-//                            mResponseTextList.remove(i1);
-//
-//                            if(i1 == maxPlace) break;
-//                            i1--;
-//                        }
-//                    }
-//                }
-//            }
+            // Prune out false positive conjunctions
+            // e.g for a stimulus of 100 it hears ONE AND...
+            //
+            if(addedConjTolerant) {
+
+                for (int i1 = 0; i1 <= maxPlace; i1++) {
+
+                    // If the response is a conjunction and the stimulus
+                    // isn't then remove the response conjunction (false positive) and
+                    // retest the element if we aren't at the end of the reponse set
+                    //
+                    if(!mStimulusTextList.get(i1).equals(conjunction)) {
+                        if(mResponseTextList.get(i1).equals(conjunction)) {
+                            Log.d("ASR", "Conjunction pruned" );
+                            mResponseTextList.remove(i1);
+
+                            if(i1 == maxPlace) break;
+                            i1--;
+                        }
+                    }
+                }
+            }
 
             Log.d("ASR", "Pre MCT: " + TextUtils.join(" ", mResponseTextList));
 
@@ -357,7 +364,7 @@ public class CNl_PLRT implements CNl_Processor {
                     // If the stimulus place value is a conjunction and the response
                     // isn't then either insert it or replace an empty element
                     //
-                    if (mStimulusComp.get(i1).equals(conjunction)) {
+                    if (mStimulusTextList.get(i1).equals(conjunction)) {
                         if(!respElem.equals(conjunction)) {
                             if(respElem.equals("")) {
                                 Log.d("ASR", "Conjunction Insertion");
@@ -396,8 +403,12 @@ public class CNl_PLRT implements CNl_Processor {
 
                 // We update the control directly in this case - unlike the base component
                 //
-                if(mResponseNumber != -1)
-                    _Owner.updateText(mResponseString);
+                if(mResponseNumber != -1) {
+                    _Owner.updateNumberString(mResponseString);
+
+                    if(DEBUG)
+                        _Owner.updateDebugText(TextUtils.join(" ", mResponseTextList));
+                }
 
                 // Let anyone interested know there is a new recognition set available
                 Intent msg = new Intent(TCONST.LISTENER_RESPONSE);
@@ -406,10 +417,10 @@ public class CNl_PLRT implements CNl_Processor {
                 bManager.sendBroadcast(msg);
 
 
-                Log.d("ASR", "Stimulus: " + TextUtils.join(" ", mStimulusComp));
+                Log.d("ASR", "Stimulus: " + TextUtils.join(" ", mStimulusTextList));
                 Log.d("ASR", "Response: " + TextUtils.join(" ", mResponseTextList));
 
-                int size = Math.min(mStimulusComp.size(),mResponseTextList.size());
+                int size = Math.min(mStimulusTextList.size(),mResponseTextList.size());
 
                 for (int i1 = 0; i1 < size; i1++) {
 
@@ -421,7 +432,7 @@ public class CNl_PLRT implements CNl_Processor {
 
                     // Check if the next element matches
                     //
-                    if(!mStimulusComp.get(i1).equals(subElem)) {
+                    if(!mStimulusTextList.get(i1).equals(subElem)) {
 
                         ErrorType = mStimulusDigitValue.size();
                         Error     = TCONST.TRUE_ERROR;
@@ -431,23 +442,19 @@ public class CNl_PLRT implements CNl_Processor {
                     // Note - don't use the response length here as it may have been made
                     // longer than the stimulus by a conj insertion or repeated word.
                     //
-                    else if(i1 >= mStimulusComp.size()-1) {
+                    else if(i1 >= mStimulusTextList.size()-1) {
                         Correct   = true;
                         break;
                     }
                 }
+
                 if(Correct) {
                     _Owner.updateOutcomeState(TCONST.FALSE_NOERROR);
                     _Owner.onASREvent(TCONST.RECOGNITION_EVENT);
                 }
                 else if(Error) {
                     _Owner.updateOutcomeState(TCONST.TRUE_ERROR);
-
-                    // If they've uttered as many words as are in the stimulus and they are
-                    // still incorrect emit a recognition event to terminate.
-                    //
-                    //if(mStimulusComp.size() == mResponseTextList.size())
-                        _Owner.onASREvent(TCONST.RECOGNITION_EVENT);
+                    _Owner.onASREvent(TCONST.RECOGNITION_EVENT);
                 }
 
                 // Update the expected word in MultiMatch

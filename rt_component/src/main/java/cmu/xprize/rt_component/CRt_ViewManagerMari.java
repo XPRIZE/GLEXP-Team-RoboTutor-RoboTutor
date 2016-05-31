@@ -25,6 +25,7 @@ import android.text.Html;
 import android.text.Layout;
 import android.text.Spanned;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -94,6 +95,18 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
     }
 
     @Override
+    public void onDestroy() {
+
+    }
+
+
+    public void setSpeakButton(String command) {
+    }
+
+    public void setPageFlipButton(String command) {
+    }
+
+    @Override
     public void seekToPage(int pageIndex) {
 
     }
@@ -158,7 +171,7 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
     }
 
     @Override
-    public void setHighLight(String highlight) {
+    public void setHighLight(String highlight, boolean update) {
 
     }
 
@@ -207,6 +220,16 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
                 }
             }, 100);
         }
+    }
+
+    @Override
+    public void onUpdate(String[] heardWords, boolean finalResult) {
+
+    }
+
+    @Override
+    public void continueListening() {
+
     }
 
 

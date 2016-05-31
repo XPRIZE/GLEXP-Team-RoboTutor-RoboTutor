@@ -26,7 +26,11 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
+import cmu.xprize.robotutor.tutorengine.graph.scene_view;
+import cmu.xprize.robotutor.tutorengine.graph.type_handler;
 import cmu.xprize.robotutor.tutorengine.graph.type_timeline;
 import cmu.xprize.robotutor.tutorengine.graph.type_timer;
 import cmu.xprize.util.CErrorManager;
@@ -53,7 +57,9 @@ public class CMediaManager implements IMediaManager {
 
     private ArrayList<mediaController>      mControllerSet = new ArrayList<mediaController>();
     private HashMap<String, type_timer>     mTimerMap      = new HashMap<String, type_timer>();
+    private HashMap<String, type_handler>   mHandlerMap    = new HashMap<String, type_handler>();
     private HashMap<String, type_timeline>  mTimeLineMap   = new HashMap<String, type_timeline>();
+
     private HashMap<CTutor, HashMap>        mMediaPackage  = new HashMap<>();
 
     private AssetManager                    mAssetManager;
@@ -85,17 +91,71 @@ public class CMediaManager implements IMediaManager {
     }
 
 
+    public void globalStop() {
+
+        for(mediaController controller : mControllerSet) {
+            if(controller.isPlaying()) {
+                controller.kill();
+            }
+        }
+
+
+        Iterator<?> timerObjects = mTimerMap.entrySet().iterator();
+
+        while(timerObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) timerObjects.next();
+
+            type_timer timer = ((type_timer)(entry.getValue()));
+
+            timer.globalPause();
+        }
+
+
+        Iterator<?> handlerObjects = mHandlerMap.entrySet().iterator();
+
+        while(handlerObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) handlerObjects.next();
+
+            type_handler handler = ((type_handler)(entry.getValue()));
+
+            handler.globalPause();
+        }
+
+
+        Iterator<?> timelineObjects = mTimeLineMap.entrySet().iterator();
+
+        while(timelineObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) timelineObjects.next();
+
+            type_timeline timeline = ((type_timeline)(entry.getValue()));
+
+            timeline.globalPause();
+        }
+
+
+
+        if(TTS != null)
+            TTS.stopSpeaking();
+
+        if(mListener != null) {
+            mListener.stop();
+        }
+    }
+
+
 
     //**************************************************************************
     // ASR management START
 
     private boolean paused = false;
+
     /**
      *  Inject the listener into the MediaManageer
      */
     public void setListener(ListenerBase listener) {
         mListener = listener;
     }
+
 
     /**
      *  Remove the listener from the MediaManageer
@@ -104,6 +164,7 @@ public class CMediaManager implements IMediaManager {
         mListener = null;
     }
 
+
     private void pauseListener() {
 
         if(mListener != null && mListener.isListening()) {
@@ -111,6 +172,7 @@ public class CMediaManager implements IMediaManager {
             paused = true;
         }
     }
+
 
     private void playListener() {
 
@@ -195,6 +257,8 @@ public class CMediaManager implements IMediaManager {
 
         try {
             // If the tutor is configured for mediapackages in the tutor_descriptor
+            // Old tutors may not contain soundMaps - these default to what they expect.
+            // non-soundMap tutors are deprecated.
             //
             soundMap = mMediaPackage.get(tTutor);
 
@@ -269,6 +333,38 @@ public class CMediaManager implements IMediaManager {
 
 
     //*************  Timer Management END
+    //********************************************************************
+
+
+
+    //********************************************************************
+    //*************  Handler Management START
+
+    public void createHandler(String key, type_handler owner) {
+
+        if(mHandlerMap.containsKey(key)) {
+            CErrorManager.terminate(TAG,  "Duplicate Handler Name:" + key, new Exception("no-exception"), false);
+        }
+        mHandlerMap.put(key, owner);
+    }
+
+
+    public type_handler removeHandler(String key) {
+        return mHandlerMap.remove(key);
+    }
+
+
+    public type_handler mapHandler(String key) {
+        return mHandlerMap.get(key);
+    }
+
+
+    public boolean hasHandler(String key) {
+        return mHandlerMap.containsKey(key);
+    }
+
+
+    //*************  Handler Management END
     //********************************************************************
 
 
@@ -364,9 +460,12 @@ public class CMediaManager implements IMediaManager {
         // If we don't find a RE-usable controller then create a new one
         //
         if(controller == null) {
+
             Log.i(TAG, "Creating new MediaController");
 
             controller = new mediaController(owner, dataSource);
+
+            mControllerSet.add(controller);
         }
 
         return controller;
@@ -403,6 +502,7 @@ public class CMediaManager implements IMediaManager {
         private MediaPlayer  mPlayer        = null;
         private boolean      mPlaying       = false;
         private boolean      mIsReady       = false;
+        private boolean      mIsAlive       = true;
 
         private Long         lastUsed       = Long.MAX_VALUE;
         private String       mDataSource = "";
@@ -445,12 +545,14 @@ public class CMediaManager implements IMediaManager {
             }
         }
 
+
         public void releasePlayer() {
 
             if(mPlayer != null) {
                 mPlayer.pause();
                 mPlayer.seekTo(0);
                 mPlaying = false;
+                mIsAlive = true;
 
                 mPlayer.reset();
                 mPlayer.release();
@@ -508,7 +610,7 @@ public class CMediaManager implements IMediaManager {
         // since they aren't being released.
         public void play() {
 
-            if(!mPlaying) {
+            if(!mPlaying && mIsAlive) {
                 if(mIsReady) {
                     mPlayer.start();
                     mPlaying = true;
@@ -526,6 +628,19 @@ public class CMediaManager implements IMediaManager {
 
             pause();
             seek(0L);
+        }
+
+
+        public void kill() {
+
+            mIsAlive = false;
+
+            // Note: using stop instead of pause seems to be preferable. pause seek combination
+            // seems to have a probability of brief restart
+            //
+            if(mPlaying) {
+                mPlayer.stop();
+            }
         }
 
 
@@ -556,7 +671,9 @@ public class CMediaManager implements IMediaManager {
         public void seekTo(int frameTime) {
 
             // No errors occur - but don't try to seek past the end
-            if(mPlayer != null && frameTime < mPlayer.getDuration())
+            // Note: we don't want to seek after death
+            //
+            if(mPlayer != null && mIsAlive && frameTime < mPlayer.getDuration())
                 mPlayer.seekTo(frameTime);
         }
 
@@ -606,7 +723,7 @@ public class CMediaManager implements IMediaManager {
             if(mOwner != null)
                 mOwner.onCompletion();
             else {
-                CErrorManager.terminate(TAG,  "invalid Owner", new Exception("no-exception"), false);
+                Log.i(TAG, "invalid Owner");
             }
 
         }

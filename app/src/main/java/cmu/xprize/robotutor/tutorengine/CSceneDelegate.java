@@ -53,7 +53,7 @@ public class CSceneDelegate implements ITutorScene {
 //
 //    public static const DEFAULT_MONITOR_INTERVAL:Number = 3000;
 //
-//    protected var _timer:Timer;
+//    protected var _handler:Timer;
 //    protected var _interval:Number = DEFAULT_MONITOR_INTERVAL;
 
 

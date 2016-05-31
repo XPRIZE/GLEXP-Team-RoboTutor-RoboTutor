@@ -71,6 +71,14 @@
 
     </cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>
 
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TTextView
+        android:id="@+id/Shypothesis"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@id/Sbanner"
+        android:textSize="20sp"
+    />
+
 
 </cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>
 

@@ -335,10 +335,13 @@ public class TScope implements IScope2 {
                 } while (tarObject == null);
 
             } catch (Exception e) {
+
                 //TODO : Manage symbol not found
-                CErrorManager.terminate(TAG, "Symbol not found : " + name, e, false);
-                Log.e(TAG, "Symbol not found : " + name);
-                System.exit(1);
+                // NOTE: this is not reliably being flushed to LogCat
+                //CErrorManager.terminate(TAG, "Symbol not found : " + name + " Exception: " , e, false);
+
+                // Don't exit
+                Log.e(TAG, "Symbol not found : " + name + " Exception: " + e);
             }
         }
 

@@ -29,6 +29,7 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
         import java.util.ArrayList;
 
+        import cmu.xprize.robotutor.R;
         import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
         import cmu.xprize.robotutor.tutorengine.CTutor;
         import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
@@ -42,7 +43,7 @@ public class TSceneAnimatorLayout extends ViewAnimator implements ITutorManager 
     private Context        mContext;
     private CSceneDelegate mTutorScene;
     private int            mTutorCount = 0;
-    private Animation      slide_in_left, slide_out_right;
+    private Animation      fade_in, slide_in_left, slide_out_right;
 
     private ArrayList<ITutorSceneImpl>  stack = new ArrayList<>();
 
@@ -64,9 +65,9 @@ public class TSceneAnimatorLayout extends ViewAnimator implements ITutorManager 
         mTutorScene.init(context, attrs);
         mContext    = context;
 
-        slide_in_left = AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
+        fade_in = AnimationUtils.loadAnimation(mContext, R.anim.fade_in);
 
-        setInAnimation(slide_in_left);
+        setInAnimation(fade_in);
     }
 
     @Override
@@ -90,11 +91,17 @@ public class TSceneAnimatorLayout extends ViewAnimator implements ITutorManager 
         super.setDisplayedChild(insertNdx);
     }
 
+    @Override
+    public void removeView(ITutorSceneImpl oldView) {
+
+        super.removeView((View) oldView);
+    }
+
 
     @Override
     public void setAnimationListener(Animation.AnimationListener callback) {
 
-        slide_in_left.setAnimationListener(callback);
+        fade_in.setAnimationListener(callback);
     }
 
 

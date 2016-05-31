@@ -29,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
@@ -193,6 +194,30 @@ public class CTutorEngine implements ILoadableObject2 {
 
     static public void pauseTutor() {
 
+    }
+
+
+    /**
+     *  Used to destroy all tutors when the system calls onDestroy for the app
+     *
+     */
+    static public void killAllTutors() {
+
+        while(tutorMap.size() > 0) {
+
+            Iterator<?> tutorObjects = tutorMap.entrySet().iterator();
+
+            Map.Entry entry = (Map.Entry) tutorObjects.next();
+
+            CTutor tutor = ((CTutor) (entry.getValue()));
+
+            // Note the endTutor call will invalidate this iterator so recreate it
+            // on each pass
+            //
+            tutor.terminateQueue();
+            tutor.endTutor();
+        }
+        mTutorEngine = null;
     }
 
 

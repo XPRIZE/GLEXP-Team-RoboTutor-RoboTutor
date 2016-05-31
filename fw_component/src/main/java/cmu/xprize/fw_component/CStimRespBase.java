@@ -415,7 +415,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
     }
 
 
-    public void onRecognitionComplete(String symbol) {
+    public void onRecognitionEvent(String symbol) {
         _onRecognition = symbol;
     }
 

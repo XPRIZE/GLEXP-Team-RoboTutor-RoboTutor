@@ -9,6 +9,7 @@ import cmu.xprize.robotutor.tutorengine.graph.scene_node;
 import cmu.xprize.robotutor.tutorengine.graph.type_action;
 import cmu.xprize.robotutor.tutorengine.graph.type_audio;
 import cmu.xprize.robotutor.tutorengine.graph.type_cond;
+import cmu.xprize.robotutor.tutorengine.graph.type_handler;
 import cmu.xprize.robotutor.tutorengine.graph.type_timeline;
 import cmu.xprize.robotutor.tutorengine.graph.type_timer;
 import cmu.xprize.robotutor.tutorengine.graph.type_tts;
@@ -38,7 +39,7 @@ public class CClassMap2 {
         classMap.put("CONDITION", type_cond.class);
         classMap.put("TTS", type_tts.class);
         classMap.put("AUDIO", type_audio.class);
-        classMap.put("TIMER", type_timer.class);
+        classMap.put("TIMER", type_handler.class);
 
         classMap.put("TReference", TReference.class);
         classMap.put("TBoolean", TBoolean.class);

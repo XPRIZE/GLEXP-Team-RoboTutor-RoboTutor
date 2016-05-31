@@ -42,6 +42,7 @@ import cmu.xprize.util.TTSsynthesizer;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.IAsrEventListener;
 import edu.cmu.xprize.listener.ListenerBase;
+import edu.cmu.xprize.listener.ListenerJSGF;
 import edu.cmu.xprize.listener.ListenerPLRT;
 
 
@@ -136,8 +137,22 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
         slide_right_to_left  = AnimationUtils.loadAnimation(mContext, R.anim.slide_right_to_left);
         slide_top_down       = AnimationUtils.loadAnimation(mContext, R.anim.slide_top_down);
         slide_bottom_up      = AnimationUtils.loadAnimation(mContext, R.anim.slide_bottom_up);
+    }
 
 
+    public void onDestroy() {
+
+        if(mListener != null) {
+            mListener.stop();
+            mListener = null;
+        }
+
+        if(mViewManager != null) {
+            mViewManager.onDestroy();
+            mViewManager = null;
+        }
+
+        //mSynthesizer.shutDown();
     }
 
 
@@ -147,6 +162,7 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
         // Attach the speech recognizer.
         mListener = new ListenerPLRT();
 //        mListener = new ListenerJSGF();
+
         mListener.setEventListener(this);
 
         // attach TTS
@@ -185,7 +201,7 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
      * @param forward
      * @param index
      */
-    public void flipPage(boolean forward, int index) {
+    public void animatePageFlip(boolean forward, int index) {
 
         if(forward) {
             if(_scrollVertical)
@@ -244,9 +260,6 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
 //        state.putInt("currentIndex", currentIndex);     // just save the current sentence index.
     }
 
-    protected void onDestroy() {
-        mSynthesizer.shutDown();
-    }
 
     //****** Activity state support END
     //*************************************************
@@ -264,8 +277,27 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     public void onEndOfSpeech() {}
 
 
+    /**
+     * Route ASR events to the appropriate ViewMannager for the content type
+     *
+     * @param heardWords
+     * @param finalResult
+     */
     @Override
     public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult) {
+
+        mViewManager.onUpdate(heardWords, finalResult);             // update current sentence state and redraw
+    }
+
+
+    /**
+     * Route ASR events to the appropriate ViewMannager for the content type
+     *
+     * @param heardWords
+     * @param finalResult
+     */
+    @Override
+    public void onUpdate(String[] heardWords, boolean finalResult) {
 
         mViewManager.onUpdate(heardWords, finalResult);             // update current sentence state and redraw
     }
@@ -329,7 +361,7 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     // Tutor Scriptable methods  Start
 
 
-    public void onRecognitionComplete(String symbol) {
+    public void onRecognitionEvent(String symbol) {
         _onRecognition = symbol;
     }
 
@@ -424,6 +456,13 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
+    public void onButtonClick(String buttonName) {
+    }
+
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
     protected void applyEventNode(String nodeName) {
     }
 
@@ -434,7 +473,29 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     public void publishValue(String varName, String value) {
     }
 
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishValue(String varName, int value) {
+    }
 
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void UpdateValue(boolean correct) {
+    }
+
+
+    public void setSpeakButton(String command) {
+
+        mViewManager.setSpeakButton(command);
+    }
+
+    public void setPageFlipButton(String command) {
+
+        mViewManager.setPageFlipButton(command);
+    }
 
     // Tutor methods  End
     //************************************************************************

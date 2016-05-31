@@ -54,7 +54,8 @@ public class CSceneGraph  {
     private CTutorGraph      mTutorGraph;
 
     private final Handler    mainHandler = new Handler(Looper.getMainLooper());
-    private HashMap          queueMap = new HashMap();
+    private HashMap          queueMap    = new HashMap();
+    private boolean          mDisabled   = false;
 
     // State fields
     private scene_node       _sceneNode;
@@ -103,8 +104,6 @@ public class CSceneGraph  {
         public void run() {
 
             try {
-
-
                 queueMap.remove(this);
 
                 switch (_command) {
@@ -152,6 +151,15 @@ public class CSceneGraph  {
                         _sceneNode.stop();
                         break;
 
+                    case TCONST.ENDTUTOR:
+
+                        // disable the input queue permanently in prep for destruction
+                        //
+                        terminateQueue();
+
+                        mTutorGraph.post(TCONST.ENDTUTOR);
+                        break;
+
                     case TCONST.GOTO_NODE:
                         _sceneNode.gotoNode(_target);
                         break;
@@ -161,6 +169,20 @@ public class CSceneGraph  {
                 CErrorManager.terminate(TAG, "Run Error:", e, false);
             }
         }
+    }
+
+
+    /**
+     *  Disable the input queue permenantly in prep for destruction
+     *  walks the queue chain to diaable scene queue
+     *
+     */
+    public void terminateQueue() {
+
+        // disable the input queue permenantly in prep for destruction
+        //
+        mDisabled = true;
+        flushQueue();
     }
 
 
@@ -188,9 +210,11 @@ public class CSceneGraph  {
      */
     private void enQueue(Queue qCommand) {
 
-        queueMap.put(qCommand, qCommand);
+        if(!mDisabled) {
+            queueMap.put(qCommand, qCommand);
 
-        mainHandler.post(qCommand);
+            mainHandler.post(qCommand);
+        }
     }
 
     /**

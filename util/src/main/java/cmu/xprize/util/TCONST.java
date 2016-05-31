@@ -379,6 +379,10 @@ public class TCONST {
 
 
     // READING Tutor State names  -- RTC Reading Tutor Component
+
+    public static final String PAGEFLIP_BUTTON = "PAGE_FLIP_BUTTON";
+    public static final String SPEAK_BUTTON    = "SPEAK_BUTTON";
+
     public static final String EMPTY = "";
 
     public static final int INCR = 1;
@@ -387,7 +391,8 @@ public class TCONST {
     public static final String RTC_VAR_PAGESTATE  = ".pageState";
     public static final String RTC_VAR_PARASTATE  = ".paraState";
     public static final String RTC_VAR_LINESTATE  = ".lineState";
-    public static final String RTC__VAR_WORDSTATE = ".wordState";
+    public static final String RTC_VAR_WORDSTATE  = ".wordState";
+    public static final String RTC_VAR_ATTEMPT    = ".attempt";
     public static final String LAST               = "LAST";
     public static final String NOT_LAST           = "NOT_LAST";
 
@@ -398,8 +403,9 @@ public class TCONST {
     public static final String RTC_LINECOMPLETE      = "LINE_COMPLETE";
     public static final String RTC_CLEAR             = "";
 
-    public static final String RTC_VAR_WORD     = ".nextword";
-    public static final String RTC_VAR_INDEX    = ".wordindex";
-    public static final String RTC_VAR_SENTENCE = ".sentence";
+    public static final String RTC_VAR_WORDVALUE  = ".currentWord";
+    public static final String RTC_VAR_INDEX      = ".wordindex";
+    public static final String RTC_VAR_REMAINING  = ".remainingWords";
+    public static final String RTC_VAR_SENTENCE   = ".sentence";
 
 }

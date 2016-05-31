@@ -27,6 +27,8 @@ import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
+import cmu.xprize.util.TCONST;
+
 public class CSm_RowContainer extends HorizontalScrollView {
 
     private Context                 mContext;
@@ -61,15 +63,21 @@ public class CSm_RowContainer extends HorizontalScrollView {
     }
 
 
-    public void buildInterface(CSm_Class rowData, ILaunchListener component) {
+    public void buildInterface(CSm_Class rowData, ILaunchListener component, String defColor) {
+
+        String color = defColor;
 
         ILauncherButton newButton = null;
 
         mContainer.removeAllViews();
         mButtons = rowData.data;
 
-        setBackgroundColor(Color.parseColor(rowData.background));
-        mContainer.setBackgroundColor(Color.parseColor(rowData.background));
+        if(rowData.background != null) {
+            color = rowData.background;
+        }
+
+        setBackgroundColor(Color.parseColor(color));
+        mContainer.setBackgroundColor(Color.parseColor(color));
 
         for(CSm_Data Button: mButtons) {
 

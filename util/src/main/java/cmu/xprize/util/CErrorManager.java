@@ -37,7 +37,7 @@ public class CErrorManager {
         } catch (InterruptedException e1) {
         }
 
-        System.exit(1);
+        //System.exit(1);
     }
 
     static public void terminate(String TAG, String Msg, Exception e, boolean printTrace) {
@@ -51,10 +51,10 @@ public class CErrorManager {
             Log.e(TAG, Msg);
 
         try {
-            Thread.sleep(400);
+            Thread.sleep(600);
         } catch (InterruptedException e1) {
         }
 
-        System.exit(1);
+        //System.exit(1);
     }
 }
