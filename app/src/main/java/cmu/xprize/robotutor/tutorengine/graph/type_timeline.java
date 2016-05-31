@@ -290,12 +290,18 @@ public class type_timeline extends type_action implements IMediaListener {
     private void killTimer() {
 
         Log.i(TAG, "Kill timeline Timer");
-        if (_frameTask != null)
-            _frameTask.cancel();
 
-        _timer.cancel();
-        _timer     = null;
-        _frameTask = null;
+        try {
+            if (_frameTask != null)
+                _frameTask.cancel();
+
+            _timer.cancel();
+            _timer = null;
+            _frameTask = null;
+        }
+        catch(Exception e) {
+            Log.e(TAG, "killTimer: " + e);
+        }
     }
 
 

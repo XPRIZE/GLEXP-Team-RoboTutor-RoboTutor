@@ -35,6 +35,13 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+/**
+ * This is a "timer" implementation using handlers instead of Timers.  Using Handlers
+ * ensure that the timer runs in the UI Thread and therefore has access to the View hierarchy
+ * which is not the case with Timers.  i.e. With a Timer you would not be able to change the
+ * visibility state of a given View in the display list.
+ *
+ */
 public class type_handler extends type_action implements IMediaListener {
 
         protected Handler   _handler   = null;
