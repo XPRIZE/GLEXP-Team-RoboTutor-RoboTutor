@@ -19,6 +19,8 @@
 
 package cmu.xprize.robotutor.tutorengine.graph;
 
+import android.util.Log;
+
 import org.json.JSONObject;
 
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
@@ -30,7 +32,7 @@ import cmu.xprize.util.TCONST;
 /**
  * Media players are special objects as there is a system wide limit on how many can be active
  * at one time.  As a result we centralize creation and management of MediaPlayers to CMediaManager
- * where we can cache players across tutors as well as play/pause etc them globally
+ * where we can cache players across tutors as well as play/pause etc globally
  */
 public class type_audio extends type_action implements IMediaListener {
 
@@ -85,6 +87,7 @@ public class type_audio extends type_action implements IMediaListener {
         if(mWasPlaying) {
             mWasPlaying = false;
 
+            Log.i(TAG, "global play");
             mPlayer.play();
         }
     }
@@ -163,8 +166,10 @@ public class type_audio extends type_action implements IMediaListener {
 
     public void play() {
 
-        if(mPlayer != null)
+        if(mPlayer != null) {
+            Log.i(TAG, "play");
             mPlayer.play();
+        }
     }
 
 

@@ -507,6 +507,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                             // Evaluate the result and assign it to LHS to allow chaining.
                             // i.e. A && B && C  - we evaluate left to right i.e. after
                             // evaluating LHS(A) && RHS(B) the becomes LHS(A&&B).
+                            //
                             switch (binaryOp) {
                                 case TCONST.BOOLOR:
                                     LHS = LHS.OR(RHS, LNegate, RNegate);

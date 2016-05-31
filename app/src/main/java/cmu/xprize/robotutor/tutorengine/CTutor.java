@@ -75,7 +75,7 @@ public class CTutor implements ILoadableObject2 {
 
     public Context                       mContext;
     public ITutorLogManager              mTutorLogManager;
-    public ITutorGraph mTutorGraph;
+    public ITutorGraph                   mTutorGraph;
     public CSceneGraph                   mSceneGraph;
     public ITutorManager                 mTutorContainer;
     public ViewGroup                     mSceneContainer;
@@ -87,7 +87,9 @@ public class CTutor implements ILoadableObject2 {
     private int                                 _framendx = 0;
     private HashMap<String, scene_initializer>  _sceneMap = new HashMap<String, scene_initializer>();
 
-    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+    private final Handler                mainHandler = new Handler(Looper.getMainLooper());
+    private HashMap                      queueMap    = new HashMap();
+    private boolean                      mDisabled   = false;
 
     // json loadable
     public scene_initializer[]           scenedata;
@@ -157,12 +159,19 @@ public class CTutor implements ILoadableObject2 {
         public void run() {
 
             try {
+                queueMap.remove(this);
+
                 switch (_command) {
+
                     case TCONST.ENDTUTOR:
+
+                        // disable the input queue permenantly in prep for destruction
+                        // walks the queue chain to diaable the tutor and scene queues
+                        //
+                        terminateQueue();
+
                         endTutor();
                         break;
-
-
                 }
             }
             catch(Exception e) {
@@ -173,13 +182,64 @@ public class CTutor implements ILoadableObject2 {
 
 
     /**
-     * Post a command to the scenegraph queue
+     *  Disable the input queue permenantly in prep for destruction
+     *  walks the queue chain to diaable scene queue
+     *
+     */
+    public void terminateQueue() {
+
+        mMediaManager.globalStop();
+
+        mTutorGraph.terminateQueue();
+
+        // disable the input queue permenantly in prep for destruction
+        //
+        mDisabled = true;
+        flushQueue();
+    }
+
+
+    /**
+     * Remove any pending scenegraph commands.
+     *
+     */
+    private void flushQueue() {
+
+        Iterator<?> tObjects = queueMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            mainHandler.removeCallbacks((Queue)(entry.getValue()));
+        }
+
+    }
+
+
+    /**
+     * Keep a mapping of pending messages so we can flush the queue if we want to terminate
+     * the tutor before it finishes naturally.
+     *
+     * @param qCommand
+     */
+    private void enQueue(Queue qCommand) {
+
+        if(!mDisabled) {
+            queueMap.put(qCommand, qCommand);
+
+            mainHandler.post(qCommand);
+        }
+    }
+
+
+    /**
+     * Post a command to the tutorgraph queue
      *
      * @param command
      */
     public void post(String command) {
 
-        mainHandler.post(new Queue(command));
+        enQueue(new Queue(command));
     }
 
 
@@ -267,7 +327,7 @@ public class CTutor implements ILoadableObject2 {
     public void endTutor() {
 
         // Only ever pop once per tutor
-        // TODO: this will change - at the moment may be called multiple times during shutdown.
+        // TODO: this will change - at the moment it may be called multiple times during shutdown.
         // e.g. from a stream flow.
 
         if(mTutorActive) {
@@ -491,24 +551,30 @@ public class CTutor implements ILoadableObject2 {
      * @param featSet
      */
     public void setTutorFeatures(String featSet) {
-        List<String> featArray = new ArrayList<String>();
 
-        if(featSet != null && featSet.length() > 0)
-            featArray = Arrays.asList(featSet.split(":"));
+        // Ignore "null" feature sets which may come during a tutor launch if there is no
+        // features data in the session_manager dataset
+        //
+        if(!featSet.toUpperCase().equals("NULL")) {
 
-        fFeatures = new ArrayList<String>();
+            List<String> featArray = new ArrayList<String>();
 
-        // Add default features 
+            if (featSet != null && featSet.length() > 0)
+                featArray = Arrays.asList(featSet.split(":"));
 
-        for (String feature : fDefaults)
-        {
-            fFeatures.add(feature);
-        }
+            fFeatures = new ArrayList<String>();
 
-        // Add instance feature
+            // Add default features
 
-        for (String feature : featArray) {
-            fFeatures.add(feature);
+            for (String feature : fDefaults) {
+                fFeatures.add(feature);
+            }
+
+            // Add instance feature
+
+            for (String feature : featArray) {
+                fFeatures.add(feature);
+            }
         }
     }
 

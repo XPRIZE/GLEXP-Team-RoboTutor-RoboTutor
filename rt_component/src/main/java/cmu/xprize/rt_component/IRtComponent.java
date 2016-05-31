@@ -49,4 +49,6 @@ public interface IRtComponent {
 
     public boolean endOfData();
 
+    public void continueListening();
+
 }

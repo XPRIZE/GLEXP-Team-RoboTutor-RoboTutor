@@ -26,6 +26,8 @@ public interface ICRt_ViewManager extends ILoadableObject {
 
     public void initStory(IVManListener owner, String assetPath);
 
+    public void onDestroy();
+
     void seekToPage(int pageIndex);
 
     void nextPage();
@@ -50,10 +52,18 @@ public interface ICRt_ViewManager extends ILoadableObject {
 
     void prevWord();
 
-    void setHighLight(String highlight);
+    void setHighLight(String highlight, boolean update);
 
     public boolean endOfData();
 
     public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult);
 
+    public void onUpdate(String[] heardWords, boolean finalResult);
+
+    public void continueListening();
+
+
+    public void setSpeakButton(String command);
+
+    public void setPageFlipButton(String command);
 }

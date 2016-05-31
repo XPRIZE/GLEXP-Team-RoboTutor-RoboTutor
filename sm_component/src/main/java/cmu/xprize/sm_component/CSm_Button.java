@@ -59,6 +59,9 @@ public class CSm_Button extends Button implements ILauncherButton, View.OnClickL
 
         mData = buttonData;
 
+        // Otherwise it ends up forced to uppercase
+        setTransformationMethod(null);
+
         setText(mData.buttonvalue);
         //int id = mContext.getResources().getIdentifier(Button.tutorname, "layout", mContext.getPackageName());
 

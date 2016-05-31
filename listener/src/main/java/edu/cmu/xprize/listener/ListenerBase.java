@@ -249,7 +249,12 @@ public class ListenerBase {
         }
     }
 
+
     public void listenFor(String[] wordsToHear, int startWord){}
+
+
+    public void listenForSentence(String[] wordsToHear, int startWord){}
+
 
     public void updateNextWordIndex(int next){
     }

@@ -31,6 +31,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.rt_component.CRt_Component;
 import cmu.xprize.rt_component.IRtComponent;
@@ -42,6 +43,9 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
     private CTutor           mTutor;
     private CObjectDelegate  mSceneObject;
     private CMediaManager    mMediaManager;
+
+    private String           speakBehavior;
+    private String           pageFlipBehavior;
 
 
     static private String TAG = "TRtComponent";
@@ -78,6 +82,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
         mSceneObject.onDestroy();
     }
 
@@ -87,6 +92,14 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
 
         // update the response variable  "<ComponentName>.<varName>"
         mTutor.getScope().addUpdateVar(name() + varName, new TString(value));
+
+    }
+
+    @Override
+    public void publishValue(String varName, int value) {
+
+        // update the response variable  "<ComponentName>.<varName>"
+        mTutor.getScope().addUpdateVar(name() + varName, new TInteger(value));
 
     }
 
@@ -163,10 +176,66 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
     }
 
 
+    public void setPageFlipButton(String command) {
+
+        super.setPageFlipButton(command);
+    }
+
+    public void setSpeakButton(String command) {
+
+        super.setSpeakButton(command);
+    }
+
+    public void setPageFlipBehavior(String command) {
+
+        pageFlipBehavior = command;
+    }
+
+    public void setSpeakBehavior(String command) {
+
+        speakBehavior = command;
+    }
+
+
+    public void onButtonClick(String buttonName) {
+
+        switch(buttonName) {
+            case TCONST.PAGEFLIP_BUTTON:
+                applyEventNode(pageFlipBehavior);
+                break;
+
+            case TCONST.SPEAK_BUTTON:
+                applyEventNode(speakBehavior);
+                break;
+        }
+    }
+
+
+    @Override
+    public void UpdateValue(boolean correct) {
+
+        reset();
+
+        if(correct)
+            mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
+        else
+            mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+    }
+
+
     public void reset() {
 
-        mTutor.setDelFeature("FTR_RIGHT");
-        mTutor.setDelFeature("FTR_WRONG");
+        mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
+        mTutor.setDelFeature(TCONST.GENERIC_WRONG);
+    }
+
+    public void onRecognitionEvent(String symbol) {
+        super.onRecognitionEvent(symbol);
+    }
+
+
+    public void setButtonBehavior(String command) {
+        mSceneObject.setButtonBehavior(command);
     }
 
 
@@ -243,12 +312,17 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
 
     @Override
     public void setHighLight(String highlight) {
-        mViewManager.setHighLight(highlight);
+        mViewManager.setHighLight(highlight, true);
     }
 
     @Override
     public boolean endOfData() {
         return mViewManager.endOfData();
+    }
+
+    @Override
+    public void continueListening() {
+        mViewManager.continueListening();
     }
 
 
@@ -261,9 +335,11 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
     protected void applyEventNode(String nodeName) {
         IScriptable2 obj = null;
 
-        if(nodeName != null && !nodeName.equals("")) {
+        if(nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
+
             try {
                 obj = mTutor.getScope().mapSymbol(nodeName);
+                obj.preEnter();
                 obj.applyNode();
 
             } catch (Exception e) {

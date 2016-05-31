@@ -7,14 +7,14 @@ android {
     defaultConfig {
         applicationId "cmu.xprize.robotutor"
 
-        minSdkVersion 19
+        minSdkVersion 21
 
         // Note that using taeget version 22 bypasses the new run-time permissions found
         // in Marshmallow 23
         //
         targetSdkVersion 22
         versionCode 1
-        versionName "0.2.0"
+        versionName "0.2.1"
     }
     buildTypes {
         release {

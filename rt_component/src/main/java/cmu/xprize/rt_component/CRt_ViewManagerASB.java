@@ -24,9 +24,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.text.Html;
 import android.text.Layout;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,6 +38,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 
 import cmu.xprize.util.CPersonaObservable;
@@ -61,6 +65,9 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private ImageView               mPageImage;
     private TextView                mPageText;
 
+    private ImageButton             mPageFlip;
+    private ImageButton             mSay;
+
     // ASB even odd page management
 
     private ViewGroup               mOddPage;
@@ -78,11 +85,18 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private int                     mCurrPara;
     private int                     mCurrLine;
     private int                     mCurrWord;
+    private int                     mHearWord;                          // The expected location of mCurrWord in heardWords - see PLRT version of onUpdate below
+
+    private String                  speakButtonEnable = "";
+    private String                  speakButtonShow   = "";
+    private String                  pageButtonEnable  = "";
+    private String                  pageButtonShow    = "";
 
     private int                     mPageCount;
     private int                     mParaCount;
     private int                     mLineCount;
     private int                     mWordCount;
+    private int                     attemptNum = 1;
 
     private String                  wordsToDisplay[];                    // current sentence words to display - contain punctuation
     private String                  wordsToSpeak[];                      // current sentence words to hear
@@ -92,7 +106,13 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     private String                  completedSentencesFmtd = "";
     private String                  completedSentences     = "";
+    private String                  futureSentencesFmtd    = "";
+    private String                  futureSentences        = "";
+    private boolean                 showFutureContent      = true;
+    private boolean                 listenFutureContent    = false;
+
     private ArrayList<String>       wordsSpoken;
+    private ArrayList<String>       futureSpoken;
 
 
     // json loadable
@@ -132,6 +152,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     }
 
 
+
+
     /**
      *
      * @param owner
@@ -144,12 +166,123 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         seekToPage(TCONST.ZERO);
 
-        startListening();
-
         //TODO: CHECK
-        mParent.flipPage(true,mCurrViewIndex);
+        mParent.animatePageFlip(true,mCurrViewIndex);
     }
 
+
+    @Override
+    public void onDestroy() {
+    }
+
+
+    /**
+     * From the script writers perspective there is only one say button and one pageflip button
+     * Since there are actually two of each - one on each page view we share the state between them and
+     * enforce updates so they are kept in sync with user expectations.
+     *
+     * @param control
+     * @param command
+     */
+    public void setButtonState(View control, String command) {
+
+        try {
+
+            switch(command) {
+
+                case "ENABLE":
+                    control.setEnabled(true);
+                    break;
+                case "DISABLE":
+                    control.setEnabled(false);
+                    break;
+                case "SHOW":
+                    control.setVisibility(View.VISIBLE);
+                    break;
+                case "HIDE":
+                    control.setVisibility(View.INVISIBLE);
+                    break;
+            }
+        }
+        catch(Exception e) {
+            Log.d(TAG, "result:" + e);
+        }
+    }
+
+
+    public void setSpeakButton(String command) {
+
+        switch(command) {
+
+            case "ENABLE":
+                speakButtonEnable = command;
+                break;
+            case "DISABLE":
+                speakButtonEnable = command;
+                break;
+            case "SHOW":
+                speakButtonShow = command;
+                break;
+            case "HIDE":
+                speakButtonShow = command;
+                break;
+        }
+
+        // Ensure the buttons reflect the current states
+        //
+        updateButtons();
+    }
+
+
+    public void setPageFlipButton(String command) {
+
+        switch(command) {
+
+            case "ENABLE":
+                Log.i("ASB", "ENABLE");
+                pageButtonEnable = command;
+                break;
+            case "DISABLE":
+                Log.i("ASB", "DISABLE");
+                pageButtonEnable = command;
+                break;
+            case "SHOW":
+                pageButtonShow = command;
+                break;
+            case "HIDE":
+                pageButtonShow = command;
+                break;
+        }
+
+        // Ensure the buttons reflect the current states
+        //
+        updateButtons();
+    }
+
+
+    private void updateButtons() {
+
+        // Make the button states insensitive to the page - So the script does not have to
+        // worry about timing of setting button states.
+        //
+        setButtonState(mPageFlip, pageButtonEnable);
+        setButtonState(mPageFlip, pageButtonShow);
+
+        setButtonState(mSay, speakButtonEnable);
+        setButtonState(mSay, speakButtonShow);
+
+        mPageFlip.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mParent.onButtonClick(TCONST.PAGEFLIP_BUTTON);
+            }
+        });
+
+        mSay.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mParent.onButtonClick(TCONST.SPEAK_BUTTON);
+            }
+        });
+    }
 
     /**
      *  This configures the target display components to be populated with data.
@@ -166,13 +299,23 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             mCurrViewIndex = mOddIndex;
             mPageImage = (ImageView) mOddPage.findViewById(R.id.SpageImage);
             mPageText  = (TextView) mOddPage.findViewById(R.id.SstoryText);
+
+            mPageFlip = (ImageButton) mOddPage.findViewById(R.id.SpageFlip);
+            mSay      = (ImageButton) mOddPage.findViewById(R.id.Sspeak);
         }
         else {
 
             mCurrViewIndex = mEvenIndex;
             mPageImage = (ImageView) mEvenPage.findViewById(R.id.SpageImage);
             mPageText  = (TextView) mEvenPage.findViewById(R.id.SstoryText);
+
+            mPageFlip = (ImageButton) mEvenPage.findViewById(R.id.SpageFlip);
+            mSay      = (ImageButton) mEvenPage.findViewById(R.id.Sspeak);
         }
+
+        // Ensure the buttons reflect the current states
+        //
+        updateButtons();
     }
 
 
@@ -196,39 +339,72 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      * @param currPara
      * @param currLine
      */
-    private void setCurrentState(int currPage, int currPara, int currLine) {
+    private void seekToStoryPosition(int currPage, int currPara, int currLine, int currWord) {
+
+        String otherWordsToSpeak[];
 
         completedSentencesFmtd = "";
+        completedSentences     = "";
+        futureSentencesFmtd    = "";
+        futureSentences        = "";
         wordsSpoken            = new ArrayList<>();
+        futureSpoken           = new ArrayList<>();
 
-        // If not seeking to the very first line
+
+        // Optimization - Skip If not seeking to the very first line
+        //
+        // Otherwise create 2 things:
+        //
+        // 1. A visually formatted representation of the words already spoken
+        // 2. A list of words already spoken - for use in the Sphinx language model
         //
         if(currPara > 0 || currLine > 0) {
 
+            // First generate all completed paragraphs in their entirity
+            //
             for(int paraIndex = 0 ; paraIndex < currPara ; paraIndex++) {
 
-                for(int lineIndex = 0 ; lineIndex <  currLine ; lineIndex++) {
+                for (String rawSentence : data[currPage].text[paraIndex]) {
 
-                    rawSentence = data[currPage].text[currPara][currLine];
-                    wordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+                    otherWordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
 
                     // Add the previous line to the list of spoken words used to build the
                     // language model - so it allows all on screen words to be spoken
                     //
-                    for (String word : wordsToSpeak)
+                    for (String word : otherWordsToSpeak)
                         wordsSpoken.add(word);
 
                     completedSentences += rawSentence;
                 }
-
                 if(paraIndex < currPara)
                     completedSentences += "<br><br>";
             }
 
-            completedSentencesFmtd = "<font color='grey'>";
+            // Then generate all completed sentences from the current paragraph
+            //
+            for(int lineIndex = 0 ; lineIndex <  currLine ; lineIndex++) {
+
+                rawSentence = data[currPage].text[currPara][lineIndex];
+                otherWordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+
+                // Add the previous line to the list of spoken words used to build the
+                // language model - so it allows all on screen words to be spoken
+                //
+                for (String word : otherWordsToSpeak)
+                    wordsSpoken.add(word);
+
+                completedSentences += rawSentence;
+            }
+
+            completedSentencesFmtd = "<font color='#AAAAAA'>";
             completedSentencesFmtd += completedSentences;
             completedSentencesFmtd += "</font>";
         }
+
+
+        // Generate the active line of text - target sentence
+        // Reset the highlight
+        mCurrHighlight = TCONST.EMPTY;
 
         mCurrPage = currPage;
         mCurrPara = currPara;
@@ -242,6 +418,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         // Words that are used to build the display text - include punctuation etc.
         // But are in one-to-one correspondance with the wordsToSpeak
+        // NOTE: wordsToSpeak is used in generating the active listening model
+        // so it must reflect the current sentence!
         //
         wordsToDisplay = rawSentence.trim().split("\\s+");
 
@@ -250,12 +428,81 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         //
         wordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
 
-        mCurrWord  = TCONST.ZERO;
+        mCurrWord  = currWord;
         mWordCount = wordsToSpeak.length;
+
+
+        // If we are showing future content - i.e. we want the entire page to be visible but
+        // only the "current" line highlighted.
+        // Note we need ...Count vars initialized here
+        //
+        // Create 2 things:
+        //
+        // 1. A visually formatted representation of the words not yet spoken
+        // 2. A list of future words to be spoken - for use in the Sphinx language model
+        //
+        if(showFutureContent) {
+
+            // Generate all remaining sentences in the current paragraph
+            //
+            // Then generate all future sentences from the current paragraph
+            //
+            for(int lineIndex = currLine+1 ; lineIndex <  mLineCount ; lineIndex++) {
+
+                rawSentence = data[currPage].text[currPara][lineIndex];
+                otherWordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+
+                // Add the previous line to the list of spoken words used to build the
+                // language model - so it allows all on screen words to be spoken
+                //
+                for (String word : otherWordsToSpeak)
+                    futureSpoken.add(word);
+
+                futureSentences += rawSentence;
+            }
+
+            // First generate all completed paragraphs in their entirity
+            //
+            for(int paraIndex = currPara+1 ; paraIndex < mParaCount ; paraIndex++) {
+
+                // Add the paragraph break if not at the end
+                //
+                futureSentences += "<br><br>";
+
+                for (String rawSentence : data[currPage].text[paraIndex]) {
+
+                    otherWordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+
+                    // Add the previous line to the list of spoken words used to build the
+                    // language model - so it allows all on screen words to be spoken
+                    //
+                    for (String word : otherWordsToSpeak)
+                        futureSpoken.add(word);
+
+                    futureSentences += rawSentence;
+                }
+            }
+
+            // TODO : parameterize the color
+
+            futureSentencesFmtd = "<font color='#AAAAAA'>";
+            futureSentencesFmtd += futureSentences;
+            futureSentencesFmtd += "</font>";
+        }
+
 
         // Publish the state out to the scripting scope in the tutor
         //
         publishStateValues();
+
+        // Update the sentence display
+        //
+        UpdateDisplay();
+
+        // Listen for the target word
+        //
+        startListening();
+
     }
 
 
@@ -269,28 +516,28 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         // Set the scriptable flag indicating the current state.
         //
-        if (mCurrWord >= mWordCount-1) {
+        if (mCurrWord >= mWordCount) {
             cummulativeState = TCONST.RTC_LINECOMPLETE;
-            mParent.publishValue(TCONST.RTC__VAR_WORDSTATE, TCONST.LAST);
+            mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.LAST);
         }
         else
-            mParent.publishValue(TCONST.RTC__VAR_WORDSTATE, TCONST.NOT_LAST);
+            mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.NOT_LAST);
 
-        if (mCurrLine >= mLineCount) {
+        if (mCurrLine >= mLineCount-1) {
             cummulativeState = TCONST.RTC_PARAGRAPHCOMPLETE;
             mParent.publishValue(TCONST.RTC_VAR_LINESTATE, TCONST.LAST);
         }
         else
             mParent.publishValue(TCONST.RTC_VAR_LINESTATE, TCONST.NOT_LAST);
 
-        if (mCurrPara >= mParaCount) {
+        if (mCurrPara >= mParaCount-1) {
             cummulativeState = TCONST.RTC_PAGECOMPLETE;
             mParent.publishValue(TCONST.RTC_VAR_PARASTATE, TCONST.LAST);
         }
         else
             mParent.publishValue(TCONST.RTC_VAR_PARASTATE, TCONST.NOT_LAST);
 
-        if (mCurrPage >= mPageCount) {
+        if (mCurrPage >= mPageCount-1) {
             cummulativeState = TCONST.RTC_STORYCMPLETE;
             mParent.publishValue(TCONST.RTC_VAR_PAGESTATE, TCONST.LAST);
         }
@@ -300,7 +547,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         // Publish the cumulative state out to the scripting scope in the tutor
         //
         mParent.publishValue(TCONST.RTC_VAR_STATE, cummulativeState);
-
     }
 
 
@@ -328,8 +574,9 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             incPage(TCONST.INCR);
         }
 
-        //TODO: CHECK
-        mParent.flipPage(true, mCurrViewIndex);
+        // Actually do the page animation
+        //
+        mParent.animatePageFlip(true, mCurrViewIndex);
     }
     @Override
     public void prevPage() {
@@ -339,16 +586,12 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         }
 
         //TODO: CHECK
-        mParent.flipPage(false, mCurrViewIndex);
+        mParent.animatePageFlip(false, mCurrViewIndex);
     }
 
     private void incPage(int direction) {
 
         mCurrPage += direction;
-
-        // Update the state vars
-        //
-        setCurrentState(mCurrPage, mCurrPara, mCurrLine);
 
         // This configures the target display components to be populated with data.
         // mPageImage - mPageText
@@ -356,6 +599,13 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         flipPage();
 
         configurePageImage();
+
+        // Update the state vars
+        // Note that this must be done after flip and configure so the target text and image views
+        // are defined
+        // NOTE: we reset mCurrPara, mCurrLine and mCurrWord
+        //
+        seekToStoryPosition(mCurrPage, TCONST.ZERO, TCONST.ZERO, TCONST.ZERO);
     }
 
 
@@ -391,13 +641,14 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         }
     }
 
+    // NOTE: we reset mCurrLine and mCurrWord
     private void incPara(int incr) {
 
         mCurrPara += incr;
 
         // Update the state vars
         //
-        setCurrentState(mCurrPage, mCurrPara, mCurrLine);
+        seekToStoryPosition(mCurrPage, mCurrPara, TCONST.ZERO, TCONST.ZERO);
     }
 
 
@@ -433,13 +684,14 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         }
     }
 
+    // NOTE: we reset mCurrWord
     private void incLine(int incr) {
 
         mCurrLine += incr;
 
         // Update the state vars
         //
-        setCurrentState(mCurrPage, mCurrPara, mCurrLine);
+        seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
     }
 
 
@@ -453,21 +705,26 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     public void seekToWord(int wordIndex) {
 
         mCurrWord = wordIndex;
+        mHearWord = 0;
 
         if(mCurrWord > mWordCount-1) mCurrWord = mWordCount-1;
         if(mCurrWord < TCONST.ZERO)  mCurrWord = TCONST.ZERO;
 
         // Update the state vars
         //
-        setCurrentState(mCurrPage, mCurrPara, mCurrLine);
+        seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, wordIndex);
 
         incWord(TCONST.ZERO);
+
+        // Start listening from the new position
+        //
+        startListening();
     }
 
     @Override
     public void nextWord() {
 
-        if(mCurrWord < mWordCount-1) {
+        if(mCurrWord < mWordCount) {
             incWord(TCONST.INCR);
         }
     }
@@ -491,17 +748,27 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         mCurrWord += incr;
 
-        mCurrHighlight = TCONST.EMPTY;
+        // Reset the highlight
+        setHighLight(TCONST.EMPTY, false);
 
+        // Publish the state out to the scripting scope in the tutor
+        //
+        publishStateValues();
+
+        // Update the sentence display
+        //
+        UpdateDisplay();
+    }
+
+    /**
+     * This picks up listening from the last word - so it seeks to wherever we are in the
+     * current sentence and listens from there.
+     */
+    public void continueListening() {
         startListening();
     }
 
-
     private void startListening() {
-
-        // Update the sentence highlighting
-        //
-        UpdateDisplay();
 
         // We allow the user to say any of the onscreen words but set the priority order of how we would like them matched
         //
@@ -524,11 +791,22 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             wordsToListenFor.add(word);
         }
 
+        // If we want to listen for all the words that are visible
+        //
+        if(listenFutureContent) {
+            for (String word : futureSpoken) {
+                wordsToListenFor.add(word);
+            }
+        }
+
         // Start listening
         //
         if (mListener != null) {
 
+            // reset the relative position of mCurrWord in the incoming PLRT heardWords array
+            mHearWord = 0;
             mListener.reInitializeListener(true);
+            mListener.updateNextWordIndex(mHearWord);
 
             mListener.listenFor(wordsToListenFor.toArray(new String[wordsToListenFor.size()]), 0);
             mListener.setPauseListener(false);
@@ -541,11 +819,14 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      * @param highlight
      */
     @Override
-    public void setHighLight(String highlight) {
+    public void setHighLight(String highlight, boolean update) {
 
         mCurrHighlight = highlight;
 
-        UpdateDisplay();
+        // Update the sentence display
+        //
+        if(update)
+            UpdateDisplay();
     }
 
 
@@ -560,6 +841,10 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
             String styledWord = wordsToDisplay[i];                           // default plain
 
+            if(i < mCurrWord) {
+                styledWord = "<font color='#00B600'>" + styledWord + "</font>";
+            }
+
             if (i == mCurrWord) {// style the next expected word
 
                 if(!mCurrHighlight.equals(TCONST.EMPTY))
@@ -571,9 +856,27 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             fmtSentence += styledWord + " ";
         }
 
-        mPageText.setText(Html.fromHtml(completedSentencesFmtd + fmtSentence));
+        // Generate the text to be displayed
+        //
+        String content = completedSentencesFmtd + fmtSentence;
+
+        if(showFutureContent)
+            content += futureSentencesFmtd;
+
+        mPageText.setText(Html.fromHtml(content));
 
         broadcastActiveTextPos(mPageText, wordsToDisplay);
+
+        // Publish the current word / sentence / remaining words for use in scripts
+        //
+        if(mCurrWord < wordsToSpeak.length) {
+            mParent.publishValue(TCONST.RTC_VAR_WORDVALUE, wordsToSpeak[mCurrWord]);
+
+            String remaining[] = Arrays.copyOfRange(wordsToSpeak, mCurrWord, wordsToSpeak.length);
+
+            mParent.publishValue(TCONST.RTC_VAR_REMAINING, TextUtils.join(" ", remaining));
+            mParent.publishValue(TCONST.RTC_VAR_SENTENCE,  TextUtils.join(" ", wordsToSpeak));
+        }
     }
 
 
@@ -628,26 +931,90 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
 
     /**
-     * This is where the incoming ASR data is processed.
+     * This is where the incoming PLRT ASR data is processed.
+     *
+     * Provided the input matches the model sentence it continues in sequence through the sentence
+     * words. If there is an error it seeks the listener to only "hear" words form the error to the
+     * end of sentence and continues like this iteratively as required.  The goal is to eliminate the
+     * word shuffling that Multi-Match does and simplify the process. Ultimately this should migrate
+     * to using 2 simultaneous decoders one for the correct sentence and one for any other "distractor"
+     * words. i.e. other words in the sentence in this case.
      *
      *  TODO: check if it is possible for the hypothesis to chamge between last update and final hyp
      */
     @Override
     public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult) {
 
-        String logString = "";
+        boolean result    = true;
+        String  logString = "";
 
-        for (int i = 0; i < heardWords.length; i++) {
-            logString += heardWords[i].hypWord.toLowerCase() + ":" + heardWords[i].iSentenceWord + " | ";
+
+        try {
+            for (int i = 0; i < heardWords.length; i++) {
+                logString += heardWords[i].hypWord.toLowerCase() + ":" + heardWords[i].iSentenceWord + " | ";
+            }
+            Log.i("ASR", "New HypSet: " + logString);
+
+            while (mHearWord < heardWords.length) {
+
+                if (wordsToSpeak[mCurrWord].equals(heardWords[mHearWord].hypWord)) {
+
+                    nextWord();
+                    mHearWord++;
+
+                    mListener.updateNextWordIndex(mHearWord);
+
+                    Log.i("ASR", "RIGHT");
+                    attemptNum = 0;
+                    result = true;
+
+                } else {
+
+                    mListener.setPauseListener(true);
+
+                    Log.i("ASR", "WRONG");
+                    mParent.publishValue(TCONST.RTC_VAR_ATTEMPT, attemptNum++);
+                    result = false;
+                    break;
+                }
+            }
+
+            // Publish the outcome
+            mParent.publishValue(TCONST.RTC_VAR_ATTEMPT, attemptNum);
+            mParent.UpdateValue(result);
+
+            mParent.onASREvent(TCONST.RECOGNITION_EVENT);
         }
-        Log.i("ASR", "New HypSet: "  + logString);
+        catch(Exception e) {
+            // TODO: This seem sto be because the activity is not destroyed and the ASR continues
+            Log.d("ASR", "onUpdate Fault: " + e);
+        }
+    }
 
 
+    /**
+     * This is where incoming JSGF ASR data would be processed.
+     *
+     *  TODO: check if it is possible for the hypothesis to chamge between last update and final hyp
+     */
+    @Override
+    public void onUpdate(String[] heardWords, boolean finalResult) {
 
+//        String logString = "";
+//
+//        for (String hypWord :  heardWords) {
+//            logString += hypWord.toLowerCase() + ":" ;
+//        }
+//        Log.i("ASR", "New JSGF HypSet: "  + logString);
+//
+//
+//        mParent.publishValue(TCONST.RTC_VAR_ATTEMPT, attemptNum++);
+//
+//        mParent.onASREvent(TCONST.RECOGNITION_EVENT);
 
     }
 
-    
+
     @Override
     public boolean endOfData() {
         return false;

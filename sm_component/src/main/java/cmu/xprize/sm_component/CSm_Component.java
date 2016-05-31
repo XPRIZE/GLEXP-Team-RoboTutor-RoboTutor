@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
+import cmu.xprize.util.TCONST;
 
 public class CSm_Component extends ScrollView implements ILoadableObject, ILaunchListener {
 
@@ -42,6 +43,7 @@ public class CSm_Component extends ScrollView implements ILoadableObject, ILaunc
 
     // json loadable
     public CSm_Class[]      dataSource;
+    public String[]         bgColors;
 
     static final String TAG = "CSm_Component";
 
@@ -73,6 +75,9 @@ public class CSm_Component extends ScrollView implements ILoadableObject, ILaunc
 
     private void buildInterface() {
 
+        int    rowIndex = 0;
+        String defColor = TCONST.NONE;
+
         mRows = new ArrayList<>();
         mContainer.removeAllViews();
 
@@ -85,7 +90,13 @@ public class CSm_Component extends ScrollView implements ILoadableObject, ILaunc
 
             CSm_RowContainer newRow = new CSm_RowContainer(mContext);
 
-            newRow.buildInterface(Row, this);
+            if(bgColors.length > 0) {
+                defColor = bgColors[rowIndex];
+
+                rowIndex = (rowIndex + 1) % bgColors.length;
+            }
+
+            newRow.buildInterface(Row, this, defColor);
 
             mRows.add(newRow);
             mContainer.addView(newRow);

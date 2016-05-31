@@ -48,6 +48,7 @@ public class TTSsynthesizer extends UtteranceProgressListener implements OnInitL
         tutorRoot = callback;
 
         tts = new TextToSpeech(context, this, FLITE_PACKAGE);
+        //tts = new TextToSpeech(context, this);
     }
 
 
@@ -132,7 +133,6 @@ public class TTSsynthesizer extends UtteranceProgressListener implements OnInitL
     }
 
 
-
     public void speak(String text) {
 
         if (readyToSpeak) {
@@ -142,6 +142,18 @@ public class TTSsynthesizer extends UtteranceProgressListener implements OnInitL
                 mMediaManager.startSpeaking();
 
             tts.speak(text.toLowerCase(Locale.US), TextToSpeech.QUEUE_FLUSH, null);
+        }
+    }
+
+
+    /**
+     * Force stop all utterances and flush the queue
+     *
+     */
+    public void stopSpeaking() {
+
+        if (readyToSpeak) {
+            tts. stop();
         }
     }
 
