@@ -61,7 +61,14 @@ public class type_cond extends type_action implements ILoadableObject2 {
     @Override
     public String applyNode() {
 
-        evaluate(false);
+        // If the feature test passes then fire the event.
+        // Otherwise set flag to indicate event was completed/skipped in this case
+        // Issue #58 - Make all actions feature reactive.
+        //
+        if(testFeatures()) {
+
+            evaluate(false);
+        }
 
         return TCONST.DONE;
     }

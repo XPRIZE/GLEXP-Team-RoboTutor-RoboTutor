@@ -19,166 +19,270 @@
 
 package cmu.xprize.robotutor.tutorengine.graph;
 
-
 import android.util.Log;
 
-import java.util.HashMap;
+import org.json.JSONObject;
 
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
+import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.IScope;
+import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
 
+public class scene_node implements ILoadableObject2, IScriptable2 {
 
-/**
- * This represents the top level animation graph object
- */
-public class scene_node extends graph_node implements ILoadableObject2 {
-
-    // State fields
-    private graph_node   _currNode;
-    private String       _nodeState;
-
+    protected IScope2       _scope;
 
     // json loadable fields
-    public String  version;
-    public String  rootnode;
+    public String           parser;      // Used to distinguish different Flash content parsers
+    public String           type;        // used by JSON loader to disambiguate object type
+    public String           name;
+    public String[]         preenter;
+    public String[]         preexit;
 
-    // These are only here to have JSON_Help parse for these maps
-    public HashMap nodeMap;
-    public HashMap moduleMap;
-    public HashMap actionMap;
-    public HashMap choiceMap;
-    public HashMap constraintMap;
+    public graph_edge[]     edges;
 
     static private final String TAG = "scene_node";
 
 
     /**
-     * The scene_node for
+     * Simple Constructor
      */
     public scene_node() {
-        _currNode = this;
     }
+
+
+    protected IScope2 getScope() {
+        if(_scope == null) {
+            CErrorManager.terminate(TAG, "Engine Error: Invalid Scope on Object: " + name, null, false);
+        }
+
+        return _scope;
+    }
+
+
+    // IScriptable2
+    @Override
+    public void set(String value) {
+
+    }
+
+    @Override
+    public void add(String value) {
+
+    }
+
+    @Override
+    public void subtract(String value) {
+
+    }
+
+    @Override
+    public void setName(String newName) {  name = newName; }
+
+    @Override
+    public String getName() { return name; }
+
+    @Override
+    public String getType() { return type; }
+
+    @Override
+    public Object getValue() { return null; }
 
 
     /**
-     *  Increments the curranimation polymorphically
-     *  potentially called recursively if currNode is a subgraph.
+     * Next allows modules to loop through multiple actions in a node.
      *
-     * @return The
+     * @return
      */
-    @Override
-    public String applyNode() {
+    public String next() {
+        return TCONST.NONE;
+    }
 
-        if (_currNode != null) {
 
-            // This is the mechanism by which Modules step through multiple internal actions
-            // However this is polymorphic where:
-            //
-            // Simple (Action type) nodes will always return:
-            //      NONE (the node is exhausted - no more actions)
-            //
-            // Complex (Module type) nodes may return:
-            //      READY(start state)
-            //      WAIT (last node action result) or
-            //      NONE (the node is exhausted - no more actions)
+    public scene_node nextNode() {
 
-            _nodeState = _currNode.next();
+        scene_node node = null;		// When we run out of tracks we just want to stop
 
-            switch(_nodeState) {
+        preExit();
 
-                // If the node is exhausted move to next node
+        for(graph_edge edge : edges) {
 
-                case TCONST.NONE:
+            if(edge.testConstraint())
+            {
+                node = edge.followEdge();
 
-                    // When we retrieve the "next" node we automatically apply it
-                    // by falling through
+                if(node != null)
+                        node.preEnter();
 
-                    _currNode = _currNode.nextNode();
-
-                    if (_currNode == null) {
-                        _nodeState = TCONST.NEXTSCENE;
-                        break;
-                    }
-                    // otherwise fall through and apply next node action
-
-                case TCONST.WAIT:
-                case TCONST.READY:
-                case TCONST.DONE:
-
-                    // This may result in a simple state change - method call etc.
-                    // which returns TCONST.DONE indicating the event is complete
-                    //
-                    // It may start a process that needs to complete before continuing.
-                    //
-                    // A result of TCONST.NONE indicated the complex source node is exhausted.
-                    // which will drive a search for the next node
-                    //
-
-                    Log.d(TAG, "Running Node: " + _currNode.name);
-                    _nodeState = _currNode.applyNode();
-                    break;
+                break;
             }
         }
 
-        return _nodeState;
+        return node;
     }
 
+
+    // TODO: Ideally this would be protected
+    // Used by Animation graph to init root animation
+    // Note: Modules use this to reinisitalize themselves
+
+    public void preEnter()
+    {
+        if(preenter != null)
+        {
+            apply(preenter);
+        }
+    }
+
+
+    // TODO: Ideally this would be protected
+    // Used by Animation graph to init root animation
+
+    public void preExit()
+    {
+        if(preexit != null)
+        {
+            apply(preexit);
+        }
+    }
+
+
+    // preenter / preexit action resolution.
+    //
+    private void apply(String[] commandSet) {
+
+        for (String nodeName : commandSet) {
+            try {
+                IScriptable2 node = (IScriptable2)getScope().mapSymbol(nodeName);
+                node.applyNode();
+
+            } catch (Exception e) {
+                CErrorManager.terminate(TAG, "ERROR: Symbol Not found:" + nodeName + " : ", e, false);
+            }
+        }
+    }
+
+
+    public String seekToAnimation(String seek) {
+        return null;
+    }
+
+    public void play() {    }
+
+    public void stop() {    }
+
+    public String applyNode() {
+        return TCONST.DONE;
+    }
+
+    public void resetNode() {}
+
+
+    public IScriptable2 mapReference(String refName) {
+
+        return null;
+    }
+
+    public IScriptable2 mapProperty(String propName) {
+
+        return null;
+    }
+
+
+    // IScriptable2
+    @Override
+    public TBoolean OR(IScriptable2 RHS, boolean lneg, boolean rneg) {
+        boolean result = false;
+
+        if((Boolean)evaluate(lneg) || (Boolean)RHS.evaluate(rneg)) {
+            result = true;
+        }
+
+        return new TBoolean(result);
+    }
 
     @Override
-    public String next() {
-        String result = TCONST.READY;
+    public TBoolean AND(IScriptable2 RHS, boolean lneg, boolean rneg) {
+        boolean result = false;
 
-        try {
-            _currNode = (graph_node) getScope().mapSymbol(rootnode);
-        }
-        catch(Exception e) {
-            CErrorManager.terminate(TAG,"Root Node not found", e, false);
+        if((Boolean)evaluate(lneg) && (Boolean)RHS.evaluate(rneg)) {
+            result = true;
         }
 
-        if(_currNode != null) {
-            Log.d(TAG, "Running Node: " + _currNode.name);
-
-            _currNode.preEnter();
-            result = TCONST.READY;
-        }
-        else {
-            Log.d(TAG, "No Root Node for Scene");
-            result = TCONST.NEXTSCENE;
-        }
-
-        return result;
+        return new TBoolean(result);
     }
-
 
     @Override
-    public void play() {
-        _currNode.play();
+    public TBoolean LT(IScriptable2 RHS) {
+        return null;
     }
-
 
     @Override
-    public void stop() {
-        _currNode.stop();
+    public TBoolean LTEQ(IScriptable2 RHS) {
+        return null;
+    }
+
+    @Override
+    public TBoolean GT(IScriptable2 RHS) {
+        return null;
+    }
+
+    @Override
+    public TBoolean GTEQ(IScriptable2 RHS) {
+        return null;
+    }
+
+    @Override
+    public TBoolean EQ(IScriptable2 RHS) {
+        return null;
+    }
+
+    @Override
+    public TBoolean NEQ(IScriptable2 RHS) {
+        return null;
+    }
+
+    @Override
+    public String resolve(int index) {
+        return null;
+    }
+
+    @Override
+    public int getIntValue() {
+        return 0;
+    }
+
+    @Override
+    public Object evaluate(boolean neg) {
+        return false;
     }
 
 
-    public String gotoNode(String nodeName) {
 
-        _currNode.stop();
-        _currNode.preExit();
+    // *** Serialization
 
-        try {
-            _currNode = (graph_node) getScope().mapSymbol(nodeName);
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope2 scope) {
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // CRITICAL
+        // Capture the scope for this node -
+        // Used when dereferencing Symbols within the nodes execution context
+        //
+        _scope = scope;
 
-        // Apply the node and continue
-        _currNode.preEnter();
-
-        return _currNode.applyNode();
+        JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
     }
 
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
+        Log.d(TAG, "Loader iteration");
+        loadJSON(jsonObj, (IScope2) scope);
+    }
 }
+
+

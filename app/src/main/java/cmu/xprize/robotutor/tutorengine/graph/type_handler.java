@@ -121,70 +121,75 @@ public class type_handler extends type_action implements IMediaListener {
 
             type_handler obj = null;
 
-            // Non reference nodes create the actual java timer and own it.
-            // Note that it is expected that the timer will be CREATED before any other
-            // nodes access it.  However if a call is made against a uninitialized timer
-            // it will simply be ignored.
+            // If the feature test passes then fire the event.
+            // Otherwise set flag to indicate event was completed/skipped in this case
+            // Issue #58 - Make all actions feature reactive.
             //
-            if(!mMediaManager.hasHandler(id)) {
+            if(testFeatures()) {
 
-                switch (action) {
-                    case TCONST.CREATEANDSTART:
-                        _timerCmd = TCONST.START;
+                // Non reference nodes create the actual java timer and own it.
+                // Note that it is expected that the timer will be CREATED before any other
+                // nodes access it.  However if a call is made against a uninitialized timer
+                // it will simply be ignored.
+                //
+                if (!mMediaManager.hasHandler(id)) {
 
-                    case TCONST.CREATE:
+                    switch (action) {
+                        case TCONST.CREATEANDSTART:
+                            _timerCmd = TCONST.START;
+
+                        case TCONST.CREATE:
+                            createHandler();
+                            break;
+
+                        default:
+                            Log.i(TAG, "Timer: " + id + " - call on uninitialized timer");
+
+                            break;
+                    }
+                }
+
+                // Reference nodes get a reference to the owner timer through the MediaManager
+                // and perform their action on the timer by updating the owners "action" and
+                // calling appyNode to execute on the actual timer.
+                //
+                if (_reference) {
+
+                    try {
+                        obj = (type_handler) mMediaManager.mapHandler(id);
+
+                        // Apply the reference action to the actual timer
+                        if (obj != null) {
+                            obj._timerCmd = action;
+                            obj.applyNode();
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else switch (_timerCmd) {
+
+                    case TCONST.START:
+                        startTimer();
+                        break;
+
+                    case TCONST.RESET:
+                        stopTimer();
                         createHandler();
                         break;
 
-                    default:
-                        Log.i(TAG, "Timer: " + id + " - call on uninitialized timer" );
+                    case TCONST.RESTART:
+                        stopTimer();
+                        createHandler();
+                        startTimer();
+                        break;
 
+                    case TCONST.STOP:
+                    case TCONST.CANCEL:
+                        stopTimer();
                         break;
                 }
             }
-
-            // Reference nodes get a reference to the owner timer through the MediaManager
-            // and perform their action on the timer by updating the owners "action" and
-            // calling appyNode to execute on the actual timer.
-            //
-            if(_reference) {
-
-                try {
-                    obj = (type_handler) mMediaManager.mapHandler(id);
-
-                    // Apply the reference action to the actual timer
-                    if(obj != null) {
-                        obj._timerCmd = action;
-                        obj.applyNode();
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            else switch(_timerCmd) {
-
-                case TCONST.START:
-                    startTimer();
-                    break;
-
-                case TCONST.RESET:
-                    stopTimer();
-                    createHandler();
-                    break;
-
-                case TCONST.RESTART:
-                    stopTimer();
-                    createHandler();
-                    startTimer();
-                    break;
-
-                case TCONST.STOP:
-                case TCONST.CANCEL:
-                    stopTimer();
-                    break;
-            }
-
             return TCONST.DONE;
         }
 

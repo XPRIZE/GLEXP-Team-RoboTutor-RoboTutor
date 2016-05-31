@@ -41,6 +41,7 @@ public class type_audio extends type_action implements IMediaListener {
 
     private CMediaManager                 mMediaManager;
     private CMediaManager.mediaController mPlayer;
+    private boolean                       mPreLoaded = false;
 
     private String                        mSoundSource;
     private String                        mSourcePath;
@@ -124,21 +125,25 @@ public class type_audio extends type_action implements IMediaListener {
     //*******************************************************
 
 
-
     /**
+     * This is an optimization used in timeLines to preload the assets - timeline tracks act as the
+     * owner so that they are informed directly of audio completion events.  This is necessary to
+     * keep them sync'd with the mediaManager attach states - otherwise they don't know when their
+     * audio players have been detached and may perform operations on a re-purposed player.
      *
      */
-    @Override
-    public void preEnter()
-    {
-        super.preEnter();
+    public void preLoad(IMediaListener owner) {
 
         String pathResolved = getScope().resolveTemplate(mSourcePath);
+
+        Log.i(TAG, "Preload: " + pathResolved);
 
         // This allocates a MediaPController for use by this audio_node. The media controller
         // is a managed global resource of CMediaManager
         //
-        mPlayer = mMediaManager.attachMediaPlayer(pathResolved, this);
+        mPlayer = mMediaManager.attachMediaPlayer(pathResolved, owner);
+
+        mPreLoaded = true;
     }
 
 
@@ -146,18 +151,33 @@ public class type_audio extends type_action implements IMediaListener {
     public String applyNode() {
         String status = TCONST.DONE;
 
-        // play on creation if command indicates
-        if(command.equals(TCONST.PLAY)) {
+        // If the feature test passes then fire the event.
+        // Otherwise set flag to indicate event was completed/skipped in this case
+        // Issue #58 - Make all actions feature reactive.
+        //
+        if(testFeatures()) {
 
-            play();
-
-            // Events return done - so they may play on top of each other.
-            // streams and flows WAIT until completion before continuing.
+            // Non type_timeline audio tracks are not preloaded. So do it inline. This just has a
+            // higher latency between the call and when the audio is actually ready to play.
             //
-            if(mode.equals(TCONST.AUDIOEVENT))
-                status = TCONST.DONE;
-            else
-                status = TCONST.WAIT;
+            if(!mPreLoaded) {
+                preLoad(this);
+            }
+            mPreLoaded = false;
+
+            // play on creation if command indicates
+            if (command.equals(TCONST.PLAY)) {
+
+                play();
+
+                // Events return done - so they may play on top of each other.
+                // streams and flows WAIT until completion before continuing.
+                //
+                if (mode.equals(TCONST.AUDIOEVENT))
+                    status = TCONST.DONE;
+                else
+                    status = TCONST.WAIT;
+            }
         }
 
         return status;
@@ -198,6 +218,12 @@ public class type_audio extends type_action implements IMediaListener {
 
         if(mPlayer != null)
             mPlayer.seekTo(frameTime);
+    }
+
+    public void detach() {
+
+        if(mPlayer != null)
+            mPlayer.detach();
     }
 
 

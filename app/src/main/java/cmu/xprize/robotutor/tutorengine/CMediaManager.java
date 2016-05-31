@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import cmu.xprize.robotutor.tutorengine.graph.scene_view;
 import cmu.xprize.robotutor.tutorengine.graph.type_handler;
 import cmu.xprize.robotutor.tutorengine.graph.type_timeline;
 import cmu.xprize.robotutor.tutorengine.graph.type_timer;
@@ -430,12 +429,12 @@ public class CMediaManager implements IMediaManager {
         if(controller == null) {
 
             mediaController oldest   = null;
-            long            timeTest =  Long.MAX_VALUE;
+            long            timeTest = 0L;
 
             for(mediaController controllerInstance : mControllerSet) {
 
                 if(!controllerInstance.isAttached()) {
-                    if(controllerInstance.lastUsed() < timeTest) {
+                    if(controllerInstance.lastUsed() > timeTest) {
                         oldest = controllerInstance;
                     }
                 }
@@ -504,7 +503,7 @@ public class CMediaManager implements IMediaManager {
         private boolean      mIsReady       = false;
         private boolean      mIsAlive       = true;
 
-        private Long         lastUsed       = Long.MAX_VALUE;
+        private Long         lastUsed       = 0L;
         private String       mDataSource = "";
 
         private boolean      mDeferredStart = false;
@@ -572,6 +571,9 @@ public class CMediaManager implements IMediaManager {
          * Note that we leave the MediaPlayer in a playable state
          */
         public void detach() {
+
+            Log.d(TAG, "detach MediaPlayer");
+
             stop();
             mOwner = null;
         }
@@ -626,6 +628,8 @@ public class CMediaManager implements IMediaManager {
 
         public void stop() {
 
+            Log.d(TAG, "stop MediaPlayer");
+
             pause();
             seek(0L);
         }
@@ -633,6 +637,7 @@ public class CMediaManager implements IMediaManager {
 
         public void kill() {
 
+            Log.d(TAG, "Kill MediaPlayer");
             mIsAlive = false;
 
             // Note: using stop instead of pause seems to be preferable. pause seek combination
@@ -689,7 +694,7 @@ public class CMediaManager implements IMediaManager {
 
             // If play was called before we were ready play
             if(mDeferredStart)
-                        play();
+                play();
         }
 
 
@@ -706,22 +711,23 @@ public class CMediaManager implements IMediaManager {
             // by re-purposing the oldest first.  i.e. We want to limit the reloading of clips
             // if possible.
             //
-            lastUsed =  System.currentTimeMillis();
+            lastUsed = System.currentTimeMillis();
 
-            try {
-                if(mPlayer != null) {
-                    pause();
-                    seekTo(0);
+            if (mOwner != null) {
+
+                try {
+                    if (mPlayer != null) {
+                        pause();
+                        seekTo(0);
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Audio state error:" + e);
                 }
-            }
-            catch(Exception e) {
-                Log.e(TAG, "Audio state error:" + e);
-            }
 
-            // Allow the owning node to do type specific processing of completion event.
-            //
-            if(mOwner != null)
+                // Allow the owning node to do type specific processing of completion event.
+                //
                 mOwner.onCompletion();
+            }
             else {
                 Log.i(TAG, "invalid Owner");
             }

@@ -200,7 +200,6 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
                 default:
                     try {
                         obj = mTutor.getScope().mapSymbol(mClickBehavior);
-                        obj.preEnter();
                         obj.applyNode();
 
                     } catch (Exception e) {

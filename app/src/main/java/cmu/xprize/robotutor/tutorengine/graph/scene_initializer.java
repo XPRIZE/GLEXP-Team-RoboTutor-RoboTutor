@@ -26,7 +26,6 @@ import org.json.JSONObject;
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
-import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
@@ -35,7 +34,7 @@ public class scene_initializer implements ILoadableObject2 {
     // json loadable
     public String          id;
 
-    public scene_view[]    scene_layout;
+    public tutor_view[]    scene_layout;
     public type_action[]  oncreate;
     public type_action[]  onenter;
     public String          features;

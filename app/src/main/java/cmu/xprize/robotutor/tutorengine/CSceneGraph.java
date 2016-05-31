@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import cmu.xprize.robotutor.tutorengine.graph.scene_node;
+import cmu.xprize.robotutor.tutorengine.graph.tutor_node;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.CErrorManager;
@@ -58,13 +58,13 @@ public class CSceneGraph  {
     private boolean          mDisabled   = false;
 
     // State fields
-    private scene_node       _sceneNode;
+    private tutor_node _sceneNode;
 
     private HashMap<String, Integer> _pFeatures;
 
 
     // json loadable
-    public HashMap<String,scene_node> animatorMap;
+    public HashMap<String,tutor_node> animatorMap;
 
 
     final private String TAG = "CSceneGraph";
@@ -112,7 +112,7 @@ public class CSceneGraph  {
                         mSceneName = _target;
 
                         try {
-                            _sceneNode = (scene_node) mScope.mapSymbol(mSceneName);
+                            _sceneNode = (tutor_node) mScope.mapSymbol(mSceneName);
 
                         } catch (Exception e) {
 
