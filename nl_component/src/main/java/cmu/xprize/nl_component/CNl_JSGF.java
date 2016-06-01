@@ -28,8 +28,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.Num2Word;
-import cmu.xprize.util.TCJSGF;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
 
@@ -133,8 +133,7 @@ public class CNl_JSGF implements CNl_Processor {
             }
         }
         catch(Exception e) {
-            Log.e(TAG, "deReference Error: " + _listName + " : Index : " + index + " : " + e);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "deReference Error: " + _listName + " : Index : " + index + " : ", e, false);
         }
 
         return null;
@@ -232,8 +231,7 @@ public class CNl_JSGF implements CNl_Processor {
             }
         }
         catch(Exception e) {
-            Log.e(TAG, "Data not initialized - " + e);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Data not initialized - ", e, false);
         }
     }
 

@@ -45,12 +45,10 @@ Modifications to support multiple languages: Copyright(c) 2016  Kevin Willows
 */
 
 
-import android.util.Log;
-
 import java.util.HashMap;
 import java.util.Locale;
 
-
+import cmu.xprize.util.CErrorManager;
 
 
 public class Phoneme {
@@ -81,9 +79,7 @@ public class Phoneme {
 
         }
         catch (Exception e) {
-
-            Log.e(TAG, "Langauge configuration error: " + e);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Langauge configuration error: ", e, false);
         }
     }
 

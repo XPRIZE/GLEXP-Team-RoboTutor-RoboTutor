@@ -26,13 +26,14 @@ import java.util.HashMap;
 import cmu.xprize.robotutor.tutorengine.CSceneGraph;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.IScriptable;
 import cmu.xprize.util.TCONST;
 
 
 public class TScope implements IScope2 {
 
-    // There is one toplevel scope created by scene_node
+    // There is one toplevel scope created by tutor_node
     //
     private static TScope rootScope = null;
 
@@ -113,9 +114,9 @@ public class TScope implements IScope2 {
 
 
     public void put(String key, IScriptable2 obj) {
+
         if(map.containsKey(key)) {
-            Log.e(TAG, "Duplicate Key : " + key);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Duplicate Key : " + key, false);
         }
         map.put(key,obj);
     }
@@ -216,8 +217,7 @@ public class TScope implements IScope2 {
                         //
                         else if (tChar == ']') {
                             if(!isArray) {
-                                Log.e(TAG, "No open bracket [ found for array reference: " + Symbol + "> in expression" + source);
-                                System.exit(1);
+                                CErrorManager.terminate(TAG, "No open bracket [ found for array reference: " + Symbol + "> in expression" + source, null, false);
                             }
 
                             _i1++;
@@ -253,8 +253,7 @@ public class TScope implements IScope2 {
                                         resultObj = mapSymbol(Symbol.toString());
 
                                         if (resultObj == null) {
-                                            Log.e(TAG, "Symbol not found: <" + Symbol + "> in expression" + source);
-                                            System.exit(1);
+                                            CErrorManager.terminate(TAG, "Symbol not found: <" + Symbol + "> in expression" + source, null, false);
                                         }
 
                                         result.append(resultObj.toString());
@@ -290,8 +289,7 @@ public class TScope implements IScope2 {
 
                             default:
                                 // TODO: Manage Syntax Errors
-                                Log.e(TAG, "Missing '}}' in expression: " + source);
-                                System.exit(1);
+                                CErrorManager.terminate(TAG, "Missing '}}' in expression: " + source, null, false);
 
                         }
                         break;
@@ -304,8 +302,7 @@ public class TScope implements IScope2 {
         }
         catch(Exception e) {
             // TODO: Manage Syntax Errors
-            Log.e(TAG, "Invalid Expression: " + source);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Invalid Expression: " + source, e, false);
         }
 
         return result.toString();
@@ -338,9 +335,13 @@ public class TScope implements IScope2 {
                 } while (tarObject == null);
 
             } catch (Exception e) {
+
                 //TODO : Manage symbol not found
-                Log.e(TAG, "Symbol not found : " + name);
-                System.exit(1);
+                // NOTE: this is not reliably being flushed to LogCat
+                //CErrorManager.terminate(TAG, "Symbol not found : " + name + " Exception: " , e, false);
+
+                // Don't exit
+                Log.e(TAG, "Symbol not found : " + name + " Exception: " + e);
             }
         }
 

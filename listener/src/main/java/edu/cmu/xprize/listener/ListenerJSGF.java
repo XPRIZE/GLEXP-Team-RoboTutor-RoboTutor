@@ -132,7 +132,31 @@ public class ListenerJSGF extends ListenerBase {
                 "grammar sentence;\n" +
                 "\n" +
                 "<word> = " + TextUtils.join("|", wordsToHear) + ";\n" +
-                "public <sentence> = <word> <word> <word> <word> <word> <word> <word> <word> <word> <word> <word>;\n";
+                "public <sentence> = ";
+
+        for(int i1 = 0; i1 < wordsToHear.length ; i1++) {
+            grammar += "<word>";
+        }
+        grammar += ";\n";
+
+        // Listen for a sequence
+        //
+        listenFor(grammar);
+    }
+
+
+    public void listenForSentence(String[] wordsToHear, int startWord) {
+
+        // Ensure all the words are in the language model
+        //
+        generateLM(wordsToHear);
+
+        // generate a grammar that allows any words
+        //
+        String grammar = "#JSGF V1.0;\n" + "\n" +
+                "grammar sentence;\n" +
+                "\n" +
+                "public <sentence> = " + TextUtils.join(" ", wordsToHear) + ";\n";
 
         // Listen for a sequence
         //
@@ -329,6 +353,11 @@ public class ListenerJSGF extends ListenerBase {
     // handle a partial or final hypothesis from pocketsphinx
     private void processHypothesis(String[] hypothesis) {
 
+        // post update to client component
+        //
+        if (eventListener != null) {
+            eventListener.onUpdate(hypothesis, false);
+        }
     }
 
 } // end Listener class

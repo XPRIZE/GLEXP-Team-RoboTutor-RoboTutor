@@ -27,6 +27,8 @@ public interface ITutorGraph {
 
     public void onDestroy();
 
+    public void terminateQueue();
+
     public void post(String command);
 
     public CSceneGraph getAnimator();

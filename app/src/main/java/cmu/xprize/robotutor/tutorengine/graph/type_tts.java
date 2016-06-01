@@ -49,28 +49,27 @@ public class type_tts extends type_action {
         mSynthesizer  = mMediaManager.getTTS();
     }
 
-    /**
-     * TODO: Look at disposing of Media Players once scene is finished - optimization
-     */
-    @Override
-    public void preEnter()
-    {
-    }
-
 
     @Override
     public String applyNode() {
 
         String status = TCONST.DONE;
 
-        switch(command) {
-            case TCONST.SAY:
-                say();
-                break;
+        // If the feature test passes then fire the event.
+        // Otherwise set flag to indicate event was completed/skipped in this case
+        // Issue #58 - Make all actions feature reactive.
+        //
+        if(testFeatures()) {
 
-            case TCONST.SET_RATE:
-                setRate();
-                break;
+            switch (command) {
+                case TCONST.SAY:
+                    say();
+                    break;
+
+                case TCONST.SET_RATE:
+                    setRate();
+                    break;
+            }
         }
 
         return status;

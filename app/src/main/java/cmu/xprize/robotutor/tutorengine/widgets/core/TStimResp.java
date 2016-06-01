@@ -15,9 +15,9 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import cmu.xprize.fw_component.CStimResp;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutor;
@@ -127,8 +127,7 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
             }
         }
         catch (Exception e) {
-            Log.e(TAG, "Invalid Data Source for : " + name());
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Invalid Data Source for : " + name(), null, false);
         }
 
         // Pass an array of strings as the data source to the base object

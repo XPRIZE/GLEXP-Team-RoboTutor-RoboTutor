@@ -32,10 +32,11 @@ import java.util.Map;
 
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.TCONST;
 
 
-public class type_action extends graph_node {
+public class type_action extends scene_node {
 
     // json loadable
     public String          id;
@@ -75,6 +76,44 @@ public class type_action extends graph_node {
 
 
 
+    public boolean testFeatures() {
+
+        boolean        featurePass = false;
+
+        // If this scene is not in the feature set for the tutor then check the next one.
+
+        if(!features.equals(""))
+        {
+            featurePass = _scope.tutor().testFeatureSet(features);
+
+            if(featurePass)
+            {
+                // Check Probability Feature if present
+
+                if(hasPFeature())
+                {
+                    featurePass = testPFeature();
+                }
+            }
+        }
+
+        // unconditional tracks pass automatically - unless they have PFeature
+
+        else
+        {
+            // Check Probability Feature if present
+
+            if(hasPFeature())
+            {
+                featurePass = testPFeature();
+            }
+            else featurePass = true;
+        }
+
+        return featurePass;
+    }
+
+
     public boolean testPFeature() {
 
         int   iter = _scope.sceneGraph().queryPFeature(pid, _prob.length, cycle);
@@ -109,146 +148,145 @@ public class type_action extends graph_node {
     @Override
     public String applyNode() {
 
-        String returnState = TCONST.DONE;
-        Map    childMap    = _scope.tutorGraph().getChildMap();
+        String  returnState = TCONST.DONE;
+        Map     childMap    = _scope.tutorGraph().getChildMap();
 
-        if(cmd != null) {
-            switch(cmd) {
+        // If the feature test passes then fire the event.
+        // Otherwise set flag to indicate event was completed/skipped in this case
+        // Issue #58 - Make all actions feature reactive.
+        //
+        if(testFeatures()) {
 
-                // System level command to launch a new Tutor Instance.
-                //
-                case TCONST.CMD_LAUNCH:
-                    try {
-                        // We demand a parm list of the form intent:String|intentdata:String
-                        //
-                        List<String> parmList = Arrays.asList(parms.split("[:\\|]"));
+            if (cmd != null) {
+                switch (cmd) {
 
-                        // Resolve any variables in the parameters.
-                        // Session manager uses TScope variables to store intents
-                        //
-                        String intent     = getScope().resolveTemplate(parmList.get(0));
-                        String intentData = getScope().resolveTemplate(parmList.get(2));
-                        String features   = getScope().resolveTemplate(parmList.get(4));
-
-                        CTutorEngine.launch(intent, intentData, features);
-                    }
-                    catch(Exception e) {
-                        Log.e(TAG, "Launch Command Invalid: " + e);
-                        System.exit(1);
-                    }
-                    break;
-
-                case TCONST.CMD_GOTO:
-                    _scope.tutor().gotoNode(id);
-                    break;
-
-                case TCONST.CMD_SET_FEATURE:
-                    _scope.tutor().setAddFeature(value);
-                    break;
-
-                case TCONST.CMD_DEL_FEATURE:
-                    _scope.tutor().setDelFeature(value);
-                    break;
-
-                case TCONST.CMD_NEXT:
-                    _scope.tutor().eventNext();
-                    break;
-
-                case TCONST.CMD_WAIT:
-                    returnState = TCONST.WAIT;
-                    break;
-            }
-        }
-
-        else  if(method != null && !method.equals("")) {
-
-            switch(method) {
-                case "=":
-                    try {
-                        getScope().mapSymbol(id).set(value);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    break;
-
-                case "+":
-                    try {
-                        getScope().mapSymbol(id).add(value);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    break;
-
-                case "-":
-                    try {
-                        getScope().mapSymbol(id).subtract(value);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    break;
-
-                default:
-                    // The parameters come in - Name:Class|Name:Class...
-                    // So in the split array the odd elements are parameter values and the
-                    // even elements are the associated base-Class(type).
-
-                    Class[]  pType  = null;
-                    Object[] iparms = null;
-
-                    // TODO: Fixup support for , delimited parm lists
-                    // TODO: This will require FSM or REGEX processing to allow : and | in strings.
+                    // System level command to launch a new Tutor Instance.
                     //
-                    if(parms != null) {
+                    case TCONST.CMD_LAUNCH:
+                        try {
+                            // We demand a parm list of the form intent:String|intentdata:String
+                            //
+                            List<String> parmList = Arrays.asList(parms.split("[:\\|]"));
 
-                        // Break up the parms specification - "parms":"value:type|value:type..."
+                            // Resolve any variables in the parameters.
+                            // Session manager uses TScope variables to store intents
+                            //
+                            String intent = getScope().resolveTemplate(parmList.get(0));
+                            String intentData = getScope().resolveTemplate(parmList.get(2));
+                            String features = getScope().resolveTemplate(parmList.get(4));
+
+                            CTutorEngine.launch(intent, intentData, features);
+                        } catch (Exception e) {
+                            CErrorManager.terminate(TAG, "Launch Command Invalid: ", e, false);
+                        }
+                        break;
+
+                    case TCONST.CMD_GOTO:
+                        _scope.tutor().gotoNode(id);
+                        break;
+
+                    case TCONST.CMD_SET_FEATURE:
+                        _scope.tutor().setAddFeature(value);
+                        break;
+
+                    case TCONST.CMD_DEL_FEATURE:
+                        _scope.tutor().setDelFeature(value);
+                        break;
+
+                    case TCONST.CMD_NEXT:
+                        _scope.tutor().eventNext();
+                        break;
+
+                    case TCONST.CMD_WAIT:
+                        returnState = TCONST.WAIT;
+                        break;
+                }
+            } else if (method != null && !method.equals("")) {
+
+                switch (method) {
+                    case "=":
+                        try {
+                            getScope().mapSymbol(id).set(value);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+
+                    case "+":
+                        try {
+                            getScope().mapSymbol(id).add(value);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+
+                    case "-":
+                        try {
+                            getScope().mapSymbol(id).subtract(value);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+
+                    default:
+                        // The parameters come in - Name:Class|Name:Class...
+                        // So in the split array the odd elements are parameter values and the
+                        // even elements are the associated base-Class(type).
+
+                        Class[] pType = null;
+                        Object[] iparms = null;
+
+                        // TODO: Fixup support for , delimited parm lists
+                        // TODO: This will require FSM or REGEX processing to allow : and | in strings.
                         //
-                        List<String> parmList = Arrays.asList(parms.split("[:\\|]"));
+                        if (parms != null) {
 
-                        // Create the arrays
-                        pType  = new Class[parmList.size() / 2];
-                        iparms = new Object[parmList.size() / 2];
-
-                        for (int i1 = 1, i2 = 0; i1 < parmList.size(); i1 += 2, i2++) {
-
-                            // Force lowercase on classname (type) and translate to Class object
+                            // Break up the parms specification - "parms":"value:type|value:type..."
                             //
-                            parmList.set(i1, parmList.get(i1).toLowerCase());
-                            pType[i2] = classMap.get(parmList.get(i1));
+                            List<String> parmList = Arrays.asList(parms.split("[:\\|]"));
 
-                            // Generate the actual parameter object to pass to the method
-                            //
-                            try {
-                                iparms[i2] = pType[i2].getConstructor(new Class[]{String.class}).newInstance(parmList.get(i1 - 1));
+                            // Create the arrays
+                            pType = new Class[parmList.size() / 2];
+                            iparms = new Object[parmList.size() / 2];
 
-                            } catch (Exception e) {
-                                // TODO: Update this exception -  it is actually an invalid parm type error
-                                e.printStackTrace();
-                                Log.e(TAG, "ERROR: " + id + " - Method: <" + method + "> Not Found: " + e);
-                                System.exit(1);
+                            for (int i1 = 1, i2 = 0; i1 < parmList.size(); i1 += 2, i2++) {
+
+                                // Force lowercase on classname (type) and translate to Class object
+                                //
+                                parmList.set(i1, parmList.get(i1).toLowerCase());
+                                pType[i2] = classMap.get(parmList.get(i1));
+
+                                // Generate the actual parameter object to pass to the method
+                                //
+                                try {
+                                    iparms[i2] = pType[i2].getConstructor(new Class[]{String.class}).newInstance(parmList.get(i1 - 1));
+
+                                } catch (Exception e) {
+                                    // TODO: Update this exception -  it is actually an invalid parm type error
+                                    CErrorManager.terminate(TAG, "ERROR: " + id + " - Method: <" + method + "> Not Found: ", e, false);
+                                }
                             }
                         }
-                    }
 
-                    try {
-                        // Find the target object by its id
-                        // get the method on the target and apply it with the parameter array created above.
-                        //
-                        Log.d(TAG, childMap.get(id).toString());
-                        childMap.get(id).getClass();
+                        try {
+                            // Find the target object by its id
+                            // get the method on the target and apply it with the parameter array created above.
+                            //
+                            Log.d(TAG, childMap.get(id).toString());
+                            childMap.get(id).getClass();
 
-                        Method _method = childMap.get(id).getClass().getMethod(method, pType);
+                            Method _method = childMap.get(id).getClass().getMethod(method, pType);
 
-                        _method.invoke(childMap.get(id), iparms);
+                            _method.invoke(childMap.get(id), iparms);
 
-                    } catch(Exception e) {
-                        e.printStackTrace();
-                        Log.e(TAG, "ERROR: "+ id + " - Apply Method: " + method + "   Parms: "+ parms + " : " + e);
-                        System.exit(1);
-                    }
-                    break;
+                        } catch (Exception e) {
+                            CErrorManager.terminate(TAG, "ERROR: " + id + " - Apply Method: " + method + "   Parms: " + parms + " : ", e, false);
+                        }
+                        break;
+                }
             }
         }
 

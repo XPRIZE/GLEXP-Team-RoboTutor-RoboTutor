@@ -23,7 +23,13 @@ import android.content.Context;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 
+import cmu.xprize.banner.persona.Persona;
+
 public class CBanner extends PercentRelativeLayout {
+
+    private Persona mPersona;
+
+
 
     public CBanner(Context context) {
         super(context);
@@ -43,8 +49,17 @@ public class CBanner extends PercentRelativeLayout {
     private void init(AttributeSet attrs) {
         inflate(getContext(), R.layout.banner_layout, this);
 
+        mPersona = (Persona) findViewById(R.id.Spersona);
+
 //        mCheckBox1 = (CheckBox) findViewById(R.id.control1);
 //        mCheckBox2 = (CheckBox) findViewById(R.id.control2);
     }
+
+
+    public void onDestroy() {
+        mPersona.onDestroy();
+    }
+
+
 
 }

@@ -19,10 +19,10 @@
 
 package cmu.xprize.robotutor.tutorengine.graph.vars;
 
-import cmu.xprize.robotutor.tutorengine.graph.graph_node;
+import cmu.xprize.robotutor.tutorengine.graph.scene_node;
 
 
-public class type_array extends graph_node {
+public class type_array extends scene_node {
 
     public IArraySource _owner;
     public String       _listName;

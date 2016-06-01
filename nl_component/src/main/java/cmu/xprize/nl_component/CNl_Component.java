@@ -188,8 +188,17 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener, I
      * @param newValue
      */
     @Override
-    public void updateText(String newValue) {
+    public void updateNumberString(String newValue) {
         super.updateText(newValue);
+    }
+
+    /**
+     * Override in Tutor sub-class to access text view id in layout - ViewManger uses this
+     * to update the debug hypothesis listing
+     * @param newValue
+     */
+    @Override
+    public void updateDebugText(String newValue) {
     }
 
 
@@ -255,6 +264,7 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener, I
         }
         mListener.configTimedEvent(eventType, timeOut);
     }
+    // TODO: Protect against exceptions if asked to get unknown key
     public void clearTimedEvent(String eventString) {
 
         int eventType = CEventMap.eventMap.get(eventString);
@@ -288,6 +298,12 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener, I
     public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult) {
 
         mInputProcessor.onUpdate(heardWords, finalResult);
+    }
+
+    @Override
+    public void onUpdate(String[] heardWords, boolean finalResult) {
+
+        //mInputProcessor.onUpdate(heardWords, finalResult);
     }
 
 

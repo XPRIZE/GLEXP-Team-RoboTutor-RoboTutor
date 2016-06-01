@@ -27,6 +27,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorManager;
 import cmu.xprize.robotutor.tutorengine.widgets.core.TTextView;
+import cmu.xprize.util.CErrorDialog;
 import cmu.xprize.util.CPreferenceCache;
 import cmu.xprize.util.IReadyListener;
 import cmu.xprize.util.ProgressLoading;
@@ -78,15 +80,18 @@ public class RoboTutor extends Activity implements IReadyListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate: ");
+//        super.onCreate(savedInstanceState);
+        super.onCreate(null);
+        Log.i(TAG, "onCreate: " + savedInstanceState);
 
-        W2N_UnitTest test = new W2N_UnitTest();
+        //W2N_UnitTest test = new W2N_UnitTest();
 
         setContentView(R.layout.robo_tutor);
 
         // Get the primary container for tutors
         tutorContainer = (ITutorManager)findViewById(R.id.tutor_container);
+
+        setFullScreen();
 
         EXTERNFILES = getApplicationContext().getExternalFilesDir("").getPath();
 
@@ -103,11 +108,32 @@ public class RoboTutor extends Activity implements IReadyListener {
 
     @Override
     protected void onDestroy() {
-
-        super.onDestroy();
         Log.i(TAG, "onDestroy: ");
 
+        super.onDestroy();
+    }
 
+
+    /**
+     * Ignore the state bundle
+     *
+     * @param bundle
+     */
+    @Override
+    protected void onRestoreInstanceState(Bundle bundle) {
+        //super.onRestoreInstanceState(bundle);
+        Log.i(TAG, "onRestoreInstanceState" + bundle);
+    }
+
+
+    private void setFullScreen() {
+
+        ((View)tutorContainer).setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
 
@@ -206,6 +232,8 @@ public class RoboTutor extends Activity implements IReadyListener {
             // Load the default tutor defined in assets/tutors/engine_descriptor.json
             // TODO: Handle tutor creation failure
             tutorEngine = CTutorEngine.getTutorEngine(RoboTutor.this, tutorContainer);
+
+            setFullScreen();
         }
     }
 
@@ -264,8 +292,6 @@ public class RoboTutor extends Activity implements IReadyListener {
         // Update the globally accessible id object for this engine instance.
         //
         CPreferenceCache.initLogPreference(this);
-
-
     }
 
 
@@ -286,6 +312,8 @@ public class RoboTutor extends Activity implements IReadyListener {
     protected void onStop() {
         super.onStop();
         Log.i(TAG, "onStop Robotutor: Off-Screen");
+
+        tutorEngine.killAllTutors();
     }
 
 
@@ -303,6 +331,12 @@ public class RoboTutor extends Activity implements IReadyListener {
 
         super.onPause();
         Log.i(TAG, "onPause Robotutor");
+
+        if(TTS != null && TTS.isReady()) {
+            TTS.stopSpeaking();
+            TTS.shutDown();
+            TTS = null;
+        }
 
         SharedPreferences.Editor prefs = getPreferences(Context.MODE_PRIVATE).edit();
     }

@@ -25,6 +25,7 @@ import android.text.Html;
 import android.text.Layout;
 import android.text.Spanned;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -88,8 +89,90 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
     }
 
 
+    @Override
+    public void initStory(IVManListener owner, String assetPath) {
+
+    }
+
+    @Override
+    public void onDestroy() {
+
+    }
+
+
+    public void setSpeakButton(String command) {
+    }
+
+    public void setPageFlipButton(String command) {
+    }
+
+    @Override
+    public void seekToPage(int pageIndex) {
+
+    }
+
+    @Override
+    public void nextPage() {
+
+    }
+
+    @Override
+    public void prevPage() {
+
+    }
+
+    @Override
+    public void seekToParagraph(int paraIndex) {
+
+    }
+
+    @Override
+    public void nextPara() {
+
+    }
+
+    @Override
+    public void prevPara() {
+
+    }
+
+    @Override
+    public void seekToLine(int lineIndex) {
+
+    }
+
+    @Override
+    public void nextLine() {
+
+    }
+
+    @Override
+    public void prevLine() {
+
+    }
+
+    @Override
+    public void seekToWord(int wordIndex) {
+
+    }
+
     public void setPublishListener(IVManListener publishListener) {
         _publishListener = publishListener;
+    }
+
+    @Override
+    public void nextWord() {
+
+    }
+
+    @Override
+    public void prevWord() {
+
+    }
+
+    @Override
+    public void setHighLight(String highlight, boolean update) {
+
     }
 
     public boolean loadStory(String storyURL) {
@@ -132,11 +215,21 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
             // schedule advance after short delay to allow time to see last word credited on screen
             new Handler().postDelayed(new Runnable() {
                 public void run() {
-                    nextSentence(mOwner, null);
+                    //nextSentence(mOwner, null);
                     changingSentence = false;
                 }
             }, 100);
         }
+    }
+
+    @Override
+    public void onUpdate(String[] heardWords, boolean finalResult) {
+
+    }
+
+    @Override
+    public void continueListening() {
+
     }
 
 
@@ -219,7 +312,7 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
                 styledWord = "<u>" + styledWord + "</u>";
 
                 //  Publish the word to the component so it can set a scritable varable
-                _publishListener.publishTargetWord(styledWord);
+                //_publishListener.publishTargetWord(styledWord);
             }
 
             fmtSentence += styledWord + " ";
@@ -372,18 +465,18 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
         return endOfStory;
     }
 
-    /**
-     * Show the next available sentence to the user
-     */
-    @Override
-    public void nextSentence(IVManListener callback, String assetPath) {
-
-        if(mListener != null)
-            mListener.deleteLogFiles();
-
-        mOwner = callback;
-        switchSentence(currentIndex + 1);      // for now just loop around single story
-    }
+//    /**
+//     * Show the next available sentence to the user
+//     */
+//    @Override
+//    public void nextSentence(IVManListener callback, String assetPath) {
+//
+//        if(mListener != null)
+//            mListener.deleteLogFiles();
+//
+//        mOwner = callback;
+//        switchSentence(currentIndex + 1);      // for now just loop around single story
+//    }
 
 
     /**
@@ -438,8 +531,8 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
                 mListener.setPauseListener(false);
             }
 
-            _publishListener.publishTargetSentence(currentSentence);
-            _publishListener.publishTargetWordIndex(expectedWordIndex);
+//            _publishListener.publishTargetSentence(currentSentence);
+//            _publishListener.publishTargetWordIndex(expectedWordIndex);
 
             UpdateSentenceDisplay();
         }

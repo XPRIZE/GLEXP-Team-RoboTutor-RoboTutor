@@ -19,18 +19,13 @@
 
 package cmu.xprize.robotutor.tutorengine.graph;
 
-import android.util.Log;
-
 import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
-import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
-import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.TCONST;
-import cmu.xprize.robotutor.tutorengine.CTutor;
 
-public class graph_module extends graph_node implements ILoadableObject2 {
+public class scene_module extends scene_node implements ILoadableObject2 {
 
     private int               _ndx = 0;
     private String            _moduleState;
@@ -45,20 +40,13 @@ public class graph_module extends graph_node implements ILoadableObject2 {
     public HashMap            choiceMap;
     public HashMap            constraintMap;
 
-    static private final String TAG = "graph_module";
+    static private final String TAG = "scene_module";
 
 
     /**
      * Simple Constructor
      */
-    public graph_module() {
-    }
-
-
-    @Override
-    public void preEnter()
-    {
-        super.preEnter();
+    public scene_module() {
     }
 
 
@@ -83,7 +71,7 @@ public class graph_module extends graph_node implements ILoadableObject2 {
 
     /**
      * As with all overrides  - "next" should only ever be called from applyNode in
-     * scene_node
+     * tutor_node
      *
      * @return
      */
@@ -102,6 +90,7 @@ public class graph_module extends graph_node implements ILoadableObject2 {
 
     /**
      * TODO: Examine externalize the loop mechanism so we can interrupt more readily
+     * Note that modules and nodes are not feature reactive
      *
      * @return
      */
@@ -115,9 +104,6 @@ public class graph_module extends graph_node implements ILoadableObject2 {
         //
         resetNode();
 
-        // If new scene has features, check that it is being used in the current tutor feature set
-        // Note: You must ensure that there is a match for the last scene in the sequence
-
         do {
             if(_ndx < tracks.length)
             {
@@ -125,52 +111,7 @@ public class graph_module extends graph_node implements ILoadableObject2 {
 
                 _ndx++;
 
-                features = _nextAction.features;
-
-                // If this scene is not in the feature set for the tutor then check the next one.
-
-                if(!features.equals(""))
-                {
-                    featurePass = _scope.tutor().testFeatureSet(features);
-
-                    if(featurePass)
-                    {
-                        // Check Probability Feature if present
-
-                        if(_nextAction.hasPFeature())
-                        {
-                            featurePass = _nextAction.testPFeature();
-                        }
-                    }
-                }
-
-                // unconditional tracks pass automatically - unless they have PFeature
-
-                else
-                {
-                    // Check Probability Feature if present
-
-                    if(_nextAction.hasPFeature())
-                    {
-                        featurePass = _nextAction.testPFeature();
-                    }
-                    else featurePass = true;
-                }
-
-                // If the feature test passes then fire the event.
-                // Otherwise set flag to indicate event was completed/skipped in this case
-                if(featurePass)
-                {
-                    Log.d(TAG, "Animation Feature: " + features + " passed:" + featurePass);
-
-                    _nextAction.preEnter();
-
-                    _moduleState = _nextAction.applyNode();
-                }
-                else {
-                    Log.i(TAG, "Feature Test Failed: ");
-                    _moduleState = TCONST.DONE;
-                }
+                _moduleState = _nextAction.applyNode();
             }
             else {
                 _moduleState = TCONST.NONE;
@@ -178,7 +119,6 @@ public class graph_module extends graph_node implements ILoadableObject2 {
             }
 
         }while(_moduleState.equals(TCONST.DONE));
-
 
         return _moduleState;
     }
@@ -192,7 +132,7 @@ public class graph_module extends graph_node implements ILoadableObject2 {
 
         if(actionMap != null && ((result = (type_action) actionMap.get(symbolName)) == null)) {
 
-            if(moduleMap != null && ((result = (graph_module) moduleMap.get(symbolName)) == null)) {
+            if(moduleMap != null && ((result = (scene_module) moduleMap.get(symbolName)) == null)) {
 
                 if((choiceMap != null) && ((result = (type_choiceset) choiceMap.get(symbolName)) == null)) {
 

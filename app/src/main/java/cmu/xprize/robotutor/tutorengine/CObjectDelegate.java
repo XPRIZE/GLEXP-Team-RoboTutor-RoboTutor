@@ -26,7 +26,7 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
 
     protected ITutorSceneImpl   mParent;
     protected CTutor            mTutor;
-    protected ITutorGraph mNavigator;
+    protected ITutorGraph       mNavigator;
     protected ITutorLogManager  mLogManager;
 
     private String              mClickBehavior;
@@ -70,7 +70,11 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
         setButtonBehavior("null");
     }
 
-    
+
+    public void endTutor() {
+        mTutor.post(TCONST.ENDTUTOR);
+    }
+
     public CTutor tutor() {
         return mTutor;
     }
@@ -196,7 +200,6 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
                 default:
                     try {
                         obj = mTutor.getScope().mapSymbol(mClickBehavior);
-                        obj.preEnter();
                         obj.applyNode();
 
                     } catch (Exception e) {

@@ -2,21 +2,14 @@ package cmu.xprize.mn_component;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -94,13 +87,11 @@ public class CMn_Component extends LinearLayout implements ILoadableObject, IVal
 
                 _dataIndex++;
             } else {
-                Log.e(TAG, "Error no DataSource : ");
-                System.exit(1);
+                CErrorManager.terminate(TAG,  "Error no DataSource : ", null, false);
             }
         }
         catch(Exception e) {
-            Log.e(TAG, "Data Exhuasted: call past end of data");
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Data Exhuasted: call past end of data", e, false);
         }
 
     }

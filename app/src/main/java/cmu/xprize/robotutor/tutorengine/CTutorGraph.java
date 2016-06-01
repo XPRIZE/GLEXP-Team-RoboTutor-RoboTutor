@@ -36,6 +36,7 @@ import java.util.Map;
 
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -60,6 +61,8 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
     protected ITutorLogManager                mLogManager;
 
     private final Handler                     mainHandler = new Handler(Looper.getMainLooper());
+    private HashMap                           queueMap    = new HashMap();
+    private boolean                           mDisabled   = false;
 
     // json loadable
     public scene_descriptor[]                navigatedata;
@@ -144,25 +147,92 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
         @Override
         public void run() {
 
-            switch(_command) {
+            try {
+                queueMap.remove(this);
 
-                case TCONST.FIRST_SCENE:
+                switch (_command) {
 
-                    gotoNextScene(true);
-                    break;
+                    case TCONST.FIRST_SCENE:
 
-                case TCONST.NEXTSCENE:
+                        gotoNextScene(true);
+                        break;
 
-                    if(gotoNextScene(false).equals(TCONST.ENDTUTOR)) {
+                    case TCONST.NEXTSCENE:
 
-                        mainHandler.post(mTutor.new Queue(TCONST.ENDTUTOR));
-                    }
-                    break;
+                        if (gotoNextScene(false).equals(TCONST.ENDTUTOR)) {
 
+                            //mainHandler.post(mTutor.new Queue(TCONST.ENDTUTOR));
+                            mTutor.post(TCONST.ENDTUTOR);
+                        }
+                        break;
 
+                    case TCONST.ENDTUTOR:
+
+                        // disable the input queue permenantly in prep for destruction
+                        // walks the queue chain to diaable scene queue
+                        //
+                        terminateQueue();
+
+                        mTutor.post(TCONST.ENDTUTOR);
+                        break;
+
+                }
+            }
+            catch(Exception e) {
+                CErrorManager.terminate(TAG, "Run Error:", e, false);
             }
         }
     }
+
+
+    /**
+     *  Disable the input queue permenantly in prep for destruction
+     *  walks the queue chain to diaable scene queue
+     *
+     */
+    public void terminateQueue() {
+
+        mSceneGraph.terminateQueue();
+
+        // disable the input queue permenantly in prep for destruction
+        //
+        mDisabled = true;
+        flushQueue();
+    }
+
+
+    /**
+     * Remove any pending scenegraph commands.
+     *
+     */
+    private void flushQueue() {
+
+        Iterator<?> tObjects = queueMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            mainHandler.removeCallbacks((Queue)(entry.getValue()));
+        }
+
+    }
+
+
+    /**
+     * Keep a mapping of pending messages so we can flush the queue if we want to terminate
+     * the tutor before it finishes naturally.
+     *
+     * @param qCommand
+     */
+    private void enQueue(Queue qCommand) {
+
+        if(!mDisabled) {
+            queueMap.put(qCommand, qCommand);
+
+            mainHandler.post(qCommand);
+        }
+    }
+
 
     /**
      * Post a command to the tutorgraph queue
@@ -171,7 +241,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
      */
     public void post(String command) {
 
-        mainHandler.post(new Queue(command));
+        enQueue(new Queue(command));
     }
 
 
@@ -349,7 +419,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
             //            gLogR.logNavEvent(logData);
             //@@ Action Logging
 
-            // On exit behaviors
+            // On terminate behaviors
             navigatedata[_scenePrev].instance.onExitScene();
 
             // Do the scene transition - add callback for when IN animation ends
@@ -357,6 +427,11 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
             mTutorContainer.addView(navigatedata[_sceneCurr].instance);
 
             result = TCONST.CONTINUETUTOR;
+        }
+        // TODO: This is a stop gap to cleanup scenes
+        //
+        else {
+            mTutorContainer.removeView(navigatedata[_sceneCurr].instance);
         }
         return result;
     }

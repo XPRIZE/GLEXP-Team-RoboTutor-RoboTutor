@@ -15,7 +15,7 @@
         android:id="@+id/StutorVersion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left|top"
+        android:layout_alignParentRight="true"
         android:text=""
         android:textSize="15sp"
         android:textColor="#FFF" />
@@ -43,11 +43,12 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:src="@drawable/back_button"
-        android:visibility="gone"
+        android:visibility="visible"
         android:background="@null"/>
 
 
     <cmu.xprize.banner.persona.Persona
+        android:id="@+id/Spersona"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_heightPercent="80%"

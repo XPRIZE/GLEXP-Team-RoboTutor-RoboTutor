@@ -26,7 +26,6 @@ import org.json.JSONObject;
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
-import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -70,11 +69,11 @@ public class graph_edge implements ILoadableObject2 {
 
 
 
-    public graph_node followEdge() {
-        graph_node nextNode = null;
+    public scene_node followEdge() {
+        scene_node nextNode = null;
 
         try {
-            nextNode = (graph_node)mScope.mapSymbol(edge);
+            nextNode = (scene_node)mScope.mapSymbol(edge);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -84,7 +83,9 @@ public class graph_edge implements ILoadableObject2 {
     }
 
 
+
     // *** Serialization
+
 
 
     @Override

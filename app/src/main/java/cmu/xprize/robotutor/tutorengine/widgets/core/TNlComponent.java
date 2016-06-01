@@ -21,9 +21,9 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import cmu.xprize.nl_component.CNl_Component;
+import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
@@ -37,9 +37,9 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.robotutor.tutorengine.graph.vars.type_array;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.JSON_Helper;
-import cmu.xprize.util.Num2Word;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
 
@@ -53,12 +53,14 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
     private CObjectDelegate mSceneObject;
     private CMediaManager   mMediaManager;
 
+    private String          debugHypSet;
+
     private int             _wrong   = 0;
     private int             _correct = 0;
 
 
     static final private String TAG = "TRtComponent";
-
+    private TTextView debugHypothesisView;
 
 
     public TNlComponent(Context context) {
@@ -160,6 +162,26 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
     @Override
     public String getLanguageFeature() {
         return mMediaManager.getLanguageFeature(mTutor);
+    }
+
+
+    /**
+     * Override in Tutor sub-class to access text view id in layout
+     * @param newValue
+     */
+    @Override
+    public void updateDebugText(String newValue) {
+
+        if(newValue == "") {
+            debugHypSet = "";
+        }
+        else {
+            if (debugHypothesisView == null)
+                debugHypothesisView = (TTextView) mTutor.getViewById(R.id.Shypothesis, null);
+
+            debugHypSet += newValue + "\n";
+            debugHypothesisView.setText(debugHypSet);
+        }
     }
 
 
@@ -273,8 +295,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
             }
         }
         catch (Exception e) {
-            Log.e(TAG, "Invalid Data Source for : " + name());
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Invalid Data Source for : " + name(), e, false);
         }
 
         // Pass an array of strings as the data source.
@@ -292,7 +313,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
                 mStimulusString = _data.get(_dataIndex);
                 preProcessStimulus();
 
-                updateText(mStimulusString);
+                updateNumberString(mStimulusString);
 
                 // Publish scriptable variables for the stimulus state
                 //
@@ -301,13 +322,11 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
 
                 _dataIndex++;
             } else {
-                Log.e(TAG, "Error no DataSource : ");
-                System.exit(1);
+                CErrorManager.terminate(TAG, "Error no DataSource : ", null, false);
             }
         }
         catch(Exception e) {
-            Log.e(TAG, "Data Exhuasted: call past end of data  - " + e);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Data Exhuasted: call past end of data  - ", e, false);
         }
 
         // Kill the recognizer thread and set the End Of Data flag
@@ -342,11 +361,21 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
 
 
     public void onStartTalking(String symbol) {
-
     }
 
+
+    /**
+     * Deprecated - in favor of onRecognitionEvent
+     *
+     * @param symbol
+     */
     public void onRecognitionComplete(String symbol) {
-        super.onRecognitionComplete(symbol);
+        onRecognitionEvent(symbol);
+    }
+
+
+    public void onRecognitionEvent(String symbol) {
+        super.onRecognitionEvent(symbol);
     }
 
 

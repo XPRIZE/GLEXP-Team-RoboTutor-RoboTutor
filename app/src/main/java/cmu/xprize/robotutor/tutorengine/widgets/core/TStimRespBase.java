@@ -15,11 +15,11 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import cmu.xprize.fw_component.CStimRespBase;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CEvent;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.JSON_Helper;
@@ -162,8 +162,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
             }
         }
         catch (Exception e) {
-            Log.e(TAG, "Invalid Data Source for : " + name());
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Invalid Data Source for : " + name(), null, false);
         }
 
         // Pass an array of strings as the data source.
@@ -220,8 +219,19 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
         super.setForeGround(Color);
     }
 
+
+    /**
+     * Deprecated - in favor of onRecognitionEvent
+     *
+     * @param symbol
+     */
     public void onRecognitionComplete(String symbol) {
-        super.onRecognitionComplete(symbol);
+        onRecognitionEvent(symbol);
+    }
+
+
+    public void onRecognitionEvent(String symbol) {
+        super.onRecognitionEvent(symbol);
     }
 
 
@@ -232,8 +242,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
      * @param Color
      */
     public void flagError(Boolean flagState, String Color) {
-        Log.e(TAG, "Unsuppported Function: " + "flagError");
-        System.exit(1);
+        CErrorManager.terminate(TAG, "Unsuppported Function: " + "flagError", null, false);
     }
 
 

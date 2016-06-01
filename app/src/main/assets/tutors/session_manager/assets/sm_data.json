@@ -20,12 +20,14 @@
   // Note: Don't actually need the type elements.  It would infer the type from the
   //       array type in the variable declaration.
 
+  "bgColors": ["#D9FFFF","#b9FFb9"],
+
   "dataSource": [
 
     {
       "type":"Sm_Class",
       "description":"numeric",
-      "background":"#D9FFFF",
+      //"background":"#D9FFFF",
       "data": [
           { "type":"Sm_Data", "intent": "digit_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy"}
 
@@ -35,7 +37,7 @@
     {
       "type":"Sm_Class",
       "description":"numeric",
-      "background":"#b9FFb9",
+      //"background":"#b9FFb9",
       "data": [
         { "type":"Sm_Data", "intent": "number_speaking", "intentdata":"native", "buttontype":"text" , "buttonvalue":"number speaking"},
         { "type":"Sm_Data", "intent": "missing_number", "intentdata":"native", "buttontype":"text" , "buttonvalue":"missing number"}
@@ -45,20 +47,21 @@
     {
       "type":"Sm_Class",
       "description":"writing",
-      "background":"#D9FFFF",
+      //"background":"#D9FFFF",
       "data": [
-        { "type":"Sm_Data", "intent": "letter_copy2", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy 1", "features":"FTR_LC" },
-        { "type":"Sm_Data", "intent": "letter_copy2", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy 2", "features":"FTR_UC"  }
+        { "type":"Sm_Data", "intent": "letter_copy2", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy a", "features":"FTR_LC" },
+        { "type":"Sm_Data", "intent": "letter_copy2", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy A", "features":"FTR_UC"  }
       ]
     },
 
     {
       "type":"Sm_Class",
       "description":"reading",
-      "background":"#D9FFFF",
+      //"background":"#D9FFFF",
       "data": [
-        { "type":"Sm_Data", "intent": "com.carney.readingtutor:com.carney.activity.ReadingTutorActivity", "intentdata":"read", "buttontype":"text" , "buttonvalue":"Reading Tutor Ext" },
-        { "type":"Sm_Data", "intent": "story_reading", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Reading Tutor" }
+        //{ "type":"Sm_Data", "intent": "com.carney.readingtutor:com.carney.activity.ReadingTutorActivity", "intentdata":"read", "buttontype":"text" , "buttonvalue":"Reading Tutor Ext" },
+        { "type":"Sm_Data", "intent": "story_reading", "intentdata":"native", "features":"FTR_MANUAL" ,"buttontype":"text" , "buttonvalue":"Reading Tutor Manual-Flip" },
+        { "type":"Sm_Data", "intent": "story_reading", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Reading Tutor AutoFlip" }
 
       ]
     },
@@ -66,7 +69,7 @@
     {
       "type":"Sm_Class",
       "description":"fluency_numeracy",
-      "background":"#b9FFb9",
+      //"background":"#b9FFb9",
       "data": [
         { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=shapes&mechanic=mcq&say=no&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Shape Pop1" },
         { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=shapes&mechanic=mcq&say=yes&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Shape Pop2" },
@@ -77,7 +80,7 @@
     {
       "type":"Sm_Class",
       "description":"fluency_numeracy",
-      "background":"#D9FFFF",
+      //"background":"#D9FFFF",
       "data": [
         { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers_to_dots&mechanic=mcq&say=no&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Dot Pop1" },
         { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers_to_dots&mechanic=mcq&say=yes&show=yes&sequence=N/A", "buttontype":"text" , "buttonvalue":"Dot Pop2" },
@@ -92,7 +95,7 @@
     {
       "type":"Sm_Class",
       "description":"fluency_numeracy",
-      "background":"#b9FFb9",
+      //"background":"#b9FFb9",
       "data": [
         { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=dots_to_numbers&mechanic=mcq&say=no&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Number Pop1" },
         { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=dots_to_numbers&mechanic=mcq&say=yes&show=yes&sequence=N/A", "buttontype":"text" , "buttonvalue":"Number Pop2" },
@@ -108,7 +111,7 @@
     {
       "type":"Sm_Class",
       "description":"fluency_numeracy",
-      "background":"#D9FFFF",
+      //"background":"#D9FFFF",
       "data": [
         { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=mcq&say=no&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Capital Pop1" },
         { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=mcq&say=yes&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Capital Pop2" },
@@ -132,7 +135,7 @@
     {
       "type":"Sm_Class",
       "description":"fluency_numeracy",
-      "background":"#b9FFb9",
+      //"background":"#b9FFb9",
       "data": [
         { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=mcq&say=no&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Letter Pop1" },
         { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=mcq&say=yes&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Letter Pop2" },
@@ -156,7 +159,7 @@
     {
       "type":"Sm_Class",
       "description":"fluency_numeracy",
-      "background":"#D9FFFF",
+      //"background":"#D9FFFF",
       "data": [
         { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=mcq&say=no&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Mix Pop1" },
         { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=mcq&say=yes&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Mix Pop2" },

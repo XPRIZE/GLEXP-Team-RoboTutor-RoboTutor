@@ -22,7 +22,6 @@ package cmu.xprize.robotutor.tutorengine;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,9 +30,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import cmu.xprize.robotutor.tutorengine.graph.scene_node;
+import cmu.xprize.robotutor.tutorengine.graph.tutor_node;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
@@ -54,16 +54,17 @@ public class CSceneGraph  {
     private CTutorGraph      mTutorGraph;
 
     private final Handler    mainHandler = new Handler(Looper.getMainLooper());
-    private HashMap          queueMap = new HashMap();
+    private HashMap          queueMap    = new HashMap();
+    private boolean          mDisabled   = false;
 
     // State fields
-    private scene_node       _sceneNode;
+    private tutor_node _sceneNode;
 
     private HashMap<String, Integer> _pFeatures;
 
 
     // json loadable
-    public HashMap<String,scene_node> animatorMap;
+    public HashMap<String,tutor_node> animatorMap;
 
 
     final private String TAG = "CSceneGraph";
@@ -102,59 +103,86 @@ public class CSceneGraph  {
         @Override
         public void run() {
 
-            queueMap.remove(this);
+            try {
+                queueMap.remove(this);
 
-            switch(_command) {
-                case TCONST.ENTER_SCENE:
+                switch (_command) {
+                    case TCONST.ENTER_SCENE:
 
-                    mSceneName = _target;
+                        mSceneName = _target;
 
-                    try {
-                        _sceneNode = (scene_node)mScope.mapSymbol(mSceneName);
+                        try {
+                            _sceneNode = (tutor_node) mScope.mapSymbol(mSceneName);
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Log.e(TAG, "Scene not found for SceneGraph");
-                        System.exit(1);
-                    }
-                    break;
+                        } catch (Exception e) {
 
-                case TCONST.NEXT_NODE:
+                            CErrorManager.terminate(TAG, "Scene not found for SceneGraph", e, false);
+                        }
+                        break;
 
-                    switch (_sceneNode.applyNode()) {
+                    case TCONST.NEXT_NODE:
 
-                        // TCONST.NEXTSCENE is used to end the current scene and step through to the
-                        // next scene in the TutorGraph.
+                        switch (_sceneNode.applyNode()) {
 
-                        case TCONST.NEXTSCENE:
-                            mTutorGraph.post(TCONST.NEXTSCENE);
-                            break;
+                            // TCONST.NEXTSCENE is used to end the current scene and step through to the
+                            // next scene in the TutorGraph.
 
-                        // TCONST.WAIT indicates that next node will be driven by a
-                        // completion event from the current action or some external user event.
+                            case TCONST.NEXTSCENE:
+                                mTutorGraph.post(TCONST.NEXTSCENE);
+                                break;
 
-                        case TCONST.WAIT:
-                            break;
+                            // TCONST.WAIT indicates that next node will be driven by a
+                            // completion event from the current action or some external user event.
 
-                        default:
-                            post(TCONST.NEXT_NODE);
-                            break;
-                    }
-                    break;
+                            case TCONST.WAIT:
+                                break;
 
-                case TCONST.PLAY:
-                    _sceneNode.play();
-                    break;
+                            default:
+                                post(TCONST.NEXT_NODE);
+                                break;
+                        }
+                        break;
 
-                case TCONST.STOP:
-                    _sceneNode.stop();
-                    break;
+                    case TCONST.PLAY:
+                        _sceneNode.play();
+                        break;
 
-                case TCONST.GOTO_NODE:
-                    _sceneNode.gotoNode(_target);
-                    break;
+                    case TCONST.STOP:
+                        _sceneNode.stop();
+                        break;
+
+                    case TCONST.ENDTUTOR:
+
+                        // disable the input queue permanently in prep for destruction
+                        //
+                        terminateQueue();
+
+                        mTutorGraph.post(TCONST.ENDTUTOR);
+                        break;
+
+                    case TCONST.GOTO_NODE:
+                        _sceneNode.gotoNode(_target);
+                        break;
+                }
+            }
+            catch(Exception e) {
+                CErrorManager.terminate(TAG, "Run Error:", e, false);
             }
         }
+    }
+
+
+    /**
+     *  Disable the input queue permenantly in prep for destruction
+     *  walks the queue chain to diaable scene queue
+     *
+     */
+    public void terminateQueue() {
+
+        // disable the input queue permenantly in prep for destruction
+        //
+        mDisabled = true;
+        flushQueue();
     }
 
 
@@ -182,9 +210,11 @@ public class CSceneGraph  {
      */
     private void enQueue(Queue qCommand) {
 
-        queueMap.put(qCommand, qCommand);
+        if(!mDisabled) {
+            queueMap.put(qCommand, qCommand);
 
-        mainHandler.post(qCommand);
+            mainHandler.post(qCommand);
+        }
     }
 
     /**
@@ -250,8 +280,7 @@ public class CSceneGraph  {
 
         } catch (JSONException e) {
 
-            Log.e(TAG, "JSON FORMAT ERROR: " + TCONST.AGDESC + " : " + e);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "JSON FORMAT ERROR: " + TCONST.AGDESC + " : ", e, false);
         }
     }
 

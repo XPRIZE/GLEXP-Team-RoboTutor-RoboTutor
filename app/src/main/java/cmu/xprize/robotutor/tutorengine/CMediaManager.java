@@ -26,9 +26,13 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
+import cmu.xprize.robotutor.tutorengine.graph.type_handler;
 import cmu.xprize.robotutor.tutorengine.graph.type_timeline;
 import cmu.xprize.robotutor.tutorengine.graph.type_timer;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.IMediaManager;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.util.TTSsynthesizer;
@@ -52,7 +56,9 @@ public class CMediaManager implements IMediaManager {
 
     private ArrayList<mediaController>      mControllerSet = new ArrayList<mediaController>();
     private HashMap<String, type_timer>     mTimerMap      = new HashMap<String, type_timer>();
+    private HashMap<String, type_handler>   mHandlerMap    = new HashMap<String, type_handler>();
     private HashMap<String, type_timeline>  mTimeLineMap   = new HashMap<String, type_timeline>();
+
     private HashMap<CTutor, HashMap>        mMediaPackage  = new HashMap<>();
 
     private AssetManager                    mAssetManager;
@@ -84,17 +90,71 @@ public class CMediaManager implements IMediaManager {
     }
 
 
+    public void globalStop() {
+
+        for(mediaController controller : mControllerSet) {
+            if(controller.isPlaying()) {
+                controller.kill();
+            }
+        }
+
+
+        Iterator<?> timerObjects = mTimerMap.entrySet().iterator();
+
+        while(timerObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) timerObjects.next();
+
+            type_timer timer = ((type_timer)(entry.getValue()));
+
+            timer.globalPause();
+        }
+
+
+        Iterator<?> handlerObjects = mHandlerMap.entrySet().iterator();
+
+        while(handlerObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) handlerObjects.next();
+
+            type_handler handler = ((type_handler)(entry.getValue()));
+
+            handler.globalPause();
+        }
+
+
+        Iterator<?> timelineObjects = mTimeLineMap.entrySet().iterator();
+
+        while(timelineObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) timelineObjects.next();
+
+            type_timeline timeline = ((type_timeline)(entry.getValue()));
+
+            timeline.globalPause();
+        }
+
+
+
+        if(TTS != null)
+            TTS.stopSpeaking();
+
+        if(mListener != null) {
+            mListener.stop();
+        }
+    }
+
+
 
     //**************************************************************************
     // ASR management START
 
     private boolean paused = false;
+
     /**
      *  Inject the listener into the MediaManageer
      */
     public void setListener(ListenerBase listener) {
         mListener = listener;
     }
+
 
     /**
      *  Remove the listener from the MediaManageer
@@ -103,6 +163,7 @@ public class CMediaManager implements IMediaManager {
         mListener = null;
     }
 
+
     private void pauseListener() {
 
         if(mListener != null && mListener.isListening()) {
@@ -110,6 +171,7 @@ public class CMediaManager implements IMediaManager {
             paused = true;
         }
     }
+
 
     private void playListener() {
 
@@ -194,6 +256,8 @@ public class CMediaManager implements IMediaManager {
 
         try {
             // If the tutor is configured for mediapackages in the tutor_descriptor
+            // Old tutors may not contain soundMaps - these default to what they expect.
+            // non-soundMap tutors are deprecated.
             //
             soundMap = mMediaPackage.get(tTutor);
 
@@ -246,8 +310,7 @@ public class CMediaManager implements IMediaManager {
     public void createTimer(String key, type_timer owner) {
 
         if(mTimerMap.containsKey(key)) {
-            Log.e(TAG, "Duplicate Timer Name:" + key);
-            System.exit(1);
+            CErrorManager.terminate(TAG,  "Duplicate Timer Name:" + key, new Exception("no-exception"), false);
         }
         mTimerMap.put(key, owner);
     }
@@ -273,6 +336,38 @@ public class CMediaManager implements IMediaManager {
 
 
 
+    //********************************************************************
+    //*************  Handler Management START
+
+    public void createHandler(String key, type_handler owner) {
+
+        if(mHandlerMap.containsKey(key)) {
+            CErrorManager.terminate(TAG,  "Duplicate Handler Name:" + key, new Exception("no-exception"), false);
+        }
+        mHandlerMap.put(key, owner);
+    }
+
+
+    public type_handler removeHandler(String key) {
+        return mHandlerMap.remove(key);
+    }
+
+
+    public type_handler mapHandler(String key) {
+        return mHandlerMap.get(key);
+    }
+
+
+    public boolean hasHandler(String key) {
+        return mHandlerMap.containsKey(key);
+    }
+
+
+    //*************  Handler Management END
+    //********************************************************************
+
+
+
 
     //********************************************************************
     //*************  Timeline Management START
@@ -280,8 +375,7 @@ public class CMediaManager implements IMediaManager {
     public void createTimeLine(String key, type_timeline owner) {
 
         if(mTimeLineMap.containsKey(key)) {
-            Log.e(TAG, "Duplicate Timer Name:" + key);
-            System.exit(1);
+            CErrorManager.terminate(TAG,  "Duplicate Timer Name:" + key, new Exception("no-exception"), false);
         }
         mTimeLineMap.put(key, owner);
     }
@@ -335,12 +429,12 @@ public class CMediaManager implements IMediaManager {
         if(controller == null) {
 
             mediaController oldest   = null;
-            long            timeTest =  Long.MAX_VALUE;
+            long            timeTest = 0L;
 
             for(mediaController controllerInstance : mControllerSet) {
 
                 if(!controllerInstance.isAttached()) {
-                    if(controllerInstance.lastUsed() < timeTest) {
+                    if(controllerInstance.lastUsed() > timeTest) {
                         oldest = controllerInstance;
                     }
                 }
@@ -348,23 +442,29 @@ public class CMediaManager implements IMediaManager {
 
             controller = oldest;
 
-            // If we are repurposing an old controller then we need to release it and
+            // If we are re-purposing an old controller then we need to release it and
             // reset its dataSource.
             //
             if(controller != null) {
+
                 Log.i(TAG, "Re-purpose an existing MediaController");
 
                 controller.releasePlayer();
-                controller.createPlayer(dataSource);
+
+                controller.attach(owner);               // Need to reattach to a new owner
+                controller.createPlayer(dataSource);    // Update the datasource
             }
         }
 
         // If we don't find a RE-usable controller then create a new one
         //
         if(controller == null) {
+
             Log.i(TAG, "Creating new MediaController");
 
             controller = new mediaController(owner, dataSource);
+
+            mControllerSet.add(controller);
         }
 
         return controller;
@@ -401,8 +501,9 @@ public class CMediaManager implements IMediaManager {
         private MediaPlayer  mPlayer        = null;
         private boolean      mPlaying       = false;
         private boolean      mIsReady       = false;
+        private boolean      mIsAlive       = true;
 
-        private Long         lastUsed       = Long.MAX_VALUE;
+        private Long         lastUsed       = 0L;
         private String       mDataSource = "";
 
         private boolean      mDeferredStart = false;
@@ -443,12 +544,14 @@ public class CMediaManager implements IMediaManager {
             }
         }
 
+
         public void releasePlayer() {
 
             if(mPlayer != null) {
                 mPlayer.pause();
                 mPlayer.seekTo(0);
                 mPlaying = false;
+                mIsAlive = true;
 
                 mPlayer.reset();
                 mPlayer.release();
@@ -468,6 +571,9 @@ public class CMediaManager implements IMediaManager {
          * Note that we leave the MediaPlayer in a playable state
          */
         public void detach() {
+
+            Log.d(TAG, "detach MediaPlayer");
+
             stop();
             mOwner = null;
         }
@@ -506,7 +612,7 @@ public class CMediaManager implements IMediaManager {
         // since they aren't being released.
         public void play() {
 
-            if(!mPlaying) {
+            if(!mPlaying && mIsAlive) {
                 if(mIsReady) {
                     mPlayer.start();
                     mPlaying = true;
@@ -522,8 +628,24 @@ public class CMediaManager implements IMediaManager {
 
         public void stop() {
 
+            Log.d(TAG, "stop MediaPlayer");
+
             pause();
             seek(0L);
+        }
+
+
+        public void kill() {
+
+            Log.d(TAG, "Kill MediaPlayer");
+            mIsAlive = false;
+
+            // Note: using stop instead of pause seems to be preferable. pause seek combination
+            // seems to have a probability of brief restart
+            //
+            if(mPlaying) {
+                mPlayer.stop();
+            }
         }
 
 
@@ -554,7 +676,9 @@ public class CMediaManager implements IMediaManager {
         public void seekTo(int frameTime) {
 
             // No errors occur - but don't try to seek past the end
-            if(mPlayer != null && frameTime < mPlayer.getDuration())
+            // Note: we don't want to seek after death
+            //
+            if(mPlayer != null && mIsAlive && frameTime < mPlayer.getDuration())
                 mPlayer.seekTo(frameTime);
         }
 
@@ -570,7 +694,7 @@ public class CMediaManager implements IMediaManager {
 
             // If play was called before we were ready play
             if(mDeferredStart)
-                        play();
+                play();
         }
 
 
@@ -587,21 +711,27 @@ public class CMediaManager implements IMediaManager {
             // by re-purposing the oldest first.  i.e. We want to limit the reloading of clips
             // if possible.
             //
-            lastUsed =  System.currentTimeMillis();
+            lastUsed = System.currentTimeMillis();
 
-            try {
-                if(mPlayer != null) {
-                    pause();
-                    seekTo(0);
+            if (mOwner != null) {
+
+                try {
+                    if (mPlayer != null) {
+                        pause();
+                        seekTo(0);
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Audio state error:" + e);
                 }
+
+                // Allow the owning node to do type specific processing of completion event.
+                //
+                mOwner.onCompletion();
             }
-            catch(Exception e) {
-                Log.e(TAG, "Audio state error:" + e);
+            else {
+                Log.i(TAG, "invalid Owner");
             }
 
-            // Allow the owning node to do type specific processing of completion event.
-            //
-            mOwner.onCompletion();
         }
     }
 

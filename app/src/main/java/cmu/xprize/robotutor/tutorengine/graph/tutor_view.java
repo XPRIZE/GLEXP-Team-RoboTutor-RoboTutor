@@ -26,20 +26,19 @@ import org.json.JSONObject;
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
-import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
-public class scene_view implements ILoadableObject2 {
+public class tutor_view implements ILoadableObject2 {
 
     // json loadable
     public String          id;
     public String          classname;
     public scene_layout[]  layouts;
-    public scene_view[]     children;
+    public tutor_view[]     children;
     public String          features;
 
-    static private final String TAG = "scene_view";
+    static private final String TAG = "tutor_view";
 
 
     @Override

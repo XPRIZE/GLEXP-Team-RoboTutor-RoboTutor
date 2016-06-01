@@ -24,10 +24,46 @@ import edu.cmu.xprize.listener.ListenerBase;
 
 public interface ICRt_ViewManager extends ILoadableObject {
 
-    public void setPublishListener(IVManListener publishListener);
+    public void initStory(IVManListener owner, String assetPath);
+
+    public void onDestroy();
+
+    void seekToPage(int pageIndex);
+
+    void nextPage();
+
+    void prevPage();
+
+    void seekToParagraph(int paraIndex);
+
+    void nextPara();
+
+    void prevPara();
+
+    void seekToLine(int lineIndex);
+
+    void nextLine();
+
+    void prevLine();
+
+    void seekToWord(int wordIndex);
+
+    void nextWord();
+
+    void prevWord();
+
+    void setHighLight(String highlight, boolean update);
+
     public boolean endOfData();
 
     public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult);
-    public void nextSentence(IVManListener callback, String AssetPath);
 
+    public void onUpdate(String[] heardWords, boolean finalResult);
+
+    public void continueListening();
+
+
+    public void setSpeakButton(String command);
+
+    public void setPageFlipButton(String command);
 }

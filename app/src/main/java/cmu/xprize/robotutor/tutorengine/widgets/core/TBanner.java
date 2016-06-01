@@ -21,6 +21,8 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
+import android.widget.ImageButton;
 
 import cmu.xprize.banner.CBanner;
 import cmu.xprize.robotutor.R;
@@ -30,12 +32,14 @@ import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.util.TCONST;
 
 
-public class TBanner extends CBanner implements ITutorObjectImpl {
+public class TBanner extends CBanner implements ITutorObjectImpl, View.OnClickListener {
 
     private CObjectDelegate mSceneObject;
     private TTextView       mVersion;
+    private ImageButton     mBackButton;
 
 
     public TBanner(Context context) {
@@ -59,19 +63,36 @@ public class TBanner extends CBanner implements ITutorObjectImpl {
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
 
-        mVersion = (TTextView)findViewById(R.id.StutorVersion);
-        //mVersion.setText("v.0.0.1");  @DEBUG
+        mVersion    = (TTextView)findViewById(R.id.StutorVersion);
+        mBackButton = (ImageButton)findViewById(R.id.Sbackbutton);
+
+        mBackButton.setOnClickListener(this);
     }
+
+
+    /**
+     * This is the main banner back button implementation - This terminates the current tutor and
+     * returns to the session manager
+     *
+     * @param v
+     */
+    @Override
+    public void onClick(View v) {
+
+        mBackButton.setOnClickListener(null);
+        mSceneObject.endTutor();
+    }
+
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
+
         mSceneObject.onDestroy();
     }
 
 
-
     public void setDataSource(String dataSource) {
-
     }
 
 
@@ -140,4 +161,5 @@ public class TBanner extends CBanner implements ITutorObjectImpl {
     public void setAlpha(Float alpha) {
         mSceneObject.setAlpha(alpha);
     }
+
 }

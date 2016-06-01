@@ -28,6 +28,7 @@ public interface INl_Implementation {
 
     public void publishState(int error, int warn);
 
-    public void updateText(String newValue);
+    public void updateNumberString(String newValue);
+    public void updateDebugText(String newValue);
     public void onASREvent(int eventType);
 }

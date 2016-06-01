@@ -25,7 +25,6 @@ import android.graphics.Color;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
@@ -35,6 +34,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CEvent;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.util.IEventDispatcher;
@@ -275,7 +275,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
 
 
     /**
-     * Ths Stimulus variant of the control broadcasts its value to the response which is the
+     * Ths Stimulus variant of the control broadcasts its value to the response variant
      *
      * @param newValue
      */
@@ -342,12 +342,10 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
 
                     _dataIndex++;
                 } else {
-                    Log.e(TAG, "Error no DataSource : ");
-                    System.exit(1);
+                    CErrorManager.terminate(TAG, "Error no DataSource : ", null, false);
                 }
             } catch (Exception e) {
-                Log.e(TAG, "Data Exhuasted: call past end of data");
-                System.exit(1);
+                CErrorManager.terminate(TAG, "Data Exhuasted: call past end of data", e, false);
             }
         }
     }
@@ -374,8 +372,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
             setBackgroundColor(colorMap.get(Color));
         }
         catch(Exception e) {
-            Log.e(TAG, "Invalid Color Name: "  + Color + " : " + e);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Invalid Color Name: "  + Color + " : ", e, false);
         }
     }
 
@@ -388,8 +385,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
             setTextColor(colorMap.get(Color));
         }
         catch(Exception e) {
-            Log.e(TAG, "Invalid Color Name: "  + Color + " : " + e);
-            System.exit(1);
+            CErrorManager.terminate(TAG, "Invalid Color Name: "  + Color + " : ", e, false);
         }
     }
 
@@ -419,7 +415,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
     }
 
 
-    public void onRecognitionComplete(String symbol) {
+    public void onRecognitionEvent(String symbol) {
         _onRecognition = symbol;
     }
 

@@ -45,6 +45,7 @@ import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.IMediaListener;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
@@ -122,10 +123,6 @@ public class type_timeline extends type_action implements IMediaListener {
         }
     }
 
-    @Override
-    public void onCompletion() {
-        // NOOP
-    }
 
     //**  Global Media Control Start
     //*******************************************************
@@ -134,7 +131,14 @@ public class type_timeline extends type_action implements IMediaListener {
     @Override
     public String applyNode() {
 
-        play();
+        // If the feature test passes then fire the event.
+        // Otherwise set flag to indicate event was completed/skipped in this case
+        // Issue #58 - Make all actions feature reactive.
+        //
+        if(testFeatures()) {
+
+            play();
+        }
 
         return TCONST.WAIT;
     }
@@ -267,7 +271,14 @@ public class type_timeline extends type_action implements IMediaListener {
             case TCONST.ABSOLUTE_TYPE:
 
                 if(_playing) {
-                    if (_currAudio != null) {
+
+                    // Ensure that we stop potentially running audio and ignore audio
+                    // that has been detached from their players
+                    //
+                    if (_currAudio != null && !_currAudio.isComplete) {
+
+                        Log.d(TAG, "timeline: Stop _currAudio: " + this);
+
                         _currAudio.hasPlayed = false;
                         _currAudio.stop();
                     }
@@ -289,12 +300,40 @@ public class type_timeline extends type_action implements IMediaListener {
     private void killTimer() {
 
         Log.i(TAG, "Kill timeline Timer");
-        if (_frameTask != null)
-            _frameTask.cancel();
 
-        _timer.cancel();
-        _timer     = null;
-        _frameTask = null;
+        try {
+            if (_frameTask != null)
+                _frameTask.cancel();
+
+            if(_timer != null) {
+                _timer.cancel();
+                _timer = null;
+                _frameTask = null;
+            }
+        }
+        catch(Exception e) {
+            Log.e(TAG, "killTimer: " + e);
+        }
+    }
+
+
+    /**
+     * Listen to the MediaController for completion events.
+     *
+     */
+    @Override
+    public void onCompletion() {
+
+        // Release the mediaController for reuse
+        //
+        Log.d(TAG, "timeline: Audio onCompletion: " + this);
+
+        if (_currAudio != null) {
+            _currAudio.detach();
+            _currAudio.isComplete = true;
+
+            Log.d(TAG, "timeline: _currAudio: " + _currAudio);
+        }
     }
 
 
@@ -443,8 +482,16 @@ public class type_timeline extends type_action implements IMediaListener {
         }
 
         if(_currAudio != null && !_currAudio.hasPlayed) {
+
             // If there is an audio track ensure that it is loaded
-            ((CAudioFrame)_currAudio).mPlayer.preEnter();
+            //
+            // Timeline tracks act as the
+            // owner so that they are informed directly of audio completion events.  This is necessary to
+            // keep them sync'd with the mediaManager player attach states - otherwise they don't know
+            // when their audio players have been detached and may perform operations on a re-purposed player.
+            // See onCompletion
+            //
+            ((CAudioFrame)_currAudio).mPlayer.preLoad(this);
 
             if(_currAudio.mIndex != seekPnt) {
                 _currAudio.seek(seekPnt - _currAudio.mIndex);
@@ -543,9 +590,11 @@ public class type_timeline extends type_action implements IMediaListener {
         public int    mDuration;
 
         public boolean hasPlayed;
+        public boolean isComplete;
 
         protected void play() {}
         protected void stop() {}
+        protected void detach() {}
         protected void seek(long frame) {}
     }
 
@@ -612,7 +661,7 @@ public class type_timeline extends type_action implements IMediaListener {
 
 
     class CFrameScript {
-        private graph_module mScript;
+        private scene_module mScript;
 
         public CFrameScript(XmlPullParser xpp) throws IOException, XmlPullParserException {
 
@@ -622,7 +671,7 @@ public class type_timeline extends type_action implements IMediaListener {
                 if (xpp.getEventType() != XmlPullParser.CDSECT) {
                     continue;
                 }
-                mScript = new graph_module();
+                mScript = new scene_module();
 
                 try {
                     // TODO : add scoping
@@ -682,7 +731,8 @@ public class type_timeline extends type_action implements IMediaListener {
 
             // Initialize flag - used so we don't play a clip that is already playing
             //
-            hasPlayed = false;
+            hasPlayed  = false;
+            isComplete = false;
 
             try {
                 String tindex = xpp.getAttributeValue(null, "index");
@@ -736,6 +786,10 @@ public class type_timeline extends type_action implements IMediaListener {
 
         protected void pause() {
             mPlayer.pause();
+        }
+
+        public void detach() {
+            mPlayer.detach();
         }
 
         @Override
@@ -840,8 +894,8 @@ public class type_timeline extends type_action implements IMediaListener {
                 }
             }
             catch(Exception e) {
-                Log.e(TAG, "ERROR: Flash resource: " + e);
-                System.exit(1);
+
+                CErrorManager.terminate(TAG, "ERROR: Flash resource: ", e, false);
             }
 
             xpparser.setInput(in, null);
@@ -891,11 +945,12 @@ public class type_timeline extends type_action implements IMediaListener {
             }
 
         } catch (XmlPullParserException e) {
-            Log.e(TAG, "ERROR: XML Spec Invalid: " + e.getMessage());
-            System.exit(1);
+
+            CErrorManager.terminate(TAG, "ERROR: XML Spec Invalid: " , e, false);
+
         } catch (IOException e) {
-            Log.e(TAG, "ERROR: XML Spec Invalid: " + e.getMessage());
-            System.exit(1);
+
+            CErrorManager.terminate(TAG, "ERROR: XML Spec Invalid: ", e, false);
         }
     }
 
