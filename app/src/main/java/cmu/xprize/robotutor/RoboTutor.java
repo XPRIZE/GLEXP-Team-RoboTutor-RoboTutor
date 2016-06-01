@@ -333,6 +333,9 @@ public class RoboTutor extends Activity implements IReadyListener {
         Log.i(TAG, "onPause Robotutor");
 
         if(TTS != null && TTS.isReady()) {
+
+            Log.i(TAG, "Releasing Flite");
+
             TTS.stopSpeaking();
             TTS.shutDown();
             TTS = null;

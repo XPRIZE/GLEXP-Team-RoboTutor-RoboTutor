@@ -227,7 +227,7 @@ public class StrokeSet {
      * Note that this is currently XPrize log specific.
      * TODO: make general Purpose
      */
-    public void writeGlyphToLog(String recog, String constraint, String recChar, String stimChar) {
+    public void writeGlyphToLog(String recog, String constraint, String stimChar, String respChar) {
         FileWriter out = null;
 
         String state = Environment.getExternalStorageState();
@@ -255,7 +255,7 @@ public class StrokeSet {
 
                 // Throws if there is a JSON serializatin error
                 //
-                out.write(serializeGlyph(recog, constraint, recChar, stimChar));
+                out.write(serializeGlyph(recog, constraint, stimChar, respChar));
                 out.close();
             }
             catch(Exception e) {
@@ -265,7 +265,7 @@ public class StrokeSet {
     }
 
 
-    public String serializeGlyph(String recog, String constraint, String recChar, String stimChar) throws IOException {
+    public String serializeGlyph(String recog, String constraint, String stimChar, String respChar) throws IOException {
 
         StringWriter outString = new StringWriter();
         JsonWriter   writer    = new JsonWriter(outString);
@@ -281,8 +281,8 @@ public class StrokeSet {
             writer.name("time").value(datetime);
             writer.name("recognizer").value(recog);
             writer.name("constraint").value(constraint);
-            writer.name("resp").value(recChar);
             writer.name("stim").value(stimChar);
+            writer.name("resp").value(respChar);
 
             writeNamedRectF(writer, "gBounds", _glyphBoundingBox);
             writeNamedRectF(writer, "fBounds", _fontBoundingBox);
