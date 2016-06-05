@@ -26,32 +26,38 @@ public class LCONST {
 
     // Recognizer configuration parameters
 
+    // Acoustic models
+
+    public static final String KIDS   = "KIDS";
+    public static final String ADULT  = "ADULT";
+
+
     /**
      * weight to assign to our language models. Higher weights bias the recognizer towards the model-expected word
      */
-    public static int LMWEIGHT = 9;
+    public static final int LMWEIGHT = 9;
 
     // Listener-specific parameters
 
     /**
      * Lag behind the last hypothesis word if not followed by silence since it may be unreliable
      */
-    public static boolean LAST_WORD_LAG = false;
+    public static final boolean LAST_WORD_LAG = false;
     /**
      * align heard words left to right with sentence words
      */
-    public static boolean ALIGN_L2R = false;
+    public static final boolean ALIGN_L2R = false;
 
     // parameters passed through to pocketsphinx
 
     /**
      * pocketsphinx threshold signal-to-noise ratio for voice activity detection, default 2.0
      */
-    public static float VAD_THRESHOLD = 2.0f;
+    public static final float VAD_THRESHOLD = 2.0f;
 
     /**
      * pocketsphinx filler probability: higher than default
      */
-    public static float FILLPROB = 1e-3f;
+    public static final float FILLPROB = 1e-3f;
 
 }

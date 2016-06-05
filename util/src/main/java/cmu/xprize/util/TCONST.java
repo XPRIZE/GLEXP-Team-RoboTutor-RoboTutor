@@ -28,7 +28,14 @@ import java.util.HashMap;
 
 public class TCONST {
 
+    public static final String COMMAND = "COMMAND";
+    public static final String MODULE = "MODULE";
+    public static final String NODE = "NODE";
+    public static final String CONDITION = "CONDITION";
+
+
     public static final String NUMDATA_HEADER   = "{\n" + "\"dataSource\": ";
+
 
     //*** Reading Tutor compatible string combinations
 
