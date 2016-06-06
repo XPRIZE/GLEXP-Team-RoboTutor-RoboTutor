@@ -118,8 +118,10 @@ public class SpeechRecognizer {
 
     private String[]        prevAsrWords;
     private ArrayList<Long> wordLastChanged;
+
     private Long            stableHypTime = 0L;
     private String          publishType   = TCONST.STABLE_HYPOTHESES;
+    //private String          publishType   = TCONST.RAW_HYPOTHESES;
 
 
     protected SpeechRecognizer(Config config) {
@@ -535,11 +537,11 @@ public class SpeechRecognizer {
                     if(!isRecording) {
 
                         // Flush the input buffer
-                        int readf = recorder.read(buffer, 0, buffer.length);
-
-                        if(readf > 0) {
-                            Log.i("ASR", "Flushed input buffer: " + readf);
-                        }
+//                        int readf = recorder.read(buffer, 0, buffer.length);
+//
+//                        if(readf > 0) {
+//                            Log.i("ASR", "Flushed input buffer: " + readf);
+//                        }
 
                         Log.i("ASR", "Resume recording");
                         recorder.startRecording();
