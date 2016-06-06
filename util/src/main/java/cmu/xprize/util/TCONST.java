@@ -313,7 +313,7 @@ public class TCONST {
 
 
     // ASR (automated speech recognition) constants
-    public static final Long   STABLE_TIME        = 100L;    // Time a word has to be stable before it is emitted.
+    public static final Long   STABLE_TIME        = 300L;    // Time a word has to be stable before it is emitted.
     public static final String FINAL_HYPOTHESIS   = "FINALHYPOTHESIS";
     public static final String PARTIAL_HYPOTHESIS = "PARTIALHYPOTHESIS";
     public static final String STABLE_HYPOTHESIS  = "STABLEHYPOTHESIS";
