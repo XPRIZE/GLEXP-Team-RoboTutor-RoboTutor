@@ -53,14 +53,14 @@ public class ListenerBase {
 
     static protected ListenerAssets  assets;     // created in init phase -
 
-    protected String captureLabel = "";          // label for capture, logging files
-    protected boolean IS_LOGGING = false;
+    protected String  captureLabel = "";          // label for capture, logging files
+    protected boolean IS_LOGGING   = false;
 
     protected File    configFile;                // config file to use, null => default
     protected File    modelsDir;                 // saved model directory
     protected LogMath logMath;                   // needed for creating Fsgs
 
-    private String acousticModel = LCONST.ADULT;  // LCONST.KIDS | LCONST.ADULT
+    private String acousticModel = LCONST.KIDS;  // LCONST.KIDS | LCONST.ADULT
 
     protected String   userID;                   // User ID
 
@@ -187,7 +187,21 @@ public class ListenerBase {
                                 .setRawLogDir(assetsDir)
                                 .setBoolean("-verbose", true)            // maximum log output
 
-                                //.setBoolean("-adcin", true)            // Unknown parm?
+                                .setFloat("-samprate", 16000f)
+
+                                .setInteger("-nfft", 512)
+
+                                .setInteger("-frate", 100)
+
+                                .setFloat("-lowerf", 50f)
+
+                                .setFloat("-upperf", 6800f)
+
+                                .setBoolean("-dither", true)
+
+                                .setInteger("-nfilt", 40)
+
+                                .setInteger("-ncep", 13)
 
                                 .setString("-agc", "none")
                                 .setFloat("-ascale", 1f)                // 20 in default
@@ -197,9 +211,7 @@ public class ListenerBase {
 
                                 .setBoolean("-bestpath", false)		    // yes in default
 
-                                //.setBoolean("-build_outdirs", true)   // Unknown parm?
-
-                                .setString("-cmn", "current")
+                                .setString("-cmn", "prior")
                                 .setBoolean("-compallsen", false)
                                 .setBoolean("-dictcase", false)
                                 .setFloat("-fillprob", 1e-2f)           // 1e-8 in default
@@ -211,14 +223,14 @@ public class ListenerBase {
 
                                 .setFloat("-lw", 10f)   	            // 6.5 in default
                                 .setInteger("-maxhmmpf", 1500)          // 10000 in default
-                                .setInteger("-maxnewoov", 5000)         // 20 in default
+                                //.setInteger("-maxnewoov", 5000)         // 20 in default
 
                                 .setDouble("-pbeam", 1e-80)             // 1e-48 in default
 
                                 .setFloat("-pip", 1f)
 
-                                //  -remove_noise no	vs. yes in default
-                                //  -remove_silence	no	vs. yes in default
+                                .setBoolean("-remove_noise", false)     // yes in default
+                                .setBoolean("-remove_silence", false)   // yes in default
 
                                 .setFloat("-silprob", 1f)               // 0.005 in default
                                 .setInteger("-topn",  4)

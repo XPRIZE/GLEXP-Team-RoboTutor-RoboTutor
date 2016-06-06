@@ -105,8 +105,8 @@ public class SpeechRecognizer {
     private final Collection<ITutorListener> listeners = new HashSet<>();
 
     private final int        sampleRate;                    // for sample rate check
-    private volatile boolean isPausedRecognizer  = false;   // start in the paused state
-    private volatile boolean isRunningRecognizer = true;
+    private volatile boolean isPausedRecognizer  = true;   // start in the paused state
+    private volatile boolean isRunningRecognizer = false;
     private volatile boolean isDecoding          = false;   // start in the not decoding state
 
     private ASREvents eventManager;
@@ -171,7 +171,8 @@ public class SpeechRecognizer {
             recognizerThread.start();
         }
 
-        Log.i("ASR", "Start session");
+        Log.i("ASR", "Start Utterance");
+
         eventManager.updateStartTime(TCONST.TIMEDSTART_EVENT, TCONST.ALL_EVENTS);
 
         return true;
@@ -520,7 +521,7 @@ public class SpeechRecognizer {
                         Log.i("ASR","Start Decoder");
 
                         // label utterance with passed-in id
-                        decoder.startUtt(label);
+                        decoder.startUtt();
                         inSpeech        = false;
                         prevHypothesis  = null;
                         prevAsrWords    = new String[0];
@@ -532,6 +533,14 @@ public class SpeechRecognizer {
                     // Ensure we are recording while the thread is running.
                     //
                     if(!isRecording) {
+
+                        // Flush the input buffer
+                        int readf = recorder.read(buffer, 0, buffer.length);
+
+                        if(readf > 0) {
+                            Log.i("ASR", "Flushed input buffer: " + readf);
+                        }
+
                         Log.i("ASR", "Resume recording");
                         recorder.startRecording();
                         isRecording = true;
@@ -547,7 +556,6 @@ public class SpeechRecognizer {
                     } else if (nread > 0) {
 
                         publishRMS(buffer, nread);
-
 
                             //ASRTimer = System.currentTimeMillis();
                         decoder.processRaw(buffer, nread, false, false);

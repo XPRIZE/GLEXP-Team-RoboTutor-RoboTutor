@@ -35,6 +35,8 @@ public class TCONST {
 
 
     public static final String NUMDATA_HEADER   = "{\n" + "\"dataSource\": ";
+    public static final boolean ADD_FEATURE     = true;
+    public static final boolean DEL_FEATURE     = false;
 
 
     //*** Reading Tutor compatible string combinations
@@ -201,6 +203,8 @@ public class TCONST {
     public static final String LOOKATEND   = "PERSONA_LOOKAT_END";
     public static final String SCREENPOINT = "SCREENPOINT";
 
+    public static final String FTR_STORY_STARTING = "FTR_STORY_STARTING";
+
     public static final String FWCORRECT    = "FTR_RIGHT";
     public static final String FWINCORRECT  = "FTR_WRONG";
     public static final String FWUNKNOWN    = "FTR_UNRECOGNIZED";
@@ -309,7 +313,7 @@ public class TCONST {
 
 
     // ASR (automated speech recognition) constants
-    public static final Long   STABLE_TIME        = 300L;    // Time a word has to be stable before it is emitted.
+    public static final Long   STABLE_TIME        = 100L;    // Time a word has to be stable before it is emitted.
     public static final String FINAL_HYPOTHESIS   = "FINALHYPOTHESIS";
     public static final String PARTIAL_HYPOTHESIS = "PARTIALHYPOTHESIS";
     public static final String STABLE_HYPOTHESIS  = "STABLEHYPOTHESIS";
