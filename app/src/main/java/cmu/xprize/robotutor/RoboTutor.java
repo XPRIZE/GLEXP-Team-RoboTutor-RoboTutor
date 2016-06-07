@@ -71,7 +71,8 @@ public class RoboTutor extends Activity implements IReadyListener {
     public ListenerBase         ASR;
     static public String        EXTERNFILES;
 
-    private boolean             isReady = false;
+    private boolean             isReady       = false;
+    private boolean             engineStarted = false;
 
 
     private final  String  TAG = "CRoboTutor";
@@ -201,6 +202,8 @@ public class RoboTutor extends Activity implements IReadyListener {
         //
         switch(serviceName) {
             case TCONST.TTS:
+                Log.i(TAG, "Attaching to Flite");
+
                 mMediaManager.setTTS(TTS);
                 break;
         }
@@ -219,21 +222,25 @@ public class RoboTutor extends Activity implements IReadyListener {
      */
     private void startEngine() {
 
-        Log.i(TAG, "startEngine");
-
         if(TTS.isReady() && ASR.isReady() && isReady) {
 
-            // Delete the asset loader utility ASR object
-            ASR = null;
+            if(!engineStarted) {
+                engineStarted = true;
 
-            progressLoading.hide();
+                Log.i(TAG, "startTutorEngine");
 
-            // Initialize the Engine - set the EXTERN File path for file installs
-            // Load the default tutor defined in assets/tutors/engine_descriptor.json
-            // TODO: Handle tutor creation failure
-            tutorEngine = CTutorEngine.getTutorEngine(RoboTutor.this, tutorContainer);
+                // Delete the asset loader utility ASR object
+                ASR = null;
 
-            setFullScreen();
+                progressLoading.hide();
+
+                // Initialize the Engine - set the EXTERN File path for file installs
+                // Load the default tutor defined in assets/tutors/engine_descriptor.json
+                // TODO: Handle tutor creation failure
+                tutorEngine = CTutorEngine.getTutorEngine(RoboTutor.this, tutorContainer);
+
+                setFullScreen();
+            }
         }
     }
 
@@ -265,6 +272,10 @@ public class RoboTutor extends Activity implements IReadyListener {
 
         super.onStart();
         Log.i(TAG, "onStart Robotutor: On-Screen");
+
+        // We only want to run the engine start sequence once per onStart call
+        //
+        engineStarted = false;
 
         // Debug - determine platform dependent memory limit
         ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
@@ -337,7 +348,10 @@ public class RoboTutor extends Activity implements IReadyListener {
             Log.i(TAG, "Releasing Flite");
 
             TTS.stopSpeaking();
-            TTS.shutDown();
+
+            // TODO: This seems to cause a Flite internal problem
+            //TTS.shutDown();
+
             TTS = null;
         }
 
@@ -357,6 +371,7 @@ public class RoboTutor extends Activity implements IReadyListener {
         SharedPreferences prefs = getPreferences(0);
 
         String restoredText = prefs.getString("text", null);
+
         if (restoredText != null) {
         }
     }
