@@ -105,7 +105,7 @@ public class SpeechRecognizer {
     private final Collection<ITutorListener> listeners = new HashSet<>();
 
     private final int        sampleRate;                    // for sample rate check
-    private volatile boolean isPausedRecognizer  = true;   // start in the paused state
+    private volatile boolean isPausedRecognizer  = true;    // start in the paused state
     private volatile boolean isRunningRecognizer = false;
     private volatile boolean isDecoding          = false;   // start in the not decoding state
 
