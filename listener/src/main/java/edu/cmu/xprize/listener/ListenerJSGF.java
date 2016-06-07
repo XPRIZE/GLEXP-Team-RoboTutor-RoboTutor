@@ -316,6 +316,16 @@ public class ListenerJSGF extends ListenerBase {
         }
 
         @Override
+        public void onError(Exception e) {
+
+        }
+
+        @Override
+        public void onTimeout() {
+
+        }
+
+        @Override
         public void onBeginningOfSpeech() {
             speaking = true;
 

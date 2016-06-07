@@ -35,6 +35,8 @@ public class TCONST {
 
 
     public static final String NUMDATA_HEADER   = "{\n" + "\"dataSource\": ";
+    public static final boolean ADD_FEATURE     = true;
+    public static final boolean DEL_FEATURE     = false;
 
 
     //*** Reading Tutor compatible string combinations
@@ -200,6 +202,8 @@ public class TCONST {
     public static final String LOOKAT      = "PERSONA_LOOKAT";
     public static final String LOOKATEND   = "PERSONA_LOOKAT_END";
     public static final String SCREENPOINT = "SCREENPOINT";
+
+    public static final String FTR_STORY_STARTING = "FTR_STORY_STARTING";
 
     public static final String FWCORRECT    = "FTR_RIGHT";
     public static final String FWINCORRECT  = "FTR_WRONG";

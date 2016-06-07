@@ -22,7 +22,37 @@
           "mapname": "PLAYINTRO",
           "preexit" :[],
           "edges": [
-            {"constraint": "", "edge": "LISTEN"}
+            {"constraint": "", "edge": "NEXT_STEP"}
+          ]
+        },
+
+        "NEXT_STEP":{
+          "COMMENT":"When user inputs a correct answer...",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "CHECK_COMPLETE",
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"STORY_STARTING","edge":"BEGIN_STORY"},
+            {"constraint":"STORY_COMPLETE","edge":"NEXTSCENE"},
+            {"constraint":"PAGE_COMPLETE","edge":"NEXT_PAGE_NODE"},
+            {"constraint":"PARAGRAPH_COMPLETE","edge":"NEXT_PARA_NODE"},
+            {"constraint":"LINE_COMPLETE","edge":"NEXT_LINE_NODE"},
+            {"constraint":"","edge":"NEXT_WORD_NODE"}
+          ]
+        },
+
+        "BEGIN_STORY": {
+          "type": "NODE",
+          "COMMENT": "",
+          "maptype":"actionMap",
+          "mapname":"START_STORY",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint":"","edge":"LISTEN"}
           ]
         },
 
@@ -91,23 +121,6 @@
           "edges":
           [
             {"constraint":"","edge":"LISTEN"}
-          ]
-        },
-
-        "NEXT_STEP":{
-          "COMMENT":"When user inputs a correct answer...",
-          "type":"node",
-          "maptype":"moduleMap",
-          "mapname": "CHECK_COMPLETE",
-          "preenter":[],
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"STORY_COMPLETE","edge":"NEXTSCENE"},
-            {"constraint":"PAGE_COMPLETE","edge":"NEXT_PAGE_NODE"},
-            {"constraint":"PARAGRAPH_COMPLETE","edge":"NEXT_PARA_NODE"},
-            {"constraint":"LINE_COMPLETE","edge":"NEXT_LINE_NODE"},
-            {"constraint":"","edge":"NEXT_WORD_NODE"}
           ]
         },
 
@@ -285,6 +298,17 @@
           ]
         },
 
+        "SPEAK_WORD": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "TTS", "command": "SAY", "content": "{{SstoryReading.currentWord}}", "rate":"1.2", "features": ""},
+            {"type": "COMMAND", "id": "SstoryReading", "method": "nextWord" ,"features":""},
+            {"type": "COMMAND", "cmd": "NEXT" }
+          ]
+        },
+
         "PLAYWRONG": {
           "type": "MODULE",
           "reuse":true,
@@ -304,6 +328,7 @@
 
         "SET_LANGUAGE":{"type": "COMMAND", "id": "SstoryReading", "method": "setLanguage", "parms": "LANG_SW:String","features":""},
         "SET_STORYNAME":{"type": "COMMAND", "id": "SstoryReading", "method": "setStory", "parms": "Ajali mbaya:String","features":""},
+        "START_STORY":{"type": "COMMAND", "id": "SstoryReading", "method": "startStory", "features":""},
 
         "HESTITATION_TIMER": {"type": "COMMAND", "id":"SstoryReading", "method":"configureTimedEvent", "parms": "START_TIMEOUT:String|HESITATION_PROMPT:String|5000:Integer", "features": "" },
         "HESTITATION_RESET": {"type": "COMMAND", "id":"SstoryReading", "method":"clearTimedEvent",     "parms": "START_TIMEOUT:String",                                       "features": "" },
@@ -346,7 +371,6 @@
         "SET_SPEAK_SENTENCE":  {"type": "COMMAND", "id":"SstoryReading", "method":"setSpeakBehavior", "parms": "SPEAK_SENTENCE:String", "features": "" },
         "RESET_SPEAK_ONCLICK": {"type": "COMMAND", "id":"SstoryReading", "method":"setSpeakBehavior", "parms": "NULL:String", "features": "" },
 
-        "SPEAK_WORD":      {"type": "TTS", "command": "SAY", "content": "{{SstoryReading.currentWord}}", "rate":"1.2", "features": ""},
         "SPEAK_SENTENCE":  {"type": "TTS", "command": "SAY", "content": "{{SstoryReading.sentence}}",    "rate":"1.2", "features": ""},
 
         "EMPTY_ACTION": {"type": "COMMAND", "cmd": "NOOP" },
@@ -373,7 +397,6 @@
           "Then":"true",
           "Else":"false"
         },
-
 
         // Note that we don't have operator precidence so we must use ( ) to enforce precidence
         //
@@ -404,6 +427,11 @@
           "Then":"true",
           "Else":"false"
         },
+
+        "STORY_STARTING": {
+            "type": "CONDITION",
+            "test":"FTR_STORY_STARTING"
+          },
 
         "FTR_RIGHT":{
           "type": "CONDITION",

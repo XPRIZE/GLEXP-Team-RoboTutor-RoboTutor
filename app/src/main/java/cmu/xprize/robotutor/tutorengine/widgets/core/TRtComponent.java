@@ -153,6 +153,18 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
     }
 
 
+    @Override
+    public void setFeature(String feature, boolean fadd) {
+        if(fadd) {
+            mTutor.setAddFeature(feature);
+        }
+        else {
+            mTutor.setDelFeature(feature);
+        }
+
+    }
+
+
     public void next() {
 
         reset();
@@ -161,6 +173,11 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
 
         if(dataExhausted())
             mTutor.setAddFeature(TCONST.FTR_EOI);
+    }
+
+
+    public void startStory() {
+        super.startStory();
     }
 
 
