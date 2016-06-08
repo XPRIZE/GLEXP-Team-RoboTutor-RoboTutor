@@ -162,8 +162,11 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
         // Attach the speech recognizer.
         mListener = new ListenerPLRT();
 //        mListener = new ListenerJSGF();
-
         mListener.setEventListener(this);
+
+        // Have connector sub-class in the tutor domain Inject the listener into the MediaManager
+        //
+        setListener(mListener);
 
         // attach TTS
         mSynthesizer = rootTTS;
@@ -186,6 +189,13 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     //*************************************************
     //****** ViewManager Support - START
 
+    /**
+     * Override in TClass
+     * @param feature
+     * @param fadd
+     */
+    public void setFeature(String feature, boolean fadd) {
+    }
 
     public int addPage(View newView) {
 
@@ -370,6 +380,10 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
         _onRecognitionError = symbol;
     }
 
+
+    public void startStory() {
+        mViewManager.beginStory();
+    }
 
 
     public void speakTargetSentence() {   // to speak the entire Target word sentence

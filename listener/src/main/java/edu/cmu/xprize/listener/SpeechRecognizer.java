@@ -105,8 +105,8 @@ public class SpeechRecognizer {
     private final Collection<ITutorListener> listeners = new HashSet<>();
 
     private final int        sampleRate;                    // for sample rate check
-    private volatile boolean isPausedRecognizer  = false;   // start in the paused state
-    private volatile boolean isRunningRecognizer = true;
+    private volatile boolean isPausedRecognizer  = true;    // start in the paused state
+    private volatile boolean isRunningRecognizer = false;
     private volatile boolean isDecoding          = false;   // start in the not decoding state
 
     private ASREvents eventManager;
@@ -118,8 +118,10 @@ public class SpeechRecognizer {
 
     private String[]        prevAsrWords;
     private ArrayList<Long> wordLastChanged;
+
     private Long            stableHypTime = 0L;
     private String          publishType   = TCONST.STABLE_HYPOTHESES;
+    //private String          publishType   = TCONST.RAW_HYPOTHESES;
 
 
     protected SpeechRecognizer(Config config) {
@@ -171,7 +173,8 @@ public class SpeechRecognizer {
             recognizerThread.start();
         }
 
-        Log.i("ASR", "Start session");
+        Log.i("ASR", "Start Utterance");
+
         eventManager.updateStartTime(TCONST.TIMEDSTART_EVENT, TCONST.ALL_EVENTS);
 
         return true;
@@ -438,6 +441,8 @@ public class SpeechRecognizer {
 
             synchronized (recognizerThread) {
 
+                int        nread;
+
                 boolean    flagsDirty     = true;
                 boolean    inSpeech       = false;
                 short[]    buffer         = new short[BUFFER_SIZE];
@@ -474,9 +479,9 @@ public class SpeechRecognizer {
                             // flush the input - i.e. clear the recorder
                             //
                             if(!isDecoding) {
-                                int nread;
 
                                 recorder.stop();
+
                                 do {
                                     nread = recorder.read(buffer, 0, buffer.length);
 
@@ -508,7 +513,7 @@ public class SpeechRecognizer {
                     }
 
                     if(!isRunningRecognizer) {
-                        Log.d("ASR", "Terminating REC Thread");
+                        Log.d("ASR", "Terminating ASR Thread");
                         continue;
                     }
 
@@ -520,7 +525,7 @@ public class SpeechRecognizer {
                         Log.i("ASR","Start Decoder");
 
                         // label utterance with passed-in id
-                        decoder.startUtt(label);
+                        decoder.startUtt();
                         inSpeech        = false;
                         prevHypothesis  = null;
                         prevAsrWords    = new String[0];
@@ -532,13 +537,24 @@ public class SpeechRecognizer {
                     // Ensure we are recording while the thread is running.
                     //
                     if(!isRecording) {
+
+                        // Flush the input buffer
+//                        int readf = recorder.read(buffer, 0, buffer.length);
+//
+//                        if(readf > 0) {
+//                            Log.i("ASR", "Flushed input buffer: " + readf);
+//                        }
+
                         Log.i("ASR", "Resume recording");
                         recorder.startRecording();
                         isRecording = true;
+                        nread       = 0;
                     }
-
-                    // Clean out the buffered input
-                    int nread = recorder.read(buffer, 0, buffer.length);
+                    else {
+                        // Clean out the buffered input
+                        nread = recorder.read(buffer, 0, buffer.length);
+                    }
+                    Log.i("ASR","ASR RAW-BYTES: " + nread);
 
                     if (-1 == nread) {
                         Log.i("ASR","Read Error");
@@ -546,58 +562,63 @@ public class SpeechRecognizer {
 
                     } else if (nread > 0) {
 
-                        publishRMS(buffer, nread);
+                        double RMS = publishRMS(buffer, nread);
 
-
+                        // This filters low power segments that otherwise cause false positives
+                        // in number_speaking tutor
+                        //
+                        //`if(RMS > 4)
+                        {
                             //ASRTimer = System.currentTimeMillis();
-                        decoder.processRaw(buffer, nread, false, false);
+                            decoder.processRaw(buffer, nread, false, false);
                             //Log.d("ASR", "Time in processRaw: " + (System.currentTimeMillis() - ASRTimer));
 
-                        nSamples += nread;
+                            nSamples += nread;
 
-                        // InSpeech is true whenever there is a signal heard at the mic above threshold
-                        // i.e. false means relative silence -
-                        //
-                        if (decoder.getInSpeech() != inSpeech) {
+                            // InSpeech is true whenever there is a signal heard at the mic above threshold
+                            // i.e. false means relative silence -
+                            //
+                            if (decoder.getInSpeech() != inSpeech) {
 
-                            inSpeech = decoder.getInSpeech();
+                                inSpeech = decoder.getInSpeech();
 
-                            // Measure times from
-                            // 1. The last time the mic heard anything
-                            // 2. The last time the mic went silent.
+                                // Measure times from
+                                // 1. The last time the mic heard anything
+                                // 2. The last time the mic went silent.
 
-                            //Log.i("ASR","State Changed: " + inSpeech);
+                                //Log.i("ASR","State Changed: " + inSpeech);
 
-                            if(inSpeech) {
-                                eventManager.fireStaticEvent(TCONST.SOUND_EVENT);
-                                eventManager.updateStartTime(TCONST.TIMEDSOUND_EVENT, TCONST.TIMEDSILENCE_EVENT);
-                                // Hearing a sound resets the silence timer
+                                if (inSpeech) {
+                                    eventManager.fireStaticEvent(TCONST.SOUND_EVENT);
+                                    eventManager.updateStartTime(TCONST.TIMEDSOUND_EVENT, TCONST.TIMEDSILENCE_EVENT);
+                                    // Hearing a sound resets the silence timer
 
-                            } else {
-                                eventManager.fireStaticEvent(TCONST.SILENCE_EVENT);
-                                eventManager.updateStartTime(TCONST.TIMEDSILENCE_EVENT, TCONST.UNKNOWNEVENT_TYPE);
+                                } else {
+                                    eventManager.fireStaticEvent(TCONST.SILENCE_EVENT);
+                                    eventManager.updateStartTime(TCONST.TIMEDSILENCE_EVENT, TCONST.UNKNOWNEVENT_TYPE);
+                                }
                             }
-                        }
 
-                        // Get the hypothesis words from the Sphinx decoder
-                        //
+                            // Get the hypothesis words from the Sphinx decoder
+                            //
                             //ASRTimer = System.currentTimeMillis();
-                        Hypothesis hypothesis = decoder.hyp();
+                            Hypothesis hypothesis = decoder.hyp();
                             //Log.d("ASR", "Time in Decoder: " + (System.currentTimeMillis() - ASRTimer));
 
-                        // If there is a valid hypothesis string from the decoder continue
-                        // Once the decoder returns a hypothesis it will not go back to
-                        // null even with long periods of silence.  i.e. Wait until they start speaking
-                        //
-                        if(hypothesis != null) {
-                            switch(publishType) {
-                                case TCONST.RAW_HYPOTHESES:
-                                    publishRawHypothesis(hypothesis);
-                                    break;
+                            // If there is a valid hypothesis string from the decoder continue
+                            // Once the decoder returns a hypothesis it will not go back to
+                            // null even with long periods of silence.  i.e. Wait until they start speaking
+                            //
+                            if (hypothesis != null) {
+                                switch (publishType) {
+                                    case TCONST.RAW_HYPOTHESES:
+                                        publishRawHypothesis(hypothesis);
+                                        break;
 
-                                case TCONST.STABLE_HYPOTHESES:
-                                    publishStableHypothesis(hypothesis);
-                                    break;
+                                    case TCONST.STABLE_HYPOTHESES:
+                                        publishStableHypothesis(hypothesis);
+                                        break;
+                                }
                             }
                         }
                     }
@@ -610,7 +631,7 @@ public class SpeechRecognizer {
                 Log.i("ASR","Stop session");
 
                 recorder.stop();
-                int nread = recorder.read(buffer, 0, buffer.length);
+                nread = recorder.read(buffer, 0, buffer.length);
                 recorder.release();
                 decoder.processRaw(buffer, nread, false, false);
                 nSamples += nread;
@@ -781,8 +802,9 @@ public class SpeechRecognizer {
     }
 
 
-    private void publishRMS(short[] buffer, int count) {
+    private double publishRMS(short[] buffer, int count) {
 
+        double RMS = 0;
         double sum = 0;
         Short  peak= 0;
 
@@ -799,10 +821,12 @@ public class SpeechRecognizer {
                     mPeak = sample;
             }
 
-            double RMS = Math.sqrt(sum / count);
+            RMS = Math.sqrt(sum / count);
 
-           // Log.i("RMS", "Double: " + RMS + "  - Sample: " + count + "  - local Peak: " + peak + "  - Peak: " + mPeak);
+            Log.i("ASR", "RMS: " + RMS + "  - Sample size: " + count + "  - local Peak: " + peak + "  - Peak: " + mPeak);
         }
+
+        return RMS;
     }
 
 
@@ -1053,7 +1077,7 @@ public class SpeechRecognizer {
             switch(eventType) {
 
                 case TCONST.TIMEDSTART_EVENT:
-                    Log.d("ASR", "CONFIG TIMED WORD: " + newTimeout);
+                    Log.d("ASR", "CONFIG TIMED START: " + newTimeout);
                     startTimeOut     = newTimeout;
                     WaitAfterStart   = true;
                     // isStartTriggered = false; This is only ever done once

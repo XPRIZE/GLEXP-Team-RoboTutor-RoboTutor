@@ -28,7 +28,7 @@
 
         <cmu.xprize.robotutor.tutorengine.widgets.core.TStimRespBase
             android:id="@+id/Sstimulus"
-            app:linked_views="Sresponse"
+            app:linked_views="Sresponse,SfingerWriter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"

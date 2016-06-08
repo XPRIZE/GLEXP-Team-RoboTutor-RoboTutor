@@ -32,6 +32,7 @@ import java.util.Map;
 
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.TCONST;
 
@@ -199,6 +200,44 @@ public class type_action extends scene_node {
 
                     case TCONST.CMD_WAIT:
                         returnState = TCONST.WAIT;
+                        break;
+
+                    // By default try and find a matching actionMap object to execute.
+                    // Note that you may not call a Module in this way.
+                    //
+                    default:
+                        IScriptable2 obj = null;
+
+                        try {
+                            obj = _scope.mapSymbol(cmd);
+
+                            if(obj != null) {
+
+                                switch(obj.getType()) {
+                                    case TCONST.MODULE:
+                                        Log.e(TAG, "Attempt to call Module: " + cmd + " : Modules may not be called.");
+                                        break;
+
+                                    case TCONST.NODE:
+                                        Log.e(TAG, "Attempt to call Node: " + cmd + " : Nodes may not be called.");
+                                        break;
+
+                                    case TCONST.CONDITION:
+                                        Log.e(TAG, "Attempt to call Condition: " + cmd + " : Conditions may not be called.");
+                                        break;
+
+                                    default:
+                                        returnState = obj.applyNode();
+                                        break;
+                                }
+                            }
+
+                        } catch (Exception e) {
+
+                            // TODO: Manage invalid Behavior
+                            e.printStackTrace();
+                        }
+
                         break;
                 }
             } else if (method != null && !method.equals("")) {

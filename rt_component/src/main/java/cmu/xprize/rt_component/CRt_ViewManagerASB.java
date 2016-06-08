@@ -97,6 +97,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private int                     mLineCount;
     private int                     mWordCount;
     private int                     attemptNum = 1;
+    private boolean                 storyBooting;
 
     private String                  wordsToDisplay[];                    // current sentence words to display - contain punctuation
     private String                  wordsToSpeak[];                      // current sentence words to hear
@@ -133,7 +134,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     static final String TAG = "CRt_ViewManagerASB";
 
 
-
+    /**
+     *
+     * @param parent
+     * @param listener
+     */
     public CRt_ViewManagerASB(CRt_Component parent, ListenerBase listener) {
 
         mParent = parent;
@@ -155,19 +160,46 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
 
     /**
+     *   The startup sequence for a new story is:
+     *   Set - storyBooting flag to inhibit startListening so the script can complete whatever
+     *   preparation is required before the listener starts.  Otherwise you get junk hypotheses.
+     *
+     *   Once the script has completed its introduction etc. it calls nextline to cause a line increment
+     *   which resets storyBooting and enables the listener for the first sentence in the story.
      *
      * @param owner
      * @param assetPath
      */
     public void initStory(IVManListener owner, String assetPath) {
 
-        mOwner = owner;
-        mAsset = assetPath;
+        mOwner       = owner;
+        mAsset       = assetPath;
+        storyBooting = true;
+
+        mParent.setFeature(TCONST.FTR_STORY_STARTING, TCONST.ADD_FEATURE);
 
         seekToPage(TCONST.ZERO);
 
         //TODO: CHECK
         mParent.animatePageFlip(true,mCurrViewIndex);
+    }
+
+
+    /**
+     *  NOTE: we reset mCurrWord - last parm in seekToStoryPosition
+     *
+     */
+    public void beginStory() {
+
+        // reset boot flag to
+        //
+        if(storyBooting) {
+
+            mParent.setFeature(TCONST.FTR_STORY_STARTING, TCONST.DEL_FEATURE);
+
+            storyBooting = false;
+            startListening();
+        }
     }
 
 
@@ -239,11 +271,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         switch(command) {
 
             case "ENABLE":
-                Log.i("ASB", "ENABLE");
+                Log.i("ASB", "ENABLE Flip Button");
                 pageButtonEnable = command;
                 break;
             case "DISABLE":
-                Log.i("ASB", "DISABLE");
+                Log.i("ASB", "DISABLE Flip Button");
                 pageButtonEnable = command;
                 break;
             case "SHOW":
@@ -499,9 +531,10 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         //
         UpdateDisplay();
 
-        // Listen for the target word
+        // Once past the story initialization stage - Listen for the target word -
         //
-        startListening();
+        if(!storyBooting)
+            startListening();
 
     }
 
@@ -684,14 +717,27 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         }
     }
 
-    // NOTE: we reset mCurrWord
+    /**
+     *  NOTE: we reset mCurrWord - last parm in seekToStoryPosition
+     *
+     */
     private void incLine(int incr) {
 
-        mCurrLine += incr;
-
-        // Update the state vars
+        // reset boot flag to
         //
-        seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
+        if(storyBooting) {
+
+            storyBooting = false;
+            startListening();
+        }
+        else {
+
+            mCurrLine += incr;
+
+            // Update the state vars
+            //
+            seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
+        }
     }
 
 
@@ -748,8 +794,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         mCurrWord += incr;
 
-        // Reset the highlight
+        // For instances where we are advancing the word manually through a script it is required
+        // that you reset the highlight and the FTR_WRONG so the next word is highlighted correctly
+        //
         setHighLight(TCONST.EMPTY, false);
+        mParent.UpdateValue(true);
 
         // Publish the state out to the scripting scope in the tutor
         //
@@ -973,7 +1022,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                     mListener.setPauseListener(true);
 
                     Log.i("ASR", "WRONG");
-                    mParent.publishValue(TCONST.RTC_VAR_ATTEMPT, attemptNum++);
+                    attemptNum++;
                     result = false;
                     break;
                 }

@@ -53,12 +53,14 @@ public class ListenerBase {
 
     static protected ListenerAssets  assets;     // created in init phase -
 
-    protected String captureLabel = "";          // label for capture, logging files
-    protected boolean IS_LOGGING = false;
+    protected String  captureLabel = "";          // label for capture, logging files
+    protected boolean IS_LOGGING   = false;
 
     protected File    configFile;                // config file to use, null => default
     protected File    modelsDir;                 // saved model directory
     protected LogMath logMath;                   // needed for creating Fsgs
+
+    private String acousticModel = LCONST.KIDS;  // LCONST.KIDS | LCONST.ADULT
 
     protected String   userID;                   // User ID
 
@@ -169,36 +171,113 @@ public class ListenerBase {
 
             } else {    // init using default config parameters
 
-                // create pocketsphinx SpeechRecognizer using the SpeechRecognizer2Setup factory method
-                recognizer = SpeechRecognizerSetup.defaultSetup()
-                        // our pronunciation dictionary
-                        //.setDictionary(new File(modelsDir, "lm/CMU07A-CAPS.DIC"))
-                        .setDictionary(new File(modelsDir, "lm/" + langDictionary))
+                switch(acousticModel) {
+                    case LCONST.KIDS:
+
+                        // create pocketsphinx SpeechRecognizer using the SpeechRecognizerSetup factory method
+
+                        recognizer = SpeechRecognizerSetup.defaultSetup()
+                                // our pronunciation dictionary
+                                .setDictionary(new File(modelsDir, "lm/" + langDictionary))
 
                                 // our acoustic model
-                        .setAcousticModel(new File(modelsDir, "hmm/en-us-semi"))
+                                .setAcousticModel(new File(modelsDir, "hmm/en-con-ind"))
 
                                 // this automatically logs raw audio to the specified directory:
-                        .setRawLogDir(assetsDir)
+                                .setRawLogDir(assetsDir)
+                                .setBoolean("-verbose", true)            // maximum log output
+
+                                .setFloat("-samprate", 16000f)
+
+                                .setInteger("-nfft", 512)
+
+                                .setInteger("-frate", 100)
+
+                                .setFloat("-lowerf", 50f)
+
+                                .setFloat("-upperf", 6800f)
+
+                                .setBoolean("-dither", true)
+
+                                .setInteger("-nfilt", 40)
+
+                                .setInteger("-ncep", 13)
+
+                                .setString("-agc", "none")
+                                .setFloat("-ascale", 1f)                // 20 in default
+                                .setBoolean("-backtrace", true)         // no in default
+
+                                .setDouble("-beam", 1e-80)		        // 1e-48 in default
+
+                                .setBoolean("-bestpath", false)		    // yes in default
+
+                                .setString("-cmn", "prior")
+                                .setBoolean("-compallsen", false)
+                                .setBoolean("-dictcase", false)
+                                .setFloat("-fillprob", 1e-2f)           // 1e-8 in default
+                                .setBoolean("-fwdflat", false)          // yes in default
+                                .setInteger("-latsize", 5000)
+                                .setFloat("-lpbeam", 1e-5f)	            // 1e-40 in default
+
+                                .setDouble("-lponlybeam", 7e-29)        //
+
+                                .setFloat("-lw", 10f)   	            // 6.5 in default
+                                .setInteger("-maxhmmpf", 1500)          // 10000 in default
+                                //.setInteger("-maxnewoov", 5000)         // 20 in default
+
+                                .setDouble("-pbeam", 1e-80)             // 1e-48 in default
+
+                                .setFloat("-pip", 1f)
+
+                                .setBoolean("-remove_noise", true)     // yes in default
+                                .setBoolean("-remove_silence", true)   // yes in default
+
+                                .setFloat("-silprob", 1f)               // 0.005 in default
+                                .setInteger("-topn",  4)
+
+                                .setDouble("-wbeam", 1e-60)             // 7e-29 in default
+
+                                .setFloat("-wip",  1f)                  // 0.65 in default
+
+                                .getRecognizer();
+
+                        break;
+
+                    case LCONST.ADULT:
+
+                        // create pocketsphinx SpeechRecognizer using the SpeechRecognizerSetup factory method
+
+                        recognizer = SpeechRecognizerSetup.defaultSetup()
+                                // our pronunciation dictionary
+                                //.setDictionary(new File(modelsDir, "lm/CMU07A-CAPS.DIC"))
+                                .setDictionary(new File(modelsDir, "lm/" + langDictionary))
+
+                                // our acoustic model
+                                .setAcousticModel(new File(modelsDir, "hmm/en-us-semi"))
+
+                                // this automatically logs raw audio to the specified directory:
+                                .setRawLogDir(assetsDir)
 
 		              /* can't get sphinx logfile on Android, log messages go to LogCat facility instead
                         .setString("-logfn", new File(assetsDir, logName).getPath())
 		               */
-                        .setBoolean("-verbose", true)            // maximum log output
+                                .setBoolean("-verbose", true)            // maximum log output
 
                                 // a few other settings we might want to experiment with:
 
                                 // threshold for voice activity detection:
-                        .setFloat("-vad_threshold", LCONST.VAD_THRESHOLD)       // default 2.0
+                                .setFloat("-vad_threshold", LCONST.VAD_THRESHOLD)       // default 2.0
                                 // other vad parameters:
                                 // .setInteger("vad_postspeech", 50)		    // default 50 (centiseconds)
                                 // .setInteger("vad_prespeech", 10)				// default 10 (centiseconds)
 
                                 // .setFloat("-silprob", 0.005f)				// default 0.005
-                        .setFloat("-fillprob", LCONST.FILLPROB)                 // default 1e-8f
+                                .setFloat("-fillprob", LCONST.FILLPROB)                 // default 1e-8f
                                 // .setFloat("-wip", 0.65f)						// default 0.65
 
-                        .getRecognizer();
+                                .getRecognizer();
+                        break;
+                }
             }
 
             // save a log math object to use when constructing FsgModels.

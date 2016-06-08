@@ -113,6 +113,11 @@ public class SpeechRecognizerSetup {
         return this;
     }
 
+    public SpeechRecognizerSetup setDouble(String key, double value) {
+        config.setFloat(key, value);
+        return this;
+    }
+
     public SpeechRecognizerSetup setString(String key, String value) {
         config.setString(key, value);
         return this;

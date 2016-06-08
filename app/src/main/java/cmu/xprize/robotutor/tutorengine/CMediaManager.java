@@ -167,6 +167,9 @@ public class CMediaManager implements IMediaManager {
     private void pauseListener() {
 
         if(mListener != null && mListener.isListening()) {
+
+            Log.d(TAG, "pauseListener");
+
             mListener.setPauseListener(true);
             paused = true;
         }
@@ -176,6 +179,9 @@ public class CMediaManager implements IMediaManager {
     private void playListener() {
 
         if(mListener != null && paused) {
+
+            Log.d(TAG, "playListener");
+
             mListener.setPauseListener(false);
             paused = false;
         }
@@ -614,11 +620,11 @@ public class CMediaManager implements IMediaManager {
 
             if(!mPlaying && mIsAlive) {
                 if(mIsReady) {
-                    mPlayer.start();
-                    mPlaying = true;
-
                     // TODO: this will need a tweak for background music etc.
                     pauseListener();
+
+                    mPlayer.start();
+                    mPlaying = true;
                 }
                 else
                     mDeferredStart = true;

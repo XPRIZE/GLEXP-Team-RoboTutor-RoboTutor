@@ -129,7 +129,7 @@ public class type_audio extends type_action implements IMediaListener {
      * This is an optimization used in timeLines to preload the assets - timeline tracks act as the
      * owner so that they are informed directly of audio completion events.  This is necessary to
      * keep them sync'd with the mediaManager attach states - otherwise they don't know when their
-     * audio players have been detached and may perform operations on a re-purposed player.
+     * audio players have been detached and may perform operations on a re-purposed players.
      *
      */
     public void preLoad(IMediaListener owner) {
