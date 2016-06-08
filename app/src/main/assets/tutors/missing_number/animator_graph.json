@@ -35,17 +35,17 @@
           "preenter":[],
           "maptype":"moduleMap",
           "mapname": "SHOWTASK",
-          "preenter":["RESET_ATTEMPTS","CREATE_HESITATION_TIMER","SET_FIRST_CLICK"],
+          "preenter":["RESET_ATTEMPTS","CREATE_HESITATION_TIMER","CREATE_NOACTION_TIMER","SET_FIRST_CLICK"],
           "preexit" :[],
           "edges":
           [
-            {"constraint":"","edge":"USERINPUT"}
+            {"constraint":"","edge":"USERINPUT_1"}
           ]
         },
 
         // This waits for input
         //
-        "USERINPUT":{
+        "USERINPUT_1":{
           "COMMENT":"When the user touches for the first time",
           "type":"node",
           "maptype":"moduleMap",
@@ -54,10 +54,28 @@
           "preexit" :[],
           "edges":
           [
+//            {"constraint":"FTR_RIGHT","edge":"CORRECT"},
+//            {"constraint":"FTR_ATTEMPT3","edge":"WRONG_3"},
+//            {"constraint":"FTR_ATTEMPT2","edge":"WRONG_2"},
+//            {"constraint":"FTR_ATTEMPT1","edge":"WRONG_1"},
+            {"constraint":"","edge":"USERINPUT_2"}
+          ]
+        },
+
+        "USERINPUT_2":{
+          "COMMENT":"When the user touches for the first time",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "INPUTTASK",
+          "preenter":["CREATE_COMPLETION_TIMER", "SET_DONE_CLICK", "SET_SECOND_CLICK"],
+          "preexit" :[],
+          "edges":
+          [
             {"constraint":"FTR_RIGHT","edge":"CORRECT"},
-            {"constraint":"FTR_ATTEMPT3","edge":"WRONG_ATTEMPT3"},
-            {"constraint":"FTR_ATTEMPT2","edge":"WRONG_ATTEMPT2"},
-            {"constraint":"","edge":"WRONG_ATTEMPT1"}
+            {"constraint":"FTR_ATTEMPT3","edge":"WRONG_3"},
+            {"constraint":"FTR_ATTEMPT2","edge":"WRONG_2"},
+            {"constraint":"FTR_ATTEMPT1","edge":"WRONG_1"},
+            {"constraint":"","edge":"NO_ACTION"}
           ]
         },
 
@@ -67,7 +85,7 @@
           "maptype":"moduleMap",
           "mapname": "PLAYCORRECT",
           "preenter":[],
-          "preexit" :[],
+          "preexit" :["RESET_ATTEMPTS"],
           "edges":
           [
             {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
@@ -76,7 +94,7 @@
           ]
         },
 
-        "WRONG_ATTEMPT1":{
+        "WRONG_1":{
           "COMMENT":"When user inputs an incorrect answer...",
           "type":"node",
           "maptype":"moduleMap",
@@ -87,11 +105,11 @@
           [
             {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
             {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
-            {"constraint":"","edge":"USERINPUT"}
+            {"constraint":"","edge":"USERINPUT_2"}
           ]
         },
 
-        "WRONG_ATTEMPT2":{
+        "WRONG_2":{
           "COMMENT":"When user inputs an incorrect answer...",
           "type":"node",
           "maptype":"moduleMap",
@@ -102,11 +120,11 @@
           [
             {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
             {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
-            {"constraint":"","edge":"USERINPUT"}
+            {"constraint":"","edge":"USERINPUT_2"}
           ]
         },
 
-        "WRONG_ATTEMPT3":{
+        "WRONG_3":{
           "COMMENT":"When user inputs an incorrect answer...",
           "type":"node",
           "maptype":"moduleMap",
@@ -117,26 +135,11 @@
           [
             {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
             {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
-            {"constraint":"","edge":"FIRSTTASK"}
+            {"constraint":"","edge":"LASTSTATE"}
           ]
         },
 
-        // this is currently unused
-        "NO_ACTION_1":{
-          "COMMENT":"When the user does no action first time...",
-          "type":"node",
-          "maptype":"moduleMap",
-          "mapname": "PLAYNO_ACTION",
-          "preenter":[],
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"","edge":"USERINPUT_2"}
-          ]
-        },
-
-        // this is currently unused
-        "NO_ACTION_2":{
+        "NO_ACTION":{
           "COMMENT":"When the user does no action second time...",
           "type":"node",
           "maptype":"moduleMap",
@@ -145,7 +148,22 @@
           "preexit" :[],
           "edges":
           [
-            {"constraint":"","edge":"WRONG_2"}
+            {"constraint":"","edge":"LASTSTATE"}
+          ]
+        },
+
+        "LASTSTATE":{
+          "COMMENT":"When the user hesitates/gets the answer wrongs",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "PLAYLASTSTATE",
+          "preenter":["SET_DONE_CLICK"],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"FTR_RIGHT","edge":"CORRECT"},
+            {"constraint":"FTR_ATTEMPT1","edge":"WRONG_2"},
+            {"constraint":"","edge":"WRONG_3"}
           ]
         },
 
@@ -223,6 +241,7 @@
           "reuse":true,
           "COMMENT": "",
           "tracks": [
+            {"type": "COMMAND", "cmd": "FEATURE-DEL", "value":"FTR_ATTEMPT_1" },
             {"type": "COMMAND", "cmd": "FEATURE-DEL", "value":"FTR_ATTEMPT_2" },
             {"type": "COMMAND", "cmd": "FEATURE-DEL", "value":"FTR_ATTEMPT_3" }
           ]
@@ -244,6 +263,15 @@
           ]
         },
 
+        "PLAYCOUNTSHAPES": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "lets_try_to_count_the.mp3","mode":"flow", "features": ""}
+            //counts the shapes here
+          ]
+        },
 
         // AUDIO filenames should not have spaces or hyphens.
         //
@@ -265,7 +293,7 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "this_answer_is_not_pattern.mp3", "mode":"flow","features": ""},
+            {"type": "COMMAND", "id":"SMissingNumber",  "method": "setButtonBehavior", "parms": "PLAYCOUNTSHAPES:String"},
             {"type": "COMMAND", "cmd": "FEATURE-ADD", "value":"FTR_ATTEMPT_3" }
           ]
         },
@@ -278,38 +306,41 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "id": "SMissingNumber", "method": "setForeGround", "parms": "highlight","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "please_count_how_many.mp3", "mode":"flow","features": ""},
+            //{"type": "COMMAND", "id": "SMissingNumber", "method": "setForeGround", "parms": "highlight","features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SMissingNumber.col1}}.mp3", "mode":"flow","features": ""},
 
-            {"type": "COMMAND", "id": "secondcolumn", "method": "setForeGround", "parms": "highlight","features":""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{no of balls in second column}.mp3", "mode":"flow","features": ""},
+            //{"type": "COMMAND", "id": "secondcolumn", "method": "setForeGround", "parms": "highlight","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SMissingNumber.col2}}.mp3", "mode":"flow","features": ""},
 
-            {"type": "COMMAND", "id": "thirdcolumn", "method": "setForeGround", "parms": "highlight","features":""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{no of balls in third column}.mp3", "mode":"flow","features": ""},
+            //{"type": "COMMAND", "id": "thirdcolumn", "method": "setForeGround", "parms": "highlight","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SMissingNumber.col3}}.mp3", "mode":"flow","features": ""}
 
-            {"type": "COMMAND", "id": "missingcolumn", "method": "setForeGround", "parms": "highlight","features":""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "how many balls go here.mp3", "mode":"flow","features": ""}
+            //{"type": "COMMAND", "id": "missingcolumn", "method": "setForeGround", "parms": "highlight","features":""},
+
           ]
         },
 
 
-        // this is currently unused
         // Notes:
         // Set the button behavior before calling a blocking action (i.e. a streaming audio command)
         // Setting an audio type to stream causes it to pause when complete until a NEXT command event arrives.
-
-
         "PLAYNO_ACTION": {
           "type": "MODULE",
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "id": "Splus", "method": "setButtonBehavior", "parms": "NEXT:String"},
-            // Flash the button here
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "tap on the plus sign.mp3", "mode":"stream","features": ""},
-            {"type": "COMMAND", "id": "Sminus", "method": "setButtonBehavior", "parms": "NEXT:String"},
-            // Flash the button here
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "tap on the minus sign.mp3", "mode":"stream","features": ""}
+            //{"type": "COMMAND", "id":"SMissingNumber",  "method": "setButtonBehavior", "parms": "PLAYCOUNTSHAPES:String"}
+          ]
+        },
+
+        "PLAYLASTSTATE": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "IDK man",
+          "tracks": [
+            {"type": "COMMAND", "id":"SMissingNumber",  "method": "setButtonBehavior", "parms": "RESTART_COMPLETION_TIMER:String"},
+            {"type": "TIMER",   "id":"CompletionTimer1", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"NEXT", "features": "" }
           ]
         },
 
@@ -318,8 +349,8 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "You did a good job.mp3", "mode":"flow", "features": ""}
-            //{"type": "AUDIO", "command": "PLAY", "soundsource": "You wrote all of them correctly.mp3",   "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "You wrote all of them correctly.mp3",   "mode":"flow", "features": ""}
           ]
         },
 
@@ -328,8 +359,8 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "You did a good job.mp3", "mode":"flow", "features": ""}
-            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Next time you can do better.mp3",   "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Next time you can do better.mp3",   "mode":"flow", "features": ""}
           ]
         },
 
@@ -340,22 +371,46 @@
           "tracks": [
             {"type": "COMMAND", "id": "SdoneButton", "method": "setButtonBehavior", "parms": "NULL:String"},
             {"type": "TIMER", "id":"HesitationTimer", "action":"CANCEL", "features": "" },
-            {"type": "TIMER", "id":"CompletionTimer", "action":"CANCEL", "features": "" },
+            {"type": "TIMER", "id":"CompletionTimer1", "action":"CANCEL", "features": "" },
             {"type": "COMMAND", "cmd": "NEXT" }
           ]
         },
 
         // this is an asynchronous timer driven node
-        "PLAY_HESITATION_TRACK": {
+        "PLAY_HESITATION_TRACK_1": {
           "type": "MODULE",
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
             //{"type": "TIMELINE", "trackname": "HES_ABS", "features": ""},
-            {"type": "TTS", "command": "SAY", "content": "Place your hesitiation prompt here", "rate":"1.0", "language":"LANG_EN", "features": "LANG_SW"},
-            {"type": "TTS", "command": "SAY", "content": "Place your hesitiation prompt here", "features": "LANG_EN"},
-            {"type": "COMMAND", "id":"SMissingNumber",  "method": "setButtonBehavior", "parms": "RESTART_COMPLETION_TIMER:String"},
-            {"type": "TIMER",   "id":"CompletionTimer", "startdelay":"0", "period":"600000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PLAY_DONEBUTTON_PROMPT", "features": "" }
+            //{"type": "COMMAND", "id": "Splus", "method": "setButtonBehavior", "parms": "NEXT:String"},
+            // Flash the button here
+            {"type": "AUDIO", "command": "PLAY", "lang": "LANG_SW", "soundsource": "tap_plus_sign_inst.mp3", "mode":"flow","features": ""},
+            {"type": "AUDIO", "command": "PLAY", "lang": "LANG_SW", "soundsource": "the_plus_sign_adds.mp3", "mode":"flow","features": ""},
+            //{"type": "COMMAND", "id": "Sminus", "method": "setButtonBehavior", "parms": "NEXT:String"},
+            // Flash the button here
+            {"type": "AUDIO", "command": "PLAY", "lang": "LANG_SW", "soundsource": "tap_on_the_minus.mp3", "mode":"flow","features": ""},
+            {"type": "AUDIO", "command": "PLAY", "lang": "LANG_SW", "soundsource": "the_minus_sign_subtracts_one.mp3", "mode":"flow","features": ""},
+            {"type": "COMMAND", "cmd": "WAIT" }
+            //{"type": "COMMAND", "id":"SMissingNumber",  "method": "setButtonBehavior", "parms": "RESTART_COMPLETION_TIMER:String"},
+            //{"type": "TIMER",   "id":"HesitationTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PLAY_HESITATION_TRACK_2", "features": "" },
+            //{"type": "COMMAND", "cmd":"SET_FIRST_CLICK"}
+            //{"type": "AUDIO", "command": "PLAY", "soundsource": "tap_plus_sign_inst.mp3", "mode":"flow","features": ""}
+          ]
+        },
+
+        // this is an asynchronous timer driven node
+        "PLAY_HESITATION_TRACK_2": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            //{"type": "TIMELINE", "trackname": "HES_ABS", "features": ""},
+            //{"type": "COMMAND", "id":"SMissingNumber",  "method": "setButtonBehavior", "parms": "RESTART_COMPLETION_TIMER:String"},
+            //{"type": "TIMER",   "id":"CompletionTimer2", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PLAY_DONEBUTTON_PROMPT", "features": "" },
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "lets_try_to_count_the.mp3","mode":"flow", "features": ""},
+            {"type": "COMMAND", "cmd": "NEXT" }
+
           ]
         },
 
@@ -366,8 +421,10 @@
           "COMMENT": "TBD",
           "tracks": [
             //{"type": "TIMELINE", "trackname": "HES_ABS", "features": ""},
-            {"type": "TTS", "command": "SAY", "content": "Place your done button prompt here", "rate":"1.0", "language":"LANG_EN", "features": "LANG_SW"},
-            {"type": "TTS", "command": "SAY", "content": "Place your done button prompt  here", "features": "LANG_EN"}
+//            {"type": "TTS", "command": "SAY", "content": "Place your done button prompt here", "rate":"1.0", "language":"LANG_EN", "features": "LANG_SW"},
+//            {"type": "TTS", "command": "SAY", "content": "Place your done button prompt  here", "features": "LANG_EN"}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "if_you_want_to_check_your_answer_tap_go.mp3", "mode":"flow","features": ""}
+
           ]
         },
 
@@ -376,9 +433,23 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
+            //{"type": "AUDIO", "command": "PLAY", "sound_source": "here.mp3", "mode":"flow", "features": ""},
+            {"type": "COMMAND", "cmd": "FEATURE-ADD", "value":"FTR_ATTEMPT_1" },
             {"type": "TIMER",   "id":"HesitationTimer", "action":"CANCEL", "features": "" },
-            {"type": "COMMAND", "id":"SMissingNumber",  "method": "setButtonBehavior", "parms": "RESTART_COMPLETION_TIMER:String"},
-            {"type": "TIMER",   "id":"CompletionTimer", "startdelay":"0", "period":"600000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PLAY_DONEBUTTON_PROMPT", "features": "" }
+            //{"type": "COMMAND", "id":"SMissingNumber",  "method": "setButtonBehavior", "parms": "RESTART_COMPLETION_TIMER:String"},
+            {"type": "TIMER",   "id":"CompletionTimer3", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PLAY_DONEBUTTON_PROMPT", "features": "" },
+            {"type": "COMMAND", "cmd": "NEXT" }
+          ]
+        },
+
+        "CANCEL_COMPLETION_TIMER": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "cmd": "FEATURE-ADD", "value":"FTR_ATTEMPT_1" },
+            {"type": "TIMER",   "id":"CompletionTimer1", "action":"CANCEL", "features": "" }
+            //{"type": "COMMAND", "id":"SMissingNumber",  "method": "setButtonBehavior", "parms": "RESTART_COMPLETION_TIMER:String"},
           ]
         }
       },
@@ -389,12 +460,15 @@
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
 
-        "CREATE_HESITATION_TIMER": {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "period":"600000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PLAY_HESITATION_TRACK", "features": "" },
-        
+        "CREATE_HESITATION_TIMER": {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PLAY_HESITATION_TRACK_1", "features": "" },
+        "CREATE_NOACTION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "startdelay":"0", "period":"12000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PLAY_HESITATION_TRACK_2", "features": "" },
+        "CREATE_COMPLETION_TIMER": {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PLAY_DONEBUTTON_PROMPT", "features": "" },
+
         "RESTART_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "action":"RESTART", "features": "" },
-        "CANCEL_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "action":"CANCEL", "features": "" },
+        //"CANCEL_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "action":"CANCEL", "features": "" },
 
         "SET_FIRST_CLICK": {"type": "COMMAND", "id": "SMissingNumber", "method": "setButtonBehavior", "parms": "CANCEL_HESITATION_TIMER:String", "features":""},
+        "SET_SECOND_CLICK": {"type": "COMMAND", "id": "SMissingNumber", "method": "setButtonBehavior", "parms": "CANCEL_COMPLETION_TIMER:String", "features":""},
 
         "SET_DONE_CLICK": {"type": "COMMAND", "id": "SdoneButton", "method": "setButtonBehavior", "parms": "ON_DONE_BUTTON:String"},
         "RESET_DONE_CLICK": {"type": "COMMAND", "id": "SdoneButton", "method": "setButtonBehavior", "parms": "NULL:String"},
@@ -441,7 +515,7 @@
           "test":"FTR_NOWORDS"
         },
 
-      "FTR_WORDS":{
+        "FTR_WORDS":{
           "type": "CONDITION",
           "test":"!FTR_NOWORDS"
         },
@@ -479,6 +553,11 @@
         "FTR_ATTEMPT2": {
           "type": "CONDITION",
           "test":"FTR_ATTEMPT_2"
+        },
+
+        "FTR_ATTEMPT1": {
+          "type": "CONDITION",
+          "test":"FTR_ATTEMPT_1"
         }
 
 
