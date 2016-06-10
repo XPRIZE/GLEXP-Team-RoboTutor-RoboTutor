@@ -1,0 +1,56 @@
+{
+  // Session Manager v0.0.1 Data set.
+  //
+  // Supports multple rows with classes of activities.
+  // This data is ordered in both dimensions,
+  // To add a new Row:
+  //    Create a new Json Object in the dataSource array
+  //    "type" is the classMap for the IloadableObject class for the Row of buttons
+  //    For each tutor in the Row add an Sm_Data json Object describing the tutor
+  //
+  //    "intent" is the tutor name for natives or the full intent for intent based tutors.
+  //    "intentdata" is extra data for the intent
+  //        'native' tutors run in the TED engine and have access to all tutor features.
+  //        'browser' activities are not supported currently
+  //        <Intent> activities run in a webview or are std apps and are initiated through an intent
+  //
+  //    "buttontype" is 'text' or 'image'
+  //    "buttonvalue" is the ascii string for the text or the Drawable used for images.
+  //
+  // Note: Don't actually need the type elements.  It would infer the type from the
+  //       array type in the variable declaration.
+
+  "bgColors": ["#D9FFFF","#b9FFb9"],
+
+  "dataSource": [
+
+    {
+      "type":"Sm_Class",
+      "description":"numeric",
+      //"background":"#b9FFb9",
+      "data": [
+        { "type":"Sm_Data", "intent": "number_speaking", "intentdata":"native", "buttontype":"text" , "buttonvalue":"number speaking"}
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"reading",
+      //"background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data", "intent": "story_reading", "intentdata":"native", "features":"FTR_MANUAL" ,"buttontype":"text" , "buttonvalue":"Reading Tutor Manual-Flip" }
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"reading",
+      //"background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data", "intent": "story_reading", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Reading Tutor AutoFlip" }
+
+      ]
+    }
+
+  ]
+}
