@@ -68,7 +68,7 @@ public class CNl_PLRT implements CNl_Processor {
     protected ArrayList<String>     mStimulusPlaceString;
     protected ArrayList<String>     mStimulusPlaceText;
 
-    private boolean DEBUG = true;
+    private boolean DEBUG = false;
 
     protected LocalBroadcastManager bManager;
 
