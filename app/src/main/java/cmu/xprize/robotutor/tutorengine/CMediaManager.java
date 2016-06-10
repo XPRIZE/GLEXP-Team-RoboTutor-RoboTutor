@@ -641,6 +641,9 @@ public class CMediaManager implements IMediaManager {
         }
 
 
+        /**
+         * TODO: need to recycle the controller
+         */
         public void kill() {
 
             Log.d(TAG, "Kill MediaPlayer");

@@ -26,10 +26,8 @@ import android.util.JsonWriter;
 import android.util.Log;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -61,7 +59,7 @@ public class StrokeSet {
     private Float                 _glyphBaseLine;
     private Float                 _fontBaseLine;
 
-    private final static String DATA_PATH = Environment.getExternalStorageDirectory() + TCONST.ROBOTUTOR_FOLDER;
+    private final static String   LOG_PATH = Environment.getExternalStorageDirectory() + TCONST.ROBOTUTOR_FOLDER;
 
     private static String      TAG  = "StrokeSet";
 
@@ -238,7 +236,7 @@ public class StrokeSet {
             String outPath;
 
             // Validate output folder
-            outPath = DATA_PATH;
+            outPath = LOG_PATH;
             File outputFile = new File(outPath);
 
             if (!outputFile.exists())
@@ -250,6 +248,7 @@ public class StrokeSet {
             outPath += TCONST.GLYPHLOG + CPreferenceCache.getPrefID(TCONST.CURRENT_TUTOR) + TCONST.JSONLOG;
 
             // Append Glyph Data to file
+            //
             try {
                 out = new FileWriter(outPath, TCONST.APPEND);
 

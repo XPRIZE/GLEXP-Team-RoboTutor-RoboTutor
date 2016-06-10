@@ -28,6 +28,13 @@ import android.util.Log;
  */
 public class CErrorManager {
 
+    static ILogManager  mLogManager;
+
+    static public void setLogManager(ILogManager manager) {
+        mLogManager = manager;
+    }
+
+
     static public void terminate(String TAG, String Msg, boolean printTrace) {
 
         Log.e(TAG, Msg);
@@ -37,6 +44,7 @@ public class CErrorManager {
         } catch (InterruptedException e1) {
         }
 
+        mLogManager.postError(TAG, Msg);
         //System.exit(1);
     }
 
@@ -55,6 +63,10 @@ public class CErrorManager {
         } catch (InterruptedException e1) {
         }
 
+        if(e != null)
+            mLogManager.postError(TAG, Msg, e);
+        else
+            mLogManager.postError(TAG, Msg);
         //System.exit(1);
     }
 }

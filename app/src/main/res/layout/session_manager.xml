@@ -27,16 +27,33 @@
         android:layout_height="match_parent"
         app:layout_heightPercent="91%" />
 
-    <cmu.xprize.robotutor.tutorengine.widgets.core.TVersionView
-        android:id="@+id/StutorVersion"
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TSceneFrameLayout
         android:layout_below="@+id/SsmComponent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_heightPercent="6%"
-        android:gravity="left|center_vertical"
-        android:textSize="20sp"
-        android:textColor="#FFF"
-        android:background="#3c6b3c"/>
+        android:background="#3c6b3c">
 
+        <cmu.xprize.robotutor.tutorengine.widgets.core.TVersionView
+            android:id="@+id/StutorVersion"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="left|center_vertical"
+            android:textSize="20sp"
+            android:textColor="#FFF"
+            android:background="#3c6b3c"/>
+
+        <cmu.xprize.robotutor.tutorengine.widgets.core.TGuidView
+            android:id="@+id/StutorGUID"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:gravity="right|center_vertical"
+            android:layout_marginRight="20dp"
+            android:textSize="35sp"
+            android:textColor="#FFF"
+            android:background="#3c6b3c"/>
+
+    </cmu.xprize.robotutor.tutorengine.widgets.core.TSceneFrameLayout>
 
 </cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>

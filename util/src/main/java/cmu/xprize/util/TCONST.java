@@ -37,6 +37,8 @@ public class TCONST {
     public static final String NUMDATA_HEADER   = "{\n" + "\"dataSource\": ";
     public static final boolean ADD_FEATURE     = true;
     public static final boolean DEL_FEATURE     = false;
+    public static final int     GUID_LEN        = 5;
+    public static final String  GUID_UPDATE     = "GUIDUPDATE";
 
 
     //*** Reading Tutor compatible string combinations
@@ -277,7 +279,7 @@ public class TCONST {
 
 
     // Preference keys
-    public static final String ENGINE_INSTANCE = "engine_instance";
+    public static final String ENGINE_INSTANCE = "RoboTutor";
     public static final String CURRENT_TUTOR   = "tutor";
 
 
