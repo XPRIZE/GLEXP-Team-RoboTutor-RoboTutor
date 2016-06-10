@@ -137,7 +137,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
     // Event Listener/Dispatcher - Start
 
     /**
-     * Must be Overridden to access mTutor
+     * Must be Overridden in app module to access tutor engine
      * @param linkedView
      */
     @Override

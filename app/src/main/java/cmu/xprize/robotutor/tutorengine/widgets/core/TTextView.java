@@ -33,7 +33,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 
 public class TTextView extends TextView implements ITutorObjectImpl {
 
-    private CObjectDelegate mSceneObject;
+    protected CObjectDelegate mSceneObject;
 
     final private String TAG = "TTutorView";
 
