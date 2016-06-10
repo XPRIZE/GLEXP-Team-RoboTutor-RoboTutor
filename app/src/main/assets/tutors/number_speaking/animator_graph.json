@@ -469,7 +469,8 @@
         "SHOWSTIMULUS":{"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "TRUE:Boolean","features":""},
         "REMOVESTIMULUS":{"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "FALSE:Boolean","features":""},
 
-        "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "gotoNextScene"},
+        "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "NEXTSCENE" },
+
         "NEXT": {"type": "COMMAND", "cmd": "NEXT"  }
       },
 
