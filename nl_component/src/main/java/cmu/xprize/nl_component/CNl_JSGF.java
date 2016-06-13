@@ -61,6 +61,8 @@ public class CNl_JSGF implements CNl_Processor {
     protected ArrayList<String>     mStimulusPlaceString;
     protected ArrayList<String>     mStimulusPlaceText;
 
+    protected ArrayList[]           mStimulusPlaceWords;
+
     protected int                   mResponseNumber;
     protected String                mResponseText;
     protected List                  mResponseList;
@@ -105,6 +107,16 @@ public class CNl_JSGF implements CNl_Processor {
         return mStimulusText;
     }
 
+    @Override
+    public boolean isPlaceValueUsed(int place) {
+        return mStimulusPlaceWords[place-1] != null;
+    }
+
+    @Override
+    public int wordsInPlaceValue(int place) {
+        return mStimulusPlaceWords[place-1].size();
+    }
+
 
     // This provides access to the Stimulus array values as Strings
     //
@@ -130,6 +142,23 @@ public class CNl_JSGF implements CNl_Processor {
                 case TCONST.PLACE_TEXT_VAR:
                     result = mStimulusPlaceText.get(index);
                     break;
+
+
+                case TCONST.PLACE4_WORDS_VAR:
+                    result = (String)mStimulusPlaceWords[3].get(index);
+                    break;
+
+                case TCONST.PLACE3_WORDS_VAR:
+                    result = (String)mStimulusPlaceWords[2].get(index);
+                    break;
+
+                case TCONST.PLACE2_WORDS_VAR:
+                    result = (String)mStimulusPlaceWords[1].get(index);
+                    break;
+
+                case TCONST.PLACE1_WORDS_VAR:
+                    result = (String)mStimulusPlaceWords[0].get(index);
+                    break;
             }
         }
         catch(Exception e) {
@@ -137,6 +166,72 @@ public class CNl_JSGF implements CNl_Processor {
         }
 
         return null;
+    }
+
+
+    /**
+     * For each place value we generate an ArrayList of the words that constitute that place value when spoken.
+     * Note that this may include conjunctions.
+     *
+     * To do this we step through the place values from high to low.
+     *
+     * e.g.  234 = mia mbeli na thelathini na nne ->  Is broken into:
+     *
+     *  hundreds - ["mia", "mbeli"]
+     *  tens     - ["na", "thelathini"]
+     *  ones     - ["na", "nne"]
+     *
+     *  This makes a possibly language specific assumption that '0' place values are not uttered.
+     *  It bases it's use of conjunctions on the language model used in Num2Word
+     *
+     * @param Number
+     * @param text
+     * @param placeValue
+     * @param parentLen
+     */
+    private void generateStimPlaceWords(int Number, String text, int placeValue, int parentLen) {
+
+        ArrayList<String> Words = null;
+
+        // assume 0 place values don't contribute to the spoken number
+        // If zero we don't change the parentLen
+        //
+        if(text.charAt(placeValue) != '0') {
+
+            // Strip off the part of the number below the place Value we are currently generating
+            // e.g. if # - 1234 and place is 2 then we want only 1200
+            //
+            int power     = (int) Math.pow(10, placeValue);
+            int partValue = (Number / power) * power;
+
+            // Generate the words that contitute that part of the number
+            // e.g. if # - 1200 = "one thousand two hundred"
+            String partWords = Num2Word.transform(partValue, _Owner.getLanguage()).toUpperCase();
+
+            // Get the words for the place value by stripping off the string that made the higher place value
+            // e.g given 1200 then at place value 2 we remove "one thousand" and are left with  "two hundred"
+            // trim the spaces from the leading edge if any
+            //
+            String placeWords = partWords.substring(parentLen).trim();
+            Words             = new ArrayList<String>(Arrays.asList(placeWords.split(" ")));
+
+            // Update the length of the string that constitutes the parent place value.
+            //
+            parentLen = partWords.length();
+        }
+
+        try {
+            mStimulusPlaceWords[placeValue] =  Words;
+            placeValue--;
+        }
+        catch(Exception e) {
+            Log.d(TAG, "Error: " + e);
+        }
+
+
+        if(placeValue > 0) {
+            generateStimPlaceWords(Number, text, placeValue, parentLen);
+        }
     }
 
 
@@ -176,6 +271,11 @@ public class CNl_JSGF implements CNl_Processor {
         mStimulusPlaceValue  = new ArrayList<Integer>();
         mStimulusPlaceText   = new ArrayList<String>();
         mStimulusPlaceString = new ArrayList<String>();
+
+        // Generate the words for each place value when speaking the number
+        //
+        mStimulusPlaceWords = new ArrayList[mStimulusString.length()];
+        generateStimPlaceWords(mStimulusValue, mStimulusString, mStimulusString.length()-1, 0);
 
         int power = 1;
 
