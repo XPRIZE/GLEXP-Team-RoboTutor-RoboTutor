@@ -36,7 +36,7 @@
           "edges":
           [
             {"constraint":"STORY_STARTING","edge":"BEGIN_STORY"},
-            {"constraint":"STORY_COMPLETE","edge":"NEXTSCENE"},
+            {"constraint":"STORY_COMPLETE","edge":"NEXT_SCENE"},
             {"constraint":"PAGE_COMPLETE","edge":"NEXT_PAGE_NODE"},
             {"constraint":"PARAGRAPH_COMPLETE","edge":"NEXT_PARA_NODE"},
             {"constraint":"LINE_COMPLETE","edge":"NEXT_LINE_NODE"},
@@ -174,7 +174,7 @@
           ]
         },
 
-        "NEXTSCENE": {
+        "NEXT_SCENE": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
           "maptype":"moduleMap",

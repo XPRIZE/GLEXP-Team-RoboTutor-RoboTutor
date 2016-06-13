@@ -554,7 +554,7 @@ public class SpeechRecognizer {
                         // Clean out the buffered input
                         nread = recorder.read(buffer, 0, buffer.length);
                     }
-                    Log.i("ASR","ASR RAW-BYTES: " + nread);
+                    //Log.i("ASR","ASR RAW-BYTES: " + nread);
 
                     if (-1 == nread) {
                         Log.i("ASR","Read Error");
@@ -823,7 +823,7 @@ public class SpeechRecognizer {
 
             RMS = Math.sqrt(sum / count);
 
-            Log.i("ASR", "RMS: " + RMS + "  - Sample size: " + count + "  - local Peak: " + peak + "  - Peak: " + mPeak);
+            //Log.i("ASR", "RMS: " + RMS + "  - Sample size: " + count + "  - local Peak: " + peak + "  - Peak: " + mPeak);
         }
 
         return RMS;
@@ -1266,10 +1266,6 @@ public class SpeechRecognizer {
          */
         public synchronized void fireStaticEvent(int eventType) {
 
-            // Auto reset static event handler
-            //
-            configStaticEvent(eventType, false);
-
             switch (eventType) {
                 case TCONST.SILENCE_EVENT:
                     if(listenForSilence) {
@@ -1290,6 +1286,10 @@ public class SpeechRecognizer {
                     }
                     break;
             }
+
+            // Auto reset static event handler
+            //
+            configStaticEvent(eventType, false);
         }
 
 

@@ -1,0 +1,99 @@
+
+
+"REMEDIATE": {
+  "type": "MODULE",
+  "reuse":true,
+  "COMMENT": "TBD",
+  "tracks": [
+
+    {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "Huh.mp3","mode":"flow", "features": ""},
+
+    // Thousands
+    // The component set the FTR_PLACE_4_USED feature if the thousands place value is non-zero
+
+    {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "4:Integer|green:String","features":"FTR_PLACE_4_USED"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitString[3]}}.mp3","mode":"flow", "features": "FTR_PLACE_4_USED"},
+
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "means.mp3","mode":"flow", "features": "FTR_PLACE_4_USED"},
+
+    // place value for Thousands
+    // The component set the FTR_P4_2WORDS if the thousands place value is composed of two words,  FTR_P4_1WORDS if the thousands place value is composed of one word,
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place4Text[2]}}.mp3","mode":"flow", "features": "FTR_PLACE_4_USED,FTR_P4_3WORDS"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place4Text[1]}}.mp3","mode":"flow", "features": "FTR_PLACE_4_USED,FTR_P4_2WORDS"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place4Text[0]}}.mp3","mode":"flow", "features": "FTR_PLACE_4_USED,FTR_P4_1WORDS"},
+    {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "4:Integer|normal:String","features":"FTR_PLACE_4_USED"},
+
+
+
+    // hundreds
+    // The component set the FTR_PLACE_3_USED feature if the hundreds place value is non-zero
+
+    {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "3:Integer|green:String","features":"FTR_PLACE_3_USED"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitString[2]}}.mp3","mode":"flow", "features": "FTR_PLACE_3_USED"},
+
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "means.mp3","mode":"flow", "features": "FTR_PLACE_3_USED"},
+
+    // place value for hundreds
+    // The component set the FTR_P3_2WORDS if the hundreds place value is composed of two words,  FTR_P3_1WORDS if the hundreds place value is composed of one word,
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place3Text[2]}}.mp3","mode":"flow", "features": "FTR_PLACE_3_USED,FTR_P3_3WORDS"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place3Text[1]}}.mp3","mode":"flow", "features": "FTR_PLACE_3_USED,FTR_P3_2WORDS"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place3Text[0]}}.mp3","mode":"flow", "features": "FTR_PLACE_3_USED,FTR_P3_1WORDS"},
+    {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "3:Integer|normal:String","features":"FTR_PLACE_3_USED"},
+
+
+    // tens
+    // The component set the FTR_PLACE_2_USED feature if the tens place value is non-zero
+
+    {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "2:Integer|green:String","features":"FTR_PLACE_2_USED"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitString[1]}}.mp3","mode":"flow", "features": "FTR_PLACE_2_USED"},
+
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "means.mp3","mode":"flow", "features": "FTR_PLACE_2_USED"},
+
+    // place value for tens
+    // The component set the FTR_P2_2WORDS if the tens place value is composed of two words,  FTR_P2_1WORDS if the tens place value is composed of one word,
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place2Text[2]}}.mp3","mode":"flow", "features": "FTR_PLACE_2_USED,FTR_P2_3WORDS"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place2Text[1]}}.mp3","mode":"flow", "features": "FTR_PLACE_2_USED,FTR_P2_2WORDS"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place2Text[0]}}.mp3","mode":"flow", "features": "FTR_PLACE_2_USED,FTR_P2_1WORDS"},
+    {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "2:Integer|normal:String","features":"FTR_PLACE_2_USED"},
+
+
+    // Ones
+    // The component set the FTR_PLACE_1_USED feature if the ones place value is non-zero - or the value is "zero"
+
+    {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "1:Integer|green:String","features":"FTR_PLACE_1_USED"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitString[0]}}.mp3","mode":"flow", "features": "FTR_PLACE_1_USED"},
+
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "means.mp3","mode":"flow", "features": "FTR_PLACE_1_USED"},
+
+    // place value for ones
+    // The component set the FTR_P1_2WORDS if the ones place value is composed of two words,  FTR_P1_1WORDS if the place ones value is composed of one word,
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place1Text[2]}}.mp3","mode":"flow", "features": "FTR_PLACE_1_USED,FTR_P2_3WORDS"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place1Text[1]}}.mp3","mode":"flow", "features": "FTR_PLACE_1_USED,FTR_P2_2WORDS"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place1Text[0]}}.mp3","mode":"flow", "features": "FTR_PLACE_1_USED,FTR_P2_1WORDS"},
+    {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "1:Integer|normal:String","features":"FTR_PLACE_1_USED"},
+
+
+
+    //Complete number
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "So this number is.mp3","mode":"flow", "features": ""},
+
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place4Text[2]}}.mp3","mode":"flow", "features": "FTR_P4_3WORDS"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place4Text[1]}}.mp3","mode":"flow", "features": "FTR_P4_2WORDS"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place4Text[0]}}.mp3","mode":"flow", "features": "FTR_P4_1WORDS"},
+
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place3Text[2]}}.mp3","mode":"flow", "features": "FTR_P3_3WORDS"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place3Text[1]}}.mp3","mode":"flow", "features": "FTR_P3_2WORDS"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place3Text[0]}}.mp3","mode":"flow", "features": "FTR_P3_1WORDS"},
+
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place21ext[2]}}.mp3","mode":"flow", "features": "FTR_P2_3WORDS"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place2Text[1]}}.mp3","mode":"flow", "features": "FTR_P2_2WORDS"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place2Text[0]}}.mp3","mode":"flow", "features": "FTR_P2_1WORDS"},
+
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place1Text[2]}}.mp3","mode":"flow", "features": "FTR_P1_3WORDS"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place1Text[1]}}.mp3","mode":"flow", "features": "FTR_P1_2WORDS"},
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.place1Text[0]}}.mp3","mode":"flow", "features": "FTR_P1_1WORDS"},
+
+    {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
+  ]
+}
