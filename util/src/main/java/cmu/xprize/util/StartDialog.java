@@ -25,6 +25,7 @@ public class StartDialog {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.start_layout);
         dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         start = (ImageButton) dialog.findViewById(R.id.SstartSelector);
 
