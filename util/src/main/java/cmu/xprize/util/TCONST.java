@@ -43,6 +43,7 @@ public class TCONST {
     public static final String  FTR_PLACE_      = "FTR_PLACE_";
     public static final String  _USED           = "_USED";
     public static final String  FTR_P           = "FTR_P";
+    public static final String  FTR_D           = "FTR_D";
     public static final String  _1WORDS         = "_1WORDS";
     public static final String  _2WORDS         = "_2WORDS";
     public static final String  _3WORDS         = "_3WORDS";

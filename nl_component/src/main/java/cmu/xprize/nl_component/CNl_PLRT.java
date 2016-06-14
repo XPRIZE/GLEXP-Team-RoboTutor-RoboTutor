@@ -69,6 +69,7 @@ public class CNl_PLRT implements CNl_Processor {
     protected ArrayList<String>     mStimulusPlaceText;
 
     protected ArrayList[]           mStimulusPlaceWords;
+    protected ArrayList[]           mStimulusDigitWords;
 
 
     private boolean DEBUG = false;
@@ -282,14 +283,24 @@ public class CNl_PLRT implements CNl_Processor {
         mStimulusPlaceText   = new ArrayList<String>();
         mStimulusPlaceString = new ArrayList<String>();
 
-        // Generate the words for each place value when speaking the number
+        // Generate the words for each place value when speaking the whole number
+        // Also generate the words for digit of the number - i.e. no conjunctions.
         // Make an arraylist big enough to hold the max numner of plcae values we support
         // init these with null - will be replaced with a string array if the place value is used
         //
         mStimulusPlaceWords = new ArrayList[TCONST.MAX_DIGITS];
-        for(int i1 = 0 ; i1 < TCONST.MAX_DIGITS ; i1++) mStimulusPlaceWords[i1] = null;
+        mStimulusDigitWords = new ArrayList[TCONST.MAX_DIGITS];
 
-        generateStimPlaceWords(mStimulusValue, mStimulusString, mStimulusString.length()-1, 0);
+        for(int i1 = 0 ; i1 < TCONST.MAX_DIGITS ; i1++) {
+            mStimulusPlaceWords[i1] = null;
+            mStimulusDigitWords[i1] = null;
+        }
+
+        // Put the stimulus number text into place value order i.e  2000  -> "0002"
+        //
+        String placeOrder = new StringBuilder(mStimulusString).reverse().toString();
+
+        generateStimPlaceWords(mStimulusValue, placeOrder, mStimulusString.length()-1, 0);
 
         int power = 1;
 

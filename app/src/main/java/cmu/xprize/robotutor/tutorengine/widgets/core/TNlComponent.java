@@ -192,6 +192,10 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
             mTutor.setDelFeature(TCONST.FTR_P + i1 + TCONST._1WORDS);
             mTutor.setDelFeature(TCONST.FTR_P + i1 + TCONST._2WORDS);
             mTutor.setDelFeature(TCONST.FTR_P + i1 + TCONST._3WORDS);
+
+            mTutor.setDelFeature(TCONST.FTR_D + i1 + TCONST._1WORDS);
+            mTutor.setDelFeature(TCONST.FTR_D + i1 + TCONST._2WORDS);
+            mTutor.setDelFeature(TCONST.FTR_D + i1 + TCONST._3WORDS);
         }
     }
 
