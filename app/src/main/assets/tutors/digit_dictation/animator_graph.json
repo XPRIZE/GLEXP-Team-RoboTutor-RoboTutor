@@ -170,12 +170,9 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "TRUE:Boolean","features":""},
-            {"type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":""},
-            //{"type": "AUDIO", "command": "PLAY", "soundsource": "This is the number.mp3", "mode":"flow", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""} //the stimulus digit
-            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3", "mode":"flow", "features": ""},
-            //{"type": "AUDIO","command": "PLAY", "soundsource": "with your finger.mp3", "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""}
           ]
         },
 
@@ -211,7 +208,8 @@
             {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""}, //flag the incorrect string in red color
             {"type": "AUDIO", "command": "PLAY", "soundsource": "That looks like.mp3", "mode":"flow","features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sresponse.value}}.mp3","mode":"flow", "features": ""},  // the recognizer output
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""}
           ]
         },
 
@@ -222,9 +220,8 @@
           "tracks": [
             {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""}, //flag the incorrect string in red color
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Huh.mp3", "mode":"flow","features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "That doesnt look like.mp3", "mode":"flow","features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3","mode":"flow", "features": ""}, //the stimulus digit
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""}
           ]
         },
 
@@ -243,6 +240,7 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Incredible.mp3", "mode":"flow", "features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "You did a good job.mp3", "mode":"flow", "features": ""}
             //{"type": "AUDIO", "command": "PLAY", "soundsource": "You wrote all of them correctly.mp3",   "mode":"flow", "features": ""}
           ]
