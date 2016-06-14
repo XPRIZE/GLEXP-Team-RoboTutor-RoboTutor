@@ -125,6 +125,10 @@ public class CNl_PLRT implements CNl_Processor {
         return mStimulusPlaceWords[place-1].size();
     }
 
+    @Override
+    public int wordsInDigitValue(int place) {
+        return mStimulusDigitWords[place-1].size();
+    }
 
 
     // This provides access to the Stimulus array values as Strings
@@ -168,6 +172,23 @@ public class CNl_PLRT implements CNl_Processor {
                 case TCONST.PLACE1_WORDS_VAR:
                     result = ((String)mStimulusPlaceWords[0].get(index)).toLowerCase();
                     break;
+
+
+                case TCONST.DIGIT4_WORDS_VAR:
+                    result = ((String)mStimulusDigitWords[3].get(index)).toLowerCase();
+                    break;
+
+                case TCONST.DIGIT3_WORDS_VAR:
+                    result = ((String)mStimulusDigitWords[2].get(index)).toLowerCase();
+                    break;
+
+                case TCONST.DIGIT2_WORDS_VAR:
+                    result = ((String)mStimulusDigitWords[1].get(index)).toLowerCase();
+                    break;
+
+                case TCONST.DIGIT1_WORDS_VAR:
+                    result = ((String)mStimulusDigitWords[0].get(index)).toLowerCase();
+                    break;
             }
         }
         catch(Exception e) {
@@ -179,8 +200,17 @@ public class CNl_PLRT implements CNl_Processor {
 
 
     /**
-     * For each place value we generate an ArrayList of the words that constitute that place value when spoken.
-     * Note that this may include conjunctions.
+     * Use Num2Word which embodies the grammar rules for the construction of a spoken number uttereance. To generate
+     * the words that represent place values when a number is spoken as a whole and when each place value is
+     * spoken in isoloatin
+     *
+     * For each place value we generate an ArrayList of the words mStimulusPlaceWords that constitute that place
+     * value when spoken. Note that this may include conjunctions. -
+     * e.g. 123   for ten place we would get "twenty" -EN or "na ishirini" - SW
+     *
+     * We also generate  mStimulusDigitWords which is the words that constitute the number for a place value
+     * if spoken in isolation -
+     * e.g. 123   for ten place we would get "twenty" -EN or "ishirini" - SW
      *
      * To do this we step through the place values from high to low.
      *
@@ -198,9 +228,10 @@ public class CNl_PLRT implements CNl_Processor {
      * @param placeValue
      * @param parentLen
      */
-    private void generateStimPlaceWords(int Number, String text, int placeValue, int parentLen) {
+    private void generateStimPlaceWords(int prevPart, int Number, String text, int placeValue, int parentLen) {
 
-        ArrayList<String> Words = null;
+        ArrayList<String> Words  = null;
+        ArrayList<String> DWords = null;
 
         // assume 0 place values don't contribute to the spoken number
         // If zero we don't change the parentLen
@@ -210,11 +241,11 @@ public class CNl_PLRT implements CNl_Processor {
             // Strip off the part of the number below the place Value we are currently generating
             // e.g. if # - 1234 and place is 2 then we want only 1200
             //
-            int power     = (int) Math.pow(10, placeValue);
-            int partValue = (Number / power) * power;
+            int power      = (int) Math.pow(10, placeValue);
+            int partValue  = (Number / power) * power;
 
             // Generate the words that contitute that part of the number
-            // e.g. if # - 1200 = "one thousand two hundred"
+            // e.g. if # - 1200 = "one thousand two hundred" - including conjunctions
             //
             String partWords = Num2Word.transform(partValue, _Owner.getLanguage()).toUpperCase();
 
@@ -230,10 +261,31 @@ public class CNl_PLRT implements CNl_Processor {
             // Update the length of the string that constitutes the parent place value.
             //
             parentLen = partWords.length();
+
+
+            // Now generate the place value words in isolation
+            // remember the partValue for next iteration.
+            // i.e. given 2938 -
+            //  partPrev= 0     partValue - 2000   digitValue = 2000
+            //  partPrev= 2000  partValue - 2900   digitValue =  900
+            //  partPrev= 2900  partValue - 2930   digitValue =   30
+            //  partPrev= 2930  partValue - 2938   digitValue =    8
+            //
+            int digitValue = partValue - prevPart;
+            prevPart = partValue;
+
+            // Generate the words that constitute that place value in isolation
+            // e.g. if # - 1200 = "one thousand two hundred" - without conjunctions
+            //
+            partWords = Num2Word.transform(digitValue, _Owner.getLanguage()).toUpperCase();
+            DWords    = new ArrayList<String>(Arrays.asList(partWords.split(" ")));
+
+            Collections.reverse(DWords);
         }
 
         try {
             mStimulusPlaceWords[placeValue] =  Words;
+            mStimulusDigitWords[placeValue] =  DWords;
             placeValue--;
         }
         catch(Exception e) {
@@ -241,7 +293,7 @@ public class CNl_PLRT implements CNl_Processor {
         }
 
         if(placeValue >= 0) {
-            generateStimPlaceWords(Number, text, placeValue, parentLen);
+            generateStimPlaceWords(prevPart, Number, text, placeValue, parentLen);
         }
     }
 
@@ -300,7 +352,7 @@ public class CNl_PLRT implements CNl_Processor {
         //
         String placeOrder = new StringBuilder(mStimulusString).reverse().toString();
 
-        generateStimPlaceWords(mStimulusValue, placeOrder, mStimulusString.length()-1, 0);
+        generateStimPlaceWords(0, mStimulusValue, placeOrder, mStimulusString.length()-1, 0);
 
         int power = 1;
 

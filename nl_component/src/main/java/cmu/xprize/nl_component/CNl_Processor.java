@@ -31,7 +31,9 @@ public interface CNl_Processor {
     String getText();
 
     public boolean isPlaceValueUsed(int place);
+
     public int wordsInPlaceValue(int place);
+    public int wordsInDigitValue(int place);
 
     String deReference(String _listName, int index);
 
