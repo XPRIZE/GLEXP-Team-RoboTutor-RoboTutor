@@ -1,11 +1,11 @@
 {
   "animatorMap": {
-    "COMMENT": "Animation Graph for the Digit Copy Tutor",
+    "COMMENT": "Animation Graph for the Digit Dictation Tutor",
 
-    "digit_copy": {
+    "digit_dictation": {
 
       "type": "ANIMATOR",
-      "title": "Digit copying tutor",
+      "title": "Digit dictation tutor",
       "COMMENT": "This tutor is designed for dictating single digit numbers 0-9.",
       "version": "1.0.0",
       "rootnode": "INTRO_STATE",
