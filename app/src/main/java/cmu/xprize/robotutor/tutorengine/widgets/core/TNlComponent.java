@@ -59,7 +59,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
     private int             _correct = 0;
 
 
-    static final private String TAG = "TRtComponent";
+    static final private String TAG = "TNlComponent";
     private TTextView debugHypothesisView;
 
 
@@ -216,6 +216,17 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
                     mTutor.setAddFeature(TCONST.FTR_P + i1 + TCONST._2WORDS);
                 if(wordCnt >=3)
                     mTutor.setAddFeature(TCONST.FTR_P + i1 + TCONST._3WORDS);
+
+
+                wordCnt = mInputProcessor.wordsInDigitValue(i1);
+
+                if(wordCnt >=1)
+                    mTutor.setAddFeature(TCONST.FTR_D + i1 + TCONST._1WORDS);
+                if(wordCnt >=2)
+                    mTutor.setAddFeature(TCONST.FTR_D + i1 + TCONST._2WORDS);
+                if(wordCnt >=3)
+                    mTutor.setAddFeature(TCONST.FTR_D + i1 + TCONST._3WORDS);
+
             }
         }
     }
@@ -274,6 +285,11 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
                     scope.addUpdateVar(name() + TCONST.PLACE3_WORDS_VAR, new type_array(this, TCONST.PLACE3_WORDS_VAR));
                     scope.addUpdateVar(name() + TCONST.PLACE2_WORDS_VAR, new type_array(this, TCONST.PLACE2_WORDS_VAR));
                     scope.addUpdateVar(name() + TCONST.PLACE1_WORDS_VAR, new type_array(this, TCONST.PLACE1_WORDS_VAR));
+
+                    scope.addUpdateVar(name() + TCONST.DIGIT4_WORDS_VAR, new type_array(this, TCONST.DIGIT4_WORDS_VAR));
+                    scope.addUpdateVar(name() + TCONST.DIGIT3_WORDS_VAR, new type_array(this, TCONST.DIGIT3_WORDS_VAR));
+                    scope.addUpdateVar(name() + TCONST.DIGIT2_WORDS_VAR, new type_array(this, TCONST.DIGIT2_WORDS_VAR));
+                    scope.addUpdateVar(name() + TCONST.DIGIT1_WORDS_VAR, new type_array(this, TCONST.DIGIT1_WORDS_VAR));
                 }
 
                 // Note that we only process 4 possible place values - to go for numbers above 9999 you would need
