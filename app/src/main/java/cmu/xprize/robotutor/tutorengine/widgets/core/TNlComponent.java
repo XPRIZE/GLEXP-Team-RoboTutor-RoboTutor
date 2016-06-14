@@ -185,6 +185,38 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
     }
 
 
+    private void clearPlaceValueFeatures() {
+
+        for(int i1 = 4 ; i1 >= 1 ; i1--) {
+            mTutor.setDelFeature(TCONST.FTR_PLACE_ + i1 + TCONST._USED);
+            mTutor.setDelFeature(TCONST.FTR_P + i1 + TCONST._1WORDS);
+            mTutor.setDelFeature(TCONST.FTR_P + i1 + TCONST._2WORDS);
+            mTutor.setDelFeature(TCONST.FTR_P + i1 + TCONST._3WORDS);
+        }
+    }
+
+
+    private void publishPlaceValueFeatures() {
+
+        clearPlaceValueFeatures();
+
+        for(int i1 = 4 ; i1 >= 1 ; i1--) {
+            if(mInputProcessor.isPlaceValueUsed(i1)) {
+                mTutor.setAddFeature(TCONST.FTR_PLACE_ + i1 + TCONST._USED);
+
+                int wordCnt = mInputProcessor.wordsInPlaceValue(i1);
+
+                if(wordCnt >=1)
+                    mTutor.setAddFeature(TCONST.FTR_P + i1 + TCONST._1WORDS);
+                if(wordCnt >=2)
+                    mTutor.setAddFeature(TCONST.FTR_P + i1 + TCONST._2WORDS);
+                if(wordCnt >=3)
+                    mTutor.setAddFeature(TCONST.FTR_P + i1 + TCONST._3WORDS);
+            }
+        }
+    }
+
+
     /**
      * Publish the Stimulus value as Scope variables for script access
      * We have several things
@@ -230,9 +262,20 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
 
                     scope.addUpdateVar(name() + TCONST.DIGIT_STRING_VAR, new type_array(this, TCONST.DIGIT_STRING_VAR));
                     scope.addUpdateVar(name() + TCONST.PLACE_STRING_VAR, new type_array(this, TCONST.PLACE_STRING_VAR));
+
                     scope.addUpdateVar(name() + TCONST.DIGIT_TEXT_VAR, new type_array(this, TCONST.DIGIT_TEXT_VAR));
                     scope.addUpdateVar(name() + TCONST.PLACE_TEXT_VAR, new type_array(this, TCONST.PLACE_TEXT_VAR));
+
+                    scope.addUpdateVar(name() + TCONST.PLACE4_WORDS_VAR, new type_array(this, TCONST.PLACE4_WORDS_VAR));
+                    scope.addUpdateVar(name() + TCONST.PLACE3_WORDS_VAR, new type_array(this, TCONST.PLACE3_WORDS_VAR));
+                    scope.addUpdateVar(name() + TCONST.PLACE2_WORDS_VAR, new type_array(this, TCONST.PLACE2_WORDS_VAR));
+                    scope.addUpdateVar(name() + TCONST.PLACE1_WORDS_VAR, new type_array(this, TCONST.PLACE1_WORDS_VAR));
                 }
+
+                // Note that we only process 4 possible place values - to go for numbers above 9999 you would need
+                // to extend this.
+                //
+                publishPlaceValueFeatures();
 
             } catch (Exception e) {
             }
@@ -273,6 +316,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
         _wrong   = 0;
 
         // Assume all correct unless proven otherwise
+        // But clear result flags to start
         //
         mTutor.setAddFeature(TCONST.ALL_CORRECT);
         mTutor.setDelFeature(TCONST.FWCORRECT);

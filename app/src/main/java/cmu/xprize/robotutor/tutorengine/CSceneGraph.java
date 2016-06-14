@@ -58,8 +58,7 @@ public class CSceneGraph  {
     private boolean          mDisabled   = false;
 
     // State fields
-    private tutor_node _sceneNode;
-
+    private tutor_node               _sceneNode;
     private HashMap<String, Integer> _pFeatures;
 
 
@@ -80,6 +79,8 @@ public class CSceneGraph  {
 
         loadSceneGraphFactory((IScope2)mScope);
     }
+
+    // TODO: add onDestroy to release animatorMap resources
 
 
     /**

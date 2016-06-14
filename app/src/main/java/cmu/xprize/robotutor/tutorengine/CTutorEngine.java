@@ -110,7 +110,7 @@ public class CTutorEngine implements ILoadableObject2 {
         // TODO: is this initialization required?
         // Initialize the JSON Helper statics - just throw away the object.
         //
-        new JSON_Helper(Activity.getAssets(), CacheSource, RoboTutor.EXTERNFILES);
+        new JSON_Helper(Activity.getAssets(), CacheSource, RoboTutor.APP_PRIVATE_FILES);
 
         // Load the TCONST.EDESC and generate the root tutor
         //

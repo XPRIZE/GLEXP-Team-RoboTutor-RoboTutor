@@ -59,7 +59,7 @@ public class CTutorAssetManager {
             String   outPath;
 
             files   = mAssetManager.list(baseAsset);
-            outPath = RoboTutor.EXTERNFILES;
+            outPath = RoboTutor.APP_PRIVATE_FILES;
 
             // catch the special case where we are copying a single folder from assets root
             // as we may need to precreate the base folder.
@@ -97,7 +97,7 @@ public class CTutorAssetManager {
      */
     public boolean fileCheck(String path) {
 
-        File projects = new File(RoboTutor.EXTERNFILES + "/" + path);
+        File projects = new File(RoboTutor.APP_PRIVATE_FILES + "/" + path);
 
         return projects.exists();
     }
@@ -190,8 +190,8 @@ public class CTutorAssetManager {
 
 
     public void extractAsset(String zipName, String targetFolder) throws IOException {
-        String zipPath     = RoboTutor.EXTERNFILES + "/" + zipName;
-        String extractPath = RoboTutor.EXTERNFILES + targetFolder;
+        String zipPath     = RoboTutor.APP_PRIVATE_FILES + "/" + zipName;
+        String extractPath = RoboTutor.APP_PRIVATE_FILES + targetFolder;
 
         File file       = new File(zipPath);
         ZipFile zipFile = new ZipFile(file);

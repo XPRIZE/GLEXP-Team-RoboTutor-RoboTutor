@@ -888,7 +888,7 @@ public class type_timeline extends type_action implements IMediaListener {
                     in = _scope.tutor().openAsset(factoryPATH);
 
                 } else {
-                    String filePath = RoboTutor.EXTERNFILES + "/" + factoryPATH;
+                    String filePath = RoboTutor.APP_PRIVATE_FILES + "/" + factoryPATH;
 
                     in = new FileInputStream(filePath);
                 }

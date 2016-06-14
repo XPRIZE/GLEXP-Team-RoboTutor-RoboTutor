@@ -1,0 +1,176 @@
+{
+  // Session Manager v0.0.1 Data set.
+  //
+  // Supports multple rows with classes of activities.
+  // This data is ordered in both dimensions,
+  // To add a new Row:
+  //    Create a new Json Object in the dataSource array
+  //    "type" is the classMap for the IloadableObject class for the Row of buttons
+  //    For each tutor in the Row add an Sm_Data json Object describing the tutor
+  //
+  //    "intent" is the tutor name for natives or the full intent for intent based tutors.
+  //    "intentdata" is extra data for the intent
+  //        'native' tutors run in the TED engine and have access to all tutor features.
+  //        'browser' activities are not supported currently
+  //        <Intent> activities run in a webview or are std apps and are initiated through an intent
+  //
+  //    "buttontype" is 'text' or 'image'
+  //    "buttonvalue" is the ascii string for the text or the Drawable used for images.
+  //
+  // Note: Don't actually need the type elements.  It would infer the type from the
+  //       array type in the variable declaration.
+
+  "bgColors": ["#D9FFFF","#b9FFb9"],
+
+  "dataSource": [
+
+    {
+      "type":"Sm_Class",
+      "description":"numeric",
+      //"background":"#D9FFFF",
+      "data": [
+          { "type":"Sm_Data", "intent": "digit_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy"}
+
+        ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"writing",
+      //"background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data", "intent": "letter_copy2", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy a", "features":"FTR_LC" },
+        { "type":"Sm_Data", "intent": "letter_copy2", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy A", "features":"FTR_UC"  }
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_numeracy",
+      //"background":"#b9FFb9",
+      "data": [
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=shapes&mechanic=mcq&say=no&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Shape Pop1" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=shapes&mechanic=mcq&say=yes&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Shape Pop2" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=shapes&mechanic=rising&say=no&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Shape Pop3" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=shapes&mechanic=rising&say=yes&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Shape Pop4" }
+      ]
+    },
+    {
+      "type":"Sm_Class",
+      "description":"fluency_numeracy",
+      //"background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers_to_dots&mechanic=mcq&say=no&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Dot Pop1" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers_to_dots&mechanic=mcq&say=yes&show=yes&sequence=N/A", "buttontype":"text" , "buttonvalue":"Dot Pop2" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers_to_dots&mechanic=mcq&say=yes&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Dot Pop3" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers_to_dots&mechanic=mcq&say=no&show=yes&sequence=N/A", "buttontype":"text" , "buttonvalue":"Dot Pop4" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers_to_dots&mechanic=rising&say=no&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Dot Pop5" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers_to_dots&mechanic=rising&say=yes&show=yes&sequence=N/A", "buttontype":"text" , "buttonvalue":"Dot Pop6" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers_to_dots&mechanic=rising&say=yes&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Dot Pop7" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers_to_dots&mechanic=rising&say=no&show=yes&sequence=N/A", "buttontype":"text" , "buttonvalue":"Dot Pop8" }
+      ]
+    },
+    {
+      "type":"Sm_Class",
+      "description":"fluency_numeracy",
+      //"background":"#b9FFb9",
+      "data": [
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=dots_to_numbers&mechanic=mcq&say=no&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Number Pop1" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=dots_to_numbers&mechanic=mcq&say=yes&show=yes&sequence=N/A", "buttontype":"text" , "buttonvalue":"Number Pop2" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=dots_to_numbers&mechanic=mcq&say=yes&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Number Pop3" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=dots_to_numbers&mechanic=mcq&say=no&show=yes&sequence=N/A", "buttontype":"text" , "buttonvalue":"Number Pop4" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=dots_to_numbers&mechanic=rising&say=no&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Number Pop5" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=dots_to_numbers&mechanic=rising&say=yes&show=yes&sequence=N/A", "buttontype":"text" , "buttonvalue":"Number Pop6" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=dots_to_numbers&mechanic=rising&say=yes&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Number Pop7" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=dots_to_numbers&mechanic=rising&say=no&show=yes&sequence=N/A", "buttontype":"text" , "buttonvalue":"Number Pop8" }
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_numeracy",
+      //"background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=mcq&say=no&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Capital Pop1" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=mcq&say=yes&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Capital Pop2" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=mcq&say=no&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Capital Pop3" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=mcq&say=yes&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Capital Pop4" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=rising&say=no&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Capital Pop5" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=rising&say=yes&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Capital Pop6" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=rising&say=no&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Capital Pop7" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=rising&say=yes&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Capital Pop8" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=mcq&say=no&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop1" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=mcq&say=yes&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop2" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=mcq&say=no&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop3" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=mcq&say=yes&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop4" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=rising&say=no&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop5" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=rising&say=yes&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop6" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=rising&say=no&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop7" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=rising&say=yes&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop8" }
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_numeracy",
+      //"background":"#b9FFb9",
+      "data": [
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=mcq&say=no&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Letter Pop1" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=mcq&say=yes&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Letter Pop2" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=mcq&say=no&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Letter Pop3" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=mcq&say=yes&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Letter Pop4" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=rising&say=no&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Letter Pop5" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=rising&say=yes&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Letter Pop6" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=rising&say=no&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Letter Pop7" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=rising&say=yes&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Letter Pop8" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=mcq&say=no&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop1" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=mcq&say=yes&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop2" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=mcq&say=no&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop3" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=mcq&say=yes&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop4" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=rising&say=no&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop5" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=rising&say=yes&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop6" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=rising&say=no&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop7" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=rising&say=yes&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop8" }
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_numeracy",
+      //"background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=mcq&say=no&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Mix Pop1" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=mcq&say=yes&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Mix Pop2" },
+      //  { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=mcq&say=yes&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Mix Pop3" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=mcq&say=no&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Mix Pop3" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=rising&say=no&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Mix Pop4" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=rising&say=yes&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Mix Pop5" },
+      //  { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=rising&say=yes&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Mix Pop7" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=rising&say=no&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Mix Pop6" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=mcq&say=no&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop1" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=mcq&say=yes&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop2" },
+      //  { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=mcq&say=yes&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop3" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=mcq&say=no&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop3" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=rising&say=no&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop4" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=rising&say=yes&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop5" },
+      // { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=rising&say=yes&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop7" },
+        { "type":"Sm_Data", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=rising&say=no&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop6" }
+      ]
+    }
+
+
+
+    //    {
+//      "type":"Sm_Class",
+//      "description":"fluency_numeracy in Browser",
+//      "background":"#b9FFb9",
+//      "data": [
+//        { "type":"Sm_Data", "intent": "android_asset/games/bubblepop/index.html?level=shapes&difficulty=easy", "intentdata":"browser", "buttontype":"text" , "buttonvalue":"ShapePop1" },
+//        { "type":"Sm_Data", "intent": "android_asset/games/bubblepop/index.html?level=shapes&difficulty=hard", "intentdata":"browser", "buttontype":"text" , "buttonvalue":"ShapePop2" },
+//        { "type":"Sm_Data", "intent": "android_asset/games/bubblepop/index.html?level=numbers&difficulty=easy", "intentdata":"browser", "buttontype":"text" , "buttonvalue":"NumberPop1" },
+//        { "type":"Sm_Data", "intent": "android_asset/games/bubblepop/index.html?level=numbers&difficulty=hard", "intentdata":"browser", "buttontype":"text" , "buttonvalue":"NumberPop2" }
+//      ]
+//    }
+
+  ]
+}

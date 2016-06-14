@@ -62,6 +62,9 @@ public class type_audio extends type_action implements IMediaListener {
         mMediaManager = CMediaManager.getInstance();
     }
 
+    /**
+     * TODO: onDestroy not being called when tutor is killed
+     */
     public void onDestroy() {
 
         mMediaManager.detachMediaPlayer(this);

@@ -30,6 +30,9 @@ public interface CNl_Processor {
     int getValue();
     String getText();
 
+    public boolean isPlaceValueUsed(int place);
+    public int wordsInPlaceValue(int place);
+
     String deReference(String _listName, int index);
 
     void preProcessStimulus(String stimulusString);

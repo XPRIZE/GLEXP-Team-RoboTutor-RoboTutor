@@ -77,6 +77,8 @@
         "LAUNCH_TUTOR":{"type": "COMMAND", "cmd": "LAUNCH-TUTOR", "parms":"{{SsmComponent.intent}}:String|{{SsmComponent.intentData}}:String|{{SsmComponent.features}}:String" },
 
         "SET_DATASOURCE":{"type": "COMMAND", "id": "SsmComponent", "method": "setDataSource", "parms": "[file]sm_data.json:String","features":""},
+//        "SET_DATASOURCE":{"type": "COMMAND", "id": "SsmComponent", "method": "setDataSource", "parms": "[file]sm_data_asr.json:String","features":""},
+//        "SET_DATASOURCE":{"type": "COMMAND", "id": "SsmComponent", "method": "setDataSource", "parms": "[file]sm_data_noasr.json:String","features":""},
         "NEXT_DATASET":{"type": "COMMAND", "id": "SsmComponent", "method": "next" ,"features":""},
         "B1_ATTACH": {"type": "COMMAND", "id": "SdoneButton", "method": "setButtonBehavior", "parms": "NEXT:String"},
         "FW_SET_REC":{"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_ALPHA:String|[a-z&&[^qx]]:String","features":""},

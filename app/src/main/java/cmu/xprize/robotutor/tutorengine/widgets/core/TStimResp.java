@@ -65,10 +65,6 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
         mSceneObject.onDestroy();
     }
 
- //   @Override
-    public void addEventListener(String linkedView) {
-        //mListeners.add((IEventListener) mTutor.getViewById(linkedViewID, null));
-    }
 
     @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
     {

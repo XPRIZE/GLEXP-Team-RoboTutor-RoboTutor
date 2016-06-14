@@ -108,9 +108,9 @@ public class CMn_Component extends LinearLayout implements ILoadableObject, IVal
 
         // More alleys than we need
         if(delta < 0) {
-            while(delta > 0) {
+            while(delta < 0) {
                 trimAlley();
-                delta--;
+                delta++;
             }
         }
         // Fewer alleys than we need

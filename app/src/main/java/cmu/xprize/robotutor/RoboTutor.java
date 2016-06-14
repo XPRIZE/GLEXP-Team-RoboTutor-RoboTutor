@@ -25,28 +25,30 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
-import cmu.W2N_UnitTest;
+import cmu.xprize.robotutor.tutorengine.CLogManager;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
-import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorManager;
-import cmu.xprize.robotutor.tutorengine.widgets.core.TTextView;
-import cmu.xprize.util.CErrorDialog;
+import cmu.xprize.robotutor.tutorengine.widgets.core.IGuidView;
+import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.CEvent;
 import cmu.xprize.util.CPreferenceCache;
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventDispatcher;
+import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.IReadyListener;
+import cmu.xprize.util.IRoboTutor;
 import cmu.xprize.util.ProgressLoading;
+import cmu.xprize.util.StartDialog;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutorAssetManager;
 import cmu.xprize.util.TTSsynthesizer;
-import cmu.xprize.util.Word2NumFSM;
 import edu.cmu.xprize.listener.ListenerBase;
 
 
@@ -60,20 +62,29 @@ import edu.cmu.xprize.listener.ListenerBase;
  * <h3>Developer Overview</h3>
  *
  */
-public class RoboTutor extends Activity implements IReadyListener {
+public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     private CTutorEngine        tutorEngine;
     private ITutorManager       tutorContainer;
     private ProgressLoading     progressLoading;
+    private StartDialog         startDialog;
     private CMediaManager       mMediaManager;
 
-    public TTSsynthesizer       TTS;
+    public TTSsynthesizer       TTS = null;
     public ListenerBase         ASR;
-    static public String        EXTERNFILES;
+
+    static public CLogManager   mLogManager;
+    static public String        APP_PRIVATE_FILES;
+    static public String        LOG_ID = "STARTUP";
 
     private boolean             isReady       = false;
     private boolean             engineStarted = false;
 
+    // TODO: This is a temporary log update mechanism - see below
+    //
+    static private IGuidView    guidCallBack;
+
+    public final static String  LOG_PATH = Environment.getExternalStorageDirectory() + TCONST.ROBOTUTOR_FOLDER;
 
     private final  String  TAG = "CRoboTutor";
 
@@ -81,11 +92,20 @@ public class RoboTutor extends Activity implements IReadyListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-        super.onCreate(null);
-        Log.i(TAG, "onCreate: " + savedInstanceState);
 
-        //W2N_UnitTest test = new W2N_UnitTest();
+        // Note = we don't want the system to try and recreate any of our views- always pass null
+        super.onCreate(null);
+
+        // Prep the CPreferenceCache
+        // Update the globally accessible id object for this engine instance.
+        //
+        LOG_ID = CPreferenceCache.initLogPreference(this);
+
+        mLogManager = CLogManager.getInstance();
+        mLogManager.startLogging();
+        CErrorManager.setLogManager(mLogManager);
+
+        mLogManager.postTimeStamp("Session Start");
 
         setContentView(R.layout.robo_tutor);
 
@@ -94,11 +114,16 @@ public class RoboTutor extends Activity implements IReadyListener {
 
         setFullScreen();
 
-        EXTERNFILES = getApplicationContext().getExternalFilesDir("").getPath();
+        APP_PRIVATE_FILES = getApplicationContext().getExternalFilesDir("").getPath();
 
         // Initialize the media manager singleton - it needs access to the App assets.
         //
         mMediaManager = CMediaManager.getInstance();
+
+        // Create the start dialog
+        // TODO: This is a temporary log update mechanism - see below
+        //
+        startDialog = new StartDialog(this);
 
         // Show the loader
         //
@@ -109,9 +134,19 @@ public class RoboTutor extends Activity implements IReadyListener {
 
     @Override
     protected void onDestroy() {
-        Log.i(TAG, "onDestroy: ");
+        mLogManager.postEvent(TAG, "onDestroy: ");
 
         super.onDestroy();
+
+        mLogManager.postEvent(TAG, "Releasing Flite");
+
+        if(TTS != null) {
+            TTS.shutDown();
+            TTS = null;
+        }
+        mLogManager.postTimeStamp("Session End");
+
+        mLogManager.stopLogging();
     }
 
 
@@ -123,7 +158,7 @@ public class RoboTutor extends Activity implements IReadyListener {
     @Override
     protected void onRestoreInstanceState(Bundle bundle) {
         //super.onRestoreInstanceState(bundle);
-        Log.i(TAG, "onRestoreInstanceState" + bundle);
+        mLogManager.postEvent(TAG, "onRestoreInstanceState" + bundle);
     }
 
 
@@ -160,15 +195,15 @@ public class RoboTutor extends Activity implements IReadyListener {
                 // At the moment we always reinstall the tutor spec data - for development
                 if(CTutorEngine.CacheSource.equals(TCONST.EXTERN)) {
                     tutorAssetManager.installAssets(TCONST.TUTORROOT);
-                    Log.i(TAG, "INFO: Tutor Assets installed:");
+                    mLogManager.postEvent(TAG, "INFO: Tutor Assets installed:");
                 }
 
                 if(!tutorAssetManager.fileCheck(TCONST.INSTALL_FLAG)) {
                     tutorAssetManager.installAssets(TCONST.LTK_ASSETS);
-                    Log.i(TAG, "INFO: LTK Assets copied:");
+                    mLogManager.postEvent(TAG, "INFO: LTK Assets copied:");
 
                     tutorAssetManager.extractAsset(TCONST.LTK_DATA_FILE, TCONST.LTK_DATA_FOLDER);
-                    Log.i(TAG, "INFO: LTK Assets installed:");
+                    mLogManager.postEvent(TAG, "INFO: LTK Assets installed:");
                 }
                 result = true;
 
@@ -196,13 +231,13 @@ public class RoboTutor extends Activity implements IReadyListener {
     @Override
     public void onServiceReady(String serviceName, int status) {
 
-        Log.i(TAG, "onServiceReady: " + serviceName + " : is : " + status);
+        mLogManager.postEvent(TAG, "onServiceReady: " + serviceName + " : is : " + status);
 
         // As the services come online push a global reference to CTutor
         //
         switch(serviceName) {
             case TCONST.TTS:
-                Log.i(TAG, "Attaching to Flite");
+                mLogManager.postEvent(TAG, "Attaching to Flite");
 
                 mMediaManager.setTTS(TTS);
                 break;
@@ -222,12 +257,13 @@ public class RoboTutor extends Activity implements IReadyListener {
      */
     private void startEngine() {
 
-        if(TTS.isReady() && ASR.isReady() && isReady) {
+        if((TTS != null && TTS.isReady()) &&
+           (ASR != null && ASR.isReady()) && isReady) {
 
             if(!engineStarted) {
                 engineStarted = true;
 
-                Log.i(TAG, "startTutorEngine");
+                mLogManager.postEvent(TAG, "startTutorEngine");
 
                 // Delete the asset loader utility ASR object
                 ASR = null;
@@ -237,11 +273,40 @@ public class RoboTutor extends Activity implements IReadyListener {
                 // Initialize the Engine - set the EXTERN File path for file installs
                 // Load the default tutor defined in assets/tutors/engine_descriptor.json
                 // TODO: Handle tutor creation failure
+                //
                 tutorEngine = CTutorEngine.getTutorEngine(RoboTutor.this, tutorContainer);
 
+                // This is here for when startDialog.show is gone
                 setFullScreen();
+
+                // TODO: This is a temporary log update mechanism - see below
+                //
+                startDialog.show();
             }
         }
+    }
+
+
+    // TODO: This is a temporary log update mechanism - see below
+    //
+    static public void setGUIDCallBack(IGuidView callBack) {
+
+        guidCallBack = callBack;
+    }
+
+    // TODO: This is a temporary log update mechanism - see below
+    //
+    public void onStartTutor() {
+
+        mLogManager.postEvent(TAG, "Updated Logging GUID: " + LOG_ID);
+        LOG_ID = CPreferenceCache.initLogPreference(this);
+        mLogManager.startLogging();
+
+        // Push the GUID to the SessionManager UI
+        guidCallBack.updateText();
+
+        startDialog.hide();
+        setFullScreen();
     }
 
 
@@ -250,7 +315,12 @@ public class RoboTutor extends Activity implements IReadyListener {
      */
     @Override
     public void onBackPressed() {
-        Log.i(TAG, "onBackPressed");
+        mLogManager.postEvent(TAG, "onBackPressed");
+        mLogManager.stopLogging();
+
+        // TODO: This is a temporary log update mechanism - see below
+        //
+        startDialog.show();
 
         if(tutorEngine != null) {
             if(tutorEngine.onBackButton()) {
@@ -271,38 +341,46 @@ public class RoboTutor extends Activity implements IReadyListener {
     protected void onStart() {
 
         super.onStart();
-        Log.i(TAG, "onStart Robotutor: On-Screen");
+        mLogManager.postEvent(TAG, "onStart Robotutor: On-Screen");
 
         // We only want to run the engine start sequence once per onStart call
         //
         engineStarted = false;
 
         // Debug - determine platform dependent memory limit
+        //
         ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-        int memAvail = am.getMemoryClass();
-        Log.i(TAG, "Available Memory: " + memAvail);
+        int memAvail       = am.getMemoryClass();
+
+        mLogManager.postEvent(TAG, "Available Memory: " + memAvail);
 
         // Create the common TTS service
         // Async
         //
-        TTS = new TTSsynthesizer(this);
-        TTS.initializeTTS(this);
+        if(TTS == null) {
+
+            mLogManager.postEvent(TAG, "Creating New TTS");
+
+            TTS = new TTSsynthesizer(this);
+            TTS.initializeTTS(this);
+        }
 
         // Create an inert listener for asset initialization only
         // Start the configListener async task to update the listener assets only if required.
         // This moves the listener assets to a local folder where they are accessible by the
         // NDK code (PocketSphinx)
         //
-        ASR = new ListenerBase("configassets");
-        ASR.configListener(this);
+        if(ASR == null) {
+
+            mLogManager.postEvent(TAG, "Creating New ASR");
+
+            ASR = new ListenerBase("configassets");
+            ASR.configListener(this);
+        }
 
         // Start the async task to initialize the tutor
         //
         new tutorConfigTask().execute();
-
-        // Update the globally accessible id object for this engine instance.
-        //
-        CPreferenceCache.initLogPreference(this);
     }
 
 
@@ -312,7 +390,7 @@ public class RoboTutor extends Activity implements IReadyListener {
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.i(TAG, "onRestart Robotutor");
+        mLogManager.postEvent(TAG, "onRestart Robotutor");
     }
 
 
@@ -322,9 +400,7 @@ public class RoboTutor extends Activity implements IReadyListener {
     @Override
     protected void onStop() {
         super.onStop();
-        Log.i(TAG, "onStop Robotutor: Off-Screen");
-
-        tutorEngine.killAllTutors();
+        mLogManager.postEvent(TAG, "onStop Robotutor: Off-Screen");
     }
 
 
@@ -341,17 +417,18 @@ public class RoboTutor extends Activity implements IReadyListener {
     protected void onPause() {
 
         super.onPause();
-        Log.i(TAG, "onPause Robotutor");
+        mLogManager.postEvent(TAG, "onPause Robotutor");
+
+        // Need to do this before releasing TTS
+        //
+        //tutorEngine.killAllTutors();
 
         if(TTS != null && TTS.isReady()) {
 
-            Log.i(TAG, "Releasing Flite");
+            mLogManager.postEvent(TAG, "Releasing Flite");
 
-            TTS.stopSpeaking();
-
-            // TODO: This seems to cause a Flite internal problem
-            //TTS.shutDown();
-
+            // TODO: This seems to cause a Flite internal problem???
+            TTS.shutDown();
             TTS = null;
         }
 
@@ -366,7 +443,7 @@ public class RoboTutor extends Activity implements IReadyListener {
     protected void onResume() {
 
         super.onResume();
-        Log.i(TAG, "Resuming Robotutor");
+        mLogManager.postEvent(TAG, "Resuming Robotutor");
 
         SharedPreferences prefs = getPreferences(0);
 
@@ -385,11 +462,7 @@ public class RoboTutor extends Activity implements IReadyListener {
     @Override
     protected void onSaveInstanceState (Bundle outState) {
         super.onResume();
-        Log.i(TAG, "onSaveInstanceState Robotutor");
-
-
+        mLogManager.postEvent(TAG, "onSaveInstanceState Robotutor");
     }
-
-
 }
 
