@@ -311,7 +311,8 @@
         "REMOVESTIMULUS":{"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "FALSE:Boolean","features":""},
         //remove the stimulus
 
-        "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "gotoNextScene"},
+        "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "NEXTSCENE" },
+
         "NEXT": {"type": "COMMAND", "cmd": "NEXT"  }
       },
 
