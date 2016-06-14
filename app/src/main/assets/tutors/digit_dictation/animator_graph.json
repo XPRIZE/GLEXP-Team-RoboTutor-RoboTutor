@@ -161,7 +161,8 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some numbers.mp3", "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now you will hear some numbers to write.mp3", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Listen carefully.mp3", "mode":"flow", "features": ""}
           ]
         },
 
