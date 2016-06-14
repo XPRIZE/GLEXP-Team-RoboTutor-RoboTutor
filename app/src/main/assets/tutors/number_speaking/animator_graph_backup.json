@@ -1,0 +1,548 @@
+{
+  "animatorMap": {
+    "COMMENT": "Animation Graph for the Digit Copy Tutor",
+
+    "number_speaking": {
+
+      "type": "ANIMATOR",
+      "title": "Number speaking tutor",
+      "COMMENT": "TBD",
+      "version": "1.0.0",
+      "rootnode": "INTRO_STATE",
+
+      "nodeMap": {
+
+        "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        "INTRO_STATE": {
+          "type": "NODE",
+          "COMMENT": "Intro Clip",
+          "maptype":"moduleMap",
+          "mapname": "PLAYINTRO",
+          "preenter":["SET_DATASOURCE"],
+          "preexit" :[],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "NEW_NUMBER"
+            }
+          ]
+        },
+
+        "NEW_NUMBER":{
+          "COMMENT":"This node presents a number for user to speak.",
+          "type":"node",
+          "preenter":["GETNUM"],
+          "maptype":"moduleMap",
+          "mapname": "SHOW_NUMBER",
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"USERINPUT"}
+          ]
+        },
+
+        "USERINPUT":{
+          "COMMENT":"When module is complete - move to next scene in the scenegraph",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "LISTENING",
+          "preenter":["LISTENER_ENABLE","HESTITATION_TIMER","SET_WORD_EVENT"],
+          "preexit" :["LISTENER_DISABLE","RESET_WORD_EVENT"],
+          "edges":
+          [
+            {"constraint":"FTR_RIGHT",     "edge":"CORRECT"},
+            {"constraint":"1_DIGIT", "edge":"NOT_CORRECT1"},
+            {"constraint":"2_DIGIT", "edge":"NOT_CORRECT2"},
+            {"constraint":"",              "edge":"NOT_CORRECT3"}
+            // The default edge is for Thousands remediation.
+          ]
+        },
+
+        "CORRECT":{
+          "COMMENT":"When user speaks a correct answer...",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "CONFIRM",
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"1_DIGIT" ,"edge":"CORRECT1"},
+            {"constraint":"2_DIGIT","edge":"CORRECT2"},
+            {"constraint":""            ,"edge":"CORRECT3"}
+          ]
+        },
+
+        "CORRECT1":{
+          "COMMENT":"When user speaks a correct answer...",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "CONFIRM1",
+          "preenter":[],
+          "preexit" :["REMOVERESPONSE","REMOVESTIMULUS"],
+          "edges":
+          [
+            {"constraint":"COMPLETE_CORRECT" ,"edge":"EXITCLIP1"},
+            {"constraint":"SOME_CORRECT","edge":"EXITCLIP2"},
+            {"constraint":""            ,"edge":"NEW_NUMBER"}
+          ]
+        },
+
+        "CORRECT2":{
+          "COMMENT":"When user speaks a correct answer...",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "CONFIRM2",
+          "preenter":[],
+          "preexit" :["REMOVERESPONSE","REMOVESTIMULUS"],
+          "edges":
+          [
+            {"constraint":"COMPLETE_CORRECT" ,"edge":"EXITCLIP1"},
+            {"constraint":"SOME_CORRECT","edge":"EXITCLIP2"},
+            {"constraint":""            ,"edge":"NEW_NUMBER"}
+          ]
+        },
+
+        "CORRECT3":{
+          "COMMENT":"When user speaks a correct answer...",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "CONFIRM3",
+          "preenter":[],
+          "preexit" :["REMOVERESPONSE","REMOVESTIMULUS"],
+          "edges":
+          [
+            {"constraint":"COMPLETE_CORRECT" ,"edge":"EXITCLIP1"},
+            {"constraint":"SOME_CORRECT","edge":"EXITCLIP2"},
+            {"constraint":""            ,"edge":"NEW_NUMBER"}
+          ]
+        },
+
+        "NOT_CORRECT1":{
+          "COMMENT":"When user speaks an incorrect answer for single digit number...",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "REMEDIATE1",
+          "preenter":[],
+          "preexit" :["REMOVERESPONSE"],
+          "edges":
+          [
+            {"constraint":"","edge":"USERINPUT"}
+          ]
+        },
+
+        "NOT_CORRECT2":{
+          "COMMENT":"When user speaks an incorrect answer for two digit number...",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "REMEDIATE2",
+          "preenter":[],
+          "preexit" :["REMOVERESPONSE"],
+          "edges":
+          [
+            {"constraint":"","edge":"USERINPUT"}
+          ]
+        },
+
+
+        "NOT_CORRECT3":{
+          "COMMENT":"When user speaks an incorrect answer for three digit number...",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "REMEDIATE3",
+          "preenter":[],
+          "preexit" :["REMOVERESPONSE"],
+          "edges":
+          [
+            {"constraint":"","edge":"USERINPUT"}
+          ]
+        },
+
+
+        "EXITCLIP1": {
+          "COMMENT":"Exit Clip for ALL_CORRECT",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "PLAYEXIT1",
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"NEXTSCENE"}
+          ]
+        },
+
+        "EXITCLIP2": {"COMMENT":"Exit Clip for NOT_ALL_CORRECT",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "PLAYEXIT2",
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"NEXTSCENE"}
+          ]
+        },
+
+        "NEXTSCENE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname":"GOTONEXTSCENE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+          ]
+        }
+      },
+
+      "moduleMap": {
+
+        "COMMENT": "@@@@@  CModules  @@@@@",
+
+        "PLAYINTRO":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "Sresponse", "method": "onRecognitionComplete", "parms": "NEXT:String"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "When you see a number say it aloud.mp3","mode":"flow", "features": ""}
+            //{"type": "TTS", "command": "SAY", "content": "Tafadhali kuzungumza idadi sauti", "rate":"1.2", "features": "LANG_SW"},
+            //{"type": "TTS", "command": "SAY", "content": "Please speak the number aloud", "features": "LANG_EN"}
+          ]
+        },
+
+        "SHOW_NUMBER": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "normal:String","features":""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "TRUE:Boolean","features":""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":""}
+          ]
+        },
+
+        "LISTENING":{
+          "type":"MODULE",
+          "reuse":true,
+          "COMMENT": "Listening Module",
+          "tracks": [
+            {"type": "COMMAND", "id": "Sresponse", "method": "onStartTalking", "parms": "CANCEL_REMINDER:String"},
+            {"type": "COMMAND", "id":"Sresponse", "method":"configureTimedEvent", "parms": "WORD_TIMEOUT:String|HESITATION_WORD_TIMEOUT:String|5000:Integer", "features": "" },
+            // This would call the cancel reminder action below when the user starts writing
+            {"type": "COMMAND", "id": "Sresponse", "method": "onRecognitionComplete", "parms": "NEXT:String"},
+            // This would increment the animation_graph when it is in a wait state.  e.g if it is sitting at the end of a stream audio clip
+            {"type": "COMMAND", "cmd": "WAIT" }
+            //{"type": "COMMAND", "id": "Sresponse", "method": "show", "parms": "TRUE:Boolean","features":""}
+          ]
+        },
+
+        "CONFIRM":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "right:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Yes.mp3","mode":"flow", "features": ""}
+          ]
+        },
+
+        "CONFIRM1":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            //{"type": "AUDIO", "command": "PLAY", "soundsource": "This number is.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.string}}.mp3","mode":"flow", "features": ""}
+            //{"type": "TTS", "command": "SAY", "content": "{{Sstimulus.text}}", "rate":"1.2", "features": "LANG_SW"},
+            //{"type": "TTS", "command": "SAY", "content": "{{Sstimulus.text}}", "features": "LANG_EN"}
+          ]
+        },
+
+        "CONFIRM2":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            //{"type": "AUDIO", "command": "PLAY", "soundsource": "This number is.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitText[1]}}.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "and.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitText[0]}}.mp3","mode":"flow", "features": ""}
+            //{"type": "TTS", "command": "SAY", "content": "{{Sstimulus.text}}", "rate":"1.2", "features": "LANG_SW"},
+            //{"type": "TTS", "command": "SAY", "content": "{{Sstimulus.text}}", "features": "LANG_EN"}
+          ]
+        },
+
+        "CONFIRM3":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            //{"type": "AUDIO", "command": "PLAY", "soundsource": "This number is.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitText[2]}}.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "and.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitText[1]}}.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "and.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitText[0]}}.mp3","mode":"flow", "features": ""}
+            //{"type": "TTS", "command": "SAY", "content": "{{Sstimulus.text}}", "rate":"1.2", "features": "LANG_SW"},
+            //{"type": "TTS", "command": "SAY", "content": "{{Sstimulus.text}}", "features": "LANG_EN"}
+          ]
+        },
+
+        "HESITATION_START_TIMEOUT":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            //{"type": "TTS", "command": "SAY", "content": "Tafadhali kuzungumza idadi sauti", "rate":"1.2", "features": "LANG_SW"},
+            //{"type": "TTS", "command": "SAY", "content": "Please speak the number aloud", "features": "LANG_EN"}
+            {"type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "What is this number.mp3","mode":"stream", "features": ""}
+            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Please say this number aloud.mp3","mode":"flow", "features": ""}
+          ]
+        },
+
+        "HESITATION_WORD_TIMEOUT":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            //{"type": "TTS", "command": "SAY", "content": "Tafadhali kuzungumza idadi sauti", "rate":"1.2", "features": "LANG_SW"},
+            //{"type": "TTS", "command": "SAY", "content": "Please speak the number aloud", "features": "LANG_EN"}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please say this number aloud.mp3","mode":"stream", "features": ""}
+            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Please say this number aloud.mp3","mode":"flow", "features": ""}
+          ]
+        },
+
+        "REMEDIATE1": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "This number is.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.string}}.mp3","mode":"flow", "features": ""},
+            //{"type": "TTS", "command": "SAY", "content": "{{Sstimulus.text}}", "rate":"1.2", "features": "LANG_SW"},
+            //{"type": "TTS", "command": "SAY", "content": "{{Sstimulus.text}}", "features": "LANG_EN"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
+          ]
+        },
+
+        "REMEDIATE2": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Huh.mp3","mode":"flow", "features": ""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "2:Integer|green:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitString[1]}}.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "means.mp3","mode":"flow", "features": ""},
+            //place value for tens
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitText[1]}}.mp3","mode":"flow", "features": ""},
+            //{"type": "TTS", "command": "SAY", "content": "{{Sstimulus.placeText[1]}}", "rate":"1.2", "features": "LANG_SW"},
+            //{"type": "TTS", "command": "SAY", "content": "{{Sstimulus.placeText[1]}}", "features": "LANG_EN"},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "2:Integer|normal:String","features":""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "1:Integer|green:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitString[0]}}.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "means.mp3","mode":"flow", "features": ""},
+            //{"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "1:Integer|right:String","features":""},
+            //place value for ones
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitText[0]}}.mp3","mode":"flow", "features": ""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "1:Integer|normal:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "So this number is.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitText[1]}}.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "and.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitText[0]}}.mp3","mode":"flow", "features": ""},
+            //{"type": "TTS", "command": "SAY", "content": "{{Sstimulus.text}}", "rate":"1.2", "features": "LANG_SW"},
+            //{"type": "TTS", "command": "SAY", "content": "{{Sstimulus.text}}", "features": "LANG_EN"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
+          ]
+        },
+
+        "REMEDIATE3": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Huh.mp3","mode":"flow", "features": ""},
+            //{"type": "AUDIO", "command": "PLAY", "soundsource": "This.mp3","mode":"flow", "features": ""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "3:Integer|green:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitString[2]}}.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "means.mp3","mode":"flow", "features": ""},
+            //place value for hundreds
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitText[2]}}.mp3","mode":"flow", "features": ""},
+            //{"type": "TTS", "command": "SAY", "content": "{{Sstimulus.placeText[2]}}", "rate":"1.2", "features": "LANG_SW"},
+            //{"type": "TTS", "command": "SAY", "content": "{{Sstimulus.placeText[2]}}", "features": "LANG_EN"},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "3:Integer|normal:String","features":""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "2:Integer|green:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitString[1]}}.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "means.mp3","mode":"flow", "features": ""},
+            //place value for tens
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitText[1]}}.mp3","mode":"flow", "features": ""},
+            //{"type": "TTS", "command": "SAY", "content": "{{Sstimulus.placeText[1]}}", "rate":"1.2", "features": "LANG_SW"},
+            //{"type": "TTS", "command": "SAY", "content": "{{Sstimulus.placeText[1]}}", "features": "LANG_EN"},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "2:Integer|normal:String","features":""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "1:Integer|green:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitString[0]}}.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "means.mp3","mode":"flow", "features": ""},
+            //{"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "1:Integer|right:String","features":""},
+            //place value for ones
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitText[0]}}.mp3","mode":"flow", "features": ""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setPlaceValueColor", "parms": "1:Integer|normal:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "So this number is.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitText[2]}}.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "and.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitText[1]}}.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "and.mp3","mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.digitText[0]}}.mp3","mode":"flow", "features": ""},
+            //{"type": "TTS", "command": "SAY", "content": "{{Sstimulus.text}}", "rate":"1.2", "features": "LANG_SW"},
+            //{"type": "TTS", "command": "SAY", "content": "{{Sstimulus.text}}", "features": "LANG_EN"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
+          ]
+        },
+
+        "PLAYEXIT1":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "You did a good job.mp3", "mode":"flow", "features": ""}
+          ]
+        },
+
+        "PLAYEXIT2":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3",                    "mode":"flow", "features": ""}
+          ]
+        }
+
+      },
+
+      "actionMap": {
+
+        "my_action": {"type": "TIMER", "name": "hint_timeout", "duration":"20", "repeat":"false", "action":"START", "ontimer":"ACTION_NAME", "features": "" },
+
+        "COMMENT": "@@@@@  CActions @@@@@ ",
+
+        "STOP": {"type": "COMMAND", "cmd": "WAIT" },
+
+        "INIT_TTS_RATE": {"type": "TTS", "command": "SET_RATE", "rate":"1.2", "features": "LANG_SW"},
+
+        "GETNUMWORDS":{"type": "COMMAND", "id": "", "method": "", "parms": "", "features": ""},
+
+        "HESTITATION_TIMER": {"type": "COMMAND", "id":"Sresponse", "method":"configureTimedEvent", "parms": "START_TIMEOUT:String|HESITATION_START_TIMEOUT:String|5000:Integer", "features": "" },
+        "HESTITATION_RESET": {"type": "COMMAND", "id":"Sresponse", "method":"clearTimedEvent",     "parms": "START_TIMEOUT:String",                                       "features": "" },
+
+        "SET_WORD_EVENT":   {"type": "COMMAND", "id":"Sresponse", "method":"configureEvent", "parms": "WORD_EVENT:String|HESTITATION_RESET:String", "features": "" },
+        "RESET_WORD_EVENT": {"type": "COMMAND", "id":"Sresponse", "method":"clearEvent",     "parms": "WORD_EVENT:String",                          "features": "" },
+
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[20,12]:String","features":""},
+
+        "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HESITATION_TRACK", "features": "" },
+
+        "CANCEL_REMINDER": {"type": "TIMER", "id":"ReminderTimer", "action":"CANCEL", "features": "" },
+
+        "HESITATION_TRACK": {"type": "COMMAND", "id": "Sstimulus", "features": ""},
+
+        "GB_DISABLE":{"type": "COMMAND", "id": "SgoButton", "method": "enable", "parms": "FALSE:Boolean","features":""},
+
+        "GB_ENABLE":{"type": "COMMAND", "id": "SgoButton", "method": "enable", "parms": "TRUE:Boolean","features":""},
+
+
+        "LISTENER_DISABLE":{"type": "COMMAND", "id": "Sresponse", "method": "listen", "parms": "FALSE:Boolean","features":""},
+
+        "LISTENER_ENABLE":{"type": "COMMAND", "id": "Sresponse", "method": "listen", "parms": "TRUE:Boolean","features":""},
+
+
+        "GETNUM":{"type": "COMMAND", "id": "Sstimulus", "method": "next" ,"features":""},
+
+        "SHOWRESPONSE":{"type": "COMMAND", "id": "Sresponse", "method": "show", "parms": "TRUE:Boolean","features":""},
+        "REMOVERESPONSE":{"type": "COMMAND", "id": "Sresponse", "method": "clear", "features":""},
+
+        "SHOWSTIMULUS":{"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "TRUE:Boolean","features":""},
+        "REMOVESTIMULUS":{"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "FALSE:Boolean","features":""},
+
+        "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "NEXTSCENE" },
+
+        "NEXT": {"type": "COMMAND", "cmd": "NEXT"  }
+      },
+
+      "constraintMap": {
+
+        "COMMENT": "@@@@@  CConstraints @@@@@ ",
+
+        "1_DIGIT": {
+          "type": "CONDITION",
+          "If": "{{Sstimulus.digits}}==1",
+          "Then":"true",
+          "Else":"false"
+        },
+
+        "2_DIGIT": {
+          "type": "CONDITION",
+          "If": "{{Sstimulus.digits}}==2",
+          "Then":"true",
+          "Else":"false"
+        },
+
+        "3_DIGIT": {
+          "type": "CONDITION",
+          "If": "{{Sstimulus.digits}}==3",
+          "Then":"true",
+          "Else":"false"
+        },
+
+        "COMPLETE_CORRECT": {
+          "type": "CONDITION",
+          "If": "END_OF_DATA && ALL_CORRECT",
+          "Then":"true",
+          "Else":"false"
+        },
+
+        "SOME_CORRECT": {
+          "type": "CONDITION",
+          "If": "END_OF_DATA && NOT_ALL_CORRECT",
+          "Then":"true",
+          "Else":"false"
+        },
+
+        "END_OF_DATA":{
+          "type": "CONDITION",
+          "test":"FTR_EOD"
+        },
+
+        "ALL_CORRECT":{
+          "type": "CONDITION",
+          "test":"ALL_CORRECT"
+        },
+
+        "NOT_ALL_CORRECT":{
+          "type": "CONDITION",
+          "test":"!ALL_CORRECT"
+        },
+
+        "FTR_RIGHT":{
+          "type": "CONDITION",
+          "test":"FTR_RIGHT"
+        },
+
+        "FTR_WRONG":{
+          "type": "CONDITION",
+          "test":"FTR_WRONG"
+        },
+
+        "FTR_UNRECOGNIZED":{
+          "type": "CONDITION",
+          "test":"FTR_UNRECOGNIZED"
+        }
+      }
+    }
+  }
+}
