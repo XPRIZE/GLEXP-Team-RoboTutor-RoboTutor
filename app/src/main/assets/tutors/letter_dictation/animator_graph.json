@@ -1,12 +1,12 @@
 {
   "animatorMap": {
-    "COMMENT": "Animation Graph for the Digit Dictation Tutor",
+    "COMMENT": "Animation Graph for the Letter dictation Tutor",
 
-    "digit_dictation": {
+    "letter_dictation": {
 
       "type": "ANIMATOR",
-      "title": "Digit dictation tutor",
-      "COMMENT": "This tutor is designed for dictating single digit numbers 0-9.",
+      "title": "Uppercase letter dictation tutor",
+      "COMMENT": "This tutor is designed for dictating letter a-z and A-Z.",
       "version": "1.0.0",
       "rootnode": "INTRO_STATE",
 
@@ -31,7 +31,7 @@
         },
 
         "NEWCHAR":{
-          "COMMENT":"This node presents a digit for user to write.",
+          "COMMENT":"This node presents a letter for user to write.",
           "type":"node",
           "preenter":["GETCHAR"],
           "maptype":"moduleMap",
@@ -161,7 +161,7 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now you will hear some numbers to write.mp3", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now you will hear some letters to write.mp3", "mode":"flow", "features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Listen carefully.mp3", "mode":"flow", "features": ""}
           ]
         },
@@ -171,9 +171,9 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            //{"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.valueUC}}.mp3",   "mode":"flow", "features": ""}
             //{"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3", "mode":"flow", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""}
+            //{"type": "AUDIO","command": "PLAY", "soundsource": "with your finger.mp3", "mode":"flow", "features": ""}
           ]
         },
 
@@ -184,7 +184,7 @@
           "tracks": [
             {"type": "COMMAND", "id": "SfingerWriter", "method": "onStartWriting", "parms": "CANCEL_REMINDER:String"},
             // This would call the cancel reminder action below when the user starts writing
-            {"type": "COMMAND", "id": "Sresponse", "method": "onRecognitionComplete", "parms": "NEXT:String"},
+            {"type": "COMMAND", "id": "SfingerWriter", "method": "onRecognitionComplete", "parms": "NEXT:String"},
             // This would increment the animation_graph when it is in a wait state.  e.g if it is sitting at the end of a stream audio clip
             {"type": "COMMAND", "cmd": "WAIT" }
             //{"type": "COMMAND", "id": "Sresponse", "method": "show", "parms": "TRUE:Boolean","features":""}
@@ -208,9 +208,9 @@
           "tracks": [
             {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""}, //flag the incorrect string in red color
             {"type": "AUDIO", "command": "PLAY", "soundsource": "That looks like.mp3", "mode":"flow","features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sresponse.value}}.mp3","mode":"flow", "features": ""},  // the recognizer output
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sresponse.valueUC}}.mp3","mode":"flow", "features": ""},  // the recognizer output
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3", "mode":"flow", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.valueUC}}.mp3",   "mode":"flow", "features": ""}
           ]
         },
 
@@ -222,28 +222,17 @@
             {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""}, //flag the incorrect string in red color
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Huh.mp3", "mode":"flow","features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3", "mode":"flow", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.valueUC}}.mp3",   "mode":"flow", "features": ""}
           ]
         },
-
-//        "PLAYHESITATION":{
-//          "type": "MODULE",
-//          "reuse":true,
-//          "COMMENT": "TBD",
-//          "tracks": [
-//            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3", "mode":"event", "features": ""},
-//            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"event", "features": ""} //the stimulus digit
-//          ]
-//        },
 
         "PLAYEXIT1":{
           "type": "MODULE",
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Incredible.mp3", "mode":"flow", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "You did a good job.mp3", "mode":"flow", "features": ""}
-            //{"type": "AUDIO", "command": "PLAY", "soundsource": "You wrote all of them correctly.mp3",   "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "You wrote all of them correctly.mp3",   "mode":"flow", "features": ""}
           ]
         },
 
@@ -252,8 +241,28 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "You did a good job.mp3", "mode":"flow", "features": ""}
-            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Next time you can do better.mp3",   "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Next time you can do better.mp3",   "mode":"flow", "features": ""}
+          ]
+        },
+
+        "SET_DATASOURCE":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,r,s,t,u,v,w,y,z]:String","features":"FTR_LC"},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,R,S,T,U,V,W,Y,Z]:String","features":"FTR_UC"}
+          ]
+        },
+
+        "FW_SET_REC":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_ALPHA:String|[a-z&&[^qx]]:String","features":"FTR_LC"},
+            {"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_ALPHA:String|[A-Z&&[^QX]]:String","features":"FTR_UC"}
           ]
         }
 
@@ -274,18 +283,12 @@
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
-
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[5,2,7,3,0,9,4,1,8]:String","features":""},
-
-        "FW_SET_REC":{"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_NUM:String","features":""},
-
         "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HESITATION_TRACK", "features": "" },
         //set the waiting time limit as 10 seconds
 
         "CANCEL_REMINDER": {"type": "TIMER", "id":"ReminderTimer", "action":"CANCEL", "features": "" },
 
-        "HESITATION_TRACK": {"type": "TIMELINE", "trackname": "HES_ABS", "features": ""},
+        "HESITATION_TRACK": {"type": "TIMELINE", "trackname": "LETTER_HES", "features": ""},
 
         "GB_DISABLE":{"type": "COMMAND", "id": "SgoButton", "method": "enable", "parms": "FALSE:Boolean","features":""},
         //disable Go button
@@ -298,7 +301,7 @@
         //enable FingerWriting
 
         "GETCHAR":{"type": "COMMAND", "id": "Sstimulus", "method": "next" ,"features":""},
-        //get a new digit from the list.
+        //get a new character from the list.
 
         //"GETRESPONSE":{"type": "COMMAND", "id": "Sresponse", "method": "???" ,"features":""},
         //get the recognized character from the recognizer???
@@ -311,8 +314,7 @@
         "REMOVESTIMULUS":{"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "FALSE:Boolean","features":""},
         //remove the stimulus
 
-        "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "NEXTSCENE" },
-
+        "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "gotoNextScene"},
         "NEXT": {"type": "COMMAND", "cmd": "NEXT"  }
       },
 
