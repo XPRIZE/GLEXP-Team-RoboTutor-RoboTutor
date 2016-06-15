@@ -184,7 +184,7 @@
           "tracks": [
             {"type": "COMMAND", "id": "SfingerWriter", "method": "onStartWriting", "parms": "CANCEL_REMINDER:String"},
             // This would call the cancel reminder action below when the user starts writing
-            {"type": "COMMAND", "id": "SfingerWriter", "method": "onRecognitionComplete", "parms": "NEXT:String"},
+            {"type": "COMMAND", "id": "Sresponse", "method": "onRecognitionComplete", "parms": "NEXT:String"},
             // This would increment the animation_graph when it is in a wait state.  e.g if it is sitting at the end of a stream audio clip
             {"type": "COMMAND", "cmd": "WAIT" }
             //{"type": "COMMAND", "id": "Sresponse", "method": "show", "parms": "TRUE:Boolean","features":""}
@@ -251,8 +251,8 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,r,s,t,u,v,w,y,z]:String","features":"FTR_LC"},
-            {"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,R,S,T,U,V,W,Y,Z]:String","features":"FTR_UC"}
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[d,w,e,f,y,s,g,n,h,i,r,b,u,t,v,c,j,z,k,a,l,p,m,o]:String","features":"FTR_LC"},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[A,G,S,Y,W,Z,F,H,T,D,O,V,I,E,R,U,J,M,C,N,K,L,B,P]:String","features":"FTR_UC"}
           ]
         },
 
