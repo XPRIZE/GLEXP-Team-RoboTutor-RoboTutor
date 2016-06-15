@@ -38,7 +38,8 @@
             app:isResponse="false"
             android:gravity="center"
             android:background="@color/stimulusBackground"
-            android:textColor="@color/stimulustext" />
+            android:textColor="@color/stimulustext"
+            android:visibility="invisible"/>
 
     </cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>
 

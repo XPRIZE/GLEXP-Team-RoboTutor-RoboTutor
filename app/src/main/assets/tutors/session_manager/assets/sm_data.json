@@ -29,8 +29,8 @@
       "description":"numeric",
       //"background":"#D9FFFF",
       "data": [
-          { "type":"Sm_Data", "intent": "digit_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy"}
-
+          { "type":"Sm_Data", "intent": "digit_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy"},
+          { "type":"Sm_Data", "intent": "digit_dictation", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Dictation"}
         ]
     },
 

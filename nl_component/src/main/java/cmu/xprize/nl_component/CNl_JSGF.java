@@ -117,6 +117,11 @@ public class CNl_JSGF implements CNl_Processor {
         return mStimulusPlaceWords[place-1].size();
     }
 
+    @Override
+    public int wordsInDigitValue(int place) {
+        return 0;
+    }
+
 
     // This provides access to the Stimulus array values as Strings
     //

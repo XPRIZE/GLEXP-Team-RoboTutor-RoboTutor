@@ -43,6 +43,7 @@ public class TCONST {
     public static final String  FTR_PLACE_      = "FTR_PLACE_";
     public static final String  _USED           = "_USED";
     public static final String  FTR_P           = "FTR_P";
+    public static final String  FTR_D           = "FTR_D";
     public static final String  _1WORDS         = "_1WORDS";
     public static final String  _2WORDS         = "_2WORDS";
     public static final String  _3WORDS         = "_3WORDS";
@@ -305,10 +306,16 @@ public class TCONST {
     public static final String PLACE_STRING_VAR  = ".placeString";
     public static final String DIGIT_TEXT_VAR    = ".digitText";
     public static final String PLACE_TEXT_VAR    = ".placeText";
+
     public static final String PLACE4_WORDS_VAR  = ".place4Words";
     public static final String PLACE3_WORDS_VAR  = ".place3Words";
     public static final String PLACE2_WORDS_VAR  = ".place2Words";
     public static final String PLACE1_WORDS_VAR  = ".place1Words";
+
+    public static final String DIGIT4_WORDS_VAR  = ".digit4Words";
+    public static final String DIGIT3_WORDS_VAR  = ".digit3Words";
+    public static final String DIGIT2_WORDS_VAR  = ".digit2Words";
+    public static final String DIGIT1_WORDS_VAR  = ".digit1Words";
 
 
     // Generic error codes
