@@ -50,7 +50,9 @@
       //"background":"#D9FFFF",
       "data": [
         { "type":"Sm_Data", "intent": "letter_copy2", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy a", "features":"FTR_LC" },
-        { "type":"Sm_Data", "intent": "letter_copy2", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy A", "features":"FTR_UC"  }
+        { "type":"Sm_Data", "intent": "letter_copy2", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy A", "features":"FTR_UC"  },
+        { "type":"Sm_Data", "intent": "letter_dictation", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Dictation a", "features":"FTR_LC" },
+        { "type":"Sm_Data", "intent": "letter_dictation", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Dictation A", "features":"FTR_UC"  }
       ]
     },
 
