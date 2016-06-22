@@ -64,7 +64,6 @@ public class CTutorEngine implements ILoadableObject2 {
     private CMediaManager                   mMediaManager;
 
     static public  RoboTutor                Activity;
-    static private ITutorManager            masterContainer;
     static public  ILogManager              TutorLogManager;
 
     static private HashMap<String,CTutor>   tutorMap    = new HashMap<>();
@@ -94,14 +93,12 @@ public class CTutorEngine implements ILoadableObject2 {
      * component logic.
      *
      * @param context
-     * @param _masterContainer
      */
-    private CTutorEngine(RoboTutor context, ITutorManager _masterContainer) {
+    private CTutorEngine(RoboTutor context) {
 
         mRootScope      = new TScope(null, "root", null);
 
         Activity        = context;
-        masterContainer = _masterContainer;
         TutorLogManager = CLogManager.getInstance();
         mAssetManager   = context.getAssets();
 
@@ -125,13 +122,12 @@ public class CTutorEngine implements ILoadableObject2 {
      * Retrieve the one and only tutorEngine object
      *
      * @param context
-     * @param tutorContainer
      * @return
      */
-    static public CTutorEngine getTutorEngine(RoboTutor context, ITutorManager tutorContainer) {
+    static public CTutorEngine getTutorEngine(RoboTutor context) {
 
         if(singletonTutorEngine == null) {
-            singletonTutorEngine = new CTutorEngine(context, tutorContainer);
+            singletonTutorEngine = new CTutorEngine(context);
         }
 
         return singletonTutorEngine;
@@ -217,7 +213,7 @@ public class CTutorEngine implements ILoadableObject2 {
         //
         deadTutor   = activeTutor;
         activeTutor = null;
-        masterContainer.removeView(deadTutor.getTutorContainer());
+        RoboTutor.masterContainer.removeView(deadTutor.getTutorContainer());
 
         startSessionManager();
 
@@ -259,7 +255,7 @@ public class CTutorEngine implements ILoadableObject2 {
 
             Log.d(TAG, "Killing Tutor: " + deadTutor.getTutorName());
 
-            masterContainer.removeView(deadTutor.getTutorContainer());
+            RoboTutor.masterContainer.removeView(deadTutor.getTutorContainer());
             deadTutor.post(TCONST.KILLTUTOR);
         }
     }
@@ -283,7 +279,7 @@ public class CTutorEngine implements ILoadableObject2 {
         tutorContainer.inflate(Activity, R.layout.scene_layout, null);
         ((ITutorObject)tutorContainer).setName("tutor_container");
 
-        masterContainer.addView((ITutorManager)tutorContainer);
+        RoboTutor.masterContainer.addView((ITutorManager)tutorContainer);
 
         activeTutor = new CTutor(Activity, tutorName, (ITutorManager)tutorContainer, TutorLogManager, mRootScope, language, features);
     }

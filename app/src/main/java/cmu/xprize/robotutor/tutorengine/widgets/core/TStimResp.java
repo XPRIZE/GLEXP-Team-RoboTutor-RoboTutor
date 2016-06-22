@@ -190,6 +190,11 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl {
     }
 
     @Override
+    public void wiggle(Float magnitude, Long duration, Integer repetition ) {
+        mSceneObject.wiggle(magnitude, duration, repetition);
+    }
+
+    @Override
     public void setAlpha(Float alpha) {
         mSceneObject.setAlpha(alpha);
     }
