@@ -23,10 +23,12 @@ package cmu.xprize.robotutor.tutorengine;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
 
+import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 
@@ -44,9 +46,9 @@ public class CSceneDelegate implements ITutorScene {
 
     protected ITutorScene       mParent;
     protected CTutor            mTutor;
-    protected CSceneGraph mAnimator;
-    protected ITutorGraph mNavigator;
-    protected ITutorLogManager  mLogManager;
+    protected CSceneGraph       mAnimator;
+    protected ITutorGraph       mNavigator;
+    protected ILogManager       mLogManager;
 
 
 //    public var audioStartTimer:CWOZTimerProxy;
@@ -89,9 +91,14 @@ public class CSceneDelegate implements ITutorScene {
 
         mContext = context;
 
-        // Load attributes
+        // If this is called prior to inflation then the ID will not be valid so ignore
+        // and it must be explicitly set later.
+        //
         try {
-            mTutorId = context.getResources().getResourceEntryName(mOwnerViewGroup.getId());
+            int id = mOwnerViewGroup.getId();
+
+            if(id != View.NO_ID)
+                mTutorId = context.getResources().getResourceEntryName(id);
         }
         catch(Exception e) {
             Log.w(TAG, "Warning: Unnamed Delegate" + e);
@@ -124,7 +131,7 @@ public class CSceneDelegate implements ITutorScene {
     public void setNavigator(ITutorGraph navigator) { mNavigator = navigator; }
 
     @Override
-    public void setLogManager(ITutorLogManager logManager) { mLogManager = logManager; }
+    public void setLogManager(ILogManager logManager) { mLogManager = logManager; }
 
 
     //*** ITutorScene Implementation

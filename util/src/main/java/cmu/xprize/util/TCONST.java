@@ -104,7 +104,8 @@ public class TCONST {
     // CTutorNavigator Constants
 
 
-    public static final String ENDTUTOR        = "END_TUTOR";
+    public static final String ENDTUTOR        = "END_TUTOR";           // Terminate a tutor from within
+    public static final String KILLTUTOR       = "KILL_TUTOR";          // Kill a tutor exteranlly
     public static final String CONTINUETUTOR   = "CONTINUE_TUTOR";
 
     public static final String OKNAV           = "OKNAV";
@@ -122,6 +123,7 @@ public class TCONST {
     final static public String SIMPLENAV       = "SIMPLE_NAVIGATOR";
     final static public String GRAPHNAV        = "GRAPH_NAVIGATOR";
     public static final String NEXT_NODE       = "NEXT_NODE";
+    public static final String NEXT_TNODE      = "NEXT_TNODE";
     public static final String NEXTSCENE       = "NEXTSCENE";
     public static final String FIRST_SCENE     = "GOTO_FIRST_SCENE";
 
@@ -265,8 +267,11 @@ public class TCONST {
     public static final String ASR         = "ASR";
 
     public static final String GLYPHLOG    = "glyphlog_";
+    public static final String DATASHOP    = "-DS";
     public static final String JSONLOG     = ".json";
     public static final boolean APPEND     = true;
+
+    public static final String GLYPH_DATA  = "glyphdata";
 
 
     // LTK messaging constants

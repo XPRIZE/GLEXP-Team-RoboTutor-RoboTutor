@@ -36,7 +36,7 @@ public class tutor_node extends scene_node implements ILoadableObject2 {
 
     // State fields
     private scene_node _currNode;
-    private String       _nodeState;
+    private String     _nodeState;
 
 
     // json loadable fields
@@ -135,7 +135,7 @@ public class tutor_node extends scene_node implements ILoadableObject2 {
             _currNode = (scene_node) getScope().mapSymbol(rootnode);
         }
         catch(Exception e) {
-            CErrorManager.terminate(TAG,"Root Node not found", e, false);
+            CErrorManager.logEvent(TAG,"Root Node not found", e, false);
         }
 
         if(_currNode != null) {

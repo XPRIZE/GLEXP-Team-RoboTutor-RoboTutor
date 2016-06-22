@@ -22,11 +22,11 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CEvent;
 import cmu.xprize.util.IEventListener;
+import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
-import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -162,7 +162,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
             }
         }
         catch (Exception e) {
-            CErrorManager.terminate(TAG, "Invalid Data Source for : " + name(), null, false);
+            CErrorManager.logEvent(TAG, "Invalid Data Source for : " + name(), null, false);
         }
 
         // Pass an array of strings as the data source.
@@ -242,7 +242,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
      * @param Color
      */
     public void flagError(Boolean flagState, String Color) {
-        CErrorManager.terminate(TAG, "Unsuppported Function: " + "flagError", null, false);
+        CErrorManager.logEvent(TAG, "Unsuppported Function: " + "flagError", null, false);
     }
 
 
@@ -312,7 +312,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
     }
 
     @Override
-    public void setLogManager(ITutorLogManager logManager) {
+    public void setLogManager(ILogManager logManager) {
         mSceneObject.setLogManager(logManager);
     }
 

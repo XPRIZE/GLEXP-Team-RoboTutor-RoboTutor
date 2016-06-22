@@ -79,7 +79,7 @@ public class Phoneme {
 
         }
         catch (Exception e) {
-            CErrorManager.terminate(TAG, "Langauge configuration error: ", e, false);
+            CErrorManager.logEvent(TAG, "Langauge configuration error: ", e, false);
         }
     }
 

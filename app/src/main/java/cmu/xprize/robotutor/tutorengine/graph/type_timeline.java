@@ -895,7 +895,7 @@ public class type_timeline extends type_action implements IMediaListener {
             }
             catch(Exception e) {
 
-                CErrorManager.terminate(TAG, "ERROR: Flash resource: ", e, false);
+                CErrorManager.logEvent(TAG, "ERROR: Flash resource: ", e, false);
             }
 
             xpparser.setInput(in, null);
@@ -946,11 +946,11 @@ public class type_timeline extends type_action implements IMediaListener {
 
         } catch (XmlPullParserException e) {
 
-            CErrorManager.terminate(TAG, "ERROR: XML Spec Invalid: " , e, false);
+            CErrorManager.logEvent(TAG, "ERROR: XML Spec Invalid: " , e, false);
 
         } catch (IOException e) {
 
-            CErrorManager.terminate(TAG, "ERROR: XML Spec Invalid: ", e, false);
+            CErrorManager.logEvent(TAG, "ERROR: XML Spec Invalid: ", e, false);
         }
     }
 

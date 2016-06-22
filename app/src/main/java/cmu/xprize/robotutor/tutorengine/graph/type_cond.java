@@ -116,7 +116,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
 
         // catch Iff exceptions
         catch(Exception e) {
-            CErrorManager.terminate(TAG,"Constraint Format Error: ", e, false);
+            CErrorManager.logEvent(TAG,"Constraint Format Error: ", e, false);
         }
 
         return result;
@@ -145,7 +145,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
             }
         }
         catch(Exception e) {
-            CErrorManager.terminate(TAG, "IFF Script error: " + script, e, false);
+            CErrorManager.logEvent(TAG, "IFF Script error: " + script, e, false);
         }
 
         return inverse? !result:result;
@@ -231,7 +231,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
 
                             case '!':
                                 if (negate) {
-                                    CErrorManager.terminate(TAG,  "Unexpected '!' at: " + _i1 + " in " + code, null, false);
+                                    CErrorManager.logEvent(TAG,  "Unexpected '!' at: " + _i1 + " in " + code, null, false);
                                 }
 
                                 _i1++;
@@ -249,7 +249,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                                     _i1++;
                                     state = TCONST.PARSEIDENT;
                                 } else {
-                                    CErrorManager.terminate(TAG,   "Unexpected '{' at: " + _i1 + " in " + code, null, false);
+                                    CErrorManager.logEvent(TAG,   "Unexpected '{' at: " + _i1 + " in " + code, null, false);
                                 }
                                 break;
 
@@ -259,7 +259,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                                     _i1++;
                                     binaryOp = TCONST.BOOLAND;
                                 } else {
-                                    CErrorManager.terminate(TAG,   "Unexpected '&' at: " + _i1 + " in " + code, null, false);
+                                    CErrorManager.logEvent(TAG,   "Unexpected '&' at: " + _i1 + " in " + code, null, false);
                                 }
                                 break;
 
@@ -270,7 +270,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                                     binaryOp = TCONST.BOOLOR;
 
                                 } else {
-                                    CErrorManager.terminate(TAG,   "Unexpected '|' at: " + _i1 + " in " + code, null, false);
+                                    CErrorManager.logEvent(TAG,   "Unexpected '|' at: " + _i1 + " in " + code, null, false);
                                 }
                                 break;
 
@@ -281,7 +281,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                                     binaryOp = TCONST.EQUALTO;
 
                                 } else {
-                                    CErrorManager.terminate(TAG,   "Unexpected '=' at: " + _i1 + " in " + code, null, false);
+                                    CErrorManager.logEvent(TAG,   "Unexpected '=' at: " + _i1 + " in " + code, null, false);
                                 }
                                 break;
 
@@ -295,7 +295,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                                         binaryOp = TCONST.LESSTHAN;
                                     }
                                 } else {
-                                    CErrorManager.terminate(TAG,   "Unexpected '<' at: " + _i1 + " in " + code, null, false);
+                                    CErrorManager.logEvent(TAG,   "Unexpected '<' at: " + _i1 + " in " + code, null, false);
                                 }
                                 break;
 
@@ -309,7 +309,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                                         binaryOp = TCONST.GREATERTHAN;
                                     }
                                 } else {
-                                    CErrorManager.terminate(TAG,   "Unexpected '>' at: " + _i1 + " in " + code, null, false);
+                                    CErrorManager.logEvent(TAG,   "Unexpected '>' at: " + _i1 + " in " + code, null, false);
                                 }
                                 break;
 
@@ -359,7 +359,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
 
                         if(tChar == '.') {
                             if(DecimalPt) {
-                                CErrorManager.terminate(TAG,   "Unexpected '.' at: " + _i1 + " in " + code, null, false);
+                                CErrorManager.logEvent(TAG,   "Unexpected '.' at: " + _i1 + " in " + code, null, false);
                             }
 
                             Symbol.append(tChar);
@@ -455,7 +455,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                         tChar = parseStr.charAt(_i1);
 
                         if(tChar ==  '.') {
-                            CErrorManager.terminate(TAG, "IFF invalid expression: " + code, null, false);
+                            CErrorManager.logEvent(TAG, "IFF invalid expression: " + code, null, false);
                         }
                         else if ((tChar >= 'A' && tChar <= 'Z') ||
                                 (tChar >= 'a' && tChar <= 'z') ||
@@ -499,7 +499,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                         } else {
 
                             if(binaryOp == TCONST.NOOP) {
-                              CErrorManager.terminate(TAG, "Invalid Expression missing Operator: " + code, null, false);
+                              CErrorManager.logEvent(TAG, "Invalid Expression missing Operator: " + code, null, false);
                             }
                             RHS = resultObj;
                             RNegate = negate;
@@ -575,7 +575,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
         }
         catch(Exception e) {
             // TODO: Manage Syntax Errors
-            CErrorManager.terminate(TAG, "Invalid Expression: " + code, null, false);
+            CErrorManager.logEvent(TAG, "Invalid Expression: " + code, null, false);
         }
 
         // Do terminal evaluation - must be boolean outcome
@@ -586,7 +586,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
 
         } catch (Exception e) {
 
-            CErrorManager.terminate(TAG,"Value does not evaluate to boolean in expression: " + code, null, false);
+            CErrorManager.logEvent(TAG,"Value does not evaluate to boolean in expression: " + code, null, false);
         }
 
         return result;

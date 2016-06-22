@@ -44,8 +44,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CPreferenceCache;
-import cmu.xprize.util.IEventDispatcher;
-import cmu.xprize.util.IEventListener;
+import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -76,7 +75,7 @@ public class CTutor implements ILoadableObject2 {
     private ArrayList<String>            fDefaults = new ArrayList<String>();
 
     public Context                       mContext;
-    public ITutorLogManager              mTutorLogManager;
+    public ILogManager                   mTutorLogManager;
     public ITutorGraph                   mTutorGraph;
     public CSceneGraph                   mSceneGraph;
     public ITutorManager                 mTutorContainer;
@@ -103,12 +102,12 @@ public class CTutor implements ILoadableObject2 {
 
     private int index = 0;  // test debug
 
-    static private final String  TAG   = LayoutInflater.class.getSimpleName();
+    static private final String  TAG   = CTutor.class.getSimpleName();
     static private final boolean DEBUG = false;
 
 
 
-    public CTutor(Context context, String name, ITutorManager tutorContainer, ITutorLogManager logManager, TScope rootScope, String tarLanguage, String featSet) {
+    public CTutor(Context context, String name, ITutorManager tutorContainer, ILogManager logManager, TScope rootScope, String tarLanguage, String featSet) {
 
         mTutorScope      = new TScope(this, name, rootScope);
         mContext         = context;
@@ -134,18 +133,91 @@ public class CTutor implements ILoadableObject2 {
     }
 
 
+    private void inflateTutor() {
+
+        // Load the "tutor_descriptor.json" file -
+        // TODO : Ultimately this is meant to hold the scene layout data -
+        loadTutorFactory();
+
+        // Load the tutor graph (scene sequence script data) for the tutor
+        // TODO: Fully implement the tutor navigator as a graph
+        loadTutorGraph();
+
+        // Load the scene graph (animation script data) for the tutor
+        loadSceneGraph();
+    }
+
+
+    public ITutorManager getTutorContainer() {
+        return mTutorContainer;
+    }
+
+    /**
+     *  Load the tutorGraph - tutor scene sequence script for this tutor
+     */
+    private void loadTutorGraph() {
+
+        switch(navigatorType) {
+            case TCONST.SIMPLENAV:
+                mTutorGraph = new CTutorGraph(this, mTutorName, mTutorContainer, mTutorScope);
+                break;
+
+            case TCONST.GRAPHNAV:
+                //mTutorGraph = new CSceneGraphNavigator(mTutorName);
+                break;
+        }
+    }
+
+
+    /**
+     * Load the scenegraph - scene animation scripts for this tutor
+     * Push the scenegraph into the tutorgraph for scripting purposes
+     *
+     */
+    private void loadSceneGraph() {
+
+        mSceneGraph = new CSceneGraph(this, mTutorScope, mTutorGraph);
+
+        mTutorGraph.setSceneGraph(mSceneGraph);
+    }
+
+
+    /**
+     * Update the current scene container view
+     *
+     * @param container
+     */
+    public void setSceneContainer(ViewGroup container) {
+        mSceneContainer = container;
+    }
+
+
+    /**
+     * This is where the tutor gets kick started
+     */
+    public void launchTutor() {
+
+        mTutorActive = true;
+        mTutorGraph.post(TCONST.FIRST_SCENE);
+    }
+
+
     /**
      *
      */
     public void onDestroy() {
-    }
 
+        // Release the Tutor resources
+        scenedata       = null;
+        language        = null;
+        navigatorType   = null;
+        soundMap        = null;
 
-    private void inflateTutor() {
+        // Release the scene graph first so the scene data is still intact during destruction
+        // TODO: don't know if this sequencing is required
+        mSceneGraph.onDestroy();
 
-        // Load the "tutor_descriptor.json" file
-        loadTutorFactory();
-        loadSceneNavigator();
+        mTutorGraph.onDestroy();
     }
 
 
@@ -157,6 +229,21 @@ public class CTutor implements ILoadableObject2 {
             _command = command;
         }
 
+        private void cleanUpTutor() {
+
+            mMediaManager.globalStop();
+
+            // disable the input queue permenantly in prep for destruction
+            // walks the queue chain to diaable the tutor and scene queues
+            //
+            mSceneGraph.terminateQueue();
+            mTutorGraph.terminateQueue();
+            terminateQueue();
+
+            mTutorActive = false;
+        }
+
+
         @Override
         public void run() {
 
@@ -165,34 +252,43 @@ public class CTutor implements ILoadableObject2 {
 
                 switch (_command) {
 
+                    // This is how you kill a running tutor externally -
+                    // When the engine wants to kill a tutor and start another.
+                    // killDeadTutor just cleans up the now unused tutor.  What happens
+                    // after is the responsability of the poster of the event
+                    //
+                    case TCONST.KILLTUTOR:
+
+                        cleanUpTutor();
+
+                        CTutorEngine.killDeadTutor();
+                        break;
+
+                    // This is how a tutor stops itself -
+                    // DestroyCurrentTutor should remove the tutor and manage the launch
+                    // of some sort of session manager of exit the app completely
+                    //
                     case TCONST.ENDTUTOR:
 
-                        // disable the input queue permenantly in prep for destruction
-                        // walks the queue chain to diaable the tutor and scene queues
-                        //
-                        terminateQueue();
+                        cleanUpTutor();
 
-                        endTutor();
+                        CTutorEngine.destroyCurrentTutor();
                         break;
                 }
             }
             catch(Exception e) {
-                CErrorManager.terminate(TAG, "Run Error:", e, false);
+                CErrorManager.logEvent(TAG, "Run Error:", e, false);
             }
         }
     }
 
 
     /**
-     *  Disable the input queue permenantly in prep for destruction
+     *  Disable the input queues permenantly in prep for destruction
      *  walks the queue chain to diaable scene queue
      *
      */
-    public void terminateQueue() {
-
-        mMediaManager.globalStop();
-
-        mTutorGraph.terminateQueue();
+    private void terminateQueue() {
 
         // disable the input queue permenantly in prep for destruction
         //
@@ -245,26 +341,6 @@ public class CTutor implements ILoadableObject2 {
     }
 
 
-    private void loadSceneNavigator() {
-
-        switch(navigatorType) {
-            case TCONST.SIMPLENAV:
-                mTutorGraph = new CTutorGraph(this, mTutorName, mTutorContainer, mTutorScope);
-                break;
-
-            case TCONST.GRAPHNAV:
-                //mTutorGraph = new CSceneGraphNavigator(mTutorName);
-                break;
-        }
-
-        mTutorGraph.initTutorContainer(mTutorContainer);
-        mSceneGraph = mTutorGraph.getAnimator();
-    }
-
-
-    public void setSceneContainer(ViewGroup container) {
-        mSceneContainer = container;
-    }
 
 
     /**
@@ -311,35 +387,6 @@ public class CTutor implements ILoadableObject2 {
 
     public TScope getScope() {
         return mTutorScope;
-    }
-
-
-    /**
-     * This is where the tutor gets kick started
-     */
-    public void launchTutor() {
-        mTutorActive = true;
-        mTutorGraph.post(TCONST.FIRST_SCENE);
-    }
-
-
-    /**
-     * This is where the tutor stops
-     */
-    public void endTutor() {
-
-        // Only ever pop once per tutor
-        // TODO: this will change - at the moment it may be called multiple times during shutdown.
-        // e.g. from a stream flow.
-
-        if(mTutorActive) {
-            mTutorActive = false;
-
-            mTutorContainer.popView(false, null);
-            mTutorGraph.onDestroy();
-
-            CTutorEngine.killTutor(mTutorName);
-        }
     }
 
 
@@ -390,33 +437,6 @@ public class CTutor implements ILoadableObject2 {
     }
 
 
-    /** Global logging support - each scene instance and subscene animation instance represent
-    *                          object instances in the log.
-    *                          The frameid is a '.' delimited string representing the:
-    *
-    *     framendx:graphnode.nodemodule.moduleelement... :animationnode.animationelement...iterationNdx
-    *
-    * 			Semantics - each ':' represents the root of a new different (sub)graph
-    *   e.g.
-    *
-    * 	  000001:root.start.SstartSplash...:root.Q0A.CSSbSRule1Part1AS...
-    */
-    private String constructLogName(String attr) {
-        String attrName = "L00000";
-        String frame;
-
-        frame = Integer.toString(_framendx);
-
-        // Note: name here is the scene name itself which is the context in which we are executing
-
-        //attrName = attrName.slice(0, 6-frame.length) + frame + "_" + name +"_" + attr + "_" + gTutor.gNavigator.iteration.toString();
-
-        //attrName = name +"_" + attr + "_" + gTutor.gNavigator.iteration.toString();
-
-        return attrName;
-    }
-
-
     public void add(String Id, ITutorObject obj) {
 
         mObjects.put(Id, obj);
@@ -452,9 +472,6 @@ public class CTutor implements ILoadableObject2 {
 
         tarScene.setVisibility(View.VISIBLE);
 
-//        mTutorContainer.addView(tarScene, index);
-//        mTutorContainer.setDisplayedChild(index++);
-
         // Generate the automation hooks
         automateScene((ITutorSceneImpl) tarScene, scenedata);
 
@@ -483,15 +500,20 @@ public class CTutor implements ILoadableObject2 {
 
         mapChildren(tutorContainer, childMap);
 
-        Iterator<?> tObjects = childMap.entrySet().iterator();
+        try {
+            Iterator<?> tObjects = childMap.entrySet().iterator();
 
-        // post create / inflate / init / map - here everything is created including the
-        // view map to permit findViewByName
-        //
-        while(tObjects.hasNext() ) {
-            Map.Entry entry = (Map.Entry) tObjects.next();
+            // post create / inflate / init / map - here everything is created including the
+            // view map to permit findViewByName
+            //
+            while (tObjects.hasNext()) {
+                Map.Entry entry = (Map.Entry) tObjects.next();
 
-            ((ITutorObject)(entry.getValue())).postInflate();
+                ((ITutorObject) (entry.getValue())).postInflate();
+            }
+        }
+        catch(Exception e) {
+            Log.d(TAG, "automation Error: " + e);
         }
     }
 
@@ -509,7 +531,7 @@ public class CTutor implements ILoadableObject2 {
 
                 if(childMap.containsKey(child.name())) {
 
-                    CErrorManager.terminate(TAG, "ERROR: Duplicate child view in:" + tutorContainer.name(),  new Exception("no-exception"), false);
+                    CErrorManager.logEvent(TAG, "ERROR: Duplicate child view in:" + tutorContainer.name(),  new Exception("no-exception"), false);
                 }
 
                 childMap.put(child.name(), child);
@@ -525,7 +547,7 @@ public class CTutor implements ILoadableObject2 {
 
             } catch (ClassCastException e) {
 
-                CErrorManager.terminate(TAG, "ERROR: Non-ITutor child view in:" + tutorContainer.name(), e, false);
+                CErrorManager.logEvent(TAG, "ERROR: Non-ITutor child view in:" + tutorContainer.name(), e, false);
             }
         }
     }

@@ -24,6 +24,8 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,8 +34,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.robotutor.tutorengine.widgets.core.TSceneAnimatorLayout;
+import cmu.xprize.util.CLogManager;
+import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -52,31 +58,28 @@ public class CTutorEngine implements ILoadableObject2 {
 
     private static TScope                   mRootScope;
 
-    private static CTutorEngine             mTutorEngine;
-    private static HashMap<String, CTutor>  mTutors = new HashMap<String, CTutor>();
-    private static CTutor                   mTutorActive;
-    private static String                   mTutorName;
+    private static CTutorEngine             singletonTutorEngine;
+
     private AssetManager                    mAssetManager;
     private CMediaManager                   mMediaManager;
 
-    private String                          mTutorDescrPath;
-    private String                          mJSONspec;
+    static public  RoboTutor                Activity;
+    static private ITutorManager            masterContainer;
+    static public  ILogManager              TutorLogManager;
 
-    static public RoboTutor                 Activity;
-    static public ITutorManager             TutorContainer;
-    static public ITutorLogManager          TutorLogManager;
-
-    static HashMap<String,CTutor>           tutorMap = new HashMap<>();
-    static HashMap<String,HashMap>          sceneMap = new HashMap<>();
+    static private HashMap<String,CTutor>   tutorMap    = new HashMap<>();
+    static private CTutor                   activeTutor = null;
+    static private CTutor                   deadTutor   = null;
 
     // You can override the language used in all tutors by placing a
     // "language":"LANG_EN", spec in the TCONST.EDESC replacing EN with
     // the desired language id
 
     // json loadable
-    public String                           defTutor;
-    public String                           defFeatures;
+    static public String                    defTutor;
+    static public String                    defFeatures;
     static public String                    language;                       // Accessed from a static context
+
 
     final static public  String CacheSource = TCONST.ASSETS;                // assets or extern
     final static private String TAG         = "CTutorEngine";
@@ -91,15 +94,15 @@ public class CTutorEngine implements ILoadableObject2 {
      * component logic.
      *
      * @param context
-     * @param tutorContainer
+     * @param _masterContainer
      */
-    private CTutorEngine(RoboTutor context, ITutorManager tutorContainer) {
+    private CTutorEngine(RoboTutor context, ITutorManager _masterContainer) {
 
         mRootScope      = new TScope(null, "root", null);
 
         Activity        = context;
-        TutorContainer  = tutorContainer;
-        TutorLogManager = new CTutorLogManager();
+        masterContainer = _masterContainer;
+        TutorLogManager = CLogManager.getInstance();
         mAssetManager   = context.getAssets();
 
         // Initialize the media manager singleton - it needs access to the App assets.
@@ -115,9 +118,6 @@ public class CTutorEngine implements ILoadableObject2 {
         // Load the TCONST.EDESC and generate the root tutor
         //
         loadEngineDescr();
-        addTutor(defTutor, defFeatures);
-
-        launchTutor(defTutor);
     }
 
 
@@ -130,24 +130,11 @@ public class CTutorEngine implements ILoadableObject2 {
      */
     static public CTutorEngine getTutorEngine(RoboTutor context, ITutorManager tutorContainer) {
 
-        if(mTutorEngine == null) {
-            mTutorEngine = new CTutorEngine(context, tutorContainer);
+        if(singletonTutorEngine == null) {
+            singletonTutorEngine = new CTutorEngine(context, tutorContainer);
         }
 
-        return mTutorEngine;
-    }
-
-
-    public static void addTutorScene(String tutorName, String sceneName, ITutorScene scene) {
-
-        HashMap scenes = sceneMap.get(tutorName);
-
-        scenes.put(sceneName, scene);
-    }
-
-
-    public void showTutorScene() {
-
+        return singletonTutorEngine;
     }
 
 
@@ -183,15 +170,6 @@ public class CTutorEngine implements ILoadableObject2 {
     }
 
 
-    static private void addTutor(String tutorName, String features) {
-
-        CTutor newTutor = new CTutor(Activity, tutorName, TutorContainer, TutorLogManager, mRootScope, language, features);
-
-        tutorMap.put(tutorName, newTutor);
-        sceneMap.put(tutorName, new HashMap<>());
-    }
-
-
     static public void pauseTutor() {
 
     }
@@ -214,50 +192,130 @@ public class CTutorEngine implements ILoadableObject2 {
             // Note the endTutor call will invalidate this iterator so recreate it
             // on each pass
             //
-            tutor.terminateQueue();
-            tutor.endTutor();
+            //tutor.terminateQueue();
+            //tutor.endTutor();
         }
-        mTutorEngine = null;
+
+        singletonTutorEngine = null;
     }
 
 
-    static public void killTutor(String tutorName) {
+    static public void startSessionManager() {
+
+        createTutor(defTutor, defFeatures);
+        launchTutor();
+    }
+
+    /**
+     * Here a tutor is destroying itself - so we need to manage the follow-on process -
+     * i.e. start some other activity / tutor or session mamagement task.
+     */
+    static public void destroyCurrentTutor() {
+
+        // When using the back button within a native tutor we will be killing the one and
+        // only tutor so deadTutor will be null
+        //
+        deadTutor   = activeTutor;
+        activeTutor = null;
+        masterContainer.removeView(deadTutor.getTutorContainer());
+
+        startSessionManager();
+
+        Log.d(TAG, "destroyCurrentTutor: " + deadTutor.getTutorName());
 
         // Get the tutor being killed and do a depth first destruction to allow
         // components to release resources etc.
         //
-        mTutorActive = tutorMap.get(tutorName);
-        mTutorActive.onDestroy();
-
-        tutorMap.remove(tutorName);
-        sceneMap.remove(tutorName);
+        deadTutor.onDestroy();
+        deadTutor = null;
     }
 
 
-    static private void launchTutor(String tutorName) {
+    /**
+     * Here a tutor has been killed off externally and need to be cleaned up.
+     */
+    static public void killDeadTutor() {
 
-        CTutor tutor = tutorMap.get(tutorName);
-        tutor.launchTutor();
+        Log.d(TAG, "killDeadTutor: " + deadTutor.getTutorName());
+
+        // Get the tutor being killed and do a depth first destruction to allow
+        // components to release resources etc.
+        //
+        deadTutor.onDestroy();
+        deadTutor = null;
     }
 
 
+    /**
+     * Here a tutor is being destroying externally
+     */
+    static public void killActiveTutor() {
+
+        if(activeTutor != null) {
+
+            deadTutor = activeTutor;
+
+            activeTutor = null;
+
+            Log.d(TAG, "Killing Tutor: " + deadTutor.getTutorName());
+
+            masterContainer.removeView(deadTutor.getTutorContainer());
+            deadTutor.post(TCONST.KILLTUTOR);
+        }
+    }
 
 
-    // Scriptable Launch command
-    //
+    /**
+     * Create a tutor by name - if a tutor is running already then kill it off first
+     *
+     * @param tutorName
+     * @param features
+     */
+    static private void createTutor(String tutorName, String features) {
+
+        killActiveTutor();
+
+        Log.d(TAG, "createTutor: " + tutorName);
+
+        // Create a new tutor container relative to the masterContainer
+        //
+        ViewGroup tutorContainer = new TSceneAnimatorLayout(Activity);
+        tutorContainer.inflate(Activity, R.layout.scene_layout, null);
+        ((ITutorObject)tutorContainer).setName("tutor_container");
+
+        masterContainer.addView((ITutorManager)tutorContainer);
+
+        activeTutor = new CTutor(Activity, tutorName, (ITutorManager)tutorContainer, TutorLogManager, mRootScope, language, features);
+    }
+
+
+    static private void launchTutor() {
+
+        activeTutor.launchTutor();
+    }
+
+
+    /**
+     *  Scriptable Launch command
+     *
+     * @param intent
+     * @param intentData
+     * @param features
+     */
     static public void launch(String intent, String intentData, String features ) {
 
         Intent extIntent = new Intent();
         String extPackage;
 
         switch(intentData) {
+
             // Create a native tutor with the given base features
             // These features are used to determine basic tutor functionality when
             // multiple tutors share a single scenegraph
             //
             case "native":
-                addTutor(intent, features);
-                launchTutor(intent);
+                createTutor(intent, features);
+                launchTutor();
                 break;
 
             case "browser":
@@ -273,13 +331,13 @@ public class CTutorEngine implements ILoadableObject2 {
                 // This a special allowance for MARi which placed there activities in a different
                 // package from there app - so we check for intent of the form "<pkgPath>:<appPath>"
                 //
-                String[] intParts = intent.split(":");
+                String[] intentParts = intent.split(":");
 
                 // If it is "<pkgPath>:<appPath>"
                 //
-                if(intParts.length > 1) {
-                    extPackage = intParts[0];
-                    intent     = intParts[1];
+                if(intentParts.length > 1) {
+                    extPackage = intentParts[0];
+                    intent     = intentParts[1];
                 }
                 // Otherwise we expect the activities to be right off the package.
                 //

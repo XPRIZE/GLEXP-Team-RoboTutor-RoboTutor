@@ -23,12 +23,12 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 
-import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.util.ILogManager;
 
 public class TView extends View implements ITutorObjectImpl {
 
@@ -96,7 +96,7 @@ public class TView extends View implements ITutorObjectImpl {
     }
 
     @Override
-    public void setLogManager(ITutorLogManager logManager) {
+    public void setLogManager(ILogManager logManager) {
         mSceneObject.setLogManager(logManager);
     }
 

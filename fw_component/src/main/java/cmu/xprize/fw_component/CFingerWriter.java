@@ -674,7 +674,7 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
         catch(Exception e)
         {
             // TODO: Manage initialization errors more effectively
-            CErrorManager.terminate(TAG, "Cannot create Recognizer - Error:1", e, false);
+            CErrorManager.logEvent(TAG, "Cannot create Recognizer - Error:1", e, false);
         }
 
         // reset the internal state

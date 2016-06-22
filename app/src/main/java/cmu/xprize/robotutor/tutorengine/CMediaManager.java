@@ -316,7 +316,7 @@ public class CMediaManager implements IMediaManager {
     public void createTimer(String key, type_timer owner) {
 
         if(mTimerMap.containsKey(key)) {
-            CErrorManager.terminate(TAG,  "Duplicate Timer Name:" + key, new Exception("no-exception"), false);
+            CErrorManager.logEvent(TAG,  "Duplicate Timer Name:" + key, new Exception("no-exception"), false);
         }
         mTimerMap.put(key, owner);
     }
@@ -348,7 +348,7 @@ public class CMediaManager implements IMediaManager {
     public void createHandler(String key, type_handler owner) {
 
         if(mHandlerMap.containsKey(key)) {
-            CErrorManager.terminate(TAG,  "Duplicate Handler Name:" + key, new Exception("no-exception"), false);
+            CErrorManager.logEvent(TAG,  "Duplicate Handler Name:" + key, new Exception("no-exception"), false);
         }
         mHandlerMap.put(key, owner);
     }
@@ -381,7 +381,7 @@ public class CMediaManager implements IMediaManager {
     public void createTimeLine(String key, type_timeline owner) {
 
         if(mTimeLineMap.containsKey(key)) {
-            CErrorManager.terminate(TAG,  "Duplicate Timer Name:" + key, new Exception("no-exception"), false);
+            CErrorManager.logEvent(TAG,  "Duplicate Timer Name:" + key, new Exception("no-exception"), false);
         }
         mTimeLineMap.put(key, owner);
     }

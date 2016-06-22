@@ -116,7 +116,7 @@ public class TScope implements IScope2 {
     public void put(String key, IScriptable2 obj) {
 
         if(map.containsKey(key)) {
-            CErrorManager.terminate(TAG, "Duplicate Key : " + key, false);
+            CErrorManager.logEvent(TAG, "Duplicate Key : " + key, false);
         }
         map.put(key,obj);
     }
@@ -217,7 +217,7 @@ public class TScope implements IScope2 {
                         //
                         else if (tChar == ']') {
                             if(!isArray) {
-                                CErrorManager.terminate(TAG, "No open bracket [ found for array reference: " + Symbol + "> in expression" + source, null, false);
+                                CErrorManager.logEvent(TAG, "No open bracket [ found for array reference: " + Symbol + "> in expression" + source, null, false);
                             }
 
                             _i1++;
@@ -253,7 +253,7 @@ public class TScope implements IScope2 {
                                         resultObj = mapSymbol(Symbol.toString());
 
                                         if (resultObj == null) {
-                                            CErrorManager.terminate(TAG, "Symbol not found: <" + Symbol + "> in expression" + source, null, false);
+                                            CErrorManager.logEvent(TAG, "Symbol not found: <" + Symbol + "> in expression" + source, null, false);
                                         }
 
                                         result.append(resultObj.toString());
@@ -289,7 +289,7 @@ public class TScope implements IScope2 {
 
                             default:
                                 // TODO: Manage Syntax Errors
-                                CErrorManager.terminate(TAG, "Missing '}}' in expression: " + source, null, false);
+                                CErrorManager.logEvent(TAG, "Missing '}}' in expression: " + source, null, false);
 
                         }
                         break;
@@ -302,7 +302,7 @@ public class TScope implements IScope2 {
         }
         catch(Exception e) {
             // TODO: Manage Syntax Errors
-            CErrorManager.terminate(TAG, "Invalid Expression: " + source, e, false);
+            CErrorManager.logEvent(TAG, "Invalid Expression: " + source, e, false);
         }
 
         return result.toString();
@@ -338,7 +338,7 @@ public class TScope implements IScope2 {
 
                 //TODO : Manage symbol not found
                 // NOTE: this is not reliably being flushed to LogCat
-                //CErrorManager.terminate(TAG, "Symbol not found : " + name + " Exception: " , e, false);
+                //CErrorManager.logEvent(TAG, "Symbol not found : " + name + " Exception: " , e, false);
 
                 // Don't exit
                 Log.e(TAG, "Symbol not found : " + name + " Exception: " + e);

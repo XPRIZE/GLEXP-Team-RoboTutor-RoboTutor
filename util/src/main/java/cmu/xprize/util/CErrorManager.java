@@ -22,7 +22,7 @@ package cmu.xprize.util;
 import android.util.Log;
 
 /**
- * This was added with Android Studio 2.1 and PIXEL C -- simple terminate could cause the logcat
+ * This was added with Android Studio 2.1 and PIXEL C -- simple logEvent could cause the logcat
  * to miss the error message
  *
  */
@@ -35,7 +35,7 @@ public class CErrorManager {
     }
 
 
-    static public void terminate(String TAG, String Msg, boolean printTrace) {
+    static public void logEvent(String TAG, String Msg, boolean printTrace) {
 
         Log.e(TAG, Msg);
 
@@ -45,10 +45,13 @@ public class CErrorManager {
         }
 
         mLogManager.postError(TAG, Msg);
+
+        // Still cannot exit as it may skip the error message
+        //
         //System.exit(1);
     }
 
-    static public void terminate(String TAG, String Msg, Exception e, boolean printTrace) {
+    static public void logEvent(String TAG, String Msg, Exception e, boolean printTrace) {
 
         if(printTrace && e != null)
             e.printStackTrace();
@@ -67,6 +70,9 @@ public class CErrorManager {
             mLogManager.postError(TAG, Msg, e);
         else
             mLogManager.postError(TAG, Msg);
+
+        // Still cannot exit as it may skip the error message
+        //
         //System.exit(1);
     }
 }

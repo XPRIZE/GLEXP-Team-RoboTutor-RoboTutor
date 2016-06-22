@@ -21,42 +21,58 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ViewAnimator;
 
+import java.util.ArrayList;
+
+import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
+import cmu.xprize.robotutor.tutorengine.ITutorManager;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.util.ILogManager;
 
+public class TMasterAnimatorLayout extends ViewAnimator implements ITutorManager {
 
-public class TSceneRelativeLayout extends RelativeLayout implements ITutorSceneImpl {
+    protected Context        mContext;
+    protected CSceneDelegate mTutorScene;
+    protected int            insertNdx;
 
-    private CSceneDelegate mTutorScene;
-
-    final private String TAG = "CSceneFrameLayout";
+    protected Animation      fade_in, fade_out, slide_in_left, slide_out_right;
 
 
-    public TSceneRelativeLayout(Context context) {
+    final private String       TAG       = "TMasterAnimatorLayout";
+
+
+    public TMasterAnimatorLayout(Context context) {
         super(context);
         init(context, null);
     }
 
-    public TSceneRelativeLayout(Context context, AttributeSet attrs) {
+    public TMasterAnimatorLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public TSceneRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init(context, attrs);
-    }
-
+    @Override
     public void init(Context context, AttributeSet attrs) {
+
         mTutorScene = new CSceneDelegate(this);
         mTutorScene.init(context, attrs);
+        mContext    = context;
+
+        fade_in  = AnimationUtils.loadAnimation(mContext, R.anim.fade_in);
+        fade_out = AnimationUtils.loadAnimation(mContext, R.anim.fade_out);
+
+        setInAnimation(fade_in);
+        setOutAnimation(fade_out);
     }
 
     @Override
@@ -65,9 +81,60 @@ public class TSceneRelativeLayout extends RelativeLayout implements ITutorSceneI
     }
 
 
+    @Override
+    public void addView(ITutorSceneImpl newView) {
+        addView((View) newView);
+    }
 
-    public void setDataSource(String dataSource) {
 
+    @Override
+    public void addView(View newView) {
+
+        insertNdx = indexOfChild((View)newView);
+
+        if(insertNdx == -1) {
+            insertNdx = super.getChildCount();
+            super.addView((View) newView, insertNdx);
+        }
+
+        Log.d(TAG, "ADD > Child Count: " + getChildCount() );
+    }
+
+
+    @Override
+    public void addAndShow(ITutorSceneImpl newView) {
+        addAndShow((View) newView);
+    }
+
+
+    @Override
+    public void addAndShow(View newView) {
+
+        addView(newView);
+        super.setDisplayedChild(insertNdx);
+    }
+
+
+    @Override
+    public void removeView(ITutorSceneImpl delView) {
+
+        removeView((View) delView);
+    }
+
+
+    @Override
+    public void removeView(View delView) {
+
+        super.removeView((View) delView);
+
+        Log.d(TAG, "REMOVE > Child Count: " + getChildCount() );
+    }
+
+
+    @Override
+    public void setAnimationListener(Animation.AnimationListener callback) {
+
+        fade_in.setAnimationListener(callback);
     }
 
 
@@ -80,7 +147,6 @@ public class TSceneRelativeLayout extends RelativeLayout implements ITutorSceneI
     // Tutor methods  End
     //************************************************************************
     //************************************************************************
-
 
 
     @Override

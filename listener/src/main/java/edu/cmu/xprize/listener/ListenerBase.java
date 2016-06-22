@@ -211,6 +211,7 @@ public class ListenerBase {
 
                                 .setBoolean("-bestpath", false)		    // yes in default
 
+//                                .setString("-cmn", "current")
                                 .setString("-cmn", "prior")
                                 .setBoolean("-compallsen", false)
                                 .setBoolean("-dictcase", false)
@@ -284,7 +285,7 @@ public class ListenerBase {
             logMath = new LogMath();
         }
         catch (Exception e) {
-            CErrorManager.terminate(TAG, "Recognizer configuration error: ", e, false);
+            CErrorManager.logEvent(TAG, "Recognizer configuration error: ", e, false);
         }
     }
 

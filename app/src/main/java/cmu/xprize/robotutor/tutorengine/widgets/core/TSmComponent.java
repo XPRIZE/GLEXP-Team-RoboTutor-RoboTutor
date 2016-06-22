@@ -24,7 +24,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import org.json.JSONObject;
 
@@ -32,7 +31,6 @@ import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -40,6 +38,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.sm_component.CSm_Component;
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
@@ -111,7 +110,7 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl {
             }
         }
         catch (Exception e) {
-            CErrorManager.terminate(TAG, "Invalid Data Source for : " + name(), null, false);
+            CErrorManager.logEvent(TAG, "Invalid Data Source for : " + name(), null, false);
         }
     }
 
@@ -209,7 +208,7 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl {
     }
 
     @Override
-    public void setLogManager(ITutorLogManager logManager) {
+    public void setLogManager(ILogManager logManager) {
         mSceneObject.setLogManager(logManager);
     }
 

@@ -20,7 +20,6 @@
         package cmu.xprize.robotutor.tutorengine.widgets.core;
 
         import android.content.Context;
-        import android.support.annotation.BoolRes;
         import android.util.AttributeSet;
         import android.view.View;
         import android.widget.ToggleButton;
@@ -30,9 +29,9 @@
         import cmu.xprize.robotutor.tutorengine.CTutor;
         import cmu.xprize.robotutor.tutorengine.CTutorEngine;
         import cmu.xprize.robotutor.tutorengine.ITutorGraph;
-        import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
         import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
         import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+        import cmu.xprize.util.ILogManager;
         import cmu.xprize.util.TCONST;
 
 public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.OnClickListener {
@@ -122,7 +121,7 @@ public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.
     }
 
     @Override
-    public void setLogManager(ITutorLogManager logManager) {
+    public void setLogManager(ILogManager logManager) {
         mSceneObject.setLogManager(logManager);
     }
 

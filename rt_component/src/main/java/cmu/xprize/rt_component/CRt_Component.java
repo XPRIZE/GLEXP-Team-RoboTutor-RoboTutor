@@ -42,7 +42,6 @@ import cmu.xprize.util.TTSsynthesizer;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.IAsrEventListener;
 import edu.cmu.xprize.listener.ListenerBase;
-import edu.cmu.xprize.listener.ListenerJSGF;
 import edu.cmu.xprize.listener.ListenerPLRT;
 
 
@@ -552,7 +551,7 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
             }
         }
         catch (Exception e) {
-            CErrorManager.terminate(TAG, "Invalid Data Source for : " + tutorName, e, false);
+            CErrorManager.logEvent(TAG, "Invalid Data Source for : " + tutorName, e, false);
         }
     }
 
@@ -583,7 +582,7 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
 
                 } catch (Exception e) {
                     // TODO: Manage Exceptions
-                    CErrorManager.terminate(TAG, "Story Parse Error: ", e, false);
+                    CErrorManager.logEvent(TAG, "Story Parse Error: ", e, false);
                 }
 
                 // Configure the view manager for the first line of the story.
@@ -605,11 +604,11 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
                 mViewManager.nextWord();
 
             } else {
-                CErrorManager.terminate(TAG, "Error no DataSource : ", null, false);
+                CErrorManager.logEvent(TAG, "Error no DataSource : ", null, false);
             }
         }
         catch(Exception e) {
-            CErrorManager.terminate(TAG, "Data Exhuasted: next called past end of data", e, false);
+            CErrorManager.logEvent(TAG, "Data Exhuasted: next called past end of data", e, false);
         }
 
     }

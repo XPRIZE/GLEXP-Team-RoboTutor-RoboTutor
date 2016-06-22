@@ -17,7 +17,7 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.robotutor.tutorengine;
+package cmu.xprize.util;
 
 import android.os.Environment;
 import android.os.Handler;
@@ -29,15 +29,10 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.util.HashMap;
 
-import cmu.xprize.robotutor.RoboTutor;
-import cmu.xprize.util.CErrorManager;
-import cmu.xprize.util.CPreferenceCache;
-import cmu.xprize.util.ILogManager;
-import cmu.xprize.util.TCONST;
-
 public class CLogManager implements ILogManager {
 
     private LogThread      logThread;                   // background thread handling log data
+    private String         log_Path;
     private boolean        isLogging = false;
 
     private Handler logHandler;
@@ -49,6 +44,15 @@ public class CLogManager implements ILogManager {
     private java.nio.channels.FileLock logLock;
     private FileWriter                 logWriter;
     private boolean                    logWriterValid = false;
+
+    // Datashop specific
+
+    private File                       logDSFile;
+    private FileOutputStream           logDSStream;
+    private java.nio.channels.FileLock logDSLock;
+    private FileWriter                 logDSWriter;
+    private boolean                    logDSWriterValid = false;
+
 
     final private String TAG = "CLogManager";
 
@@ -64,7 +68,9 @@ public class CLogManager implements ILogManager {
     }
 
 
-    public void startLogging() {
+    public void startLogging(String logPath) {
+
+        log_Path = logPath;
 
         // Restart the log if necessary
         //
@@ -161,7 +167,7 @@ public class CLogManager implements ILogManager {
                 writePacketToLog(dataPacket, target);
 
             } catch (Exception e) {
-                CErrorManager.terminate(TAG, "Write Error:", e, false);
+                CErrorManager.logEvent(TAG, "Write Error:", e, false);
             }
         }
     }
@@ -181,23 +187,25 @@ public class CLogManager implements ILogManager {
             releaseLog();
         }
 
-        String path = CPreferenceCache.getPrefID(TCONST.ENGINE_INSTANCE) + TCONST.JSONLOG;
+        String path   = CPreferenceCache.getPrefID(TCONST.ENGINE_INSTANCE) + TCONST.JSONLOG;
+        String dsPath = CPreferenceCache.getPrefID(TCONST.ENGINE_INSTANCE) + TCONST.DATASHOP + TCONST.JSONLOG;
 
         String state = Environment.getExternalStorageState();
 
         if (Environment.MEDIA_MOUNTED.equals(state)) {
 
             String outPath;
+            String outDSPath;
 
             // Validate output folder
-            outPath = RoboTutor.LOG_PATH;
+            outPath   = log_Path;
+            outDSPath = log_Path;
             File outputFile = new File(outPath);
 
             if (!outputFile.exists())
                     outputFile.mkdir();
 
             // Generate a tutor instance-unique id for the log name
-            // This won't change until the tutor changes
             //
             outPath += path;
 
@@ -210,9 +218,33 @@ public class CLogManager implements ILogManager {
 
                 logWriterValid = true;
 
+                // Begin the root JSON element
+                postPacket("{");
+
             } catch (Exception e) {
                 Log.d(TAG, "lockLog Failed: " + e);
             }
+
+
+            //**** DATASHOP
+
+            // Generate a tutor instance-unique id for DataShop
+            //
+            outDSPath += dsPath;
+
+            logDSFile = new File(outDSPath);
+
+            try {
+                logDSStream = new FileOutputStream(logDSFile);
+                logDSLock   = logDSStream.getChannel().lock();
+                logDSWriter = new FileWriter(outDSPath, TCONST.APPEND);
+
+                logDSWriterValid = true;
+
+            } catch (Exception e) {
+                Log.d(TAG, "DataShop lockLog Failed: " + e);
+            }
+
         }
     }
 
@@ -221,6 +253,10 @@ public class CLogManager implements ILogManager {
 
         try {
             if(logWriterValid) {
+
+                // Terminate the root JSON element
+                postPacket("}");
+
                 logWriterValid = false;
 
                 logWriter.flush();
@@ -233,6 +269,25 @@ public class CLogManager implements ILogManager {
         catch(Exception e) {
             Log.d(TAG, "releaseLog Failed: " + e);
         }
+
+        //**** DATASHOP
+
+        try {
+            if(logDSWriterValid) {
+
+                logDSWriterValid = false;
+
+                logDSWriter.flush();
+                logDSWriter.close();
+
+                logDSLock.release();
+                logDSStream.close();
+            }
+        }
+        catch(Exception e) {
+            Log.d(TAG, "releaseLog Failed: " + e);
+        }
+
     }
 
 
@@ -393,6 +448,13 @@ public class CLogManager implements ILogManager {
                 "\"msg\":\"" + Msg + "\"," +
                 "\"exception\":\"" + e.toString() + "\"," +
                 "},\n";
+
+        post(packet);
+    }
+
+
+    @Override
+    public void postPacket(String packet) {
 
         post(packet);
     }

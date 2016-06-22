@@ -49,9 +49,8 @@ public class CSceneGraph  {
     private TScope           mScope;
 
     protected CTutor         mTutor;
-    private String           mTutorName;
     private String           mSceneName;
-    private CTutorGraph      mTutorGraph;
+    private ITutorGraph      mTutorGraph;
 
     private final Handler    mainHandler = new Handler(Looper.getMainLooper());
     private HashMap          queueMap    = new HashMap();
@@ -69,7 +68,7 @@ public class CSceneGraph  {
     final private String TAG = "CSceneGraph";
 
 
-    public CSceneGraph(CTutor tutor, TScope tutorScope, CTutorGraph tutorGraph) {
+    public CSceneGraph(CTutor tutor, TScope tutorScope, ITutorGraph tutorGraph) {
 
         mTutor      = tutor;
         mScope      = tutorScope;
@@ -80,7 +79,12 @@ public class CSceneGraph  {
         loadSceneGraphFactory((IScope2)mScope);
     }
 
-    // TODO: add onDestroy to release animatorMap resources
+    /**
+     *
+     */
+    public void onDestroy() {
+
+    }
 
 
     /**
@@ -117,7 +121,7 @@ public class CSceneGraph  {
 
                         } catch (Exception e) {
 
-                            CErrorManager.terminate(TAG, "Scene not found for SceneGraph", e, false);
+                            CErrorManager.logEvent(TAG, "Scene not found for SceneGraph", e, false);
                         }
                         break;
 
@@ -167,7 +171,7 @@ public class CSceneGraph  {
                 }
             }
             catch(Exception e) {
-                CErrorManager.terminate(TAG, "Run Error:", e, false);
+                CErrorManager.logEvent(TAG, "Run Error:", e, false);
             }
         }
     }
@@ -281,7 +285,7 @@ public class CSceneGraph  {
 
         } catch (JSONException e) {
 
-            CErrorManager.terminate(TAG, "JSON FORMAT ERROR: " + TCONST.AGDESC + " : ", e, false);
+            CErrorManager.logEvent(TAG, "JSON FORMAT ERROR: " + TCONST.AGDESC + " : ", e, false);
         }
     }
 

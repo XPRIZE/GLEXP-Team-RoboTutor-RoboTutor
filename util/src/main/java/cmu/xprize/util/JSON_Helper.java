@@ -176,7 +176,7 @@ public class JSON_Helper {
                             field.set(self, jsonObj.getString(fieldName));
 
                         } catch (JSONException e) {
-                            CErrorManager.terminate(TAG, "field conversion:", e, false);
+                            CErrorManager.logEvent(TAG, "field conversion:", e, false);
                         }
                     }
 
@@ -187,7 +187,7 @@ public class JSON_Helper {
                             field.set(self, jsonObj.getBoolean(fieldName));
 
                         } catch (JSONException e) {
-                            CErrorManager.terminate(TAG, "field conversion:", e, false);
+                            CErrorManager.logEvent(TAG, "field conversion:", e, false);
                         }
                     }
 
@@ -198,7 +198,7 @@ public class JSON_Helper {
                             field.setFloat(self, Float.parseFloat(jsonObj.getString(fieldName)));
 
                         } catch (JSONException e) {
-                            CErrorManager.terminate(TAG, "field conversion:", e, false);
+                            CErrorManager.logEvent(TAG, "field conversion:", e, false);
                         }
                     }
 
@@ -209,7 +209,7 @@ public class JSON_Helper {
                             field.set(self, jsonObj.getBoolean(fieldName));
 
                         } catch (JSONException e) {
-                            CErrorManager.terminate(TAG, "field conversion:", e, false);
+                            CErrorManager.logEvent(TAG, "field conversion:", e, false);
                         }
                     }
 
@@ -221,7 +221,7 @@ public class JSON_Helper {
                             field.set(self, jsonObj.getLong(fieldName));
 
                         } catch (JSONException e) {
-                            CErrorManager.terminate(TAG, "field conversion:", e, false);
+                            CErrorManager.logEvent(TAG, "field conversion:", e, false);
                         }
                     }
 
@@ -232,7 +232,7 @@ public class JSON_Helper {
                             field.set(self, jsonObj.getInt(fieldName));
 
                         } catch (JSONException e) {
-                            CErrorManager.terminate(TAG, "field conversion:", e, false);
+                            CErrorManager.logEvent(TAG, "field conversion:", e, false);
                         }
                     }
 
@@ -300,7 +300,7 @@ public class JSON_Helper {
                                         eObj = elemClass.newInstance();
                                     }
                                     catch(Exception e) {
-                                        CErrorManager.terminate(TAG, "Check Syntax on Element: " + key, e, false);
+                                        CErrorManager.logEvent(TAG, "Check Syntax on Element: " + key, e, false);
                                     }
                                 }
 
@@ -417,7 +417,7 @@ public class JSON_Helper {
                 }
 
             } catch (Exception e) {
-                CErrorManager.terminate(TAG, "ERROR: parseSelf:", e, true);
+                CErrorManager.logEvent(TAG, "ERROR: parseSelf:", e, true);
             }
         }
     }
@@ -490,7 +490,7 @@ public class JSON_Helper {
             }
         }
         catch(Exception e) {
-            CErrorManager.terminate(TAG, "Json Array Format Error: ", e, false);
+            CErrorManager.logEvent(TAG, "Json Array Format Error: ", e, false);
         }
 
         return field_Array;
