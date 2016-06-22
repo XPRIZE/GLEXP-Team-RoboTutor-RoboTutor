@@ -12,6 +12,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
+import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.TCONST;
 
 // This is just a convenience to simplify the syntax in type_action execution
@@ -27,7 +28,7 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
     protected ITutorSceneImpl   mParent;
     protected CTutor            mTutor;
     protected ITutorGraph       mNavigator;
-    protected ITutorLogManager  mLogManager;
+    protected ILogManager       mLogManager;
 
     private String              mClickBehavior;
     private AnimatorSet         _animatorSets;
@@ -99,7 +100,7 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
     public void setNavigator(ITutorGraph navigator) { mNavigator = navigator; }
 
     @Override
-    public void setLogManager(ITutorLogManager logManager) { mLogManager = logManager; }
+    public void setLogManager(ILogManager logManager) { mLogManager = logManager; }
 
 
     public void setButtonBehavior(String command) {

@@ -28,11 +28,10 @@ import cmu.xprize.banner.CBanner;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
-import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.util.TCONST;
+import cmu.xprize.util.ILogManager;
 
 
 public class TBanner extends CBanner implements ITutorObjectImpl, View.OnClickListener {
@@ -142,7 +141,7 @@ public class TBanner extends CBanner implements ITutorObjectImpl, View.OnClickLi
     }
 
     @Override
-    public void setLogManager(ITutorLogManager logManager) {
+    public void setLogManager(ILogManager logManager) {
         mSceneObject.setLogManager(logManager);
     }
 

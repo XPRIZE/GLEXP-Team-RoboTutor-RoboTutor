@@ -167,7 +167,7 @@ public class CNl_JSGF implements CNl_Processor {
             }
         }
         catch(Exception e) {
-            CErrorManager.terminate(TAG, "deReference Error: " + _listName + " : Index : " + index + " : ", e, false);
+            CErrorManager.logEvent(TAG, "deReference Error: " + _listName + " : Index : " + index + " : ", e, false);
         }
 
         return null;
@@ -336,7 +336,7 @@ public class CNl_JSGF implements CNl_Processor {
             }
         }
         catch(Exception e) {
-            CErrorManager.terminate(TAG, "Data not initialized - ", e, false);
+            CErrorManager.logEvent(TAG, "Data not initialized - ", e, false);
         }
     }
 

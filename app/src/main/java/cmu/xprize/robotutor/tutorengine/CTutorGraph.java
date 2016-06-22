@@ -37,6 +37,7 @@ import java.util.Map;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -58,7 +59,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
     protected String                          mTutorName;
     protected ITutorManager                   mTutorContainer;
     protected CSceneGraph                     mSceneGraph;
-    protected ITutorLogManager                mLogManager;
+    protected ILogManager                     mLogManager;
 
     private final Handler                     mainHandler = new Handler(Looper.getMainLooper());
     private HashMap                           queueMap    = new HashMap();
@@ -97,9 +98,21 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
         _sceneCurr = 0;
         _scenePrev = 0;
 
-        loadNavigatorDescr();
+        loadTutorGraphFactory();
 
-        mSceneGraph = new CSceneGraph(mTutor, tutorScope, this);
+        // TODO: Check if this is ever used
+        navigatedata[0].instance = tutorContainer;
+    }
+
+    @Override
+    public void setSceneGraph(CSceneGraph sGraph) {
+        mSceneGraph = sGraph;
+    }
+
+
+    @Override
+    public CSceneGraph getSceneGraph() {
+        return mSceneGraph;
     }
 
 
@@ -179,7 +192,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
                 }
             }
             catch(Exception e) {
-                CErrorManager.terminate(TAG, "Run Error:", e, false);
+                CErrorManager.logEvent(TAG, "Run Error:", e, false);
             }
         }
     }
@@ -191,8 +204,6 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
      *
      */
     public void terminateQueue() {
-
-        mSceneGraph.terminateQueue();
 
         // disable the input queue permenantly in prep for destruction
         //
@@ -242,19 +253,6 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
     public void post(String command) {
 
         enQueue(new Queue(command));
-    }
-
-
-    // Initialize the pointer to the tutor root scene
-    //
-    public void initTutorContainer(ITutorSceneImpl rootScene) {
-
-        navigatedata[0].instance = rootScene;
-    }
-
-    @Override
-    public CSceneGraph getAnimator() {
-        return mSceneGraph;
     }
 
 
@@ -384,7 +382,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
         _push = push;
 
         // TODO: This is a stopgap until we have full tutorgraph capabilities.
-        ///
+        //
         if (_sceneCurr < _sceneCnt-1) {
 
             // remember current frame
@@ -456,9 +454,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
         mTutorContainer.setAnimationListener(null);
 
         // increment the global frame ID - for logging
-
         mTutor.incFrameNdx();
-        mTutorContainer.pushView(_push);
 
         //## Mod Sep 12 2013 - This is a special case to handle the first preenter event for an animationGraph.
         //                     The root node of the animation graph is parsed in the preEnter stage of the scene
@@ -497,7 +493,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
      * This provides a simple linear or mapped access to scenes.
      *
      */
-    private void loadNavigatorDescr() {
+    private void loadTutorGraphFactory() {
 
         try {
             loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutorName + "/" + TCONST.SNDESC)), (IScope2)mRootScope);

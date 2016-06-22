@@ -21,12 +21,9 @@ package cmu.xprize.ltk;
 
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.os.Environment;
 import android.util.JsonWriter;
 import android.util.Log;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.text.DateFormat;
@@ -35,7 +32,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.TimeZone;
 
+import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.CLogManager;
 import cmu.xprize.util.CPreferenceCache;
+import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.TCONST;
 
 /**
@@ -59,12 +59,14 @@ public class StrokeSet {
     private Float                 _glyphBaseLine;
     private Float                 _fontBaseLine;
 
-    private final static String   LOG_PATH = Environment.getExternalStorageDirectory() + TCONST.ROBOTUTOR_FOLDER;
+    static public ILogManager     logManager;
 
     private static String      TAG  = "StrokeSet";
 
 
     public StrokeSet(float baseline) {
+
+        logManager = CLogManager.getInstance();
 
         _strokeInfoList = new ArrayList<>();
         _glyphBaseLine  = baseline;
@@ -222,56 +224,43 @@ public class StrokeSet {
 
 
     /**
-     * Note that this is currently XPrize log specific.
-     * TODO: make general Purpose
+     *
+     * @param recog
+     * @param constraint
+     * @param stimChar
+     * @param respChar
      */
     public void writeGlyphToLog(String recog, String constraint, String stimChar, String respChar) {
-        FileWriter out = null;
 
-        String state = Environment.getExternalStorageState();
-
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-
-            String[] files = null;
-            String outPath;
-
-            // Validate output folder
-            outPath = LOG_PATH;
-            File outputFile = new File(outPath);
-
-            if (!outputFile.exists())
-                       outputFile.mkdir();
-
-            // Generate a tutor instance-unique id for the log name
-            // This won't change until the tutor changes
-            //
-            outPath += TCONST.GLYPHLOG + CPreferenceCache.getPrefID(TCONST.CURRENT_TUTOR) + TCONST.JSONLOG;
-
-            // Append Glyph Data to file
-            //
-            try {
-                out = new FileWriter(outPath, TCONST.APPEND);
-
-                // Throws if there is a JSON serializatin error
-                //
-                out.write(serializeGlyph(recog, constraint, stimChar, respChar));
-                out.close();
-            }
-            catch(Exception e) {
-                Log.e(TAG, "Glyph Serialization Error: " + e);
-            }
-        }
+        // Throws if there is a JSON serializatin error
+        //
+        logManager.postPacket(serializeGlyph(CPreferenceCache.getPrefID(TCONST.CURRENT_TUTOR), TAG, recog, constraint, stimChar, respChar));
     }
 
 
-    public String serializeGlyph(String recog, String constraint, String stimChar, String respChar) throws IOException {
+    /**
+     *
+     * @param tutorID
+     * @param tag
+     * @param recog
+     * @param constraint
+     * @param stimChar
+     * @param respChar
+     * @return
+     */
+    public String serializeGlyph(String tutorID, String tag, String recog, String constraint, String stimChar, String respChar)  {
 
         StringWriter outString = new StringWriter();
         JsonWriter   writer    = new JsonWriter(outString);
 
         writer.setIndent("  ");
 
-        writer.beginObject();
+        try {
+            writer.beginObject();
+
+            writer.name("type").value(TCONST.GLYPH_DATA);
+            writer.name("tutorid").value(tutorID);
+            writer.name("tag").value(tag);
 
             DateFormat df = DateFormat.getDateTimeInstance();
             df.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -291,9 +280,13 @@ public class StrokeSet {
             writer.name("strokes");
             writeStrokeInfo(writer, _strokeInfoList);
 
-        writer.endObject();
+            writer.endObject();
 
-        writer.close();
+            writer.close();
+        }
+        catch(Exception e) {
+            CErrorManager.logEvent(TAG, "Glyph Serialization Failed: ", e, false);
+        }
 
         Log.i(TAG, "GlyphData" + writer.toString());
 

@@ -192,7 +192,7 @@ public class CNl_PLRT implements CNl_Processor {
             }
         }
         catch(Exception e) {
-            CErrorManager.terminate(TAG, "deReference Error: " + _listID + " : Index : " + index + " : ", e, false);
+            CErrorManager.logEvent(TAG, "deReference Error: " + _listID + " : Index : " + index + " : ", e, false);
         }
 
         return result;
@@ -419,7 +419,7 @@ public class CNl_PLRT implements CNl_Processor {
             }
         }
         catch(Exception e) {
-            CErrorManager.terminate(TAG, "Data not initialized - ", e, false);
+            CErrorManager.logEvent(TAG, "Data not initialized - ", e, false);
         }
     }
 

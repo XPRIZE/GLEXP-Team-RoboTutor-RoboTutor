@@ -58,7 +58,7 @@ public class scene_node implements ILoadableObject2, IScriptable2 {
 
     protected IScope2 getScope() {
         if(_scope == null) {
-            CErrorManager.terminate(TAG, "Engine Error: Invalid Scope on Object: " + name, null, false);
+            CErrorManager.logEvent(TAG, "Engine Error: Invalid Scope on Object: " + name, null, false);
         }
 
         return _scope;
@@ -162,7 +162,7 @@ public class scene_node implements ILoadableObject2, IScriptable2 {
                 node.applyNode();
 
             } catch (Exception e) {
-                CErrorManager.terminate(TAG, "ERROR: Symbol Not found:" + nodeName + " : ", e, false);
+                CErrorManager.logEvent(TAG, "ERROR: Symbol Not found:" + nodeName + " : ", e, false);
             }
         }
     }

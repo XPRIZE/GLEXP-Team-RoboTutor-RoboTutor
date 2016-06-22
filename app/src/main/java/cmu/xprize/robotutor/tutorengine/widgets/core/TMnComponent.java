@@ -9,12 +9,12 @@ import cmu.xprize.mn_component.CMn_Component;
 import cmu.xprize.mn_component.CMn_Data;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
-import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
@@ -141,7 +141,7 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
             }
         }
         catch (Exception e) {
-            CErrorManager.terminate(TAG, "Invalid Data Source for : " + name(), e, false);
+            CErrorManager.logEvent(TAG, "Invalid Data Source for : " + name(), e, false);
         }
     }
 
@@ -207,7 +207,7 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
     }
 
     @Override
-    public void setLogManager(ITutorLogManager logManager) {
+    public void setLogManager(ILogManager logManager) {
         mSceneObject.setLogManager(logManager);
     }
 

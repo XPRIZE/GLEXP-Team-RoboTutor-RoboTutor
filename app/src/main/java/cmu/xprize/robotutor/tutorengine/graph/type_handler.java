@@ -174,19 +174,19 @@ public class type_handler extends type_action implements IMediaListener {
                         break;
 
                     case TCONST.RESET:
-                        stopTimer();
+                        destroyTimer();
                         createHandler();
                         break;
 
                     case TCONST.RESTART:
-                        stopTimer();
+                        destroyTimer();
                         createHandler();
                         startTimer();
                         break;
 
                     case TCONST.STOP:
                     case TCONST.CANCEL:
-                        stopTimer();
+                        destroyTimer();
                         break;
                 }
             }
@@ -222,7 +222,7 @@ public class type_handler extends type_action implements IMediaListener {
 
                         else {
                             _frameTask = null;
-                            stopTimer();
+                            destroyTimer();
                         }
 
                     } catch (Exception e) {
@@ -238,6 +238,7 @@ public class type_handler extends type_action implements IMediaListener {
         }
 
 
+
         private void stopTimer() {
 
             if(_playing) {
@@ -251,6 +252,15 @@ public class type_handler extends type_action implements IMediaListener {
                 _frameTask = null;
 
                 _playing = false;
+            }
+        }
+
+
+        private void destroyTimer() {
+
+            if(_playing) {
+
+                stopTimer();
 
                 mMediaManager.removeHandler(id);
             }

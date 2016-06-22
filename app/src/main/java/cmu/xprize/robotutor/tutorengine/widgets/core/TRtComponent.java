@@ -25,7 +25,6 @@ import android.util.AttributeSet;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
-import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -35,6 +34,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.rt_component.CRt_Component;
 import cmu.xprize.rt_component.IRtComponent;
+import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
 
@@ -406,7 +406,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
     }
 
     @Override
-    public void setLogManager(ITutorLogManager logManager) {
+    public void setLogManager(ILogManager logManager) {
         mSceneObject.setLogManager(logManager);
     }
 

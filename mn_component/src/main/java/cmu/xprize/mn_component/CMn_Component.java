@@ -87,11 +87,11 @@ public class CMn_Component extends LinearLayout implements ILoadableObject, IVal
 
                 _dataIndex++;
             } else {
-                CErrorManager.terminate(TAG,  "Error no DataSource : ", null, false);
+                CErrorManager.logEvent(TAG,  "Error no DataSource : ", null, false);
             }
         }
         catch(Exception e) {
-            CErrorManager.terminate(TAG, "Data Exhuasted: call past end of data", e, false);
+            CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, false);
         }
 
     }

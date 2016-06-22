@@ -17,25 +17,46 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.robotutor.tutorengine;
+package cmu.xprize.util;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
-import cmu.xprize.util.ILogManager;
+import cmu.xprize.common.R;
 
-public interface ITutorObject {
 
-    public void init(Context context, AttributeSet attrs);
-    public void onDestroy();
+public class CLoaderView extends LinearLayout {
 
-    public void   setName(String name);
-    public String name();
+    private ViewGroup viewParent = null;
 
-    public void setParent(ITutorSceneImpl mParent);
-    public void postInflate();
-    public void setTutor(CTutor tutor);
-    public void setNavigator(ITutorGraph navigator);
-    public void setLogManager(ILogManager logManager);
+    public CLoaderView(Context context, ViewGroup parent) {
+        super(context);
+        viewParent = parent;
+        init(context, null);
+    }
+
+    public CLoaderView(Context context) {
+        super(context);
+        init(context, null);
+    }
+
+    public CLoaderView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context, attrs);
+    }
+
+    public CLoaderView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context, attrs);
+    }
+
+
+    public void init(Context context, AttributeSet attrs) {
+    }
+
 
 }

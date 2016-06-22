@@ -23,15 +23,15 @@ import java.util.HashMap;
 
 public interface ITutorGraph {
 
-    public void initTutorContainer(ITutorSceneImpl rootScene);
-
     public void onDestroy();
 
     public void terminateQueue();
 
     public void post(String command);
 
-    public CSceneGraph getAnimator();
+    public void setSceneGraph(CSceneGraph sGraph);
+
+    public CSceneGraph getSceneGraph();
 
     public HashMap getChildMap();
 

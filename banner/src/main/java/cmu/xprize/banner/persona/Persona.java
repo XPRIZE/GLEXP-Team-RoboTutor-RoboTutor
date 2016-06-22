@@ -24,7 +24,6 @@ import android.content.IntentFilter;
 import android.content.res.XmlResourceParser;
 import android.graphics.Canvas;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
@@ -33,14 +32,12 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.LinearInterpolator;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -77,7 +74,7 @@ public class Persona extends View {
     private int             blinkCnt;
     private Timer           blinkTimer = null;
 
-    private Handler         handler;
+    private Handler blinkHandler;
 
     private AnimatorSet     animation = null;
     private TimerTask       blinkTask;
@@ -138,11 +135,22 @@ public class Persona extends View {
 
 
     /**
-     * Release resources and diesconnect from broadcast Mananger
+     * Release resources and disconnect from broadcast Manager
      */
     public void onDestroy() {
 
         try {
+            canBlink = false;
+            canStare = false;
+
+            if(blinkTimer != null) {
+                blinkTimer.cancel();
+                blinkTimer.purge();
+                blinkTimer = null;
+            }
+
+            cancelStare();
+
             setOnClickListener(null);
             bManager.unregisterReceiver(bReceiver);
         }
@@ -393,16 +401,15 @@ public class Persona extends View {
     }
 
 
-
     private void postDelayedBlink() {
         if (blinkTimer == null) {
-            blinkTimer = new Timer("BLINK");
-            handler    = new Handler();
-            isBlinking = true;
+            blinkTimer   = new Timer("BLINK");
+            blinkHandler = new Handler();
+            isBlinking   = true;
 
             blinkTask = new TimerTask() {
                 public void run() {
-                    handler.post(new Runnable() {
+                    blinkHandler.post(new Runnable() {
                         @Override
                         public void run() {
                             startBlink();

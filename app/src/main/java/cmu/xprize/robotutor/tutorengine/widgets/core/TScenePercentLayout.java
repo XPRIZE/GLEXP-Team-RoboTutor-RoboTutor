@@ -25,11 +25,11 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
-import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
+import cmu.xprize.util.ILogManager;
 
 
 public class TScenePercentLayout extends PercentRelativeLayout implements ITutorSceneImpl {
@@ -113,7 +113,7 @@ public class TScenePercentLayout extends PercentRelativeLayout implements ITutor
     }
 
     @Override
-    public void setLogManager(ITutorLogManager logManager) {
+    public void setLogManager(ILogManager logManager) {
         mTutorScene.setLogManager(logManager);
     }
 

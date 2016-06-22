@@ -11,10 +11,10 @@ import android.view.View;
 
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
-import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.util.ILogManager;
 
 /**
  * Created by Kevin on 2/13/2016.
@@ -138,7 +138,7 @@ public class TRect extends View  implements ITutorObjectImpl {
     }
 
     @Override
-    public void setLogManager(ITutorLogManager logManager) {
+    public void setLogManager(ILogManager logManager) {
         mSceneObject.setLogManager(logManager);
     }
 

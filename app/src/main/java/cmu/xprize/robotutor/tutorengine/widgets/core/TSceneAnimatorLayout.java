@@ -21,6 +21,7 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
         import android.content.Context;
         import android.util.AttributeSet;
+        import android.util.Log;
         import android.view.View;
         import android.view.ViewGroup;
         import android.view.animation.Animation;
@@ -32,20 +33,15 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
         import cmu.xprize.robotutor.R;
         import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
         import cmu.xprize.robotutor.tutorengine.CTutor;
-        import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
         import cmu.xprize.robotutor.tutorengine.ITutorGraph;
         import cmu.xprize.robotutor.tutorengine.ITutorManager;
         import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
         import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
+        import cmu.xprize.util.ILogManager;
 
-public class TSceneAnimatorLayout extends ViewAnimator implements ITutorManager {
+public class TSceneAnimatorLayout extends TMasterAnimatorLayout implements ITutorManager {
 
-    private Context        mContext;
-    private CSceneDelegate mTutorScene;
-    private int            mTutorCount = 0;
-    private Animation      fade_in, slide_in_left, slide_out_right;
-
-    private ArrayList<ITutorSceneImpl>  stack = new ArrayList<>();
+    final private String       TAG       = "TSceneAnimatorLayout";
 
 
     public TSceneAnimatorLayout(Context context) {
@@ -65,168 +61,11 @@ public class TSceneAnimatorLayout extends ViewAnimator implements ITutorManager 
         mTutorScene.init(context, attrs);
         mContext    = context;
 
-        fade_in = AnimationUtils.loadAnimation(mContext, R.anim.fade_in);
+        fade_in  = AnimationUtils.loadAnimation(mContext, R.anim.fade_in);
+        fade_out = AnimationUtils.loadAnimation(mContext, R.anim.fade_out);
 
         setInAnimation(fade_in);
+        setOutAnimation(fade_out);
     }
 
-    @Override
-    public void onDestroy() {
-        mTutorScene.onDestroy();
-    }
-
-
-
-    @Override
-    public void addView(View newView) {
-        super.addView(newView);
-    }
-
-
-    @Override
-    public void addView(ITutorSceneImpl newView) {
-
-        int insertNdx = super.getChildCount();
-        super.addView((View) newView, insertNdx);
-        super.setDisplayedChild(insertNdx);
-    }
-
-    @Override
-    public void removeView(ITutorSceneImpl oldView) {
-
-        super.removeView((View) oldView);
-    }
-
-
-    @Override
-    public void setAnimationListener(Animation.AnimationListener callback) {
-
-        fade_in.setAnimationListener(callback);
-    }
-
-
-    @Override
-    public void pushView(boolean push) {
-
-        View child = getChildAt(0);
-
-        if(push) {
-            stack.add(0, (ITutorSceneImpl)child);
-            mTutorCount++;
-        }
-
-        // Don't automatically pop the only tutor
-//        if(mTutorCount > 1)
-//            super.removeView(child);
-    }
-
-
-    @Override
-    public void popView(boolean push, Animation.AnimationListener callback) {
-
-        ITutorSceneImpl scene = stack.remove(0);
-
-        int index = indexOfChild((View)scene);
-
-        super.setDisplayedChild(index);
-    }
-
-
-    @Override
-    public void addView(View newView, int index) {
-        super.addView(newView, index);
-    }
-
-    @Override
-    public void removeView(View delView) {
-        super.removeView(delView);
-    }
-
-
-    @Override
-    public void removeAllViews() {
-        super.removeAllViews();
-    }
-
-
-    public void setDisplayedScene(int index) {
-        setDisplayedChild(index);
-    }
-
-
-    //************************************************************************
-    //************************************************************************
-    // Tutor methods  Start
-
-
-
-    // Tutor methods  End
-    //************************************************************************
-    //************************************************************************
-
-
-    @Override
-    public void setName(String name) {
-        mTutorScene.setName(name);
-    }
-
-    @Override
-    public String name() {
-        return mTutorScene.name();
-    }
-
-    @Override
-    public void setParent(ITutorSceneImpl mParent) {
-        mTutorScene.setParent(mParent);
-    }
-
-    @Override
-    public void setTutor(CTutor tutor) {
-        mTutorScene.setTutor(tutor);
-    }
-
-    @Override
-    public void postInflate() {}
-
-    @Override
-    public void setNavigator(ITutorGraph navigator) {
-        mTutorScene.setNavigator(navigator);
-    }
-
-    @Override
-    public void setLogManager(ITutorLogManager logManager) {
-        mTutorScene.setLogManager(logManager);
-    }
-
-
-    @Override
-    public CSceneDelegate getimpl() {
-        return mTutorScene;
-    }
-
-
-    @Override
-    public ViewGroup getOwner() {
-        return mTutorScene.getOwner();
-    }
-
-    @Override
-    public String preEnterScene(scene_descriptor scene, String Direction) {
-        return mTutorScene.preEnterScene(scene, Direction);
-    }
-
-    @Override
-    public void onEnterScene() {
-        mTutorScene.onEnterScene();
-    }
-
-    @Override
-    public String preExitScene(String Direction, int sceneCurr) {
-        return mTutorScene.preExitScene(Direction, sceneCurr);
-    }
-
-    @Override
-    public void onExitScene() {
-        mTutorScene.onExitScene();
-    }
 }

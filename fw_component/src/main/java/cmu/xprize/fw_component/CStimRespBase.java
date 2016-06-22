@@ -342,10 +342,10 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
 
                     _dataIndex++;
                 } else {
-                    CErrorManager.terminate(TAG, "Error no DataSource : ", null, false);
+                    CErrorManager.logEvent(TAG, "Error no DataSource : ", null, false);
                 }
             } catch (Exception e) {
-                CErrorManager.terminate(TAG, "Data Exhuasted: call past end of data", e, false);
+                CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, false);
             }
         }
     }
@@ -372,7 +372,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
             setBackgroundColor(colorMap.get(Color));
         }
         catch(Exception e) {
-            CErrorManager.terminate(TAG, "Invalid Color Name: "  + Color + " : ", e, false);
+            CErrorManager.logEvent(TAG, "Invalid Color Name: "  + Color + " : ", e, false);
         }
     }
 
@@ -385,7 +385,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
             setTextColor(colorMap.get(Color));
         }
         catch(Exception e) {
-            CErrorManager.terminate(TAG, "Invalid Color Name: "  + Color + " : ", e, false);
+            CErrorManager.logEvent(TAG, "Invalid Color Name: "  + Color + " : ", e, false);
         }
     }
 

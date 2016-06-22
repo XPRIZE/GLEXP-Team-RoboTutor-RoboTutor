@@ -27,7 +27,6 @@ import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.ITutorLogManager;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -39,6 +38,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.robotutor.tutorengine.graph.vars.type_array;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.IEventListener;
+import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
@@ -359,7 +359,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
             }
         }
         catch (Exception e) {
-            CErrorManager.terminate(TAG, "Invalid Data Source for : " + name(), e, false);
+            CErrorManager.logEvent(TAG, "Invalid Data Source for : " + name(), e, false);
         }
 
         // Pass an array of strings as the data source.
@@ -386,11 +386,11 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
 
                 _dataIndex++;
             } else {
-                CErrorManager.terminate(TAG, "Error no DataSource : ", null, false);
+                CErrorManager.logEvent(TAG, "Error no DataSource : ", null, false);
             }
         }
         catch(Exception e) {
-            CErrorManager.terminate(TAG, "Data Exhuasted: call past end of data  - ", e, false);
+            CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data  - ", e, false);
         }
 
         // Kill the recognizer thread and set the End Of Data flag
@@ -525,7 +525,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
     }
 
     @Override
-    public void setLogManager(ITutorLogManager logManager) {
+    public void setLogManager(ILogManager logManager) {
         mSceneObject.setLogManager(logManager);
     }
 
