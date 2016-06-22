@@ -64,7 +64,6 @@ import edu.cmu.xprize.listener.ListenerBase;
 public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     private CTutorEngine        tutorEngine;
-    private ITutorManager       masterContainer;
     private CMediaManager       mMediaManager;
 
     private CLoaderView         progressView;
@@ -73,6 +72,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     public TTSsynthesizer       TTS = null;
     public ListenerBase         ASR;
 
+    static public ITutorManager masterContainer;
     static public ILogManager   logManager;
     static public String        APP_PRIVATE_FILES;
     static public String        LOG_ID = "STARTUP";
@@ -267,7 +267,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
             if(!engineStarted) {
                 engineStarted = true;
 
-                logManager.postEvent(TAG, "startTutorEngine");
+                logManager.postEvent(TAG, "Starting TutorEngine");
 
                 // Delete the asset loader utility ASR object
                 ASR = null;
@@ -278,12 +278,17 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 // Load the default tutor defined in assets/tutors/engine_descriptor.json
                 // TODO: Handle tutor creation failure
                 //
-                tutorEngine = CTutorEngine.getTutorEngine(RoboTutor.this, masterContainer);
+                tutorEngine = CTutorEngine.getTutorEngine(RoboTutor.this);
 
                 // TODO: This is a temporary log update mechanism - see below
                 //
                 masterContainer.addAndShow(startView);
                 setFullScreen();
+            }
+            // Note that it is possible for the masterContainer to be recreated without the
+            // engine begin destroyed so we must maintain sync here.
+            else {
+                logManager.postEvent(TAG, "Restarting TutorEngine");
             }
         }
     }

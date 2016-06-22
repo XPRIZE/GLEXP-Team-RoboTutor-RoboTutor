@@ -262,6 +262,11 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
     }
 
     @Override
+    public void wiggle(Float magnitude, Long duration, Integer repetition ) {
+        mSceneObject.wiggle(magnitude, duration, repetition);
+    }
+
+    @Override
     public void setAlpha(Float alpha) {
         mSceneObject.setAlpha(alpha);
     }
