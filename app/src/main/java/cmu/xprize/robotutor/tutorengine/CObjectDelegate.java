@@ -216,6 +216,51 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
     }
 
 
+    public void bubbleBounce(float magnitude, float scale, long duration, int repetition ) {
+
+        ArrayList<Animator> bounceColl = new ArrayList<Animator>();
+
+        AnimatorSet animation = new AnimatorSet();
+
+        if(repetition <= 0)
+            repetition = 1;
+
+        animation.addListener(new Animator.AnimatorListener() {
+
+            @Override
+            public void onAnimationCancel(Animator arg0) {
+                //Functionality here
+            }
+
+            @Override
+            public void onAnimationStart(Animator arg0) {
+                //Functionality here
+            }
+
+            @Override
+            public void onAnimationEnd(Animator arg0) {
+                //Functionality here
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator arg0) {
+                //Functionality here
+            }
+        });
+
+        for(int i=0; i< repetition ; i++) {
+            bounceColl.add(createFloatAnimator("y", mOwnerView.getY() + (mOwnerView.getHeight() * magnitude), duration, 1, ValueAnimator.REVERSE, null));
+            bounceColl.add(createFloatAnimator("scaleX", scale, duration, 1, ValueAnimator.REVERSE, new AccelerateInterpolator(2.0f)));
+
+            bounceColl.add(createFloatAnimator("y", mOwnerView.getY() - (mOwnerView.getHeight() * magnitude), duration, 1, ValueAnimator.REVERSE, null));
+        }
+
+        animation.playSequentially(bounceColl);
+
+        animation.start();
+    }
+
+
     public void setAlpha(Float alpha) {
         mOwnerView.setAlpha(alpha);
     }
