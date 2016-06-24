@@ -33,7 +33,7 @@ public class CClassMap {
     // This is used to map "type" (class names) used in json HashMap specs to real classes
 
     static {
-        classMap.put("Mn_Data", CMn_Data.class);
+        classMap.put("Bp_Data", CBp_Data.class);
 
         classMap.put("string", String.class);
         classMap.put("bool", Boolean.class);

@@ -90,7 +90,7 @@ public class CMediaManager implements IMediaManager {
     }
 
 
-    public void globalStop() {
+    public void restartMediaManager() {
 
         for(mediaController controller : mControllerSet) {
             if(controller.isPlaying()) {
@@ -131,14 +131,20 @@ public class CMediaManager implements IMediaManager {
             timeline.globalPause();
         }
 
-
-
         if(TTS != null)
             TTS.stopSpeaking();
 
         if(mListener != null) {
             mListener.stop();
         }
+
+        mControllerSet = new ArrayList<mediaController>();
+        mTimerMap      = new HashMap<String, type_timer>();
+        mHandlerMap    = new HashMap<String, type_handler>();
+        mTimeLineMap   = new HashMap<String, type_timeline>();
+
+        mMediaPackage  = new HashMap<>();
+        mLangFtrMap    = new HashMap<CTutor, String>();
     }
 
 

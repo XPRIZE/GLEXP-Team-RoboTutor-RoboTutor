@@ -28,6 +28,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
@@ -187,12 +188,54 @@ public class CMn_Component extends LinearLayout implements ILoadableObject, IVal
 
 
     public void UpdateValue(int value) {
-
     }
 
 
-    public void wiggleColumn(int index, String part, float magnitude, long duration, int repetition ) {
+    /**
+     * We override the delegate implementation to wiggle just the icons if no index/part are specified
+     * as in the other override.
+     *
+     * @param direction
+     * @param magnitude
+     * @param duration
+     * @param repetition
+     */
+    public void wiggle(String direction, float magnitude, long duration, int repetition ) {
+        wiggle( direction,  magnitude,  duration,  repetition,  "icons",  _mnindex );
+    }
 
+
+    /**
+     * We override the delegate implementation to wiggle just the icons if no index/part are specified
+     * as in the other override.
+     *
+     * @param direction
+     * @param magnitude
+     * @param duration
+     * @param repetition
+     * @param part
+     *
+     */
+    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition, String part) {
+        wiggle( direction,  magnitude,  duration,  repetition,  part,  _mnindex );
+    }
+
+
+    /**
+     * Note that the parameters here have to be non-intrinsic types so that the scripting engine can instantiate
+     * them. i.e. they must have a constructor.
+     * @param direction
+     * @param magnitude
+     * @param duration
+     * @param repetition
+     * @param part
+     * @param index
+     */
+    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition, String part, Integer index ) {
+
+        index = (index == -1)? _mnindex: index;
+
+        _alleys.get(index).wigglePart(direction, magnitude, duration, repetition, part);
     }
 
 

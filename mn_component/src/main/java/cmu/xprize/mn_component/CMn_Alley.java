@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.View_Helper;
 
 public class CMn_Alley extends android.support.percent.PercentRelativeLayout {
@@ -106,6 +107,37 @@ public class CMn_Alley extends android.support.percent.PercentRelativeLayout {
         if(_isMissingNumber)
             _owner.UpdateValue(newValue);
     }
+
+
+    public void wigglePart(String direction, float magnitude, long duration, int repetition, String part ) {
+
+        View wiggleTarget = null;
+
+        switch(part.toLowerCase()) {
+            case "plus":
+                wiggleTarget = Splus;
+                break;
+
+            case "minus":
+                wiggleTarget = Sminus;
+                break;
+
+            case "number":
+                wiggleTarget = Snumber;
+                break;
+
+            case "icons":
+                wiggleTarget = SiconSet;
+                break;
+
+            default:
+                wiggleTarget = this;
+                break;
+        }
+
+        CAnimatorUtil.wiggle(wiggleTarget, direction, magnitude, duration, repetition);
+    }
+
 
 
     public void setData(CMn_Data data, int index, int mnIndex) {

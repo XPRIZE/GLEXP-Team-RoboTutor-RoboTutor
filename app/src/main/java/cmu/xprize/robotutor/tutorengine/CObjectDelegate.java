@@ -126,9 +126,9 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
     }
 
 
-    public void wiggle(float magnitude, long duration, int repetition ) {
+    public void wiggle(String direction, float magnitude, long duration, int repetition ) {
 
-        CAnimatorUtil.wiggle(mOwnerView, magnitude, duration, repetition);
+        CAnimatorUtil.wiggle(mOwnerView, direction, magnitude, duration, repetition);
     }
 
 

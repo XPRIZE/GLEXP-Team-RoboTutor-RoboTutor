@@ -28,6 +28,9 @@ import android.view.animation.AccelerateInterpolator;
 
 import java.util.ArrayList;
 
+
+// TODO: CAnimatorUtil needs to be integrated with the MediaManager so that it can kill animations on demand.
+
 public class CAnimatorUtil {
 
     static private Animator createFloatAnimator(View _tarView, String prop, float endPt, long duration , int repeat, int mode, AccelerateInterpolator interpolator ) {
@@ -85,7 +88,7 @@ public class CAnimatorUtil {
     }
 
 
-    static public void wiggle(View _tarView, float magnitude, long duration, int repetition ) {
+    static public void wiggle(View _tarView, String direction, float magnitude, long duration, int repetition ) {
 
         ArrayList<Animator> wiggleColl = new ArrayList<Animator>();
 
@@ -117,9 +120,20 @@ public class CAnimatorUtil {
             }
         });
 
-        for(int i=0; i< repetition ; i++) {
-            wiggleColl.add(createFloatAnimator(_tarView, "x", _tarView.getX() + (_tarView.getWidth() * magnitude), duration, 1, ValueAnimator.REVERSE, null));
-            wiggleColl.add(createFloatAnimator(_tarView, "x", _tarView.getX() - (_tarView.getWidth() * magnitude), duration, 1, ValueAnimator.REVERSE, null));
+        switch(direction.toLowerCase()) {
+            case "vertical":
+                for (int i = 0; i < repetition; i++) {
+                    wiggleColl.add(createFloatAnimator(_tarView, "y", _tarView.getY() + (_tarView.getHeight() * magnitude), duration, 1, ValueAnimator.REVERSE, null));
+                    wiggleColl.add(createFloatAnimator(_tarView, "y", _tarView.getY() - (_tarView.getHeight() * magnitude), duration, 1, ValueAnimator.REVERSE, null));
+                }
+                break;
+
+            default:
+                for (int i = 0; i < repetition; i++) {
+                    wiggleColl.add(createFloatAnimator(_tarView, "x", _tarView.getX() + (_tarView.getWidth() * magnitude), duration, 1, ValueAnimator.REVERSE, null));
+                    wiggleColl.add(createFloatAnimator(_tarView, "x", _tarView.getX() - (_tarView.getWidth() * magnitude), duration, 1, ValueAnimator.REVERSE, null));
+                }
+                break;
         }
 
         animation.playSequentially(wiggleColl);

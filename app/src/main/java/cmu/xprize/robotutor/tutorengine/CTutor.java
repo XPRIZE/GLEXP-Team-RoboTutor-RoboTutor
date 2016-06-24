@@ -231,7 +231,7 @@ public class CTutor implements ILoadableObject2 {
 
         private void cleanUpTutor() {
 
-            mMediaManager.globalStop();
+            mMediaManager.restartMediaManager();
 
             // disable the input queue permenantly in prep for destruction
             // walks the queue chain to diaable the tutor and scene queues

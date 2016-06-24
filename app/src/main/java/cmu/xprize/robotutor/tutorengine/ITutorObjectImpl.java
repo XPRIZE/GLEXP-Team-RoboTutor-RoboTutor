@@ -11,7 +11,7 @@ public interface ITutorObjectImpl extends ITutorObject {
 
     public void zoomInOut(Float scale, Long duration);
 
-    public void wiggle(Float magnitude, Long duration, Integer repetition );
+    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition );
 
     public void setAlpha(Float alpha);
 }

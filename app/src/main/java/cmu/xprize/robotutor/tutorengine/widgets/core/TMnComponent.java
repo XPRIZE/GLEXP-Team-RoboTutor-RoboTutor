@@ -177,6 +177,10 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
     //**********************************************************
     //*****************  Common Tutor Object Methods
 
+    //    * Note that the parameters here have to be non-intrinsic types so that the scripting engine can instantiate
+    //    * them. i.e. they must have a constructor.
+
+
     @Override
     public void setName(String name) {
         mSceneObject.setName(name);
@@ -222,10 +226,50 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
         mSceneObject.zoomInOut(scale, duration);
     }
 
+
+    /**
+     * Note that wiggle is implemented in the super class not the delegate to allow subcomponent wiggles
+     * This override targets just the icons on the question column if no index/part spec are given.
+     *
+     * @param direction
+     * @param magnitude
+     * @param duration
+     * @param repetition
+     */
     @Override
-    public void wiggle(Float magnitude, Long duration, Integer repetition ) {
-        mSceneObject.wiggle(magnitude, duration, repetition);
+    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition ) {
+        super.wiggle(direction, magnitude, duration, repetition);
     }
+
+
+    /**
+     * Note that wiggle is implemented in the super class not the delegate to allow subcomponent wiggles
+     * @param direction
+     * @param magnitude
+     * @param duration
+     * @param repetition
+     * @param part
+     */
+    @Override
+    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition, String part) {
+        super.wiggle(direction, magnitude, duration, repetition, part);
+    }
+
+
+    /**
+     * Note that wiggle is implemented in the super class not the delegate to allow subcomponent wiggles
+     * @param direction
+     * @param magnitude
+     * @param duration
+     * @param repetition
+     * @param part
+     * @param index
+     */
+    @Override
+    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition, String part, Integer index ) {
+        super.wiggle(direction, magnitude, duration, repetition, part, index);
+    }
+
 
     @Override
     public void setAlpha(Float alpha) {

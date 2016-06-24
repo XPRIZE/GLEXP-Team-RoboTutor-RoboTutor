@@ -327,8 +327,8 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
     }
 
     @Override
-    public void wiggle(Float magnitude, Long duration, Integer repetition ) {
-        mSceneObject.wiggle(magnitude, duration, repetition);
+    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition ) {
+        mSceneObject.wiggle(direction, magnitude, duration, repetition);
     }
 
     @Override
