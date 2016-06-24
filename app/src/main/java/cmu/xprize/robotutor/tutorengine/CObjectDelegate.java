@@ -14,6 +14,7 @@ import android.widget.Button;
 import java.util.ArrayList;
 
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
+import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.TCONST;
 
@@ -119,145 +120,21 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
     }
 
 
-    private Animator createFloatAnimator(String prop, float endPt, long duration ,int repeat, int mode, AccelerateInterpolator interpolator ) {
-
-        ValueAnimator   vAnimator = null;
-
-        vAnimator = ObjectAnimator.ofFloat(mOwnerView, prop, endPt).setDuration(duration);
-
-        vAnimator.setInterpolator(interpolator);
-        vAnimator.setRepeatCount(repeat);
-        vAnimator.setRepeatMode(mode);
-
-        vAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                mOwnerView.invalidate();
-            }
-        });
-
-        return vAnimator;
-    }
-
-
     public void zoomInOut(float scale, long duration ) {
 
-        AnimatorSet animation = new AnimatorSet();
-
-        animation.addListener(new Animator.AnimatorListener() {
-
-            @Override
-            public void onAnimationCancel(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationStart(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationEnd(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator arg0) {
-                //Functionality here
-            }
-        });
-
-        animation.play(createFloatAnimator("scaleX", scale, duration, 1, ValueAnimator.REVERSE, new AccelerateInterpolator(2.0f))).with(createFloatAnimator("scaleY", scale, duration, 1, ValueAnimator.REVERSE, new AccelerateInterpolator(2.0f)));
-
-        animation.start();
+        CAnimatorUtil.zoomInOut(mOwnerView, scale, duration);
     }
 
 
     public void wiggle(float magnitude, long duration, int repetition ) {
 
-        ArrayList<Animator> wiggleColl = new ArrayList<Animator>();
-
-        AnimatorSet animation = new AnimatorSet();
-
-        if(repetition <= 0)
-            repetition = 1;
-
-        animation.addListener(new Animator.AnimatorListener() {
-
-            @Override
-            public void onAnimationCancel(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationStart(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationEnd(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator arg0) {
-                //Functionality here
-            }
-        });
-
-        for(int i=0; i< repetition ; i++) {
-            wiggleColl.add(createFloatAnimator("x", mOwnerView.getX() + (mOwnerView.getWidth() * magnitude), duration, 1, ValueAnimator.REVERSE, null));
-            wiggleColl.add(createFloatAnimator("x", mOwnerView.getX() - (mOwnerView.getWidth() * magnitude), duration, 1, ValueAnimator.REVERSE, null));
-        }
-
-        animation.playSequentially(wiggleColl);
-
-        animation.start();
+        CAnimatorUtil.wiggle(mOwnerView, magnitude, duration, repetition);
     }
 
 
     public void bubbleBounce(float magnitude, float scale, long duration, int repetition ) {
 
-        ArrayList<Animator> bounceColl = new ArrayList<Animator>();
-
-        AnimatorSet animation = new AnimatorSet();
-
-        if(repetition <= 0)
-            repetition = 1;
-
-        animation.addListener(new Animator.AnimatorListener() {
-
-            @Override
-            public void onAnimationCancel(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationStart(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationEnd(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator arg0) {
-                //Functionality here
-            }
-        });
-
-        for(int i=0; i< repetition ; i++) {
-            bounceColl.add(createFloatAnimator("y", mOwnerView.getY() + (mOwnerView.getHeight() * magnitude), duration, 1, ValueAnimator.REVERSE, null));
-            bounceColl.add(createFloatAnimator("scaleX", scale, duration, 1, ValueAnimator.REVERSE, new AccelerateInterpolator(2.0f)));
-
-            bounceColl.add(createFloatAnimator("y", mOwnerView.getY() - (mOwnerView.getHeight() * magnitude), duration, 1, ValueAnimator.REVERSE, null));
-        }
-
-        animation.playSequentially(bounceColl);
-
-        animation.start();
+        CAnimatorUtil.Bounce(mOwnerView, magnitude, scale, duration, repetition);
     }
 
 

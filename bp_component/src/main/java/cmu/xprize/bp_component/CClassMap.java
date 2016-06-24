@@ -17,7 +17,7 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.mn_component;
+package cmu.xprize.bp_component;
 
 import java.util.HashMap;
 
