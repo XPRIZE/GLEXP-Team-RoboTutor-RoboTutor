@@ -17,31 +17,32 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.mn_component;
+package cmu.xprize.bp_component;
 
-import java.util.HashMap;
+import org.json.JSONObject;
+
+import cmu.xprize.util.CClassMap;
+import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IScope;
+import cmu.xprize.util.JSON_Helper;
+
+public class CBp_Data implements ILoadableObject{
+
+    // json loadable
+    public String        options;
+    public int[]         dataset;
+    public int           maxvalue;
+    public String        mn_index;
 
 
-/**
- * Created by Kevin on 2/29/2016.
- */
-public class CClassMap {
 
-    static public HashMap<String, Class> classMap = new HashMap<String, Class>();
+    //************ Serialization
 
-    //
-    // This is used to map "type" (class names) used in json HashMap specs to real classes
 
-    static {
-        classMap.put("Mn_Data", CMn_Data.class);
 
-        classMap.put("string", String.class);
-        classMap.put("bool", Boolean.class);
-        classMap.put("int", Integer.class);
-        classMap.put("float", Float.class);
-        classMap.put("byte", Byte.class);
-        classMap.put("long", Long.class);
-        classMap.put("short", Short.class);
-        classMap.put("object", Object.class);
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
+
+        JSON_Helper.parseSelf(jsonObj, this, CClassMap.classMap, scope);
     }
 }

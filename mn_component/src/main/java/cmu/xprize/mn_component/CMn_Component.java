@@ -1,3 +1,22 @@
+//*********************************************************************************
+//
+//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
+//    Copyright(c) Kevin Willows All Rights Reserved
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+//*********************************************************************************
+
 package cmu.xprize.mn_component;
 
 import android.content.Context;
@@ -27,12 +46,13 @@ public class CMn_Component extends LinearLayout implements ILoadableObject, IVal
     private   int                  _mnindex;
     private   int                  _corValue;
 
+    private boolean correct;
+
 
     // json loadable
     public CMn_Data[]      dataSource;
 
     static final String TAG = "CMn_Component";
-    private boolean correct;
 
 
     public CMn_Component(Context context) {
@@ -167,6 +187,11 @@ public class CMn_Component extends LinearLayout implements ILoadableObject, IVal
 
 
     public void UpdateValue(int value) {
+
+    }
+
+
+    public void wiggleColumn(int index, String part, float magnitude, long duration, int repetition ) {
 
     }
 
