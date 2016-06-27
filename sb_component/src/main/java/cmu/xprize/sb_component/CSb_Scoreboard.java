@@ -209,10 +209,12 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
         if(mScore == 0) return;
         if(coinbags[0].getCoinNumber() > 0) coinbags[0].decrease();
         else {
-            if(mScore % 100 == 0)
-                borrowAnimation(2);
-            else
-                borrowAnimation(1);
+            for(int i = 1; i < mColNum; i++){
+                if(coinbags[i].getCoinNumber() > 0){
+                    borrowAnimation(i);
+                    break;
+                }
+            }
         }
 //        borrowAnimation(bag_dollars);
         mScore -= 1;
@@ -252,7 +254,7 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
 
 
         LayoutParams params_coin = (LayoutParams) largeCoin.getLayoutParams();
-        params_coin.width = (int)(width * 100 / widthScale);
+        params_coin.width = (int)(width * 100.0f / widthScale);
         params_coin.height = (int)(height / 302.0f * 100 );
         requestLayout();
 
@@ -296,7 +298,7 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
                 alpha2.setDuration(800);
 
                 ValueAnimator translateX = ValueAnimator.ofFloat(largeCoin.getX(),
-                        carryToBag.getX() - width / 200.0f * 30 );
+                        carryToBag.getX() - (width * 30.0f / widthScale) );
                 translateX.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
@@ -328,16 +330,16 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
                         });
                         scale.setDuration(1000);
 
-                        ValueAnimator translateX = ValueAnimator.ofFloat(largeCoin.getX(),
+                        ValueAnimator translateX2 = ValueAnimator.ofFloat(largeCoin.getX(),
                                 carryToBag.getX() + carryToBag.coins[0].getX());
-                        translateX.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        translateX2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator animation) {
                                 largeCoin.setX((Float) animation.getAnimatedValue());
                                 requestLayout();
                             }
                         });
-                        translateX.setDuration(1000);
+                        translateX2.setDuration(1000);
 
                         ValueAnimator translateY2;
 //                        if(carryToBag.getCoinNumber() > 0)
@@ -359,7 +361,7 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
 
 
                         AnimatorSet set = new AnimatorSet();
-                        set.playTogether(translateX, translateY2, scale);
+                        set.playTogether(translateX2, translateY2, scale);
 
 
                         set.addListener(new AnimatorListenerAdapter() {
@@ -412,7 +414,7 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
         lendToBag.setVisibility(INVISIBLE);
 
         LayoutParams params = (LayoutParams) largeCoin.getLayoutParams();
-        params.width = (int) (width * 20 * widthScale);
+        params.width = (int) (width * 20.0 / widthScale);
         params.height = (int) (height / 302.0f * 20 );
         largeCoin.setX(bag.getX() + bag.coins[0].getX());
 //        if(bag.getCoinNumber() > 0)
@@ -452,7 +454,7 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 LayoutParams params = (LayoutParams) largeCoin.getLayoutParams();
-                params.width = (int) (width / 240.0f * 100  * (Float) animation.getAnimatedValue());
+                params.width = (int) (width * 100.0f / widthScale  * (Float) animation.getAnimatedValue());
                 params.height = (int) (height / 302.0f * 100  * (Float) animation.getAnimatedValue());
 
             }
