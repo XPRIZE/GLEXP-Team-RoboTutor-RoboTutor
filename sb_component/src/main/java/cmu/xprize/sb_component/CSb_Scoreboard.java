@@ -14,23 +14,15 @@ import android.widget.ImageView;
  */
 
 public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayout {
-    private CSb_Coinbag bag_pennies;
-    public CSb_Coinbag bag_dimes;
-    private CSb_Coinbag bag_dollars;
-
-    private CSb_Lollipop lollipop_pennies;
-    public CSb_Lollipop lollipop_dimes;
-    private CSb_Lollipop lollipop_dollars;
-
-
     private CSb_Lollipop[] lollipops;
     private CSb_Coinbag[] coinbags;
-    private static float ratio = 302/210.0f;
     private int mScore;
     private int mColNum;
     private int widthScale;
-    private boolean init = true;
+    private int[] resoureImageIds;
 
+
+    private boolean init = true;
 
     private static float DPTOPX;
     private Context context;
@@ -82,7 +74,6 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
         int lollipopGap = bagGap;
         int lollipopMarginLeft = 0;
 
-//        30 40 30 40 30 40 30
 
         for(int i = mColNum - 1; i >= 0; i--){
             coinbags[i].layout(bagMarginLeft,
@@ -95,28 +86,6 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
             bagMarginLeft += bagGap;
             lollipopMarginLeft += lollipopGap;
         }
-
-
-//        bag_dollars.layout((int)(widthSize * 0.143),
-//                            heightSize - bagHeight,
-//                (int)(widthSize * 0.143) + bagWidth,
-//                heightSize);
-//
-//        bag_dimes.layout((int)(widthSize * 0.381),
-//                heightSize - bagHeight,
-//                (int)(widthSize * 0.381) + bagWidth,
-//                heightSize);
-//
-//        bag_pennies.layout((int)(widthSize * 0.619),
-//                heightSize - bagHeight,
-//                (int)(widthSize * 0.619) + bagWidth,
-//                heightSize);
-//
-//        int lollipopWidth = (int)(widthSize * 0.476);
-//        lollipop_dollars.layout(0, 0, lollipopWidth, heightSize);
-//        lollipop_dimes.layout((int)(widthSize * 0.238), 0, (int)(widthSize * 0.238) + lollipopWidth, heightSize);
-//        lollipop_pennies.layout((int)(widthSize * 0.476), 0, (int)(widthSize * 0.476) + lollipopWidth, heightSize);
-
     }
 
     private void init(Context context, AttributeSet attrs) {
@@ -137,11 +106,25 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
                 int score = mScore;
                 coinbags = new CSb_Coinbag[mColNum];
                 lollipops = new CSb_Lollipop[mColNum];
+                resoureImageIds = new int[mColNum];
+                for(int i = 0; i < mColNum; i++){
+                    switch (i){
+                        case 0:
+                            resoureImageIds[i] = R.drawable.coin_bronze;
+                            break;
+                        case 1:
+                            resoureImageIds[i] = R.drawable.coin_silver;
+                            break;
+                        default:
+                            resoureImageIds[i] = R.drawable.coin_gold;
+                    }
+                }
+
                 for(int i = 0; i < mColNum; i++){
                     coinbags[i] = new CSb_Coinbag(context);
                     lollipops[i] = new CSb_Lollipop(context);
-                    coinbags[i].setImageResource(R.drawable.coin_bronze);
-                    lollipops[i].setImageResoure(R.drawable.coin_bronze);
+                    coinbags[i].setImageResource(resoureImageIds[i]);
+                    lollipops[i].setImageResoure(resoureImageIds[i]);
                     coinbags[i].setCoinNumber(score % 10);
                     score /= 10;
                     addView(coinbags[i]);
@@ -151,45 +134,14 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
 
                 widthScale = 50 * (mColNum + 1);
 
-//                bag_pennies = new CSb_Coinbag(context);
-//                bag_dimes = new CSb_Coinbag(context);
-//                bag_dollars = new CSb_Coinbag(context);
-//
-//                bag_pennies.setImageResource(R.drawable.coin_bronze);
-//                bag_dimes.setImageResource(R.drawable.coin_silver);
-//                bag_dollars.setImageResource(R.drawable.coin_gold);
-//
-//                lollipop_pennies = new CSb_Lollipop(context);
-//                lollipop_dimes = new CSb_Lollipop(context);
-//                lollipop_dollars = new CSb_Lollipop(context);
-//
-//                lollipop_pennies.setImageResoure(R.drawable.coin_bronze);
-//                lollipop_dimes.setImageResoure(R.drawable.coin_silver);
-//                lollipop_dollars.setImageResoure(R.drawable.coin_gold);
-
                 largeCoin = new ImageView(context);
                 largeCoin.setImageResource(R.drawable.coin_gold);
                 largeCoin.setVisibility(INVISIBLE);
                 largeCoin.setScaleType(ImageView.ScaleType.FIT_XY);
 
 
-
-//                addView(bag_pennies);
-//                addView(bag_dimes);
-//                addView(bag_dollars);
-//                addView(lollipop_pennies);
-//                addView(lollipop_dimes);
-//                addView(lollipop_dollars);
                 addView(largeCoin);
 
-//                bag_pennies.setVisibility(INVISIBLE);
-//                bag_dollars.setVisibility(INVISIBLE);
-//                bag_dimes.setVisibility(INVISIBLE);
-
-
-//                lollipop_dimes.setVisibility(INVISIBLE);
-//                lollipop_dollars.setVisibility(INVISIBLE);
-//                lollipop_pennies.setVisibility(INVISIBLE);
 
             } finally {
                 a.recycle();
@@ -216,7 +168,6 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
                 }
             }
         }
-//        borrowAnimation(bag_dollars);
         mScore -= 1;
     }
 
@@ -225,14 +176,16 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
         int widthScale = 50 * (mColNum + 1);
         int bagWidth = (int)(widthSize * 40.0 / widthScale);
         int lollipopWidth = (int)(widthSize * 100.0 / widthScale);
-        int bagGap = (int)(widthSize * 50 / widthScale);
-        int bagMarginLeft = (int)(widthSize * 30 / widthScale);
+        int bagGap = (int)(widthSize * 50.0 / widthScale);
+        int bagMarginLeft = (int)(widthSize * 30.0 / widthScale);
         int lollipopGap = bagGap;
         int lollipopMarginLeft = 0;
 
         for(int i = mColNum - 1; i >= 0; i--){
             coinbags[i].setX(bagMarginLeft);
             lollipops[i].setX(lollipopMarginLeft);
+            lollipops[i].setToCircle();
+            lollipops[i].forceLayout();
             bagMarginLeft += bagGap;
             lollipopMarginLeft += lollipopGap;
         }
@@ -259,19 +212,13 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
         requestLayout();
 
 
-//        final CSb_Coinbag carryToBag = bag == bag_pennies ? bag_dimes : bag_dollars;
-//
-//        final CSb_Lollipop lollipop = bag == bag_pennies? lollipop_pennies : lollipop_dimes;
         lollipop.setVisibility(VISIBLE);
 
         lollipop.animateToCircle();
         lollipop.postDelayed(new Runnable() {
             @Override
             public void run() {
-//                if(bag == bag_pennies)
-//                    largeCoin.setImageResource(R.drawable.coin_silver);
-//                else
-//                    largeCoin.setImageResource(R.drawable.coin_gold);
+                largeCoin.setImageResource(resoureImageIds[index+1]);
                 largeCoin.setVisibility(VISIBLE);
                 largeCoin.getDrawable().setAlpha(0);
                 largeCoin.setX(lollipop.getX());
@@ -342,13 +289,10 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
                         translateX2.setDuration(1000);
 
                         ValueAnimator translateY2;
-//                        if(carryToBag.getCoinNumber() > 0)
-                            translateY2 = ValueAnimator.ofFloat(largeCoin.getY(),
-                                    carryToBag.getY() +
-                                            carryToBag.coins[carryToBag.getCoinNumber()].getY());
-//                        else
-//                            translateY2 = ValueAnimator.ofFloat(largeCoin.getY(),
-//                                    carryToBag.getY() + carryToBag.coins[0].getY());
+                        translateY2 = ValueAnimator.ofFloat(largeCoin.getY(),
+                                carryToBag.getY() +
+                                        carryToBag.coins[carryToBag.getCoinNumber()].getY());
+
 
                         translateY2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
@@ -371,17 +315,9 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
                                 largeCoin.setVisibility(INVISIBLE);
                                 bag.setVisibility(VISIBLE);
                                 bag.setCoinNumber(0);
-
                                 carryToBag.increase();
                                 if(carryToBag.getCoinNumber() == 10)
                                     carryAnimation(index+1);
-//                                if (bag == bag_dimes)
-//                                    bag_dollars.increase();
-//                                else if (bag == bag_pennies) {
-//                                    bag_dimes.increase();
-//                                    if (bag_dimes.getCoinNumber() == 10)
-//                                        carryAnimation(bag_dimes);
-//                                }
                             }
                         });
 
@@ -409,19 +345,17 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
 
         bag.decrease();
 
-//        final CSb_Coinbag bagLandTo = bag == bag_dimes? bag_pennies : bag_dimes;
         lendToBag.setCoinNumber(10);
         lendToBag.setVisibility(INVISIBLE);
 
         LayoutParams params = (LayoutParams) largeCoin.getLayoutParams();
         params.width = (int) (width * 20.0 / widthScale);
         params.height = (int) (height / 302.0f * 20 );
+        largeCoin.setImageResource(resoureImageIds[index]);
         largeCoin.setX(bag.getX() + bag.coins[0].getX());
-//        if(bag.getCoinNumber() > 0)
-//            largeCoin.setY(bag.getY() - bag.coins[0].getY());
-//        else
-            largeCoin.setY(bag.getY() + bag.coins[bag.getCoinNumber()].getY());
+        largeCoin.setY(bag.getY() + bag.coins[bag.getCoinNumber()].getY());
         largeCoin.setVisibility(VISIBLE);
+
 
         lollipop.setAlpha(0);
         lollipop.setToCircle();
@@ -494,13 +428,9 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
         alpha2.setDuration(800);
 
 
-//        largeCoin.setScaleType(ImageView.ScaleType.CENTER);
-//        largeCoin.animate().scaleX(5).scaleY(5).translationYBy(0).setDuration(1000).start();
-
         set.playTogether(translateY, scale, translateX);
         set.playTogether(translateX2, alpha1, alpha2);
         set.play(translateX2).after(translateX);
-
         set.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
