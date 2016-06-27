@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CSb_Scoreboard">
+        <attr name="col_num" format="integer"/>
+        <attr name="score" format="integer"/>
+    </declare-styleable>
+</resources>
