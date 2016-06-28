@@ -4,6 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:clipChildren="false"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="cmu.xprize.sb_component.MainActivity">
@@ -24,13 +25,22 @@
         android:layout_alignBottom="@+id/button2" android:layout_alignParentEnd="true"
         android:layout_marginBottom="67dp"/>
     <cmu.xprize.sb_component.CSb_Scoreboard
+        android:clipChildren="false"
         android:layout_width="240dp"
         android:layout_height="302dp"
         app:col_num="4"
         app:score="999"
         android:id="@+id/test"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="13dp"/>
+        android:layout_marginStart="13dp">
+        <ImageView
+            android:src="@android:drawable/btn_star_big_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/test" android:layout_marginStart="300dp"
+            android:layout_marginTop="54dp" android:id="@+id/imageView"/>
+    </cmu.xprize.sb_component.CSb_Scoreboard>
+
     <!--<cmu.xprize.sb_component.CSb_Lollipop-->
         <!--android:layout_width="100dp"-->
         <!--android:layout_height="302dp"-->
