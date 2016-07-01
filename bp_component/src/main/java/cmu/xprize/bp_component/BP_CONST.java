@@ -1,0 +1,138 @@
+//*********************************************************************************
+//
+//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
+//    Copyright(c) Kevin Willows All Rights Reserved
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+//*********************************************************************************
+
+package cmu.xprize.bp_component;
+
+// global tutor constants
+
+import java.util.HashMap;
+
+public class BP_CONST {
+
+    public static final String[] bubbleColors = {"RED", "BLUE", "PINK", "ORANGE", "GREEN"};
+
+
+    public static final int RED_BUBBLE = R.drawable.bubble_r_0;
+    public static final int BLUE_BUBBLE = R.drawable.bubble_b_0;
+    public static final int PINK_BUBBLE = R.drawable.bubble_p_0;
+    public static final int ORANGE_BUBBLE = R.drawable.bubble_o_0;
+    public static final int GREEN_BUBBLE = R.drawable.bubble_g_0;
+    public static final String REFERENCE = "reference";
+    public static final String TEXTDATA = "text_data";
+
+    public static final int MAX = 1;
+    public static final int MIN = 0;
+
+    static public HashMap<String, Integer> bubbleMap = new HashMap<String, Integer>();
+
+    static {
+        bubbleMap.put("RED", RED_BUBBLE);
+        bubbleMap.put("BLUE", BLUE_BUBBLE);
+        bubbleMap.put("PINK", PINK_BUBBLE);
+        bubbleMap.put("ORANGE", ORANGE_BUBBLE);
+        bubbleMap.put("GREEN", GREEN_BUBBLE);
+    }
+
+
+
+    public static final int[] RED_POP = {R.drawable.bubble_r_1, R.drawable.bubble_r_2, R.drawable.bubble_r_3, R.drawable.bubble_r_4, R.drawable.bubble_r_5, R.drawable.bubble_empty};
+    public static final int[] BLUE_POP = {R.drawable.bubble_b_1, R.drawable.bubble_b_2, R.drawable.bubble_b_3, R.drawable.bubble_b_4, R.drawable.bubble_b_5, R.drawable.bubble_empty};
+    public static final int[] PINK_POP = {R.drawable.bubble_p_1, R.drawable.bubble_p_2, R.drawable.bubble_p_3, R.drawable.bubble_p_4, R.drawable.bubble_p_5, R.drawable.bubble_empty};
+    public static final int[] ORANGE_POP = {R.drawable.bubble_o_1, R.drawable.bubble_o_2, R.drawable.bubble_o_3, R.drawable.bubble_o_4, R.drawable.bubble_o_5, R.drawable.bubble_empty};
+    public static final int[] GREEN_POP = {R.drawable.bubble_g_1, R.drawable.bubble_g_2, R.drawable.bubble_g_3, R.drawable.bubble_g_4, R.drawable.bubble_g_5, R.drawable.bubble_empty};
+
+    static public HashMap<String, int[]> popAnimationMap = new HashMap<String, int[]>();
+
+    static {
+        popAnimationMap.put("RED",    RED_POP);
+        popAnimationMap.put("BLUE",   BLUE_POP);
+        popAnimationMap.put("PINK",   PINK_POP);
+        popAnimationMap.put("ORANGE", ORANGE_POP);
+        popAnimationMap.put("GREEN",  GREEN_POP);
+    }
+
+
+
+    public static final String[] shapeNames = {"arrow", "circle", "diamond", "heart", "hexagon", "line", "octagon", "oval", "pentagon", "rectangle", "ring", "semicircle", "square", "star", "trapezoid", "triangle"};
+
+
+    public static int [] SHAPE_arrow      = {R.drawable.shape_arrow     };
+    public static int [] SHAPE_circle     = {R.drawable.shape_circle    };
+    public static int [] SHAPE_diamond    = {R.drawable.shape_diamond   };
+    public static int [] SHAPE_heart      = {R.drawable.shape_heart     };
+    public static int [] SHAPE_hexagon    = {R.drawable.shape_hexagon   };
+    public static int [] SHAPE_line       = {R.drawable.shape_line      };
+    public static int [] SHAPE_octagon    = {R.drawable.shape_octagon   };
+    public static int [] SHAPE_oval       = {R.drawable.shape_oval      };
+    public static int [] SHAPE_pentagon   = {R.drawable.shape_pentagon  };
+    public static int [] SHAPE_rectangle  = {R.drawable.shape_rectangle };
+    public static int [] SHAPE_ring       = {R.drawable.shape_ring      };
+    public static int [] SHAPE_semicircle = {R.drawable.shape_semicircle};
+    public static int [] SHAPE_square     = {R.drawable.shape_square    };
+    public static int [] SHAPE_star       = {R.drawable.shape_star      };
+    public static int [] SHAPE_trapezoid  = {R.drawable.shape_trapezoid };
+    public static int [] SHAPE_triangle   = {R.drawable.shape_triangle  };
+
+    public static int [] DOT_0  =  {R.drawable.bubble_empty};
+    public static int [] DOT_1  =  {R.drawable.dot_1_0};
+    public static int [] DOT_2  =  {R.drawable.dot_2_0, R.drawable.dot_2_1};
+    public static int [] DOT_3  =  {R.drawable.dot_3_0, R.drawable.dot_3_1, R.drawable.dot_3_2, R.drawable.dot_3_3, R.drawable.dot_3_4, R.drawable.dot_3_5, R.drawable.dot_3_6};
+    public static int [] DOT_4  =  {R.drawable.dot_4_0, R.drawable.dot_4_1, R.drawable.dot_4_2, R.drawable.dot_4_3};
+    public static int [] DOT_5  =  {R.drawable.dot_5_0, R.drawable.dot_5_1, R.drawable.dot_5_2};
+    public static int [] DOT_6  =  {R.drawable.dot_6_0, R.drawable.dot_6_1, R.drawable.dot_6_2, R.drawable.dot_6_3, R.drawable.dot_6_4, R.drawable.dot_6_5};
+    public static int [] DOT_7  =  {R.drawable.dot_7_0, R.drawable.dot_7_1};
+    public static int [] DOT_8  =  {R.drawable.dot_8_0, R.drawable.dot_8_1, R.drawable.dot_8_2, R.drawable.dot_8_3, R.drawable.dot_8_4};
+    public static int [] DOT_9  =  {R.drawable.dot_9_0, R.drawable.dot_9_1, R.drawable.dot_9_2, R.drawable.dot_9_3, R.drawable.dot_9_4};
+    public static int [] DOT_10 =  {R.drawable.dot_10_0, R.drawable.dot_10_1, R.drawable.dot_10_2, R.drawable.dot_10_3, R.drawable.dot_10_4, R.drawable.dot_10_5, R.drawable.dot_10_6, R.drawable.dot_10_7, R.drawable.dot_10_8};
+
+
+    static public HashMap<String, int[]> drawableMap = new HashMap<String, int[]>();
+
+    static {
+        drawableMap.put("arrow"     , SHAPE_arrow      );
+        drawableMap.put("circle"    , SHAPE_circle     );
+        drawableMap.put("diamond"   , SHAPE_diamond    );
+        drawableMap.put("heart"     , SHAPE_heart      );
+        drawableMap.put("hexagon"   , SHAPE_hexagon    );
+        drawableMap.put("line"      , SHAPE_line       );
+        drawableMap.put("octagon"   , SHAPE_octagon    );
+        drawableMap.put("oval"      , SHAPE_oval       );
+        drawableMap.put("pentagon"  , SHAPE_pentagon   );
+        drawableMap.put("rectangle" , SHAPE_rectangle  );
+        drawableMap.put("ring"      , SHAPE_ring       );
+        drawableMap.put("semicircle", SHAPE_semicircle );
+        drawableMap.put("square"    , SHAPE_square     );
+        drawableMap.put("star"      , SHAPE_star       );
+        drawableMap.put("trapezoid" , SHAPE_trapezoid  );
+        drawableMap.put("triangle"  , SHAPE_triangle   );
+
+        drawableMap.put("0"  , DOT_0  );
+        drawableMap.put("1"  , DOT_1  );
+        drawableMap.put("2"  , DOT_2  );
+        drawableMap.put("3"  , DOT_3  );
+        drawableMap.put("4"  , DOT_4  );
+        drawableMap.put("5"  , DOT_5  );
+        drawableMap.put("6"  , DOT_6  );
+        drawableMap.put("7"  , DOT_7  );
+        drawableMap.put("8"  , DOT_8  );
+        drawableMap.put("9"  , DOT_9  );
+        drawableMap.put("10" , DOT_10 );
+    }
+
+}

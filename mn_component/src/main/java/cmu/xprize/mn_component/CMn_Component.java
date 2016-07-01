@@ -28,14 +28,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-public class CMn_Component extends LinearLayout implements ILoadableObject, IValueListener{
+public class CMn_Component extends LinearLayout implements ILoadableObject, IValueListener {
 
     private   Context      mContext;
     private   float        mAlleyRadius;
@@ -80,12 +79,12 @@ public class CMn_Component extends LinearLayout implements ILoadableObject, IVal
 
             TypedArray a = context.getTheme().obtainStyledAttributes(
                     attrs,
-                    R.styleable.CMn_Component,
+                    R.styleable.RoboTutor,
                     0, 0);
 
             try {
-                mAlleyRadius = a.getFloat(R.styleable.CMn_Component_radAlley, 0.25f);
-                mDataSource  = a.getString(R.styleable.CMn_Component_dataSource);
+                mAlleyRadius = a.getFloat(R.styleable.RoboTutor_radAlley, 0.25f);
+                mDataSource  = a.getString(R.styleable.RoboTutor_dataSource);
             } finally {
                 a.recycle();
             }
@@ -145,6 +144,7 @@ public class CMn_Component extends LinearLayout implements ILoadableObject, IVal
         // decode the index of the missing number
         //
         switch(data.mn_index) {
+
             case TCONST.RAND:
                 _mnindex = (int)(Math.random() * data.dataset.length);
                 break;

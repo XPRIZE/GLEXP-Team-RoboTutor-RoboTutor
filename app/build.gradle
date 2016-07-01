@@ -46,4 +46,6 @@ dependencies {
     compile project(':sm_component')
     compile project(':fw_component')
     compile project(':nl_component')
+    compile project(path: ':bp_component')
+    compile project(path: ':bp_component')
 }

@@ -132,12 +132,6 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
     }
 
 
-    public void bubbleBounce(float magnitude, float scale, long duration, int repetition ) {
-
-        CAnimatorUtil.Bounce(mOwnerView, magnitude, scale, duration, repetition);
-    }
-
-
     public void setAlpha(Float alpha) {
         mOwnerView.setAlpha(alpha);
     }

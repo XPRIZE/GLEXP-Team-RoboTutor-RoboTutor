@@ -26,6 +26,15 @@
 
     {
       "type":"Sm_Class",
+      "description":"bubblepop-native",
+      //"background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data", "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"BP_Experimental"}
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
       "description":"numeric",
       //"background":"#D9FFFF",
       "data": [

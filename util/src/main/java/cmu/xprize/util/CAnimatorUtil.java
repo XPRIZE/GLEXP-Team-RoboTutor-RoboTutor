@@ -22,9 +22,14 @@ package cmu.xprize.util;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.BaseInterpolator;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.OvershootInterpolator;
 
 import java.util.ArrayList;
 
@@ -33,158 +38,148 @@ import java.util.ArrayList;
 
 public class CAnimatorUtil {
 
-    static private Animator createFloatAnimator(View _tarView, String prop, float endPt, long duration , int repeat, int mode, AccelerateInterpolator interpolator ) {
 
-        final View    targetView = _tarView;
-        ValueAnimator vAnimator  = null;
+    static private Animator createFloatAnimator(View _tarView, String prop, long duration, int repeat, int mode, TimeInterpolator interpolator, float... endPts) {
 
-        vAnimator = ObjectAnimator.ofFloat(_tarView, prop, endPt).setDuration(duration);
+        return createFloatAnimator(_tarView, prop, duration, repeat, mode, interpolator, 0, endPts);
+    }
+
+
+    static private Animator createFloatAnimator(View _tarView, String prop, long duration, int repeat, int mode, TimeInterpolator interpolator, long delay, float... endPts) {
+
+        ValueAnimator vAnimator = null;
+
+        vAnimator = ObjectAnimator.ofFloat(_tarView, prop, endPts).setDuration(duration);
 
         vAnimator.setInterpolator(interpolator);
+
         vAnimator.setRepeatCount(repeat);
         vAnimator.setRepeatMode(mode);
-
-        vAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                targetView.invalidate();
-            }
-        });
+        vAnimator.setStartDelay(delay);
 
         return vAnimator;
     }
 
 
-    static public void zoomInOut(View _tarView, float scale, long duration ) {
+    static public void zoomInOut(View _tarView, float scale, long duration) {
+
+        ArrayList<Animator> zoomColl = new ArrayList<Animator>();
 
         AnimatorSet animation = new AnimatorSet();
 
-        animation.addListener(new Animator.AnimatorListener() {
+        zoomColl.add(createFloatAnimator(_tarView, "scaleX", duration, 0, 0, new AccelerateInterpolator(2.0f), _tarView.getScaleX(), scale, _tarView.getScaleX()));
+        zoomColl.add(createFloatAnimator(_tarView, "scaleY", duration, 0, 0, new AccelerateInterpolator(2.0f), _tarView.getScaleY(), scale, _tarView.getScaleY()));
 
-            @Override
-            public void onAnimationCancel(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationStart(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationEnd(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator arg0) {
-                //Functionality here
-            }
-        });
-
-        animation.play(createFloatAnimator(_tarView, "scaleX", scale, duration, 1, ValueAnimator.REVERSE, new AccelerateInterpolator(2.0f))).with(createFloatAnimator(_tarView, "scaleY", scale, duration, 1, ValueAnimator.REVERSE, new AccelerateInterpolator(2.0f)));
-
+        animation.playTogether(zoomColl);
         animation.start();
     }
 
 
     static public void wiggle(View _tarView, String direction, float magnitude, long duration, int repetition ) {
 
-        ArrayList<Animator> wiggleColl = new ArrayList<Animator>();
+        AnimatorSet animation = configWiggle( _tarView,  direction,  duration,  repetition, magnitude );
+
+        animation.start();
+    }
+
+    static public AnimatorSet configWiggle(View _tarView, String direction, long duration, int repetition, float magnitude) {
+        return configWiggle(_tarView, direction, duration, repetition, 0, magnitude);
+    }
+
+    static public AnimatorSet configWiggle(View _tarView, String direction, long duration, int repetition, long delay, float magnitude) {
+
+        Animator wiggleAnimator;
+        int      animatorMode = ValueAnimator.RESTART;
+        float[]  wayPoints  = new float[5];
 
         AnimatorSet animation = new AnimatorSet();
 
-        if(repetition <= 0)
-            repetition = 1;
+        switch (direction.toLowerCase()) {
+            case "vertical":
 
-        animation.addListener(new Animator.AnimatorListener() {
+                    wayPoints[0] = _tarView.getY();
+                    wayPoints[1] = _tarView.getY() + (_tarView.getHeight() * magnitude);
+                    wayPoints[2] = _tarView.getY();
+                    wayPoints[3] = _tarView.getY() - (_tarView.getHeight() * magnitude);
+                    wayPoints[4] = _tarView.getY();
 
-            @Override
-            public void onAnimationCancel(Animator arg0) {
-                //Functionality here
-            }
+                    wiggleAnimator = createFloatAnimator(_tarView, "y", duration, repetition, animatorMode, new LinearInterpolator(), delay, wayPoints);
+                    break;
 
-            @Override
-            public void onAnimationStart(Animator arg0) {
-                //Functionality here
-            }
+            default:
 
-            @Override
-            public void onAnimationEnd(Animator arg0) {
-                //Functionality here
-            }
+                    wayPoints[0] = _tarView.getX();
+                    wayPoints[1] = _tarView.getX() + (_tarView.getWidth() * magnitude);
+                    wayPoints[0] = _tarView.getX();
+                    wayPoints[2] = _tarView.getX() - (_tarView.getWidth() * magnitude);
+                    wayPoints[3] = _tarView.getX();
 
-            @Override
-            public void onAnimationRepeat(Animator arg0) {
-                //Functionality here
-            }
-        });
+                    wiggleAnimator = createFloatAnimator(_tarView, "x", duration, repetition, animatorMode, new LinearInterpolator(), delay, wayPoints);
+                    break;
+        }
+
+        animation.play(wiggleAnimator);
+
+        return animation;
+    }
+
+
+
+    static public AnimatorSet configStretch(View _tarView, String direction, long duration, int repetition, float magnitude) {
+        return  configStretch(_tarView,  direction,  duration,  repetition, 0, magnitude );
+    }
+
+    static public AnimatorSet configStretch(View _tarView, String direction, long duration, int repetition, long delay, float magnitude ) {
+
+        Animator stretchAnimator;
+        int      animatorMode = ValueAnimator.RESTART;
+        float[]  wayPoints  = new float[3];
+
+
+        AnimatorSet animation = new AnimatorSet();
+
+        float scaleEnd =  _tarView.getScaleY() * magnitude;
 
         switch(direction.toLowerCase()) {
             case "vertical":
-                for (int i = 0; i < repetition; i++) {
-                    wiggleColl.add(createFloatAnimator(_tarView, "y", _tarView.getY() + (_tarView.getHeight() * magnitude), duration, 1, ValueAnimator.REVERSE, null));
-                    wiggleColl.add(createFloatAnimator(_tarView, "y", _tarView.getY() - (_tarView.getHeight() * magnitude), duration, 1, ValueAnimator.REVERSE, null));
-                }
+
+                wayPoints[0] = _tarView.getScaleY();
+                wayPoints[1] = scaleEnd;
+                wayPoints[2] = _tarView.getScaleY();
+
+                stretchAnimator = createFloatAnimator(_tarView, "scaleY", duration, repetition, animatorMode, new LinearInterpolator(), delay, wayPoints);
                 break;
 
             default:
-                for (int i = 0; i < repetition; i++) {
-                    wiggleColl.add(createFloatAnimator(_tarView, "x", _tarView.getX() + (_tarView.getWidth() * magnitude), duration, 1, ValueAnimator.REVERSE, null));
-                    wiggleColl.add(createFloatAnimator(_tarView, "x", _tarView.getX() - (_tarView.getWidth() * magnitude), duration, 1, ValueAnimator.REVERSE, null));
-                }
+
+                wayPoints[0] = _tarView.getScaleX();
+                wayPoints[1] = scaleEnd;
+                wayPoints[2] = _tarView.getScaleX();
+
+                stretchAnimator = createFloatAnimator(_tarView, "scaleX", duration, repetition, animatorMode, new LinearInterpolator(), delay, wayPoints);
                 break;
         }
 
-        animation.playSequentially(wiggleColl);
+        animation.play(stretchAnimator);
 
-        animation.start();
+        return animation;
     }
 
 
-    static public void Bounce(View _tarView, float magnitude, float scale, long duration, int repetition ) {
+    static public AnimatorSet configZoomIn(View _tarView, long duration, long delay, float... absScales) {
 
-        ArrayList<Animator> bounceColl = new ArrayList<Animator>();
+        ArrayList<Animator> zoomAnimators = new ArrayList<Animator>();
 
         AnimatorSet animation = new AnimatorSet();
 
-        if(repetition <= 0)
-            repetition = 1;
+        zoomAnimators.add(createFloatAnimator(_tarView, "scaleX", duration, 0, 0, new BounceInterpolator(), delay, absScales));
+        zoomAnimators.add(createFloatAnimator(_tarView, "scaleY", duration, 0, 0, new BounceInterpolator(), delay, absScales));
 
-        animation.addListener(new Animator.AnimatorListener() {
+        animation.playTogether(zoomAnimators);
 
-            @Override
-            public void onAnimationCancel(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationStart(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationEnd(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator arg0) {
-                //Functionality here
-            }
-        });
-
-        for(int i=0; i< repetition ; i++) {
-            bounceColl.add(createFloatAnimator(_tarView, "y", _tarView.getY() + (_tarView.getHeight() * magnitude), duration, 1, ValueAnimator.REVERSE, null));
-            bounceColl.add(createFloatAnimator(_tarView, "scaleX", scale, duration, 1, ValueAnimator.REVERSE, new AccelerateInterpolator(2.0f)));
-
-            bounceColl.add(createFloatAnimator(_tarView, "y", _tarView.getY() - (_tarView.getHeight() * magnitude), duration, 1, ValueAnimator.REVERSE, null));
-        }
-
-        animation.playSequentially(bounceColl);
-
-        animation.start();
+        return animation;
     }
 
-    
+
+
 }

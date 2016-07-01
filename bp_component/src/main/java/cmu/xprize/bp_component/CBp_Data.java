@@ -29,10 +29,18 @@ import cmu.xprize.util.JSON_Helper;
 public class CBp_Data implements ILoadableObject{
 
     // json loadable
-    public String        options;
-    public int[]         dataset;
-    public int           maxvalue;
-    public String        mn_index;
+    public String        question_type     = "MC";
+    public String        question_say      = "false";
+    public String        question_show     = "false";
+    public String        response_hear     = "false";
+
+    public int[]         response_count   = null;
+    public String        response_layout  = "fixed";
+    public String[]      response_color   = null;
+    public int           response_index   = -1;
+    public int           response_timeout = -1;
+
+    public int[]         dataset          = null;
 
 
 

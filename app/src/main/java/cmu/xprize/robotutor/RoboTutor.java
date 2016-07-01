@@ -142,14 +142,14 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         super.onDestroy();
 
-        logManager.postEvent(TAG, "Releasing Flite");
-
         if(TTS != null) {
+            logManager.postEvent(TAG, "Releasing Flite");
+
             TTS.shutDown();
             TTS = null;
         }
-        logManager.postTimeStamp("Session End");
 
+        logManager.postTimeStamp("Session End");
         logManager.stopLogging();
     }
 
@@ -300,6 +300,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         guidCallBack = callBack;
     }
+
 
     // TODO: This is a temporary log update mechanism - see below
     //
