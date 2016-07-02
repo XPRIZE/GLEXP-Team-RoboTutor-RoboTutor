@@ -9,7 +9,7 @@ public class CSquarePrimitive implements IPrimitive {
     private Rect    rect;
     private float   rotate;
     private int     color;
-    private int     alpha;
+    private int     alpha = 255;
 
     public CSquarePrimitive(Rect newRect) {
         rect = newRect;

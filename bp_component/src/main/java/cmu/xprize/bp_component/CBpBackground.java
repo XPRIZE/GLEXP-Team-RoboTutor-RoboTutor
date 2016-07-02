@@ -25,6 +25,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import org.json.JSONObject;
@@ -210,7 +211,11 @@ public class CBpBackground extends View implements ILoadableObject {
                     break;
 
                 case "random":
-                    item.setColor(colors[(int)(Math.random() * colors.length)]);
+                    int color = colors[(int)(Math.random() * colors.length)];
+
+                    Log.d(TAG, "Color:" + Integer.toHexString(color));
+
+                    item.setColor(color);
                     break;
             }
         }

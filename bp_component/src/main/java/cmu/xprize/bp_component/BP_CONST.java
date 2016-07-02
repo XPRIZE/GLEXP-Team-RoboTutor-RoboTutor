@@ -38,6 +38,9 @@ public class BP_CONST {
 
     public static final int MAX = 1;
     public static final int MIN = 0;
+    public static final String INFLATE = "INFLATE_BUBBLE";
+    public static final long INFLATE_DELAY = 250;
+    public static final String POP_BUBBLE = "POP_BUBBLE";
 
     static public HashMap<String, Integer> bubbleMap = new HashMap<String, Integer>();
 

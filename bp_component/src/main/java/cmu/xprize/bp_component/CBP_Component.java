@@ -48,7 +48,7 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
 
-public class CBP_Component extends FrameLayout implements ILoadableObject, View.OnClickListener, Animator.AnimatorListener  {
+public class CBP_Component extends FrameLayout implements ILoadableObject {
 
     // Make this public and static so sub-components may use it during json load to instantiate
     // controls on the fly.
@@ -65,7 +65,6 @@ public class CBP_Component extends FrameLayout implements ILoadableObject, View.
     // json loadable
     public String          stimulus_type;
     public String[]        stimulus_data;
-    public int             stimulus_count;
     public CBp_Data[]      dataSource;
     public CBpBackground   view_background;
 
@@ -76,7 +75,6 @@ public class CBP_Component extends FrameLayout implements ILoadableObject, View.
     CBubble bubble1;
     CBubble bubble2;
     boolean mAnimationStarted = false;
-    AnimationDrawable popping;
     ArrayList<AnimatorSet>  animatorList = new ArrayList<AnimatorSet>();
 
 
@@ -170,123 +168,14 @@ public class CBP_Component extends FrameLayout implements ILoadableObject, View.
                 break;
 
             case "rising":
+
                 _mechanics = new CBp_Mechanic_RISE(mContext, this);
                 break;
         }
 
+        _mechanics.populateView(_currData);
+
         requestLayout();
-    }
-
-
-    protected void setupWiggle(View target, long delay) {
-
-        AnimatorSet animation = CAnimatorUtil.configWiggle(target, "vertical", 3000, ValueAnimator.INFINITE, delay, 0.16f );
-
-        animation.addListener(this);
-        animation.start();
-
-        AnimatorSet stretch = CAnimatorUtil.configStretch(target, "vertical", 2100, ValueAnimator.INFINITE, delay, 1.21f);
-
-        stretch.addListener(this);
-        stretch.start();
-    }
-
-    protected void setupZoomIn(View target, long duration, long delay, float... scales) {
-
-        Log.d(TAG, "X" + target.getX());
-        Log.d(TAG, "W" + target.getWidth());
-
-        AnimatorSet animation = CAnimatorUtil.configZoomIn(target, duration, delay, scales );
-
-        animation.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationCancel(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationStart(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationEnd(Animator arg0) {
-                setupWiggle(bubble1, 0);
-                setupWiggle(bubble2, 0);
-                bubble1.setOnClickListener(CBP_Component.this);
-                bubble2.setOnClickListener(CBP_Component.this);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator arg0) {
-                //Functionality here
-            }
-        });
-
-        animation.start();
-    }
-
-    @Override
-    public void onClick(View bubble) {
-
-        bubble.setVisibility(View.INVISIBLE);
-
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        ImageView bubblepop = new ImageView(mContext);
-
-        bubblepop.setScaleX(1.4f);
-        bubblepop.setScaleY(1.4f);
-
-        bubblepop.setX(bubble.getX());
-        bubblepop.setY(bubble.getY());
-
-        addView(bubblepop, layoutParams);
-
-        popping = new AnimationDrawable();
-
-        popping.addFrame(getResources().getDrawable(R.drawable.bubble_b_1, null), 80);
-        popping.addFrame(getResources().getDrawable(R.drawable.bubble_b_2, null), 80);
-        popping.addFrame(getResources().getDrawable(R.drawable.bubble_b_3, null), 70);
-        popping.addFrame(getResources().getDrawable(R.drawable.bubble_b_4, null), 70);
-        popping.addFrame(getResources().getDrawable(R.drawable.bubble_b_5, null), 60);
-        popping.addFrame(getResources().getDrawable(R.drawable.bubble_empty, null), 60);
-        popping.setOneShot(true);
-
-        bubblepop.setBackground(popping);
-
-//        popping = (AnimationDrawable) getResources().getDrawable(R.drawable.bubble_b_pop, null);
-//
-//        bubblepop.setBackgroundDrawable(popping);
-
-        post(new Starter());
-    }
-
-    @Override
-    public void onAnimationStart(Animator animation) {
-
-    }
-
-    @Override
-    public void onAnimationEnd(Animator animation) {
-        animation.start();
-    }
-
-    @Override
-    public void onAnimationCancel(Animator animation) {
-
-    }
-
-    @Override
-    public void onAnimationRepeat(Animator animation) {
-
-    }
-
-    class Starter implements Runnable {
-
-        public void run() {
-            popping.start();
-        }
     }
 
 
@@ -295,10 +184,13 @@ public class CBP_Component extends FrameLayout implements ILoadableObject, View.
 
         super.onLayout(changed, l, t, r, b);
 
-        int width    = r - l;
-        int height   = b - t;
+        if(changed || ((_mechanics != null) && !_mechanics.isInitialized())) {
+            int width = r - l;
+            int height = b - t;
 
-        _mechanics.doLayout(width, height, _currData);
+            if(_mechanics != null)
+                _mechanics.doLayout(width, height, _currData);
+        }
     }
 
 
@@ -307,20 +199,9 @@ public class CBP_Component extends FrameLayout implements ILoadableObject, View.
 
         super.onDraw(canvas);
 
-        if(!mAnimationStarted && bubble1 != null) {
-            mAnimationStarted = true;
-
-            setupZoomIn(bubble1, 600, 0, 0f, 1.0f);
-            bubble1.setTranslationZ(5f);
-
-            setupZoomIn(bubble2, 600, 0, 0f, 1.4f);
-//            setupWiggle(bubble1, 0);
-//            setupWiggle(bubble2, 100);
-        }
-
+        if(_mechanics != null)
+            _mechanics.startAnimation();
     }
-
-
 
 
     public void UpdateValue(int value) {
@@ -328,8 +209,6 @@ public class CBP_Component extends FrameLayout implements ILoadableObject, View.
 
 
     protected boolean isCorrect() {
-
-
         return correct;
     }
 

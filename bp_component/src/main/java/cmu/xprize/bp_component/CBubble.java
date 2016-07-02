@@ -21,8 +21,10 @@ package cmu.xprize.bp_component;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -37,7 +39,7 @@ public class CBubble extends FrameLayout {
     private float           mScale;
 
     private float           mAngle;
-    private float           mLocation;
+    private float           mDistance;
 
 
     public CBubble(Context context) {
@@ -99,11 +101,31 @@ public class CBubble extends FrameLayout {
     public void setIntrinsicScale(float newScale) {
         mScale = newScale;
     }
-
-
-    public void setLocation(float newLoc) {
-        mLocation = newLoc;
+    public float getIntrinsicScale() {
+        return mScale;
     }
+
+
+
+    public void setPosition(Point relOrigin, float newLoc) {
+        mDistance = newLoc;
+
+//        Log.d("XFORM", "Origin X: " + relOrigin.x);
+//        Log.d("XFORM", "Origin Y: " + relOrigin.y);
+//
+//        Log.d("XFORM", "Xcomp   : " + (mDistance * Math.cos(mAngle)));
+//        Log.d("XFORM", "Ycomp   : " + (mDistance * Math.sin(mAngle)));
+//        Log.d("XFORM", "Distance: " + mDistance);
+//        Log.d("XFORM", "Angle   : " + mAngle);
+
+        setX((float) (relOrigin.x + (mDistance * Math.cos(mAngle))) - (getWidth() / 2));
+        setY((float) (relOrigin.y - (mDistance * Math.sin(mAngle))) - (getHeight() / 2));
+
+//        Log.d("XFORM", "Pos X: " + getX());
+//        Log.d("XFORM", "Pos Y: " + getY());
+
+    }
+
 
 
     public void setAngle(float newAngle) {

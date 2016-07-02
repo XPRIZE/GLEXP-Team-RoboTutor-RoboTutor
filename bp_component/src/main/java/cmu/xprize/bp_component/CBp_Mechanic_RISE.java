@@ -25,6 +25,7 @@ public class CBp_Mechanic_RISE implements IBubbleMechanic {
 
     private Context         mContext;
     private CBP_Component   mParent;
+    private boolean         mInitialized = false;
 
     private CBubble[]       mBubbles;
 
@@ -39,6 +40,12 @@ public class CBp_Mechanic_RISE implements IBubbleMechanic {
 
 
     @Override
+    public boolean isInitialized() {
+        return mInitialized;
+    }
+
+
+    @Override
     public void onDestroy() {
 
         for(CBubble bubble : mBubbles) {
@@ -46,7 +53,18 @@ public class CBp_Mechanic_RISE implements IBubbleMechanic {
         }
     }
 
-    private void doLayout(CBp_Data data) {
+    @Override
+    public void startAnimation() {
+
+    }
+
+    @Override
+    public void populateView(CBp_Data data) {
+
+    }
+
+    @Override
+    public void doLayout(int width, int height, CBp_Data data) {
 
     }
 
