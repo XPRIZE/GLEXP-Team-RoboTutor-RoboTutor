@@ -19,6 +19,7 @@
 
 package cmu.xprize.bp_component;
 
+import android.graphics.Canvas;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -38,6 +39,11 @@ public class CBp_Mechanic_Base implements IBubbleMechanic{
 
     static final String TAG = "CBp_Mechanic_Base";
 
+
+    @Override
+    public void onDraw(Canvas canvas) {
+
+    }
 
     @Override
     public boolean isInitialized() {

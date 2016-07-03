@@ -20,6 +20,7 @@
 package cmu.xprize.bp_component;
 
 import android.content.Context;
+import android.graphics.Canvas;
 
 public class CBp_Mechanic_RISE implements IBubbleMechanic {
 
@@ -36,6 +37,12 @@ public class CBp_Mechanic_RISE implements IBubbleMechanic {
 
         mContext = context;
         mParent  = parent;
+    }
+
+
+    @Override
+    public void onDraw(Canvas canvas) {
+
     }
 
 

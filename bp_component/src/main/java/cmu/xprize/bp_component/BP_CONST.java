@@ -38,9 +38,14 @@ public class BP_CONST {
 
     public static final int MAX = 1;
     public static final int MIN = 0;
-    public static final String INFLATE = "INFLATE_BUBBLE";
-    public static final long INFLATE_DELAY = 250;
-    public static final String POP_BUBBLE = "POP_BUBBLE";
+
+    public static final String POP_BUBBLE        = "POP_BUBBLE";
+    public static final String INFLATE           = "INFLATE_BUBBLE";
+    public static final long   INFLATE_DELAY     = 250;
+
+    public static final float  BOUNCE_MAGNITUDE  = 0.16f;
+    public static final float  STRETCH_MAGNITUDE = 1.21f;
+    public static final float  MIN_VRANGE        = .80f;
 
     static public HashMap<String, Integer> bubbleMap = new HashMap<String, Integer>();
 
@@ -59,6 +64,8 @@ public class BP_CONST {
     public static final int[] PINK_POP = {R.drawable.bubble_p_1, R.drawable.bubble_p_2, R.drawable.bubble_p_3, R.drawable.bubble_p_4, R.drawable.bubble_p_5, R.drawable.bubble_empty};
     public static final int[] ORANGE_POP = {R.drawable.bubble_o_1, R.drawable.bubble_o_2, R.drawable.bubble_o_3, R.drawable.bubble_o_4, R.drawable.bubble_o_5, R.drawable.bubble_empty};
     public static final int[] GREEN_POP = {R.drawable.bubble_g_1, R.drawable.bubble_g_2, R.drawable.bubble_g_3, R.drawable.bubble_g_4, R.drawable.bubble_g_5, R.drawable.bubble_empty};
+
+    public static final int[] POP_FRAME_TIME = {80,80,70,70,60,60};
 
     static public HashMap<String, int[]> popAnimationMap = new HashMap<String, int[]>();
 

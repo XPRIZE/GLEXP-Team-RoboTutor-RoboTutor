@@ -1,8 +1,11 @@
 
 package cmu.xprize.bp_component;
 
+import android.graphics.Canvas;
+
 public interface IBubbleMechanic {
 
+    public void onDraw(Canvas canvas);
     public boolean isInitialized();
     public void onDestroy();
 
