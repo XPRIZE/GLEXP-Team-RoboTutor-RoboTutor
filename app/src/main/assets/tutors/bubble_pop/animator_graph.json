@@ -2,7 +2,7 @@
   "animatorMap": {
     "COMMENT": "Animation Graph for the BubblePop Game",
 
-    "session_manager": {
+    "bubble_pop": {
 
       "type": "ANIMATOR",
       "title": "BubblePop Game",
@@ -19,11 +19,8 @@
           "COMMENT": "Intro Clip",
           "maptype":"actionMap",
           "mapname": "INTRO_STATE_TRACK",
-          "preenter": [
-            "B5_ATTACH"
-          ],
+          "preenter": ["SET_VERSION","SET_DATASOURCE","NEXT_DATASET"],
           "preexit": [
-            "B5_DEATTACH"
           ],
           "edges": [
             {
@@ -66,7 +63,7 @@
           "edges": [
             {
               "constraint": "FTR_NOWORDS",
-              "edge": "NEXTSCENE"
+              "edge": "NEXT_SCENE"
             },
             {
               "constraint": "",
@@ -87,7 +84,7 @@
           "edges": [
             {
               "constraint": "FTR_NOWORDS",
-              "edge": "NEXTSCENE"
+              "edge": "NEXT_SCENE"
             },
             {
               "constraint": "",
@@ -95,7 +92,7 @@
             }
           ]
         },
-        "NEXTSCENE": {
+        "NEXT_SCENE": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
           "maptype":"actionMap",
@@ -131,22 +128,19 @@
 
       "actionMap": {
 
-        "my_action": {"type": "TIMER", "name": "hint_timeout", "duration":"20", "repeat":"false", "action":"START", "ontimer":"ACTION_NAME", "features": "" },
-
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "INTRO_STATE_TRACK": {
-          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABS", "features": ""
-        },
-        "USERINPUT_TRACK": {
-          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": ""
-        },
-        "CORRECT_TRACK": {
-          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": ""
-        },
-        "WRONG_TRACK": {
-          "type": "TIMELINE", "trackname": "WT_SIMPLE_ABSB", "features": ""
-        },
+        "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "SBubblePop", "method": "setDataSource", "parms": "[file]bp_data.json:String","features":""},
+        "NEXT_DATASET":{"type": "COMMAND", "id": "SBubblePop", "method": "next" ,"features":""},
+
+        "INTRO_STATE_TRACK": {"type": "COMMAND", "cmd": "WAIT"  },
+
+        "USERINPUT_TRACK":  {"type": "COMMAND", "cmd": "WAIT"  },
+
+        "CORRECT_TRACK":  {"type": "COMMAND", "cmd": "WAIT"  },
+
+        "WRONG_TRACK":  {"type": "COMMAND", "cmd": "WAIT"  },
 
 
         "B5_ATTACH": {

@@ -1,0 +1,53 @@
+{
+  // Bubble Pop v0.0.1
+  //
+  // Data set - Shapes[all] - MC .
+  //
+  // Modes:
+  //  Shapes  Numbers to Dots  Dots to Numbers  uppercase  lowercase  mixedcase
+  //
+  //  Question Format:   Multiple Choice / Dynamic Rising
+  //
+  //  Stimulus: Say Show
+  //
+  //  Response: Hear / Show
+  //
+  //  Sequence : Fixed   Random      
+  //  
+  //
+
+  //  "stimulusType" : "reference" | "text_data"
+
+  "stimulus_type" : "reference",
+  "stimulus_data" : ["arrow","circle","crescent", "diamond", "heart", "hexagon", "line", "octagon", "oval", "pentagon", "rectangle", "ring", "semicircle", "square", "star", "trapezoid", "triangle"],
+
+  // Swahili Aphabet
+//  "stimulus_data" : ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","r","s","t","u","v","w","y","z"],
+//  "stimulus_data" : ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","R","S","T","U","V","W","Y","Z"],
+
+  // English Aphabet
+//  "stimulus_data" : ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"],
+//  "stimulus_data" : ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+
+//  "stimulus_data" : ["0","1","2","3","4","5","6","7","8","9"],
+
+  // Number of questions
+  "stimulus_count":-1,
+
+  "dataSource" : [
+
+    {"type":"Bp_Data", "question_type": "rising", "question_say": "true", "question_show": "false", "response_hear": "false", "dataset":[0,4,5,6,11], "stimulus_index": 1, "stimulus_type": "reference" },
+    {"type":"Bp_Data", "question_type": "multiple-choice", "question_say": "true", "question_show": "false", "response_hear": "false", "dataset":[0,4,5,6,11], "stimulus_index": 1, "stimulus_type": "reference" },
+    {"type":"Bp_Data", "question_type": "multiple-choice", "question_say": "true", "question_show": "false", "response_hear": "false", "response_layout": "random", "response_count": [5,5], "response_color":["R","B","P","O","G"], "question_index": -1, "response_timeout": 2000}
+
+
+  ],
+
+  "view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"fixed", "colorbase":"#666666", "colors":[0xFF2A5A8E, 0xFF1C3C5F, 0xFF3E86D4, 0xFF336DAD]}
+//  "view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"fixed", "colorbase":"#666666", "colors":[0xFF2A818A, 0xFF32709D, 0xFF2E6C92, 0xFF26628A]}
+//  "view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"random", "colors":[0xFF2A818A, 0xFF32709D, 0xFF2E6C92, 0xFF26628A], "colorbase":"#000088" },
+//  "view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"random", "colorbase":"#000088" },
+//
+//  "view_background" : {"style": "primitives", "kind": "squares", "layout": "random", "layoutcount": 30, "scalerange":[0.8, 1.2], "rotationrange":[0.0,89.0], "colorchoice":"random", "colorbase":"#000088" }
+
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<animation-list
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/Sselected"
+    android:oneshot="true">
+    <item android:drawable="@drawable/bubble_b_1" android:duration="50" />
+    <item android:drawable="@drawable/bubble_b_2" android:duration="50" />
+    <item android:drawable="@drawable/bubble_b_3" android:duration="50" />
+    <item android:drawable="@drawable/bubble_b_4" android:duration="50" />
+    <item android:drawable="@drawable/bubble_b_5" android:duration="50" />
+    <item android:drawable="@drawable/bubble_b_6" android:duration="50" />
+    <item android:drawable="@drawable/bubble_empty" android:duration="50" />
+</animation-list>

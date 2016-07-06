@@ -21,33 +21,42 @@ package cmu.xprize.bp_component;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
-import cmu.xprize.util.TCONST;
 
 
 public class CBP_Component extends FrameLayout implements ILoadableObject {
 
-    private   Context      mContext;
-    protected String       mDataSource;
-    private   int          _dataIndex = 0;
+    // Make this public and static so sub-components may use it during json load to instantiate
+    // controls on the fly.
+    //
+    static public Context   mContext;
+
+    protected String        mDataSource;
+    private   int           _dataIndex = 0;
+
+    private IBubbleMechanic _mechanics;
 
     private boolean        correct = false;
 
     // json loadable
+    public String          stimulus_type;
+    public String[]        stimulus_data;
     public CBp_Data[]      dataSource;
-
+    public CBpBackground   view_background;
 
     static final String TAG = "CBP_Component";
+
+    private CBp_Data        _currData;
 
 
 
@@ -76,15 +85,19 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
             TypedArray a = context.getTheme().obtainStyledAttributes(
                     attrs,
-                    R.styleable.CBp_Component,
+                    R.styleable.RoboTutor,
                     0, 0);
 
             try {
-                mDataSource  = a.getString(R.styleable.CBp_Component_dataSource);
+                mDataSource  = a.getString(R.styleable.RoboTutor_dataSource);
             } finally {
                 a.recycle();
             }
         }
+
+        // Allow onDraw to be called to start animations
+        //
+        setWillNotDraw(false);
     }
 
 
@@ -120,12 +133,69 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
     protected void updateDataSet(CBp_Data data) {
 
+        Log.d(TAG, "test");
+
+        _currData = data;
+
+        if(_mechanics  != null)
+            _mechanics.onDestroy();
+
+        switch(data.question_type) {
+            case "multiple-choice":
+                _mechanics = new CBp_Mechanic_MC(mContext, this);
+                break;
+
+            case "rising":
+
+                _mechanics = new CBp_Mechanic_RISE(mContext, this);
+                break;
+        }
+
+        _mechanics.populateView(_currData);
+
+        requestLayout();
+    }
+
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+
+        super.onLayout(changed, l, t, r, b);
+
+        if(changed || ((_mechanics != null) && !_mechanics.isInitialized())) {
+            int width = r - l;
+            int height = b - t;
+
+            if(_mechanics != null)
+                _mechanics.doLayout(width, height, _currData);
+        }
+
+        if(_mechanics != null) {
+            _mechanics.post(BP_CONST.SHOW_STIMULUS, _currData);
+        }
+
+    }
+
+
+    @Override
+    public void onDraw(Canvas canvas) {
+
+        super.onDraw(canvas);
+
+//        if(_mechanics != null) {
+//            _mechanics.startAnimation();
+//
+//            // debug - To use this you must disable the background view
+//            //_mechanics.onDraw(canvas);
+//        }
+    }
+
+
+    public void UpdateValue(int value) {
     }
 
 
     protected boolean isCorrect() {
-
-
         return correct;
     }
 
@@ -151,6 +221,8 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
         _dataIndex = 0;
+
+        addView(view_background);
     }
 
 }

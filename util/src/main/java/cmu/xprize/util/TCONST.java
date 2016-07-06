@@ -214,6 +214,7 @@ public class TCONST {
     public static final String LOOKATSTART = "PERSONA_LOOKAT_START";
     public static final String LOOKAT      = "PERSONA_LOOKAT";
     public static final String LOOKATEND   = "PERSONA_LOOKAT_END";
+    public static final String GLANCEAT    = "PERSONA_GLANCEAT";
     public static final String SCREENPOINT = "SCREENPOINT";
 
     public static final String FTR_STORY_STARTING = "FTR_STORY_STARTING";

@@ -43,6 +43,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import cmu.xprize.banner.R;
+import cmu.xprize.util.TCONST;
 
 /**
  *
@@ -87,11 +88,6 @@ public class Persona extends View {
     private static float    OPENEYE      = 0.15f;
     private static float    CLOSEDEYE    = 1.00f;
 
-    final public static String   LOOKATSTART  = "PERSONA_LOOKAT_START";
-    final public static String   LOOKAT       = "PERSONA_LOOKAT";
-    final public static String   LOOKATEND    = "PERSONA_LOOKAT_END";
-    final public static String   SCREENPOINT  = "SCREENPOINT";
-
 
     /**
      * Create a Persona object
@@ -124,9 +120,10 @@ public class Persona extends View {
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(getContext());
 
-        IntentFilter filter = new IntentFilter(LOOKATSTART);
-        filter.addAction(LOOKAT);
-        filter.addAction(LOOKATEND);
+        IntentFilter filter = new IntentFilter(TCONST.LOOKATSTART);
+        filter.addAction(TCONST.LOOKAT);
+        filter.addAction(TCONST.LOOKATEND);
+        filter.addAction(TCONST.GLANCEAT);
 
         bReceiver = new ChangeReceiver();
 
@@ -250,7 +247,7 @@ public class Persona extends View {
 
             Log.d("Persona", "Broadcast recieved: ");
 
-            float[] point = intent.getFloatArrayExtra(SCREENPOINT);
+            float[] point = intent.getFloatArrayExtra(TCONST.SCREENPOINT);
 
             getLocationOnScreen(_screenCoord);
 
@@ -262,16 +259,23 @@ public class Persona extends View {
 
             switch(intent.getAction()) {
 
-                case LOOKATSTART:
+                case TCONST.LOOKATSTART:
                     startTouch(localPt);
 
-                case LOOKAT:
+                case TCONST.LOOKAT:
                     moveTouch(localPt);
                     break;
 
-                case LOOKATEND:
+                case TCONST.LOOKATEND:
                     endTouch(localPt);
                     break;
+
+                case TCONST.GLANCEAT:
+                    startTouch(localPt);
+                    moveTouch(localPt);
+                    endTouch(localPt);
+                    break;
+
             }
         }
     }
