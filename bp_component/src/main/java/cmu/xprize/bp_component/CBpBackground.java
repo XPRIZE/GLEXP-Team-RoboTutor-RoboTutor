@@ -219,7 +219,6 @@ public class CBpBackground extends View implements ILoadableObject {
                     break;
             }
         }
-
     }
 
 

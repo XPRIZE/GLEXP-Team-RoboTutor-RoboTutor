@@ -39,6 +39,8 @@ public class CBubble extends FrameLayout {
 
     private   Context         mContext;
 
+    private boolean           mOnScreen = false;
+
     private ImageView         mIcon;
     private TextView          mText;
     private float             mScale;
@@ -88,7 +90,9 @@ public class CBubble extends FrameLayout {
         }
     }
 
-    public void pop() {
+    public long pop() {
+
+        long animTime = 0L;
 
         // Remove the bubble graphic and content
         //
@@ -117,7 +121,11 @@ public class CBubble extends FrameLayout {
         //
         int ndx = 0;
         for(int animID : popAnimSet) {
-            popping.addFrame(mContext.getResources().getDrawable(animID), BP_CONST.POP_FRAME_TIME[ndx++]);
+
+            int duration = BP_CONST.POP_FRAME_TIME[ndx++];
+            animTime    += duration;
+
+            popping.addFrame(mContext.getResources().getDrawable(animID, null), duration);
         }
         popping.setOneShot(true);
 
@@ -129,6 +137,17 @@ public class CBubble extends FrameLayout {
 
         popping.start();
 
+        return animTime;
+    }
+
+
+    public boolean getOnScreen() {
+        return mOnScreen;
+    }
+
+
+    public void setOnScreen(boolean isOnScreen) {
+        mOnScreen = isOnScreen;
     }
 
 
@@ -139,13 +158,11 @@ public class CBubble extends FrameLayout {
 
 
     public void init(Context context, AttributeSet attrs) {
-
         mContext = context;
     }
 
 
     public void setColor(String color) {
-
         mColor = color;
 
         setBackgroundResource(BP_CONST.bubbleMap.get(mColor));
@@ -153,27 +170,26 @@ public class CBubble extends FrameLayout {
 
 
     public String getColor() {
-
         return mColor;
     }
 
 
     public void setColor(int resId) {
-
         setBackgroundResource(resId);
     }
 
 
     public void setColor(Drawable res) {
-
         setBackground(res);
     }
 
 
     public void setScale(float newScale) {
+
+        setAssignedScale(newScale);
+
         setScaleX(newScale);
         setScaleY(newScale);
-
     }
 
     public void setRange(float[] _range) {
@@ -190,6 +206,10 @@ public class CBubble extends FrameLayout {
 
     public float getAssignedScale() {
         return mScale;
+    }
+
+    public float getScaledWidth() {
+        return getWidth() * mScale;
     }
 
     public void setAngle(float newAngle) {
@@ -211,7 +231,7 @@ public class CBubble extends FrameLayout {
         return pos;
     }
 
-    public PointF getNormalPosition() {
+    public PointF getCenterPosition() {
         PointF nPosition = new PointF();
 
         nPosition.x = mPosition.x + (getWidth() / 2);
@@ -220,28 +240,18 @@ public class CBubble extends FrameLayout {
         return nPosition;
     }
 
-    public void setViewPosition(Point relOrigin, float vecDist) {
+    public void setVectorPosition(Point relOrigin, float vecDist, float angle) {
 
         mDistance = vecDist;
-
-//        Log.d("XFORM", "Origin X: " + relOrigin.x);
-//        Log.d("XFORM", "Origin Y: " + relOrigin.y);
-//
-//        Log.d("XFORM", "Xcomp   : " + (mDistance * Math.cos(mAngle)));
-//        Log.d("XFORM", "Ycomp   : " + (mDistance * Math.sin(mAngle)));
-//        Log.d("XFORM", "Distance: " + mDistance);
-//        Log.d("XFORM", "Angle   : " + mAngle);
+        mAngle    = angle;
 
         mPosition.x = ((float) (relOrigin.x + (mDistance * Math.cos(mAngle))) - (getWidth() / 2));
         mPosition.y = ((float) (relOrigin.y - (mDistance * Math.sin(mAngle))) - (getHeight() / 2));
 
         setX(mPosition.x);
         setY(mPosition.y);
-
-//        Log.d("XFORM", "Pos X: " + getX());
-//        Log.d("XFORM", "Pos Y: " + getY());
-
     }
+
     public PointF getViewPosition() {
         return mPosition;
     }

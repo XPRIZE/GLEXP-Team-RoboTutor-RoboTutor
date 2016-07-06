@@ -23,49 +23,53 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.drawable.AnimationDrawable;
-import android.util.Log;
+import android.graphics.PointF;
+import android.graphics.Rect;
 import android.view.View;
+import android.view.animation.AnticipateInterpolator;
+import android.view.animation.BounceInterpolator;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import cmu.xprize.util.CAnimatorUtil;
+import cmu.xprize.util.TCONST;
 
-public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechanic, View.OnClickListener {
+/**
+ *
+ */
+public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechanic {
 
-    private Context         mContext;
-    private CBP_Component   mParent;
-    private boolean         mInitialized      = false;
-    private boolean         mAnimationStarted = false;
+    private Paint           mPaint       = new Paint();
+    private Rect            mViewRegion  = new Rect();
 
-    private CBubble[]       mBubbles;
-
-    private float           _alpha      = 0.80f; //65f;
-    private float[]         _scaleRange = {1.0f, 1.3f};
-    private float[]         _scales;
-
-    private float           _angleStart = 0;
-    private float[]         _angleRange = {0, (float)(Math.PI/4.0)};
+    private float           _angle      = 0;
+    private float[]         _angleRange = {BP_CONST.ANGLE_MIN, BP_CONST.ANGLE_MAX};
     private float           _angleInc;
-    private float[]         _rays;
-    private Point           _padding = new Point(300, 200);
-    private Point           _screenCenter = new Point();
 
-    private HashMap<Animator, CBubble>  inflators = new HashMap<Animator, CBubble>();
-    AnimationDrawable       popping;
+    // Note: the bubble is smaller than than the pop animation so it fits well inside these bounds
+    // only the pop will hit the margins -
+    // TODO: possibly change the bubble drawable and then recenter the pop drawable as required.
+    //
+    private Rect            _margins    = new Rect(BP_CONST.MARGIN_LEFT, BP_CONST.MARGIN_TOP, BP_CONST.MARGIN_RIGHT, BP_CONST.MARGIN_BOTTOM);
+    private Point           _viewCenter = new Point();
 
 
     static final String TAG = "CBp_Mechanic_MC";
 
 
     public CBp_Mechanic_MC(Context context, CBP_Component parent ) {
+        super.init(context, parent);
+    }
 
-        mContext = context;
-        mParent  = parent;
+    @Override
+    protected void init(Context context, CBP_Component parent) {
+        super.init(context, parent);
     }
 
 
@@ -76,82 +80,156 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
+    }
 
-        for(CBubble bubble : mBubbles) {
-            mParent.removeView(bubble);
+    @Override
+    public void onDraw(Canvas canvas) {
+
+        // Create a paint object to deine the line parameters
+        mPaint      = new Paint();
+        mViewRegion = new Rect();
+
+        mPaint.setColor(Color.parseColor("#FF00FF"));
+        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setAntiAlias(false);
+
+        mParent.getDrawingRect(mViewRegion);
+
+        mViewRegion.top    += _margins.top;
+        mViewRegion.bottom -= _margins.bottom;
+        mViewRegion.left   += _margins.left;
+        mViewRegion.right  -= _margins.right;
+
+        canvas.drawRect(mViewRegion, mPaint);
+
+        mPaint.setColor(Color.parseColor("#000000"));
+        canvas.drawCircle(_viewCenter.x, _viewCenter.y , 13f, mPaint);
+
+        for(int i1 = 0; i1 < SBubbles.length ; i1++) {
+
+            float[] range = SBubbles[i1].getRange();
+            float   angle = SBubbles[i1].getAngle();
+
+            PointF pos1 = SBubbles[i1].getPosition(_viewCenter, range[0], angle);
+            PointF pos2 = SBubbles[i1].getPosition(_viewCenter, range[1], angle);
+
+            float irad = _bubbleIntrinsicRadius * SBubbles[i1].getAssignedScale();
+            float brad = irad + _bubbleIntrinsicRadius * BP_CONST.BOUNCE_MAGNITUDE;
+            float srad = brad * BP_CONST.STRETCH_MAGNITUDE;
+
+            mPaint.setColor(Color.parseColor("#00FFFF"));
+            canvas.drawCircle(pos2.x, pos2.y , irad, mPaint);
+
+            mPaint.setColor(Color.parseColor("#000000"));
+            canvas.drawCircle(pos2.x, pos2.y , 10, mPaint);
+
+            mPaint.setColor(Color.parseColor("#000000"));
+            mPaint.setStyle(Paint.Style.STROKE);
+            canvas.drawCircle(pos2.x, pos2.y , brad, mPaint);
+
+            mPaint.setColor(Color.parseColor("#00FF00"));
+            mPaint.setStyle(Paint.Style.STROKE);
+            canvas.drawCircle(pos2.x, pos2.y , srad, mPaint);
+
+            mPaint.setColor(Color.parseColor("#FF0000"));
+            mPaint.setStyle(Paint.Style.FILL);
+            canvas.drawCircle(pos1.x, pos1.y , 13f, mPaint);
+
+            mPaint.setColor(Color.parseColor("#0000FF"));
+            mPaint.setStyle(Paint.Style.FILL);
+            PointF pos3 = SBubbles[i1].getCenterPosition();
+            mPaint.setAlpha(100);
+            canvas.drawCircle(pos3.x, pos3.y , irad, mPaint);
+            mPaint.setAlpha(255);
+            canvas.drawCircle(pos3.x, pos3.y , 13f, mPaint);
+
+
+            mPaint.setColor(Color.parseColor("#000000"));
+            canvas.drawLine(_viewCenter.x, _viewCenter.y ,pos2.x, pos2.y , mPaint);
         }
+    }
+
+
+    protected void setupWiggle(View target, long delay) {
+
+        AnimatorSet animation = CAnimatorUtil.configWiggle(target, "vertical", 3000, ValueAnimator.INFINITE, delay, BP_CONST.BOUNCE_MAGNITUDE );
+
+        float[] wayPoints = new float[]{target.getScaleY(),
+                                        target.getScaleY() * BP_CONST.STRETCH_MAGNITUDE,
+                                        target.getScaleY()};
+
+        AnimatorSet stretch   = CAnimatorUtil.configStretch(target, "vertical", 2100, ValueAnimator.INFINITE, delay, wayPoints );
+
+        animation.start();
+        stretch.start();
     }
 
 
     protected void runCommand(String command, Object target ) {
 
         CBubble bubble;
+        long    delay = 0;
+
+        super.runCommand(command, target);
 
         switch(command) {
+
+            case BP_CONST.SHOW_BUBBLES:
+
+                delay = BP_CONST.INFLATE_DELAY;
+
+                if (!_animationStarted && mInitialized) {
+
+                    _animationStarted = true;
+
+                    for(CBubble ibubble : SBubbles) {
+                        post(BP_CONST.INFLATE, ibubble, delay);
+
+                        delay += BP_CONST.INFLATE_DELAY;
+                    }
+                }
+                break;
+
             case BP_CONST.INFLATE:
                 bubble = (CBubble)target;
 
-                Animator inflator = setupZoomIn(bubble, 600, 0, 0f, bubble.getIntrinsicScale());
+                // Persona - look at the stimulus
+                broadcastLocation(TCONST.GLANCEAT, new PointF(bubble.getX() + bubble.getWidth()/2, bubble.getY()+ bubble.getHeight()/2));
+
+                Animator inflator = CAnimatorUtil.configZoomIn(bubble, 600, 0, new BounceInterpolator(), 0f, bubble.getAssignedScale());
+
+                inflator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationCancel(Animator arg0) {
+                        //Functionality here
+                    }
+
+                    @Override
+                    public void onAnimationStart(Animator arg0) {
+                        //Functionality here
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+
+                        CBubble bubble = inflators.get(animation);
+                        inflators.remove(animation);
+
+                        setupWiggle(bubble, 0);
+                        bubble.setOnClickListener(CBp_Mechanic_MC.this);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator arg0) {
+                        //Functionality here
+                    }
+                });
 
                 inflators.put(inflator, bubble);
                 inflator.start();
                 break;
-
-            case BP_CONST.POP_BUBBLE:
-
-                bubble = (CBubble)target;
-
-                bubble.setVisibility(View.INVISIBLE);
-
-                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-                ImageView bubblepop = new ImageView(mContext);
-
-                bubblepop.setScaleX(1.4f);
-                bubblepop.setScaleY(1.4f);
-
-                bubblepop.setX(bubble.getX());
-                bubblepop.setY(bubble.getY());
-
-                mParent.addView(bubblepop, layoutParams);
-
-                popping = new AnimationDrawable();
-
-                popping.addFrame(mParent.getResources().getDrawable(R.drawable.bubble_b_1, null), 80);
-                popping.addFrame(mParent.getResources().getDrawable(R.drawable.bubble_b_2, null), 80);
-                popping.addFrame(mParent.getResources().getDrawable(R.drawable.bubble_b_3, null), 70);
-                popping.addFrame(mParent.getResources().getDrawable(R.drawable.bubble_b_4, null), 70);
-                popping.addFrame(mParent.getResources().getDrawable(R.drawable.bubble_b_5, null), 60);
-                popping.addFrame(mParent.getResources().getDrawable(R.drawable.bubble_empty, null), 60);
-                popping.setOneShot(true);
-
-//                popping = (AnimationDrawable) mParent.getResources().getDrawable(R.drawable.bubble_b_pop, null);
-
-                bubblepop.setBackground(popping);
-
-                popping.start();
-                break;
         }
-    }
-
-
-    /**
-     *
-     * @param valueRange
-     * @return
-     */
-    private float getRandInRange(float[] valueRange) {
-
-        float range = valueRange[BP_CONST.MAX] - valueRange[BP_CONST.MIN];
-        float rand  = valueRange[BP_CONST.MIN];
-
-        // check if less than error tolerance.
-        //
-        if( range > 0.01) {
-            rand = (float)(valueRange[BP_CONST.MIN] + Math.random() * range);
-        }
-
-        return rand;
     }
 
 
@@ -164,91 +242,98 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
      *   will hit the top and the side simultaneously. Above this value it will hit the top before
      *   reaching the side and below it will hit the side before reaching the top.
      *
-     *
+     *   Note: the bubble is dimensionally smaller than than the pop animation so it fits well
+     *   inside these bounds only the pop animation will hit the margins - See TODO above
      *
      * @param angle
-     * @param center
      * @param radius
-     * @param padding
      */
-    private float[] calcVectorRange(Point center, float angle, float radius, Point padding ) {
+    private float[] calcVectorRange(float angle, float radius ) {
+
+        // Account for the bubble bounce and stretch so that it doesn't go outside the margin bounds.
+        // Note: BOUNCE_MAGNITUDE is a relative value while STRETCH_MAGNITUDE is an absolute multiple
+        //
+        radius += radius * BP_CONST.BOUNCE_MAGNITUDE;
+        radius  = radius * BP_CONST.STRETCH_MAGNITUDE;
 
         float distIntercept = 0;
-        Point bounds        = new Point(center.x - padding.x, center.y - padding.y);
-        float criticalAngle = (float) Math.atan((bounds.y - radius) / (bounds.x - radius));
+        Point coordCenter   = new Point(_viewCenter.x - _margins.right, _viewCenter.y - _margins.top);
+        float criticalAngle = (float) Math.atan((coordCenter.y - radius) / (coordCenter.x - radius));
         float quadrant      = (float)(Math.PI / 2f);
+
 
         if(angle <= quadrant) {
 
             if(angle < criticalAngle) {
 
-                distIntercept = (float) ((bounds.x - radius) / Math.cos(angle));
+                distIntercept = (float) ((coordCenter.x - radius) / Math.cos(angle));
             }
             else {
 
-                distIntercept = (float) ((bounds.y - radius) / Math.sin(angle));
+                distIntercept = (float) ((coordCenter.y - radius) / Math.sin(angle));
             }
         }
         else if(angle <= (quadrant * 2)) {
 
             if(angle > (Math.PI - criticalAngle)) {
 
-                distIntercept = (float) ((radius - bounds.x) / Math.cos(angle));
+                distIntercept = (float) ((radius - coordCenter.x) / Math.cos(angle));
             }
             else {
 
-                distIntercept = (float) ((bounds.y - radius) / Math.sin(angle));
+                distIntercept = (float) ((coordCenter.y - radius) / Math.sin(angle));
             }
         }
         else if(angle <= (quadrant * 3)) {
 
             if(angle < (Math.PI + criticalAngle)) {
 
-                distIntercept = (float) ((radius - bounds.x) / Math.cos(angle));
+                distIntercept = (float) ((radius - coordCenter.x) / Math.cos(angle));
             }
             else {
 
-                distIntercept = (float) ((radius - bounds.y) / Math.sin(angle));
+                distIntercept = (float) ((radius - coordCenter.y) / Math.sin(angle));
             }
         }
         else {
 
             if(angle > ((2*Math.PI) - criticalAngle)) {
 
-                distIntercept = (float) ((bounds.x - radius) / Math.cos(angle));
+                distIntercept = (float) ((coordCenter.x - radius) / Math.cos(angle));
             }
             else {
 
-                distIntercept = (float) ((radius - bounds.y) / Math.sin(angle));
+                distIntercept = (float) ((radius - coordCenter.y) / Math.sin(angle));
             }
         }
 
-        return new float[]{radius * 1.5f, distIntercept};
+        //return new float[]{radius * 1.5f, distIntercept};
+        return new float[]{distIntercept * BP_CONST.MIN_VRANGE, distIntercept};
     }
 
 
     public void populateView(CBp_Data data) {
 
         CBubble newBubble;
-        int colorNdx = 0;
+        int colorNdx = (int)(Math.random() * BP_CONST.bubbleColors.length);
 
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        mBubbles = new CBubble[data.dataset.length];
-        _scales = new float[data.dataset.length];
+        SBubbles = new CBubble[data.dataset.length];
 
-        for (int i1 = 0; i1 < mBubbles.length; i1++) {
+        for (int i1 = 0; i1 < SBubbles.length; i1++) {
 
             newBubble = (CBubble) View.inflate(mContext, R.layout.bubble_view, null);
 
-            // Set Color: pass in resource ID - Cycle through the colors repetitively
-            newBubble.setColor(BP_CONST.bubbleMap.get(BP_CONST.bubbleColors[colorNdx]));
+            // Set Color: pass in String e.g. "RED" - Cycle through the colors repetitively
+            //
+            newBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
             colorNdx = (colorNdx + 1) % BP_CONST.bubbleColors.length;
 
             newBubble.setScale(0);
             newBubble.setAlpha(_alpha);
 
-            mBubbles[i1] = newBubble;
+            SBubbles[i1] = newBubble;
 
             mParent.addView(newBubble, layoutParams);
 
@@ -262,7 +347,8 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
                     break;
 
                 case BP_CONST.TEXTDATA:
-                    newBubble.setContents(0, "3");
+
+                    newBubble.setContents(0, mParent.stimulus_data[data.dataset[i1]]);
                     break;
             }
         }
@@ -271,107 +357,43 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
     public void doLayout(int width, int height, CBp_Data data) {
 
-        int bubbleRadius = (mParent.getResources().getDrawable(BP_CONST.RED_BUBBLE, null).getIntrinsicWidth()) / 2;
+        _bubbleIntrinsicRadius = (mParent.getResources().getDrawable(BP_CONST.BUBBLE_SAMPLE, null).getIntrinsicWidth()) / 2;
 
         // Now we have the bubbles we position them on rays(vectors) eminating from the center of the
         // view.
         //
-        _screenCenter.set(width / 2, height / 2);
+        _viewCenter.set((width + _margins.left - _margins.right) / 2, (height + _margins.top - _margins.bottom) / 2);
 
         if(_angleRange != null)
-            _angleStart = getRandInRange(_angleRange);
+            _angle = getRandInRange(_angleRange);
 
         _angleInc   = (float)((2 * Math.PI) / data.dataset.length);
 
-        for(int i1 = 0 ; i1 < mBubbles.length ; i1++) {
+        for(int i1 = 0; i1 < SBubbles.length ; i1++) {
 
             // This is the scale the bubble will expand too.
             //
-            mBubbles[i1].setIntrinsicScale(getRandInRange(_scaleRange));
+            SBubbles[i1].setAssignedScale(getRandInRange(_scaleRange));
 
-            float[] range = calcVectorRange(_screenCenter, _angleStart, bubbleRadius * mBubbles[i1].getIntrinsicScale(), _padding );
+            float[] _range = calcVectorRange(_angle, _bubbleIntrinsicRadius * SBubbles[i1].getAssignedScale() );
 
-            mBubbles[i1].setAngle(_angleStart);
-            mBubbles[i1].setPosition(_screenCenter, getRandInRange(range));
+            SBubbles[i1].setRange(_range);
+            SBubbles[i1].setVectorPosition(_viewCenter, getRandInRange(_range), _angle);
 
-            _angleStart += _angleInc;
+            _angle += _angleInc;
         }
 
         mInitialized = true;
     }
 
 
-    public void startAnimation() {
+    public void removeBubble(CBubble bubble) {
 
-        long delay = BP_CONST.INFLATE_DELAY;
+        for (int i1 = 0; i1 < SBubbles.length; i1++) {
 
-        if (!mAnimationStarted && mInitialized) {
-            mAnimationStarted = true;
-
-            for(CBubble bubble : mBubbles) {
-                post(BP_CONST.INFLATE, bubble, delay);
-
-                delay += BP_CONST.INFLATE_DELAY;
+            if (SBubbles[i1] == bubble) {
+                SBubbles[i1] = null;
             }
         }
     }
-
-
-    protected void setupWiggle(View target, long delay) {
-
-        AnimatorSet animation = CAnimatorUtil.configWiggle(target, "vertical", 3000, ValueAnimator.INFINITE, delay, 0.16f );
-
-        //animation.addListener(this);
-        animation.start();
-
-        AnimatorSet stretch = CAnimatorUtil.configStretch(target, "vertical", 2100, ValueAnimator.INFINITE, delay, 1.21f);
-
-        //stretch.addListener(this);
-        stretch.start();
-    }
-
-
-    protected AnimatorSet setupZoomIn(View target, long duration, long delay, float... scales) {
-
-        Log.d(TAG, "X" + target.getX());
-        Log.d(TAG, "W" + target.getWidth());
-
-        AnimatorSet animation = CAnimatorUtil.configZoomIn(target, duration, delay, scales );
-
-        animation.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationCancel(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationStart(Animator arg0) {
-                //Functionality here
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-
-                CBubble bubble = inflators.get(animation);
-
-                setupWiggle(bubble, 0);
-                bubble.setOnClickListener(CBp_Mechanic_MC.this);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator arg0) {
-                //Functionality here
-            }
-        });
-
-        return animation;
-    }
-
-
-    @Override
-    public void onClick(View bubble) {
-
-        post(BP_CONST.POP_BUBBLE, bubble);
-    }
-
 }

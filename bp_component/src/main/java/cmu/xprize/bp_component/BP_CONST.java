@@ -27,25 +27,46 @@ public class BP_CONST {
 
     public static final String[] bubbleColors = {"RED", "BLUE", "PINK", "ORANGE", "GREEN"};
 
+    public static final int BUBBLE_SAMPLE = R.drawable.bubble_r_0;
 
-    public static final int RED_BUBBLE = R.drawable.bubble_r_0;
-    public static final int BLUE_BUBBLE = R.drawable.bubble_b_0;
-    public static final int PINK_BUBBLE = R.drawable.bubble_p_0;
+    public static final int RED_BUBBLE    = R.drawable.bubble_r_0;
+    public static final int BLUE_BUBBLE   = R.drawable.bubble_b_0;
+    public static final int PINK_BUBBLE   = R.drawable.bubble_p_0;
     public static final int ORANGE_BUBBLE = R.drawable.bubble_o_0;
-    public static final int GREEN_BUBBLE = R.drawable.bubble_g_0;
+    public static final int GREEN_BUBBLE  = R.drawable.bubble_g_0;
+
     public static final String REFERENCE = "reference";
-    public static final String TEXTDATA = "text_data";
+    public static final String TEXTDATA  = "text_data";
 
     public static final int MAX = 1;
     public static final int MIN = 0;
 
+    public static final String SHOW_BUBBLES      = "SHOW_BUBBLES";
+    public static final String CLEAR_CONTENT     = "CLEAR_CONTENT";
+    public static final String SPAWN_BUBBLE      = "SPAWN_BUBBLE";
+    public static final String WIGGLE_BUBBLE     = "WIGGLE_BUTTON";
     public static final String POP_BUBBLE        = "POP_BUBBLE";
     public static final String INFLATE           = "INFLATE_BUBBLE";
-    public static final long   INFLATE_DELAY     = 250;
+    public static final long   INFLATE_DELAY     = 200;
+    public static final String SHOW_STIMULUS     = "SHOW_STIMULUS";
+    public static final String REMOVE_BUBBLE     = "REMOVE_BUBBLE";
+    public static final String ZOOM_STIMULUS     = "ZOOM_STIMULUS";
+    public static final String MOVE_STIMULUS     = "MOVE_STIMULUS";
 
     public static final float  BOUNCE_MAGNITUDE  = 0.16f;
     public static final float  STRETCH_MAGNITUDE = 1.21f;
     public static final float  MIN_VRANGE        = .80f;
+    public static final int    MARGIN_LEFT       = 200;
+    public static final int    MARGIN_TOP        = 0;
+    public static final int    MARGIN_RIGHT      = 200;
+    public static final int    MARGIN_BOTTOM     = 250;
+    public static final float  STIM_PAD_BOTTOM   = 15;
+
+    public static final float  ANGLE_MIN         = 0;
+    public static final float  ANGLE_MAX         = (float) (Math.PI / 3.0);
+
+    public static final float STRETCH_MAX        = 1.21f;
+    public static final float STRETCH_MIN        = 0.80f;
 
     static public HashMap<String, Integer> bubbleMap = new HashMap<String, Integer>();
 
@@ -56,7 +77,6 @@ public class BP_CONST {
         bubbleMap.put("ORANGE", ORANGE_BUBBLE);
         bubbleMap.put("GREEN", GREEN_BUBBLE);
     }
-
 
 
     public static final int[] RED_POP = {R.drawable.bubble_r_1, R.drawable.bubble_r_2, R.drawable.bubble_r_3, R.drawable.bubble_r_4, R.drawable.bubble_r_5, R.drawable.bubble_empty};

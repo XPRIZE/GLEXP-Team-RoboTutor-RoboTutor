@@ -24,6 +24,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
+import android.graphics.PointF;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.BaseInterpolator;
@@ -110,9 +111,9 @@ public class CAnimatorUtil {
 
                     wayPoints[0] = _tarView.getX();
                     wayPoints[1] = _tarView.getX() + (_tarView.getWidth() * magnitude);
-                    wayPoints[0] = _tarView.getX();
-                    wayPoints[2] = _tarView.getX() - (_tarView.getWidth() * magnitude);
-                    wayPoints[3] = _tarView.getX();
+                    wayPoints[2] = _tarView.getX();
+                    wayPoints[3] = _tarView.getX() - (_tarView.getWidth() * magnitude);
+                    wayPoints[4] = _tarView.getX();
 
                     wiggleAnimator = createFloatAnimator(_tarView, "x", duration, repetition, animatorMode, new LinearInterpolator(), delay, wayPoints);
                     break;
@@ -125,36 +126,36 @@ public class CAnimatorUtil {
 
 
 
-    static public AnimatorSet configStretch(View _tarView, String direction, long duration, int repetition, float magnitude) {
+    static public AnimatorSet configStretch(View _tarView, String direction, long duration, int repetition, float... magnitude) {
         return  configStretch(_tarView,  direction,  duration,  repetition, 0, magnitude );
     }
 
-    static public AnimatorSet configStretch(View _tarView, String direction, long duration, int repetition, long delay, float magnitude ) {
+    static public AnimatorSet configStretch(View _tarView, String direction, long duration, int repetition, long delay, float... wayPoints ) {
 
         Animator stretchAnimator;
         int      animatorMode = ValueAnimator.RESTART;
-        float[]  wayPoints  = new float[3];
+//        float[]  wayPoints  = new float[3];
 
 
         AnimatorSet animation = new AnimatorSet();
 
-        float scaleEnd =  _tarView.getScaleY() * magnitude;
+        //float scaleEnd =  _tarView.getScaleY() * magnitude;
 
         switch(direction.toLowerCase()) {
             case "vertical":
 
-                wayPoints[0] = _tarView.getScaleY();
-                wayPoints[1] = scaleEnd;
-                wayPoints[2] = _tarView.getScaleY();
+//                wayPoints[0] = _tarView.getScaleY();
+//                wayPoints[1] = scaleEnd;
+//                wayPoints[2] = _tarView.getScaleY();
 
                 stretchAnimator = createFloatAnimator(_tarView, "scaleY", duration, repetition, animatorMode, new LinearInterpolator(), delay, wayPoints);
                 break;
 
             default:
 
-                wayPoints[0] = _tarView.getScaleX();
-                wayPoints[1] = scaleEnd;
-                wayPoints[2] = _tarView.getScaleX();
+//                wayPoints[0] = _tarView.getScaleX();
+//                wayPoints[1] = scaleEnd;
+//                wayPoints[2] = _tarView.getScaleX();
 
                 stretchAnimator = createFloatAnimator(_tarView, "scaleX", duration, repetition, animatorMode, new LinearInterpolator(), delay, wayPoints);
                 break;
@@ -166,16 +167,38 @@ public class CAnimatorUtil {
     }
 
 
-    static public AnimatorSet configZoomIn(View _tarView, long duration, long delay, float... absScales) {
+    static public AnimatorSet configZoomIn(View _tarView, long duration, long delay, TimeInterpolator interpolator, float... absScales) {
 
         ArrayList<Animator> zoomAnimators = new ArrayList<Animator>();
 
         AnimatorSet animation = new AnimatorSet();
 
-        zoomAnimators.add(createFloatAnimator(_tarView, "scaleX", duration, 0, 0, new BounceInterpolator(), delay, absScales));
-        zoomAnimators.add(createFloatAnimator(_tarView, "scaleY", duration, 0, 0, new BounceInterpolator(), delay, absScales));
+        zoomAnimators.add(createFloatAnimator(_tarView, "scaleX", duration, 0, 0, interpolator, delay, absScales));
+        zoomAnimators.add(createFloatAnimator(_tarView, "scaleY", duration, 0, 0, interpolator, delay, absScales));
 
         animation.playTogether(zoomAnimators);
+
+        return animation;
+    }
+
+    static public AnimatorSet configTranslate(View _tarView, long duration, long delay, PointF... absPos) {
+
+        ArrayList<Animator> moveAnimators = new ArrayList<Animator>();
+
+        float[]  wayPointsX  = new float[absPos.length];
+        float[]  wayPointsY  = new float[absPos.length];
+
+        for(int i1 = 0 ; i1 < absPos.length ; i1++) {
+            wayPointsX[i1] = absPos[i1].x;
+            wayPointsY[i1] = absPos[i1].y;
+        }
+
+        AnimatorSet animation = new AnimatorSet();
+
+        moveAnimators.add(createFloatAnimator(_tarView, "x", duration, 0, 0, new LinearInterpolator(), delay, wayPointsX));
+        moveAnimators.add(createFloatAnimator(_tarView, "y", duration, 0, 0, new LinearInterpolator(), delay, wayPointsY));
+
+        animation.playTogether(moveAnimators);
 
         return animation;
     }

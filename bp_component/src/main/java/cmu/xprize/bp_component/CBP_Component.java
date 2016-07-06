@@ -19,29 +19,15 @@
 
 package cmu.xprize.bp_component;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
-import android.view.animation.Animation;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
-import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
@@ -72,12 +58,6 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
     private CBp_Data        _currData;
 
-    CBubble bubble1;
-    CBubble bubble2;
-    boolean mAnimationStarted = false;
-    ArrayList<AnimatorSet>  animatorList = new ArrayList<AnimatorSet>();
-
-
 
 
     public CBP_Component(Context context) {
@@ -98,8 +78,6 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
 
     public void init(Context context, AttributeSet attrs) {
-
-        inflate(getContext(), R.layout.bubblepop_layout, this);
 
         mContext = context;
 
@@ -191,6 +169,11 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
             if(_mechanics != null)
                 _mechanics.doLayout(width, height, _currData);
         }
+
+        if(_mechanics != null) {
+            _mechanics.post(BP_CONST.SHOW_STIMULUS, _currData);
+        }
+
     }
 
 
@@ -199,8 +182,12 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
         super.onDraw(canvas);
 
-        if(_mechanics != null)
-            _mechanics.startAnimation();
+//        if(_mechanics != null) {
+//            _mechanics.startAnimation();
+//
+//            // debug - To use this you must disable the background view
+//            //_mechanics.onDraw(canvas);
+//        }
     }
 
 
