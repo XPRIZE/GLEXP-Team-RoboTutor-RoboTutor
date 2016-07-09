@@ -1,29 +1,58 @@
 package cmu.xprize.ak_component;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.AttributeSet;
+import android.view.View;
 
 /**
  * Created by jacky on 2016/7/1.
  */
 
-public class QuestionBoard extends GameObject {
+public class QuestionBoard extends View {
     protected int leftNum, rightNum;
     protected float textSize;
 
-    public QuestionBoard(int x, int y, int w, int h) {
-        this.x = x;
-        this.y = y;
-        width = w;
-        height = h;
-        textSize = 6;
-        leftNum = 13;
-        rightNum = 20;
-        dx = -GamePanel.MOVESPEED / 3;
-        dy = GamePanel.MOVESPEED / 2;
+    protected int width;
+    protected int height;
+    protected int x;
+    protected int y;
+
+//    public QuestionBoard(int x, int y, int w, int h) {
+//        this.x = x;
+//        this.y = y;
+//        width = w;
+//        height = h;
+//        textSize = 6;
+//        leftNum = 13;
+//        rightNum = 20;
+//        dx = -GamePanel.MOVESPEED / 3;
+//        dy = GamePanel.MOVESPEED / 2;
+//    }
+
+    public QuestionBoard(Context context) {
+        super(context);
+        init();
+    }
+
+    public QuestionBoard(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public QuestionBoard(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    protected void init() {
+        width = 90;
+        height = 30;
+        textSize = 20;
+//        x = 430;
+//        y = 100;
     }
 
     public void setQuestion(int leftNum, int rightNum) {
@@ -32,29 +61,50 @@ public class QuestionBoard extends GameObject {
     }
 
     public void update() {
-        y += dy;
-        x += dx;
-        textSize += Math.abs(dy / 4.0f);
-        width += Math.abs(dx * 3);
-        height += Math.abs(dy / 2);
+//        y += dy;
+//        x += dx;
+//        textSize += Math.abs(dy / 4.0f);
+//        width += Math.abs(dx * 3);
+//        height += Math.abs(dy / 2);
     }
 
-    public void draw(Canvas canvas) {
+    @Override
+    public void onDraw(Canvas canvas) {
         Paint paint = new Paint();
+        int[] l = new int[2];
+        getLocationOnScreen(l);
+        int x = l[0];
+        int y = l[1];
+        int width = getWidth();
+        int height = getHeight();
+
         paint.setColor(Color.LTGRAY);
         paint.setStyle(Paint.Style.FILL);
 
-        Rect rect = new Rect(x, y, x + width, y + height);
+//        canvas.drawLine(0,0, 1000, 1000, paint);
+
+//        Rect rect = new Rect(0,0, width, height);
 //        canvas.drawRect(rect, paint);
-        canvas.drawRect(new RectF(x, y, x + width/3.0f, y + height), paint);
-        canvas.drawRect(new RectF(x + width / 2.0f, y, x + 5.0f * width / 6, y + height), paint);
+        canvas.drawRect(new RectF(0, 0, width/3.0f, height), paint);
+        canvas.drawRect(new RectF(width / 2.0f, 0, 5.0f * width / 6, height), paint);
 
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setColor(Color.BLACK);
         paint.setTextSize(textSize);
 
-        canvas.drawText(String.valueOf(leftNum), x + width/6, y + height/2 + textSize / 4, paint);
-        canvas.drawText(String.valueOf(rightNum), x + 4 * width/6, y + height/2 + textSize / 4, paint);
+        canvas.drawText(String.valueOf(leftNum), width/6, height/2 + textSize / 4, paint);
+        canvas.drawText(String.valueOf(rightNum), 4 * width/6, height/2 + textSize / 4, paint);
+    }
 
+
+    public Rect getRect() {
+        int[] l = new int[2];
+        getLocationOnScreen(l);
+        int x = l[0];
+        int y = l[1];
+        int w = getWidth();
+        int h = getHeight();
+
+        return new Rect(x, y, x + w, y + h);
     }
 }
