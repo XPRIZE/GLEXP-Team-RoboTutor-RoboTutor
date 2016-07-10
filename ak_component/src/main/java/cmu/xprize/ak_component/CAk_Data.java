@@ -10,11 +10,13 @@ import cmu.xprize.util.*;
 
 public class CAk_Data implements ILoadableObject{
 
-    public int choice_num = 2;
-    public String[] choices = null;
-    public String anwser = "";
 
-    public int[] dataset = null;
+    //json loadable
+    public int              choice_count    = 2;
+    public String[]         choices         = null;
+    public String           anwser          = "";
+//    public int[] dataset = null;
+
 
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {

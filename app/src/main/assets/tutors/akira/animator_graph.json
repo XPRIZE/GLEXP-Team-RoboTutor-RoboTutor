@@ -1,11 +1,11 @@
 {
   "animatorMap": {
-    "COMMENT": "Animation Graph for the BubblePop Game",
+    "COMMENT": "Animation Graph for the Akira Game",
 
-    "session_manager": {
+    "akira": {
 
       "type": "ANIMATOR",
-      "title": "BubblePop Game",
+      "title": "Akira Game",
       "COMMENT": "This is where you describe your tutor",
       "version": "1.0.0",
       "rootnode": "INTRO_STATE",
@@ -19,11 +19,8 @@
           "COMMENT": "Intro Clip",
           "maptype":"actionMap",
           "mapname": "INTRO_STATE_TRACK",
-          "preenter": [
-            "B5_ATTACH"
-          ],
+          "preenter": ["SET_DATASOURCE"],
           "preexit": [
-            "B5_DEATTACH"
           ],
           "edges": [
             {
@@ -143,14 +140,7 @@
 
         "WRONG_TRACK":  {"type": "COMMAND", "cmd": "WAIT"  },
 
-
-        "B5_ATTACH": {
-          "type": "COMMAND", "id": "button5", "method": "setButtonBehavior", "parms": "STOP:String"
-        },
-        "B5_DEATTACH": {
-          "type": "COMMAND", "id": "button5", "method": "setButtonBehavior", "parms": "NULL:String"
-        },
-
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "SAkira", "method": "setDataSource", "parms": "[file]ak_data.json:String","features":""},
 
         "NEXTSCENE": {
           "type": "COMMAND", "cmd": "gotoNextScene"

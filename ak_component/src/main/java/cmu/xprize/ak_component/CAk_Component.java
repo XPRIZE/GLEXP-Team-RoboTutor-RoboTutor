@@ -59,7 +59,10 @@ public class CAk_Component extends FrameLayout implements ILoadableObject{
     private long questionTime;
     private int boardCount;
 
-    public CAk_Data[] dataSource;
+    //json loadable
+    public int          gameSpeed          ;
+    public CAk_Data[]   dataSource         ;
+
 
     public CAk_Component(Context context) {
         super(context);
@@ -207,7 +210,7 @@ public class CAk_Component extends FrameLayout implements ILoadableObject{
                 tree.setX(580 * scaleFactorX);
                 tree.setY(135 * scaleFactorY);
 
-                tree.animate().setDuration(3000).x(760 * scaleFactorX).y(610 * scaleFactorY).setListener(new AnimatorListenerAdapter() {
+                tree.animate().setDuration(3500 - gameSpeed * 100).x(760 * scaleFactorX).y(610 * scaleFactorY).setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
@@ -224,7 +227,7 @@ public class CAk_Component extends FrameLayout implements ILoadableObject{
                 addView(tree);
                 tree.setX(300 * scaleFactorX);
                 tree.setY(135 * scaleFactorY);
-                tree.animate().setDuration(3000).x(165 * scaleFactorX).y(610 * scaleFactorY).setListener(new AnimatorListenerAdapter() {
+                tree.animate().setDuration(3500 - gameSpeed * 100).x(165 * scaleFactorX).y(610 * scaleFactorY).setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
@@ -256,7 +259,7 @@ public class CAk_Component extends FrameLayout implements ILoadableObject{
 
                 AnimatorSet set = new AnimatorSet();
                 set.playTogether(animator1, animator2, animator3, animator4);
-                set.setDuration(3000);
+                set.setDuration(3500 - gameSpeed * 100);
                 set.setTarget(questionBoard);
                 set.addListener(new AnimatorListenerAdapter() {
                     @Override
