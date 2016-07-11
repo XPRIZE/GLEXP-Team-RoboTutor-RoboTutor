@@ -49,7 +49,8 @@
       //"background":"#b9FFb9",
       "data": [
         { "type":"Sm_Data", "intent": "number_speaking", "intentdata":"native", "buttontype":"text" , "buttonvalue":"number speaking"},
-        { "type":"Sm_Data", "intent": "missing_number", "intentdata":"native", "buttontype":"text" , "buttonvalue":"missing number"}
+        { "type":"Sm_Data", "intent": "missing_number", "intentdata":"native", "buttontype":"text" , "buttonvalue":"missing number"},
+        { "type":"Sm_Data", "intent": "arithmetic", "intentdata":"native", "buttontype":"text" , "buttonvalue":"AR_Experimental"}
       ]
     },
 
