@@ -1,12 +1,12 @@
 {
   "animatorMap": {
-    "COMMENT": "Animation Graph for the Arithmetic Tutor",
+    "COMMENT": "Animation Graph for Arithmetic tutor",
 
     "arithmetic": {
 
       "type": "ANIMATOR",
-      "title": "Arithmetic tutor",
-      "COMMENT": "This tutor is designed for predict arithmetic number.",
+      "title": "Arithmetic Tutor",
+      "COMMENT": "This is where you describe your tutor",
       "version": "1.0.0",
       "rootnode": "INTRO_STATE",
 
@@ -17,186 +17,64 @@
         "INTRO_STATE": {
           "type": "NODE",
           "COMMENT": "Intro Clip",
-          "maptype":"moduleMap",
-          "mapname": "PLAYINTRO",
-          "preenter":["SET_VERSION","SET_DATASOURCE"],
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"","edge": "FIRSTTASK"}
+          "maptype":"actionMap",
+          "mapname": "INTRO_STATE_TRACK",
+          "preenter": ["SET_VERSION","SET_DATASOURCE","NEXT_DATASET"],
+          "preexit": [
+          ],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "USERINPUT"
+            }
           ]
         },
 
-        // This initializes the dataset display and resets for a new set of attempts
-        //
-        "FIRSTTASK":{
-          "COMMENT":"This node presents the first task.",
-          "type":"node",
-          "preenter":[],
-          "maptype":"moduleMap",
-          "mapname": "SHOWTASK",
-          "preenter":["RESET_ATTEMPTS","CREATE_HESITATION_TIMER","CREATE_NOACTION_TIMER","SET_FIRST_CLICK"],
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"","edge":"USERINPUT_1"}
-          ]
-        },
-
-        // This waits for input
-        //
-        "USERINPUT_1":{
-          "COMMENT":"When the user touches for the first time",
-          "type":"node",
-          "maptype":"moduleMap",
-          "mapname": "INPUTTASK",
-          "preenter":["SET_DONE_CLICK"],
-          "preexit" :[],
-          "edges":
-          [
-//            {"constraint":"FTR_RIGHT","edge":"CORRECT"},
-//            {"constraint":"FTR_ATTEMPT3","edge":"WRONG_3"},
-//            {"constraint":"FTR_ATTEMPT2","edge":"WRONG_2"},
-//            {"constraint":"FTR_ATTEMPT1","edge":"WRONG_1"},
-            {"constraint":"","edge":"USERINPUT_2"}
-          ]
-        },
-
-        "USERINPUT_2":{
-          "COMMENT":"When the user touches for the first time",
-          "type":"node",
-          "maptype":"moduleMap",
-          "mapname": "INPUTTASK",
-          "preenter":["CREATE_COMPLETION_TIMER", "SET_DONE_CLICK", "SET_SECOND_CLICK"],
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"FTR_RIGHT","edge":"CORRECT"},
-            {"constraint":"FTR_ATTEMPT3","edge":"WRONG_3"},
-            {"constraint":"FTR_ATTEMPT2","edge":"WRONG_2"},
-            {"constraint":"FTR_ATTEMPT1","edge":"WRONG_1"},
-            {"constraint":"","edge":"NO_ACTION"}
-          ]
-        },
-
-        "CORRECT":{
-          "COMMENT":"When user inputs a correct answer...",
-          "type":"node",
-          "maptype":"moduleMap",
-          "mapname": "PLAYCORRECT",
-          "preenter":[],
-          "preexit" :["RESET_ATTEMPTS"],
-          "edges":
-          [
-            {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
-            {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
-            {"constraint":"","edge":"FIRSTTASK"}
-          ]
-        },
-
-        "WRONG_1":{
-          "COMMENT":"When user inputs an incorrect answer...",
-          "type":"node",
-          "maptype":"moduleMap",
-          "mapname": "PLAYWRONG_1",
-          "preenter":[],
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
-            {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
-            {"constraint":"","edge":"USERINPUT_2"}
-          ]
-        },
-
-        "WRONG_2":{
-          "COMMENT":"When user inputs an incorrect answer...",
-          "type":"node",
-          "maptype":"moduleMap",
-          "mapname": "PLAYWRONG_2",
-          "preenter":[],
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
-            {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
-            {"constraint":"","edge":"USERINPUT_2"}
-          ]
-        },
-
-        "WRONG_3":{
-          "COMMENT":"When user inputs an incorrect answer...",
-          "type":"node",
-          "maptype":"moduleMap",
-          "mapname": "PLAYWRONG_3",
-          "preenter":[],
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
-            {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
-            {"constraint":"","edge":"LASTSTATE"}
-          ]
-        },
-
-        "NO_ACTION":{
-          "COMMENT":"When the user does no action second time...",
-          "type":"node",
-          "maptype":"moduleMap",
-          "mapname": "PLAYNO_ACTION",
-          "preenter":[],
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"","edge":"LASTSTATE"}
-          ]
-        },
-
-        "LASTSTATE":{
-          "COMMENT":"When the user hesitates/gets the answer wrongs",
-          "type":"node",
-          "maptype":"moduleMap",
-          "mapname": "PLAYLASTSTATE",
-          "preenter":["SET_DONE_CLICK"],
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"FTR_RIGHT","edge":"CORRECT"},
-            {"constraint":"FTR_ATTEMPT1","edge":"WRONG_2"},
-            {"constraint":"","edge":"WRONG_3"}
-          ]
-        },
-
-        "EXITCLIP1": {
-          "COMMENT":"Exit Clip for ALL_CORRECT",
-          "type":"node",
-          "maptype":"moduleMap",
-          "mapname": "PLAYEXIT1",
-          "preenter":[],
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"","edge":"NEXTSCENE"}
-          ]
-        },
-
-        "EXITCLIP2": {"COMMENT":"Exit Clip for NOT_ALL_CORRECT",
-          "type":"node",
-          "maptype":"moduleMap",
-          "mapname": "PLAYEXIT2",
-          "preenter":[],
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"","edge":"NEXTSCENE"}
-          ]
-        },
-
-        "NEXTSCENE": {
+        "USERINPUT": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
           "maptype":"actionMap",
-          "mapname":"GOTONEXTSCENE",
+          "mapname": "USERINPUT_TRACK",
+          "preenter": [
+          ],
+          "preexit": [
+          ],
+          "edges": [
+            {"constraint":"FTR_RIGHT", "edge": "CORRECT"},
+            {"constraint": "FTR_WRONG", "edge": "WRONG"}
+          ]
+        },
+
+        "CORRECT": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname": "CORRECT_TRACK",
+          "preenter": [],
+          "preexit": [
+          ],
+          "edges": [
+            {"constraint": "", "edge": "NEXT_SCENE"},
+          ]
+        },
+
+        "WRONG": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname": "WRONG_TRACK",
+          "preenter": [],
+          "preexit": [
+          ],
+          "edges": [
+            {"constraint": "", "edge": "USER_INPUT"},
+          ]
+        },
+        "NEXT_SCENE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname": "NEXTSCENE",
           "preenter": [],
           "preexit": [],
           "edges": [
@@ -204,222 +82,22 @@
         }
       },
 
-
       "moduleMap": {
+
         "COMMENT": "@@@@@  CModules  @@@@@",
 
-        "PLAYINTRO":{
+        "PLAYCORRECT": {
           "type": "MODULE",
           "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Intro music.mp3", "mode":"flow", "features": ""}
-          ]
-        },
-
-        "SHOWTASK": {
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-            {"type": "COMMAND", "id": "SArithmetic", "method": "next" ,"features":""}
-          ]
-        },
-
-        "INPUTTASK": {
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-            {"type": "COMMAND", "cmd": "WAIT" }
-          ]
-        },
-
-        // this is currently unused
-        "RESET_ATTEMPTS":{
-          "type":"MODULE",
-          "reuse":true,
-          "COMMENT": "",
-          "tracks": [
-            {"type": "COMMAND", "cmd": "FEATURE-DEL", "value":"FTR_ATTEMPT_1" },
-            {"type": "COMMAND", "cmd": "FEATURE-DEL", "value":"FTR_ATTEMPT_2" },
-            {"type": "COMMAND", "cmd": "FEATURE-DEL", "value":"FTR_ATTEMPT_3" }
-          ]
-        },
-
-        // NOTES:
-        // AUDIO soundsource(s) are now relative to a soundpackage - see the tutor_descriptor to see its structure.
-        // The "default" sound package is used if none is specified
-        // The effect sound packages are special as it is not language sensitive
-        //
-        "PLAYCORRECT":{
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
+          "COMMENT": "????",
           "tracks": [
           ]
         },
-
-        "PLAYCOUNTSHAPES": {
+        "PLAYWRONG": {
           "type": "MODULE",
           "reuse":true,
-          "COMMENT": "TBD",
+          "COMMENT": "????",
           "tracks": [
-
-          ]
-        },
-
-        // AUDIO filenames should not have spaces or hyphens.
-        //
-        "PLAYWRONG_1": {
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-            {"type": "COMMAND", "cmd": "FEATURE-ADD", "value":"FTR_ATTEMPT_2" }
-          ]
-        },
-
-
-        // AUDIO filenames should not have spaces or hyphens.
-        //
-        "PLAYWRONG_2": {
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-            {"type": "COMMAND", "id":"SArithmetic",  "method": "setButtonBehavior", "parms": "PLAYCOUNTSHAPES:String"},
-            {"type": "COMMAND", "cmd": "FEATURE-ADD", "value":"FTR_ATTEMPT_3" }
-          ]
-        },
-
-
-        // AUDIO filenames should not have spaces or hyphens.
-        //
-        "PLAYWRONG_3": {
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-
-          ]
-        },
-
-
-        // Notes:
-        // Set the button behavior before calling a blocking action (i.e. a streaming audio command)
-        // Setting an audio type to stream causes it to pause when complete until a NEXT command event arrives.
-        "PLAYNO_ACTION": {
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-          ]
-        },
-
-        "PLAYLASTSTATE": {
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "IDK man",
-          "tracks": [
-            {"type": "COMMAND", "id":"SArithmetic",  "method": "setButtonBehavior", "parms": "RESTART_COMPLETION_TIMER:String"},
-            {"type": "TIMER",   "id":"CompletionTimer1", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"NEXT", "features": "" }
-          ]
-        },
-
-        "PLAYEXIT1":{
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-
-          ]
-        },
-
-        "PLAYEXIT2":{
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-
-          ]
-        },
-
-        "ON_DONE_BUTTON": {
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-            {"type": "COMMAND", "id": "SdoneButton", "method": "setButtonBehavior", "parms": "NULL:String"},
-            {"type": "TIMER", "id":"HesitationTimer", "action":"CANCEL", "features": "" },
-            {"type": "TIMER", "id":"CompletionTimer1", "action":"CANCEL", "features": "" },
-            {"type": "COMMAND", "cmd": "NEXT" }
-          ]
-        },
-
-        // this is an asynchronous timer driven node
-        "PLAY_HESITATION_TRACK_1": {
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-            {"type": "COMMAND", "cmd": "WAIT" }
-            //{"type": "COMMAND", "id":"SMissingNumber",  "method": "setButtonBehavior", "parms": "RESTART_COMPLETION_TIMER:String"},
-            //{"type": "TIMER",   "id":"HesitationTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PLAY_HESITATION_TRACK_2", "features": "" },
-            //{"type": "COMMAND", "cmd":"SET_FIRST_CLICK"}
-            //{"type": "AUDIO", "command": "PLAY", "soundsource": "tap_plus_sign_inst.mp3", "mode":"flow","features": ""}
-          ]
-        },
-
-        // this is an asynchronous timer driven node
-        "PLAY_HESITATION_TRACK_2": {
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-            //{"type": "TIMELINE", "trackname": "HES_ABS", "features": ""},
-            //{"type": "COMMAND", "id":"SMissingNumber",  "method": "setButtonBehavior", "parms": "RESTART_COMPLETION_TIMER:String"},
-            //{"type": "TIMER",   "id":"CompletionTimer2", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PLAY_DONEBUTTON_PROMPT", "features": "" },
-            {"type": "COMMAND", "cmd": "NEXT" }
-
-          ]
-        },
-
-        // this is an asynchronous timer driven node
-        "PLAY_DONEBUTTON_PROMPT": {
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-            //{"type": "TIMELINE", "trackname": "HES_ABS", "features": ""},
-//            {"type": "TTS", "command": "SAY", "content": "Place your done button prompt here", "rate":"1.0", "language":"LANG_EN", "features": "LANG_SW"},
-//            {"type": "TTS", "command": "SAY", "content": "Place your done button prompt  here", "features": "LANG_EN"}
-
-          ]
-        },
-
-        "CANCEL_HESITATION_TIMER": {
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-            //{"type": "AUDIO", "command": "PLAY", "sound_source": "here.mp3", "mode":"flow", "features": ""},
-            {"type": "COMMAND", "cmd": "FEATURE-ADD", "value":"FTR_ATTEMPT_1" },
-            {"type": "TIMER",   "id":"HesitationTimer", "action":"CANCEL", "features": "" },
-            //{"type": "COMMAND", "id":"SMissingNumber",  "method": "setButtonBehavior", "parms": "RESTART_COMPLETION_TIMER:String"},
-            {"type": "TIMER",   "id":"CompletionTimer3", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PLAY_DONEBUTTON_PROMPT", "features": "" },
-            {"type": "COMMAND", "cmd": "NEXT" }
-          ]
-        },
-
-        "CANCEL_COMPLETION_TIMER": {
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-            {"type": "COMMAND", "cmd": "FEATURE-ADD", "value":"FTR_ATTEMPT_1" },
-            {"type": "TIMER",   "id":"CompletionTimer1", "action":"CANCEL", "features": "" }
-            //{"type": "COMMAND", "id":"SMissingNumber",  "method": "setButtonBehavior", "parms": "RESTART_COMPLETION_TIMER:String"},
           ]
         }
       },
@@ -429,108 +107,45 @@
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
-
-        "CREATE_HESITATION_TIMER": {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PLAY_HESITATION_TRACK_1", "features": "" },
-        "CREATE_NOACTION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "startdelay":"0", "period":"12000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PLAY_HESITATION_TRACK_2", "features": "" },
-        "CREATE_COMPLETION_TIMER": {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PLAY_DONEBUTTON_PROMPT", "features": "" },
-
-        "RESTART_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "action":"RESTART", "features": "" },
-        //"CANCEL_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "action":"CANCEL", "features": "" },
-
-        "SET_FIRST_CLICK": {"type": "COMMAND", "id": "SArithmetic", "method": "setButtonBehavior", "parms": "CANCEL_HESITATION_TIMER:String", "features":""},
-        "SET_SECOND_CLICK": {"type": "COMMAND", "id": "SArithmetic", "method": "setButtonBehavior", "parms": "CANCEL_COMPLETION_TIMER:String", "features":""},
-
-        "SET_DONE_CLICK": {"type": "COMMAND", "id": "SdoneButton", "method": "setButtonBehavior", "parms": "ON_DONE_BUTTON:String"},
-        "RESET_DONE_CLICK": {"type": "COMMAND", "id": "SdoneButton", "method": "setButtonBehavior", "parms": "NULL:String"},
-
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "SArithmetic", "method": "setDataSource", "parms": "[file]mn_data.json:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "SArithmetic", "method": "setDataSource", "parms": "[file]ar_data.json:String","features":""},
         "NEXT_DATASET":{"type": "COMMAND", "id": "SArithmetic", "method": "next" ,"features":""},
 
-        "GB_DISABLE":{"type": "COMMAND", "id": "SdoneButton", "method": "enable", "parms": "FALSE:Boolean","features":""},
-        "GB_ENABLE":{"type": "COMMAND", "id": "SdoneButton", "method": "enable", "parms": "TRUE:Boolean","features":""},
+        "INTRO_STATE_TRACK": {"type": "COMMAND", "cmd": "WAIT"  },
 
-        "MN_DISABLE":{"type": "COMMAND", "id": "SArithmetic", "method": "enable", "parms": "FALSE:Boolean","features":""},
-        "MN_ENABLE":{"type": "COMMAND", "id": "SArithmetic", "method": "enable", "parms": "TRUE:Boolean","features":""},
+        "USERINPUT_TRACK":  {"type": "COMMAND", "cmd": "WAIT"  },
 
-        "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "NEXTSCENE" },
-        "NEXT": {"type": "COMMAND", "cmd": "NEXT" },
-        "PAUSE":{"type": "COMMAND", "cmd": "WAIT" }
+        "CORRECT_TRACK":  {"type": "COMMAND", "cmd": "WAIT"  },
 
+        "WRONG_TRACK":  {"type": "COMMAND", "cmd": "WAIT"  },
+
+
+        "NEXTSCENE": {"type": "COMMAND", "id": "SArithmetic", "method": "next" ,"features":""}
       },
-
-
-      // Use FTR_ Prefix on "features" to facilitate identification during debugging
-      //
 
       "constraintMap": {
 
         "COMMENT": "@@@@@  CConstraints @@@@@ ",
 
-        "COND_PASS1": {
+        "FTR_NOWORDS": {
           "type": "CONDITION",
-          "If": "FTR_NOWORDS && ALL_CORRECT",
-          "Then":"true",
-          "Else":"false"
+          "cmd": "test",
+          "code": "FTR_NOWORDS"
         },
-
-        "COND_PASS2": {
+        "FTR_WORDS": {
           "type": "CONDITION",
-          "If": "FTR_NOWORDS && NOT_ALL_CORRECT",
-          "Then":"true",
-          "Else":"false"
+          "cmd": "test",
+          "code": "!FTR_NOWORDS"
         },
-
-        "FTR_NOWORDS":{
+        "FTR_RIGHT": {
           "type": "CONDITION",
-          "test":"FTR_NOWORDS"
+          "cmd": "test",
+          "code": "FTR_RIGHT"
         },
-
-        "FTR_WORDS":{
+        "FTR_WRONG": {
           "type": "CONDITION",
-          "test":"!FTR_NOWORDS"
-        },
-
-        "ALL_CORRECT":{
-          "type": "CONDITION",
-          "test":"ALL_CORRECT"
-        },
-
-        "NOT_ALL_CORRECT":{
-          "type": "CONDITION",
-          "test":"!ALL_CORRECT"
-        },
-
-        "FTR_RIGHT":{
-          "type": "CONDITION",
-          "test":"FTR_RIGHT"
-        },
-
-        "FTR_WRONG":{
-          "type": "CONDITION",
-          "test":"FTR_WRONG"
-        },
-
-        "FTR_NO_ACTION":{
-          "type": "CONDITION",
-          "test":"FTR_NO_ACTION"
-        },
-
-        "FTR_ATTEMPT3": {
-          "type": "CONDITION",
-          "test":"FTR_ATTEMPT_3"
-        },
-
-        "FTR_ATTEMPT2": {
-          "type": "CONDITION",
-          "test":"FTR_ATTEMPT_2"
-        },
-
-        "FTR_ATTEMPT1": {
-          "type": "CONDITION",
-          "test":"FTR_ATTEMPT_1"
+          "cmd": "test",
+          "code": "!FTR_RIGHT"
         }
-
-
       }
     }
   }

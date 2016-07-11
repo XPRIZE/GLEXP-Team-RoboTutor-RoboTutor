@@ -82,6 +82,9 @@ public class CAr_Component extends LinearLayout implements ILoadableObject {
 
     public void init(Context context, AttributeSet attrs) {
 
+        setOrientation(VERTICAL);
+        setOnClickListener(clickListener);
+
         mContext = context;
 
         if (attrs != null) {
@@ -456,6 +459,11 @@ public class CAr_Component extends LinearLayout implements ILoadableObject {
             viewGroup.setClipToPadding(enabled);
             v = viewGroup;
         }
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
     }
 
     /**
