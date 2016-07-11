@@ -6,8 +6,6 @@ import android.speech.tts.TextToSpeech.OnInitListener;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 
-import org.w3c.dom.Text;
-
 import java.util.Locale;
 
 /**
@@ -24,8 +22,8 @@ public class TTSsynthesizer extends UtteranceProgressListener implements OnInitL
     private boolean         readyToSpeak = false;
     private IReadyListener  tutorRoot;
 
-    private IMediaManager   mMediaManager;
-    private boolean         isSpeaking = false;
+    private IMediaController mMediaController;
+    private boolean          isSpeaking = false;
 
     static final String FLITE_PACKAGE = "edu.cmu.xprize.flite";
 
@@ -74,8 +72,8 @@ public class TTSsynthesizer extends UtteranceProgressListener implements OnInitL
     /**
      * Link to the tutor domain media manageer
      */
-    public void setMediaManager(IMediaManager manager) {
-        mMediaManager = manager;
+    public void setMediaManager(IMediaController manager) {
+        mMediaController = manager;
     }
 
 
@@ -138,8 +136,8 @@ public class TTSsynthesizer extends UtteranceProgressListener implements OnInitL
         if (readyToSpeak) {
             tts. setOnUtteranceProgressListener(this);
 
-            if(mMediaManager != null)
-                mMediaManager.startSpeaking();
+            if(mMediaController != null)
+                mMediaController.startSpeaking();
 
             tts.speak(text.toLowerCase(Locale.US), TextToSpeech.QUEUE_FLUSH, null);
         }
@@ -167,8 +165,8 @@ public class TTSsynthesizer extends UtteranceProgressListener implements OnInitL
             if(!isSpeaking) {
                 isSpeaking = false;
 
-                if(mMediaManager != null)
-                    mMediaManager.stopSpeaking();
+                if(mMediaController != null)
+                    mMediaController.stopSpeaking();
             }
         }
         catch(Exception ex) {
@@ -176,8 +174,8 @@ public class TTSsynthesizer extends UtteranceProgressListener implements OnInitL
 
             isSpeaking = false;
 
-            if(mMediaManager != null)
-                mMediaManager.stopSpeaking();
+            if(mMediaController != null)
+                mMediaController.stopSpeaking();
         }
 
         return isSpeaking;
@@ -197,14 +195,14 @@ public class TTSsynthesizer extends UtteranceProgressListener implements OnInitL
     @Override
     public void onDone(String utteranceId) {
         isSpeaking = false;
-        if(mMediaManager != null)
-            mMediaManager.stopSpeaking();
+        if(mMediaController != null)
+            mMediaController.stopSpeaking();
     }
 
     @Override
     public void onError(String utteranceId) {
         isSpeaking = false;
-        if(mMediaManager != null)
-            mMediaManager.stopSpeaking();
+        if(mMediaController != null)
+            mMediaController.stopSpeaking();
     }
 }

@@ -1,6 +1,6 @@
 package cmu.xprize.util;
 
-public interface IMediaManager {
+public interface IMediaController {
 
     public void startSpeaking();
     public void stopSpeaking();

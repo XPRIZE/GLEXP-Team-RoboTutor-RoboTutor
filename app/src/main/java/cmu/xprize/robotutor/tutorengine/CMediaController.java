@@ -1,0 +1,147 @@
+package cmu.xprize.robotutor.tutorengine;
+
+import android.content.res.AssetManager;
+import android.util.Log;
+
+import java.util.HashMap;
+
+import cmu.xprize.util.IMediaController;
+import cmu.xprize.util.TTSsynthesizer;
+import edu.cmu.xprize.listener.ListenerBase;
+
+public class CMediaController implements IMediaController{
+
+    static private HashMap<CTutor, CMediaManager>  managerMap = new HashMap<>();
+
+    static private TTSsynthesizer TTS;
+    static private ListenerBase   mListener;
+    static private AssetManager   mAssetManager;
+
+    final static public String TAG = "CMediaController";
+
+
+
+    private static CMediaController ourInstance = new CMediaController();
+
+    public static CMediaController getInstance() {
+        return ourInstance;
+    }
+
+    private CMediaController() {
+    }
+
+    static public CMediaManager newMediaManager(CTutor parentTutor) {
+
+        CMediaManager manager = new CMediaManager(ourInstance, mAssetManager);
+
+        managerMap.put(parentTutor, manager);
+
+        return manager;
+    }
+
+
+    static public CMediaManager getInstance(CTutor parentTutor) {
+
+        CMediaManager manager = managerMap.get(parentTutor);
+
+        return manager;
+    }
+
+
+    static public void destroyMediaManager(CTutor tutor) {
+
+        CMediaManager manager = managerMap.get(tutor);
+
+        if(manager != null) {
+            manager.restartMediaManager();
+        }
+
+        managerMap.remove(tutor);
+    }
+
+
+    public void setAssetManager(AssetManager manager) {
+        mAssetManager = manager;
+    }
+
+
+    //**************************************************************************
+    // TTS management START
+
+    static public TTSsynthesizer getTTS() {
+
+        return TTS;
+    }
+
+    public void setTTS(TTSsynthesizer _tts) {
+
+        TTS = _tts;
+        TTS.setMediaManager(this);
+    }
+
+    public void startSpeaking() {
+        pauseListener();
+    }
+
+    public void stopSpeaking() {
+        playListener();
+    }
+
+
+    // TTS management END
+    //**************************************************************************
+
+
+
+    //**************************************************************************
+    // ASR management START
+
+    private boolean paused = false;
+
+    /**
+     *  Inject the listener into the MediaManageer
+     */
+    static public void setListener(ListenerBase listener) {
+        mListener = listener;
+    }
+
+
+    /**
+     *  Remove the listener from the MediaManageer
+     */
+    static public void removeListener(ListenerBase listener) {
+        mListener = null;
+    }
+
+
+    private void pauseListener() {
+
+        if(mListener != null && mListener.isListening()) {
+
+            Log.d(TAG, "pauseListener");
+
+            mListener.setPauseListener(true);
+            paused = true;
+        }
+    }
+
+
+    private void playListener() {
+
+        if(mListener != null && paused) {
+
+            Log.d(TAG, "playListener");
+
+            mListener.setPauseListener(false);
+            paused = false;
+        }
+    }
+
+    // ASR management END
+    //**************************************************************************
+
+
+
+
+
+}

@@ -23,19 +23,19 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import java.io.IOException;
 
+import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.util.CLoaderView;
 import cmu.xprize.util.CLogManager;
-import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorManager;
 import cmu.xprize.robotutor.tutorengine.widgets.core.IGuidView;
@@ -64,7 +64,7 @@ import edu.cmu.xprize.listener.ListenerBase;
 public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     private CTutorEngine        tutorEngine;
-    private CMediaManager       mMediaManager;
+    private CMediaController    mMediaController;
 
     private CLoaderView         progressView;
     private CStartView          startView;
@@ -74,8 +74,13 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     static public ITutorManager masterContainer;
     static public ILogManager   logManager;
+
     static public String        APP_PRIVATE_FILES;
     static public String        LOG_ID = "STARTUP";
+
+    static public float         designDensity   = 2.0f;
+    static public float         instanceDensity;
+    static public float         densityRescale;
 
     private boolean             isReady       = false;
     private boolean             engineStarted = false;
@@ -101,6 +106,12 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         //
         LOG_ID = CPreferenceCache.initLogPreference(this);
 
+        // get the multiplier used for drawables at the current screen density and calc the
+        // correction rescale factor for design scale
+        //
+        instanceDensity = getResources().getDisplayMetrics().density;
+        densityRescale  = designDensity / instanceDensity;
+
         logManager = CLogManager.getInstance();
         logManager.startLogging(LOG_PATH);
         CErrorManager.setLogManager(logManager);
@@ -119,7 +130,10 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         // Initialize the media manager singleton - it needs access to the App assets.
         //
-        mMediaManager = CMediaManager.getInstance();
+        mMediaController = CMediaController.getInstance();
+        AssetManager mAssetManager = getApplicationContext().getAssets();
+        mMediaController.setAssetManager(mAssetManager);
+
 
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -243,7 +257,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
             case TCONST.TTS:
                 logManager.postEvent(TAG, "Attaching to Flite");
 
-                mMediaManager.setTTS(TTS);
+                mMediaController.setTTS(TTS);
                 break;
         }
         startEngine();

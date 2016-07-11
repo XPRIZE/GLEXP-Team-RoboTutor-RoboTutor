@@ -262,7 +262,7 @@ public class JSON_Helper {
                                 Log.d(TAG, "Inflating Object: " + key);
                                 JSONObject elem = nJsonObj.getJSONObject(key);
 
-                                // This is a convenience construct -
+                                // maptype is a convenience construct -
                                 // If there is a maptype then the node has it's instance data
                                 // partially or completely defined in a HashMap object that is in
                                 // a separate JSON construct to allow reuse in multiple nodes
@@ -297,7 +297,24 @@ public class JSON_Helper {
                                         Class<?> elemClass = classMap.get(elem.getString("type"));
 
                                         System.out.printf("class type:%s\n", elemClass.getName());
-                                        eObj = elemClass.newInstance();
+
+                                        // TODO: This is an experimental implemenation to allow arrays on the right side of HashMaps.
+                                        // TODO: Validate
+                                        //
+                                        if (elemClass.isArray()) {
+
+                                            // Get the array on the 1st dimension for the field (attribute)
+                                            nArr = jsonObj.getJSONArray(fieldName);
+
+                                            elemClass = fieldClass.getComponentType();
+
+                                            eObj = Array.newInstance(elemClass, nArr.length());
+
+                                            field.set(self, parseArray(jsonObj, self, classMap, scope, nArr, elemClass, eObj));
+                                        }
+                                        else {
+                                            eObj = elemClass.newInstance();
+                                        }
                                     }
                                     catch(Exception e) {
                                         CErrorManager.logEvent(TAG, "Check Syntax on Element: " + key, e, false);

@@ -41,6 +41,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import cmu.xprize.robotutor.RoboTutor;
+import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.IMediaListener;
@@ -88,7 +89,6 @@ public class type_timeline extends type_action implements IMediaListener {
 
 
     public type_timeline() {
-        mMediaManager = CMediaManager.getInstance();
     }
 
 
@@ -1019,6 +1019,8 @@ public class type_timeline extends type_action implements IMediaListener {
 
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(CTutorEngine.Activity);
+
+        mMediaManager = CMediaController.getInstance(scope.tutor());
 
         // Tasks can only run once so create a new one for each recognition task.
         _loaderThread = new LoaderThread();

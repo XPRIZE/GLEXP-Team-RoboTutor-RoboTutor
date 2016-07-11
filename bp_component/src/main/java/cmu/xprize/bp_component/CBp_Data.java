@@ -39,7 +39,7 @@ public class CBp_Data implements ILoadableObject{
     public String[]      response_color   = null;
     public int           response_timeout = -1;
 
-    public String        stimulus_type    = "drawable";
+    public String        stimulus_type    = "reference";
     public int           stimulus_index   = -1;
 
     public int[]         dataset          = null;

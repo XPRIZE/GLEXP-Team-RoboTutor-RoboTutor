@@ -31,7 +31,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 
-public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl {
+public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, IDataSink  {
 
 
     private CTutor          mTutor;

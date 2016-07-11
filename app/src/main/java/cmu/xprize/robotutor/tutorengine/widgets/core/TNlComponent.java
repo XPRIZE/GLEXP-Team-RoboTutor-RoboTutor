@@ -24,6 +24,7 @@ import android.util.AttributeSet;
 
 import cmu.xprize.nl_component.CNl_Component;
 import cmu.xprize.robotutor.R;
+import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
@@ -37,6 +38,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.robotutor.tutorengine.graph.vars.type_array;
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.CEvent;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.JSON_Helper;
@@ -47,7 +49,7 @@ import edu.cmu.xprize.listener.ListenerBase;
 /**
  * Scriptable number listener component
  */
-public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IArraySource{
+public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IArraySource, IDataSink {
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
@@ -82,7 +84,6 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
 
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
-        mMediaManager = CMediaManager.getInstance();
 
         // Create a listener to process the ASR input
         // Note this ability to switch processors is primarily for development purposes to
@@ -90,13 +91,17 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
         //
         createInputProcessor(TCONST.PLRT);
         //createInputProcessor(TCONST.JSGF);
+
+        // Push the ASR listener reference into the super class in the Java domain
+        //
+        prepareListener(CMediaController.getTTS());
     }
 
 
     @Override
     public void onDestroy() {
 
-        mMediaManager.removeListener(mListener);
+        CMediaController.removeListener(mListener);
 
         if(mListener != null)
                 mListener.stop();
@@ -137,7 +142,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
      */
     @Override
     public void setListener(ListenerBase listener) {
-        mMediaManager.setListener(listener);
+        CMediaController.setListener(listener);
     }
 
     /**
@@ -145,7 +150,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
      */
     @Override
     public void removeListener(ListenerBase listener) {
-        mMediaManager.removeListener(listener);
+        CMediaController.removeListener(listener);
     }
 
     /**
@@ -153,7 +158,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
      */
     @Override
     public String getLanguage() {
-        return mMediaManager.getLanguage(mTutor);
+        return mMediaManager.getLanguageIANA_2(mTutor);
     }
 
     /**
@@ -342,6 +347,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
         mTutor.setDelFeature(TCONST.FWCORRECT);
         mTutor.setDelFeature(TCONST.FWINCORRECT);
 
+
         try {
             if (dataSource.startsWith(TCONST.SOURCEFILE)) {
                 dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
@@ -365,6 +371,11 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
         // Pass an array of strings as the data source.
         //
         setDataSource(dataSource.split(","));
+
+        // This sends the LANG_FTR to the response control where the listener is attached.
+        // This allows the respsonse control to initialize the ASR language
+        //
+        dispatchEvent(new CEvent(TCONST.SET_LANG_FTR, TCONST.VALUE, getLanguageFeature()));
     }
 
 
@@ -398,6 +409,16 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
         if(dataExhausted()) {
             mTutor.setAddFeature(TCONST.FTR_EOD);
         }
+    }
+
+
+    /**
+     * @param language
+     */
+    @Override
+    public void setLanguage(String language) {
+
+        super.setLanguage(language);
     }
 
 
@@ -496,10 +517,10 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
         mTutor = tutor;
         mSceneObject.setTutor(tutor);
 
-        // Push the TTS reference into the super class in the Java domain - Note that this must
-        // be done after inflation as mTutor must have been initialized for getLanguage callback
+        // The media manager is tutor specific so we have to use the tutor to access
+        // the correct instance for this component.
         //
-        prepareListener(mMediaManager.getTTS());
+        mMediaManager = CMediaController.getInstance(mTutor);
     }
 
     // Do deferred configuration - anything that cannot be done until after the

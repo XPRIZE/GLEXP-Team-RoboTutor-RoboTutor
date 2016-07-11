@@ -33,10 +33,7 @@ import cmu.xprize.robotutor.tutorengine.graph.type_handler;
 import cmu.xprize.robotutor.tutorengine.graph.type_timeline;
 import cmu.xprize.robotutor.tutorengine.graph.type_timer;
 import cmu.xprize.util.CErrorManager;
-import cmu.xprize.util.IMediaManager;
 import cmu.xprize.util.TCONST;
-import cmu.xprize.util.TTSsynthesizer;
-import edu.cmu.xprize.listener.ListenerBase;
 
 
 /**
@@ -52,7 +49,9 @@ import edu.cmu.xprize.listener.ListenerBase;
  *
  *
  */
-public class CMediaManager implements IMediaManager {
+public class CMediaManager {
+
+    private CMediaController                mMediaController;
 
     private ArrayList<mediaController>      mControllerSet = new ArrayList<mediaController>();
     private HashMap<String, type_timer>     mTimerMap      = new HashMap<String, type_timer>();
@@ -60,33 +59,18 @@ public class CMediaManager implements IMediaManager {
     private HashMap<String, type_timeline>  mTimeLineMap   = new HashMap<String, type_timeline>();
 
     private HashMap<CTutor, HashMap>        mMediaPackage  = new HashMap<>();
-
     private AssetManager                    mAssetManager;
-    private ListenerBase                    mListener;
 
     // Note that there is per tutor Language capability
     //
-    static private HashMap<CTutor, String>  mLangFtrMap     = new HashMap<CTutor, String>();
-    static private TTSsynthesizer           TTS;
+    private HashMap<CTutor, String>  mLangFtrMap     = new HashMap<CTutor, String>();
 
     final static public String TAG = "CMediaManager";
 
 
-
-    private static CMediaManager ourInstance = new CMediaManager();
-
-
-    public static CMediaManager getInstance() {
-        return ourInstance;
-    }
-
-
-    private CMediaManager() {
-    }
-
-
-    public void setAssetManager(AssetManager manager) {
-        mAssetManager = manager;
+    public CMediaManager(CMediaController controller, AssetManager manager) {
+        mMediaController = controller;
+        mAssetManager    = manager;
     }
 
 
@@ -97,7 +81,6 @@ public class CMediaManager implements IMediaManager {
                 controller.kill();
             }
         }
-
 
         Iterator<?> timerObjects = mTimerMap.entrySet().iterator();
 
@@ -131,12 +114,6 @@ public class CMediaManager implements IMediaManager {
             timeline.globalPause();
         }
 
-        if(TTS != null)
-            TTS.stopSpeaking();
-
-        if(mListener != null) {
-            mListener.stop();
-        }
 
         mControllerSet = new ArrayList<mediaController>();
         mTimerMap      = new HashMap<String, type_timer>();
@@ -150,96 +127,30 @@ public class CMediaManager implements IMediaManager {
 
 
     //**************************************************************************
-    // ASR management START
-
-    private boolean paused = false;
-
-    /**
-     *  Inject the listener into the MediaManageer
-     */
-    public void setListener(ListenerBase listener) {
-        mListener = listener;
-    }
-
-
-    /**
-     *  Remove the listener from the MediaManageer
-     */
-    public void removeListener(ListenerBase listener) {
-        mListener = null;
-    }
-
-
-    private void pauseListener() {
-
-        if(mListener != null && mListener.isListening()) {
-
-            Log.d(TAG, "pauseListener");
-
-            mListener.setPauseListener(true);
-            paused = true;
-        }
-    }
-
-
-    private void playListener() {
-
-        if(mListener != null && paused) {
-
-            Log.d(TAG, "playListener");
-
-            mListener.setPauseListener(false);
-            paused = false;
-        }
-    }
-
-    // ASR management END
-    //**************************************************************************
-
-
-
-    //**************************************************************************
-    // TTS management START
-
-    public TTSsynthesizer getTTS() {
-
-        return TTS;
-    }
-
-    public void setTTS(TTSsynthesizer _tts) {
-
-        TTS = _tts;
-        TTS.setMediaManager(this);
-    }
-
-    public void startSpeaking() {
-        pauseListener();
-    }
-
-    public void stopSpeaking() {
-        playListener();
-    }
-
-
-    // TTS management END
-    //**************************************************************************
-
-
-
-    //**************************************************************************
     // Language management START
 
-    static public String getLanguage(CTutor tTutor) {
+    // Use two letter language codes as defined here:
+    // https://www.w3.org/International/questions/qa-lang-2or3
+
+    public String getLanguageIANA_2(CTutor tTutor) {
 
         return TCONST.langMap.get(mLangFtrMap.get(tTutor));
     }
 
-    static public String getLanguageFeature(CTutor tTutor) {
+    public String getLanguageFeature(CTutor tTutor) {
 
-        return mLangFtrMap.get(tTutor);
+        try {
+            return mLangFtrMap.get(tTutor);
+        }
+        catch(Exception e) {
+            Log.d(TAG, "Excep:"  + e);
+
+            return("LANG_SW");
+
+        }
     }
 
-    static public void setLanguageFeature(CTutor tTutor, String langFtr) {
+    public void setLanguageFeature(CTutor tTutor, String langFtr) {
 
         mLangFtrMap.put(tTutor, langFtr);
 
@@ -260,10 +171,10 @@ public class CMediaManager implements IMediaManager {
         String          soundPackage;
 
         if(langOverride != null) {
-            autoLang = mapLanguage(langOverride);
+            autoLang = mapLanguageIANA_2(langOverride);
         }
         else {
-            autoLang = getLanguage(tTutor);
+            autoLang = getLanguageIANA_2(tTutor);
         }
 
         try {
@@ -288,7 +199,7 @@ public class CMediaManager implements IMediaManager {
                         break;
 
                     default:
-                        autoLang = mapLanguage(langOverride);
+                        autoLang = mapLanguageIANA_2(langOverride);
                         break;
                 }
 
@@ -306,7 +217,7 @@ public class CMediaManager implements IMediaManager {
     }
 
 
-    static public String mapLanguage(String _language) {
+    public String mapLanguageIANA_2(String _language) {
 
         return TCONST.langMap.get(_language);
     }
@@ -627,10 +538,12 @@ public class CMediaManager implements IMediaManager {
             if(!mPlaying && mIsAlive) {
                 if(mIsReady) {
                     // TODO: this will need a tweak for background music etc.
-                    pauseListener();
+                    mMediaController.startSpeaking();
 
                     mPlayer.start();
-                    mPlaying = true;
+
+                    mPlaying       = true;
+                    mDeferredStart = false;
                 }
                 else
                     mDeferredStart = true;
@@ -667,7 +580,7 @@ public class CMediaManager implements IMediaManager {
         public void pause() {
             if(mPlaying) {
                 mPlayer.pause();
-                playListener();
+                mMediaController.stopSpeaking();
             }
             mPlaying = false;
         }

@@ -24,6 +24,7 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -172,11 +173,13 @@ public class type_action extends scene_node {
                             // Resolve any variables in the parameters.
                             // Session manager uses TScope variables to store intents
                             //
-                            String intent = getScope().resolveTemplate(parmList.get(0));
+                            String intent     = getScope().resolveTemplate(parmList.get(0));
                             String intentData = getScope().resolveTemplate(parmList.get(2));
-                            String features = getScope().resolveTemplate(parmList.get(4));
+                            String dataSource = getScope().resolveTemplate(parmList.get(4));
+                            String features   = getScope().resolveTemplate(parmList.get(6));
 
-                            CTutorEngine.launch(intent, intentData, features);
+                            CTutorEngine.launch(intent, intentData, dataSource, features);
+
                         } catch (Exception e) {
                             CErrorManager.logEvent(TAG, "Launch Command Invalid: ", e, false);
                         }
@@ -321,7 +324,11 @@ public class type_action extends scene_node {
 
                             _method.invoke(childMap.get(id), iparms);
 
-                        } catch (Exception e) {
+                        }
+                        catch(InvocationTargetException e) {
+                            CErrorManager.logEvent(TAG, "Script internal ERROR: " + id + " - Apply Method: " + method + "   Parms: " + parms + " : ", e, false);
+                        }
+                        catch (Exception e) {
                             CErrorManager.logEvent(TAG, "ERROR: " + id + " - Apply Method: " + method + "   Parms: " + parms + " : ", e, false);
                         }
                         break;

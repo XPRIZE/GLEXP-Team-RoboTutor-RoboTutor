@@ -21,6 +21,8 @@ package cmu.xprize.robotutor.tutorengine;
 
 import java.util.HashMap;
 
+import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
+
 public interface ITutorGraph {
 
     public void onDestroy();
@@ -32,6 +34,8 @@ public interface ITutorGraph {
     public void setSceneGraph(CSceneGraph sGraph);
 
     public CSceneGraph getSceneGraph();
+
+    public void setDefDataSource(defdata_tutor dataSources);
 
     public HashMap getChildMap();
 

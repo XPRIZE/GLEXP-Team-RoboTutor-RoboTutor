@@ -19,7 +19,7 @@ import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-public class TBpComponent extends CBP_Component implements ITutorObjectImpl {
+public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDataSink  {
 
     private CTutor           mTutor;
     private CObjectDelegate  mSceneObject;
@@ -48,6 +48,12 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl {
 
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
 
@@ -131,7 +137,7 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl {
             }
         }
         catch (Exception e) {
-            CErrorManager.logEvent(TAG, "Invalid Data Source for : " + name(), e, false);
+            CErrorManager.logEvent(TAG, "Invalid Data Source - " + dataSource + " for : " + name() + " : " , e, false);
         }
     }
 
@@ -168,10 +174,6 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl {
     //**********************************************************
     //*****************  Common Tutor Object Methods
 
-    @Override
-    public void onDestroy() {
-
-    }
 
     @Override
     public void setName(String name) {

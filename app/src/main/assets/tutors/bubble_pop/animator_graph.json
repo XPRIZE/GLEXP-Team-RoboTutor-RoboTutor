@@ -131,7 +131,7 @@
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "SBubblePop", "method": "setDataSource", "parms": "[file]bp_data.json:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "SBubblePop", "method": "setDataSource", "parms": "[file]bp_data.json:String","features":"!DATA_SBUBBLEPOP"},
         "NEXT_DATASET":{"type": "COMMAND", "id": "SBubblePop", "method": "next" ,"features":""},
 
         "INTRO_STATE_TRACK": {"type": "COMMAND", "cmd": "WAIT"  },

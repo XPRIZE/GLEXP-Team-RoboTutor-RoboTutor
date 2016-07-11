@@ -23,6 +23,7 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.IMediaListener;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
@@ -58,8 +59,6 @@ public class type_audio extends type_action implements IMediaListener {
 
 
     public type_audio() {
-
-        mMediaManager = CMediaManager.getInstance();
     }
 
     /**
@@ -242,12 +241,15 @@ public class type_audio extends type_action implements IMediaListener {
 
         super.loadJSON(jsonObj, scope);
 
+
         // Custom post processing.
 
         // If we have set a language then update the sound source to point to the correct subdir
         // If no language set then use whichever language is used in the Flash XML
         // An audio source can force a language by setting "lang" to a known language ID
         // e.g. LANG_SW | LANG_EN | LANG_FR
+
+        mMediaManager = CMediaController.getInstance(_scope.tutor());
 
         langPath = mMediaManager.mapMediaPackage(_scope.tutor(), soundpackage, lang);
 

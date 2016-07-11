@@ -18,7 +18,7 @@ import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-public class TMnComponent extends CMn_Component  implements ITutorObjectImpl {
+public class TMnComponent extends CMn_Component  implements ITutorObjectImpl, IDataSink {
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;

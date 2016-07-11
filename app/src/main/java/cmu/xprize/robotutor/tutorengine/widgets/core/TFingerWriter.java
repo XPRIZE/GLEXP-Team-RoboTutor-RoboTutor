@@ -33,7 +33,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILogManager;
 
-public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl {
+public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl, IDataSink  {
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;

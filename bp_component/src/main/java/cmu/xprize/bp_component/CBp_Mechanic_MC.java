@@ -106,6 +106,8 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
         mPaint.setColor(Color.parseColor("#000000"));
         canvas.drawCircle(_viewCenter.x, _viewCenter.y , 13f, mPaint);
 
+        int _bubbleIntrinsicRadius = (mParent.getResources().getDrawable(BP_CONST.BUBBLE_SAMPLE, null).getIntrinsicWidth()) / 2;
+
         for(int i1 = 0; i1 < SBubbles.length ; i1++) {
 
             float[] range = SBubbles[i1].getRange();
@@ -114,8 +116,8 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
             PointF pos1 = SBubbles[i1].getPosition(_viewCenter, range[0], angle);
             PointF pos2 = SBubbles[i1].getPosition(_viewCenter, range[1], angle);
 
-            float irad = _bubbleIntrinsicRadius * SBubbles[i1].getAssignedScale();
-            float brad = irad + _bubbleIntrinsicRadius * BP_CONST.BOUNCE_MAGNITUDE;
+            float irad = BP_CONST.BUBBLE_DESIGN_RADIUS * SBubbles[i1].getAssignedScale();
+            float brad = irad + BP_CONST.BUBBLE_DESIGN_RADIUS * BP_CONST.BOUNCE_MAGNITUDE;
             float srad = brad * BP_CONST.STRETCH_MAGNITUDE;
 
             mPaint.setColor(Color.parseColor("#00FFFF"));
@@ -195,7 +197,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
                 bubble = (CBubble)target;
 
                 // Persona - look at the stimulus
-                broadcastLocation(TCONST.GLANCEAT, new PointF(bubble.getX() + bubble.getWidth()/2, bubble.getY()+ bubble.getHeight()/2));
+                broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(new PointF(bubble.getX() + bubble.getWidth()/2, bubble.getY()+ bubble.getHeight()/2)));
 
                 Animator inflator = CAnimatorUtil.configZoomIn(bubble, 600, 0, new BounceInterpolator(), 0f, bubble.getAssignedScale());
 
@@ -229,6 +231,20 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
                 inflators.put(inflator, bubble);
                 inflator.start();
                 break;
+
+            case BP_CONST.POP_BUBBLE:
+
+                bubble = (CBubble)target;
+                delay  = bubble.pop();
+
+                // stop listening to the bubble
+                bubble.setOnClickListener(null);
+
+                broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(bubble.getCenterPosition()));
+
+                post(BP_CONST.REMOVE_BUBBLE, bubble, delay);
+                break;
+
         }
     }
 
@@ -337,18 +353,18 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
             mParent.addView(newBubble, layoutParams);
 
-            switch (mParent.stimulus_type) {
+            switch (mComponent.stimulus_type) {
 
                 case BP_CONST.REFERENCE:
 
-                    int[] shapeSet = BP_CONST.drawableMap.get(mParent.stimulus_data[data.dataset[i1]]);
+                    int[] shapeSet = BP_CONST.drawableMap.get(mComponent.stimulus_data[data.dataset[i1]]);
 
                     newBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
                     break;
 
                 case BP_CONST.TEXTDATA:
 
-                    newBubble.setContents(0, mParent.stimulus_data[data.dataset[i1]]);
+                    newBubble.setContents(0, mComponent.stimulus_data[data.dataset[i1]]);
                     break;
             }
         }
@@ -356,8 +372,6 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
 
     public void doLayout(int width, int height, CBp_Data data) {
-
-        _bubbleIntrinsicRadius = (mParent.getResources().getDrawable(BP_CONST.BUBBLE_SAMPLE, null).getIntrinsicWidth()) / 2;
 
         // Now we have the bubbles we position them on rays(vectors) eminating from the center of the
         // view.
@@ -375,7 +389,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
             //
             SBubbles[i1].setAssignedScale(getRandInRange(_scaleRange));
 
-            float[] _range = calcVectorRange(_angle, _bubbleIntrinsicRadius * SBubbles[i1].getAssignedScale() );
+            float[] _range = calcVectorRange(_angle, BP_CONST.BUBBLE_DESIGN_RADIUS * SBubbles[i1].getAssignedScale() );
 
             SBubbles[i1].setRange(_range);
             SBubbles[i1].setVectorPosition(_viewCenter, getRandInRange(_range), _angle);
@@ -387,13 +401,4 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
     }
 
 
-    public void removeBubble(CBubble bubble) {
-
-        for (int i1 = 0; i1 < SBubbles.length; i1++) {
-
-            if (SBubbles[i1] == bubble) {
-                SBubbles[i1] = null;
-            }
-        }
-    }
 }

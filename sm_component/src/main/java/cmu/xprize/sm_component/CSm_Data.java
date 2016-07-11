@@ -31,6 +31,7 @@ public class CSm_Data implements ILoadableObject {
     // json loadable
     public String       intent;
     public String       intentdata;
+    public String       datasource;
     public String       buttontype;
     public String       buttonvalue;
     public String       features;

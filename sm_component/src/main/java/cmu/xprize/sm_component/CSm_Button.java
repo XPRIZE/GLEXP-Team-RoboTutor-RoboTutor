@@ -21,7 +21,6 @@ package cmu.xprize.sm_component;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -78,6 +77,6 @@ public class CSm_Button extends Button implements ILauncherButton, View.OnClickL
      */
     @Override
     public void onClick(View v) {
-        mComponent.setTutorIntent(mData.intent, mData.intentdata, mData.features);
+        mComponent.setTutorIntent(mData.intent, mData.intentdata, mData.datasource, mData.features);
     }
 }

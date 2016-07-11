@@ -27,7 +27,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 
-public class TStimResp extends CStimResp implements ITutorObjectImpl {
+public class TStimResp extends CStimResp implements ITutorObjectImpl, IDataSink  {
 
 
     private CObjectDelegate mSceneObject;
