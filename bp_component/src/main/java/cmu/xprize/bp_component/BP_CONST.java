@@ -43,7 +43,7 @@ public class BP_CONST {
     public static final String SHOW_BUBBLES      = "SHOW_BUBBLES";
     public static final String CLEAR_CONTENT     = "CLEAR_CONTENT";
     public static final String SPAWN_BUBBLE      = "SPAWN_BUBBLE";
-    public static final String WIGGLE_BUBBLE     = "WIGGLE_BUTTON";
+    public static final String WIGGLE_BUBBLE     = "WIGGLE_BUBBLE";
     public static final String POP_BUBBLE        = "POP_BUBBLE";
     public static final String INFLATE           = "INFLATE_BUBBLE";
     public static final long   INFLATE_DELAY     = 200;
@@ -72,6 +72,9 @@ public class BP_CONST {
     public static final int DESIGNHEIGHT          = 1620;
     public static final int BUBBLE_DESIGN_RADIUS  = 210;
     public static final float DESIGN_SCALE        = 2.0f;
+
+    public static final String STIMULUS_SHOWN     = "STIMULUS_SHOWN";
+    public static final String BUBBLE_TOUCHED     = "BUBBLE_TOUCHED";
 
     static public HashMap<String, Integer> bubbleMap = new HashMap<String, Integer>();
 

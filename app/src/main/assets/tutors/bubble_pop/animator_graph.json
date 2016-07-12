@@ -16,9 +16,9 @@
 
         "INTRO_STATE": {
           "type": "NODE",
-          "COMMENT": "Intro Clip",
+          "COMMENT": "Intro Clip - we only ever visit this node once",
           "maptype":"actionMap",
-          "mapname": "INTRO_STATE_TRACK",
+          "mapname": "NEXTNODE",
           "preenter": ["SET_VERSION","PLAY_BACKINGTRACK","PLAY_PROMPT","SET_DATASOURCE","NEXT_DATASET"],
           "preexit": [
           ],
@@ -30,32 +30,47 @@
           ]
         },
 
-        "USERINPUT": {
+        "UPDATE_STIMULUS": {
+          "type": "NODE",
+          "COMMENT": "We may say or show the stimulus at this point",
+          "maptype":"moduleMap",
+          "mapname": "UPDATESTIMULUS",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "USERINPUT"
+            }
+          ]
+        },
+
+
+        "USER_INPUT": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
           "maptype":"actionMap",
-          "mapname": "USERINPUT_TRACK",
-          "preenter": [
-          ],
+          "mapname": "USERINPUT",
+          "preenter": [],
           "preexit": [
           ],
           "edges": [
             {
               "constraint":"FTR_RIGHT",
-              "edge": "CORRECT"
+              "edge": "PLAYCORRECT"
             },
             {
               "constraint": "",
-              "edge": "WRONG"
+              "edge": "PLAYWRONG"
             }
           ]
         },
 
-        "CORRECT": {
+        "PLAT_CORRECT": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"actionMap",
-          "mapname": "CORRECT_TRACK",
+          "maptype":"moduleMap",
+          "mapname": "PLAYCORRECT",
           "preenter": [],
           "preexit": [
             "GETWORD"
@@ -72,11 +87,11 @@
           ]
         },
 
-        "WRONG": {
+        "PLAY_WRONG": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"actionMap",
-          "mapname": "WRONG_TRACK",
+          "maptype":"moduleMap",
+          "mapname": "PLAYWRONG",
           "preenter": [],
           "preexit": [
             "GETWORD"
@@ -108,20 +123,45 @@
 
         "COMMENT": "@@@@@  CModules  @@@@@",
 
+        // Here we manage the Stimulus display.
+        // We are either going to Speak the Stimulus / Show the Stimulus / Both or Neither -
+
+        "UPDATESTIMULUS": {
+          "type": "MODULE",
+          "reuse":true,
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.stimulus}}.mp3",  "soundpackage":"default", "mode":"flow", "features": "FTR_SAY"},
+
+            // If we are showing it we have to wait for the animation to complete before continuing
+            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "STIMULUS_SHOWN:String,NEXT:String" ,"features":"FTR_SHOW"},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_STIMULUS:String"               ,"features":"FTR_SHOW"},
+
+            // Otherwise we just continue to the next node
+            {"type": "COMMAND", "cmd": "NEXT", "feature":"!FTR_SHOW"  }
+          ]
+        },
+
+
         "PLAYCORRECT": {
           "type": "MODULE",
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "great.mp3", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "popSound.mp3",  "soundpackage":"tutor_effect", "mode":"flow", "features": ""},
+
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "POP_BUBBLE:String" ,"features":""}
           ]
         },
+
+
         "PLAYWRONG": {
           "type": "MODULE",
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "great.mp3", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "wrong.mp3", "soundpackage":"tutor_effect", "mode":"flow", "features": ""},
+
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "WIGGLE_BUBBLE:String" ,"features":""}
           ]
         }
       },
@@ -137,13 +177,12 @@
         "SET_DATASOURCE":{"type": "COMMAND", "id": "SBubblePop", "method": "setDataSource", "parms": "[file]bp_data.json:String","features":"!DATA_SBUBBLEPOP"},
         "NEXT_DATASET":{"type": "COMMAND", "id": "SBubblePop", "method": "next" ,"features":""},
 
-        "INTRO_STATE_TRACK": {"type": "COMMAND", "cmd": "WAIT"  },
 
-        "USERINPUT_TRACK":  {"type": "COMMAND", "cmd": "WAIT"  },
 
-        "CORRECT_TRACK":  {"type": "COMMAND", "cmd": "WAIT"  },
+//        "SET_SHOW":{"type": "COMMAND", "id": "SBubblePop", "method": "setEventBehavior" ,"features":""},
 
-        "WRONG_TRACK":  {"type": "COMMAND", "cmd": "WAIT"  },
+        "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"  },
+        "USERINPUT":  {"type": "COMMAND", "cmd": "WAIT"  },
 
 
         "B5_ATTACH": {

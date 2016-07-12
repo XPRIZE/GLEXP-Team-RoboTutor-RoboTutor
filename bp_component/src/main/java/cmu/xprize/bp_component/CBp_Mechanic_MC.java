@@ -178,9 +178,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
                 delay = BP_CONST.INFLATE_DELAY;
 
-                if (!_animationStarted && mInitialized) {
-
-                    _animationStarted = true;
+                if (mInitialized) {
 
                     for(CBubble ibubble : SBubbles) {
                         post(BP_CONST.INFLATE, ibubble, delay);
