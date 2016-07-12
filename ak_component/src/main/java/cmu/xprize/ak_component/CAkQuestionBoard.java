@@ -15,7 +15,7 @@ import java.util.Random;
  * Created by jacky on 2016/7/1.
  */
 
-public class QuestionBoard extends View {
+public class CAkQuestionBoard extends View {
     protected int leftNum, rightNum;
     protected float textSize;
 
@@ -23,16 +23,16 @@ public class QuestionBoard extends View {
     protected int height;
 
 
-    public QuestionBoard(Context context) {
+    public CAkQuestionBoard(Context context) {
         super(context);
         init();
     }
 
-    public QuestionBoard(Context context, AttributeSet attrs) {
+    public CAkQuestionBoard(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public QuestionBoard(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CAkQuestionBoard(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -56,25 +56,21 @@ public class QuestionBoard extends View {
     @Override
     public void onDraw(Canvas canvas) {
         Paint paint = new Paint();
-        int[] l = new int[2];
-        getLocationOnScreen(l);
-        int x = l[0];
-        int y = l[1];
         int width = getWidth();
         int height = getHeight();
 
         paint.setColor(Color.LTGRAY);
         paint.setStyle(Paint.Style.FILL);
 
-        canvas.drawRect(new RectF(0, 0, width/3.0f, height), paint);
-        canvas.drawRect(new RectF(width / 2.0f, 0, 5.0f * width / 6, height), paint);
+        canvas.drawRect(new RectF(0, 0, width * 5.0f / 12, height), paint);
+        canvas.drawRect(new RectF(width * 7.0f / 12.0f, 0, width, height), paint);
 
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setColor(Color.BLACK);
         paint.setTextSize(textSize);
 
-        canvas.drawText(String.valueOf(leftNum), width/6, height/2 + textSize / 4, paint);
-        canvas.drawText(String.valueOf(rightNum), 4 * width/6, height/2 + textSize / 4, paint);
+        canvas.drawText(String.valueOf(leftNum), width * 5.0f / 24.0f, height / 2.0f + textSize / 4, paint);
+        canvas.drawText(String.valueOf(rightNum),width * 19.0f / 24.0f, height / 2.0f + textSize / 4, paint);
     }
 
 

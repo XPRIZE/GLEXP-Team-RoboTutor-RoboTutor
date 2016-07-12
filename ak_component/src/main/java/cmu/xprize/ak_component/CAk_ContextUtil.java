@@ -6,10 +6,10 @@ import android.app.Application;
  * Created by Iris on 16/7/8.
  */
 
-public class ContextUtil extends Application {
-    private static ContextUtil instance;
+public class CAk_ContextUtil extends Application {
+    private static CAk_ContextUtil instance;
 
-    public static ContextUtil getInstance() {
+    public static CAk_ContextUtil getInstance() {
         return instance;
     }
     @Override

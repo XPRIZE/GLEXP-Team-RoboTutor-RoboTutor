@@ -15,7 +15,7 @@ import java.util.Random;
  * Created by jacky on 2016/7/1.
  */
 
-public class Player extends TextView{
+public class CAkPlayer extends TextView{
     protected enum Lane{LEFT, MID, RIGHT}
 
     protected boolean isPlaying;
@@ -27,17 +27,17 @@ public class Player extends TextView{
 
     private PercentRelativeLayout.LayoutParams params;
 
-    public Player(Context context) {
+    public CAkPlayer(Context context) {
         super(context);
         init(context, null);
     }
 
-    public Player(Context context, AttributeSet attrs) {
+    public CAkPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public Player(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CAkPlayer(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
