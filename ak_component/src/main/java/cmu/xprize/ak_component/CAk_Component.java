@@ -4,17 +4,23 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
+import android.graphics.Path;
+import android.media.SoundPool;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.json.JSONObject;
+
+import java.util.Random;
 
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
@@ -37,7 +43,7 @@ import cmu.xprize.util.JSON_Helper;
  * 4. Add speedometer
  *
  */
-public class CAk_Component extends FrameLayout implements ILoadableObject{
+public class CAk_Component extends RelativeLayout implements ILoadableObject{
     static public Context mContext;
 
     protected String        mDataSource;
@@ -49,15 +55,31 @@ public class CAk_Component extends FrameLayout implements ILoadableObject{
 
     static final int WIDTH = 960, HEIGHT = 600;
 
-    private Background bg;
     private CAk_Data _currData;
     private long startTime;
     private Player player;
 
-    private long treeTime1;
-    private long treeTime2;
+    private TextView score;
+    private long sidewalkRightTime;
+    private long sidewalkLeftTime;
     private long questionTime;
     private int boardCount;
+    private ImageView cityBackground;
+
+
+    private TeachFinger teachFinger;
+    private Random random;
+    private SoundPool soundPool;
+
+    private int errornum=0;
+
+    private boolean lastCorrect = true;
+    private Boolean isFirstInstall;
+
+    private Path sidewalkLeft;
+    private Path sidewalkRight;
+
+    private int carscreechMedia,correctMedia,incorrectMedia,numberchangedMedia;
 
     //json loadable
     public int          gameSpeed          ;
@@ -79,24 +101,61 @@ public class CAk_Component extends FrameLayout implements ILoadableObject{
         init(context, attrs);
     }
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        final float width = right - left;
+        final float height = bottom - top;
 
-    /**
-     *
-     * Init method for game
-     * Init all objects which will be allocated only once here,
-     * like background, player and background city animation.
-     *
-     */
+        sidewalkLeft.reset();
+        sidewalkLeft.moveTo(width * 0.3f, height * 0.25f);
+        sidewalkLeft.lineTo(-width / 10, height);
+
+        sidewalkRight.reset();
+        sidewalkRight.moveTo(width * 0.6f, height* 0.25f);
+        sidewalkRight.lineTo(width, height);
+
+    }
+
+        /**
+         *
+         * Init method for game
+         * Init all objects which will be allocated only once here,
+         * like background, player and background city animation.
+         *
+         */
 
     public void init(Context context, AttributeSet attrs) {
         inflate(getContext(), R.layout.akira_layout, this);
 
         mContext = context;
 
-        treeTime1 = treeTime2 = questionTime = startTime = System.nanoTime();
+        sidewalkLeftTime = sidewalkRightTime = questionTime = startTime = System.nanoTime();
 
-        bg = new Background(context);
-        player = new Player(context);
+        player = (Player) findViewById(R.id.player);
+        cityBackground = (ImageView) findViewById(R.id.city);
+        score = (TextView) findViewById(R.id.score);
+
+        cityBackground.animate().setDuration(100000).translationY(-HEIGHT);
+
+        sidewalkLeft = new Path();
+        sidewalkRight = new Path();
+
+        random = new Random();
+
+        teachFinger = (TeachFinger)findViewById(R.id.finger);
+
+        isFirstInstall=true;
+        if(isFirstInstall==false)
+            teachFinger.finishTeaching=true;
+
+//        soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+//        Context c=ContextUtil.getInstance();
+//        carscreechMedia=soundPool.load(c,R.raw.carscreech,1);
+//        correctMedia=soundPool.load(c,R.raw.correct,1);
+//        incorrectMedia=soundPool.load(c,R.raw.incorrect,1);
+//        numberchangedMedia=soundPool.load(c,R.raw.numberchanged,1);
+
 
         mainHandler.post(gameRunnable);
         if(attrs != null) {
@@ -147,25 +206,26 @@ public class CAk_Component extends FrameLayout implements ILoadableObject{
     }
 
 
+    private boolean first = true;
+
     /**
      *
      * Draw game panel
      * Remember to draw all static object, like background, car, etc.
      */
-    @Override
-    public void onDraw(Canvas canvas) {
-
-        float scaleFactorX = getWidth() * 1.0f / CAk_Component.WIDTH;
-        float scaleFactorY = getHeight() * 1.0f / CAk_Component.HEIGHT;
-
-        canvas.save();
-        canvas.scale(scaleFactorX, scaleFactorY);
-
-        bg.draw(canvas);
-        player.draw(canvas);
-
-        canvas.restore();
-    }
+//    @Override
+//    public void onDraw(Canvas canvas) {
+//
+//
+//        float scaleFactorX = getWidth() * 1.0f / CAk_Component.WIDTH;
+//        float scaleFactorY = getHeight() * 1.0f / CAk_Component.HEIGHT;
+//
+//        canvas.save();
+//        canvas.scale(scaleFactorX, scaleFactorY);
+//
+//
+//        canvas.restore();
+//    }
 
     public void post(String command, Object target) {
 
@@ -186,8 +246,8 @@ public class CAk_Component extends FrameLayout implements ILoadableObject{
 
         @Override
         public void run() {
-            long elapse1 = (System.nanoTime() - treeTime1) / 1000000;
-            long elapse2 = (System.nanoTime() - treeTime2) / 1000000;
+            long elapseRight = (System.nanoTime() - sidewalkRightTime) / 1000000;
+            long elapseLeft = (System.nanoTime() - sidewalkLeftTime) / 1000000;
             long elapse = (System.nanoTime() - questionTime) / 1000000;
 
             final float scaleFactorX = getWidth() * 1.f / CAk_Component.WIDTH;
@@ -201,40 +261,71 @@ public class CAk_Component extends FrameLayout implements ILoadableObject{
              */
 
 
-            if(elapse1 > 3500) {
-                final ImageView tree =new ImageView(mContext);
+            if(elapseRight > 3500) {
 
-                tree.setImageResource(R.drawable.tree);
-                tree.setLayoutParams(new LayoutParams((int)(50 * scaleFactorX), (int)(100 * scaleFactorY)));
-                addView(tree);
-                tree.setX(580 * scaleFactorX);
-                tree.setY(135 * scaleFactorY);
+                int r = random.nextInt() % 3;
 
-                tree.animate().setDuration(3500 - gameSpeed * 100).x(760 * scaleFactorX).y(610 * scaleFactorY).setListener(new AnimatorListenerAdapter() {
+                final ImageView sidewalkStuff  = new ImageView(mContext);
+                if(r == 0){
+                    sidewalkStuff.setImageResource(R.drawable.tree);
+                    sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
+                }
+                else if(r == 1) {
+                    sidewalkStuff.setImageResource(R.drawable.sidewalkcrack);
+                    sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
+                }else if(r == 2) {
+                    sidewalkStuff.setImageResource(R.drawable.tirepile);
+                    sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
+                }
+
+                addView(sidewalkStuff);
+
+
+                ValueAnimator pathAnimator = ObjectAnimator.ofFloat(sidewalkStuff, "x", "y", sidewalkRight);
+                pathAnimator.setDuration(3500);
+                pathAnimator.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        removeView(tree);
+                        removeView(sidewalkStuff);
                     }
                 });
-                treeTime1 = System.nanoTime();
+                pathAnimator.start();
+
+                sidewalkRightTime = System.nanoTime();
             }
 
-            if(elapse2 > 2500) {
-                final ImageView tree = new ImageView(mContext);
-                tree.setImageResource(R.drawable.tree);
-                tree.setLayoutParams(new LayoutParams((int)(50 * scaleFactorX), (int)(100 * scaleFactorY)));
-                addView(tree);
-                tree.setX(300 * scaleFactorX);
-                tree.setY(135 * scaleFactorY);
-                tree.animate().setDuration(3500 - gameSpeed * 100).x(165 * scaleFactorX).y(610 * scaleFactorY).setListener(new AnimatorListenerAdapter() {
+            if(elapseLeft > 2500) {
+                int r = random.nextInt() % 3;
+
+                final ImageView sidewalkStuff  = new ImageView(mContext);
+                if(r == 0){
+                    sidewalkStuff.setImageResource(R.drawable.tree);
+                    sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
+                }
+                else if(r == 1) {
+                    sidewalkStuff.setImageResource(R.drawable.sidewalkcrack);
+                    sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
+                }else if(r == 2) {
+                    sidewalkStuff.setImageResource(R.drawable.tirepile);
+                    sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
+                }
+
+                addView(sidewalkStuff);
+
+
+                ValueAnimator pathAnimator = ObjectAnimator.ofFloat(sidewalkStuff, "x", "y", sidewalkLeft);
+                pathAnimator.setDuration(3500);
+                pathAnimator.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        removeView(tree);
+                        removeView(sidewalkStuff);
                     }
                 });
-                treeTime2 = System.nanoTime();
+                pathAnimator.start();
+
+                sidewalkLeftTime = System.nanoTime();
             }
 
 
@@ -245,7 +336,7 @@ public class CAk_Component extends FrameLayout implements ILoadableObject{
              *  Using drawable as questionboard
              */
 
-            if(elapse > 5000) {
+            if(elapse > 5000 && teachFinger.finishTeaching) {
                 final QuestionBoard questionBoard = new QuestionBoard(mContext);
                 addView(questionBoard, new LayoutParams((int)(90 * scaleFactorX), (int)(30 * scaleFactorY)));
                 questionBoard.setX(430 * scaleFactorX);
@@ -266,6 +357,20 @@ public class CAk_Component extends FrameLayout implements ILoadableObject{
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
                         removeView(questionBoard);
+
+                        if(judge(questionBoard)){
+                            player.score += 1;
+//                            soundPool.play(correctMedia, 1.0f, 1.0f, 1, 0, 1.0f);
+                            lastCorrect=true;
+                            errornum=0;
+                        }else{
+                            player.score -= 1;
+//                            soundPool.play(incorrectMedia, 1.0f, 1.0f, 1, 0, 1.0f);
+                            lastCorrect=false;
+                            errornum+=1;
+                            Log.d("error",""+errornum);
+                        }
+
                     }
                 });
                 set.start();
@@ -273,7 +378,7 @@ public class CAk_Component extends FrameLayout implements ILoadableObject{
                 questionTime = System.nanoTime();
             }
 
-
+            score.setText("score: "+player.score);
             mainHandler.postDelayed(gameRunnable, 100);
         }
     };
@@ -301,8 +406,9 @@ public class CAk_Component extends FrameLayout implements ILoadableObject{
 //                player.setUp(true);
 //            }
             player.onTouchEvent(event, scaleFactorX);
-            player.update();
-            invalidate();
+//            soundPool.play(carscreechMedia, 1.0f, 1.0f, 1, 0, 1.0f);
+            if(isFirstInstall==true&&teachFinger.finishTeaching!=true)
+                teachFinger.onTouch(event, player);
             return true;
         }
         if(event.getAction()==MotionEvent.ACTION_UP)
@@ -311,6 +417,16 @@ public class CAk_Component extends FrameLayout implements ILoadableObject{
         }
 
         return super.onTouchEvent(event);
+    }
+
+    private boolean judge(QuestionBoard questionBoard){
+        if(player.rearNum < questionBoard.leftNum && player.getLane() == Player.Lane.LEFT ||
+                player.rearNum > questionBoard.rightNum && player.getLane() == Player.Lane.RIGHT ||
+                (player.rearNum < questionBoard.rightNum && player.rearNum > questionBoard.leftNum
+                        && player.getLane() == Player.Lane.MID)){
+            return true;
+        }
+        return false;
     }
 
 

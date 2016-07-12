@@ -9,6 +9,8 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.util.Random;
+
 /**
  * Created by jacky on 2016/7/1.
  */
@@ -22,17 +24,6 @@ public class QuestionBoard extends View {
     protected int x;
     protected int y;
 
-//    public QuestionBoard(int x, int y, int w, int h) {
-//        this.x = x;
-//        this.y = y;
-//        width = w;
-//        height = h;
-//        textSize = 6;
-//        leftNum = 13;
-//        rightNum = 20;
-//        dx = -GamePanel.MOVESPEED / 3;
-//        dy = GamePanel.MOVESPEED / 2;
-//    }
 
     public QuestionBoard(Context context) {
         super(context);
@@ -51,6 +42,12 @@ public class QuestionBoard extends View {
         width = 90;
         height = 30;
         textSize = 20;
+        Random r = new Random();
+
+        leftNum = r.nextInt(50);
+        rightNum = leftNum + r.nextInt(50) + 1;
+
+
 //        x = 430;
 //        y = 100;
     }

@@ -2,83 +2,88 @@ package cmu.xprize.ak_component;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
+import android.support.percent.PercentLayoutHelper;
+import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.widget.TextView;
+
+import java.util.Random;
 
 /**
  * Created by jacky on 2016/7/1.
  */
 
-public class Player extends GameObject {
+public class Player extends TextView{
     protected enum Lane{LEFT, MID, RIGHT}
 
     protected boolean isPlaying;
     protected int score;
     protected int rearNum;
-    private Lane lane;
-
-    private Drawable mDrawable;
-    private int width = 75, height = 75;
+    protected Lane lane = Lane.MID;
 
 
-    private Rect mViewRegion = new Rect();
+
+    private PercentRelativeLayout.LayoutParams params;
+
     public Player(Context context) {
+        super(context);
         init(context, null);
     }
 
+    public Player(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context, attrs);
+    }
+
+    public Player(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context, attrs);
+    }
 
     protected void init(Context context, AttributeSet attrs) {
-        mDrawable = ContextCompat.getDrawable(context, R.drawable.car_rear);
-        mDrawable.setBounds(450,450,525,525);
-        x = 450;
-        y = 450;
-        this.lane = Lane.MID;
+        Drawable image = context.getResources().getDrawable( R.drawable.car_rear);
+        int h = image.getIntrinsicHeight();
+        int w = image.getIntrinsicWidth();
+        image.setBounds( 0, 0, w, h );
+        setCompoundDrawables(null, image,
+                null, null);
+        rearNum = new Random().nextInt(100);
+        setText("" + rearNum);
     }
 
-
-//    protected void onDraw(Canvas canvas) {
-//
-//        mDrawable.draw(canvas);
-//    }
-
-    //    public Player(Bitmap res, int w, int h) {
-//        image = res;
-//        width = w;
-//        height = h;
-//        rearNum = 14;
-//        lane = Lane.MID;
-//        x = 487 - width / 2;
-//        y = 450;
-//    }
-//
     public void update() {
-        switch (lane) {
-            case LEFT:
-                x = 330 - width / 2;
-                break;
-            case MID:
-                x = 487 - width / 2;
-                break;
-            case RIGHT:
-                x = 667 - width / 2;
-                break;
+        if(getLayoutParams() != null)
+            params = (PercentRelativeLayout.LayoutParams) getLayoutParams();
+        if(params != null) {
+            PercentLayoutHelper.PercentLayoutInfo info = params.getPercentLayoutInfo();
+            switch (lane) {
+                case LEFT:
+                    info.leftMarginPercent = 0.25f;
+                    break;
+                case MID:
+                    info.leftMarginPercent = 0.45f;
+                    break;
+                case RIGHT:
+                    info.leftMarginPercent = 0.65f;
+                    break;
+            }
+            requestLayout();
         }
-
-    }
-//
-    public void draw(Canvas canvas) {
-        mDrawable.setBounds(x, y, x + width, y + height);
-        mDrawable.draw(canvas);
     }
 
-//
+    @Override
+    public void onDraw(Canvas canvas) {
+        update();
+        super.onDraw(canvas);
+    }
+
+
     public void onTouchEvent(MotionEvent event, float scaleFactorX){
-        float touchX = event.getX() / scaleFactorX;
+        float touchX = event.getX();
         //Change to left lane
-        if(touchX < x + width / 2) {
+        if(touchX < getX() + getWidth()/2) {
             lane = lane == Lane.RIGHT? Lane.MID : Lane.LEFT;
             System.out.println("To left");
         }
