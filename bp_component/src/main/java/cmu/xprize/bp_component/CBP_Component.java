@@ -24,15 +24,9 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
@@ -64,7 +58,7 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
     static final String TAG = "CBP_Component";
 
-    private CBp_Data        _currData;
+    protected CBp_Data     _currData;
 
 
 
@@ -89,7 +83,7 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
         mContext = context;
 
-        inflate(getContext(), R.layout.bubblepop_layout, this);
+        inflate(getContext(), R.layout.bubblepop_container, this);
 
         if(attrs != null) {
 
@@ -124,6 +118,7 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     public CBP_LetterBoxLayout getContainer() {
         return Scontent;
     }
+
 
     public void onDestroy() {
 
@@ -169,8 +164,10 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
         _currData = data;
 
-        if(_mechanics  != null)
+        if(_mechanics  != null) {
             _mechanics.onDestroy();
+            _mechanics = null;
+        }
 
         switch(data.question_type) {
             case "multiple-choice":
@@ -239,6 +236,36 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     public boolean allCorrect(int numCorrect) {
         return (numCorrect == dataSource.length);
     }
+
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // Tutor Scriptable methods  Start
+
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void applyEvent(String event){};
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishValue(String varName, String value) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishValue(String varName, int value) {
+    }
+
+
+    // Tutor methods  End
+    //************************************************************************
+    //************************************************************************
 
 
 

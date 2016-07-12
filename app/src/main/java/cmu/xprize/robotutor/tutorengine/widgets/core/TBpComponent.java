@@ -5,6 +5,8 @@ import android.util.AttributeSet;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 import cmu.xprize.bp_component.CBP_Component;
 import cmu.xprize.bp_component.CBp_Data;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
@@ -13,6 +15,7 @@ import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILogManager;
@@ -23,6 +26,8 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
 
     private CTutor           mTutor;
     private CObjectDelegate  mSceneObject;
+
+    private HashMap<String, String>   eventMap = new HashMap<>();
 
 
     static final String TAG = "TBpComponent";
@@ -83,6 +88,9 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
 
         mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
         mTutor.setDelFeature(TCONST.GENERIC_WRONG);
+
+        mTutor.setDelFeature(TCONST.SAY_STIMULUS);
+        mTutor.setDelFeature(TCONST.SHOW_STIMULUS);
     }
 
 
@@ -97,6 +105,8 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
         // Let the compoenent process the new data set
         //
         super.updateDataSet(data);
+
+
     }
 
 
@@ -167,6 +177,68 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
     public void setButtonBehavior(String command) {
         mSceneObject.setButtonBehavior(command);
     }
+
+
+    //**********************************************************
+    //**********************************************************
+    //*****************  Scripting Interface
+
+
+    public void setEventBehavior(String event, String behavior) {
+
+        if(behavior.toUpperCase().equals(TCONST.NULL)) {
+
+            if(eventMap.containsKey(event)) {
+                eventMap.remove(event);
+            }
+        }
+        else {
+            eventMap.put(event, behavior);
+        }
+    }
+
+    // Execute scirpt target if behavior is defined for this event
+    //
+    public void applyEvent(String event){
+
+        if(eventMap.containsKey(event)) {
+            applyEventNode(eventMap.get(event));
+        }
+    };
+
+
+    /**
+     *  Apply Events in the Tutor Domain.
+     *
+     * @param nodeName
+     */
+    protected void applyEventNode(String nodeName) {
+        IScriptable2 obj = null;
+
+        if(nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
+
+            try {
+                obj = mTutor.getScope().mapSymbol(nodeName);
+
+                if(obj != null) {
+                    obj.preEnter();
+                    obj.applyNode();
+                }
+
+            } catch (Exception e) {
+                // TODO: Manage invalid Behavior
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Scripting Interface  End
+    //************************************************************************
+    //************************************************************************
+
+
+
+
 
 
 

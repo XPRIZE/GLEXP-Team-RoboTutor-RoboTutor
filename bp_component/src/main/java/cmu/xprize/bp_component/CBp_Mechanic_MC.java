@@ -30,12 +30,9 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.view.View;
-import android.view.animation.AnticipateInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-
-import java.util.ArrayList;
 
 import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.TCONST;
@@ -168,12 +165,12 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
     }
 
 
-    protected void runCommand(String command, Object target ) {
+    protected void execCommand(String command, Object target ) {
 
         CBubble bubble;
         long    delay = 0;
 
-        super.runCommand(command, target);
+        super.execCommand(command, target);
 
         switch(command) {
 

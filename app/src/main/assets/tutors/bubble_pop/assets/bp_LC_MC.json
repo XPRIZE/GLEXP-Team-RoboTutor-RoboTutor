@@ -44,8 +44,9 @@
 
   ],
 
-  "view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"fixed", "colorbase":"#666666", "colors":[0xFF2A5A8E, 0xFF1C3C5F, 0xFF3E86D4, 0xFF336DAD]}
-//  "view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"fixed", "colorbase":"#666666", "colors":[0xFF2A818A, 0xFF32709D, 0xFF2E6C92, 0xFF26628A]}
+  //"view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"fixed", "colorbase":"#666666", "colors":[0xFF2A5A8E, 0xFF1C3C5F, 0xFF3E86D4, 0xFF336DAD]}
+  //"view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"fixed", "colorbase":"#666666", "colors":[0xFF2A5C8D, 0xFF1C5A8D, 0xFF3E5E8E, 0xFF335C8E]}
+  "view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"fixed", "colorbase":"#666666", "colors":[0xFFA3A300, 0xFF8C8C00, 0xFFD9D900, 0xFFB2B200]}
 //  "view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"random", "colors":[0xFF2A818A, 0xFF32709D, 0xFF2E6C92, 0xFF26628A], "colorbase":"#000088" },
 //  "view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"random", "colorbase":"#000088" },
 //

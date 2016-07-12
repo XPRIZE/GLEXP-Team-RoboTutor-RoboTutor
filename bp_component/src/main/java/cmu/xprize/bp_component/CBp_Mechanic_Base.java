@@ -21,7 +21,6 @@ package cmu.xprize.bp_component;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -50,36 +49,34 @@ import cmu.xprize.util.TCONST;
 
 public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener, View.OnClickListener {
 
-    protected Context               mContext;
-    protected CBP_Component         mComponent;
-    protected CBP_LetterBoxLayout   mParent;
-    protected boolean               mInitialized = false;
+    protected Context                     mContext;
+    protected CBP_Component               mComponent;
+    protected CBP_LetterBoxLayout         mParent;
+    protected boolean                     mInitialized = false;
 
-    protected boolean               _isRunning   = false;
+    protected boolean                     _isRunning   = false;
 
-    private final Handler           mainHandler = new Handler(Looper.getMainLooper());
-    private HashMap                 queueMap    = new HashMap();
-    protected boolean               _enabled    = true;
-    private boolean                 _qDisabled  = false;
+    private final Handler                 mainHandler = new Handler(Looper.getMainLooper());
+    private HashMap                       queueMap    = new HashMap();
+    protected boolean                     _enabled    = true;
+    private boolean                       _qDisabled  = false;
 
-    private boolean                 _watchable    = true;
-    private int[]                   _screenCoord  = new int[2];
-    private Boolean                 _touchStarted = false;
-    private long                    _time;
-    private long                    _prevTime;
+    private boolean                       _watchable    = true;
+    private int[]                         _screenCoord  = new int[2];
+    private long                          _time;
+    private long                          _prevTime;
 
-    private LocalBroadcastManager   bManager;
+    private LocalBroadcastManager         bManager;
 
-    protected boolean               _animationStarted = false;
-    protected boolean               _stimulusShown    = false;
-    protected boolean               _stimulusAnimated = false;
-    protected boolean               _stimulusMoved    = false;
+    protected boolean                     _animationStarted = false;
+    protected boolean                     _stimulusShown    = false;
+    protected boolean                     _stimulusAnimated = false;
+    protected boolean                     _stimulusMoved    = false;
 
-    protected float                 _alpha      = 0.80f;
-    protected float[]               _scaleRange = {0.85f, 1.3f};
-    //protected float[]               _scaleRange = {1f, 1f};
+    protected float                       _alpha       = 0.80f;
+    protected float[]                     _scaleRange  = {0.85f, 1.3f};
 
-    protected CBp_Data              _currData;
+    protected CBp_Data                    _currData;
 
     protected CBubble[]                   SBubbles;
     protected CBubbleStimulus             SbubbleStumulus;
@@ -89,6 +86,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
 
     static final String TAG = "CBp_Mechanic_Base";
+
 
 
     protected void init(Context context, CBP_Component parent) {
@@ -212,7 +210,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
     }
 
 
-    protected void runCommand(String command, Object target ) {
+    protected void execCommand(String command, Object target ) {
 
         CBubble bubble;
         long    delay = 0;
@@ -421,7 +419,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
             try {
                 queueMap.remove(this);
 
-                runCommand(_command, _target);
+                execCommand(_command, _target);
             }
             catch(Exception e) {
                 CErrorManager.logEvent(TAG, "Run Error:", e, false);

@@ -37,7 +37,6 @@ public class CBp_Data implements ILoadableObject{
     public int[]         response_count   = null;
     public String        response_layout  = "fixed";
     public String[]      response_color   = null;
-    public int           response_timeout = -1;
 
     public String        stimulus_type    = "reference";
     public int           stimulus_index   = -1;

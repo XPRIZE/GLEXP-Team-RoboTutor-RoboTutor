@@ -93,6 +93,18 @@ public class type_timer extends type_action implements IMediaListener {
     }
 
     @Override
+    public boolean isLooping() {
+        return false;
+    }
+
+
+    @Override
+    public float getVolume() {
+        return -1;
+    }
+
+
+    @Override
     public void onCompletion() {
         // NOOP
     }

@@ -178,11 +178,13 @@ public class CBubbleStimulus extends FrameLayout {
         RectF bounds = new RectF(mViewRegion.left, mViewRegion.top, mViewRegion.right, mViewRegion.bottom);
 
 
-        mPaint.setColor(Color.parseColor("#AAFFFFFF"));
+        mPaint.setColor(Color.parseColor("#AAAAAAAA"));
         mPaint.setStyle(Paint.Style.FILL);
         canvas.drawRoundRect(bounds, 30f, 30f, mPaint);
 
+        mPaint.setColor(Color.parseColor("#AA000000"));
         mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeWidth(2.0f);
         canvas.drawRoundRect(bounds, 30f, 30f, mPaint);
     }
 

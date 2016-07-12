@@ -198,7 +198,13 @@ public class CMediaManager {
                         // Do nothing - Use the standard autoLang
                         break;
 
+                    case TCONST.LANG_EFFECT:
+                        // Use the non-language specific path - sound effects etc.
+                        autoLang = "effect";
+                        break;
+
                     default:
+                        // Use the override language
                         autoLang = mapLanguageIANA_2(langOverride);
                         break;
                 }
@@ -458,6 +464,14 @@ public class CMediaManager {
                 soundData.close();
                 mPlayer.setOnPreparedListener(this);
                 mPlayer.setOnCompletionListener(this);
+                mPlayer.setLooping(mOwner.isLooping());
+
+                float volume = mOwner.getVolume();
+
+                if(volume > 0) {
+                    mPlayer.setVolume(volume, volume);
+                }
+
                 mPlayer.prepareAsync();
 
                 Log.d(TAG, "Audio Loading: " + dataSource);

@@ -123,6 +123,17 @@ public class type_timeline extends type_action implements IMediaListener {
         }
     }
 
+    @Override
+    public boolean isLooping() {
+        return false;
+    }
+
+
+    @Override
+    public float getVolume() {
+        return -1;
+    }
+
 
     //**  Global Media Control Start
     //*******************************************************

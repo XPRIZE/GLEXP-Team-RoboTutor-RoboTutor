@@ -55,6 +55,9 @@ public class TCONST {
     public static final String FW_TTS           = "FW_TTS";
     public static final String SET_LANG_FTR     = "SET_LANGUAGE_FEATURE";
     public static final String VALUE            = "VALUE";
+    public static final String NULL             = "NULL";
+    public static final String SAY_STIMULUS     = "SAYSTIMULUS";
+    public static final String SHOW_STIMULUS    = "SHOWSTIMULUS";
 
 
     //*** Reading Tutor compatible string combinations

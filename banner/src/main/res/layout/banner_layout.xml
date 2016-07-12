@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:clipChildren="false"
-    android:background="@drawable/bannerbox">
+    android:clipChildren="false">
 
     <!-- in Relative layout - views have to be defined before being referenced -->
 

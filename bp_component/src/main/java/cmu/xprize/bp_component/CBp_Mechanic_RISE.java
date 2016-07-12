@@ -216,12 +216,12 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
 
 
-    protected void runCommand(String command, Object target ) {
+    protected void execCommand(String command, Object target ) {
 
         CBubble bubble;
         long    delay = 0;
 
-        super.runCommand(command, target);
+        super.execCommand(command, target);
 
         switch(command) {
 

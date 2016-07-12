@@ -52,7 +52,9 @@ public class type_audio extends type_action implements IMediaListener {
     public String        lang;
     public String        soundsource;
     public String        soundpackage;
-    public long          index = 0;
+    public boolean       repeat = false;
+    public float         volume = -1f;
+    public long          index  = 0;
 
     final static public String TAG = "type_audio";
 
@@ -103,6 +105,16 @@ public class type_audio extends type_action implements IMediaListener {
 
             mPlayer.releasePlayer();
         }
+    }
+
+    @Override
+    public boolean isLooping() {
+        return repeat;
+    }
+
+    @Override
+    public float getVolume() {
+        return volume;
     }
 
     /**

@@ -20,6 +20,10 @@
 package cmu.xprize.banner;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 
@@ -29,6 +33,10 @@ public class CBanner extends PercentRelativeLayout {
 
     private Persona mPersona;
 
+    private Paint mPaint      = new Paint();
+    private Rect  mViewRegion = new Rect();
+
+    private int   mColor = Color.parseColor("#75C043");
 
 
     public CBanner(Context context) {
@@ -51,8 +59,10 @@ public class CBanner extends PercentRelativeLayout {
 
         mPersona = (Persona) findViewById(R.id.Spersona);
 
-//        mCheckBox1 = (CheckBox) findViewById(R.id.control1);
-//        mCheckBox2 = (CheckBox) findViewById(R.id.control2);
+        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setAntiAlias(false);
+
+        setWillNotDraw(false);
     }
 
 
@@ -61,5 +71,15 @@ public class CBanner extends PercentRelativeLayout {
     }
 
 
+    @Override
+    public void onDraw(Canvas canvas) {
+
+        super.onDraw(canvas);
+
+        mPaint.setColor(mColor);
+
+        getDrawingRect(mViewRegion);
+        canvas.drawRect(mViewRegion, mPaint);
+    }
 
 }
