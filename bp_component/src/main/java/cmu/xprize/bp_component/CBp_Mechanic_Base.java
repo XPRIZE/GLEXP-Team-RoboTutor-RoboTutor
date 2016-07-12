@@ -21,7 +21,6 @@ package cmu.xprize.bp_component;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -30,6 +29,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnticipateInterpolator;
@@ -49,36 +49,35 @@ import cmu.xprize.util.TCONST;
 
 public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener, View.OnClickListener {
 
-    protected Context               mContext;
-    protected CBP_Component         mParent;
-    protected boolean               mInitialized = false;
+    protected Context                     mContext;
+    protected CBP_Component               mComponent;
+    protected CBP_LetterBoxLayout         mParent;
+    protected boolean                     mInitialized = false;
 
+    protected boolean                     _isRunning   = false;
 
-    private final Handler           mainHandler = new Handler(Looper.getMainLooper());
-    private HashMap                 queueMap    = new HashMap();
-    protected boolean               _enabled    = true;
-    private boolean                 _qDisabled  = false;
+    private final Handler                 mainHandler = new Handler(Looper.getMainLooper());
+    private HashMap                       queueMap    = new HashMap();
+    protected boolean                     _enabled    = true;
+    private boolean                       _qDisabled  = false;
 
-    private boolean                 _watchable    = true;
-    private int[]                   _screenCoord  = new int[2];
-    private Boolean                 _touchStarted = false;
-    private long                    _time;
-    private long                    _prevTime;
+    private boolean                       _watchable    = true;
+    private int[]                         _screenCoord  = new int[2];
+    private long                          _time;
+    private long                          _prevTime;
 
-    private LocalBroadcastManager   bManager;
+    private LocalBroadcastManager         bManager;
 
-    protected boolean               _animationStarted = false;
-    protected boolean               _stimulusShown    = false;
-    protected boolean               _stimulusAnimated = false;
-    protected boolean               _stimulusMoved    = false;
+    protected boolean                     _animationStarted = false;
+    protected boolean                     _stimulusShown    = false;
+    protected boolean                     _stimulusAnimated = false;
+    protected boolean                     _stimulusMoved    = false;
 
-    protected float                 _alpha      = 0.80f;
-    protected float[]               _scaleRange = {0.85f, 1.3f};
-    //protected float[]               _scaleRange = {1f, 1f};
+    protected float                       _alpha       = 0.80f;
+    protected float[]                     _scaleRange  = {0.85f, 1.3f};
 
-    protected CBp_Data              _currData;
+    protected CBp_Data                    _currData;
 
-    protected int                         _bubbleIntrinsicRadius;
     protected CBubble[]                   SBubbles;
     protected CBubbleStimulus             SbubbleStumulus;
 
@@ -89,10 +88,12 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
     static final String TAG = "CBp_Mechanic_Base";
 
 
+
     protected void init(Context context, CBP_Component parent) {
 
-        mContext = context;
-        mParent  = parent;
+        mContext   = context;
+        mComponent = parent;
+        mParent    = parent.getContainer();
 
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(mContext);
@@ -101,6 +102,8 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
     @Override
     public void onDestroy() {
+
+        _isRunning = false;
 
         terminateQueue();
 
@@ -136,7 +139,43 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
     }
 
+
     public void removeBubble(CBubble bubble) {
+
+        mParent.removeView(bubble);
+
+        for (int i1 = 0; i1 < SBubbles.length; i1++) {
+
+            if (SBubbles[i1] == bubble) {
+                SBubbles[i1] = null;
+                break;
+            }
+        }
+    }
+
+
+    public void replaceBubble(CBubble bubble) {
+
+        CBubble newBubble;
+
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        mParent.removeView(bubble);
+
+        newBubble = (CBubble) View.inflate(mContext, R.layout.bubble_view, null);
+        newBubble.setAlpha(0);
+
+        for (int i1 = 0; i1 < SBubbles.length; i1++) {
+
+            if (SBubbles[i1] == bubble) {
+                SBubbles[i1] = newBubble;
+
+                mParent.addView(newBubble, layoutParams);
+                break;
+            }
+        }
+
+        mParent.bringChildToFront(SbubbleStumulus);
     }
 
 
@@ -155,7 +194,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
             case BP_CONST.REFERENCE:
 
-                int[] shapeSet = BP_CONST.drawableMap.get(mParent.stimulus_data[data.dataset[data.stimulus_index]]);
+                int[] shapeSet = BP_CONST.drawableMap.get(mComponent.stimulus_data[data.dataset[data.stimulus_index]]);
 
                 Drawable qDrawable = mParent.getResources().getDrawable(shapeSet[0], null);
 
@@ -163,7 +202,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 break;
 
             case BP_CONST.TEXTDATA:
-                SbubbleStumulus.setContents(0, mParent.stimulus_data[data.dataset[data.stimulus_index]]);
+                SbubbleStumulus.setContents(0, mComponent.stimulus_data[data.dataset[data.stimulus_index]]);
                 break;
         }
 
@@ -171,31 +210,18 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
     }
 
 
-    protected void runCommand(String command, Object target ) {
+    protected void execCommand(String command, Object target ) {
 
         CBubble bubble;
         long    delay = 0;
 
         switch(command) {
 
-            case BP_CONST.POP_BUBBLE:
-
-                bubble = (CBubble)target;
-                delay  = bubble.pop();
-
-                // stop listening to the bubble
-                bubble.setOnClickListener(null);
-
-                broadcastLocation(TCONST.GLANCEAT, bubble.getCenterPosition());
-
-                post(BP_CONST.REMOVE_BUBBLE, bubble, delay);
-                break;
-
             case BP_CONST.WIGGLE_BUBBLE:
 
                 bubble = (CBubble)target;
 
-                broadcastLocation(TCONST.GLANCEAT, bubble.getCenterPosition());
+                broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(bubble.getCenterPosition()));
 
                 CAnimatorUtil.wiggle(bubble, "horizontal", 0.10f, 70, 5);
                 break;
@@ -205,8 +231,13 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 bubble = (CBubble)target;
 
                 removeBubble(bubble);
+                break;
 
-                mParent.removeView((View)target);
+            case BP_CONST.REPLACE_BUBBLE:
+
+                bubble = (CBubble)target;
+
+                replaceBubble(bubble);
                 break;
 
             case BP_CONST.SHOW_STIMULUS:
@@ -226,10 +257,10 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
                     _stimulusAnimated = true;
 
-                    float[] scale = new float[]{SbubbleStumulus.getHeight()};
-
                     // Persona - look at the stimulus
-                    broadcastLocation(TCONST.GLANCEAT, new PointF(mParent.getWidth() / 2, mParent.getHeight() / 2));
+                    Log.d(TAG, "Width: " + mParent.getWidth() + " - HEIGHT: " + mParent.getHeight());
+
+                    broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(new PointF(mParent.getWidth() / 2, mParent.getHeight() / 2)));
 
                     SbubbleStumulus.setX((mParent.getWidth() - SbubbleStumulus.getWidth()) / 2);
                     SbubbleStumulus.setY((mParent.getHeight() - SbubbleStumulus.getHeight()) / 2);
@@ -271,7 +302,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
                     float[] scale = new float[]{(BP_CONST.MARGIN_BOTTOM * .9f) / SbubbleStumulus.getHeight()};
 
-                    float height = SbubbleStumulus.getHeight();
+                    float height       = SbubbleStumulus.getHeight();
                     float scaledHeight = height * scale[0];
 
                     PointF wayPoints[] = new PointF[1];
@@ -388,7 +419,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
             try {
                 queueMap.remove(this);
 
-                runCommand(_command, _target);
+                execCommand(_command, _target);
             }
             catch(Exception e) {
                 CErrorManager.logEvent(TAG, "Run Error:", e, false);
@@ -484,9 +515,9 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
         CBubble bubble = (CBubble)view;
 
-        //post(BP_CONST.POP_BUBBLE, bubble);
+        post(BP_CONST.POP_BUBBLE, bubble);
         //post(BP_CONST.WIGGLE_BUBBLE, bubble);
-        post(BP_CONST.CLEAR_CONTENT, bubble);
+        //post(BP_CONST.CLEAR_CONTENT, bubble);
     }
 
 

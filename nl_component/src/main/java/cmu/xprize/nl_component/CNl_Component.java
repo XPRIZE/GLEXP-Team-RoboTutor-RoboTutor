@@ -33,6 +33,7 @@ import java.util.List;
 
 import cmu.xprize.fw_component.CStimRespBase;
 import cmu.xprize.util.CEventMap;
+import cmu.xprize.util.IEvent;
 import cmu.xprize.util.Num2Word;
 import cmu.xprize.util.TCJSGF;
 import cmu.xprize.util.TCONST;
@@ -47,6 +48,7 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener, I
 
     protected ListenerBase          mListener;
     protected TTSsynthesizer        mSynthesizer;
+    protected String                mLanguage;
 
     protected String                mProcessorType;
     protected CNl_Processor         mInputProcessor;
@@ -112,7 +114,6 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener, I
             }
 
             // Configure the mListener language and the callback for ASR Events
-            mListener.setLanguage(getLanguageFeature());
             mListener.setEventListener(this);
 
             // Have connector sub-class in the tutor domain Inject the listener into the MediaManager
@@ -124,6 +125,41 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener, I
 
         // attach TTS
         mSynthesizer = rootTTS;
+    }
+
+
+    /**
+     *
+     * @param language Feature string (e.g. LANG_EN)
+     */
+    public void setLanguage(String language) {
+
+        mLanguage = TCONST.langMap.get(language);
+
+        // Configure the mListener for our story
+        //
+        mListener.setLanguage(language);
+    }
+
+
+    /**
+     *
+     * @param event
+     */
+    @Override
+    public void onEvent(IEvent event) {
+
+        super.onEvent(event);
+
+        switch(event.getType()) {
+
+            // Message from Stimiulus variant to share state with response variant
+            //
+            case TCONST.SET_LANG_FTR:
+
+                setLanguage((String)event.getString(TCONST.VALUE));
+                break;
+        }
     }
 
 

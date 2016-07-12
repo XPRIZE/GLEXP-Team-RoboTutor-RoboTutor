@@ -24,6 +24,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -51,6 +53,8 @@ public class CBubble extends FrameLayout {
     private float[]           mRange;
     private PointF            mPosition = new PointF();
 
+    private float             mScaleCorrection = 1.0f;
+
     private ImageView         bubblepop = null;
     private AnimationDrawable popping   = null;
 
@@ -71,6 +75,15 @@ public class CBubble extends FrameLayout {
     }
 
 
+    public void init(Context context, AttributeSet attrs) {
+
+        mContext = context;
+
+        float instanceDensity = mContext.getResources().getDisplayMetrics().density;
+        mScaleCorrection      = BP_CONST.DESIGN_SCALE / instanceDensity;
+    }
+
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -79,7 +92,8 @@ public class CBubble extends FrameLayout {
 
         mIcon = (ImageView) findViewById(R.id.SIcon);
         mText = (TextView) findViewById(R.id.SText);
-        mScale = 1;
+
+        setScale(1.0f);
     }
 
     public void onDestroy() {
@@ -89,6 +103,189 @@ public class CBubble extends FrameLayout {
             bubblepop = null;
         }
     }
+
+    public boolean getOnScreen() {
+        return mOnScreen;
+    }
+
+
+    public void setOnScreen(boolean isOnScreen) {
+        mOnScreen = isOnScreen;
+    }
+
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+    }
+
+
+    public void setColor(String color) {
+        mColor = color;
+
+        setBackgroundResource(BP_CONST.bubbleMap.get(mColor));
+    }
+
+
+    public String getColor() {
+        return mColor;
+    }
+
+
+    public void setColor(int resId) {
+        setBackgroundResource(resId);
+    }
+
+
+    public void setColor(Drawable res) {
+        setBackground(res);
+    }
+
+
+    public void setScale(float newScale) {
+
+        setAssignedScale(newScale);
+
+        setScaleX(mScale);
+        setScaleY(mScale);
+    }
+
+    @Override
+    public void setScaleX(float newScale) {
+        super.setScaleX(newScale *  mScaleCorrection);
+    }
+
+    @Override
+    public void setScaleY(float newScale) {
+        super.setScaleY(newScale *  mScaleCorrection);
+    }
+
+    @Override
+    public float getScaleX() {
+        return super.getScaleX() / mScaleCorrection;
+    }
+
+    @Override
+    public float getScaleY() {
+        return super.getScaleY() / mScaleCorrection;
+    }
+
+    public void setRange(float[] _range) {
+        mRange = _range;
+    }
+
+    public float[] getRange() {
+        return mRange;
+    }
+
+    public void setAssignedScale(float newScale) {
+        mScale = newScale;
+    }
+
+    public float getAssignedScale() {
+        return mScale;
+    }
+
+    public void setAngle(float newAngle) {
+        mAngle = newAngle;
+    }
+
+    public float getAngle() {
+        return mAngle;
+    }
+
+
+    public PointF getPosition(Point relOrigin, float Loc, float angle) {
+
+        PointF pos = new PointF();
+
+        pos.x = ((float) (relOrigin.x + (Loc * Math.cos(angle))));
+        pos.y = ((float) (relOrigin.y - (Loc * Math.sin(angle))));
+
+        return pos;
+    }
+
+
+    public void setPosition(int x, int y) {
+        PointF nPosition = new PointF();
+
+        nPosition.x = x;
+        nPosition.y = y;
+
+        setX(x);
+        setY(y);
+    }
+
+    public void setCenterPosition(int x, int y) {
+        PointF nPosition = new PointF();
+
+        nPosition.x = x + (getWidth() / 2);
+        nPosition.y = y + (getHeight() / 2);
+
+        setX(x);
+        setY(y);
+    }
+
+
+    public PointF getCenterPosition() {
+        PointF nPosition = new PointF();
+
+        nPosition.x = getX() + (getWidth() / 2);
+        nPosition.y = getY() + (getHeight() / 2);
+
+        return nPosition;
+    }
+
+
+
+    /**
+     * Hit rectangle in parent's coordinates
+     *
+     * @param outRect The hit rectangle of the view.
+     */
+    public void getHitRect(Rect outRect) {
+        super.getHitRect(outRect);
+    }
+
+    public void setVectorPosition(Point relOrigin, float vecDist, float angle) {
+
+        mDistance = vecDist;
+        mAngle    = angle;
+
+        mPosition.x = ((float) (relOrigin.x + (mDistance * Math.cos(mAngle))) - (getWidth() / 2));
+        mPosition.y = ((float) (relOrigin.y - (mDistance * Math.sin(mAngle))) - (getHeight() / 2));
+
+        setX(mPosition.x);
+        setY(mPosition.y);
+    }
+
+    public PointF getVectorPosition() {
+        return mPosition;
+    }
+
+
+
+    public void setContents(int resID, String text) {
+
+        if(text == null) {
+            mIcon.setImageResource(resID);
+            mIcon.setVisibility(View.VISIBLE);
+        }
+        else {
+            mText.setText(text);
+            mText.setVisibility(View.VISIBLE);
+        }
+
+        invalidate();
+    }
+
+
+    @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec) {
+
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+    }
+
 
     public long pop() {
 
@@ -138,144 +335,6 @@ public class CBubble extends FrameLayout {
         popping.start();
 
         return animTime;
-    }
-
-
-    public boolean getOnScreen() {
-        return mOnScreen;
-    }
-
-
-    public void setOnScreen(boolean isOnScreen) {
-        mOnScreen = isOnScreen;
-    }
-
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-    }
-
-
-    public void init(Context context, AttributeSet attrs) {
-        mContext = context;
-    }
-
-
-    public void setColor(String color) {
-        mColor = color;
-
-        setBackgroundResource(BP_CONST.bubbleMap.get(mColor));
-    }
-
-
-    public String getColor() {
-        return mColor;
-    }
-
-
-    public void setColor(int resId) {
-        setBackgroundResource(resId);
-    }
-
-
-    public void setColor(Drawable res) {
-        setBackground(res);
-    }
-
-
-    public void setScale(float newScale) {
-
-        setAssignedScale(newScale);
-
-        setScaleX(newScale);
-        setScaleY(newScale);
-    }
-
-    public void setRange(float[] _range) {
-        mRange = _range;
-    }
-
-    public float[] getRange() {
-        return mRange;
-    }
-
-    public void setAssignedScale(float newScale) {
-        mScale = newScale;
-    }
-
-    public float getAssignedScale() {
-        return mScale;
-    }
-
-    public float getScaledWidth() {
-        return getWidth() * mScale;
-    }
-
-    public void setAngle(float newAngle) {
-        mAngle = newAngle;
-    }
-
-    public float getAngle() {
-        return mAngle;
-    }
-
-
-    public PointF getPosition(Point relOrigin, float Loc, float angle) {
-
-        PointF pos = new PointF();
-
-        pos.x = ((float) (relOrigin.x + (Loc * Math.cos(angle))));
-        pos.y = ((float) (relOrigin.y - (Loc * Math.sin(angle))));
-
-        return pos;
-    }
-
-    public PointF getCenterPosition() {
-        PointF nPosition = new PointF();
-
-        nPosition.x = mPosition.x + (getWidth() / 2);
-        nPosition.y = mPosition.y + (getHeight() / 2);
-
-        return nPosition;
-    }
-
-    public void setVectorPosition(Point relOrigin, float vecDist, float angle) {
-
-        mDistance = vecDist;
-        mAngle    = angle;
-
-        mPosition.x = ((float) (relOrigin.x + (mDistance * Math.cos(mAngle))) - (getWidth() / 2));
-        mPosition.y = ((float) (relOrigin.y - (mDistance * Math.sin(mAngle))) - (getHeight() / 2));
-
-        setX(mPosition.x);
-        setY(mPosition.y);
-    }
-
-    public PointF getViewPosition() {
-        return mPosition;
-    }
-
-
-
-    public void setContents(int resID, String text) {
-
-        if(text == null) {
-            mIcon.setImageResource(resID);
-            mIcon.setVisibility(View.VISIBLE);
-        }
-        else {
-            mText.setText(text);
-            mText.setVisibility(View.VISIBLE);
-        }
-
-        invalidate();
-    }
-
-    @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec) {
-
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
     }
 
 }

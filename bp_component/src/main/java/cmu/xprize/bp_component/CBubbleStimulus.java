@@ -33,6 +33,8 @@ public class CBubbleStimulus extends FrameLayout {
     private TextView          mText;
     private float             mScale;
 
+    private float             mScaleCorrection;
+
     private Paint   mPaint;
     public String   mColorbase = "#000000";
 
@@ -63,6 +65,9 @@ public class CBubbleStimulus extends FrameLayout {
 
         mContext = context;
 
+        float instanceDensity = mContext.getResources().getDisplayMetrics().density;
+        mScaleCorrection  = BP_CONST.DESIGN_SCALE / instanceDensity;
+
         // Create a paint object to deine the line parameters
         mPaint = new Paint();
 
@@ -85,15 +90,51 @@ public class CBubbleStimulus extends FrameLayout {
 
         mIcon = (ImageView) findViewById(R.id.SIcon);
         mText = (TextView) findViewById(R.id.SText);
-        mScale = 1;
+
+        setScale(1.0f);
     }
 
 
     public void setScale(float newScale) {
-        setScaleX(newScale);
-        setScaleY(newScale);
+
+        setAssignedScale(newScale);
+
+        setScaleX(mScale);
+        setScaleY(mScale);
     }
 
+
+    @Override
+    public void setScaleX(float newScale) {
+        super.setScaleX(newScale *  mScaleCorrection);
+    }
+
+    @Override
+    public void setScaleY(float newScale) {
+        super.setScaleY(newScale *  mScaleCorrection);
+    }
+
+    @Override
+    public float getScaleX() {
+        return super.getScaleX() / mScaleCorrection;
+    }
+
+    @Override
+    public float getScaleY() {
+        return super.getScaleY() / mScaleCorrection;
+    }
+
+    public void setAssignedScale(float newScale) {
+        mScale = newScale;
+    }
+
+    public float getAssignedScale() {
+        return mScale;
+    }
+
+    public float getScaledWidth() {
+        return getWidth() * mScale;
+    }
 
     public void setContents(int resID, String text) {
 
@@ -137,21 +178,14 @@ public class CBubbleStimulus extends FrameLayout {
         RectF bounds = new RectF(mViewRegion.left, mViewRegion.top, mViewRegion.right, mViewRegion.bottom);
 
 
-        mPaint.setColor(Color.parseColor("#AAFFFFFF"));
+        mPaint.setColor(Color.parseColor("#AAAAAAAA"));
         mPaint.setStyle(Paint.Style.FILL);
         canvas.drawRoundRect(bounds, 30f, 30f, mPaint);
 
+        mPaint.setColor(Color.parseColor("#AA000000"));
         mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeWidth(2.0f);
         canvas.drawRoundRect(bounds, 30f, 30f, mPaint);
-
-
     }
-
-
-
-
-
-
-
 
 }

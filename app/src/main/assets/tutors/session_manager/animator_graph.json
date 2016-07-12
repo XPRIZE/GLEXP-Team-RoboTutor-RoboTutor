@@ -74,9 +74,9 @@
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
         "SET_LAUNCHER":{"type": "COMMAND", "id": "SsmComponent", "method": "onTutorSelect", "parms": "LAUNCH_TUTOR:String"},
-        "LAUNCH_TUTOR":{"type": "COMMAND", "cmd": "LAUNCH-TUTOR", "parms":"{{SsmComponent.intent}}:String|{{SsmComponent.intentData}}:String|{{SsmComponent.features}}:String" },
+        "LAUNCH_TUTOR":{"type": "COMMAND", "cmd": "LAUNCH-TUTOR", "parms":"{{SsmComponent.intent}}:String|{{SsmComponent.intentData}}:String|{{SsmComponent.dataSource}}:String|{{SsmComponent.features}}:String" },
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "SsmComponent", "method": "setDataSource", "parms": "[file]sm_data.json:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "SsmComponent", "method": "setDataSource", "parms": "[file]sm_data.json:String","features":"!DATA_SSMCOMPONENT"},
 //        "SET_DATASOURCE":{"type": "COMMAND", "id": "SsmComponent", "method": "setDataSource", "parms": "[file]sm_data_asr.json:String","features":""},
 //        "SET_DATASOURCE":{"type": "COMMAND", "id": "SsmComponent", "method": "setDataSource", "parms": "[file]sm_data_noasr.json:String","features":""},
         "NEXT_DATASET":{"type": "COMMAND", "id": "SsmComponent", "method": "next" ,"features":""},

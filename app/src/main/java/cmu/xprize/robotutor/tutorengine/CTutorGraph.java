@@ -34,8 +34,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import cmu.xprize.robotutor.tutorengine.graph.databinding;
+import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.robotutor.tutorengine.widgets.core.IDataSink;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.IScope;
@@ -47,26 +50,27 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
 public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.AnimationListener {
 
-    private TScope                            mRootScope;
+    private TScope             mRootScope;
 
-    private boolean                           traceMode     = false;
-    private int                               _sceneCnt     = 0;
-    private boolean                           _inNavigation = false;
-    private String                            _xType;
+    private boolean            traceMode     = false;
+    private int                _sceneCnt     = 0;
+    private boolean            _inNavigation = false;
+    private String             _xType;
 
-    protected ITutorScene                     mParent;
-    protected CTutor                          mTutor;
-    protected String                          mTutorName;
-    protected ITutorManager                   mTutorContainer;
-    protected CSceneGraph                     mSceneGraph;
-    protected ILogManager                     mLogManager;
+    protected ITutorScene      mParent;
+    protected CTutor           mTutor;
+    protected String           mTutorName;
+    protected defdata_tutor    mDefDataSource = null;
+    protected ITutorManager    mTutorContainer;
+    protected CSceneGraph      mSceneGraph;
+    protected ILogManager      mLogManager;
 
-    private final Handler                     mainHandler = new Handler(Looper.getMainLooper());
-    private HashMap                           queueMap    = new HashMap();
-    private boolean                           mDisabled   = false;
+    private final Handler      mainHandler = new Handler(Looper.getMainLooper());
+    private HashMap            queueMap    = new HashMap();
+    private boolean            mDisabled   = false;
 
     // json loadable
-    public scene_descriptor[]                navigatedata;
+    public scene_descriptor[] navigatedata;
 
 
     // State data
@@ -113,6 +117,13 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
     @Override
     public CSceneGraph getSceneGraph() {
         return mSceneGraph;
+    }
+
+
+    @Override
+    public void setDefDataSource(defdata_tutor dataSources) {
+
+        mDefDataSource = dataSources;
     }
 
 
@@ -420,6 +431,8 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
             // On terminate behaviors
             navigatedata[_scenePrev].instance.onExitScene();
 
+            preEnterScene();
+
             // Do the scene transition - add callback for when IN animation ends
             mTutorContainer.setAnimationListener(this);
             mTutorContainer.addView(navigatedata[_sceneCurr].instance);
@@ -432,6 +445,35 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
             mTutorContainer.removeView(navigatedata[_sceneCurr].instance);
         }
         return result;
+    }
+
+
+    private void preEnterScene() {
+
+        Map  childMap = getChildMap();
+
+        // Walk all the components that have datasources defined and initialize them.
+        //
+        if(mDefDataSource != null) {
+
+            String sceneName = navigatedata[_sceneCurr].id;
+
+            databinding[] bindings = (databinding[]) mDefDataSource.scene_bindings.get(sceneName).databindings;
+
+            for(databinding binding : bindings) {
+
+                IDataSink dataSink = (IDataSink) childMap.get(binding.name);
+
+                if(dataSink != null) {
+
+                    dataSink.setDataSource(binding.datasource);
+
+                    // Add a feature to show the compoonent has been initialized
+                    //
+                    mTutor.setAddFeature(TCONST.DATA_PREFIX + binding.name.toUpperCase());
+                }
+            }
+        }
     }
 
 
@@ -462,7 +504,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
         //                     associated with the animation object has been instantiated.
         //
         //	TODO: This should be rationalized with the standard preEnter when all the preEnter customizations
-        //        in CWOZScene derivatives have been moved to the XML (JSON) spec.
+        //  TODO: in CWOZScene derivatives have been moved to the XML (JSON) spec.
         //
         navigatedata[_sceneCurr].instance.onEnterScene();
 

@@ -173,6 +173,20 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
 
 
     /**
+     *
+     * @param language Feature string (e.g. LANG_EN)
+     */
+    public void setLanguage(String language) {
+
+        mLanguage = TCONST.langMap.get(language);
+
+        // Configure the mListener for our story
+        //
+        mListener.setLanguage(language);
+    }
+
+
+    /**
      * @Override in Tutor Domain to allow the MediaManageer direct access to the recognizer
      */
     public void setListener(ListenerBase listener) {}
@@ -396,20 +410,6 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     }
 
 
-    /**
-     *
-     * @param language Feature string (e.g. LANG_EN)
-     */
-    public void setLanguage(String language) {
-
-        mLanguage = TCONST.langMap.get(language);
-
-        // Configure the mListener for our story
-        //
-        mListener.setLanguage(language);
-    }
-
-
     public void configureEvent(String symbol, String eventString) {
 
         int eventType = CEventMap.eventMap.get(eventString);
@@ -528,32 +528,32 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
      *
      * @param dataSource
      */
-    public void setDataSource(String dataSource, String tutorName) {
-
-        try {
-            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
-                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
-
-                DATASOURCEPATH = TCONST.TUTORROOT + "/" + tutorName + "/" + TCONST.TASSETS + "/" + mLanguage + "/";
-
-                String jsonData = JSON_Helper.cacheData(DATASOURCEPATH + dataSource);
-                loadJSON(new JSONObject(jsonData), null);
-
-            } else if (dataSource.startsWith("db|")) {
-
-
-            } else if (dataSource.startsWith("{")) {
-
-                loadJSON(new JSONObject(dataSource), null);
-
-            } else {
-                throw (new Exception("BadDataSource"));
-            }
-        }
-        catch (Exception e) {
-            CErrorManager.logEvent(TAG, "Invalid Data Source for : " + tutorName, e, false);
-        }
-    }
+//    public void setDataSource(String dataSource, String tutorName) {
+//
+//        try {
+//            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
+//                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
+//
+//                DATASOURCEPATH = TCONST.TUTORROOT + "/" + tutorName + "/" + TCONST.TASSETS + "/" + mLanguage + "/";
+//
+//                String jsonData = JSON_Helper.cacheData(DATASOURCEPATH + dataSource);
+//                loadJSON(new JSONObject(jsonData), null);
+//
+//            } else if (dataSource.startsWith("db|")) {
+//
+//
+//            } else if (dataSource.startsWith("{")) {
+//
+//                loadJSON(new JSONObject(dataSource), null);
+//
+//            } else {
+//                throw (new Exception("BadDataSource"));
+//            }
+//        }
+//        catch (Exception e) {
+//            CErrorManager.logEvent(TAG, "Invalid Data Source for : " + tutorName, e, false);
+//        }
+//    }
 
 
     /**

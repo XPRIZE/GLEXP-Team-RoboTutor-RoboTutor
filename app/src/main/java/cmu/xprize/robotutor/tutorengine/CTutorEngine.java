@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.net.Uri;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 
 import org.json.JSONException;
@@ -35,6 +34,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import cmu.xprize.robotutor.R;
+import cmu.xprize.robotutor.tutorengine.graph.defdata_scenes;
+import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.robotutor.tutorengine.widgets.core.TSceneAnimatorLayout;
@@ -60,24 +61,24 @@ public class CTutorEngine implements ILoadableObject2 {
 
     private static CTutorEngine             singletonTutorEngine;
 
-    private AssetManager                    mAssetManager;
     private CMediaManager                   mMediaManager;
 
     static public  RoboTutor                Activity;
     static public  ILogManager              TutorLogManager;
 
-    static private HashMap<String,CTutor>   tutorMap    = new HashMap<>();
-    static private CTutor                   activeTutor = null;
-    static private CTutor                   deadTutor   = null;
+    static private HashMap<String,CTutor>   tutorMap        = new HashMap<>();
+    static private CTutor                   activeTutor     = null;
+    static private CTutor                   deadTutor       = null;
 
     // You can override the language used in all tutors by placing a
     // "language":"LANG_EN", spec in the TCONST.EDESC replacing EN with
     // the desired language id
 
     // json loadable
-    static public String                    defTutor;
-    static public String                    defFeatures;
-    static public String                    language;                       // Accessed from a static context
+    static public String                         defTutor;
+    static public HashMap<String, defdata_tutor> defDataSources;
+    static public String                         defFeatures;
+    static public String                         language;                       // Accessed from a static context
 
 
     final static public  String CacheSource = TCONST.ASSETS;                // assets or extern
@@ -100,12 +101,6 @@ public class CTutorEngine implements ILoadableObject2 {
 
         Activity        = context;
         TutorLogManager = CLogManager.getInstance();
-        mAssetManager   = context.getAssets();
-
-        // Initialize the media manager singleton - it needs access to the App assets.
-        //
-        mMediaManager = CMediaManager.getInstance();
-        mMediaManager.setAssetManager(mAssetManager);
 
         // TODO: is this initialization required?
         // Initialize the JSON Helper statics - just throw away the object.
@@ -198,8 +193,18 @@ public class CTutorEngine implements ILoadableObject2 {
 
     static public void startSessionManager() {
 
+        defdata_tutor tutorBindings = null;
+
+        if(defDataSources != null) {
+            tutorBindings = defDataSources.get(defTutor);
+        }
+
+        // Sample: how to launch a tutor with a json datasource
+//        String datas = "{\"scene_bindings\" : {\"session_manager\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SsmComponent\",\"datasource\": \"[file]sm_data.json\"}]}}}";
+//        launch(defTutor, "native", datas, "" );
+
         createTutor(defTutor, defFeatures);
-        launchTutor();
+        launchTutor(tutorBindings);
     }
 
     /**
@@ -284,10 +289,12 @@ public class CTutorEngine implements ILoadableObject2 {
         activeTutor = new CTutor(Activity, tutorName, (ITutorManager)tutorContainer, TutorLogManager, mRootScope, language, features);
     }
 
+    /**
+     *  Note: You must call createTutor at some point prior to this call
+     */
+    static private void launchTutor(defdata_tutor dataSource) {
 
-    static private void launchTutor() {
-
-        activeTutor.launchTutor();
+        activeTutor.launchTutor(dataSource);
     }
 
 
@@ -298,10 +305,33 @@ public class CTutorEngine implements ILoadableObject2 {
      * @param intentData
      * @param features
      */
-    static public void launch(String intent, String intentData, String features ) {
+    static public void launch(String intent, String intentData, String dataSourceJson, String features ) {
+
+        defdata_tutor dynamicDataSource = null;
 
         Intent extIntent = new Intent();
         String extPackage;
+
+        // Allow the intent to override any engine level datasource defaults
+        //
+        if(!dataSourceJson.equals(TCONST.NO_DATASOURCE)) {
+
+            dynamicDataSource = new defdata_tutor();
+
+            try {
+                dynamicDataSource.loadJSON(new JSONObject(dataSourceJson), (IScope2)mRootScope);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        // If no datasource defined in the external launch request then try and find a engine level default
+        //
+        else {
+            if(defDataSources != null) {
+                dynamicDataSource = defDataSources.get(intent);
+            }
+        }
 
         switch(intentData) {
 
@@ -311,7 +341,7 @@ public class CTutorEngine implements ILoadableObject2 {
             //
             case "native":
                 createTutor(intent, features);
-                launchTutor();
+                launchTutor(dynamicDataSource);
                 break;
 
             case "browser":

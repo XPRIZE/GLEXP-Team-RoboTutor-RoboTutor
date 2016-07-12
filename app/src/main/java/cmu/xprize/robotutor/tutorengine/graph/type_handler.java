@@ -25,6 +25,7 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.robotutor.tutorengine.IMediaListener;
@@ -64,7 +65,6 @@ public class type_handler extends type_action implements IMediaListener {
 
 
         public type_handler() {
-            mMediaManager = CMediaManager.getInstance();
         }
 
 
@@ -103,7 +103,19 @@ public class type_handler extends type_action implements IMediaListener {
             }
         }
 
-        @Override
+    @Override
+    public boolean isLooping() {
+        return false;
+    }
+
+
+    @Override
+    public float getVolume() {
+        return -1;
+    }
+
+
+    @Override
         public void onCompletion() {
             // NOOP
         }
@@ -286,5 +298,8 @@ public class type_handler extends type_action implements IMediaListener {
             // make id which is the map-key tutor specific.
             //
             id = scope.tutor().mTutorName + id;
+
+            mMediaManager = CMediaController.getInstance(scope.tutor());
+
         }
 }

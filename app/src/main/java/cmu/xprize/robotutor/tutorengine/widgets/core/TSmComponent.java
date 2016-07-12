@@ -42,7 +42,7 @@ import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-public class TSmComponent extends CSm_Component implements ITutorObjectImpl {
+public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDataSink {
 
     private CTutor               mTutor;
     private CObjectDelegate      mSceneObject;
@@ -88,6 +88,7 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl {
      *
      * @param dataSource
      */
+    @Override
     public void setDataSource(String dataSource) {
 
         try {
@@ -123,12 +124,13 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl {
      * @param intentData
      */
     @Override
-    public void setTutorIntent(String intent, String intentData, String features) {
+    public void setTutorIntent(String intent, String intentData, String dataSource, String features) {
 
         // update the response variable  "<Sresponse>.value"
 
         mTutor.getScope().addUpdateVar(name() + ".intent", new TString(intent));
         mTutor.getScope().addUpdateVar(name() + ".intentData", new TString(intentData));
+        mTutor.getScope().addUpdateVar(name() + ".dataSource", new TString(dataSource));
         mTutor.getScope().addUpdateVar(name() + ".features", new TString(features));
 
         applyEventNode(mSymbol);
@@ -193,13 +195,13 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl {
         mLangButton.setTransformationMethod(null);
 
         // Hide th language toggle on the release builds
-        //
-        if(!BuildConfig.DEBUG) {
-
-            mLangButton.setVisibility(View.GONE);
-
-            parent.requestLayout();
-        }
+        // TODO : ensure it is in place for trial releases
+//        if(!BuildConfig.DEBUG) {
+//
+//            mLangButton.setVisibility(View.GONE);
+//
+//            parent.requestLayout();
+//        }
     }
 
     @Override

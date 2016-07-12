@@ -25,5 +25,9 @@ public interface IMediaListener {
     public void globalPlay();
     public void globalStop();
 
+    public boolean isLooping();
+
     public void onCompletion();
+
+    public float getVolume();
 }

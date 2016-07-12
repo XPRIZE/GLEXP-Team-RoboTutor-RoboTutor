@@ -24,6 +24,7 @@
         import android.view.View;
         import android.widget.ToggleButton;
 
+        import cmu.xprize.robotutor.tutorengine.CMediaController;
         import cmu.xprize.robotutor.tutorengine.CMediaManager;
         import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
         import cmu.xprize.robotutor.tutorengine.CTutor;
@@ -75,7 +76,6 @@ public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.
     @Override
     public void onClick(View v) {
         mLangState    = !mLangState;
-        mMediaManager = CMediaManager.getInstance();
 
         CTutorEngine.changeDefaultLanguage(mLangState? TCONST.LANG_EN: TCONST.LANG_SW);
     }
@@ -103,6 +103,11 @@ public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.
     public void setTutor(CTutor tutor) {
         mTutor = tutor;
         mSceneObject.setTutor(tutor);
+
+        // The media manager is tutor specific so we have to use the tutor to access
+        // the correct instance for this component.
+        //
+        mMediaManager = CMediaController.getInstance(mTutor);
     }
 
     // Do deferred configuration - anything that cannot be done until after the

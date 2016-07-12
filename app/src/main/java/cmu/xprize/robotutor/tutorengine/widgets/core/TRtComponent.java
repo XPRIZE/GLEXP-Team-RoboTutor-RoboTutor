@@ -22,6 +22,9 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import org.json.JSONObject;
+
+import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
@@ -34,11 +37,13 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.rt_component.CRt_Component;
 import cmu.xprize.rt_component.IRtComponent;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILogManager;
+import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
 
-public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRtComponent {
+public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRtComponent, IDataSink {
 
     private CTutor           mTutor;
     private CObjectDelegate  mSceneObject;
@@ -68,7 +73,6 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
 
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
-        mMediaManager = CMediaManager.getInstance();
 
         // Default to English language stories
         //
@@ -76,7 +80,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
 
         // Push the ASR listener reference into the super class in the Java domain
         //
-        prepareListener(mMediaManager.getTTS());
+        prepareListener(CMediaController.getTTS());
     }
 
 
@@ -105,11 +109,44 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
 
 
     /**
+     *
+     * @param dataSource
+     */
+    @Override
+    public void setDataSource(String dataSource) {
+
+        try {
+            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
+                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
+
+                DATASOURCEPATH = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + mLanguage + "/";
+
+                String jsonData = JSON_Helper.cacheData(DATASOURCEPATH + dataSource);
+                loadJSON(new JSONObject(jsonData), null);
+
+            } else if (dataSource.startsWith("db|")) {
+
+
+            } else if (dataSource.startsWith("{")) {
+
+                loadJSON(new JSONObject(dataSource), null);
+
+            } else {
+                throw (new Exception("BadDataSource"));
+            }
+        }
+        catch (Exception e) {
+            CErrorManager.logEvent(TAG, "Invalid Data Source for : " + mTutor.getTutorName(), e, false);
+        }
+    }
+
+
+    /**
      *  Inject the listener into the MediaManageer
      */
     @Override
     public void setListener(ListenerBase listener) {
-        mMediaManager.setListener(listener);
+        CMediaController.setListener(listener);
     }
 
 
@@ -118,7 +155,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
      */
     @Override
     public void removeListener(ListenerBase listener) {
-        mMediaManager.removeListener(listener);
+        CMediaController.removeListener(listener);
     }
 
 
@@ -138,7 +175,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
         // At the moment
         // The data source is the language specific story index file.
         //
-        super.setDataSource( TCONST.SOURCEFILE + TCONST.STORYINDEX, mTutor.getTutorName());
+        setDataSource( TCONST.SOURCEFILE + TCONST.STORYINDEX);
     }
 
 
@@ -400,6 +437,11 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
     public void setTutor(CTutor tutor) {
         mTutor = tutor;
         mSceneObject.setTutor(tutor);
+
+        // The media manager is tutor specific so we have to use the tutor to access
+        // the correct instance for this component.
+        //
+        mMediaManager = CMediaController.getInstance(mTutor);
     }
 
     @Override

@@ -28,7 +28,6 @@ public class BP_CONST {
     public static final String[] bubbleColors = {"RED", "BLUE", "PINK", "ORANGE", "GREEN"};
 
     public static final int BUBBLE_SAMPLE = R.drawable.bubble_r_0;
-
     public static final int RED_BUBBLE    = R.drawable.bubble_r_0;
     public static final int BLUE_BUBBLE   = R.drawable.bubble_b_0;
     public static final int PINK_BUBBLE   = R.drawable.bubble_p_0;
@@ -50,6 +49,7 @@ public class BP_CONST {
     public static final long   INFLATE_DELAY     = 200;
     public static final String SHOW_STIMULUS     = "SHOW_STIMULUS";
     public static final String REMOVE_BUBBLE     = "REMOVE_BUBBLE";
+    public static final String REPLACE_BUBBLE    = "REPLACE_BUBBLE";
     public static final String ZOOM_STIMULUS     = "ZOOM_STIMULUS";
     public static final String MOVE_STIMULUS     = "MOVE_STIMULUS";
 
@@ -65,8 +65,13 @@ public class BP_CONST {
     public static final float  ANGLE_MIN         = 0;
     public static final float  ANGLE_MAX         = (float) (Math.PI / 3.0);
 
-    public static final float STRETCH_MAX        = 1.21f;
-    public static final float STRETCH_MIN        = 0.80f;
+    public static final float STRETCH_MAX         = 1.21f;
+    public static final float STRETCH_MIN         = 0.80f;
+
+    public static final int DESIGNWIDTH           = 2560;
+    public static final int DESIGNHEIGHT          = 1620;
+    public static final int BUBBLE_DESIGN_RADIUS  = 210;
+    public static final float DESIGN_SCALE        = 2.0f;
 
     static public HashMap<String, Integer> bubbleMap = new HashMap<String, Integer>();
 

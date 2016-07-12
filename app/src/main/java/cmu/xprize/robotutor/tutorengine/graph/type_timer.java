@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.IMediaListener;
@@ -53,7 +54,6 @@ public class type_timer extends type_action implements IMediaListener {
 
 
     public type_timer() {
-        mMediaManager = CMediaManager.getInstance();
     }
 
 
@@ -91,6 +91,18 @@ public class type_timer extends type_action implements IMediaListener {
             stopTimer();
         }
     }
+
+    @Override
+    public boolean isLooping() {
+        return false;
+    }
+
+
+    @Override
+    public float getVolume() {
+        return -1;
+    }
+
 
     @Override
     public void onCompletion() {
@@ -262,5 +274,7 @@ public class type_timer extends type_action implements IMediaListener {
         // make id which is the map-key tutor specific.
         //
         id = scope.tutor().mTutorName + id;
+
+        mMediaManager = CMediaController.getInstance(scope.tutor());
     }
 }

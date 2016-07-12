@@ -19,7 +19,7 @@
           "COMMENT": "Intro Clip",
           "maptype":"actionMap",
           "mapname": "INTRO_STATE_TRACK",
-          "preenter": ["SET_VERSION","SET_DATASOURCE","NEXT_DATASET"],
+          "preenter": ["SET_VERSION","PLAY_BACKINGTRACK","PLAY_PROMPT","SET_DATASOURCE","NEXT_DATASET"],
           "preexit": [
           ],
           "edges": [
@@ -130,8 +130,11 @@
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
+        "PLAY_BACKINGTRACK": {"type": "AUDIO", "command": "PLAY", "soundsource": "gamesound.mp3", "soundpackage":"tutor_effect", "repeat":true, "volume": 0.20, "mode":"flow", "features": ""},
+        "PLAY_PROMPT": {"type": "AUDIO", "command": "PLAY", "soundsource": "Please tap on it.mp3", "soundpackage":"default", "volume": 0.7, "mode":"flow", "features": ""},
+
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "SBubblePop", "method": "setDataSource", "parms": "[file]bp_data.json:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "SBubblePop", "method": "setDataSource", "parms": "[file]bp_data.json:String","features":"!DATA_SBUBBLEPOP"},
         "NEXT_DATASET":{"type": "COMMAND", "id": "SBubblePop", "method": "next" ,"features":""},
 
         "INTRO_STATE_TRACK": {"type": "COMMAND", "cmd": "WAIT"  },

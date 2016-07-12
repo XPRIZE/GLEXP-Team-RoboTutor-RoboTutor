@@ -81,11 +81,11 @@ public class ListenerBase {
     // Dictionary files are located in the assets/sync/models/lm
     // Note: on Android these are case sensitive filenames
     //
-    static private HashMap<String, String> langMap = new HashMap<String, String>();
+    static private HashMap<String, String> dictMap = new HashMap<String, String>();
 
     static {
-        langMap.put("LANG_EN", "CMU07A-CAPS.DIC");
-        langMap.put("LANG_SW", "SWAHILI.DIC");
+        dictMap.put("LANG_EN", "CMU07A-CAPS.DIC");
+        dictMap.put("LANG_SW", "SWAHILI.DIC");
     }
 
     static private boolean       isReady = false;
@@ -138,7 +138,7 @@ public class ListenerBase {
 
         // initialize recognizer for our task
         //
-        setupRecognizer(assets.getExternalDir(), configFile, langMap.get(langFTR));
+        setupRecognizer(assets.getExternalDir(), configFile, dictMap.get(langFTR));
     }
 
 
@@ -372,7 +372,8 @@ public class ListenerBase {
     }
 
     public void setPauseListener(boolean pauseListener) {
-        recognizer.setPauseRecognizer(pauseListener);
+        if (recognizer != null)
+            recognizer.setPauseRecognizer(pauseListener);
     }
 
     /**
@@ -380,7 +381,8 @@ public class ListenerBase {
      * @return
      */
     public boolean isListening() {
-       return recognizer.isListening();
+
+       return (recognizer != null)? recognizer.isListening(): false;
     }
 
     public void reInitializeListener(boolean restartListener) {

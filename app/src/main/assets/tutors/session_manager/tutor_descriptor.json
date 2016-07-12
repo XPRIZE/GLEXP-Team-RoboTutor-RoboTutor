@@ -1,6 +1,22 @@
 {
     "language":"LANG_SW",
 
+	//Tutor level data bindings   - HashMap<String, defdata_scene
+	"dataSource": {
+		"scene_bindings" : {
+			//Scene level data bindings  - databindings[]
+			"session_manager": {
+				"type": "SCENEDATA_MAP",
+				"databindings": [
+					{
+						"name": "SsmComponent",
+						"datasource": "[file]sm_data.json"
+					}
+				]
+			}
+		}
+	},
+
 	"scenedata": [
 	  {
 		"id":"session_manager",

@@ -31,6 +31,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import cmu.xprize.util.CAnimatorUtil;
+import cmu.xprize.util.TCONST;
 
 public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMechanic {
 
@@ -123,32 +124,31 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                 _distractorCnt = 0;
             }
 
-            switch (mParent.stimulus_type) {
+            switch (mComponent.stimulus_type) {
 
                 case BP_CONST.REFERENCE:
 
-                    int[] shapeSet = BP_CONST.drawableMap.get(mParent.stimulus_data[_currData.dataset[stimNdx]]);
+                    int[] shapeSet = BP_CONST.drawableMap.get(mComponent.stimulus_data[_currData.dataset[stimNdx]]);
 
                     nextBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
                     break;
 
                 case BP_CONST.TEXTDATA:
 
-                    nextBubble.setContents(0, mParent.stimulus_data[_currData.dataset[stimNdx]]);
+                    nextBubble.setContents(0, mComponent.stimulus_data[_currData.dataset[stimNdx]]);
                     break;
             }
 
-            float xRange[] = new float[]{0, mParent.getWidth() - _bubbleIntrinsicRadius};
+            float xRange[] = new float[]{0, mParent.getWidth() - (BP_CONST.BUBBLE_DESIGN_RADIUS * nextBubble.getAssignedScale())};
             float xPos;
 
             do {
                 xPos = getRandInRange(xRange);
-            }while(Math.abs(xPos - _prevXpos) < nextBubble.getScaledWidth());
+            }while(Math.abs(xPos - _prevXpos) < nextBubble.getWidth());
 
             _prevXpos = xPos;
 
-            nextBubble.setX(xPos);
-            nextBubble.setY(mParent.getHeight());
+            nextBubble.setPosition((int) xPos, mParent.getHeight());
             nextBubble.setAlpha(1.0f);
 
             long timeOfFlight = (long) (_travelTime / nextBubble.getAssignedScale());
@@ -157,7 +157,7 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
             PointF posFinal    = new PointF();
 
             posFinal.x =  nextBubble.getX();
-            posFinal.y = -_bubbleIntrinsicRadius * 2;
+            posFinal.y = -BP_CONST.BUBBLE_DESIGN_RADIUS * 2.5f * nextBubble.getAssignedScale();
 
             wayPoints[0] = posFinal;
 
@@ -216,38 +216,54 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
 
 
-    protected void runCommand(String command, Object target ) {
+    protected void execCommand(String command, Object target ) {
 
         CBubble bubble;
         long    delay = 0;
 
-        super.runCommand(command, target);
+        super.execCommand(command, target);
 
         switch(command) {
 
             case BP_CONST.SHOW_BUBBLES:
 
-                if (!_animationStarted && mInitialized) {
+                if (!_isRunning && mInitialized) {
 
-                    _animationStarted = true;
+                    _isRunning = true;
                     post(BP_CONST.SPAWN_BUBBLE);
                 }
                 break;
 
             case BP_CONST.SPAWN_BUBBLE:
 
-                if(launchBubble()) {
+                if(_isRunning) {
 
-                    int[] launchRange = {_travelTime / _countRange[BP_CONST.MAX], _travelTime / _countRange[BP_CONST.MIN]};
+                    if (launchBubble()) {
 
-                    delay = getRandInRange(launchRange);
+                        int[] launchRange = {_travelTime / _countRange[BP_CONST.MAX], _travelTime / _countRange[BP_CONST.MIN]};
 
-                    post(BP_CONST.SPAWN_BUBBLE, delay);
-                }
-                else {
-                    post(BP_CONST.SPAWN_BUBBLE, 10);
+                        delay = getRandInRange(launchRange);
+
+                        post(BP_CONST.SPAWN_BUBBLE, delay);
+                    } else {
+                        post(BP_CONST.SPAWN_BUBBLE);
+                    }
                 }
                 break;
+
+            case BP_CONST.POP_BUBBLE:
+
+                bubble = (CBubble)target;
+                delay  = bubble.pop();
+
+                // stop listening to the bubble
+                bubble.setOnClickListener(null);
+
+                broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(bubble.getCenterPosition()));
+
+                post(BP_CONST.REPLACE_BUBBLE, bubble, delay);
+                break;
+
         }
     }
 
@@ -256,8 +272,6 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
     public void populateView(CBp_Data data) {
 
         CBubble newBubble;
-
-        _bubbleIntrinsicRadius = (mParent.getResources().getDrawable(BP_CONST.BUBBLE_SAMPLE, null).getIntrinsicWidth());
 
         _currData = data;
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -279,10 +293,7 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
 
     @Override
-    public void doLayout(int width, int height, CBp_Data data) {
-
-
-    }
+    public void doLayout(int width, int height, CBp_Data data) {}
 
 
 }

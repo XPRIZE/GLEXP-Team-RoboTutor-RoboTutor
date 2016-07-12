@@ -41,6 +41,8 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     //
     static public Context   mContext;
 
+    public CBP_LetterBoxLayout  Scontent;
+
     protected String        mDataSource;
     private   int           _dataIndex = 0;
 
@@ -56,7 +58,7 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
     static final String TAG = "CBP_Component";
 
-    private CBp_Data        _currData;
+    protected CBp_Data     _currData;
 
 
 
@@ -81,6 +83,8 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
         mContext = context;
 
+        inflate(getContext(), R.layout.bubblepop_container, this);
+
         if(attrs != null) {
 
             TypedArray a = context.getTheme().obtainStyledAttributes(
@@ -95,9 +99,33 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
             }
         }
 
+        // Get the letterboxed game container
+        //
+        Scontent = (CBP_LetterBoxLayout) findViewById(R.id.Scontent);
+
         // Allow onDraw to be called to start animations
         //
         setWillNotDraw(false);
+    }
+
+
+    /**
+     * The game mechanic uses this to get the game container where it will create
+     * all the game controls.  The purpose of this is to make the game resolution invariant.
+     *
+     * @return
+     */
+    public CBP_LetterBoxLayout getContainer() {
+        return Scontent;
+    }
+
+
+    public void onDestroy() {
+
+        if(_mechanics != null) {
+            _mechanics.onDestroy();
+            _mechanics = null;
+        }
     }
 
 
@@ -122,7 +150,6 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
         catch(Exception e) {
             CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, false);
         }
-
     }
 
 
@@ -137,8 +164,10 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
         _currData = data;
 
-        if(_mechanics  != null)
+        if(_mechanics  != null) {
             _mechanics.onDestroy();
+            _mechanics = null;
+        }
 
         switch(data.question_type) {
             case "multiple-choice":
@@ -157,6 +186,13 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     }
 
 
+    @Override protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec) {
+
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+    }
+
+
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
 
@@ -167,7 +203,7 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
             int height = b - t;
 
             if(_mechanics != null)
-                _mechanics.doLayout(width, height, _currData);
+                _mechanics.doLayout(Scontent.getWidth(), Scontent.getHeight(), _currData);
         }
 
         if(_mechanics != null) {
@@ -181,15 +217,12 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     public void onDraw(Canvas canvas) {
 
         super.onDraw(canvas);
-
-//        if(_mechanics != null) {
-//            _mechanics.startAnimation();
-//
-//            // debug - To use this you must disable the background view
-//            //_mechanics.onDraw(canvas);
-//        }
     }
 
+
+    public IBubbleMechanic getMechanics() {
+        return _mechanics;
+    }
 
     public void UpdateValue(int value) {
     }
@@ -203,6 +236,36 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     public boolean allCorrect(int numCorrect) {
         return (numCorrect == dataSource.length);
     }
+
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // Tutor Scriptable methods  Start
+
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void applyEvent(String event){};
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishValue(String varName, String value) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishValue(String varName, int value) {
+    }
+
+
+    // Tutor methods  End
+    //************************************************************************
+    //************************************************************************
 
 
 
@@ -223,6 +286,8 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
         _dataIndex = 0;
 
         addView(view_background);
+        bringChildToFront(Scontent);
+
     }
 
 }

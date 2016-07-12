@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 
+import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
@@ -45,8 +46,6 @@ public class type_tts extends type_action {
 
 
     public type_tts() {
-        mMediaManager = CMediaManager.getInstance();
-        mSynthesizer  = mMediaManager.getTTS();
     }
 
 
@@ -130,6 +129,9 @@ public class type_tts extends type_action {
         // Always call super to init _scope - or do it yourself
         //
         super.loadJSON(jsonObj, scope);
+
+        mMediaManager = CMediaController.getInstance(scope.tutor());
+        mSynthesizer  = CMediaController.getTTS();
 
         // Custom post processing.
         // If rate and language are not initialized use defaults

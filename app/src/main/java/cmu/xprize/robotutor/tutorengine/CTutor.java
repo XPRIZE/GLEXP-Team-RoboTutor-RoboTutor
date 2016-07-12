@@ -40,6 +40,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cmu.xprize.robotutor.tutorengine.graph.databinding;
+import cmu.xprize.robotutor.tutorengine.graph.defdata_scenes;
+import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.CErrorManager;
@@ -93,10 +96,11 @@ public class CTutor implements ILoadableObject2 {
     private boolean                      mDisabled   = false;
 
     // json loadable
-    public scene_initializer[]           scenedata;
-    public String                        language;
-    public String                        navigatorType;
-    public HashMap<String,CMediaPackage> soundMap;
+    public scene_initializer[]              scenedata;
+    public defdata_tutor                    dataSource = null;
+    public String                           language;
+    public String                           navigatorType;
+    public HashMap<String,CMediaPackage>    soundMap;
 
     public String engineLanguage;
 
@@ -116,7 +120,7 @@ public class CTutor implements ILoadableObject2 {
         mTutorLogManager = logManager;
 
         mAssetManager    = context.getAssets();
-        mMediaManager    = CMediaManager.getInstance();
+        mMediaManager    = CMediaController.newMediaManager(this);
 
         setTutorFeatures(featSet);
 
@@ -143,7 +147,7 @@ public class CTutor implements ILoadableObject2 {
         // TODO: Fully implement the tutor navigator as a graph
         loadTutorGraph();
 
-        // Load the scene graph (animation script data) for the tutor
+        // Load the scene graphs (animation script data) for each scene in the tutor
         loadSceneGraph();
     }
 
@@ -194,10 +198,14 @@ public class CTutor implements ILoadableObject2 {
 
     /**
      * This is where the tutor gets kick started
+     * Note we pass the extDataSource if available - otherwise we use the local descriptor
+     * source if available and let it manage the databinding. Otherwise it has to be set
+     * dynamically by the scenegraph.
      */
-    public void launchTutor() {
+    public void launchTutor(defdata_tutor extDataSource) {
 
         mTutorActive = true;
+        mTutorGraph.setDefDataSource((extDataSource != null)? extDataSource:dataSource);
         mTutorGraph.post(TCONST.FIRST_SCENE);
     }
 
@@ -231,7 +239,7 @@ public class CTutor implements ILoadableObject2 {
 
         private void cleanUpTutor() {
 
-            mMediaManager.restartMediaManager();
+            CMediaController.destroyMediaManager(CTutor.this);
 
             // disable the input queue permenantly in prep for destruction
             // walks the queue chain to diaable the tutor and scene queues
@@ -408,7 +416,7 @@ public class CTutor implements ILoadableObject2 {
     public void updateLanguageFeature(String langFtr) {
 
         // Remove any active language - Only want one language feature active
-        setDelFeature(CMediaManager.getLanguageFeature(this));
+        setDelFeature(mMediaManager.getLanguageFeature(this));
 
         setAddFeature(langFtr);
     }
