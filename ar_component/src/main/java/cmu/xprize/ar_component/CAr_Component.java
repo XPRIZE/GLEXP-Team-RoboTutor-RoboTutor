@@ -41,7 +41,7 @@ public class CAr_Component extends LinearLayout implements ILoadableObject {
     // private int[][] dataset = {{3, 4, 7}, {1, 3, 1, 1, 6}, {1, 1, 3, 5}};
     //private int[][] dataset = {{2, 1, 1}, {7, 4, 3}, {6, 1, 5}, {4, 3, 1}};
     private int[] numbers;
-    private Integer corValue;
+    public Integer corValue;
 
     private String operation; // = "-";
 
@@ -126,7 +126,7 @@ public class CAr_Component extends LinearLayout implements ILoadableObject {
     }
 
     public boolean dataExhausted() {
-        return (_dataIndex >= dataSource.length) ? true : false;
+        return (_dataIndex >= dataSource.length);
     }
 
 
@@ -167,11 +167,9 @@ public class CAr_Component extends LinearLayout implements ILoadableObject {
             }
         }
 
-        if (operation == "-") {
+        if (operation.equals("-")) {
             animateSubtract();
         }
-
-        _dataIndex++;
     }
 
     private void setAlley(int index, int val, int id, String operation, boolean clickable) {
@@ -220,13 +218,13 @@ public class CAr_Component extends LinearLayout implements ILoadableObject {
         boolean correct = corValue.equals(allAlleys.get(numAlleys - 1).getNum());
 
         if (!correct) {
-            //allAlleys.get(numAlleys-1).getEditText().setText(""); // reset answer text
+            allAlleys.get(numAlleys-1).getEditText().setText(""); // reset answer text
         }
 
         return correct;
     }
 
-    public void UpdateValue(int value) {
+    public void UpdateValue() {
     }
 
     public boolean allCorrect(int numCorrect) {

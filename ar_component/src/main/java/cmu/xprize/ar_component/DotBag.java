@@ -150,6 +150,7 @@ public class DotBag extends TableLayout {
 
         this.imageName = _imageName;
         this.isClickable = clickable;
+        this.isHollow = false;
 
         if (_rows == 0 || _cols == 0) {
             setZero();

@@ -13,6 +13,7 @@ import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILogManager;
@@ -56,15 +57,20 @@ public class TArComponent extends CAr_Component implements ITutorObjectImpl {
     //*****************  Tutor Interface
 
     @Override
-    public void UpdateValue(int value) {
+    public void UpdateValue() {
 
-        // update the Scope response variable  "<varname>.value"
+        // update the Scope response variable  "<SArithmetic>.value"
         //
-        mTutor.getScope().addUpdateVar(name() + ".value", new TInteger(value));
+        mTutor.getScope().addUpdateVar(name() + ".value", new TInteger(corValue));
 
-        boolean correct = isCorrect();
+    }
+
+
+    public void evaluate () {
 
         reset();
+
+        boolean correct = isCorrect();
 
         if(correct)
             mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
@@ -141,13 +147,14 @@ public class TArComponent extends CAr_Component implements ITutorObjectImpl {
         // If wrong reset ALLCORRECT
         //
         if(mTutor.testFeatureSet(TCONST.GENERIC_WRONG)) {
-
             mTutor.setDelFeature(TCONST.ALL_CORRECT);
         }
 
         reset();
 
         super.next();
+
+        UpdateValue();
 
         if(dataExhausted())
             mTutor.setAddFeature(TCONST.FTR_EOI);
@@ -226,6 +233,21 @@ public class TArComponent extends CAr_Component implements ITutorObjectImpl {
     @Override
     public void setAlpha(Float alpha) {
 
+    }
+
+    public void applyEventNode(String nodeName) {
+        IScriptable2 obj = null;
+
+        if(nodeName != null && !nodeName.equals("")) {
+            try {
+                obj = mTutor.getScope().mapSymbol(nodeName);
+                obj.applyNode();
+
+            } catch (Exception e) {
+                // TODO: Manage invalid Behavior
+                e.printStackTrace();
+            }
+        }
     }
 
 
