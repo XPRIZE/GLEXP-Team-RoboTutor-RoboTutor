@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import cmu.xprize.bp_component.BP_CONST;
 import cmu.xprize.bp_component.CBP_Component;
 import cmu.xprize.bp_component.CBp_Data;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
@@ -27,7 +28,8 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
     private CTutor           mTutor;
     private CObjectDelegate  mSceneObject;
 
-    private HashMap<String, String>   eventMap = new HashMap<>();
+    private HashMap<String, String>   volatileMap = new HashMap<>();
+    private HashMap<String, String>   stickyMap   = new HashMap<>();
 
 
     static final String TAG = "TBpComponent";
@@ -106,9 +108,14 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
         //
         super.updateDataSet(data);
 
+        if(data.question_say) {
+            mTutor.setAddFeature(TCONST.SAY_STIMULUS);
+        }
 
+        if(data.question_show) {
+            mTutor.setAddFeature(TCONST.SHOW_STIMULUS);
+        }
     }
-
 
 
     /**
@@ -184,26 +191,70 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
     //*****************  Scripting Interface
 
 
-    public void setEventBehavior(String event, String behavior) {
+    public void postEvent(String event) {
+
+        switch(event) {
+
+            case BP_CONST.SHOW_STIMULUS:
+                _mechanics.post(BP_CONST.SHOW_STIMULUS, _currData);
+                break;
+
+            case BP_CONST.POP_BUBBLE:
+                _mechanics.post(BP_CONST.POP_BUBBLE, _touchedBubble);
+                break;
+
+            case BP_CONST.WIGGLE_BUBBLE:
+                _mechanics.post(BP_CONST.WIGGLE_BUBBLE, _touchedBubble);
+                break;
+
+            case BP_CONST.CLEAR_CONTENT:
+                _mechanics.post(BP_CONST.CLEAR_CONTENT, _touchedBubble);
+                break;
+        }
+    }
+
+
+    public void setVolatileBehavior(String event, String behavior) {
 
         if(behavior.toUpperCase().equals(TCONST.NULL)) {
 
-            if(eventMap.containsKey(event)) {
-                eventMap.remove(event);
+            if(volatileMap.containsKey(event)) {
+                volatileMap.remove(event);
             }
         }
         else {
-            eventMap.put(event, behavior);
+            volatileMap.put(event, behavior);
         }
     }
+
+
+    public void setStickyBehavior(String event, String behavior) {
+
+        if(behavior.toUpperCase().equals(TCONST.NULL)) {
+
+            if(stickyMap.containsKey(event)) {
+                stickyMap.remove(event);
+            }
+        }
+        else {
+            stickyMap.put(event, behavior);
+        }
+    }
+
 
     // Execute scirpt target if behavior is defined for this event
     //
     public void applyEvent(String event){
 
-        if(eventMap.containsKey(event)) {
-            applyEventNode(eventMap.get(event));
+        if(volatileMap.containsKey(event)) {
+            applyEventNode(volatileMap.get(event));
+
+            volatileMap.remove(event);
         }
+        else if(stickyMap.containsKey(event)) {
+            applyEventNode(stickyMap.get(event));
+        }
+
     };
 
 

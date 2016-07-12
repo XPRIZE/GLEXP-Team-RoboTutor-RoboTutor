@@ -29,10 +29,10 @@ import cmu.xprize.util.JSON_Helper;
 public class CBp_Data implements ILoadableObject{
 
     // json loadable
-    public String        question_type     = "MC";
-    public String        question_say      = "false";
-    public String        question_show     = "false";
-    public String        response_hear     = "false";
+    public String        question_type    = "MC";
+    public boolean       question_say     = false;
+    public boolean       question_show    = false;
+    public boolean       response_hear    = false;
 
     public int[]         response_count   = null;
     public String        response_layout  = "fixed";

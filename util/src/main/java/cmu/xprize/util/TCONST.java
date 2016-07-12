@@ -56,8 +56,8 @@ public class TCONST {
     public static final String SET_LANG_FTR     = "SET_LANGUAGE_FEATURE";
     public static final String VALUE            = "VALUE";
     public static final String NULL             = "NULL";
-    public static final String SAY_STIMULUS     = "SAYSTIMULUS";
-    public static final String SHOW_STIMULUS    = "SHOWSTIMULUS";
+    public static final String SAY_STIMULUS     = "FTR_SAY";
+    public static final String SHOW_STIMULUS    = "FTR_SHOW";
 
 
     //*** Reading Tutor compatible string combinations

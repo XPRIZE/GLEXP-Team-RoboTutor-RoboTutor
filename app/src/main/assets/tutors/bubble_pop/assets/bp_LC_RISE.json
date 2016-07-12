@@ -40,7 +40,7 @@
 
   "dataSource" : [
 
-    {"type":"Bp_Data", "question_type": "rising", "question_say": "true", "question_show": "false", "response_hear": "false", "dataset":[0,4,5,6,9], "stimulus_index": 1, "stimulus_type": "text_data" }
+    {"type":"Bp_Data", "question_type": "rising", "question_say": true, "question_show": false, "response_hear": "false", "dataset":[0,4,5,6,9], "stimulus_index": 1, "stimulus_type": "text_data" }
 
   ],
 

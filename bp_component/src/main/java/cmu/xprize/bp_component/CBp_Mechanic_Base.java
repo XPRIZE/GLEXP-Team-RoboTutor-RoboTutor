@@ -68,11 +68,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
     private LocalBroadcastManager         bManager;
 
-    protected boolean                     _animationStarted = false;
-    protected boolean                     _stimulusShown    = false;
-    protected boolean                     _stimulusAnimated = false;
-    protected boolean                     _stimulusMoved    = false;
-
     protected float                       _alpha       = 0.80f;
     protected float[]                     _scaleRange  = {0.85f, 1.3f};
 
@@ -242,106 +237,96 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
             case BP_CONST.SHOW_STIMULUS:
 
-                if(!_stimulusShown) {
-
-                    _stimulusShown = true;
-
-                    showStimulus((CBp_Data) target);
-                    post(BP_CONST.ZOOM_STIMULUS);
-                }
+                // This is a 2 step process - first the stimulus is zoomed then moved to the bottom
+                // of the screen.
+                //
+                showStimulus((CBp_Data) target);
+                post(BP_CONST.ZOOM_STIMULUS);
                 break;
 
             case BP_CONST.ZOOM_STIMULUS:
 
-                if(!_stimulusAnimated) {
+                // Persona - look at the stimulus
+                Log.d(TAG, "Width: " + mParent.getWidth() + " - HEIGHT: " + mParent.getHeight());
 
-                    _stimulusAnimated = true;
+                broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(new PointF(mParent.getWidth() / 2, mParent.getHeight() / 2)));
 
-                    // Persona - look at the stimulus
-                    Log.d(TAG, "Width: " + mParent.getWidth() + " - HEIGHT: " + mParent.getHeight());
+                SbubbleStumulus.setX((mParent.getWidth() - SbubbleStumulus.getWidth()) / 2);
+                SbubbleStumulus.setY((mParent.getHeight() - SbubbleStumulus.getHeight()) / 2);
 
-                    broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(new PointF(mParent.getWidth() / 2, mParent.getHeight() / 2)));
+                Animator inflator = CAnimatorUtil.configZoomIn(SbubbleStumulus, 600, 0, new BounceInterpolator(), 0f, 3.0f);
 
-                    SbubbleStumulus.setX((mParent.getWidth() - SbubbleStumulus.getWidth()) / 2);
-                    SbubbleStumulus.setY((mParent.getHeight() - SbubbleStumulus.getHeight()) / 2);
+                inflator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationCancel(Animator arg0) {
+                        //Functionality here
+                    }
 
-                    Animator inflator = CAnimatorUtil.configZoomIn(SbubbleStumulus, 600, 0, new BounceInterpolator(), 0f, 3.0f);
+                    @Override
+                    public void onAnimationStart(Animator arg0) {
+                        //Functionality here
+                    }
 
-                    inflator.addListener(new Animator.AnimatorListener() {
-                        @Override
-                        public void onAnimationCancel(Animator arg0) {
-                            //Functionality here
-                        }
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
 
-                        @Override
-                        public void onAnimationStart(Animator arg0) {
-                            //Functionality here
-                        }
+                        post(BP_CONST.MOVE_STIMULUS, 400);
+                    }
 
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
+                    @Override
+                    public void onAnimationRepeat(Animator arg0) {
+                        //Functionality here
+                    }
+                });
 
-                            post(BP_CONST.MOVE_STIMULUS, 400);
-                        }
+                inflator.start();
 
-                        @Override
-                        public void onAnimationRepeat(Animator arg0) {
-                            //Functionality here
-                        }
-                    });
-
-                    inflator.start();
-                }
                 break;
 
             case BP_CONST.MOVE_STIMULUS:
 
-                if(!_stimulusMoved) {
+                float[] scale = new float[]{(BP_CONST.MARGIN_BOTTOM * .9f) / SbubbleStumulus.getHeight()};
 
-                    _stimulusMoved = true;
+                float height       = SbubbleStumulus.getHeight();
+                float scaledHeight = height * scale[0];
 
-                    float[] scale = new float[]{(BP_CONST.MARGIN_BOTTOM * .9f) / SbubbleStumulus.getHeight()};
+                PointF wayPoints[] = new PointF[1];
+                PointF posFinal    = new PointF();
 
-                    float height       = SbubbleStumulus.getHeight();
-                    float scaledHeight = height * scale[0];
+                posFinal.x = SbubbleStumulus.getX();
+                posFinal.y = mParent.getHeight() - (scaledHeight + ((height - scaledHeight) / 2) + BP_CONST.STIM_PAD_BOTTOM);
 
-                    PointF wayPoints[] = new PointF[1];
-                    PointF posFinal    = new PointF();
+                wayPoints[0] = posFinal;
 
-                    posFinal.x = SbubbleStumulus.getX();
-                    posFinal.y = mParent.getHeight() - (scaledHeight + ((height - scaledHeight) / 2) + BP_CONST.STIM_PAD_BOTTOM);
+                AnimatorSet inflator2  = CAnimatorUtil.configZoomIn(SbubbleStumulus, 300, 0, new LinearInterpolator(), scale);
+                Animator    translator = CAnimatorUtil.configTranslate(SbubbleStumulus, 300, 0, wayPoints);
 
-                    wayPoints[0] = posFinal;
+                inflator2.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationCancel(Animator arg0) {
+                        //Functionality here
+                    }
 
-                    AnimatorSet inflator   = CAnimatorUtil.configZoomIn(SbubbleStumulus, 300, 0, new LinearInterpolator(), scale);
-                    Animator    translator = CAnimatorUtil.configTranslate(SbubbleStumulus, 300, 0, wayPoints);
+                    @Override
+                    public void onAnimationStart(Animator arg0) {
+                        //Functionality here
+                    }
 
-                    inflator.addListener(new Animator.AnimatorListener() {
-                        @Override
-                        public void onAnimationCancel(Animator arg0) {
-                            //Functionality here
-                        }
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
 
-                        @Override
-                        public void onAnimationStart(Animator arg0) {
-                            //Functionality here
-                        }
+                        mComponent.applyEvent(BP_CONST.STIMULUS_SHOWN);
+                        //post(BP_CONST.SHOW_BUBBLES);
+                    }
 
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
+                    @Override
+                    public void onAnimationRepeat(Animator arg0) {
+                        //Functionality here
+                    }
+                });
 
-                            post(BP_CONST.SHOW_BUBBLES);
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animator arg0) {
-                            //Functionality here
-                        }
-                    });
-
-                    inflator.start();
-                    translator.start();
-                }
+                inflator2.start();
+                translator.start();
                 break;
 
             case BP_CONST.CLEAR_CONTENT:
@@ -513,11 +498,9 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
     @Override
     public void onClick(View view) {
 
-        CBubble bubble = (CBubble)view;
+        mComponent.setTouchedBubble((CBubble)view);
 
-        post(BP_CONST.POP_BUBBLE, bubble);
-        //post(BP_CONST.WIGGLE_BUBBLE, bubble);
-        //post(BP_CONST.CLEAR_CONTENT, bubble);
+        mComponent.applyEvent(BP_CONST.BUBBLE_TOUCHED);
     }
 
 
@@ -575,6 +558,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
         // TODO: switch back to setting onTouchListener
         if(_enabled) {
+
             mParent.onTouchEvent(event);
 
             touchPt = new PointF(event.getX(), event.getY());

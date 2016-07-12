@@ -46,7 +46,7 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     protected String        mDataSource;
     private   int           _dataIndex = 0;
 
-    private IBubbleMechanic _mechanics;
+    protected IBubbleMechanic _mechanics;
 
     private boolean        correct = false;
 
@@ -59,7 +59,7 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     static final String TAG = "CBP_Component";
 
     protected CBp_Data     _currData;
-
+    protected CBubble      _touchedBubble;
 
 
     public CBP_Component(Context context) {
@@ -205,11 +205,6 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
             if(_mechanics != null)
                 _mechanics.doLayout(Scontent.getWidth(), Scontent.getHeight(), _currData);
         }
-
-        if(_mechanics != null) {
-            _mechanics.post(BP_CONST.SHOW_STIMULUS, _currData);
-        }
-
     }
 
 
@@ -238,7 +233,9 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     }
 
 
-
+    public void setTouchedBubble(CBubble bubble) {
+        _touchedBubble = bubble;
+    }
 
     //************************************************************************
     //************************************************************************
