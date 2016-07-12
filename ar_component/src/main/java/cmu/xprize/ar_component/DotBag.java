@@ -415,6 +415,17 @@ public class DotBag extends TableLayout {
             }
         }
 
+        // now reset dot col index
+
+        for (int i = 0; i < allTableRows.size(); i++) {
+            currTableRow = allTableRows.get(i);
+            numChildren = currTableRow.getVirtualChildCount();
+            for (int j = 0; j < numChildren; j++){
+                Dot dot = (Dot) currTableRow.getVirtualChildAt(j);
+                dot.setCol(j);
+            }
+        }
+
     }
 
     public void setRight(float newRight) {

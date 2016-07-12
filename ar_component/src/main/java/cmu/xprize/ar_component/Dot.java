@@ -113,4 +113,12 @@ public class Dot extends ImageView {
         this.isClickable = _clickable;
 
     }
+
+    public void setCol(int _col) {
+        this.col = _col;
+    }
+
+    public void setRow(int _row) {
+        this.row = _row;
+    }
 }
