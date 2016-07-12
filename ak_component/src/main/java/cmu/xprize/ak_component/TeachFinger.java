@@ -85,7 +85,7 @@ public class TeachFinger extends TextView {
                             null, null);
         setText(words);
 
-        lane = MID;
+        lane = LEFT;
     }
 
     public void update() {
