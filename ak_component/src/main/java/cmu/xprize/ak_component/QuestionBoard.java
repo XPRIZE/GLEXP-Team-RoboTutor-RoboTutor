@@ -21,8 +21,6 @@ public class QuestionBoard extends View {
 
     protected int width;
     protected int height;
-    protected int x;
-    protected int y;
 
 
     public QuestionBoard(Context context) {
@@ -48,21 +46,11 @@ public class QuestionBoard extends View {
         rightNum = leftNum + r.nextInt(50) + 1;
 
 
-//        x = 430;
-//        y = 100;
     }
 
     public void setQuestion(int leftNum, int rightNum) {
         this.leftNum = leftNum;
         this.rightNum = rightNum;
-    }
-
-    public void update() {
-//        y += dy;
-//        x += dx;
-//        textSize += Math.abs(dy / 4.0f);
-//        width += Math.abs(dx * 3);
-//        height += Math.abs(dy / 2);
     }
 
     @Override
@@ -78,10 +66,6 @@ public class QuestionBoard extends View {
         paint.setColor(Color.LTGRAY);
         paint.setStyle(Paint.Style.FILL);
 
-//        canvas.drawLine(0,0, 1000, 1000, paint);
-
-//        Rect rect = new Rect(0,0, width, height);
-//        canvas.drawRect(rect, paint);
         canvas.drawRect(new RectF(0, 0, width/3.0f, height), paint);
         canvas.drawRect(new RectF(width / 2.0f, 0, 5.0f * width / 6, height), paint);
 

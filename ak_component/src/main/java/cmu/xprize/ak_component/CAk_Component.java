@@ -205,28 +205,6 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
     }
 
-
-    private boolean first = true;
-
-    /**
-     *
-     * Draw game panel
-     * Remember to draw all static object, like background, car, etc.
-     */
-//    @Override
-//    public void onDraw(Canvas canvas) {
-//
-//
-//        float scaleFactorX = getWidth() * 1.0f / CAk_Component.WIDTH;
-//        float scaleFactorY = getHeight() * 1.0f / CAk_Component.HEIGHT;
-//
-//        canvas.save();
-//        canvas.scale(scaleFactorX, scaleFactorY);
-//
-//
-//        canvas.restore();
-//    }
-
     public void post(String command, Object target) {
 
     }
