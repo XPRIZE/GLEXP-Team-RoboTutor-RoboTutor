@@ -1,0 +1,277 @@
+{
+  "animatorMap": {
+    "COMMENT": "Animation Graph for the Add/Subtract Tutor",
+
+    "add_subtract": {
+
+      "type": "ANIMATOR",
+      "title": "Add/Subtract tutor",
+      "COMMENT": "This tutor is designed for the Add/Subtract tutor.",
+      "version": "1.0.0",
+      "rootnode": "INTRO_STATE",
+
+      "nodeMap": {
+
+        "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        "INTRO_STATE": {
+          "type": "NODE",
+          "COMMENT": "Intro Clip",
+          "maptype":"moduleMap",
+          "mapname": "PLAYINTRO",
+          "preenter":["SET_VERSION","SET_DATASOURCE"],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge": "FIRSTTASK"}
+          ]
+        },
+
+        // This initializes the dataset display and resets for a new set of attempts
+        //
+        "FIRSTTASK":{
+          "COMMENT":"This node presents the first task.",
+          "type":"node",
+          "preenter":[],
+          "maptype":"moduleMap",
+          "mapname": "SHOWTASK",
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"USERINPUT"}
+          ]
+        },
+
+        // This waits for input
+        //
+        "USERINPUT":{
+          "COMMENT":"When the user touches for the first time",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "CLICKDOTS",
+          "preenter":["CREATE_COMPLETION_TIMER"],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"FTR_RIGHT","edge":"CORRECT"},
+            {"constraint":"FTR_WRONG","edge":"WRONG"}
+          ]
+        },
+
+        "CORRECT":{
+          "COMMENT":"When user inputs a correct answer...",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "PLAYCORRECT",
+          "preenter":[],
+          "preexit" :["RESTART_COMPLETION_TIMER"],
+          "edges":
+          [
+            {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
+            {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
+            {"constraint":"","edge":"FIRSTTASK"}
+          ]
+        },
+
+        "WRONG":{
+          "COMMENT":"When user inputs an incorrect answer...",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "PLAYWRONG",
+          "preenter":[],
+          "preexit" :["CANCEL_COMPLETION_TIMER"],
+          "edges":
+          [
+            {"constraint":"","edge":"USERINPUT"}
+          ]
+        },
+
+        "EXITCLIP1": {
+          "COMMENT":"Exit Clip for ALL_CORRECT",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "PLAYEXIT1",
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"NEXTSCENE"}
+          ]
+        },
+
+        "EXITCLIP2": {"COMMENT":"Exit Clip for NOT_ALL_CORRECT",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "PLAYEXIT2",
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"NEXTSCENE"}
+          ]
+        },
+
+        "NEXTSCENE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname":"GOTONEXTSCENE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+          ]
+        }
+      },
+
+      "moduleMap": {
+        "COMMENT": "@@@@@  CModules  @@@@@",
+        "PLAYINTRO": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+          ]
+        },
+        "SHOWTASK": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "next", "features": ""}
+          ]
+        },
+        "CLICKDOTS": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "cmd": "WAIT"}
+          ]
+        },
+        // NOTES:
+        // AUDIO soundsource(s) are now relative to a soundpackage - see the tutor_descriptor to see its structure.
+        // The "default" sound package is used if none is specified
+        // The effect sound packages are special as it is not language sensitive
+        //
+        "PLAYCORRECT": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+          ]
+        },
+        // AUDIO filenames should not have spaces or hyphens.
+        //
+        "PLAYWRONG": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "cmd": "FEATURE-ADD", "value": "FTR_WRONG"}
+          ]
+        },
+        // this is an asynchronous timer driven node
+        "EVALUATE": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "evaluate"},
+            {"type": "COMMAND", "cmd": "NEXT"}
+          ]
+        },
+
+        "PLAYEXIT1":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+          ]
+        },
+
+        "PLAYEXIT2":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+          ]
+        }
+      },
+
+
+      "actionMap": {
+
+        "COMMENT": "@@@@@  CActions @@@@@ ",
+
+        "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
+
+        "CREATE_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "startdelay":"0", "period":"12000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"EVALUATE", "features": "" },
+
+        "RESTART_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "action":"RESTART", "features": "" },
+        "CANCEL_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "action":"CANCEL", "features": "" },
+
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "SAddSubtract", "method": "setDataSource", "parms": "[file]asm_data.json:String","features":""},
+        "NEXT_DATASET":{"type": "COMMAND", "id": "SAddSubtract", "method": "next" ,"features":""},
+
+        "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "NEXTSCENE" },
+        "NEXT": {"type": "COMMAND", "cmd": "NEXT" },
+        "PAUSE":{"type": "COMMAND", "cmd": "WAIT" }
+
+      },
+
+
+      // Use FTR_ Prefix on "features" to facilitate identification during debugging
+      //
+
+      "constraintMap": {
+        "COMMENT": "@@@@@  CConstraints @@@@@ ",
+
+        "COND_PASS1": {
+          "type": "CONDITION",
+          "If": "FTR_NOWORDS && ALL_CORRECT",
+          "Then":"true",
+          "Else":"false"
+        },
+
+        "COND_PASS2": {
+          "type": "CONDITION",
+          "If": "FTR_NOWORDS && NOT_ALL_CORRECT",
+          "Then":"true",
+          "Else":"false"
+        },
+
+        "FTR_NOWORDS":{
+          "type": "CONDITION",
+          "test":"FTR_NOWORDS"
+        },
+
+        "FTR_WORDS":{
+          "type": "CONDITION",
+          "test":"!FTR_NOWORDS"
+        },
+
+        "ALL_CORRECT": {
+          "type": "CONDITION",
+          "test": "ALL_CORRECT"
+        },
+        "NOT_ALL_CORRECT": {
+          "type": "CONDITION",
+          "test": "!ALL_CORRECT"
+        },
+        "FTR_RIGHT": {
+          "type": "CONDITION",
+          "test": "FTR_RIGHT"
+        },
+        "FTR_WRONG": {
+          "type": "CONDITION",
+          "test": "FTR_WRONG"
+        },
+        "FTR_NO_ACTION": {
+          "type": "CONDITION",
+          "test": "FTR_NO_ACTION"
+        }
+      }
+    }
+  }
+}

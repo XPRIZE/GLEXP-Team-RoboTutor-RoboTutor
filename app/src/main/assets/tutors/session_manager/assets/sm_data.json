@@ -35,10 +35,10 @@
 
     {
       "type":"Sm_Class",
-      "description":"arithmetic",
+      "description":"add_subtract",
       //"background":"#D9FFFF",
       "data": [
-        { "type":"Sm_Data", "intent": "arithmetic", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Add/Subtract"}
+        { "type":"Sm_Data", "intent": "add_subtract", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Add/Subtract"}
       ]
     },
 
