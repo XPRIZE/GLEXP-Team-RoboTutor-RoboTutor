@@ -17,6 +17,11 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     public CAsm_MechanicSubtract(CAsm_Component parent) {super.init(parent);}
 
     @Override
+    public String getOperation() {
+        return "-";
+    }
+
+    @Override
     public void handleClick() {
 
         Dot clickedDot = null;
@@ -98,7 +103,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     }
 
     @Override
-    public void preAnimation() {
+    public void preClickAnimation() {
 
         int numAlleys, rows, cols, size, dy;
         String imageName;

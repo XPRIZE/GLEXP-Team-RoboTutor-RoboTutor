@@ -40,7 +40,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject {
 
     protected ArrayList<CAsm_Alley> allAlleys = new ArrayList<>();
 
-    protected IDotMechanics mechanics;
+    protected IDotMechanics mechanics = new CAsm_MechanicBase();
 
     // json loadable
     public CAsm_Data[] dataSource;
@@ -156,7 +156,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject {
 
         setMechanics();
 
-        mechanics.preAnimation();
+        mechanics.preClickAnimation();
 
     }
 
@@ -170,6 +170,10 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject {
     }
 
     private void setMechanics() {
+
+        if ((mechanics.getOperation()).equals(operation)) {
+            return; // no need to change mechanics
+        }
 
         switch(operation) {
 

@@ -23,13 +23,13 @@
           "preexit" :[],
           "edges":
           [
-            {"constraint":"","edge": "FIRSTTASK"}
+            {"constraint":"","edge": "TASK"}
           ]
         },
 
         // This initializes the dataset display and resets for a new set of attempts
         //
-        "FIRSTTASK":{
+        "TASK":{
           "COMMENT":"This node presents the first task.",
           "type":"node",
           "preenter":[],
@@ -70,7 +70,7 @@
           [
             {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
             {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
-            {"constraint":"","edge":"FIRSTTASK"}
+            {"constraint":"","edge":"TASK"}
           ]
         },
 
@@ -168,7 +168,6 @@
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "cmd": "FEATURE-ADD", "value": "FTR_WRONG"}
           ]
         },
         // this is an asynchronous timer driven node

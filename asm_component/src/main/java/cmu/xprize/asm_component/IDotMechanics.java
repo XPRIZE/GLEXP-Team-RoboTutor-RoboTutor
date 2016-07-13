@@ -6,6 +6,7 @@ package cmu.xprize.asm_component;
 public interface IDotMechanics {
 
     public void handleClick();
-    public void preAnimation();
+    public void preClickAnimation();
+    public String getOperation();
 
 }

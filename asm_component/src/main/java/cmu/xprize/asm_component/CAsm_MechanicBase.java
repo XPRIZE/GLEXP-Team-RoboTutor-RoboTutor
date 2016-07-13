@@ -32,8 +32,12 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     }
 
-    public void preAnimation() {
+    public void preClickAnimation() {
 
+    }
+
+    public String getOperation() {
+        return "";
     }
 
     // TODO: fix this function - copied from stack overflow
