@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
@@ -18,10 +17,6 @@ import java.util.Random;
 public class CAkQuestionBoard extends View {
     protected int leftNum, rightNum;
     protected float textSize;
-
-    protected int width;
-    protected int height;
-
 
     public CAkQuestionBoard(Context context) {
         super(context);
@@ -37,15 +32,10 @@ public class CAkQuestionBoard extends View {
     }
 
     protected void init() {
-        width = 90;
-        height = 30;
-        textSize = 20;
         Random r = new Random();
-
         leftNum = r.nextInt(50);
         rightNum = leftNum + r.nextInt(50) + 1;
-
-
+        textSize = 20;
     }
 
     public void setQuestion(int leftNum, int rightNum) {
@@ -73,15 +63,4 @@ public class CAkQuestionBoard extends View {
         canvas.drawText(String.valueOf(rightNum),width * 19.0f / 24.0f, height / 2.0f + textSize / 4, paint);
     }
 
-
-    public Rect getRect() {
-        int[] l = new int[2];
-        getLocationOnScreen(l);
-        int x = l[0];
-        int y = l[1];
-        int w = getWidth();
-        int h = getHeight();
-
-        return new Rect(x, y, x + w, y + h);
-    }
 }

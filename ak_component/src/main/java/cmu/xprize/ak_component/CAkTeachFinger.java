@@ -1,14 +1,12 @@
 package cmu.xprize.ak_component;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.support.percent.PercentLayoutHelper;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import static cmu.xprize.ak_component.CAkTeachFinger.Lane.LEFT;
@@ -35,11 +33,7 @@ public class CAkTeachFinger extends TextView {
     }
 
     protected enum Lane{LEFT, MID, RIGHT};
-    private Bitmap image;
     private Lane lane;
-
-
-    private ImageView imageView;
 
     private String words= "Try touching here to change lane";
     protected enum FirstRight{TRUE,FALSE,DONE};

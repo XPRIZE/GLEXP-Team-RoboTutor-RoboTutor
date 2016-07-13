@@ -8,6 +8,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.PointF;
+import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Handler;
 import android.os.Looper;
@@ -58,7 +59,8 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
     private CAk_Data _currData;
     private long startTime;
-    private CAkPlayer CAkPlayer;
+    private CAkPlayer player;
+    private CAkTeachFinger teachFinger;
 
     private TextView score;
     private long sidewalkRightTime;
@@ -67,8 +69,6 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     private int boardCount;
     private ImageView cityBackground;
 
-
-    private CAkTeachFinger CAkTeachFinger;
     private Random random;
     private SoundPool soundPool;
 
@@ -81,7 +81,9 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     private PointF[] sidewalkLeftPoints;
     private PointF[] sidewalkRightPoints;
 
-    private int carscreechMedia,correctMedia,incorrectMedia,numberchangedMedia;
+    private int carscreechMedia, correctMedia, incorrectMedia, numberchangedMedia;
+    private boolean flag=true;
+
 
     //json loadable
     public int          gameSpeed          ;
@@ -136,9 +138,10 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
         sidewalkLeftTime = sidewalkRightTime = questionTime = startTime = System.nanoTime();
 
-        CAkPlayer = (CAkPlayer) findViewById(R.id.player);
+        player = (CAkPlayer) findViewById(R.id.player);
         cityBackground = (ImageView) findViewById(R.id.city);
         score = (TextView) findViewById(R.id.score);
+        teachFinger = (CAkTeachFinger) findViewById(R.id.finger);
 
         Animator cityAnimator = CAnimatorUtil.configTranslate(cityBackground,
                 100000, 0, new PointF(0, -HEIGHT));
@@ -155,18 +158,15 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
         random = new Random();
 
-        CAkTeachFinger = (CAkTeachFinger)findViewById(R.id.finger);
-
         isFirstInstall=true;
         if(isFirstInstall==false)
-            CAkTeachFinger.finishTeaching=true;
+            teachFinger.finishTeaching=true;
 
-//        soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
-//        Context c=CAk_ContextUtil.getInstance();
-//        carscreechMedia=soundPool.load(c,R.raw.carscreech,1);
-//        correctMedia=soundPool.load(c,R.raw.correct,1);
-//        incorrectMedia=soundPool.load(c,R.raw.incorrect,1);
-//        numberchangedMedia=soundPool.load(c,R.raw.numberchanged,1);
+        soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+        carscreechMedia=soundPool.load(mContext, R.raw.carscreech, 1);
+        correctMedia=soundPool.load(mContext, R.raw.correct, 1);
+        incorrectMedia=soundPool.load(mContext, R.raw.incorrect, 1);
+        numberchangedMedia=soundPool.load(mContext, R.raw.numberchanged, 1);
 
 
         mainHandler.post(gameRunnable);
@@ -329,17 +329,17 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
              *  Using drawable as questionboard
              */
 
-            if(elapse > 5000) {
-                final CAkQuestionBoard CAkQuestionBoard = new CAkQuestionBoard(mContext);
+            if(elapse > 5000 && teachFinger.finishTeaching) {
+                final CAkQuestionBoard questionBoard = new CAkQuestionBoard(mContext);
 
                 LayoutParams params = new LayoutParams((int)(90 * scaleFactorX), (int)(30 * scaleFactorY));
                 params.addRule(CENTER_HORIZONTAL);
-                addView(CAkQuestionBoard, params);
+                addView(questionBoard, params);
 
-                AnimatorSet questionboardAnimator = CAnimatorUtil.configZoomIn(CAkQuestionBoard, 3500,
+                AnimatorSet questionboardAnimator = CAnimatorUtil.configZoomIn(questionBoard, 3500,
                         0, new LinearInterpolator(), 4f);
 
-                ValueAnimator questionboardTranslationAnimator = ObjectAnimator.ofFloat(CAkQuestionBoard,
+                ValueAnimator questionboardTranslationAnimator = ObjectAnimator.ofFloat(questionBoard,
                         "y", getHeight() * 0.25f, getHeight() * 0.75f);
                 questionboardAnimator.setDuration(3500);
                 questionboardAnimator.setInterpolator(new LinearInterpolator());
@@ -350,15 +350,15 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        removeView(CAkQuestionBoard);
-                        if(judge(CAkQuestionBoard)){
-                            CAkPlayer.score += 1;
-//                            soundPool.play(correctMedia, 1.0f, 1.0f, 1, 0, 1.0f);
+                        removeView(questionBoard);
+                        if(judge(questionBoard)){
+                            player.score += 1;
+                            soundPool.play(correctMedia, 1.0f, 1.0f, 1, 0, 1.0f);
                             lastCorrect=true;
                             errornum=0;
                         }else{
-                            CAkPlayer.score -= 1;
-//                            soundPool.play(incorrectMedia, 1.0f, 1.0f, 1, 0, 1.0f);
+                            player.score -= 1;
+                            soundPool.play(incorrectMedia, 1.0f, 1.0f, 1, 0, 1.0f);
                             lastCorrect=false;
                             errornum+=1;
                         }
@@ -367,10 +367,15 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
                 questionboardAnimator.start();
 
+                if(flag && teachFinger != null) {
+                    teachFinger.setVisibility(INVISIBLE);
+                    flag = false;
+                }
+
                 questionTime = System.nanoTime();
             }
 
-            score.setText("score: "+ CAkPlayer.score);
+            score.setText("score: "+ player.score);
             mainHandler.postDelayed(gameRunnable, 100);
         }
     };
@@ -397,10 +402,12 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 //            {
 //                player.setUp(true);
 //            }
-            CAkPlayer.onTouchEvent(event, scaleFactorX);
-//            soundPool.play(carscreechMedia, 1.0f, 1.0f, 1, 0, 1.0f);
-            if(isFirstInstall==true&& CAkTeachFinger.finishTeaching!=true)
-                CAkTeachFinger.onTouch(event, CAkPlayer);
+            player.onTouchEvent(event, scaleFactorX);
+
+            if(isFirstInstall && !teachFinger.finishTeaching)
+                teachFinger.onTouch(event, player);
+            soundPool.play(carscreechMedia, 1.0f, 1.0f, 1, 0, 1.0f);
+
             return true;
         }
         if(event.getAction()==MotionEvent.ACTION_UP)
@@ -412,10 +419,10 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     }
 
     private boolean judge(CAkQuestionBoard CAkQuestionBoard){
-        if(CAkPlayer.rearNum < CAkQuestionBoard.leftNum && CAkPlayer.getLane() == cmu.xprize.ak_component.CAkPlayer.Lane.LEFT ||
-                CAkPlayer.rearNum > CAkQuestionBoard.rightNum && CAkPlayer.getLane() == cmu.xprize.ak_component.CAkPlayer.Lane.RIGHT ||
-                (CAkPlayer.rearNum < CAkQuestionBoard.rightNum && CAkPlayer.rearNum > CAkQuestionBoard.leftNum
-                        && CAkPlayer.getLane() == cmu.xprize.ak_component.CAkPlayer.Lane.MID)){
+        if(player.rearNum < CAkQuestionBoard.leftNum && player.getLane() == cmu.xprize.ak_component.CAkPlayer.Lane.LEFT ||
+                player.rearNum > CAkQuestionBoard.rightNum && player.getLane() == cmu.xprize.ak_component.CAkPlayer.Lane.RIGHT ||
+                (player.rearNum < CAkQuestionBoard.rightNum && player.rearNum > CAkQuestionBoard.leftNum
+                        && player.getLane() == cmu.xprize.ak_component.CAkPlayer.Lane.MID)){
             return true;
         }
         return false;
