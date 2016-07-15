@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import static cmu.xprize.ak_component.CAkTeachFinger.Lane.LEFT;
 import static cmu.xprize.ak_component.CAkTeachFinger.Lane.MID;
+import static cmu.xprize.ak_component.CAkTeachFinger.Lane.RIGHT;
 
 /**
  * Created by Iris on 16/7/7.
@@ -34,6 +35,7 @@ public class CAkTeachFinger extends TextView {
 
     protected enum Lane{LEFT, MID, RIGHT};
     private Lane lane;
+    private CAkPlayer.Lane PLane;
 
     private String words= "Try touching here to change lane";
     protected enum FirstRight{TRUE,FALSE,DONE};
@@ -52,10 +54,11 @@ public class CAkTeachFinger extends TextView {
         int w = image.getIntrinsicWidth();
         image.setBounds( 0, 0, w, h );
         setCompoundDrawables(null, image,
-                            null, null);
+                null, null);
         setText(words);
 
-        lane = LEFT;
+        lane = RIGHT;
+        PLane = CAkPlayer.Lane.MID;
     }
 
     public void update() {
@@ -68,10 +71,10 @@ public class CAkTeachFinger extends TextView {
                     info.leftMarginPercent = 0.25f;
                     break;
                 case MID:
-                    info.leftMarginPercent = 0.40f;
+                    info.leftMarginPercent = 0.36f;
                     break;
                 case RIGHT:
-                    info.leftMarginPercent = 0.65f;
+                    info.leftMarginPercent = 0.41f;
                     break;
             }
             requestLayout();
@@ -87,30 +90,32 @@ public class CAkTeachFinger extends TextView {
 
     public void onTouch(MotionEvent event, CAkPlayer CAkPlayer){
         int touchX = (int)event.getX();
-        int width = getWidth();
+        int width = CAkPlayer.getWidth();
+        PLane=CAkPlayer.getLane();
 
         if(touchX >= CAkPlayer.getX() + width / 2 &&
-                firstright==FirstRight.TRUE && CAkPlayer.lane == cmu.xprize.ak_component.CAkPlayer.Lane.MID) {
+                firstright==FirstRight.TRUE && PLane== cmu.xprize.ak_component.CAkPlayer.Lane.MID) {
             firstright=FirstRight.DONE;
             words="Excellent!Now try this way";
-            CAkPlayer.lane = cmu.xprize.ak_component.CAkPlayer.Lane.RIGHT;
+            //CAkPlayer.lane = cmu.xprize.ak_component.CAkPlayer.Lane.RIGHT;
+            PLane= cmu.xprize.ak_component.CAkPlayer.Lane.RIGHT;
             lane = MID;
-            CAkPlayer.update();
+            //CAkPlayer.update();
             update();
             invalidate();
         }
         else if(touchX < CAkPlayer.getX() + width / 2 &&
                 firstright == FirstRight.TRUE &&
-                CAkPlayer.lane == cmu.xprize.ak_component.CAkPlayer.Lane.MID) {
-            CAkPlayer.lane = cmu.xprize.ak_component.CAkPlayer.Lane.LEFT;
-            CAkPlayer.update();
+                PLane == cmu.xprize.ak_component.CAkPlayer.Lane.MID) {
+            PLane = cmu.xprize.ak_component.CAkPlayer.Lane.LEFT;
+            //CAkPlayer.update();
             update();
             invalidate();
         }
         else if(touchX >= CAkPlayer.getX() + width / 2 &&
-                firstright == FirstRight.TRUE && CAkPlayer.lane == cmu.xprize.ak_component.CAkPlayer.Lane.LEFT) {
-            CAkPlayer.lane = cmu.xprize.ak_component.CAkPlayer.Lane.MID;
-            CAkPlayer.update();
+                firstright == FirstRight.TRUE && PLane == cmu.xprize.ak_component.CAkPlayer.Lane.LEFT) {
+            PLane = cmu.xprize.ak_component.CAkPlayer.Lane.MID;
+            //CAkPlayer.update();
             update();
             invalidate();
         }
@@ -119,20 +124,20 @@ public class CAkTeachFinger extends TextView {
                 touchX < CAkPlayer.getX() + width / 2){
             words="Great!And this way?";
             secondleft=SecondLeft.DONE;
-            CAkPlayer.lane = cmu.xprize.ak_component.CAkPlayer.Lane.MID;
+            PLane = cmu.xprize.ak_component.CAkPlayer.Lane.MID;
             lane = LEFT;
-            CAkPlayer.update();
+            //CAkPlayer.update();
             update();
             invalidate();
         }
         else if(firstright == FirstRight.DONE &&
                 secondleft == SecondLeft.DONE &&
                 touchX < CAkPlayer.getX() + width / 2 &&
-                CAkPlayer.lane == cmu.xprize.ak_component.CAkPlayer.Lane.LEFT)
+                PLane == cmu.xprize.ak_component.CAkPlayer.Lane.MID)
         {
             words="Great!Let's get start?Choose the correct lane!";
             finishTeaching=true;
-            CAkPlayer.update();
+            //CAkPlayer.update();
             update();
             invalidate();
         }
@@ -141,8 +146,8 @@ public class CAkTeachFinger extends TextView {
                 touchX < CAkPlayer.getX() + width / 2 &&
                 CAkPlayer.lane == cmu.xprize.ak_component.CAkPlayer.Lane.RIGHT)
         {
-            CAkPlayer.lane = cmu.xprize.ak_component.CAkPlayer.Lane.MID;
-            CAkPlayer.update();
+            PLane = cmu.xprize.ak_component.CAkPlayer.Lane.MID;
+            //CAkPlayer.update();
             update();
             invalidate();
         }
@@ -150,8 +155,8 @@ public class CAkTeachFinger extends TextView {
                 secondleft == SecondLeft.DONE &&
                 touchX >= CAkPlayer.getX() + width / 2)
         {
-            CAkPlayer.lane = cmu.xprize.ak_component.CAkPlayer.Lane.RIGHT;
-            CAkPlayer.update();
+            PLane = cmu.xprize.ak_component.CAkPlayer.Lane.RIGHT;
+            //CAkPlayer.update();
             update();
             invalidate();
         }

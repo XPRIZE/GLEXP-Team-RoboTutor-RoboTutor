@@ -402,10 +402,11 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 //            {
 //                player.setUp(true);
 //            }
-            player.onTouchEvent(event, scaleFactorX);
 
             if(isFirstInstall && !teachFinger.finishTeaching)
                 teachFinger.onTouch(event, player);
+            player.onTouchEvent(event, scaleFactorX);
+
             soundPool.play(carscreechMedia, 1.0f, 1.0f, 1, 0, 1.0f);
 
             return true;
