@@ -92,6 +92,15 @@
 
     {
       "type":"Sm_Class",
+      "description":"add_subtract",
+      //"background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data", "intent": "add_subtract", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Add/Subtract"}
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
       "description":"numeric",
       //"background":"#D9FFFF",
       "data": [
