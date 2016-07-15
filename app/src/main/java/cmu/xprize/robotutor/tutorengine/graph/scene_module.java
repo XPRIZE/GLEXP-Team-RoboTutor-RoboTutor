@@ -104,21 +104,17 @@ public class scene_module extends scene_node implements ILoadableObject2 {
         //
         resetNode();
 
-        do {
-            if(_ndx < tracks.length)
-            {
-                _nextAction = tracks[_ndx];
+        if(_ndx < tracks.length)
+        {
+            _nextAction = tracks[_ndx];
 
-                _ndx++;
+            _ndx++;
 
-                _moduleState = _nextAction.applyNode();
-            }
-            else {
-                _moduleState = TCONST.NONE;
-                break;
-            }
-
-        }while(_moduleState.equals(TCONST.DONE));
+            _moduleState = _nextAction.applyNode();
+        }
+        else {
+            _moduleState = TCONST.NONE;
+        }
 
         return _moduleState;
     }

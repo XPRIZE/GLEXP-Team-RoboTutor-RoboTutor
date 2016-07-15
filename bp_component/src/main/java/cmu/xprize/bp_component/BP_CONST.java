@@ -74,7 +74,7 @@ public class BP_CONST {
     public static final float DESIGN_SCALE        = 2.0f;
 
     public static final String STIMULUS_SHOWN     = "STIMULUS_SHOWN";
-    public static final String BUBBLE_TOUCHED     = "BUBBLE_TOUCHED";
+    public static final String BUBBLE_TOUCH_EVENT = "BUBBLE_TOUCH_EVENT";
 
     static public HashMap<String, Integer> bubbleMap = new HashMap<String, Integer>();
 

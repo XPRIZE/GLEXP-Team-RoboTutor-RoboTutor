@@ -131,8 +131,10 @@ public class type_audio extends type_action implements IMediaListener {
 
         // Flows automatically increment to next scenegraph node.
         //
-        if(mode.equals(TCONST.AUDIOFLOW))
+        if(mode.equals(TCONST.AUDIOFLOW)) {
+            Log.d(TAG, "Processing: Audio Flow");
             _scope.tutor().eventNext();
+        }
     }
 
     //**  Global Media Control Start
@@ -148,7 +150,7 @@ public class type_audio extends type_action implements IMediaListener {
      */
     public void preLoad(IMediaListener owner) {
 
-        String pathResolved = getScope().resolveTemplate(mSourcePath);
+        String pathResolved = getScope().parseTemplate(mSourcePath);
 
         Log.i(TAG, "Preload: " + pathResolved);
 
@@ -189,6 +191,10 @@ public class type_audio extends type_action implements IMediaListener {
                 //
                 if (mode.equals(TCONST.AUDIOEVENT))
                     status = TCONST.DONE;
+
+                // TCONST.STREAMEVENT or TCONST.FLOWEVENT wait for completio
+                //
+                // TCONST.FLOWEVENT automatically advances
                 else
                     status = TCONST.WAIT;
             }

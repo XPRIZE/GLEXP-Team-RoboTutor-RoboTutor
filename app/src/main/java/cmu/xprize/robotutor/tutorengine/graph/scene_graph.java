@@ -32,7 +32,7 @@ import cmu.xprize.util.TCONST;
 /**
  * This represents the top level tutor graph object
  */
-public class tutor_node extends scene_node implements ILoadableObject2 {
+public class scene_graph extends scene_node implements ILoadableObject2 {
 
     // State fields
     private scene_node _currNode;
@@ -56,7 +56,7 @@ public class tutor_node extends scene_node implements ILoadableObject2 {
     /**
      * The tutor_node for
      */
-    public tutor_node() {
+    public scene_graph() {
         _currNode = this;
     }
 
@@ -99,6 +99,8 @@ public class tutor_node extends scene_node implements ILoadableObject2 {
                     _currNode = _currNode.nextNode();
 
                     if (_currNode == null) {
+                        Log.d(TAG, "Processing END Node: ");
+
                         _nodeState = TCONST.NEXTSCENE;
                         break;
                     }
@@ -116,9 +118,12 @@ public class tutor_node extends scene_node implements ILoadableObject2 {
                     // A result of TCONST.NONE indicated the complex source node is exhausted.
                     // which will drive a search for the next node
                     //
+                    Log.d(TAG, "Processing Node: " + _currNode.name + " - start State: " + _nodeState + " - mapType: " + _currNode.maptype + " - mapName: " + _currNode.mapname);
 
-                    Log.d(TAG, "Running Node: " + _currNode.name);
                     _nodeState = _currNode.applyNode();
+
+                    Log.d(TAG, "Processing Node: " + _currNode.name + " - end State: " + _nodeState);
+
                     break;
             }
         }
@@ -139,10 +144,12 @@ public class tutor_node extends scene_node implements ILoadableObject2 {
         }
 
         if(_currNode != null) {
-            Log.d(TAG, "Running Node: " + _currNode.name);
 
+            // TODO: Check if preenter is used - I think we only want this for scene preenter/exit
             _currNode.preEnter();
             result = TCONST.READY;
+
+            Log.d(TAG, "Processing Node: " + rootnode + " : READY");
         }
         else {
             Log.d(TAG, "No Root Node for Scene");

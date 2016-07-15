@@ -59,6 +59,12 @@ public class TCONST {
     public static final String SAY_STIMULUS     = "FTR_SAY";
     public static final String SHOW_STIMULUS    = "FTR_SHOW";
 
+    public static final String TYPE_CTUTOR      = "CTutor";
+    public static final String TYPE_CSCENEGRAPH = "CSceneGraph";
+    public static final String TYPE_CTUTORGRAPH = "CTutorGraph";
+    public static final String EVENT_SCENEQUEUE = "Scene Queue Event";
+    public static final String EVENT_TUTORGRAPH = "Tutor Graph Event";
+
 
     //*** Reading Tutor compatible string combinations
 

@@ -466,8 +466,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
         }
     }
 
-
-    /**
+/**
      * Post a command to the tutorgraph queue
      *
      * @param command
@@ -498,9 +497,11 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
     @Override
     public void onClick(View view) {
 
-        mComponent.setTouchedBubble((CBubble)view);
+        CBubble bubble = (CBubble)view;
 
-        mComponent.applyEvent(BP_CONST.BUBBLE_TOUCHED);
+        mComponent.publishState(bubble);
+        mComponent.setTouchedBubble(bubble);  // TODO: Don't need this ??
+        mComponent.applyEvent(BP_CONST.BUBBLE_TOUCH_EVENT);
     }
 
 

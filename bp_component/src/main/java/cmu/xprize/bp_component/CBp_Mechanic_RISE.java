@@ -103,6 +103,8 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
             _prevColorNdx = colorNdx;
 
+            String correctVal = mComponent.stimulus_data[_currData.dataset[_currData.stimulus_index]];
+
             nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
             nextBubble.setScale(getRandInRange(_scaleRange));
 
@@ -124,18 +126,22 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                 _distractorCnt = 0;
             }
 
+            String stiumulusVal = mComponent.stimulus_data[_currData.dataset[stimNdx]];
+
             switch (mComponent.stimulus_type) {
 
                 case BP_CONST.REFERENCE:
 
-                    int[] shapeSet = BP_CONST.drawableMap.get(mComponent.stimulus_data[_currData.dataset[stimNdx]]);
+                    int[] shapeSet = BP_CONST.drawableMap.get(stiumulusVal);
 
+                    nextBubble.configData(stiumulusVal, correctVal);
                     nextBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
                     break;
 
                 case BP_CONST.TEXTDATA:
 
-                    nextBubble.setContents(0, mComponent.stimulus_data[_currData.dataset[stimNdx]]);
+                    nextBubble.configData(stiumulusVal, correctVal);
+                    nextBubble.setContents(0, stiumulusVal);
                     break;
             }
 

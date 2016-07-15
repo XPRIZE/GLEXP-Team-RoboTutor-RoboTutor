@@ -326,7 +326,9 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
     public void populateView(CBp_Data data) {
 
         CBubble newBubble;
-        int colorNdx = (int)(Math.random() * BP_CONST.bubbleColors.length);
+
+        int    colorNdx   = (int)(Math.random() * BP_CONST.bubbleColors.length);
+        String correctVal = mComponent.stimulus_data[data.dataset[data.stimulus_index]];
 
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -348,18 +350,22 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
             mParent.addView(newBubble, layoutParams);
 
+            String stiumulusVal = mComponent.stimulus_data[data.dataset[i1]];
+
             switch (mComponent.stimulus_type) {
 
                 case BP_CONST.REFERENCE:
 
-                    int[] shapeSet = BP_CONST.drawableMap.get(mComponent.stimulus_data[data.dataset[i1]]);
+                    int[] shapeSet = BP_CONST.drawableMap.get(stiumulusVal);
 
+                    newBubble.configData(stiumulusVal, correctVal);
                     newBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
                     break;
 
                 case BP_CONST.TEXTDATA:
 
-                    newBubble.setContents(0, mComponent.stimulus_data[data.dataset[i1]]);
+                    newBubble.configData(stiumulusVal, correctVal);
+                    newBubble.setContents(0, stiumulusVal);
                     break;
             }
         }

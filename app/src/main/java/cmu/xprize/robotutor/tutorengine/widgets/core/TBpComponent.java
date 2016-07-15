@@ -10,6 +10,7 @@ import java.util.HashMap;
 import cmu.xprize.bp_component.BP_CONST;
 import cmu.xprize.bp_component.CBP_Component;
 import cmu.xprize.bp_component.CBp_Data;
+import cmu.xprize.bp_component.CBubble;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
@@ -18,6 +19,8 @@ import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.JSON_Helper;
@@ -68,32 +71,28 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
     //**********************************************************
     //*****************  Tutor Interface
 
-    @Override
-    public void UpdateValue(int value) {
 
-        // update the Scope response variable  "<varname>.value"
-        //
-        mTutor.getScope().addUpdateVar(name() + ".value", new TInteger(value));
+    private void reset() {
 
-        boolean correct = isCorrect();
-
-        reset();
-
-        if(correct)
-            mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
-        else
-            mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+        resetValid();
+        resetState();
     }
 
 
-    private void reset() {
+    private void resetValid() {
 
         mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
         mTutor.setDelFeature(TCONST.GENERIC_WRONG);
 
+    }
+
+
+    private void resetState() {
+
         mTutor.setDelFeature(TCONST.SAY_STIMULUS);
         mTutor.setDelFeature(TCONST.SHOW_STIMULUS);
     }
+
 
 
     /**
@@ -108,13 +107,7 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
         //
         super.updateDataSet(data);
 
-        if(data.question_say) {
-            mTutor.setAddFeature(TCONST.SAY_STIMULUS);
-        }
-
-        if(data.question_show) {
-            mTutor.setAddFeature(TCONST.SHOW_STIMULUS);
-        }
+        publishQuestionState(data);
     }
 
 
@@ -197,6 +190,10 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
 
             case BP_CONST.SHOW_STIMULUS:
                 _mechanics.post(BP_CONST.SHOW_STIMULUS, _currData);
+                break;
+
+            case BP_CONST.SHOW_BUBBLES:
+                _mechanics.post(BP_CONST.SHOW_BUBBLES);
                 break;
 
             case BP_CONST.POP_BUBBLE:
@@ -289,6 +286,67 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
 
 
 
+    //************************************************************************
+    //************************************************************************
+    // publish component state data - START
+
+    /**
+     * Publish the Stimulus value as Scope variables for script access
+     *
+     */
+    @Override
+    protected void publishState(CBubble bubble) {
+
+        TScope scope = mTutor.getScope();
+
+        scope.addUpdateVar(name() + ".ansValue", new TString(bubble.getStimulus()));
+
+        resetValid();
+
+        if(bubble.isCorrect()) {
+            mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
+        }
+        else {
+            mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+        }
+    }
+
+
+    protected void publishQuestionState(CBp_Data data) {
+
+        TScope scope = mTutor.getScope();
+
+        resetState();
+
+        String correctVal = stimulus_data[data.dataset[data.stimulus_index]];
+        scope.addUpdateVar(name() + ".questValue", new TString(correctVal));
+
+        if(data.question_say) {
+            mTutor.setAddFeature(TCONST.SAY_STIMULUS);
+        }
+
+        if(data.question_show) {
+            mTutor.setAddFeature(TCONST.SHOW_STIMULUS);
+        }
+    }
+
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishValue(String varName, String value) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishValue(String varName, int value) {
+    }
+
+
+    // publish component state data - EBD
+    //************************************************************************
+    //************************************************************************
 
 
 

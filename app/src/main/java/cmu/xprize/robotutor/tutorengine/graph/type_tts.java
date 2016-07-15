@@ -19,15 +19,10 @@
 
 package cmu.xprize.robotutor.tutorengine.graph;
 
-import android.util.Log;
-
 import org.json.JSONObject;
-
-import java.io.FileNotFoundException;
 
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
-import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.util.TTSsynthesizer;
@@ -97,7 +92,7 @@ public class type_tts extends type_action {
         setRate();
         setLanguage();
 
-        String speechResolved = getScope().resolveTemplate(content);
+        String speechResolved = getScope().parseTemplate(content);
 
         mSynthesizer.speak(speechResolved);
 

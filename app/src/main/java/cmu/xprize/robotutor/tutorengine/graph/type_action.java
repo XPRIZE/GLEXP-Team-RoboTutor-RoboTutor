@@ -173,10 +173,10 @@ public class type_action extends scene_node {
                             // Resolve any variables in the parameters.
                             // Session manager uses TScope variables to store intents
                             //
-                            String intent     = getScope().resolveTemplate(parmList.get(0));
-                            String intentData = getScope().resolveTemplate(parmList.get(2));
-                            String dataSource = getScope().resolveTemplate(parmList.get(4));
-                            String features   = getScope().resolveTemplate(parmList.get(6));
+                            String intent     = getScope().parseTemplate(parmList.get(0));
+                            String intentData = getScope().parseTemplate(parmList.get(2));
+                            String dataSource = getScope().parseTemplate(parmList.get(4));
+                            String features   = getScope().parseTemplate(parmList.get(6));
 
                             CTutorEngine.launch(intent, intentData, dataSource, features);
 

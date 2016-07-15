@@ -41,6 +41,10 @@ public class scene_node implements ILoadableObject2, IScriptable2 {
     public String           parser;      // Used to distinguish different Flash content parsers
     public String           type;        // used by JSON loader to disambiguate object type
     public String           name;
+
+    public String           maptype;
+    public String           mapname;
+
     public String[]         preenter;
     public String[]         preexit;
 
@@ -135,7 +139,9 @@ public class scene_node implements ILoadableObject2, IScriptable2 {
     {
         if(preenter != null)
         {
-            apply(preenter);
+            Log.d(TAG, "Processing Node: " + name + " PreEnter");
+
+            applyCommandSet(preenter);
         }
     }
 
@@ -147,18 +153,24 @@ public class scene_node implements ILoadableObject2, IScriptable2 {
     {
         if(preexit != null)
         {
-            apply(preexit);
+            Log.d(TAG, "Processing Node: " + name + " PreExit");
+
+            applyCommandSet(preexit);
         }
     }
 
 
     // preenter / preexit action resolution.
     //
-    private void apply(String[] commandSet) {
+    private void applyCommandSet(String[] commandSet) {
 
         for (String nodeName : commandSet) {
+
             try {
                 IScriptable2 node = (IScriptable2)getScope().mapSymbol(nodeName);
+
+                Log.d(TAG, "Processing Command: " + node.getName() + " - type: " + node.getType());
+
                 node.applyNode();
 
             } catch (Exception e) {

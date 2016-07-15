@@ -48,7 +48,7 @@ import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
 
-public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.AnimationListener {
+public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.AnimationListener, IEventSource {
 
     private TScope             mRootScope;
 
@@ -108,6 +108,17 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
         navigatedata[0].instance = tutorContainer;
     }
 
+
+    @Override
+    public String getEventSourceName() {
+        return TCONST.EVENT_TUTORGRAPH;
+    }
+    @Override
+    public String getEventSourceType() {
+        return TCONST.TYPE_CTUTORGRAPH;
+    }
+
+
     @Override
     public void setSceneGraph(CSceneGraph sGraph) {
         mSceneGraph = sGraph;
@@ -162,9 +173,11 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
 
     public class Queue implements Runnable {
 
-        protected String _command;
+        protected IEventSource _source;;
+        protected String       _command;
 
-        public Queue(String command) {
+        public Queue(IEventSource source, String command) {
+            _source  = source;
             _command = command;
         }
 
@@ -173,6 +186,8 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
 
             try {
                 queueMap.remove(this);
+
+                Log.d(TAG, "Processing event: " + _command + " From: " + _source.getEventSourceName() + " TYPE: " + _source.getEventSourceType());
 
                 switch (_command) {
 
@@ -248,6 +263,8 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
      */
     private void enQueue(Queue qCommand) {
 
+        Log.d(TAG, "Processing POST to TutorGraph: " + qCommand._command + " - from: " +  qCommand._source.getEventSourceName());
+
         if(!mDisabled) {
             queueMap.put(qCommand, qCommand);
 
@@ -261,9 +278,9 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
      *
      * @param command
      */
-    public void post(String command) {
+    public void post(IEventSource source, String command) {
 
-        enQueue(new Queue(command));
+        enQueue(new Queue(source, command));
     }
 
 
@@ -508,8 +525,8 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
         //
         navigatedata[_sceneCurr].instance.onEnterScene();
 
-        mSceneGraph.post(TCONST.ENTER_SCENE, navigatedata[_sceneCurr].id);
-        mSceneGraph.post(TCONST.NEXT_NODE);
+        mSceneGraph.post(this, TCONST.ENTER_SCENE, navigatedata[_sceneCurr].id);
+        mSceneGraph.post(this, TCONST.NEXT_NODE);
     }
 
     @Override

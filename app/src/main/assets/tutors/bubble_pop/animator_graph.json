@@ -17,15 +17,14 @@
         "INTRO_STATE": {
           "type": "NODE",
           "COMMENT": "Intro Clip - we only ever visit this node once",
-          "maptype":"actionMap",
-          "mapname": "NEXTNODE",
-          "preenter": ["SET_VERSION","PLAY_BACKINGTRACK","PLAY_PROMPT","SET_DATASOURCE","NEXT_DATASET"],
-          "preexit": [
-          ],
+          "maptype":"moduleMap",
+          "mapname": "INTROSTATE",
+          "preenter": ["SET_VERSION","SET_DATASOURCE"],
+          "preexit": ["NEXT_DATASET"],
           "edges": [
             {
               "constraint": "",
-              "edge": "USERINPUT"
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
@@ -40,7 +39,7 @@
           "edges": [
             {
               "constraint": "",
-              "edge": "USERINPUT"
+              "edge": "USER_INPUT"
             }
           ]
         },
@@ -50,31 +49,28 @@
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
           "maptype":"actionMap",
-          "mapname": "USERINPUT",
+          "mapname": "WAITFORUSERINPUT",
           "preenter": [],
-          "preexit": [
-          ],
+          "preexit": [],
           "edges": [
             {
               "constraint":"FTR_RIGHT",
-              "edge": "PLAYCORRECT"
+              "edge": "PLAY_CORRECT"
             },
             {
               "constraint": "",
-              "edge": "PLAYWRONG"
+              "edge": "PLAY_WRONG"
             }
           ]
         },
 
-        "PLAT_CORRECT": {
+        "PLAY_CORRECT": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
           "maptype":"moduleMap",
           "mapname": "PLAYCORRECT",
           "preenter": [],
-          "preexit": [
-            "GETWORD"
-          ],
+          "preexit": [],
           "edges": [
             {
               "constraint": "FTR_NOWORDS",
@@ -82,7 +78,7 @@
             },
             {
               "constraint": "",
-              "edge": "USERINPUT"
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
@@ -93,9 +89,7 @@
           "maptype":"moduleMap",
           "mapname": "PLAYWRONG",
           "preenter": [],
-          "preexit": [
-            "GETWORD"
-          ],
+          "preexit": [],
           "edges": [
             {
               "constraint": "FTR_NOWORDS",
@@ -103,7 +97,7 @@
             },
             {
               "constraint": "",
-              "edge": "INTRO_STATE"
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
@@ -130,17 +124,26 @@
           "type": "MODULE",
           "reuse":true,
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.stimulus}}.mp3",  "soundpackage":"default", "mode":"flow", "features": "FTR_SAY"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"xprize", "mode":"event", "features": "FTR_SAY"},
 
             // If we are showing it we have to wait for the animation to complete before continuing
-            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "STIMULUS_SHOWN:String,NEXT:String" ,"features":"FTR_SHOW"},
-            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_STIMULUS:String"               ,"features":"FTR_SHOW"},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "STIMULUS_SHOWN:String|NEXTNODE:String" ,"features":"FTR_SHOW"},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_STIMULUS:String"                  ,"features":"FTR_SHOW"},
+            {"type": "COMMAND", "cmd": "WAIT", "feature":"FTR_SHOW"  },
 
-            // Otherwise we just continue to the next node
-            {"type": "COMMAND", "cmd": "NEXT", "feature":"!FTR_SHOW"  }
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_BUBBLES:String"              ,"features":"FTR_SHOW"}
           ]
         },
 
+        "INTROSTATE": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "gamesound.mp3", "soundpackage":"tutor_effect", "repeat":true, "volume": 0.20, "mode":"event", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please tap on it.mp3", "soundpackage":"default", "volume": 0.7, "mode":"flow", "features": ""}
+          ]
+        },
 
         "PLAYCORRECT": {
           "type": "MODULE",
@@ -150,6 +153,17 @@
             {"type": "AUDIO", "command": "PLAY", "soundsource": "popSound.mp3",  "soundpackage":"tutor_effect", "mode":"flow", "features": ""},
 
             {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "POP_BUBBLE:String" ,"features":""}
+          ]
+        },
+
+
+
+        "USERINPUT": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "COMMAND", "cmd": "WAIT"  }
           ]
         },
 
@@ -170,7 +184,7 @@
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "PLAY_BACKINGTRACK": {"type": "AUDIO", "command": "PLAY", "soundsource": "gamesound.mp3", "soundpackage":"tutor_effect", "repeat":true, "volume": 0.20, "mode":"flow", "features": ""},
+        "PLAY_BACKINGTRACK": {"type": "AUDIO", "command": "PLAY", "soundsource": "gamesound.mp3", "soundpackage":"tutor_effect", "repeat":true, "volume": 0.20, "mode":"event", "features": ""},
         "PLAY_PROMPT": {"type": "AUDIO", "command": "PLAY", "soundsource": "Please tap on it.mp3", "soundpackage":"default", "volume": 0.7, "mode":"flow", "features": ""},
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
@@ -182,8 +196,7 @@
 //        "SET_SHOW":{"type": "COMMAND", "id": "SBubblePop", "method": "setEventBehavior" ,"features":""},
 
         "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"  },
-        "USERINPUT":  {"type": "COMMAND", "cmd": "WAIT"  },
-
+        "WAITFORUSERINPUT":{"type": "COMMAND", "cmd": "WAIT"  },
 
         "B5_ATTACH": {
           "type": "COMMAND", "id": "button5", "method": "setButtonBehavior", "parms": "STOP:String"

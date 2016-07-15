@@ -22,6 +22,7 @@ package cmu.xprize.robotutor.tutorengine;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,7 +31,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import cmu.xprize.robotutor.tutorengine.graph.tutor_node;
+import cmu.xprize.robotutor.tutorengine.graph.scene_graph;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.CErrorManager;
@@ -57,12 +58,12 @@ public class CSceneGraph  {
     private boolean          mDisabled   = false;
 
     // State fields
-    private tutor_node               _sceneNode;
+    private scene_graph _scene;
     private HashMap<String, Integer> _pFeatures;
 
 
     // json loadable
-    public HashMap<String,tutor_node> animatorMap;
+    public HashMap<String,scene_graph> animatorMap;
 
 
 
@@ -92,16 +93,30 @@ public class CSceneGraph  {
      * This is the central processsing point of CSceneGraph - It is a message driven pattern
      * on the UI thread.
      */
-    public class Queue implements Runnable {
+    public class Queue implements Runnable, IEventSource {
 
-        protected String _command;
-        protected String _target;
+        protected IEventSource _source;;
+        protected String       _command;
+        protected String       _target;
 
-        public Queue(String command) {
+
+        @Override
+        public String getEventSourceName() {
+            return TCONST.EVENT_SCENEQUEUE;
+        }
+        @Override
+        public String getEventSourceType() {
+            return TCONST.TYPE_CSCENEGRAPH;
+        }
+
+
+        public Queue(IEventSource source, String command) {
+            _source  = source;
             _command = command;
         }
 
-        public Queue(String command, String target) {
+        public Queue(IEventSource source, String command, String target) {
+            _source  = source;
             _command = command;
             _target  = target;
         }
@@ -112,13 +127,17 @@ public class CSceneGraph  {
             try {
                 queueMap.remove(this);
 
+                Log.d(TAG, "Processing event: " + _command + " From: " + _source.getEventSourceName() + " TYPE: " + _source.getEventSourceType() + " Target: " + _target);
+
                 switch (_command) {
                     case TCONST.ENTER_SCENE:
 
                         mSceneName = _target;
 
                         try {
-                            _sceneNode = (tutor_node) mScope.mapSymbol(mSceneName);
+                            _scene = (scene_graph) mScope.mapSymbol(mSceneName);
+
+                            Log.d(TAG, "Processing Enter Scene: " + _scene.name + " - mapType: " + _scene.type );
 
                         } catch (Exception e) {
 
@@ -128,33 +147,35 @@ public class CSceneGraph  {
 
                     case TCONST.NEXT_NODE:
 
-                        switch (_sceneNode.applyNode()) {
+                        String sceneState = _scene.applyNode();
+
+                        switch (sceneState) {
 
                             // TCONST.NEXTSCENE is used to end the current scene and step through to the
                             // next scene in the TutorGraph.
 
                             case TCONST.NEXTSCENE:
-                                mTutorGraph.post(TCONST.NEXTSCENE);
+                                mTutorGraph.post(this, TCONST.NEXTSCENE);
                                 break;
 
                             // TCONST.WAIT indicates that next node will be driven by a
                             // completion event from the current action or some external user event.
-
+                            //
                             case TCONST.WAIT:
                                 break;
 
                             default:
-                                post(TCONST.NEXT_NODE);
+                                post(this, TCONST.NEXT_NODE);
                                 break;
                         }
                         break;
 
                     case TCONST.PLAY:
-                        _sceneNode.play();
+                        _scene.play();
                         break;
 
                     case TCONST.STOP:
-                        _sceneNode.stop();
+                        _scene.stop();
                         break;
 
                     case TCONST.ENDTUTOR:
@@ -163,11 +184,11 @@ public class CSceneGraph  {
                         //
                         terminateQueue();
 
-                        mTutorGraph.post(TCONST.ENDTUTOR);
+                        mTutorGraph.post(this, TCONST.ENDTUTOR);
                         break;
 
                     case TCONST.GOTO_NODE:
-                        _sceneNode.gotoNode(_target);
+                        _scene.gotoNode(_target);
                         break;
                 }
             }
@@ -216,6 +237,8 @@ public class CSceneGraph  {
      */
     private void enQueue(Queue qCommand) {
 
+        Log.d(TAG, "Processing POST to SceneGraph: " + qCommand._command + " - from: " +  qCommand._source.getEventSourceName() + " - target: " + qCommand._target );
+
         if(!mDisabled) {
             queueMap.put(qCommand, qCommand);
 
@@ -228,9 +251,9 @@ public class CSceneGraph  {
      *
      * @param command
      */
-    public void post(String command) {
+    public void post(IEventSource source, String command) {
 
-        enQueue(new Queue(command));
+        enQueue(new Queue(source, command));
     }
 
 
@@ -239,9 +262,9 @@ public class CSceneGraph  {
      *
      * @param command
      */
-    public void post(String command, String target) {
+    public void post(IEventSource source, String command, String target) {
 
-        enQueue(new Queue(command, target));
+        enQueue(new Queue(source, command, target));
     }
 
 

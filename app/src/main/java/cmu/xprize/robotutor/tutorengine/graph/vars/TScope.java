@@ -138,7 +138,7 @@ public class TScope implements IScope2 {
      * @param source
      * @return
      */
-    public String resolveTemplate(String source) {
+    public String parseTemplate(String source) {
 
         int    _i1    = 0;
 

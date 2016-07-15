@@ -43,6 +43,9 @@ public class CBubble extends FrameLayout {
 
     private boolean           mOnScreen = false;
 
+    private String            mCorrectVal;
+    private String            mStimulusVal;
+
     private ImageView         mIcon;
     private TextView          mText;
     private float             mScale;
@@ -96,6 +99,7 @@ public class CBubble extends FrameLayout {
         setScale(1.0f);
     }
 
+
     public void onDestroy() {
 
         if(bubblepop != null) {
@@ -103,6 +107,25 @@ public class CBubble extends FrameLayout {
             bubblepop = null;
         }
     }
+
+
+    public void configData(String stimulusVal, String correctVal) {
+
+        mCorrectVal = correctVal;
+        mStimulusVal = stimulusVal;
+    }
+
+
+    public boolean isCorrect() {
+
+        return mCorrectVal.equals(mStimulusVal);
+    }
+
+
+    public String getStimulus() {
+        return mStimulusVal;
+    }
+
 
     public boolean getOnScreen() {
         return mOnScreen;

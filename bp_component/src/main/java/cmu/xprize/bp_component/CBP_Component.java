@@ -237,6 +237,8 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
         _touchedBubble = bubble;
     }
 
+
+
     //************************************************************************
     //************************************************************************
     // Tutor Scriptable methods  Start
@@ -246,6 +248,22 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     // TClass domain where TScope lives providing access to tutor scriptables
     //
     public void applyEvent(String event){};
+
+
+    // Tutor methods  End
+    //************************************************************************
+    //************************************************************************
+
+
+    //************************************************************************
+    //************************************************************************
+    // publish component state data - START
+
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    protected void publishState(CBubble bubble) {};
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
@@ -260,11 +278,9 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     }
 
 
-    // Tutor methods  End
+    // publish component state data - EBD
     //************************************************************************
     //************************************************************************
-
-
 
 
     //************ Serialization
