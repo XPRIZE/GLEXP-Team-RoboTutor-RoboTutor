@@ -6,7 +6,6 @@ android {
 
     defaultConfig {
         applicationId "cmu.xprize.robotutor"
-
         minSdkVersion 21
 
         // Note that using taeget version 22 bypasses the new run-time permissions found
@@ -33,7 +32,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:percent:23.2.0'
@@ -49,5 +48,5 @@ dependencies {
     compile project(path: ':bp_component')
     compile project(path: ':bp_component')
     compile project(':asm_component')
-
+    compile project(':ak_component')
 }
