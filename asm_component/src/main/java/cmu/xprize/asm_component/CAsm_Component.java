@@ -19,21 +19,19 @@ import cmu.xprize.util.JSON_Helper;
 /**
  * Created by mayankagrawal on 6/27/16.
  */
-public class CAsm_Component extends LinearLayout implements ILoadableObject {
+public class CAsm_Component extends LinearLayout implements ILoadableObject, View.OnClickListener {
 
     private Context mContext;
 
     protected String mDataSource;
+    private int _dataIndex;
 
     private int[] numbers;
     protected Integer corValue;
-
     protected String operation;
-
     protected String currImage;
 
     protected int numAlleys = 0;
-    private int _dataIndex;
 
     private float scale = getResources().getDisplayMetrics().density;
     protected int alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
@@ -41,6 +39,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject {
     protected ArrayList<CAsm_Alley> allAlleys = new ArrayList<>();
 
     protected IDotMechanics mechanics = new CAsm_MechanicBase();
+
+    protected CAsm_LetterBoxLayout Scontent;
 
     // json loadable
     public CAsm_Data[] dataSource;
@@ -60,14 +60,17 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject {
 
     public CAsm_Component(Context context, AttributeSet attrs, int defStyle) {
 
-        super(context, attrs);
+        super(context, attrs, defStyle);
         init(context, attrs);
     }
 
     public void init(Context context, AttributeSet attrs) {
 
         setOrientation(VERTICAL);
-        setOnClickListener(clickListener);
+        setOnClickListener(this);
+
+        inflate(getContext(), R.layout.asm_container, this);
+
 
         mContext = context;
 
@@ -84,6 +87,12 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject {
                 a.recycle();
             }
         }
+
+        // Get the letterboxed game container
+        //
+        Scontent = (CAsm_LetterBoxLayout) findViewById(R.id.Scontent);
+        Scontent.setOnClickListener(this);
+
 
     }
 
@@ -121,8 +130,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject {
 
         readInData(data);
 
-        // update alleys
+        // TODO: talk about whether this should be part of base mechanics
 
+        // update alleys
         for (int i = 0; i < numbers.length; i++) {
 
             val = numbers[i];
@@ -145,7 +155,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject {
         }
 
         // delete extra alleys
-
         int delta = numAlleys - numbers.length;
 
         if (delta > 0) {
@@ -210,7 +219,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject {
 
         newAlley.setParams(val, currImage, id, operation, clickable);
 
-        addView(newAlley, index);
+        Scontent.addView(newAlley, index);
         allAlleys.add(index, newAlley);
 
         numAlleys++;
@@ -221,8 +230,10 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject {
     private void delAlley() {
 
         int index = numAlleys - 1;
+        CAsm_Alley toRemove = allAlleys.get(index);
 
-        allAlleys.get(index).removeAllViews();
+        toRemove.removeAllViews();
+        Scontent.removeView(toRemove);
         allAlleys.remove(index);
 
         numAlleys--;
@@ -236,7 +247,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject {
         if (!correct) {
             allAlleys.get(numAlleys-1).getEditText().setText(""); // reset answer text
         }
-
         return correct;
     }
 
@@ -246,11 +256,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject {
 
 //  TODO: fix the onTouch to see results
 
-    private OnClickListener clickListener = new OnClickListener() {
-        public void onClick(View v) {
-            mechanics.handleClick();
-        }
-    };
+ public void onClick(View v) {mechanics.handleClick();}
+
 
 
     @Override

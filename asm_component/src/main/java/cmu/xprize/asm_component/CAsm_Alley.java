@@ -14,8 +14,8 @@ import android.widget.LinearLayout;
  */
 public class CAsm_Alley extends LinearLayout {
 
-    private EditText num;
-    private DotBag   dotBag;
+    private EditText SText;
+    private DotBag   SdotBag;
 
     float scale = getResources().getDisplayMetrics().density;
     final int textSize = (int)(ASM_CONST.textSize*scale);
@@ -43,8 +43,8 @@ public class CAsm_Alley extends LinearLayout {
 
     private void init(Context context, AttributeSet attrs) {
 
-        num = new EditText(context);
-        dotBag = new DotBag(context);
+        SText = new EditText(context);
+        SdotBag = new DotBag(context);
         setClipChildren(false);
         setClipToPadding(false);
     }
@@ -57,36 +57,36 @@ public class CAsm_Alley extends LinearLayout {
 
     private void createEditText(int val, int id, String operation) {
 
-        num = new EditText(getContext());
+        SText = new EditText(getContext());
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 textSize*2, LayoutParams.MATCH_PARENT);
         lp.setMarginEnd(textSize/2);
-        num.setLayoutParams(lp);
+        SText.setLayoutParams(lp);
 
-        num.setBackground(null);
-        num.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
-        num.setTextSize(textSize/2);
-        num.setTextColor(Color.BLACK);
-        num.setPadding(0, 0, rightPadding, 0);
+        SText.setBackground(null);
+        SText.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
+        SText.setTextSize(textSize/2);
+        SText.setTextColor(Color.BLACK);
+        SText.setPadding(0, 0, rightPadding, 0);
 
         updateEditText(val, id, operation);
 
-        addView(num);
+        addView(SText);
     }
 
     private void createDotBag(int rows, int cols, String imageName, boolean clickable) {
 
-        dotBag = new DotBag(getContext());
-        dotBag.setParams(textSize, rows, cols, clickable, imageName);
+        SdotBag = new DotBag(getContext());
+        SdotBag.setParams(textSize, rows, cols, clickable, imageName);
 
-        addView(dotBag);
+        addView(SdotBag);
 
     }
 
     public void update(int val, String image, int id, String operation, boolean clickable) {
 
-        dotBag.update(1, val, image, clickable); // TODO: fix hard coded 1
+        SdotBag.update(1, val, image, clickable); // TODO: fix hard coded 1
         updateEditText(val, id, operation);
 
     }
@@ -94,22 +94,22 @@ public class CAsm_Alley extends LinearLayout {
     private void updateEditText (int val, int id, String operation) {
 
         if (id == ASM_CONST.REGULAR) {
-            num.setText(Integer.toString(val));
-            num.setPaintFlags(0);
-            num.setEnabled(false);
-            num.setBackground(null);
+            SText.setText(Integer.toString(val));
+            SText.setPaintFlags(0);
+            SText.setEnabled(false);
+            SText.setBackground(null);
         }
         else if (id == ASM_CONST.OPERATION) {
-            num.setText(operation + " " + Integer.toString(val));
-            num.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
-            num.setEnabled(false);
-            num.setBackground(null);
+            SText.setText(operation + " " + Integer.toString(val));
+            SText.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+            SText.setEnabled(false);
+            SText.setBackground(null);
         }
         else { // id == ASM_CONST.RESULT
-            num.setText("");
-            num.setPaintFlags(0);
-            num.setEnabled(true);
-            num.setBackground(getResources().getDrawable(R.drawable.back));
+            SText.setText("");
+            SText.setPaintFlags(0);
+            SText.setEnabled(true);
+            SText.setBackground(getResources().getDrawable(R.drawable.back));
         }
 
     }
@@ -117,7 +117,7 @@ public class CAsm_Alley extends LinearLayout {
     public Integer getNum() {
 
         try {
-            return Integer.parseInt(num.getText().toString());
+            return Integer.parseInt(SText.getText().toString());
         }
         catch (NumberFormatException e) {
             return null;
@@ -127,10 +127,10 @@ public class CAsm_Alley extends LinearLayout {
     }
 
     public DotBag getDotBag() {
-        return dotBag;
+        return SdotBag;
     }
 
     public EditText getEditText() {
-        return num;
+        return SText;
     }
 }

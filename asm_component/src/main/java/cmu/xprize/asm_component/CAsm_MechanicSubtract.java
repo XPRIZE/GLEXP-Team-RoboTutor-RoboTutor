@@ -16,10 +16,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
     public CAsm_MechanicSubtract(CAsm_Component parent) {super.init(parent);}
 
-    @Override
-    public String getOperation() {
-        return "-";
-    }
+    protected String operation = "-";
 
     @Override
     public void handleClick() {

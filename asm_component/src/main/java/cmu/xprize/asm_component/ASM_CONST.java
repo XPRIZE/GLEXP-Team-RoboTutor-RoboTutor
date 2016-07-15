@@ -16,4 +16,7 @@ public class ASM_CONST {
 
     public static final int borderWidth = 3;
 
+    public static final int DESIGNWIDTH           = 2560;
+    public static final int DESIGNHEIGHT          = 1620;
+
 }

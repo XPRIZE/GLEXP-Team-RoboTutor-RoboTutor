@@ -10,17 +10,14 @@ import android.animation.ObjectAnimator;
 public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics {
 
     static final String TAG = "CAsm_MechanicAdd";
-
     public CAsm_MechanicAdd(CAsm_Component parent) {super.init(parent);}
+
+    protected String operation = "+";
 
     @Override
     public void preClickAnimation() {
     }
 
-    @Override
-    public String getOperation() {
-        return "+";
-    }
 
     @Override
     public void handleClick() {

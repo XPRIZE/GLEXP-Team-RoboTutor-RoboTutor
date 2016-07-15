@@ -18,6 +18,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     protected ArrayList<CAsm_Alley> allAlleys;
     protected CAsm_Component parent;
+    protected String operation = "";
 
     static final String TAG = "CAsm_MechanicBase";
 
@@ -37,7 +38,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
     }
 
     public String getOperation() {
-        return "";
+        return operation;
     }
 
     // TODO: fix this function - copied from stack overflow
