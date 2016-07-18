@@ -192,6 +192,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
             case "-":
                 mechanics = new CAsm_MechanicSubtract(this);
                 break;
+            case "x":
+                mechanics = new CAsm_MechanicMultiply(this);
+                break;
         }
     }
 

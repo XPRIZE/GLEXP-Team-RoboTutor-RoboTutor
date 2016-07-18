@@ -249,7 +249,7 @@ public class DotBag extends TableLayout {
     @Override
     protected void onDraw(Canvas canvas) {
 
-        canvas.drawRoundRect(bounds, size, size, borderPaint);
+        canvas.drawRoundRect(bounds, size/2, size/2, borderPaint);
         resetBounds();
 
     }
@@ -437,6 +437,8 @@ public class DotBag extends TableLayout {
         bounds.set(borderWidth, borderWidth, size*(cols+1) - borderWidth, rowsToUse*size - borderWidth);
 
     }
+
+    public TableRow getRow(int index) {return allTableRows.get(index); }
 
 
 
