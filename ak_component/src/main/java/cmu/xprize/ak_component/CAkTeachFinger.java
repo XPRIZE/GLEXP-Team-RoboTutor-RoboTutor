@@ -61,6 +61,15 @@ public class CAkTeachFinger extends TextView {
         PLane = CAkPlayer.Lane.MID;
     }
 
+    public void reset(Context context, AttributeSet attrs)
+    {
+        words="Try touching here to change lane";
+        firstright=FirstRight.TRUE;
+        secondleft=SecondLeft.TRUE;
+        finishTeaching = false;
+        init(context,attrs);
+    }
+
     public void update() {
         if(getLayoutParams() != null)
             params = (PercentRelativeLayout.LayoutParams) getLayoutParams();
@@ -90,7 +99,7 @@ public class CAkTeachFinger extends TextView {
 
     public void onTouch(MotionEvent event, CAkPlayer CAkPlayer){
         int touchX = (int)event.getX();
-        int width = CAkPlayer.getWidth();
+        int width = getWidth();
         PLane=CAkPlayer.getLane();
 
         if(touchX >= CAkPlayer.getX() + width / 2 &&
