@@ -5,13 +5,16 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.PointF;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.animation.LinearInterpolator;
@@ -72,8 +75,6 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     private Random random;
     private SoundPool soundPool;
 
-    private int errornum=0;
-
     private boolean lastCorrect = true;
     private Boolean isFirstInstall;
 
@@ -89,6 +90,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     public int          gameSpeed          ;
     public CAk_Data[]   dataSource         ;
 
+    public int errornum=0;
 
     public CAk_Component(Context context) {
         super(context);
@@ -123,13 +125,13 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
     }
 
-        /**
-         *
-         * Init method for game
-         * Init all objects which will be allocated only once here,
-         * like background, player and background city animation.
-         *
-         */
+    /**
+     *
+     * Init method for game
+     * Init all objects which will be allocated only once here,
+     * like background, player and background city animation.
+     *
+     */
 
     public void init(Context context, AttributeSet attrs) {
         inflate(getContext(), R.layout.akira_layout, this);
@@ -157,6 +159,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         sidewalkRightPoints[1] = new PointF();
 
         random = new Random();
+
 
         isFirstInstall=true;
         if(isFirstInstall==false)
@@ -361,6 +364,8 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                             soundPool.play(incorrectMedia, 1.0f, 1.0f, 1, 0, 1.0f);
                             lastCorrect=false;
                             errornum+=1;
+                            if(errornum==3)
+                                dialog();
                         }
                     }
                 });
@@ -379,6 +384,36 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
             mainHandler.postDelayed(gameRunnable, 100);
         }
     };
+
+
+    public void dialog()
+    {
+        AlertDialog.Builder builder=new AlertDialog.Builder(mContext);
+        builder.setMessage("Do you need help?");
+        builder.setTitle("Help");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //show finger tutor
+                errornum = 0;
+                player.lane= CAkPlayer.Lane.MID;
+                isFirstInstall=true;
+                teachFinger.finishTeaching=false;
+                teachFinger.setVisibility(VISIBLE);
+                teachFinger.reset(mContext,null);
+                flag=true;
+                dialogInterface.dismiss();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                errornum = 0;
+                dialogInterface.dismiss();
+            }
+        });
+        builder.create().show();
+    }
 
 
     /**
@@ -406,7 +441,6 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
             if(isFirstInstall && !teachFinger.finishTeaching)
                 teachFinger.onTouch(event, player);
             player.onTouchEvent(event, scaleFactorX);
-
             soundPool.play(carscreechMedia, 1.0f, 1.0f, 1, 0, 1.0f);
 
             return true;
@@ -445,7 +479,4 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         _dataIndex = 0;
 
     }
-
-
-
 }
