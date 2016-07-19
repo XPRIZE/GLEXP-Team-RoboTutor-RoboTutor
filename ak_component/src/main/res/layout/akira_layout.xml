@@ -54,8 +54,29 @@
         android:textSize="40sp"
         android:id="@+id/score"
     />
-
-
-
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_marginTopPercent="65%"
+        app:layout_marginLeftPercent="80%"
+        android:id="@+id/speedometer"
+        android:src="@drawable/speedometer"
+        />
+    <Button
+        app:layout_marginTopPercent="65%"
+        app:layout_marginLeftPercent="80%"
+        android:id="@+id/minusspeed"
+        android:text="-"
+        android:layout_width="30dp"
+        android:layout_height="45dp"
+        />
+    <Button
+        app:layout_marginTopPercent="65%"
+        android:id="@+id/plusspeed"
+        app:layout_marginLeftPercent="90%"
+        android:layout_width="30dp"
+        android:layout_height="45dp"
+        android:text="+"
+        />
 
 </android.support.percent.PercentRelativeLayout>
