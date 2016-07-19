@@ -165,7 +165,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
         setMechanics();
 
-        mechanics.preClickAnimation();
+        mechanics.preClickSetup();
 
     }
 
