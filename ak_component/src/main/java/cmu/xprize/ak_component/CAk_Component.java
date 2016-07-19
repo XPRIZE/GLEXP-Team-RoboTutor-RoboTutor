@@ -26,6 +26,9 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 import cmu.xprize.util.CAnimatorUtil;
@@ -90,10 +93,14 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
     private boolean speedIsZero=false;
     private int extraSpeed=0;
+    private boolean animatorStop=false;
 
     //json loadable
     public int          gameSpeed          ;
     public CAk_Data[]   dataSource         ;
+    private List<Animator> ongoingAnimator;
+    private Animator cityAnimator;
+    private CAkQuestionBoard stopQuestionBoard;
 
     public int errornum=0;
 
@@ -152,7 +159,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         minusSpeed = (Button) findViewById(R.id.minusspeed);
         plusSpeed = (Button) findViewById(R.id.plusspeed);
 
-        Animator cityAnimator = CAnimatorUtil.configTranslate(cityBackground,
+        cityAnimator = CAnimatorUtil.configTranslate(cityBackground,
                 100000, 0, new PointF(0, -HEIGHT));
 
 
@@ -166,6 +173,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         sidewalkRightPoints[1] = new PointF();
 
         random = new Random();
+        ongoingAnimator=new ArrayList<>();
 
         minusSpeed.setOnClickListener(new OnClickListener() {
             @Override
@@ -276,8 +284,6 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
             int s=extraSpeed*500;
 
-            final Animator sidewalkAnimator,sidewalkAnimator1;
-
             /**
              * Add side view
              *
@@ -285,7 +291,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
              * Different side view object, random elapse and position
              */
 
-            if(elapseRight > 3500-s) {
+            if(!animatorStop&&elapseRight > 3500-s) {
 
                 int r = random.nextInt() % 3;
 
@@ -304,15 +310,17 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
                 addView(sidewalkStuff);
 
-                sidewalkAnimator = CAnimatorUtil.configTranslate(sidewalkStuff,
+                final Animator sidewalkAnimator = CAnimatorUtil.configTranslate(sidewalkStuff,
                         3500-s, 0, sidewalkRightPoints[0], sidewalkRightPoints[1]
                 );
+                ongoingAnimator.add(sidewalkAnimator);
 
                 sidewalkAnimator.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
                         removeView(sidewalkStuff);
+                        ongoingAnimator.remove(sidewalkAnimator);
                     }
                 });
 
@@ -320,7 +328,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                 sidewalkRightTime = System.nanoTime();
             }
 
-            if(elapseLeft > 2500-s) {
+            if(!animatorStop&&elapseLeft > 2500-s) {
                 int r = random.nextInt() % 3;
 
                 final ImageView sidewalkStuff  = new ImageView(mContext);
@@ -338,14 +346,16 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
                 addView(sidewalkStuff);
 
-                sidewalkAnimator1 = CAnimatorUtil.configTranslate(sidewalkStuff,
+                final Animator sidewalkAnimator1 = CAnimatorUtil.configTranslate(sidewalkStuff,
                         3500-s, 0, sidewalkLeftPoints[0], sidewalkLeftPoints[1]
                 );
+                ongoingAnimator.add(sidewalkAnimator1);
                 sidewalkAnimator1.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
                         removeView(sidewalkStuff);
+                        ongoingAnimator.remove(sidewalkAnimator1);
                     }
                 });
                 sidewalkAnimator1.start();
@@ -361,7 +371,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
              *  Using drawable as questionboard
              */
 
-            if(elapse > 5000-s && teachFinger.finishTeaching) {
+            if(!animatorStop&&elapse > 5000-s && teachFinger.finishTeaching) {
                 final CAkQuestionBoard questionBoard = new CAkQuestionBoard(mContext);
 
                 LayoutParams params = new LayoutParams((int)(90 * scaleFactorX), (int)(30 * scaleFactorY));
@@ -370,6 +380,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
                 final AnimatorSet questionboardAnimator = CAnimatorUtil.configZoomIn(questionBoard, 3500,
                         0, new LinearInterpolator(), 4f);
+                //ongoingAnimator.add(questionboardAnimator);
 
                 ValueAnimator questionboardTranslationAnimator = ObjectAnimator.ofFloat(questionBoard,
                         "y", getHeight() * 0.25f, getHeight() * 0.75f);
@@ -382,12 +393,23 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        removeView(questionBoard);
                         if(judge(questionBoard)){
-                            player.score += 1;
                             soundPool.play(correctMedia, 1.0f, 1.0f, 1, 0, 1.0f);
-                            lastCorrect=true;
-                            errornum=0;
+                            if(speedIsZero==false) {
+                                player.score += 1;
+                                lastCorrect = true;
+                                errornum = 0;
+                            }
+                            else
+                            {
+                                animatorStop=false;
+                                for(int i=0;i<ongoingAnimator.size();i++)
+                                {
+                                    ongoingAnimator.get(i).resume();
+                                }
+                                cityAnimator.resume();
+                            }
+                            removeView(questionBoard);
                         }else{
                             if(speedIsZero==false) {
                                 player.score -= 1;
@@ -396,16 +418,21 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                                 errornum += 1;
                                 if (errornum == 3)
                                     dialog();
+                                removeView(questionBoard);
                             }
                             else{
-                                /*if(sidewalkAnimator1!= null)
-                                    sidewalkAnimator1.pause();
-                                if(sidewalkAnimator!=null) {
-                                    sidewalkAnimator.pause();
-                                }*/
-                                questionboardAnimator.pause();
+                                animatorStop=true;
+                                cityAnimator.pause();
+                                for(int i=0;i<ongoingAnimator.size();i++)
+                                {
+                                    ongoingAnimator.get(i).pause();
+                                    System.out.println(""+ongoingAnimator.get(i));
+                                }
+                                stopQuestionBoard=questionBoard;
+                                //removeView(questionBoard);
                             }
                         }
+                        //ongoingAnimator.remove(questionboardAnimator);
                     }
                 });
 
@@ -481,7 +508,19 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                 teachFinger.onTouch(event, player);
             player.onTouchEvent(event, scaleFactorX);
             soundPool.play(carscreechMedia, 1.0f, 1.0f, 1, 0, 1.0f);
-
+            if(animatorStop)
+            {
+                if(judge(stopQuestionBoard))
+                {
+                    animatorStop=false;
+                    for(int i=0;i<ongoingAnimator.size();i++)
+                    {
+                        ongoingAnimator.get(i).resume();
+                    }
+                    cityAnimator.resume();
+                    removeView(stopQuestionBoard);
+                }
+            }
             return true;
         }
         if(event.getAction()==MotionEvent.ACTION_UP)
