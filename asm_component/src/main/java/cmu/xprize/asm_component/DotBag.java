@@ -1,25 +1,22 @@
 package cmu.xprize.asm_component;
 
-import android.animation.LayoutTransition;
+
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.shapes.OvalShape;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationSet;
-import android.view.animation.LayoutAnimationController;
+import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+
 
 /**
  * Created by Diego on 6/23/2016.
@@ -76,30 +73,6 @@ public class DotBag extends TableLayout {
 
     }
 
-    public void setRows(int _rows) {this.rows = _rows;}
-
-    public void setCols(int _cols) {
-        this.cols = _cols;
-    }
-
-    public void resetDots() {
-
-        TableRow currTableRow;
-
-        for (int i = 0; i < allTableRows.size(); i++) {
-            currTableRow = allTableRows.get(i);
-
-            for (int j = 0; j < currTableRow.getVirtualChildCount(); j++){
-
-                Dot dot = (Dot) currTableRow.getVirtualChildAt(j);
-
-                dot.setImageName(imageName);
-                dot.setHollow(isHollow);
-                dot.setIsClickable(isClickable);
-            }
-        }
-    }
-
     public void setParams(int size, int rows, int cols, boolean isClickable, String imageName) {
 
         this.rows = rows;
@@ -121,18 +94,6 @@ public class DotBag extends TableLayout {
 
     }
 
-    private void setZero() {
-
-        rows = 0;
-        cols = 0;
-        removeAllViews();
-        allTableRows.clear();
-        params.width = size;
-        params.height = size;
-        setLayoutParams(params);
-        resetBounds();
-
-    }
 
     public void update(int _rows, int _cols, String _imageName, boolean clickable) {
 
@@ -191,24 +152,35 @@ public class DotBag extends TableLayout {
 
     }
 
-    private TableRow addRow(int index) {
+    private void setZero() {
 
-        if (allTableRows.size() == 0) {
-            params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            setLayoutParams(params);
+        rows = 0;
+        cols = 0;
+        removeAllViews();
+        allTableRows.clear();
+        params.width = size;
+        params.height = size;
+        setLayoutParams(params);
+        resetBounds();
+
+    }
+
+    public void resetDots() {
+
+        TableRow currTableRow;
+
+        for (int i = 0; i < allTableRows.size(); i++) {
+            currTableRow = allTableRows.get(i);
+
+            for (int j = 0; j < currTableRow.getVirtualChildCount(); j++){
+
+                Dot dot = (Dot) currTableRow.getVirtualChildAt(j);
+
+                dot.setImageName(imageName);
+                dot.setHollow(isHollow);
+                dot.setIsClickable(isClickable);
+            }
         }
-
-        TableRow tableRow = new TableRow(context);
-
-        DotBag.LayoutParams lp = new DotBag.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        lp.setMargins(size / 2, 0, size / 2, 0);
-        tableRow.setLayoutParams(lp);
-
-        addView(tableRow, index);
-        allTableRows.add(index, tableRow);
-
-        return tableRow;
     }
 
     public Dot addDot(int row, int col) {
@@ -231,6 +203,28 @@ public class DotBag extends TableLayout {
         return dot;
     }
 
+    private TableRow addRow(int index) {
+
+        if (allTableRows.size() == 0) {
+            params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            setLayoutParams(params);
+        }
+
+        TableRow tableRow = new TableRow(context);
+
+        DotBag.LayoutParams lp = new DotBag.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        lp.setMargins(size / 2, 0, size / 2, 0);
+        tableRow.setLayoutParams(lp);
+
+        addView(tableRow, index);
+        allTableRows.add(index, tableRow);
+
+        return tableRow;
+    }
+
+
+
     private void setPaint() {
 
         borderPaint.setStrokeWidth(borderWidth);
@@ -242,14 +236,10 @@ public class DotBag extends TableLayout {
 
     }
 
-    public Dot getDot(int row, int col) {
-        return (Dot) allTableRows.get(row).getVirtualChildAt(col);
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
 
-        canvas.drawRoundRect(bounds, size, size, borderPaint);
+        canvas.drawRoundRect(bounds, size/2, size/2, borderPaint);
         resetBounds();
 
     }
@@ -266,31 +256,8 @@ public class DotBag extends TableLayout {
         }
     };
 
-    public boolean getIsClicked(){
 
-        if (isClicked) {
-            isClicked = false; // reset
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
 
-    public boolean hasClickedDot() {
-        TableRow tableRow = null;
-        for (int row = 0; row < getChildCount(); row++){
-            tableRow = (TableRow) getChildAt(row);
-            for (int col = 0; col < tableRow.getChildCount(); col ++) {
-                Dot dot = (Dot) tableRow.getChildAt(col);
-                if (dot.getIsClicked()) {
-                    return true;
-                }
-            }
-
-        }
-        return false;
-    }
     public Dot findClickedDot() {
 
         TableRow currTableRow;
@@ -309,27 +276,6 @@ public class DotBag extends TableLayout {
         return null;
     }
 
-    private void updateRows() {this.rows = allTableRows.size(); }
-
-    private void updateCols() {
-
-        int currCols;
-        int maxCols = 0;
-        TableRow currTableRow;
-
-        for (int i = 0; i < this.rows; i++) {
-
-            currTableRow = allTableRows.get(i);
-            currCols = currTableRow.getVirtualChildCount();
-            maxCols = (currCols > maxCols)?currCols:maxCols;
-        }
-
-        this.cols = maxCols;
-
-    }
-
-    public int getRows(){ return this.rows;}
-    public int getCols(){ return this.cols;}
 
     public void removeDot(Dot toRemove) {
 
@@ -342,32 +288,6 @@ public class DotBag extends TableLayout {
         updateCols();
 
         resetBounds();
-
-    }
-
-    public String getImageName() {
-        return imageName;
-    }
-
-    public int getSize() {return this.size; }
-
-    public void setHollow(boolean _isHollow) {
-
-        TableRow currTableRow;
-
-        this.isHollow = _isHollow;
-
-        for (int i = 0; i < allTableRows.size(); i++) {
-            currTableRow = allTableRows.get(i);
-
-            for (int j = 0; j < currTableRow.getVirtualChildCount(); j++){
-
-                Dot dot = (Dot) currTableRow.getVirtualChildAt(j);
-
-                dot.setHollow(isHollow);
-            }
-        }
-
     }
 
     public ArrayList<Dot> getVisibleDots(){
@@ -420,6 +340,64 @@ public class DotBag extends TableLayout {
         }
 
     }
+    /* Adapted from Kevin's CAnimatorUtil. Using translationX instead of X. */
+    public void wiggle(long duration, int repetition, long delay, float magnitude) {
+
+        float offset = magnitude*getWidth();
+        float[] pts = {0, offset, 0, -offset, 0};
+        ObjectAnimator anim = ObjectAnimator.ofFloat(this, "translationX", pts);
+        anim.setDuration(duration);
+        anim.setRepeatCount(repetition);
+        anim.setStartDelay(delay);
+        anim.setInterpolator(new LinearInterpolator());
+        anim.start();
+    }
+
+    private void resetBounds() {
+
+        int rowsToUse = (rows == 0)?1:rows; // to enable drawing of zero dotbag
+
+        bounds.set(borderWidth, borderWidth, size*(cols+1) - borderWidth, rowsToUse*size - borderWidth);
+
+    }
+
+    public void setIsClickable(boolean _isClickable) {
+
+        TableRow currTableRow;
+
+        this.isClickable = _isClickable;
+
+        for (int i = 0; i < allTableRows.size(); i++) {
+            currTableRow = allTableRows.get(i);
+
+            for (int j = 0; j < currTableRow.getVirtualChildCount(); j++){
+                Dot dot = (Dot) currTableRow.getVirtualChildAt(j);
+                dot.setIsClickable(isClickable);
+            }
+        }
+    }
+
+    public void setHollow(boolean _isHollow) {
+
+        TableRow currTableRow;
+
+        this.isHollow = _isHollow;
+
+        for (int i = 0; i < allTableRows.size(); i++) {
+            currTableRow = allTableRows.get(i);
+
+            for (int j = 0; j < currTableRow.getVirtualChildCount(); j++){
+                Dot dot = (Dot) currTableRow.getVirtualChildAt(j);
+                dot.setHollow(isHollow);
+            }
+        }
+
+    }
+
+    public void setRows(int _rows) {this.rows = _rows;}
+    public void setCols(int _cols) {
+        this.cols = _cols;
+    }
 
     public void setRight(float newRight) {
 
@@ -428,13 +406,47 @@ public class DotBag extends TableLayout {
 
     }
 
+    public String getImageName() {
+        return imageName;
+    }
+    public int getSize() {return this.size; }
+    public int getRows(){ return this.rows;}
+    public int getCols(){ return this.cols;}
+
+    public TableRow getRow(int index) {return allTableRows.get(index); }
+
     public RectF getBounds() {return this.bounds; }
 
-    public void resetBounds() {
+    public Dot getDot(int row, int col) {
+        return (Dot) allTableRows.get(row).getVirtualChildAt(col);
+    }
 
-        int rowsToUse = (rows == 0)?1:rows; // to enable drawing of zero dotbag
+    public boolean getIsClicked(){
 
-        bounds.set(borderWidth, borderWidth, size*(cols+1) - borderWidth, rowsToUse*size - borderWidth);
+        if (isClicked) {
+            isClicked = false; // reset
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    private void updateRows() {this.rows = allTableRows.size(); }
+
+    private void updateCols() {
+        int currCols;
+        int maxCols = 0;
+        TableRow currTableRow;
+
+        for (int i = 0; i < this.rows; i++) {
+
+            currTableRow = allTableRows.get(i);
+            currCols = currTableRow.getVirtualChildCount();
+            maxCols = (currCols > maxCols)?currCols:maxCols;
+        }
+
+        this.cols = maxCols;
 
     }
 

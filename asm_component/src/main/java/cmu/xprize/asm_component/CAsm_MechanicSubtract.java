@@ -19,6 +19,40 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     protected String operation = "-";
 
     @Override
+    public void preClickSetup() {
+
+        int numAlleys, rows, cols, size, dy;
+        String imageName;
+
+        numAlleys = allAlleys.size();
+
+        DotBag firstDotBag = allAlleys.get(0).getDotBag();
+        DotBag resultDotBag = allAlleys.get(numAlleys - 1).getDotBag();
+
+        rows = firstDotBag.getRows();
+        cols = firstDotBag.getCols();
+        imageName = firstDotBag.getImageName();
+        size = firstDotBag.getSize();
+
+        resultDotBag.setParams(size, rows, cols, false, imageName);
+        setAllParentsClip(resultDotBag, false);
+
+        firstDotBag.setHollow(true);
+
+        // calc distance
+        dy = 0;
+        for (int i = numAlleys - 1; i > 0; i--) {
+            dy += allAlleys.get(i).getHeight() + parent.alleyMargin;
+        }
+
+        resultDotBag.setTranslationY(-dy);
+        ObjectAnimator anim = ObjectAnimator.ofFloat(resultDotBag, "translationY", 0);
+        anim.setDuration(3000);
+        anim.start();
+
+    }
+
+    @Override
     public void handleClick() {
 
         Dot clickedDot = null;
@@ -99,39 +133,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
     }
 
-    @Override
-    public void preClickAnimation() {
 
-        int numAlleys, rows, cols, size, dy;
-        String imageName;
-
-        numAlleys = allAlleys.size();
-
-        DotBag firstDotBag = allAlleys.get(0).getDotBag();
-        DotBag resultDotBag = allAlleys.get(numAlleys - 1).getDotBag();
-
-        rows = firstDotBag.getRows();
-        cols = firstDotBag.getCols();
-        imageName = firstDotBag.getImageName();
-        size = firstDotBag.getSize();
-
-        resultDotBag.setParams(size, rows, cols, false, imageName);
-        setAllParentsClip(resultDotBag, false);
-
-        firstDotBag.setHollow(true);
-
-        // calc distance
-        dy = 0;
-        for (int i = numAlleys - 1; i > 0; i--) {
-            dy += allAlleys.get(i).getHeight() + parent.alleyMargin;
-        }
-
-        resultDotBag.setTranslationY(-dy);
-        ObjectAnimator anim = ObjectAnimator.ofFloat(resultDotBag, "translationY", 0);
-        anim.setDuration(3000);
-        anim.start();
-
-    }
 
 
 }

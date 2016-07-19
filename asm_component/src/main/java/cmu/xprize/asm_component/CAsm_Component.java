@@ -40,7 +40,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
     protected IDotMechanics mechanics = new CAsm_MechanicBase();
 
-    protected CAsm_LetterBoxLayout Scontent;
+    //protected CAsm_LetterBoxLayout Scontent;
 
     // json loadable
     public CAsm_Data[] dataSource;
@@ -69,7 +69,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         setOrientation(VERTICAL);
         setOnClickListener(this);
 
-        inflate(getContext(), R.layout.asm_container, this);
+        //inflate(getContext(), R.layout.asm_container, this);
 
 
         mContext = context;
@@ -90,8 +90,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
         // Get the letterboxed game container
         //
-        Scontent = (CAsm_LetterBoxLayout) findViewById(R.id.Scontent);
-        Scontent.setOnClickListener(this);
+        //Scontent = (CAsm_LetterBoxLayout) findViewById(R.id.Scontent);
+        //Scontent.setOnClickListener(this);
 
 
     }
@@ -192,6 +192,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
             case "-":
                 mechanics = new CAsm_MechanicSubtract(this);
                 break;
+            case "x":
+                mechanics = new CAsm_MechanicMultiply(this);
+                break;
         }
     }
 
@@ -219,7 +222,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
         newAlley.setParams(val, currImage, id, operation, clickable);
 
-        Scontent.addView(newAlley, index);
+        //Scontent.addView(newAlley, index);
+        addView(newAlley, index);
         allAlleys.add(index, newAlley);
 
         numAlleys++;
@@ -233,7 +237,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         CAsm_Alley toRemove = allAlleys.get(index);
 
         toRemove.removeAllViews();
-        Scontent.removeView(toRemove);
+        //Scontent.removeView(toRemove);
+        removeView(toRemove);
         allAlleys.remove(index);
 
         numAlleys--;
@@ -250,20 +255,12 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         return correct;
     }
 
-    public void UpdateValue() {
-    }
-
 
 //  TODO: fix the onTouch to see results
 
  public void onClick(View v) {mechanics.handleClick();}
 
 
-
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b);
-    }
 
     /**
      * Load the data source

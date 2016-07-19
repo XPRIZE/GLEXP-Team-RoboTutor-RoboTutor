@@ -29,13 +29,14 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     }
 
+    public void preClickSetup() {
+
+    }
+
     public void handleClick() {
 
     }
 
-    public void preClickAnimation() {
-
-    }
 
     public String getOperation() {
         return operation;
