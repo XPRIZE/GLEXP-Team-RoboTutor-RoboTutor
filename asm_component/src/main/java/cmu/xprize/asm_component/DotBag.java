@@ -1,25 +1,22 @@
 package cmu.xprize.asm_component;
 
-import android.animation.LayoutTransition;
+
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.shapes.OvalShape;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationSet;
-import android.view.animation.LayoutAnimationController;
+import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+
 
 /**
  * Created by Diego on 6/23/2016.
@@ -439,6 +436,24 @@ public class DotBag extends TableLayout {
     }
 
     public TableRow getRow(int index) {return allTableRows.get(index); }
+
+    /* Adapted from Kevin's CAnimatorUtil. Using translationX instead of X. */
+    public void wiggle(long duration, int repetition, long delay, float magnitude) {
+
+        float offset = magnitude*getWidth();
+        float[] pts = {0, offset, 0, -offset, 0};
+        ObjectAnimator anim = ObjectAnimator.ofFloat(this, "translationX", pts);
+        anim.setDuration(duration);
+        anim.setRepeatCount(repetition);
+        anim.setStartDelay(delay);
+        anim.setInterpolator(new LinearInterpolator());
+        anim.start();
+    }
+
+    public void setIsClickable(boolean _isClickable) {
+        this.isClickable = _isClickable;
+        resetDots();
+    }
 
 
 

@@ -4,7 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.graphics.RectF;
+import android.view.animation.LinearInterpolator;
 import android.widget.TableRow;
+
+import cmu.xprize.util.CAnimatorUtil;
 
 /**
  * Created by mayankagrawal on 7/13/16.
@@ -19,8 +22,11 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
     @Override
     public void preClickAnimation() {
 
-        // allAlleys.get(0).getDotBag().wiggle();
-        //allAlleys.get(1).getDotBag().setIsClickable(false);
+        DotBag firstBag = allAlleys.get(0).getDotBag();
+        firstBag.wiggle(300, 2, 100, .05f);
+
+        allAlleys.get(1).getDotBag().setIsClickable(false);
+
     }
 
 
@@ -57,9 +63,7 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         newRow.setTranslationY(-dy);
         clickedDot.setHollow(true);
 
-        ObjectAnimator anim = ObjectAnimator.ofFloat(newRow, "translationY", 0);
-        anim.setDuration(1000);
-        anim.start();
+
 
 
 
