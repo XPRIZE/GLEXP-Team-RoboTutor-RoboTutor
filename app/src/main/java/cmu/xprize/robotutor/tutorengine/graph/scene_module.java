@@ -104,17 +104,24 @@ public class scene_module extends scene_node implements ILoadableObject2 {
         //
         resetNode();
 
-        if(_ndx < tracks.length)
-        {
-            _nextAction = tracks[_ndx];
+        // TODO: At the moment this loop is used to allow Module callouts from timer events
+        // TODO: Make it so that timer events runin their own graph so this is not needed.
+        //
+        do {
 
-            _ndx++;
+            if(_ndx < tracks.length)
+            {
+                _nextAction = tracks[_ndx];
 
-            _moduleState = _nextAction.applyNode();
-        }
-        else {
-            _moduleState = TCONST.NONE;
-        }
+                _ndx++;
+
+                _moduleState = _nextAction.applyNode();
+            }
+            else {
+                _moduleState = TCONST.NONE;
+            }
+
+        }while(_moduleState.equals(TCONST.DONE));
 
         return _moduleState;
     }

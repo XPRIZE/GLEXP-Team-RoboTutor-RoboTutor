@@ -276,7 +276,11 @@ public class scene_node implements ILoadableObject2, IScriptable2 {
 
 
 
+
     // *** Serialization
+
+
+
 
     @Override
     public void loadJSON(JSONObject jsonObj, IScope2 scope) {

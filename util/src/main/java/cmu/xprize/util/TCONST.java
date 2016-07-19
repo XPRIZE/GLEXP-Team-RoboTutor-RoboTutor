@@ -64,6 +64,7 @@ public class TCONST {
     public static final String TYPE_CTUTORGRAPH = "CTutorGraph";
     public static final String EVENT_SCENEQUEUE = "Scene Queue Event";
     public static final String EVENT_TUTORGRAPH = "Tutor Graph Event";
+    public static final String AUDIO_REF        = "audio_ref";
 
 
     //*** Reading Tutor compatible string combinations

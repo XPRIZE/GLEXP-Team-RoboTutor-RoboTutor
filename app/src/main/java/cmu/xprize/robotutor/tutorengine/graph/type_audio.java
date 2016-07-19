@@ -19,6 +19,7 @@
 
 package cmu.xprize.robotutor.tutorengine.graph;
 
+import android.media.MediaPlayer;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -41,7 +42,7 @@ public class type_audio extends type_action implements IMediaListener {
     // index and duration are calibrated
 
     private CMediaManager                 mMediaManager;
-    private CMediaManager.mediaController mPlayer;
+    private CMediaManager.PlayerManager   mPlayer;
     private boolean                       mPreLoaded = false;
 
     private String                        mSoundSource;
@@ -52,9 +53,12 @@ public class type_audio extends type_action implements IMediaListener {
     public String        lang;
     public String        soundsource;
     public String        soundpackage;
-    public boolean       repeat = false;
-    public float         volume = -1f;
-    public long          index  = 0;
+
+    public boolean       repeat   = false;
+    public float         volume   = -1f;
+    public long          index    = 0;
+
+
 
     final static public String TAG = "type_audio";
 
@@ -79,31 +83,37 @@ public class type_audio extends type_action implements IMediaListener {
     @Override
     public void globalPause() {
 
-        if(mPlayer.isPlaying()) {
-            mWasPlaying = true;
+        if(mPlayer != null) {
+            if (mPlayer.isPlaying()) {
+                mWasPlaying = true;
 
-            mPlayer.stop();
+                mPlayer.stop();
+            }
         }
     }
 
     @Override
     public void globalPlay() {
 
-        if(mWasPlaying) {
-            mWasPlaying = false;
+        if(mPlayer != null) {
+            if (mWasPlaying) {
+                mWasPlaying = false;
 
-            Log.i(TAG, "global play");
-            mPlayer.play();
+                Log.i(TAG, "global play");
+                mPlayer.play();
+            }
         }
     }
 
     @Override
     public void globalStop() {
 
-        if(mPlayer.isPlaying()) {
-            mWasPlaying = true;
+        if(mPlayer != null) {
+            if (mPlayer.isPlaying()) {
+                mWasPlaying = true;
 
-            mPlayer.releasePlayer();
+                mPlayer.releasePlayer();
+            }
         }
     }
 
@@ -122,18 +132,33 @@ public class type_audio extends type_action implements IMediaListener {
      *
      */
     @Override
-    public void onCompletion() {
+    public void onCompletion(CMediaManager.PlayerManager playerManager) {
 
-        // Release the mediaController for reuse
+        // If not an AUDIOEVENT then we disconnect the player to allow reuse
         //
-        if(mPlayer != null)
-            mPlayer.detach();
+        if(!mode.equals(TCONST.AUDIOEVENT)) {
 
-        // Flows automatically increment to next scenegraph node.
+            // Release the mediaController for reuse
+            //
+            if (mPlayer != null) {
+                mPlayer.detach();
+                mPlayer = null;
+            }
+
+            // Flows automatically emit a NEXT_NODE event to next scenegraph.
+            //
+            if (mode.equals(TCONST.AUDIOFLOW)) {
+                Log.d(TAG, "Processing: Audio Flow");
+                _scope.tutor().eventNext();
+            }
+        }
+        // If this is an AUDIOEVENT type then the mPlayer was released alread but we need
+        // to let the independent playerManager know that it is no longer needed.
         //
-        if(mode.equals(TCONST.AUDIOFLOW)) {
-            Log.d(TAG, "Processing: Audio Flow");
-            _scope.tutor().eventNext();
+        else {
+            if (playerManager != null) {
+                playerManager.detach();
+            }
         }
     }
 
@@ -165,6 +190,7 @@ public class type_audio extends type_action implements IMediaListener {
 
     @Override
     public String applyNode() {
+
         String status = TCONST.DONE;
 
         // If the feature test passes then fire the event.
@@ -189,14 +215,16 @@ public class type_audio extends type_action implements IMediaListener {
                 // Events return done - so they may play on top of each other.
                 // streams and flows WAIT until completion before continuing.
                 //
-                if (mode.equals(TCONST.AUDIOEVENT))
+                if (mode.equals(TCONST.AUDIOEVENT)) {
                     status = TCONST.DONE;
+                }
 
-                // TCONST.STREAMEVENT or TCONST.FLOWEVENT wait for completio
+                // TCONST.STREAMEVENT or TCONST.FLOWEVENT wait for completion
                 //
                 // TCONST.FLOWEVENT automatically advances
-                else
+                else {
                     status = TCONST.WAIT;
+                }
             }
         }
 
@@ -209,6 +237,16 @@ public class type_audio extends type_action implements IMediaListener {
         if(mPlayer != null) {
             Log.i(TAG, "play");
             mPlayer.play();
+
+            // AUDIOEVENT mode tracks are fire and forget - i.e. we discnnect from the player
+            // and let it continue to completion independently.
+            //
+            // This allows this Audio element to be reused immediately - So we can fire another
+            // instance of the sound while the other is still playing.
+            //
+            if(mode == TCONST.AUDIOEVENT) {
+                mPlayer = null;
+            }
         }
     }
 

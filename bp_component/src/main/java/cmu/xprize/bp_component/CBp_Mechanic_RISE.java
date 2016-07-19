@@ -35,13 +35,10 @@ import cmu.xprize.util.TCONST;
 
 public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMechanic {
 
-    private int[]           _countRange    = {4, 4};
     private int             _travelTime    = 4800;
-    private int             _maxDistractor = 4;
-    private int             _distractorCnt = 2;
+    private int             stimNdx        = 0;
 
     private int             _prevColorNdx  = 0;
-    private CBubble         _prevBubble    = null;
     private float           _prevXpos      = 0;
 
     static final String TAG = "CBp_Mechanic_RISE";
@@ -108,23 +105,9 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
             nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
             nextBubble.setScale(getRandInRange(_scaleRange));
 
-            // Generate the index for the next item to display
-            // Constrain it so that we never present more than _maxDistractor items
-            // between stimulus item presentations.
+            // Cycle on the indexes to display
             //
-            int stimNdx = (int) (Math.random() * _currData.dataset.length);
-
-            if(stimNdx != _currData.stimulus_index) {
-                _distractorCnt++;
-
-                if(_distractorCnt >= _maxDistractor) {
-                    stimNdx = _currData.stimulus_index;
-                    _distractorCnt = 0;
-                }
-            }
-            else {
-                _distractorCnt = 0;
-            }
+            stimNdx =( stimNdx + 1) % _currData.dataset.length;
 
             String stiumulusVal = mComponent.stimulus_data[_currData.dataset[stimNdx]];
 
@@ -246,7 +229,7 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
                     if (launchBubble()) {
 
-                        int[] launchRange = {_travelTime / _countRange[BP_CONST.MAX], _travelTime / _countRange[BP_CONST.MIN]};
+                        int[] launchRange = {_travelTime / mComponent.countRange[BP_CONST.MAX], _travelTime / mComponent.countRange[BP_CONST.MIN]};
 
                         delay = getRandInRange(launchRange);
 
@@ -279,12 +262,16 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
         CBubble newBubble;
 
+        // Check if the dataset needs to be generated
+        //
+        generateRandomData(data);
+
         _currData = data;
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        SBubbles = new CBubble[_countRange[BP_CONST.MAX]];
+        SBubbles = new CBubble[mComponent.countRange[BP_CONST.MAX]];
 
-        for (int i1 = 0; i1 < _countRange[BP_CONST.MAX]; i1++) {
+        for (int i1 = 0; i1 < mComponent.countRange[BP_CONST.MAX]; i1++) {
 
             newBubble = (CBubble) View.inflate(mContext, R.layout.bubble_view, null);
             newBubble.setAlpha(0);

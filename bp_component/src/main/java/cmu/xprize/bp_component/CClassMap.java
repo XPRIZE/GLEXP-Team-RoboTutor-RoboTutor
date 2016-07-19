@@ -35,6 +35,8 @@ public class CClassMap {
     static {
         classMap.put("Bp_Data", CBp_Data.class);
 
+        classMap.put("STRING_ARRAY", String[].class);
+
         classMap.put("string", String.class);
         classMap.put("bool", Boolean.class);
         classMap.put("int", Integer.class);

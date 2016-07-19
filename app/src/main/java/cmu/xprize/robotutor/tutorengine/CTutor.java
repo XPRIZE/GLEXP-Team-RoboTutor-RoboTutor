@@ -431,6 +431,13 @@ public class CTutor implements ILoadableObject2, IEventSource {
         setAddFeature(langFtr);
     }
 
+    public String getLanguageFeature() {
+
+        return mMediaManager.getLanguageFeature(this);
+    }
+
+
+
     // Language management
     //**************************************************************************
 

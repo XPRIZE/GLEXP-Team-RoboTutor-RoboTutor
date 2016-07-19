@@ -105,7 +105,7 @@ public class type_timer extends type_action implements IMediaListener {
 
 
     @Override
-    public void onCompletion() {
+    public void onCompletion(CMediaManager.PlayerManager playerManager) {
         // NOOP
     }
 
