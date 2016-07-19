@@ -70,14 +70,6 @@ public class Dot extends ImageView {
 
     protected void onDraw(Canvas canvas) {super.onDraw(canvas);}
 
-    private void createDrawable(String imgPath) {
-
-        int imageResource = context.getResources().getIdentifier(imgPath, "drawable", context.getPackageName());
-        Drawable image = ContextCompat.getDrawable(context, imageResource);
-        setImageDrawable(image);
-
-    }
-
     public void setHollow(boolean _isHollow) {
 
         isHollow = _isHollow;
@@ -89,6 +81,14 @@ public class Dot extends ImageView {
         }
 
         createDrawable(imgPath);
+    }
+
+    private void createDrawable(String imgPath) {
+
+        int imageResource = context.getResources().getIdentifier(imgPath, "drawable", context.getPackageName());
+        Drawable image = ContextCompat.getDrawable(context, imageResource);
+        setImageDrawable(image);
+
     }
 
     public int getRow() {return this.row;}

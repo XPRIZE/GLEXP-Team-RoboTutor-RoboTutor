@@ -55,6 +55,13 @@ public class CAsm_Alley extends LinearLayout {
         createDotBag(1, val, image, clickable); // TODO: fix hard coded 1
     }
 
+    public void update(int val, String image, int id, String operation, boolean clickable) {
+
+        SdotBag.update(1, val, image, clickable); // TODO: fix hard coded 1
+        updateEditText(val, id, operation);
+
+    }
+
     private void createEditText(int val, int id, String operation) {
 
         SText = new EditText(getContext());
@@ -84,12 +91,6 @@ public class CAsm_Alley extends LinearLayout {
 
     }
 
-    public void update(int val, String image, int id, String operation, boolean clickable) {
-
-        SdotBag.update(1, val, image, clickable); // TODO: fix hard coded 1
-        updateEditText(val, id, operation);
-
-    }
 
     private void updateEditText (int val, int id, String operation) {
 
@@ -122,7 +123,6 @@ public class CAsm_Alley extends LinearLayout {
         catch (NumberFormatException e) {
             return null;
         }
-
 
     }
 

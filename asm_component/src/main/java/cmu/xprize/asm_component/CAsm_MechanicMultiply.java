@@ -20,7 +20,7 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
     protected String operation = "x";
 
     @Override
-    public void preClickAnimation() {
+    public void preClickSetup() {
 
         DotBag firstBag = allAlleys.get(0).getDotBag();
         firstBag.wiggle(300, 2, 100, .05f);

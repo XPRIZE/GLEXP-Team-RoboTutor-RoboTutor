@@ -15,7 +15,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
     protected String operation = "+";
 
     @Override
-    public void preClickAnimation() {
+    public void preClickSetup() {
     }
 
 
