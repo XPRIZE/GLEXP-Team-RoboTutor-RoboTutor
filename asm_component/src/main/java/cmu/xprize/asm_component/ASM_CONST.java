@@ -11,7 +11,7 @@ public class ASM_CONST {
 
     public static final int alleyMargin = 20;
 
-    public static final int textSize = 75;
+    public static final int textSize = 50;
     public static final int rightPadding = 10;
 
     public static final int borderWidth = 3;

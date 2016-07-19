@@ -1,11 +1,11 @@
 {
 
   "dataSource": [
-      {"type":"Asm_Data", "dataset":[6,3,18]  , "operation":"x", "image": "star"},
-      {"type":"Asm_Data", "dataset":[5,4,20]  , "operation":"x", "image": "hexagon"},
       {"type":"Asm_Data", "dataset":[1,2,3,6], "operation":"+", "image": "circle"},
-      {"type":"Asm_Data", "dataset":[4,1,3], "operation":"-", "image": "triangle"},
-      {"type":"Asm_Data", "dataset":[1,1,2], "operation":"+", "image": "pentagon"}
+      {"type":"Asm_Data", "dataset":[9,2,7], "operation":"-", "image": "triangle"},
+      {"type":"Asm_Data", "dataset":[4,5,9], "operation":"+", "image": "pentagon"},
+    {"type":"Asm_Data", "dataset":[6,3,18]  , "operation":"x", "image": "star"},
+    {"type":"Asm_Data", "dataset":[5,4,20]  , "operation":"x", "image": "hexagon"},
 
   ]
 }
