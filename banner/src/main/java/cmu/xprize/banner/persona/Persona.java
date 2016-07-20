@@ -25,6 +25,7 @@ import android.content.res.XmlResourceParser;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
@@ -181,6 +182,25 @@ public class Persona extends View {
         rightEye.lookAt(screenPos);
 
         invalidate();
+    }
+
+    public void lookAt(PointF screenPos, int duration) {
+
+        lookAt(screenPos);
+
+        new CountDownTimer(duration, duration) {
+
+            public void onTick(long millisUntilFinished) {
+            }
+
+            public void onFinish() {
+
+                leftEye.setEyeLocation();
+                rightEye.setEyeLocation();
+                startBlink();
+            }
+        }.start();
+
     }
 
 
@@ -496,7 +516,76 @@ public class Persona extends View {
         animation.start();
     }
 
+    public void exciteEyes(int duration) {
 
+        final float radiusFactor = 1.1f;
+        final float initOpenEye = OPENEYE;
+
+        OPENEYE = OPENEYE / 2.0f;
+
+        PointF leftRadius = leftEye.getEyeRadius();
+        PointF rightRadius = rightEye.getEyeRadius();
+
+        leftEye.setRadiusX(leftRadius.x * radiusFactor);
+        leftEye.setRadiusY(leftRadius.y * radiusFactor);
+        rightEye.setRadiusX(rightRadius.x * radiusFactor);
+        rightEye.setRadiusY(rightRadius.y * radiusFactor);
+
+        leftEye.setEyeLocation();
+        rightEye.setEyeLocation();
+
+        startBlink();
+
+
+        new CountDownTimer(duration, duration) {
+
+            public void onTick(long millisUntilFinished) {
+            }
+
+            public void onFinish() {
+
+                OPENEYE = initOpenEye;
+
+                PointF leftRadius = leftEye.getEyeRadius();
+                PointF rightRadius = rightEye.getEyeRadius();
+
+                leftEye.setRadiusX(leftRadius.x / radiusFactor);
+                leftEye.setRadiusY(leftRadius.y / radiusFactor);
+                rightEye.setRadiusX(rightRadius.x / radiusFactor);
+                rightEye.setRadiusY(rightRadius.y / radiusFactor);
+
+                leftEye.setEyeLocation();
+                rightEye.setEyeLocation();
+
+                startBlink();
+
+            }
+        }.start();
+
+    }
+
+
+    public void droopEyes(int duration) {
+
+        final float initOpenEye = OPENEYE;
+
+        OPENEYE = 3*OPENEYE;
+        startBlink();
+
+        new CountDownTimer(duration, duration) {
+
+            public void onTick(long millisUntilFinished) {
+            }
+
+            public void onFinish() {
+
+                OPENEYE = initOpenEye;
+                startBlink();
+
+            }
+        }.start();
+
+    }
 
 
     //***************************************************
