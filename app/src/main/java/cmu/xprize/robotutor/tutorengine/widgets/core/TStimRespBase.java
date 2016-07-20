@@ -296,7 +296,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, ID
     @Override
     public void postInflate() {
 
-        // Do deferred listeners configuration - this cannot be done until after the
+        // Do deferred listeners configuration - this cannot be done until after the tutor is instantiated
         //
         if(!mListenerConfigured) {
             for (String linkedView : mLinkedViews) {
