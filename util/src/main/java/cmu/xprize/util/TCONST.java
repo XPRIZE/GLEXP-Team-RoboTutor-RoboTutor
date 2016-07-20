@@ -65,6 +65,7 @@ public class TCONST {
     public static final String EVENT_SCENEQUEUE = "Scene Queue Event";
     public static final String EVENT_TUTORGRAPH = "Tutor Graph Event";
     public static final String AUDIO_REF        = "audio_ref";
+    public static final String SET_BANNER_COLOR = "SET_BANNER_COLOR";
 
 
     //*** Reading Tutor compatible string combinations

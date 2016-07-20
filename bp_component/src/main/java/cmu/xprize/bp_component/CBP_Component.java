@@ -27,20 +27,32 @@ import android.widget.FrameLayout;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.CEvent;
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventDispatcher;
+import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
+import cmu.xprize.util.TCONST;
 
 
-public class CBP_Component extends FrameLayout implements ILoadableObject {
+public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoadableObject {
 
     // Make this public and static so sub-components may use it during json load to instantiate
     // controls on the fly.
     //
     static public Context       mContext;
+
+    public List<IEventListener> mListeners          = new ArrayList<IEventListener>();
+    protected List<String>      mLinkedViews;
+    protected boolean           mListenerConfigured = false;
 
     public CBP_LetterBoxLayout  Scontent;
 
@@ -58,9 +70,14 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     public HashMap<String,String[]> stimulus_map;
     public int                      question_count;
     public String                   question_sequence;
+
     public int[]                    countRange     = {4, 4};
+
     public CBp_Data[]               dataSource;
+
     public CBpBackground            view_background;
+    public String                   banner_color;
+
 
     static final String TAG = "CBP_Component";
 
@@ -98,7 +115,17 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
                     0, 0);
 
             try {
-                mDataSource  = a.getString(R.styleable.RoboTutor_dataSource);
+
+                mDataSource = a.getString(R.styleable.RoboTutor_dataSource);
+
+                String linkedViews;
+
+                linkedViews = a.getNonResourceString(R.styleable.RoboTutor_linked_views);
+
+                if(linkedViews != null) {
+                    mLinkedViews = Arrays.asList(linkedViews.split(","));
+                }
+
             } finally {
                 a.recycle();
             }
@@ -274,7 +301,7 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
-    protected void publishState(CBubble bubble) {};
+    protected void publishState(CBubble bubble) {}
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
@@ -294,6 +321,30 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     //************************************************************************
 
 
+
+    //***********************************************************
+    // Event Listener/Dispatcher - Start
+
+
+    @Override
+    public void addEventListener(String linkedView) {
+
+    }
+
+    @Override
+    public void dispatchEvent(IEvent event) {
+
+        for (IEventListener listener : mListeners) {
+            listener.onEvent(event);
+        }
+    }
+
+    // Event Listener/Dispatcher - End
+    //***********************************************************
+
+
+
+
     //************ Serialization
 
 
@@ -311,6 +362,11 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
         addView(view_background);
         bringChildToFront(Scontent);
+
+        if(banner_color != null) {
+            dispatchEvent(new CEvent(TCONST.SET_BANNER_COLOR, TCONST.VALUE , banner_color));
+        }
     }
+
 
 }

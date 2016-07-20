@@ -20,6 +20,7 @@
 package cmu.xprize.banner;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -27,9 +28,18 @@ import android.graphics.Rect;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 
-import cmu.xprize.banner.persona.Persona;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class CBanner extends PercentRelativeLayout {
+import cmu.xprize.banner.persona.Persona;
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventListener;
+import cmu.xprize.util.TCONST;
+
+public class CBanner extends PercentRelativeLayout implements IEventListener {
+
+    public Context  mContext;
 
     private Persona mPersona;
 
@@ -41,21 +51,24 @@ public class CBanner extends PercentRelativeLayout {
 
     public CBanner(Context context) {
         super(context);
-        init(null);
+        init(context, null);
     }
 
     public CBanner(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(attrs);
+        init(context, attrs);
     }
 
     public CBanner(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init(attrs);
+        init(context, attrs);
     }
 
-    private void init(AttributeSet attrs) {
+    private void init(Context context, AttributeSet attrs) {
+
         inflate(getContext(), R.layout.banner_layout, this);
+
+        mContext = context;
 
         mPersona = (Persona) findViewById(R.id.Spersona);
 
@@ -82,4 +95,16 @@ public class CBanner extends PercentRelativeLayout {
         canvas.drawRect(mViewRegion, mPaint);
     }
 
+
+    @Override
+    public void onEvent(IEvent event) {
+
+        switch(event.getType()) {
+
+            // Message from Stimiulus variant to share state with response variant
+            case TCONST.SET_BANNER_COLOR:
+                mColor = Color.parseColor((String)event.getString(TCONST.VALUE));
+                break;
+        }
+    }
 }

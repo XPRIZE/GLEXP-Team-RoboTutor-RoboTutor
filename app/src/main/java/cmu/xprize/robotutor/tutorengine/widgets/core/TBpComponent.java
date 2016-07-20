@@ -6,7 +6,9 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import cmu.xprize.bp_component.BP_CONST;
 import cmu.xprize.bp_component.CBP_Component;
@@ -25,6 +27,8 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -71,6 +75,23 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
     public void onDestroy() {
         super.onDestroy();
     }
+
+
+    //***********************************************************
+    // Event Listener/Dispatcher - Start
+
+
+    @Override
+    public void addEventListener(String linkedView) {
+
+        mListeners.add((IEventListener) mTutor.getViewByName(linkedView));
+    }
+
+    // Event Listener/Dispatcher - End
+    //***********************************************************
+
+
+
 
 
     //**********************************************************
@@ -388,6 +409,15 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
 
     @Override
     public void postInflate() {
+
+        // Do deferred listeners configuration - this cannot be done until after the tutor is instantiated
+        //
+        if(!mListenerConfigured) {
+            for (String linkedView : mLinkedViews) {
+                addEventListener(linkedView);
+            }
+            mListenerConfigured = true;
+        }
     }
 
     @Override
