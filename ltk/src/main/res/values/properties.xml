@@ -2,7 +2,6 @@
 <resources>
     <declare-styleable name="CStimResp">
         <attr name="isResponse" format="boolean" />
-        <attr name="linked_views" format="string"/>
         <attr name="aspectratio" format="float"/>
         <attr name="textcolor" format="color" />
     </declare-styleable>

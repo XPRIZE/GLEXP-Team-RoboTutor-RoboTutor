@@ -18,5 +18,6 @@
     {"type":"Bp_Data", "question_type": "multiple-choice", "question_say": false, "question_show": false, "rand_data":true, "rand_size":4, "rand_index": true, "stimulus_type": "reference" }
   ],
 
-  "view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"fixed", "colorbase":"#666666", "colors":[0xFF2A5A8E, 0xFF1C3C5F, 0xFF3E86D4, 0xFF336DAD]}
+  "view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"fixed", "colorbase":"#666666", "colors":[0xFF2A5A8E, 0xFF1C3C5F, 0xFF3E86D4, 0xFF336DAD]},
+  "banner_color" : "#000066"
 }

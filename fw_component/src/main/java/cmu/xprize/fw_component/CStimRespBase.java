@@ -122,7 +122,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
             try {
                 mIsResponse = a.getBoolean(R.styleable.CStimResp_isResponse, false);
                 mAspect     = a.getFloat(R.styleable.CStimResp_aspectratio, -1.0f);
-                linkedViews = a.getNonResourceString(R.styleable.CStimResp_linked_views);
+                linkedViews = a.getNonResourceString(R.styleable.RoboTutor_linked_views);
                 mTextColor  = getCurrentTextColor();
 
                 mLinkedViews = Arrays.asList(linkedViews.split(","));
