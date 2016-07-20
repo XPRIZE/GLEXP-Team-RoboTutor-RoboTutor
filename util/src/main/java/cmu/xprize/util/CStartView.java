@@ -60,6 +60,13 @@ public class CStartView extends FrameLayout {
 
         start = (ImageButton)findViewById(R.id.SstartSelector);
 
+        // Allow hits anywhere on screen
+        //
+        setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                callback.onStartTutor();
+            }
+        });
         start.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 callback.onStartTutor();

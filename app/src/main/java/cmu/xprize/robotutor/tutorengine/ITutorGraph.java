@@ -29,7 +29,7 @@ public interface ITutorGraph {
 
     public void terminateQueue();
 
-    public void post(String command);
+    public void post(IEventSource source, String command);
 
     public void setSceneGraph(CSceneGraph sGraph);
 

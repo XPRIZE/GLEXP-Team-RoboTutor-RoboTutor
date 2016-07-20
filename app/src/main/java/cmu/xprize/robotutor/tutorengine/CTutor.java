@@ -40,8 +40,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import cmu.xprize.robotutor.tutorengine.graph.databinding;
-import cmu.xprize.robotutor.tutorengine.graph.defdata_scenes;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
@@ -61,7 +59,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
  *  Each Tutor instance is represented by a CTutor
  *
  */
-public class CTutor implements ILoadableObject2 {
+public class CTutor implements ILoadableObject2, IEventSource {
 
     private boolean traceMode = false;
 
@@ -84,7 +82,7 @@ public class CTutor implements ILoadableObject2 {
     public ITutorManager                 mTutorContainer;
     public ViewGroup                     mSceneContainer;
 
-    public String                        mTutorName;
+    public String                        mTutorName = "";
     public AssetManager                  mAssetManager;
     public boolean                       mTutorActive = false;
 
@@ -152,6 +150,16 @@ public class CTutor implements ILoadableObject2 {
     }
 
 
+    @Override
+    public String getEventSourceName() {
+        return mTutorName;
+    }
+    @Override
+    public String getEventSourceType() {
+        return TCONST.TYPE_CTUTOR;
+    }
+
+
     public ITutorManager getTutorContainer() {
         return mTutorContainer;
     }
@@ -206,7 +214,7 @@ public class CTutor implements ILoadableObject2 {
 
         mTutorActive = true;
         mTutorGraph.setDefDataSource((extDataSource != null)? extDataSource:dataSource);
-        mTutorGraph.post(TCONST.FIRST_SCENE);
+        mTutorGraph.post(this, TCONST.FIRST_SCENE);
     }
 
 
@@ -330,6 +338,8 @@ public class CTutor implements ILoadableObject2 {
      */
     private void enQueue(Queue qCommand) {
 
+        Log.d(TAG, "Processing POST to tutorGraph: " + qCommand._command );
+
         if(!mDisabled) {
             queueMap.put(qCommand, qCommand);
 
@@ -420,6 +430,13 @@ public class CTutor implements ILoadableObject2 {
 
         setAddFeature(langFtr);
     }
+
+    public String getLanguageFeature() {
+
+        return mMediaManager.getLanguageFeature(this);
+    }
+
+
 
     // Language management
     //**************************************************************************
@@ -729,12 +746,12 @@ public class CTutor implements ILoadableObject2 {
 
     // Scriptable graph next command
     public void eventNext() {
-        mSceneGraph.post(TCONST.NEXT_NODE);
+        mSceneGraph.post(this, TCONST.NEXT_NODE);
     }
 
     // Scriptable graph goto command
     public void gotoNode(String nodeID) {
-        mSceneGraph.post(TCONST.GOTO_NODE, nodeID);
+        mSceneGraph.post(this, TCONST.GOTO_NODE, nodeID);
     }
 
 

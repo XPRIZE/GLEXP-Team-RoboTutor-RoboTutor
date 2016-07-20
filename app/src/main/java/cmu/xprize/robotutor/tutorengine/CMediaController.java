@@ -9,6 +9,11 @@ import cmu.xprize.util.IMediaController;
 import cmu.xprize.util.TTSsynthesizer;
 import edu.cmu.xprize.listener.ListenerBase;
 
+
+/**
+ * This is a singleton that manages MediaManager instances for tutors.
+ * This allows us to release a tutor's resources by name from managerMap
+ */
 public class CMediaController implements IMediaController{
 
     static private HashMap<CTutor, CMediaManager>  managerMap = new HashMap<>();
@@ -18,7 +23,6 @@ public class CMediaController implements IMediaController{
     static private AssetManager   mAssetManager;
 
     final static public String TAG = "CMediaController";
-
 
 
     private static CMediaController ourInstance = new CMediaController();

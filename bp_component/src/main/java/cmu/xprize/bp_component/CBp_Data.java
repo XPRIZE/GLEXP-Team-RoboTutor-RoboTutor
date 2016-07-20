@@ -32,16 +32,15 @@ public class CBp_Data implements ILoadableObject{
     public String        question_type    = "MC";
     public boolean       question_say     = false;
     public boolean       question_show    = false;
-    public boolean       response_hear    = false;
-
-    public int[]         response_count   = null;
-    public String        response_layout  = "fixed";
-    public String[]      response_color   = null;
 
     public String        stimulus_type    = "reference";
     public int           stimulus_index   = -1;
 
     public int[]         dataset          = null;
+
+    public boolean       rand_data        = true;
+    public int           rand_size        = 5;
+    public boolean       rand_index       = true;
 
 
 

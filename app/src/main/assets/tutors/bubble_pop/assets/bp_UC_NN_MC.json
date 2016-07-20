@@ -1,0 +1,21 @@
+{
+  "stimulus_type" : "text_data",
+
+  "stimulus_map" : {
+    "type":"STRING_ARRAY",
+    "LANG_SW" : ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","R","S","T","U","V","W","Y","Z"],
+    "LANG_EN" : ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
+  },
+
+  "question_count": 10,
+  "question_sequence": "sequential",
+
+  "dataSource" : [
+
+    {"type":"Bp_Data", "question_type": "multiple-choice", "question_say": false, "question_show": false, "rand_data":true, "rand_size":5, "rand_index": true, "stimulus_type": "text_data" }
+
+  ],
+
+  "view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"fixed", "colorbase":"#666666", "colors":[0xFFA3A300, 0xFF8C8C00, 0xFFD9D900, 0xFFB2B200]}
+
+}

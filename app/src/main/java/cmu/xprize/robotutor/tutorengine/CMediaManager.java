@@ -37,7 +37,9 @@ import cmu.xprize.util.TCONST;
 
 
 /**
- * This is a Singleton Object
+ * The MediaManager is a per tutor media repository - when a tutor is shut down it's
+ * associated MediaManager should be destroyed as well to clean up any operations.
+ * Audio , timers etc.
  *
  * This object centralizes access to ongoing processes like audio playback and timelines so
  * that we can pause, play, stop, or destroy them globally.  There is a system wide hard limit on the number
@@ -53,7 +55,7 @@ public class CMediaManager {
 
     private CMediaController                mMediaController;
 
-    private ArrayList<mediaController>      mControllerSet = new ArrayList<mediaController>();
+    private ArrayList<PlayerManager>        mPlayerCache   = new ArrayList<PlayerManager>();
     private HashMap<String, type_timer>     mTimerMap      = new HashMap<String, type_timer>();
     private HashMap<String, type_handler>   mHandlerMap    = new HashMap<String, type_handler>();
     private HashMap<String, type_timeline>  mTimeLineMap   = new HashMap<String, type_timeline>();
@@ -68,6 +70,11 @@ public class CMediaManager {
     final static public String TAG = "CMediaManager";
 
 
+    /**
+     *
+     * @param controller
+     * @param manager
+     */
     public CMediaManager(CMediaController controller, AssetManager manager) {
         mMediaController = controller;
         mAssetManager    = manager;
@@ -76,7 +83,7 @@ public class CMediaManager {
 
     public void restartMediaManager() {
 
-        for(mediaController controller : mControllerSet) {
+        for(PlayerManager controller : mPlayerCache) {
             if(controller.isPlaying()) {
                 controller.kill();
             }
@@ -115,7 +122,7 @@ public class CMediaManager {
         }
 
 
-        mControllerSet = new ArrayList<mediaController>();
+        mPlayerCache = new ArrayList<PlayerManager>();
         mTimerMap      = new HashMap<String, type_timer>();
         mHandlerMap    = new HashMap<String, type_handler>();
         mTimeLineMap   = new HashMap<String, type_timeline>();
@@ -334,19 +341,20 @@ public class CMediaManager {
     //********************************************************************
     //*************  MediaPlayer Management START
 
-    public mediaController attachMediaPlayer(String dataSource, IMediaListener owner) {
 
-        mediaController controller = null;
+    public PlayerManager attachMediaPlayer(String dataSource, IMediaListener owner) {
+
+        PlayerManager manager = null;
 
         // First look for an unattached (cached) controller that uses this datasource and reuse it.
         //
-        for(mediaController controllerInstance : mControllerSet) {
+        for(PlayerManager playerInstance : mPlayerCache) {
 
-            if(!controllerInstance.isAttached() && controllerInstance.compareSource(dataSource)) {
-                Log.i(TAG, "Attach to existing MediaController");
+            if(!playerInstance.isAttached() && playerInstance.compareSource(dataSource)) {
+                Log.i(TAG, "Attach to existing PlayerManager");
 
-                controller = controllerInstance;
-                controller.attach(owner);
+                manager = playerInstance;
+                manager.attach(owner);
                 break;
             }
         }
@@ -355,48 +363,48 @@ public class CMediaManager {
         // for the longest period. i.e. assume the oldest unused audioclip has least probability of
         // being reused.
         //
-        if(controller == null) {
+        if(manager == null) {
 
-            mediaController oldest   = null;
-            long            timeTest = 0L;
+            PlayerManager oldest   = null;
+            long          timeTest = 0L;
 
-            for(mediaController controllerInstance : mControllerSet) {
+            for(PlayerManager managerInstance : mPlayerCache) {
 
-                if(!controllerInstance.isAttached()) {
-                    if(controllerInstance.lastUsed() > timeTest) {
-                        oldest = controllerInstance;
+                if(!managerInstance.isAttached()) {
+                    if(managerInstance.lastUsed() > timeTest) {
+                        oldest = managerInstance;
                     }
                 }
             }
 
-            controller = oldest;
+            manager = oldest;
 
             // If we are re-purposing an old controller then we need to release it and
             // reset its dataSource.
             //
-            if(controller != null) {
+            if(manager != null) {
 
-                Log.i(TAG, "Re-purpose an existing MediaController");
+                Log.i(TAG, "Re-purpose an existing PlayerManager");
 
-                controller.releasePlayer();
+                manager.releasePlayer();
 
-                controller.attach(owner);               // Need to reattach to a new owner
-                controller.createPlayer(dataSource);    // Update the datasource
+                manager.attach(owner);               // Need to reattach to a new owner
+                manager.createPlayer(dataSource);    // Update the datasource
             }
         }
 
         // If we don't find a RE-usable controller then create a new one
         //
-        if(controller == null) {
+        if(manager == null) {
 
-            Log.i(TAG, "Creating new MediaController");
+            Log.i(TAG, "Creating new PlayerManager");
 
-            controller = new mediaController(owner, dataSource);
+            manager = new PlayerManager(owner, dataSource);
 
-            mControllerSet.add(controller);
+            mPlayerCache.add(manager);
         }
 
-        return controller;
+        return manager;
     }
 
 
@@ -408,22 +416,21 @@ public class CMediaManager {
      */
     public void  detachMediaPlayer(Object owner) {
 
-        mediaController controller = null;
+        PlayerManager controller = null;
 
         // First look for an unattached (cached) controller that uses this datasource and reuse it.
         //
-        for(mediaController controllerInstance : mControllerSet) {
+        for(PlayerManager managerInstance : mPlayerCache) {
 
-            if(controllerInstance.compareOwner(owner)) {
+            if(managerInstance.compareOwner(owner)) {
 
-                controllerInstance.detach();
-                break;
+                managerInstance.detach();
             }
         }
     }
 
 
-    public class mediaController implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
+    public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
         private IMediaListener mOwner;
 
@@ -439,10 +446,11 @@ public class CMediaManager {
         private boolean      mDeferredSeek  = false;
         private long         mSeekPoint     = 0;
 
-        final static public String TAG = "mediaController";
+
+        final static public String TAG = "PlayerManager";
 
 
-        protected mediaController(Object owner, String _dataSource) {
+        protected PlayerManager(Object owner, String _dataSource) {
 
             mOwner      = (IMediaListener)owner;
             mDataSource = _dataSource;
@@ -462,6 +470,7 @@ public class CMediaManager {
 
                 mPlayer.setDataSource(soundData.getFileDescriptor(), soundData.getStartOffset(), soundData.getLength());
                 soundData.close();
+
                 mPlayer.setOnPreparedListener(this);
                 mPlayer.setOnCompletionListener(this);
                 mPlayer.setLooping(mOwner.isLooping());
@@ -486,7 +495,6 @@ public class CMediaManager {
 
             if(mPlayer != null) {
                 mPlayer.pause();
-                mPlayer.seekTo(0);
                 mPlaying = false;
                 mIsAlive = true;
 
@@ -550,10 +558,12 @@ public class CMediaManager {
         public void play() {
 
             if(!mPlaying && mIsAlive) {
+
                 if(mIsReady) {
                     // TODO: this will need a tweak for background music etc.
                     mMediaController.startSpeaking();
 
+                    Log.d(TAG, "PLAY " + mDataSource);
                     mPlayer.start();
 
                     mPlaying       = true;
@@ -655,25 +665,12 @@ public class CMediaManager {
             //
             lastUsed = System.currentTimeMillis();
 
+            // Allow the owning node to do type specific processing of completion event.
+            //
             if (mOwner != null) {
 
-                try {
-                    if (mPlayer != null) {
-                        pause();
-                        seekTo(0);
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, "Audio state error:" + e);
-                }
-
-                // Allow the owning node to do type specific processing of completion event.
-                //
-                mOwner.onCompletion();
+                mOwner.onCompletion(this);
             }
-            else {
-                Log.i(TAG, "invalid Owner");
-            }
-
         }
     }
 

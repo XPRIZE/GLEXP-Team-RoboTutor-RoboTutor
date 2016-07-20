@@ -23,10 +23,11 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.FrameLayout;
 
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
@@ -39,27 +40,31 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     // Make this public and static so sub-components may use it during json load to instantiate
     // controls on the fly.
     //
-    static public Context   mContext;
+    static public Context       mContext;
 
     public CBP_LetterBoxLayout  Scontent;
 
-    protected String        mDataSource;
-    private   int           _dataIndex = 0;
+    protected String            mDataSource;
+    protected String[]          stimulus_data;
+    private   int               _dataIndex = 0;
 
-    protected IBubbleMechanic _mechanics;
+    protected IBubbleMechanic   _mechanics;
 
-    private boolean        correct = false;
+    private boolean             correct = false;
+    public  int question_Index;
 
     // json loadable
-    public String          stimulus_type;
-    public String[]        stimulus_data;
-    public CBp_Data[]      dataSource;
-    public CBpBackground   view_background;
+    public String                   stimulus_type;
+    public HashMap<String,String[]> stimulus_map;
+    public int                      question_count;
+    public String                   question_sequence;
+    public int[]                    countRange     = {4, 4};
+    public CBp_Data[]               dataSource;
+    public CBpBackground            view_background;
 
     static final String TAG = "CBP_Component";
 
     protected CBp_Data     _currData;
-    protected CBubble      _touchedBubble;
 
 
     public CBP_Component(Context context) {
@@ -133,16 +138,29 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
         dataSource = _dataSource;
         _dataIndex = 0;
+
+        // If presenting stimulus values sequentially then we use this to track the current value.
+        //
+        question_Index = 0;
     }
 
 
     public void next() {
 
         try {
+
             if (dataSource != null) {
                 updateDataSet(dataSource[_dataIndex]);
 
+                // We cycle through the dataSource question types iteratively
+                //
                 _dataIndex++;
+                _dataIndex %= dataSource.length;
+
+                // Count down the number of questions requested
+                //
+                question_count--;
+
             } else {
                 CErrorManager.logEvent(TAG,  "Error no DataSource : ", null, false);
             }
@@ -154,13 +172,11 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
 
     public boolean dataExhausted() {
-        return (_dataIndex >= dataSource.length)? true:false;
+        return (question_count <= 0)? true:false;
     }
 
 
     protected void updateDataSet(CBp_Data data) {
-
-        Log.d(TAG, "test");
 
         _currData = data;
 
@@ -233,9 +249,6 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     }
 
 
-    public void setTouchedBubble(CBubble bubble) {
-        _touchedBubble = bubble;
-    }
 
     //************************************************************************
     //************************************************************************
@@ -246,6 +259,22 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     // TClass domain where TScope lives providing access to tutor scriptables
     //
     public void applyEvent(String event){};
+
+
+    // Tutor methods  End
+    //************************************************************************
+    //************************************************************************
+
+
+    //************************************************************************
+    //************************************************************************
+    // publish component state data - START
+
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    protected void publishState(CBubble bubble) {};
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
@@ -260,11 +289,9 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     }
 
 
-    // Tutor methods  End
+    // publish component state data - EBD
     //************************************************************************
     //************************************************************************
-
-
 
 
     //************ Serialization
@@ -284,7 +311,6 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
         addView(view_background);
         bringChildToFront(Scontent);
-
     }
 
 }

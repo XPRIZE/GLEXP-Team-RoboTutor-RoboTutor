@@ -102,17 +102,20 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
         terminateQueue();
 
-        for(int i1 = 0; i1 < SBubbles.length ; i1++) {
-            if(SBubbles[i1] != null) {
-                mParent.removeView((View) SBubbles[i1]);
-                SBubbles[i1].onDestroy();
-                SBubbles[i1] = null;
-            }
-        }
-        if(SbubbleStumulus != null)
-            mParent.removeView((View)SbubbleStumulus);
+        if(SBubbles != null) {
 
-        SBubbles = null;
+            for (int i1 = 0; i1 < SBubbles.length; i1++) {
+                if (SBubbles[i1] != null) {
+                    mParent.removeView((View) SBubbles[i1]);
+                    SBubbles[i1].onDestroy();
+                    SBubbles[i1] = null;
+                }
+            }
+            if (SbubbleStumulus != null)
+                mParent.removeView((View) SbubbleStumulus);
+
+            SBubbles = null;
+        }
     }
 
     @Override
@@ -218,7 +221,33 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
                 broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(bubble.getCenterPosition()));
 
-                CAnimatorUtil.wiggle(bubble, "horizontal", 0.10f, 70, 5);
+                Animator wiggler = CAnimatorUtil.configWiggle(bubble, "horizontal",70, 5, 0, 0.10f );
+
+                wiggler.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationCancel(Animator arg0) {
+                        //Functionality here
+                    }
+
+                    @Override
+                    public void onAnimationStart(Animator arg0) {
+                        //Functionality here
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+
+                        mComponent.applyEvent(BP_CONST.BUBBLE_WIGGLED);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator arg0) {
+                        //Functionality here
+                    }
+                });
+
+                wiggler.start();
+
                 break;
 
             case BP_CONST.REMOVE_BUBBLE:
@@ -226,6 +255,8 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 bubble = (CBubble)target;
 
                 removeBubble(bubble);
+
+                mComponent.applyEvent(BP_CONST.BUBBLE_POPPED);
                 break;
 
             case BP_CONST.REPLACE_BUBBLE:
@@ -233,6 +264,8 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 bubble = (CBubble)target;
 
                 replaceBubble(bubble);
+
+                mComponent.applyEvent(BP_CONST.BUBBLE_POPPED);
                 break;
 
             case BP_CONST.SHOW_STIMULUS:
@@ -356,16 +389,24 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                     @Override
                     public void onAnimationEnd(Animator animation) {
 
-                        for(int i1 = 0; i1 < SBubbles.length ; i1++) {
-                            if(SBubbles[i1] != null) {
-                                mParent.removeView((View) SBubbles[i1]);
-                                SBubbles[i1] = null;
-                            }
-                        }
-                        if(SbubbleStumulus != null)
-                            mParent.removeView((View)SbubbleStumulus);
+                        // If the bubble still exist.  If the tutor is terminated while this
+                        // animation is running this may be null.
+                        //
+                        if (SBubbles != null) {
 
-                        SBubbles = null;
+                            for (int i1 = 0; i1 < SBubbles.length; i1++) {
+                                if (SBubbles[i1] != null) {
+                                    mParent.removeView((View) SBubbles[i1]);
+                                    SBubbles[i1] = null;
+                                }
+                            }
+                            if (SbubbleStumulus != null)
+                                mParent.removeView((View) SbubbleStumulus);
+
+                            SBubbles = null;
+
+                            mComponent.applyEvent(BP_CONST.BUBBLES_CLEARED);
+                        }
                     }
 
                     @Override
@@ -466,8 +507,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
         }
     }
 
-
-    /**
+/**
      * Post a command to the tutorgraph queue
      *
      * @param command
@@ -498,9 +538,10 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
     @Override
     public void onClick(View view) {
 
-        mComponent.setTouchedBubble((CBubble)view);
+        CBubble bubble = (CBubble)view;
 
-        mComponent.applyEvent(BP_CONST.BUBBLE_TOUCHED);
+        mComponent.publishState(bubble);
+        mComponent.applyEvent(BP_CONST.BUBBLE_TOUCH_EVENT);
     }
 
 
@@ -585,6 +626,48 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
         //Log.i(TAG, "Touch Time: " + _time + "  :  " + delta);
         return true;
+    }
+
+
+    public void generateRandomData(CBp_Data data) {
+
+        int stimCount = (data.rand_data)? data.rand_size:data.dataset.length;
+        int setSize   = mComponent.stimulus_data.length;
+
+        // Constrain the presentation set size
+        //
+        if(stimCount > setSize)
+            stimCount = setSize;
+
+        // If the first element of the dataset is < 0 it indicates the number of random items
+        // to add to the array
+        //
+        if(data.rand_data) {
+
+            data.dataset = new int[stimCount];
+
+            for(int i1 = 0 ; i1 < stimCount ; i1++) {
+                data.dataset[i1] = (int) (Math.random() * setSize);
+            }
+        }
+
+        // If requested (by -ve entry) - select which bubble is correct at random
+        //
+        if(data.rand_index)
+            data.stimulus_index = (int) (Math.random() * data.dataset.length);
+
+        // If we are using sequential presentations then we substitute the
+        // current correct index in the "correct" i.e. stimulus bubble. To
+        // ensure there is at least one correct answer.
+        //
+        if(mComponent.question_sequence.equals(BP_CONST.SEQUENTIAL)) {
+
+            data.dataset[data.stimulus_index] = mComponent.question_Index++;
+
+            // cycle on the stimulus_data
+            //
+            mComponent.question_Index %= setSize;
+        }
     }
 
 

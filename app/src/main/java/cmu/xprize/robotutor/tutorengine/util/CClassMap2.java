@@ -3,12 +3,11 @@ package cmu.xprize.robotutor.tutorengine.util;
 import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.CMediaPackage;
-import cmu.xprize.robotutor.tutorengine.graph.databinding;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_scenes;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.scene_module;
 import cmu.xprize.robotutor.tutorengine.graph.scene_node;
-import cmu.xprize.robotutor.tutorengine.graph.tutor_node;
+import cmu.xprize.robotutor.tutorengine.graph.scene_graph;
 import cmu.xprize.robotutor.tutorengine.graph.type_action;
 import cmu.xprize.robotutor.tutorengine.graph.type_audio;
 import cmu.xprize.robotutor.tutorengine.graph.type_cond;
@@ -33,7 +32,8 @@ public class CClassMap2 {
     // This is used to map "type" (class names) used in json HashMap specs to real classes
 
     static {
-        classMap.put("ANIMATOR", tutor_node.class);
+        classMap.put("ANIMATOR", scene_graph.class);
+        classMap.put("SUBGRAPH", scene_graph.class);
         classMap.put("NODE", scene_node.class);
         classMap.put("MODULE", scene_module.class);
         classMap.put("TIMELINE", type_timeline.class);
@@ -45,6 +45,8 @@ public class CClassMap2 {
 
         classMap.put("TUTORDATA_MAP", defdata_tutor.class);
         classMap.put("SCENEDATA_MAP", defdata_scenes.class);
+
+        classMap.put("STRING_ARRAY", String[].class);
 
         classMap.put("TReference", TReference.class);
         classMap.put("TBoolean", TBoolean.class);

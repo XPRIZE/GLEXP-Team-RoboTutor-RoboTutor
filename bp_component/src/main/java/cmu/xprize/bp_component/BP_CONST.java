@@ -34,6 +34,12 @@ public class BP_CONST {
     public static final int ORANGE_BUBBLE = R.drawable.bubble_o_0;
     public static final int GREEN_BUBBLE  = R.drawable.bubble_g_0;
 
+    public static final int RED_BUBBLE_VIBE    = R.drawable.bubble_r_vib;
+    public static final int BLUE_BUBBLE_VIBE   = R.drawable.bubble_b_vib;
+    public static final int PINK_BUBBLE_VIBE   = R.drawable.bubble_p_vib;
+    public static final int ORANGE_BUBBLE_VIBE = R.drawable.bubble_o_vib;
+    public static final int GREEN_BUBBLE_VIBE  = R.drawable.bubble_g_vib;
+
     public static final String REFERENCE = "reference";
     public static final String TEXTDATA  = "text_data";
 
@@ -52,6 +58,8 @@ public class BP_CONST {
     public static final String REPLACE_BUBBLE    = "REPLACE_BUBBLE";
     public static final String ZOOM_STIMULUS     = "ZOOM_STIMULUS";
     public static final String MOVE_STIMULUS     = "MOVE_STIMULUS";
+
+    public static final float[] AUDIO_SCALE_RANGE = new float[]{1.05f, 1.1f};
 
     public static final float  BOUNCE_MAGNITUDE  = 0.16f;
     public static final float  STRETCH_MAGNITUDE = 1.21f;
@@ -74,7 +82,12 @@ public class BP_CONST {
     public static final float DESIGN_SCALE        = 2.0f;
 
     public static final String STIMULUS_SHOWN     = "STIMULUS_SHOWN";
-    public static final String BUBBLE_TOUCHED     = "BUBBLE_TOUCHED";
+    public static final String BUBBLE_TOUCH_EVENT = "BUBBLE_TOUCH_EVENT";
+    public static final String BUBBLE_POPPED      = "BUBBLE_POPPED";
+    public static final String BUBBLE_WIGGLED     = "BUBBLE_WIGGLED";
+    public static final String BUBBLES_CLEARED    = "BUBBLES_CLEARED";
+    public static final String RANDOM             = "random";
+    public static final String SEQUENTIAL         = "sequential";
 
     static public HashMap<String, Integer> bubbleMap = new HashMap<String, Integer>();
 
@@ -84,6 +97,16 @@ public class BP_CONST {
         bubbleMap.put("PINK", PINK_BUBBLE);
         bubbleMap.put("ORANGE", ORANGE_BUBBLE);
         bubbleMap.put("GREEN", GREEN_BUBBLE);
+    }
+
+    static public HashMap<String, Integer> audioBubbleMap = new HashMap<String, Integer>();
+
+    static {
+        audioBubbleMap.put("RED", RED_BUBBLE_VIBE);
+        audioBubbleMap.put("BLUE", BLUE_BUBBLE_VIBE);
+        audioBubbleMap.put("PINK", PINK_BUBBLE_VIBE);
+        audioBubbleMap.put("ORANGE", ORANGE_BUBBLE_VIBE);
+        audioBubbleMap.put("GREEN", GREEN_BUBBLE_VIBE);
     }
 
 

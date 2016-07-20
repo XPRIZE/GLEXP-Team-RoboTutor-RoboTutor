@@ -19,6 +19,8 @@
 
 package cmu.xprize.robotutor.tutorengine;
 
+import android.media.MediaPlayer;
+
 public interface IMediaListener {
 
     public void globalPause();
@@ -27,7 +29,7 @@ public interface IMediaListener {
 
     public boolean isLooping();
 
-    public void onCompletion();
+    public void onCompletion(CMediaManager.PlayerManager playerManager);
 
     public float getVolume();
 }

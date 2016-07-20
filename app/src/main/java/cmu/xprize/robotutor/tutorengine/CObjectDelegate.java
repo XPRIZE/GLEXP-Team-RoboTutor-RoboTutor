@@ -20,7 +20,7 @@ import cmu.xprize.util.TCONST;
 
 // This is just a convenience to simplify the syntax in type_action execution
 
-public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
+public class CObjectDelegate implements ITutorObject, Button.OnClickListener, IEventSource {
 
     private View                mOwnerView;
 
@@ -65,6 +65,18 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
         }
 
     }
+
+
+    @Override
+    public String getEventSourceName() {
+        return mContext.getResources().getResourceName(mOwnerView.getId());
+    }
+    @Override
+    public String getEventSourceType() {
+        return mContext.getResources().getResourceTypeName(mOwnerView.getId());
+    }
+
+
 
     /**
      *  Release listeners and resources
@@ -148,15 +160,15 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener {
             switch (mClickBehavior) {
 
                 case TCONST.NEXTSCENE:
-                    mTutor.mTutorGraph.post(TCONST.NEXTSCENE);
+                    mTutor.mTutorGraph.post(this, TCONST.NEXTSCENE);
                     break;
 
                 case TCONST.NEXT_NODE:
-                    mTutor.mSceneGraph.post(TCONST.NEXT_NODE);
+                    mTutor.mSceneGraph.post(this, TCONST.NEXT_NODE);
                     break;
 
                 case TCONST.STOP:
-                    mTutor.mSceneGraph.post(TCONST.STOP);
+                    mTutor.mSceneGraph.post(this, TCONST.STOP);
                     break;
 
                 default:

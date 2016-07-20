@@ -177,7 +177,8 @@ public class CBubbleStimulus extends FrameLayout {
 
         RectF bounds = new RectF(mViewRegion.left, mViewRegion.top, mViewRegion.right, mViewRegion.bottom);
 
-
+        // Draw the stimulus outline box - partially transparent
+        //
         mPaint.setColor(Color.parseColor("#AAAAAAAA"));
         mPaint.setStyle(Paint.Style.FILL);
         canvas.drawRoundRect(bounds, 30f, 30f, mPaint);
