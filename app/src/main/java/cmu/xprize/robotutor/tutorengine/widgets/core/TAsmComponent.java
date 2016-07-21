@@ -54,14 +54,6 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
     //**********************************************************
     //*****************  Tutor Interface
 
-    @Override
-    public void UpdateValue() {
-
-        // update the Scope response variable  "<SArithmetic>.value"
-        //
-        mTutor.getScope().addUpdateVar(name() + ".value", new TInteger(corValue));
-
-    }
 
 
     public void evaluate () {
@@ -151,9 +143,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
         reset();
 
         super.next();
-
-        UpdateValue();
-
+        
         if(dataExhausted())
             mTutor.setAddFeature(TCONST.FTR_EOI);
     }
