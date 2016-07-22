@@ -248,103 +248,136 @@ public class JSON_Helper {
 
                         Iterator<?> keys = nJsonObj.keys();
 
+                        // DEBUG
+//                        if(fieldName.equals("stimulus_map")) {
+//                            Log.i(TAG, "THERE");
+//                        }
+
+                        // You can have a global hash RH type where you defince the Right hand type once
+                        // This permits native types - i.e. arrays etc on the RH side.
+                        // Note that type info gets lost in the compile so it is not available for introspection
+                        // Check for global type
+
+                        Class<?> elemClass   = null;
+                        boolean  globalType  = false;
+                        boolean  isPrimitive = false;
+
+                        if(nJsonObj.has("type")) {
+                            elemClass   = classMap.get(nJsonObj.getString("type"));
+                            isPrimitive = !elemClass.isPrimitive();
+                            globalType = true;
+                        }
+
                         while(keys.hasNext() ) {
 
                             String key  = (String)keys.next();
                             Object eObj = null;
 
-//                            if(key.equals("SET_STORYNAME")) {
+                            // DEBUG
+//                            if(key.equals("LANG_SW")) {
 //                                Log.i(TAG, "THERE");
 //                            }
 
                             // Throw away comment fields
-                            if(!key.equals("COMMENT")) {
+                            if(!key.equals("COMMENT") && !key.equals("type")) {
                                 Log.d(TAG, "Inflating Object: " + key);
-                                JSONObject elem = nJsonObj.getJSONObject(key);
 
-                                // maptype is a convenience construct -
-                                // If there is a maptype then the node has it's instance data
-                                // partially or completely defined in a HashMap object that is in
-                                // a separate JSON construct to allow reuse in multiple nodes
-                                // or simply to make the JSON easier to read.
-                                //
-                                // For each "maptype" there is a named json Map construct
-                                // (e.g. "maptype":"moduleMap") "moduleMap" is assumed to exist
-                                // on the parent JSONobject.  For each node with a maptype there
-                                // is an associated "mapname" which defines the element to use
-                                // in the object creation.  Note that the mapType is assumed to be
-                                // either a "graph_node" or subclass thereof.
-                                //
-                                if(elem.has("maptype")) {
+                                JSONObject elem = null;
 
-                                    // Note that if there has a "maptype" then it's actual type
-                                    // is found in the "type" field of the mapped object.
-                                    // i.e. parentjsonobj.maptype.mapname.type
-                                    //
-                                    nJsonMap = jsonObj.getJSONObject(elem.getString("maptype"));
-                                    JSONObject mapElem = nJsonMap.getJSONObject(elem.getString("mapname"));
+                                if(isPrimitive) {
+                                    if (elemClass.isArray()) {
 
-                                    Class<?> elemClass = classMap.get(mapElem.getString("type"));
-
-                                    System.out.printf("class type:%s\n", elemClass.getName());
-                                    eObj = elemClass.newInstance();
-
-                                    // First load the shared instance info in the map
-                                    ((ILoadableObject) eObj).loadJSON(mapElem, scope);
-                                }
-                                else {
-                                    try {
-                                        Class<?> elemClass = classMap.get(elem.getString("type"));
-
-                                        System.out.printf("class type:%s\n", elemClass.getName());
+                                        Log.d(TAG, "here");
 
                                         // TODO: This is an experimental implemenation to allow arrays on the right side of HashMaps.
                                         // TODO: Validate
                                         //
-                                        if (elemClass.isArray()) {
 
-                                            // Get the array on the 1st dimension for the field (attribute)
-                                            nArr = jsonObj.getJSONArray(fieldName);
+                                        // Get the array on the 1st dimension for the field (attribute)
+                                        nArr = nJsonObj.getJSONArray(key);
 
-                                            elemClass = fieldClass.getComponentType();
+                                        Class<?> compClass = elemClass.getComponentType();
 
-                                            eObj = Array.newInstance(elemClass, nArr.length());
+                                        eObj = Array.newInstance(compClass, nArr.length());
 
-                                            field.set(self, parseArray(jsonObj, self, classMap, scope, nArr, elemClass, eObj));
-                                        }
-                                        else {
-                                            eObj = elemClass.newInstance();
-                                        }
-                                    }
-                                    catch(Exception e) {
-                                        CErrorManager.logEvent(TAG, "Check Syntax on Element: " + key, e, false);
-                                    }
-                                }
+                                        parseArray(nJsonObj, self, classMap, scope, nArr, compClass, eObj);
 
-                                // Load the base instance data whether or not it has a mapped
-                                // link.  There may or may not be any data here. But note that
-                                // it will override any info in the map instance data.
-
-                                ((ILoadableObject) eObj).loadJSON(elem, scope);
-
-                                // Initialize graph mode types
-                                //
-                                if(eObj instanceof IScriptable) {
-
-                                    // Associate the node with its Map name
-                                    // This overrides any names assigned in the subtype spec
-                                    ((IScriptable) eObj).setName(key);
-
-                                    // Add the new object to the scope - if it is a scoped object
-                                    // it may just be a data source etc.
-
-                                    if (scope != null) {
-                                        scope.put(key, (IScriptable) eObj);
-                                        Log.i(TAG, "Adding to scope: " + key);
+                                        field_Map.put(key, eObj);
                                     }
                                 }
                                 else {
-                                    field_Map.put(key, eObj);
+                                    elem = nJsonObj.getJSONObject(key);
+
+                                    // maptype is a convenience construct -
+                                    // If there is a maptype then the node has it's instance data
+                                    // partially or completely defined in a HashMap object that is in
+                                    // a separate JSON construct to allow reuse in multiple nodes
+                                    // or simply to make the JSON easier to read.
+                                    //
+                                    // For each "maptype" there is a named json Map construct
+                                    // (e.g. "maptype":"moduleMap") "moduleMap" is assumed to exist
+                                    // on the parent JSONobject.  For each node with a maptype there
+                                    // is an associated "mapname" which defines the element to use
+                                    // in the object creation.  Note that the mapType is assumed to be
+                                    // either a "graph_node" or subclass thereof.
+                                    //
+                                    if (elem.has("maptype")) {
+
+                                        // Note that if there has a "maptype" then it's actual type
+                                        // is found in the "type" field of the mapped object.
+                                        // i.e. parentjsonobj.maptype.mapname.type
+                                        //
+                                        nJsonMap = jsonObj.getJSONObject(elem.getString("maptype"));
+                                        JSONObject mapElem = nJsonMap.getJSONObject(elem.getString("mapname"));
+
+                                        // mapped types should always determine the per instance type
+                                        //
+                                        elemClass = classMap.get(mapElem.getString("type"));
+
+                                        System.out.printf("class type:%s\n", elemClass.getName());
+                                        eObj = elemClass.newInstance();
+
+                                        // First load the shared instance info in the map
+                                        ((ILoadableObject) eObj).loadJSON(mapElem, scope);
+                                    } else {
+                                        try {
+                                            // If not using a global type then determine the per instance type
+                                            //
+                                            if (!globalType)
+                                                elemClass = classMap.get(elem.getString("type"));
+
+                                            System.out.printf("class type:%s\n", elemClass.getName());
+
+                                            eObj = elemClass.newInstance();
+                                        } catch (Exception e) {
+                                            CErrorManager.logEvent(TAG, "Check Syntax on Element: " + key + " : ", e, false);
+                                        }
+                                    }
+
+                                    // Load the base instance data whether or not it has a mapped
+                                    // link.  There may or may not be any data here. But note that
+                                    // it will override any info in the map instance data.
+
+                                    ((ILoadableObject) eObj).loadJSON(elem, scope);
+
+                                    // Initialize graph mode types
+                                    //
+                                    if (eObj instanceof IScriptable) {
+
+                                        // Associate the node with its Map name
+                                        // This overrides any names assigned in the subtype spec
+                                        ((IScriptable) eObj).setName(key);
+
+                                        // Add the new object to the scope - if it is a scoped object
+                                        // it may just be a data source etc.
+
+                                        if (scope != null) {
+                                            scope.put(key, (IScriptable) eObj);
+                                            Log.i(TAG, "Adding to scope: " + key);
+                                        }
+                                    } else {
+                                        field_Map.put(key, eObj);
+                                    }
                                 }
                             }
                         }

@@ -24,6 +24,8 @@ import cmu.xprize.util.IScriptable;
 
 public interface IScriptable2 extends IScriptable {
 
+    public String getType();
+
     public TBoolean OR(IScriptable2 RHS, boolean lneg, boolean rneg);
     public TBoolean AND(IScriptable2 RHS, boolean lneg, boolean rneg);
     public TBoolean LT(IScriptable2 RHS);

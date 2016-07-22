@@ -29,6 +29,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.widget.FrameLayout;
@@ -165,7 +166,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
     }
 
 
-    protected void execCommand(String command, Object target ) {
+    public void execCommand(String command, Object target ) {
 
         CBubble bubble;
         long    delay = 0;
@@ -181,7 +182,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
                 if (mInitialized) {
 
                     for(CBubble ibubble : SBubbles) {
-                        post(BP_CONST.INFLATE, ibubble, delay);
+                        mComponent.post(BP_CONST.INFLATE, ibubble, delay);
 
                         delay += BP_CONST.INFLATE_DELAY;
                     }
@@ -237,7 +238,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
                 broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(bubble.getCenterPosition()));
 
-                post(BP_CONST.REMOVE_BUBBLE, bubble, delay);
+                mComponent.post(BP_CONST.REMOVE_BUBBLE, bubble, delay);
                 break;
 
         }
@@ -326,7 +327,14 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
     public void populateView(CBp_Data data) {
 
         CBubble newBubble;
-        int colorNdx = (int)(Math.random() * BP_CONST.bubbleColors.length);
+
+        // Check if the dataset needs to be generated
+        //
+        generateRandomData(data);
+
+        // Start the bubbles with a random color and cycle the colors
+        int    colorNdx   = (int)(Math.random() * BP_CONST.bubbleColors.length);
+        String correctVal = mComponent._stimulus_data[data.dataset[data.stimulus_index]];
 
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -336,10 +344,18 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
             newBubble = (CBubble) View.inflate(mContext, R.layout.bubble_view, null);
 
+            String bubbleColor = BP_CONST.bubbleColors[colorNdx];
+
             // Set Color: pass in String e.g. "RED" - Cycle through the colors repetitively
             //
-            newBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
+            if(data.stimulus_type.equals(TCONST.AUDIO_REF)) {
+                newBubble.setFeedbackColor(bubbleColor);
+            }
+
+            newBubble.setColor(bubbleColor);
+
             colorNdx = (colorNdx + 1) % BP_CONST.bubbleColors.length;
+
 
             newBubble.setScale(0);
             newBubble.setAlpha(_alpha);
@@ -348,18 +364,27 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
             mParent.addView(newBubble, layoutParams);
 
+            String stiumulusVal = mComponent._stimulus_data[data.dataset[i1]];
+
             switch (mComponent.stimulus_type) {
 
                 case BP_CONST.REFERENCE:
 
-                    int[] shapeSet = BP_CONST.drawableMap.get(mComponent.stimulus_data[data.dataset[i1]]);
+                    try {
+                        int[] shapeSet = BP_CONST.drawableMap.get(stiumulusVal);
 
-                    newBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
+                        newBubble.configData(stiumulusVal, correctVal);
+                        newBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
+                    }
+                    catch(Exception e) {
+                        Log.e(TAG, "Invalid Datatset: " + stiumulusVal);
+                    }
                     break;
 
                 case BP_CONST.TEXTDATA:
 
-                    newBubble.setContents(0, mComponent.stimulus_data[data.dataset[i1]]);
+                    newBubble.configData(stiumulusVal, correctVal);
+                    newBubble.setContents(0, stiumulusVal);
                     break;
             }
         }

@@ -44,10 +44,11 @@ import cmu.xprize.util.TCONST;
 
 public class CStimRespBase extends TextView  implements View.OnClickListener, IEventListener, IEventDispatcher {
 
-    protected Context           mContext;
-    public List<IEventListener> mListeners = new ArrayList<IEventListener>();
-    protected List<String>      mLinkedViews;
-    protected boolean           mListenerConfigured = false;
+    protected Context               mContext;
+
+    public    List<IEventListener>  mListeners          = new ArrayList<IEventListener>();
+    protected List<String>          mLinkedViews;
+    protected boolean               mListenerConfigured = false;
 
     // Used by control in response mode to maintain state info
     protected String        mStimulusString;        // String representation - even for numbers e.g. "34"
@@ -121,7 +122,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
             try {
                 mIsResponse = a.getBoolean(R.styleable.CStimResp_isResponse, false);
                 mAspect     = a.getFloat(R.styleable.CStimResp_aspectratio, -1.0f);
-                linkedViews = a.getNonResourceString(R.styleable.CStimResp_linked_views);
+                linkedViews = a.getNonResourceString(R.styleable.RoboTutor_linked_views);
                 mTextColor  = getCurrentTextColor();
 
                 mLinkedViews = Arrays.asList(linkedViews.split(","));
@@ -216,12 +217,6 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
         setTextSize(TypedValue.COMPLEX_UNIT_PX, finalHeight * 0.7f);
 
         setMeasuredDimension(finalWidth, finalHeight);
-
-//        setMeasuredDimension(getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec),
-//                getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec));
-//        super.onMeasure(
-//                MeasureSpec.makeMeasureSpec(finalWidth, MeasureSpec.EXACTLY),
-//                MeasureSpec.makeMeasureSpec(finalHeight, MeasureSpec.EXACTLY));
     }
 
 

@@ -22,44 +22,78 @@ package cmu.xprize.bp_component;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.FrameLayout;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.CEvent;
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventDispatcher;
+import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
+import cmu.xprize.util.TCONST;
 
 
-public class CBP_Component extends FrameLayout implements ILoadableObject {
+public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoadableObject {
 
     // Make this public and static so sub-components may use it during json load to instantiate
     // controls on the fly.
     //
-    static public Context   mContext;
+    static public Context           mContext;
 
-    public CBP_LetterBoxLayout  Scontent;
+    public List<IEventListener>     mListeners          = new ArrayList<IEventListener>();
+    protected List<String>          mLinkedViews;
+    protected boolean               mListenerConfigured = false;
 
-    protected String        mDataSource;
-    private   int           _dataIndex = 0;
+    public CBP_LetterBoxLayout      Scontent;
 
-    protected IBubbleMechanic _mechanics;
+    protected String                mDataSource;
 
-    private boolean        correct = false;
+    protected CBp_Data              _currData;
+    protected String[]              _stimulus_data;
+    private   int                   _dataIndex = 0;
+
+    protected IBubbleMechanic       _mechanics;
+
+    private   boolean               correct = false;
+    public    int                   question_Index;
+    protected int                   correct_Count;
+
+    private final Handler           mainHandler = new Handler(Looper.getMainLooper());
+    private HashMap                 queueMap    = new HashMap();
+    private boolean                 _qDisabled  = false;
+
 
     // json loadable
-    public String          stimulus_type;
-    public String[]        stimulus_data;
-    public CBp_Data[]      dataSource;
-    public CBpBackground   view_background;
+    public String                   stimulus_type;
+    public HashMap<String,String[]> stimulus_map;
+
+    public int                      question_count;
+    public String                   question_sequence;
+
+    public int[]                    countRange     = {4, 4};
+
+    public CBp_Data[]               dataSource;
+
+    public CBpBackground            view_background;
+    public String                   banner_color;
+
 
     static final String TAG = "CBP_Component";
 
-    protected CBp_Data     _currData;
-    protected CBubble      _touchedBubble;
 
 
     public CBP_Component(Context context) {
@@ -93,7 +127,17 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
                     0, 0);
 
             try {
-                mDataSource  = a.getString(R.styleable.RoboTutor_dataSource);
+
+                mDataSource = a.getString(R.styleable.RoboTutor_dataSource);
+
+                String linkedViews;
+
+                linkedViews = a.getNonResourceString(R.styleable.RoboTutor_linked_views);
+
+                if(linkedViews != null) {
+                    mLinkedViews = Arrays.asList(linkedViews.split(","));
+                }
+
             } finally {
                 a.recycle();
             }
@@ -122,6 +166,8 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
     public void onDestroy() {
 
+        terminateQueue();
+
         if(_mechanics != null) {
             _mechanics.onDestroy();
             _mechanics = null;
@@ -133,16 +179,30 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
         dataSource = _dataSource;
         _dataIndex = 0;
+
+        // If presenting stimulus values sequentially then we use this to track the current value.
+        //
+        question_Index = 0;
+        correct_Count  = 0;
     }
 
 
     public void next() {
 
         try {
+
             if (dataSource != null) {
                 updateDataSet(dataSource[_dataIndex]);
 
+                // We cycle through the dataSource question types iteratively
+                //
                 _dataIndex++;
+                _dataIndex %= dataSource.length;
+
+                // Count down the number of questions requested
+                //
+                question_count--;
+
             } else {
                 CErrorManager.logEvent(TAG,  "Error no DataSource : ", null, false);
             }
@@ -154,13 +214,11 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
 
 
     public boolean dataExhausted() {
-        return (_dataIndex >= dataSource.length)? true:false;
+        return (question_count <= 0)? true:false;
     }
 
 
     protected void updateDataSet(CBp_Data data) {
-
-        Log.d(TAG, "test");
 
         _currData = data;
 
@@ -233,9 +291,6 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     }
 
 
-    public void setTouchedBubble(CBubble bubble) {
-        _touchedBubble = bubble;
-    }
 
     //************************************************************************
     //************************************************************************
@@ -246,6 +301,22 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     // TClass domain where TScope lives providing access to tutor scriptables
     //
     public void applyEvent(String event){};
+
+
+    // Tutor methods  End
+    //************************************************************************
+    //************************************************************************
+
+
+    //************************************************************************
+    //************************************************************************
+    // publish component state data - START
+
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    protected void publishState(CBubble bubble) {}
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
@@ -260,9 +331,157 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
     }
 
 
-    // Tutor methods  End
+    // publish component state data - EBD
     //************************************************************************
     //************************************************************************
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // Component Message Queue  -- Start
+
+
+    public class Queue implements Runnable {
+
+        protected String _command;
+        protected Object _target;
+
+        public Queue(String command) {
+            _command = command;
+        }
+
+        public Queue(String command, Object target) {
+            _command = command;
+            _target  = target;
+        }
+
+
+        @Override
+        public void run() {
+
+            try {
+                queueMap.remove(this);
+
+                if(_mechanics != null) {
+                    _mechanics.execCommand(_command, _target);
+                }
+            }
+            catch(Exception e) {
+                CErrorManager.logEvent(TAG, "Run Error:", e, false);
+            }
+        }
+    }
+
+
+    /**
+     *  Disable the input queues permenantly in prep for destruction
+     *  walks the queue chain to diaable scene queue
+     *
+     */
+    private void terminateQueue() {
+
+        // disable the input queue permenantly in prep for destruction
+        //
+        _qDisabled = true;
+        flushQueue();
+    }
+
+
+    /**
+     * Remove any pending scenegraph commands.
+     *
+     */
+    private void flushQueue() {
+
+        Iterator<?> tObjects = queueMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            mainHandler.removeCallbacks((Queue)(entry.getValue()));
+        }
+    }
+
+
+    /**
+     * Keep a mapping of pending messages so we can flush the queue if we want to terminate
+     * the tutor before it finishes naturally.
+     *
+     * @param qCommand
+     */
+    private void enQueue(Queue qCommand) {
+        enQueue(qCommand, 0);
+    }
+    private void enQueue(Queue qCommand, long delay) {
+
+        if(!_qDisabled) {
+            queueMap.put(qCommand, qCommand);
+
+            if(delay > 0) {
+                mainHandler.postDelayed(qCommand, delay);
+            }
+            else {
+                mainHandler.post(qCommand);
+            }
+        }
+    }
+
+    /**
+     * Post a command to the tutorgraph queue
+     *
+     * @param command
+     */
+    public void post(String command) {
+        post(command, 0);
+    }
+    public void post(String command, long delay) {
+
+        enQueue(new Queue(command), delay);
+    }
+
+
+    /**
+     * Post a command and target to this scenegraph queue
+     *
+     * @param command
+     */
+    public void post(String command, Object target) {
+        post(command, target, 0);
+    }
+    public void post(String command, Object target, long delay) {
+
+        enQueue(new Queue(command, target), delay);
+    }
+
+
+
+
+    // Component Message Queue  -- End
+    //************************************************************************
+    //************************************************************************
+
+
+
+    //***********************************************************
+    // Event Listener/Dispatcher - Start
+
+
+    @Override
+    public void addEventListener(String linkedView) {
+
+    }
+
+    @Override
+    public void dispatchEvent(IEvent event) {
+
+        for (IEventListener listener : mListeners) {
+            listener.onEvent(event);
+        }
+    }
+
+    // Event Listener/Dispatcher - End
+    //***********************************************************
 
 
 
@@ -285,6 +504,10 @@ public class CBP_Component extends FrameLayout implements ILoadableObject {
         addView(view_background);
         bringChildToFront(Scontent);
 
+        if(banner_color != null) {
+            dispatchEvent(new CEvent(TCONST.SET_BANNER_COLOR, TCONST.VALUE , banner_color));
+        }
     }
+
 
 }

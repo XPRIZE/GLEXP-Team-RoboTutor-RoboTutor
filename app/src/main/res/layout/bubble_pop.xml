@@ -18,6 +18,7 @@
         android:id="@+id/SBubblePop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:linked_views="Sbanner"
         app:layout_heightPercent="90%"
         android:layout_below="@+id/Sbanner"/>
 

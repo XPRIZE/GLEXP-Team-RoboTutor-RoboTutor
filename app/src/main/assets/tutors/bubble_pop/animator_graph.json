@@ -17,15 +17,14 @@
         "INTRO_STATE": {
           "type": "NODE",
           "COMMENT": "Intro Clip - we only ever visit this node once",
-          "maptype":"actionMap",
-          "mapname": "NEXTNODE",
-          "preenter": ["SET_VERSION","PLAY_BACKINGTRACK","PLAY_PROMPT","SET_DATASOURCE","NEXT_DATASET"],
-          "preexit": [
-          ],
+          "maptype":"moduleMap",
+          "mapname": "INTROSTATE",
+          "preenter": ["SET_VERSION","SET_DATASOURCE"],
+          "preexit": [],
           "edges": [
             {
               "constraint": "",
-              "edge": "USERINPUT"
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
@@ -35,12 +34,12 @@
           "COMMENT": "We may say or show the stimulus at this point",
           "maptype":"moduleMap",
           "mapname": "UPDATESTIMULUS",
-          "preenter": [],
+          "preenter": ["NEXT_DATASET"],
           "preexit": [],
           "edges": [
             {
               "constraint": "",
-              "edge": "USERINPUT"
+              "edge": "USER_INPUT"
             }
           ]
         },
@@ -49,40 +48,37 @@
         "USER_INPUT": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"actionMap",
+          "maptype":"moduleMap",
           "mapname": "USERINPUT",
           "preenter": [],
-          "preexit": [
-          ],
+          "preexit": [],
           "edges": [
             {
               "constraint":"FTR_RIGHT",
-              "edge": "PLAYCORRECT"
+              "edge": "PLAY_CORRECT"
             },
             {
               "constraint": "",
-              "edge": "PLAYWRONG"
+              "edge": "PLAY_WRONG"
             }
           ]
         },
 
-        "PLAT_CORRECT": {
+        "PLAY_CORRECT": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
           "maptype":"moduleMap",
           "mapname": "PLAYCORRECT",
           "preenter": [],
-          "preexit": [
-            "GETWORD"
-          ],
+          "preexit": [],
           "edges": [
             {
-              "constraint": "FTR_NOWORDS",
-              "edge": "NEXT_SCENE"
+              "constraint": "FTR_EOD",
+              "edge": "FINAL_SCORE"
             },
             {
               "constraint": "",
-              "edge": "USERINPUT"
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
@@ -93,20 +89,30 @@
           "maptype":"moduleMap",
           "mapname": "PLAYWRONG",
           "preenter": [],
-          "preexit": [
-            "GETWORD"
-          ],
+          "preexit": [],
           "edges": [
             {
-              "constraint": "FTR_NOWORDS",
-              "edge": "NEXT_SCENE"
-            },
-            {
               "constraint": "",
-              "edge": "INTRO_STATE"
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
+
+        "FINAL_SCORE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"moduleMap",
+          "mapname": "FINALSCORE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "NEXT_SCENE"
+            }
+          ]
+        },
+
         "NEXT_SCENE": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
@@ -123,6 +129,16 @@
 
         "COMMENT": "@@@@@  CModules  @@@@@",
 
+        "INTROSTATE": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "gamesound.mp3", "soundpackage":"tutor_effect", "repeat":true, "volume": 0.10, "mode":"event", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please tap on it.mp3", "soundpackage":"default", "volume": 0.7, "mode":"flow", "features": ""}
+          ]
+        },
+
         // Here we manage the Stimulus display.
         // We are either going to Speak the Stimulus / Show the Stimulus / Both or Neither -
 
@@ -130,14 +146,24 @@
           "type": "MODULE",
           "reuse":true,
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.stimulus}}.mp3",  "soundpackage":"default", "mode":"flow", "features": "FTR_SAY"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"xprize", "mode":"event", "features": "FTR_SAY"},
 
             // If we are showing it we have to wait for the animation to complete before continuing
-            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "STIMULUS_SHOWN:String,NEXT:String" ,"features":"FTR_SHOW"},
-            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_STIMULUS:String"               ,"features":"FTR_SHOW"},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "STIMULUS_SHOWN:String|NEXTNODE:String" ,"features":"FTR_SHOW"},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_STIMULUS:String"                  ,"features":"FTR_SHOW"},
+            {"type": "COMMAND", "cmd": "WAIT", "features":"FTR_SHOW"  },
 
-            // Otherwise we just continue to the next node
-            {"type": "COMMAND", "cmd": "NEXT", "feature":"!FTR_SHOW"  }
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_BUBBLES:String"              ,"features":""}
+          ]
+        },
+
+        "USERINPUT": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "BUBBLE_TOUCH_EVENT:String|NEXTNODE:String" ,"features":""},
+            {"type": "COMMAND", "cmd": "WAIT"  }
           ]
         },
 
@@ -147,21 +173,55 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "popSound.mp3",  "soundpackage":"tutor_effect", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "popSound.mp3",  "soundpackage":"tutor_effect", "volume": 0.20, "mode":"event", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"event", "features": ""},
 
-            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "POP_BUBBLE:String" ,"features":""}
+            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "BUBBLE_POPPED:String|NEXTNODE:String" ,"features":""},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "POP_BUBBLE:String" ,"features":""},
+            {"type": "COMMAND", "cmd": "WAIT"  },
+
+            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "BUBBLES_CLEARED:String|NEXTNODE:String" ,"features":""},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "CLEAR_CONTENT:String" ,"features":""},
+            {"type": "COMMAND", "cmd": "WAIT"  },
+
+            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "FEEDBACK_SHOWN:String|NEXTNODE:String" ,"features":""},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "SHOW_FEEDBACK:String" ,"features":""},
+            {"type": "COMMAND", "cmd": "WAIT"  }
           ]
         },
-
 
         "PLAYWRONG": {
           "type": "MODULE",
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "wrong.mp3", "soundpackage":"tutor_effect", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "wrong.mp3", "soundpackage":"tutor_effect", "volume": 0.05, "mode":"event", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"event", "features": ""},
 
-            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "WIGGLE_BUBBLE:String" ,"features":""}
+            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "BUBBLE_WIGGLED:String|NEXTNODE:String" ,"features":""},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "WIGGLE_BUBBLE:String" ,"features":""},
+            {"type": "COMMAND", "cmd": "WAIT"  },
+
+            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "BUBBLES_CLEARED:String|NEXTNODE:String" ,"features":""},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "CLEAR_CONTENT:String" ,"features":""},
+            {"type": "COMMAND", "cmd": "WAIT"  },
+
+            {"type": "TIMER", "id":"nextDelayTimer", "startdelay":"0", "period":"500", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"NEXTNODE", "features": "" },
+            {"type": "COMMAND", "cmd": "WAIT"  }
+          ]
+        },
+
+
+        "FINALSCORE": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "scorecard.mp3", "soundpackage":"tutor_effect", "volume": 1.00, "mode":"event", "features": ""},
+
+            {"type": "TIMER", "id":"showScoreTimer", "startdelay":"0", "period":"4000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"NEXTNODE", "features": "" },
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "SHOW_SCORE:String" ,"features":""},
+            {"type": "COMMAND", "cmd": "WAIT"  }
           ]
         }
       },
@@ -170,7 +230,7 @@
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "PLAY_BACKINGTRACK": {"type": "AUDIO", "command": "PLAY", "soundsource": "gamesound.mp3", "soundpackage":"tutor_effect", "repeat":true, "volume": 0.20, "mode":"flow", "features": ""},
+        "PLAY_BACKINGTRACK": {"type": "AUDIO", "command": "PLAY", "soundsource": "gamesound.mp3", "soundpackage":"tutor_effect", "repeat":true, "volume": 0.20, "mode":"event", "features": ""},
         "PLAY_PROMPT": {"type": "AUDIO", "command": "PLAY", "soundsource": "Please tap on it.mp3", "soundpackage":"default", "volume": 0.7, "mode":"flow", "features": ""},
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
@@ -182,8 +242,6 @@
 //        "SET_SHOW":{"type": "COMMAND", "id": "SBubblePop", "method": "setEventBehavior" ,"features":""},
 
         "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"  },
-        "USERINPUT":  {"type": "COMMAND", "cmd": "WAIT"  },
-
 
         "B5_ATTACH": {
           "type": "COMMAND", "id": "button5", "method": "setButtonBehavior", "parms": "STOP:String"
@@ -202,26 +260,21 @@
 
         "COMMENT": "@@@@@  CConstraints @@@@@ ",
 
-        "FTR_NOWORDS": {
+        "FTR_RIGHT":{
           "type": "CONDITION",
-          "cmd": "test",
-          "code": "FTR_NOWORDS"
+          "test":"FTR_RIGHT"
         },
-        "FTR_WORDS": {
+
+        "FTR_WRONG":{
           "type": "CONDITION",
-          "cmd": "test",
-          "code": "!FTR_NOWORDS"
+          "test":"FTR_WRONG"
         },
-        "FTR_RIGHT": {
+
+        "FTR_EOD":{
           "type": "CONDITION",
-          "cmd": "test",
-          "code": "FTR_RIGHT"
-        },
-        "FTR_WRONG": {
-          "type": "CONDITION",
-          "cmd": "test",
-          "code": "!FTR_RIGHT"
+          "test":"FTR_EOD"
         }
+
       }
     }
   }

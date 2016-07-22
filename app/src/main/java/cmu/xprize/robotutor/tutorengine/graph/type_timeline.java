@@ -333,7 +333,7 @@ public class type_timeline extends type_action implements IMediaListener {
      *
      */
     @Override
-    public void onCompletion() {
+    public void onCompletion(CMediaManager.PlayerManager playerManager) {
 
         // Release the mediaController for reuse
         //

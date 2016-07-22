@@ -34,72 +34,6 @@
 
     {
       "type":"Sm_Class",
-      "description":"bubblepop-native",
-      //"background":"#D9FFFF",
-      "data": [
-
-        { "type":"Sm_Data",
-          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_shape_MC.json\"}]}}}",
-          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Shape MC"},
-
-        { "type":"Sm_Data",
-          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_shape_RISE.json\"}]}}}",
-          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Shape Rise"},
-
-        { "type":"Sm_Data",
-          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_MC.json\"}]}}}",
-          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Shape 2 Number MC"},
-
-        { "type":"Sm_Data",
-          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_RISE.json\"}]}}}",
-          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Shape 2 Number Rise"},
-
-        { "type":"Sm_Data",
-          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_MC.json\"}]}}}",
-          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Number 2 Shape MC"},
-
-        { "type":"Sm_Data",
-          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_RISE.json\"}]}}}",
-          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Number 2 Shape Rise"},
-
-        { "type":"Sm_Data",
-          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_MC.json\"}]}}}",
-          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Numbers MC"},
-
-        { "type":"Sm_Data",
-          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_RISE.json\"}]}}}",
-          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Numbers RISE"},
-
-        { "type":"Sm_Data",
-          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_MC.json\"}]}}}",
-          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase MC"},
-
-        { "type":"Sm_Data",
-          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_RISE.json\"}]}}}",
-          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase Rise"},
-
-        { "type":"Sm_Data",
-          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_MC.json\"}]}}}",
-          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase MC"},
-
-        { "type":"Sm_Data",
-          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_RISE.json\"}]}}}",
-          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase Rise"},
-
-        { "type":"Sm_Data",
-          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_MC.json\"}]}}}",
-          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case MC"},
-
-        { "type":"Sm_Data",
-          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_RISE.json\"}]}}}",
-          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case Rise"}
-
-
-      ]
-    },
-
-    {
-      "type":"Sm_Class",
       "description":"add_subtract",
       //"background":"#D9FFFF",
       "data": [
@@ -156,40 +90,18 @@
       "description":"fluency_numeracy",
       //"background":"#b9FFb9",
       "data": [
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=shapes&mechanic=mcq&say=no&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Shape Pop1" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=shapes&mechanic=mcq&say=yes&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Shape Pop2" },
-//        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=shapes&mechanic=rising&say=no&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Shape Pop3" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=shapes&mechanic=rising&say=yes&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Shape Pop4" }
-      ]
-    },
-    {
-      "type":"Sm_Class",
-      "description":"fluency_numeracy",
-      //"background":"#D9FFFF",
-      "data": [
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers_to_dots&mechanic=mcq&say=no&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Dot Pop1" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers_to_dots&mechanic=mcq&say=yes&show=yes&sequence=N/A", "buttontype":"text" , "buttonvalue":"Dot Pop2" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers_to_dots&mechanic=mcq&say=yes&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Dot Pop3" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers_to_dots&mechanic=mcq&say=no&show=yes&sequence=N/A", "buttontype":"text" , "buttonvalue":"Dot Pop4" },
-//        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers_to_dots&mechanic=rising&say=no&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Dot Pop5" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers_to_dots&mechanic=rising&say=yes&show=yes&sequence=N/A", "buttontype":"text" , "buttonvalue":"Dot Pop6" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers_to_dots&mechanic=rising&say=yes&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Dot Pop7" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=numbers_to_dots&mechanic=rising&say=no&show=yes&sequence=N/A", "buttontype":"text" , "buttonvalue":"Dot Pop8" }
-      ]
-    },
-    {
-      "type":"Sm_Class",
-      "description":"fluency_numeracy",
-      //"background":"#b9FFb9",
-      "data": [
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=dots_to_numbers&mechanic=mcq&say=no&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Number Pop1" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=dots_to_numbers&mechanic=mcq&say=yes&show=yes&sequence=N/A", "buttontype":"text" , "buttonvalue":"Number Pop2" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=dots_to_numbers&mechanic=mcq&say=yes&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Number Pop3" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=dots_to_numbers&mechanic=mcq&say=no&show=yes&sequence=N/A", "buttontype":"text" , "buttonvalue":"Number Pop4" },
-//        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=dots_to_numbers&mechanic=rising&say=no&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Number Pop5" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=dots_to_numbers&mechanic=rising&say=yes&show=yes&sequence=N/A", "buttontype":"text" , "buttonvalue":"Number Pop6" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=dots_to_numbers&mechanic=rising&say=yes&show=no&sequence=N/A", "buttontype":"text" , "buttonvalue":"Number Pop7" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=dots_to_numbers&mechanic=rising&say=no&show=yes&sequence=N/A", "buttontype":"text" , "buttonvalue":"Number Pop8" }
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_shape_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Shape Pop1"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_shape_YN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Shape Pop2"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_shape_YN_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Shape Pop3"}
       ]
     },
 
@@ -198,22 +110,34 @@
       "description":"fluency_numeracy",
       //"background":"#D9FFFF",
       "data": [
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=mcq&say=no&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Capital Pop1" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=mcq&say=yes&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Capital Pop2" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=mcq&say=no&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Capital Pop3" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=mcq&say=yes&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Capital Pop4" },
-  //      { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=rising&say=no&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Capital Pop5" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=rising&say=yes&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Capital Pop6" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=rising&say=no&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Capital Pop7" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=rising&say=yes&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Capital Pop8" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=mcq&say=no&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop1" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=mcq&say=yes&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop2" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=mcq&say=no&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop3" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=mcq&say=yes&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop4" },
-    //    { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=rising&say=no&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop5" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=rising&say=yes&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop6" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=rising&say=no&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop7" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_uppercase&mechanic=rising&say=yes&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop8" }
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Number -> Dot 1"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_YY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Number -> Dot 2"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_YN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Number -> Dot 3"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_NY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Number -> Dot 4"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_YY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Number -> Dot 5"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_YN_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Number -> Dot 6"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_NY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Number -> Dot 7"}
       ]
     },
 
@@ -222,48 +146,273 @@
       "description":"fluency_numeracy",
       //"background":"#b9FFb9",
       "data": [
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=mcq&say=no&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Letter Pop1" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=mcq&say=yes&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Letter Pop2" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=mcq&say=no&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Letter Pop3" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=mcq&say=yes&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Letter Pop4" },
-      //  { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=rising&say=no&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Letter Pop5" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=rising&say=yes&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Letter Pop6" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=rising&say=no&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Letter Pop7" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=rising&say=yes&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Letter Pop8" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=mcq&say=no&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop1" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=mcq&say=yes&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop2" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=mcq&say=no&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop3" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=mcq&say=yes&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop4" },
-        //{ "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=rising&say=no&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop5" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=rising&say=yes&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop6" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=rising&say=no&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop7" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_lowercase&mechanic=rising&say=yes&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop8" }
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Dot -> Number 1"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_YY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Dot -> Number 2"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_YN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Dot -> Number 3"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_NY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Dot -> Number 4"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_YY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Dot -> Number 5"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_YN_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Dot -> Number 6"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_NY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Dot -> Number 7"}
+      ]
+    },
+
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_numeracy",
+      //"background":"#b9FFb9",
+      "data": [
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Number Pop1"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_YY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Numbers Pop2"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_YN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Numbers Pop3"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_NY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Numbers Pop4"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_YY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Numbers Pop5"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_YN_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Numbers Pop6"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_NY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Numbers Pop7"}
+      ]
+    },
+
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_Lowercase -sequential",
+      //"background":"#b9FFb9",
+      "data": [
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 1"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_YY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 2"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_YN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 3"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_NY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 4"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_YY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 5"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_YN_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 6"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_NY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 7"}
+      ]
+    },
+
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_Lowercase -random",
+      //"background":"#b9FFb9",
+      "data": [
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 1R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_YY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 2R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_YN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 3R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_NY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 4R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_YY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 5R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_YN_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 6R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_NY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 7R"}
+      ]
+    },
+
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_Uppercase - sequential",
+      //"background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 1"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_YY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 2"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_YN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 3"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_NY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 4"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_YY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 5"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_YN_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 6"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_NY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 7"}
       ]
     },
 
     {
       "type":"Sm_Class",
-      "description":"fluency_numeracy",
+      "description":"fluency_Uppercase - random",
       //"background":"#D9FFFF",
       "data": [
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=mcq&say=no&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Mix Pop1" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=mcq&say=yes&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Mix Pop2" },
-//        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=mcq&say=yes&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Mix Pop3" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=mcq&say=no&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Mix Pop3" },
-//        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=rising&say=no&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Mix Pop4" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=rising&say=yes&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Mix Pop5" },
-//        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=rising&say=yes&show=no&sequence=simple", "buttontype":"text" , "buttonvalue":"Mix Pop7" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=rising&say=no&show=yes&sequence=simple", "buttontype":"text" , "buttonvalue":"Mix Pop6" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=mcq&say=no&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop1" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=mcq&say=yes&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop2" },
-//        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=mcq&say=yes&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop3" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=mcq&say=no&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop3" },
-//        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=rising&say=no&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop4" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=rising&say=yes&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop5" },
-//       { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=rising&say=yes&show=no&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop7" },
-        { "type":"Sm_Data", "datasource":"", "intent": "edu.cmu.xprize.games.GameActivity", "intentdata":"?level=letters_mix&mechanic=rising&say=no&show=yes&sequence=random", "buttontype":"text" , "buttonvalue":"Random Pop6" }
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 1R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_YY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 2R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_YN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 3R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_NY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 4R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_YY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 5R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_YN_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 6R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_NY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 7R"}
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_Mixed case - sequential",
+      //"background":"#D9FFFF",
+      "data": [
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case MC"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_YY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case MC"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_NY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case MC"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_YY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case Rise"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_NY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case Rise"}
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_Mixed case - random",
+      //"background":"#D9FFFF",
+      "data": [
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_R_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case MC"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_R_YY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case MC"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_R_NY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case MC"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_R_YY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case Rise"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_R_NY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case Rise"}
       ]
     }
+
 
   ]
 }

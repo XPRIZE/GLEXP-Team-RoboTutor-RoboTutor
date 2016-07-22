@@ -116,7 +116,7 @@ public class type_handler extends type_action implements IMediaListener {
 
 
     @Override
-        public void onCompletion() {
+        public void onCompletion(CMediaManager.PlayerManager playerManager) {
             // NOOP
         }
 

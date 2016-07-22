@@ -43,6 +43,10 @@ public class CBubble extends FrameLayout {
 
     private boolean           mOnScreen = false;
 
+    private String            mCorrectVal;
+    private String            mStimulusVal;
+
+    private ImageView         mAudio;
     private ImageView         mIcon;
     private TextView          mText;
     private float             mScale;
@@ -90,11 +94,13 @@ public class CBubble extends FrameLayout {
 
         setClipChildren(false);
 
-        mIcon = (ImageView) findViewById(R.id.SIcon);
-        mText = (TextView) findViewById(R.id.SText);
+        mAudio =  (ImageView) findViewById(R.id.SAudioFeedback);
+        mIcon  = (ImageView) findViewById(R.id.SIcon);
+        mText  = (TextView) findViewById(R.id.SText);
 
         setScale(1.0f);
     }
+
 
     public void onDestroy() {
 
@@ -103,6 +109,25 @@ public class CBubble extends FrameLayout {
             bubblepop = null;
         }
     }
+
+
+    public void configData(String stimulusVal, String correctVal) {
+
+        mCorrectVal = correctVal;
+        mStimulusVal = stimulusVal;
+    }
+
+
+    public boolean isCorrect() {
+
+        return mCorrectVal.equals(mStimulusVal);
+    }
+
+
+    public String getStimulus() {
+        return mStimulusVal;
+    }
+
 
     public boolean getOnScreen() {
         return mOnScreen;
@@ -124,6 +149,13 @@ public class CBubble extends FrameLayout {
         mColor = color;
 
         setBackgroundResource(BP_CONST.bubbleMap.get(mColor));
+    }
+
+
+    public void setFeedbackColor(String color) {
+        mColor = color;
+
+        mAudio.setImageResource(BP_CONST.audioBubbleMap.get(mColor));
     }
 
 

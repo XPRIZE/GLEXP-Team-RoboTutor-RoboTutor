@@ -51,10 +51,10 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
     //**********************************************************
     //**********************************************************
     //*****************  Tutor Interface
-
-
+    
 
     public void evaluateWhole () {
+
 
         reset();
 
