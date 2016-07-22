@@ -88,6 +88,12 @@ public class BP_CONST {
     public static final String BUBBLES_CLEARED    = "BUBBLES_CLEARED";
     public static final String RANDOM             = "random";
     public static final String SEQUENTIAL         = "sequential";
+    public static final int    FEEDBACK_SIZE      = 300;
+    public static final String SHOW_FEEDBACK      = "SHOW_FEEDBACK";
+    public static final String FEEDBACK_SHOWN     = "FEEDBACK_SHOWN";
+    public static final String ZOOM_FEEDBACK      = "ZOOM_FEEDBACK";
+    public static final String SHOW_SCORE         = "SHOW_SCORE";
+
 
     static public HashMap<String, Integer> bubbleMap = new HashMap<String, Integer>();
 

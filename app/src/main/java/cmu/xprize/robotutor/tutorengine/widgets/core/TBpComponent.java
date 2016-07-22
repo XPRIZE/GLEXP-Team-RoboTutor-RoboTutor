@@ -6,15 +6,12 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import cmu.xprize.bp_component.BP_CONST;
 import cmu.xprize.bp_component.CBP_Component;
 import cmu.xprize.bp_component.CBp_Data;
 import cmu.xprize.bp_component.CBubble;
-import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
@@ -22,12 +19,9 @@ import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
-import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.CErrorManager;
-import cmu.xprize.util.IEvent;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.IScope;
@@ -212,24 +206,32 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
 
         switch (event) {
 
+            case BP_CONST.SHOW_SCORE:
+                post(BP_CONST.SHOW_SCORE);
+                break;
+
             case BP_CONST.SHOW_STIMULUS:
-                _mechanics.post(BP_CONST.SHOW_STIMULUS, _currData);
+                post(BP_CONST.SHOW_STIMULUS, _currData);
+                break;
+
+            case BP_CONST.SHOW_FEEDBACK:
+                post(BP_CONST.SHOW_FEEDBACK, new Integer(correct_Count));
                 break;
 
             case BP_CONST.SHOW_BUBBLES:
-                _mechanics.post(BP_CONST.SHOW_BUBBLES);
+                post(BP_CONST.SHOW_BUBBLES);
                 break;
 
             case BP_CONST.POP_BUBBLE:
-                _mechanics.post(BP_CONST.POP_BUBBLE, _touchedBubble);
+                post(BP_CONST.POP_BUBBLE, _touchedBubble);
                 break;
 
             case BP_CONST.WIGGLE_BUBBLE:
-                _mechanics.post(BP_CONST.WIGGLE_BUBBLE, _touchedBubble);
+                post(BP_CONST.WIGGLE_BUBBLE, _touchedBubble);
                 break;
 
             case BP_CONST.CLEAR_CONTENT:
-                _mechanics.post(BP_CONST.CLEAR_CONTENT, _touchedBubble);
+                post(BP_CONST.CLEAR_CONTENT, _touchedBubble);
                 break;
         }
     }
@@ -275,8 +277,6 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
         }
 
     }
-
-    ;
 
 
     /**
@@ -334,6 +334,7 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
 
         if (bubble.isCorrect()) {
             mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
+            correct_Count++;
         } else {
             mTutor.setAddFeature(TCONST.GENERIC_WRONG);
         }
@@ -346,7 +347,7 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
 
         resetState();
 
-        String correctVal = stimulus_data[data.dataset[data.stimulus_index]];
+        String correctVal = _stimulus_data[data.dataset[data.stimulus_index]];
 
         if(correctVal.length() == 1)
             correctVal = correctVal.toUpperCase();
@@ -462,6 +463,6 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
 
         // Map the language specific data source
         //
-        stimulus_data = stimulus_map.get(((IScope2) scope).tutor().getLanguageFeature());
+        _stimulus_data = stimulus_map.get(((IScope2) scope).tutor().getLanguageFeature());
     }
 }

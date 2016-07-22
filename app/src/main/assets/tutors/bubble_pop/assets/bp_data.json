@@ -19,17 +19,17 @@
   //  "stimulusType" : "reference" | "text_data"
 
 //  "stimulus_type" : "reference",
-//  "stimulus_data" : ["arrow","circle","crescent", "diamond", "heart", "hexagon", "line", "octagon", "oval", "pentagon", "rectangle", "ring", "semicircle", "square", "star", "trapezoid", "triangle"],
+//  "_stimulus_data" : ["arrow","circle","crescent", "diamond", "heart", "hexagon", "line", "octagon", "oval", "pentagon", "rectangle", "ring", "semicircle", "square", "star", "trapezoid", "triangle"],
 
   // Swahili Aphabet
 //  "stimulus_type" : "text_data",
-//  "stimulus_data" : ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","r","s","t","u","v","w","y","z"],
-//  "stimulus_data" : ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","R","S","T","U","V","W","Y","Z"],
+//  "_stimulus_data" : ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","r","s","t","u","v","w","y","z"],
+//  "_stimulus_data" : ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","R","S","T","U","V","W","Y","Z"],
 
   // English Aphabet
 //  "stimulus_type" : "text_data",
-//  "stimulus_data" : ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"],
-//  "stimulus_data" : ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+//  "_stimulus_data" : ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"],
+//  "_stimulus_data" : ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
 
   // Numbers
   "stimulus_type" : "text_data",

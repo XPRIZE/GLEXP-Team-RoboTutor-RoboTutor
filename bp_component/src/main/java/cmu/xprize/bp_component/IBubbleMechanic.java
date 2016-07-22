@@ -12,9 +12,5 @@ public interface IBubbleMechanic {
     public void populateView(CBp_Data data);
     public void doLayout(int width, int height, CBp_Data data);
 
-    public void post(String command);
-    public void post(String command, long delay);
-    public void post(String command, Object target);
-    public void post(String command, Object target, long delay);
-
+    public void execCommand(String command, Object target );
 }

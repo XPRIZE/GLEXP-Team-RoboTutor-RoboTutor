@@ -166,7 +166,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
     }
 
 
-    protected void execCommand(String command, Object target ) {
+    public void execCommand(String command, Object target ) {
 
         CBubble bubble;
         long    delay = 0;
@@ -182,7 +182,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
                 if (mInitialized) {
 
                     for(CBubble ibubble : SBubbles) {
-                        post(BP_CONST.INFLATE, ibubble, delay);
+                        mComponent.post(BP_CONST.INFLATE, ibubble, delay);
 
                         delay += BP_CONST.INFLATE_DELAY;
                     }
@@ -238,7 +238,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
                 broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(bubble.getCenterPosition()));
 
-                post(BP_CONST.REMOVE_BUBBLE, bubble, delay);
+                mComponent.post(BP_CONST.REMOVE_BUBBLE, bubble, delay);
                 break;
 
         }
@@ -334,7 +334,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
         // Start the bubbles with a random color and cycle the colors
         int    colorNdx   = (int)(Math.random() * BP_CONST.bubbleColors.length);
-        String correctVal = mComponent.stimulus_data[data.dataset[data.stimulus_index]];
+        String correctVal = mComponent._stimulus_data[data.dataset[data.stimulus_index]];
 
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -364,7 +364,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
             mParent.addView(newBubble, layoutParams);
 
-            String stiumulusVal = mComponent.stimulus_data[data.dataset[i1]];
+            String stiumulusVal = mComponent._stimulus_data[data.dataset[i1]];
 
             switch (mComponent.stimulus_type) {
 
