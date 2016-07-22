@@ -22,6 +22,8 @@ package cmu.xprize.bp_component;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
@@ -30,7 +32,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CEvent;
@@ -48,26 +52,35 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
     // Make this public and static so sub-components may use it during json load to instantiate
     // controls on the fly.
     //
-    static public Context       mContext;
+    static public Context           mContext;
 
-    public List<IEventListener> mListeners          = new ArrayList<IEventListener>();
-    protected List<String>      mLinkedViews;
-    protected boolean           mListenerConfigured = false;
+    public List<IEventListener>     mListeners          = new ArrayList<IEventListener>();
+    protected List<String>          mLinkedViews;
+    protected boolean               mListenerConfigured = false;
 
-    public CBP_LetterBoxLayout  Scontent;
+    public CBP_LetterBoxLayout      Scontent;
 
-    protected String            mDataSource;
-    protected String[]          stimulus_data;
-    private   int               _dataIndex = 0;
+    protected String                mDataSource;
 
-    protected IBubbleMechanic   _mechanics;
+    protected CBp_Data              _currData;
+    protected String[]              _stimulus_data;
+    private   int                   _dataIndex = 0;
 
-    private boolean             correct = false;
-    public  int question_Index;
+    protected IBubbleMechanic       _mechanics;
+
+    private   boolean               correct = false;
+    public    int                   question_Index;
+    protected int                   correct_Count;
+
+    private final Handler           mainHandler = new Handler(Looper.getMainLooper());
+    private HashMap                 queueMap    = new HashMap();
+    private boolean                 _qDisabled  = false;
+
 
     // json loadable
     public String                   stimulus_type;
     public HashMap<String,String[]> stimulus_map;
+
     public int                      question_count;
     public String                   question_sequence;
 
@@ -81,7 +94,6 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
     static final String TAG = "CBP_Component";
 
-    protected CBp_Data     _currData;
 
 
     public CBP_Component(Context context) {
@@ -154,6 +166,8 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
     public void onDestroy() {
 
+        terminateQueue();
+
         if(_mechanics != null) {
             _mechanics.onDestroy();
             _mechanics = null;
@@ -169,6 +183,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         // If presenting stimulus values sequentially then we use this to track the current value.
         //
         question_Index = 0;
+        correct_Count  = 0;
     }
 
 
@@ -317,6 +332,132 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
 
     // publish component state data - EBD
+    //************************************************************************
+    //************************************************************************
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // Component Message Queue  -- Start
+
+
+    public class Queue implements Runnable {
+
+        protected String _command;
+        protected Object _target;
+
+        public Queue(String command) {
+            _command = command;
+        }
+
+        public Queue(String command, Object target) {
+            _command = command;
+            _target  = target;
+        }
+
+
+        @Override
+        public void run() {
+
+            try {
+                queueMap.remove(this);
+
+                if(_mechanics != null) {
+                    _mechanics.execCommand(_command, _target);
+                }
+            }
+            catch(Exception e) {
+                CErrorManager.logEvent(TAG, "Run Error:", e, false);
+            }
+        }
+    }
+
+
+    /**
+     *  Disable the input queues permenantly in prep for destruction
+     *  walks the queue chain to diaable scene queue
+     *
+     */
+    private void terminateQueue() {
+
+        // disable the input queue permenantly in prep for destruction
+        //
+        _qDisabled = true;
+        flushQueue();
+    }
+
+
+    /**
+     * Remove any pending scenegraph commands.
+     *
+     */
+    private void flushQueue() {
+
+        Iterator<?> tObjects = queueMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            mainHandler.removeCallbacks((Queue)(entry.getValue()));
+        }
+    }
+
+
+    /**
+     * Keep a mapping of pending messages so we can flush the queue if we want to terminate
+     * the tutor before it finishes naturally.
+     *
+     * @param qCommand
+     */
+    private void enQueue(Queue qCommand) {
+        enQueue(qCommand, 0);
+    }
+    private void enQueue(Queue qCommand, long delay) {
+
+        if(!_qDisabled) {
+            queueMap.put(qCommand, qCommand);
+
+            if(delay > 0) {
+                mainHandler.postDelayed(qCommand, delay);
+            }
+            else {
+                mainHandler.post(qCommand);
+            }
+        }
+    }
+
+    /**
+     * Post a command to the tutorgraph queue
+     *
+     * @param command
+     */
+    public void post(String command) {
+        post(command, 0);
+    }
+    public void post(String command, long delay) {
+
+        enQueue(new Queue(command), delay);
+    }
+
+
+    /**
+     * Post a command and target to this scenegraph queue
+     *
+     * @param command
+     */
+    public void post(String command, Object target) {
+        post(command, target, 0);
+    }
+    public void post(String command, Object target, long delay) {
+
+        enQueue(new Queue(command, target), delay);
+    }
+
+
+
+
+    // Component Message Queue  -- End
     //************************************************************************
     //************************************************************************
 

@@ -56,15 +56,11 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
     protected boolean                     _isRunning   = false;
 
-    private final Handler                 mainHandler = new Handler(Looper.getMainLooper());
-    private HashMap                       queueMap    = new HashMap();
-    protected boolean                     _enabled    = true;
-    private boolean                       _qDisabled  = false;
-
     private boolean                       _watchable    = true;
     private int[]                         _screenCoord  = new int[2];
     private long                          _time;
     private long                          _prevTime;
+    protected boolean                     _enabled    = true;
 
     private LocalBroadcastManager         bManager;
 
@@ -75,6 +71,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
     protected CBubble[]                   SBubbles;
     protected CBubbleStimulus             SbubbleStumulus;
+    protected CBubbleStimulus             SfeedBack;
 
     protected HashMap<Animator, CBubble>  inflators   = new HashMap<Animator, CBubble>();
     protected HashMap<Animator, CBubble>  translators = new HashMap<Animator, CBubble>();
@@ -99,8 +96,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
     public void onDestroy() {
 
         _isRunning = false;
-
-        terminateQueue();
 
         if(SBubbles != null) {
 
@@ -192,7 +187,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
             case BP_CONST.REFERENCE:
 
-                int[] shapeSet = BP_CONST.drawableMap.get(mComponent.stimulus_data[data.dataset[data.stimulus_index]]);
+                int[] shapeSet = BP_CONST.drawableMap.get(mComponent._stimulus_data[data.dataset[data.stimulus_index]]);
 
                 Drawable qDrawable = mParent.getResources().getDrawable(shapeSet[0], null);
 
@@ -200,7 +195,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 break;
 
             case BP_CONST.TEXTDATA:
-                SbubbleStumulus.setContents(0, mComponent.stimulus_data[data.dataset[data.stimulus_index]]);
+                SbubbleStumulus.setContents(0, mComponent._stimulus_data[data.dataset[data.stimulus_index]]);
                 break;
         }
 
@@ -208,10 +203,37 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
     }
 
 
-    protected void execCommand(String command, Object target ) {
+    private void showFeedback(Integer correctCount) {
 
-        CBubble bubble;
-        long    delay = 0;
+        SfeedBack = (CBubbleStimulus) mParent.findViewById(R.id.Sfeedback);
+
+        if(SfeedBack == null) {
+
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(BP_CONST.FEEDBACK_SIZE, BP_CONST.FEEDBACK_SIZE);
+
+            SfeedBack = (CBubbleStimulus) View.inflate(mContext, R.layout.bubble_stimulus, null);
+
+            // Set Color: pass in String e.g. "RED" - Cycle through the colors repetitively
+            //
+            SfeedBack.setScale(0f);
+            SfeedBack.setAlpha(1.0f);
+
+            SfeedBack.setId(R.id.Sfeedback);
+
+            mParent.addView(SfeedBack, layoutParams);
+        }
+
+        SfeedBack.setContents(0, correctCount.toString());
+
+        mParent.bringChildToFront(SfeedBack);
+    }
+
+
+    public void execCommand(String command, Object target ) {
+
+        CBubble  bubble;
+        Animator inflator;
+        long     delay = 0;
 
         switch(command) {
 
@@ -274,20 +296,36 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 // of the screen.
                 //
                 showStimulus((CBp_Data) target);
-                post(BP_CONST.ZOOM_STIMULUS);
+                mComponent.post(BP_CONST.ZOOM_STIMULUS);
                 break;
 
-            case BP_CONST.ZOOM_STIMULUS:
 
-                // Persona - look at the stimulus
+            case BP_CONST.SHOW_SCORE:
+
+                SfeedBack.setX((mParent.getWidth() - SfeedBack.getWidth()) / 2);
+                SfeedBack.setY((mParent.getHeight() - SfeedBack.getHeight()) / 2);
+
+                inflator = CAnimatorUtil.configZoomIn(SfeedBack, 600, 0, new BounceInterpolator(), 0f, 3.0f);
+
+                inflator.start();
+
+                break;
+
+            case BP_CONST.SHOW_FEEDBACK:
+
+                showFeedback((Integer) target);
+                mComponent.post(BP_CONST.ZOOM_FEEDBACK);
+                break;
+
+            case BP_CONST.ZOOM_FEEDBACK:
+
                 Log.d(TAG, "Width: " + mParent.getWidth() + " - HEIGHT: " + mParent.getHeight());
+                Log.d(TAG, "Width: " + SfeedBack.getWidth() + " - HEIGHT: " + SfeedBack.getHeight());
 
-                broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(new PointF(mParent.getWidth() / 2, mParent.getHeight() / 2)));
+                SfeedBack.setX(mParent.getWidth() - SfeedBack.getWidth());
+                SfeedBack.setY(0);
 
-                SbubbleStumulus.setX((mParent.getWidth() - SbubbleStumulus.getWidth()) / 2);
-                SbubbleStumulus.setY((mParent.getHeight() - SbubbleStumulus.getHeight()) / 2);
-
-                Animator inflator = CAnimatorUtil.configZoomIn(SbubbleStumulus, 600, 0, new BounceInterpolator(), 0f, 3.0f);
+                inflator = CAnimatorUtil.configZoomIn(SfeedBack, 600, 0, new BounceInterpolator(), 0f, 1.0f);
 
                 inflator.addListener(new Animator.AnimatorListener() {
                     @Override
@@ -303,7 +341,45 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                     @Override
                     public void onAnimationEnd(Animator animation) {
 
-                        post(BP_CONST.MOVE_STIMULUS, 400);
+                        mComponent.applyEvent(BP_CONST.FEEDBACK_SHOWN);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator arg0) {
+                        //Functionality here
+                    }
+                });
+
+                inflator.start();
+                break;
+
+            case BP_CONST.ZOOM_STIMULUS:
+
+                // Persona - look at the stimulus
+                Log.d(TAG, "Width: " + mParent.getWidth() + " - HEIGHT: " + mParent.getHeight());
+
+                broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(new PointF(mParent.getWidth() / 2, mParent.getHeight() / 2)));
+
+                SbubbleStumulus.setX((mParent.getWidth() - SbubbleStumulus.getWidth()) / 2);
+                SbubbleStumulus.setY((mParent.getHeight() - SbubbleStumulus.getHeight()) / 2);
+
+                inflator = CAnimatorUtil.configZoomIn(SbubbleStumulus, 600, 0, new BounceInterpolator(), 0f, 3.0f);
+
+                inflator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationCancel(Animator arg0) {
+                        //Functionality here
+                    }
+
+                    @Override
+                    public void onAnimationStart(Animator arg0) {
+                        //Functionality here
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+
+                        mComponent.post(BP_CONST.MOVE_STIMULUS, 400);
                     }
 
                     @Override
@@ -331,10 +407,10 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
                 wayPoints[0] = posFinal;
 
-                AnimatorSet inflator2  = CAnimatorUtil.configZoomIn(SbubbleStumulus, 300, 0, new LinearInterpolator(), scale);
+                AnimatorSet inflatorSet = CAnimatorUtil.configZoomIn(SbubbleStumulus, 300, 0, new LinearInterpolator(), scale);
                 Animator    translator = CAnimatorUtil.configTranslate(SbubbleStumulus, 300, 0, wayPoints);
 
-                inflator2.addListener(new Animator.AnimatorListener() {
+                inflatorSet.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationCancel(Animator arg0) {
                         //Functionality here
@@ -349,7 +425,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                     public void onAnimationEnd(Animator animation) {
 
                         mComponent.applyEvent(BP_CONST.STIMULUS_SHOWN);
-                        //post(BP_CONST.SHOW_BUBBLES);
                     }
 
                     @Override
@@ -358,7 +433,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                     }
                 });
 
-                inflator2.start();
+                inflatorSet.start();
                 translator.start();
                 break;
 
@@ -421,117 +496,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 break;
         }
 
-    }
-
-
-    public class Queue implements Runnable {
-
-        protected String _command;
-        protected Object _target;
-
-        public Queue(String command) {
-            _command = command;
-        }
-
-        public Queue(String command, Object target) {
-            _command = command;
-            _target  = target;
-        }
-
-
-        @Override
-        public void run() {
-
-            try {
-                queueMap.remove(this);
-
-                execCommand(_command, _target);
-            }
-            catch(Exception e) {
-                CErrorManager.logEvent(TAG, "Run Error:", e, false);
-            }
-        }
-    }
-
-
-    /**
-     *  Disable the input queues permenantly in prep for destruction
-     *  walks the queue chain to diaable scene queue
-     *
-     */
-    private void terminateQueue() {
-
-        // disable the input queue permenantly in prep for destruction
-        //
-        _qDisabled = true;
-        flushQueue();
-    }
-
-
-    /**
-     * Remove any pending scenegraph commands.
-     *
-     */
-    private void flushQueue() {
-
-        Iterator<?> tObjects = queueMap.entrySet().iterator();
-
-        while(tObjects.hasNext() ) {
-            Map.Entry entry = (Map.Entry) tObjects.next();
-
-            mainHandler.removeCallbacks((Queue)(entry.getValue()));
-        }
-    }
-
-
-    /**
-     * Keep a mapping of pending messages so we can flush the queue if we want to terminate
-     * the tutor before it finishes naturally.
-     *
-     * @param qCommand
-     */
-    private void enQueue(Queue qCommand) {
-        enQueue(qCommand, 0);
-    }
-    private void enQueue(Queue qCommand, long delay) {
-
-        if(!_qDisabled) {
-            queueMap.put(qCommand, qCommand);
-
-            if(delay > 0) {
-                mainHandler.postDelayed(qCommand, delay);
-            }
-            else {
-                mainHandler.post(qCommand);
-            }
-        }
-    }
-
-/**
-     * Post a command to the tutorgraph queue
-     *
-     * @param command
-     */
-    public void post(String command) {
-        post(command, 0);
-    }
-    public void post(String command, long delay) {
-
-        enQueue(new Queue(command), delay);
-    }
-
-
-    /**
-     * Post a command and target to this scenegraph queue
-     *
-     * @param command
-     */
-    public void post(String command, Object target) {
-        post(command, target, 0);
-    }
-    public void post(String command, Object target, long delay) {
-
-        enQueue(new Queue(command, target), delay);
     }
 
 
@@ -632,7 +596,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
     public void generateRandomData(CBp_Data data) {
 
         int stimCount = (data.rand_data)? data.rand_size:data.dataset.length;
-        int setSize   = mComponent.stimulus_data.length;
+        int setSize   = mComponent._stimulus_data.length;
 
         // Constrain the presentation set size
         //
@@ -664,7 +628,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
             data.dataset[data.stimulus_index] = mComponent.question_Index++;
 
-            // cycle on the stimulus_data
+            // cycle on the _stimulus_data
             //
             mComponent.question_Index %= setSize;
         }

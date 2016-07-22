@@ -74,7 +74,7 @@
           "edges": [
             {
               "constraint": "FTR_EOD",
-              "edge": "NEXT_SCENE"
+              "edge": "FINAL_SCORE"
             },
             {
               "constraint": "",
@@ -93,10 +93,26 @@
           "edges": [
             {
               "constraint": "",
-              "edge": "USER_INPUT"
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
+
+        "FINAL_SCORE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"moduleMap",
+          "mapname": "FINALSCORE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "NEXT_SCENE"
+            }
+          ]
+        },
+
         "NEXT_SCENE": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
@@ -166,6 +182,10 @@
 
             {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "BUBBLES_CLEARED:String|NEXTNODE:String" ,"features":""},
             {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "CLEAR_CONTENT:String" ,"features":""},
+            {"type": "COMMAND", "cmd": "WAIT"  },
+
+            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "FEEDBACK_SHOWN:String|NEXTNODE:String" ,"features":""},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "SHOW_FEEDBACK:String" ,"features":""},
             {"type": "COMMAND", "cmd": "WAIT"  }
           ]
         },
@@ -180,8 +200,28 @@
 
             {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "BUBBLE_WIGGLED:String|NEXTNODE:String" ,"features":""},
             {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "WIGGLE_BUBBLE:String" ,"features":""},
-            {"type": "COMMAND", "cmd": "WAIT"  }
+            {"type": "COMMAND", "cmd": "WAIT"  },
 
+            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "BUBBLES_CLEARED:String|NEXTNODE:String" ,"features":""},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "CLEAR_CONTENT:String" ,"features":""},
+            {"type": "COMMAND", "cmd": "WAIT"  },
+
+            {"type": "TIMER", "id":"nextDelayTimer", "startdelay":"0", "period":"500", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"NEXTNODE", "features": "" },
+            {"type": "COMMAND", "cmd": "WAIT"  }
+          ]
+        },
+
+
+        "FINALSCORE": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "scorecard.mp3", "soundpackage":"tutor_effect", "volume": 1.00, "mode":"event", "features": ""},
+
+            {"type": "TIMER", "id":"showScoreTimer", "startdelay":"0", "period":"4000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"NEXTNODE", "features": "" },
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "SHOW_SCORE:String" ,"features":""},
+            {"type": "COMMAND", "cmd": "WAIT"  }
           ]
         }
       },

@@ -100,7 +100,7 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
             _prevColorNdx = colorNdx;
 
-            String correctVal = mComponent.stimulus_data[_currData.dataset[_currData.stimulus_index]];
+            String correctVal = mComponent._stimulus_data[_currData.dataset[_currData.stimulus_index]];
 
             nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
             nextBubble.setScale(getRandInRange(_scaleRange));
@@ -109,7 +109,7 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
             //
             stimNdx =( stimNdx + 1) % _currData.dataset.length;
 
-            String stiumulusVal = mComponent.stimulus_data[_currData.dataset[stimNdx]];
+            String stiumulusVal = mComponent._stimulus_data[_currData.dataset[stimNdx]];
 
             switch (mComponent.stimulus_type) {
 
@@ -205,7 +205,7 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
 
 
-    protected void execCommand(String command, Object target ) {
+    public void execCommand(String command, Object target ) {
 
         CBubble bubble;
         long    delay = 0;
@@ -219,7 +219,7 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                 if (!_isRunning && mInitialized) {
 
                     _isRunning = true;
-                    post(BP_CONST.SPAWN_BUBBLE);
+                    mComponent.post(BP_CONST.SPAWN_BUBBLE);
                 }
                 break;
 
@@ -233,9 +233,9 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
                         delay = getRandInRange(launchRange);
 
-                        post(BP_CONST.SPAWN_BUBBLE, delay);
+                        mComponent.post(BP_CONST.SPAWN_BUBBLE, delay);
                     } else {
-                        post(BP_CONST.SPAWN_BUBBLE);
+                        mComponent.post(BP_CONST.SPAWN_BUBBLE);
                     }
                 }
                 break;
@@ -250,7 +250,7 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
                 broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(bubble.getCenterPosition()));
 
-                post(BP_CONST.REPLACE_BUBBLE, bubble, delay);
+                mComponent.post(BP_CONST.REPLACE_BUBBLE, bubble, delay);
                 break;
 
         }
