@@ -1,21 +1,26 @@
 package cmu.xprize.asm_component;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.view.Gravity;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 
 
 /**
- * Created by mayankagrawal on 6/29/16.
+ * Horizontal Alley that has the text on the left and its associated dotbag on the right
  */
 public class CAsm_Alley extends LinearLayout {
 
-    private EditText SText;
-    private DotBag   SdotBag;
+    private CAsm_Text SText;
+    private CAsm_DotBag SdotBag;
+
+    private int digitIndex;
+    private int val;
+    private int id;
+
+    private String operation;
+    private String image;
+
+    private boolean clickable;
 
     float scale = getResources().getDisplayMetrics().density;
     final int textSize = (int)(ASM_CONST.textSize*scale);
@@ -43,94 +48,81 @@ public class CAsm_Alley extends LinearLayout {
 
     private void init(Context context, AttributeSet attrs) {
 
-        SText = new EditText(context);
-        SdotBag = new DotBag(context);
-        setClipChildren(false);
-        setClipToPadding(false);
+        createText();
+        createDotBag();
+
+        //setClipChildren(false);
+        //setClipToPadding(false);
     }
 
-    public void setParams(int val, String image, int id, String operation, boolean clickable) {
+    public void update(int val, String image, int id, String operation, boolean clickable, int numSlots) {
 
-        createEditText(val, id, operation);
-        createDotBag(1, val, image, clickable); // TODO: fix hard coded 1
+        this.id = id;
+        this.val = val;
+        this.operation = operation;
+        this.clickable = clickable;
+        this.digitIndex = numSlots;
+        this.image = image;
+
+        resetText();
+
+        SText.update(id, val, operation, numSlots);
+
     }
 
-    public void update(int val, String image, int id, String operation, boolean clickable) {
+    private void createText() {
 
-        SdotBag.update(1, val, image, clickable); // TODO: fix hard coded 1
-        updateEditText(val, id, operation);
-
-    }
-
-    private void createEditText(int val, int id, String operation) {
-
-        SText = new EditText(getContext());
+        SText = new CAsm_Text(getContext());
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                textSize*2, LayoutParams.MATCH_PARENT);
-        lp.setMarginEnd(textSize/2);
+                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        lp.setMargins(0, 0, rightPadding, 0);
         SText.setLayoutParams(lp);
-
-        SText.setBackground(null);
-        SText.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
-        SText.setTextSize(textSize/2);
-        SText.setTextColor(Color.BLACK);
-        SText.setPadding(0, 0, rightPadding, 0);
-
-        updateEditText(val, id, operation);
-
-        addView(SText);
+        addView(SText, 0);
     }
 
-    private void createDotBag(int rows, int cols, String imageName, boolean clickable) {
+    private void createDotBag() {
 
-        SdotBag = new DotBag(getContext());
-        SdotBag.setParams(textSize, rows, cols, clickable, imageName);
+        SdotBag = new CAsm_DotBag(getContext());
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        SdotBag.setLayoutParams(lp);
+        addView(SdotBag, 1);
 
-        addView(SdotBag);
+        // TODO: figure out why it won't show up unless updated
 
     }
 
+    public void nextDigit() {
 
-    private void updateEditText (int val, int id, String operation) {
+        Integer cols;
 
-        if (id == ASM_CONST.REGULAR) {
-            SText.setText(Integer.toString(val));
-            SText.setPaintFlags(0);
-            SText.setEnabled(false);
-            SText.setBackground(null);
+        digitIndex--;
+        SText.performNextDigit();
+
+        if (id == ASM_CONST.RESULT) {
+            cols = 0;
         }
-        else if (id == ASM_CONST.OPERATION) {
-            SText.setText(operation + " " + Integer.toString(val));
-            SText.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
-            SText.setEnabled(false);
-            SText.setBackground(null);
+        else {
+            cols = SText.getDigit(digitIndex);
+            cols = (cols != null)?cols:0;
         }
-        else { // id == ASM_CONST.RESULT
-            SText.setText("");
-            SText.setPaintFlags(0);
-            SText.setEnabled(true);
-            SText.setBackground(getResources().getDrawable(R.drawable.back));
-        }
+        SdotBag.update(1, cols, image, clickable);
 
     }
 
-    public Integer getNum() {
 
-        try {
-            return Integer.parseInt(SText.getText().toString());
-        }
-        catch (NumberFormatException e) {
-            return null;
-        }
+    public Integer getNum() {return SText.getNum();}
 
-    }
-
-    public DotBag getDotBag() {
+    public CAsm_DotBag getDotBag() {
         return SdotBag;
     }
 
-    public EditText getEditText() {
-        return SText;
-    }
+    public CAsm_Text getText() {return SText;}
+
+    public void resetText() {SText.resetAllValues();}
+
+    public Integer getCurrentDigit() {return SText.getDigit(digitIndex);}
+
+
 }

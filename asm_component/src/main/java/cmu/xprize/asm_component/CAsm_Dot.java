@@ -6,13 +6,12 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 /**
- * Created by Diego on 6/23/2016.
+ *
  */
-public class Dot extends ImageView {
+public class CAsm_Dot extends ImageView {
 
     private Context context;
 
@@ -26,17 +25,17 @@ public class Dot extends ImageView {
     static final private String TAG ="Dot";
 
 
-    public Dot(Context context) {
+    public CAsm_Dot(Context context) {
         super(context);
         this.context = context;
     }
 
-    public Dot(Context context, AttributeSet attributeSet) {
+    public CAsm_Dot(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         this.context = context;
     }
 
-    public Dot(Context context, AttributeSet attributeSet, int defStyle) {
+    public CAsm_Dot(Context context, AttributeSet attributeSet, int defStyle) {
         super(context, attributeSet, defStyle);
         this.context = context;
     }

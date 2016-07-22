@@ -16,9 +16,6 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
 
-/**
- * Created by mayankagrawal on 6/27/16.
- */
 public class CAsm_Component extends LinearLayout implements ILoadableObject, View.OnClickListener {
 
     private Context mContext;
@@ -27,6 +24,10 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
     private int _dataIndex;
 
     private int[] numbers;
+    private int digitIndex;
+    private int numSlots;
+
+    protected Integer corDigit;
     protected Integer corValue;
     protected String operation;
     protected String currImage;
@@ -118,6 +119,20 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
     }
 
+    public void nextDigit() {
+
+        digitIndex--;
+
+        for (CAsm_Alley alley: allAlleys) {
+            alley.nextDigit();
+        }
+
+        corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[digitIndex]);
+
+        mechanics.preClickSetup();
+
+    }
+
     public boolean dataExhausted() {
         return (_dataIndex >= dataSource.length);
     }
@@ -129,6 +144,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         boolean clickable = true;
 
         readInData(data);
+
+        numSlots = CAsm_Util.maxDigits(numbers) + 2;
+        digitIndex = numSlots;
 
         // TODO: talk about whether this should be part of base mechanics
 
@@ -151,7 +169,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
                 id = ASM_CONST.REGULAR;
             }
 
-            setAlley(i, val, id, operation, clickable);
+            updateAlley(i, val, id, operation, clickable);
         }
 
         // delete extra alleys
@@ -164,8 +182,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         }
 
         setMechanics();
-
-        mechanics.preClickAnimation();
 
     }
 
@@ -198,7 +214,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         }
     }
 
-    private void setAlley(int index, int val, int id, String operation, boolean clickable) {
+    private void updateAlley(int index, int val, int id, String operation, boolean clickable) {
 
         if (index + 1 > numAlleys) {
             addAlley(index, val, id, operation, clickable);
@@ -206,7 +222,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
         else {
             CAsm_Alley currAlley = allAlleys.get(index);
-            currAlley.update(val, currImage, id, operation, clickable);
+            currAlley.update(val, currImage, id, operation, clickable, numSlots);
         }
     }
 
@@ -215,12 +231,12 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         CAsm_Alley newAlley = new CAsm_Alley(mContext);
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, 0, alleyMargin);
         newAlley.setLayoutParams(lp);
 
-        newAlley.setParams(val, currImage, id, operation, clickable);
+        newAlley.update(val, currImage, id, operation, clickable, numSlots);
 
         //Scontent.addView(newAlley, index);
         addView(newAlley, index);
@@ -245,20 +261,28 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
     }
 
-    public boolean isCorrect() {
+    public boolean isWholeCorrect() {
 
-        boolean correct = corValue.equals(allAlleys.get(numAlleys - 1).getNum());
+        int ans = allAlleys.get(numAlleys - 1).getNum();
+        return corValue.equals(ans);
+
+    }
+
+    public boolean isDigitCorrect() {
+
+        boolean correct = (corDigit.equals(allAlleys.get(numAlleys - 1).getCurrentDigit()));
 
         if (!correct) {
-            allAlleys.get(numAlleys-1).getEditText().setText(""); // reset answer text
+            allAlleys.get(numAlleys-1).getText().resetValue(digitIndex); // reset answer text
         }
         return correct;
     }
 
 
+
 //  TODO: fix the onTouch to see results
 
- public void onClick(View v) {mechanics.handleClick();}
+    public void onClick(View v) {mechanics.handleClick();}
 
 
 

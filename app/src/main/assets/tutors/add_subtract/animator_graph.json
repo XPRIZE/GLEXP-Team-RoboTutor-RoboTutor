@@ -23,18 +23,32 @@
           "preexit" :[],
           "edges":
           [
-            {"constraint":"","edge": "TASK"}
+            {"constraint":"","edge": "PROBLEM"}
           ]
         },
 
         // This initializes the dataset display and resets for a new set of attempts
         //
-        "TASK":{
-          "COMMENT":"This node presents the first task.",
+        "PROBLEM":{
+          "COMMENT":"This node presents the first problem.",
           "type":"node",
           "preenter":[],
           "maptype":"moduleMap",
-          "mapname": "SHOWTASK",
+          "mapname": "SHOWPROBLEM",
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"NEXTDIGIT"}
+          ]
+        },
+
+        "NEXTDIGIT":{
+          "COMMENT":"This node presents the first digit.",
+          "type":"node",
+          "preenter":[],
+          "maptype":"moduleMap",
+          "mapname": "SHOWDIGIT",
           "preenter":[],
           "preexit" :[],
           "edges":
@@ -54,36 +68,37 @@
           "preexit" :[],
           "edges":
           [
-            {"constraint":"FTR_RIGHT","edge":"CORRECT"},
-            {"constraint":"FTR_WRONG","edge":"WRONG"}
+            {"constraint":"FTR_RIGHT","edge":"WHOLECORRECT"},
+            {"constraint":"FTR_WRONG","edge":"WHOLEWRONG"}
           ]
         },
 
-        "CORRECT":{
+        "WHOLECORRECT":{
           "COMMENT":"When user inputs a correct answer...",
           "type":"node",
           "maptype":"moduleMap",
           "mapname": "PLAYCORRECT",
           "preenter":[],
-          "preexit" :["RESTART_COMPLETION_TIMER"],
+          "preexit" :["CANCEL_COMPLETION_TIMER"],
           "edges":
           [
             {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
             {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
-            {"constraint":"","edge":"TASK"}
+            {"constraint":"","edge":"PROBLEM"}
           ]
         },
 
-        "WRONG":{
+        "WHOLEWRONG":{
           "COMMENT":"When user inputs an incorrect answer...",
           "type":"node",
           "maptype":"moduleMap",
-          "mapname": "PLAYWRONG",
+          "mapname": "EVALUATEDIGIT",
           "preenter":[],
           "preexit" :["CANCEL_COMPLETION_TIMER"],
           "edges":
           [
-            {"constraint":"","edge":"USERINPUT"}
+            {"constraint":"FTR_RIGHT","edge":"NEXTDIGIT"},
+            {"constraint":"FTR_WRONG","edge":"USERINPUT"}
           ]
         },
 
@@ -105,7 +120,7 @@
           "maptype":"moduleMap",
           "mapname": "PLAYEXIT2",
           "preenter":[],
-          "preexit" :[],
+          "preexit" :["CANCEL_COMPLETION_TIMER"],
           "edges":
           [
             {"constraint":"","edge":"NEXTSCENE"}
@@ -133,7 +148,7 @@
           "tracks": [
           ]
         },
-        "SHOWTASK": {
+        "SHOWPROBLEM": {
           "type": "MODULE",
           "reuse": true,
           "COMMENT": "TBD",
@@ -141,6 +156,16 @@
             {"type": "COMMAND", "id": "SAddSubtract", "method": "next", "features": ""}
           ]
         },
+
+        "SHOWDIGIT": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "nextDigit", "features": ""}
+          ]
+        },
+
         "CLICKDOTS": {
           "type": "MODULE",
           "reuse": true,
@@ -171,13 +196,22 @@
           ]
         },
         // this is an asynchronous timer driven node
-        "EVALUATE": {
+        "EVALUATEWHOLE": {
           "type": "MODULE",
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "evaluate"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "evaluateWhole"},
             {"type": "COMMAND", "cmd": "NEXT"}
+          ]
+        },
+
+        "EVALUATEDIGIT": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "evaluateDigit"}
           ]
         },
 
@@ -205,13 +239,15 @@
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
 
-        "CREATE_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "startdelay":"0", "period":"12000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"EVALUATE", "features": "" },
+        "CREATE_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "startdelay":"0", "period":"10000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"EVALUATEWHOLE", "features": "" },
 
-        "RESTART_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "action":"RESTART", "features": "" },
+        "RESTART_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "action":"RESTART", "ontimer":"EVALUATEWHOLE", "features": "" },
         "CANCEL_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "action":"CANCEL", "features": "" },
 
         "SET_DATASOURCE":{"type": "COMMAND", "id": "SAddSubtract", "method": "setDataSource", "parms": "[file]asm_data.json:String","features":""},
         "NEXT_DATASET":{"type": "COMMAND", "id": "SAddSubtract", "method": "next" ,"features":""},
+
+        "RESET":{"type": "COMMAND", "id": "SAddSubtract", "method": "reset" ,"features":""},
 
         "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "NEXTSCENE" },
         "NEXT": {"type": "COMMAND", "cmd": "NEXT" },

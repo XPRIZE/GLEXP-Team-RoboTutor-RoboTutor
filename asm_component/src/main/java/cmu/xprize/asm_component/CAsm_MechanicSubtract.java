@@ -8,7 +8,7 @@ import android.view.View;
 import java.util.ArrayList;
 
 /**
- * Created by mayankagrawal on 7/13/16.
+ * all subtraction-specific operations are implemented here
  */
 public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMechanics {
 
@@ -21,20 +21,19 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     @Override
     public void preClickSetup() {
 
-        int numAlleys, rows, cols, size, dy;
+        int numAlleys, rows, cols, dy;
         String imageName;
 
         numAlleys = allAlleys.size();
 
-        DotBag firstDotBag = allAlleys.get(0).getDotBag();
-        DotBag resultDotBag = allAlleys.get(numAlleys - 1).getDotBag();
+        CAsm_DotBag firstDotBag = allAlleys.get(0).getDotBag();
+        CAsm_DotBag resultDotBag = allAlleys.get(numAlleys - 1).getDotBag();
 
         rows = firstDotBag.getRows();
         cols = firstDotBag.getCols();
         imageName = firstDotBag.getImageName();
-        size = firstDotBag.getSize();
 
-        resultDotBag.setParams(size, rows, cols, false, imageName);
+        resultDotBag.update(rows, cols, imageName, false);
         setAllParentsClip(resultDotBag, false);
 
         firstDotBag.setHollow(true);
@@ -55,10 +54,9 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     @Override
     public void handleClick() {
 
-        Dot clickedDot = null;
-        DotBag resultDotBag = allAlleys.get(allAlleys.size() - 1).getDotBag();
-//      clickedBag will always be the middle number. 3 - 2 = 1. It is referring to 2
-        DotBag clickedBag = allAlleys.get(1).getDotBag(); // only one possible dotbag to look at
+        CAsm_Dot clickedDot = null;
+        CAsm_DotBag resultDotBag = allAlleys.get(allAlleys.size() - 1).getDotBag();
+        CAsm_DotBag clickedBag = allAlleys.get(1).getDotBag(); // only one possible dotbag to look at
 
         if (clickedBag.getIsClicked()) {
             clickedDot = clickedBag.findClickedDot();
@@ -69,25 +67,24 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
             return;
         }
 
-        int clickedDotCol = clickedDot.getCol();
-
         clickedDot.setHollow(true);
 
-        Dot correspondingDot = resultDotBag.getDot(0, clickedDotCol);
+        int clickedDotCol = clickedDot.getCol();
+        CAsm_Dot correspondingDot = resultDotBag.getDot(0, clickedDotCol);
         correspondingDot.setVisibility(View.INVISIBLE);
 
-        if (resultDotBag.getVisibleDots().size() == parent.corValue) {
+        if (resultDotBag.getVisibleDots().size() == parent.corDigit) {
             subtractLayoutChange(clickedDot);
         }
     }
 
-    private void subtractLayoutChange(Dot clickedDot) {
+    private void subtractLayoutChange(CAsm_Dot clickedDot) {
 
-        final DotBag resultDotBag = allAlleys.get(allAlleys.size() - 1).getDotBag();
+        final CAsm_DotBag resultDotBag = allAlleys.get(allAlleys.size() - 1).getDotBag();
 
-        final ArrayList<Dot> visibleDots = resultDotBag.getVisibleDots();
+        final ArrayList<CAsm_Dot> visibleDots = resultDotBag.getVisibleDots();
         final int numVisibleDots = visibleDots.size();
-        int numInvisibleDots = allAlleys.get(0).getNum() - numVisibleDots;
+        int numInvisibleDots = allAlleys.get(0).getCurrentDigit() - numVisibleDots;
 
         int dotSize = clickedDot.getWidth();
         float currRight = resultDotBag.getBounds().right;
@@ -132,8 +129,5 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         animSet.start();
 
     }
-
-
-
 
 }

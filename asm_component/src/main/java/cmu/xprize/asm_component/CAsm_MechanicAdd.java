@@ -5,7 +5,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 
 /**
- * Created by mayankagrawal on 7/13/16.
+ * all addition specific operations are implemented here
  */
 public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics {
 
@@ -22,8 +22,8 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
     @Override
     public void handleClick() {
 
-        DotBag currBag;
-        DotBag clickedBag = null;
+        CAsm_DotBag currBag;
+        CAsm_DotBag clickedBag = null;
         int alleyNum = 0;
 
         for (int i = 0; i < allAlleys.size(); i++) {
@@ -39,7 +39,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
             return;
         }
 
-        Dot clickedDot = clickedBag.findClickedDot();
+        CAsm_Dot clickedDot = clickedBag.findClickedDot();
 
         if (clickedDot != null) {
             animateAdd(clickedDot, alleyNum);
@@ -48,15 +48,15 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
     }
 
-    public void animateAdd(Dot clickedDot, int alleyNum) {
+    public void animateAdd(CAsm_Dot clickedDot, int alleyNum) {
 
-        DotBag resultBag = allAlleys.get(allAlleys.size() - 1).getDotBag();
+        CAsm_DotBag resultBag = allAlleys.get(allAlleys.size() - 1).getDotBag();
 
         int dx = determineDX(clickedDot, resultBag.getCols());
         int dy = determineDY(alleyNum);
 
-        final Dot oldDot = clickedDot;
-        final Dot newDot = resultBag.addDot(0, resultBag.getCols());
+        final CAsm_Dot oldDot = clickedDot;
+        final CAsm_Dot newDot = resultBag.addDot(0, resultBag.getCols());
         newDot.setTranslationX(-dx);
         newDot.setTranslationY(-dy);
         newDot.setIsClickable(false);
@@ -91,7 +91,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         animSetXY.start();
     }
 
-    private int determineDX(Dot startDot, int targetCol) {
+    private int determineDX(CAsm_Dot startDot, int targetCol) {
 
         int dotSize = startDot.getWidth();
         return dotSize * (targetCol - startDot.getCol());

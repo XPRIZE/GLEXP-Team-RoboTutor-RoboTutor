@@ -19,21 +19,24 @@ import java.util.ArrayList;
 
 
 /**
- * Created by Diego on 6/23/2016.
+ *
  */
-public class DotBag extends TableLayout {
+public class CAsm_DotBag extends TableLayout {
 
     private Context context;
 
 
     final float scale = getResources().getDisplayMetrics().density;
-    private int rows, cols, size;
+
+    private int rows = 0;
+    private int cols = 0;
+    private int size = (int)(ASM_CONST.textSize*scale);
 
     private boolean isClickable = false;
     private boolean isClicked = false;
     private boolean isHollow = false;
 
-    private String imageName;
+    private String imageName = "star"; // default
 
     private LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -46,7 +49,7 @@ public class DotBag extends TableLayout {
     RectF bounds = new RectF();
 
 
-    public DotBag(Context context, AttributeSet attributeSet) {
+    public CAsm_DotBag(Context context, AttributeSet attributeSet) {
 
         super(context, attributeSet);
         this.context = context;
@@ -54,7 +57,7 @@ public class DotBag extends TableLayout {
 
     }
 
-    public DotBag(Context context) {
+    public CAsm_DotBag(Context context) {
 
         super(context);
         this.context = context;
@@ -70,27 +73,7 @@ public class DotBag extends TableLayout {
         setClipToPadding(false);
         setOnClickListener(clickListener);
         setPaint();
-
-    }
-
-    public void setParams(int size, int rows, int cols, boolean isClickable, String imageName) {
-
-        this.rows = rows;
-        this.cols = cols;
-        this.imageName = imageName;
-        this.isClickable = isClickable;
-        this.size = size;
-
-        if (rows == 0 || cols == 0) {
-            setZero();
-            return;
-        }
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                addDot(i, j);
-            }
-        }
+        setZero();
 
     }
 
@@ -174,7 +157,7 @@ public class DotBag extends TableLayout {
 
             for (int j = 0; j < currTableRow.getVirtualChildCount(); j++){
 
-                Dot dot = (Dot) currTableRow.getVirtualChildAt(j);
+                CAsm_Dot dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
 
                 dot.setImageName(imageName);
                 dot.setHollow(isHollow);
@@ -183,14 +166,14 @@ public class DotBag extends TableLayout {
         }
     }
 
-    public Dot addDot(int row, int col) {
+    public CAsm_Dot addDot(int row, int col) {
 
         while (allTableRows.size() < row + 1) {
             addRow(allTableRows.size());
         }
         TableRow tableRow = allTableRows.get(row);
 
-        Dot dot = new Dot(context);
+        CAsm_Dot dot = new CAsm_Dot(context);
         dot.setParams(isClickable, imageName, row, col);
         dot.setLayoutParams(new TableRow.LayoutParams(size, size));
 
@@ -213,7 +196,7 @@ public class DotBag extends TableLayout {
 
         TableRow tableRow = new TableRow(context);
 
-        DotBag.LayoutParams lp = new DotBag.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        CAsm_DotBag.LayoutParams lp = new CAsm_DotBag.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.setMargins(size / 2, 0, size / 2, 0);
         tableRow.setLayoutParams(lp);
 
@@ -258,16 +241,16 @@ public class DotBag extends TableLayout {
 
 
 
-    public Dot findClickedDot() {
+    public CAsm_Dot findClickedDot() {
 
         TableRow currTableRow;
-        Dot currDot;
+        CAsm_Dot currDot;
 
         for (int i = 0; i < allTableRows.size(); i++) {
             currTableRow = allTableRows.get(i);
 
             for (int j = 0; j < currTableRow.getVirtualChildCount(); j++) {
-                currDot = (Dot) currTableRow.getVirtualChildAt(j);
+                currDot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
                 if (currDot.getIsClicked()) {
                     return currDot;
                 }
@@ -277,7 +260,7 @@ public class DotBag extends TableLayout {
     }
 
 
-    public void removeDot(Dot toRemove) {
+    public void removeDot(CAsm_Dot toRemove) {
 
         int row = toRemove.getRow();
 
@@ -290,17 +273,17 @@ public class DotBag extends TableLayout {
         resetBounds();
     }
 
-    public ArrayList<Dot> getVisibleDots(){
+    public ArrayList<CAsm_Dot> getVisibleDots(){
 
         TableRow currTableRow;
 
-        ArrayList<Dot> toReturn = new ArrayList<>();
+        ArrayList<CAsm_Dot> toReturn = new ArrayList<>();
 
         for (int i = 0; i < allTableRows.size(); i++) {
             currTableRow = allTableRows.get(i);
 
             for (int j = 0; j < currTableRow.getVirtualChildCount(); j++){
-                Dot dot = (Dot) currTableRow.getVirtualChildAt(j);
+                CAsm_Dot dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
 
                 if (dot.getVisibility() == VISIBLE) {
                     toReturn.add(dot);
@@ -320,7 +303,7 @@ public class DotBag extends TableLayout {
             currTableRow = allTableRows.get(i);
             numChildren = currTableRow.getVirtualChildCount();
             for (int j = numChildren - 1; j >= 0; j--){
-                Dot dot = (Dot) currTableRow.getVirtualChildAt(j);
+                CAsm_Dot dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
 
                 if (dot.getVisibility() == INVISIBLE) {
                     removeDot(dot);
@@ -334,7 +317,7 @@ public class DotBag extends TableLayout {
             currTableRow = allTableRows.get(i);
             numChildren = currTableRow.getVirtualChildCount();
             for (int j = 0; j < numChildren; j++){
-                Dot dot = (Dot) currTableRow.getVirtualChildAt(j);
+                CAsm_Dot dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
                 dot.setCol(j);
             }
         }
@@ -371,7 +354,7 @@ public class DotBag extends TableLayout {
             currTableRow = allTableRows.get(i);
 
             for (int j = 0; j < currTableRow.getVirtualChildCount(); j++){
-                Dot dot = (Dot) currTableRow.getVirtualChildAt(j);
+                CAsm_Dot dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
                 dot.setIsClickable(isClickable);
             }
         }
@@ -387,7 +370,7 @@ public class DotBag extends TableLayout {
             currTableRow = allTableRows.get(i);
 
             for (int j = 0; j < currTableRow.getVirtualChildCount(); j++){
-                Dot dot = (Dot) currTableRow.getVirtualChildAt(j);
+                CAsm_Dot dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
                 dot.setHollow(isHollow);
             }
         }
@@ -398,6 +381,7 @@ public class DotBag extends TableLayout {
     public void setCols(int _cols) {
         this.cols = _cols;
     }
+    public void setSize(int _size) {this.size = size;}
 
     public void setRight(float newRight) {
 
@@ -417,8 +401,8 @@ public class DotBag extends TableLayout {
 
     public RectF getBounds() {return this.bounds; }
 
-    public Dot getDot(int row, int col) {
-        return (Dot) allTableRows.get(row).getVirtualChildAt(col);
+    public CAsm_Dot getDot(int row, int col) {
+        return (CAsm_Dot) allTableRows.get(row).getVirtualChildAt(col);
     }
 
     public boolean getIsClicked(){
