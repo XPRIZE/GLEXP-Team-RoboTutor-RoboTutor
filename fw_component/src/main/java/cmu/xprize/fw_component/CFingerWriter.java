@@ -160,12 +160,12 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
         if(attrs != null) {
             TypedArray a = context.getTheme().obtainStyledAttributes(
                     attrs,
-                    R.styleable.CStimResp,
+                    R.styleable.RoboTutor,
                     0, 0);
 
             try {
                 linkedViews = a.getNonResourceString(R.styleable.RoboTutor_linked_views);
-                mAspect     = a.getFloat(R.styleable.CStimResp_aspectratio, 1.0f);
+                mAspect     = a.getFloat(R.styleable.RoboTutor_aspectratio, 1.0f);
 
                 mLinkedViews = Arrays.asList(linkedViews.split(","));
 
