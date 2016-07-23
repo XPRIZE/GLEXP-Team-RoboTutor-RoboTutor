@@ -34,9 +34,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 
-/**
- *
- */
 public class CAsm_LetterBoxLayout extends LinearLayout {
 
     public Context   mContext;

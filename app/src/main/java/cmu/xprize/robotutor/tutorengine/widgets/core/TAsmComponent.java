@@ -23,9 +23,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
     private CTutor           mTutor;
     private CObjectDelegate  mSceneObject;
 
-
     static final String TAG = "TArComponent";
-
 
     public TAsmComponent(Context context) {
         super(context);
@@ -53,14 +51,26 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
     //**********************************************************
     //**********************************************************
     //*****************  Tutor Interface
+    
 
+    public void evaluateWhole () {
 
-
-    public void evaluate () {
 
         reset();
 
-        boolean correct = isCorrect();
+        boolean correct = isWholeCorrect();
+
+        if(correct)
+            mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
+        else
+            mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+    }
+
+    public void evaluateDigit () {
+
+        reset();
+
+        boolean correct = isDigitCorrect();
 
         if(correct)
             mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
@@ -69,7 +79,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
     }
 
 
-    private void reset() {
+    public void reset() {
 
         mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
         mTutor.setDelFeature(TCONST.GENERIC_WRONG);
@@ -143,9 +153,17 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
         reset();
 
         super.next();
-        
+
         if(dataExhausted())
             mTutor.setAddFeature(TCONST.FTR_EOI);
+
+    }
+
+    public void nextDigit() {
+
+        reset();
+        super.nextDigit();
+
     }
 
 
