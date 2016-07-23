@@ -2,7 +2,11 @@
 <resources>
     <declare-styleable name="RoboTutor">
         <attr name="radAlley" format="float"/>
-        <attr name="linked_views" format="string"/>
         <attr name="dataSource" format="string"/>
+
+        <attr name="isResponse" format="boolean" />
+        <attr name="aspectratio" format="float"/>
+        <attr name="textcolor" format="color" />
+        <attr name="linked_views" format="string"/>
     </declare-styleable>
 </resources>

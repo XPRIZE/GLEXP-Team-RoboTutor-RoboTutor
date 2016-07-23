@@ -95,12 +95,12 @@ public class CStimResp extends LinearLayout implements View.OnClickListener, ITe
         if(attrs != null) {
             TypedArray a = context.getTheme().obtainStyledAttributes(
                     attrs,
-                    R.styleable.CStimResp,
+                    R.styleable.RoboTutor,
                     0, 0);
 
             try {
-                mIsResponse   = a.getBoolean(R.styleable.CStimResp_isResponse, false);
-                //mLinkedViewID = a.getResourceId(R.styleable.CStimResp_linked_view, 0);
+                mIsResponse   = a.getBoolean(R.styleable.RoboTutor_isResponse, false);
+                //mLinkedViewID = a.getResourceId(R.styleable.RoboTutor_linked_view, 0);
             } finally {
                 a.recycle();
             }
