@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/digit_copy">
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TBanner
+        android:id="@+id/Sbanner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_heightPercent="10%"
+        android:background="#800"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:textColor="#FFF"
+        android:text="This is the Banner Area."/>
+
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout
+        android:id="@+id/Sstimcontainer"
+        android:layout_below="@id/Sbanner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_heightPercent="9%"
+        android:background="@color/respContainerColor">
+
+        <cmu.xprize.robotutor.tutorengine.widgets.core.TStimRespBase
+            android:id="@+id/Sstimulus"
+            app:linked_views="Sresponse,SfingerWriter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            app:layout_heightPercent="80%"
+            app:aspectratio="0.83"
+            app:isResponse="false"
+            android:gravity="center"
+            android:background="@color/stimulusBackground"
+            android:textColor="@color/stimulustext" />
+
+    </cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>
+
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout
+        android:id="@+id/Srespcontainer"
+        android:layout_below="@id/Sstimcontainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_heightPercent="14%"
+        android:background="@color/respContainerColor">
+
+        <cmu.xprize.robotutor.tutorengine.widgets.core.TStimRespBase
+            android:id="@+id/Sresponse"
+            app:linked_views="Sstimulus"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            app:layout_heightPercent="80%"
+            app:aspectratio="0.83"
+            app:isResponse="true"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:background="@color/responseBackground"
+            android:textColor="@color/responsetext" />
+
+    </cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>
+
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout
+        android:id="@+id/Sfingerwritercontainer"
+        android:layout_below="@id/Srespcontainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_heightPercent="67%"
+        android:background="@color/fingerWriterBackground">
+
+        <cmu.xprize.robotutor.tutorengine.widgets.core.TFingerWriter
+            android:id="@+id/SfingerWriter"
+            app:linked_views="Sresponse"
+            app:layout_heightPercent="90%"
+            app:aspectratio="0.5433"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/writing_paper" />
+
+    </cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>
+
+</cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>
