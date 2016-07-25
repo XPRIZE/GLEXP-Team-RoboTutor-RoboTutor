@@ -45,6 +45,20 @@ public class CAsm_MechanicBase implements IDotMechanics {
             v = viewGroup;
         }
     }
+    
+    /* reset any changes made by mechanics */
+    public void reset() {
+
+        CAsm_DotBag currBag;
+
+        for (CAsm_Alley alley: allAlleys) {
+
+            currBag = alley.getDotBag();
+            currBag.setTranslationX(0);
+            currBag.setTranslationY(0);
+        }
+
+    }
 
 
 }

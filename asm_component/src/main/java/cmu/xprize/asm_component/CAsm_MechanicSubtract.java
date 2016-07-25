@@ -13,32 +13,36 @@ import java.util.ArrayList;
 public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMechanics {
 
     static final String TAG = "CAsm_MechanicSubtract";
+    protected String operation = "-";
+
+    private int dotOffset;
 
     public CAsm_MechanicSubtract(CAsm_Component parent) {super.init(parent);}
 
-    protected String operation = "-";
 
     @Override
     public void preClickSetup() {
 
-        int numAlleys, rows, cols, dy;
-        String imageName;
+        int dy, numAlleys;
 
         numAlleys = allAlleys.size();
 
         CAsm_DotBag firstDotBag = allAlleys.get(0).getDotBag();
-        CAsm_DotBag resultDotBag = allAlleys.get(numAlleys - 1).getDotBag();
+        CAsm_DotBag secondDotBag = allAlleys.get(1).getDotBag();
+        CAsm_DotBag resultDotBag = allAlleys.get(2).getDotBag();
 
-        rows = firstDotBag.getRows();
-        cols = firstDotBag.getCols();
-        imageName = firstDotBag.getImageName();
+        // right align
 
-        resultDotBag.update(rows, cols, imageName, false);
+        dotOffset = (firstDotBag.getCols()-secondDotBag.getCols());
+        secondDotBag.setTranslationX(dotOffset*secondDotBag.getSize());
+
+        // bring result dotbag down
+
+        resultDotBag.update(
+                firstDotBag.getRows(), firstDotBag.getCols(), firstDotBag.getImageName(), false);
         setAllParentsClip(resultDotBag, false);
-
         firstDotBag.setHollow(true);
 
-        // calc distance
         dy = 0;
         for (int i = numAlleys - 1; i > 0; i--) {
             dy += allAlleys.get(i).getHeight() + parent.alleyMargin;
@@ -70,7 +74,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         clickedDot.setHollow(true);
 
         int clickedDotCol = clickedDot.getCol();
-        CAsm_Dot correspondingDot = resultDotBag.getDot(0, clickedDotCol);
+        CAsm_Dot correspondingDot = resultDotBag.getDot(0, clickedDotCol + dotOffset);
         correspondingDot.setVisibility(View.INVISIBLE);
 
         if (resultDotBag.getVisibleDots().size() == parent.corDigit) {
@@ -88,45 +92,16 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         int dotSize = clickedDot.getWidth();
         float currRight = resultDotBag.getBounds().right;
-        float newRight = currRight - dotSize * numInvisibleDots;
+        float newRight = currRight - (dotSize * numInvisibleDots);
 
-        float dx = newRight - currRight;
 
-        ArrayList<Animator> allAnimations = new ArrayList<>();
+        ObjectAnimator anim = ObjectAnimator.ofFloat(resultDotBag, "right", currRight, newRight);
+        anim.setDuration(1000);
+        anim.start();
 
-        for (int i = 0; i < numVisibleDots; i++) {
-            allAnimations.add(ObjectAnimator.ofFloat(visibleDots.get(i), "translationX", dx));
-        }
-        allAnimations.add(ObjectAnimator.ofFloat(resultDotBag, "right", currRight, newRight));
+        resultDotBag.removeInvisibleDots();
 
-        AnimatorSet animSet = new AnimatorSet();
-        animSet.playTogether(allAnimations);
-        animSet.setDuration(1000);
-        animSet.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-            }
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
-
-                for (int i = 0; i < numVisibleDots; i++) {
-                    visibleDots.get(i).setTranslationX(0); // reset dots
-                }
-
-                resultDotBag.removeInvisibleDots();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-            }
-        });
-
-        animSet.start();
 
     }
 

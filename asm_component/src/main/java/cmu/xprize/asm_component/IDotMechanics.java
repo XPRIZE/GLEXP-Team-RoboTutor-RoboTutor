@@ -8,5 +8,6 @@ public interface IDotMechanics {
     void preClickSetup();
     void handleClick();
     String getOperation();
+    void reset();
 
 }

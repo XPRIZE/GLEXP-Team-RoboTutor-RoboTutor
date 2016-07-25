@@ -129,6 +129,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
         corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[digitIndex]);
 
+        mechanics.reset();
         mechanics.preClickSetup();
 
     }
