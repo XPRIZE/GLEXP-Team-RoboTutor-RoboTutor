@@ -24,6 +24,9 @@ public class CAsm_Text extends LinearLayout {
 
     float scale = getResources().getDisplayMetrics().density;
     final int textSize = (int)(ASM_CONST.textSize*scale);
+    final int textBoxWidth = (int)(ASM_CONST.textBoxWidth*scale);
+    final int textBoxHeight = (int)(ASM_CONST.textBoxHeight*scale);
+
 
     public CAsm_Text(Context context) {
 
@@ -85,11 +88,11 @@ public class CAsm_Text extends LinearLayout {
 
         EditText newText = new EditText(getContext());
 
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(textSize/2, textSize);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(textBoxWidth, textBoxHeight);
         newText.setLayoutParams(lp);
         newText.setBackground(null);
         newText.setGravity(Gravity.CENTER);
-        newText.setTextSize(textSize/4);
+        newText.setTextSize(textSize);
         newText.setTextColor(Color.BLACK);
         newText.setSingleLine(true);
 

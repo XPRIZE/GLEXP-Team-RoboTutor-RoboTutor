@@ -34,7 +34,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         // right align
 
         dotOffset = (firstDotBag.getCols()-secondDotBag.getCols());
-        secondDotBag.setTranslationX(dotOffset*secondDotBag.getSize());
+        secondDotBag.setTranslationX(dotOffset*secondDotBag.getSize() + translationX);
 
         // bring result dotbag down
 

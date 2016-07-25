@@ -30,7 +30,7 @@ public class CAsm_DotBag extends TableLayout {
 
     private int rows = 0;
     private int cols = 0;
-    private int size = (int)(ASM_CONST.textSize*scale);
+    private int size = (int)(ASM_CONST.textBoxHeight*scale);
 
     private boolean isClickable = false;
     private boolean isClicked = false;

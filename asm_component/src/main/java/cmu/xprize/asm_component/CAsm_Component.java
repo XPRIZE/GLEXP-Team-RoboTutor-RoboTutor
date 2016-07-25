@@ -117,6 +117,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
             CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, false);
         }
 
+        mechanics.next();
+
     }
 
     public void nextDigit() {
@@ -129,8 +131,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
         corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[digitIndex]);
 
-        mechanics.reset();
-        mechanics.preClickSetup();
+        mechanics.nextDigit();
 
     }
 
