@@ -253,4 +253,8 @@ public class CAsm_Text extends LinearLayout {
 
     }
 
+    public EditText getText(int index) {
+        return (EditText) getChildAt(index);
+    }
+
 }

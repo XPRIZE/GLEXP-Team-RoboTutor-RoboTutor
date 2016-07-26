@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.view.View;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 
@@ -27,7 +28,6 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
         CAsm_DotBag currBag;
         CAsm_DotBag clickedBag = null;
-        CAsm_DotBag resultBag = allAlleys.get(allAlleys.size() - 1).getDotBag();
         int alleyNum = 0;
 
         for (int i = 0; i < allAlleys.size(); i++) {
@@ -56,7 +56,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         final CAsm_DotBag resultBag = allAlleys.get(allAlleys.size() - 1).getDotBag();
 
         int dx = determineColumnDX(clickedDot, resultBag.getCols());
-        int dy = determineDY(alleyNum, allAlleys.size()-1);
+        int dy = determineAlleyDY(alleyNum, allAlleys.size()-1);
 
         final CAsm_Dot oldDot = clickedDot;
         final CAsm_Dot newDot = resultBag.addDot(0, resultBag.getCols());
@@ -80,8 +80,8 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (resultBag.getCols() >= 4) {
-                    carry();
+                if ((resultBag.getCols() >= 10) & resultBag.isNotTranslatedX(translationX)) {
+                    performCarry();
                 }
             }
 
@@ -103,7 +103,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         return dotSize * (targetCol - startDot.getCol());
     }
 
-    private int determineDY(int startAlley, int endAlley) {
+    private int determineAlleyDY(int startAlley, int endAlley) {
 
         int dy = 0;
         for (int i = startAlley + 1; i <= endAlley; i++) {
@@ -112,26 +112,27 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         return dy;
     }
 
-    private void carry() {
+    private void performCarry() {
 
         // shrink result dotbag to dime
 
-        CAsm_DotBag resultBag = allAlleys.get(allAlleys.size() - 1).getDotBag();
-        shrink(resultBag);
+        AnimatorSet shrinkAnimation = createShrinkAnimation();
+        AnimatorSet carryAnimation = createCarryAnimation();
 
-        // move dime to carry location
-
-        // create new result dotbag
+        AnimatorSet toPlay = new AnimatorSet();
+        toPlay.setDuration(1000);
+        toPlay.playSequentially(shrinkAnimation, carryAnimation);
+        toPlay.start();
 
     }
 
-    private void shrink (final CAsm_DotBag resultBag) {
-
-        // TODO: works if wait till animations are done
+    private AnimatorSet createShrinkAnimation () {
 
         ObjectAnimator anim;
-        float currRight, newRight;
         CAsm_Dot currDot;
+        int colsToTranslate;
+
+        final CAsm_DotBag resultBag = allAlleys.get(allAlleys.size()-1).getDotBag();
         int dotSize = resultBag.getSize();
 
         ArrayList<Animator> allAnimations = new ArrayList<>();
@@ -139,18 +140,21 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         for (int i = 0; i < resultBag.getCols(); i++) {
 
             currDot = resultBag.getDot(0, i);
-            anim = ObjectAnimator.ofFloat(currDot, "translationX", -i*dotSize);
+            colsToTranslate = (i < 10)?i:9;
+            anim = ObjectAnimator.ofFloat(currDot, "translationX", -colsToTranslate*dotSize);
             allAnimations.add(anim);
+
         }
 
-        currRight = resultBag.getBounds().right;
-        newRight = currRight - (dotSize*(resultBag.getCols()-1));
+        float currRight = resultBag.getBounds().right;
+        float newRight = currRight - (dotSize*9);
         anim = ObjectAnimator.ofFloat(resultBag, "right", currRight, newRight);
         allAnimations.add(anim);
 
         AnimatorSet animSet = new AnimatorSet();
         animSet.playTogether(allAnimations);
         animSet.setDuration(1000);
+
         animSet.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -159,7 +163,8 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                carryAnimation();
+                resultBag.removeDots(1, 9);
+
             }
 
             @Override
@@ -172,39 +177,93 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
             }
         });
-        animSet.start();
+
+        return animSet;
 
 
     }
 
-    private void carryAnimation() {
+    private AnimatorSet createCarryAnimation() {
 
         ObjectAnimator animX, animY;
 
         CAsm_DotBag animatorBag = allAlleys.get(0).getDotBag();
-        CAsm_DotBag resultBag = allAlleys.get(allAlleys.size()-1).getDotBag();
-        
-        CAsm_Dot carryDot = animatorBag.addDot(0,0);
-        carryDot.setImageName("star");
-        carryDot.setTranslationY(determineDY(0, allAlleys.size()-1));
+        final CAsm_DotBag resultBag = allAlleys.get(allAlleys.size()-1).getDotBag();
+
+        final CAsm_Dot carryDot = resultBag.getDot(0,0);
         setAllParentsClip(carryDot, false);
 
-
-        int digitsToTranslate = parent.numSlots - parent.digitIndex;
-
         float transX = -(scale*ASM_CONST.rightPadding +
-                scale*ASM_CONST.textBoxWidth*(digitsToTranslate + .5f) + resultBag.getSize());
+                scale*ASM_CONST.textBoxWidth*(1.5f) + resultBag.getSize());
+
+        float transY = -determineAlleyDY(1, allAlleys.size()-1);
 
         animX = ObjectAnimator.ofFloat(carryDot, "translationX", carryDot.getTranslationX(), transX);
-        animY = ObjectAnimator.ofFloat(carryDot, "translationY", carryDot.getTranslationY(), determineDY(0, 1));
+        animY = ObjectAnimator.ofFloat(carryDot, "translationY", carryDot.getTranslationY(), transY);
 
         AnimatorSet animSet = new AnimatorSet();
         animSet.playTogether(animX, animY);
         animSet.setDuration(1000);
-        animSet.start();
+
+        animSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                carryDot.setImageName("star");
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                updateCarryText();
+                replaceCarryDot();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+        return animSet;
 
 
     }
 
+    private void updateCarryText(){
+
+        CAsm_Text textLayout = allAlleys.get(1).getText();
+        EditText t = textLayout.getText(parent.digitIndex-1);
+        t.setText("1");
+
+    }
+
+    private void replaceCarryDot() {
+
+        CAsm_Dot newDot;
+        CAsm_DotBag animatorBag = allAlleys.get(0).getDotBag();
+        CAsm_DotBag resultBag = allAlleys.get(allAlleys.size()-1).getDotBag();
+
+        resultBag.removeDots(0,0);
+
+        newDot = animatorBag.addDot(0,0);
+        newDot.setImageName("star");
+        setAllParentsClip(newDot, false);
+
+        float transX = -(scale*ASM_CONST.rightPadding +
+                scale*ASM_CONST.textBoxWidth*(1.5f) + resultBag.getSize());
+
+        float transY = determineAlleyDY(0,1);
+
+        newDot.setTranslationX(transX);
+        newDot.setTranslationY(transY);
+
+
+
+    }
 
 }

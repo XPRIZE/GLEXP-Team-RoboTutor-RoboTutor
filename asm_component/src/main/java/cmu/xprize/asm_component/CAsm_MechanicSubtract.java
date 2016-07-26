@@ -100,7 +100,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         anim.setDuration(1000);
         anim.start();
 
-        resultDotBag.removeInvisibleDots();
+        resultDotBag.removeDots(numVisibleDots, numInvisibleDots + numVisibleDots - 1);
 
 
 

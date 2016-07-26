@@ -265,7 +265,7 @@ public class CAsm_DotBag extends TableLayout {
     }
 
 
-    public void removeDot(CAsm_Dot toRemove) {
+    private void removeDot(CAsm_Dot toRemove) {
 
         int row = toRemove.getRow();
 
@@ -299,20 +299,16 @@ public class CAsm_DotBag extends TableLayout {
         return toReturn;
     }
 
-    public void removeInvisibleDots(){
+    public void removeDots(int startCol, int endCol){
 
         TableRow currTableRow;
         int numChildren;
 
         for (int i = 0; i < allTableRows.size(); i++) {
             currTableRow = allTableRows.get(i);
-            numChildren = currTableRow.getVirtualChildCount();
-            for (int j = numChildren - 1; j >= 0; j--){
+            for (int j = endCol; j >= startCol; j--){
                 CAsm_Dot dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
-
-                if (dot.getVisibility() == INVISIBLE) {
-                    removeDot(dot);
-                }
+                removeDot(dot);
             }
         }
 
@@ -324,6 +320,8 @@ public class CAsm_DotBag extends TableLayout {
             for (int j = 0; j < numChildren; j++){
                 CAsm_Dot dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
                 dot.setCol(j);
+                dot.setTranslationX(0);
+
             }
         }
 
@@ -438,6 +436,30 @@ public class CAsm_DotBag extends TableLayout {
         }
 
         this.cols = maxCols;
+
+    }
+
+    public boolean isNotTranslatedX(float translationX) {
+
+        if (getTranslationX() != translationX) {
+            return false;
+        }
+
+        TableRow currTableRow;
+        CAsm_Dot dot;
+
+        for (int i = 0; i < allTableRows.size(); i++) {
+            currTableRow = allTableRows.get(i);
+
+            for (int j = 0; j < currTableRow.getVirtualChildCount(); j++){
+                dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
+                if (dot.getTranslationX() != 0) {
+                    return false;
+                };
+            }
+        }
+
+        return true;
 
     }
 
