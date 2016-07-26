@@ -14,7 +14,6 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,7 +26,6 @@ import android.widget.TextView;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -383,7 +381,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                 //ongoingAnimator.add(questionboardAnimator);
 
                 ValueAnimator questionboardTranslationAnimator = ObjectAnimator.ofFloat(questionBoard,
-                        "y", getHeight() * 0.25f, getHeight() * 0.75f);
+                        "y", getHeight() * 0.25f, getHeight() * 0.70f);
                 questionboardAnimator.setDuration(3500-s);
                 questionboardAnimator.setInterpolator(new LinearInterpolator());
 
