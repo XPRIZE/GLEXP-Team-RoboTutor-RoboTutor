@@ -82,29 +82,10 @@ public class CSb_Lollipop extends RelativeLayout {
         mCoinWidth = (int) (0.2 * widthSize);
         mCoinHeight = (int) (heightSize / 302.0 * 20);
         bound.setScaleType(ImageView.ScaleType.FIT_XY);
-        if(mode == Mode.STICK) {
-//            bound.setImageDrawable(getResources().getDrawable(R.drawable.avd_to_circle));
-            bound.layout(0 , 0, widthSize, heightSize);
-            //setBackground(ContextCompat.getDrawable(context, R.drawable.avd_to_circle));
-            int marginTop = (int)(heightSize / 302.0 * 92);
-            int marginLeft = (int)(0.4 * widthSize);
-//            for (int i = 0; i < 10; i++) {
-//                coins[i].layout(marginLeft, marginTop,
-//                        marginLeft + mCoinWidth, marginTop + mCoinHeight);
-//                marginTop += mCoinHeight;
-//
-//            }
-        }else {
-//            bound.setImageDrawable(getResources().getDrawable(R.drawable.avd_to_stick));
-            bound.layout(0 , 0, widthSize, heightSize);
-            int circleHeight = (int)(heightSize / 302.0 * 100);
-            int circleWidth = widthSize;
-//            for (int i = 0; i < 10; i++) {
-//                int marginLeft = (int)(widthSize * LAYOUT_CIRCLE[i][0]);
-//                int marginTop = (int)(heightSize/302.0 * 100 * LAYOUT_CIRCLE[i][1]);
-//                coins[i].layout(marginLeft, marginTop,
-//                        marginLeft + mCoinWidth, marginTop + mCoinHeight);
-//            }
+        bound.layout(0 , 0, widthSize, heightSize);
+        for(int i = 0; i < 10; i++){
+            coins[i].getLayoutParams().height = mCoinHeight;
+            coins[i].getLayoutParams().width = mCoinWidth;
         }
     }
 
@@ -119,9 +100,10 @@ public class CSb_Lollipop extends RelativeLayout {
             coins[i].setX(width * LAYOUT_CIRCLE[i][0] );
             coins[i].setY(height / 302.0f * 100 * LAYOUT_CIRCLE[i][1]);
         }
+        requestLayout();
         AnimatedVectorDrawable d = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.avd_to_stick);
         bound.setImageDrawable(d);
-        requestLayout();
+
     }
 
     public void animateToStick(){
@@ -137,9 +119,9 @@ public class CSb_Lollipop extends RelativeLayout {
             coins[i].setY(height / 302.0f * 100 * LAYOUT_CIRCLE[i][1]);
             coins[i].getLayoutParams().height = mCoinHeight;
             coins[i].getLayoutParams().width = mCoinWidth;
-            requestLayout();
             set.add(i);
         }
+        requestLayout();
 
 
         toStickHelper(9, coins, set);

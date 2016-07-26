@@ -368,10 +368,7 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
                                 if(carryToBag.getCoinNumber() == 10)
                                     carryAnimation(index+1);
                                 int showingCol = getShowingCol();
-                                for(int i = 0; i < mColNum; i++){
-                                    if(i <= showingCol) coinbags[i].setVisibility(VISIBLE);
-                                    else coinbags[i].setVisibility(INVISIBLE);
-                                }
+                                coinbags[showingCol].setVisibility(VISIBLE);
                             }
                         });
 
@@ -503,8 +500,8 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
                         } else lendToBag.setCoinNumber(9);
                         int showingCol = getShowingCol();
                         for(int i = 0; i < mColNum; i++){
-                            if(i <= showingCol) coinbags[i].setVisibility(VISIBLE);
-                            else coinbags[i].setVisibility(INVISIBLE);
+                            if(i > showingCol) coinbags[i].setVisibility(INVISIBLE);
+//                            else coinbags[i].setVisibility(INVISIBLE);
                         }
                     }
                 }, 2500);
