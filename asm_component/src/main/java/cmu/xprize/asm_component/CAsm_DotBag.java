@@ -36,6 +36,8 @@ public class CAsm_DotBag extends TableLayout {
     private boolean isClicked = false;
     private boolean isHollow = false;
 
+    private boolean drawBorder = true;
+
     private String imageName = "star"; // default
 
     private LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -135,7 +137,7 @@ public class CAsm_DotBag extends TableLayout {
 
     }
 
-    private void setZero() {
+    public void setZero() {
 
         rows = 0;
         cols = 0;
@@ -222,7 +224,10 @@ public class CAsm_DotBag extends TableLayout {
     @Override
     protected void onDraw(Canvas canvas) {
 
-        canvas.drawRoundRect(bounds, size/2, size/2, borderPaint);
+        if (drawBorder) {
+            canvas.drawRoundRect(bounds, size / 2, size / 2, borderPaint);
+        }
+
         resetBounds();
 
     }
@@ -389,6 +394,8 @@ public class CAsm_DotBag extends TableLayout {
         invalidate();
 
     }
+
+    public void setDrawBorder(boolean _drawBorder) {this.drawBorder = _drawBorder;}
 
     public String getImageName() {
         return imageName;

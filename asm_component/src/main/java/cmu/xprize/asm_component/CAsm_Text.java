@@ -153,6 +153,19 @@ public class CAsm_Text extends LinearLayout {
                 }
 
                 break;
+
+            case ASM_CONST.OVERHEAD:
+
+                break;
+
+            case ASM_CONST.ANIMATOR:
+
+                for (int i = 0; i < numSlots; i++) {
+                    curText = (EditText) getChildAt(i);
+                    resetText(curText);
+                }
+
+                break;
         }
     }
 

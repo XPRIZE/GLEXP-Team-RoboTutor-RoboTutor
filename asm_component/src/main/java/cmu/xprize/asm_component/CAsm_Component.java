@@ -24,8 +24,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
     private int _dataIndex;
 
     private int[] numbers;
-    private int digitIndex;
-    private int numSlots;
+
+    protected int digitIndex;
+    protected int numSlots;
 
     protected Integer corDigit;
     protected Integer corValue;
@@ -142,6 +143,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
     protected void updateDataSet(CAsm_Data data) {
 
+        // TODO: talk about whether this should be part of base mechanics
+
         int val, id;
         boolean clickable = true;
 
@@ -150,7 +153,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         numSlots = CAsm_Util.maxDigits(numbers) + 2;
         digitIndex = numSlots;
 
-        // TODO: talk about whether this should be part of base mechanics
+        updateAlley(0, 0, ASM_CONST.ANIMATOR, operation, false); // animator alley
+        updateAlley(1, 0, ASM_CONST.OVERHEAD, operation, true); // carry/borrow alley
 
         // update alleys
         for (int i = 0; i < numbers.length; i++) {
@@ -171,11 +175,11 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
                 id = ASM_CONST.REGULAR;
             }
 
-            updateAlley(i, val, id, operation, clickable);
+            updateAlley(i+2, val, id, operation, clickable);
         }
 
         // delete extra alleys
-        int delta = numAlleys - numbers.length;
+        int delta = numAlleys - (numbers.length+2);
 
         if (delta > 0) {
             for (int i = 0; i < delta; i++) {
