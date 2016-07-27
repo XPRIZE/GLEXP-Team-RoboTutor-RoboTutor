@@ -17,6 +17,14 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
     private int dotOffset;
 
+    // defined alley indices since there will always be a fixed number
+    int animatorIndex = 0;
+    int overheadIndex = 1;
+    int firstBagIndex = 2;
+    int secondBagIndex = 3;
+    int resultIndex = 4;
+
+
     public CAsm_MechanicSubtract(CAsm_Component parent) {super.init(parent);}
 
 
@@ -28,9 +36,12 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         numAlleys = allAlleys.size();
 
         // 0th index is animator dotbag and 1st is carry/borrow
-        CAsm_DotBag firstDotBag = allAlleys.get(2).getDotBag();
-        CAsm_DotBag secondDotBag = allAlleys.get(3).getDotBag();
-        CAsm_DotBag resultDotBag = allAlleys.get(4).getDotBag();
+        CAsm_DotBag borrowBag = allAlleys.get(overheadIndex).getDotBag();
+        CAsm_DotBag firstDotBag = allAlleys.get(firstBagIndex).getDotBag();
+        CAsm_DotBag secondDotBag = allAlleys.get(secondBagIndex).getDotBag();
+        CAsm_DotBag resultDotBag = allAlleys.get(resultIndex).getDotBag();
+
+        borrowBag.setDrawBorder(false);
 
         // right align
 
@@ -39,13 +50,16 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         // bring result dotbag down
 
-        resultDotBag.update(
-                firstDotBag.getRows(), firstDotBag.getCols(), firstDotBag.getImageName(), false);
+        resultDotBag.setRows(firstDotBag.getRows());
+        resultDotBag.setCols(firstDotBag.getCols());
+        resultDotBag.setImage(firstDotBag.getImageName());
+        resultDotBag.setIsClickable(false);
+
         setAllParentsClip(resultDotBag, false);
         firstDotBag.setHollow(true);
 
         dy = 0;
-        for (int i = numAlleys - 1; i > 0; i--) {
+        for (int i = resultIndex; i > firstBagIndex; i--) {
             dy += allAlleys.get(i).getHeight() + parent.alleyMargin;
         }
 
@@ -60,8 +74,8 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     public void handleClick() {
 
         CAsm_Dot clickedDot = null;
-        CAsm_DotBag resultDotBag = allAlleys.get(allAlleys.size() - 1).getDotBag();
-        CAsm_DotBag clickedBag = allAlleys.get(2).getDotBag(); // only one possible dotbag to look at
+        CAsm_DotBag clickedBag = allAlleys.get(secondBagIndex).getDotBag(); // only one possible dotbag to look at
+        CAsm_DotBag resultDotBag = allAlleys.get(resultIndex).getDotBag();
 
         if (clickedBag.getIsClicked()) {
             clickedDot = clickedBag.findClickedDot();
@@ -85,11 +99,10 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
     private void subtractLayoutChange(CAsm_Dot clickedDot) {
 
-        final CAsm_DotBag resultDotBag = allAlleys.get(allAlleys.size() - 1).getDotBag();
+        final CAsm_DotBag resultDotBag = allAlleys.get(resultIndex).getDotBag();
 
-        final ArrayList<CAsm_Dot> visibleDots = resultDotBag.getVisibleDots();
-        final int numVisibleDots = visibleDots.size();
-        int numInvisibleDots = allAlleys.get(0).getCurrentDigit() - numVisibleDots;
+        int numVisibleDots = resultDotBag.getVisibleDots().size();
+        int numInvisibleDots = resultDotBag.getCols() - numVisibleDots;
 
         int dotSize = clickedDot.getWidth();
         float currRight = resultDotBag.getBounds().right;
