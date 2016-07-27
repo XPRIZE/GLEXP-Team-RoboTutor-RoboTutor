@@ -1,6 +1,7 @@
 {
   "gameSpeed" : "10",
   "dataSource" : [
-    {"type" : "Ak_Data", "choice_count" : "2", "choices" : ["12", "23"], "answer" : "12"}
+    {"type" : "CAk_Data", "choices" : ["12", "23"], "answer" : "MID", "playerString" : "15"},
+    {"type" : "CAk_Data", "choices" : ["30", "50"], "answer" : "RIGHT", "playerString" : "60"}
   ]
 }

@@ -8,19 +8,20 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
-import java.util.Random;
-
 /**
  * Created by jacky on 2016/7/1.
  */
 
 public class CAkQuestionBoard extends View {
-    protected int leftNum, rightNum;
+    public int leftNum, rightNum;
     protected float textSize;
 
-    public CAkQuestionBoard(Context context) {
+    public String[] choices;
+    public CAkPlayer.Lane answerLane;
+
+    public CAkQuestionBoard(Context context, CAkPlayer.Lane answerLane, String[] choices) {
         super(context);
-        init();
+        init(answerLane, choices);
     }
 
     public CAkQuestionBoard(Context context, AttributeSet attrs) {
@@ -31,10 +32,17 @@ public class CAkQuestionBoard extends View {
         super(context, attrs, defStyleAttr);
     }
 
-    protected void init() {
-        Random r = new Random();
-        leftNum = r.nextInt(50);
-        rightNum = leftNum + r.nextInt(50) + 1;
+    protected void init(CAkPlayer.Lane answerLane, String[] choices) {
+//        Random r = new Random();
+//        leftNum = r.nextInt(50);
+//        rightNum = leftNum + r.nextInt(50) + 1;
+
+        this.choices = choices;
+        this.answerLane = answerLane;
+
+        leftNum = Integer.valueOf(choices[0]);
+        rightNum = Integer.valueOf(choices[1]);
+
         textSize = 20;
     }
 

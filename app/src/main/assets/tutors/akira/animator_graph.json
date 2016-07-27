@@ -20,21 +20,35 @@
           "maptype":"actionMap",
           "mapname": "INTRO_STATE_TRACK",
           "preenter": ["SET_DATASOURCE"],
-          "preexit": [
+          "preexit": ["NEXT_DATASET"
           ],
           "edges": [
             {
               "constraint": "",
-              "edge": "USERINPUT"
+              "edge": "POST_QUESTIONBOARD"
             }
           ]
         },
 
-        "USERINPUT": {
+        "POST_QUESTIONBOARD" : {
+          "type" : "NODE",
+          "COMMENT" : "",
+          "maptype": "moduleMap",
+          "mapname" : "POST_QUESTION",
+          "preexit" : [],
+          "edges" : [
+            {
+              "constraint" : "",
+              "edge": "USER_INPUT"
+            }
+          ]
+        },
+
+        "USER_INPUT": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"actionMap",
-          "mapname": "USERINPUT_TRACK",
+          "maptype":"moduleMap",
+          "mapname": "USER_ANSWER",
           "preenter": [
           ],
           "preexit": [
@@ -57,17 +71,17 @@
           "maptype":"actionMap",
           "mapname": "CORRECT_TRACK",
           "preenter": [],
-          "preexit": [
-            "GETWORD"
+          "preexit": ["NEXT_DATASET"
           ],
           "edges": [
             {
-              "constraint": "FTR_NOWORDS",
+              "constraint": "FTR_EOD",
               "edge": "NEXTSCENE"
             },
+
             {
               "constraint": "",
-              "edge": "USERINPUT"
+              "edge": "POST_QUESTIONBOARD"
             }
           ]
         },
@@ -78,17 +92,17 @@
           "maptype":"actionMap",
           "mapname": "WRONG_TRACK",
           "preenter": [],
-          "preexit": [
-            "GETWORD"
+          "preexit": ["NEXT_DATASET"
           ],
           "edges": [
             {
-              "constraint": "FTR_NOWORDS",
+              "constraint": "FTR_EOD",
               "edge": "NEXTSCENE"
             },
+
             {
               "constraint": "",
-              "edge": "INTRO_STATE"
+              "edge": "POST_QUESTIONBOARD"
             }
           ]
         },
@@ -96,7 +110,7 @@
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
           "maptype":"actionMap",
-          "mapname": "NEXTSCENE",
+          "mapname": "NEXT_SCENE",
           "preenter": [],
           "preexit": [],
           "edges": [
@@ -123,7 +137,27 @@
           "tracks": [
             {"type": "AUDIO", "command": "PLAY", "soundsource": "great.mp3", "features": ""}
           ]
+        },
+
+        "POST_QUESTION": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "",
+          "tracks": [
+            {"type": "COMMAND", "id": "SAkira", "method": "postQuestionBoard", "parms": "","features":""},
+            {"type": "COMMAND", "cmd": "WAIT" }
+          ]
+        },
+
+        "USER_ANSWER": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "",
+          "tracks": [
+            {"type": "COMMAND", "id": "SAkira", "method": "judge", "parms": "","features":""}
+          ]
         }
+
       },
 
       "actionMap": {
@@ -132,44 +166,42 @@
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "INTRO_STATE_TRACK": {"type": "COMMAND", "cmd": "WAIT"  },
+        "INTRO_STATE_TRACK": {"type": "COMMAND", "cmd": ""  },
 
-        "USERINPUT_TRACK":  {"type": "COMMAND", "cmd": "WAIT"  },
+        "USERINPUT_TRACK":  {"type": "COMMAND", "cmd": ""  },
 
-        "CORRECT_TRACK":  {"type": "COMMAND", "cmd": "WAIT"  },
+        "CORRECT_TRACK":  {"type": "COMMAND", "cmd": ""  },
 
-        "WRONG_TRACK":  {"type": "COMMAND", "cmd": "WAIT"  },
+        "WRONG_TRACK":  {"type": "COMMAND", "cmd": ""  },
 
         "SET_DATASOURCE":{"type": "COMMAND", "id": "SAkira", "method": "setDataSource", "parms": "[file]ak_data.json:String","features":""},
 
-        "NEXTSCENE": {
+        "NEXT_DATASET":{"type": "COMMAND", "id": "SAkira", "method": "next" ,"features":""},
+
+        "NEXT_SCENE": {
           "type": "COMMAND", "cmd": "gotoNextScene"
-        }
+        },
+
+        "NEXT": {"type": "COMMAND", "cmd": "NEXT"  }
       },
 
       "constraintMap": {
 
         "COMMENT": "@@@@@  CConstraints @@@@@ ",
 
-        "FTR_NOWORDS": {
+        "FTR_RIGHT":{
           "type": "CONDITION",
-          "cmd": "test",
-          "code": "FTR_NOWORDS"
+          "test":"FTR_RIGHT"
         },
-        "FTR_WORDS": {
+
+        "FTR_WRONG":{
           "type": "CONDITION",
-          "cmd": "test",
-          "code": "!FTR_NOWORDS"
+          "test":"FTR_WRONG"
         },
-        "FTR_RIGHT": {
+
+        "FTR_EOD":{
           "type": "CONDITION",
-          "cmd": "test",
-          "code": "FTR_RIGHT"
-        },
-        "FTR_WRONG": {
-          "type": "CONDITION",
-          "cmd": "test",
-          "code": "!FTR_RIGHT"
+          "test":"FTR_EOD"
         }
       }
     }

@@ -2,9 +2,6 @@ package cmu.xprize.ak_component;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,7 +14,6 @@ import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -63,42 +59,45 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
     static final int WIDTH = 960, HEIGHT = 600;
 
-    private CAk_Data _currData;
-    private long startTime;
-    private CAkPlayer player;
-    private CAkTeachFinger teachFinger;
+    protected CAk_Data _currData;
+    protected long startTime;
+    protected CAkPlayer player;
+    protected CAkTeachFinger teachFinger;
 
-    private TextView score;
-    private long sidewalkRightTime;
+    protected CAkQuestionBoard questionBoard;
+
+    protected TextView score;
+    protected long sidewalkRightTime;
     private long sidewalkLeftTime;
     private long questionTime;
-    private int boardCount;
     private ImageView cityBackground;
     private Button minusSpeed;
     private Button plusSpeed;
 
     private Random random;
-    private SoundPool soundPool;
+    protected SoundPool soundPool;
 
-    private boolean lastCorrect = true;
-    private Boolean isFirstInstall;
+    protected boolean lastCorrect = true;
+    protected Boolean isFirstInstall;
 
     private PointF[] sidewalkLeftPoints;
     private PointF[] sidewalkRightPoints;
 
-    private int carscreechMedia, correctMedia, incorrectMedia, numberchangedMedia;
-    private boolean flag=true;
+    protected int carscreechMedia, correctMedia, incorrectMedia, numberchangedMedia;
+    protected boolean flag=true;
 
-    private boolean speedIsZero=false;
-    private int extraSpeed=0;
-    private boolean animatorStop=false;
+    protected boolean speedIsZero=false;
+    protected int extraSpeed=0;
+    protected boolean animatorStop=false;
 
     //json loadable
-    public int          gameSpeed          ;
-    public CAk_Data[]   dataSource         ;
-    private List<Animator> ongoingAnimator;
-    private Animator cityAnimator;
-    private CAkQuestionBoard stopQuestionBoard;
+    public    int          gameSpeed          ;
+    public    CAk_Data[]   dataSource         ;
+
+
+    protected List<Animator> ongoingAnimator;
+    protected Animator cityAnimator;
+    protected CAkQuestionBoard stopQuestionBoard;
 
     public int errornum=0;
 
@@ -154,6 +153,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         cityBackground = (ImageView) findViewById(R.id.city);
         score = (TextView) findViewById(R.id.score);
         teachFinger = (CAkTeachFinger) findViewById(R.id.finger);
+        teachFinger.finishTeaching = true;
         minusSpeed = (Button) findViewById(R.id.minusspeed);
         plusSpeed = (Button) findViewById(R.id.plusspeed);
 
@@ -235,7 +235,6 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         try {
             if (dataSource != null) {
                 updateDataSet(dataSource[_dataIndex]);
-
                 _dataIndex++;
             } else {
                 CErrorManager.logEvent(TAG,  "Error no DataSource : ", null, false);
@@ -247,15 +246,19 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     }
 
     public boolean dataExhausted() {
-        return (_dataIndex >= dataSource.length)? true:false;
+        return _dataIndex >= dataSource.length;
     }
 
     protected void updateDataSet(CAk_Data data) {
-
+        questionBoard = new CAkQuestionBoard(mContext, data.answerLane, data.choices);
+        player.setText(data.playerString);
     }
 
     public void post(String command, Object target) {
 
+    }
+
+    public void UpdateValue(int value) {
     }
 
     /**
@@ -291,17 +294,13 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
             if(!animatorStop&&elapseRight > 3500-s) {
 
-                int r = random.nextInt() % 3;
+                int r = random.nextInt() % 2;
 
                 final ImageView sidewalkStuff  = new ImageView(mContext);
                 if(r == 0){
-                    sidewalkStuff.setImageResource(R.drawable.tree);
-                    sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
-                }
-                else if(r == 1) {
                     sidewalkStuff.setImageResource(R.drawable.sidewalkcrack);
                     sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
-                }else if(r == 2) {
+                }else if(r == 1) {
                     sidewalkStuff.setImageResource(R.drawable.tirepile);
                     sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
                 }
@@ -327,17 +326,13 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
             }
 
             if(!animatorStop&&elapseLeft > 2500-s) {
-                int r = random.nextInt() % 3;
+                int r = random.nextInt() % 2;
 
                 final ImageView sidewalkStuff  = new ImageView(mContext);
                 if(r == 0){
-                    sidewalkStuff.setImageResource(R.drawable.tree);
-                    sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
-                }
-                else if(r == 1) {
                     sidewalkStuff.setImageResource(R.drawable.sidewalkcrack);
                     sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
-                }else if(r == 2) {
+                }else if(r == 1) {
                     sidewalkStuff.setImageResource(R.drawable.tirepile);
                     sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
                 }
@@ -369,85 +364,87 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
              *  Using drawable as questionboard
              */
 
-            if(!animatorStop&&elapse > 5000-s && teachFinger.finishTeaching) {
-                final CAkQuestionBoard questionBoard = new CAkQuestionBoard(mContext);
-
-                LayoutParams params = new LayoutParams((int)(90 * scaleFactorX), (int)(30 * scaleFactorY));
-                params.addRule(CENTER_HORIZONTAL);
-                addView(questionBoard, params);
-
-                final AnimatorSet questionboardAnimator = CAnimatorUtil.configZoomIn(questionBoard, 3500,
-                        0, new LinearInterpolator(), 4f);
-                //ongoingAnimator.add(questionboardAnimator);
-
-                ValueAnimator questionboardTranslationAnimator = ObjectAnimator.ofFloat(questionBoard,
-                        "y", getHeight() * 0.25f, getHeight() * 0.70f);
-                questionboardAnimator.setDuration(3500-s);
-                questionboardAnimator.setInterpolator(new LinearInterpolator());
-
-                questionboardAnimator.playTogether(questionboardTranslationAnimator);
-
-                questionboardAnimator.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        if(judge(questionBoard)){
-                            soundPool.play(correctMedia, 1.0f, 1.0f, 1, 0, 1.0f);
-                            if(speedIsZero==false) {
-                                player.score += 1;
-                                lastCorrect = true;
-                                errornum = 0;
-                            }
-                            else
-                            {
-                                animatorStop=false;
-                                for(int i=0;i<ongoingAnimator.size();i++)
-                                {
-                                    ongoingAnimator.get(i).resume();
-                                }
-                                cityAnimator.resume();
-                            }
-                            removeView(questionBoard);
-                        }else{
-                            if(speedIsZero==false) {
-                                player.score -= 1;
-                                soundPool.play(incorrectMedia, 1.0f, 1.0f, 1, 0, 1.0f);
-                                lastCorrect = false;
-                                errornum += 1;
-                                if (errornum == 3)
-                                    dialog();
-                                removeView(questionBoard);
-                            }
-                            else{
-                                animatorStop=true;
-                                cityAnimator.pause();
-                                for(int i=0;i<ongoingAnimator.size();i++)
-                                {
-                                    ongoingAnimator.get(i).pause();
-                                    System.out.println(""+ongoingAnimator.get(i));
-                                }
-                                stopQuestionBoard=questionBoard;
-                                //removeView(questionBoard);
-                            }
-                        }
-                        //ongoingAnimator.remove(questionboardAnimator);
-                    }
-                });
-
-                questionboardAnimator.start();
-
-                if(flag && teachFinger != null) {
-                    teachFinger.setVisibility(INVISIBLE);
-                    flag = false;
-                }
-
-                questionTime = System.nanoTime();
-            }
+//            if(!animatorStop&&elapse > 5000-s && teachFinger.finishTeaching) {
+//                final CAkQuestionBoard questionBoard = new CAkQuestionBoard(mContext);
+//
+//                LayoutParams params = new LayoutParams((int)(90 * scaleFactorX), (int)(30 * scaleFactorY));
+//                params.addRule(CENTER_HORIZONTAL);
+//                addView(questionBoard, params);
+//
+//                final AnimatorSet questionboardAnimator = CAnimatorUtil.configZoomIn(questionBoard, 3500,
+//                        0, new LinearInterpolator(), 4f);
+//                //ongoingAnimator.add(questionboardAnimator);
+//
+//                ValueAnimator questionboardTranslationAnimator = ObjectAnimator.ofFloat(questionBoard,
+//                        "y", getHeight() * 0.25f, getHeight() * 0.70f);
+//                questionboardAnimator.setDuration(3500-s);
+//                questionboardAnimator.setInterpolator(new LinearInterpolator());
+//
+//                questionboardAnimator.playTogether(questionboardTranslationAnimator);
+//
+//                questionboardAnimator.addListener(new AnimatorListenerAdapter() {
+//                    @Override
+//                    public void onAnimationEnd(Animator animation) {
+//                        super.onAnimationEnd(animation);
+//                        if(judge(questionBoard)){
+//                            soundPool.play(correctMedia, 1.0f, 1.0f, 1, 0, 1.0f);
+//                            if(speedIsZero==false) {
+//                                player.score += 1;
+//                                lastCorrect = true;
+//                                errornum = 0;
+//                            }
+//                            else
+//                            {
+//                                animatorStop=false;
+//                                for(int i=0;i<ongoingAnimator.size();i++)
+//                                {
+//                                    ongoingAnimator.get(i).resume();
+//                                }
+//                                cityAnimator.resume();
+//                            }
+//                            removeView(questionBoard);
+//                        }else{
+//                            if(speedIsZero==false) {
+//                                player.score -= 1;
+//                                soundPool.play(incorrectMedia, 1.0f, 1.0f, 1, 0, 1.0f);
+//                                lastCorrect = false;
+//                                errornum += 1;
+//                                if (errornum == 3)
+//                                    dialog();
+//                                removeView(questionBoard);
+//                            }
+//                            else{
+//                                animatorStop=true;
+//                                cityAnimator.pause();
+//                                for(int i=0;i<ongoingAnimator.size();i++)
+//                                {
+//                                    ongoingAnimator.get(i).pause();
+//                                    System.out.println(""+ongoingAnimator.get(i));
+//                                }
+//                                stopQuestionBoard=questionBoard;
+//                                //removeView(questionBoard);
+//                            }
+//                        }
+//                        //ongoingAnimator.remove(questionboardAnimator);
+//                    }
+//                });
+//
+//                questionboardAnimator.start();
+//
+//                if(flag && teachFinger != null) {
+//                    teachFinger.setVisibility(INVISIBLE);
+//                    flag = false;
+//                }
+//
+//                questionTime = System.nanoTime();
+//            }
 
             score.setText("score: "+ player.score);
-            mainHandler.postDelayed(gameRunnable, 100);
+            mainHandler.postDelayed(gameRunnable, 400);
         }
     };
+
+
 
 
     public void dialog()
@@ -490,8 +487,6 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
-        final float scaleFactorX = getWidth() * 1.f / CAk_Component.WIDTH;
         if(event.getAction()==MotionEvent.ACTION_DOWN){
 //            if(!player.getPlaying())
 //            {
@@ -504,21 +499,21 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
             if(isFirstInstall && !teachFinger.finishTeaching)
                 teachFinger.onTouch(event, player);
-            player.onTouchEvent(event, scaleFactorX);
+            player.onTouch(event);
             soundPool.play(carscreechMedia, 1.0f, 1.0f, 1, 0, 1.0f);
-            if(animatorStop)
-            {
-                if(judge(stopQuestionBoard))
-                {
-                    animatorStop=false;
-                    for(int i=0;i<ongoingAnimator.size();i++)
-                    {
-                        ongoingAnimator.get(i).resume();
-                    }
-                    cityAnimator.resume();
-                    removeView(stopQuestionBoard);
-                }
-            }
+//            if(animatorStop)
+//            {
+//                if(judge(stopQuestionBoard))
+//                {
+//                    animatorStop=false;
+//                    for(int i=0;i<ongoingAnimator.size();i++)
+//                    {
+//                        ongoingAnimator.get(i).resume();
+//                    }
+//                    cityAnimator.resume();
+//                    removeView(stopQuestionBoard);
+//                }
+//            }
             return true;
         }
         if(event.getAction()==MotionEvent.ACTION_UP)
@@ -529,15 +524,15 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         return super.onTouchEvent(event);
     }
 
-    private boolean judge(CAkQuestionBoard CAkQuestionBoard){
-        if(player.rearNum < CAkQuestionBoard.leftNum && player.getLane() == cmu.xprize.ak_component.CAkPlayer.Lane.LEFT ||
-                player.rearNum > CAkQuestionBoard.rightNum && player.getLane() == cmu.xprize.ak_component.CAkPlayer.Lane.RIGHT ||
-                (player.rearNum < CAkQuestionBoard.rightNum && player.rearNum > CAkQuestionBoard.leftNum
-                        && player.getLane() == cmu.xprize.ak_component.CAkPlayer.Lane.MID)){
-            return true;
-        }
-        return false;
-    }
+//    protected boolean judge(CAkQuestionBoard CAkQuestionBoard){
+//        if(player.rearNum < CAkQuestionBoard.leftNum && player.getLane() == cmu.xprize.ak_component.CAkPlayer.Lane.LEFT ||
+//                player.rearNum > CAkQuestionBoard.rightNum && player.getLane() == cmu.xprize.ak_component.CAkPlayer.Lane.RIGHT ||
+//                (player.rearNum < CAkQuestionBoard.rightNum && player.rearNum > CAkQuestionBoard.leftNum
+//                        && player.getLane() == cmu.xprize.ak_component.CAkPlayer.Lane.MID)){
+//            return true;
+//        }
+//        return false;
+//    }
 
 
 

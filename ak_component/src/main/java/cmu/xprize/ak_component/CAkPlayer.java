@@ -9,19 +9,17 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.TextView;
 
-import java.util.Random;
-
 /**
  * Created by jacky on 2016/7/1.
  */
 
 public class CAkPlayer extends TextView{
-    protected enum Lane{LEFT, MID, RIGHT}
+    public enum Lane{LEFT, MID, RIGHT}
 
     protected boolean isPlaying;
-    protected int score;
-    protected int rearNum;
-    protected Lane lane = Lane.MID;
+    public int score;
+    public String rearString;
+    public Lane lane = Lane.MID;
 
 
 
@@ -49,8 +47,6 @@ public class CAkPlayer extends TextView{
         image.setBounds( 0, 0, w, h );
         setCompoundDrawables(null, image,
                 null, null);
-        rearNum = new Random().nextInt(100);
-        setText("" + rearNum);
     }
 
     public void update() {
@@ -80,7 +76,7 @@ public class CAkPlayer extends TextView{
     }
 
 
-    public void onTouchEvent(MotionEvent event, float scaleFactorX){
+    public void onTouch(MotionEvent event){
         float touchX = event.getX();
         //Change to left lane
         if(touchX < getX() + getWidth()/2) {
