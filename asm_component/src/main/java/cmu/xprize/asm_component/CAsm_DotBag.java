@@ -79,19 +79,14 @@ public class CAsm_DotBag extends TableLayout {
 
     }
 
-
-    public void update(int _rows, int _cols, String _imageName, boolean clickable) {
+    public void setRows(int _rows) {
 
         TableRow currTableRow;
 
         int deltaRows = _rows - this.rows;
-        int deltaCols = _cols - this.cols;
 
-        this.imageName = _imageName;
-        this.isClickable = clickable;
-        this.isHollow = false;
 
-        if (_rows == 0 || _cols == 0) {
+        if (_rows == 0) {
             setZero();
             return;
         }
@@ -111,6 +106,22 @@ public class CAsm_DotBag extends TableLayout {
             }
         }
 
+        this.rows = _rows;
+        resetBounds();
+
+    }
+
+    public void setCols(int _cols) {
+
+        TableRow currTableRow;
+
+        if (_cols == 0) {
+            setZero();
+            return;
+        }
+
+        int deltaCols = _cols - this.cols;
+
         if (deltaCols < 0) {
             for (int i = 0; i < this.rows; i++) {
                 currTableRow = allTableRows.get(i);
@@ -122,50 +133,33 @@ public class CAsm_DotBag extends TableLayout {
         }
 
         else if (deltaCols > 0) {
-            for (int i = 0; i < _rows; i++) {
+            for (int i = 0; i < this.rows; i++) {
                 for (int j = this.cols; j < _cols; j++ ) {
                     addDot(i, j);
                 }
             }
+
         }
 
-        this.rows = _rows;
         this.cols = _cols;
-
-        resetDots();
         resetBounds();
 
     }
 
-    public void setZero() {
-
-        rows = 0;
-        cols = 0;
-        removeAllViews();
-        allTableRows.clear();
-        params.width = size;
-        params.height = size;
-        setLayoutParams(params);
-        resetBounds();
-
-    }
-
-    public void resetDots() {
+    public void setImage(String _imageName) {
 
         TableRow currTableRow;
 
+        this.imageName = _imageName;
+
         for (int i = 0; i < allTableRows.size(); i++) {
             currTableRow = allTableRows.get(i);
-
             for (int j = 0; j < currTableRow.getVirtualChildCount(); j++){
-
                 CAsm_Dot dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
-
                 dot.setImageName(imageName);
-                dot.setHollow(isHollow);
-                dot.setIsClickable(isClickable);
             }
         }
+
     }
 
     public CAsm_Dot addDot(int row, int col) {
@@ -188,6 +182,49 @@ public class CAsm_DotBag extends TableLayout {
         return dot;
     }
 
+    public void removeDots(int startCol, int endCol){
+
+        TableRow currTableRow;
+        int numChildren;
+
+        for (int i = 0; i < allTableRows.size(); i++) {
+            currTableRow = allTableRows.get(i);
+            for (int j = endCol; j >= startCol; j--){
+                CAsm_Dot dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
+                removeDot(dot);
+            }
+        }
+
+        // now reset dot col index
+
+        for (int i = 0; i < allTableRows.size(); i++) {
+            currTableRow = allTableRows.get(i);
+            numChildren = currTableRow.getVirtualChildCount();
+            for (int j = 0; j < numChildren; j++){
+                CAsm_Dot dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
+                dot.setCol(j);
+                dot.setTranslationX(0);
+
+            }
+        }
+
+    }
+
+
+    private void setZero() {
+
+        rows = 0;
+        cols = 0;
+        removeAllViews();
+        allTableRows.clear();
+        params.width = size;
+        params.height = size;
+        setLayoutParams(params);
+        resetBounds();
+
+    }
+
+
     private TableRow addRow(int index) {
 
         if (allTableRows.size() == 0) {
@@ -209,7 +246,6 @@ public class CAsm_DotBag extends TableLayout {
     }
 
 
-
     private void setPaint() {
 
         borderPaint.setStrokeWidth(borderWidth);
@@ -227,7 +263,6 @@ public class CAsm_DotBag extends TableLayout {
         if (drawBorder) {
             canvas.drawRoundRect(bounds, size / 2, size / 2, borderPaint);
         }
-
         resetBounds();
 
     }
@@ -299,33 +334,6 @@ public class CAsm_DotBag extends TableLayout {
         return toReturn;
     }
 
-    public void removeDots(int startCol, int endCol){
-
-        TableRow currTableRow;
-        int numChildren;
-
-        for (int i = 0; i < allTableRows.size(); i++) {
-            currTableRow = allTableRows.get(i);
-            for (int j = endCol; j >= startCol; j--){
-                CAsm_Dot dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
-                removeDot(dot);
-            }
-        }
-
-        // now reset dot col index
-
-        for (int i = 0; i < allTableRows.size(); i++) {
-            currTableRow = allTableRows.get(i);
-            numChildren = currTableRow.getVirtualChildCount();
-            for (int j = 0; j < numChildren; j++){
-                CAsm_Dot dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
-                dot.setCol(j);
-                dot.setTranslationX(0);
-
-            }
-        }
-
-    }
     /* Adapted from Kevin's CAnimatorUtil. Using translationX instead of X. */
     public void wiggle(long duration, int repetition, long delay, float magnitude) {
 
@@ -380,11 +388,7 @@ public class CAsm_DotBag extends TableLayout {
 
     }
 
-    public void setRows(int _rows) {this.rows = _rows;}
-    public void setCols(int _cols) {
-        this.cols = _cols;
-    }
-    public void setSize(int _size) {this.size = size;}
+    public void setSize(int _size) {this.size = _size;}
 
     public void setRight(float newRight) {
 

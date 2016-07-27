@@ -110,7 +110,11 @@ public class CAsm_Alley extends LinearLayout {
             cols = SText.getDigit(digitIndex);
             cols = (cols != null)?cols:0;
         }
-        SdotBag.update(1, cols, image, clickable);
+
+        SdotBag.setRows(1);
+        SdotBag.setCols(cols);
+        SdotBag.setImage(image);
+        SdotBag.setIsClickable(clickable);
 
     }
 
