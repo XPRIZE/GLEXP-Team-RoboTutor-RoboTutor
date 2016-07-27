@@ -2,6 +2,9 @@ package cmu.xprize.ak_component;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,9 +14,11 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -22,6 +27,7 @@ import android.widget.TextView;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -98,7 +104,6 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     protected List<Animator> ongoingAnimator;
     protected Animator cityAnimator;
     protected CAkQuestionBoard stopQuestionBoard;
-
     public int errornum=0;
 
     public CAk_Component(Context context) {
@@ -363,88 +368,10 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
              *  TODO
              *  Using drawable as questionboard
              */
-
-//            if(!animatorStop&&elapse > 5000-s && teachFinger.finishTeaching) {
-//                final CAkQuestionBoard questionBoard = new CAkQuestionBoard(mContext);
-//
-//                LayoutParams params = new LayoutParams((int)(90 * scaleFactorX), (int)(30 * scaleFactorY));
-//                params.addRule(CENTER_HORIZONTAL);
-//                addView(questionBoard, params);
-//
-//                final AnimatorSet questionboardAnimator = CAnimatorUtil.configZoomIn(questionBoard, 3500,
-//                        0, new LinearInterpolator(), 4f);
-//                //ongoingAnimator.add(questionboardAnimator);
-//
-//                ValueAnimator questionboardTranslationAnimator = ObjectAnimator.ofFloat(questionBoard,
-//                        "y", getHeight() * 0.25f, getHeight() * 0.70f);
-//                questionboardAnimator.setDuration(3500-s);
-//                questionboardAnimator.setInterpolator(new LinearInterpolator());
-//
-//                questionboardAnimator.playTogether(questionboardTranslationAnimator);
-//
-//                questionboardAnimator.addListener(new AnimatorListenerAdapter() {
-//                    @Override
-//                    public void onAnimationEnd(Animator animation) {
-//                        super.onAnimationEnd(animation);
-//                        if(judge(questionBoard)){
-//                            soundPool.play(correctMedia, 1.0f, 1.0f, 1, 0, 1.0f);
-//                            if(speedIsZero==false) {
-//                                player.score += 1;
-//                                lastCorrect = true;
-//                                errornum = 0;
-//                            }
-//                            else
-//                            {
-//                                animatorStop=false;
-//                                for(int i=0;i<ongoingAnimator.size();i++)
-//                                {
-//                                    ongoingAnimator.get(i).resume();
-//                                }
-//                                cityAnimator.resume();
-//                            }
-//                            removeView(questionBoard);
-//                        }else{
-//                            if(speedIsZero==false) {
-//                                player.score -= 1;
-//                                soundPool.play(incorrectMedia, 1.0f, 1.0f, 1, 0, 1.0f);
-//                                lastCorrect = false;
-//                                errornum += 1;
-//                                if (errornum == 3)
-//                                    dialog();
-//                                removeView(questionBoard);
-//                            }
-//                            else{
-//                                animatorStop=true;
-//                                cityAnimator.pause();
-//                                for(int i=0;i<ongoingAnimator.size();i++)
-//                                {
-//                                    ongoingAnimator.get(i).pause();
-//                                    System.out.println(""+ongoingAnimator.get(i));
-//                                }
-//                                stopQuestionBoard=questionBoard;
-//                                //removeView(questionBoard);
-//                            }
-//                        }
-//                        //ongoingAnimator.remove(questionboardAnimator);
-//                    }
-//                });
-//
-//                questionboardAnimator.start();
-//
-//                if(flag && teachFinger != null) {
-//                    teachFinger.setVisibility(INVISIBLE);
-//                    flag = false;
-//                }
-//
-//                questionTime = System.nanoTime();
-//            }
-
             score.setText("score: "+ player.score);
             mainHandler.postDelayed(gameRunnable, 400);
         }
     };
-
-
 
 
     public void dialog()
@@ -501,19 +428,6 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                 teachFinger.onTouch(event, player);
             player.onTouch(event);
             soundPool.play(carscreechMedia, 1.0f, 1.0f, 1, 0, 1.0f);
-//            if(animatorStop)
-//            {
-//                if(judge(stopQuestionBoard))
-//                {
-//                    animatorStop=false;
-//                    for(int i=0;i<ongoingAnimator.size();i++)
-//                    {
-//                        ongoingAnimator.get(i).resume();
-//                    }
-//                    cityAnimator.resume();
-//                    removeView(stopQuestionBoard);
-//                }
-//            }
             return true;
         }
         if(event.getAction()==MotionEvent.ACTION_UP)

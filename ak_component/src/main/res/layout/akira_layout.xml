@@ -73,7 +73,6 @@
         android:layout_height="45dp"
         />
     <Button
-        android:visibility="invisible"
         app:layout_marginTopPercent="65%"
         android:id="@+id/plusspeed"
         app:layout_marginLeftPercent="90%"
