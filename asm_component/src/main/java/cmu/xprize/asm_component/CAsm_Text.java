@@ -2,6 +2,7 @@ package cmu.xprize.asm_component;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.annotation.RequiresPermission;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.EditText;
@@ -38,7 +39,6 @@ public class CAsm_Text extends LinearLayout {
         super(context, attrs);
         init(context, attrs);
     }
-
 
     public CAsm_Text(Context context, AttributeSet attrs, int defStyle) {
 
@@ -86,7 +86,7 @@ public class CAsm_Text extends LinearLayout {
 
     private void addText(int index){
 
-        EditText newText = new EditText(getContext());
+        Write_Text newText = new Write_Text(getContext());
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(textBoxWidth, textBoxHeight);
         newText.setLayoutParams(lp);
@@ -110,7 +110,7 @@ public class CAsm_Text extends LinearLayout {
 
         int numSlots = getChildCount();
         String[] digits = CAsm_Util.intToDigits(value, numSlots);
-        EditText curText;
+        Write_Text curText;
 
         switch(id){
 
@@ -118,7 +118,7 @@ public class CAsm_Text extends LinearLayout {
 
                 for (int i = 0; i < numSlots; i++) {
 
-                    curText = (EditText) getChildAt(i);
+                    curText = (Write_Text) getChildAt(i);
                     resetText(curText);
                     curText.setText(digits[i]);
 
@@ -130,7 +130,7 @@ public class CAsm_Text extends LinearLayout {
 
                 for (int i = 0; i < numSlots; i++) {
 
-                    curText = (EditText) getChildAt(i);
+                    curText = (Write_Text) getChildAt(i);
                     resetText(curText);
 
                     if (i == 0) {
@@ -148,7 +148,7 @@ public class CAsm_Text extends LinearLayout {
             case ASM_CONST.RESULT:
 
                 for (int i = 0; i < numSlots; i++) {
-                    curText = (EditText) getChildAt(i);
+                    curText = (Write_Text) getChildAt(i);
                     resetText(curText);
                 }
 
@@ -161,7 +161,7 @@ public class CAsm_Text extends LinearLayout {
             case ASM_CONST.ANIMATOR:
 
                 for (int i = 0; i < numSlots; i++) {
-                    curText = (EditText) getChildAt(i);
+                    curText = (Write_Text) getChildAt(i);
                     resetText(curText);
                 }
 
@@ -171,18 +171,18 @@ public class CAsm_Text extends LinearLayout {
 
     public void performNextDigit() {
 
-        EditText curText;
+        Write_Text curText;
 
         digitIndex--;
 
         if (digitIndex != getChildCount()-1){
 
-            curText = (EditText) getChildAt(digitIndex+1);
+            curText = (Write_Text) getChildAt(digitIndex+1);
             resetText(curText);
 
         }
 
-        curText = (EditText) getChildAt(digitIndex);
+        curText = (Write_Text) getChildAt(digitIndex);
         curText.setTextColor(Color.BLACK);
         curText.setAlpha(1.0f);
 
@@ -195,7 +195,7 @@ public class CAsm_Text extends LinearLayout {
 
     public void resetValue(int index) {
 
-        EditText t = (EditText) getChildAt(index);
+        Write_Text t = (Write_Text) getChildAt(index);
         t.setText("");
 
     }
@@ -207,7 +207,7 @@ public class CAsm_Text extends LinearLayout {
         }
     }
 
-    private void resetText(EditText toReset) {
+    private void resetText(Write_Text toReset) {
         // TODO: change function name?
         toReset.setEnabled(false);
         toReset.setTextColor(Color.BLACK);
@@ -225,7 +225,7 @@ public class CAsm_Text extends LinearLayout {
 
         for (int i = 0; i < numSlots; i++) {
 
-            EditText t = (EditText)getChildAt(i);
+            Write_Text t = (Write_Text) getChildAt(i);
             String test = t.getText().toString();
 
             try {
@@ -241,7 +241,7 @@ public class CAsm_Text extends LinearLayout {
 
     public Integer getDigit(int index) {
 
-        EditText t = (EditText)getChildAt(index);
+        Write_Text t = (Write_Text) getChildAt(index);
         String input = t.getText().toString();
 
         if (input.equals("") || input.equals(operation)) {
@@ -253,8 +253,8 @@ public class CAsm_Text extends LinearLayout {
 
     }
 
-    public EditText getText(int index) {
-        return (EditText) getChildAt(index);
+    public Write_Text getText(int index) {
+        return (Write_Text) getChildAt(index);
     }
 
 }

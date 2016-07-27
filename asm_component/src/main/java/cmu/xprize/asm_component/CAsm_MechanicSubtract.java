@@ -73,6 +73,8 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     @Override
     public void handleClick() {
 
+        super.handleClick();
+
         CAsm_Dot clickedDot = null;
         CAsm_DotBag clickedBag = allAlleys.get(secondBagIndex).getDotBag(); // only one possible dotbag to look at
         CAsm_DotBag resultDotBag = allAlleys.get(resultIndex).getDotBag();

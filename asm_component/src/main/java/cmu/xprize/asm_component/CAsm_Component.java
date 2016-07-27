@@ -45,6 +45,10 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
     //protected CAsm_LetterBoxLayout Scontent;
 
     // json loadable
+
+    //Writing
+    private Writing_Popup mPopup;
+
     public CAsm_Data[] dataSource;
 
     static final String TAG = "CAsm_Component";
@@ -71,8 +75,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         setOrientation(VERTICAL);
         setOnClickListener(this);
 
-        //inflate(getContext(), R.layout.asm_container, this);
 
+        //inflate(getContext(), R.layout.asm_container, this);
 
         mContext = context;
 
@@ -94,7 +98,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         //
         //Scontent = (CAsm_LetterBoxLayout) findViewById(R.id.Scontent);
         //Scontent.setOnClickListener(this);
-
+        mPopup = new Writing_Popup(mContext);
 
     }
 
