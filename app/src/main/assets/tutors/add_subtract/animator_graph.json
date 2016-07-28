@@ -229,6 +229,19 @@
           "COMMENT": "TBD",
           "tracks": [
           ]
+        },
+        "FINGERWRITING":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "SDigitWriter", "method": "onStartWriting", "parms": "CANCEL_REMINDER:String"},
+            // This would call the cancel reminder action below when the user starts writing
+            {"type": "COMMAND", "id": "Sresponse", "method": "onRecognitionComplete", "parms": "NEXT:String"},
+            // This would increment the animation_graph when it is in a wait state.  e.g if it is sitting at the end of a stream audio clip
+            {"type": "COMMAND", "cmd": "WAIT" }
+            //{"type": "COMMAND", "id": "Sresponse", "method": "show", "parms": "TRUE:Boolean","features":""}
+          ]
         }
       },
 
@@ -251,7 +264,17 @@
 
         "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "NEXTSCENE" },
         "NEXT": {"type": "COMMAND", "cmd": "NEXT" },
-        "PAUSE":{"type": "COMMAND", "cmd": "WAIT" }
+        "PAUSE":{"type": "COMMAND", "cmd": "WAIT" },
+
+        //FINGERWRITING ADDITIONS
+
+        "FW_DISABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "FALSE:Boolean","features":""},
+        //disable FingerWriting
+        "FW_ENABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "TRUE:Boolean","features":""}
+        //enable FingerWriting
+
+        //FINGERWRITING ADDITIONS
+
 
       },
 

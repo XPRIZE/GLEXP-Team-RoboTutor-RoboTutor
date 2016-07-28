@@ -3,8 +3,10 @@ package cmu.xprize.asm_component;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
 import org.json.JSONObject;
 
@@ -48,6 +50,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
     //Writing
     private Writing_Popup mPopup;
+    private Write_Text currDigit;
 
     public CAsm_Data[] dataSource;
 
@@ -294,8 +297,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
     public void onClick(View v) {mechanics.handleClick();}
 
-
-
     /**
      * Load the data source
      *
@@ -308,5 +309,20 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         _dataIndex = 0;
 
     }
+
+    public void enterNumber(Write_Text t) {
+        //CAsm_Text c = (CAsm_Text)t.getParent();
+        mPopup.showAtLocation(this, Gravity.LEFT, 10, 10);
+        mPopup.update(50, 50, 300, 300);
+        mPopup.enable(true);
+        //mPopup.update(,10,10,300,300);
+        //currDigit = t;
+    }
+
+    public void exitWrite() {
+        mPopup.enable(false);
+        mPopup.dismiss();
+    }
+
 
 }

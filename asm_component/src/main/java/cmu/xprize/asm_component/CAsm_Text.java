@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.RequiresPermission;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -22,6 +24,8 @@ public class CAsm_Text extends LinearLayout {
     private int id;
 
     private String operation;
+
+    private boolean isClicked;
 
     float scale = getResources().getDisplayMetrics().density;
     final int textSize = (int)(ASM_CONST.textSize*scale);
@@ -51,6 +55,7 @@ public class CAsm_Text extends LinearLayout {
         mContext = context;
         //setClipChildren(false);
         //setClipToPadding(false);
+        //setOnClickListener(clickListener);
     }
 
     public void update(int id, int val, String operation, int numSlots) {
@@ -189,6 +194,7 @@ public class CAsm_Text extends LinearLayout {
         if (id == ASM_CONST.RESULT) {
             curText.setEnabled(true);
             curText.setBackground(getResources().getDrawable(R.drawable.back));
+            curText.isWritable = true;
         }
 
     }
@@ -210,6 +216,7 @@ public class CAsm_Text extends LinearLayout {
     private void resetText(Write_Text toReset) {
         // TODO: change function name?
         toReset.setEnabled(false);
+        toReset.isWritable = false;
         toReset.setTextColor(Color.BLACK);
         toReset.setAlpha(.5f);
         toReset.setBackground(null);
@@ -255,6 +262,61 @@ public class CAsm_Text extends LinearLayout {
 
     public Write_Text getText(int index) {
         return (Write_Text) getChildAt(index);
+    }
+
+
+    public boolean getIsClicked() {
+        if (isClicked) {
+            isClicked = false;
+            return true;
+        } else return false;
+    }
+
+    public Write_Text findClickedField() {
+        Write_Text currText;
+        Write_Text clickedText;
+        for (int i = 0; i < getChildCount(); i++) {
+            currText = (Write_Text)getChildAt(i);
+            if (currText.getIsClicked()) {
+                clickedText = currText;
+                return clickedText;
+            }
+        }
+        return null;
+    }
+/*
+    private OnClickListener clickListener = new OnClickListener(getContext()){
+        @Override
+        public void onClick(View v) {
+            Log.v("GOT_CLICK?","bob");
+            Write_Text t = (Write_Text)v;
+            t.isClicked = true;
+            isClicked = true;
+            //clickListener.mPopup.showAtLocation(t, Gravity.CENTER,0,0);
+            //t.enterNumber();
+        }
+    };*/
+
+
+    /*
+
+    private OnClickListener clickListener = new OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            try {
+                Write_Text t = (Write_Text) v;
+                if (t.isWritable) {
+                    t.isClicked = true;
+                }
+                isClicked = true;
+            } catch (ClassCastException e) {
+                return;
+            }
+        }
+    };*/
+
+    public void setIsClicked(boolean b) {
+        isClicked = b;
     }
 
 }

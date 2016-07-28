@@ -1,7 +1,9 @@
 package cmu.xprize.asm_component;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
@@ -10,6 +12,7 @@ import android.widget.PopupWindow;
  */
 public class Writing_Popup extends PopupWindow {
     private Context mContext;
+    private CAsm_Fingerwriter fw;
 
     public Writing_Popup(Context context) {
         super(context);
@@ -36,8 +39,14 @@ public class Writing_Popup extends PopupWindow {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         testy.setLayoutParams(lp);
-        CAsm_Fingerwriter fw = new CAsm_Fingerwriter(context);
+        fw = new CAsm_Fingerwriter(context);
+        fw.setId(R.id.SDigitWriter);
         testy.addView(fw);
+        testy.setBackgroundColor(Color.WHITE);
         this.setContentView(testy);
+    }
+
+    public void enable(boolean b) {
+        fw.enable(b);
     }
 }

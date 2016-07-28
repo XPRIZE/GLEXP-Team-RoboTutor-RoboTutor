@@ -1,5 +1,6 @@
 package cmu.xprize.asm_component;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -50,8 +51,34 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     public void preClickSetup() {}
 
-    public void handleClick() {}
+    public void handleClick() {
 
+        CAsm_Text currText;
+        CAsm_Text clickedText = null;
+        int alleyNum = 0;
+        Log.v("Test for Null", Integer.toString(allAlleys.size()));
+
+        for (int i = 0; i < this.allAlleys.size(); i++) {
+            currText = this.allAlleys.get(i).getText();
+            if (currText.getIsClicked()) {
+                clickedText = currText;
+                break;
+            }
+        }
+
+        if (clickedText == null) {
+            parent.exitWrite();
+            return;
+        }
+
+        Write_Text clickedField = clickedText.findClickedField();
+
+        if (clickedField != null && clickedField.isWritable) { //TODO: Decide whether this is private.
+            parent.enterNumber(clickedField);
+        } else {
+            parent.exitWrite();
+        }
+    }
 
     public String getOperation() {return operation;}
 
