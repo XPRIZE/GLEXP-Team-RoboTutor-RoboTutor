@@ -11,10 +11,9 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -73,8 +72,8 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     private long sidewalkLeftTime;
     private long questionTime;
     private ImageView cityBackground;
-    private Button minusSpeed;
-    private Button plusSpeed;
+
+    protected boolean isRunning = true;
 
     private Random random;
     protected SoundPool soundPool;
@@ -90,7 +89,6 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
     protected boolean speedIsZero=false;
     protected int extraSpeed=0;
-    protected boolean animatorStop=false;
 
     //json loadable
     public    int          gameSpeed          ;
@@ -155,11 +153,9 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         scoreboard = (CSb_Scoreboard) findViewById(R.id.scoreboard);
         teachFinger = (CAkTeachFinger) findViewById(R.id.finger);
         teachFinger.finishTeaching = true;
-        minusSpeed = (Button) findViewById(R.id.minusspeed);
-        plusSpeed = (Button) findViewById(R.id.plusspeed);
 
         cityAnimator = CAnimatorUtil.configTranslate(cityBackground,
-                100000, 0, new PointF(0, -HEIGHT));
+                400000, 0, new PointF(0, -HEIGHT));
 
 
         sidewalkLeftPoints = new PointF[2];
@@ -173,27 +169,6 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
         random = new Random();
         ongoingAnimator=new ArrayList<>();
-
-        minusSpeed.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(extraSpeed>=-4)
-                    extraSpeed--;
-                if(extraSpeed==-5)
-                    speedIsZero=true;
-                System.out.println(""+extraSpeed);
-            }
-        });
-        plusSpeed.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(extraSpeed==-5)
-                    speedIsZero=false;
-                if(extraSpeed<=4)
-                    extraSpeed++;
-                System.out.println(""+extraSpeed);
-            }
-        });
 
         isFirstInstall=true;
         if(isFirstInstall==false)
@@ -280,18 +255,17 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
             long elapseRight = (System.nanoTime() - sidewalkRightTime) / 1000000;
             long elapseLeft = (System.nanoTime() - sidewalkLeftTime) / 1000000;
             long elapse = (System.nanoTime() - questionTime) / 1000000;
+            
+            int s = extraSpeed * 500;
 
-            final float scaleFactorX = getWidth() * 1.f / CAk_Component.WIDTH;
-            final float scaleFactorY = getHeight() * 1.f / CAk_Component.HEIGHT;
-
-            int s=extraSpeed*500;
+            final PercentRelativeLayout percentLayout = (PercentRelativeLayout) getChildAt(0);
 
             /**
              * Add side view
              *
              */
 
-            if(!animatorStop&&elapseRight > 3500-s) {
+            if(isRunning && elapseRight > 3500) {
 
                 int r = random.nextInt() % 2;
 
@@ -304,10 +278,11 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                     sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
                 }
 
-                addView(sidewalkStuff);
+                percentLayout.addView(sidewalkStuff);
+                scoreboard.bringToFront();
 
                 final Animator sidewalkAnimator = CAnimatorUtil.configTranslate(sidewalkStuff,
-                        3500-s, 0, sidewalkRightPoints[0], sidewalkRightPoints[1]
+                        5000-s, 0, sidewalkRightPoints[0], sidewalkRightPoints[1]
                 );
                 ongoingAnimator.add(sidewalkAnimator);
 
@@ -315,7 +290,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        removeView(sidewalkStuff);
+                        percentLayout.removeView(sidewalkStuff);
                         ongoingAnimator.remove(sidewalkAnimator);
                     }
                 });
@@ -324,7 +299,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                 sidewalkRightTime = System.nanoTime();
             }
 
-            if(!animatorStop&&elapseLeft > 2500-s) {
+            if(isRunning && elapseLeft > 2500) {
                 int r = random.nextInt() % 2;
 
                 final ImageView sidewalkStuff  = new ImageView(mContext);
@@ -336,17 +311,18 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                     sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
                 }
 
-                addView(sidewalkStuff);
+                percentLayout.addView(sidewalkStuff);
+                scoreboard.bringToFront();
 
                 final Animator sidewalkAnimator1 = CAnimatorUtil.configTranslate(sidewalkStuff,
-                        3500-s, 0, sidewalkLeftPoints[0], sidewalkLeftPoints[1]
+                        5000-s, 0, sidewalkLeftPoints[0], sidewalkLeftPoints[1]
                 );
                 ongoingAnimator.add(sidewalkAnimator1);
                 sidewalkAnimator1.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        removeView(sidewalkStuff);
+                        percentLayout.removeView(sidewalkStuff);
                         ongoingAnimator.remove(sidewalkAnimator1);
                     }
                 });
@@ -430,4 +406,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         _dataIndex = 0;
 
     }
+
+
+
 }

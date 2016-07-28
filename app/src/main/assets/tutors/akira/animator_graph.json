@@ -70,9 +70,8 @@
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
           "maptype":"moduleMap",
           "mapname": "PLAYCORRECT",
-          "preenter": [],
-          "preexit": ["NEXT_DATASET"
-          ],
+          "preenter": ["PAUSE"],
+          "preexit": ["RESUME", "NEXT_DATASET"],
           "edges": [
             {
               "constraint": "FTR_EOD",
@@ -91,9 +90,8 @@
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
           "maptype":"moduleMap",
           "mapname": "PLAYWRONG",
-          "preenter": [],
-          "preexit": ["NEXT_DATASET"
-          ],
+          "preenter": ["PAUSE"],
+          "preexit": ["RESUME", "NEXT_DATASET"],
           "edges": [
             {
               "constraint": "FTR_EOD",
@@ -150,7 +148,9 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Correct v1.mp3", "soundpackage":"tutor_effect", "volume": 0.10, "mode":"event", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Correct v1.mp3", "soundpackage":"tutor_effect", "volume": 0.10, "mode":"event", "features": ""},
+            {"type": "COMMAND", "id": "SAkira", "method": "increaseScore", "parms": "", "features":""},
+            {"type": "COMMAND", "cmd": "WAIT"}
           ]
         },
         "PLAYWRONG": {
@@ -159,7 +159,9 @@
           "COMMENT": "????",
           "tracks": [
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Incorrect v1.mp3", "soundpackage":"tutor_effect", "volume": 0.10, "mode":"event", "features": ""},
-            {"type": "COMMAND", "id": "SAkira", "method": "crash", "parms": "", "features":""}
+            {"type": "COMMAND", "id": "SAkira", "method": "crash", "parms": "", "features":""},
+            {"type": "COMMAND", "id": "SAkira", "method": "decreaseScore", "parms": "", "features":""},
+            {"type": "COMMAND", "cmd": "WAIT"}
           ]
         },
 
@@ -208,7 +210,15 @@
           "type": "COMMAND", "cmd": "gotoNextScene"
         },
 
-        "NEXT": {"type": "COMMAND", "cmd": "NEXT"  }
+        "NEXT": {"type": "COMMAND", "cmd": "NEXT"  },
+
+        "PAUSE":{
+          "type": "COMMAND", "id": "SAkira", "method": "pause" ,"features":""
+        },
+
+        "RESUME":{
+          "type": "COMMAND", "id": "SAkira", "method": "resume" ,"features":""
+        }
 
 
       },

@@ -6,9 +6,12 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import org.json.JSONObject;
@@ -23,6 +26,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
+import cmu.xprize.sb_component.CSb_Scoreboard;
 import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILogManager;
@@ -38,9 +42,10 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     private CTutor mTutor;
     private CObjectDelegate mSceneObject;
 
-    private boolean isCorrect;
-    private CAkQuestionBoard qb;
 
+    protected Button[] speedometerButton;
+
+    private boolean isCorrect;
 
     static final String TAG = "TAkComponent";
 
@@ -61,6 +66,20 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         super.init(context, attrs);
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
+        speedometerButton = new Button[11];
+        for(int i = 0; i < 11; i++) {
+            int resID = getResources().getIdentifier("button" + i, "id",
+                    "cmu.xprize.robotutor");
+            speedometerButton[i] = (Button) findViewById(resID);
+            final int speed = i - 5;
+            speedometerButton[i].setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    extraSpeed = speed;
+                }
+            });
+        }
+        finishLine = new ImageView(mContext);
     }
 
 
@@ -194,20 +213,23 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     public void postQuestionBoard() {
         final CAkQuestionBoard questionBoard = this.questionBoard; //new CAkQuestionBoard(mContext);
+        final PercentRelativeLayout percentLayout = (PercentRelativeLayout) getChildAt(0);
 
         int s = extraSpeed * 500;
 
-        LayoutParams params = new LayoutParams(240, 80);
+        LayoutParams params = new LayoutParams(360, 80);
         params.addRule(CENTER_HORIZONTAL);
-        ((PercentRelativeLayout)getChildAt(0)).addView(questionBoard, params);
+        percentLayout.addView(questionBoard, params);
         player.bringToFront();
+        scoreboard.bringToFront();
+
 
         final AnimatorSet questionboardAnimator = CAnimatorUtil.configZoomIn(questionBoard, 3500,
                 0, new LinearInterpolator(), 4f);
-
+        ongoingAnimator.add(questionboardAnimator);
         ValueAnimator questionboardTranslationAnimator = ObjectAnimator.ofFloat(questionBoard,
                 "y", getHeight() * 0.25f, getHeight() * 0.70f);
-        questionboardAnimator.setDuration(3500-s);
+        questionboardAnimator.setDuration(5000-s);
         questionboardAnimator.setInterpolator(new LinearInterpolator());
 
         questionboardAnimator.playTogether(questionboardTranslationAnimator);
@@ -216,9 +238,9 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                ((PercentRelativeLayout)getChildAt(0)).removeView(questionBoard);
+                percentLayout.removeView(questionBoard);
                 applyEventNode("NEXT");
-
+                ongoingAnimator.remove(questionboardAnimator);
             }
         });
 
@@ -232,21 +254,25 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     public void postFinishLine() {
         int s = extraSpeed * 500;
+        final PercentRelativeLayout percentLayout = (PercentRelativeLayout) getChildAt(0);
+
         final ImageView finishLine = new ImageView(mContext);
         LayoutParams params = new LayoutParams(getWidth()/3, getHeight()/10);
         params.addRule(CENTER_HORIZONTAL);
-        finishLine.setLayoutParams(params);
         finishLine.setImageResource(cmu.xprize.ak_component.R.drawable.finishline);
 
-        ((PercentRelativeLayout)getChildAt(0)).addView(finishLine, params);
+        percentLayout.addView(finishLine, params);
         player.bringToFront();
+        scoreboard.bringToFront();
 
         final AnimatorSet finishLineAnimator = CAnimatorUtil.configZoomIn(finishLine, 3500,
                 0, new LinearInterpolator(), 4f);
 
+        ongoingAnimator.add(finishLineAnimator);
+
         ValueAnimator finishLineTranslationAnimator = ObjectAnimator.ofFloat(finishLine,
-                "y", getHeight() * 0.25f, getHeight() * 0.70f);
-        finishLineAnimator.setDuration(3500-s);
+                "y", 0.25f * getHeight(), 0.9f * getHeight());
+        finishLineAnimator.setDuration(5000-s);
         finishLineAnimator.setInterpolator(new LinearInterpolator());
 
         finishLineAnimator.playTogether(finishLineTranslationAnimator);
@@ -256,7 +282,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 applyEventNode("NEXT");
-
+                ongoingAnimator.remove(finishLineAnimator);
             }
         });
 
@@ -267,16 +293,55 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         reset();
         if(questionBoard.answerLane == player.lane){
             mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
-            scoreboard.increase();
-            player.score += 1;
         }else {
             mTutor.setAddFeature(TCONST.GENERIC_WRONG);
-            player.score -= 1;
+
         }
     }
 
     public void crash() {
         player.crash();
+    }
+
+    public void pause() {
+        isRunning = false;
+        for(Animator animator : ongoingAnimator)
+            animator.pause();
+    }
+
+    public void resume() {
+        isRunning = true;
+        for(Animator animator : ongoingAnimator)
+            animator.resume();
+    }
+
+    public void increaseScore() {
+        scoreboard.increase();
+        player.score += 1;
+        new AnimateScoreboard().execute(scoreboard);
+    }
+
+    public void decreaseScore() {
+        scoreboard.decrease();
+        player.score -= 1;
+        new AnimateScoreboard().execute(scoreboard);
+    }
+
+    private class AnimateScoreboard extends AsyncTask<CSb_Scoreboard, Integer, CSb_Scoreboard> {
+        @Override
+        protected CSb_Scoreboard doInBackground(CSb_Scoreboard... params) {
+            CSb_Scoreboard scoreboard = params[0];
+            while(scoreboard.isAnimating);
+            return scoreboard;
+        }
+
+        @Override
+        protected void onPostExecute(CSb_Scoreboard scoreboard) {
+            super.onPostExecute(scoreboard);
+            applyEventNode("NEXT");
+        }
+
+
     }
 
 

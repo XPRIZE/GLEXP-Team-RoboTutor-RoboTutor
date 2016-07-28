@@ -25,6 +25,8 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
     private Paint mPaint;
     private int[] resoureImageIds;
 
+    public boolean isAnimating;
+
 
     private boolean init = true;
 
@@ -74,7 +76,7 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
         int scoreHeight = (int)(heightSize * 0.2);
 
         int lollipopWidth = (int)(widthSize * 100.0 / widthScale);
-        int bagGap = (int)(widthSize * 50.0 / widthScale);
+        int bagGap = (int)(widthSize * 40.0 / widthScale);
         int bagMarginLeft = (int)(widthSize * 30.0 / widthScale);
         int lollipopGap = bagGap;
         int lollipopMarginLeft = 0;
@@ -109,7 +111,8 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setTextSize(70);
         for(int i = 0; i < showingCol+1; i++) {
-            canvas.drawText(String.valueOf(coinbags[i].getCoinNumber()),
+            //Prevent showing 2 digit at a column
+            canvas.drawText(String.valueOf(coinbags[i].getCoinNumber() > 9? 9 : coinbags[i].getCoinNumber()),
                     coinbags[i].getX() + coinbags[i].getWidth() / 2,
                     0.9f * height, mPaint);
         }
@@ -200,15 +203,21 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
 
     public void increase() {
         mScore += 1;
+        isAnimating = true;
         coinbags[0].increase();
         if(coinbags[0].getCoinNumber() == 10) {
             carryAnimation(0);
         }
+        else isAnimating = false;
     }
 
     public void decrease() {
         if(mScore == 0) return;
-        if(coinbags[0].getCoinNumber() > 0) coinbags[0].decrease();
+        isAnimating = true;
+        if(coinbags[0].getCoinNumber() > 0){
+            coinbags[0].decrease();
+            isAnimating = false;
+        }
         else {
             for(int i = 1; i < mColNum; i++){
                 if(coinbags[i].getCoinNumber() > 0){
@@ -223,9 +232,7 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
     private void setPosition() {
         int widthSize = getWidth();
         int widthScale = 50 * (mColNum + 1);
-        int bagWidth = (int)(widthSize * 40.0 / widthScale);
-        int lollipopWidth = (int)(widthSize * 100.0 / widthScale);
-        int bagGap = (int)(widthSize * 50.0 / widthScale);
+        int bagGap = (int)(widthSize * 40.0 / widthScale);
         int bagMarginLeft = (int)(widthSize * 30.0 / widthScale);
         int lollipopGap = bagGap;
         int lollipopMarginLeft = 0;
@@ -368,6 +375,8 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
                                 carryToBag.increase();
                                 if(carryToBag.getCoinNumber() == 10)
                                     carryAnimation(index+1);
+                                else
+                                    isAnimating = false;
                                 int showingCol = getShowingCol();
                                 coinbags[showingCol].setVisibility(VISIBLE);
                             }
@@ -498,7 +507,10 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
                         lendToBag.setVisibility(VISIBLE);
                         if (index > 1) {
                             borrowAnimation(index-1);
-                        } else lendToBag.setCoinNumber(9);
+                        } else{
+                            lendToBag.setCoinNumber(9);
+                            isAnimating = false;
+                        }
                         int showingCol = getShowingCol();
                         for(int i = 0; i < mColNum; i++){
                             if(i > showingCol) coinbags[i].setVisibility(INVISIBLE);
@@ -512,5 +524,6 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
 
         set.start();
     }
+
 }
 
