@@ -93,6 +93,8 @@ public class CAsm_Dot extends ImageView {
     public int getRow() {return this.row;}
     public int getCol() {return this.col;}
 
+    public boolean getIsHollow() {return this.isHollow;}
+
     public boolean getIsClicked(){
         if (isClicked) {
             isClicked = false;
