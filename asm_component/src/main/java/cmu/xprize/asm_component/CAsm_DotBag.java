@@ -7,7 +7,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -73,7 +75,6 @@ public class CAsm_DotBag extends TableLayout {
         setWillNotDraw(false);
         setClipChildren(false);
         setClipToPadding(false);
-        setOnClickListener(clickListener);
         setPaint();
         setZero();
 
@@ -267,19 +268,16 @@ public class CAsm_DotBag extends TableLayout {
 
     }
 
-    private OnClickListener clickListener = new OnClickListener(){
-        public void onClick(View v) {
-
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        final int action = MotionEventCompat.getActionMasked(event);
+        if (action == MotionEvent.ACTION_DOWN) {
             if (isClickable) {
                 isClicked = true;
             }
-
-            View Component = (View) v.getParent().getParent();
-            Component.performClick();
         }
-    };
-
-
+        return false;
+    }
 
     public CAsm_Dot findClickedDot() {
 

@@ -32,7 +32,6 @@
         "PROBLEM":{
           "COMMENT":"This node presents the first problem.",
           "type":"node",
-          "preenter":[],
           "maptype":"moduleMap",
           "mapname": "SHOWPROBLEM",
           "preenter":[],
@@ -46,10 +45,9 @@
         "NEXTDIGIT":{
           "COMMENT":"This node presents the first digit.",
           "type":"node",
-          "preenter":[],
           "maptype":"moduleMap",
           "mapname": "SHOWDIGIT",
-          "preenter":[],
+          "preenter":["SET_INVISIBLE", "CREATE_HESITATION_TIMER"],
           "preexit" :[],
           "edges":
           [
@@ -146,6 +144,7 @@
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
+//            {"type": "AUDIO", "command": "PLAY", "soundsource": "0.mp3", "repeat":true, "volume": 0.10, "mode":"event", "features": ""}
           ]
         },
         "SHOWPROBLEM": {
@@ -243,6 +242,13 @@
 
         "RESTART_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "action":"RESTART", "ontimer":"EVALUATEWHOLE", "features": "" },
         "CANCEL_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "action":"CANCEL", "features": "" },
+
+
+//        "SET_VISIBILITY":{"type": "COMMAND", "id": "SAddSubtract", "method": "setVisible", "parms":"false:bool", "features":""},
+        "SET_VISIBLE": {"type": "COMMAND", "id": "SAddSubtract", "method": "setVisible", "parms":"true:bool"},
+        "SET_INVISIBLE": {"type": "COMMAND", "id": "SAddSubtract", "method": "setVisible", "parms":"false:bool"},
+        "CREATE_HESITATION_TIMER": {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "period":"3000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"SET_VISIBLE"},
+//        {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "action":"CREATEANDSTART", "repeat":"false", "period":"1000", "features":"", "onTimer":"SET_VISIBILITY"},
 
         "SET_DATASOURCE":{"type": "COMMAND", "id": "SAddSubtract", "method": "setDataSource", "parms": "[file]asm_data.json:String","features":""},
         "NEXT_DATASET":{"type": "COMMAND", "id": "SAddSubtract", "method": "next" ,"features":""},

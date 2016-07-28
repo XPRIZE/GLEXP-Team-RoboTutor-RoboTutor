@@ -2,7 +2,10 @@ package cmu.xprize.asm_component;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -16,7 +19,7 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
 
-public class CAsm_Component extends LinearLayout implements ILoadableObject, View.OnClickListener {
+public class CAsm_Component extends LinearLayout implements ILoadableObject {
 
     private Context mContext;
 
@@ -32,6 +35,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
     protected Integer corValue;
     protected String operation;
     protected String currImage;
+    private boolean isVisible;
 
     protected int numAlleys = 0;
 
@@ -69,7 +73,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
     public void init(Context context, AttributeSet attrs) {
 
         setOrientation(VERTICAL);
-        setOnClickListener(this);
 
         //inflate(getContext(), R.layout.asm_container, this);
 
@@ -104,6 +107,19 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         _dataIndex = 0;
     }
 
+    public void setVisible(Boolean isVisible) {
+        Log.d("setVisible", isVisible.toString());
+        for (int alley = 0; alley < allAlleys.size(); alley++) {
+            CAsm_Alley curAlley = allAlleys.get(alley);
+            CAsm_DotBag curDB = curAlley.getDotBag();
+            if (isVisible) {
+                curDB.setVisibility(VISIBLE);
+            } else {
+                curDB.setVisibility(INVISIBLE);
+            }
+        }
+    }
+
     public void next() {
 
         try {
@@ -121,6 +137,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         mechanics.next();
 
     }
+
 
     public void nextDigit() {
 
@@ -288,7 +305,16 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
 //  TODO: fix the onTouch to see results
 
-    public void onClick(View v) {mechanics.handleClick();}
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        final int action = MotionEventCompat.getActionMasked(event);
+        if (action == MotionEvent.ACTION_DOWN) {
+            mechanics.handleClick();
+            Log.d("Successful", "onTouch");
+        }
+        return true;
+    }
+
 
 
 
