@@ -107,7 +107,7 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
         canvas.drawLine(coinbags[showingCol].getX(), 0.82f * height,
                 coinbags[0].getX() + coinbags[0].getWidth(), 0.82f * height, mPaint);
         mPaint.setTextAlign(Paint.Align.CENTER);
-        mPaint.setTextSize(80);
+        mPaint.setTextSize(70);
         for(int i = 0; i < showingCol+1; i++) {
             canvas.drawText(String.valueOf(coinbags[i].getCoinNumber()),
                     coinbags[i].getX() + coinbags[i].getWidth() / 2,
@@ -119,6 +119,7 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
     private int getShowingCol() {
         int n = (int)Math.pow(10, mColNum);
         int showingCol = mColNum;
+        if(mScore == 0) return 0;
         while(n > mScore) {
             n /= 10;
             showingCol--;

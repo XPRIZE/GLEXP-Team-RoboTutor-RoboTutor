@@ -267,6 +267,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         reset();
         if(questionBoard.answerLane == player.lane){
             mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
+            scoreboard.increase();
             player.score += 1;
         }else {
             mTutor.setAddFeature(TCONST.GENERIC_WRONG);

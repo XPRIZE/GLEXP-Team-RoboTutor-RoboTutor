@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import cmu.xprize.sb_component.CSb_Scoreboard;
 import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
@@ -63,6 +64,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     protected long startTime;
     protected CAkPlayer player;
     protected CAkTeachFinger teachFinger;
+    protected CSb_Scoreboard scoreboard;
 
     protected CAkQuestionBoard questionBoard;
 
@@ -150,7 +152,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
         player = (CAkPlayer) findViewById(R.id.player);
         cityBackground = (ImageView) findViewById(R.id.city);
-        score = (TextView) findViewById(R.id.score);
+        scoreboard = (CSb_Scoreboard) findViewById(R.id.scoreboard);
         teachFinger = (CAkTeachFinger) findViewById(R.id.finger);
         teachFinger.finishTeaching = true;
         minusSpeed = (Button) findViewById(R.id.minusspeed);
@@ -353,14 +355,6 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                 sidewalkLeftTime = System.nanoTime();
             }
 
-
-            /**
-             *  Add questionboard
-             *
-             *  TODO
-             *  Using drawable as questionboard
-             */
-            score.setText("score: "+ player.score);
             mainHandler.postDelayed(gameRunnable, 400);
         }
     };
