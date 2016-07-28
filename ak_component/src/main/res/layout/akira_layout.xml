@@ -29,12 +29,12 @@
     />
     <cmu.xprize.ak_component.CAkPlayer
         app:layout_widthPercent="10%"
-        app:layout_heightPercent="18%"
-        app:layout_marginTopPercent="80%"
+        app:layout_heightPercent="28%"
+        app:layout_marginTopPercent="70%"
         android:textAlignment="center"
         android:textSize="16sp"
-        android:src="@drawable/car_rear"
         android:id="@+id/player"
+        android:text=""
     />
 
     <cmu.xprize.ak_component.CAkTeachFinger
@@ -44,6 +44,7 @@
         android:textAlignment="center"
         android:textSize="22sp"
         android:id="@+id/finger"
+        android:visibility="invisible"
     />
     <TextView
         android:layout_width="wrap_content"
@@ -54,8 +55,31 @@
         android:textSize="40sp"
         android:id="@+id/score"
     />
-
-
-
+    <ImageView
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_marginTopPercent="65%"
+        app:layout_marginLeftPercent="80%"
+        android:id="@+id/speedometer"
+        android:src="@drawable/speedometer"
+        />
+    <Button
+        android:visibility="invisible"
+        app:layout_marginTopPercent="65%"
+        app:layout_marginLeftPercent="80%"
+        android:id="@+id/minusspeed"
+        android:text="-"
+        android:layout_width="30dp"
+        android:layout_height="45dp"
+        />
+    <Button
+        app:layout_marginTopPercent="65%"
+        android:id="@+id/plusspeed"
+        app:layout_marginLeftPercent="90%"
+        android:layout_width="30dp"
+        android:layout_height="45dp"
+        android:text="+"
+        />
 
 </android.support.percent.PercentRelativeLayout>

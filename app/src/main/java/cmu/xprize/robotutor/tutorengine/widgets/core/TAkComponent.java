@@ -1,10 +1,19 @@
 package cmu.xprize.robotutor.tutorengine.widgets.core;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
+import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 
 import org.json.JSONObject;
 
+import cmu.xprize.ak_component.CAkQuestionBoard;
 import cmu.xprize.ak_component.CAk_Component;
 import cmu.xprize.ak_component.CAk_Data;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
@@ -12,6 +21,9 @@ import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
+import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.JSON_Helper;
@@ -21,10 +33,13 @@ import cmu.xprize.util.TCONST;
  * Created by jacky on 2016/7/6.
  */
 
-public class TAkComponent extends CAk_Component implements ITutorObjectImpl {
+public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDataSink {
 
     private CTutor mTutor;
     private CObjectDelegate mSceneObject;
+
+    private boolean isCorrect;
+    private CAkQuestionBoard qb;
 
 
     static final String TAG = "TAkComponent";
@@ -53,22 +68,22 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl {
 //    **********************************************************
 //    *****************  Tutor Interface
 
-//    @Override
-//    public void UpdateValue(int value) {
-//
-//        // update the Scope response variable  "<varname>.value"
-//        //
-//        mTutor.getScope().addUpdateVar(name() + ".value", new TInteger(value));
-//
-//        boolean correct = true;
-//
-//        reset();
-//
-//        if(correct)
-//            mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
-//        else
-//            mTutor.setAddFeature(TCONST.GENERIC_WRONG);
-//    }
+    @Override
+    public void UpdateValue(int value) {
+
+        // update the Scope response variable  "<varname>.value"
+        //
+        mTutor.getScope().addUpdateVar(name() + ".value", new TInteger(value));
+
+        boolean correct = true;
+
+        reset();
+
+        if(correct)
+            mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
+        else
+            mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+    }
 
 
     private void reset() {
@@ -145,10 +160,12 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl {
 
         reset();
 
+        if(dataExhausted())
+            mTutor.setAddFeature(TCONST.FTR_EOD);
+
         super.next();
 
-        if(dataExhausted())
-            mTutor.setAddFeature(TCONST.FTR_EOI);
+
     }
 
 
@@ -160,6 +177,106 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl {
         mSceneObject.setButtonBehavior(command);
     }
 
+    public void applyEventNode(String nodeName) {
+        IScriptable2 obj = null;
+
+        if(nodeName != null && !nodeName.equals("")) {
+            try {
+                obj = mTutor.getScope().mapSymbol(nodeName);
+                obj.applyNode();
+
+            } catch (Exception e) {
+                // TODO: Manage invalid Behavior
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void postQuestionBoard() {
+        final CAkQuestionBoard questionBoard = this.questionBoard; //new CAkQuestionBoard(mContext);
+
+        int s = extraSpeed * 500;
+
+        LayoutParams params = new LayoutParams(240, 80);
+        params.addRule(CENTER_HORIZONTAL);
+        ((PercentRelativeLayout)getChildAt(0)).addView(questionBoard, params);
+        player.bringToFront();
+
+        final AnimatorSet questionboardAnimator = CAnimatorUtil.configZoomIn(questionBoard, 3500,
+                0, new LinearInterpolator(), 4f);
+
+        ValueAnimator questionboardTranslationAnimator = ObjectAnimator.ofFloat(questionBoard,
+                "y", getHeight() * 0.25f, getHeight() * 0.70f);
+        questionboardAnimator.setDuration(3500-s);
+        questionboardAnimator.setInterpolator(new LinearInterpolator());
+
+        questionboardAnimator.playTogether(questionboardTranslationAnimator);
+
+        questionboardAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                ((PercentRelativeLayout)getChildAt(0)).removeView(questionBoard);
+                applyEventNode("NEXT");
+
+            }
+        });
+
+        questionboardAnimator.start();
+
+        if(flag && teachFinger != null) {
+            teachFinger.setVisibility(INVISIBLE);
+            flag = false;
+        }
+    }
+
+    public void postFinishLine() {
+        int s = extraSpeed * 500;
+        final ImageView finishLine = new ImageView(mContext);
+        LayoutParams params = new LayoutParams(getWidth()/3, getHeight()/10);
+        params.addRule(CENTER_HORIZONTAL);
+        finishLine.setLayoutParams(params);
+        finishLine.setImageResource(cmu.xprize.ak_component.R.drawable.finishline);
+
+        ((PercentRelativeLayout)getChildAt(0)).addView(finishLine, params);
+        player.bringToFront();
+
+        final AnimatorSet finishLineAnimator = CAnimatorUtil.configZoomIn(finishLine, 3500,
+                0, new LinearInterpolator(), 4f);
+
+        ValueAnimator finishLineTranslationAnimator = ObjectAnimator.ofFloat(finishLine,
+                "y", getHeight() * 0.25f, getHeight() * 0.70f);
+        finishLineAnimator.setDuration(3500-s);
+        finishLineAnimator.setInterpolator(new LinearInterpolator());
+
+        finishLineAnimator.playTogether(finishLineTranslationAnimator);
+
+        finishLineAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                applyEventNode("NEXT");
+
+            }
+        });
+
+        finishLineAnimator.start();
+    }
+
+    public void judge(){
+        reset();
+        if(questionBoard.answerLane == player.lane){
+            mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
+            player.score += 1;
+        }else {
+            mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+            player.score -= 1;
+        }
+    }
+
+    public void crash() {
+        player.crash();
+    }
 
 
     //**********************************************************
