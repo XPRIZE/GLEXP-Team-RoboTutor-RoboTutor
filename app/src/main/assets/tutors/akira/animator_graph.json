@@ -17,7 +17,7 @@
         "INTRO_STATE": {
           "type": "NODE",
           "COMMENT": "Intro Clip",
-          "maptype":"actionMap",
+          "maptype":"moduleMap",
           "mapname": "INTRO_STATE_TRACK",
           "preenter": ["SET_DATASOURCE"],
           "preexit": ["NEXT_DATASET"
@@ -68,15 +68,15 @@
         "CORRECT": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"actionMap",
-          "mapname": "CORRECT_TRACK",
+          "maptype":"moduleMap",
+          "mapname": "PLAYCORRECT",
           "preenter": [],
           "preexit": ["NEXT_DATASET"
           ],
           "edges": [
             {
               "constraint": "FTR_EOD",
-              "edge": "NEXTSCENE"
+              "edge": "POSTFINISHLINE"
             },
 
             {
@@ -89,15 +89,15 @@
         "WRONG": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"actionMap",
-          "mapname": "WRONG_TRACK",
+          "maptype":"moduleMap",
+          "mapname": "PLAYWRONG",
           "preenter": [],
           "preexit": ["NEXT_DATASET"
           ],
           "edges": [
             {
               "constraint": "FTR_EOD",
-              "edge": "NEXTSCENE"
+              "edge": "POSTFINISHLINE"
             },
 
             {
@@ -106,6 +106,22 @@
             }
           ]
         },
+
+        "POSTFINISHLINE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"moduleMap",
+          "mapname": "POST_FINISHLINE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "NEXTSCENE"
+            }
+          ]
+        },
+
         "NEXTSCENE": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
@@ -122,12 +138,19 @@
 
         "COMMENT": "@@@@@  CModules  @@@@@",
 
+        "INTRO_STATE_TRACK": {
+          "type": "MODULE",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Racecar v3-2.mp3", "soundpackage":"tutor_effect", "repeat": true, "volume": 0.30, "mode":"event", "features": ""}
+          ]
+        },
+
         "PLAYCORRECT": {
           "type": "MODULE",
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "great.mp3", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Correct v1.mp3", "soundpackage":"tutor_effect", "volume": 0.10, "mode":"event", "features": ""}
           ]
         },
         "PLAYWRONG": {
@@ -135,7 +158,8 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "great.mp3", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Incorrect v1.mp3", "soundpackage":"tutor_effect", "volume": 0.10, "mode":"event", "features": ""},
+            {"type": "COMMAND", "id": "SAkira", "method": "crash", "parms": "", "features":""}
           ]
         },
 
@@ -145,7 +169,7 @@
           "COMMENT": "",
           "tracks": [
             {"type": "COMMAND", "id": "SAkira", "method": "postQuestionBoard", "parms": "","features":""},
-            {"type": "COMMAND", "cmd": "WAIT" }
+            {"type": "COMMAND", "cmd": "WAIT"}
           ]
         },
 
@@ -155,6 +179,14 @@
           "COMMENT": "",
           "tracks": [
             {"type": "COMMAND", "id": "SAkira", "method": "judge", "parms": "","features":""}
+            ]
+        },
+
+        "POST_FINISHLINE": {
+          "type": "MODULE",
+          "tracks": [
+            {"type": "COMMAND", "id": "SAkira", "method": "postFinishLine" ,"features":""},
+            {"type": "COMMAND", "cmd": "WAIT"}
           ]
         }
 
@@ -162,19 +194,13 @@
 
       "actionMap": {
 
-        "my_action": {"type": "TIMER", "name": "hint_timeout", "duration":"20", "repeat":"false", "action":"START", "ontimer":"ACTION_NAME", "features": "" },
-
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "INTRO_STATE_TRACK": {"type": "COMMAND", "cmd": ""  },
+
 
         "USERINPUT_TRACK":  {"type": "COMMAND", "cmd": ""  },
 
-        "CORRECT_TRACK":  {"type": "COMMAND", "cmd": ""  },
-
-        "WRONG_TRACK":  {"type": "COMMAND", "cmd": ""  },
-
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "SAkira", "method": "setDataSource", "parms": "[file]ak_data.json:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "SAkira", "method": "setDataSource", "parms": "[file]ak_data.json:String", "features":""},
 
         "NEXT_DATASET":{"type": "COMMAND", "id": "SAkira", "method": "next" ,"features":""},
 
@@ -183,6 +209,8 @@
         },
 
         "NEXT": {"type": "COMMAND", "cmd": "NEXT"  }
+
+
       },
 
       "constraintMap": {

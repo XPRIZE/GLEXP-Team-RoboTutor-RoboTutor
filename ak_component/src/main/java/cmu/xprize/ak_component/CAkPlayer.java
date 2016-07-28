@@ -2,6 +2,7 @@ package cmu.xprize.ak_component;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.percent.PercentLayoutHelper;
 import android.support.percent.PercentRelativeLayout;
@@ -21,7 +22,8 @@ public class CAkPlayer extends TextView{
     public String rearString;
     public Lane lane = Lane.MID;
 
-
+    private Drawable car_left, car_mid, car_right;
+    private AnimationDrawable fishTail;
 
     private PercentRelativeLayout.LayoutParams params;
 
@@ -41,12 +43,21 @@ public class CAkPlayer extends TextView{
     }
 
     protected void init(Context context, AttributeSet attrs) {
-        Drawable image = context.getResources().getDrawable( R.drawable.car_rear);
-        int h = image.getIntrinsicHeight();
-        int w = image.getIntrinsicWidth();
-        image.setBounds( 0, 0, w, h );
-        setCompoundDrawables(null, image,
+        car_mid = context.getResources().getDrawable(R.drawable.car_mid);
+        car_left = context.getResources().getDrawable(R.drawable.car_left);
+        car_right = context.getResources().getDrawable(R.drawable.car_right);
+        fishTail = (AnimationDrawable) context.getResources().getDrawable(R.drawable.fishtail_animation);
+
+        int h = car_mid.getIntrinsicHeight();
+        int w = car_mid.getIntrinsicWidth();
+        car_mid.setBounds(0, 0, (int)(w * 0.7), (int)(h * 0.7));
+        setCompoundDrawables(null, car_mid,
                 null, null);
+
+        car_left.setBounds(0, 0, w, h);
+        car_right.setBounds(0, 0, w, h);
+        fishTail.setBounds(0, 0, w, h);
+
     }
 
     public void update() {
@@ -57,12 +68,23 @@ public class CAkPlayer extends TextView{
             switch (lane) {
                 case LEFT:
                     info.leftMarginPercent = 0.25f;
+
+                    //Make sure fishTail animation is finished
+                    if(getCompoundDrawables()[1] != fishTail)
+                        setCompoundDrawables(null, car_left,
+                            null, null);
                     break;
                 case MID:
                     info.leftMarginPercent = 0.45f;
+                    if(getCompoundDrawables()[1] != fishTail)
+                        setCompoundDrawables(null, car_mid,
+                            null, null);
                     break;
                 case RIGHT:
                     info.leftMarginPercent = 0.65f;
+                    if(getCompoundDrawables()[1] != fishTail)
+                        setCompoundDrawables(null, car_right,
+                            null, null);
                     break;
             }
             requestLayout();
@@ -90,9 +112,26 @@ public class CAkPlayer extends TextView{
         }
     }
 
+    public void crash() {
+        final Drawable ori = getCompoundDrawables()[1];
+        setCompoundDrawables(null, fishTail, null, null);
+        requestLayout();
+        fishTail.start();
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fishTail.stop();
+                fishTail.selectDrawable(0);
+                setCompoundDrawables(null, ori, null, null);
+            }
+        }, 800);
+    }
+
     public Lane getLane() {
         return lane;
     }
+
+
 
 
 }

@@ -6,8 +6,10 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 
 import org.json.JSONObject;
 
@@ -193,11 +195,12 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     public void postQuestionBoard() {
         final CAkQuestionBoard questionBoard = this.questionBoard; //new CAkQuestionBoard(mContext);
 
-        int s=extraSpeed*500;
+        int s = extraSpeed * 500;
 
-        LayoutParams params = new LayoutParams(90, 30);
+        LayoutParams params = new LayoutParams(240, 80);
         params.addRule(CENTER_HORIZONTAL);
-        addView(questionBoard, params);
+        ((PercentRelativeLayout)getChildAt(0)).addView(questionBoard, params);
+        player.bringToFront();
 
         final AnimatorSet questionboardAnimator = CAnimatorUtil.configZoomIn(questionBoard, 3500,
                 0, new LinearInterpolator(), 4f);
@@ -213,47 +216,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-//                if(judge(questionBoard)){
-//                    soundPool.play(correctMedia, 1.0f, 1.0f, 1, 0, 1.0f);
-//                    if(speedIsZero==false) {
-//                        player.score += 1;
-//                        lastCorrect = true;
-//                        errornum = 0;
-//                    }
-//                    else
-//                    {
-//                        animatorStop=false;
-//                        for(int i=0;i<ongoingAnimator.size();i++)
-//                        {
-//                            ongoingAnimator.get(i).resume();
-//                        }
-//                        cityAnimator.resume();
-//                    }
-//                    removeView(questionBoard);
-//                }else{
-//                    if(speedIsZero==false) {
-//                        player.score -= 1;
-//                        soundPool.play(incorrectMedia, 1.0f, 1.0f, 1, 0, 1.0f);
-//                        lastCorrect = false;
-//                        errornum += 1;
-//                        if (errornum == 3)
-//                            dialog();
-//                        removeView(questionBoard);
-//                    }
-//                    else{
-//                        animatorStop=true;
-//                        cityAnimator.pause();
-//                        for(int i=0;i<ongoingAnimator.size();i++)
-//                        {
-//                            ongoingAnimator.get(i).pause();
-//                            System.out.println(""+ongoingAnimator.get(i));
-//                        }
-//                        stopQuestionBoard=questionBoard;
-//                        //removeView(questionBoard);
-//                    }
-//                }
-                //ongoingAnimator.remove(questionboardAnimator);
-                removeView(questionBoard);
+                ((PercentRelativeLayout)getChildAt(0)).removeView(questionBoard);
                 applyEventNode("NEXT");
 
             }
@@ -267,6 +230,39 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         }
     }
 
+    public void postFinishLine() {
+        int s = extraSpeed * 500;
+        final ImageView finishLine = new ImageView(mContext);
+        LayoutParams params = new LayoutParams(getWidth()/3, getHeight()/10);
+        params.addRule(CENTER_HORIZONTAL);
+        finishLine.setLayoutParams(params);
+        finishLine.setImageResource(cmu.xprize.ak_component.R.drawable.finishline);
+
+        ((PercentRelativeLayout)getChildAt(0)).addView(finishLine, params);
+        player.bringToFront();
+
+        final AnimatorSet finishLineAnimator = CAnimatorUtil.configZoomIn(finishLine, 3500,
+                0, new LinearInterpolator(), 4f);
+
+        ValueAnimator finishLineTranslationAnimator = ObjectAnimator.ofFloat(finishLine,
+                "y", getHeight() * 0.25f, getHeight() * 0.70f);
+        finishLineAnimator.setDuration(3500-s);
+        finishLineAnimator.setInterpolator(new LinearInterpolator());
+
+        finishLineAnimator.playTogether(finishLineTranslationAnimator);
+
+        finishLineAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                applyEventNode("NEXT");
+
+            }
+        });
+
+        finishLineAnimator.start();
+    }
+
     public void judge(){
         reset();
         if(questionBoard.answerLane == player.lane){
@@ -276,6 +272,10 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
             mTutor.setAddFeature(TCONST.GENERIC_WRONG);
             player.score -= 1;
         }
+    }
+
+    public void crash() {
+        player.crash();
     }
 
 

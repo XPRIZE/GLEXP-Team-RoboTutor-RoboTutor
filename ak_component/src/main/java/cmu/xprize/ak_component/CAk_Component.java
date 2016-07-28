@@ -2,9 +2,6 @@ package cmu.xprize.ak_component;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,11 +11,9 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -27,7 +22,6 @@ import android.widget.TextView;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -293,8 +287,6 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
             /**
              * Add side view
              *
-             * TODO
-             * Different side view object, random elapse and position
              */
 
             if(!animatorStop&&elapseRight > 3500-s) {
@@ -404,14 +396,6 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     }
 
 
-    /**
-     * TODO
-     * Judge touchEvent position.
-     * Should the game only allow users to touch on lane to change lane,
-     * or should the car change lane according to the relative touch position?
-     *
-     */
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction()==MotionEvent.ACTION_DOWN){
@@ -427,7 +411,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
             if(isFirstInstall && !teachFinger.finishTeaching)
                 teachFinger.onTouch(event, player);
             player.onTouch(event);
-            soundPool.play(carscreechMedia, 1.0f, 1.0f, 1, 0, 1.0f);
+            soundPool.play(carscreechMedia, 0.1f, 0.1f, 1, 0, 1.0f);
             return true;
         }
         if(event.getAction()==MotionEvent.ACTION_UP)
@@ -437,18 +421,6 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
         return super.onTouchEvent(event);
     }
-
-//    protected boolean judge(CAkQuestionBoard CAkQuestionBoard){
-//        if(player.rearNum < CAkQuestionBoard.leftNum && player.getLane() == cmu.xprize.ak_component.CAkPlayer.Lane.LEFT ||
-//                player.rearNum > CAkQuestionBoard.rightNum && player.getLane() == cmu.xprize.ak_component.CAkPlayer.Lane.RIGHT ||
-//                (player.rearNum < CAkQuestionBoard.rightNum && player.rearNum > CAkQuestionBoard.leftNum
-//                        && player.getLane() == cmu.xprize.ak_component.CAkPlayer.Lane.MID)){
-//            return true;
-//        }
-//        return false;
-//    }
-
-
 
     //************ Serialization
 
