@@ -12,8 +12,10 @@ import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.IEvent;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -239,5 +241,27 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
     @Override
     public void setAlpha(Float alpha) {
 
+    }
+
+    @Override
+    public void onEvent(IEvent event) {
+        super.onEvent(event);
+        evaluateWhole();
+        applyEventNode("NEXT");
+    }
+
+    protected void applyEventNode(String nodeName) {
+        IScriptable2 obj = null;
+
+        if(nodeName != null && !nodeName.equals("")) {
+            try {
+                obj = mTutor.getScope().mapSymbol(nodeName);
+                obj.applyNode();
+
+            } catch (Exception e) {
+                // TODO: Manage invalid Behavior
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -5,10 +5,14 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventListener;
+import cmu.xprize.util.TCONST;
+
 /**
  * Created by dexte on 7/27/2016.
  */
-public class Write_Text extends TextView {
+public class Write_Text extends TextView implements IEventListener {
 
     public boolean isWritable;
 
@@ -66,4 +70,9 @@ public class Write_Text extends TextView {
 
 };
 
+    public void onEvent(IEvent event) {
+        String response  = (String)event.getString(TCONST.FW_VALUE);
+        this.setText(response);
+        View Component = (View)this.getParent().getParent().getParent();
+    }
 }

@@ -64,7 +64,7 @@
           "type":"node",
           "maptype":"moduleMap",
           "mapname": "CLICKDOTS",
-          "preenter":["CREATE_COMPLETION_TIMER"],
+          "preenter":[],
           "preexit" :[],
           "edges":
           [
@@ -79,7 +79,7 @@
           "maptype":"moduleMap",
           "mapname": "PLAYCORRECT",
           "preenter":[],
-          "preexit" :["CANCEL_COMPLETION_TIMER"],
+          "preexit" :[],
           "edges":
           [
             {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
@@ -94,7 +94,7 @@
           "maptype":"moduleMap",
           "mapname": "EVALUATEDIGIT",
           "preenter":[],
-          "preexit" :["CANCEL_COMPLETION_TIMER"],
+          "preexit" :[],
           "edges":
           [
             {"constraint":"FTR_RIGHT","edge":"NEXTDIGIT"},
@@ -120,7 +120,7 @@
           "maptype":"moduleMap",
           "mapname": "PLAYEXIT2",
           "preenter":[],
-          "preexit" :["CANCEL_COMPLETION_TIMER"],
+          "preexit" :[],
           "edges":
           [
             {"constraint":"","edge":"NEXTSCENE"}

@@ -13,12 +13,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
+import cmu.xprize.util.TCONST;
 
 
-public class CAsm_Component extends LinearLayout implements ILoadableObject, View.OnClickListener {
+public class CAsm_Component extends LinearLayout implements ILoadableObject, View.OnClickListener, IEventListener {
 
     private Context mContext;
 
@@ -313,14 +316,24 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
     public void enterNumber(Write_Text t) {
         //CAsm_Text c = (CAsm_Text)t.getParent();
         mPopup.showAtLocation(this, Gravity.LEFT, 10, 10);
-        mPopup.update(50, 50, 300, 300);
-        mPopup.enable(true);
-        //mPopup.update(,10,10,300,300);
+        //mPopup.update(50, 50, 300, 300);
+        IEventListener text = (IEventListener)t;
+        IEventListener component = (IEventListener)this;
+        ArrayList<IEventListener> listeners = new ArrayList<>();
+        listeners.add(text);
+        listeners.add(component);
+        mPopup.enable(true,listeners);
+        mPopup.update(t,50,50,300,300);
         //currDigit = t;
     }
 
     public void exitWrite() {
-        mPopup.enable(false);
+        mPopup.enable(false,null);
+        mPopup.dismiss();
+    }
+
+    public void onEvent(IEvent event) {
+        mPopup.enable(false,null);
         mPopup.dismiss();
     }
 

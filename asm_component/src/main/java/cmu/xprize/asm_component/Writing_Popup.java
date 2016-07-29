@@ -7,6 +7,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
+import java.util.ArrayList;
+
+import cmu.xprize.util.IEventListener;
+
 /**
  * Created by dexte on 7/27/2016.
  */
@@ -40,13 +44,13 @@ public class Writing_Popup extends PopupWindow {
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         testy.setLayoutParams(lp);
         fw = new CAsm_Fingerwriter(context);
-        fw.setId(R.id.SDigitWriter);
+        //fw.setId(R.id.SDigitWriter);
         testy.addView(fw);
         testy.setBackgroundColor(Color.WHITE);
         this.setContentView(testy);
     }
 
-    public void enable(boolean b) {
-        fw.enable(b);
+    public void enable(boolean b,ArrayList<IEventListener> listeners) {
+        fw.enable(b,listeners);
     }
 }
