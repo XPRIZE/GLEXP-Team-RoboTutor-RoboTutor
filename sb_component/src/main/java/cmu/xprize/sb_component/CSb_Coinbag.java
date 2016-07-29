@@ -83,7 +83,6 @@ public class CSb_Coinbag extends RelativeLayout {
         bound.setScaleType(ImageView.ScaleType.FIT_XY);
 
         addView(bound);
-
         coins = new ImageView[10];
         for(int i = 0; i < 10; i++) {
             coins[i] = new ImageView(context);
@@ -92,8 +91,6 @@ public class CSb_Coinbag extends RelativeLayout {
             coins[i].setScaleType(ImageView.ScaleType.FIT_XY);
             addView(coins[i]);
         }
-
-//        setBackground(gd);
         coinNumber = 0;
     }
 
@@ -138,12 +135,10 @@ public class CSb_Coinbag extends RelativeLayout {
             if(coinNumber > 0) {
                 coins[coinNumber].setVisibility(VISIBLE);
                 coinNumber += 1;
-//                bound.getLayoutParams().height = ((coinNumber + 1) * mCoinHeight);
             }
             else {
                 coins[coinNumber].setVisibility(VISIBLE);
                 coinNumber += 1;
-//                bound.getLayoutParams().height = 2 * mCoinHeight;
             }
             requestLayout();
         }else
@@ -155,10 +150,8 @@ public class CSb_Coinbag extends RelativeLayout {
             coinNumber -= 1;
             if(coinNumber > 0) {
                 coins[coinNumber].setVisibility(INVISIBLE);
-//                bound.getLayoutParams().height = (int) ((coinNumber + 1) * mCoinHeight);
             }else {
                 coins[coinNumber].setVisibility(INVISIBLE);
-//                bound.getLayoutParams().height = (int) (2 * mCoinHeight);
             }
             requestLayout();
         }

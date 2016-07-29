@@ -102,7 +102,6 @@ public class CSb_Lollipop extends RelativeLayout {
         requestLayout();
         AnimatedVectorDrawable d = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.avd_to_stick);
         bound.setImageDrawable(d);
-
     }
 
     public void animateToStick(){
@@ -122,7 +121,9 @@ public class CSb_Lollipop extends RelativeLayout {
             set.add(i);
         }
         requestLayout();
-
+            requestLayout();
+            set.add(i);
+        }
 
         toStickHelper(9, coins, set);
         Drawable drawable = bound.getDrawable();

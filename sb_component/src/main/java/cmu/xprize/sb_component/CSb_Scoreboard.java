@@ -17,6 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import cmu.xprize.util.CAnimatorUtil;
+import android.util.AttributeSet;
+import android.widget.ImageView;
 
 /**
  * Created by jacky on 2016/6/22.
@@ -198,8 +200,6 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
 
                 mPaint = new Paint();
 
-
-
             } finally {
                 a.recycle();
             }
@@ -291,7 +291,6 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
             bagMarginLeft += bagGap;
             lollipopMarginLeft += lollipopGap;
         }
-
     }
 
     private void carryAnimation(final int index) {
@@ -560,7 +559,6 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
                         int showingCol = getShowingCol();
                         for(int i = 0; i < mColNum; i++){
                             if(i > showingCol) coinbags[i].setVisibility(INVISIBLE);
-//                            else coinbags[i].setVisibility(INVISIBLE);
                         }
                     }
                 }, 2500);
@@ -570,6 +568,4 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
 
         set.start();
     }
-
 }
-
