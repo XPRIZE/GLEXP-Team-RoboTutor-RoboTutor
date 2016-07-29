@@ -26,6 +26,8 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
     @Override
     public void handleClick() {
 
+        super.handleClick();
+
         CAsm_DotBag currBag;
         CAsm_DotBag clickedBag = null;
         int alleyNum = 0;
@@ -237,7 +239,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
     private void updateCarryText(){
 
         CAsm_Text textLayout = allAlleys.get(1).getText();
-        EditText t = textLayout.getText(parent.digitIndex-1);
+        Write_Text t = textLayout.getText(parent.digitIndex-1);
         t.setText("1");
 
     }

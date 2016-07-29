@@ -8,4 +8,6 @@
     android:layout_height="match_parent"
     android:clipChildren="false">
 
+    <tag android:id="@+id/SDigitWriter"/>
+    
 </cmu.xprize.asm_component.CAsm_LetterBoxLayout>

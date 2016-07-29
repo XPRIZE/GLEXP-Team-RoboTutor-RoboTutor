@@ -69,6 +69,10 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     @Override
     public void handleClick() {
 
+
+        super.handleClick();
+
+
         int correspondingCol;
         CAsm_Dot clickedDot = null;
         CAsm_DotBag clickedBag = allAlleys.get(secondBagIndex).getDotBag(); // only one possible dotbag to look at
@@ -148,19 +152,19 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         // update texts
 
         CAsm_Text firstBagLayout = allAlleys.get(firstBagIndex).getText();
-        EditText origSourceText = firstBagLayout.getText(parent.digitIndex-1);
+        Write_Text origSourceText = firstBagLayout.getText(parent.digitIndex-1);
         Integer origSourceDigit = firstBagLayout.getDigit(parent.digitIndex-1);
         origSourceText.setPaintFlags(origSourceText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
         CAsm_Text overheadLayout = allAlleys.get(overheadIndex).getText();
-        EditText updatedSourceText = overheadLayout.getText(parent.digitIndex-1);
+        Write_Text updatedSourceText = overheadLayout.getText(parent.digitIndex-1);
         updatedSourceText.setText(String.valueOf(origSourceDigit-1));
 
-        EditText origDestText = firstBagLayout.getText(parent.digitIndex);
+        Write_Text origDestText = firstBagLayout.getText(parent.digitIndex);
         Integer origDestDigit = firstBagLayout.getDigit(parent.digitIndex);
         origDestText.setPaintFlags(origDestText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-        EditText updatedDestText = overheadLayout.getText(parent.digitIndex);
+        Write_Text updatedDestText = overheadLayout.getText(parent.digitIndex);
         updatedDestText.setText(String.valueOf(10 + origDestDigit));
 
         borrowBag.setDrawBorder(true);
