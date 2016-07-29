@@ -3,6 +3,7 @@ package cmu.xprize.sb_component;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.AnimatedVectorDrawable;
@@ -70,8 +71,6 @@ public class CSb_Lollipop extends RelativeLayout {
         }
         bound = new ImageView(context);
         addView(bound);
-        mode = Mode.STICK;
-        //setBackground(ContextCompat.getDrawable(context, R.drawable.avd_to_circle));
     }
 
     @Override
@@ -110,6 +109,7 @@ public class CSb_Lollipop extends RelativeLayout {
         final int width = getWidth();
         final int height = getHeight();
         AnimatedVectorDrawable d = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.avd_to_stick);
+        d.setTint(Color.LTGRAY);
         bound.setImageDrawable(d);
 
         this.mode = Mode.CIRCLE;
@@ -168,6 +168,7 @@ public class CSb_Lollipop extends RelativeLayout {
         mCoinWidth = (int) (0.2 * width);
         mCoinHeight = (int) (height / 302.0 * 20);
         AnimatedVectorDrawable d = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.avd_to_circle);
+        d.setTint(Color.LTGRAY);
         bound.setImageDrawable(d);
         this.mode = Mode.STICK;
         HashSet<Integer> set = new HashSet<>();

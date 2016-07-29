@@ -9,8 +9,14 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.util.AttributeSet;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import cmu.xprize.util.CAnimatorUtil;
 
 /**
  * Created by jacky on 2016/6/22.
@@ -24,7 +30,6 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
     private int widthScale;
     private Paint mPaint;
     private int[] resoureImageIds;
-
     public boolean isAnimating;
 
 
@@ -103,7 +108,7 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
         int height = getHeight();
         int showingCol = getShowingCol();
 
-        mPaint.setColor(Color.BLACK);
+        mPaint.setColor(Color.WHITE);
         mPaint.setStrokeWidth(4);
 
         canvas.drawLine(coinbags[showingCol].getX(), 0.82f * height,
@@ -228,6 +233,47 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
         }
         mScore -= 1;
     }
+
+    public Animator reward(float x, float y) {
+        TextView textView = new TextView(context);
+        textView.setText("+1");
+        textView.setTextSize(20);
+        textView.setTextColor(Color.WHITE);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        addView(textView, params);
+        Animator rewardAnimator = CAnimatorUtil.configTranslate(textView,
+                1500, 0, new PointF(x, y), new PointF(
+                        coinbags[0].getX(),
+                        coinbags[0].getY() + coinbags[0].getHeight()));
+        return rewardAnimator;
+    }
+
+    public Animator penalty(float x, float y) {
+        TextView textView = new TextView(context);
+        textView.setText("-1");
+        textView.setTextSize(30);
+        textView.setTextColor(Color.WHITE);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        addView(textView, params);
+
+        Animator rewardAnimator = CAnimatorUtil.configTranslate(textView,
+                1500, 0, new PointF(x, y), new PointF(
+                        coinbags[0].getX() + coinbags[0].getWidth(),
+                        coinbags[0].getY() + coinbags[0].getHeight()));
+        return rewardAnimator;
+    }
+
+    public void removeTextView(){
+        for(int i = 0; i < getChildCount(); i++) {
+            if(getChildAt(i).getClass() == TextView.class)
+                removeView(getChildAt(i));
+        }
+    }
+
 
     private void setPosition() {
         int widthSize = getWidth();

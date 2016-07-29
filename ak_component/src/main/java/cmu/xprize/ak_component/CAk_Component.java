@@ -14,6 +14,8 @@ import android.os.Looper;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -64,6 +66,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     protected CAkPlayer player;
     protected CAkTeachFinger teachFinger;
     protected CSb_Scoreboard scoreboard;
+    protected Button[] speedometerButton;
 
     protected CAkQuestionBoard questionBoard;
 
@@ -72,6 +75,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     private long sidewalkLeftTime;
     private long questionTime;
     private ImageView cityBackground;
+    protected View mask;
 
     protected boolean isRunning = true;
 
@@ -151,6 +155,22 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         player = (CAkPlayer) findViewById(R.id.player);
         cityBackground = (ImageView) findViewById(R.id.city);
         scoreboard = (CSb_Scoreboard) findViewById(R.id.scoreboard);
+        mask = findViewById(R.id.mask);
+
+        speedometerButton = new Button[11];
+        for(int i = 0; i < 11; i++) {
+            int resID = getResources().getIdentifier("button" + i, "id",
+                    "cmu.xprize.robotutor");
+            speedometerButton[i] = (Button) findViewById(resID);
+            final int speed = i - 5;
+            speedometerButton[i].setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    extraSpeed = speed;
+                }
+            });
+        }
+
         teachFinger = (CAkTeachFinger) findViewById(R.id.finger);
         teachFinger.finishTeaching = true;
 
@@ -200,6 +220,9 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 //         Allow onDraw to be called to start animations
 
         setWillNotDraw(false);
+
+
+
     }
 
     public void setmDataSource(CAk_Data[] _dataSource) {
@@ -255,7 +278,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
             long elapseRight = (System.nanoTime() - sidewalkRightTime) / 1000000;
             long elapseLeft = (System.nanoTime() - sidewalkLeftTime) / 1000000;
             long elapse = (System.nanoTime() - questionTime) / 1000000;
-            
+
             int s = extraSpeed * 500;
 
             final PercentRelativeLayout percentLayout = (PercentRelativeLayout) getChildAt(0);

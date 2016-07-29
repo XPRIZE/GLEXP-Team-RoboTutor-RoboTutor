@@ -9,9 +9,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.animation.LinearInterpolator;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import org.json.JSONObject;
@@ -42,11 +40,6 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     private CTutor mTutor;
     private CObjectDelegate mSceneObject;
 
-
-    protected Button[] speedometerButton;
-
-    private boolean isCorrect;
-
     static final String TAG = "TAkComponent";
 
     public TAkComponent(Context context) {
@@ -66,20 +59,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         super.init(context, attrs);
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
-        speedometerButton = new Button[11];
-        for(int i = 0; i < 11; i++) {
-            int resID = getResources().getIdentifier("button" + i, "id",
-                    "cmu.xprize.robotutor");
-            speedometerButton[i] = (Button) findViewById(resID);
-            final int speed = i - 5;
-            speedometerButton[i].setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    extraSpeed = speed;
-                }
-            });
-        }
-        finishLine = new ImageView(mContext);
+
     }
 
 
@@ -316,15 +296,37 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     }
 
     public void increaseScore() {
-        scoreboard.increase();
-        player.score += 1;
-        new AnimateScoreboard().execute(scoreboard);
+        mask.setVisibility(VISIBLE);
+        Animator animator = scoreboard.reward(player.getX(), player.getY() - player.getHeight());
+        LayoutParams params =  (LayoutParams) getLayoutParams();
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                scoreboard.removeTextView();
+                scoreboard.increase();
+                player.score += 1;
+
+                new AnimateScoreboard().execute(scoreboard);
+            }
+        });
+        animator.start();
     }
 
     public void decreaseScore() {
-        scoreboard.decrease();
-        player.score -= 1;
-        new AnimateScoreboard().execute(scoreboard);
+        mask.setVisibility(VISIBLE);
+        Animator animator = scoreboard.penalty(player.getX(), player.getY() - player.getHeight());
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                scoreboard.removeTextView();
+                scoreboard.decrease();
+                player.score -= 1;
+                new AnimateScoreboard().execute(scoreboard);
+            }
+        });
+        animator.start();
     }
 
     private class AnimateScoreboard extends AsyncTask<CSb_Scoreboard, Integer, CSb_Scoreboard> {
@@ -339,6 +341,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         protected void onPostExecute(CSb_Scoreboard scoreboard) {
             super.onPostExecute(scoreboard);
             applyEventNode("NEXT");
+            mask.setVisibility(INVISIBLE);
         }
 
 

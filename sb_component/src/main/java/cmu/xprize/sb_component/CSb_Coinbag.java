@@ -75,6 +75,15 @@ public class CSb_Coinbag extends RelativeLayout {
     }
 
     private void init(Context context, AttributeSet attrs) {
+        bound = new ImageView(context);
+        GradientDrawable gd = new GradientDrawable();
+        gd.setColor(Color.TRANSPARENT);
+        gd.setStroke(2, Color.WHITE);
+        bound.setImageDrawable(gd);
+        bound.setScaleType(ImageView.ScaleType.FIT_XY);
+
+        addView(bound);
+
         coins = new ImageView[10];
         for(int i = 0; i < 10; i++) {
             coins[i] = new ImageView(context);
@@ -84,14 +93,6 @@ public class CSb_Coinbag extends RelativeLayout {
             addView(coins[i]);
         }
 
-        bound = new ImageView(context);
-        GradientDrawable gd = new GradientDrawable();
-        gd.setColor(Color.TRANSPARENT);
-        gd.setStroke(2, Color.BLACK);
-        bound.setImageDrawable(gd);
-        bound.setScaleType(ImageView.ScaleType.FIT_XY);
-
-        addView(bound);
 //        setBackground(gd);
         coinNumber = 0;
     }
@@ -130,45 +131,6 @@ public class CSb_Coinbag extends RelativeLayout {
 
         bound.layout(0, heightSize - boundHeight, widthSize, heightSize);
 
-    }
-
-    public CSb_Coinbag(Context context, int widthSize, int id) {
-        super(context);
-        this.width = widthSize;
-        this.height = widthSize;
-        DPTOPX = getResources().getDisplayMetrics().density;
-
-        final RelativeLayout.LayoutParams pm = new RelativeLayout.LayoutParams(
-                (int)(0.4 * width),
-                (int)(2.2 * height)
-        );
-
-        setLayoutParams(pm);
-
-        coins = new ImageView[10];
-        for(int i = 0; i < 10; i++) {
-            coins[i] = new ImageView(context);
-            coins[i].setImageResource(id);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                    (int)(width * 0.2),
-                    (int)(height * 0.2));
-            params.leftMargin = (int)(0.4 * width * LAYOUT_LINE[i][0]);
-            params.topMargin = (int)(2.2 * height * LAYOUT_LINE[i][1]);
-            coins[i].setLayoutParams(params);
-            coins[i].setVisibility(INVISIBLE);
-            addView(coins[i]);
-        }
-
-
-
-        GradientDrawable gd = new GradientDrawable();
-
-        gd.setCornerRadius(0.2f * width);
-        gd.setColor(Color.TRANSPARENT);
-        gd.setStroke((int) (width / 100.0f), Color.BLACK);
-        setBackground(gd);
-
-        coinNumber = 0;
     }
 
     public void increase() {
