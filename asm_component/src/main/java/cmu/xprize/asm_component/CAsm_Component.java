@@ -25,7 +25,7 @@ import cmu.xprize.util.TCONST;
 
 
 
-public class CAsm_Component extends LinearLayout implements ILoadableObject, View.OnClickListener, IEventListener {
+public class CAsm_Component extends LinearLayout implements ILoadableObject, IEventListener {
 
 
     private Context mContext;
@@ -48,6 +48,10 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
     private float scale = getResources().getDisplayMetrics().density;
     protected int alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
+
+    private String[]         chimes = {"2", "4", "5", "8", "11", "14", "16", "19", "21", "23"};
+    private int              chimeIndex;
+    protected String         currentChime = "2";
 
     protected ArrayList<CAsm_Alley> allAlleys = new ArrayList<>();
 
@@ -85,6 +89,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
     public void init(Context context, AttributeSet attrs) {
 
         setOrientation(VERTICAL);
+        currentChime = chimes[chimeIndex];
 
 
         //inflate(getContext(), R.layout.asm_container, this);
@@ -119,6 +124,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         _dataIndex = 0;
     }
 
+
     public void setVisible(Boolean isVisible) {
         Log.d("setVisible", isVisible.toString());
         for (int alley = 0; alley < allAlleys.size(); alley++) {
@@ -132,10 +138,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         }
     }
 
-    @Override
-    public void onClick(View v) {
-
-    }
 
     public void next() {
 
@@ -287,6 +289,11 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         return newAlley;
     }
 
+    public void nextChime() {
+        chimeIndex = chimeIndex + 1;
+        currentChime = chimes[chimeIndex % 10];
+    }
+
     private void delAlley() {
 
         int index = numAlleys - 1;
@@ -318,16 +325,11 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         return correct;
     }
 
-
-
-//  TODO: fix the onTouch to see results
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         final int action = MotionEventCompat.getActionMasked(event);
         if (action == MotionEvent.ACTION_DOWN) {
             mechanics.handleClick();
-            Log.d("Successful", "onTouch");
         }
         return true;
     }

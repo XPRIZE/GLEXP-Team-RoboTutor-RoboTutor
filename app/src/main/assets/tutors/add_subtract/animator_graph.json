@@ -144,7 +144,6 @@
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
-//            {"type": "AUDIO", "command": "PLAY", "soundsource": "0.mp3", "repeat":true, "volume": 0.10, "mode":"event", "features": ""}
           ]
         },
         "SHOWPROBLEM": {
@@ -170,7 +169,8 @@
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "cmd": "WAIT"}
+            {"type": "COMMAND", "cmd": "WAIT"},
+            {"type": "AUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{TestChimes}}.mp3", "repeat":false, "volume": ".9", "mode":"event", "features": ""}
           ]
         },
         // NOTES:

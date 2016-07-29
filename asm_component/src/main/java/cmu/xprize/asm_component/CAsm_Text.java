@@ -3,9 +3,11 @@ package cmu.xprize.asm_component;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.RequiresPermission;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -55,7 +57,6 @@ public class CAsm_Text extends LinearLayout {
         mContext = context;
         //setClipChildren(false);
         //setClipToPadding(false);
-        //setOnClickListener(clickListener);
     }
 
     public void update(int id, int val, String operation, int numSlots) {
@@ -284,36 +285,15 @@ public class CAsm_Text extends LinearLayout {
         }
         return null;
     }
-/*
-    private OnClickListener clickListener = new OnClickListener(getContext()){
-        @Override
-        public void onClick(View v) {
-            Log.v("GOT_CLICK?","bob");
-            Write_Text t = (Write_Text)v;
-            t.isClicked = true;
-            isClicked = true;
-            //clickListener.mPopup.showAtLocation(t, Gravity.CENTER,0,0);
-            //t.enterNumber();
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        final int action = MotionEventCompat.getActionMasked(event);
+        if (action == MotionEvent.ACTION_DOWN) {
+            setIsClicked(true);
         }
-    };*/
-
-
-    /*
-
-    private OnClickListener clickListener = new OnClickListener(){
-        @Override
-        public void onClick(View v) {
-            try {
-                Write_Text t = (Write_Text) v;
-                if (t.isWritable) {
-                    t.isClicked = true;
-                }
-                isClicked = true;
-            } catch (ClassCastException e) {
-                return;
-            }
-        }
-    };*/
+        return false;
+    }
 
     public void setIsClicked(boolean b) {
         isClicked = b;

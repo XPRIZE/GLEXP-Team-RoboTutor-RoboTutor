@@ -2,8 +2,11 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import org.json.JSONObject;
+
+import java.lang.reflect.Array;
 
 import cmu.xprize.asm_component.CAsm_Component;
 import cmu.xprize.asm_component.CAsm_Data;
@@ -13,7 +16,10 @@ import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.util.ILogManager;
@@ -40,11 +46,12 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
     }
 
 
+
+
     @Override
     public void init(Context context, AttributeSet attrs) {
 
         super.init(context, attrs);
-
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
     }
@@ -53,7 +60,6 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
     //**********************************************************
     //**********************************************************
     //*****************  Tutor Interface
-    
 
     public void evaluateWhole () {
 
@@ -143,6 +149,16 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
         }
     }
 
+    @Override
+    public void nextChime() {
+        super.nextChime();
+        TScope scope = mTutor.getScope();
+        Log.d("File Name", currentChime);
+        scope.addUpdateVar("TestChimes", new TString(currentChime));
+        scope.addUpdateVar("TestDot", new TBoolean(true));
+
+
+    }
 
     public void next() {
 
@@ -210,7 +226,9 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
     }
 
     @Override
-    public void postInflate() {}
+    public void postInflate() {
+        nextChime();
+    }
 
     @Override
     public void setNavigator(ITutorGraph navigator) {
@@ -237,6 +255,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
     public void wiggle(String direction, Float magnitude, Long duration, Integer repetition) {
 
     }
+
 
     @Override
     public void setAlpha(Float alpha) {
