@@ -45,7 +45,9 @@ public class CAsm_MechanicBase implements IDotMechanics {
             currBag.setTranslationX(translationX);
         }
 
-        preClickSetup();
+        if (parent.dotbagsVisible) {
+            preClickSetup();
+        }
 
     }
 

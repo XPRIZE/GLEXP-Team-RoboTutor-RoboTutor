@@ -38,7 +38,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     protected Integer corValue;
     protected String operation;
     protected String currImage;
-    private boolean isVisible;
+    protected boolean dotbagsVisible = true;
 
     protected int numAlleys = 0;
 
@@ -122,16 +122,27 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
 
     public void setVisible(Boolean isVisible) {
+
+
         Log.d("setVisible", isVisible.toString());
-        for (int alley = 0; alley < allAlleys.size(); alley++) {
-            CAsm_Alley curAlley = allAlleys.get(alley);
+        for (int i = 0; i < allAlleys.size(); i++) {
+
+            CAsm_Alley curAlley = allAlleys.get(i);
             CAsm_DotBag curDB = curAlley.getDotBag();
+
             if (isVisible) {
                 curDB.setVisibility(VISIBLE);
-            } else {
+                if (!dotbagsVisible) {
+                    mechanics.preClickSetup();
+                }
+            }
+            else {
                 curDB.setVisibility(INVISIBLE);
             }
         }
+
+        dotbagsVisible = isVisible;
+
     }
 
 
