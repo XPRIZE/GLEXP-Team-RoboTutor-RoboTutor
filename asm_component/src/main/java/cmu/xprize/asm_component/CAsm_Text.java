@@ -1,6 +1,7 @@
 package cmu.xprize.asm_component;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -21,19 +22,25 @@ public class CAsm_Text extends TextView implements IEventListener {
     public boolean isClicked;
 
     public CAsm_Text(Context context) {
+
         super(context);
-        isWritable = false;
-        this.setFocusable(false);
+        init();
     }
 
     public CAsm_Text(Context context, AttributeSet attrs) {
+
         super(context, attrs);
-        isWritable = false;
-        this.setFocusable(false);
+        init();
     }
 
     public CAsm_Text(Context context, AttributeSet attrs, int defStyle) {
+
         super(context, attrs, defStyle);
+        init();
+    }
+
+    private void init() {
+
         isWritable = false;
         this.setFocusable(false);
     }
@@ -49,6 +56,18 @@ public class CAsm_Text extends TextView implements IEventListener {
             isClicked = false;
             return true;
         } else return false;
+    }
+
+    public void reset() {
+
+        setEnabled(false);
+        isWritable = false;
+        setTextColor(Color.BLACK);
+        setAlpha(.5f);
+        setBackground(null);
+        setPaintFlags(0);
+        setTypeface(null);
+
     }
 
     @Override

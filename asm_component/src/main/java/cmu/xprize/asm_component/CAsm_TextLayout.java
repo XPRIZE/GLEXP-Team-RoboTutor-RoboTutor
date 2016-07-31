@@ -2,11 +2,16 @@ package cmu.xprize.asm_component;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.LinearLayout;
+
+import cmu.xprize.util.CAnimatorUtil;
 
 /**
  * horizontal layout of edit texts to display numbers + operation. fixed number of slots for
@@ -51,8 +56,9 @@ public class CAsm_TextLayout extends LinearLayout {
     private void init(Context context, AttributeSet attrs) {
 
         mContext = context;
-        //setClipChildren(false);
-        //setClipToPadding(false);
+        setClipChildren(false);
+        setClipToPadding(false);
+
     }
 
     public void update(int id, int val, String operation, int numSlots) {
@@ -121,7 +127,7 @@ public class CAsm_TextLayout extends LinearLayout {
                 for (int i = 0; i < numSlots; i++) {
 
                     curText = (CAsm_Text) getChildAt(i);
-                    resetText(curText);
+                    curText.reset();
                     curText.setText(digits[i]);
 
                 }
@@ -133,7 +139,7 @@ public class CAsm_TextLayout extends LinearLayout {
                 for (int i = 0; i < numSlots; i++) {
 
                     curText = (CAsm_Text) getChildAt(i);
-                    resetText(curText);
+                    curText.reset();
 
                     if (i == 0) {
                         curText.setText(operation);
@@ -151,7 +157,7 @@ public class CAsm_TextLayout extends LinearLayout {
 
                 for (int i = 0; i < numSlots; i++) {
                     curText = (CAsm_Text) getChildAt(i);
-                    resetText(curText);
+                    curText.reset();
                 }
 
                 break;
@@ -164,7 +170,7 @@ public class CAsm_TextLayout extends LinearLayout {
 
                 for (int i = 0; i < numSlots; i++) {
                     curText = (CAsm_Text) getChildAt(i);
-                    resetText(curText);
+                    curText.reset();
                 }
 
                 break;
@@ -180,19 +186,22 @@ public class CAsm_TextLayout extends LinearLayout {
         if (digitIndex != getChildCount()-1){
 
             curText = (CAsm_Text) getChildAt(digitIndex+1);
-            resetText(curText);
+            curText.reset();
 
         }
 
         curText = (CAsm_Text) getChildAt(digitIndex);
         curText.setTextColor(Color.BLACK);
         curText.setAlpha(1.0f);
+        curText.setTypeface(null, Typeface.BOLD);
 
         if (id == ASM_CONST.RESULT) {
             curText.setEnabled(true);
             curText.setBackground(getResources().getDrawable(R.drawable.back));
             curText.isWritable = true;
         }
+
+        CAnimatorUtil.zoomInOut(curText, 1.2f, 1000L);
 
     }
 
@@ -210,15 +219,6 @@ public class CAsm_TextLayout extends LinearLayout {
         }
     }
 
-    private void resetText(CAsm_Text toReset) {
-        // TODO: change function name?
-        toReset.setEnabled(false);
-        toReset.isWritable = false;
-        toReset.setTextColor(Color.BLACK);
-        toReset.setAlpha(.5f);
-        toReset.setBackground(null);
-
-    }
 
     public Integer getNum() {
 

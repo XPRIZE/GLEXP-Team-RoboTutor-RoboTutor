@@ -22,34 +22,46 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     int secondBagIndex = 3;
     int resultIndex = 4;
 
+    int extraIndex;
+
 
     public CAsm_MechanicSubtract(CAsm_Component parent) {super.init(parent);}
 
     @Override
     public void nextDigit(){
         super.nextDigit();
-        borrowed = false;
     }
 
     @Override
     public void preClickSetup() {
 
-        int dy;
+        int animatedIndex;
 
-        // 0th index is animator dotbag and 1st is carry/borrow
-        CAsm_DotBag borrowBag = allAlleys.get(overheadIndex).getDotBag();
-        CAsm_DotBag firstDotBag = allAlleys.get(firstBagIndex).getDotBag();
+        if (borrowed) {
+            animatedIndex = overheadIndex;
+            extraIndex = firstBagIndex;
+        } else {
+            animatedIndex = firstBagIndex;
+            extraIndex = overheadIndex;
+        }
+
+        borrowed = false;
+
+        CAsm_DotBag animatedBag = allAlleys.get(animatedIndex).getDotBag();
+        animatedBag.setDrawBorder(true);
+
+        CAsm_DotBag extraBag = allAlleys.get(extraIndex).getDotBag();
+        extraBag.setCols(0);
+        extraBag.setDrawBorder(false);
+
+        // right align
         CAsm_DotBag secondDotBag = allAlleys.get(secondBagIndex).getDotBag();
         CAsm_DotBag resultDotBag = allAlleys.get(resultIndex).getDotBag();
 
-        borrowBag.setDrawBorder(false);
-
-        // right align
-
-        dotOffset = (firstDotBag.getCols()-secondDotBag.getCols());
+        dotOffset = (animatedBag.getCols()-secondDotBag.getCols());
         if (dotOffset < 0) {
-            firstDotBag.setTranslationX(-dotOffset * firstDotBag.getSize() + translationX);
-            resultDotBag.setTranslationX(-dotOffset * firstDotBag.getSize() + translationX);
+            animatedBag.setTranslationX(-dotOffset * animatedBag.getSize() + translationX);
+            resultDotBag.setTranslationX(-dotOffset * animatedBag.getSize() + translationX);
         }
         else {
             secondDotBag.setTranslationX(dotOffset * secondDotBag.getSize() + translationX);
@@ -57,7 +69,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         // bring result dotbag down
 
-        createDownwardBagAnimator(firstBagIndex).start();
+        createDownwardBagAnimator(animatedIndex).start();
 
     }
 
@@ -66,7 +78,6 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
 
         super.handleClick();
-
 
         int correspondingCol;
         CAsm_Dot clickedDot = null;

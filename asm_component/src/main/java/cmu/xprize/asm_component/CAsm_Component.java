@@ -132,13 +132,15 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
             if (isVisible) {
                 curDB.setVisibility(VISIBLE);
-                if (!dotbagsVisible) {
-                    mechanics.preClickSetup();
-                }
+
             }
             else {
                 curDB.setVisibility(INVISIBLE);
             }
+        }
+
+        if (isVisible && !dotbagsVisible) {
+            mechanics.preClickSetup();
         }
 
         dotbagsVisible = isVisible;
