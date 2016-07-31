@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
  */
 public class CAsm_Alley extends LinearLayout {
 
-    private CAsm_Text SText;
+    private CAsm_TextLayout SText;
     private CAsm_DotBag SdotBag;
 
     private int digitIndex;
@@ -76,7 +76,7 @@ public class CAsm_Alley extends LinearLayout {
 
     private void createText() {
 
-        SText = new CAsm_Text(getContext());
+        SText = new CAsm_TextLayout(getContext());
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -124,7 +124,7 @@ public class CAsm_Alley extends LinearLayout {
         return SdotBag;
     }
 
-    public CAsm_Text getText() {return SText;}
+    public CAsm_TextLayout getText() {return SText;}
 
     public void resetText() {SText.resetAllValues();}
 

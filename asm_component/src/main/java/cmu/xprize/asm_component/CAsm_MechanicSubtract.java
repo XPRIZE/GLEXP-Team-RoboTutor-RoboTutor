@@ -1,13 +1,8 @@
 package cmu.xprize.asm_component;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.graphics.Paint;
 import android.view.View;
-import android.widget.EditText;
-
-import java.util.ArrayList;
 
 /**
  * all subtraction-specific operations are implemented here
@@ -151,20 +146,20 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         // update texts
 
-        CAsm_Text firstBagLayout = allAlleys.get(firstBagIndex).getText();
-        Write_Text origSourceText = firstBagLayout.getText(parent.digitIndex-1);
+        CAsm_TextLayout firstBagLayout = allAlleys.get(firstBagIndex).getText();
+        CAsm_Text origSourceText = firstBagLayout.getText(parent.digitIndex-1);
         Integer origSourceDigit = firstBagLayout.getDigit(parent.digitIndex-1);
         origSourceText.setPaintFlags(origSourceText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-        CAsm_Text overheadLayout = allAlleys.get(overheadIndex).getText();
-        Write_Text updatedSourceText = overheadLayout.getText(parent.digitIndex-1);
+        CAsm_TextLayout overheadLayout = allAlleys.get(overheadIndex).getText();
+        CAsm_Text updatedSourceText = overheadLayout.getText(parent.digitIndex-1);
         updatedSourceText.setText(String.valueOf(origSourceDigit-1));
 
-        Write_Text origDestText = firstBagLayout.getText(parent.digitIndex);
+        CAsm_Text origDestText = firstBagLayout.getText(parent.digitIndex);
         Integer origDestDigit = firstBagLayout.getDigit(parent.digitIndex);
         origDestText.setPaintFlags(origDestText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-        Write_Text updatedDestText = overheadLayout.getText(parent.digitIndex);
+        CAsm_Text updatedDestText = overheadLayout.getText(parent.digitIndex);
         updatedDestText.setText(String.valueOf(10 + origDestDigit));
 
         borrowBag.setDrawBorder(true);

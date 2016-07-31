@@ -77,6 +77,7 @@ public class CAsm_DotBag extends TableLayout {
         setClipToPadding(false);
         setPaint();
         setZero();
+        //setBackgroundColor(Color.parseColor("F3DB"));
 
     }
 
@@ -263,6 +264,8 @@ public class CAsm_DotBag extends TableLayout {
 
         if (drawBorder) {
             canvas.drawRoundRect(bounds, size / 2, size / 2, borderPaint);
+            // TODO: make opaque
+
         }
         resetBounds();
 
@@ -441,11 +444,7 @@ public class CAsm_DotBag extends TableLayout {
 
     }
 
-    public boolean isNotTranslatedX(float translationX) {
-
-        if (getTranslationX() != translationX) {
-            return false;
-        }
+    public boolean dotsStatic() {
 
         TableRow currTableRow;
         CAsm_Dot dot;

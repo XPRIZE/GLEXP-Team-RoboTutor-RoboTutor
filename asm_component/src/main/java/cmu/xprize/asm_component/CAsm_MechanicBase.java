@@ -53,28 +53,26 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     public void handleClick() {
 
-        CAsm_Text currText;
-        CAsm_Text clickedText = null;
-        int alleyNum = 0;
-        Log.v("Test for Null", Integer.toString(allAlleys.size()));
+        CAsm_TextLayout currTextLayout;
+        CAsm_TextLayout clickedTextLayout = null;
 
         for (int i = 0; i < this.allAlleys.size(); i++) {
-            currText = this.allAlleys.get(i).getText();
-            if (currText.getIsClicked()) {
-                clickedText = currText;
+            currTextLayout = this.allAlleys.get(i).getText();
+            if (currTextLayout.getIsClicked()) {
+                clickedTextLayout = currTextLayout;
                 break;
             }
         }
 
-        if (clickedText == null) {
+        if (clickedTextLayout == null) {
             parent.exitWrite();
             return;
         }
 
-        Write_Text clickedField = clickedText.findClickedField();
+        CAsm_Text clickedText = clickedTextLayout.findClickedText();
 
-        if (clickedField != null && clickedField.isWritable) { //TODO: Decide whether this is private.
-            parent.enterNumber(clickedField);
+        if (clickedText != null && clickedText.isWritable) { //TODO: Decide whether this is private.
+            parent.updateText(clickedText);
         } else {
             parent.exitWrite();
         }
@@ -82,17 +80,8 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     public String getOperation() {return operation;}
 
-    // TODO: fix this function - copied from stack overflow
-    protected static void setAllParentsClip(View v, boolean enabled) {
-        while (v.getParent() != null && v.getParent() instanceof ViewGroup) {
-            ViewGroup viewGroup = (ViewGroup) v.getParent();
-            viewGroup.setClipChildren(enabled);
-            viewGroup.setClipToPadding(enabled);
-            v = viewGroup;
-        }
-    }
     
-    /* reset any changesmade by mechanics */
+    /* reset any changes made by mechanics */
     public void reset() {
 
         CAsm_DotBag currBag;
@@ -105,6 +94,16 @@ public class CAsm_MechanicBase implements IDotMechanics {
             currBag.setTranslationY(0);
         }
 
+    }
+
+    // TODO: fix this function - copied from stack overflow
+    protected static void setAllParentsClip(View v, boolean enabled) {
+        while (v.getParent() != null && v.getParent() instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) v.getParent();
+            viewGroup.setClipChildren(enabled);
+            viewGroup.setClipToPadding(enabled);
+            v = viewGroup;
+        }
     }
 
 

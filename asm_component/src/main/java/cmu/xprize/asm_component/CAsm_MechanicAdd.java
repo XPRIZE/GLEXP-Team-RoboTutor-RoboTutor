@@ -3,8 +3,6 @@ package cmu.xprize.asm_component;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.view.View;
-import android.widget.EditText;
 
 import java.util.ArrayList;
 
@@ -83,7 +81,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if ((resultBag.getCols() >= 10) & resultBag.isNotTranslatedX(translationX)) {
+                if ((resultBag.getCols() >= 10) & resultBag.dotsStatic()) {
                     performCarry();
                 }
             }
@@ -239,8 +237,8 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
     private void updateCarryText(){
 
-        CAsm_Text textLayout = allAlleys.get(1).getText();
-        Write_Text t = textLayout.getText(parent.digitIndex-1);
+        CAsm_TextLayout textLayout = allAlleys.get(1).getText();
+        CAsm_Text t = textLayout.getText(parent.digitIndex-1);
         t.setText("1");
 
     }

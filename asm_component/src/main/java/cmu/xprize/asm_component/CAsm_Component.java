@@ -7,9 +7,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 
 import org.json.JSONObject;
 
@@ -21,8 +19,6 @@ import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
-import cmu.xprize.util.TCONST;
-
 
 
 public class CAsm_Component extends LinearLayout implements ILoadableObject, IEventListener {
@@ -62,8 +58,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     // json loadable
 
     //Writing
-    private Writing_Popup mPopup;
-    private Write_Text currDigit;
+    private CAsm_Popup mPopup;
+    private CAsm_Text currDigit;
 
     public CAsm_Data[] dataSource;
 
@@ -114,7 +110,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         //
         //Scontent = (CAsm_LetterBoxLayout) findViewById(R.id.Scontent);
         //Scontent.setOnClickListener(this);
-        mPopup = new Writing_Popup(mContext);
+        mPopup = new CAsm_Popup(mContext);
 
     }
 
@@ -325,6 +321,29 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         return correct;
     }
 
+    public void updateText(CAsm_Text t) {
+
+        ArrayList<IEventListener> listeners = new ArrayList<>();
+        listeners.add(t);
+        listeners.add(this);
+
+        mPopup.showAtLocation(this, Gravity.LEFT, 10, 10);
+        mPopup.enable(true,listeners);
+        mPopup.update(t,50,50,300,300);
+
+    }
+
+    public void exitWrite() {
+        mPopup.enable(false,null);
+        mPopup.dismiss();
+    }
+
+    public void onEvent(IEvent event) {
+        mPopup.enable(false,null);
+        mPopup.dismiss();
+    }
+
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         final int action = MotionEventCompat.getActionMasked(event);
@@ -348,29 +367,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     }
 
-    public void enterNumber(Write_Text t) {
-        //CAsm_Text c = (CAsm_Text)t.getParent();
-        mPopup.showAtLocation(this, Gravity.LEFT, 10, 10);
-        //mPopup.update(50, 50, 300, 300);
-        IEventListener text = (IEventListener)t;
-        IEventListener component = (IEventListener)this;
-        ArrayList<IEventListener> listeners = new ArrayList<>();
-        listeners.add(text);
-        listeners.add(component);
-        mPopup.enable(true,listeners);
-        mPopup.update(t,50,50,300,300);
-        //currDigit = t;
-    }
-
-    public void exitWrite() {
-        mPopup.enable(false,null);
-        mPopup.dismiss();
-    }
-
-    public void onEvent(IEvent event) {
-        mPopup.enable(false,null);
-        mPopup.dismiss();
-    }
 
 
 }
