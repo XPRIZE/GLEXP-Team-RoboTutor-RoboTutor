@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.TCONST;
@@ -67,6 +68,14 @@ public class CAsm_Text extends TextView implements IEventListener {
         setBackground(null);
         setPaintFlags(0);
         setTypeface(null);
+
+    }
+
+    public void setResult(){
+
+        setEnabled(true);
+        setBackground(getResources().getDrawable(R.drawable.back));
+        isWritable = true;
 
     }
 

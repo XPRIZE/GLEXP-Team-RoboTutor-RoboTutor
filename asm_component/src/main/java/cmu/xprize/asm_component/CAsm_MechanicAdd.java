@@ -17,6 +17,39 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
     protected String operation = "+";
 
     @Override
+    public void nextDigit() {
+
+        super.nextDigit();
+
+        CAsm_TextLayout currLayout;
+        Integer currValue;
+        int totalValue = 0;
+
+        for (int i = 0; i < allAlleys.size(); i++) {
+
+            currLayout = allAlleys.get(i).getTextLayout();
+            currValue = currLayout.getDigit(parent.digitIndex);
+
+            if (currValue != null) {
+                totalValue += currValue;
+            }
+
+        }
+
+        if (totalValue > 10) {
+            parent.overheadVal = (totalValue - (totalValue % 10))/10;
+            parent.overheadIndex = 1;
+            updateCarryText();
+        }
+        else {
+            parent.overheadVal = null;
+            parent.overheadIndex = null;
+        }
+
+    }
+
+
+    @Override
     public void preClickSetup() {
     }
 
@@ -237,9 +270,9 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
     private void updateCarryText(){
 
-        CAsm_TextLayout textLayout = allAlleys.get(1).getText();
+        CAsm_TextLayout textLayout = allAlleys.get(1).getTextLayout();
         CAsm_Text t = textLayout.getText(parent.digitIndex-1);
-        t.setText("1");
+        t.setResult();
 
     }
 

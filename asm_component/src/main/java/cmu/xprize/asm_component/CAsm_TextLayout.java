@@ -194,14 +194,14 @@ public class CAsm_TextLayout extends LinearLayout {
         curText.setTextColor(Color.BLACK);
         curText.setAlpha(1.0f);
         curText.setTypeface(null, Typeface.BOLD);
+        curText.setBackground(null);
 
         if (id == ASM_CONST.RESULT) {
-            curText.setEnabled(true);
-            curText.setBackground(getResources().getDrawable(R.drawable.back));
-            curText.isWritable = true;
+            curText.setResult();
         }
-
-        CAnimatorUtil.zoomInOut(curText, 1.2f, 1000L);
+        else {
+            CAnimatorUtil.zoomInOut(curText, 1.5f, 1500L);
+        }
 
     }
 

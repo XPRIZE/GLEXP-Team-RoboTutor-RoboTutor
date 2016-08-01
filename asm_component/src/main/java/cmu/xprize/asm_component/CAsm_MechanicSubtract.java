@@ -157,12 +157,12 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         // update texts
 
-        CAsm_TextLayout firstBagLayout = allAlleys.get(firstBagIndex).getText();
+        CAsm_TextLayout firstBagLayout = allAlleys.get(firstBagIndex).getTextLayout();
         CAsm_Text origSourceText = firstBagLayout.getText(parent.digitIndex-1);
         Integer origSourceDigit = firstBagLayout.getDigit(parent.digitIndex-1);
         origSourceText.setPaintFlags(origSourceText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-        CAsm_TextLayout overheadLayout = allAlleys.get(overheadIndex).getText();
+        CAsm_TextLayout overheadLayout = allAlleys.get(overheadIndex).getTextLayout();
         CAsm_Text updatedSourceText = overheadLayout.getText(parent.digitIndex-1);
         updatedSourceText.setText(String.valueOf(origSourceDigit-1));
 

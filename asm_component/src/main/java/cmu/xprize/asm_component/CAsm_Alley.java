@@ -124,7 +124,7 @@ public class CAsm_Alley extends LinearLayout {
         return SdotBag;
     }
 
-    public CAsm_TextLayout getText() {return SText;}
+    public CAsm_TextLayout getTextLayout() {return SText;}
 
     public void resetText() {SText.resetAllValues();}
 

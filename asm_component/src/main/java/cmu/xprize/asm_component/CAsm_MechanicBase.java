@@ -59,7 +59,8 @@ public class CAsm_MechanicBase implements IDotMechanics {
         CAsm_TextLayout clickedTextLayout = null;
 
         for (int i = 0; i < this.allAlleys.size(); i++) {
-            currTextLayout = this.allAlleys.get(i).getText();
+
+            currTextLayout = this.allAlleys.get(i).getTextLayout();
             if (currTextLayout.getIsClicked()) {
                 clickedTextLayout = currTextLayout;
                 break;

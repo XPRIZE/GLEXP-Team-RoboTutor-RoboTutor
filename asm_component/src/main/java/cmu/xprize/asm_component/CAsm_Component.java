@@ -2,6 +2,7 @@ package cmu.xprize.asm_component;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -39,6 +40,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     protected String operation;
     protected String currImage;
     protected boolean dotbagsVisible = true;
+
+    protected Integer overheadVal = null;
+    protected Integer overheadIndex = null;
 
     protected int numAlleys = 0;
 
@@ -326,12 +330,29 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     public boolean isDigitCorrect() {
 
-        boolean correct = (corDigit.equals(allAlleys.get(numAlleys - 1).getCurrentDigit()));
+        boolean overheadCorrect, bottomCorrect;
 
-        if (!correct) {
-            allAlleys.get(numAlleys-1).getText().resetValue(digitIndex); // reset answer text
+        // first check bottom answer
+        CAsm_TextLayout textLayout = allAlleys.get(numAlleys - 1).getTextLayout();
+        bottomCorrect = corDigit.equals(textLayout.getDigit(digitIndex));
+
+        if (!bottomCorrect) {
+            textLayout.getText(digitIndex).setText("");
         }
-        return correct;
+
+        // now check overhead answer
+        overheadCorrect = true;
+        if (overheadVal != null) {
+            textLayout = allAlleys.get(overheadIndex).getTextLayout();
+            overheadCorrect = overheadVal.equals(textLayout.getDigit(digitIndex - 1));
+        }
+
+        if (!overheadCorrect) {
+            textLayout.getText(digitIndex-1).setText("");
+        }
+
+        return (bottomCorrect & overheadCorrect);
+
     }
 
     public void updateText(CAsm_Text t) {
