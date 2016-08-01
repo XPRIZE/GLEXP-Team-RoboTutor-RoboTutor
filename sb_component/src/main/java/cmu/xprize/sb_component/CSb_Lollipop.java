@@ -121,9 +121,6 @@ public class CSb_Lollipop extends RelativeLayout {
             set.add(i);
         }
         requestLayout();
-            requestLayout();
-            set.add(i);
-        }
 
         toStickHelper(9, coins, set);
         Drawable drawable = bound.getDrawable();
