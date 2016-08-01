@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/activity_main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:clipChildren="false"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cmu.xprize.sb_component.MainActivity">
+
+    <Button
+        android:text="-"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button2"
+        android:layout_alignParentBottom="true" android:layout_alignStart="@+id/button"
+        android:layout_marginBottom="121dp"/>
+    <Button
+        android:text="+"
+        android:layout_width="90dp"
+        android:layout_height="50dp"
+        tools:layout_editor_absoluteY="152dp" android:id="@+id/button"
+        android:layout_marginEnd="16dp"
+        android:layout_alignBottom="@+id/button2" android:layout_alignParentEnd="true"
+        android:layout_marginBottom="67dp"/>
+    <cmu.xprize.sb_component.CSb_Scoreboard
+        android:clipChildren="false"
+        android:layout_width="240dp"
+        android:layout_height="402dp"
+        app:col_num="3"
+        app:score="100"
+        android:id="@+id/test"
+        android:layout_alignParentTop="true" android:layout_alignParentStart="true">
+    </cmu.xprize.sb_component.CSb_Scoreboard>
+
+    <!--<cmu.xprize.sb_component.CSb_Lollipop-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="302dp"-->
+        <!--android:id="@+id/lollipop" android:layout_centerVertical="true"-->
+        <!--android:layout_toStartOf="@+id/button2" android:layout_marginEnd="68dp"/>-->
+
+</RelativeLayout>

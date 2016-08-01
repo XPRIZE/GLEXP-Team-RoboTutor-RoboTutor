@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="102dp"
+        android:height="302dp"
+        android:viewportWidth="102"
+        android:viewportHeight="302">
+    <path
+        android:name="stickpart"
+        android:strokeColor="#EEEEEE"
+        android:strokeWidth="1"
+        android:pathData="M71,98 v 0 a50,50 0 0 1 -40,0 V 98" />
+    <path
+        android:name="circlepart"
+        android:strokeColor="#EEEEEE"
+        android:strokeWidth="1"
+        android:pathData="M31,98 a50,50 0 1 1 40,0" />
+
+</vector>

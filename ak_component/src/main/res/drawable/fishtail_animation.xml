@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list android:id="@+id/fishtail_animation" android:oneshot="false"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/fishtail00" android:duration="50"/>
+    <item android:drawable="@drawable/fishtail01" android:duration="50"/>
+    <item android:drawable="@drawable/fishtail02" android:duration="50"/>
+    <item android:drawable="@drawable/fishtail03" android:duration="50"/>
+    <item android:drawable="@drawable/fishtail04" android:duration="50"/>
+    <item android:drawable="@drawable/fishtail05" android:duration="50"/>
+    <item android:drawable="@drawable/fishtail06" android:duration="50"/>
+    <item android:drawable="@drawable/fishtail07" android:duration="50"/>
+    <item android:drawable="@drawable/fishtail08" android:duration="50"/>
+    <item android:drawable="@drawable/fishtail09" android:duration="50"/>
+    <item android:drawable="@drawable/fishtail10" android:duration="50"/>
+    <item android:drawable="@drawable/fishtail11" android:duration="50"/>
+    <item android:drawable="@drawable/fishtail12" android:duration="50"/>
+    <item android:drawable="@drawable/fishtail13" android:duration="50"/>
+    <item android:drawable="@drawable/fishtail14" android:duration="50"/>
+    <item android:drawable="@drawable/fishtail15" android:duration="50"/>
+
+</animation-list>
