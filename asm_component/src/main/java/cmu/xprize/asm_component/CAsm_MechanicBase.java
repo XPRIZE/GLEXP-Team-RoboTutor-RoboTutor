@@ -20,6 +20,13 @@ public class CAsm_MechanicBase implements IDotMechanics {
     float scale;
     float translationX;
 
+    // defined alley indices since there will always be a fixed number
+    protected int animatorIndex = 0;
+    protected int overheadIndex = 1;
+    protected int firstBagIndex = 2;
+    protected int secondBagIndex = 3;
+    protected int resultIndex = 4;
+
     static final String TAG = "CAsm_MechanicBase";
 
     protected void init(CAsm_Component parent) {
@@ -53,6 +60,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
         parent.overheadIndex = null;
         parent.overheadVal = null;
+        resultIndex = allAlleys.size()-1;
 
         highlightDigits();
 
@@ -107,7 +115,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     public String getOperation() {return operation;}
 
-    
+
     /* reset any changes made by mechanics */
     public void reset() {
 

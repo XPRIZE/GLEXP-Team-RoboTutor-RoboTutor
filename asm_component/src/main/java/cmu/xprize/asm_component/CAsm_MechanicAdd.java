@@ -83,10 +83,10 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
     public void animateAdd(CAsm_Dot clickedDot, int alleyNum) {
 
-        final CAsm_DotBag resultBag = allAlleys.get(allAlleys.size() - 1).getDotBag();
+        final CAsm_DotBag resultBag = allAlleys.get(resultIndex).getDotBag();
 
         int dx = determineColumnDX(clickedDot, resultBag.getCols());
-        int dy = determineAlleyDY(alleyNum, allAlleys.size()-1);
+        int dy = determineAlleyDY(alleyNum, resultIndex);
 
         final CAsm_Dot oldDot = clickedDot;
         final CAsm_Dot newDot = resultBag.addDot(0, resultBag.getCols());
@@ -162,7 +162,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         CAsm_Dot currDot;
         int colsToTranslate;
 
-        final CAsm_DotBag resultBag = allAlleys.get(allAlleys.size()-1).getDotBag();
+        final CAsm_DotBag resultBag = allAlleys.get(resultIndex).getDotBag();
         int dotSize = resultBag.getSize();
 
         ArrayList<Animator> allAnimations = new ArrayList<>();
@@ -217,7 +217,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
         ObjectAnimator animX, animY;
 
-        final CAsm_DotBag resultBag = allAlleys.get(allAlleys.size()-1).getDotBag();
+        final CAsm_DotBag resultBag = allAlleys.get(resultIndex).getDotBag();
         final CAsm_Dot carryDot = resultBag.getDot(0,0);
 
         setAllParentsClip(carryDot, false);
@@ -245,7 +245,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
             public void onAnimationEnd(Animator animation) {
 
                 resultBag.setCols(0);
-                CAsm_TextLayout carryLayout = allAlleys.get(1).getTextLayout();
+                CAsm_TextLayout carryLayout = allAlleys.get(overheadIndex).getTextLayout();
                 CAsm_Text carryText = carryLayout.getText(parent.digitIndex-1);
                 Integer currCarryNum = carryLayout.getDigit(parent.digitIndex-1);
 
@@ -276,33 +276,9 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
     private void updateCarryText(){
 
-        CAsm_TextLayout textLayout = allAlleys.get(1).getTextLayout();
+        CAsm_TextLayout textLayout = allAlleys.get(overheadIndex).getTextLayout();
         CAsm_Text t = textLayout.getText(parent.digitIndex-1);
         t.setResult();
-
-    }
-
-    private void replaceCarryDot() {
-
-        CAsm_Dot newDot;
-        CAsm_DotBag animatorBag = allAlleys.get(0).getDotBag();
-        CAsm_DotBag resultBag = allAlleys.get(allAlleys.size()-1).getDotBag();
-
-        resultBag.removeDots(0,0);
-
-        newDot = animatorBag.addDot(0,0);
-        newDot.setImageName("star");
-        setAllParentsClip(newDot, false);
-
-        float transX = -(scale*ASM_CONST.rightPadding +
-                scale*ASM_CONST.textBoxWidth*(1.5f) + resultBag.getSize());
-
-        float transY = determineAlleyDY(0,1);
-
-        newDot.setTranslationX(transX);
-        newDot.setTranslationY(transY);
-
-
 
     }
 

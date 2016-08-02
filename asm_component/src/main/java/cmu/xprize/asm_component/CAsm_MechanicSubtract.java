@@ -18,16 +18,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     private boolean dotBagBorrowed = false;
     private boolean previouslyBorrowed = false;
     private boolean willBorrow = false;
-
-
-    // defined alley indices since there will always be a fixed number
-    private int animatorIndex = 0;
-    private int overheadIndex = 1;
-    private int firstBagIndex = 2;
-    private int secondBagIndex = 3;
-    private int resultIndex = 4;
-
-
+    
     private int minuendIndex;
     private int extraIndex;
 
