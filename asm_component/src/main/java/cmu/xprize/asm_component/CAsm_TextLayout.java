@@ -254,7 +254,12 @@ public class CAsm_TextLayout extends LinearLayout {
             return null;
         }
         else {
-            return Integer.parseInt(input);
+            try {
+                return Integer.parseInt(input);
+            }
+            catch (NumberFormatException e) {
+                return null;
+            }
         }
 
     }

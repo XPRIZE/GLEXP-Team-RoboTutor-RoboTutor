@@ -217,10 +217,9 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
         ObjectAnimator animX, animY;
 
-        CAsm_DotBag animatorBag = allAlleys.get(0).getDotBag();
         final CAsm_DotBag resultBag = allAlleys.get(allAlleys.size()-1).getDotBag();
-
         final CAsm_Dot carryDot = resultBag.getDot(0,0);
+
         setAllParentsClip(carryDot, false);
 
         float transX = -(scale*ASM_CONST.rightPadding +
@@ -238,14 +237,25 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         animSet.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                carryDot.setImageName("star");
+                carryDot.setImageName("star"); // TODO: get image of 10
 
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                updateCarryText();
-                replaceCarryDot();
+
+                resultBag.setCols(0);
+                CAsm_TextLayout carryLayout = allAlleys.get(1).getTextLayout();
+                CAsm_Text carryText = carryLayout.getText(parent.digitIndex-1);
+                Integer currCarryNum = carryLayout.getDigit(parent.digitIndex-1);
+
+                if (currCarryNum == null) {
+                    carryText.setText("1");
+                }
+                else {
+                    carryText.setText(String.valueOf(1 + currCarryNum));
+                }
+
             }
 
             @Override
