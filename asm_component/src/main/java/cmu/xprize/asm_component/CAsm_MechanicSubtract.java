@@ -1,5 +1,7 @@
 package cmu.xprize.asm_component;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.view.View;
 
@@ -17,14 +19,17 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     private boolean previouslyBorrowed = false;
     private boolean willBorrow = false;
 
-    // defined alley indices since there will always be a fixed number
-    int animatorIndex = 0;
-    int overheadIndex = 1;
-    int firstBagIndex = 2;
-    int secondBagIndex = 3;
-    int resultIndex = 4;
 
-    int extraIndex;
+    // defined alley indices since there will always be a fixed number
+    private int animatorIndex = 0;
+    private int overheadIndex = 1;
+    private int firstBagIndex = 2;
+    private int secondBagIndex = 3;
+    private int resultIndex = 4;
+
+
+    private int minuendIndex;
+    private int extraIndex;
 
 
     public CAsm_MechanicSubtract(CAsm_Component parent) {super.init(parent);}
@@ -43,7 +48,6 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         super.nextDigit();
 
-        int minuendIndex;
         Integer minuend, subtrahend;
 
         minuendIndex = (previouslyBorrowed)?overheadIndex:firstBagIndex;
@@ -70,39 +74,34 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     @Override
     public void preClickSetup() {
 
-        int animatedIndex;
-
         if (previouslyBorrowed) {
-            animatedIndex = overheadIndex;
+            minuendIndex = overheadIndex;
             extraIndex = firstBagIndex;
         } else {
-            animatedIndex = firstBagIndex;
+            minuendIndex = firstBagIndex;
             extraIndex = overheadIndex;
         }
 
-        CAsm_DotBag animatedBag = allAlleys.get(animatedIndex).getDotBag();
-        animatedBag.setDrawBorder(true);
+        CAsm_DotBag minuendBag = allAlleys.get(minuendIndex).getDotBag();
+        minuendBag.setDrawBorder(true);
 
         CAsm_DotBag extraBag = allAlleys.get(extraIndex).getDotBag();
         extraBag.setCols(0);
         extraBag.setDrawBorder(false);
 
+        CAsm_DotBag resultDotBag = allAlleys.get(resultIndex).getDotBag();
+        resultDotBag.setDrawBorder(false);
+
         // right align
         CAsm_DotBag secondDotBag = allAlleys.get(secondBagIndex).getDotBag();
-        CAsm_DotBag resultDotBag = allAlleys.get(resultIndex).getDotBag();
 
-        dotOffset = (animatedBag.getCols()-secondDotBag.getCols());
+        dotOffset = (minuendBag.getCols()-secondDotBag.getCols());
         if (dotOffset < 0) {
-            animatedBag.setTranslationX(-dotOffset * animatedBag.getSize() + translationX);
-            resultDotBag.setTranslationX(-dotOffset * animatedBag.getSize() + translationX);
+            minuendBag.setTranslationX(-dotOffset * minuendBag.getSize() + translationX);
         }
         else {
             secondDotBag.setTranslationX(dotOffset * secondDotBag.getSize() + translationX);
         }
-
-        // bring result dotbag down
-
-        createDownwardBagAnimator(animatedIndex).start();
 
     }
 
@@ -114,8 +113,9 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         int correspondingCol;
         CAsm_Dot clickedDot = null;
+
+        CAsm_DotBag minuendDotBag = allAlleys.get(minuendIndex).getDotBag();
         CAsm_DotBag clickedBag = allAlleys.get(secondBagIndex).getDotBag(); // only one possible dotbag to look at
-        CAsm_DotBag resultDotBag = allAlleys.get(resultIndex).getDotBag();
 
         if (clickedBag.getIsClicked()) {
             clickedDot = clickedBag.findClickedDot();
@@ -130,8 +130,8 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         int clickedDotCol = clickedDot.getCol();
 
         if (dotBagBorrowed) {
-            CAsm_DotBag originalBag = allAlleys.get(firstBagIndex).getDotBag();
-            int remainingDotsToClick = clickedBag.getCols() - originalBag.getCols();
+            CAsm_DotBag minuendBag = allAlleys.get(minuendIndex).getDotBag();
+            int remainingDotsToClick = minuendBag.getCols() - clickedBag.getCols();
             correspondingCol = 10 - (remainingDotsToClick - clickedDotCol);
         }
         else {
@@ -145,44 +145,88 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         clickedDot.setHollow(true);
 
-        CAsm_Dot correspondingDot = resultDotBag.getDot(0, correspondingCol);
+        CAsm_Dot correspondingDot = minuendDotBag.getDot(0, correspondingCol);
         correspondingDot.setVisibility(View.INVISIBLE);
 
-        if (resultDotBag.getVisibleDots().size() == parent.corDigit) {
-            subtractLayoutChange(clickedDot);
+        if (minuendDotBag.getVisibleDots().size() == parent.corDigit) {
+            AnimatorSet shrink = createShrinkAnimator(minuendDotBag);
+            shrink.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    createDownwardBagAnimator(minuendIndex).start();
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+
+            shrink.start();
         }
 
-        else if (resultDotBag.getVisibleDots().size() == 0) {
+        else if (minuendDotBag.getVisibleDots().size() == 0) {
             borrow();
         }
     }
 
-    private void subtractLayoutChange(CAsm_Dot clickedDot) {
+    private AnimatorSet createShrinkAnimator(final CAsm_DotBag changingBag) {
 
-        final CAsm_DotBag resultDotBag = allAlleys.get(resultIndex).getDotBag();
 
-        int numVisibleDots = resultDotBag.getVisibleDots().size();
-        int numInvisibleDots = resultDotBag.getCols() - numVisibleDots;
+        final int numVisibleDots = changingBag.getVisibleDots().size();
+        final int numInvisibleDots = changingBag.getCols() - numVisibleDots;
 
-        int dotSize = clickedDot.getWidth();
-        float currRight = resultDotBag.getBounds().right;
+        int dotSize = changingBag.getSize();
+        float currRight = changingBag.getBounds().right;
         float newRight = currRight - (dotSize * numInvisibleDots);
 
-
-        ObjectAnimator anim = ObjectAnimator.ofFloat(resultDotBag, "right", currRight, newRight);
+        AnimatorSet animSet = new AnimatorSet();
+        ObjectAnimator anim = ObjectAnimator.ofFloat(changingBag, "right", currRight, newRight);
         anim.setDuration(1000);
-        anim.start();
+        animSet.play(anim);
 
-        resultDotBag.removeDots(numVisibleDots, numInvisibleDots + numVisibleDots - 1);
+        animSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
 
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                changingBag.removeDots(numVisibleDots, numInvisibleDots + numVisibleDots - 1);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+        return animSet;
 
     }
 
     private void borrow() {
 
         dotBagBorrowed = true;
+        minuendIndex -= 1;
 
-        CAsm_DotBag borrowBag = allAlleys.get(overheadIndex).getDotBag();
+        CAsm_DotBag borrowBag = allAlleys.get(minuendIndex).getDotBag();
         CAsm_DotBag firstDotBag = allAlleys.get(firstBagIndex).getDotBag();
         CAsm_DotBag secondDotBag = allAlleys.get(secondBagIndex).getDotBag();
         CAsm_DotBag resultDotBag = allAlleys.get(resultIndex).getDotBag();
@@ -209,12 +253,11 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         borrowBag.setRows(1);
         borrowBag.setCols(10);
         borrowBag.setTranslationX(0);
+
         resultDotBag.removeDots(0, resultDotBag.getCols()-1);
         resultDotBag.setTranslationX(0);
 
-        createDownwardBagAnimator(overheadIndex).start();
-
-        dotOffset = resultDotBag.getCols() - secondDotBag.getCols();
+        dotOffset = borrowBag.getCols() - secondDotBag.getCols();
         secondDotBag.setTranslationX(dotOffset*secondDotBag.getSize());
 
 
@@ -222,16 +265,17 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
     private ObjectAnimator createDownwardBagAnimator(int startIndex) {
 
-        CAsm_DotBag firstDotBag = allAlleys.get(startIndex).getDotBag();
+        CAsm_DotBag startDotBag = allAlleys.get(startIndex).getDotBag();
         CAsm_DotBag resultDotBag = allAlleys.get(resultIndex).getDotBag();
 
-        resultDotBag.setRows(firstDotBag.getRows());
-        resultDotBag.setCols(firstDotBag.getCols());
-        resultDotBag.setImage(firstDotBag.getImageName());
+        resultDotBag.setRows(startDotBag.getRows());
+        resultDotBag.setCols(startDotBag.getCols());
+        resultDotBag.setImage(startDotBag.getImageName());
         resultDotBag.setIsClickable(false);
+        resultDotBag.setDrawBorder(true);
 
         setAllParentsClip(resultDotBag, false);
-        firstDotBag.setHollow(true);
+        startDotBag.setHollow(true);
 
         int dy = 0;
         for (int i = resultIndex; i > startIndex; i--) {
