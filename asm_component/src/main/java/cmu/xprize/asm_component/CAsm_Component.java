@@ -2,8 +2,12 @@ package cmu.xprize.asm_component;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
-import android.view.View;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.Gravity;
 import android.widget.LinearLayout;
 
 import org.json.JSONObject;
@@ -11,12 +15,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
 
-public class CAsm_Component extends LinearLayout implements ILoadableObject, View.OnClickListener {
+public class CAsm_Component extends LinearLayout implements ILoadableObject, IEventListener {
+
 
     private Context mContext;
 
@@ -24,18 +31,27 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
     private int _dataIndex;
 
     private int[] numbers;
-    private int digitIndex;
-    private int numSlots;
+
+    protected int digitIndex;
+    protected int numSlots;
 
     protected Integer corDigit;
     protected Integer corValue;
     protected String operation;
     protected String currImage;
+    protected boolean dotbagsVisible = true;
+
+    protected Integer overheadVal = null;
+    protected Integer overheadIndex = null;
 
     protected int numAlleys = 0;
 
     private float scale = getResources().getDisplayMetrics().density;
     protected int alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
+
+    private String[]         chimes = {"2", "4", "5", "8", "11", "14", "16", "19", "21", "23"};
+    private int              chimeIndex;
+    protected String         currentChime = "2";
 
     protected ArrayList<CAsm_Alley> allAlleys = new ArrayList<>();
 
@@ -44,6 +60,11 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
     //protected CAsm_LetterBoxLayout Scontent;
 
     // json loadable
+
+    //Writing
+    private CAsm_Popup mPopup;
+    private CAsm_Text currDigit;
+
     public CAsm_Data[] dataSource;
 
     static final String TAG = "CAsm_Component";
@@ -68,10 +89,10 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
     public void init(Context context, AttributeSet attrs) {
 
         setOrientation(VERTICAL);
-        setOnClickListener(this);
+        currentChime = chimes[chimeIndex];
+
 
         //inflate(getContext(), R.layout.asm_container, this);
-
 
         mContext = context;
 
@@ -93,7 +114,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         //
         //Scontent = (CAsm_LetterBoxLayout) findViewById(R.id.Scontent);
         //Scontent.setOnClickListener(this);
-
+        mPopup = new CAsm_Popup(mContext);
 
     }
 
@@ -102,6 +123,34 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         dataSource = _dataSource;
         _dataIndex = 0;
     }
+
+
+    public void setVisible(Boolean isVisible) {
+
+
+        Log.d("setVisible", isVisible.toString());
+        for (int i = 0; i < allAlleys.size(); i++) {
+
+            CAsm_Alley curAlley = allAlleys.get(i);
+            CAsm_DotBag curDB = curAlley.getDotBag();
+
+            if (isVisible) {
+                curDB.setVisibility(VISIBLE);
+
+            }
+            else {
+                curDB.setVisibility(INVISIBLE);
+            }
+        }
+
+        if (isVisible && !dotbagsVisible) {
+            mechanics.preClickSetup();
+        }
+
+        dotbagsVisible = isVisible;
+
+    }
+
 
     public void next() {
 
@@ -117,7 +166,10 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
             CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, false);
         }
 
+        mechanics.next();
+
     }
+
 
     public void nextDigit() {
 
@@ -129,7 +181,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
         corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[digitIndex]);
 
-        mechanics.preClickSetup();
+        mechanics.nextDigit();
 
     }
 
@@ -140,6 +192,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
     protected void updateDataSet(CAsm_Data data) {
 
+        // TODO: talk about whether this should be part of base mechanics
+
         int val, id;
         boolean clickable = true;
 
@@ -148,7 +202,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         numSlots = CAsm_Util.maxDigits(numbers) + 2;
         digitIndex = numSlots;
 
-        // TODO: talk about whether this should be part of base mechanics
+        updateAlley(0, 0, ASM_CONST.ANIMATOR, operation, false); // animator alley
+        updateAlley(1, 0, ASM_CONST.OVERHEAD, operation, true); // carry/borrow alley
 
         // update alleys
         for (int i = 0; i < numbers.length; i++) {
@@ -169,11 +224,11 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
                 id = ASM_CONST.REGULAR;
             }
 
-            updateAlley(i, val, id, operation, clickable);
+            updateAlley(i+2, val, id, operation, clickable);
         }
 
         // delete extra alleys
-        int delta = numAlleys - numbers.length;
+        int delta = numAlleys - (numbers.length+2);
 
         if (delta > 0) {
             for (int i = 0; i < delta; i++) {
@@ -247,6 +302,11 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         return newAlley;
     }
 
+    public void nextChime() {
+        chimeIndex = chimeIndex + 1;
+        currentChime = chimes[chimeIndex % 10];
+    }
+
     private void delAlley() {
 
         int index = numAlleys - 1;
@@ -270,20 +330,62 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
     public boolean isDigitCorrect() {
 
-        boolean correct = (corDigit.equals(allAlleys.get(numAlleys - 1).getCurrentDigit()));
+        boolean overheadCorrect, bottomCorrect;
 
-        if (!correct) {
-            allAlleys.get(numAlleys-1).getText().resetValue(digitIndex); // reset answer text
+        // first check bottom answer
+        CAsm_TextLayout textLayout = allAlleys.get(numAlleys - 1).getTextLayout();
+        bottomCorrect = corDigit.equals(textLayout.getDigit(digitIndex));
+
+        if (!bottomCorrect) {
+            textLayout.getText(digitIndex).setText("");
         }
-        return correct;
+
+        // now check overhead answer
+        overheadCorrect = true;
+        if (overheadVal != null) {
+            textLayout = allAlleys.get(overheadIndex).getTextLayout();
+            overheadCorrect = overheadVal.equals(textLayout.getDigit(digitIndex - 1));
+        }
+
+        if (!overheadCorrect) {
+            textLayout.getText(digitIndex-1).setText("");
+        }
+
+        return (bottomCorrect & overheadCorrect);
+
+    }
+
+    public void updateText(CAsm_Text t) {
+
+        ArrayList<IEventListener> listeners = new ArrayList<>();
+        listeners.add(t);
+        listeners.add(this);
+
+        mPopup.showAtLocation(this, Gravity.LEFT, 10, 10);
+        mPopup.enable(true,listeners);
+        mPopup.update(t,50,50,300,300);
+
+    }
+
+    public void exitWrite() {
+        mPopup.enable(false,null);
+        mPopup.dismiss();
+    }
+
+    public void onEvent(IEvent event) {
+        mPopup.enable(false,null);
+        mPopup.dismiss();
     }
 
 
-
-//  TODO: fix the onTouch to see results
-
-    public void onClick(View v) {mechanics.handleClick();}
-
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        final int action = MotionEventCompat.getActionMasked(event);
+        if (action == MotionEvent.ACTION_DOWN) {
+            mechanics.handleClick();
+        }
+        return true;
+    }
 
 
     /**
@@ -298,5 +400,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         _dataIndex = 0;
 
     }
+
+
 
 }

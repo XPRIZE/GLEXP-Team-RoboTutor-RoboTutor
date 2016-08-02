@@ -27,7 +27,8 @@
       "tutor_effect":  {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/arithmetic"},
       "xprize_effect": {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/global"},
       "default":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/arithmetic"},
-      "xprize":        {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global"}
+      "xprize":        {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global"},
+      "chimes":        {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "chimes"}
     },
 
   	"navigatorType":"SIMPLE_NAVIGATOR"
