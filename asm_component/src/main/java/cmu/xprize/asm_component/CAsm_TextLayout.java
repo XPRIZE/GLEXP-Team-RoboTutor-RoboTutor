@@ -2,7 +2,6 @@ package cmu.xprize.asm_component;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
@@ -191,6 +190,12 @@ public class CAsm_TextLayout extends LinearLayout {
         }
 
         curText = (CAsm_Text) getChildAt(digitIndex);
+
+        if (curText.getIsStruck()) {
+            // crossed out
+            return;
+        }
+
         curText.setTextColor(Color.BLACK);
         curText.setAlpha(1.0f);
         curText.setTypeface(null, Typeface.BOLD);
@@ -198,9 +203,6 @@ public class CAsm_TextLayout extends LinearLayout {
 
         if (id == ASM_CONST.RESULT) {
             curText.setResult();
-        }
-        else {
-            CAnimatorUtil.zoomInOut(curText, 1.5f, 1500L);
         }
 
     }

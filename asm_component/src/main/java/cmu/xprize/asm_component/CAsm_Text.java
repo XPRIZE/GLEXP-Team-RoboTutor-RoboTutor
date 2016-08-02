@@ -2,6 +2,7 @@ package cmu.xprize.asm_component;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -14,13 +15,14 @@ import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.TCONST;
 
 /**
- * Created by dexte on 7/27/2016.
+ *
  */
 public class CAsm_Text extends TextView implements IEventListener {
 
     public boolean isWritable;
-
     public boolean isClicked;
+
+    private boolean isStruck = false;
 
     public CAsm_Text(Context context) {
 
@@ -68,6 +70,7 @@ public class CAsm_Text extends TextView implements IEventListener {
         setBackground(null);
         setPaintFlags(0);
         setTypeface(null);
+        isStruck = false;
 
     }
 
@@ -78,6 +81,21 @@ public class CAsm_Text extends TextView implements IEventListener {
         isWritable = true;
 
     }
+
+    public void setStruck(boolean _isStruck){
+
+        this.isStruck = _isStruck;
+
+        if (isStruck) {
+            setPaintFlags(getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+        else {
+            setPaintFlags(getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+
+    }
+
+    public boolean getIsStruck() {return this.isStruck;}
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

@@ -41,10 +41,6 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
             parent.overheadIndex = 1;
             updateCarryText();
         }
-        else {
-            parent.overheadVal = null;
-            parent.overheadIndex = null;
-        }
 
     }
 

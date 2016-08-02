@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import cmu.xprize.util.CAnimatorUtil;
+
 /**
  *
  */
@@ -49,6 +51,28 @@ public class CAsm_MechanicBase implements IDotMechanics {
             preClickSetup();
         }
 
+        parent.overheadIndex = null;
+        parent.overheadVal = null;
+
+        highlightDigits();
+
+    }
+
+    public void highlightDigits() {
+
+        CAsm_Text text;
+
+        for (int i = 0; i < allAlleys.size(); i++) {
+            text = allAlleys.get(i).getTextLayout().getText(parent.digitIndex);
+
+            if (text.getIsStruck()) {
+                text.reset();
+                text.setStruck(true);
+            }
+            else {
+                CAnimatorUtil.zoomInOut(text, 1.5f, 1500L);
+            }
+        }
     }
 
     public void preClickSetup() {}
