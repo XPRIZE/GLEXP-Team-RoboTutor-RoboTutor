@@ -58,7 +58,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
             preClickSetup();
         }
 
-        parent.overheadIndex = null;
+        parent.overheadText = null;
         parent.overheadVal = null;
         resultIndex = allAlleys.size()-1;
 
@@ -87,17 +87,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     public void handleClick() {
 
-        CAsm_TextLayout currTextLayout;
-        CAsm_TextLayout clickedTextLayout = null;
-
-        for (int i = 0; i < this.allAlleys.size(); i++) {
-
-            currTextLayout = this.allAlleys.get(i).getTextLayout();
-            if (currTextLayout.getIsClicked()) {
-                clickedTextLayout = currTextLayout;
-                break;
-            }
-        }
+        CAsm_TextLayout clickedTextLayout = findClickedTextLayout();
 
         if (clickedTextLayout == null) {
             parent.exitWrite();
@@ -110,10 +100,16 @@ public class CAsm_MechanicBase implements IDotMechanics {
             parent.updateText(clickedText);
         } else {
             parent.exitWrite();
+            clickedTextLayout.setIsClicked(true);
+            clickedText.setIsClicked(true);
         }
     }
 
     public String getOperation() {return operation;}
+
+    public void correctOverheadText() {
+        // whenever they put in the right overhead text
+    }
 
 
     /* reset any changes made by mechanics */
@@ -140,6 +136,25 @@ public class CAsm_MechanicBase implements IDotMechanics {
             viewGroup.setClipToPadding(enabled);
             v = viewGroup;
         }
+    }
+
+    protected CAsm_TextLayout findClickedTextLayout() {
+
+        CAsm_TextLayout currTextLayout;
+        CAsm_TextLayout clickedTextLayout = null;
+
+        for (int i = 0; i < this.allAlleys.size(); i++) {
+
+            currTextLayout = this.allAlleys.get(i).getTextLayout();
+
+            if (currTextLayout.getIsClicked()) {
+                clickedTextLayout = currTextLayout;
+                break;
+            }
+        }
+
+        return clickedTextLayout;
+
     }
 
 

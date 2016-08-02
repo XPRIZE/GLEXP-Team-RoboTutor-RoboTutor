@@ -38,8 +38,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
         if (totalValue > 10) {
             parent.overheadVal = (totalValue - (totalValue % 10))/10;
-            parent.overheadIndex = 1;
-            updateCarryText();
+            parent.overheadText = updateCarryText();
         }
 
     }
@@ -274,11 +273,13 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
     }
 
-    private void updateCarryText(){
+    private CAsm_Text updateCarryText(){
 
         CAsm_TextLayout textLayout = allAlleys.get(overheadIndex).getTextLayout();
         CAsm_Text t = textLayout.getText(parent.digitIndex-1);
         t.setResult();
+
+        return t;
 
     }
 

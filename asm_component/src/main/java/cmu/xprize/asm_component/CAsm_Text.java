@@ -19,10 +19,11 @@ import cmu.xprize.util.TCONST;
  */
 public class CAsm_Text extends TextView implements IEventListener {
 
-    public boolean isWritable;
-    public boolean isClicked;
+    public boolean isWritable = false;
+    public boolean isClicked = false;
 
     private boolean isStruck = false;
+    private boolean isBorrowable = false;
 
     public CAsm_Text(Context context) {
 
@@ -64,13 +65,17 @@ public class CAsm_Text extends TextView implements IEventListener {
     public void reset() {
 
         setEnabled(false);
-        isWritable = false;
+
         setTextColor(Color.BLACK);
         setAlpha(.5f);
         setBackground(null);
         setPaintFlags(0);
         setTypeface(null);
+
         isStruck = false;
+        isWritable = false;
+        isBorrowable = false;
+        isClicked = false;
 
     }
 
@@ -101,7 +106,7 @@ public class CAsm_Text extends TextView implements IEventListener {
     public boolean onTouchEvent(MotionEvent event) {
         final int action = MotionEventCompat.getActionMasked(event);
         if (action == MotionEvent.ACTION_DOWN) {
-            if (isWritable) {
+            if (isWritable || isBorrowable) {
                 isClicked = true;
             }
         }
@@ -112,4 +117,29 @@ public class CAsm_Text extends TextView implements IEventListener {
         String response  = (String)event.getString(TCONST.FW_VALUE);
         this.setText(response);
     }
+
+    public void setIsClicked(boolean _isClicked) {this.isClicked = _isClicked;}
+
+    public void setBorrowable(boolean _isBorrowable) {this.isBorrowable = _isBorrowable;}
+
+    public boolean getIsBorrowable() {return isBorrowable;}
+
+    public Integer getDigit() {
+
+        String input = getText().toString();
+
+        if (input.equals("")) {
+            return null;
+        }
+        else {
+            try {
+                return Integer.parseInt(input);
+            }
+            catch (NumberFormatException e) {
+                return null;
+            }
+        }
+
+    }
+
 }

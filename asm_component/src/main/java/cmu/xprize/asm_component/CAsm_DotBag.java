@@ -464,6 +464,26 @@ public class CAsm_DotBag extends TableLayout {
 
     }
 
+    public boolean getIsHollow() {
+
+        TableRow currTableRow;
+        CAsm_Dot dot;
+
+        for (int i = 0; i < allTableRows.size(); i++) {
+            currTableRow = allTableRows.get(i);
+
+            for (int j = 0; j < currTableRow.getVirtualChildCount(); j++){
+                dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
+                if (!dot.getIsHollow()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+
+    }
+
 
 
 }

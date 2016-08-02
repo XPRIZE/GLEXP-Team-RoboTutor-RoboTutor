@@ -42,7 +42,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     protected boolean dotbagsVisible = true;
 
     protected Integer overheadVal = null;
-    protected Integer overheadIndex = null;
+    protected CAsm_Text overheadText = null;
 
     protected int numAlleys = 0;
 
@@ -343,12 +343,15 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         // now check overhead answer
         overheadCorrect = true;
         if (overheadVal != null) {
-            textLayout = allAlleys.get(overheadIndex).getTextLayout();
-            overheadCorrect = overheadVal.equals(textLayout.getDigit(digitIndex - 1));
-        }
+            overheadCorrect = overheadVal.equals(overheadText.getDigit());
 
-        if (!overheadCorrect) {
-            textLayout.getText(digitIndex-1).setText("");
+            if (!overheadCorrect) {
+                overheadText.setText("");
+            }
+            else {
+                mechanics.correctOverheadText();
+            }
+
         }
 
         return (bottomCorrect & overheadCorrect);
