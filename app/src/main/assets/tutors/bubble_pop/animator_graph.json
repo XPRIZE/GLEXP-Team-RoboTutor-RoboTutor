@@ -87,13 +87,21 @@
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
           "maptype":"moduleMap",
-          "mapname": "PLAYWRONG",
+          "mapname": "PLAYWRONG_PAUSE",
           "preenter": [],
           "preexit": [],
           "edges": [
             {
-              "constraint": "",
+              "constraint": "FTR_EOD",
+              "edge": "FINAL_SCORE"
+            },
+            {
+              "constraint": "FTR_LASTATTEMPT",
               "edge": "UPDATE_STIMULUS"
+            },
+            {
+              "constraint": "",
+              "edge": "USER_INPUT"
             }
           ]
         },
@@ -212,6 +220,38 @@
         },
 
 
+        "PLAYWRONG_PAUSE": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "PAUSE_ANIMATION:String" ,"features":""},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "wrong.mp3", "soundpackage":"tutor_effect", "volume": 0.05, "mode":"event", "features": ""},
+
+            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "BUBBLE_WIGGLED:String|NEXTNODE:String" ,"features":""},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "WIGGLE_BUBBLE:String" ,"features":""},
+            {"type": "COMMAND", "cmd": "WAIT"  },
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Thats.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": ""},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please tap.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT"},
+
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "RESUME_ANIMATION:String" ,"features":"!FTR_LASTATTEMPT"},
+
+            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "BUBBLES_CLEARED:String|NEXTNODE:String" ,"features":"FTR_LASTATTEMPT"},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "CLEAR_CONTENT:String" ,"features":"FTR_LASTATTEMPT"},
+            {"type": "COMMAND", "cmd": "WAIT" ,"features":"FTR_LASTATTEMPT" },
+
+            {"type": "TIMER", "id":"nextDelayTimer", "startdelay":"0", "period":"750", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"NEXTNODE", "features": "" },
+            {"type": "COMMAND", "cmd": "WAIT"  }
+          ]
+        },
+
+
         "FINALSCORE": {
           "type": "MODULE",
           "reuse":true,
@@ -273,6 +313,11 @@
         "FTR_EOD":{
           "type": "CONDITION",
           "test":"FTR_EOD"
+        },
+
+        "FTR_LASTATTEMPT":{
+          "type": "CONDITION",
+          "test":"FTR_LASTATTEMPT"
         }
 
       }

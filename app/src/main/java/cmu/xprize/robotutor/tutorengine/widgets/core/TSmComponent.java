@@ -198,18 +198,18 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
 
         // Hide th language toggle on the release builds
         // TODO : ensure it is in place for trial releases
-//        if(!BuildConfig.DEBUG) {
-//
-//            View view = findViewById(R.id.SsmComponent);
-//            PercentRelativeLayout.LayoutParams params = (PercentRelativeLayout.LayoutParams) view.getLayoutParams();
-//            PercentLayoutHelper.PercentLayoutInfo info = params.getPercentLayoutInfo();
-//            info.heightPercent = 0.88f;
-//            view.requestLayout();
-//
-//            mLangButton.setVisibility(View.GONE);
-//
-//            parent.requestLayout();
-//        }
+        if(BuildConfig.DEBUG) {
+
+            View view = findViewById(R.id.SsmComponent);
+            PercentRelativeLayout.LayoutParams params = (PercentRelativeLayout.LayoutParams) view.getLayoutParams();
+            PercentLayoutHelper.PercentLayoutInfo info = params.getPercentLayoutInfo();
+            info.heightPercent = 0.88f;
+            view.requestLayout();
+
+            mLangButton.setVisibility(View.GONE);
+
+            parent.requestLayout();
+        }
     }
 
     @Override

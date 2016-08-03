@@ -104,6 +104,7 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
 
         mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
         mTutor.setDelFeature(TCONST.GENERIC_WRONG);
+        mTutor.setDelFeature(TCONST.LAST_ATTEMPT);
 
     }
 
@@ -205,6 +206,14 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
     public void postEvent(String event) {
 
         switch (event) {
+
+            case BP_CONST.PAUSE_ANIMATION:
+                post(BP_CONST.PAUSE_ANIMATION);
+                break;
+
+            case BP_CONST.RESUME_ANIMATION:
+                post(BP_CONST.RESUME_ANIMATION);
+                break;
 
             case BP_CONST.SHOW_SCORE:
                 post(BP_CONST.SHOW_SCORE);
@@ -337,6 +346,11 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
             correct_Count++;
         } else {
             mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+            attempt_count--;
+
+            if(attempt_count <= 0) {
+                mTutor.setAddFeature(TCONST.LAST_ATTEMPT);
+            }
         }
     }
 

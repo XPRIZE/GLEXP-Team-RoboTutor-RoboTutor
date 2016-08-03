@@ -70,6 +70,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
     private   boolean               correct = false;
     public    int                   question_Index;
+    public int                      attempt_count;
     protected int                   correct_Count;
 
     private final Handler           mainHandler = new Handler(Looper.getMainLooper());
@@ -202,7 +203,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
                 // Count down the number of questions requested
                 //
                 question_count--;
-
+                attempt_count = BP_CONST.MAX_ATTEMPT;
             } else {
                 CErrorManager.logEvent(TAG,  "Error no DataSource : ", null, false);
             }
@@ -316,7 +317,9 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
-    protected void publishState(CBubble bubble) {}
+    protected void publishState(CBubble bubble) {
+
+    }
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
