@@ -13,6 +13,7 @@ import android.widget.PopupWindow;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import cmu.xprize.util.CErrorManager;
@@ -43,15 +44,18 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     protected String operation;
     protected String currImage;
     private boolean isVisible;
+    protected boolean isNew = true;
 
     protected int numAlleys = 0;
 
     private float scale = getResources().getDisplayMetrics().density;
     protected int alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
 
-    private String[]         chimes = {"2", "4", "5", "8", "11", "14", "16", "19", "21", "23"};
-    private int              chimeIndex;
-    protected String         currentChime = "2";
+//    Arithmetic problems will start with the
+    protected int               placeValIndex;
+    protected int               chimeIndex;
+    protected String[]          chimes = ASM_CONST.CHIMES[placeValIndex];
+    protected String            currentChime = chimes[chimeIndex];
 
     protected ArrayList<CAsm_Alley> allAlleys = new ArrayList<>();
 
@@ -89,7 +93,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     public void init(Context context, AttributeSet attrs) {
 
         setOrientation(VERTICAL);
-        currentChime = chimes[chimeIndex];
 
 
         //inflate(getContext(), R.layout.asm_container, this);
@@ -126,7 +129,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
 
     public void setVisible(Boolean isVisible) {
-        Log.d("setVisible", isVisible.toString());
         for (int alley = 0; alley < allAlleys.size(); alley++) {
             CAsm_Alley curAlley = allAlleys.get(alley);
             CAsm_DotBag curDB = curAlley.getDotBag();
@@ -233,8 +235,18 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         currImage = data.image;
         corValue = numbers[numbers.length - 1];
         operation = data.operation;
+//        setChime(operation);
 
     }
+//  Todo: Bring back the mechanics
+//    private void setChime(String operation) {
+//        if (operation.equals("+")) {
+//            chimeIndex = 0;
+//            currentChime = chimes[chimeIndex];
+//        } else if (operation.equals("-")){
+//
+//        }
+//    }
 
     private void setMechanics() {
 
@@ -290,9 +302,25 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     }
 
     public void nextChime() {
-        chimeIndex = chimeIndex + 1;
-        currentChime = chimes[chimeIndex % 10];
+        chimeIndex++;
+        chimes = ASM_CONST.CHIMES[placeValIndex % 4];
+        currentChime = chimes[chimeIndex % chimes.length];
     }
+
+    public void nextPlaceValue() {
+        placeValIndex++;
+        chimes = ASM_CONST.CHIMES[placeValIndex % 4];
+        currentChime = chimes[chimeIndex % chimes.length];
+    }
+
+    public void resetChime() {
+        chimeIndex = -1;
+    }
+
+    public void resetPlaceValue() {
+        placeValIndex = -1;
+    }
+
 
     private void delAlley() {
 

@@ -169,8 +169,7 @@
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "cmd": "WAIT"},
-            {"type": "AUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{TestChimes}}.mp3", "repeat":false, "volume": ".9", "mode":"event", "features": ""}
+            {"type": "COMMAND", "cmd": "WAIT"}
           ]
         },
         // NOTES:
@@ -273,6 +272,7 @@
         "PAUSE":{"type": "COMMAND", "cmd": "WAIT" },
 
         //FINGERWRITING ADDITIONS
+        "PLAY_CHIME": {"type": "AUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{TestChimes}}.mp3", "repeat":false, "volume": ".9", "mode":"event", "features": ""},
 
         "FW_DISABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "FALSE:Boolean","features":""},
         //disable FingerWriting

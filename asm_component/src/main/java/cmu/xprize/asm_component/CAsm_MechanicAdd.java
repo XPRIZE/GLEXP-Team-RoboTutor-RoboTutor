@@ -3,6 +3,7 @@ package cmu.xprize.asm_component;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -49,6 +50,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
         if (clickedDot != null) {
             animateAdd(clickedDot, alleyNum);
+            Log.d("File Name", "Played");
             parent.nextChime();
         }
 
