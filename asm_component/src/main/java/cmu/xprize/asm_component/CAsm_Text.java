@@ -83,6 +83,7 @@ public class CAsm_Text extends TextView implements IEventListener {
 
         setEnabled(true);
         setBackground(getResources().getDrawable(R.drawable.back));
+        setAlpha(1);
         isWritable = true;
 
     }

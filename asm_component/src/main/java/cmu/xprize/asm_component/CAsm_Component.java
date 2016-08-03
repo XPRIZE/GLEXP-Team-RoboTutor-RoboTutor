@@ -341,18 +341,18 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         }
 
         // now check overhead answer
-        overheadCorrect = true;
         if (overheadVal != null) {
             overheadCorrect = overheadVal.equals(overheadText.getDigit());
 
-            if (!overheadCorrect) {
-                overheadText.setText("");
-            }
-            else {
+            if (overheadCorrect) {
                 mechanics.correctOverheadText();
             }
-
+            else {
+                overheadText.setText("");
+            }
         }
+
+        overheadCorrect = (overheadVal == null); // make sure there is no new overhead val
 
         return (bottomCorrect & overheadCorrect);
 

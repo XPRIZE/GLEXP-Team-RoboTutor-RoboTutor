@@ -25,9 +25,9 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         Integer currValue;
         int totalValue = 0;
 
-        for (int i = 0; i < allAlleys.size(); i++) {
+        for (CAsm_Alley alley: allAlleys) {
 
-            currLayout = allAlleys.get(i).getTextLayout();
+            currLayout = alley.getTextLayout();
             currValue = currLayout.getDigit(parent.digitIndex);
 
             if (currValue != null) {
@@ -59,6 +59,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         int alleyNum = 0;
 
         for (int i = 0; i < allAlleys.size(); i++) {
+
             currBag = allAlleys.get(i).getDotBag();
             if (currBag.getIsClicked()) {
                 clickedBag = currBag;

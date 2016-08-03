@@ -116,6 +116,10 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     public void correctOverheadText() {
         // whenever they put in the right overhead text
+
+        parent.overheadVal = null;
+        parent.overheadText = null;
+
     }
 
 
@@ -150,9 +154,9 @@ public class CAsm_MechanicBase implements IDotMechanics {
         CAsm_TextLayout currTextLayout;
         CAsm_TextLayout clickedTextLayout = null;
 
-        for (int i = 0; i < this.allAlleys.size(); i++) {
+        for (CAsm_Alley alley: allAlleys) {
 
-            currTextLayout = this.allAlleys.get(i).getTextLayout();
+            currTextLayout = alley.getTextLayout();
 
             if (currTextLayout.getIsClicked()) {
                 clickedTextLayout = currTextLayout;
