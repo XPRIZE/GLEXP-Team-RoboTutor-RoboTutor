@@ -67,7 +67,7 @@ public class CAkPlayer extends TextView{
             PercentLayoutHelper.PercentLayoutInfo info = params.getPercentLayoutInfo();
             switch (lane) {
                 case LEFT:
-                    info.leftMarginPercent = 0.25f;
+                    info.leftMarginPercent = 0.20f;
 
                     //Make sure fishTail animation is finished
                     if(getCompoundDrawables()[1] != fishTail)
@@ -75,13 +75,13 @@ public class CAkPlayer extends TextView{
                             null, null);
                     break;
                 case MID:
-                    info.leftMarginPercent = 0.45f;
+                    info.leftMarginPercent = 0.40f;
                     if(getCompoundDrawables()[1] != fishTail)
                         setCompoundDrawables(null, car_mid,
                             null, null);
                     break;
                 case RIGHT:
-                    info.leftMarginPercent = 0.65f;
+                    info.leftMarginPercent = 0.60f;
                     if(getCompoundDrawables()[1] != fishTail)
                         setCompoundDrawables(null, car_right,
                             null, null);

@@ -197,7 +197,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         final CAkQuestionBoard questionBoard = this.questionBoard; //new CAkQuestionBoard(mContext);
         final PercentRelativeLayout percentLayout = (PercentRelativeLayout) getChildAt(0);
 
-        int s = extraSpeed * 300;
+        int s = extraSpeed * 400;
 
         LayoutParams params = new LayoutParams(360, 80);
         params.addRule(CENTER_HORIZONTAL);
@@ -235,7 +235,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     }
 
     public void postFinishLine() {
-        int s = extraSpeed * 300;
+        int s = extraSpeed * 400;
         final PercentRelativeLayout percentLayout = (PercentRelativeLayout) getChildAt(0);
 
         final ImageView finishLine = new ImageView(mContext);

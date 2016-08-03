@@ -265,6 +265,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     }
 
     protected void onSpeedChange(int speed) {
+        int s = speed * 400;
         for(int i = 0; i < ongoingAnimator.size(); i++) {
             Animator animator = ongoingAnimator.get(i);
             if(animator.getClass() == AnimatorSet.class) {
@@ -274,7 +275,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                 for(int j = 0; j < list.size(); j++) {
                     ObjectAnimator objectAnimator = (ObjectAnimator) list.get(j);
                     float fraction = objectAnimator.getAnimatedFraction();
-                    objectAnimator.setDuration(5000 - 300 * speed);
+                    objectAnimator.setDuration(5000 - s);
                 }
                 set.resume();
             }
@@ -301,7 +302,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
             long elapseLeft = (System.nanoTime() - sidewalkLeftTime) / 1000000;
             long elapse = (System.nanoTime() - questionTime) / 1000000;
 
-            int s = extraSpeed * 300;
+            int s = extraSpeed * 400;
 
             final PercentRelativeLayout percentLayout = (PercentRelativeLayout) getChildAt(0);
 
