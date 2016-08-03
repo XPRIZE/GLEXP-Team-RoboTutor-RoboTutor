@@ -29,25 +29,21 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     @Override
     public void nextDigit() {
 
+        // TODO: MAKE READABLE
+
         previouslyBorrowed = willBorrow;
         willBorrow = false;
         dotBagBorrowed = false;
 
-        minuendIndex = (previouslyBorrowed)?overheadIndex:firstBagIndex;
+        minuendIndex = calcMinuendIndex();
 
         if (previouslyBorrowed) {
             CAsm_Text borrowedText = allAlleys.get(minuendIndex+1).getTextLayout().getText(parent.digitIndex);
             borrowedText.setStruck(true);
         }
 
+
         super.nextDigit();
-
-        CAsm_DotBag currBag;
-
-        for (int i = 0; i < minuendIndex; i++) {
-            currBag = allAlleys.get(i).getDotBag();
-            currBag.setDrawBorder(false);
-        }
 
         Integer minuend, subtrahend;
 
@@ -77,27 +73,23 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     @Override
     public void preClickSetup() {
 
-        int extraIndex;
+        CAsm_DotBag currBag;
 
-        if (previouslyBorrowed) {
-            minuendIndex = overheadIndex;
-            extraIndex = firstBagIndex;
-        } else {
-            minuendIndex = firstBagIndex;
-            extraIndex = overheadIndex;
+        for (int i = 0; i < allAlleys.size(); i++) {
+
+            currBag = allAlleys.get(i).getDotBag();
+
+            if (i != minuendIndex & i!= secondBagIndex) {
+                currBag.setCols(0);
+                currBag.setDrawBorder(false);
+            }
+            else{
+                currBag.setDrawBorder(true);
+            }
         }
 
-        CAsm_DotBag minuendBag = allAlleys.get(minuendIndex).getDotBag();
-        minuendBag.setDrawBorder(true);
-
-        CAsm_DotBag extraBag = allAlleys.get(extraIndex).getDotBag();
-        extraBag.setCols(0);
-        extraBag.setDrawBorder(false);
-
-        CAsm_DotBag resultDotBag = allAlleys.get(resultIndex).getDotBag();
-        resultDotBag.setDrawBorder(false);
-
         // right align
+        CAsm_DotBag minuendBag = allAlleys.get(minuendIndex).getDotBag();
         CAsm_DotBag secondDotBag = allAlleys.get(secondBagIndex).getDotBag();
 
         dotOffset = (minuendBag.getCols()-secondDotBag.getCols());
@@ -240,6 +232,8 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
     private void borrow() {
 
+        // TODO: MAKE READABLE
+
         dotBagBorrowed = true;
         int borrowIndex = minuendIndex-1;
 
@@ -335,6 +329,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         if (clickedText != null && clickedText.getIsBorrowable()) {
             clickedText.reset();
+            clickedText.setStruck(true);
             parent.overheadText.setResult();
         }
 
@@ -352,9 +347,43 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         else {
             digitBorrowingIndex +=1;
+            farBorrowing();
             makeTextBorrowable(digitBorrowingIndex, overheadIndex);
+
         }
 
+    }
+
+    private void farBorrowing() {
+
+        CAsm_TextLayout firstBagLayout = allAlleys.get(firstBagIndex).getTextLayout();
+        CAsm_Text origText = firstBagLayout.getText(digitBorrowingIndex);
+        origText.setStruck(true);
+
+        CAsm_TextLayout updatedLayout = allAlleys.get(firstBagIndex-1).getTextLayout();
+        CAsm_Text updatedText = updatedLayout.getText(digitBorrowingIndex);
+        updatedText.setText(String.valueOf(10 + origText.getDigit()));
+
+    }
+
+    private int calcMinuendIndex() {
+
+        if (previouslyBorrowed) {
+            if (allAlleys.get(overheadIndex).getTextLayout().getText(parent.digitIndex).getIsStruck()) {
+                return animatorIndex;
+            }
+            else {
+                return overheadIndex;
+            }
+        }
+        else {
+            if (allAlleys.get(firstBagIndex).getTextLayout().getText(parent.digitIndex).getIsStruck()) {
+               return overheadIndex;
+            }
+            else {
+                return firstBagIndex;
+            }
+        }
     }
 
 }

@@ -96,13 +96,20 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
         CAsm_Text clickedText = clickedTextLayout.findClickedText();
 
-        if (clickedText != null && clickedText.isWritable) { //TODO: Decide whether this is private.
-            parent.updateText(clickedText);
-        } else {
-            parent.exitWrite();
-            clickedTextLayout.setIsClicked(true);
-            clickedText.setIsClicked(true);
+        if (clickedText != null) {
+
+            if (clickedText.isWritable) {
+                parent.updateText(clickedText);
+            } else {
+                clickedTextLayout.setIsClicked(true);
+                clickedText.setIsClicked(true);
+            }
         }
+
+        else {
+            parent.exitWrite();
+        }
+
     }
 
     public String getOperation() {return operation;}
