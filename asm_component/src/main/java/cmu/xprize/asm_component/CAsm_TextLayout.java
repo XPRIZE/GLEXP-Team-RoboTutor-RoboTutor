@@ -248,14 +248,7 @@ public class CAsm_TextLayout extends LinearLayout {
     public Integer getDigit(int index) {
 
         CAsm_Text t = (CAsm_Text) getChildAt(index);
-        String input = t.getText().toString();
-
-        if (input.equals("") || input.equals(operation)) {
-            return null;
-        }
-        else {
-            return Integer.parseInt(input);
-        }
+        return t.getDigit();
 
     }
 
@@ -265,6 +258,7 @@ public class CAsm_TextLayout extends LinearLayout {
 
 
     public boolean getIsClicked() {
+
         if (isClicked) {
             isClicked = false;
             return true;
@@ -272,6 +266,7 @@ public class CAsm_TextLayout extends LinearLayout {
     }
 
     public CAsm_Text findClickedText() {
+
         CAsm_Text currText;
         CAsm_Text clickedText;
         for (int i = 0; i < getChildCount(); i++) {

@@ -20,6 +20,13 @@ public class CAsm_MechanicBase implements IDotMechanics {
     float scale;
     float translationX;
 
+    // defined alley indices since there will always be a fixed number
+    protected int animatorIndex = 0;
+    protected int overheadIndex = 1;
+    protected int firstBagIndex = 2;
+    protected int secondBagIndex = 3;
+    protected int resultIndex = 4;
+
     static final String TAG = "CAsm_MechanicBase";
 
     protected void init(CAsm_Component parent) {
@@ -51,8 +58,9 @@ public class CAsm_MechanicBase implements IDotMechanics {
             preClickSetup();
         }
 
-        parent.overheadIndex = null;
+        parent.overheadText = null;
         parent.overheadVal = null;
+        resultIndex = allAlleys.size()-1;
 
         highlightDigits();
 
@@ -79,17 +87,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     public void handleClick() {
 
-        CAsm_TextLayout currTextLayout;
-        CAsm_TextLayout clickedTextLayout = null;
-
-        for (int i = 0; i < this.allAlleys.size(); i++) {
-
-            currTextLayout = this.allAlleys.get(i).getTextLayout();
-            if (currTextLayout.getIsClicked()) {
-                clickedTextLayout = currTextLayout;
-                break;
-            }
-        }
+        CAsm_TextLayout clickedTextLayout = findClickedTextLayout();
 
         if (clickedTextLayout == null) {
             parent.exitWrite();
@@ -98,16 +96,29 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
         CAsm_Text clickedText = clickedTextLayout.findClickedText();
 
-        if (clickedText != null && clickedText.isWritable) { //TODO: Decide whether this is private.
-            parent.updateText(clickedText);
-        } else {
+        if (clickedText != null) {
+
+            if (clickedText.isWritable) {
+                parent.updateText(clickedText);
+            } else {
+                clickedTextLayout.setIsClicked(true);
+                clickedText.setIsClicked(true);
+            }
+        }
+
+        else {
             parent.exitWrite();
         }
+
     }
 
     public String getOperation() {return operation;}
 
-    
+    public void correctOverheadText() {
+        // whenever they put in the right overhead text
+    }
+
+
     /* reset any changes made by mechanics */
     public void reset() {
 
@@ -131,6 +142,25 @@ public class CAsm_MechanicBase implements IDotMechanics {
             viewGroup.setClipToPadding(enabled);
             v = viewGroup;
         }
+    }
+
+    protected CAsm_TextLayout findClickedTextLayout() {
+
+        CAsm_TextLayout currTextLayout;
+        CAsm_TextLayout clickedTextLayout = null;
+
+        for (int i = 0; i < this.allAlleys.size(); i++) {
+
+            currTextLayout = this.allAlleys.get(i).getTextLayout();
+
+            if (currTextLayout.getIsClicked()) {
+                clickedTextLayout = currTextLayout;
+                break;
+            }
+        }
+
+        return clickedTextLayout;
+
     }
 
 
