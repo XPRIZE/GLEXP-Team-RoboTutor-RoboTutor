@@ -54,6 +54,8 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         super(context, attrs, defStyleAttr);
     }
 
+
+
     @Override
     public void init(Context context, AttributeSet attrs) {
         super.init(context, attrs);
@@ -195,7 +197,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         final CAkQuestionBoard questionBoard = this.questionBoard; //new CAkQuestionBoard(mContext);
         final PercentRelativeLayout percentLayout = (PercentRelativeLayout) getChildAt(0);
 
-        int s = extraSpeed * 500;
+        int s = extraSpeed * 300;
 
         LayoutParams params = new LayoutParams(360, 80);
         params.addRule(CENTER_HORIZONTAL);
@@ -233,7 +235,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     }
 
     public void postFinishLine() {
-        int s = extraSpeed * 500;
+        int s = extraSpeed * 300;
         final PercentRelativeLayout percentLayout = (PercentRelativeLayout) getChildAt(0);
 
         final ImageView finishLine = new ImageView(mContext);
@@ -287,6 +289,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         isRunning = false;
         for(Animator animator : ongoingAnimator)
             animator.pause();
+
     }
 
     public void resume() {
@@ -297,15 +300,15 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     public void increaseScore() {
         mask.setVisibility(VISIBLE);
-        Animator animator = scoreboard.reward(player.getX(), player.getY() - player.getHeight());
+        Animator animator = scoreboard.reward(player.getX(), player.getY() - player.getHeight(), "+" + extraSpeed);
         LayoutParams params =  (LayoutParams) getLayoutParams();
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 scoreboard.removeTextView();
-                scoreboard.increase();
-                player.score += 1;
+                scoreboard.increase(extraSpeed);
+                player.score += extraSpeed;
 
                 new AnimateScoreboard().execute(scoreboard);
             }
@@ -315,14 +318,14 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     public void decreaseScore() {
         mask.setVisibility(VISIBLE);
-        Animator animator = scoreboard.penalty(player.getX(), player.getY() - player.getHeight());
+        Animator animator = scoreboard.reward(player.getX(), player.getY() - player.getHeight(), "-" + extraSpeed);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 scoreboard.removeTextView();
-                scoreboard.decrease();
-                player.score -= 1;
+                scoreboard.decrease(extraSpeed);
+                player.score -= extraSpeed;
                 new AnimateScoreboard().execute(scoreboard);
             }
         });
@@ -333,7 +336,17 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         @Override
         protected CSb_Scoreboard doInBackground(CSb_Scoreboard... params) {
             CSb_Scoreboard scoreboard = params[0];
-            while(scoreboard.isAnimating);
+            synchronized (scoreboard.lock) {
+                while(!scoreboard.isAnimating){
+                    try {
+                        scoreboard.lock.wait();
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                scoreboard.isAnimating = false;
+            }
+
             return scoreboard;
         }
 

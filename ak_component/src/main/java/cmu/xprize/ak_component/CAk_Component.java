@@ -2,9 +2,9 @@ package cmu.xprize.ak_component;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.AlertDialog;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.PointF;
 import android.media.AudioManager;
@@ -104,6 +104,8 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     protected CAkQuestionBoard stopQuestionBoard;
     public int errornum=0;
 
+
+
     public CAk_Component(Context context) {
         super(context);
         init(context, null);
@@ -162,10 +164,11 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
             int resID = getResources().getIdentifier("button" + i, "id",
                     "cmu.xprize.robotutor");
             speedometerButton[i] = (Button) findViewById(resID);
-            final int speed = i - 5;
+            final int speed = i;
             speedometerButton[i].setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    onSpeedChange(speed);
                     extraSpeed = speed;
                 }
             });
@@ -189,6 +192,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
         random = new Random();
         ongoingAnimator=new ArrayList<>();
+
 
         isFirstInstall=true;
         if(isFirstInstall==false)
@@ -260,6 +264,24 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     public void UpdateValue(int value) {
     }
 
+    protected void onSpeedChange(int speed) {
+        for(int i = 0; i < ongoingAnimator.size(); i++) {
+            Animator animator = ongoingAnimator.get(i);
+            if(animator.getClass() == AnimatorSet.class) {
+                AnimatorSet set = (AnimatorSet)animator;
+                set.pause();
+                ArrayList<Animator> list = set.getChildAnimations();
+                for(int j = 0; j < list.size(); j++) {
+                    ObjectAnimator objectAnimator = (ObjectAnimator) list.get(j);
+                    float fraction = objectAnimator.getAnimatedFraction();
+                    objectAnimator.setDuration(5000 - 300 * speed);
+                }
+                set.resume();
+            }
+        }
+    }
+
+
     /**
      * Main game loop runnable
      *
@@ -279,7 +301,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
             long elapseLeft = (System.nanoTime() - sidewalkLeftTime) / 1000000;
             long elapse = (System.nanoTime() - questionTime) / 1000000;
 
-            int s = extraSpeed * 500;
+            int s = extraSpeed * 300;
 
             final PercentRelativeLayout percentLayout = (PercentRelativeLayout) getChildAt(0);
 
@@ -337,19 +359,21 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                 percentLayout.addView(sidewalkStuff);
                 scoreboard.bringToFront();
 
-                final Animator sidewalkAnimator1 = CAnimatorUtil.configTranslate(sidewalkStuff,
+                final Animator sidewalkAnimator = CAnimatorUtil.configTranslate(sidewalkStuff,
                         5000-s, 0, sidewalkLeftPoints[0], sidewalkLeftPoints[1]
                 );
-                ongoingAnimator.add(sidewalkAnimator1);
-                sidewalkAnimator1.addListener(new AnimatorListenerAdapter() {
+                ongoingAnimator.add(sidewalkAnimator);
+
+
+                sidewalkAnimator.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
                         percentLayout.removeView(sidewalkStuff);
-                        ongoingAnimator.remove(sidewalkAnimator1);
+                        ongoingAnimator.remove(sidewalkAnimator);
                     }
                 });
-                sidewalkAnimator1.start();
+                sidewalkAnimator.start();
 
                 sidewalkLeftTime = System.nanoTime();
             }
@@ -357,36 +381,6 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
             mainHandler.postDelayed(gameRunnable, 400);
         }
     };
-
-
-    public void dialog()
-    {
-        AlertDialog.Builder builder=new AlertDialog.Builder(mContext);
-        builder.setMessage("Do you need help?");
-        builder.setTitle("Help");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //show finger tutor
-                errornum = 0;
-                player.lane= CAkPlayer.Lane.MID;
-                isFirstInstall=true;
-                teachFinger.finishTeaching=false;
-                teachFinger.setVisibility(VISIBLE);
-                teachFinger.reset(mContext,null);
-                flag=true;
-                dialogInterface.dismiss();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                errornum = 0;
-                dialogInterface.dismiss();
-            }
-        });
-        builder.create().show();
-    }
 
 
     @Override
