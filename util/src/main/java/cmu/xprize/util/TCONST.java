@@ -66,6 +66,7 @@ public class TCONST {
     public static final String EVENT_TUTORGRAPH = "Tutor Graph Event";
     public static final String AUDIO_REF        = "audio_ref";
     public static final String SET_BANNER_COLOR = "SET_BANNER_COLOR";
+    public static final String LAST_ATTEMPT     = "FTR_LASTATTEMPT";
 
 
     //*** Reading Tutor compatible string combinations
