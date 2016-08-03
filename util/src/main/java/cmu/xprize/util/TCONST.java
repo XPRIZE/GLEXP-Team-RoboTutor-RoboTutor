@@ -28,10 +28,10 @@ import java.util.HashMap;
 
 public class TCONST {
 
-    public static final String COMMAND = "COMMAND";
-    public static final String MODULE = "MODULE";
-    public static final String NODE = "NODE";
-    public static final String CONDITION = "CONDITION";
+    public static final String COMMAND      = "COMMAND";
+    public static final String MODULE       = "MODULE";
+    public static final String NODE         = "NODE";
+    public static final String CONDITION    = "CONDITION";
 
 
     public static final String NUMDATA_HEADER   = "{\n" + "\"dataSource\": ";
@@ -68,6 +68,18 @@ public class TCONST {
     public static final String SET_BANNER_COLOR = "SET_BANNER_COLOR";
     public static final String LAST_ATTEMPT     = "FTR_LASTATTEMPT";
 
+
+    public static final String FONT_FOLDER      = "fonts/";
+    public static final String SHOWICONS        = "SHOWICONS";
+    public static final String SHOWNUM          = "SHOWNUM";
+
+    static public HashMap<String, String> fontMap = new HashMap<String, String>();
+
+    static {
+        fontMap.put("grundschrift",         FONT_FOLDER + "Grundschrift.ttf");
+        fontMap.put("grundschrift_kontur",  FONT_FOLDER + "Grundschrift-Kontur.otf");
+        fontMap.put("grundschrift_punkt",   FONT_FOLDER + "Grundschrift-Punkt.otf");
+    }
 
     //*** Reading Tutor compatible string combinations
 

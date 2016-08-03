@@ -23,33 +23,33 @@
   "bgColors": ["#D9FFFF","#b9FFb9"],
 
   "dataSource": [
-    {
-      "type":"Sm_Class",
-      "description":"Akira",
-      //"background":"#D9FFFF",
-      "data": [
-        { "type":"Sm_Data", "datasource":"", "intent": "akira", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Akira"}
-      ]
-    },
-
-    {
-      "type":"Sm_Class",
-      "description":"add_subtract",
-      //"background":"#D9FFFF",
-      "data": [
-        { "type":"Sm_Data", "datasource":"", "intent": "add_subtract", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Add/Subtract"}
-      ]
-    },
-
+//    {
+//      "type":"Sm_Class",
+//      "description":"Akira",
+//      //"background":"#D9FFFF",
+//      "data": [
+//        { "type":"Sm_Data", "datasource":"", "intent": "akira", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Akira"}
+//      ]
+//    },
+//
+//    {
+//      "type":"Sm_Class",
+//      "description":"add_subtract",
+//      //"background":"#D9FFFF",
+//      "data": [
+//        { "type":"Sm_Data", "datasource":"", "intent": "add_subtract", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Add/Subtract"}
+//      ]
+//    },
+//
     {
       "type":"Sm_Class",
       "description":"numeric",
       //"background":"#D9FFFF",
       "data": [
-          { "type":"Sm_Data", "datasource":"", "intent": "digit_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy"},
-          { "type":"Sm_Data", "datasource":"", "intent": "digit_dictation", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Dictation"},
-          { "type":"Sm_Data", "datasource":"", "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word Copy"}
-        ]
+        { "type":"Sm_Data", "datasource":"", "intent": "digit_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy"},
+        { "type":"Sm_Data", "datasource":"", "intent": "digit_dictation", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Dictation"}
+//        { "type":"Sm_Data", "datasource":"", "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word Copy"}
+      ]
     },
 
     {
@@ -57,8 +57,8 @@
       "description":"numeric",
       //"background":"#b9FFb9",
       "data": [
-        { "type":"Sm_Data", "datasource":"", "intent": "number_speaking", "intentdata":"native", "buttontype":"text" , "buttonvalue":"number speaking"},
-        { "type":"Sm_Data", "datasource":"", "intent": "missing_number", "intentdata":"native", "buttontype":"text" , "buttonvalue":"missing number"}
+        { "type":"Sm_Data", "datasource":"", "intent": "number_speaking", "intentdata":"native", "buttontype":"text" , "buttonvalue":"number speaking"}
+//        { "type":"Sm_Data", "datasource":"", "intent": "missing_number", "intentdata":"native", "buttontype":"text" , "buttonvalue":"missing number"}
       ]
     },
 
