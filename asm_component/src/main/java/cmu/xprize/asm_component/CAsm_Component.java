@@ -2,14 +2,13 @@ package cmu.xprize.asm_component;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 
 import org.json.JSONObject;
 
@@ -22,8 +21,6 @@ import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
-import cmu.xprize.util.TCONST;
-
 
 
 public class CAsm_Component extends LinearLayout implements ILoadableObject, IEventListener {
@@ -43,8 +40,12 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     protected Integer corValue;
     protected String operation;
     protected String currImage;
+
     private boolean isVisible;
-    protected boolean isNew = true;
+    protected boolean dotbagsVisible = true;
+
+    protected Integer overheadVal = null;
+    protected CAsm_Text overheadText = null;
 
     protected int numAlleys = 0;
 
@@ -66,8 +67,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     // json loadable
 
     //Writing
-    private Writing_Popup mPopup;
-    private Write_Text currDigit;
+    private CAsm_Popup mPopup;
+    private CAsm_Text currDigit;
 
     public CAsm_Data[] dataSource;
 
@@ -117,7 +118,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         //
         //Scontent = (CAsm_LetterBoxLayout) findViewById(R.id.Scontent);
         //Scontent.setOnClickListener(this);
-        mPopup = new Writing_Popup(mContext);
+        mPopup = new CAsm_Popup(mContext);
 
     }
 
@@ -129,15 +130,27 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
 
     public void setVisible(Boolean isVisible) {
+
         for (int alley = 0; alley < allAlleys.size(); alley++) {
             CAsm_Alley curAlley = allAlleys.get(alley);
             CAsm_DotBag curDB = curAlley.getDotBag();
-            if (isVisible) {
-                curDB.setVisibility(VISIBLE);
-            } else {
-                curDB.setVisibility(INVISIBLE);
+
+                if (isVisible) {
+                    curDB.setVisibility(VISIBLE);
+                    isVisible = true;
+
+                } else {
+                    curDB.setVisibility(INVISIBLE);
+                    isVisible = false;
+                }
             }
-        }
+
+            if (isVisible && !dotbagsVisible) {
+                mechanics.preClickSetup();
+            }
+
+            dotbagsVisible = isVisible;
+
     }
 
 
@@ -345,13 +358,56 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     public boolean isDigitCorrect() {
 
-        boolean correct = (corDigit.equals(allAlleys.get(numAlleys - 1).getCurrentDigit()));
+        boolean overheadCorrect, bottomCorrect;
 
-        if (!correct) {
-            allAlleys.get(numAlleys-1).getText().resetValue(digitIndex); // reset answer text
+        // first check bottom answer
+        CAsm_TextLayout textLayout = allAlleys.get(numAlleys - 1).getTextLayout();
+        bottomCorrect = corDigit.equals(textLayout.getDigit(digitIndex));
+
+        if (!bottomCorrect) {
+            textLayout.getText(digitIndex).setText("");
         }
-        return correct;
+
+        // now check overhead answer
+        if (overheadVal != null) {
+            overheadCorrect = overheadVal.equals(overheadText.getDigit());
+
+            if (overheadCorrect) {
+                mechanics.correctOverheadText();
+            }
+            else {
+                overheadText.setText("");
+            }
+        }
+
+        overheadCorrect = (overheadVal == null); // make sure there is no new overhead val
+
+        return (bottomCorrect & overheadCorrect);
+
     }
+
+    public void updateText(CAsm_Text t) {
+
+        ArrayList<IEventListener> listeners = new ArrayList<>();
+        listeners.add(t);
+        listeners.add(this);
+
+        mPopup.showAtLocation(this, Gravity.LEFT, 10, 10);
+        mPopup.enable(true,listeners);
+        mPopup.update(t,50,50,300,300);
+
+    }
+
+    public void exitWrite() {
+        mPopup.enable(false,null);
+        mPopup.dismiss();
+    }
+
+    public void onEvent(IEvent event) {
+        mPopup.enable(false,null);
+        mPopup.dismiss();
+    }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -376,29 +432,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     }
 
-    public void enterNumber(Write_Text t) {
-        //CAsm_Text c = (CAsm_Text)t.getParent();
-        mPopup.showAtLocation(this, Gravity.LEFT, 10, 10);
-        //mPopup.update(50, 50, 300, 300);
-        IEventListener text = (IEventListener)t;
-        IEventListener component = (IEventListener)this;
-        ArrayList<IEventListener> listeners = new ArrayList<>();
-        listeners.add(text);
-        listeners.add(component);
-        mPopup.enable(true,listeners);
-        mPopup.update(t,50,50,300,300);
-        //currDigit = t;
-    }
-
-    public void exitWrite() {
-        mPopup.enable(false,null);
-        mPopup.dismiss();
-    }
-
-    public void onEvent(IEvent event) {
-        mPopup.enable(false,null);
-        mPopup.dismiss();
-    }
 
 
 }

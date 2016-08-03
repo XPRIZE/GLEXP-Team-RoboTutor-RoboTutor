@@ -9,7 +9,7 @@ import android.widget.TableRow;
 public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMechanics {
 
     static final String TAG = "CAsm_MechanicMultiply";
-    public CAsm_MechanicMultiply(CAsm_Component parent) {super.init(parent);}
+    public CAsm_MechanicMultiply(CAsm_Component mComponent) {super.init(mComponent);}
 
     protected String operation = "x";
 
@@ -47,10 +47,10 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         }
 
         if (resultRows == 0) {
-            dy = parent.alleyMargin + secondBag.getHeight();
+            dy = mComponent.alleyMargin + secondBag.getHeight();
         }
         else {
-            dy = secondBag.getHeight() + parent.alleyMargin + resultBag.getHeight();
+            dy = secondBag.getHeight() + mComponent.alleyMargin + resultBag.getHeight();
         }
 
         final TableRow newRow = resultBag.getRow(resultRows);

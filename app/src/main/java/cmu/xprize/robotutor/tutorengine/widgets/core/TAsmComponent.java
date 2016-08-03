@@ -32,7 +32,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
     private CTutor           mTutor;
     private CObjectDelegate  mSceneObject;
 
-    static final String TAG = "TArComponent";
+    static final String TAG = "TAsmComponent";
 
     public TAsmComponent(Context context) {
         super(context);
