@@ -109,6 +109,8 @@ public class CAsm_DotBag extends TableLayout {
         }
 
         this.rows = _rows;
+
+        resetDotTranslations();
         resetBounds();
 
     }
@@ -144,6 +146,8 @@ public class CAsm_DotBag extends TableLayout {
         }
 
         this.cols = _cols;
+
+        resetDotTranslations();
         resetBounds();
 
     }
@@ -182,34 +186,6 @@ public class CAsm_DotBag extends TableLayout {
         resetBounds();
 
         return dot;
-    }
-
-    public void removeDots(int startCol, int endCol){
-
-        TableRow currTableRow;
-        int numChildren;
-
-        for (int i = 0; i < allTableRows.size(); i++) {
-            currTableRow = allTableRows.get(i);
-            for (int j = endCol; j >= startCol; j--){
-                CAsm_Dot dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
-                removeDot(dot);
-            }
-        }
-
-        // now reset dot col index
-
-        for (int i = 0; i < allTableRows.size(); i++) {
-            currTableRow = allTableRows.get(i);
-            numChildren = currTableRow.getVirtualChildCount();
-            for (int j = 0; j < numChildren; j++){
-                CAsm_Dot dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
-                dot.setCol(j);
-                dot.setTranslationX(0);
-
-            }
-        }
-
     }
 
 
@@ -475,14 +451,34 @@ public class CAsm_DotBag extends TableLayout {
             for (int j = 0; j < currTableRow.getVirtualChildCount(); j++){
                 dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
                 if (!dot.getIsHollow()) {
+                    this.isHollow = false;
                     return false;
                 }
             }
         }
 
+        this.isHollow = true;
         return true;
 
     }
+
+    private void resetDotTranslations() {
+
+        TableRow currTableRow;
+        CAsm_Dot dot;
+
+        for (int i = 0; i < allTableRows.size(); i++) {
+            currTableRow = allTableRows.get(i);
+
+            for (int j = 0; j < currTableRow.getVirtualChildCount(); j++){
+                dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
+                dot.setTranslationX(0);
+                dot.setTranslationY(0);
+
+            }
+        }
+    }
+
 
 
 

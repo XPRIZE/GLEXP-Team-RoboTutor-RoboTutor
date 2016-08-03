@@ -192,7 +192,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                resultBag.removeDots(1, 9);
+                resultBag.setCols(resultBag.getCols()-9);
 
             }
 
@@ -243,7 +243,12 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
             @Override
             public void onAnimationEnd(Animator animation) {
 
+                // reset dotbag
+                int targetCols = resultBag.getCols()-1;
                 resultBag.setCols(0);
+                resultBag.setRows(1);
+                resultBag.setCols(targetCols);
+
                 CAsm_TextLayout carryLayout = allAlleys.get(overheadIndex).getTextLayout();
                 CAsm_Text carryText = carryLayout.getText(parent.digitIndex-1);
                 Integer currCarryNum = carryLayout.getDigit(parent.digitIndex-1);

@@ -213,7 +213,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                changingBag.removeDots(numVisibleDots, numInvisibleDots + numVisibleDots - 1);
+                changingBag.setCols(numVisibleDots);
             }
 
             @Override
@@ -264,7 +264,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         borrowBag.setCols(10);
         borrowBag.setTranslationX(0);
 
-        resultDotBag.removeDots(0, resultDotBag.getCols()-1);
+        resultDotBag.setCols(0);
         resultDotBag.setTranslationX(0);
 
         dotOffset = borrowBag.getCols() - secondDotBag.getCols();
