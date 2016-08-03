@@ -8,11 +8,27 @@
       "title": "Word copying tutor",
       "COMMENT": "This tutor is designed for copying words.",
       "version": "1.0.0",
-      "rootnode": "INTRO_STATE",
+      "rootnode": "TEMP_STATE",
 
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        "TEMP_STATE": {
+          "type": "NODE",
+          "COMMENT": "Intro Clip",
+          "maptype":"actionMap",
+          "mapname": "WAIT",
+          "preenter":[],
+          "preexit" :[],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "NEWWORD"
+            }
+          ]
+        },
+
 
         "INTRO_STATE": {
           "type": "NODE",
@@ -55,7 +71,6 @@
             {"constraint":"FTR_WRONG","edge":"WRONG"},
             //{"constraint":"","edge":"UNRECOGNIZED"}
 	        {"constraint":"","edge":"UNRECOGNIZED"}
-            //{"constraint":"","edge":"HESITATION"}
           ]
         },
 
@@ -100,19 +115,6 @@
             {"constraint":"","edge":"USERINPUT"}
           ]
         },
-
-//        "HESITATION":{
-//          "COMMENT":"When the user doesn't write anything...",
-//          "type":"node",
-//          "maptype":"moduleMap",
-//          "mapname": "PLAYHESITATION",
-//          "preenter":[],
-//          "preexit" :[],
-//          "edges":
-//          [
-//            {"constraint":"","edge":"USERINPUT"}
-//          ]
-//        },
 
         "EXITCLIP1": {
           "COMMENT":"Exit Clip for ALL_CORRECT",
@@ -160,7 +162,7 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some words.mp3", "mode":"flow", "features": ""}
+//            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some words.mp3", "mode":"flow", "features": ""}
           ]
         },
 
@@ -225,16 +227,6 @@
           ]
         },
 
-//        "PLAYHESITATION":{
-//          "type": "MODULE",
-//          "reuse":true,
-//          "COMMENT": "TBD",
-//          "tracks": [
-//            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3", "mode":"event", "features": ""},
-//            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"event", "features": ""} //the stimulus digit
-//          ]
-//        },
-
         "PLAYEXIT1":{
           "type": "MODULE",
           "reuse":true,
@@ -255,15 +247,6 @@
           ]
         }
 
-//        "PLAYCORRECT": {
-//          "type": "MODULE",
-//          "reuse":true,
-//          "COMMENT": "TBD",
-//          "tracks": [
-//            {"type": "AUDIO", "command": "PLAY", "soundsource": "good.mp3", "features": ""}
-//          ]
-//        }
-//
       },
 
       "actionMap": {
@@ -282,8 +265,6 @@
         //set the waiting time limit as 10 seconds
 
         "CANCEL_REMINDER": {"type": "TIMER", "id":"ReminderTimer", "action":"CANCEL", "features": "" },
-
-        "HESITATION_TRACK": {"type": "TIMELINE", "trackname": "HES_ABS", "features": ""},
 
         "GB_DISABLE":{"type": "COMMAND", "id": "SgoButton", "method": "enable", "parms": "FALSE:Boolean","features":""},
         //disable Go button
@@ -310,7 +291,8 @@
         //remove the stimulus
 
         "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "gotoNextScene"},
-        "NEXT": {"type": "COMMAND", "cmd": "NEXT"  }
+        "NEXT": {"type": "COMMAND", "cmd": "NEXT"  },
+        "WAIT": {"type": "COMMAND", "cmd": "WAIT"  }
       },
 
       "constraintMap": {
