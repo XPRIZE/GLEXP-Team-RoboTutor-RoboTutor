@@ -4,9 +4,9 @@
     {"type" : "CAk_Data", "choices" : ["10", "20"], "answer" : "RIGHT", "playerString" : "60"},
     {"type" : "CAk_Data", "choices" : ["55", "70"], "answer" : "LEFT", "playerString" : "23"},
     {"type" : "CAk_Data", "choices" : ["9"], "answer" : "LEFT", "playerString" : "3+5"},
-    {"type" : "CAk_Data", "choices" : ["4", "6", "7"], "answer" : "LEFT", "playerString" : "9-3"},
-    {"type" : "CAk_Data", "choices" : ["3", "4", "5"], "answer" : "RIGHT", "playerString" : "2+2"},
-    {"type" : "CAk_Data", "choices" : ["A", "B", "C"], "answer" : "MID", "playerString" : "b"},
+    {"type" : "CAk_Data", "choices" : ["4", "5", "6"], "answer" : "RIGHT", "playerString" : "9-3"},
+    {"type" : "CAk_Data", "choices" : ["3", "4", "5"], "answer" : "MID", "playerString" : "2+2"},
+    {"type" : "CAk_Data", "choices" : ["A", "B", "C"], "answer" : "RIGHT", "playerString" : "c"},
     {"type" : "CAk_Data", "choices" : ["d", "e", "f"], "answer" : "LEFT", "playerString" : "D"}
   ]
 }
