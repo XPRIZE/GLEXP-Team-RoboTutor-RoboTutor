@@ -24,7 +24,7 @@
         app:layout_widthPercent="100%"
         app:layout_heightPercent="75%"
         app:layout_marginTopPercent="25%"
-        android:src="@drawable/pavement1"
+        android:src="@drawable/rsz_pavement1"
         android:scaleType="fitXY"
         android:id="@+id/pavement"
         android:layout_width="wrap_content" android:layout_height="wrap_content"/>
