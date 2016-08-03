@@ -3,6 +3,7 @@ package cmu.xprize.asm_component;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -337,7 +338,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         bottomCorrect = corDigit.equals(textLayout.getDigit(digitIndex));
 
         if (!bottomCorrect) {
-            textLayout.getText(digitIndex).setText("");
+            //textLayout.getText(digitIndex).setText("");
+            wrongDigit(textLayout.getText(digitIndex));
         }
 
         // now check overhead answer
@@ -352,27 +354,42 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         }
 
         return (bottomCorrect & overheadCorrect);
+    }
 
+    public void wrongDigit(final CAsm_Text t) {
+            //Indicates that the digit the user entered is wrong w/ red text.
+            //TODO: Switch timer w/ notifying user with prompt to try again.
+            t.setTextColor(Color.RED);
+            Handler h = new Handler();
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    t.setText("");
+                    t.setTextColor(Color.BLACK);
+                }
+            }, 2500);
     }
 
     public void updateText(CAsm_Text t) {
-
-        ArrayList<IEventListener> listeners = new ArrayList<>();
-        listeners.add(t);
-        listeners.add(this);
-
-        mPopup.showAtLocation(this, Gravity.LEFT, 10, 10);
-        mPopup.enable(true,listeners);
-        mPopup.update(t,50,50,300,300);
-
+        if (!mPopup.isActive) {
+            ArrayList<IEventListener> listeners = new ArrayList<>();
+            listeners.add(t);
+            listeners.add(this);
+            mPopup.showAtLocation(this, Gravity.LEFT, 10, 10);
+            mPopup.enable(true, listeners);
+            mPopup.update(t, 50, 50, 300, 300);
+            mPopup.isActive = true;
+        }
     }
 
     public void exitWrite() {
+        mPopup.isActive = false;
         mPopup.enable(false,null);
         mPopup.dismiss();
     }
 
     public void onEvent(IEvent event) {
+        mPopup.isActive = false;
         mPopup.enable(false,null);
         mPopup.dismiss();
     }

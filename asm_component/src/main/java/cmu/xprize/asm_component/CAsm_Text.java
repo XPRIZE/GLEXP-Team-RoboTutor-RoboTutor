@@ -109,6 +109,7 @@ public class CAsm_Text extends TextView implements IEventListener {
     }
 
     public void onEvent(IEvent event) {
+        //Called when user responds through the fingerwriter, to change the text to user's response.
         String response  = (String)event.getString(TCONST.FW_VALUE);
         this.setText(response);
     }

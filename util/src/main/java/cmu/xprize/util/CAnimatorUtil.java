@@ -45,7 +45,6 @@ public class CAnimatorUtil {
         return createFloatAnimator(_tarView, prop, duration, repeat, mode, interpolator, 0, endPts);
     }
 
-
     static private Animator createFloatAnimator(View _tarView, String prop, long duration, int repeat, int mode, TimeInterpolator interpolator, long delay, float... endPts) {
 
         ValueAnimator vAnimator = null;

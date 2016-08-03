@@ -121,7 +121,6 @@ public class CAsm_MechanicBase implements IDotMechanics {
             currBag.setTranslationY(0);
             currBag.setVisibility(View.VISIBLE);
         }
-
     }
 
     // TODO: fix this function - copied from stack overflow

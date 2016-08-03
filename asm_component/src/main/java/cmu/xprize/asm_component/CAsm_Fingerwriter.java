@@ -1,5 +1,9 @@
 package cmu.xprize.asm_component;
 
+/**
+ * Created by dexte on 8/2/2016.
+ */
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -8,10 +12,6 @@ import java.util.ArrayList;
 
 import cmu.xprize.fw_component.CFingerWriter;
 import cmu.xprize.util.IEventListener;
-
-/**
- *
- */
 
 public class CAsm_FingerWriter extends CFingerWriter {
 
@@ -34,8 +34,6 @@ public class CAsm_FingerWriter extends CFingerWriter {
 
         this.setRecognizer("EN_STD_NUM");
         this.mListenerConfigured = true;
-        //TODO: Add Listeners so that they can find when the text is popping up.
-
     }
 
     public void enable(boolean _enable, ArrayList<IEventListener> listeners) {
@@ -57,4 +55,5 @@ public class CAsm_FingerWriter extends CFingerWriter {
     }
 
 }
+
 
