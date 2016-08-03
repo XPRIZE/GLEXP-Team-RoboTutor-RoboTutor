@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
  */
 public class CAsm_Alley extends LinearLayout {
 
-    private CAsm_Text SText;
+    private CAsm_TextLayout SText;
     private CAsm_DotBag SdotBag;
 
     private int digitIndex;
@@ -68,11 +68,15 @@ public class CAsm_Alley extends LinearLayout {
 
         SText.update(id, val, operation, numSlots);
 
+        boolean drawBorder = (id != ASM_CONST.ANIMATOR);
+        SdotBag.setDrawBorder(drawBorder);
+
+
     }
 
     private void createText() {
 
-        SText = new CAsm_Text(getContext());
+        SText = new CAsm_TextLayout(getContext());
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -82,14 +86,13 @@ public class CAsm_Alley extends LinearLayout {
     }
 
     private void createDotBag() {
+        // TODO: figure out why it won't show up unless updated
 
         SdotBag = new CAsm_DotBag(getContext());
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         SdotBag.setLayoutParams(lp);
         addView(SdotBag, 1);
-
-        // TODO: figure out why it won't show up unless updated
 
     }
 
@@ -107,10 +110,13 @@ public class CAsm_Alley extends LinearLayout {
             cols = SText.getDigit(digitIndex);
             cols = (cols != null)?cols:0;
         }
-        SdotBag.update(1, cols, image, clickable);
+
+        SdotBag.setRows(1);
+        SdotBag.setCols(cols);
+        SdotBag.setImage(image);
+        SdotBag.setIsClickable(clickable);
 
     }
-
 
     public Integer getNum() {return SText.getNum();}
 
@@ -118,7 +124,7 @@ public class CAsm_Alley extends LinearLayout {
         return SdotBag;
     }
 
-    public CAsm_Text getText() {return SText;}
+    public CAsm_TextLayout getTextLayout() {return SText;}
 
     public void resetText() {SText.resetAllValues();}
 

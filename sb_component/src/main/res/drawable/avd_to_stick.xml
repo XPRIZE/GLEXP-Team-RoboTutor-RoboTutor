@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/lollipop">
+    <target android:animation="@animator/to_stick_stickpart" android:name="stickpart"/>
+    <target android:animation="@animator/to_stick_circlepart" android:name="circlepart"/>
+</animated-vector>

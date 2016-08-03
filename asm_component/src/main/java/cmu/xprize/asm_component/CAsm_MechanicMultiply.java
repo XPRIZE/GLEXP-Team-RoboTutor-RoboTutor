@@ -27,6 +27,8 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
     @Override
     public void handleClick() {
 
+        super.handleClick();
+
         int dy;
 
         CAsm_DotBag firstBag = allAlleys.get(0).getDotBag();

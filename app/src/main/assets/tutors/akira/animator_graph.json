@@ -17,24 +17,38 @@
         "INTRO_STATE": {
           "type": "NODE",
           "COMMENT": "Intro Clip",
-          "maptype":"actionMap",
+          "maptype":"moduleMap",
           "mapname": "INTRO_STATE_TRACK",
           "preenter": ["SET_DATASOURCE"],
-          "preexit": [
+          "preexit": ["NEXT_DATASET"
           ],
           "edges": [
             {
               "constraint": "",
-              "edge": "USERINPUT"
+              "edge": "POST_QUESTIONBOARD"
             }
           ]
         },
 
-        "USERINPUT": {
+        "POST_QUESTIONBOARD" : {
+          "type" : "NODE",
+          "COMMENT" : "",
+          "maptype": "moduleMap",
+          "mapname" : "POST_QUESTION",
+          "preexit" : [],
+          "edges" : [
+            {
+              "constraint" : "",
+              "edge": "USER_INPUT"
+            }
+          ]
+        },
+
+        "USER_INPUT": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"actionMap",
-          "mapname": "USERINPUT_TRACK",
+          "maptype":"moduleMap",
+          "mapname": "USER_ANSWER",
           "preenter": [
           ],
           "preexit": [
@@ -54,20 +68,19 @@
         "CORRECT": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"actionMap",
-          "mapname": "CORRECT_TRACK",
-          "preenter": [],
-          "preexit": [
-            "GETWORD"
-          ],
+          "maptype":"moduleMap",
+          "mapname": "PLAYCORRECT",
+          "preenter": ["PAUSE"],
+          "preexit": ["RESUME", "NEXT_DATASET"],
           "edges": [
             {
-              "constraint": "FTR_NOWORDS",
-              "edge": "NEXTSCENE"
+              "constraint": "FTR_EOD",
+              "edge": "POSTFINISHLINE"
             },
+
             {
               "constraint": "",
-              "edge": "USERINPUT"
+              "edge": "POST_QUESTIONBOARD"
             }
           ]
         },
@@ -75,28 +88,43 @@
         "WRONG": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"actionMap",
-          "mapname": "WRONG_TRACK",
-          "preenter": [],
-          "preexit": [
-            "GETWORD"
-          ],
+          "maptype":"moduleMap",
+          "mapname": "PLAYWRONG",
+          "preenter": ["PAUSE"],
+          "preexit": ["RESUME", "NEXT_DATASET"],
           "edges": [
             {
-              "constraint": "FTR_NOWORDS",
-              "edge": "NEXTSCENE"
+              "constraint": "FTR_EOD",
+              "edge": "POSTFINISHLINE"
             },
+
             {
               "constraint": "",
-              "edge": "INTRO_STATE"
+              "edge": "POST_QUESTIONBOARD"
             }
           ]
         },
+
+        "POSTFINISHLINE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"moduleMap",
+          "mapname": "POST_FINISHLINE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "NEXTSCENE"
+            }
+          ]
+        },
+
         "NEXTSCENE": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
           "maptype":"actionMap",
-          "mapname": "NEXTSCENE",
+          "mapname": "NEXT_SCENE",
           "preenter": [],
           "preexit": [],
           "edges": [
@@ -108,12 +136,21 @@
 
         "COMMENT": "@@@@@  CModules  @@@@@",
 
+        "INTRO_STATE_TRACK": {
+          "type": "MODULE",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Racecar v3-2.mp3", "soundpackage":"tutor_effect", "repeat": true, "volume": 0.30, "mode":"event", "features": ""}
+          ]
+        },
+
         "PLAYCORRECT": {
           "type": "MODULE",
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "great.mp3", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Correct v1.mp3", "soundpackage":"tutor_effect", "volume": 0.10, "mode":"event", "features": ""},
+            {"type": "COMMAND", "id": "SAkira", "method": "increaseScore", "parms": "", "features":""},
+            {"type": "COMMAND", "cmd": "WAIT"}
           ]
         },
         "PLAYWRONG": {
@@ -121,55 +158,88 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "great.mp3", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Incorrect v1.mp3", "soundpackage":"tutor_effect", "volume": 0.10, "mode":"event", "features": ""},
+            {"type": "COMMAND", "id": "SAkira", "method": "crash", "parms": "", "features":""},
+            {"type": "COMMAND", "id": "SAkira", "method": "decreaseScore", "parms": "", "features":""},
+            {"type": "COMMAND", "cmd": "WAIT"}
+          ]
+        },
+
+        "POST_QUESTION": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "",
+          "tracks": [
+            {"type": "COMMAND", "id": "SAkira", "method": "postQuestionBoard", "parms": "","features":""},
+            {"type": "COMMAND", "cmd": "WAIT"}
+          ]
+        },
+
+        "USER_ANSWER": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "",
+          "tracks": [
+            {"type": "COMMAND", "id": "SAkira", "method": "judge", "parms": "","features":""}
+            ]
+        },
+
+        "POST_FINISHLINE": {
+          "type": "MODULE",
+          "tracks": [
+            {"type": "COMMAND", "id": "SAkira", "method": "postFinishLine" ,"features":""},
+            {"type": "COMMAND", "cmd": "WAIT"}
           ]
         }
+
       },
 
       "actionMap": {
 
-        "my_action": {"type": "TIMER", "name": "hint_timeout", "duration":"20", "repeat":"false", "action":"START", "ontimer":"ACTION_NAME", "features": "" },
-
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "INTRO_STATE_TRACK": {"type": "COMMAND", "cmd": "WAIT"  },
 
-        "USERINPUT_TRACK":  {"type": "COMMAND", "cmd": "WAIT"  },
 
-        "CORRECT_TRACK":  {"type": "COMMAND", "cmd": "WAIT"  },
+        "USERINPUT_TRACK":  {"type": "COMMAND", "cmd": ""  },
 
-        "WRONG_TRACK":  {"type": "COMMAND", "cmd": "WAIT"  },
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "SAkira", "method": "setDataSource", "parms": "[file]ak_data.json:String", "features":""},
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "SAkira", "method": "setDataSource", "parms": "[file]ak_data.json:String","features":""},
+        "NEXT_DATASET":{"type": "COMMAND", "id": "SAkira", "method": "next" ,"features":""},
 
-        "NEXTSCENE": {
+        "NEXT_SCENE": {
           "type": "COMMAND", "cmd": "gotoNextScene"
+        },
+
+        "NEXT": {"type": "COMMAND", "cmd": "NEXT"  },
+
+        "PAUSE":{
+          "type": "COMMAND", "id": "SAkira", "method": "pause" ,"features":""
+        },
+
+        "RESUME":{
+          "type": "COMMAND", "id": "SAkira", "method": "resume" ,"features":""
         }
+
+
       },
 
       "constraintMap": {
 
         "COMMENT": "@@@@@  CConstraints @@@@@ ",
 
-        "FTR_NOWORDS": {
+        "FTR_RIGHT":{
           "type": "CONDITION",
-          "cmd": "test",
-          "code": "FTR_NOWORDS"
+          "test":"FTR_RIGHT"
         },
-        "FTR_WORDS": {
+
+        "FTR_WRONG":{
           "type": "CONDITION",
-          "cmd": "test",
-          "code": "!FTR_NOWORDS"
+          "test":"FTR_WRONG"
         },
-        "FTR_RIGHT": {
+
+        "FTR_EOD":{
           "type": "CONDITION",
-          "cmd": "test",
-          "code": "FTR_RIGHT"
-        },
-        "FTR_WRONG": {
-          "type": "CONDITION",
-          "cmd": "test",
-          "code": "!FTR_RIGHT"
+          "test":"FTR_EOD"
         }
       }
     }

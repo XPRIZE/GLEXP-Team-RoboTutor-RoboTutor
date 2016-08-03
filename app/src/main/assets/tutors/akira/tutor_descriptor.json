@@ -21,9 +21,9 @@
 	// path     - the resource path relative to assets/tutors/trackdata/LIBRARY/audio/<language>
 
 	"soundMap" : {
-		"tutor_effect":  {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/bubble_pop"},
+		"tutor_effect":  {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/akira"},
 		"xprize_effect": {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/global"},
-		"default":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/bubble_pop"},
+		"default":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/akira"},
 		"xprize":        {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global"}
 	},
 
