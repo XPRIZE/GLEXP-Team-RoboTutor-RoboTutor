@@ -14,7 +14,7 @@ import cmu.xprize.util.CAnimatorUtil;
 public class CAsm_MechanicBase implements IDotMechanics {
 
     protected ArrayList<CAsm_Alley> allAlleys;
-    protected CAsm_Component parent;
+    protected CAsm_Component mComponent;
     protected String operation = "";
 
     float scale;
@@ -29,11 +29,11 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     static final String TAG = "CAsm_MechanicBase";
 
-    protected void init(CAsm_Component parent) {
+    protected void init(CAsm_Component mComponent) {
 
-        this.parent = parent;
-        this.allAlleys = parent.allAlleys;
-        this.scale = parent.getResources().getDisplayMetrics().density;
+        this.mComponent = mComponent;
+        this.allAlleys = mComponent.allAlleys;
+        this.scale = mComponent.getResources().getDisplayMetrics().density;
 
     }
 
@@ -54,12 +54,12 @@ public class CAsm_MechanicBase implements IDotMechanics {
             currBag.setTranslationX(translationX);
         }
 
-        if (parent.dotbagsVisible) {
+        if (mComponent.dotbagsVisible) {
             preClickSetup();
         }
 
-        parent.overheadText = null;
-        parent.overheadVal = null;
+        mComponent.overheadText = null;
+        mComponent.overheadVal = null;
         resultIndex = allAlleys.size()-1;
 
         highlightDigits();
@@ -70,8 +70,8 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
         CAsm_Text text;
 
-        for (int i = 0; i < allAlleys.size(); i++) {
-            text = allAlleys.get(i).getTextLayout().getText(parent.digitIndex);
+        for (CAsm_Alley alley: allAlleys) {
+            text = alley.getTextLayout().getText(mComponent.digitIndex);
 
             if (text.getIsStruck()) {
                 text.reset();
@@ -90,7 +90,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
         CAsm_TextLayout clickedTextLayout = findClickedTextLayout();
 
         if (clickedTextLayout == null) {
-            parent.exitWrite();
+            mComponent.exitWrite();
             return;
         }
 
@@ -99,7 +99,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
         if (clickedText != null) {
 
             if (clickedText.isWritable) {
-                parent.updateText(clickedText);
+                mComponent.updateText(clickedText);
             } else {
                 clickedTextLayout.setIsClicked(true);
                 clickedText.setIsClicked(true);
@@ -107,7 +107,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
         }
 
         else {
-            parent.exitWrite();
+            mComponent.exitWrite();
         }
 
     }
@@ -117,8 +117,9 @@ public class CAsm_MechanicBase implements IDotMechanics {
     public void correctOverheadText() {
         // whenever they put in the right overhead text
 
-        parent.overheadVal = null;
-        parent.overheadText = null;
+        mComponent.overheadText.setWritable(false);
+        mComponent.overheadVal = null;
+        mComponent.overheadText = null;
 
     }
 

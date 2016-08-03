@@ -49,11 +49,7 @@ public class CAsm_Text extends TextView implements IEventListener {
         this.setFocusable(false);
     }
 
-    public void disableWrite() {
-        isWritable = false;
-    }
-
-    public void enableWrite() {isWritable = true;}
+    public void setWritable(boolean _isWritable) {this.isWritable = _isWritable; }
 
     public boolean getIsClicked() {
         if (isClicked) {
