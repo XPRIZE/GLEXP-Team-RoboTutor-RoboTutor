@@ -257,9 +257,9 @@
 
 
 //        "SET_VISIBILITY":{"type": "COMMAND", "id": "SAddSubtract", "method": "setVisible", "parms":"false:bool", "features":""},
-        "SET_VISIBLE": {"type": "COMMAND", "id": "SAddSubtract", "method": "setVisible", "parms":"true:bool"},
-        "SET_INVISIBLE": {"type": "COMMAND", "id": "SAddSubtract", "method": "setVisible", "parms":"false:bool"},
-        "CREATE_HESITATION_TIMER": {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "period":"3000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"SET_VISIBLE"},
+        "SET_DOTBAGS_VISIBLE": {"type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"true:bool"},
+        "SET_DOTBAGS_INVISIBLE": {"type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"false:bool"},
+        "CREATE_HESITATION_TIMER": {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "period":"3000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"SET_DOTBAGS_VISIBLE"},
 //        {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "action":"CREATEANDSTART", "repeat":"false", "period":"1000", "features":"", "onTimer":"SET_VISIBILITY"},
 
         "SET_DATASOURCE":{"type": "COMMAND", "id": "SAddSubtract", "method": "setDataSource", "parms": "[file]asm_data.json:String","features":""},

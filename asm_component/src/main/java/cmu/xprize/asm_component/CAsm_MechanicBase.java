@@ -135,8 +135,9 @@ public class CAsm_MechanicBase implements IDotMechanics {
             currBag = alley.getDotBag();
             currBag.setTranslationX(translationX);
             currBag.setTranslationY(0);
-            currBag.setVisibility(View.VISIBLE);
         }
+
+        mComponent.setDotBagsVisible(false);
 
     }
 

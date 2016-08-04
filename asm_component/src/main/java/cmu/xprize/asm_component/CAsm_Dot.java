@@ -42,17 +42,17 @@ public class CAsm_Dot extends ImageView {
         this.context = context;
     }
 
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
+    public void setImageName(String _imageName) {
+        this.imageName = _imageName;
         createDrawable(this.imageName);
     }
 
-    public void setParams( boolean isClickable, String imageName, int row, int col) {
+    public void setParams( boolean _isClickable, String _imageName, int _row, int _col) {
 
-        this.isClickable = isClickable;
-        setImageName(imageName);
-        this.row = row;
-        this.col = col;
+        this.isClickable = _isClickable;
+        setImageName(_imageName);
+        this.row = _row;
+        this.col = _col;
     }
 
     @Override

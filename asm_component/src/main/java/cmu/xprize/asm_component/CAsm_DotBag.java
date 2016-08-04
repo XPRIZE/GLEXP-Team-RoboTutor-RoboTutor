@@ -77,7 +77,6 @@ public class CAsm_DotBag extends TableLayout {
         setClipToPadding(false);
         setPaint();
         setZero();
-        //setBackgroundColor(Color.parseColor("F3DB"));
 
     }
 
@@ -213,7 +212,8 @@ public class CAsm_DotBag extends TableLayout {
 
         TableRow tableRow = new TableRow(context);
 
-        CAsm_DotBag.LayoutParams lp = new CAsm_DotBag.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        CAsm_DotBag.LayoutParams lp = new CAsm_DotBag.LayoutParams(LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT);
         lp.setMargins(size / 2, 0, size / 2, 0);
         tableRow.setLayoutParams(lp);
 
@@ -311,17 +311,19 @@ public class CAsm_DotBag extends TableLayout {
         return toReturn;
     }
 
-    /* Adapted from Kevin's CAnimatorUtil. Using translationX instead of X. */
+    /* Adapted from Kevin's CAnimatorUtil. Using setTranslationX instead of setX. */
     public void wiggle(long duration, int repetition, long delay, float magnitude) {
 
         float offset = magnitude*getWidth();
         float[] pts = {0, offset, 0, -offset, 0};
+
         ObjectAnimator anim = ObjectAnimator.ofFloat(this, "translationX", pts);
         anim.setDuration(duration);
         anim.setRepeatCount(repetition);
         anim.setStartDelay(delay);
         anim.setInterpolator(new LinearInterpolator());
         anim.start();
+
     }
 
     private void resetBounds() {

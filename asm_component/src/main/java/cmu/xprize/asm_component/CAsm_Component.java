@@ -41,7 +41,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     protected String operation;
     protected String currImage;
 
-    private boolean isVisible;
     protected boolean dotbagsVisible = true;
 
     protected Integer overheadVal = null;
@@ -62,15 +61,14 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     protected IDotMechanics mechanics = new CAsm_MechanicBase();
 
+    // TODO: wrap in LetterBox
     //protected CAsm_LetterBoxLayout Scontent;
 
     // json loadable
+    public CAsm_Data[] dataSource;
 
     //Writing
     private CAsm_Popup mPopup;
-    private CAsm_Text currDigit;
-
-    public CAsm_Data[] dataSource;
 
     static final String TAG = "CAsm_Component";
 
@@ -129,27 +127,25 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     }
 
 
-    public void setVisible(Boolean isVisible) {
+    public void setDotBagsVisible(Boolean _dotbagsVisible) {
 
         for (int alley = 0; alley < allAlleys.size(); alley++) {
             CAsm_Alley curAlley = allAlleys.get(alley);
             CAsm_DotBag curDB = curAlley.getDotBag();
 
-                if (isVisible) {
+                if (_dotbagsVisible) {
                     curDB.setVisibility(VISIBLE);
-                    isVisible = true;
 
                 } else {
                     curDB.setVisibility(INVISIBLE);
-                    isVisible = false;
                 }
             }
 
-            if (isVisible && !dotbagsVisible) {
+            if (_dotbagsVisible && !dotbagsVisible) {
                 mechanics.preClickSetup();
             }
 
-            dotbagsVisible = isVisible;
+            dotbagsVisible = _dotbagsVisible;
 
     }
 

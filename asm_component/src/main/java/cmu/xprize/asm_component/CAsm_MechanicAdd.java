@@ -37,9 +37,9 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
         }
 
-        if (totalValue > 10) {
+        if (totalValue > 10) { // need to carry
             mComponent.overheadVal = (totalValue - (totalValue % 10))/10;
-            mComponent.overheadText = updateCarryText();
+            mComponent.overheadText = setCarryText();
         }
 
     }
@@ -86,6 +86,8 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
     }
 
     public void animateAdd(CAsm_Dot clickedDot, int alleyNum) {
+
+        // create new dot in result bag, but animate it from position of the clicked dot
 
         final CAsm_DotBag resultBag = allAlleys.get(resultIndex).getDotBag();
 
@@ -147,8 +149,6 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
     }
 
     private void performCarry() {
-
-        // shrink result dotbag to dime
 
         AnimatorSet shrinkAnimation = createShrinkAnimation();
         AnimatorSet carryAnimation = createCarryAnimation();
@@ -241,7 +241,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         animSet.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                carryDot.setImageName("star"); // TODO: get image of 10
+                carryDot.setImageName("star"); // TODO: get image of "10"
 
             }
 
@@ -249,10 +249,8 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
             public void onAnimationEnd(Animator animation) {
 
                 // reset dotbag
-                int targetCols = resultBag.getCols()-1;
-                resultBag.setCols(0);
-                resultBag.setRows(1);
-                resultBag.setCols(targetCols);
+                resultBag.setCols(resultBag.getCols()-1);
+                resultBag.setImage(resultBag.getImageName());
 
                 CAsm_TextLayout carryLayout = allAlleys.get(overheadIndex).getTextLayout();
                 CAsm_Text carryText = carryLayout.getText(mComponent.digitIndex-1);
@@ -283,7 +281,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
     }
 
-    private CAsm_Text updateCarryText(){
+    private CAsm_Text setCarryText(){
 
         CAsm_TextLayout textLayout = allAlleys.get(overheadIndex).getTextLayout();
         CAsm_Text t = textLayout.getText(mComponent.digitIndex-1);
