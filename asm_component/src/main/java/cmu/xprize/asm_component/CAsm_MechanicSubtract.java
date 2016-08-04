@@ -33,12 +33,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         willBorrow = false;
         dotBagBorrowed = false;
 
-        minuendIndex = calcMinuendIndex();
-
-        if (previouslyBorrowed) {
-            CAsm_Text borrowedText = allAlleys.get(minuendIndex+1).getTextLayout().getText(mComponent.digitIndex);
-            borrowedText.setStruck(true);
-        }
+        minuendIndex = calcMinuendIndex(firstBagIndex);
 
         super.nextDigit();
 
@@ -343,26 +338,18 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
     }
 
-    private int calcMinuendIndex() {
+    private int calcMinuendIndex(int startIndex) {
 
-        // if there is struck text, the minuend should be right about it
+        // keep going up till you find text that is not struck
 
-        if (previouslyBorrowed) {
-            if (allAlleys.get(overheadIndex).getTextLayout().getText(mComponent.digitIndex).getIsStruck()) {
-                return animatorIndex;
-            }
-            else {
-                return overheadIndex;
-            }
+        if (allAlleys.get(startIndex).getTextLayout().getText(mComponent.digitIndex).getIsStruck()) {
+            return calcMinuendIndex(startIndex-1);
         }
         else {
-            if (allAlleys.get(firstBagIndex).getTextLayout().getText(mComponent.digitIndex).getIsStruck()) {
-               return overheadIndex;
-            }
-            else {
-                return firstBagIndex;
-            }
+            return startIndex;
         }
+
+
     }
 
 }
