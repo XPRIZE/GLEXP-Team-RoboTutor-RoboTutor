@@ -93,6 +93,9 @@ public class BP_CONST {
     public static final String FEEDBACK_SHOWN     = "FEEDBACK_SHOWN";
     public static final String ZOOM_FEEDBACK      = "ZOOM_FEEDBACK";
     public static final String SHOW_SCORE         = "SHOW_SCORE";
+    public static final String PAUSE_ANIMATION    = "PAUSE_ANIMATION";
+    public static final String RESUME_ANIMATION   = "RESUME_ANIMATION";
+    public static final int    MAX_ATTEMPT        = 3;
 
 
     static public HashMap<String, Integer> bubbleMap = new HashMap<String, Integer>();

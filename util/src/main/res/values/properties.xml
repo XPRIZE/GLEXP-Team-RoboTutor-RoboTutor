@@ -8,5 +8,7 @@
         <attr name="aspectratio" format="float"/>
         <attr name="textcolor" format="color" />
         <attr name="linked_views" format="string"/>
+        <attr name="type_face" format="string"/>
+        <attr name="border_width" format="float"/>
     </declare-styleable>
 </resources>
