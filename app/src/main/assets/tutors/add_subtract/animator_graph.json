@@ -276,11 +276,11 @@
 
         "FW_DISABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "FALSE:Boolean","features":""},
         //disable FingerWriting
-        "FW_ENABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "TRUE:Boolean","features":""}
+        "FW_ENABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "TRUE:Boolean","features":""},
         //enable FingerWriting
 
-        //FINGERWRITING ADDITIONS
-
+        //Visual cues
+        "PROMPT_COL":{"type": "COMMAND","id":"SAddSubtract","method":"highlightCurrentColumn","parms":"","features":""}
 
       },
 

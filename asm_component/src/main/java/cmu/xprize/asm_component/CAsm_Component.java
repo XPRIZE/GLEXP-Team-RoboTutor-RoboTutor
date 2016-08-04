@@ -1,5 +1,7 @@
 package cmu.xprize.asm_component;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -64,7 +66,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     //Writing
     private CAsm_Popup mPopup;
-    private CAsm_Text currDigit;
+    private boolean clickPaused;
 
     public CAsm_Data[] dataSource;
 
@@ -363,14 +365,43 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
             //Indicates that the digit the user entered is wrong w/ red text.
             //TODO: Switch timer w/ notifying user with prompt to try again.
             t.setTextColor(Color.RED);
+            clickPaused = true;
             Handler h = new Handler();
             h.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     t.setText("");
                     t.setTextColor(Color.BLACK);
+                    clickPaused = false;
                 }
             }, 2500);
+    }
+
+    public boolean getClickPaused() {return clickPaused;}
+
+    public void highlightText(final CAsm_Text t) {
+        //Useful to highlight individual Text-fields to call importance to them.
+        int colorStart = Color.YELLOW;
+        int colorEnd = Color.TRANSPARENT;
+        ValueAnimator v = ValueAnimator.ofObject(new ArgbEvaluator(),colorStart,colorEnd);
+        v.setDuration(1250);
+        v.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                t.setBackgroundColor((int) animator.getAnimatedValue());
+            }
+        });
+        v.start();
+    }
+
+    public void highlightCurrentColumn() {
+        //Highlights user's active column.
+        for (CAsm_Alley alley: allAlleys) {
+            try {
+                CAsm_Text text = alley.getTextLayout().getText(digitIndex);
+                if (text.getDigit() != null || text.isWritable) {highlightText(text); }
+            } catch (NullPointerException e) { continue;}
+        }
     }
 
     public void updateText(CAsm_Text t) {

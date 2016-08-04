@@ -117,6 +117,10 @@ public class CAsm_Alley extends LinearLayout {
 
     }
 
+    public int getID() {
+        return id;
+    }
+
     public Integer getNum() {return STextLayout.getNum();}
 
     public CAsm_DotBag getDotBag() {

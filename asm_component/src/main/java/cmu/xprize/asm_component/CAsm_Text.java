@@ -3,6 +3,8 @@ package cmu.xprize.asm_component;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -62,12 +64,13 @@ public class CAsm_Text extends TextView implements IEventListener {
         } else return false;
     }
 
+
     public void reset() {
 
         setEnabled(false);
 
         setTextColor(Color.BLACK);
-        setAlpha(.5f);
+        //setAlpha(.5f);
         setBackground(null);
         setPaintFlags(0);
         setTypeface(null);

@@ -86,28 +86,28 @@ public class CAsm_MechanicBase implements IDotMechanics {
     public void preClickSetup() {}
 
     public void handleClick() {
+            if (!parent.getClickPaused()){
 
-        CAsm_TextLayout clickedTextLayout = findClickedTextLayout();
+            CAsm_TextLayout clickedTextLayout = findClickedTextLayout();
 
-        if (clickedTextLayout == null) {
-            parent.exitWrite();
-            return;
-        }
-
-        CAsm_Text clickedText = clickedTextLayout.findClickedText();
-
-        if (clickedText != null) {
-
-            if (clickedText.isWritable) {
-                parent.updateText(clickedText);
-            } else {
-                clickedTextLayout.setIsClicked(true);
-                clickedText.setIsClicked(true);
+            if (clickedTextLayout == null) {
+                parent.exitWrite();
+                return;
             }
-        }
 
-        else {
-            parent.exitWrite();
+            CAsm_Text clickedText = clickedTextLayout.findClickedText();
+
+            if (clickedText != null) {
+
+                if (clickedText.isWritable) {
+                    parent.updateText(clickedText);
+                } else {
+                    clickedTextLayout.setIsClicked(true);
+                    clickedText.setIsClicked(true);
+                }
+            } else {
+                parent.exitWrite();
+            }
         }
 
     }

@@ -1,5 +1,7 @@
 package cmu.xprize.asm_component;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -9,6 +11,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import cmu.xprize.util.CAnimatorUtil;
 
@@ -278,6 +281,8 @@ public class CAsm_TextLayout extends LinearLayout {
         }
         return null;
     }
+
+
 
     public void setIsClicked(boolean _isClicked) {
         isClicked = _isClicked;
