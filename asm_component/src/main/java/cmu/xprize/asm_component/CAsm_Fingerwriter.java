@@ -31,7 +31,6 @@ public class CAsm_FingerWriter extends CFingerWriter {
     }
 
     private void init() {
-
         this.setRecognizer("EN_STD_NUM");
         this.mListenerConfigured = true;
     }
