@@ -18,6 +18,7 @@ public class CAsm_Popup extends PopupWindow {
 
     private Context mContext;
     private CAsm_FingerWriter fw;
+    public boolean isActive;
 
     public CAsm_Popup(Context context) {
         super(context);
@@ -37,7 +38,6 @@ public class CAsm_Popup extends PopupWindow {
     private void init(Context context, AttributeSet attrs) {
 
         mContext = context;
-
         LinearLayout layout = new LinearLayout(context);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,

@@ -3,8 +3,11 @@ package cmu.xprize.asm_component;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -19,40 +22,34 @@ import cmu.xprize.util.TCONST;
  */
 public class CAsm_Text extends TextView implements IEventListener {
 
-    public boolean isWritable;
-    public boolean isClicked;
+    float scale = getResources().getDisplayMetrics().density;
+    final int textSize = (int)(ASM_CONST.textSize*scale);
+
+    public boolean isWritable = false;
+    public boolean isClicked = false;
 
     private boolean isStruck = false;
+    private boolean isBorrowable = false;
 
     public CAsm_Text(Context context) {
 
         super(context);
-        init();
+        reset();
     }
 
     public CAsm_Text(Context context, AttributeSet attrs) {
 
         super(context, attrs);
-        init();
+        reset();
     }
 
     public CAsm_Text(Context context, AttributeSet attrs, int defStyle) {
 
         super(context, attrs, defStyle);
-        init();
+        reset();
     }
 
-    private void init() {
-
-        isWritable = false;
-        this.setFocusable(false);
-    }
-
-    public void disableWrite() {
-        isWritable = false;
-    }
-
-    public void enableWrite() {isWritable = true;}
+    public void setWritable(boolean _isWritable) {this.isWritable = _isWritable; }
 
     public boolean getIsClicked() {
         if (isClicked) {
@@ -61,16 +58,26 @@ public class CAsm_Text extends TextView implements IEventListener {
         } else return false;
     }
 
+
     public void reset() {
 
+        isClicked = false;
+
+        setStruck(false);
+        setWritable(false);
+        setBorrowable(false);
         setEnabled(false);
-        isWritable = false;
+
         setTextColor(Color.BLACK);
-        setAlpha(.5f);
+        setGravity(Gravity.CENTER);
+        setTextSize(textSize);
+
         setBackground(null);
-        setPaintFlags(0);
         setTypeface(null);
-        isStruck = false;
+        setSingleLine(true);
+
+        setPaintFlags(0);
+
 
     }
 
@@ -78,7 +85,7 @@ public class CAsm_Text extends TextView implements IEventListener {
 
         setEnabled(true);
         setBackground(getResources().getDrawable(R.drawable.back));
-        isWritable = true;
+        setWritable(true);
 
     }
 
@@ -88,9 +95,11 @@ public class CAsm_Text extends TextView implements IEventListener {
 
         if (isStruck) {
             setPaintFlags(getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            setAlpha(0.5f);
         }
         else {
             setPaintFlags(getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+            setAlpha(1f);
         }
 
     }
@@ -101,7 +110,7 @@ public class CAsm_Text extends TextView implements IEventListener {
     public boolean onTouchEvent(MotionEvent event) {
         final int action = MotionEventCompat.getActionMasked(event);
         if (action == MotionEvent.ACTION_DOWN) {
-            if (isWritable) {
+            if (isWritable || isBorrowable) {
                 isClicked = true;
             }
         }
@@ -109,7 +118,33 @@ public class CAsm_Text extends TextView implements IEventListener {
     }
 
     public void onEvent(IEvent event) {
+        //Called when user responds through the fingerwriter, to change the text to user's response.
         String response  = (String)event.getString(TCONST.FW_VALUE);
         this.setText(response);
     }
+
+    public void setIsClicked(boolean _isClicked) {this.isClicked = _isClicked;}
+
+    public void setBorrowable(boolean _isBorrowable) {this.isBorrowable = _isBorrowable;}
+
+    public boolean getIsBorrowable() {return isBorrowable;}
+
+    public Integer getDigit() {
+
+        String input = getText().toString();
+
+        if (input.equals("")) {
+            return null;
+        }
+        else {
+            try {
+                return Integer.parseInt(input);
+            }
+            catch (NumberFormatException e) {
+                return null;
+            }
+        }
+
+    }
+
 }

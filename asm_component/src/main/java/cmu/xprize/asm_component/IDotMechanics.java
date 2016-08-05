@@ -9,6 +9,7 @@ public interface IDotMechanics {
     void next();
     void nextDigit();
     void handleClick();
+    void correctOverheadText();
     String getOperation();
 
 }
