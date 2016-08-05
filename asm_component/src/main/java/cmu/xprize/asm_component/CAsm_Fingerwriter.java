@@ -54,5 +54,3 @@ public class CAsm_FingerWriter extends CFingerWriter {
     }
 
 }
-
-
