@@ -79,6 +79,13 @@ public class CAsm_TextLayout extends LinearLayout {
             delta++;
         }
 
+        CAsm_Text currText;
+
+        for (int i = 0; i < getChildCount(); i++) {
+            currText = (CAsm_Text) getChildAt(i);
+            currText.reset();
+        }
+
         if (id == ASM_CONST.OPERATION) {
             setBackground(getResources().getDrawable(R.drawable.underline));
         }
@@ -120,7 +127,6 @@ public class CAsm_TextLayout extends LinearLayout {
                 for (int i = 0; i < numSlots; i++) {
 
                     curText = (CAsm_Text) getChildAt(i);
-                    curText.reset();
                     curText.setText(digits[i]);
 
                 }
@@ -132,7 +138,6 @@ public class CAsm_TextLayout extends LinearLayout {
                 for (int i = 0; i < numSlots; i++) {
 
                     curText = (CAsm_Text) getChildAt(i);
-                    curText.reset();
 
                     if (i == 0) {
                         curText.setText(operation);
@@ -148,11 +153,6 @@ public class CAsm_TextLayout extends LinearLayout {
 
             case ASM_CONST.RESULT:
 
-                for (int i = 0; i < numSlots; i++) {
-                    curText = (CAsm_Text) getChildAt(i);
-                    curText.reset();
-                }
-
                 break;
 
             case ASM_CONST.OVERHEAD:
@@ -160,11 +160,6 @@ public class CAsm_TextLayout extends LinearLayout {
                 break;
 
             case ASM_CONST.ANIMATOR:
-
-                for (int i = 0; i < numSlots; i++) {
-                    curText = (CAsm_Text) getChildAt(i);
-                    curText.reset();
-                }
 
                 break;
         }

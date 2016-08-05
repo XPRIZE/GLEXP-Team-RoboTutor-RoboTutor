@@ -44,6 +44,10 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     public void nextDigit(){
 
+        for (CAsm_Alley alley: allAlleys) {
+            alley.nextDigit();
+        }
+
         if (mComponent.dotbagsVisible) {
             preClickSetup();
         }

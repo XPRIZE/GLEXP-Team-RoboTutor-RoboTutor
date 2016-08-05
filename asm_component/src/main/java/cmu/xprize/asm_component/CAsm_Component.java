@@ -172,13 +172,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
         digitIndex--;
 
-        for (CAsm_Alley alley: allAlleys) {
-            alley.nextDigit();
-        }
+        mechanics.nextDigit();
 
         corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[digitIndex]);
-
-        mechanics.nextDigit();
 
     }
 

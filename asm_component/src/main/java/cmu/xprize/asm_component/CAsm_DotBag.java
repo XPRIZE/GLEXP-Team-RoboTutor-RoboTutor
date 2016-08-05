@@ -106,6 +106,11 @@ public class CAsm_DotBag extends TableLayout {
         }
 
         else if (deltaRows > 0) {
+
+            while (allTableRows.size() < _rows) {
+                addRow(allTableRows.size());
+            }
+
             for (int i = this.rows; i < _rows; i++) {
                 for (int j = 0; j < this.cols; j++) {
                     addDot(i, j);
@@ -129,7 +134,8 @@ public class CAsm_DotBag extends TableLayout {
             return;
         }
 
-        int deltaCols = _cols - this.cols;
+        int origCols = this.cols;
+        int deltaCols = _cols - origCols;
 
         if (deltaCols < 0) {
             for (int i = 0; i < this.rows; i++) {
@@ -143,7 +149,7 @@ public class CAsm_DotBag extends TableLayout {
 
         else if (deltaCols > 0) {
             for (int i = 0; i < this.rows; i++) {
-                for (int j = this.cols; j < _cols; j++ ) {
+                for (int j = origCols; j < _cols; j++ ) {
                     addDot(i, j);
                 }
             }
@@ -212,6 +218,7 @@ public class CAsm_DotBag extends TableLayout {
         updateRows();
         updateCols();
         resetBounds();
+
         if (isAudible) {
             setChimeIndex(chimeIndex + 1);
             currentChime = chimes[this.chimeIndex % chimes.length];
@@ -348,8 +355,10 @@ public class CAsm_DotBag extends TableLayout {
     /* Adapted from Kevin's CAnimatorUtil. Using setTranslationX instead of setX. */
     public void wiggle(long duration, int repetition, long delay, float magnitude) {
 
+        float currTranslation = getTranslationX();
         float offset = magnitude*getWidth();
-        float[] pts = {0, offset, 0, -offset, 0};
+        float[] pts = {currTranslation, offset + currTranslation, currTranslation,
+                currTranslation-offset, currTranslation};
 
         ObjectAnimator anim = ObjectAnimator.ofFloat(this, "translationX", pts);
         anim.setDuration(duration);

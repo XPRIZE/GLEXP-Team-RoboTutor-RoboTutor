@@ -85,6 +85,8 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
             subtrahendBag.setTranslationX(dotOffset * subtrahendBag.getSize());
         }
 
+        subtrahendBag.wiggle(300, 1, 100, .05f);
+
 
         // for case: x - 0
         if (subtrahendBag.getCols() == 0) {
