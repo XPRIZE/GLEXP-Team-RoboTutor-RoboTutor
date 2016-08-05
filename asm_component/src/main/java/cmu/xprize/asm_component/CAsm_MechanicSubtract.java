@@ -79,10 +79,10 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         dotOffset = (minuendBag.getCols()-subtrahendBag.getCols());
         if (dotOffset < 0) {
-            minuendBag.setTranslationX(-dotOffset * minuendBag.getSize() + translationX);
+            minuendBag.setTranslationX(-dotOffset * minuendBag.getSize());
         }
         else {
-            subtrahendBag.setTranslationX(dotOffset * subtrahendBag.getSize() + translationX);
+            subtrahendBag.setTranslationX(dotOffset * subtrahendBag.getSize());
         }
 
 
@@ -226,6 +226,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         CAsm_TextLayout updatedLayout = allAlleys.get(borrowIndex).getTextLayout();
         CAsm_Text updatedDestText = updatedLayout.getText(mComponent.digitIndex);
         updatedDestText.setText(String.valueOf(10 + origDigit));
+        updatedDestText.setTextSize(updatedDestText.getTextSize()/4);
 
         borrowBag.setDrawBorder(true);
         borrowBag.setRows(1);
@@ -292,7 +293,8 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         CAsm_Text clickedText = clickedTextLayout.findClickedText();
 
         if (clickedText != null && clickedText.getIsBorrowable()) {
-            clickedText.reset();
+            //clickedText.reset();
+            clickedText.setAlpha(.5f);
             clickedText.setStruck(true);
             mComponent.overheadText.setResult();
             return true;
@@ -332,6 +334,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         CAsm_TextLayout updatedLayout = allAlleys.get(firstBagIndex-1).getTextLayout();
         CAsm_Text updatedText = updatedLayout.getText(digitBorrowingIndex);
         updatedText.setText(String.valueOf(10 + origText.getDigit()));
+        updatedText.setTextSize(updatedText.getTextSize()/4);
 
     }
 

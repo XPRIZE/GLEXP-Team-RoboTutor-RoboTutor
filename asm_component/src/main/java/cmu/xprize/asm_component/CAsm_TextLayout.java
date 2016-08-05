@@ -30,7 +30,6 @@ public class CAsm_TextLayout extends LinearLayout {
     private boolean isClicked;
 
     float scale = getResources().getDisplayMetrics().density;
-    final int textSize = (int)(ASM_CONST.textSize*scale);
     final int textBoxWidth = (int)(ASM_CONST.textBoxWidth*scale);
     final int textBoxHeight = (int)(ASM_CONST.textBoxHeight*scale);
 
@@ -97,11 +96,6 @@ public class CAsm_TextLayout extends LinearLayout {
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(textBoxWidth, textBoxHeight);
         newText.setLayoutParams(lp);
-        newText.setBackground(null);
-        newText.setGravity(Gravity.CENTER);
-        newText.setTextSize(textSize);
-        newText.setTextColor(Color.BLACK);
-        newText.setSingleLine(true);
 
         addView(newText, index);
 
@@ -178,18 +172,18 @@ public class CAsm_TextLayout extends LinearLayout {
 
     public void performNextDigit() {
 
-        CAsm_Text curText;
-
         digitIndex--;
 
         if (digitIndex != getChildCount()-1){
 
-            curText = (CAsm_Text) getChildAt(digitIndex+1);
-            curText.reset();
+            CAsm_Text prevText = (CAsm_Text) getChildAt(digitIndex+1);
+            prevText.setAlpha(0.5f);
+            prevText.setTypeface(null);
+            prevText.setBackground(null);
 
         }
 
-        curText = (CAsm_Text) getChildAt(digitIndex);
+        CAsm_Text curText = (CAsm_Text) getChildAt(digitIndex);
 
         if (curText.getIsStruck()) {
             // crossed out

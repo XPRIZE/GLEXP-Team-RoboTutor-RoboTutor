@@ -18,7 +18,6 @@ public class CAsm_MechanicBase implements IDotMechanics {
     protected String operation = "";
 
     float scale;
-    float translationX;
 
     // defined alley indices since there will always be a fixed number
     protected int animatorIndex = 0;
@@ -45,15 +44,6 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     public void nextDigit(){
 
-        CAsm_DotBag currBag;
-
-        translationX -= scale*ASM_CONST.textBoxWidth;
-
-        for (CAsm_Alley alley: allAlleys) {
-            currBag = alley.getDotBag();
-            currBag.setTranslationX(translationX);
-        }
-
         if (mComponent.dotbagsVisible) {
             preClickSetup();
         }
@@ -73,13 +63,10 @@ public class CAsm_MechanicBase implements IDotMechanics {
         for (CAsm_Alley alley: allAlleys) {
             text = alley.getTextLayout().getText(mComponent.digitIndex);
 
-            if (text.getIsStruck()) {
-                text.reset();
-                text.setStruck(true);
-            }
-            else {
+            if (!text.getIsStruck()) {
                 CAnimatorUtil.zoomInOut(text, 1.5f, 1500L);
             }
+
         }
     }
 
@@ -128,12 +115,11 @@ public class CAsm_MechanicBase implements IDotMechanics {
     public void reset() {
 
         CAsm_DotBag currBag;
-        translationX = scale*ASM_CONST.textBoxWidth;
 
         for (CAsm_Alley alley: allAlleys) {
 
             currBag = alley.getDotBag();
-            currBag.setTranslationX(translationX);
+            currBag.setTranslationX(0);
             currBag.setTranslationY(0);
         }
 
