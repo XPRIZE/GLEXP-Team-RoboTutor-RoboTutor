@@ -1,5 +1,6 @@
 package cmu.xprize.asm_component;
 
+import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -363,7 +364,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     public void wrongDigit(final CAsm_Text t) {
             //Indicates that the digit the user entered is wrong w/ red text.
-            //TODO: Switch timer w/ notifying user with prompt to try again.
             t.setTextColor(Color.RED);
             clickPaused = true;
             Handler h = new Handler();
@@ -389,6 +389,20 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
             @Override
             public void onAnimationUpdate(ValueAnimator animator) {
                 t.setBackgroundColor((int) animator.getAnimatedValue());
+            }
+        });
+        v.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {}
+            @Override
+            public void onAnimationRepeat(Animator animation) {}
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (t.isWritable) t.setResult();
+            }
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                if (t.isWritable) t.setResult();
             }
         });
         v.start();

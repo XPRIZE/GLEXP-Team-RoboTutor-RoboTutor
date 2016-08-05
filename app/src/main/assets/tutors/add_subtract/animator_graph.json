@@ -48,7 +48,7 @@
           "maptype":"moduleMap",
           "mapname": "SHOWDIGIT",
           "preenter":["SET_INVISIBLE", "CREATE_HESITATION_TIMER"],
-          "preexit" :[],
+          "preexit" :["PROMPT_COL"],
           "edges":
           [
             {"constraint":"","edge":"USERINPUT"}
