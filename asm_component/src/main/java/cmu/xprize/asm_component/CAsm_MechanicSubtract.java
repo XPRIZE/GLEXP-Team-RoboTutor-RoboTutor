@@ -313,7 +313,6 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
             if (!dotBagBorrowed) {
                 dotbagBorrow();
             }
-
         }
 
         else {
@@ -335,6 +334,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         CAsm_Text updatedText = updatedLayout.getText(digitBorrowingIndex);
         updatedText.setText(String.valueOf(10 + origText.getDigit()));
         updatedText.setTextSize(updatedText.getTextSize()/4);
+        updatedText.setAlpha(1.0f);
 
     }
 

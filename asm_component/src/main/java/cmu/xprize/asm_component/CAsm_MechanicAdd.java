@@ -226,8 +226,8 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
         setAllParentsClip(carryDot, false);
 
-        float transX = -(scale*ASM_CONST.rightPadding +
-                scale*ASM_CONST.textBoxWidth*(1.5f) + resultBag.getSize());
+        float transX = -(scale*ASM_CONST.rightPadding + resultBag.getSize() +
+                scale*ASM_CONST.textBoxWidth*(mComponent.numSlots - mComponent.digitIndex + .5f));
 
         float transY = -determineAlleyDY(1, allAlleys.size()-1);
 

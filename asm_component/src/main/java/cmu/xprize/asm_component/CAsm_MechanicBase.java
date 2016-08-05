@@ -104,6 +104,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
     public void correctOverheadText() {
         // whenever they put in the right overhead text
 
+        mComponent.overheadText.setAlpha(.5f);
         mComponent.overheadText.setWritable(false);
         mComponent.overheadVal = null;
         mComponent.overheadText = null;
