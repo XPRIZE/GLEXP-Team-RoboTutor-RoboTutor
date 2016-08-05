@@ -61,20 +61,23 @@ public class CAsm_Text extends TextView implements IEventListener {
 
     public void reset() {
 
-
-        isStruck = false;
-        isWritable = false;
-        isBorrowable = false;
         isClicked = false;
 
-        setTextColor(Color.BLACK);
-        setBackground(null);
-        setPaintFlags(0);
-        setTypeface(null);
-        setGravity(Gravity.CENTER);
-        setSingleLine(true);
-        setTextSize(textSize);
+        setStruck(false);
+        setWritable(false);
+        setBorrowable(false);
         setEnabled(false);
+
+        setTextColor(Color.BLACK);
+        setGravity(Gravity.CENTER);
+        setTextSize(textSize);
+
+        setBackground(null);
+        setTypeface(null);
+        setSingleLine(true);
+
+        setPaintFlags(0);
+
 
     }
 
@@ -82,7 +85,7 @@ public class CAsm_Text extends TextView implements IEventListener {
 
         setEnabled(true);
         setBackground(getResources().getDrawable(R.drawable.back));
-        isWritable = true;
+        setWritable(true);
 
     }
 
@@ -92,9 +95,11 @@ public class CAsm_Text extends TextView implements IEventListener {
 
         if (isStruck) {
             setPaintFlags(getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            setAlpha(0.5f);
         }
         else {
             setPaintFlags(getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+            setAlpha(1f);
         }
 
     }

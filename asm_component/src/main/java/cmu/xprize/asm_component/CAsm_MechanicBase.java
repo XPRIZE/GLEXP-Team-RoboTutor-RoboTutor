@@ -77,29 +77,32 @@ public class CAsm_MechanicBase implements IDotMechanics {
     public void preClickSetup() {}
 
     public void handleClick() {
-        if (!mComponent.getClickPaused()) {
 
-            CAsm_TextLayout clickedTextLayout = findClickedTextLayout();
-
-            if (clickedTextLayout == null) {
-                mComponent.exitWrite();
-                return;
-            }
-
-            CAsm_Text clickedText = clickedTextLayout.findClickedText();
-
-            if (clickedText != null) {
-
-                if (clickedText.isWritable) {
-                    mComponent.updateText(clickedText);
-                } else {
-                    clickedTextLayout.setIsClicked(true);
-                    clickedText.setIsClicked(true);
-                }
-            } else {
-                mComponent.exitWrite();
-            }
+        if (mComponent.getClickPaused()) {
+            return;
         }
+
+        CAsm_TextLayout clickedTextLayout = findClickedTextLayout();
+
+        if (clickedTextLayout == null) {
+            mComponent.exitWrite();
+            return;
+        }
+
+        CAsm_Text clickedText = clickedTextLayout.findClickedText();
+
+        if (clickedText != null) {
+
+            if (clickedText.isWritable) {
+                mComponent.updateText(clickedText);
+            } else {
+                clickedTextLayout.setIsClicked(true);
+                clickedText.setIsClicked(true);
+            }
+        } else {
+            mComponent.exitWrite();
+        }
+
     }
 
     public String getOperation() {return operation;}
@@ -107,7 +110,6 @@ public class CAsm_MechanicBase implements IDotMechanics {
     public void correctOverheadText() {
         // whenever they put in the right overhead text
 
-        mComponent.overheadText.setAlpha(.5f);
         mComponent.overheadText.setWritable(false);
         mComponent.overheadVal = null;
         mComponent.overheadText = null;

@@ -19,7 +19,7 @@ public class ASM_CONST {
 
     public static final int textSize     = 25;
     public static final int textBoxWidth = 30;
-    public static final int textBoxHeight= 60;
+    public static final int textBoxHeight= 50;
 
 
     public static final int borderWidth  = 3;

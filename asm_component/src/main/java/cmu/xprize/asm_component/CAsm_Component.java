@@ -365,7 +365,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         bottomCorrect = corDigit.equals(textLayout.getDigit(digitIndex));
 
         if (!bottomCorrect) {
-            //textLayout.getText(digitIndex).setText("");
             wrongDigit(textLayout.getText(digitIndex));
         }
 
@@ -377,7 +376,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                 mechanics.correctOverheadText();
             }
             else {
-                overheadText.setText("");
+                wrongDigit(overheadText);
             }
         }
 

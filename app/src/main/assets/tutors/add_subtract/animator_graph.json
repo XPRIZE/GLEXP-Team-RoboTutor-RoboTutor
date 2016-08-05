@@ -47,7 +47,7 @@
           "type":"node",
           "maptype":"moduleMap",
           "mapname": "SHOWDIGIT",
-          "preenter":["SET_INVISIBLE", "CREATE_HESITATION_TIMER"],
+          "preenter":["SET_DOTBAGS_INVISIBLE", "CREATE_HESITATION_TIMER"],
           "preexit" :["PROMPT_COL"],
           "edges":
           [

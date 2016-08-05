@@ -138,16 +138,12 @@ public class CAsm_TextLayout extends LinearLayout {
 
             case ASM_CONST.OPERATION:
 
+                digits[0] = operation;
+
                 for (int i = 0; i < numSlots; i++) {
 
                     curText = (CAsm_Text) getChildAt(i);
-
-                    if (i == 0) {
-                        curText.setText(operation);
-                    }
-                    else {
-                        curText.setText(digits[i]);
-                    }
+                    curText.setText(digits[i]);
 
                 }
 

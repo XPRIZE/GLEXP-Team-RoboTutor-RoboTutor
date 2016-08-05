@@ -1,7 +1,7 @@
 package cmu.xprize.asm_component;
 
 /**
- * Created by dexte on 8/2/2016.
+ *
  */
 
 import android.content.Context;
