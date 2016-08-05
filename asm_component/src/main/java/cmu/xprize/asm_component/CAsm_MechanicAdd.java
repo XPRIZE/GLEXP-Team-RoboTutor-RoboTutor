@@ -79,7 +79,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
             animateAdd(clickedDot, alleyNum);
 
 
-            mComponent.nextChime();
+            mComponent.playChime();
 
         }
 

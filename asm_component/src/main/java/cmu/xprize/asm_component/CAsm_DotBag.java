@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,11 @@ public class CAsm_DotBag extends TableLayout {
     private boolean isHollow = false;
 
     private boolean drawBorder = true;
+
+    private String[] chimes;
+    private int chimeIndex= -1;
+    private String currentChime;
+    private boolean isAudible;
 
     private String imageName = "star"; // default
 
@@ -167,6 +173,29 @@ public class CAsm_DotBag extends TableLayout {
 
     }
 
+
+    public void setChimeIndex(int chimeIndex) {
+        this.chimeIndex = chimeIndex;
+    }
+
+    public void setChimes(String[] chimes) {
+        this.chimes = chimes;
+//        currentChime = chimes[chimeIndex % chimes.length];
+    }
+
+    public void setIsAudible(boolean isAudible) {
+        this.isAudible = isAudible;
+    }
+
+    public String getCurrentChime() {
+        return currentChime;
+    }
+
+    public boolean getIsAudible(){
+        return isAudible;
+    }
+
+
     public CAsm_Dot addDot(int row, int col) {
 
         while (allTableRows.size() < row + 1) {
@@ -183,6 +212,11 @@ public class CAsm_DotBag extends TableLayout {
         updateRows();
         updateCols();
         resetBounds();
+        if (isAudible) {
+            setChimeIndex(chimeIndex + 1);
+            currentChime = chimes[this.chimeIndex % chimes.length];
+        }
+
 
         return dot;
     }

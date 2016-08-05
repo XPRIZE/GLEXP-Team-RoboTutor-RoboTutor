@@ -53,9 +53,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
 //    Arithmetic problems will start with the
     protected int               placeValIndex;
-    protected int               chimeIndex;
     protected String[]          chimes = ASM_CONST.CHIMES[placeValIndex];
-    protected String            currentChime = chimes[chimeIndex];
+    protected String            currentChime;
 
     protected ArrayList<CAsm_Alley> allAlleys = new ArrayList<>();
 
@@ -235,6 +234,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         }
 
         setMechanics();
+        setSound();
 
     }
 
@@ -244,18 +244,22 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         currImage = data.image;
         corValue = numbers[numbers.length - 1];
         operation = data.operation;
-//        setChime(operation);
 
     }
-//  Todo: Bring back the mechanics
-//    private void setChime(String operation) {
-//        if (operation.equals("+")) {
-//            chimeIndex = 0;
-//            currentChime = chimes[chimeIndex];
-//        } else if (operation.equals("-")){
-//
-//        }
-//    }
+    private void setSound() {
+        switch (operation) {
+            case "+":
+//                result dotbag will be the only one playing sound
+                allAlleys.get(allAlleys.size() - 1).getDotBag().setIsAudible(true);
+                break;
+            case "-":
+//                minuend dotbag is the only one that plays
+                allAlleys.get(1).getDotBag().setIsAudible(true);
+                break;
+        }
+    }
+
+
 
     private void setMechanics() {
 
@@ -310,20 +314,18 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         return newAlley;
     }
 
-    public void nextChime() {
-        chimeIndex++;
-        chimes = ASM_CONST.CHIMES[placeValIndex % 4];
-        currentChime = chimes[chimeIndex % chimes.length];
-    }
-
     public void nextPlaceValue() {
         placeValIndex++;
         chimes = ASM_CONST.CHIMES[placeValIndex % 4];
-        currentChime = chimes[chimeIndex % chimes.length];
+        for (CAsm_Alley alley: allAlleys) {
+            CAsm_DotBag dotBag = alley.getDotBag();
+            dotBag.setChimes(chimes);
+            dotBag.setChimeIndex(-1);
+        }
     }
 
-    public void resetChime() {
-        chimeIndex = -1;
+    public void playChime() {
+
     }
 
     public void resetPlaceValue() {
