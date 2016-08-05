@@ -16,48 +16,32 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     private int dotOffset;
 
     private boolean dotBagBorrowed = false;
-    private boolean previouslyBorrowed = false;
-    private boolean willBorrow = false;
 
     private int minuendIndex; // vertical column
 
     private int digitBorrowingIndex; // horizontal column
 
 
-    public CAsm_MechanicSubtract(CAsm_Component parent) {super.init(parent);}
+    public CAsm_MechanicSubtract(CAsm_Component mComponent) {super.init(mComponent);}
 
     @Override
     public void nextDigit() {
 
-        // TODO: MAKE READABLE
-
-        previouslyBorrowed = willBorrow;
-        willBorrow = false;
         dotBagBorrowed = false;
 
-        minuendIndex = calcMinuendIndex();
-
-        if (previouslyBorrowed) {
-            CAsm_Text borrowedText = allAlleys.get(minuendIndex+1).getTextLayout().getText(parent.digitIndex);
-            borrowedText.setStruck(true);
-        }
-
+        minuendIndex = calcMinuendIndex(firstBagIndex);
 
         super.nextDigit();
 
-        Integer minuend, subtrahend;
-
-        minuend = allAlleys.get(minuendIndex).getCurrentDigit();
-        subtrahend = allAlleys.get(secondBagIndex).getCurrentDigit();
+        int minuend = allAlleys.get(minuendIndex).getCurrentDigit();
+        int subtrahend = allAlleys.get(secondBagIndex).getCurrentDigit();
 
         if (minuend - subtrahend < 0) {
 
-            willBorrow = true;
-
             CAsm_TextLayout firstBagLayout = allAlleys.get(firstBagIndex).getTextLayout();
 
-            // find first nonzero to borrow from
-            for (int i = parent.digitIndex-1; i >= 0; i--) {
+            // find first nonzero to borrow from - this should always break in the for loop!
+            for (int i = mComponent.digitIndex-1; i >= 0; i--) {
 
                 if (firstBagLayout.getDigit(i) > 0) {
                     digitBorrowingIndex = i;
@@ -66,12 +50,13 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
             }
 
             makeTextBorrowable(digitBorrowingIndex, firstBagIndex);
-
         }
     }
 
     @Override
     public void preClickSetup() {
+
+        // only show dotbags that are being operated on
 
         CAsm_DotBag currBag;
 
@@ -90,14 +75,22 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         // right align
         CAsm_DotBag minuendBag = allAlleys.get(minuendIndex).getDotBag();
-        CAsm_DotBag secondDotBag = allAlleys.get(secondBagIndex).getDotBag();
+        CAsm_DotBag subtrahendBag = allAlleys.get(secondBagIndex).getDotBag();
 
-        dotOffset = (minuendBag.getCols()-secondDotBag.getCols());
+        dotOffset = (minuendBag.getCols()-subtrahendBag.getCols());
         if (dotOffset < 0) {
-            minuendBag.setTranslationX(-dotOffset * minuendBag.getSize() + translationX);
+            minuendBag.setTranslationX(-dotOffset * minuendBag.getSize());
         }
         else {
-            secondDotBag.setTranslationX(dotOffset * secondDotBag.getSize() + translationX);
+            subtrahendBag.setTranslationX(dotOffset * subtrahendBag.getSize());
+        }
+
+        subtrahendBag.wiggle(300, 1, 100, .05f);
+
+
+        // for case: x - 0
+        if (subtrahendBag.getCols() == 0) {
+            createDownwardBagAnimator(minuendIndex).start();
         }
 
     }
@@ -105,22 +98,19 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     @Override
     public void handleClick() {
 
-
         super.handleClick();
 
-        checkBorrowingText();
+        if (checkBorrowingText()) {return;} // found text and operated on it
 
-        int correspondingCol;
         CAsm_Dot clickedDot = null;
 
         CAsm_DotBag minuendDotBag = allAlleys.get(minuendIndex).getDotBag();
-        CAsm_DotBag clickedBag = allAlleys.get(secondBagIndex).getDotBag(); // only one possible dotbag to look at
+        CAsm_DotBag subtrahendBag = allAlleys.get(secondBagIndex).getDotBag();
         CAsm_DotBag correspondingBag = minuendDotBag;
 
-        if (clickedBag.getIsClicked()) {
-            clickedDot = clickedBag.findClickedDot();
+        if (subtrahendBag.getIsClicked()) {
+            clickedDot = subtrahendBag.findClickedDot();
         }
-
         // make sure dot was clicked
         if (clickedDot == null) {
             return;
@@ -128,25 +118,12 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
 
         int clickedDotCol = clickedDot.getCol();
+        int minuend = allAlleys.get(minuendIndex).getCurrentDigit();
+        int correspondingCol = minuend - subtrahendBag.getCols() + clickedDotCol;
 
-        if (dotBagBorrowed) {
-
-            CAsm_DotBag minuendBag = allAlleys.get(minuendIndex).getDotBag();
-            CAsm_DotBag secondMinuendBag = allAlleys.get(minuendIndex+1).getDotBag();
-
-            if (clickedBag.getCols() - clickedDotCol <= secondMinuendBag.getCols()) {
-                correspondingBag = secondMinuendBag;
-                correspondingCol = clickedDotCol - (clickedBag.getCols() - secondMinuendBag.getCols());
-            }
-
-            else {
-                int minuendDots = minuendBag.getCols() + secondMinuendBag.getCols();
-                correspondingCol = minuendDots + clickedDotCol - clickedBag.getCols();
-            }
-        }
-
-        else {
-            correspondingCol = clickedDotCol + dotOffset;
+        if (correspondingCol > minuendDotBag.getCols()-1) {
+            correspondingBag = allAlleys.get(minuendIndex+1).getDotBag();
+            correspondingCol -= minuendDotBag.getCols();
         }
 
         if (correspondingCol < 0) {
@@ -159,8 +136,9 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         CAsm_Dot correspondingDot = correspondingBag.getDot(0, correspondingCol);
         correspondingDot.setVisibility(View.INVISIBLE);
 
-        if (minuendDotBag.getVisibleDots().size() == parent.corDigit &&
-                clickedBag.getIsHollow()) {
+        if (minuendDotBag.getVisibleDots().size() == mComponent.corDigit &&
+                subtrahendBag.getIsHollow()) {
+
             AnimatorSet shrink = createShrinkAnimator(minuendDotBag);
             shrink.addListener(new Animator.AnimatorListener() {
                 @Override
@@ -190,7 +168,6 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     }
 
     private AnimatorSet createShrinkAnimator(final CAsm_DotBag changingBag) {
-
 
         final int numVisibleDots = changingBag.getVisibleDots().size();
         final int numInvisibleDots = changingBag.getCols() - numVisibleDots;
@@ -230,43 +207,35 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
     }
 
-    private void borrow() {
+    private void dotbagBorrow() {
 
-        // TODO: MAKE READABLE
+        // function when you borrow from your neighbor
 
         dotBagBorrowed = true;
         int borrowIndex = minuendIndex-1;
 
         CAsm_DotBag borrowBag = allAlleys.get(borrowIndex).getDotBag();
-        CAsm_DotBag secondDotBag = allAlleys.get(secondBagIndex).getDotBag();
-        CAsm_DotBag resultDotBag = allAlleys.get(resultIndex).getDotBag();
+        CAsm_DotBag subtrahendBag = allAlleys.get(secondBagIndex).getDotBag();
 
         // update texts
 
-        CAsm_TextLayout firstBagLayout = allAlleys.get(firstBagIndex).getTextLayout();
-        CAsm_Text origSourceText = firstBagLayout.getText(parent.digitIndex-1);
-        origSourceText.setStruck(true);
-
         CAsm_TextLayout minuendLayout = allAlleys.get(minuendIndex).getTextLayout();
-        CAsm_Text origDestText = minuendLayout.getText(parent.digitIndex);
-        Integer origDestDigit = minuendLayout.getDigit(parent.digitIndex);
-        origDestText.reset();
-        origDestText.setStruck(true);
+        CAsm_Text origText = minuendLayout.getText(mComponent.digitIndex);
+        Integer origDigit = minuendLayout.getDigit(mComponent.digitIndex);
+        origText.reset();
+        origText.setStruck(true);
 
         CAsm_TextLayout updatedLayout = allAlleys.get(borrowIndex).getTextLayout();
-        CAsm_Text updatedDestText = updatedLayout.getText(parent.digitIndex);
-        updatedDestText.setText(String.valueOf(10 + origDestDigit));
+        CAsm_Text updatedDestText = updatedLayout.getText(mComponent.digitIndex);
+        updatedDestText.setText(String.valueOf(10 + origDigit));
+        updatedDestText.setTextSize(updatedDestText.getTextSize()/4);
 
         borrowBag.setDrawBorder(true);
         borrowBag.setRows(1);
         borrowBag.setCols(10);
-        borrowBag.setTranslationX(0);
 
-        resultDotBag.setCols(0);
-        resultDotBag.setTranslationX(0);
-
-        dotOffset = borrowBag.getCols() - secondDotBag.getCols();
-        secondDotBag.setTranslationX(dotOffset*secondDotBag.getSize());
+        dotOffset = borrowBag.getCols() - subtrahendBag.getCols();
+        subtrahendBag.setTranslationX(dotOffset*subtrahendBag.getSize());
 
         minuendIndex = borrowIndex;
 
@@ -289,7 +258,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         int dy = 0;
         for (int i = resultIndex; i > startIndex; i--) {
-            dy += allAlleys.get(i).getHeight() + parent.alleyMargin;
+            dy += allAlleys.get(i).getHeight() + mComponent.alleyMargin;
         }
 
         resultDotBag.setTranslationY(-dy);
@@ -298,50 +267,53 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         return anim;
 
-
     }
 
     private void makeTextBorrowable(int verticalIndex, int horizontalIndex) {
 
-
         CAsm_TextLayout borrowingLayout = allAlleys.get(horizontalIndex).getTextLayout();
         borrowingLayout.getText(verticalIndex).setBorrowable(true);
 
-        parent.overheadVal = borrowingLayout.getDigit(verticalIndex)-1;
-        parent.overheadVal = (parent.overheadVal < 0)?10:parent.overheadVal;
+        mComponent.overheadVal = borrowingLayout.getDigit(verticalIndex)-1;
+        mComponent.overheadVal = (mComponent.overheadVal < 0)?10:mComponent.overheadVal;
 
-        CAsm_TextLayout toBorrowLayout = allAlleys.get(horizontalIndex-1).getTextLayout();
-        parent.overheadText = toBorrowLayout.getText(verticalIndex);
+        CAsm_TextLayout updatedLayout = allAlleys.get(horizontalIndex-1).getTextLayout();
+        mComponent.overheadText = updatedLayout.getText(verticalIndex);
 
 
     }
 
-    private void checkBorrowingText() {
+    private boolean checkBorrowingText() {
 
         // if they clicked a text they can borrow from, create a place for them to write the answer
         CAsm_TextLayout clickedTextLayout = findClickedTextLayout();
 
         if (clickedTextLayout == null) {
-            return;
+            return false;
         }
 
         CAsm_Text clickedText = clickedTextLayout.findClickedText();
 
         if (clickedText != null && clickedText.getIsBorrowable()) {
-            clickedText.reset();
+            //clickedText.reset();
+            clickedText.setAlpha(.5f);
             clickedText.setStruck(true);
-            parent.overheadText.setResult();
+            mComponent.overheadText.setResult();
+            return true;
         }
 
+        return false;
     }
 
     @Override
     public void correctOverheadText() {
 
-        if (digitBorrowingIndex == parent.digitIndex-1) {
+        super.correctOverheadText();
+
+        if (digitBorrowingIndex == mComponent.digitIndex-1) {
             // perform borrowing animation
             if (!dotBagBorrowed) {
-                borrow();
+                dotbagBorrow();
             }
         }
 
@@ -349,12 +321,12 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
             digitBorrowingIndex +=1;
             farBorrowing();
             makeTextBorrowable(digitBorrowingIndex, overheadIndex);
-
         }
-
     }
 
     private void farBorrowing() {
+
+        //if they borrow a few digits away, e.g. 3003 - 1928
 
         CAsm_TextLayout firstBagLayout = allAlleys.get(firstBagIndex).getTextLayout();
         CAsm_Text origText = firstBagLayout.getText(digitBorrowingIndex);
@@ -363,27 +335,23 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         CAsm_TextLayout updatedLayout = allAlleys.get(firstBagIndex-1).getTextLayout();
         CAsm_Text updatedText = updatedLayout.getText(digitBorrowingIndex);
         updatedText.setText(String.valueOf(10 + origText.getDigit()));
+        updatedText.setTextSize(updatedText.getTextSize()/4);
+        updatedText.setAlpha(1.0f);
 
     }
 
-    private int calcMinuendIndex() {
+    private int calcMinuendIndex(int startIndex) {
 
-        if (previouslyBorrowed) {
-            if (allAlleys.get(overheadIndex).getTextLayout().getText(parent.digitIndex).getIsStruck()) {
-                return animatorIndex;
-            }
-            else {
-                return overheadIndex;
-            }
+        // keep going up till you find text that is not struck
+
+        if (allAlleys.get(startIndex).getTextLayout().getText(mComponent.digitIndex).getIsStruck()) {
+            return calcMinuendIndex(startIndex-1);
         }
         else {
-            if (allAlleys.get(firstBagIndex).getTextLayout().getText(parent.digitIndex).getIsStruck()) {
-               return overheadIndex;
-            }
-            else {
-                return firstBagIndex;
-            }
+            return startIndex;
         }
+
+
     }
 
 }

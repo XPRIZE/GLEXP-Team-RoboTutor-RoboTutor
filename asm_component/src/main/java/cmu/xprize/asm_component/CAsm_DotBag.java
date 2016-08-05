@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,11 @@ public class CAsm_DotBag extends TableLayout {
     private boolean isHollow = false;
 
     private boolean drawBorder = true;
+
+    private String[] chimes;
+    private int chimeIndex= -1;
+    private String currentChime;
+    private boolean isAudible;
 
     private String imageName = "star"; // default
 
@@ -77,7 +83,6 @@ public class CAsm_DotBag extends TableLayout {
         setClipToPadding(false);
         setPaint();
         setZero();
-        //setBackgroundColor(Color.parseColor("F3DB"));
 
     }
 
@@ -101,6 +106,11 @@ public class CAsm_DotBag extends TableLayout {
         }
 
         else if (deltaRows > 0) {
+
+            while (allTableRows.size() < _rows) {
+                addRow(allTableRows.size());
+            }
+
             for (int i = this.rows; i < _rows; i++) {
                 for (int j = 0; j < this.cols; j++) {
                     addDot(i, j);
@@ -124,7 +134,8 @@ public class CAsm_DotBag extends TableLayout {
             return;
         }
 
-        int deltaCols = _cols - this.cols;
+        int origCols = this.cols;
+        int deltaCols = _cols - origCols;
 
         if (deltaCols < 0) {
             for (int i = 0; i < this.rows; i++) {
@@ -138,7 +149,7 @@ public class CAsm_DotBag extends TableLayout {
 
         else if (deltaCols > 0) {
             for (int i = 0; i < this.rows; i++) {
-                for (int j = this.cols; j < _cols; j++ ) {
+                for (int j = origCols; j < _cols; j++ ) {
                     addDot(i, j);
                 }
             }
@@ -168,6 +179,29 @@ public class CAsm_DotBag extends TableLayout {
 
     }
 
+
+    public void setChimeIndex(int chimeIndex) {
+        this.chimeIndex = chimeIndex;
+    }
+
+    public void setChimes(String[] chimes) {
+        this.chimes = chimes;
+//        currentChime = chimes[chimeIndex % chimes.length];
+    }
+
+    public void setIsAudible(boolean isAudible) {
+        this.isAudible = isAudible;
+    }
+
+    public String getCurrentChime() {
+        return currentChime;
+    }
+
+    public boolean getIsAudible(){
+        return isAudible;
+    }
+
+
     public CAsm_Dot addDot(int row, int col) {
 
         while (allTableRows.size() < row + 1) {
@@ -184,6 +218,12 @@ public class CAsm_DotBag extends TableLayout {
         updateRows();
         updateCols();
         resetBounds();
+
+        if (isAudible) {
+            setChimeIndex(chimeIndex + 1);
+            currentChime = chimes[this.chimeIndex % chimes.length];
+        }
+
 
         return dot;
     }
@@ -213,7 +253,8 @@ public class CAsm_DotBag extends TableLayout {
 
         TableRow tableRow = new TableRow(context);
 
-        CAsm_DotBag.LayoutParams lp = new CAsm_DotBag.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        CAsm_DotBag.LayoutParams lp = new CAsm_DotBag.LayoutParams(LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT);
         lp.setMargins(size / 2, 0, size / 2, 0);
         tableRow.setLayoutParams(lp);
 
@@ -311,17 +352,21 @@ public class CAsm_DotBag extends TableLayout {
         return toReturn;
     }
 
-    /* Adapted from Kevin's CAnimatorUtil. Using translationX instead of X. */
+    /* Adapted from Kevin's CAnimatorUtil. Using setTranslationX instead of setX. */
     public void wiggle(long duration, int repetition, long delay, float magnitude) {
 
+        float currTranslation = getTranslationX();
         float offset = magnitude*getWidth();
-        float[] pts = {0, offset, 0, -offset, 0};
+        float[] pts = {currTranslation, offset + currTranslation, currTranslation,
+                currTranslation-offset, currTranslation};
+
         ObjectAnimator anim = ObjectAnimator.ofFloat(this, "translationX", pts);
         anim.setDuration(duration);
         anim.setRepeatCount(repetition);
         anim.setStartDelay(delay);
         anim.setInterpolator(new LinearInterpolator());
         anim.start();
+
     }
 
     private void resetBounds() {

@@ -47,7 +47,8 @@
       //"background":"#D9FFFF",
       "data": [
           { "type":"Sm_Data", "datasource":"", "intent": "digit_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy"},
-          { "type":"Sm_Data", "datasource":"", "intent": "digit_dictation", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Dictation"}
+          { "type":"Sm_Data", "datasource":"", "intent": "digit_dictation", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Dictation"},
+          { "type":"Sm_Data", "datasource":"", "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word Copy"}
         ]
     },
 

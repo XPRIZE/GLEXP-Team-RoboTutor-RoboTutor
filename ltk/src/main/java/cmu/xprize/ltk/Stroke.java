@@ -21,14 +21,13 @@ package cmu.xprize.ltk;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
-
-import cmu.xprize.ltk.AffineXform;
 
 
 /**
@@ -39,6 +38,13 @@ public class Stroke  {
     // The list of points in this stroke
 
     private ArrayList<StrokePoint> _points;
+
+    private RectF _boundingBox = null;
+    private Path  _truePath;
+    private float _X, _Y;
+
+    private float ToleranceFactor = 10;
+
 
     // Animation replay variables
 
@@ -52,7 +58,8 @@ public class Stroke  {
 
 
     public Stroke() {
-        _points  = new ArrayList<StrokePoint>();
+        _points   = new ArrayList<StrokePoint>();
+        _truePath = new Path();
     }
 
 
@@ -82,10 +89,80 @@ public class Stroke  {
     }
 
 
+    // Expands the bounding box to accommodate the given point if necessary
+    private void addPointToBoundingBox(PointF point) {
+
+        if (_boundingBox == null) {
+            _boundingBox = new RectF(point.x, point.y, point.x, point.y);
+            return;
+        }
+
+        // Expand the bounding box to include it, if necessary
+        _boundingBox.union(point.x, point.y);
+    }
+
+
     // Adds the given point to this stroke
     public void addPoint(PointF point, long time) {
 
+        // Add Root node
+        //
+        if(_points.isEmpty()) {
+
+            _truePath.moveTo(point.x, point.y);
+        }
+        else {
+            _truePath.quadTo(_X, _Y, (point.x + _X) / 2, (point.y + _Y) / 2);
+        }
+        _X = point.x;
+        _Y = point.y;
+
         _points.add(new StrokePoint(point, time));
+
+        addPointToBoundingBox(point);
+    }
+
+
+    public Path getPath() {
+        return _truePath;
+    }
+
+
+    public boolean isPoint(Rect parentBounds) {
+
+        boolean point = false;
+
+        if((_boundingBox.width()  < parentBounds.width()  / ToleranceFactor) &&
+           (_boundingBox.height() < parentBounds.height() / ToleranceFactor)) {
+
+            point = true;
+        }
+        return point;
+    }
+
+
+    public void reBuildPath() {
+
+        boolean init = false;
+
+        _truePath = new Path();
+
+        for(StrokePoint strokepoint : _points) {
+
+            PointF point = strokepoint.getPoint();
+
+            // Add Root node
+            //
+            if(!init) {
+                _truePath.moveTo(point.x, point.y);
+                init = true;
+
+            } else {
+                _truePath.quadTo(_X, _Y, (point.x + _X) / 2, (point.y + _Y) / 2);
+            }
+            _X = point.x;
+            _Y = point.y;
+        }
     }
 
 
@@ -120,6 +197,7 @@ public class Stroke  {
 
         return strokePath;
     }
+
 
     public Path addReplaySegments(AffineXform xForm, int index) {
 

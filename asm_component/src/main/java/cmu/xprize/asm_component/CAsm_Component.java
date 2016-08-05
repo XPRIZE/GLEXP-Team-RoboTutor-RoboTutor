@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import cmu.xprize.util.CErrorManager;
@@ -43,6 +44,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     protected Integer corValue;
     protected String operation;
     protected String currImage;
+
     protected boolean dotbagsVisible = true;
 
     protected Integer overheadVal = null;
@@ -53,23 +55,25 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     private float scale = getResources().getDisplayMetrics().density;
     protected int alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
 
-    private String[]         chimes = {"2", "4", "5", "8", "11", "14", "16", "19", "21", "23"};
-    private int              chimeIndex;
-    protected String         currentChime = "2";
+//    Arithmetic problems will start with the
+    protected int               placeValIndex;
+    protected String[]          chimes = ASM_CONST.CHIMES[placeValIndex];
+    protected String            currentChime;
 
     protected ArrayList<CAsm_Alley> allAlleys = new ArrayList<>();
 
     protected IDotMechanics mechanics = new CAsm_MechanicBase();
 
+    // TODO: wrap in LetterBox
     //protected CAsm_LetterBoxLayout Scontent;
 
     // json loadable
+    public CAsm_Data[] dataSource;
 
     //Writing
     private CAsm_Popup mPopup;
-    private boolean clickPaused;
 
-    public CAsm_Data[] dataSource;
+    private boolean clickPaused;
 
     static final String TAG = "CAsm_Component";
 
@@ -93,7 +97,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     public void init(Context context, AttributeSet attrs) {
 
         setOrientation(VERTICAL);
-        currentChime = chimes[chimeIndex];
 
 
         //inflate(getContext(), R.layout.asm_container, this);
@@ -129,29 +132,25 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     }
 
 
-    public void setVisible(Boolean isVisible) {
+    public void setDotBagsVisible(Boolean _dotbagsVisible) {
 
-
-        Log.d("setVisible", isVisible.toString());
-        for (int i = 0; i < allAlleys.size(); i++) {
-
-            CAsm_Alley curAlley = allAlleys.get(i);
+        for (int alley = 0; alley < allAlleys.size(); alley++) {
+            CAsm_Alley curAlley = allAlleys.get(alley);
             CAsm_DotBag curDB = curAlley.getDotBag();
 
-            if (isVisible) {
-                curDB.setVisibility(VISIBLE);
+                if (_dotbagsVisible) {
+                    curDB.setVisibility(VISIBLE);
 
+                } else {
+                    curDB.setVisibility(INVISIBLE);
+                }
             }
-            else {
-                curDB.setVisibility(INVISIBLE);
+
+            if (_dotbagsVisible && !dotbagsVisible) {
+                mechanics.preClickSetup();
             }
-        }
 
-        if (isVisible && !dotbagsVisible) {
-            mechanics.preClickSetup();
-        }
-
-        dotbagsVisible = isVisible;
+            dotbagsVisible = _dotbagsVisible;
 
     }
 
@@ -179,13 +178,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
         digitIndex--;
 
-        for (CAsm_Alley alley: allAlleys) {
-            alley.nextDigit();
-        }
+        mechanics.nextDigit();
 
         corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[digitIndex]);
-
-        mechanics.nextDigit();
 
     }
 
@@ -241,6 +236,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         }
 
         setMechanics();
+        setSound();
 
     }
 
@@ -252,6 +248,20 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         operation = data.operation;
 
     }
+    private void setSound() {
+        switch (operation) {
+            case "+":
+//                result dotbag will be the only one playing sound
+                allAlleys.get(allAlleys.size() - 1).getDotBag().setIsAudible(true);
+                break;
+            case "-":
+//                minuend dotbag is the only one that plays
+                allAlleys.get(1).getDotBag().setIsAudible(true);
+                break;
+        }
+    }
+
+
 
     private void setMechanics() {
 
@@ -306,10 +316,24 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         return newAlley;
     }
 
-    public void nextChime() {
-        chimeIndex = chimeIndex + 1;
-        currentChime = chimes[chimeIndex % 10];
+    public void nextPlaceValue() {
+        placeValIndex++;
+        chimes = ASM_CONST.CHIMES[placeValIndex % 4];
+        for (CAsm_Alley alley: allAlleys) {
+            CAsm_DotBag dotBag = alley.getDotBag();
+            dotBag.setChimes(chimes);
+            dotBag.setChimeIndex(-1);
+        }
     }
+
+    public void playChime() {
+
+    }
+
+    public void resetPlaceValue() {
+        placeValIndex = -1;
+    }
+
 
     private void delAlley() {
 
@@ -346,18 +370,18 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         }
 
         // now check overhead answer
-        overheadCorrect = true;
         if (overheadVal != null) {
             overheadCorrect = overheadVal.equals(overheadText.getDigit());
 
-            if (!overheadCorrect) {
-                overheadText.setText("");
-            }
-            else {
+            if (overheadCorrect) {
                 mechanics.correctOverheadText();
             }
-
+            else {
+                overheadText.setText("");
+            }
         }
+
+        overheadCorrect = (overheadVal == null); // make sure there is no new overhead val
 
         return (bottomCorrect & overheadCorrect);
     }

@@ -8,8 +8,11 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 
+import cmu.xprize.asm_component.ASM_CONST;
+import cmu.xprize.asm_component.CAsm_Alley;
 import cmu.xprize.asm_component.CAsm_Component;
 import cmu.xprize.asm_component.CAsm_Data;
+import cmu.xprize.asm_component.CAsm_DotBag;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
@@ -149,14 +152,19 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
         }
     }
 
-    @Override
-    public void nextChime() {
-        super.nextChime();
-        TScope scope = mTutor.getScope();
-        Log.d("File Name", currentChime);
-        scope.addUpdateVar("TestChimes", new TString(currentChime));
-        scope.addUpdateVar("TestDot", new TBoolean(true));
 
+    @Override
+    public void playChime() {
+        TScope scope = mTutor.getScope();
+        for (CAsm_Alley alley: allAlleys) {
+            CAsm_DotBag dotBag = alley.getDotBag();
+            if (dotBag.getIsAudible()) {
+                currentChime = dotBag.getCurrentChime();
+            }
+        }
+        Log.d("PlayChime", currentChime);
+        scope.addUpdateVar("TestChimes", new TString(currentChime));
+        applyEventNode("PLAY_CHIME");
 
     }
 
@@ -171,7 +179,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
         reset();
 
         super.next();
-
+        resetPlaceValue();
         if(dataExhausted())
             mTutor.setAddFeature(TCONST.FTR_EOI);
 
@@ -181,6 +189,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
 
         reset();
         super.nextDigit();
+        nextPlaceValue();
 
     }
 
@@ -227,7 +236,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
 
     @Override
     public void postInflate() {
-        nextChime();
+
     }
 
     @Override

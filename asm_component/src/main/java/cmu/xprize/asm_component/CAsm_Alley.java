@@ -23,7 +23,6 @@ public class CAsm_Alley extends LinearLayout {
     private boolean clickable;
 
     float scale = getResources().getDisplayMetrics().density;
-    final int textSize = (int)(ASM_CONST.textSize*scale);
     final int rightPadding = (int)(ASM_CONST.rightPadding*scale);
 
     static final String TAG = "CAsm_Alley";
@@ -50,25 +49,23 @@ public class CAsm_Alley extends LinearLayout {
 
         createText();
         createDotBag();
-
-        //setClipChildren(false);
-        //setClipToPadding(false);
+        setClipToPadding(false);
     }
 
-    public void update(int val, String image, int id, String operation, boolean clickable, int numSlots) {
+    public void update(int _val, String _image, int _id, String _operation, boolean _clickable,
+                       int numSlots) {
 
-        this.id = id;
-        this.val = val;
-        this.operation = operation;
-        this.clickable = clickable;
+        this.id = _id;
+        this.val = _val;
+        this.operation = _operation;
+        this.clickable = _clickable;
         this.digitIndex = numSlots;
-        this.image = image;
+        this.image = _image;
 
         STextLayout.resetAllValues();
         STextLayout.update(id, val, operation, numSlots);
 
-        boolean drawBorder = (id != ASM_CONST.ANIMATOR);
-        SdotBag.setDrawBorder(drawBorder);
+        SdotBag.setDrawBorder(id != ASM_CONST.ANIMATOR);
 
 
     }
@@ -115,10 +112,6 @@ public class CAsm_Alley extends LinearLayout {
         SdotBag.setImage(image);
         SdotBag.setIsClickable(clickable);
 
-    }
-
-    public int getID() {
-        return id;
     }
 
     public Integer getNum() {return STextLayout.getNum();}

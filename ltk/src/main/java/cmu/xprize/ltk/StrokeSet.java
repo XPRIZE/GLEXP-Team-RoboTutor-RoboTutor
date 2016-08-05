@@ -115,7 +115,7 @@ public class StrokeSet {
 
         if (_glyphBoundingBox == null) {
             _glyphBoundingBox = new RectF(point.x, point.y, point.x, point.y);
-            _fontBoundingBox = new RectF(point.x, point.y, point.x, point.y);
+            _fontBoundingBox  = new RectF(point.x, point.y, point.x, point.y);
             return;
         }
 

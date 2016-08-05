@@ -9,17 +9,48 @@ import android.widget.TableRow;
 public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMechanics {
 
     static final String TAG = "CAsm_MechanicMultiply";
-    public CAsm_MechanicMultiply(CAsm_Component parent) {super.init(parent);}
+    public CAsm_MechanicMultiply(CAsm_Component mComponent) {super.init(mComponent);}
 
     protected String operation = "x";
 
     @Override
+    public void nextDigit() {
+
+        if (mComponent.digitIndex == mComponent.numSlots-1) {
+            super.nextDigit();
+        }
+        else {
+
+            CAsm_DotBag firstBag, secondBag, resultBag;
+
+            allAlleys.get(resultIndex).nextDigit();
+
+            firstBag = allAlleys.get(firstBagIndex).getDotBag();
+            secondBag = allAlleys.get(secondBagIndex).getDotBag();
+            resultBag = allAlleys.get(resultIndex).getDotBag();
+
+            resultBag.setRows(firstBag.getCols());
+            resultBag.setCols(secondBag.getCols());
+
+            mComponent.setDotBagsVisible(true);
+        }
+
+    }
+
+    @Override
     public void preClickSetup() {
 
-        CAsm_DotBag firstBag = allAlleys.get(0).getDotBag();
-        firstBag.wiggle(300, 2, 100, .05f);
+        if (mComponent.digitIndex != mComponent.numSlots-1) {
+            return;
+        }
 
-        allAlleys.get(1).getDotBag().setIsClickable(false);
+        CAsm_DotBag overheadBag = allAlleys.get(overheadIndex).getDotBag();
+        overheadBag.setDrawBorder(false);
+
+        CAsm_DotBag firstBag = allAlleys.get(firstBagIndex).getDotBag();
+        firstBag.wiggle(300, 1, 100, .05f);
+
+        allAlleys.get(secondBagIndex).getDotBag().setIsClickable(false);
 
     }
 
@@ -31,9 +62,9 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
 
         int dy;
 
-        CAsm_DotBag firstBag = allAlleys.get(0).getDotBag();
-        CAsm_DotBag secondBag = allAlleys.get(1).getDotBag();
-        CAsm_DotBag resultBag = allAlleys.get(2).getDotBag();
+        CAsm_DotBag firstBag = allAlleys.get(firstBagIndex).getDotBag();
+        CAsm_DotBag secondBag = allAlleys.get(secondBagIndex).getDotBag();
+        CAsm_DotBag resultBag = allAlleys.get(resultIndex).getDotBag();
 
         final CAsm_Dot clickedDot = firstBag.findClickedDot();
 
@@ -47,10 +78,10 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         }
 
         if (resultRows == 0) {
-            dy = parent.alleyMargin + secondBag.getHeight();
+            dy = mComponent.alleyMargin + secondBag.getHeight();
         }
         else {
-            dy = secondBag.getHeight() + parent.alleyMargin + resultBag.getHeight();
+            dy = secondBag.getHeight() + mComponent.alleyMargin + resultBag.getHeight();
         }
 
         final TableRow newRow = resultBag.getRow(resultRows);
@@ -61,6 +92,7 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
 
         ObjectAnimator anim = ObjectAnimator.ofFloat(newRow, "translationY", 0);
         anim.setDuration(1000);
+        setAllParentsClip(newRow, false);
         anim.start();
 
     }

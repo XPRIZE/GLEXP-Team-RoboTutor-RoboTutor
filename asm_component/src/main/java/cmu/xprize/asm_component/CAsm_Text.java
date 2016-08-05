@@ -7,6 +7,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -21,6 +22,9 @@ import cmu.xprize.util.TCONST;
  */
 public class CAsm_Text extends TextView implements IEventListener {
 
+    float scale = getResources().getDisplayMetrics().density;
+    final int textSize = (int)(ASM_CONST.textSize*scale);
+
     public boolean isWritable = false;
     public boolean isClicked = false;
 
@@ -30,32 +34,22 @@ public class CAsm_Text extends TextView implements IEventListener {
     public CAsm_Text(Context context) {
 
         super(context);
-        init();
+        reset();
     }
 
     public CAsm_Text(Context context, AttributeSet attrs) {
 
         super(context, attrs);
-        init();
+        reset();
     }
 
     public CAsm_Text(Context context, AttributeSet attrs, int defStyle) {
 
         super(context, attrs, defStyle);
-        init();
+        reset();
     }
 
-    private void init() {
-
-        isWritable = false;
-        this.setFocusable(false);
-    }
-
-    public void disableWrite() {
-        isWritable = false;
-    }
-
-    public void enableWrite() {isWritable = true;}
+    public void setWritable(boolean _isWritable) {this.isWritable = _isWritable; }
 
     public boolean getIsClicked() {
         if (isClicked) {
@@ -67,18 +61,20 @@ public class CAsm_Text extends TextView implements IEventListener {
 
     public void reset() {
 
-        setEnabled(false);
-
-        setTextColor(Color.BLACK);
-        //setAlpha(.5f);
-        setBackground(null);
-        setPaintFlags(0);
-        setTypeface(null);
 
         isStruck = false;
         isWritable = false;
         isBorrowable = false;
         isClicked = false;
+
+        setTextColor(Color.BLACK);
+        setBackground(null);
+        setPaintFlags(0);
+        setTypeface(null);
+        setGravity(Gravity.CENTER);
+        setSingleLine(true);
+        setTextSize(textSize);
+        setEnabled(false);
 
     }
 
