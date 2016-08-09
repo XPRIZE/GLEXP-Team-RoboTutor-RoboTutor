@@ -184,8 +184,10 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
 
         super.next();
 
-        if (dataExhausted())
+        if (dataExhausted()) {
             mTutor.setAddFeature(TCONST.FTR_EOD);
+            Log.d("BPOP", "Data Exhausted ");
+        }
     }
 
 
@@ -216,7 +218,7 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
                 break;
 
             case BP_CONST.SHOW_SCORE:
-                post(BP_CONST.SHOW_SCORE);
+                post(BP_CONST.SHOW_SCORE, new Integer(correct_Count));
                 break;
 
             case BP_CONST.SHOW_STIMULUS:
@@ -246,6 +248,10 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
     }
 
 
+    public void enableTouchEvents() {
+        super.enableTouchEvents();
+    }
+
     public void setVolatileBehavior(String event, String behavior) {
 
         if (behavior.toUpperCase().equals(TCONST.NULL)) {
@@ -274,17 +280,25 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
 
     // Execute scirpt target if behavior is defined for this event
     //
-    public void applyEvent(String event) {
+    public boolean applyEvent(String event) {
+
+        boolean result = false;
 
         if (volatileMap.containsKey(event)) {
             Log.d(TAG, "Processing BP_ApplyEvent: " + event);
             applyEventNode(volatileMap.get(event));
 
             volatileMap.remove(event);
+
+            result = true;
+
         } else if (stickyMap.containsKey(event)) {
             applyEventNode(stickyMap.get(event));
+
+            result = true;
         }
 
+        return result;
     }
 
 
@@ -343,15 +357,23 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
 
         if (bubble.isCorrect()) {
             mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
+            Log.d("BPOP", "Correct" );
             correct_Count++;
         } else {
             mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+            Log.d("BPOP", "Wrong" );
             attempt_count--;
 
             if(attempt_count <= 0) {
                 mTutor.setAddFeature(TCONST.LAST_ATTEMPT);
+
+                Log.d("BPOP", "Publish Last Attempt" );
             }
         }
+
+        Log.d("BPOP", "Publish correct Count: " + correct_Count);
+        Log.d("BPOP", "Publish attempt Count: " + attempt_count);
+
     }
 
 
