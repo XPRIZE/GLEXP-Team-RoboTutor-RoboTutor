@@ -25,6 +25,7 @@ import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
+import cmu.xprize.asm_component.CAsm_Text;
 
 
 public class CAsm_Component extends LinearLayout implements ILoadableObject, IEventListener {
@@ -330,6 +331,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     }
 
+
+
+
     public void resetPlaceValue() {
         placeValIndex = -1;
     }
@@ -382,7 +386,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
         overheadCorrect = (overheadVal == null); // make sure there is no new overhead val
 
-        return (bottomCorrect & overheadCorrect);
+        return (bottomCorrect);
     }
 
     public void wrongDigit(final CAsm_Text t) {
@@ -401,6 +405,10 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     }
 
     public boolean getClickPaused() {return clickPaused;}
+
+    public void setTextWritable(CAsm_Text t){
+
+    }
 
     public void highlightText(final CAsm_Text t) {
         //Useful to highlight individual Text-fields to call importance to them.
