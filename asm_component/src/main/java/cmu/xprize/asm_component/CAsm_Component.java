@@ -177,13 +177,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     public void nextDigit() {
 
-        for (CAsm_Alley alley: allAlleys) {
-            try {
-                CAsm_Text text = alley.getTextLayout().getText(digitIndex);
-                if (text.isWritable) {text.setWritable(false); }
-            } catch (NullPointerException e) { continue;}
-        }
-
         digitIndex--; 
 
         mechanics.nextDigit();
