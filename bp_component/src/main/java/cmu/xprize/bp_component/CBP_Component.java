@@ -25,6 +25,7 @@ import android.graphics.Canvas;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 import org.json.JSONObject;
@@ -204,6 +205,9 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
                 //
                 question_count--;
                 attempt_count = BP_CONST.MAX_ATTEMPT;
+
+                Log.d("BPOP", "question Count: " + question_count);
+                Log.d("BPOP", "attempt  Count: " + attempt_count);
             } else {
                 CErrorManager.logEvent(TAG,  "Error no DataSource : ", null, false);
             }
@@ -301,7 +305,15 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
-    public void applyEvent(String event){};
+    public boolean applyEvent(String event){ return false;}
+
+
+    public void enableTouchEvents() {
+
+        if(_mechanics != null) {
+            _mechanics.enableTouchEvents();
+        }
+    }
 
 
     // Tutor methods  End

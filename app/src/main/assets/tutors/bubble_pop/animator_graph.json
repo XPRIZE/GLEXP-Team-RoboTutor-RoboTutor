@@ -92,16 +92,31 @@
           "preexit": [],
           "edges": [
             {
-              "constraint": "FTR_EOD",
-              "edge": "FINAL_SCORE"
-            },
-            {
               "constraint": "FTR_LASTATTEMPT",
-              "edge": "UPDATE_STIMULUS"
+              "edge": "CHECK_EOD"
             },
             {
               "constraint": "",
               "edge": "USER_INPUT"
+            }
+          ]
+        },
+
+        "CHECK_EOD" : {
+          "type": "NODE",
+          "COMMENT": "When they've made last attempt and still wrong - check if EOD",
+          "maptype":"moduleMap",
+          "mapname": "EMPTYMODULE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {
+              "constraint": "FTR_EOD",
+              "edge": "FINAL_SCORE"
+            },
+            {
+              "constraint": "",
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
@@ -170,6 +185,7 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"type": "COMMAND", "id": "SBubblePop", "method": "enableTouchEvents", "parms": "" ,"features":""},
             {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "BUBBLE_TOUCH_EVENT:String|NEXTNODE:String" ,"features":""},
             {"type": "COMMAND", "cmd": "WAIT"  }
           ]
@@ -252,6 +268,14 @@
         },
 
 
+        "EMPTYMODULE": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+          ]
+        },
+
         "FINALSCORE": {
           "type": "MODULE",
           "reuse":true,
@@ -292,7 +316,7 @@
 
 
         "NEXTSCENE": {
-          "type": "COMMAND", "cmd": "gotoNextScene"
+          "type": "COMMAND", "cmd": "NEXTSCENE"
         }
       },
 

@@ -9,6 +9,8 @@ public interface IBubbleMechanic {
     public boolean isInitialized();
     public void onDestroy();
 
+    public void enableTouchEvents();
+
     public void populateView(CBp_Data data);
     public void doLayout(int width, int height, CBp_Data data);
 
