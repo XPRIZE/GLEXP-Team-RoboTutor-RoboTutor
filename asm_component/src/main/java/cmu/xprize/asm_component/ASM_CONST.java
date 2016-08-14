@@ -13,11 +13,11 @@ public class ASM_CONST {
     public static final int OPERATION    = 4;
     public static final int RESULT       = 5;
 
-    public static final int alleyMargin  = 0;
-    public static final int rightPadding = 20;
+    public static final int alleyMargin  = 10;
+    public static final int rightPadding = 15;
 
 
-    public static final int textSize     = 25;
+    public static final int textSize     = 15;
     public static final int textBoxWidth = 30;
     public static final int textBoxHeight= 50;
 
