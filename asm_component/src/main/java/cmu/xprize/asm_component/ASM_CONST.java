@@ -17,7 +17,7 @@ public class ASM_CONST {
     public static final int rightPadding = 15;
 
 
-    public static final int textSize     = 15;
+    public static final int textSize     = 14;
     public static final int textBoxWidth = 30;
     public static final int textBoxHeight= 50;
 

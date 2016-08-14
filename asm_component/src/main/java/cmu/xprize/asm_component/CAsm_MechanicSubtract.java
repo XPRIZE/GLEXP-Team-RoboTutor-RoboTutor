@@ -350,7 +350,25 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
             return startIndex;
         }
 
+    }
 
+    /**
+     *     If user has inputted bottom digit correctly without filling the overhead text correctly,
+     *     the tutor will fill the overhead text automatically.
+     */
+    @Override
+    public void fillOverheadAutomatically() {
+        CAsm_Text text = allAlleys.get(overheadIndex).getTextLayout().getText(digitBorrowingIndex);
+
+        if(text.getText().equals("") || text == null) {
+            allAlleys.get(firstBagIndex).getTextLayout().getText(digitBorrowingIndex).setStruck(true);
+            allAlleys.get(overheadIndex).getTextLayout().getText(digitBorrowingIndex).setResult();
+            allAlleys.get(overheadIndex).getTextLayout().getText(digitBorrowingIndex).setText(mComponent.overheadVal.toString());
+        }else {
+            allAlleys.get(overheadIndex).getTextLayout().getText(digitBorrowingIndex).setStruck(true);
+            allAlleys.get(animatorIndex).getTextLayout().getText(digitBorrowingIndex).setResult();
+            allAlleys.get(animatorIndex).getTextLayout().getText(digitBorrowingIndex).setText(mComponent.overheadVal.toString());
+        }
     }
 
 }

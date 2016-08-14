@@ -291,4 +291,14 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
     }
 
+    /**
+     *     If user has inputted bottom digit correctly without filling the overhead text correctly,
+     *     the tutor will fill the overhead text automatically.
+     */
+    @Override
+    public void fillOverheadAutomatically() {
+        CAsm_TextLayout textLayout = allAlleys.get(overheadIndex).getTextLayout();
+        CAsm_Text oriText = textLayout.getText(mComponent.digitIndex-1);
+        oriText.setText(mComponent.overheadVal.toString());
+    }
 }
