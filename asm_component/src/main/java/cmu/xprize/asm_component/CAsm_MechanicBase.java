@@ -67,10 +67,17 @@ public class CAsm_MechanicBase implements IDotMechanics {
         for (CAsm_Alley alley: allAlleys) {
             text = alley.getTextLayout().getText(mComponent.digitIndex);
 
-            if (!text.getIsStruck()) {
-                CAnimatorUtil.zoomInOut(text, 1.5f, 1500L);
+            if(!(mComponent.operation.equals("x") && allAlleys.indexOf(alley) == resultIndex)) {
+                if (!text.getIsStruck()) {
+                    CAnimatorUtil.zoomInOut(text, 1.5f, 1500L);
+                }
             }
+        }
 
+        if(mComponent.operation.equals("x")) {
+            CAsm_TextLayout resultTextLayout = allAlleys.get(resultIndex).getTextLayout();
+            for(int i = 2; i < resultTextLayout.getChildCount(); i++)
+                CAnimatorUtil.zoomInOut(resultTextLayout.getText(i), 1.5f, 1500L);
         }
     }
 

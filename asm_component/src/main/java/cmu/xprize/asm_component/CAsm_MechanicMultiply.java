@@ -9,7 +9,14 @@ import android.widget.TableRow;
 public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMechanics {
 
     static final String TAG = "CAsm_MechanicMultiply";
-    public CAsm_MechanicMultiply(CAsm_Component mComponent) {super.init(mComponent);}
+    public CAsm_MechanicMultiply(CAsm_Component mComponent) {
+        super.init(mComponent);
+
+        //User could choose the order of writing result digits
+        CAsm_TextLayout resultTextLayout = allAlleys.get(resultIndex).getTextLayout();
+        for(int i = 2; i < resultTextLayout.getChildCount(); i++)
+            resultTextLayout.getText(i).setResult();
+    }
 
     protected String operation = "x";
 

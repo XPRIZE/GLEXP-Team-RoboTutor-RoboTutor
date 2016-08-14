@@ -25,7 +25,6 @@ import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
-import cmu.xprize.asm_component.CAsm_Text;
 
 
 public class CAsm_Component extends LinearLayout implements ILoadableObject, IEventListener {
@@ -177,12 +176,16 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     public void nextDigit() {
 
-        digitIndex--; 
+        digitIndex--;
 
         mechanics.nextDigit();
 
         corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[digitIndex]);
 
+        if(operation.equals("x")) {
+            if(corDigit.equals(allAlleys.get(allAlleys.size()-1).getTextLayout().getDigit(digitIndex)))
+                nextDigit();
+        }
     }
 
     public boolean dataExhausted() {
@@ -331,9 +334,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     }
 
-
-
-
     public void resetPlaceValue() {
         placeValIndex = -1;
     }
@@ -363,9 +363,31 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     public boolean isDigitCorrect() {
 
         boolean overheadCorrect, bottomCorrect;
+        int otherBottomCorrect = 0;
+
+        CAsm_TextLayout textLayout = allAlleys.get(numAlleys - 1).getTextLayout();
+
+        //For multiplication, user can change the order of writing result.
+        //e.g. If the result is 123, user input 1 first. We need to confirm the “1” is a correct input.
+        if(operation.equals("x")) {
+            for(int i = 2; i < digitIndex; i++) {
+                Integer curDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[i]);
+                Integer digit = textLayout.getDigit(i);
+                if(digit != null && !digit.equals(""))
+                    otherBottomCorrect = curDigit.equals(textLayout.getDigit(i))? 1 : 2;
+                if(otherBottomCorrect == 0 && i+1 == digitIndex)
+                    break;
+                if(otherBottomCorrect == 1) {
+                    textLayout.getText(i).reset();
+                    i = digitIndex;
+                } else if(otherBottomCorrect == 2) {
+                    wrongDigit(textLayout.getText(i));
+                    i = digitIndex;
+                }
+            }
+        }
 
         // first check bottom answer
-        CAsm_TextLayout textLayout = allAlleys.get(numAlleys - 1).getTextLayout();
         bottomCorrect = corDigit.equals(textLayout.getDigit(digitIndex));
 
         if (!bottomCorrect) {
@@ -406,10 +428,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     public boolean getClickPaused() {return clickPaused;}
 
-    public void setTextWritable(CAsm_Text t){
-
-    }
-
     public void highlightText(final CAsm_Text t) {
         //Useful to highlight individual Text-fields to call importance to them.
         int colorStart = Color.YELLOW;
@@ -429,11 +447,31 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
             public void onAnimationRepeat(Animator animation) {}
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (t.isWritable) t.setResult();
+                if (t.isWritable) {
+                    //For multiplication, user could choose the order of writing result digits
+                    if(operation.equals("x")) {
+                        CAsm_TextLayout resultTextLayout = allAlleys.get(allAlleys.size()-1).getTextLayout();
+                        for(int i = 2; i <= digitIndex; i++) {
+                            if(resultTextLayout.getText(i).isWritable)
+                                resultTextLayout.getText(i).setResult();
+                        }
+                    } else
+                        t.setResult();
+                }
             }
             @Override
             public void onAnimationCancel(Animator animation) {
-                if (t.isWritable) t.setResult();
+                if (t.isWritable) {
+                    //For multiplication, user could choose the order of writing result digits
+                    if(operation.equals("x")) {
+                        CAsm_TextLayout resultTextLayout = allAlleys.get(allAlleys.size()-1).getTextLayout();
+                        for(int i = 2; i <= digitIndex; i++) {
+                            if(resultTextLayout.getText(i).isWritable)
+                                resultTextLayout.getText(i).setResult();
+                        }
+                    } else
+                        t.setResult();
+                }
             }
         });
         v.start();

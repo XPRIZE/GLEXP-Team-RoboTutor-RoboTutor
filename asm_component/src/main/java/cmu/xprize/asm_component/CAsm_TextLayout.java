@@ -187,6 +187,14 @@ public class CAsm_TextLayout extends LinearLayout {
         curText.setBackground(null);
 
         if (id == ASM_CONST.RESULT) {
+            if(operation.equals("x")) {
+                for(int i = 2; i < digitIndex; i++) {
+                    if (getText(i).isWritable) {
+                        getText(i).reset();
+                        getText(i).setWritable(true);
+                    }
+                }
+            }
             curText.setResult();
         }
 
