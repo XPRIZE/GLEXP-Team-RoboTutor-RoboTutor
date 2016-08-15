@@ -91,11 +91,17 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
         final CAsm_DotBag resultBag = allAlleys.get(resultIndex).getDotBag();
 
-        int dx = determineColumnDX(clickedDot, resultBag.getCols());
+        int dx = determineColumnDX(clickedDot, resultBag.getCols()<10 ? resultBag.getCols() : resultBag.getOverflowNum());
         int dy = determineAlleyDY(alleyNum, resultIndex);
 
         final CAsm_Dot oldDot = clickedDot;
-        final CAsm_Dot newDot = resultBag.addDot(0, resultBag.getCols());
+        final CAsm_Dot newDot;
+        if(resultBag.getCols() < 10)
+            newDot = resultBag.addDot(0, resultBag.getCols());
+        else {
+            newDot = resultBag.addDot(1, resultBag.getOverflowNum());
+            resultBag.addOverflowNum();
+        }
         newDot.setTranslationX(-dx);
         newDot.setTranslationY(-dy);
         newDot.setIsClickable(false);
@@ -116,8 +122,15 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if ((resultBag.getCols() >= 10) & resultBag.dotsStatic()) {
-                    performCarry();
+                if(resultBag.getCols() >= 10 && resultBag.dotsStatic()) {
+                    Integer temp = allAlleys.get(overheadIndex).getTextLayout().getText(mComponent.digitIndex).getDigit();
+                    int number1 = (temp == null || temp.equals("")) ? 0 : temp.intValue();
+                    int number2 = allAlleys.get(firstBagIndex).getTextLayout().getText(mComponent.digitIndex).getDigit().intValue();
+                    int number3 = allAlleys.get(secondBagIndex).getTextLayout().getText(mComponent.digitIndex).getDigit().intValue();
+
+                    if (number1 + number2 + number3 == 10 + resultBag.getOverflowNum()) {
+                        performCarry();
+                    }
                 }
             }
 
@@ -181,7 +194,8 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         }
 
         float currRight = resultBag.getBounds().right;
-        float newRight = currRight - (dotSize*9);
+        float newRight = currRight - (dotSize*(10-resultBag.getOverflowNum()));
+
         anim = ObjectAnimator.ofFloat(resultBag, "right", currRight, newRight);
         allAnimations.add(anim);
 
@@ -197,7 +211,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                resultBag.setCols(resultBag.getCols()-9);
+                resultBag.setCols(resultBag.getOverflowNum());
 
             }
 
@@ -241,15 +255,25 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         animSet.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                carryDot.setImageName("star"); // TODO: get image of "10"
+                carryDot.setImageName("ten"); // TODO: get image of "10"
+                for(int i = resultBag.getOverflowNum() - 1; i > 0; i--)
+                    resultBag.getDot(0,i).setImageName("empty");
 
+                int dy = resultBag.getRow(1).getHeight();
+                resultBag.getRow(0).setTranslationY(dy);
+
+                ObjectAnimator anim = ObjectAnimator.ofFloat(resultBag.getRow(0), "translationY", 0);
+                anim.setDuration(1000);
+                setAllParentsClip(resultBag.getRow(1), false);
+                anim.start();
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
 
                 // reset dotbag
-                resultBag.setCols(resultBag.getCols()-1);
+                resultBag.setRows(1);
+                //resultBag.setCols(resultBag.getCols()-1);
                 resultBag.setImage(resultBag.getImageName());
 
                 CAsm_TextLayout carryLayout = allAlleys.get(overheadIndex).getTextLayout();

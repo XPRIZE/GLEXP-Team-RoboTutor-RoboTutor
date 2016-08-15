@@ -111,6 +111,7 @@ public class CAsm_Alley extends LinearLayout {
         SdotBag.setCols(cols);
         SdotBag.setImage(image);
         SdotBag.setIsClickable(clickable);
+        SdotBag.resetOverflowNum();
 
     }
 

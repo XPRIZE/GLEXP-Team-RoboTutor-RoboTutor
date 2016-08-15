@@ -48,6 +48,8 @@ public class CAsm_DotBag extends TableLayout {
 
     private String imageName = "star"; // default
 
+    private int overflowNum = 0;
+
     private LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -141,9 +143,10 @@ public class CAsm_DotBag extends TableLayout {
             for (int i = 0; i < this.rows; i++) {
                 currTableRow = allTableRows.get(i);
 
-                for (int j = this.cols - 1; j >= _cols; j-- ) {
+                for (int j = currTableRow.getVirtualChildCount() - 1; j >= _cols; j-- ) {
                     currTableRow.removeViewAt(j);
                 }
+
             }
         }
 
@@ -524,7 +527,15 @@ public class CAsm_DotBag extends TableLayout {
         }
     }
 
+    public void resetOverflowNum() {
+        this.overflowNum = 0;
+    }
 
+    public void addOverflowNum() {
+        this.overflowNum++;
+    }
 
-
+    public int getOverflowNum() {
+        return this.overflowNum;
+    }
 }
