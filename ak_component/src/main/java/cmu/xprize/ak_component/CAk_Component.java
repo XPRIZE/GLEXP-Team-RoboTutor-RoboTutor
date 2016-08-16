@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.PointF;
+import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Handler;
@@ -92,7 +93,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     protected boolean flag=true;
 
     protected boolean speedIsZero=false;
-    protected int extraSpeed=0;
+    protected int extraSpeed = 1;
 
     //json loadable
     public    int          gameSpeed          ;
@@ -162,7 +163,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         speedometerButton = new Button[11];
         for(int i = 0; i < 11; i++) {
             int resID = getResources().getIdentifier("button" + i, "id",
-                    "cmu.xprize.robotutor");
+                    "cmu.xprize.robotutor_akira");
             speedometerButton[i] = (Button) findViewById(resID);
             final int speed = i;
             speedometerButton[i].setOnClickListener(new OnClickListener() {
@@ -170,9 +171,18 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                 public void onClick(View v) {
                     onSpeedChange(speed);
                     extraSpeed = speed;
+                    for(Button b : speedometerButton)
+                        b.getBackground().clearColorFilter();
+                    v.getBackground().setColorFilter(0xFFFFCC00,PorterDuff.Mode.SRC);
+                    if(v == speedometerButton[0])
+                        scoreboard.setVisibility(INVISIBLE);
+                    else
+                        scoreboard.setVisibility(VISIBLE);
                 }
             });
         }
+
+        speedometerButton[1].getBackground().setColorFilter(0xFFFFCC00,PorterDuff.Mode.SRC);
 
         teachFinger = (CAkTeachFinger) findViewById(R.id.finger);
         teachFinger.finishTeaching = true;
@@ -254,7 +264,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
     protected void updateDataSet(CAk_Data data) {
         questionBoard = new CAkQuestionBoard(mContext, data.answerLane, data.choices);
-        player.setText(data.playerString);
+        player.setText(data.aboveString, data.belowString);
     }
 
     public void post(String command, Object target) {
@@ -274,7 +284,6 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                 ArrayList<Animator> list = set.getChildAnimations();
                 for(int j = 0; j < list.size(); j++) {
                     ObjectAnimator objectAnimator = (ObjectAnimator) list.get(j);
-                    float fraction = objectAnimator.getAnimatedFraction();
                     objectAnimator.setDuration(5000 - s);
                 }
                 set.resume();

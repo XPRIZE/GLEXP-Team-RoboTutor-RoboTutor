@@ -29,13 +29,11 @@
         android:id="@+id/pavement"
         android:layout_width="wrap_content" android:layout_height="wrap_content"/>
     <cmu.xprize.ak_component.CAkPlayer
-        app:layout_widthPercent="20%"
-        app:layout_heightPercent="38%"
-        app:layout_marginTopPercent="70%"
+        app:layout_widthPercent="10%"
+        app:layout_heightPercent="50%"
+        app:layout_marginTopPercent="40%"
         android:textAlignment="center"
-        android:textSize="30sp"
         android:id="@+id/player"
-        android:text=""
         android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 
     <cmu.xprize.ak_component.CAkTeachFinger
@@ -51,65 +49,65 @@
     <LinearLayout
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        app:layout_heightPercent="7%"
+        app:layout_heightPercent="12%"
         android:orientation="horizontal"
         android:layout_height="wrap_content">
         <Button android:text="0"
                 android:id="@+id/button0"
-                android:textSize="24sp"
+                android:textSize="16sp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:layout_width="wrap_content" style="@style/Widget.AppCompat.Button"
                 android:elevation="0dp"/>
         <Button android:text="1"
                 android:id="@+id/button1"
-                android:textSize="24sp"
+                android:textSize="16sp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:layout_width="wrap_content"/>
         <Button android:text="2"
                 android:id="@+id/button2"
-                android:textSize="24sp"
+                android:textSize="16sp"
                 android:layout_weight="1"
                 android:layout_height="match_parent" android:layout_width="wrap_content"/>
         <Button android:text="3"
                 android:id="@+id/button3"
-                android:textSize="24sp"
+                android:textSize="16sp"
                 android:layout_weight="1"
                 android:layout_height="match_parent" android:layout_width="wrap_content"/>
         <Button android:text="4"
                 android:id="@+id/button4"
-                android:textSize="24sp"
+                android:textSize="16sp"
                 android:layout_weight="1"
                 android:layout_height="match_parent" android:layout_width="wrap_content"/>
         <Button android:text="5"
                 android:id="@+id/button5"
-                android:textSize="24sp"
+                android:textSize="16sp"
                 android:layout_weight="1"
                 android:layout_height="match_parent" android:layout_width="wrap_content"/>
         <Button android:text="6"
                 android:id="@+id/button6"
-                android:textSize="24sp"
+                android:textSize="16sp"
                 android:layout_weight="1"
                 android:layout_height="match_parent" android:layout_width="wrap_content"/>
         <Button android:text="7"
                 android:id="@+id/button7"
-                android:textSize="24sp"
+                android:textSize="16sp"
                 android:layout_weight="1"
                 android:layout_height="match_parent" android:layout_width="wrap_content"/>
         <Button android:text="8"
                 android:id="@+id/button8"
-                android:textSize="24sp"
+                android:textSize="16sp"
                 android:layout_weight="1"
                 android:layout_height="match_parent" android:layout_width="wrap_content"/>
         <Button android:text="9"
                 android:id="@+id/button9"
-                android:textSize="24sp"
+                android:textSize="16sp"
                 android:layout_weight="1"
                 android:layout_height="match_parent" android:layout_width="wrap_content"/>
         <Button android:text="10"
                 android:id="@+id/button10"
-                android:textSize="24sp"
+                android:textSize="16sp"
                 android:layout_weight="1"
                 android:layout_height="match_parent" android:layout_width="wrap_content"/>
 
@@ -125,11 +123,11 @@
     />
 
     <cmu.xprize.sb_component.CSb_Scoreboard
-        android:layout_width="250dp"
-        android:layout_height="500dp"
-        app:score="8"
+        app:layout_widthPercent="15%"
+        app:layout_heightPercent="50%"
+        app:score="0"
         android:id="@+id/scoreboard"
-        android:layout_alignTop="@+id/city" android:layout_alignEnd="@+id/finger"
-        android:layout_marginEnd="28dp"/>
+        app:layout_marginTopPercent="30%"
+    />
 
 </android.support.percent.PercentRelativeLayout>

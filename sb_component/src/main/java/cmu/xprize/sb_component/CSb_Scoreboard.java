@@ -9,11 +9,14 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -117,15 +120,26 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
         canvas.drawLine(coinbags[showingCol].getX(), 0.82f * height,
                 coinbags[0].getX() + coinbags[0].getWidth(), 0.82f * height, mPaint);
         mPaint.setTextAlign(Paint.Align.CENTER);
-        mPaint.setTextSize(70);
+
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        if(size.x > 1400)
+            mPaint.setTextSize(70);
+        else
+            mPaint.setTextSize(30);
         boolean flag = false;
-        for(int i = mColNum - 1; i >= 0; i--) {
+        for(int i = mColNum - 1; i > 0; i--) {
             if(coinbags[i].getCoinNumber() > 0) flag = true;
             if(flag)
                 canvas.drawText(String.valueOf(coinbags[i].getCoinNumber() > 9? 9 : coinbags[i].getCoinNumber()),
                     coinbags[i].getX() + coinbags[i].getWidth() / 2,
                     0.9f * height, mPaint);
         }
+        canvas.drawText(String.valueOf(coinbags[0].getCoinNumber() > 9? 9 : coinbags[0].getCoinNumber()),
+                coinbags[0].getX() + coinbags[0].getWidth() / 2,
+                0.9f * height, mPaint);
 
     }
 
@@ -282,6 +296,7 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
                     if(flag) coinbags[i].setVisibility(VISIBLE);
                     else coinbags[i].setVisibility(INVISIBLE);
                 }
+                coinbags[0].setVisibility(VISIBLE);
                 isChanging = false;
             } else {
                 for (int i = col; i < mColNum; i++) {
@@ -343,7 +358,7 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
     public Animator reward(float x, float y, String str) {
         TextView textView = new TextView(context);
         textView.setText(str);
-        textView.setTextSize(20);
+        textView.setTextSize(30);
         textView.setTextColor(Color.WHITE);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -351,7 +366,7 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
         addView(textView, params);
         Animator rewardAnimator = CAnimatorUtil.configTranslate(textView,
                 1500, 0, new PointF(x, y), new PointF(
-                        coinbags[0].getX(),
+                        coinbags[0].getX() + coinbags[0].getWidth(),
                         coinbags[0].getY() + coinbags[0].getHeight()));
         return rewardAnimator;
     }
@@ -521,6 +536,7 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
                                     if(flag) coinbags[i].setVisibility(VISIBLE);
                                     else coinbags[i].setVisibility(INVISIBLE);
                                 }
+                                coinbags[0].setVisibility(VISIBLE);
                             }
                         });
 
@@ -659,6 +675,7 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
                             if(flag) coinbags[i].setVisibility(VISIBLE);
                             else coinbags[i].setVisibility(INVISIBLE);
                         }
+                        coinbags[0].setVisibility(VISIBLE);
                     }
                 }, 2500);
 

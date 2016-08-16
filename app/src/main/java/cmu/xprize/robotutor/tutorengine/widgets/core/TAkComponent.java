@@ -6,9 +6,12 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
+import android.view.Display;
+import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
@@ -205,12 +208,22 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         player.bringToFront();
         scoreboard.bringToFront();
 
+        WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        AnimatorSet tmp;
+        if(size.x > 1400)
+            tmp = CAnimatorUtil.configZoomIn(questionBoard, 3500,
+                    0, new LinearInterpolator(), 4f);
+        else
+            tmp = CAnimatorUtil.configZoomIn(questionBoard, 3500,
+                    0, new LinearInterpolator(), 2f);
 
-        final AnimatorSet questionboardAnimator = CAnimatorUtil.configZoomIn(questionBoard, 3500,
-                0, new LinearInterpolator(), 4f);
+        final AnimatorSet questionboardAnimator = tmp;
         ongoingAnimator.add(questionboardAnimator);
         ValueAnimator questionboardTranslationAnimator = ObjectAnimator.ofFloat(questionBoard,
-                "y", getHeight() * 0.25f, getHeight() * 0.70f);
+                "y", getHeight() * 0.25f, getHeight() * 0.65f);
         questionboardAnimator.setDuration(5000-s);
         questionboardAnimator.setInterpolator(new LinearInterpolator());
 
@@ -299,37 +312,54 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     }
 
     public void increaseScore() {
-        mask.setVisibility(VISIBLE);
-        Animator animator = scoreboard.reward(player.getX(), player.getY() - player.getHeight(), "+" + extraSpeed);
-        LayoutParams params =  (LayoutParams) getLayoutParams();
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                scoreboard.removeTextView();
-                scoreboard.increase(extraSpeed);
-                player.score += extraSpeed;
-
-                new AnimateScoreboard().execute(scoreboard);
-            }
-        });
-        animator.start();
+        if(extraSpeed != 0) {
+            mask.setVisibility(VISIBLE);
+            Animator animator = scoreboard.reward(player.getX() + player.carImage.getX(),
+                    player.getY(), "+" + extraSpeed);
+            LayoutParams params =  (LayoutParams) getLayoutParams();
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    scoreboard.removeTextView();
+                    scoreboard.increase(extraSpeed);
+                    player.score += extraSpeed;
+                    new AnimateScoreboard().execute(scoreboard);
+                }
+            });
+            animator.start();
+        }
+        else {
+            scoreboard.increase(extraSpeed);
+            new AnimateScoreboard().execute(scoreboard);
+        }
     }
 
     public void decreaseScore() {
-        mask.setVisibility(VISIBLE);
-        Animator animator = scoreboard.reward(player.getX(), player.getY() - player.getHeight(), "-" + extraSpeed);
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                scoreboard.removeTextView();
-                scoreboard.decrease(extraSpeed);
-                player.score -= extraSpeed;
-                new AnimateScoreboard().execute(scoreboard);
-            }
-        });
-        animator.start();
+        if(extraSpeed != 0) {
+            mask.setVisibility(VISIBLE);
+            Animator animator = scoreboard.reward(player.getX() + player.carImage.getX(),
+                    player.getY(), "-" + extraSpeed);
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    scoreboard.removeTextView();
+                    if (player.score <= extraSpeed) {
+                        scoreboard.decrease(player.score);
+                        player.score = 0;
+                    } else {
+                        scoreboard.decrease(extraSpeed);
+                        player.score -= extraSpeed;
+                    }
+                    new AnimateScoreboard().execute(scoreboard);
+                }
+            });
+            animator.start();
+        }else {
+            scoreboard.decrease(extraSpeed);
+            new AnimateScoreboard().execute(scoreboard);
+        }
     }
 
     private class AnimateScoreboard extends AsyncTask<CSb_Scoreboard, Integer, CSb_Scoreboard> {
