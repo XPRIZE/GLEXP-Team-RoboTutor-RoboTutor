@@ -169,11 +169,5 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     }
 
-    /**
-     *     If user has inputted bottom digit correctly without filling the overhead text correctly,
-     *     the tutor will fill the overhead text automatically.
-     */
-    public void fillOverheadAutomatically() {
-        //Detailed process is shown in override methods of child classs.
-    }
+
 }

@@ -402,18 +402,11 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                 mechanics.correctOverheadText();
             }
             else {
-                if(!bottomCorrect)
-                    wrongDigit(overheadText);
+                wrongDigit(overheadText);
             }
         }
 
         overheadCorrect = (overheadVal == null); // make sure there is no new overhead val
-
-        //If user input the bottom digit correctly, fill the overheadText automatically.
-        if(bottomCorrect && !overheadCorrect) {
-            mechanics.fillOverheadAutomatically();
-            isDigitCorrect();
-        }
 
         return (bottomCorrect);
     }
@@ -541,4 +534,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         _dataIndex = 0;
 
     }
+
+
+
 }
