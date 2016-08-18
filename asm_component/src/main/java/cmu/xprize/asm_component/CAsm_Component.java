@@ -408,7 +408,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
         overheadCorrect = (overheadVal == null); // make sure there is no new overhead val
 
-        return (bottomCorrect);
+        return (bottomCorrect & overheadCorrect);
     }
 
     public void wrongDigit(final CAsm_Text t) {
