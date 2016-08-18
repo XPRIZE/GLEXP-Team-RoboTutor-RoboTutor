@@ -9,13 +9,14 @@ public class CAsm_Util {
 
         char[] charArray = String.valueOf(toConvert).toCharArray();
         String[] toReturn = new String[numSlots];
-        int numBlanks = numSlots - charArray.length;
+        int numBlanks = numSlots - charArray.length * 2;
 
         for (int i = 0; i < numBlanks; i++) {
             toReturn[i] = "";
         }
-        for (int i = numBlanks; i < numSlots; i++) {
-            toReturn[i] = Character.toString(charArray[i - numBlanks]);
+        for (int i = numBlanks; i < numSlots; i = i + 2) {
+            toReturn[i] = "";
+            toReturn[i+1] = Character.toString(charArray[(i - numBlanks) / 2]);
         }
 
         return toReturn;

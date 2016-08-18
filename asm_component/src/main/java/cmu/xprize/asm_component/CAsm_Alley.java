@@ -16,6 +16,7 @@ public class CAsm_Alley extends LinearLayout {
     private int digitIndex;
     private int val;
     private int id;
+    private int numSlots;
 
     private String operation;
     private String image;
@@ -53,20 +54,20 @@ public class CAsm_Alley extends LinearLayout {
     }
 
     public void update(int _val, String _image, int _id, String _operation, boolean _clickable,
-                       int numSlots) {
+                       int _numSlots) {
 
         this.id = _id;
         this.val = _val;
         this.operation = _operation;
         this.clickable = _clickable;
-        this.digitIndex = numSlots;
+        this.digitIndex = _numSlots;
+        this.numSlots = _numSlots;
         this.image = _image;
 
         STextLayout.resetAllValues();
         STextLayout.update(id, val, operation, numSlots);
 
-        SdotBag.setDrawBorder(id != ASM_CONST.ANIMATOR);
-
+        SdotBag.setDrawBorder(id != ASM_CONST.ANIMATOR1 && id != ASM_CONST.ANIMATOR2 && id != ASM_CONST.ANIMATOR3);
 
     }
 
@@ -96,7 +97,9 @@ public class CAsm_Alley extends LinearLayout {
 
         Integer cols;
 
-        digitIndex--;
+        if(digitIndex == numSlots) digitIndex--;
+        else digitIndex = digitIndex - 2;
+
         STextLayout.performNextDigit();
 
         if (id == ASM_CONST.RESULT) {

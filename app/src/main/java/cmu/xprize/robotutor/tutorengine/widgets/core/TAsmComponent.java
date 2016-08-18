@@ -48,9 +48,6 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
         super(context, attrs, defStyleAttr);
     }
 
-
-
-
     @Override
     public void init(Context context, AttributeSet attrs) {
 
@@ -89,7 +86,6 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
             mTutor.setAddFeature(TCONST.GENERIC_WRONG);
     }
 
-
     public void reset() {
 
         mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
@@ -109,8 +105,6 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
         //
         super.updateDataSet(data);
     }
-
-
 
     /**
      *

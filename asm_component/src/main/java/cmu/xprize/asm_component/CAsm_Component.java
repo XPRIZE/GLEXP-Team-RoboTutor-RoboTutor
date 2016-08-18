@@ -176,7 +176,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     public void nextDigit() {
 
-        digitIndex--;
+        if(digitIndex == numSlots) digitIndex--;
+        else digitIndex = digitIndex - 2;
 
         mechanics.nextDigit();
 
@@ -202,11 +203,13 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
         readInData(data);
 
-        numSlots = CAsm_Util.maxDigits(numbers) + 2;
+        numSlots = CAsm_Util.maxDigits(numbers) * 2 + 2;
         digitIndex = numSlots;
 
-        updateAlley(0, 0, ASM_CONST.ANIMATOR, operation, false); // animator alley
-        updateAlley(1, 0, ASM_CONST.OVERHEAD, operation, true); // carry/borrow alley
+        updateAlley(0, 0, ASM_CONST.ANIMATOR3, operation, false); // animator alley
+        updateAlley(1, 0, ASM_CONST.ANIMATOR2, operation, false); // animator alley
+        updateAlley(2, 0, ASM_CONST.ANIMATOR1, operation, false); // animator alley
+        updateAlley(3, 0, ASM_CONST.OVERHEAD, operation, true); // carry/borrow alley
 
         // update alleys
         for (int i = 0; i < numbers.length; i++) {
@@ -227,11 +230,11 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                 id = ASM_CONST.REGULAR;
             }
 
-            updateAlley(i+2, val, id, operation, clickable);
+            updateAlley(i + 4, val, id, operation, clickable);
         }
 
         // delete extra alleys
-        int delta = numAlleys - (numbers.length+2);
+        int delta = numAlleys - (numbers.length + 4);
 
         if (delta > 0) {
             for (int i = 0; i < delta; i++) {
@@ -260,7 +263,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                 break;
             case "-":
 //                minuend dotbag is the only one that plays
-                allAlleys.get(1).getDotBag().setIsAudible(true);
+                allAlleys.get(3).getDotBag().setIsAudible(true);
                 break;
         }
     }
@@ -370,12 +373,12 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         //For multiplication, user can change the order of writing result.
         //e.g. If the result is 123, user input 1 first. We need to confirm the “1” is a correct input.
         if(operation.equals("x")) {
-            for(int i = 2; i < digitIndex; i++) {
+            for(int i = 3; i < digitIndex; i = i + 2) {
                 Integer curDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[i]);
                 Integer digit = textLayout.getDigit(i);
                 if(digit != null && !digit.equals(""))
                     otherBottomCorrect = curDigit.equals(textLayout.getDigit(i))? 1 : 2;
-                if(otherBottomCorrect == 0 && i+1 == digitIndex)
+                if(otherBottomCorrect == 0 && (i+ 2 == digitIndex || i+ 1 == digitIndex))
                     break;
                 if(otherBottomCorrect == 1) {
                     textLayout.getText(i).reset();

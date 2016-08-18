@@ -41,7 +41,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
             CAsm_TextLayout firstBagLayout = allAlleys.get(firstBagIndex).getTextLayout();
 
             // find first nonzero to borrow from - this should always break in the for loop!
-            for (int i = mComponent.digitIndex-1; i >= 0; i--) {
+            for (int i = mComponent.digitIndex - 2; i >= 0; i = i - 2) {
 
                 if (firstBagLayout.getDigit(i) > 0) {
                     digitBorrowingIndex = i;
@@ -275,7 +275,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         CAsm_TextLayout borrowingLayout = allAlleys.get(horizontalIndex).getTextLayout();
         borrowingLayout.getText(verticalIndex).setBorrowable(true);
 
-        mComponent.overheadVal = borrowingLayout.getDigit(verticalIndex)-1;
+        mComponent.overheadVal = borrowingLayout.getDigit(verticalIndex) - 1;
         mComponent.overheadVal = (mComponent.overheadVal < 0)?10:mComponent.overheadVal;
 
         CAsm_TextLayout updatedLayout = allAlleys.get(horizontalIndex-1).getTextLayout();
@@ -310,7 +310,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         super.correctOverheadText();
 
-        if (digitBorrowingIndex == mComponent.digitIndex-1) {
+        if (digitBorrowingIndex == mComponent.digitIndex-2) {
             // perform borrowing animation
             if (!dotBagBorrowed) {
                 dotbagBorrow();
@@ -318,7 +318,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         }
 
         else {
-            digitBorrowingIndex +=1;
+            digitBorrowingIndex += 2;
             farBorrowing();
             makeTextBorrowable(digitBorrowingIndex, overheadIndex);
         }

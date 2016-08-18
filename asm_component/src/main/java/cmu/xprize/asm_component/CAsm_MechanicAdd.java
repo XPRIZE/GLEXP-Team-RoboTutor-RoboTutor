@@ -243,7 +243,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         float transX = -(scale*ASM_CONST.rightPadding + resultBag.getSize() +
                 scale*ASM_CONST.textBoxWidth*(mComponent.numSlots - mComponent.digitIndex + .5f));
 
-        float transY = -determineAlleyDY(1, allAlleys.size()-1);
+        float transY = -determineAlleyDY(4, allAlleys.size()-1);
 
         animX = ObjectAnimator.ofFloat(carryDot, "translationX", carryDot.getTranslationX(), transX);
         animY = ObjectAnimator.ofFloat(carryDot, "translationY", carryDot.getTranslationY(), transY);
@@ -277,8 +277,8 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
                 resultBag.setImage(resultBag.getImageName());
 
                 CAsm_TextLayout carryLayout = allAlleys.get(overheadIndex).getTextLayout();
-                CAsm_Text carryText = carryLayout.getText(mComponent.digitIndex-1);
-                Integer currCarryNum = carryLayout.getDigit(mComponent.digitIndex-1);
+                CAsm_Text carryText = carryLayout.getText(mComponent.digitIndex-2);
+                Integer currCarryNum = carryLayout.getDigit(mComponent.digitIndex-2);
 
                 if (currCarryNum == null) {
                     carryText.setText("1");
@@ -308,7 +308,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
     private CAsm_Text setCarryText(){
 
         CAsm_TextLayout textLayout = allAlleys.get(overheadIndex).getTextLayout();
-        CAsm_Text t = textLayout.getText(mComponent.digitIndex-1);
+        CAsm_Text t = textLayout.getText(mComponent.digitIndex - 2);
         t.setResult();
 
         return t;

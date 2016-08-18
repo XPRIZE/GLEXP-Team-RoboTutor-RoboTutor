@@ -157,7 +157,15 @@ public class CAsm_TextLayout extends LinearLayout {
 
                 break;
 
-            case ASM_CONST.ANIMATOR:
+            case ASM_CONST.ANIMATOR1:
+
+                break;
+
+            case ASM_CONST.ANIMATOR2:
+
+                break;
+
+            case ASM_CONST.ANIMATOR3:
 
                 break;
         }
@@ -165,11 +173,12 @@ public class CAsm_TextLayout extends LinearLayout {
 
     public void performNextDigit() {
 
-        digitIndex--;
+        if(digitIndex == numSlots) digitIndex--;
+        else digitIndex = digitIndex - 2;
 
         if (digitIndex != getChildCount()-1){
 
-            CAsm_Text prevText = (CAsm_Text) getChildAt(digitIndex+1);
+            CAsm_Text prevText = (CAsm_Text) getChildAt(digitIndex + 2);
             prevText.setTypeface(null);
             prevText.setBackground(null);
             prevText.setWritable(false);
@@ -188,12 +197,14 @@ public class CAsm_TextLayout extends LinearLayout {
 
         if (id == ASM_CONST.RESULT) {
             if(operation.equals("x")) {
-                for(int i = 2; i < digitIndex; i++) {
+                for(int i = 3; i < digitIndex; i = i + 2) {
+                    getText(i-1).reset();
                     if (getText(i).isWritable) {
                         getText(i).reset();
                         getText(i).setWritable(true);
                     }
                 }
+                getText(digitIndex-1).reset();
             }
             curText.setResult();
         }
@@ -214,7 +225,6 @@ public class CAsm_TextLayout extends LinearLayout {
         }
     }
 
-
     public Integer getNum() {
 
         if (id != ASM_CONST.RESULT) {return value;}
@@ -222,7 +232,7 @@ public class CAsm_TextLayout extends LinearLayout {
         int j = 0;
         int digit;
 
-        for (int i = 0; i < numSlots; i++) {
+        for (int i = 3; i < numSlots; i = i + 2) {
 
             CAsm_Text t = (CAsm_Text) getChildAt(i);
             String test = t.getText().toString();
@@ -232,7 +242,7 @@ public class CAsm_TextLayout extends LinearLayout {
             } catch (NumberFormatException e) {
                 continue;
             }
-            j += (int)((Math.pow(10,(getChildCount()-i-1))*digit));
+            j += (int)((Math.pow(10,(getChildCount()-i-1)/2)*digit));
         }
 
         return j;
@@ -248,7 +258,6 @@ public class CAsm_TextLayout extends LinearLayout {
     public CAsm_Text getText(int index) {
         return (CAsm_Text) getChildAt(index);
     }
-
 
     public boolean getIsClicked() {
 
@@ -272,12 +281,9 @@ public class CAsm_TextLayout extends LinearLayout {
         return null;
     }
 
-
-
     public void setIsClicked(boolean _isClicked) {
         isClicked = _isClicked;
     }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

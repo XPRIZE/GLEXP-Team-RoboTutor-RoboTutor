@@ -20,11 +20,13 @@ public class CAsm_MechanicBase implements IDotMechanics {
     float scale;
 
     // defined alley indices since there will always be a fixed number
-    protected int animatorIndex = 0;
-    protected int overheadIndex = 1;
-    protected int firstBagIndex = 2;
-    protected int secondBagIndex = 3;
-    protected int resultIndex = 4;
+    protected int animator3Index = 0;
+    protected int animator2Index = 1;
+    protected int animator1Index = 2;
+    protected int overheadIndex = 3;
+    protected int firstBagIndex = 4;
+    protected int secondBagIndex = 5;
+    protected int resultIndex = 6;
 
     static final String TAG = "CAsm_MechanicBase";
 
@@ -76,7 +78,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
         if(mComponent.operation.equals("x")) {
             CAsm_TextLayout resultTextLayout = allAlleys.get(resultIndex).getTextLayout();
-            for(int i = 2; i < resultTextLayout.getChildCount(); i++)
+            for(int i = 3; i < resultTextLayout.getChildCount(); i = i + 2)
                 CAnimatorUtil.zoomInOut(resultTextLayout.getText(i), 1.5f, 1500L);
         }
     }
@@ -122,7 +124,6 @@ public class CAsm_MechanicBase implements IDotMechanics {
         mComponent.overheadText = null;
 
     }
-
 
     /* reset any changes made by mechanics */
     public void reset() {

@@ -7,11 +7,13 @@ import java.util.Map;
 
 public class ASM_CONST {
 
-    public static final int ANIMATOR     = 1;
-    public static final int OVERHEAD     = 2;
-    public static final int REGULAR      = 3;
-    public static final int OPERATION    = 4;
-    public static final int RESULT       = 5;
+    public static final int ANIMATOR3    = 1;
+    public static final int ANIMATOR2    = 2;
+    public static final int ANIMATOR1    = 3;
+    public static final int OVERHEAD     = 4;
+    public static final int REGULAR      = 5;
+    public static final int OPERATION    = 6;
+    public static final int RESULT       = 7;
 
     public static final int alleyMargin  = 10;
     public static final int rightPadding = 15;
