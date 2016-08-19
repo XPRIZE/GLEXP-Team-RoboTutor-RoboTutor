@@ -221,15 +221,25 @@ public class CAsm_DotBag extends TableLayout {
         updateRows();
         updateCols();
         resetBounds();
-
         if (isAudible) {
             setChimeIndex(chimeIndex + 1);
             currentChime = chimes[this.chimeIndex % chimes.length];
         }
 
 
+
         return dot;
     }
+
+    public void setHallowChime(){
+        if (isAudible) {
+            setChimeIndex(chimeIndex + 1);
+            currentChime = chimes[this.chimeIndex % chimes.length];
+        }
+    }
+
+
+
 
 
     private void setZero() {
@@ -537,5 +547,9 @@ public class CAsm_DotBag extends TableLayout {
 
     public int getOverflowNum() {
         return this.overflowNum;
+    }
+
+    public void setIsisAudible(boolean isAudible){
+        this.isAudible = isAudible;
     }
 }
