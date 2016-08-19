@@ -163,7 +163,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         speedometerButton = new Button[11];
         for(int i = 0; i < 11; i++) {
             int resID = getResources().getIdentifier("button" + i, "id",
-                    "cmu.xprize.robotutor_akira");
+                    "cmu.xprize.robotutor");
             speedometerButton[i] = (Button) findViewById(resID);
             final int speed = i;
             speedometerButton[i].setOnClickListener(new OnClickListener() {
