@@ -49,6 +49,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     protected Integer overheadVal = null;
     protected CAsm_Text overheadText = null;
+    protected CAsm_Text overheadTextSupplement = null;
 
     protected int numAlleys = 0;
 
@@ -366,29 +367,12 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     public boolean isDigitCorrect() {
 
         boolean overheadCorrect, bottomCorrect;
-        int otherBottomCorrect = 0;
 
         CAsm_TextLayout textLayout = allAlleys.get(numAlleys - 1).getTextLayout();
 
         //For multiplication, user can change the order of writing result.
         //e.g. If the result is 123, user input 1 first. We need to confirm the “1” is a correct input.
-        if(operation.equals("x")) {
-            for(int i = 3; i < digitIndex; i = i + 2) {
-                Integer curDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[i]);
-                Integer digit = textLayout.getDigit(i);
-                if(digit != null && !digit.equals(""))
-                    otherBottomCorrect = curDigit.equals(textLayout.getDigit(i))? 1 : 2;
-                if(otherBottomCorrect == 0 && (i+ 2 == digitIndex || i+ 1 == digitIndex))
-                    break;
-                if(otherBottomCorrect == 1) {
-                    textLayout.getText(i).reset();
-                    i = digitIndex;
-                } else if(otherBottomCorrect == 2) {
-                    wrongDigit(textLayout.getText(i));
-                    i = digitIndex;
-                }
-            }
-        }
+        if(operation.equals("x")) checkOtherBottomCorrect(textLayout);
 
         // first check bottom answer
         bottomCorrect = corDigit.equals(textLayout.getDigit(digitIndex));
@@ -399,19 +383,45 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
         // now check overhead answer
         if (overheadVal != null) {
-            overheadCorrect = overheadVal.equals(overheadText.getDigit());
+            if (overheadVal < 10)
+                overheadCorrect = overheadVal.equals(overheadText.getDigit());
+            else if (overheadTextSupplement.getDigit() == null || overheadText.getDigit() == null)
+                overheadCorrect = false;
+            else
+                overheadCorrect = overheadVal.equals(overheadTextSupplement.getDigit() * 10 + overheadText.getDigit());
 
-            if (overheadCorrect) {
+            if (overheadCorrect)
                 mechanics.correctOverheadText();
-            }
-            else {
+            else if (overheadVal < 10)
                 wrongDigit(overheadText);
+            else {
+                if (overheadTextSupplement.getDigit() != null && overheadTextSupplement.getDigit() != 1) wrongDigit(overheadTextSupplement);
+                if (overheadText.getDigit() != null && overheadText.getDigit() != 0) wrongDigit(overheadText);
             }
         }
 
         overheadCorrect = (overheadVal == null); // make sure there is no new overhead val
 
         return (bottomCorrect & overheadCorrect);
+    }
+
+    public void checkOtherBottomCorrect(CAsm_TextLayout textLayout) {
+        int otherBottomCorrect = 0;
+        for(int i = 3; i < digitIndex; i = i + 2) {
+            Integer curDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[i]);
+            Integer digit = textLayout.getDigit(i);
+            if(digit != null && !digit.equals(""))
+                otherBottomCorrect = curDigit.equals(textLayout.getDigit(i))? 1 : 2;
+            if(otherBottomCorrect == 0 && (i+ 2 == digitIndex || i+ 1 == digitIndex))
+                break;
+            if(otherBottomCorrect == 1) {
+                textLayout.getText(i).reset();
+                i = digitIndex;
+            } else if(otherBottomCorrect == 2) {
+                wrongDigit(textLayout.getText(i));
+                i = digitIndex;
+            }
+        }
     }
 
     public void wrongDigit(final CAsm_Text t) {
@@ -426,7 +436,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                     t.setTextColor(Color.BLACK);
                     clickPaused = false;
                 }
-            }, 2500);
+            }, 1500);
     }
 
     public boolean getClickPaused() {return clickPaused;}

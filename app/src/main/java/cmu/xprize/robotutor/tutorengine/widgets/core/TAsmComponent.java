@@ -13,6 +13,8 @@ import cmu.xprize.asm_component.CAsm_Alley;
 import cmu.xprize.asm_component.CAsm_Component;
 import cmu.xprize.asm_component.CAsm_Data;
 import cmu.xprize.asm_component.CAsm_DotBag;
+import cmu.xprize.asm_component.CAsm_MechanicSubtract;
+import cmu.xprize.asm_component.CAsm_Text;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
@@ -284,6 +286,12 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
                 // TODO: Manage invalid Behavior
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void highlightBorrowable() {
+        if(operation.equals("-")) {
+            mechanics.highlightBorrowable();
         }
     }
 }

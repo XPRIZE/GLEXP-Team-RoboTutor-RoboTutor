@@ -177,8 +177,12 @@ public class CAsm_TextLayout extends LinearLayout {
         else digitIndex = digitIndex - 2;
 
         if (digitIndex != getChildCount()-1){
-
             CAsm_Text prevText = (CAsm_Text) getChildAt(digitIndex + 2);
+            prevText.setTypeface(null);
+            prevText.setBackground(null);
+            prevText.setWritable(false);
+
+            prevText = (CAsm_Text) getChildAt(digitIndex + 2);
             prevText.setTypeface(null);
             prevText.setBackground(null);
             prevText.setWritable(false);

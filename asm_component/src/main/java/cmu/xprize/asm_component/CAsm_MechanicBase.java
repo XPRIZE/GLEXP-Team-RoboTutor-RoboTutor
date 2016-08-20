@@ -120,8 +120,11 @@ public class CAsm_MechanicBase implements IDotMechanics {
         // whenever they put in the right overhead text
 
         mComponent.overheadText.setWritable(false);
+        if(mComponent.overheadTextSupplement != null)
+            mComponent.overheadTextSupplement.setWritable(false);
         mComponent.overheadVal = null;
         mComponent.overheadText = null;
+        mComponent.overheadTextSupplement = null;
 
     }
 
@@ -170,5 +173,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     }
 
+    public void highlightBorrowable() {
 
+    }
 }

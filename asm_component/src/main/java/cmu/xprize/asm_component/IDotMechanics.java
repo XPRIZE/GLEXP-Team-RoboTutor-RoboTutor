@@ -10,6 +10,7 @@ public interface IDotMechanics {
     void nextDigit();
     void handleClick();
     void correctOverheadText();
+    void highlightBorrowable();
     String getOperation();
 
 }
