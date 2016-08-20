@@ -182,7 +182,7 @@ public class CAsm_TextLayout extends LinearLayout {
             prevText.setBackground(null);
             prevText.setWritable(false);
 
-            prevText = (CAsm_Text) getChildAt(digitIndex + 2);
+            prevText = (CAsm_Text) getChildAt(digitIndex + 1);
             prevText.setTypeface(null);
             prevText.setBackground(null);
             prevText.setWritable(false);
