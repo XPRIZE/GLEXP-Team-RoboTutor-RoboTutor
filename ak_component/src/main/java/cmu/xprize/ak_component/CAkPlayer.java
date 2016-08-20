@@ -4,6 +4,7 @@ import android.animation.AnimatorSet;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.percent.PercentLayoutHelper;
@@ -72,9 +73,14 @@ public class CAkPlayer extends LinearLayout{
         if(size.x > 1400){
             aboveTextView.setTextSize(24);
             belowTextView.setTextSize(24);
+            aboveTextView.setTypeface(null, Typeface.BOLD);
+            belowTextView.setTypeface(null, Typeface.BOLD);
+
         }else {
             aboveTextView.setTextSize(16);
             belowTextView.setTextSize(16);
+            aboveTextView.setTypeface(null, Typeface.BOLD);
+            belowTextView.setTypeface(null, Typeface.BOLD);
         }
 
 
