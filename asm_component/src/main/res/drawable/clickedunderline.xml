@@ -8,7 +8,8 @@
         <shape android:shape="line" >
             <stroke
                 android:width="3dp"
-                android:color="#FF000000" />
+                android:alpha = "140"
+                android:color="#000000" />
 
         </shape>
     </item>

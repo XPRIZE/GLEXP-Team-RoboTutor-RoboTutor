@@ -31,6 +31,8 @@ public class CAsm_TextLayout extends LinearLayout {
     private String operation;
 
     private boolean isClicked;
+    private int clickedTextIndex = -1;
+    private int clickedTextLayoutIndex = -1;
 
     float scale = getResources().getDisplayMetrics().density;
     final int textBoxWidth = (int)(ASM_CONST.textBoxWidth*scale);
@@ -72,20 +74,28 @@ public class CAsm_TextLayout extends LinearLayout {
 
         int delta = numSlots - getChildCount();
 
+        CAsm_TextLayout newTextLayout;
+
         while (delta > 0) {
-            addText(getChildCount());
+            newTextLayout = new CAsm_TextLayout(this.mContext);
+            newTextLayout.addText(0);
+            newTextLayout.addText(1);
+            addView(newTextLayout, getChildCount());
+
             delta--;
         }
 
         while (delta < 0) {
-            delText();
+            delChild();
             delta++;
         }
 
         CAsm_Text currText;
 
         for (int i = 0; i < getChildCount(); i++) {
-            currText = (CAsm_Text) getChildAt(i);
+            currText = getTextLayout(i).getText(0);
+            currText.reset();
+            currText = getTextLayout(i).getText(1);
             currText.reset();
         }
 
@@ -97,7 +107,6 @@ public class CAsm_TextLayout extends LinearLayout {
         }
 
         setText();
-
     }
 
     private void addText(int index){
@@ -111,7 +120,7 @@ public class CAsm_TextLayout extends LinearLayout {
 
     }
 
-    private void delText(){
+    private void delChild(){
 
         removeViewAt(getChildCount()-1);
 
@@ -121,7 +130,7 @@ public class CAsm_TextLayout extends LinearLayout {
 
         int numSlots = getChildCount();
         String[] digits = CAsm_Util.intToDigits(value, numSlots);
-        CAsm_Text curText;
+        CAsm_TextLayout curTextLayout;
 
         switch(id){
 
@@ -129,8 +138,8 @@ public class CAsm_TextLayout extends LinearLayout {
 
                 for (int i = 0; i < numSlots; i++) {
 
-                    curText = (CAsm_Text) getChildAt(i);
-                    curText.setText(digits[i]);
+                    curTextLayout = getTextLayout(i);
+                    curTextLayout.getText(1).setText(digits[i]);
 
                 }
 
@@ -142,8 +151,8 @@ public class CAsm_TextLayout extends LinearLayout {
 
                 for (int i = 0; i < numSlots; i++) {
 
-                    curText = (CAsm_Text) getChildAt(i);
-                    curText.setText(digits[i]);
+                    curTextLayout = getTextLayout(i);
+                    curTextLayout.getText(1).setText(digits[i]);
 
                 }
 
@@ -173,22 +182,21 @@ public class CAsm_TextLayout extends LinearLayout {
 
     public void performNextDigit() {
 
-        if(digitIndex == numSlots) digitIndex--;
-        else digitIndex = digitIndex - 2;
+        digitIndex--;
 
         if (digitIndex != getChildCount()-1){
-            CAsm_Text prevText = (CAsm_Text) getChildAt(digitIndex + 2);
+            CAsm_Text prevText = getTextLayout(digitIndex + 1).getText(1);
             prevText.setTypeface(null);
             prevText.setBackground(null);
             prevText.setWritable(false);
 
-            prevText = (CAsm_Text) getChildAt(digitIndex + 1);
+            prevText = getTextLayout(digitIndex + 1).getText(0);
             prevText.setTypeface(null);
             prevText.setBackground(null);
             prevText.setWritable(false);
         }
 
-        CAsm_Text curText = (CAsm_Text) getChildAt(digitIndex);
+        CAsm_Text curText = getTextLayout(digitIndex).getText(1);
 
         if (curText.getIsStruck()) {
             // crossed out
@@ -201,14 +209,14 @@ public class CAsm_TextLayout extends LinearLayout {
 
         if (id == ASM_CONST.RESULT) {
             if(operation.equals("x")) {
-                for(int i = 3; i < digitIndex; i = i + 2) {
-                    getText(i-1).reset();
-                    if (getText(i).isWritable) {
-                        getText(i).reset();
-                        getText(i).setWritable(true);
+                for(int i = 1; i < digitIndex; i++) {
+                    getTextLayout(i).getText(0).reset();
+                    if (getTextLayout(i).getText(1).isWritable) {
+                        getTextLayout(i).getText(1).reset();
+                        getTextLayout(i).getText(1).setWritable(true);
                     }
                 }
-                getText(digitIndex-1).reset();
+                getTextLayout(digitIndex).getText(0).reset();
             }
             curText.setResult();
         }
@@ -217,13 +225,13 @@ public class CAsm_TextLayout extends LinearLayout {
 
     public void resetValue(int index) {
 
-        CAsm_Text t = (CAsm_Text) getChildAt(index);
-        t.setText("");
+        CAsm_TextLayout textLayout = (CAsm_TextLayout) getChildAt(index);
+        textLayout.getText(0).setText("");
+        textLayout.getText(1).setText("");
 
     }
 
     public void resetAllValues() {
-
         for (int i = 0; i < numSlots; i++) {
             resetValue(i);
         }
@@ -236,9 +244,9 @@ public class CAsm_TextLayout extends LinearLayout {
         int j = 0;
         int digit;
 
-        for (int i = 3; i < numSlots; i = i + 2) {
+        for (int i = 1; i < numSlots; i++) {
 
-            CAsm_Text t = (CAsm_Text) getChildAt(i);
+            CAsm_Text t = getTextLayout(i).getText(1);
             String test = t.getText().toString();
 
             try {
@@ -246,7 +254,7 @@ public class CAsm_TextLayout extends LinearLayout {
             } catch (NumberFormatException e) {
                 continue;
             }
-            j += (int)((Math.pow(10,(getChildCount()-i-1)/2)*digit));
+            j += (int)((Math.pow(10,(getChildCount()-i-1)) * digit));
         }
 
         return j;
@@ -254,9 +262,13 @@ public class CAsm_TextLayout extends LinearLayout {
 
     public Integer getDigit(int index) {
 
-        CAsm_Text t = (CAsm_Text) getChildAt(index);
+        CAsm_Text t = getTextLayout(index).getText(1);
         return t.getDigit();
 
+    }
+
+    public CAsm_TextLayout getTextLayout(int index) {
+        return (CAsm_TextLayout) getChildAt(index);
     }
 
     public CAsm_Text getText(int index) {
@@ -276,13 +288,30 @@ public class CAsm_TextLayout extends LinearLayout {
         CAsm_Text currText;
         CAsm_Text clickedText;
         for (int i = 0; i < getChildCount(); i++) {
-            currText = (CAsm_Text)getChildAt(i);
+            currText = getTextLayout(i).getText(0);
             if (currText.getIsClicked()) {
+                clickedTextIndex = 0;
+                clickedTextLayoutIndex = i;
+                clickedText = currText;
+                return clickedText;
+            }
+            currText = getTextLayout(i).getText(1);
+            if (currText.getIsClicked()) {
+                clickedTextIndex = 1;
+                clickedTextLayoutIndex = i;
                 clickedText = currText;
                 return clickedText;
             }
         }
         return null;
+    }
+
+    public int findClickedTextIndex() {
+        return clickedTextIndex;
+    }
+
+    public int findClickedTextLayoutIndex() {
+        return clickedTextLayoutIndex;
     }
 
     public void setIsClicked(boolean _isClicked) {
@@ -298,5 +327,9 @@ public class CAsm_TextLayout extends LinearLayout {
         return false;
     }
 
-
+    public void resetAllBackground() {
+        for (int i = 0; i < numSlots; i++) {
+            getTextLayout(i).setBackground(null);
+        }
+    }
 }

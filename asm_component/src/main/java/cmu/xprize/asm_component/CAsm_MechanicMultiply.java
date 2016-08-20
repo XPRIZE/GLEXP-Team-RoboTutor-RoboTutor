@@ -14,8 +14,10 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
 
         //User could choose the order of writing result digits
         CAsm_TextLayout resultTextLayout = allAlleys.get(resultIndex).getTextLayout();
-        for(int i = 2; i < resultTextLayout.getChildCount(); i++)
-            resultTextLayout.getText(i).setResult();
+        for(int i = 1; i < resultTextLayout.getChildCount(); i++) {
+            resultTextLayout.getTextLayout(i).getText(0).setResult();
+            resultTextLayout.getTextLayout(i).getText(1).setResult();
+        }
     }
 
     protected String operation = "x";

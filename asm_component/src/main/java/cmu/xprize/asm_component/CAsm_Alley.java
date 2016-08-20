@@ -65,6 +65,8 @@ public class CAsm_Alley extends LinearLayout {
         this.image = _image;
 
         STextLayout.resetAllValues();
+        if(id != ASM_CONST.OPERATION && id != ASM_CONST.REGULAR)
+            STextLayout.resetAllBackground();
         STextLayout.update(id, val, operation, numSlots);
 
         SdotBag.setDrawBorder(id != ASM_CONST.ANIMATOR1 && id != ASM_CONST.ANIMATOR2 && id != ASM_CONST.ANIMATOR3);
@@ -97,8 +99,7 @@ public class CAsm_Alley extends LinearLayout {
 
         Integer cols;
 
-        if(digitIndex == numSlots) digitIndex--;
-        else digitIndex = digitIndex - 2;
+        digitIndex--;
 
         STextLayout.performNextDigit();
 

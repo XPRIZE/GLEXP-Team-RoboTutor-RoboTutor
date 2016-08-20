@@ -123,10 +123,10 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
             @Override
             public void onAnimationEnd(Animator animation) {
                 if(resultBag.getCols() >= 10 && resultBag.dotsStatic()) {
-                    Integer temp = allAlleys.get(overheadIndex).getTextLayout().getText(mComponent.digitIndex).getDigit();
+                    Integer temp = allAlleys.get(overheadIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit();
                     int number1 = (temp == null || temp.equals("")) ? 0 : temp.intValue();
-                    int number2 = allAlleys.get(firstBagIndex).getTextLayout().getText(mComponent.digitIndex).getDigit().intValue();
-                    int number3 = allAlleys.get(secondBagIndex).getTextLayout().getText(mComponent.digitIndex).getDigit().intValue();
+                    int number2 = allAlleys.get(firstBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit().intValue();
+                    int number3 = allAlleys.get(secondBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit().intValue();
 
                     if (number1 + number2 + number3 == 10 + resultBag.getOverflowNum()) {
                         performCarry();
@@ -277,8 +277,8 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
                 resultBag.setImage(resultBag.getImageName());
 
                 CAsm_TextLayout carryLayout = allAlleys.get(overheadIndex).getTextLayout();
-                CAsm_Text carryText = carryLayout.getText(mComponent.digitIndex-2);
-                Integer currCarryNum = carryLayout.getDigit(mComponent.digitIndex-2);
+                CAsm_Text carryText = carryLayout.getTextLayout(mComponent.digitIndex-1).getText(1);
+                Integer currCarryNum = carryLayout.getDigit(mComponent.digitIndex-1);
 
                 if (currCarryNum == null) {
                     carryText.setText("1");
@@ -308,7 +308,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
     private CAsm_Text setCarryText(){
 
         CAsm_TextLayout textLayout = allAlleys.get(overheadIndex).getTextLayout();
-        CAsm_Text t = textLayout.getText(mComponent.digitIndex - 2);
+        CAsm_Text t = textLayout.getTextLayout(mComponent.digitIndex - 1).getText(1);
         t.setResult();
 
         return t;

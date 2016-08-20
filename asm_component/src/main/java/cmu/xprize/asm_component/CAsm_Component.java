@@ -177,8 +177,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     public void nextDigit() {
 
-        if(digitIndex == numSlots) digitIndex--;
-        else digitIndex = digitIndex - 2;
+        digitIndex--;
 
         mechanics.nextDigit();
 
@@ -204,7 +203,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
         readInData(data);
 
-        numSlots = CAsm_Util.maxDigits(numbers) * 2 + 2;
+        numSlots = CAsm_Util.maxDigits(numbers) + 1;
         digitIndex = numSlots;
 
         updateAlley(0, 0, ASM_CONST.ANIMATOR3, operation, false); // animator alley
@@ -378,7 +377,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         bottomCorrect = corDigit.equals(textLayout.getDigit(digitIndex));
 
         if (!bottomCorrect) {
-            wrongDigit(textLayout.getText(digitIndex));
+            wrongDigit(textLayout.getTextLayout(digitIndex).getText(1));
         }
 
         // now check overhead answer
@@ -407,18 +406,18 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     public void checkOtherBottomCorrect(CAsm_TextLayout textLayout) {
         int otherBottomCorrect = 0;
-        for(int i = 3; i < digitIndex; i = i + 2) {
+        for(int i = 1; i < digitIndex; i++) {
             Integer curDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[i]);
             Integer digit = textLayout.getDigit(i);
             if(digit != null && !digit.equals(""))
                 otherBottomCorrect = curDigit.equals(textLayout.getDigit(i))? 1 : 2;
-            if(otherBottomCorrect == 0 && (i+ 2 == digitIndex || i+ 1 == digitIndex))
+            if(otherBottomCorrect == 0 && i+ 1 == digitIndex)
                 break;
             if(otherBottomCorrect == 1) {
-                textLayout.getText(i).reset();
+                textLayout.getTextLayout(i).getText(1).reset();
                 i = digitIndex;
             } else if(otherBottomCorrect == 2) {
-                wrongDigit(textLayout.getText(i));
+                wrongDigit(textLayout.getTextLayout(i).getText(1));
                 i = digitIndex;
             }
         }
@@ -464,9 +463,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                     //For multiplication, user could choose the order of writing result digits
                     if(operation.equals("x")) {
                         CAsm_TextLayout resultTextLayout = allAlleys.get(allAlleys.size()-1).getTextLayout();
-                        for(int i = 2; i <= digitIndex; i++) {
-                            if(resultTextLayout.getText(i).isWritable)
-                                resultTextLayout.getText(i).setResult();
+                        for(int i = 1; i <= digitIndex; i++) {
+                            if(resultTextLayout.getTextLayout(i).getText(1).isWritable)
+                                resultTextLayout.getTextLayout(i).getText(1).setResult();
                         }
                     } else
                         t.setResult();
@@ -478,9 +477,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                     //For multiplication, user could choose the order of writing result digits
                     if(operation.equals("x")) {
                         CAsm_TextLayout resultTextLayout = allAlleys.get(allAlleys.size()-1).getTextLayout();
-                        for(int i = 2; i <= digitIndex; i++) {
-                            if(resultTextLayout.getText(i).isWritable)
-                                resultTextLayout.getText(i).setResult();
+                        for(int i = 1; i <= digitIndex; i++) {
+                            if(resultTextLayout.getTextLayout(i).getText(1).isWritable)
+                                resultTextLayout.getTextLayout(i).getText(1).setResult();
                         }
                     } else
                         t.setResult();
@@ -494,7 +493,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         //Highlights user's active column.
         for (CAsm_Alley alley: allAlleys) {
             try {
-                CAsm_Text text = alley.getTextLayout().getText(digitIndex);
+                CAsm_Text text = alley.getTextLayout().getTextLayout(digitIndex).getText(1);
                 if (text.getDigit() != null || text.isWritable) {highlightText(text); }
             } catch (NullPointerException e) { continue;}
         }
