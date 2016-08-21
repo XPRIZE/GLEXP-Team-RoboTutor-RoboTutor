@@ -98,7 +98,7 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
 
         newRow.setTranslationY(-dy);
         clickedDot.setHollow(true);
-
+        mComponent.playChime();
         ObjectAnimator anim = ObjectAnimator.ofFloat(newRow, "translationY", 0);
         anim.setDuration(1000);
         setAllParentsClip(newRow, false);
