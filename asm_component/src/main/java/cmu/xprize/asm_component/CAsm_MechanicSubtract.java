@@ -21,8 +21,8 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
     private int minuendIndex; // vertical column
 
-    private int digitBorrowingIndex; // horizontal column
-    private int digitBorrowingCol;
+    private int digitBorrowingIndex = 0; // horizontal column
+    private int digitBorrowingCol = 0;
     private boolean isBorrowedValue = true; //To indicate if the current overhead value is borrowed value
 
     public CAsm_MechanicSubtract(CAsm_Component mComponent) {super.init(mComponent);}
@@ -378,6 +378,8 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
     @Override
     public void highlightBorrowable() {
+        if(digitBorrowingCol == 0 && digitBorrowingIndex == 0) return;
+
         CAsm_TextLayout borrowableTextLayout = allAlleys.get(digitBorrowingCol).getTextLayout();
         CAsm_Text borrowableText = borrowableTextLayout.getTextLayout(digitBorrowingIndex).getText(1);
         if(!borrowableText.getIsStruck()) mComponent.highlightText(borrowableText);
