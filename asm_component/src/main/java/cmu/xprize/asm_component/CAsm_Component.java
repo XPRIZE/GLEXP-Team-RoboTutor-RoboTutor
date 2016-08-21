@@ -59,6 +59,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 //    Arithmetic problems will start with the
     protected int               placeValIndex;
     protected String[]          chimes = ASM_CONST.CHIMES[placeValIndex];
+    protected String[]          twoRowschimes = new String[20];
     protected String            currentChime;
 
     protected ArrayList<CAsm_Alley> allAlleys = new ArrayList<>();
@@ -326,10 +327,23 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     public void nextPlaceValue() {
         placeValIndex++;
         chimes = ASM_CONST.CHIMES[placeValIndex % 4];
+        String [] firstRowChimes = chimes;
+        String [] secondRowChimes = ASM_CONST.CHIMES[(placeValIndex+1) % 4];
+        for(int i = 0;i < 10; i++){
+            twoRowschimes[i]  = firstRowChimes[i];
+        }
+        for(int i = 10;i< 19; i++){
+            twoRowschimes[i]  = secondRowChimes[i-10+1];
+        }
         for (CAsm_Alley alley: allAlleys) {
             CAsm_DotBag dotBag = alley.getDotBag();
-            dotBag.setChimes(chimes);
-            dotBag.setChimeIndex(-1);
+            if(dotBag.getRows() == 1){
+                dotBag.setChimes(chimes);
+                dotBag.setChimeIndex(-1);
+            }else{
+                dotBag.setChimes(twoRowschimes);
+                dotBag.setChimeIndex(-1);
+            }
         }
     }
 

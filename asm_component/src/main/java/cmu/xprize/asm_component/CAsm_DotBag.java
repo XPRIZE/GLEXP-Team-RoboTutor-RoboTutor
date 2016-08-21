@@ -223,7 +223,8 @@ public class CAsm_DotBag extends TableLayout {
         resetBounds();
         if (isAudible) {
             setChimeIndex(chimeIndex + 1);
-            currentChime = chimes[this.chimeIndex % chimes.length];
+            currentChime = chimes[this.chimeIndex];
+
         }
 
 
