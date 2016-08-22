@@ -513,14 +513,19 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         }
     }
 
-    public void updateText(CAsm_Text t) {
+    public void updateText(CAsm_Text t, boolean isClickingBorrowing) {
         if (!mPopup.isActive) {
             ArrayList<IEventListener> listeners = new ArrayList<>();
             listeners.add(t);
             listeners.add(this);
             mPopup.showAtLocation(this, Gravity.LEFT, 10, 10);
             mPopup.enable(true, listeners);
-            mPopup.update(t, 50, 50, 300, 300);
+
+            if(isClickingBorrowing)
+                mPopup.update(t, 120, -300, 300, 300);
+            else
+                mPopup.update(t, 50, 50, 300, 300);
+
             mPopup.isActive = true;
         }
     }

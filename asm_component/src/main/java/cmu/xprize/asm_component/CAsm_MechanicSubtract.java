@@ -44,7 +44,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
             CAsm_TextLayout firstBagLayout = allAlleys.get(firstBagIndex).getTextLayout();
 
             // find first nonzero to borrow from - this should always break in the for loop!
-            for (int i = mComponent.digitIndex - 2; i >= 0; i = i - 2) {
+            for (int i = mComponent.digitIndex - 1; i >= 0; i--) {
 
                 if (firstBagLayout.getDigit(i) > 0) {
                     digitBorrowingIndex = i;

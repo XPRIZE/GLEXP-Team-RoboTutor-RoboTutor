@@ -28,6 +28,8 @@ public class CAsm_MechanicBase implements IDotMechanics {
     protected int secondBagIndex = 5;
     protected int resultIndex = 6;
 
+    protected int clickedTextLayoutIndex = -1;
+
     static final String TAG = "CAsm_MechanicBase";
 
     protected void init(CAsm_Component mComponent) {
@@ -103,7 +105,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
         if (clickedText != null) {
 
             if (clickedText.isWritable) {
-                mComponent.updateText(clickedText);
+                mComponent.updateText(clickedText, clickedTextLayoutIndex < resultIndex);
             } else {
                 clickedTextLayout.setIsClicked(true);
                 clickedText.setIsClicked(true);
@@ -164,6 +166,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
             currTextLayout = alley.getTextLayout();
 
             if (currTextLayout.getIsClicked()) {
+                clickedTextLayoutIndex = allAlleys.indexOf(alley);
                 clickedTextLayout = currTextLayout;
                 break;
             }
@@ -174,6 +177,6 @@ public class CAsm_MechanicBase implements IDotMechanics {
     }
 
     public void highlightBorrowable() {
-
     }
+
 }
