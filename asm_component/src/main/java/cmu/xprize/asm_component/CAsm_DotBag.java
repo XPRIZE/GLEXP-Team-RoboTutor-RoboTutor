@@ -152,9 +152,10 @@ public class CAsm_DotBag extends TableLayout {
 
         else if (deltaCols > 0) {
             for (int i = 0; i < this.rows; i++) {
-                for (int j = origCols; j < _cols; j++ ) {
+                for(int j = 0; j < origCols; j++)
+                    getDot(i, j).setVisibility(View.VISIBLE);
+                for (int j = origCols; j < _cols; j++ )
                     addDot(i, j);
-                }
             }
 
         }
