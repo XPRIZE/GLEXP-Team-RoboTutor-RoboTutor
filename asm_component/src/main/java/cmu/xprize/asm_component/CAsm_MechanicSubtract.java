@@ -143,6 +143,8 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         subtrahendBag.setHallowChime();
         mComponent.playChime();
 
+
+
         CAsm_Dot correspondingDot = correspondingBag.getDot(0, correspondingCol);
         correspondingDot.setVisibility(View.INVISIBLE);
 
@@ -220,6 +222,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     private void dotbagBorrow() {
 
         // function when you borrow from your neighbor
+
         dotBagBorrowed = true;
 
         CAsm_DotBag borrowBag = allAlleys.get(digitBorrowingCol).getDotBag();
@@ -227,18 +230,13 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         CAsm_DotBag subtrahendBag = allAlleys.get(secondBagIndex).getDotBag();
 
         borrowBag.setDrawBorder(true);
-        borrowBag.setRows(2);
+        borrowBag.setRows(1);
         borrowBag.setCols(10);
-
-        for(int i = 0; i < 10; i++)
-            borrowBag.getDot(1, i).setVisibility(View.INVISIBLE);
 
         dotOffset = borrowBag.getCols() - subtrahendBag.getCols();
         subtrahendBag.setTranslationX(dotOffset*subtrahendBag.getSize());
         dotOffset = borrowBag.getCols() - minuendBag.getCols();
         minuendBag.setTranslationX(dotOffset*subtrahendBag.getSize());
-
-        createUpwardBagAnimator();
 
         minuendIndex = digitBorrowingCol;
     }
@@ -248,7 +246,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         CAsm_DotBag startDotBag = allAlleys.get(startIndex).getDotBag();
         CAsm_DotBag resultDotBag = allAlleys.get(resultIndex).getDotBag();
 
-        resultDotBag.setRows(1);
+        resultDotBag.setRows(startDotBag.getRows());
         resultDotBag.setCols(startDotBag.getCols());
         resultDotBag.setImage(startDotBag.getImageName());
         resultDotBag.setIsClickable(false);
@@ -258,8 +256,9 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         startDotBag.setHollow(true);
 
         int dy = 0;
-        for (int i = resultIndex; i > startIndex; i--)
+        for (int i = resultIndex; i > startIndex; i--) {
             dy += allAlleys.get(i).getHeight() + mComponent.alleyMargin;
+        }
 
         resultDotBag.setTranslationY(-dy);
         ObjectAnimator anim = ObjectAnimator.ofFloat(resultDotBag, "translationY", 0);
@@ -267,25 +266,6 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         return anim;
 
-    }
-
-    private void createUpwardBagAnimator() {
-
-        CAsm_DotBag startDotBag = allAlleys.get(firstBagIndex).getDotBag();
-        CAsm_DotBag resultDotBag = allAlleys.get(digitBorrowingCol).getDotBag();
-
-        setAllParentsClip(resultDotBag, false);
-
-        int dy = 0;
-        for (int i = firstBagIndex; i > digitBorrowingCol; i--) {
-            dy += allAlleys.get(i).getHeight() + mComponent.alleyMargin;
-        }
-
-        startDotBag.setTranslationY(0);
-        ObjectAnimator anim = ObjectAnimator.ofFloat(startDotBag, "translationY", -dy);
-        anim.setDuration(1500);
-
-        anim.start();
     }
 
     private void makeTextBorrowable(int verticalIndex, int horizontalIndex) {
