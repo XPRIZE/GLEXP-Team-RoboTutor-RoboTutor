@@ -326,9 +326,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     public void nextPlaceValue() {
         placeValIndex++;
-        chimes = ASM_CONST.CHIMES[placeValIndex % 4];
+        chimes = ASM_CONST.CHIMES[placeValIndex % 4 + 1];
         String [] firstRowChimes = chimes;
-        String [] secondRowChimes = ASM_CONST.CHIMES[(placeValIndex+1) % 4];
+        String [] secondRowChimes = ASM_CONST.CHIMES[(placeValIndex - 1) % 4 + 1];
         for(int i = 0;i < 10; i++){
             twoRowschimes[i]  = firstRowChimes[i];
         }
