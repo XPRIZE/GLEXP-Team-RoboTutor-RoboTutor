@@ -3,6 +3,7 @@ package cmu.xprize.ak_component;
 import android.animation.AnimatorSet;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
@@ -71,16 +72,20 @@ public class CAkPlayer extends LinearLayout{
         display.getSize(size);
         AnimatorSet tmp;
         if(size.x > 1400){
-            aboveTextView.setTextSize(24);
-            belowTextView.setTextSize(24);
+            aboveTextView.setTextSize(26);
+            belowTextView.setTextSize(26);
             aboveTextView.setTypeface(null, Typeface.BOLD);
             belowTextView.setTypeface(null, Typeface.BOLD);
+            aboveTextView.setTextColor(Color.GREEN);
+            belowTextView.setTextColor(Color.GREEN);
 
         }else {
-            aboveTextView.setTextSize(16);
-            belowTextView.setTextSize(16);
+            aboveTextView.setTextSize(18);
+            belowTextView.setTextSize(18);
             aboveTextView.setTypeface(null, Typeface.BOLD);
             belowTextView.setTypeface(null, Typeface.BOLD);
+            aboveTextView.setTextColor(Color.GREEN);
+            belowTextView.setTextColor(Color.GREEN);
         }
 
 
