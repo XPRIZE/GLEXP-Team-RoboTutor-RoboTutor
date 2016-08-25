@@ -56,6 +56,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     private float scale = getResources().getDisplayMetrics().density;
     protected int alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
 
+    protected  boolean isWriting = false;
+
 //    Arithmetic problems will start with the
     protected int               placeValIndex;
     protected String[]          chimes = ASM_CONST.CHIMES[placeValIndex];
@@ -135,10 +137,10 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
 
     public void setDotBagsVisible(Boolean _dotbagsVisible) {
-
-        for (int alley = 0; alley < allAlleys.size(); alley++) {
-            CAsm_Alley curAlley = allAlleys.get(alley);
-            CAsm_DotBag curDB = curAlley.getDotBag();
+        if(!isWriting) {
+            for (int alley = 0; alley < allAlleys.size(); alley++) {
+                CAsm_Alley curAlley = allAlleys.get(alley);
+                CAsm_DotBag curDB = curAlley.getDotBag();
 
                 if (_dotbagsVisible) {
                     curDB.setVisibility(VISIBLE);
@@ -153,7 +155,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
             }
 
             dotbagsVisible = _dotbagsVisible;
-
+        }
     }
 
 
@@ -179,6 +181,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     public void nextDigit() {
 
         digitIndex--;
+        isWriting = false;
 
         mechanics.nextDigit();
 
@@ -514,6 +517,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     }
 
     public void updateText(CAsm_Text t, boolean isClickingBorrowing) {
+        isWriting = true;
         if (!mPopup.isActive) {
             ArrayList<IEventListener> listeners = new ArrayList<>();
             listeners.add(t);

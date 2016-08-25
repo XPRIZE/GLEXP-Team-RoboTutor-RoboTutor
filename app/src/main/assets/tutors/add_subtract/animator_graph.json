@@ -47,7 +47,7 @@
           "type":"node",
           "maptype":"moduleMap",
           "mapname": "SHOWDIGIT",
-          "preenter":["SET_DOTBAGS_INVISIBLE", "CREATE_HESITATION_TIMER_SHOW_DOTBAG"],
+          "preenter":["SET_DOTBAGS_INVISIBLE"],
           "preexit" :["PROMPT_COL"],
           "edges":
           [
@@ -62,7 +62,7 @@
           "type":"node",
           "maptype":"moduleMap",
           "mapname": "CLICKDOTS",
-          "preenter":["HIGHLIGHT_BORROWABLE"],
+          "preenter":["HIGHLIGHT_BORROWABLE", "CREATE_HESITATION_TIMER_SHOW_DOTBAG"],
           "preexit" :[],
           "edges":
           [

@@ -84,8 +84,10 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
 
         if(correct)
             mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
-        else
+        else {
+            isWriting = false;
             mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+        }
     }
 
     public void reset() {
