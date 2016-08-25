@@ -276,7 +276,7 @@
         "PAUSE":{"type": "COMMAND", "cmd": "WAIT" },
 
         //FINGERWRITING ADDITIONS
-        "PLAY_CHIME": {"type": "AUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{TestChimes}}.mp3", "repeat":false, "volume": ".9", "mode":"event", "features": ""},
+        "PLAY_CHIME": {"type": "AUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{TestChimes}}.mp3", "repeat":false, "volume": "0.7", "mode":"event", "features": ""},
 
         "FW_DISABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "FALSE:Boolean","features":""},
         //disable FingerWriting
