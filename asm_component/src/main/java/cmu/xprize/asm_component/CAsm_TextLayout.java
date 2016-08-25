@@ -189,11 +189,13 @@ public class CAsm_TextLayout extends LinearLayout {
             prevText.setTypeface(null);
             prevText.setBackground(null);
             prevText.setWritable(false);
+            prevText.setAlpha(0.5f);
 
             prevText = getTextLayout(digitIndex + 1).getText(0);
             prevText.setTypeface(null);
             prevText.setBackground(null);
             prevText.setWritable(false);
+            prevText.setAlpha(0.5f);
         }
 
         CAsm_Text curText = getTextLayout(digitIndex).getText(1);
