@@ -29,7 +29,7 @@ LTKShapeRecognizer* lipiShapeReco = NULL;
 * Author			Date				Description of change
 *************************************************************************************/
 
-void JNICALL Java_cmu_xprize_ltk_LipiTKJNIInterface_initializeNative(JNIEnv *env,
+void JNICALL Java_cmu_xprize_ltkplus_CLipiTKJNIInterface_initializeNative(JNIEnv *env,
 																 jobject this_object,
 																 jstring lipiDirectory,
 																 jstring lipiProject)
@@ -87,7 +87,7 @@ void JNICALL Java_cmu_xprize_ltk_LipiTKJNIInterface_initializeNative(JNIEnv *env
 *************************************************************************************/
 
 jobjectArray 
-	JNICALL Java_cmu_xprize_ltk_LipiTKJNIInterface_recognizeNative(JNIEnv *env,
+	JNICALL Java_cmu_xprize_ltkplus_CLipiTKJNIInterface_recognizeNative(JNIEnv *env,
 															   jobject this_object,
 															   jobjectArray StrokeArray,
 															   jint NumStrokes)
@@ -98,7 +98,7 @@ jobjectArray
 
 	try
 	{
-		jclass strokeClass = env->FindClass("cmu/xprize/ltk/Stroke");
+		jclass strokeClass = env->FindClass("cmu/xprize/ltkplus/CStroke");
 		if(strokeClass == NULL) {
 			ALOG(LTKLogger::LTK_LOGLEVEL_DEBUG, "strokeClass ID is NULL");
 			cout << "strokeClass ID is NULL" << endl;
@@ -134,7 +134,7 @@ jobjectArray
 
 		jfieldID yFieldID = env->GetFieldID(pointFClass, "y", "F");
 
-		jclass resultClass = env->FindClass("cmu/xprize/ltk/RecResult");
+		jclass resultClass = env->FindClass("cmu/xprize/ltkplus/CRecResult");
 
 		if(resultClass == NULL) {
             ALOG( LTKLogger::LTK_LOGLEVEL_DEBUG, "resultClass ID is NULL");

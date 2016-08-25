@@ -68,7 +68,7 @@ public class JSON_Helper {
 
     static public String cacheData(String fileName) {
 
-        InputStream in;
+        InputStream in = null;
 
         StringBuilder buffer = new StringBuilder();
         byte[] databuffer    = new byte[1024];
@@ -85,14 +85,21 @@ public class JSON_Helper {
                 // We can load from Android Assets or from an external file based on the
                 // CacheSource setting
                 //
-                if(_cacheSource.equals(TCONST.ASSETS)) {
+                switch(_cacheSource) {
+                    case TCONST.ASSETS:
 
-                    in = _assetManager.open(fileName);
+                        in = _assetManager.open(fileName);
+                        break;
 
-                } else {
-                    String filePath = _externFiles + "/" + fileName;
+                    case TCONST.EXTERN:
+                        String filePath = _externFiles + "/" + fileName;
 
-                    in = new FileInputStream(filePath);
+                        in = new FileInputStream(filePath);
+                        break;
+
+                    case TCONST.DEFINED:
+                        in = new FileInputStream(fileName);
+                        break;
                 }
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -133,6 +140,9 @@ public class JSON_Helper {
      *
      * Obj is the object itself - so it already exists and its type is known at call time. So this
      * is not used to generate the root object from the spec.
+     *
+     * Scope may be null if you are not rebuilding a scriptable object - i.e. you can use this
+     * just to reconstruct an ILoadableObject with no other intent
      *
      * @param jsonObj
      * @param self
@@ -398,54 +408,6 @@ public class JSON_Helper {
                             Object field_Array = Array.newInstance(elemClass, nArr.length());
 
                             field.set(self, parseArray(jsonObj, self, classMap, scope, nArr, elemClass, field_Array));
-
-
-//                            nArr = jsonObj.getJSONArray(fieldName);
-//
-//                            Class<?> elemClass = fieldClass.getComponentType();
-//
-//                            Object field_Array = Array.newInstance(elemClass, nArr.length());
-//
-//                            for (int i = 0; i < nArr.length(); i++) {
-//                                try {
-//                                    Object eObj;
-//
-//                                    if (elemClass.equals(String.class)) {
-//                                        eObj = nArr.getString(i);
-//                                    }
-//                                    else if (elemClass.equals(int.class)) {
-//                                        eObj = nArr.getInt(i);
-//                                    }
-//                                    else {
-//                                        nJsonObj = nArr.getJSONObject(i);
-//
-//                                        // If the element has a type field then assume it is a subtype
-//                                        // of the array component type and instantiate it by type
-//                                        if (nJsonObj.has("type")) {
-//                                            Class<?> subClass = classMap.get(nJsonObj.getString("type"));
-//
-//                                            System.out.printf("class type:%s\n", subClass.getName());
-//                                            eObj = subClass.newInstance();
-//                                        }
-//
-//                                        // Otherwise use the array component type by default.
-//                                        else {
-//                                            System.out.printf("class type:%s\n", elemClass.getName());
-//                                            eObj = elemClass.newInstance();
-//                                        }
-//
-//                                        ((ILoadableObject) eObj).loadJSON(nJsonObj, scope);
-//                                    }
-//
-//                                    Array.set(field_Array, i, eObj);
-//
-//                                } catch (NullPointerException e) {
-//                                    e.printStackTrace();
-//                                    Log.e(TAG, "Null Object in :" + nJsonObj);
-//                                }
-//                            }
-//
-//                            field.set(self, field_Array);
                         }
 
                         // otherwise assume it is a discrete object of ILoadable type
@@ -510,6 +472,10 @@ public class JSON_Helper {
                         eObj = nArr.getString(i);
                     } else if (elemClass.equals(int.class)) {
                         eObj = nArr.getInt(i);
+                    } else if (elemClass.equals(float.class)) {
+                        eObj = (float)(nArr.getDouble(i));
+                    } else if (elemClass.equals(double.class)) {
+                        eObj = nArr.getDouble(i);
                     } else {
                         nJsonObj = nArr.getJSONObject(i);
 

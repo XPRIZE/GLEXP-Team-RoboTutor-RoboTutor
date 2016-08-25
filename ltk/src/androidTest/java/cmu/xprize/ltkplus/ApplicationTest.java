@@ -1,4 +1,4 @@
-package cmu.xprize.ltk;
+package cmu.xprize.ltkplus;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

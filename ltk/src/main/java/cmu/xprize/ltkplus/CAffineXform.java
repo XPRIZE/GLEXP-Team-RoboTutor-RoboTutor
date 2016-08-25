@@ -17,9 +17,9 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.ltk;
+package cmu.xprize.ltkplus;
 
-public class AffineXform {
+public class CAffineXform {
 
     private float _scaleX;
     private float _scaleY;
@@ -30,11 +30,11 @@ public class AffineXform {
     private int   _origX;
     private int   _origY;
 
-    public AffineXform() {
+    public CAffineXform() {
         init(0,0,0,0,0);
     }
 
-    public AffineXform(float sx, float sy, float x, float y, float t) {
+    public CAffineXform(float sx, float sy, float x, float y, float t) {
         init(sx, sy, x, y, t);
     }
 

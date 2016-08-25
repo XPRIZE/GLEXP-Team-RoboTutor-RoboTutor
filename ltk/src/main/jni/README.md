@@ -11,6 +11,15 @@ e.g.
 
     ndk-build NDK_LIBS_OUT="../jniLibs"
     
+To build successfully you must add:
+
+    sourceSets {
+        main {
+            jni.srcDirs = []
+        }
+    }
+    
+to the build.gradle file for the writingcomp module     
     
 To Build you need to update the PATHH variable to point to the jni folder in your dev environment.
 
@@ -20,12 +29,14 @@ specification.
  lipiJni.cpp 
  lipiJni.h 
 
-i.e. Java_cmu_xprize_ltk_LipiTKJNIInterface
+e.g. Java_cmu_xprize_ltk_CLipiTKJNIInterface_??
+                or
+     Java_lipitk_CLipiTKJNIInterface_??
 
 
 You also need to update the marshalling references to reflect package changes.
-env->FindClass("cmu/xprize/ltk/RecResult");
 
+env->FindClass("cmu/xprize/ltk/RecResult");
 
 To control debugging log output in Android see   LTKLoggerUtil.cpp : ANDROID_LOG
 

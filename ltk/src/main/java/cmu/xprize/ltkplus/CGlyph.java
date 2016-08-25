@@ -17,7 +17,7 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.ltk;
+package cmu.xprize.ltkplus;
 
 import android.graphics.PointF;
 import android.graphics.RectF;
@@ -44,13 +44,13 @@ import cmu.xprize.util.TCONST;
  * the glyph is complete.  It is serialized in a normalized form
  *
  */
-public class StrokeSet {
+public class CGlyph {
 
     // volatile data
     private StrokeInfo        _strokeInfo;
     private long              _startTime;
     private long              _lastTime;
-    private Stroke            _currentStroke;
+    private CStroke _currentStroke;
 
     // persistent glyph data
     private ArrayList<StrokeInfo> _strokeInfoList;
@@ -64,7 +64,7 @@ public class StrokeSet {
     private static String      TAG  = "StrokeSet";
 
 
-    public StrokeSet(float baseline) {
+    public CGlyph(float baseline) {
 
         logManager = CLogManager.getInstance();
 
@@ -75,7 +75,7 @@ public class StrokeSet {
 
     public void newStroke() {
 
-        _currentStroke = new Stroke();
+        _currentStroke = new CStroke();
         _startTime     = System.currentTimeMillis();
         _strokeInfo    = new StrokeInfo(_currentStroke, _startTime);
 
@@ -137,7 +137,7 @@ public class StrokeSet {
     public float getFontBaselineRatio() { return (_fontBaseLine - _fontBoundingBox.top) / _fontBoundingBox.height(); }
 
     public int size() {return _strokeInfoList.size(); }
-    public Stroke getStroke(int index) {
+    public CStroke getStroke(int index) {
         return  _strokeInfoList.get(index).stroke();
     }
 
@@ -191,11 +191,11 @@ public class StrokeSet {
 
     public class StrokeInfo {
 
-        private Stroke _stroke;
+        private CStroke _stroke;
         private Long   _time;
         private Long   _duration;
 
-        StrokeInfo(Stroke newStroke, long time) {
+        StrokeInfo(CStroke newStroke, long time) {
             _stroke = newStroke;
             _time   = time;
         }
@@ -204,7 +204,7 @@ public class StrokeSet {
             _duration = duration;
         }
 
-        public Stroke stroke() {
+        public CStroke stroke() {
             return _stroke;
         }
         public long time() {
@@ -308,11 +308,11 @@ public class StrokeSet {
         writer.endArray();
     }
 
-    public void writeStroke(JsonWriter writer, Stroke stroke) throws IOException {
+    public void writeStroke(JsonWriter writer, CStroke stroke) throws IOException {
 
         writer.beginArray();
 
-        for (Stroke.StrokePoint point : stroke.getPoints()) {
+        for (CStroke.StrokePoint point : stroke.getPoints()) {
 //            writer.beginObject();
 //            writer.name("p");
 

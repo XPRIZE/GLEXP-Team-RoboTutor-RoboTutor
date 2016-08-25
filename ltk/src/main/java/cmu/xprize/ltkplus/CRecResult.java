@@ -1,8 +1,8 @@
-package cmu.xprize.ltk;
+package cmu.xprize.ltkplus;
 
-public class RecResult {
+public class CRecResult {
 
-    public RecResult() {
+    public CRecResult() {
         Id = -1;
         Confidence = 0;
     }

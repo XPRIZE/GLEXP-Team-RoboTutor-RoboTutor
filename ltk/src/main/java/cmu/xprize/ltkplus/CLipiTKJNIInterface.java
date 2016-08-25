@@ -17,7 +17,7 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.ltk;
+package cmu.xprize.ltkplus;
 
 import android.util.Log;
 
@@ -25,7 +25,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
-public class LipiTKJNIInterface {
+public class CLipiTKJNIInterface {
 
     private String _lipiDirectory;
     private String _project;
@@ -42,7 +42,7 @@ public class LipiTKJNIInterface {
     //  Initializes the interface with a directory to look for projects in
     //  	the name of the project to use for recognition, and the name
     //  	of the ShapeRecognizer to use.
-    public LipiTKJNIInterface(String lipiDirectory, String project) {
+    public CLipiTKJNIInterface(String lipiDirectory, String project) {
         _lipiDirectory = lipiDirectory;
         _project = project;
     }
@@ -94,10 +94,10 @@ public class LipiTKJNIInterface {
         }
     }
 
-    public RecResult[] recognize(Stroke[] strokes) {
-        RecResult[] results = recognizeNative(strokes, strokes.length);
+    public CRecResult[] recognize(CStroke[] strokes) {
+        CRecResult[] results = recognizeNative(strokes, strokes.length);
 
-        for (RecResult result : results)
+        for (CRecResult result : results)
             Log.d("jni", "ShapeID = " + result.Id + " Confidence = " + result.Confidence);
 
         return results;
@@ -107,7 +107,7 @@ public class LipiTKJNIInterface {
     private native void initializeNative(String lipiDirectory, String project);
 
     // Returns a list of results when recognizing the given list of strokes
-    private native RecResult[] recognizeNative(Stroke[] strokes, int numJStrokes);
+    private native CRecResult[] recognizeNative(CStroke[] strokes, int numJStrokes);
 
     public String getLipiDirectory() {
         return _lipiDirectory;

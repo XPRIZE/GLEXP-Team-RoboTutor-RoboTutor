@@ -1,4 +1,4 @@
-package cmu.xprize.ltk;
+package cmu.xprize.ltkplus;
 
 import org.junit.Test;
 

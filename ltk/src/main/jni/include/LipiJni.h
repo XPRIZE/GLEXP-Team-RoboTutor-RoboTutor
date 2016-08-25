@@ -27,8 +27,8 @@
 #define CONFIDENCE_THRESHOLD 0.002f
 #define NUMOFCHOICES 5
 
-extern "C" void JNICALL Java_cmu_xprize_ltk_LipiTKJNIInterface_initializeNative(JNIEnv *env, jobject this_object, jstring lipiDirectory, jstring project);
+extern "C" void JNICALL Java_cmu_xprize_ltkplus_CLipiTKJNIInterface_initializeNative(JNIEnv *env, jobject this_object, jstring lipiDirectory, jstring project);
 
-extern "C" jobjectArray JNICALL Java_cmu_xprize_ltk_LipiTKJNIInterface_recognizeNative(JNIEnv *env, jobject this_object, jobjectArray StrokeArray, jint numJStrokes);
+extern "C" jobjectArray JNICALL Java_cmu_xprize_ltkplus_CLipiTKJNIInterface_recognizeNative(JNIEnv *env, jobject this_object, jobjectArray StrokeArray, jint numJStrokes);
 
 #endif

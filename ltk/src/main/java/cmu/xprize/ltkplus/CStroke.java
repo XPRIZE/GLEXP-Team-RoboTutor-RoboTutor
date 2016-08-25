@@ -17,7 +17,7 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.ltk;
+package cmu.xprize.ltkplus;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,7 +33,7 @@ import android.util.Log;
 /**
  *
  */
-public class Stroke  {
+public class CStroke {
 
     // The list of points in this stroke
 
@@ -57,19 +57,19 @@ public class Stroke  {
 
 
 
-    public Stroke() {
+    public CStroke() {
         _points   = new ArrayList<StrokePoint>();
         _truePath = new Path();
     }
 
 
-    public Stroke(PointF point, long time) {
+    public CStroke(PointF point, long time) {
         this();
         addPoint(point, time);
     }
 
 
-    public Stroke(PointF origin) {
+    public CStroke(PointF origin) {
         this(origin, System.currentTimeMillis());
     }
 
@@ -183,7 +183,7 @@ public class Stroke  {
     //************************************************************************
 
 
-    public Path startReplaySegments(AffineXform xForm) {
+    public Path startReplaySegments(CAffineXform xForm) {
 
         nPoint = new Point();
         lPoint = new Point(xForm.getOrigX(), xForm.getOrigY());
@@ -199,7 +199,7 @@ public class Stroke  {
     }
 
 
-    public Path addReplaySegments(AffineXform xForm, int index) {
+    public Path addReplaySegments(CAffineXform xForm, int index) {
 
         for(int i1 = oldIndex ; i1 <= index ; i1++)
         {
@@ -220,7 +220,7 @@ public class Stroke  {
     }
 
 
-    public PointF getReplayPoint(AffineXform xForm, int index) {
+    public PointF getReplayPoint(CAffineXform xForm, int index) {
         PointF ipoint = new PointF();
 
         ipoint.x = (int)((_points.get(index).getX() * xForm.getScaleX()) + xForm.getOffsetX());

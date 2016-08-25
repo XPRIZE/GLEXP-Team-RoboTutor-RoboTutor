@@ -18,7 +18,7 @@
 //            OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //            THE SOFTWARE.
 
-package cmu.xprize.ltk;
+package cmu.xprize.ltkplus;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -29,15 +29,15 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class Zip {
+public class CZip {
 
     private ZipFile _zipFile;
 
-    public Zip(ZipFile zipFile) {
+    public CZip(ZipFile zipFile) {
         this._zipFile = zipFile;
     }
 
-    public Zip(String pathToZipFile) throws IOException {
+    public CZip(String pathToZipFile) throws IOException {
         this._zipFile = new ZipFile(pathToZipFile);
     }
 

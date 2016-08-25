@@ -493,7 +493,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
      */
     @Override
     protected void onSaveInstanceState (Bundle outState) {
-        super.onResume();
+
+        super.onSaveInstanceState(outState);
         logManager.postEvent(TAG, "onSaveInstanceState Robotutor");
     }
 }
