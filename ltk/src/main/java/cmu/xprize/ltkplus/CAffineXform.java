@@ -19,6 +19,8 @@
 
 package cmu.xprize.ltkplus;
 
+import android.graphics.PointF;
+
 public class CAffineXform {
 
     private float _scaleX;
@@ -47,6 +49,20 @@ public class CAffineXform {
         _timeScale = t;
     }
 
+    public boolean isChanged(float sx, float sy, float x, float y, float t) {
+
+        boolean result = false;
+
+        if(_scaleX    != sx) result = true;
+        if(_scaleY    != sy) result = true;
+        if(_offsetX   != x)  result = true;
+        if(_offsetY   != y)  result = true;
+        if(_timeScale != t)  result = true;
+
+        return result;
+    }
+
+
     public int  getOrigX() {return _origX;}
     public void setOrigX(int orig) { _origX = orig; }
 
@@ -60,6 +76,8 @@ public class CAffineXform {
     public float getOffsetX() {return _offsetX;}
 
     public float getOffsetY() {return _offsetY;}
+
+    public PointF getPoint() {return new PointF(_origX, _origY);}
 
     public void setOffsetX(float offset) { _offsetX = offset;}
 

@@ -19,9 +19,6 @@
 
 package cmu.xprize.ltkplus;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
@@ -29,19 +26,26 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 
 /**
  *
  */
 public class CStroke {
 
-    // The list of points in this stroke
+    // The list of points in this getStroke
 
     private ArrayList<StrokePoint> _points;
 
-    private RectF _boundingBox = null;
-    private Path  _truePath;
-    private float _X, _Y;
+    private RectF   _boundingBox = null;
+
+    // canvas relative coordinates for drawing
+    //
+    private Path    _canvasPath;
+    private PointF  _canvasPoint;
+    private float   _X, _Y;
 
     private float ToleranceFactor = 10;
 
@@ -51,15 +55,28 @@ public class CStroke {
     private Point       nPoint;
     private Point       lPoint;
     private int         oldIndex;
-    private Path        strokePath;
+    private Path        replayPath;
 
     final private String TAG = "StrokeClass";
 
 
 
     public CStroke() {
-        _points   = new ArrayList<StrokePoint>();
-        _truePath = new Path();
+        _points      = new ArrayList<StrokePoint>();
+        _canvasPath  = new Path();
+        _canvasPoint = new PointF();
+    }
+
+
+    public CStroke(float[] data) {
+        _points      = new ArrayList<StrokePoint>();
+        _canvasPath  = new Path();
+        _canvasPoint = new PointF();
+
+        for(int i1 = 0 ; i1 < data.length ; i1 +=3) {
+
+            addPoint(new PointF(data[i1],data[i1+1]), (long)data[i1 + 2]);
+        }
     }
 
 
@@ -74,19 +91,51 @@ public class CStroke {
     }
 
 
+
+    //************************************************************************
+    //** JNI access methods
+    // LTK uses these methods in JNI code to access the contents of a getStroke
+    // in the Native domain
+    // These are JNI variables - see ...\ltk\src\main\jniLipiJNI.cpp for how they are accessed
+
+
+    public int getNumberOfPoints() {
+        return _points.size();
+    }
+
+    public PointF getPointAt(int index) {
+        return _points.get(index).getPoint();
+    }
+
+
+    //** JNI access methods
+    //************************************************************************
+
+
     public ArrayList<StrokePoint> getPoints() {
         return _points;
     }
 
-
-    public PointF getPoint() {
-        return _points.get(0)._point;
+    public int getPointsInPath() {
+        return _points.size();
     }
 
 
     public long getTime() {
         return _points.get(0)._time;
     }
+
+
+
+    public Path getPath() {
+        return _canvasPath;
+    }
+
+
+    public PointF getPoint() {
+        return _canvasPoint;
+    }
+
 
 
     // Expands the bounding box to accommodate the given point if necessary
@@ -102,29 +151,26 @@ public class CStroke {
     }
 
 
-    // Adds the given point to this stroke
+    // Adds the given point to this getStroke
     public void addPoint(PointF point, long time) {
 
         // Add Root node
         //
         if(_points.isEmpty()) {
 
-            _truePath.moveTo(point.x, point.y);
+            _canvasPath.moveTo(point.x, point.y);
+            _canvasPoint = new PointF(point.x, point.y);
         }
         else {
-            _truePath.quadTo(_X, _Y, (point.x + _X) / 2, (point.y + _Y) / 2);
+            _canvasPath.quadTo(_X, _Y, (point.x + _X) / 2, (point.y + _Y) / 2);
         }
+
         _X = point.x;
         _Y = point.y;
 
         _points.add(new StrokePoint(point, time));
 
         addPointToBoundingBox(point);
-    }
-
-
-    public Path getPath() {
-        return _truePath;
     }
 
 
@@ -141,65 +187,55 @@ public class CStroke {
     }
 
 
-    public void reBuildPath() {
+    public void reBuildPath(CGlyph srcGlyph, CAffineXform glyphXform) {
 
         boolean init = false;
 
-        _truePath = new Path();
+        _canvasPath = new Path();
 
         for(StrokePoint strokepoint : _points) {
 
-            PointF point = strokepoint.getPoint();
+            glyphXform.setOrigX((int) ((strokepoint.getPoint().x * glyphXform.getScaleX()) + glyphXform.getOffsetX()));
+            glyphXform.setOrigY((int) ((strokepoint.getPoint().y * glyphXform.getScaleY()) + glyphXform.getOffsetY()));
+
+            // Build the new bounding box for the glyph we are recreating -
+            //
+            srcGlyph.addPointToGlyphBoundingBox(glyphXform.getPoint());
 
             // Add Root node
             //
             if(!init) {
-                _truePath.moveTo(point.x, point.y);
+                _canvasPath.moveTo(glyphXform.getOrigX(), glyphXform.getOrigY());
+                _canvasPoint = new PointF(glyphXform.getOrigX(), glyphXform.getOrigY());
                 init = true;
 
             } else {
-                _truePath.quadTo(_X, _Y, (point.x + _X) / 2, (point.y + _Y) / 2);
+                _canvasPath.quadTo(_X, _Y, (glyphXform.getOrigX() + _X) / 2, (glyphXform.getOrigY() + _Y) / 2);
             }
-            _X = point.x;
-            _Y = point.y;
+            _X = glyphXform.getOrigX();
+            _Y = glyphXform.getOrigY();
+
         }
     }
 
 
-    //************************************************************************
-    //** JNI access methods
-    // LTK uses these methods in JNI code to access the contents of a stroke
-    // in the Native domain
-
-    public int getNumberOfPoints() {
-        return _points.size();
-    }
-
-    public PointF getPointAt(int index) {
-        return _points.get(index).getPoint();
-    }
-
-    //** JNI access methods
-    //************************************************************************
-
-
-    public Path startReplaySegments(CAffineXform xForm) {
+    public Path initReplayPath(CAffineXform xForm) {
 
         nPoint = new Point();
         lPoint = new Point(xForm.getOrigX(), xForm.getOrigY());
-        strokePath = new Path();
+        replayPath = new Path();
 
-        strokePath.moveTo(lPoint.x, lPoint.y);
+        replayPath.moveTo(lPoint.x, lPoint.y);
 
         Log.i(TAG, "Next Point: " + 0 + " : " + xForm.getOrigX() + " : " + xForm.getOrigX());
 
         oldIndex = 1;
 
-        return strokePath;
+        return replayPath;
     }
 
 
-    public Path addReplaySegments(CAffineXform xForm, int index) {
+    public Path incrReplayPath(CAffineXform xForm, int index) {
 
         for(int i1 = oldIndex ; i1 <= index ; i1++)
         {
@@ -209,14 +245,14 @@ public class CStroke {
             Log.i(TAG, "Next Point: " + i1 + " : " + nPoint.x + " : " + nPoint.y );
             Log.i(TAG, "Last Point: " + i1 + " : " + lPoint.x + " : " + lPoint.y );
 
-            strokePath.quadTo(lPoint.x, lPoint.y, (nPoint.x + lPoint.x) / 2, (nPoint.y + lPoint.y) / 2);
+            replayPath.quadTo(lPoint.x, lPoint.y, (nPoint.x + lPoint.x) / 2, (nPoint.y + lPoint.y) / 2);
 
             lPoint = nPoint;
         }
 
         oldIndex = index + 1;
 
-        return strokePath;
+        return replayPath;
     }
 
 
@@ -229,6 +265,10 @@ public class CStroke {
         return ipoint;
     }
 
+
+    public Path getReplayPath() {
+        return replayPath;
+    }
 
 
     public void normalizeStroke(float normalX, float normalY, long  cTime ) {

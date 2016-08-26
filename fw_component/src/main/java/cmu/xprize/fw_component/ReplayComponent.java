@@ -46,6 +46,7 @@ import java.util.Iterator;
 import cmu.xprize.ltkplus.CAffineXform;
 import cmu.xprize.ltkplus.CStroke;
 import cmu.xprize.ltkplus.CGlyph;
+import cmu.xprize.ltkplus.CStrokeInfo;
 import cmu.xprize.util.TCONST;
 
 
@@ -57,11 +58,12 @@ public class ReplayComponent extends View implements Animator.AnimatorListener {
     private PointF          tPoint;
     private int             _index;
 
-    private AnimatorSet                    fullAnimation;
-    private ArrayList<Animator>            drawAnimation;
-    private Iterator<CGlyph.StrokeInfo> StrokeIterator;
-    private CStroke _strokeToDraw;
-    private CAffineXform _glyphXform;
+    private AnimatorSet             fullAnimation;
+    private ArrayList<Animator>     drawAnimation;
+    private Iterator<CStrokeInfo>   StrokeIterator;
+
+    private CStroke                 _strokeToDraw;
+    private CAffineXform            _glyphXform;
 
     private static final float TOLERANCE = 3;
 
@@ -175,7 +177,7 @@ public class ReplayComponent extends View implements Animator.AnimatorListener {
 
         if(StrokeIterator.hasNext()) {
 
-            _strokeToDraw = StrokeIterator.next().stroke();
+            _strokeToDraw = StrokeIterator.next().getStroke();
 
             animateStroke();
             result = true;
@@ -261,7 +263,7 @@ public class ReplayComponent extends View implements Animator.AnimatorListener {
             index = 1;
             delta = 0;
 
-            cPath = _strokeToDraw.startReplaySegments(_glyphXform);
+            cPath = _strokeToDraw.initReplayPath(_glyphXform);
 
             drawAnimation = new ArrayList<Animator>();
             drawAnimation.add(createDrawAnimation("alpha", 1, 10));
@@ -300,7 +302,7 @@ public class ReplayComponent extends View implements Animator.AnimatorListener {
             _index = index;
 
             if(_index != -1) {
-                cPath  = _strokeToDraw.addReplaySegments(_glyphXform, _index);
+                cPath  = _strokeToDraw.incrReplayPath(_glyphXform, _index);
                 tPoint = _strokeToDraw.getReplayPoint(_glyphXform, _index);
 
                 Log.i(TAG, "replay Index: " + index);
