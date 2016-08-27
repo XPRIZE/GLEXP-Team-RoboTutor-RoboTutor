@@ -85,7 +85,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
         if(correct)
             mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
         else {
-            isWriting = false;
+            resetHesitationTimer();
             mTutor.setAddFeature(TCONST.GENERIC_WRONG);
         }
     }

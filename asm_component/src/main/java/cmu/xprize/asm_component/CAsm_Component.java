@@ -8,6 +8,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v4.view.MotionEventCompat;
+import android.support.v7.text.AllCapsTransformationMethod;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -57,6 +58,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     protected int alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
 
     protected  boolean isWriting = false;
+    protected boolean hasShown = false;
+    protected long startTime;
 
 //    Arithmetic problems will start with the
     protected int               placeValIndex;
@@ -77,7 +80,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     //Writing
     private CAsm_Popup mPopup;
 
-    private boolean clickPaused;
+    private boolean clickPaused = false;
 
     static final String TAG = "CAsm_Component";
 
@@ -135,31 +138,70 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         _dataIndex = 0;
     }
 
-
     public void setDotBagsVisible(Boolean _dotbagsVisible) {
-        if(!isWriting) {
-            for (int alley = 0; alley < allAlleys.size(); alley++) {
-                CAsm_Alley curAlley = allAlleys.get(alley);
-                CAsm_DotBag curDB = curAlley.getDotBag();
+            if(System.currentTimeMillis() - startTime < 3000) return;
 
-                if (_dotbagsVisible) {
-                    curDB.setVisibility(VISIBLE);
+            if (_dotbagsVisible && !hasShown && !isWriting) {
+                hasShown = true;
 
-                } else {
-                    curDB.setVisibility(INVISIBLE);
+                int delayTime = 0;
+                for (int alley = 0; alley < allAlleys.size(); alley++) {
+                    final CAsm_Alley curAlley = allAlleys.get(alley);
+                    delayTime = wiggleDigitAndDotbag(curAlley, delayTime);
                 }
-            }
 
-            if (_dotbagsVisible && !dotbagsVisible) {
-                mechanics.preClickSetup();
-            }
+                if (!dotbagsVisible)
+                    mechanics.preClickSetup();
+
+            } else if(!_dotbagsVisible){
+                for (int alley = 0; alley < allAlleys.size(); alley++)
+                    allAlleys.get(alley).getDotBag().setVisibility(INVISIBLE);
+            } else
+                return;
 
             dotbagsVisible = _dotbagsVisible;
-        }
+
     }
 
+    public int wiggleDigitAndDotbag(final CAsm_Alley curAlley, int delayTime) {
+        final CAsm_DotBag curDB = curAlley.getDotBag();
+        final CAsm_TextLayout curTextLayout = curAlley.getTextLayout().getTextLayout(digitIndex);
+        CAsm_Text curText = curTextLayout.getText(1);
+
+        if (!curText.getText().equals("") && !curText.getIsStruck()) {
+            clickPaused = true;
+            Handler h = new Handler();
+
+            //wiggle operator
+            if(allAlleys.indexOf(curAlley) == ASM_CONST.OPERATION - 1) {
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        curAlley.getTextLayout().getTextLayout(0).getText(1).wiggle(300, 1, 0, .3f);
+                    }
+                }, delayTime);
+                delayTime += 1000;
+            }
+
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    clickPaused = false;
+                    curDB.setVisibility(VISIBLE);
+                    curDB.wiggle(300, 1, 0, .05f);
+                    curTextLayout.getText(0).wiggle(300, 1, 0, .3f);
+                    curTextLayout.getText(1).wiggle(300, 1, 0, .3f);
+                }
+            }, delayTime);
+            delayTime += 1000;
+        } else if (!curText.getIsStruck())
+            curDB.setVisibility(VISIBLE);
+
+        return delayTime;
+    }
 
     public void next() {
+        isWriting = false;
 
         try {
             if (dataSource != null) {
@@ -177,11 +219,12 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     }
 
-
     public void nextDigit() {
 
         digitIndex--;
         isWriting = false;
+        hasShown = false;
+        startTime = System.currentTimeMillis();
 
         mechanics.nextDigit();
 
@@ -196,7 +239,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     public boolean dataExhausted() {
         return (_dataIndex >= dataSource.length);
     }
-
 
     protected void updateDataSet(CAsm_Data data) {
 
@@ -259,6 +301,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         operation = data.operation;
 
     }
+
     private void setSound() {
         switch (operation) {
             case "+":
@@ -271,8 +314,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                 break;
         }
     }
-
-
 
     private void setMechanics() {
 
@@ -357,7 +398,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     public void resetPlaceValue() {
         placeValIndex = -1;
     }
-
 
     private void delAlley() {
 
@@ -535,9 +575,27 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     }
 
     public void exitWrite() {
+
         mPopup.isActive = false;
         mPopup.enable(false,null);
         mPopup.dismiss();
+
+        resetHesitationTimer();
+    }
+
+    public void resetHesitationTimer() {
+        if(isWriting && !hasShown) {
+            startTime = System.currentTimeMillis();
+            isWriting = false;
+
+            Handler h = new Handler();
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setDotBagsVisible(true);
+                }
+            }, 3000);
+        }
     }
 
     public void onEvent(IEvent event) {
@@ -545,7 +603,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         mPopup.enable(false,null);
         mPopup.dismiss();
     }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -555,7 +612,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         }
         return true;
     }
-
 
     /**
      * Load the data source

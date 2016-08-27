@@ -68,7 +68,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
             currBag = allAlleys.get(i).getDotBag();
 
-            if (i != minuendIndex & i!= secondBagIndex) {
+            if (i != minuendIndex && i != firstBagIndex && i != secondBagIndex) {
                 currBag.setCols(0);
                 currBag.setDrawBorder(false);
             }
@@ -94,9 +94,9 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         if (subtrahendBag.getCols() == 0) {
             createDownwardBagAnimator(minuendIndex).start();
         }
-        else {
+/*        else {
             subtrahendBag.wiggle(300, 1, 100, .05f);
-        }
+        }*/
 
     }
 

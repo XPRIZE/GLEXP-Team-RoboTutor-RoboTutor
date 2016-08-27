@@ -1,5 +1,6 @@
 package cmu.xprize.asm_component;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,6 +11,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 
 import cmu.xprize.util.CAnimatorUtil;
@@ -147,4 +149,20 @@ public class CAsm_Text extends TextView implements IEventListener {
 
     }
 
+    /* Adapted from Kevin's CAnimatorUtil. Using setTranslationX instead of setX. */
+    public void wiggle(long duration, int repetition, long delay, float magnitude) {
+
+        float currTranslation = getTranslationX();
+        float offset = magnitude*getWidth();
+        float[] pts = {currTranslation, offset + currTranslation, currTranslation,
+                currTranslation-offset, currTranslation};
+
+        ObjectAnimator anim = ObjectAnimator.ofFloat(this, "translationX", pts);
+        anim.setDuration(duration);
+        anim.setRepeatCount(repetition);
+        anim.setStartDelay(delay);
+        anim.setInterpolator(new LinearInterpolator());
+        anim.start();
+
+    }
 }

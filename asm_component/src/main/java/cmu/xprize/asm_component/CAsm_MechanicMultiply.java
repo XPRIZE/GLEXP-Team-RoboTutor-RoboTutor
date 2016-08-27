@@ -56,8 +56,8 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         CAsm_DotBag overheadBag = allAlleys.get(overheadIndex).getDotBag();
         overheadBag.setDrawBorder(false);
 
-        CAsm_DotBag firstBag = allAlleys.get(firstBagIndex).getDotBag();
-        firstBag.wiggle(300, 1, 100, .05f);
+/*        CAsm_DotBag firstBag = allAlleys.get(firstBagIndex).getDotBag();
+        firstBag.wiggle(300, 1, 100, .05f);*/
 
         allAlleys.get(secondBagIndex).getDotBag().setIsClickable(false);
 
