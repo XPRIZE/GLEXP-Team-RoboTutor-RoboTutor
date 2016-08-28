@@ -89,7 +89,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     private PointF[] sidewalkLeftPoints;
     private PointF[] sidewalkRightPoints;
 
-    protected int carscreechMedia, correctMedia, incorrectMedia, numberchangedMedia;
+    protected int carscreechMedia, correctMedia, incorrectMedia, numberchangedMedia,slowdown,speedup;
     protected boolean flag=true;
 
     protected boolean speedIsZero=false;
@@ -165,6 +165,14 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
             int resID = getResources().getIdentifier("button" + i, "id",
                     "cmu.xprize.robotutor");
             speedometerButton[i] = (Button) findViewById(resID);
+            if(extraSpeed>i)     //slow down the speed
+            {
+                //soundPool.play(slowdown, 0.1f, 0.1f, 1, 0, 1.0f);
+            }
+            else if(extraSpeed<i)  //increase the speed
+            {
+                //soundPool.play(speedup, 0.1f, 0.1f, 1, 0, 1.0f);
+            }
             final int speed = i;
             speedometerButton[i].setOnClickListener(new OnClickListener() {
                 @Override
@@ -213,6 +221,8 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         correctMedia=soundPool.load(mContext, R.raw.correct, 1);
         incorrectMedia=soundPool.load(mContext, R.raw.incorrect, 1);
         numberchangedMedia=soundPool.load(mContext, R.raw.numberchanged, 1);
+        //slowdown=soundPool.load(mContext,R.raw.slow,1);
+        //speedup=soundPool.load(mContext,R.raw.speed,1);
 
         mainHandler.post(gameRunnable);
         if(attrs != null) {
@@ -265,6 +275,8 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     protected void updateDataSet(CAk_Data data) {
         questionBoard = new CAkQuestionBoard(mContext, data.answerLane, data.choices);
         player.setText(data.aboveString, data.belowString);
+        CAnimatorUtil.zoomInOut(player.belowTextView,(float)0.5,500);
+        CAnimatorUtil.zoomInOut(player.aboveTextView,(float)0.5,500);
     }
 
     public void post(String command, Object target) {
@@ -322,14 +334,18 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
             if(isRunning && elapseRight > 3500) {
 
-                int r = random.nextInt() % 2;
+                int r = random.nextInt() % 3;
 
                 final ImageView sidewalkStuff  = new ImageView(mContext);
                 if(r == 0){
-                    sidewalkStuff.setImageResource(R.drawable.sidewalkcrack);
+                    sidewalkStuff.setImageResource(R.drawable.robotreeleft);
                     sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
                 }else if(r == 1) {
-                    sidewalkStuff.setImageResource(R.drawable.tirepile);
+                    sidewalkStuff.setImageResource(R.drawable.billboardright);
+                    sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
+                }
+                else if(r == 2) {
+                    sidewalkStuff.setImageResource(R.drawable.leftarrowsign);
                     sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
                 }
 
@@ -355,14 +371,18 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
             }
 
             if(isRunning && elapseLeft > 2500) {
-                int r = random.nextInt() % 2;
+                int r = random.nextInt() % 3;
 
                 final ImageView sidewalkStuff  = new ImageView(mContext);
                 if(r == 0){
-                    sidewalkStuff.setImageResource(R.drawable.sidewalkcrack);
+                    sidewalkStuff.setImageResource(R.drawable.robotreeright);
                     sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
                 }else if(r == 1) {
-                    sidewalkStuff.setImageResource(R.drawable.tirepile);
+                    sidewalkStuff.setImageResource(R.drawable.billboardleft);
+                    sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
+                }
+                else if(r == 2) {
+                    sidewalkStuff.setImageResource(R.drawable.rightarrowsign);
                     sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
                 }
 

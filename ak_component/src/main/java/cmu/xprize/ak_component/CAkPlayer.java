@@ -34,8 +34,8 @@ public class CAkPlayer extends LinearLayout{
     private Drawable car_left, car_mid, car_right;
     private AnimationDrawable fishTail;
 
-    private TextView aboveTextView;
-    private TextView belowTextView;
+    public TextView aboveTextView;
+    public TextView belowTextView;
     public ImageView carImage;
 
     private PercentRelativeLayout.LayoutParams params;
@@ -204,8 +204,4 @@ public class CAkPlayer extends LinearLayout{
         aboveTextView.setText(above);
         belowTextView.setText(below);
     }
-
-
-
-
 }
