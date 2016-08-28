@@ -1,0 +1,701 @@
+//*********************************************************************************
+//
+//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
+//    Copyright(c) Kevin Willows All Rights Reserved
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+//*********************************************************************************
+
+package cmu.xprize.comp_writing;
+
+import android.content.Context;
+import android.graphics.PointF;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.percent.PercentRelativeLayout;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import cmu.xprize.ltkplus.CGlyphMetrics;
+import cmu.xprize.ltkplus.CRecognizerPlus;
+import cmu.xprize.ltkplus.GCONST;
+import cmu.xprize.ltkplus.CGlyphSet;
+import cmu.xprize.ltkplus.IGlyphSink;
+import cmu.xprize.ltkplus.CRecResult;
+import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.CLinkedScrollView;
+
+
+/**
+ * TODO: document your custom view class.
+ *
+ *  !!!! NOTE: This requires com.android.support:percent:23.2.0' at least or the aspect ratio
+ *  settings will not work correctly.
+ *
+ */
+public class CWritingController extends PercentRelativeLayout implements IWritingController {
+
+    private char[]           mStimulusData;
+
+    private TextView          mLtkStats;
+    private TextView          mLtkPlus;
+    private TextView          mVisualStats;
+    private TextView          mFitStatsA;
+    private TextView          mFitStatsB;
+
+    private Button            mShowSample;
+    private Button            mShowPrototype;
+    private Button            mShowBounds;
+    private Spinner           mFontSelector;
+
+    private Button            mBoostSample;
+    private Button            mBoostPunct;
+    private Spinner           mBoostClass;
+
+    private CLinkedScrollView mRecognizedScroll;
+    private CLinkedScrollView mDrawnScroll;
+
+    private LinearLayout     mRecogList;
+    private LinearLayout     mDrawnList;
+    private CGlyphSet        mGlyphSet;
+
+    private int              mMaxLength = GCONST.ALPHABET.length();                // Maximum string length
+
+    private final Handler    mainHandler = new Handler(Looper.getMainLooper());
+    private HashMap          queueMap    = new HashMap();
+    private boolean          _qDisabled  = false;
+
+    private IGlyphSink       _recognizer;
+
+
+    final private boolean mMoveRIGHT = false;
+
+    final private String  TAG        = "WritingComp";
+
+    public CWritingController(Context context) {
+        super(context);
+        init(null, 0);
+    }
+
+    public CWritingController(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(attrs, 0);
+    }
+
+    public CWritingController(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        init(attrs, defStyle);
+    }
+
+    private void init(AttributeSet attrs, int defStyle) {
+
+        setClipChildren(false);
+
+    }
+
+    public void onCreate(Context context) {
+
+        View v;
+        mStimulusData = new char[mMaxLength];
+
+        // Create the one system level recognizer
+        _recognizer = new CRecognizerPlus(context, GCONST.ALPHABET);
+
+        // Setup the Recycler for the recognized input views
+        mRecognizedScroll = (CLinkedScrollView) findViewById(R.id.Srecognized_scroller);
+        mRecogList = (LinearLayout) findViewById(R.id.Srecognized_glyphs);
+
+        for(int i1 =0 ; i1 < mStimulusData.length ; i1++)
+        {
+            // create a new view
+            v = LayoutInflater.from(getContext())
+                    .inflate(R.layout.recog_resp_comp, null, false);
+
+            mRecogList.addView(v);
+        }
+
+        mLtkStats    = (TextView)findViewById(R.id.Smetrics_Ltk);
+        mLtkPlus     = (TextView)findViewById(R.id.Smetrics_LtkPlus);
+        mVisualStats = (TextView)findViewById(R.id.Smetrics_Visual);
+        mFitStatsA   = (TextView)findViewById(R.id.Smetrics_FitA);
+        mFitStatsB   = (TextView)findViewById(R.id.Smetrics_FitB);
+
+        mShowSample    = (Button)findViewById(R.id.SshowSample);
+        mShowPrototype = (Button)findViewById(R.id.SshowPrototype);
+        mShowBounds    = (Button)findViewById(R.id.SshowBounds);
+        mFontSelector  = (Spinner) findViewById(R.id.SfontSelector);
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
+                R.array.fonts_array, android.R.layout.simple_spinner_item);
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mFontSelector.setAdapter(adapter);
+
+        mShowSample.setOnClickListener(new showSampleClickListener());
+        mShowPrototype.setOnClickListener(new showPrototypeClickListener());
+        mShowBounds.setOnClickListener(new showBoundsClickListener());
+        mFontSelector.setOnItemSelectedListener(new SpinnerSelectionListener());
+
+
+        mBoostSample = (Button)findViewById(R.id.SboostExpected);
+        mBoostPunct  = (Button)findViewById(R.id.SboostPunct);
+        mBoostClass  = (Spinner) findViewById(R.id.SboostClass);
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> boostadapter = ArrayAdapter.createFromResource(context,
+                R.array.boost_array, android.R.layout.simple_spinner_item);
+
+        // Specify the layout to use when the list of choices appears
+        boostadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mBoostClass.setAdapter(boostadapter);
+
+        mBoostSample.setOnClickListener(new boostSampleClickListener());
+        mBoostPunct.setOnClickListener(new boostPunctClickListener());
+        mBoostClass.setOnItemSelectedListener(new boostClassSelectionListener());
+
+
+        //****************************
+
+        mDrawnScroll = (CLinkedScrollView) findViewById(R.id.Sdrawn_scroller);
+        mDrawnScroll.setClipChildren(false);
+
+        mDrawnList = (LinearLayout) findViewById(R.id.Sdrawn_glyphs);
+        mDrawnList.setClipChildren(true);
+
+        for(int i1 =0 ; i1 < mStimulusData.length ; i1++)
+        {
+            // create a new view
+            v = LayoutInflater.from(getContext())
+                    .inflate(R.layout.drawn_input_comp, null, false);
+
+            // Control whether glyphs are clipped at the draw view boundry
+            //
+            ((ViewGroup)v).setClipChildren(false);
+
+            mDrawnList.addView(v);
+            ((CDrawnInputController)v).setRecognizer(_recognizer);
+            ((CDrawnInputController)v).setLinkedScroll(mDrawnScroll);
+            ((CDrawnInputController)v).setWritingController(this);
+        }
+
+        // Load the prototype glyphs
+        //
+        mGlyphSet = _recognizer.getGlyphPrototypes(); //new GlyphSet(TCONST.ALPHABET);
+
+        for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
+
+            CDrawnInputController comp = (CDrawnInputController) mDrawnList.getChildAt(i1);
+
+            comp.setProtoGlyph(GCONST.ALPHABET.substring(i1,i1+1), mGlyphSet.cloneGlyph(GCONST.ALPHABET.substring(i1,i1+1)));
+        }
+
+        mRecogList.setOnTouchListener(new RecogTouchListener());
+        mDrawnList.setOnTouchListener(new drawnTouchListener());
+
+        mRecognizedScroll.setLinkedScroll(mDrawnScroll);
+        mDrawnScroll.setLinkedScroll(mRecognizedScroll);
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+    }
+
+
+    /**
+     * Note that only the mDrawnList will initiate this call
+     *
+     * @param child
+     */
+    public void deleteItem(View child) {
+        int index = mDrawnList.indexOfChild(child);
+
+        mDrawnList.removeViewAt(index);
+        mRecogList.removeViewAt(index);
+    }
+
+
+    /**
+     * Note that only the mDrawnList will initiate this call
+     *
+     * @param child
+     */
+    public void addItemAt(View child, int inc) {
+
+        int index = mDrawnList.indexOfChild(child);
+
+        // create a new view
+        View rv = LayoutInflater.from(getContext())
+                .inflate(R.layout.recog_resp_comp, null, false);
+
+        // create a new view
+        View dv = LayoutInflater.from(getContext())
+                .inflate(R.layout.drawn_input_comp, null, false);
+
+        ((CDrawnInputController)dv).setClipChildren(false);
+
+        mDrawnList.addView(dv, index + inc);
+
+        ((CDrawnInputController)dv).setLinkedScroll(mDrawnScroll);
+        ((CDrawnInputController)dv).setWritingController(this);
+
+        mRecogList.addView(rv, index + inc);
+    }
+
+
+    public void updateGlyph(IDrawnInputController child, String glyph) {
+
+        int index = mDrawnList.indexOfChild((View)child);
+
+        CResponseContainer respText = (CResponseContainer)mRecogList.getChildAt(index);
+
+        respText.setResponseChar(glyph);
+    }
+
+
+    public class RecogTouchListener implements View.OnTouchListener {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            PointF touchPt;
+            final int action = event.getAction();
+
+            touchPt = new PointF(event.getX(), event.getY());
+
+            //Log.i(TAG, "ActionID" + action);
+
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    Log.i(TAG, "RECOG _ ACTION_DOWN");
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    Log.i(TAG, "RECOG _ ACTION_MOVE");
+                    break;
+                case MotionEvent.ACTION_UP:
+                    Log.i(TAG, "RECOG _ ACTION_UP");
+                    break;
+            }
+            return true;
+        }
+    }
+
+
+    public class drawnTouchListener implements View.OnTouchListener {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            PointF touchPt;
+            final int action = event.getAction();
+
+            touchPt = new PointF(event.getX(), event.getY());
+
+            //Log.i(TAG, "ActionID" + action);
+
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    Log.i(TAG, "DRAWN _ ACTION_DOWN");
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    Log.i(TAG, "DRAWN _ ACTION_MOVE");
+                    break;
+                case MotionEvent.ACTION_UP:
+                    Log.i(TAG, "DRAWN _ ACTION_UP");
+                    break;
+            }
+            return true;
+        }
+    }
+
+    public class showSampleClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+
+            for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
+
+                CDrawnInputController comp = (CDrawnInputController) mDrawnList.getChildAt(i1);
+
+                if(comp.toggleSampleChar()) {
+                    mShowSample.setText("Hide Sample");
+                }
+                else {
+                    mShowSample.setText("Show Sample");
+                }
+            }
+        }
+    }
+
+    public class showPrototypeClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+
+            boolean result = false;
+
+            for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
+
+                CDrawnInputController comp = (CDrawnInputController) mDrawnList.getChildAt(i1);
+                result = comp.toggleProtoGlyph();
+            }
+
+            if(result) {
+                mShowPrototype.setText("Show User Glyph");
+            }
+            else {
+                mShowPrototype.setText("Show Prototype");
+            }
+
+        }
+    }
+
+
+    public class showBoundsClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+
+            boolean result = false;
+
+            for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
+
+                CDrawnInputController comp = (CDrawnInputController) mDrawnList.getChildAt(i1);
+                result = comp.toggleDebugBounds();
+            }
+
+            if(result) {
+                mShowBounds.setText("Hide Bounds");
+            }
+            else {
+                mShowBounds.setText("Show Bounds");
+            }
+
+        }
+    }
+
+
+    public class SpinnerSelectionListener implements AdapterView.OnItemSelectedListener {
+
+        public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+
+            // An item was selected. You can retrieve the selected item using
+            String fontSelection = (String)parent.getItemAtPosition(pos);
+
+            for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
+
+                CDrawnInputController comp = (CDrawnInputController) mDrawnList.getChildAt(i1);
+                comp.selectFont(fontSelection);
+            }
+        }
+
+        public void onNothingSelected(AdapterView<?> parent) {
+            // Another interface callback
+        }
+    }
+
+
+
+    public class boostSampleClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+
+            if(_recognizer.toggleExpectedBoost()) {
+                mBoostSample.setText("Boost Expected : YES");
+            }
+            else {
+                mBoostSample.setText("Boost Expected : NO ");
+            }
+
+        }
+    }
+
+
+    public class boostPunctClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+
+            if(_recognizer.togglePunctBoost()) {
+                mBoostPunct.setText("Boost Punctuation : YES");
+            }
+            else {
+                mBoostPunct.setText("Boost Punctuation : NO ");
+            }
+
+        }
+    }
+
+
+    public class boostClassSelectionListener implements AdapterView.OnItemSelectedListener {
+
+        public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+
+            // An item was selected. You can retrieve the selected item using
+            String classSelection = (String)parent.getItemAtPosition(pos);
+
+            _recognizer.setClassBoost(classSelection);
+        }
+
+        public void onNothingSelected(AdapterView<?> parent) {
+            // Another interface callback
+        }
+    }
+
+
+
+    @Override
+    public void updateGlyphStats(CRecResult[] ltkPlusCandidates, CRecResult[] charCandidates, CGlyphMetrics metricsA, CGlyphMetrics metricsB) {
+
+
+        // TODO: This is an experiment to see how full visual processing affects results  SEARCH: VISUALCOMPARE
+        String ltkPlusStats = "";
+
+        for(CRecResult candidate : ltkPlusCandidates) {
+
+            ltkPlusStats += candidate.getRecChar() + " : " + String.format("%.3f", candidate.getPlusConfidence());
+
+            if(candidate.isVirtual()) {
+                ltkPlusStats += " *";
+            }
+            ltkPlusStats += "\n";
+        }
+        mLtkPlus.setText(ltkPlusStats);
+
+
+
+        String ltkStats = "";
+
+        for(CRecResult candidate : charCandidates) {
+
+            ltkStats += candidate.getRecChar() + " : " + String.format("%.3f", candidate.Confidence);
+
+            if(candidate.isVirtual()) {
+                ltkStats += " *";
+            }
+            ltkStats += "\n";
+        }
+        mLtkStats.setText(ltkStats);
+
+
+
+        String visualStats = "";
+
+        for(CRecResult candidate : charCandidates) {
+
+            visualStats += candidate.getRecChar() + " : " + String.format("%.3f", candidate.getVisualConfidence()) + "\n";
+        }
+        mVisualStats.setText(visualStats);
+
+
+
+        // These are the fit stats for the sample (i.e. expected) character
+        //
+        String fitStats = "";
+
+        fitStats += "dX: " + metricsA.getHorizontalDeviation() + "\n";
+        fitStats += "dY: " + metricsA.getVerticalDeviation() + "\n";
+
+        fitStats += "dW: " + metricsA.getWidthDeviation() + "\n";
+        fitStats += "dH: " + metricsA.getHeightDeviation() + "\n";
+
+        fitStats += "dA: " + metricsA.getAspectDeviation() + "\n";
+
+        mFitStatsA.setText(fitStats);
+
+
+
+        // These are the fit stats for the LTK (i.e. inferred) character
+        //
+        String fitStatsB = "";
+
+        fitStatsB += "dX: " + metricsB.getHorizontalDeviation() + "\n";
+        fitStatsB += "dY: " + metricsB.getVerticalDeviation() + "\n";
+
+        fitStatsB += "dW: " + metricsB.getWidthDeviation() + "\n";
+        fitStatsB += "dH: " + metricsB.getHeightDeviation() + "\n";
+
+        fitStatsB += "dA: " + metricsB.getAspectDeviation() + "\n";
+
+        mFitStatsB.setText(fitStatsB);
+    }
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // Component Message Queue  -- Start
+
+
+    public class Queue implements Runnable {
+
+        protected String _command    = "";
+        protected String _target     = "";
+        protected String _item       = "";
+
+        public Queue(String command) {
+            _command = command;
+        }
+
+        public Queue(String command, String target) {
+            _command = command;
+            _target  = target;
+        }
+
+        public Queue(String command, String target, String item) {
+            _command = command;
+            _target  = target;
+            _item    = item;
+        }
+
+
+        @Override
+        public void run() {
+
+            try {
+                queueMap.remove(this);
+
+                switch(_target) {
+                    case "STIMULUS":
+                        break;
+
+                    case "RESPONSE":
+                        break;
+
+                    case "RECOGNIZER":
+                        _recognizer.execCommand(_command);
+                        break;
+
+                    case "GLYPH":
+                        break;
+
+                    default:
+
+                        break;
+                }
+
+
+            }
+            catch(Exception e) {
+                CErrorManager.logEvent(TAG, "Run Error:", e, false);
+            }
+        }
+    }
+
+
+    /**
+     *  Disable the input queues permenantly in prep for destruction
+     *  walks the queue chain to diaable scene queue
+     *
+     */
+    private void terminateQueue() {
+
+        // disable the input queue permenantly in prep for destruction
+        //
+        _qDisabled = true;
+        flushQueue();
+    }
+
+
+    /**
+     * Remove any pending scenegraph commands.
+     *
+     */
+    private void flushQueue() {
+
+        Iterator<?> tObjects = queueMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            mainHandler.removeCallbacks((Queue)(entry.getValue()));
+        }
+    }
+
+
+    /**
+     * Keep a mapping of pending messages so we can flush the queue if we want to terminate
+     * the tutor before it finishes naturally.
+     *
+     * @param qCommand
+     */
+    private void enQueue(Queue qCommand) {
+        enQueue(qCommand, 0);
+    }
+    private void enQueue(Queue qCommand, long delay) {
+
+        if(!_qDisabled) {
+            queueMap.put(qCommand, qCommand);
+
+            if(delay > 0) {
+                mainHandler.postDelayed(qCommand, delay);
+            }
+            else {
+                mainHandler.post(qCommand);
+            }
+        }
+    }
+
+    /**
+     * Post a command to the queue
+     *
+     * @param command
+     */
+    public void post(String command) {
+        post(command, 0);
+    }
+    public void post(String command, long delay) {
+
+        enQueue(new Queue(command), delay);
+    }
+
+
+    /**
+     * Post a command and target to this queue
+     *
+     * @param command
+     */
+    public void post(String command, String target) {
+        post(command, target, 0);
+    }
+    public void post(String command, String target, long delay) { enQueue(new Queue(command, target), delay); }
+
+
+    /**
+     * Post a command , target and item to this queue
+     *
+     * @param command
+     */
+    public void post(String command, String target, String item) {
+        post(command, target, item, 0);
+    }
+    public void post(String command, String target, String item, long delay) { enQueue(new Queue(command, target, item), delay); }
+
+
+
+
+    // Component Message Queue  -- End
+    //************************************************************************
+    //************************************************************************
+
+
+}

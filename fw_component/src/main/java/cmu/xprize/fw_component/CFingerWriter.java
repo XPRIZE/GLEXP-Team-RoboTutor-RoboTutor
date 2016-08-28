@@ -332,8 +332,9 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
 
         // We always add the next stoke to the glyph set
 
-        if (_currentGlyph == null)
-            _currentGlyph = new CGlyph(mBaseLine);
+// TODO: ltkplus import fault
+//        if (_currentGlyph == null)
+//            _currentGlyph = new CGlyph(mBaseLine);
 
         _currentGlyph.newStroke();
         _currentGlyph.addPoint(touchPt);
