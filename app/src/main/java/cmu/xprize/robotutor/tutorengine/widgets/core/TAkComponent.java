@@ -45,7 +45,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     private CTutor mTutor;
     private CObjectDelegate mSceneObject;
-    protected String currentAudio;
+
 
     static final String TAG = "TAkComponent";
 
@@ -112,10 +112,6 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         // Let the compoenent process the new data set
         //
         super.updateDataSet(data);
-
-
-
-
     }
 
 
@@ -183,7 +179,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     @Override
     public void playAudio(CAk_Data data){
         TScope scope = mTutor.getScope();
-        currentAudio = getAboveString(data);
+        String currentAudio = new String(getAboveString(data));
         Log.d("PlayAudio", currentAudio);
         scope.addUpdateVar("TestAudio", new TString(currentAudio));
         applyEventNode("PLAY_AUDIO");
