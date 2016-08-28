@@ -33,22 +33,21 @@ import cmu.xprize.util.TCONST;
 
 public class CRecognizerPlus implements IGlyphSink {
 
-    private Context               mContext;
+    private Context                mContext;
 
-    private CGlyphSet _glyphSet;
-    private ConcurrentLinkedQueue _glyphQueue = new ConcurrentLinkedQueue();
-    private boolean               mDisabled   = false;
+    private CGlyphSet              _glyphSet;
+    private ConcurrentLinkedQueue  _glyphQueue = new ConcurrentLinkedQueue();
+    private boolean                mDisabled   = false;
 
-    private RecognizerTask        _recTask;
-    private QueuedGlyph           _nextGlyph;
+    private RecognizerTask         _recTask;
+    private QueuedGlyph            _nextGlyph;
 
-    private Boolean               _isRecognizing = false;
+    private Boolean                _isRecognizing = false;
     private CStroke[]              _recStrokes;
-    private CRecResult[]           _recResults;
-    private String[]              _recChars;
 
     private CRecResult[]           _ltkCandidates     = null;
     private CRecResult[]           _ltkPlusCandidates = null;
+    private int                    _sampleIndex       = 0;
 
     private Rect                   _viewBnds          = new Rect();  // The view draw bounds
     private Rect                   _fontBnds          = new Rect();  // The bounds for the font size limits
@@ -231,7 +230,21 @@ public class CRecognizerPlus implements IGlyphSink {
          */
         @Override
         protected String doInBackground(Void... unsued) {
-            _recResults = _recognizer.recognize(_recStrokes);
+            _ltkCandidates = _recognizer.recognize(_recStrokes);
+
+            // generate the LTK project folder that contains the symbol to unicode mapping
+            //
+            String configFileDirectory = _recognizer.getLipiDirectory() + "/projects/alphanumeric/config/";
+//            String configFileDirectory = _recognizer.getLipiDirectory() + "/projects/demonumerals/config/";
+
+            for (int i = 0; i < _ltkCandidates.length; i++) {
+
+                _ltkCandidates[i].setRecChar(_recognizer.getSymbolName(_ltkCandidates[i].Id, configFileDirectory));
+
+                Log.d("LTK", "Char = " + _ltkCandidates[i].getRecChar() + " Confidence = " + _ltkCandidates[i].Confidence + "  - ShapeID = " + _ltkCandidates[i].Id);
+            }
+
+            _sampleIndex = ltkPlusProcessor(_nextGlyph._source );
 
             return null;
         }
@@ -243,30 +256,13 @@ public class CRecognizerPlus implements IGlyphSink {
         @Override
         protected void onPostExecute(String sResponse) {
 
-
-//            for (RecResult result : _recResults) {
-//                Log.e("jni", "ShapeID = " + result.Id + " Confidence = " + result.Confidence);
-//            }
-
             _recStrokes = null;
-
-            // generate the LTK project folder that contains the symbol to unicode mapping
-            //
-            String configFileDirectory = _recognizer.getLipiDirectory() + "/projects/alphanumeric/config/";
-//            String configFileDirectory = _recognizer.getLipiDirectory() + "/projects/demonumerals/config/";
-
-            for (int i = 0; i < _recResults.length; i++) {
-
-                _recResults[i].setRecChar(_recognizer.getSymbolName(_recResults[i].Id, configFileDirectory));
-
-                Log.d("LTK", "Char = " + _recResults[i].getRecChar() + " Confidence = " + _recResults[i].Confidence + "  - ShapeID = " + _recResults[i].Id);
-            }
 
             synchronized (_isRecognizing) {
 
                 _isRecognizing = false;
 
-                _nextGlyph._source.recCallBack(_recResults);
+                _nextGlyph._source.recCallBack(_ltkCandidates, _ltkPlusCandidates, _sampleIndex);
 
                 // Check if any more recognizer requests are queued
                 //
@@ -293,23 +289,6 @@ public class CRecognizerPlus implements IGlyphSink {
     }
 
 
-    /**
-     * Return the last recognized charater in the given index
-     * TODO: Manage bound violations
-     *
-     * @param id
-     * @return
-     */
-    public String getRecChar(int id) {
-        if(_recChars == null)
-        {
-            Log.d(TAG,"getRecChar is NULL - *************************");
-            return "o";
-        }
-
-        Log.d(TAG,"getRecChar is - " + _recChars[id]);
-        return _recChars[id];
-    }
 
 
     //**********************************************************************************
@@ -431,8 +410,6 @@ public class CRecognizerPlus implements IGlyphSink {
         int         sampleIndex     = -1;
         boolean     forceProcessing = false;
 
-        _ltkPlusCandidates = glyphSrc.getPlusCandidates();
-        _ltkCandidates     = glyphSrc.getLtkCandidates();
         _sampleExpected    = glyphSrc.getExpectedChar();
         _drawGlyph         = glyphSrc.getGlyph();
         _fontBnds          = glyphSrc.getFontBnds();
@@ -631,9 +608,6 @@ public class CRecognizerPlus implements IGlyphSink {
             _ltkPlusCandidates = _ltkCandidates;
             _ltkPlusCandidates[0].setGlyph(_drawGlyph);
         }
-
-        glyphSrc.setPlusCandidates(_ltkPlusCandidates);
-        glyphSrc.setLtkCandidates(_ltkCandidates);
 
         return sampleIndex;
     }

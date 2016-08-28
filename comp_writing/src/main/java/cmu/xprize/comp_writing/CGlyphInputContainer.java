@@ -81,8 +81,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
     static private Bitmap         _bitmap;
     private boolean               _bitmapDirty       = false;
-    private CRecResult[]          _ltkCandidates     = null;
-    private CRecResult[]          _ltkPlusCandidates = null;
     private String                _ltkPlusResult;
 
     private String                _sampleExpected     = "";     // The expected character
@@ -1077,17 +1075,9 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                     mInputController.setProtoTypeDirty(true);
             }
 
-            // debug - test
-            //_userGlyph.rebuildGlyph(TCONST.VIEW_SCALED, _viewBnds);
-
-//            mReplayComp.replayGlyph(_userGlyph, _baseLine, ReplayComponent.FIT_VERT | ReplayComponent.ALIGN_BASELINE | ReplayComponent.ALIGN_CENTER, null);
-//            mReplayComp.replayGlyph(_userGlyph, _baseLine, ReplayComponent.FIT_VERT | ReplayComponent.FIT_HORZ | ReplayComponent.ALIGN_CENTER, null);
-//            mReplayComp.replayGlyph(_userGlyph, _baseLine, "GLYPHREL_VAR_ASPECT", null);
-//            mReplayComp.replayGlyph(_userGlyph, _baseLine, "GLYPHREL_CONST_ASPECT", null);
-
-//            mReplayComp.replayGlyph(_userGlyph, _baseLine, "ABS_VAR_ASPECT", null);
-//            mReplayComp.replayGlyph(_userGlyph, _baseLine, "ABS_CONST_ASPECT", null);
-//            replayGlyph();
+            // We need to ensure we are using the correct path data when analysing
+            //
+            //rebuildGlyph();
 
             setHasGlyph(true);
             Log.i(TAG, "Recognition Done");
@@ -1123,16 +1113,12 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     }
 
 
+    //*******************************************************************************************
+    //*******************************************************************************************
+    //*******************************************************************************************
     // IGlyphSource interface Implementation
     //
-    @Override
-    public CRecResult[] getPlusCandidates(){ return _ltkPlusCandidates; }
-    @Override
-    public void         setPlusCandidates(CRecResult[] updatedList){ _ltkPlusCandidates = updatedList; }
-    @Override
-    public CRecResult[] getLtkCandidates() { return _ltkCandidates; }
-    @Override
-    public void         setLtkCandidates(CRecResult[] updatedList) {  _ltkCandidates = updatedList; }
+
     @Override
     public String       getExpectedChar() {return _sampleExpected; }
     @Override
@@ -1148,21 +1134,10 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     @Override
     public Paint        getPaint() { return mPaint; }
 
+
     @Override
-    public void recCallBack(CRecResult[] recCandidates) {
+    public void recCallBack(CRecResult[] _ltkCandidates, CRecResult[] _ltkPlusCandidates, int sampleIndex) {
 
-        _ltkCandidates = recCandidates;
-
-        if(_showUserGlyph)
-            _drawGlyph = _userGlyph;
-        else
-            _drawGlyph = _protoGlyph;
-
-        rebuildGlyph();
-
-        // Do the LTK+ post processing
-        //
-        int sampleIndex = _recognizer.ltkPlusProcessor(this);
 
         mWritingController.updateGlyphStats(_ltkPlusCandidates, _ltkCandidates, _ltkCandidates[sampleIndex].getGlyph().getMetric(), _ltkCandidates[0].getGlyph().getMetric());
 
@@ -1170,7 +1145,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         //
         _ltkPlusResult = _ltkPlusCandidates[0].getRecChar();
 
-        // Reconstitute the path in the correct orientation after post-processing
+        // Reconstitute the path in the correct orientation after LTK+ post-processing
         //
         rebuildGlyph();
 

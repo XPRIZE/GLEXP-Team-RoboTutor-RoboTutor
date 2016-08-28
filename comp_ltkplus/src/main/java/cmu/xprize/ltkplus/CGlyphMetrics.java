@@ -158,87 +158,91 @@ public class CGlyphMetrics {
         Rect charBnds = new Rect();
         visualMatch   = 0;
 
-        _bitmap = Bitmap.createBitmap(fontBounds.width(), fontBounds.height(), Bitmap.Config.ARGB_8888);
-
-        Canvas drawSurface = new Canvas(_bitmap);
-
-   //     mPaint.getTextBounds(expectedChar, 0, 1, charBnds);
-        mPaint.getTextBounds(charToCompare, 0, 1, charBnds);
-
-        Rect insetBnds = new Rect(0,0,charBnds.width(), charBnds.height());
-        int  inset     = (int) (GCONST.STROKE_WEIGHT / 2);
-
-        insetBnds.inset(inset, inset);
-
-        glyphToCompare.rebuildGlyph(TCONST.VIEW_NORMAL, insetBnds);
-
-        // Draw the charToCompare using the desired font to the Bitmap - then capture the pixels
-        // and count the numberof pixels occupied by the char
+        // Ensure that there is a testable region - otherwise Bitmap.createBitmap will fail
         //
-        mPaint.setColor(TCONST.FONTCOLOR1);
-        drawSurface.drawText(charToCompare, -charBnds.left, -charBnds.top, mPaint);
+        if(fontBounds.width() > 0 && fontBounds.height() > 0) {
 
-        _pixels    = new CPixelArray(_bitmap);
-        _charValue = 0;
+            _bitmap = Bitmap.createBitmap(fontBounds.width(), fontBounds.height(), Bitmap.Config.ARGB_8888);
 
-        for(int i1 = 0; i1 < _pixels.getWidth() ; i1++) {
-            for (int i2 = 0; i2 < _pixels.getHeight(); i2++) {
+            Canvas drawSurface = new Canvas(_bitmap);
 
-                if(_pixels.getPixel(i1, i2) == TCONST.FONTCOLOR1) {
-                    _charValue++;
+            //     mPaint.getTextBounds(expectedChar, 0, 1, charBnds);
+            mPaint.getTextBounds(charToCompare, 0, 1, charBnds);
+
+            Rect insetBnds = new Rect(0, 0, charBnds.width(), charBnds.height());
+            int inset = (int) (GCONST.STROKE_WEIGHT / 2);
+
+            insetBnds.inset(inset, inset);
+
+            glyphToCompare.rebuildGlyph(TCONST.VIEW_NORMAL, insetBnds);
+
+            // Draw the charToCompare using the desired font to the Bitmap - then capture the pixels
+            // and count the numberof pixels occupied by the char
+            //
+            mPaint.setColor(TCONST.FONTCOLOR1);
+            drawSurface.drawText(charToCompare, -charBnds.left, -charBnds.top, mPaint);
+
+            _pixels = new CPixelArray(_bitmap);
+            _charValue = 0;
+
+            for (int i1 = 0; i1 < _pixels.getWidth(); i1++) {
+                for (int i2 = 0; i2 < _pixels.getHeight(); i2++) {
+
+                    if (_pixels.getPixel(i1, i2) == TCONST.FONTCOLOR1) {
+                        _charValue++;
+                    }
                 }
             }
-        }
 
-        // Draw a border around the draw region - debug only
-        //
-        if(DBG) {
-            charBnds.offset(-charBnds.left, -charBnds.top);
+            // Draw a border around the draw region - debug only
+            //
+            if (DBG) {
+                charBnds.offset(-charBnds.left, -charBnds.top);
 
-            mPaintDBG = new Paint();
-            mPaintDBG.setStyle(Paint.Style.STROKE);
-            mPaintDBG.setColor(Color.YELLOW);
-            drawSurface.drawRect(charBnds, mPaintDBG);
-        }
+                mPaintDBG = new Paint();
+                mPaintDBG.setStyle(Paint.Style.STROKE);
+                mPaintDBG.setColor(Color.YELLOW);
+                drawSurface.drawRect(charBnds, mPaintDBG);
+            }
 
-        // Draw the glyphToCompare overtop of the char and count the number of pixels not
-        // obscured by the glyph - represents a metric of the correspondence between the two
-        //
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeWidth(GCONST.STROKE_WEIGHT);
+            // Draw the glyphToCompare overtop of the char and count the number of pixels not
+            // obscured by the glyph - represents a metric of the correspondence between the two
+            //
+            mPaint.setStyle(Paint.Style.STROKE);
+            mPaint.setStrokeWidth(GCONST.STROKE_WEIGHT);
 
-        // Redraw the current glyph path to the bitmap surface
-        //
-        glyphToCompare.drawGylyph(drawSurface,  mPaint, fontBounds);
+            // Redraw the current glyph path to the bitmap surface
+            //
+            glyphToCompare.drawGylyph(drawSurface, mPaint, fontBounds);
 
-        _pixels.getPixels();
-        int errValue    = 0;
-        int excessValue = 0;
+            _pixels.getPixels();
+            int errValue = 0;
+            int excessValue = 0;
 
-        for(int i1 = 0; i1 < _pixels.getWidth() ; i1++) {
-            for (int i2 = 0; i2 < _pixels.getHeight(); i2++) {
+            for (int i1 = 0; i1 < _pixels.getWidth(); i1++) {
+                for (int i2 = 0; i2 < _pixels.getHeight(); i2++) {
 
-                if(_pixels.getPixel(i1, i2) == TCONST.FONTCOLOR1) {
+                    if (_pixels.getPixel(i1, i2) == TCONST.FONTCOLOR1) {
 
-                    _pixels.setPixel(i1, i2, TCONST.ERRORCOLOR1);
-                    errValue++;
-                }
-                else if(_pixels.getPixel(i1, i2) == TCONST.GLYPHCOLOR1) {
-                    //excessValue++;
+                        _pixels.setPixel(i1, i2, TCONST.ERRORCOLOR1);
+                        errValue++;
+                    } else if (_pixels.getPixel(i1, i2) == TCONST.GLYPHCOLOR1) {
+                        //excessValue++;
+                    }
                 }
             }
+
+            // Calc the visual match metric -
+            //
+            // 0 = complete overlay - glyph may still have undesirable form but covers the char at least
+            // 1 = no match
+            //
+            visualMatch = (float) (_charValue - errValue - (excessValue / 2)) / (float) _charValue;
+            Log.d(TAG, "Char Error: " + visualMatch);
+
+            if (isVolatile)
+                _bitmap.recycle();
         }
-
-        // Calc the visual match metric -
-        //
-        // 0 = complete overlay - glyph may still have undesirable form but covers the char at least
-        // 1 = no match
-        //
-        visualMatch = (float) (_charValue - errValue - (excessValue / 2)) / (float) _charValue;
-        Log.d(TAG, "Char Error: " + visualMatch);
-
-        if(isVolatile)
-            _bitmap.recycle();
 
         return visualMatch;
     }
