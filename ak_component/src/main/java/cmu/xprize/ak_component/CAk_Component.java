@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +34,7 @@ import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
+
 
 /**
  * Created by jacky on 2016/7/6.
@@ -273,14 +275,41 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     }
 
     protected void updateDataSet(CAk_Data data) {
+        boolean isAudio = isAudio(data);
         questionBoard = new CAkQuestionBoard(mContext, data.answerLane, data.choices);
-        player.setText(data.aboveString, data.belowString);
-        CAnimatorUtil.zoomInOut(player.belowTextView,(float)0.5,500);
-        CAnimatorUtil.zoomInOut(player.aboveTextView,(float)0.5,500);
+
+        if(isAudio){
+            playAudio(data);
+            player.setText("", "");
+        }else{
+            player.setText(data.aboveString, data.belowString);
+            CAnimatorUtil.zoomInOut(player.belowTextView,(float)0.5,500);
+            CAnimatorUtil.zoomInOut(player.aboveTextView,(float)0.5,500);
+        }
+    }
+
+
+    protected  boolean isAudio(CAk_Data data){
+        if(data.belowString.equals("audio"))
+            return true;
+        else
+            return false;
+    }
+
+    protected String getBelowString(CAk_Data data){
+        return data.belowString;
+    }
+
+    protected String getAboveString(CAk_Data data){
+        return data.aboveString;
     }
 
     public void post(String command, Object target) {
 
+    }
+
+
+    public void playAudio(CAk_Data data){
     }
 
     public void UpdateValue(int value) {

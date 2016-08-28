@@ -10,6 +10,7 @@ import android.graphics.Point;
 import android.os.AsyncTask;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
@@ -27,6 +28,8 @@ import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.sb_component.CSb_Scoreboard;
 import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.CErrorManager;
@@ -42,6 +45,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     private CTutor mTutor;
     private CObjectDelegate mSceneObject;
+
 
     static final String TAG = "TAkComponent";
 
@@ -172,6 +176,15 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     }
 
+    @Override
+    public void playAudio(CAk_Data data){
+        TScope scope = mTutor.getScope();
+        String currentAudio = new String(getAboveString(data));
+        Log.d("PlayAudio", currentAudio);
+        scope.addUpdateVar("TestAudio", new TString(currentAudio));
+        applyEventNode("PLAY_AUDIO");
+    }
+
 
     public void enable(Boolean enable) {
     }
@@ -195,6 +208,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
             }
         }
     }
+
 
     public void postQuestionBoard() {
         final CAkQuestionBoard questionBoard = this.questionBoard; //new CAkQuestionBoard(mContext);

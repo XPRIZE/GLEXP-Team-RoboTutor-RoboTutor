@@ -212,6 +212,10 @@
 
         "NEXT": {"type": "COMMAND", "cmd": "NEXT"  },
 
+        "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{TestAudio}}.mp3","soundpackage":"xprize" ,"repeat":false, "volume": "0.7", "mode":"event", "features": ""},
+
+
+
         "PAUSE":{
           "type": "COMMAND", "id": "SAkira", "method": "pause" ,"features":""
         },
