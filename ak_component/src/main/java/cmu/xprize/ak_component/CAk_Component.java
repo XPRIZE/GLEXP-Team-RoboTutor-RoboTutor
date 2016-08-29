@@ -174,13 +174,13 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                     onSpeedChange(speed);
                     if(extraSpeed>speed)     //slow down the speed
                     {
-                        //soundPool.play(slowdown, 0.1f, 0.1f, 1, 0, 1.0f);
-                        soundPool.play(carscreechMedia, 0.1f, 0.1f, 1, 0, 1.0f);
+                        soundPool.play(slowdown, 0.1f, 0.1f, 1, 0, 1.0f);
+                        //soundPool.play(carscreechMedia, 0.1f, 0.1f, 1, 0, 1.0f);
                     }
                     else if(extraSpeed<speed)  //increase the speed
                     {
-                        //soundPool.play(speedup, 0.1f, 0.1f, 1, 0, 1.0f);
-                        soundPool.play(carscreechMedia, 0.1f, 0.1f, 1, 0, 1.0f);
+                        soundPool.play(speedup, 0.1f, 0.1f, 1, 0, 1.0f);
+                        //soundPool.play(carscreechMedia, 0.1f, 0.1f, 1, 0, 1.0f);
                     }
                     extraSpeed = speed;
                     for(Button b : speedometerButton)
