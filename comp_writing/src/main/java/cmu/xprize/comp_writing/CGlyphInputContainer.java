@@ -296,6 +296,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         if (needsRefresh) {
            refreshDrawableState();
+           invalidate();
         }
 
         if(mInputController != null)
@@ -604,18 +605,20 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         // Display the background box.
         //
-        RectF viewBndsF= new RectF(_viewBnds);
-        viewBndsF.inset(GCONST.LINE_WEIGHT/2, GCONST.LINE_WEIGHT/2);
+        if(!mHasGlyph) {
 
-        mPaintBG.setStyle(Paint.Style.FILL);
-        mPaintBG.setColor(Color.WHITE);
-        canvas.drawRoundRect(viewBndsF, GCONST.CORNER_RAD, GCONST.CORNER_RAD, mPaintBG);
+            RectF viewBndsF = new RectF(_viewBnds);
+            viewBndsF.inset(GCONST.LINE_WEIGHT / 2, GCONST.LINE_WEIGHT / 2);
 
-        mPaintBG.setStyle(Paint.Style.STROKE);
-        mPaintBG.setStrokeWidth(GCONST.LINE_WEIGHT);
-        mPaintBG.setColor(Color.parseColor("#A5C4D4"));
-        canvas.drawRoundRect(viewBndsF, GCONST.CORNER_RAD, GCONST.CORNER_RAD, mPaintBG);
+            mPaintBG.setStyle(Paint.Style.FILL);
+            mPaintBG.setColor(Color.WHITE);
+            canvas.drawRoundRect(viewBndsF, GCONST.CORNER_RAD, GCONST.CORNER_RAD, mPaintBG);
 
+            mPaintBG.setStyle(Paint.Style.STROKE);
+            mPaintBG.setStrokeWidth(GCONST.LINE_WEIGHT);
+            mPaintBG.setColor(Color.parseColor("#33A5C4D4"));
+            canvas.drawRoundRect(viewBndsF, GCONST.CORNER_RAD, GCONST.CORNER_RAD, mPaintBG);
+        }
 
         // Set the lower case upper boundry line
         //

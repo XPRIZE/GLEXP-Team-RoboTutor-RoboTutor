@@ -60,42 +60,25 @@ import cmu.xprize.util.CLinkedScrollView;
  */
 public class CWritingController extends PercentRelativeLayout implements IWritingController {
 
-    private char[]           mStimulusData;
-
-    private TextView          mLtkStats;
-    private TextView          mLtkPlus;
-    private TextView          mVisualStats;
-    private TextView          mFitStatsA;
-    private TextView          mFitStatsB;
-
-    private Button            mShowSample;
-    private Button            mShowPrototype;
-    private Button            mShowBounds;
-    private Spinner           mFontSelector;
-
-    private Button            mBoostSample;
-    private Button            mBoostPunct;
-    private Spinner           mBoostClass;
+    protected char[]           mStimulusData;
 
     private CLinkedScrollView mRecognizedScroll;
     private CLinkedScrollView mDrawnScroll;
 
-    private LinearLayout     mRecogList;
-    private LinearLayout     mDrawnList;
-    private CGlyphSet        mGlyphSet;
+    private LinearLayout      mRecogList;
+    protected LinearLayout    mDrawnList;
+    private CGlyphSet         mGlyphSet;
 
-    private int              mMaxLength = GCONST.ALPHABET.length();                // Maximum string length
+    private int               mMaxLength = 6; //GCONST.ALPHABET.length();                // Maximum string length
 
-    private final Handler    mainHandler = new Handler(Looper.getMainLooper());
-    private HashMap          queueMap    = new HashMap();
-    private boolean          _qDisabled  = false;
+    protected final Handler   mainHandler = new Handler(Looper.getMainLooper());
+    protected HashMap         queueMap    = new HashMap();
+    protected boolean         _qDisabled  = false;
 
-    private IGlyphSink       _recognizer;
+    protected IGlyphSink      _recognizer;
 
+    final private String  TAG        = "CWritingController";
 
-    final private boolean mMoveRIGHT = false;
-
-    final private String  TAG        = "WritingComp";
 
     public CWritingController(Context context) {
         super(context);
@@ -115,7 +98,6 @@ public class CWritingController extends PercentRelativeLayout implements IWritin
     private void init(AttributeSet attrs, int defStyle) {
 
         setClipChildren(false);
-
     }
 
     public void onCreate(Context context) {
@@ -138,48 +120,6 @@ public class CWritingController extends PercentRelativeLayout implements IWritin
 
             mRecogList.addView(v);
         }
-
-        mLtkStats    = (TextView)findViewById(R.id.Smetrics_Ltk);
-        mLtkPlus     = (TextView)findViewById(R.id.Smetrics_LtkPlus);
-        mVisualStats = (TextView)findViewById(R.id.Smetrics_Visual);
-        mFitStatsA   = (TextView)findViewById(R.id.Smetrics_FitA);
-        mFitStatsB   = (TextView)findViewById(R.id.Smetrics_FitB);
-
-        mShowSample    = (Button)findViewById(R.id.SshowSample);
-        mShowPrototype = (Button)findViewById(R.id.SshowPrototype);
-        mShowBounds    = (Button)findViewById(R.id.SshowBounds);
-        mFontSelector  = (Spinner) findViewById(R.id.SfontSelector);
-
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
-                R.array.fonts_array, android.R.layout.simple_spinner_item);
-
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mFontSelector.setAdapter(adapter);
-
-        mShowSample.setOnClickListener(new showSampleClickListener());
-        mShowPrototype.setOnClickListener(new showPrototypeClickListener());
-        mShowBounds.setOnClickListener(new showBoundsClickListener());
-        mFontSelector.setOnItemSelectedListener(new SpinnerSelectionListener());
-
-
-        mBoostSample = (Button)findViewById(R.id.SboostExpected);
-        mBoostPunct  = (Button)findViewById(R.id.SboostPunct);
-        mBoostClass  = (Spinner) findViewById(R.id.SboostClass);
-
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> boostadapter = ArrayAdapter.createFromResource(context,
-                R.array.boost_array, android.R.layout.simple_spinner_item);
-
-        // Specify the layout to use when the list of choices appears
-        boostadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mBoostClass.setAdapter(boostadapter);
-
-        mBoostSample.setOnClickListener(new boostSampleClickListener());
-        mBoostPunct.setOnClickListener(new boostPunctClickListener());
-        mBoostClass.setOnItemSelectedListener(new boostClassSelectionListener());
-
 
         //****************************
 
@@ -330,215 +270,6 @@ public class CWritingController extends PercentRelativeLayout implements IWritin
             return true;
         }
     }
-
-    public class showSampleClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-
-            for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
-
-                CDrawnInputController comp = (CDrawnInputController) mDrawnList.getChildAt(i1);
-
-                if(comp.toggleSampleChar()) {
-                    mShowSample.setText("Hide Sample");
-                }
-                else {
-                    mShowSample.setText("Show Sample");
-                }
-            }
-        }
-    }
-
-    public class showPrototypeClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-
-            boolean result = false;
-
-            for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
-
-                CDrawnInputController comp = (CDrawnInputController) mDrawnList.getChildAt(i1);
-                result = comp.toggleProtoGlyph();
-            }
-
-            if(result) {
-                mShowPrototype.setText("Show User Glyph");
-            }
-            else {
-                mShowPrototype.setText("Show Prototype");
-            }
-
-        }
-    }
-
-
-    public class showBoundsClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-
-            boolean result = false;
-
-            for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
-
-                CDrawnInputController comp = (CDrawnInputController) mDrawnList.getChildAt(i1);
-                result = comp.toggleDebugBounds();
-            }
-
-            if(result) {
-                mShowBounds.setText("Hide Bounds");
-            }
-            else {
-                mShowBounds.setText("Show Bounds");
-            }
-
-        }
-    }
-
-
-    public class SpinnerSelectionListener implements AdapterView.OnItemSelectedListener {
-
-        public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-
-            // An item was selected. You can retrieve the selected item using
-            String fontSelection = (String)parent.getItemAtPosition(pos);
-
-            for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
-
-                CDrawnInputController comp = (CDrawnInputController) mDrawnList.getChildAt(i1);
-                comp.selectFont(fontSelection);
-            }
-        }
-
-        public void onNothingSelected(AdapterView<?> parent) {
-            // Another interface callback
-        }
-    }
-
-
-
-    public class boostSampleClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-
-            if(_recognizer.toggleExpectedBoost()) {
-                mBoostSample.setText("Boost Expected : YES");
-            }
-            else {
-                mBoostSample.setText("Boost Expected : NO ");
-            }
-
-        }
-    }
-
-
-    public class boostPunctClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-
-            if(_recognizer.togglePunctBoost()) {
-                mBoostPunct.setText("Boost Punctuation : YES");
-            }
-            else {
-                mBoostPunct.setText("Boost Punctuation : NO ");
-            }
-
-        }
-    }
-
-
-    public class boostClassSelectionListener implements AdapterView.OnItemSelectedListener {
-
-        public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-
-            // An item was selected. You can retrieve the selected item using
-            String classSelection = (String)parent.getItemAtPosition(pos);
-
-            _recognizer.setClassBoost(classSelection);
-        }
-
-        public void onNothingSelected(AdapterView<?> parent) {
-            // Another interface callback
-        }
-    }
-
-
-
-    @Override
-    public void updateGlyphStats(CRecResult[] ltkPlusCandidates, CRecResult[] charCandidates, CGlyphMetrics metricsA, CGlyphMetrics metricsB) {
-
-
-        // TODO: This is an experiment to see how full visual processing affects results  SEARCH: VISUALCOMPARE
-        String ltkPlusStats = "";
-
-        for(CRecResult candidate : ltkPlusCandidates) {
-
-            ltkPlusStats += candidate.getRecChar() + " : " + String.format("%.3f", candidate.getPlusConfidence());
-
-            if(candidate.isVirtual()) {
-                ltkPlusStats += " *";
-            }
-            ltkPlusStats += "\n";
-        }
-        mLtkPlus.setText(ltkPlusStats);
-
-
-
-        String ltkStats = "";
-
-        for(CRecResult candidate : charCandidates) {
-
-            ltkStats += candidate.getRecChar() + " : " + String.format("%.3f", candidate.Confidence);
-
-            if(candidate.isVirtual()) {
-                ltkStats += " *";
-            }
-            ltkStats += "\n";
-        }
-        mLtkStats.setText(ltkStats);
-
-
-
-        String visualStats = "";
-
-        for(CRecResult candidate : charCandidates) {
-
-            visualStats += candidate.getRecChar() + " : " + String.format("%.3f", candidate.getVisualConfidence()) + "\n";
-        }
-        mVisualStats.setText(visualStats);
-
-
-
-        // These are the fit stats for the sample (i.e. expected) character
-        //
-        String fitStats = "";
-
-        fitStats += "dX: " + metricsA.getHorizontalDeviation() + "\n";
-        fitStats += "dY: " + metricsA.getVerticalDeviation() + "\n";
-
-        fitStats += "dW: " + metricsA.getWidthDeviation() + "\n";
-        fitStats += "dH: " + metricsA.getHeightDeviation() + "\n";
-
-        fitStats += "dA: " + metricsA.getAspectDeviation() + "\n";
-
-        mFitStatsA.setText(fitStats);
-
-
-
-        // These are the fit stats for the LTK (i.e. inferred) character
-        //
-        String fitStatsB = "";
-
-        fitStatsB += "dX: " + metricsB.getHorizontalDeviation() + "\n";
-        fitStatsB += "dY: " + metricsB.getVerticalDeviation() + "\n";
-
-        fitStatsB += "dW: " + metricsB.getWidthDeviation() + "\n";
-        fitStatsB += "dH: " + metricsB.getHeightDeviation() + "\n";
-
-        fitStatsB += "dA: " + metricsB.getAspectDeviation() + "\n";
-
-        mFitStatsB.setText(fitStatsB);
-    }
-
 
 
     //************************************************************************
@@ -696,6 +427,12 @@ public class CWritingController extends PercentRelativeLayout implements IWritin
     // Component Message Queue  -- End
     //************************************************************************
     //************************************************************************
+
+
+    // Debug component requirement
+    @Override
+    public void updateGlyphStats(CRecResult[] ltkPlusResult, CRecResult[] ltkresult, CGlyphMetrics metricsA, CGlyphMetrics metricsB) {
+    }
 
 
 }
