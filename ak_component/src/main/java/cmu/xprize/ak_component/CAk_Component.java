@@ -167,19 +167,21 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
             int resID = getResources().getIdentifier("button" + i, "id",
                     "cmu.xprize.robotutor");
             speedometerButton[i] = (Button) findViewById(resID);
-            if(extraSpeed>i)     //slow down the speed
-            {
-                //soundPool.play(slowdown, 0.1f, 0.1f, 1, 0, 1.0f);
-            }
-            else if(extraSpeed<i)  //increase the speed
-            {
-                //soundPool.play(speedup, 0.1f, 0.1f, 1, 0, 1.0f);
-            }
             final int speed = i;
             speedometerButton[i].setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onSpeedChange(speed);
+                    if(extraSpeed>speed)     //slow down the speed
+                    {
+                        //soundPool.play(slowdown, 0.1f, 0.1f, 1, 0, 1.0f);
+                        soundPool.play(carscreechMedia, 0.1f, 0.1f, 1, 0, 1.0f);
+                    }
+                    else if(extraSpeed<speed)  //increase the speed
+                    {
+                        //soundPool.play(speedup, 0.1f, 0.1f, 1, 0, 1.0f);
+                        soundPool.play(carscreechMedia, 0.1f, 0.1f, 1, 0, 1.0f);
+                    }
                     extraSpeed = speed;
                     for(Button b : speedometerButton)
                         b.getBackground().clearColorFilter();
@@ -218,13 +220,13 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         if(isFirstInstall==false)
             teachFinger.finishTeaching=true;
 
-        soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
         carscreechMedia=soundPool.load(mContext, R.raw.carscreech, 1);
         correctMedia=soundPool.load(mContext, R.raw.correct, 1);
         incorrectMedia=soundPool.load(mContext, R.raw.incorrect, 1);
         numberchangedMedia=soundPool.load(mContext, R.raw.numberchanged, 1);
-        //slowdown=soundPool.load(mContext,R.raw.slow,1);
-        //speedup=soundPool.load(mContext,R.raw.speed,1);
+        slowdown=soundPool.load(mContext,R.raw.slow,1);
+        speedup=soundPool.load(mContext,R.raw.speed,1);
 
         mainHandler.post(gameRunnable);
         if(attrs != null) {
