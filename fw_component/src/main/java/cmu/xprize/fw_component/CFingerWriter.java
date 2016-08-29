@@ -46,10 +46,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cmu.xprize.ltk.LipiTKJNIInterface;
-import cmu.xprize.ltk.RecResult;
-import cmu.xprize.ltk.Stroke;
-import cmu.xprize.ltk.StrokeSet;
+import cmu.xprize.ltkplus.CLipiTKJNIInterface;
+import cmu.xprize.ltkplus.CRecResult;
+import cmu.xprize.ltkplus.CStroke;
+import cmu.xprize.ltkplus.CGlyph;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CEvent;
 import cmu.xprize.util.IEvent;
@@ -79,19 +79,19 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
 
     private static final float    TOLERANCE = 5;
 
-    private LipiTKJNIInterface    _recognizer;
+    private CLipiTKJNIInterface   _recognizer;
     private String                _configFolder;
     private boolean               _initialized   = false;
     private RecognizerThread      _recThread;
     private String                _recogId;                // for logging
     private boolean               _isRecognizing = false;
 
-    private Stroke[]              _recStrokes;
-    private RecResult[]           _recResults;
+    private CStroke[]              _recStrokes;
+    private CRecResult[]           _recResults;
     protected ArrayList<String>   _recChars;
     private String                _constraint;
 
-    private StrokeSet             _currentGlyph;
+    private CGlyph _currentGlyph;
     private int[]                 _screenCoord  = new int[2];
     private Boolean               _watchable    = false;
 
@@ -332,8 +332,9 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
 
         // We always add the next stoke to the glyph set
 
-        if (_currentGlyph == null)
-            _currentGlyph = new StrokeSet(mBaseLine);
+// TODO: ltkplus import fault
+//        if (_currentGlyph == null)
+//            _currentGlyph = new CGlyph(mBaseLine);
 
         _currentGlyph.newStroke();
         _currentGlyph.addPoint(touchPt);
@@ -471,7 +472,7 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
 
             for(int i1 = 0 ; i1 < _currentGlyph.size() ; i1++) {
 
-                Stroke stroke = _currentGlyph.getStroke(i1);
+                CStroke stroke = _currentGlyph.getStroke(i1);
 
                 if(stroke.isPoint(drawBnds)) {
 
@@ -563,7 +564,7 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
         RecognizerThread() {
         }
 
-        public void setStrokes(Stroke[] _recognitionStrokes) {
+        public void setStrokes(CStroke[] _recognitionStrokes) {
             _recStrokes = _recognitionStrokes;
         }
 
@@ -587,7 +588,7 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
 
             Pattern pattern = Pattern.compile(_constraint);
 
-            for (RecResult result : _recResults) {
+            for (CRecResult result : _recResults) {
                 Log.e("jni", "ShapeID = " + result.Id + " Confidence = " + result.Confidence);
             }
 
@@ -642,7 +643,7 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
         @Override
         protected void onPreExecute() {
 
-            _recStrokes = new Stroke[_currentGlyph.size()];
+            _recStrokes = new CStroke[_currentGlyph.size()];
 
             for (int s = 0; s < _currentGlyph.size(); s++)
                 _recStrokes[s] = _currentGlyph.getStroke(s);
@@ -673,7 +674,7 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
 
         try {
             _recogId      = recogId;
-            _recognizer   = new LipiTKJNIInterface(path, recogMap.get(recogId));
+            _recognizer   = new CLipiTKJNIInterface(path, recogMap.get(recogId));
             _configFolder = _recognizer.getLipiDirectory() + folderMap.get(recogId);
 
             _recognizer.initialize();

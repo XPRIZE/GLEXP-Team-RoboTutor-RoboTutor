@@ -72,14 +72,26 @@ public class TCONST {
     public static final String FONT_FOLDER      = "fonts/";
     public static final String SHOWICONS        = "SHOWICONS";
     public static final String SHOWNUM          = "SHOWNUM";
+    public static final String VIEW_SCALED      = "VIEW_SCALED";
+    public static final String VIEW_NORMAL      = "VIEW_NORMAL";
+    public static final String VIEW_ANIMATE     = "VIEW_ANIMATE";
+    public static final String STROKE_ORIGINAL  = "STROKE_ORIGINAL";
+    public static final String STROKE_OVERLAY   = "STROKE_OVERLAY";
+    public static final int    GLYPHCOLOR1      = 0xAA000000;
+    public static final int    FONTCOLOR1       = 0xFF0000FF;
+    public static final int    ERRORCOLOR1      = 0xFFFF0000;
+    public static final boolean VOLATILE        = true;
+    public static final int     DOT_SIZE        = 40;
+    public static final String CONTAINER_SCALED = "CONTAINER_SCALED";
 
     static public HashMap<String, String> fontMap = new HashMap<String, String>();
 
     static {
         fontMap.put("grundschrift",         FONT_FOLDER + "Grundschrift.ttf");
-        fontMap.put("grundschrift_kontur",  FONT_FOLDER + "Grundschrift-Kontur.otf");
-        fontMap.put("grundschrift_punkt",   FONT_FOLDER + "Grundschrift-Punkt.otf");
+        fontMap.put("grundschrift-kontur",  FONT_FOLDER + "Grundschrift-Kontur.otf");
+        fontMap.put("grundschrift-punkt",   FONT_FOLDER + "Grundschrift-Punkt.otf");
     }
+
 
     //*** Reading Tutor compatible string combinations
 
@@ -149,6 +161,7 @@ public class TCONST {
     public static final String ASSETS          = "ASSETS";
     public static final String RESOURCES       = "RESOURCE";
     public static final String EXTERN          = "EXTERN";
+    public static final String DEFINED         = "DEFINED";
 
     // Navigator types
     final static public String SIMPLENAV       = "SIMPLE_NAVIGATOR";
@@ -157,6 +170,7 @@ public class TCONST {
     public static final String NEXT_TNODE      = "NEXT_TNODE";
     public static final String NEXTSCENE       = "NEXTSCENE";
     public static final String FIRST_SCENE     = "GOTO_FIRST_SCENE";
+    public static final String REC_GLYPH       = "REC_GLYPH";
 
 
 
@@ -302,6 +316,7 @@ public class TCONST {
     public static final String DATASHOP    = "-DS";
     public static final String JSONLOG     = ".json";
     public static final boolean APPEND     = true;
+    public static final boolean REPLACE    = false;
 
     public static final String GLYPH_DATA  = "glyphdata";
 
@@ -312,7 +327,9 @@ public class TCONST {
     public static final String FW_EOI      = "FW_EOI";
     public static final String FW_RESPONSE = "FW_RESPONSE";
 
-    public static final String ROBOTUTOR_FOLDER = "/RoboTutor/";
+    public static final String WRITINGTUTOR_FOLDER = "/WritingTutor/";
+    public static final String ROBOTUTOR_FOLDER     = "/RoboTutor/";
+    public static final String GLYPHS_FOLDER = "/glyphs/";
 
 
     // Listener Control message types

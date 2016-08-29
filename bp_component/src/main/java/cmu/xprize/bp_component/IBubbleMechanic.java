@@ -13,6 +13,6 @@ public interface IBubbleMechanic {
 
     public void populateView(CBp_Data data);
     public void doLayout(int width, int height, CBp_Data data);
-
     public void execCommand(String command, Object target );
+
 }
