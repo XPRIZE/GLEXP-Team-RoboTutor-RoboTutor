@@ -1,6 +1,7 @@
 package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 
@@ -85,7 +86,15 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
         if(correct)
             mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
         else {
-            resetHesitationTimer();
+            isWriting = false;
+
+            Handler h = new Handler();
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setDotBagsVisible(true, digitIndex);
+                }
+            }, 1500);
             mTutor.setAddFeature(TCONST.GENERIC_WRONG);
         }
     }

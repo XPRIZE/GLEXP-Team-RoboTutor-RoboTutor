@@ -51,6 +51,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     protected Integer overheadVal = null;
     protected CAsm_Text overheadText = null;
     protected CAsm_Text overheadTextSupplement = null;
+    protected int curOverheadCol = -1;
 
     protected int numAlleys = 0;
 
@@ -138,16 +139,26 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         _dataIndex = 0;
     }
 
-    public void setDotBagsVisible(Boolean _dotbagsVisible) {
-            if(System.currentTimeMillis() - startTime < 3000) return;
+    public void setDotBagsVisible(Boolean _dotbagsVisible, int curDigitIndex) {
+            if(curDigitIndex != digitIndex) return;
+            if(System.currentTimeMillis() - startTime < 3000 && _dotbagsVisible) return;
 
             if (_dotbagsVisible && !hasShown && !isWriting) {
+                if(curOverheadCol >= 0)
+                    if(allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(1).getText().equals("")
+                            || allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(1).getCurrentTextColor() == Color.RED) {
+                        mechanics.highlightBorrowable();
+                        return;
+                    } else
+                        curOverheadCol = -1;
+
                 hasShown = true;
 
                 int delayTime = 0;
                 for (int alley = 0; alley < allAlleys.size(); alley++) {
                     final CAsm_Alley curAlley = allAlleys.get(alley);
-                    delayTime = wiggleDigitAndDotbag(curAlley, delayTime);
+                    final int _curDigitIndex = curDigitIndex;
+                    delayTime = wiggleDigitAndDotbag(curAlley, delayTime, _curDigitIndex);
                 }
 
                 if (!dotbagsVisible)
@@ -160,10 +171,13 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                 return;
 
             dotbagsVisible = _dotbagsVisible;
-
     }
 
-    public int wiggleDigitAndDotbag(final CAsm_Alley curAlley, int delayTime) {
+    public void setDotBagsVisible(Boolean _dotbagsVisible) {
+        setDotBagsVisible(_dotbagsVisible, digitIndex);
+    }
+
+    public int wiggleDigitAndDotbag(final CAsm_Alley curAlley, int delayTime, final int curDigitIndex) {
         final CAsm_DotBag curDB = curAlley.getDotBag();
         final CAsm_TextLayout curTextLayout = curAlley.getTextLayout().getTextLayout(digitIndex);
         CAsm_Text curText = curTextLayout.getText(1);
@@ -177,6 +191,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                 h.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        if(curDigitIndex != digitIndex) return;
                         curAlley.getTextLayout().getTextLayout(0).getText(1).wiggle(300, 1, 0, .3f);
                     }
                 }, delayTime);
@@ -186,6 +201,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
             h.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    if(curDigitIndex != digitIndex) return;
                     clickPaused = false;
                     curDB.setVisibility(VISIBLE);
                     curDB.wiggle(300, 1, 0, .05f);
@@ -456,9 +472,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
             }
         }
 
-        overheadCorrect = (overheadVal == null); // make sure there is no new overhead val
+//        overheadCorrect = (overheadVal == null); // make sure there is no new overhead val
 
-        return (bottomCorrect & overheadCorrect);
+        return (bottomCorrect);
     }
 
     public void checkOtherBottomCorrect(CAsm_TextLayout textLayout) {
@@ -580,10 +596,10 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         mPopup.enable(false,null);
         mPopup.dismiss();
 
-        resetHesitationTimer();
+        resetHesitationTimer(3000);
     }
 
-    public void resetHesitationTimer() {
+    public void resetHesitationTimer(int delayTime) {
         if(isWriting && !hasShown) {
             startTime = System.currentTimeMillis();
             isWriting = false;
@@ -592,9 +608,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
             h.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    setDotBagsVisible(true);
+                    setDotBagsVisible(true, digitIndex);
                 }
-            }, 3000);
+            }, delayTime);
         }
     }
 

@@ -148,16 +148,13 @@ public class CAsm_DotBag extends TableLayout {
                 }
 
             }
-        }
-
-        else if (deltaCols > 0) {
+        } else {
             for (int i = 0; i < this.rows; i++) {
                 for(int j = 0; j < origCols; j++)
                     getDot(i, j).setVisibility(View.VISIBLE);
                 for (int j = origCols; j < _cols; j++ )
                     addDot(i, j);
             }
-
         }
 
         this.cols = _cols;
@@ -228,8 +225,6 @@ public class CAsm_DotBag extends TableLayout {
 
         }
 
-
-
         return dot;
     }
 
@@ -244,7 +239,7 @@ public class CAsm_DotBag extends TableLayout {
 
 
 
-    private void setZero() {
+    protected void setZero() {
 
         rows = 0;
         cols = 0;

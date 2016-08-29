@@ -56,8 +56,6 @@ public class CAsm_MechanicBase implements IDotMechanics {
             preClickSetup();
         }
 
-        mComponent.overheadText = null;
-        mComponent.overheadVal = null;
         resultIndex = allAlleys.size()-1;
 
         highlightDigits();
@@ -142,7 +140,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
             currBag.setTranslationY(0);
         }
 
-        mComponent.setDotBagsVisible(false);
+        mComponent.setDotBagsVisible(false, mComponent.digitIndex);
 
     }
 

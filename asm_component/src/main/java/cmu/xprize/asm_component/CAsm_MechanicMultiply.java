@@ -41,7 +41,7 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
             resultBag.setRows(firstBag.getCols());
             resultBag.setCols(secondBag.getCols());
 
-            mComponent.setDotBagsVisible(true);
+            mComponent.setDotBagsVisible(true, mComponent.digitIndex);
         }
 
     }

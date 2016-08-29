@@ -1,7 +1,9 @@
 package cmu.xprize.asm_component;
 
 import android.content.Context;
+import android.content.pm.InstrumentationInfo;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.LinearLayout;
 
 
@@ -38,7 +40,6 @@ public class CAsm_Alley extends LinearLayout {
         super(context, attrs);
         init(context, attrs);
     }
-
 
     public CAsm_Alley(Context context, AttributeSet attrs, int defStyle) {
 
@@ -111,12 +112,16 @@ public class CAsm_Alley extends LinearLayout {
             cols = (cols != null)?cols:0;
         }
 
+        if(operation.equals("-")) {
+            removeView(SdotBag);
+            createDotBag();
+        }
         SdotBag.setRows(1);
         SdotBag.setCols(cols);
         SdotBag.setImage(image);
         SdotBag.setIsClickable(clickable);
         SdotBag.resetOverflowNum();
-
+        SdotBag.setVisibility(INVISIBLE);
     }
 
     public Integer getNum() {return STextLayout.getNum();}

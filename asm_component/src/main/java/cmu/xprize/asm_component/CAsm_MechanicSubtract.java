@@ -3,7 +3,9 @@ package cmu.xprize.asm_component;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -18,6 +20,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     private int dotOffset;
 
     private boolean dotBagBorrowed = false;
+    private boolean hasBorrowed = false;
 
     private int minuendIndex; // vertical column
 
@@ -25,10 +28,38 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     private int digitBorrowingCol = 0;
     private boolean isBorrowedValue = true; //To indicate if the current overhead value is borrowed value
 
+    private int borrowBlockStartIndex = -1;
+    private int borrowBlockEndIndex = -1;
+
     public CAsm_MechanicSubtract(CAsm_Component mComponent) {super.init(mComponent);}
 
     @Override
     public void nextDigit() {
+
+        if (digitBorrowingIndex <= mComponent.digitIndex && digitBorrowingIndex > 0) {
+            if(mComponent.digitIndex < borrowBlockEndIndex)
+                mComponent.curOverheadCol = firstBagIndex - 2 - (mComponent.digitIndex - borrowBlockStartIndex);
+            else
+                mComponent.curOverheadCol = firstBagIndex - 2 - (borrowBlockEndIndex - 1 - borrowBlockStartIndex) + 1;
+
+            if (mComponent.digitIndex == digitBorrowingIndex &&
+                    !allAlleys.get(mComponent.curOverheadCol).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getText().equals("") &&
+                    !(allAlleys.get(mComponent.curOverheadCol).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getCurrentTextColor() == Color.RED))
+                    dotbagBorrow();
+        } else if (mComponent.digitIndex < digitBorrowingIndex){
+            hasBorrowed = false;
+
+            if (allAlleys.get(digitBorrowingCol).getTextLayout().getTextLayout(digitBorrowingIndex).getText(0).equals("1"))
+                allAlleys.get(digitBorrowingCol).getTextLayout().getTextLayout(digitBorrowingIndex).getText(0).setBorrowable(false);
+            allAlleys.get(digitBorrowingCol).getTextLayout().getTextLayout(digitBorrowingIndex).getText(1).setBorrowable(false);
+        }
+
+        if (mComponent.digitIndex == borrowBlockStartIndex - 1) {
+            digitBorrowingCol = 0;
+            digitBorrowingIndex = 0;
+            borrowBlockStartIndex = -1;
+            borrowBlockEndIndex = -1;
+        }
 
         dotBagBorrowed = false;
 
@@ -39,13 +70,13 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         int minuend = allAlleys.get(minuendIndex).getCurrentDigit();
         int subtrahend = allAlleys.get(secondBagIndex).getCurrentDigit();
 
-        if (minuend - subtrahend < 0) {
+        if (minuend - subtrahend < 0 && !hasBorrowed) {
+            hasBorrowed = true;
+            isBorrowedValue = true;
 
             CAsm_TextLayout firstBagLayout = allAlleys.get(firstBagIndex).getTextLayout();
-
             // find first nonzero to borrow from - this should always break in the for loop!
             for (int i = mComponent.digitIndex - 1; i >= 0; i--) {
-
                 if (firstBagLayout.getDigit(i) > 0) {
                     digitBorrowingIndex = i;
                     digitBorrowingCol = firstBagIndex;
@@ -54,6 +85,9 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
             }
 
             makeTextBorrowable(digitBorrowingIndex, digitBorrowingCol);
+            borrowBlockStartIndex = digitBorrowingIndex;
+            borrowBlockEndIndex = mComponent.digitIndex;
+            mComponent.curOverheadCol = firstBagIndex - 2 - (borrowBlockEndIndex - 1 - borrowBlockStartIndex) + 1;
         }
     }
 
@@ -225,18 +259,30 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         dotBagBorrowed = true;
 
+        if (mComponent.digitIndex == digitBorrowingIndex &&
+                !allAlleys.get(mComponent.curOverheadCol).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).equals("") &&
+                !(allAlleys.get(mComponent.curOverheadCol).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getCurrentTextColor() == Color.RED))
+            digitBorrowingCol = mComponent.curOverheadCol;
+
         CAsm_DotBag borrowBag = allAlleys.get(digitBorrowingCol).getDotBag();
         CAsm_DotBag minuendBag = allAlleys.get(minuendIndex).getDotBag();
         CAsm_DotBag subtrahendBag = allAlleys.get(secondBagIndex).getDotBag();
 
         borrowBag.setDrawBorder(true);
         borrowBag.setRows(1);
-        borrowBag.setCols(10);
+        if(mComponent.digitIndex < borrowBlockEndIndex) {
+            borrowBag.setCols(allAlleys.get(mComponent.curOverheadCol).getTextLayout().getDigit(mComponent.digitIndex));
+            allAlleys.get(digitBorrowingCol + 1).getTextLayout().getTextLayout(mComponent.digitIndex).getText(0).setStruck(true);
+            allAlleys.get(digitBorrowingCol + 1).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).setStruck(true);
+            allAlleys.get(digitBorrowingCol + 1).getTextLayout().getTextLayout(mComponent.digitIndex).getBackground().setAlpha(100);;
+            allAlleys.get(firstBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).setStruck(true);
+        } else
+            borrowBag.setCols(10);
 
         dotOffset = borrowBag.getCols() - subtrahendBag.getCols();
-        subtrahendBag.setTranslationX(dotOffset*subtrahendBag.getSize());
+        subtrahendBag.setTranslationX(dotOffset * subtrahendBag.getSize());
         dotOffset = borrowBag.getCols() - minuendBag.getCols();
-        minuendBag.setTranslationX(dotOffset*subtrahendBag.getSize());
+        minuendBag.setTranslationX(dotOffset * minuendBag.getSize());
 
         minuendIndex = digitBorrowingCol;
     }
@@ -336,14 +382,14 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         super.correctOverheadText();
 
-        if (digitBorrowingIndex + 1 == mComponent.digitIndex && isBorrowedValue) {
-            // perform borrowing animation
+        if (mComponent.digitIndex < digitBorrowingIndex)
+            return;
+        else if ((digitBorrowingIndex + 1 == mComponent.digitIndex && isBorrowedValue && borrowBlockEndIndex == mComponent.digitIndex) ||
+                (digitBorrowingIndex == mComponent.digitIndex && !isBorrowedValue)) {
             if (!dotBagBorrowed) {
                 dotbagBorrow();
             }
-        }
-
-        else {
+        } else {
             if(!isBorrowedValue)
                 digitBorrowingCol--;
             else
@@ -378,7 +424,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
     @Override
     public void highlightBorrowable() {
-        if(digitBorrowingCol == 0 && digitBorrowingIndex == 0) return;
+        if(digitBorrowingCol == 0 && digitBorrowingIndex == 0 || mComponent.digitIndex < digitBorrowingIndex) return;
 
         CAsm_TextLayout borrowableTextLayout = allAlleys.get(digitBorrowingCol).getTextLayout();
         CAsm_Text borrowableText = borrowableTextLayout.getTextLayout(digitBorrowingIndex).getText(1);
@@ -386,7 +432,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         if(!isBorrowedValue && digitBorrowingCol != firstBagIndex) {
             borrowableText = borrowableTextLayout.getTextLayout(digitBorrowingIndex).getText(0);
-            if(!borrowableText.getIsStruck()) mComponent.highlightText(borrowableText);
+            if(!borrowableText.getIsStruck() && !borrowableText.getText().equals("")) mComponent.highlightText(borrowableText);
         }
     }
 
