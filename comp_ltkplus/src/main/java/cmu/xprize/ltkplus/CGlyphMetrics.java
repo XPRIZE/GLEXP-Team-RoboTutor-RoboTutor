@@ -183,16 +183,8 @@ public class CGlyphMetrics {
             drawSurface.drawText(charToCompare, -charBnds.left, -charBnds.top, mPaint);
 
             _pixels = new CPixelArray(_bitmap);
-            _charValue = 0;
 
-            for (int i1 = 0; i1 < _pixels.getWidth(); i1++) {
-                for (int i2 = 0; i2 < _pixels.getHeight(); i2++) {
-
-                    if (_pixels.getPixel(i1, i2) == TCONST.FONTCOLOR1) {
-                        _charValue++;
-                    }
-                }
-            }
+            _charValue = _pixels.scanForColor(TCONST.FONTCOLOR1);
 
             // Draw a border around the draw region - debug only
             //
@@ -216,21 +208,11 @@ public class CGlyphMetrics {
             glyphToCompare.drawGylyph(drawSurface, mPaint, fontBounds);
 
             _pixels.getPixels();
-            int errValue = 0;
+
+            int errValue    = 0;
             int excessValue = 0;
 
-            for (int i1 = 0; i1 < _pixels.getWidth(); i1++) {
-                for (int i2 = 0; i2 < _pixels.getHeight(); i2++) {
-
-                    if (_pixels.getPixel(i1, i2) == TCONST.FONTCOLOR1) {
-
-                        _pixels.setPixel(i1, i2, TCONST.ERRORCOLOR1);
-                        errValue++;
-                    } else if (_pixels.getPixel(i1, i2) == TCONST.GLYPHCOLOR1) {
-                        //excessValue++;
-                    }
-                }
-            }
+            errValue = _pixels.scanAndReplace(TCONST.FONTCOLOR1, TCONST.ERRORCOLOR1);
 
             // Calc the visual match metric -
             //

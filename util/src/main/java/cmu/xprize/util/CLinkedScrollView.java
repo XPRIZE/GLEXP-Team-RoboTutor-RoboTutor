@@ -11,6 +11,8 @@ import android.widget.HorizontalScrollView;
 
 public class CLinkedScrollView extends HorizontalScrollView implements View.OnTouchListener{
 
+    protected Context        mContext;
+
     private   boolean        mEnableScrolling   = true;
     protected boolean        mIsInitiator       = false;
     protected boolean        mCaptureInitiator  = false;
@@ -25,20 +27,22 @@ public class CLinkedScrollView extends HorizontalScrollView implements View.OnTo
 
     public CLinkedScrollView(Context context) {
         super(context);
-        init(context);
+        init(context, null);
     }
 
     public CLinkedScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init(context, attrs);
     }
 
     public CLinkedScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        init(context, attrs);
     }
 
-    private void init(Context context) {
+    protected void init(Context context, AttributeSet attrs ) {
+
+        mContext = context;
 
         setOnTouchListener(this);
     }

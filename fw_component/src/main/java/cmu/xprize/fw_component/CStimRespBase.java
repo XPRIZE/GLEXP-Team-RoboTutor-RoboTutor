@@ -29,28 +29,35 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import cmu.xprize.util.CClassMap;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CEvent;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.util.IEventDispatcher;
 import cmu.xprize.util.IEventListener;
+import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IScope;
+import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
 
-public class CStimRespBase extends TextView  implements View.OnClickListener, IEventListener, IEventDispatcher {
+public class CStimRespBase extends TextView  implements View.OnClickListener, IEventListener, IEventDispatcher, ILoadableObject {
 
     protected Context               mContext;
 
     public    List<IEventListener>  mListeners          = new ArrayList<IEventListener>();
-    protected List<String>          mLinkedViews;
+    protected List<String>          mLinkedViews        = new ArrayList<String>();
     protected boolean               mListenerConfigured = false;
 
-    // Used by control in response mode to maintain state info
+    // Used in response-mode to maintain state info
+
     protected String        mStimulusString;        // String representation - even for numbers e.g. "34"
     protected String        mResponseString;        // String representation - even for numbers e.g. "34"
     protected boolean       mIsResponse;
@@ -59,6 +66,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
     private String[]        mLinkLex;
     private int[]           mLexEnds;             // records location of the end of lexemes in mDisplayText string
     private boolean         mEmpty = false;
+
     private int             mTextColor;
     public  String          mValue;
     protected boolean       mShowState;
@@ -73,6 +81,11 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
     protected String        _onRecognitionError;
 
     protected float         mAspect;           //   = 0.82f w/h
+
+
+    // json loadable
+    public String[]               dataSource;
+
 
     static public String TAG = "CStimRespBase";
 
@@ -125,7 +138,9 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
                 linkedViews = a.getNonResourceString(R.styleable.RoboTutor_linked_views);
                 mTextColor  = getCurrentTextColor();
 
-                mLinkedViews = Arrays.asList(linkedViews.split(","));
+                if(linkedViews != null) {
+                    mLinkedViews = Arrays.asList(linkedViews.split(","));
+                }
 
             } finally {
                 a.recycle();
@@ -428,5 +443,25 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
     // Scripting Interface  End
     //************************************************************************
     //************************************************************************
+
+
+
+
+    //************ Serialization
+
+
+
+    /**
+     * Load the data source
+     *
+     * @param jsonData
+     */
+    @Override
+    public void loadJSON(JSONObject jsonData, IScope scope) {
+
+        JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
+        _dataIndex = 0;
+
+    }
 
 }

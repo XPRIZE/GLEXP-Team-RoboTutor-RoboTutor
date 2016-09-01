@@ -215,6 +215,7 @@ public class CRecognizerPlus implements IGlyphSink {
      */
     class RecognizerTask extends AsyncTask<Void, Void, String> {
 
+        private long         LTKTimer;                  // Used for benchmarking
 
         RecognizerTask() {
         }
@@ -230,7 +231,10 @@ public class CRecognizerPlus implements IGlyphSink {
          */
         @Override
         protected String doInBackground(Void... unsued) {
+
             _ltkCandidates = _recognizer.recognize(_recStrokes);
+
+            Log.d("LTKPLUS", "Time in LTKProcessor: " + (System.currentTimeMillis() - LTKTimer));
 
             // generate the LTK project folder that contains the symbol to unicode mapping
             //
@@ -258,6 +262,8 @@ public class CRecognizerPlus implements IGlyphSink {
 
             _recStrokes = null;
 
+            Log.d("LTKPLUS", "Time in LTK_PUS_Processor: " + (System.currentTimeMillis() - LTKTimer));
+
             synchronized (_isRecognizing) {
 
                 _isRecognizing = false;
@@ -278,6 +284,8 @@ public class CRecognizerPlus implements IGlyphSink {
          */
         @Override
         protected void onPreExecute() {
+
+            LTKTimer = System.currentTimeMillis();
 
             CGlyph glyph = _nextGlyph._glyph;
 

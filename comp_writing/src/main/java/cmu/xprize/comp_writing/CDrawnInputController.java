@@ -32,15 +32,24 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.RemoteViews;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cmu.xprize.ltkplus.CGlyph;
 import cmu.xprize.ltkplus.IGlyphSink;
 import cmu.xprize.util.CLinkedScrollView;
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventDispatcher;
+import cmu.xprize.util.IEventListener;
+import cmu.xprize.util.TCONST;
 
 
 /**
  */
 @RemoteViews.RemoteView
 public class CDrawnInputController extends PercentRelativeLayout implements View.OnTouchListener, IDrawnInputController {
+
+    private Context                mContext;
 
     private IWritingController      mWritingController;
     private CDrawnInputController   mThis;
@@ -82,7 +91,10 @@ public class CDrawnInputController extends PercentRelativeLayout implements View
     }
 
     private void init(Context context) {
-       mThis = this;
+
+       mThis    = this;
+       mContext = context;
+
        setOnTouchListener(this);
        setClipChildren(false);
     }
@@ -100,21 +112,25 @@ public class CDrawnInputController extends PercentRelativeLayout implements View
         mDeleteSpaceBut   = (ImageButton)findViewById(R.id.delete_space);
         mEraseGlyphBut = (ImageButton)findViewById(R.id.delete_glyph);
 
-        mGlyphReplayBut = (ImageButton)findViewById(R.id.glyph_playback);
-        mGlyphAlignBut  = (ImageButton)findViewById(R.id.glyph_align);
-        mGlyphFlashBut  = (ImageButton)findViewById(R.id.glyph_flash);
-        mGlyphSaveBut   = (Button) findViewById(R.id.Ssave);
-
         mInsLftSpaceBut.setVisibility(INVISIBLE);
         mInsRgtSpaceBut.setVisibility(INVISIBLE);
         mDeleteSpaceBut.setVisibility(INVISIBLE);
         mEraseGlyphBut.setVisibility(INVISIBLE);
-        mGlyphSaveBut.setVisibility(INVISIBLE);
 
         mInsLftSpaceBut.setOnClickListener(new insLSpaceClickListener());
         mInsRgtSpaceBut.setOnClickListener(new insRSpaceClickListener());
         mDeleteSpaceBut.setOnClickListener(new delSpaceClickListener());
         mEraseGlyphBut.setOnClickListener(new eraseGlyphClickListener());
+
+        mGlyphReplayBut = (ImageButton)findViewById(R.id.glyph_playback);
+        mGlyphAlignBut  = (ImageButton)findViewById(R.id.glyph_align);
+        mGlyphFlashBut  = (ImageButton)findViewById(R.id.glyph_flash);
+        mGlyphSaveBut   = (Button) findViewById(R.id.Ssave);
+
+        mGlyphReplayBut.setVisibility(INVISIBLE);
+        mGlyphAlignBut.setVisibility(INVISIBLE);
+        mGlyphFlashBut.setVisibility(INVISIBLE);
+        mGlyphSaveBut.setVisibility(INVISIBLE);
 
         mGlyphReplayBut.setOnClickListener(new glyphPlaybackListener());
         mGlyphAlignBut.setOnClickListener(new glyphAlignListener());

@@ -27,6 +27,7 @@ import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -147,24 +148,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         //
         progressView = (CLoaderView)inflater.inflate(R.layout.progress_layout, null );
         masterContainer.addAndShow(progressView);
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        logManager.postEvent(TAG, "onDestroy: ");
-
-        super.onDestroy();
-
-        if(TTS != null) {
-            logManager.postEvent(TAG, "Releasing Flite");
-
-            TTS.shutDown();
-            TTS = null;
-        }
-
-        logManager.postTimeStamp("Session End");
-        logManager.stopLogging();
     }
 
 
@@ -433,6 +416,19 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     protected void onStop() {
         super.onStop();
         logManager.postEvent(TAG, "onStop Robotutor: Off-Screen");
+
+        // Need to do this before releasing TTS
+        //
+        tutorEngine.killActiveTutor();
+
+        if(TTS != null && TTS.isReady()) {
+
+            logManager.postEvent(TAG, "Releasing Flite");
+
+            // TODO: This seems to cause a Flite internal problem???
+            TTS.shutDown();
+            TTS = null;
+        }
     }
 
 
@@ -450,19 +446,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         super.onPause();
         logManager.postEvent(TAG, "onPause Robotutor");
-
-        // Need to do this before releasing TTS
-        //
-        tutorEngine.killActiveTutor();
-
-        if(TTS != null && TTS.isReady()) {
-
-            logManager.postEvent(TAG, "Releasing Flite");
-
-            // TODO: This seems to cause a Flite internal problem???
-            TTS.shutDown();
-            TTS = null;
-        }
 
         SharedPreferences.Editor prefs = getPreferences(Context.MODE_PRIVATE).edit();
     }
@@ -497,5 +480,27 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         super.onSaveInstanceState(outState);
         logManager.postEvent(TAG, "onSaveInstanceState Robotutor");
     }
+
+
+    @Override
+    protected void onDestroy() {
+
+        logManager.postEvent(TAG, "onDestroy Glyph_Recognizer: isfinishing - " + isFinishing());
+
+        super.onDestroy();
+
+        if(TTS != null) {
+            logManager.postEvent(TAG, "Releasing Flite");
+
+            TTS.shutDown();
+            TTS = null;
+        }
+
+        logManager.postTimeStamp("Session End");
+        logManager.stopLogging();
+    }
+
+
+
 }
 

@@ -556,7 +556,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
                 if(childMap.containsKey(child.name())) {
 
-                    CErrorManager.logEvent(TAG, "ERROR: Duplicate child view in:" + tutorContainer.name(),  new Exception("no-exception"), false);
+                    CErrorManager.logEvent(TAG, "ERROR: Duplicate child view in:" + tutorContainer.name() + " - Duplicate of: " + child.name(),  new Exception("no-exception"), false);
                 }
 
                 childMap.put(child.name(), child);

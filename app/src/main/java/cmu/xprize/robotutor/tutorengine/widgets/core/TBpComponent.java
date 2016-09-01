@@ -30,7 +30,7 @@ import cmu.xprize.util.TCONST;
 
 public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDataSink {
 
-    private CTutor mTutor;
+    private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
 
     private CBubble _touchedBubble;
@@ -152,6 +152,7 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
                 dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
 
                 String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataSource);
+
                 // Load the datasource in the component module - i.e. the superclass
                 loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 

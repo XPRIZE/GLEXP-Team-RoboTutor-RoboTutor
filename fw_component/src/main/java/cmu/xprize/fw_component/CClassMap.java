@@ -17,14 +17,11 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.comp_writing;
+package cmu.xprize.fw_component;
 
 import java.util.HashMap;
 
 
-/**
- * Created by Kevin on 2/29/2016.
- */
 public class CClassMap {
 
     static public HashMap<String, Class> classMap = new HashMap<String, Class>();
@@ -33,7 +30,6 @@ public class CClassMap {
     // This is used to map "type" (class names) used in json HashMap specs to real classes
 
     static {
-
         classMap.put("STRING_ARRAY", String[].class);
 
         classMap.put("string", String.class);

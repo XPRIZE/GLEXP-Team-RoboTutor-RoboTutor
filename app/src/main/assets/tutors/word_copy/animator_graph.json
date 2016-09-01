@@ -8,7 +8,7 @@
       "title": "Word copying tutor",
       "COMMENT": "This tutor is designed for copying words.",
       "version": "1.0.0",
-      "rootnode": "TEMP_STATE",
+      "rootnode": "INTRO_STATE",
 
       "nodeMap": {
 
@@ -257,7 +257,7 @@
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[saba,sifuri,mbili]:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[saba,sifuri,mbili]:String","features":"!DATA_SSTIMULUS"},
 
         "FW_SET_REC":{"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_NUM:String","features":""},
 
@@ -276,7 +276,7 @@
         "FW_ENABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "TRUE:Boolean","features":""},
         //enable FingerWriting
 
-        "GETCHAR":{"type": "COMMAND", "id": "Sstimulus", "method": "next" ,"features":""},
+        "GETWORD":{"type": "COMMAND", "id": "Sstimulus", "method": "next" ,"features":""},
         //get a new digit from the list.
 
         //"GETRESPONSE":{"type": "COMMAND", "id": "Sresponse", "method": "???" ,"features":""},
