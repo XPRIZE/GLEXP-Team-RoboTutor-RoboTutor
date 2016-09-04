@@ -99,14 +99,21 @@ public class CAsm_TextLayout extends LinearLayout {
             currText.reset();
         }
 
-        if (id == ASM_CONST.OPERATION) {
-            setBackground(getResources().getDrawable(R.drawable.underline));
-        }
-        else {
-            setBackground(null);
+        if (operation.equals("x")) {
+            if (id == ASM_CONST.OPERATION_MULTI)
+                setBackground(getResources().getDrawable(R.drawable.underline));
+            else
+                setBackground(null);
+            setTextForMultiplication();
+        } else {
+            if (id == ASM_CONST.OPERATION)
+                setBackground(getResources().getDrawable(R.drawable.underline));
+            else
+                setBackground(null);
+            setTextForAddSubtract();
         }
 
-        setText();
+
     }
 
     private void addText(int index){
@@ -126,7 +133,7 @@ public class CAsm_TextLayout extends LinearLayout {
 
     }
 
-    private void setText() {
+    private void setTextForAddSubtract() {
 
         int numSlots = getChildCount();
         String[] digits = CAsm_Util.intToDigits(value, numSlots);
@@ -180,7 +187,39 @@ public class CAsm_TextLayout extends LinearLayout {
         }
     }
 
-    public void performNextDigit() {
+    private void setTextForMultiplication() {
+
+        int numSlots = getChildCount();
+        String[] digits = CAsm_Util.intToDigits(value, numSlots);
+        CAsm_TextLayout curTextLayout;
+
+        switch(id){
+
+            case ASM_CONST.REGULAR_MULTI:
+
+                for (int i = 0; i < numSlots; i++) {
+                    curTextLayout = getTextLayout(i);
+                    curTextLayout.getText(1).setText(digits[i]);
+                }
+
+                break;
+
+            case ASM_CONST.OPERATION_MULTI:
+
+                digits[0] = operation;
+
+                for (int i = 0; i < numSlots; i++) {
+                    curTextLayout = getTextLayout(i);
+                    curTextLayout.getText(1).setText(digits[i]);
+                }
+
+                break;
+
+            default : break;
+        }
+    }
+
+    public void performNextDigit(boolean downwardResult) {
 
         digitIndex--;
 
@@ -209,9 +248,10 @@ public class CAsm_TextLayout extends LinearLayout {
         curText.setTypeface(null, Typeface.BOLD);
         curText.setBackground(null);
 
-        if (id == ASM_CONST.RESULT) {
-            if(operation.equals("x")) {
-                for(int i = 1; i < digitIndex; i++) {
+        if(operation.equals("x")) {
+            if ((id == ASM_CONST.RESULT_OR_ADD_MULTI_PART1 && !downwardResult) ||
+                    (id == ASM_CONST.RESULT_MULTI_BACKUP && downwardResult) ) {
+                for (int i = 1; i < digitIndex; i++) {
                     getTextLayout(i).getText(0).reset();
                     if (getTextLayout(i).getText(1).isWritable) {
                         getTextLayout(i).getText(1).reset();
@@ -220,8 +260,8 @@ public class CAsm_TextLayout extends LinearLayout {
                 }
                 getTextLayout(digitIndex).getText(0).reset();
             }
-            curText.setResult();
-        }
+        } else if (id == ASM_CONST.RESULT)
+            getTextLayout(digitIndex).getText(0).reset();
 
     }
 
@@ -241,7 +281,7 @@ public class CAsm_TextLayout extends LinearLayout {
 
     public Integer getNum() {
 
-        if (id != ASM_CONST.RESULT) {return value;}
+//        if (id != ASM_CONST.RESULT) {return value;}
 
         int j = 0;
         int digit;

@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class ASM_CONST {
 
+    //for add and subtract
     public static final int ANIMATOR3    = 1;
     public static final int ANIMATOR2    = 2;
     public static final int ANIMATOR1    = 3;
@@ -14,6 +15,14 @@ public class ASM_CONST {
     public static final int REGULAR      = 5;
     public static final int OPERATION    = 6;
     public static final int RESULT       = 7;
+
+    //for multiplication
+    public static final int REGULAR_MULTI                  = 1;
+    public static final int OPERATION_MULTI                = 2;
+    public static final int RESULT_OR_ADD_MULTI_PART1     = 3;
+    public static final int ADD_MULTI_PART2                = 4;
+    public static final int ADD_MULTI_PART3                = 5;
+    public static final int RESULT_MULTI_BACKUP            = 6;
 
     public static final int alleyMargin  = 10;
     public static final int rightPadding = 15;

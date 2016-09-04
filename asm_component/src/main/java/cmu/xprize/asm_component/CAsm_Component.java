@@ -62,6 +62,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     protected boolean hasShown = false;
     protected long startTime;
 
+    boolean downwardResult = false;
+
 //    Arithmetic problems will start with the
     protected int               placeValIndex;
     protected String[]          chimes = ASM_CONST.CHIMES[placeValIndex];
@@ -140,8 +142,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     }
 
     public void setDotBagsVisible(Boolean _dotbagsVisible, int curDigitIndex) {
-            if(curDigitIndex != digitIndex) return;
-            if(System.currentTimeMillis() - startTime < 3000 && _dotbagsVisible) return;
+            if (curDigitIndex != digitIndex) return;
+            if (System.currentTimeMillis() - startTime < 3000 && _dotbagsVisible) return;
+            if (operation.equals("x") && !_dotbagsVisible) return;
 
             if (_dotbagsVisible && !hasShown && !isWriting) {
                 if(curOverheadCol >= 0)
@@ -187,12 +190,13 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
             Handler h = new Handler();
 
             //wiggle operator
-            if(allAlleys.indexOf(curAlley) == ASM_CONST.OPERATION - 1) {
+            if((allAlleys.indexOf(curAlley) == ASM_CONST.OPERATION - 1 && !operation.equals("x")) ||
+                    (allAlleys.indexOf(curAlley) == ASM_CONST.OPERATION_MULTI - 1 && operation.equals("x")) ) {
                 h.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         if(curDigitIndex != digitIndex) return;
-                        curAlley.getTextLayout().getTextLayout(0).getText(1).wiggle(300, 1, 0, .3f);
+                        curAlley.getTextLayout().getTextLayout(0).getText(1).wiggle(300, 1, 0, .5f);
                     }
                 }, delayTime);
                 delayTime += 1000;
@@ -247,7 +251,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[digitIndex]);
 
         if(operation.equals("x")) {
-            if(corDigit.equals(allAlleys.get(allAlleys.size()-1).getTextLayout().getDigit(digitIndex)))
+            if((corDigit.equals(allAlleys.get(ASM_CONST.RESULT_OR_ADD_MULTI_PART1 - 1).getTextLayout().getDigit(digitIndex)) && !downwardResult) ||
+                    (corDigit.equals(allAlleys.get(ASM_CONST.RESULT_MULTI_BACKUP - 1).getTextLayout().getDigit(digitIndex)) && downwardResult))
                 nextDigit();
         }
     }
@@ -257,16 +262,25 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     }
 
     protected void updateDataSet(CAsm_Data data) {
-
         // TODO: talk about whether this should be part of base mechanics
-
-        int val, id;
-        boolean clickable = true;
-
         readInData(data);
 
         numSlots = CAsm_Util.maxDigits(numbers) + 1;
         digitIndex = numSlots;
+
+        if (operation.equals("x"))
+            updateAllAlleyForMultiplication();
+        else
+            updateAllAlleyForAddSubtract();
+
+        setMechanics();
+        setSound();
+
+    }
+
+    private void updateAllAlleyForAddSubtract() {
+        int val, id;
+        boolean clickable = true;
 
         updateAlley(0, 0, ASM_CONST.ANIMATOR3, operation, false); // animator alley
         updateAlley(1, 0, ASM_CONST.ANIMATOR2, operation, false); // animator alley
@@ -280,15 +294,11 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
             if (i == numbers.length - 2) {
                 id = ASM_CONST.OPERATION;
-            }
-
-            else if (i == numbers.length - 1) {
+            } else if (i == numbers.length - 1) {
                 id = ASM_CONST.RESULT;
                 val = 0;
                 clickable = false;
-            }
-
-            else {
+            } else {
                 id = ASM_CONST.REGULAR;
             }
 
@@ -303,9 +313,17 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                 delAlley();
             }
         }
+    }
 
-        setMechanics();
-        setSound();
+    private void updateAllAlleyForMultiplication() {
+
+        // update alleys
+        updateAlley(0, numbers[0], ASM_CONST.REGULAR_MULTI, operation, true);
+        updateAlley(1, numbers[1], ASM_CONST.OPERATION_MULTI, operation, false);
+        updateAlley(2, numbers[2], ASM_CONST.RESULT_OR_ADD_MULTI_PART1, operation, false);
+        updateAlley(3, 0, ASM_CONST.ADD_MULTI_PART2, operation, false);
+        updateAlley(4, 0, ASM_CONST.ADD_MULTI_PART3, operation, false);
+        updateAlley(5, 0, ASM_CONST.RESULT_MULTI_BACKUP, operation, false);
 
     }
 
@@ -431,7 +449,15 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     public boolean isWholeCorrect() {
 
-        int ans = allAlleys.get(numAlleys - 1).getNum();
+        int ans;
+        if (operation.equals("x")) {
+            if(downwardResult)
+                ans = allAlleys.get(ASM_CONST.RESULT_MULTI_BACKUP - 1).getNum();
+            else
+                ans = allAlleys.get(ASM_CONST.RESULT_OR_ADD_MULTI_PART1 - 1).getNum();
+        } else
+            ans = allAlleys.get(numAlleys - 1).getNum();
+
         return corValue.equals(ans);
 
     }
@@ -440,7 +466,14 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
         boolean overheadCorrect, bottomCorrect;
 
-        CAsm_TextLayout textLayout = allAlleys.get(numAlleys - 1).getTextLayout();
+        CAsm_TextLayout textLayout;
+        if(operation.equals("x")) {
+            if (downwardResult)
+                textLayout = allAlleys.get(ASM_CONST.RESULT_MULTI_BACKUP - 1).getTextLayout();
+            else
+                textLayout = allAlleys.get(ASM_CONST.RESULT_OR_ADD_MULTI_PART1 - 1).getTextLayout();
+        } else
+            textLayout = allAlleys.get(numAlleys - 1).getTextLayout();
 
         //For multiplication, user can change the order of writing result.
         //e.g. If the result is 123, user input 1 first. We need to confirm the “1” is a correct input.
@@ -467,8 +500,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
             else if (overheadVal < 10)
                 wrongDigit(overheadText);
             else {
-                if (overheadTextSupplement.getDigit() != null && overheadTextSupplement.getDigit() != 1) wrongDigit(overheadTextSupplement);
-                if (overheadText.getDigit() != null && overheadText.getDigit() != 0) wrongDigit(overheadText);
+                if (overheadTextSupplement.getDigit() != null && overheadTextSupplement.getDigit() != overheadVal/10) wrongDigit(overheadTextSupplement);
+                if (overheadText.getDigit() != null && overheadText.getDigit() != overheadVal%10) wrongDigit(overheadText);
             }
         }
 
@@ -535,7 +568,11 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                 if (t.isWritable) {
                     //For multiplication, user could choose the order of writing result digits
                     if(operation.equals("x")) {
-                        CAsm_TextLayout resultTextLayout = allAlleys.get(allAlleys.size()-1).getTextLayout();
+                        CAsm_TextLayout resultTextLayout;
+                        if (downwardResult)
+                            resultTextLayout = allAlleys.get(ASM_CONST.RESULT_MULTI_BACKUP - 1).getTextLayout();
+                        else
+                            resultTextLayout = allAlleys.get(ASM_CONST.RESULT_OR_ADD_MULTI_PART1 - 1).getTextLayout();
                         for(int i = 1; i <= digitIndex; i++) {
                             if(resultTextLayout.getTextLayout(i).getText(1).isWritable)
                                 resultTextLayout.getTextLayout(i).getText(1).setResult();
@@ -549,7 +586,11 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                 if (t.isWritable) {
                     //For multiplication, user could choose the order of writing result digits
                     if(operation.equals("x")) {
-                        CAsm_TextLayout resultTextLayout = allAlleys.get(allAlleys.size()-1).getTextLayout();
+                        CAsm_TextLayout resultTextLayout;
+                        if (downwardResult)
+                            resultTextLayout = allAlleys.get(ASM_CONST.RESULT_MULTI_BACKUP - 1).getTextLayout();
+                        else
+                            resultTextLayout = allAlleys.get(ASM_CONST.RESULT_OR_ADD_MULTI_PART1 - 1).getTextLayout();
                         for(int i = 1; i <= digitIndex; i++) {
                             if(resultTextLayout.getTextLayout(i).getText(1).isWritable)
                                 resultTextLayout.getTextLayout(i).getText(1).setResult();
@@ -584,7 +625,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
             if(isClickingBorrowing)
                 mPopup.update(t, 120, -300, 300, 300);
             else
-                mPopup.update(t, 50, 50, 300, 300);
+                mPopup.update(t, 60, 0, 300, 300);
 
             mPopup.isActive = true;
         }
@@ -641,7 +682,5 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         _dataIndex = 0;
 
     }
-
-
 
 }

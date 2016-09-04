@@ -28,6 +28,13 @@ public class CAsm_MechanicBase implements IDotMechanics {
     protected int secondBagIndex = 5;
     protected int resultIndex = 6;
 
+    protected int firstBagIndexForMulti = 0;
+    protected int secondBagIndexForMulti = 1;
+    protected int resultOrAddInMultiPart1 = 2;
+    protected int addInMultiPart2 = 3;
+    protected int addInMultiPart3 = 4;
+    protected int resultIndexForMultiBackup = 5;
+
     protected int clickedTextLayoutIndex = -1;
 
     static final String TAG = "CAsm_MechanicBase";
@@ -49,7 +56,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
     public void nextDigit(){
 
         for (CAsm_Alley alley: allAlleys) {
-            alley.nextDigit();
+            alley.nextDigit(mComponent.downwardResult);
         }
 
         if (mComponent.dotbagsVisible) {
@@ -77,7 +84,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
         }
 
         if(mComponent.operation.equals("x")) {
-            CAsm_TextLayout resultTextLayout = allAlleys.get(resultIndex).getTextLayout();
+            CAsm_TextLayout resultTextLayout = allAlleys.get(resultOrAddInMultiPart1).getTextLayout();
             for(int i = 1; i < resultTextLayout.getChildCount(); i++)
                 CAnimatorUtil.zoomInOut(resultTextLayout.getTextLayout(i).getText(1), 1.5f, 1500L);
         }
@@ -103,7 +110,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
         if (clickedText != null) {
 
             if (clickedText.isWritable) {
-                mComponent.updateText(clickedText, clickedTextLayoutIndex < resultIndex);
+                mComponent.updateText(clickedText, clickedTextLayoutIndex < resultIndex && !mComponent.operation.equals("x"));
             } else {
                 clickedTextLayout.setIsClicked(true);
                 clickedText.setIsClicked(true);

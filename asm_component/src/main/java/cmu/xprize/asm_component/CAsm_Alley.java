@@ -66,12 +66,19 @@ public class CAsm_Alley extends LinearLayout {
         this.image = _image;
 
         STextLayout.resetAllValues();
-        if(id != ASM_CONST.OPERATION && id != ASM_CONST.REGULAR)
-            STextLayout.resetAllBackground();
-        STextLayout.update(id, val, operation, numSlots);
+        if(operation.equals("x")) {
+            if(id != ASM_CONST.OPERATION_MULTI && id != ASM_CONST.REGULAR_MULTI)
+                STextLayout.resetAllBackground();
+            STextLayout.update(id, val, operation, numSlots);
 
-        SdotBag.setDrawBorder(id != ASM_CONST.ANIMATOR1 && id != ASM_CONST.ANIMATOR2 && id != ASM_CONST.ANIMATOR3);
+            SdotBag.setDrawBorder(id == ASM_CONST.REGULAR_MULTI || id == ASM_CONST.OPERATION_MULTI);
+        } else {
+            if (id != ASM_CONST.OPERATION && id != ASM_CONST.REGULAR)
+                STextLayout.resetAllBackground();
+            STextLayout.update(id, val, operation, numSlots);
 
+            SdotBag.setDrawBorder(id != ASM_CONST.ANIMATOR1 && id != ASM_CONST.ANIMATOR2 && id != ASM_CONST.ANIMATOR3);
+        }
     }
 
     private void createText() {
@@ -96,20 +103,30 @@ public class CAsm_Alley extends LinearLayout {
 
     }
 
-    public void nextDigit() {
+    public void nextDigit(boolean downwardResult) {
 
         Integer cols;
 
         digitIndex--;
 
-        STextLayout.performNextDigit();
+        STextLayout.performNextDigit(downwardResult);
 
-        if (id == ASM_CONST.RESULT) {
-            cols = 0;
-        }
-        else {
-            cols = STextLayout.getDigit(digitIndex);
-            cols = (cols != null)?cols:0;
+        if (operation.equals("x")) {
+            if (id == ASM_CONST.RESULT_OR_ADD_MULTI_PART1 && !downwardResult)
+                cols = 0;
+            else if (id == ASM_CONST.RESULT_MULTI_BACKUP && downwardResult)
+                cols = 0;
+            else {
+                cols = STextLayout.getDigit(digitIndex);
+                cols = (cols != null)?cols:0;
+            }
+        } else {
+            if (id == ASM_CONST.RESULT)
+                cols = 0;
+            else {
+                cols = STextLayout.getDigit(digitIndex);
+                cols = (cols != null)?cols:0;
+            }
         }
 
         if(operation.equals("-")) {

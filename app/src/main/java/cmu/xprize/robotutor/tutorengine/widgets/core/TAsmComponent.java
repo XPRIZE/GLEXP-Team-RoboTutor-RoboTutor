@@ -305,4 +305,8 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
             mechanics.highlightBorrowable();
         }
     }
+
+    public void setAddFeature(String feature){
+        mTutor.setAddFeature(feature);
+    }
 }
