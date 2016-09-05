@@ -91,6 +91,14 @@ public class CAsm_Text extends TextView implements IEventListener {
 
     }
 
+    public void cancelResult(){
+
+        setEnabled(false);
+        setBackground(null);
+        setWritable(false);
+
+    }
+
     public void setStruck(boolean _isStruck){
 
         this.isStruck = _isStruck;

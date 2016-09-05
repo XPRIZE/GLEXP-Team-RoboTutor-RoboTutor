@@ -54,4 +54,11 @@ public class CAsm_Popup extends PopupWindow {
     public void enable(boolean _enable,ArrayList<IEventListener> listeners) {
         fw.enable(_enable,listeners);
     }
+
+    public void reset() {
+        isActive = false;
+        enable(false, null);
+        dismiss();
+    }
+
 }

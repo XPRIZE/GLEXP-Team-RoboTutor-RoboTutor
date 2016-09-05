@@ -86,7 +86,8 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
         if(correct)
             mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
         else {
-            isWriting = false;
+            if (!mPopup.isActive && !mPopupSupplement.isActive)
+                isWriting = false;
 
             Handler h = new Handler();
             h.postDelayed(new Runnable() {
@@ -95,6 +96,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
                     setDotBagsVisible(true, digitIndex);
                 }
             }, 1500);
+
             mTutor.setAddFeature(TCONST.GENERIC_WRONG);
         }
     }

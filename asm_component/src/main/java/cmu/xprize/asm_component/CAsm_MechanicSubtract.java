@@ -312,14 +312,14 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         ArrayList<Animator> animList = new ArrayList<Animator>();
         ObjectAnimator anim;
 
-        int duraTime = 200;
+        int duraTime = 2000;
         for (int i = 0; i < resultDotBag.getRows(); i++) {
-            for (int j = 0; j < resultDotBag.getCols(); j++) {
+            for (int j = resultDotBag.getCols()-1; j >= 0; j--) {
                 resultDotBag.getDot(i, j).setTranslationY(-dy);
                 anim = ObjectAnimator.ofFloat( resultDotBag.getDot(i, j), "translationY", 0);
                 anim.setDuration(duraTime);
                 animList.add(anim);
-                duraTime += 200;
+                duraTime -= 200;
             }
         }
         animSet.playTogether(animList);

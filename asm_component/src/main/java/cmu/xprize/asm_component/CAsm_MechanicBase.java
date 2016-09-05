@@ -111,7 +111,14 @@ public class CAsm_MechanicBase implements IDotMechanics {
         if (clickedText != null) {
 
             if (clickedText.isWritable) {
-                mComponent.updateText(clickedText, clickedTextLayoutIndex < resultIndex && !mComponent.operation.equals("x"));
+                if (mComponent.overheadTextSupplement != null) {
+                    if ((clickedText.equals(mComponent.overheadText) || clickedText.equals(mComponent.overheadTextSupplement))
+                            && mComponent.overheadText.isWritable == true && mComponent.overheadTextSupplement.isWritable == true)
+                        mComponent.updateText(mComponent.overheadTextSupplement, mComponent.overheadText, clickedTextLayoutIndex < resultIndex && !mComponent.operation.equals("x"));
+                    else
+                        mComponent.updateText(null, clickedText, clickedTextLayoutIndex < resultIndex && !mComponent.operation.equals("x"));
+                } else
+                    mComponent.updateText(null, clickedText, clickedTextLayoutIndex < resultIndex && !mComponent.operation.equals("x"));
             } else {
                 clickedTextLayout.setIsClicked(true);
                 clickedText.setIsClicked(true);
@@ -127,9 +134,9 @@ public class CAsm_MechanicBase implements IDotMechanics {
     public void correctOverheadText() {
         // whenever they put in the right overhead text
 
-        mComponent.overheadText.setWritable(false);
+        mComponent.overheadText.cancelResult();
         if(mComponent.overheadTextSupplement != null)
-            mComponent.overheadTextSupplement.setWritable(false);
+            mComponent.overheadTextSupplement.cancelResult();
         mComponent.overheadVal = null;
         mComponent.overheadText = null;
         mComponent.overheadTextSupplement = null;

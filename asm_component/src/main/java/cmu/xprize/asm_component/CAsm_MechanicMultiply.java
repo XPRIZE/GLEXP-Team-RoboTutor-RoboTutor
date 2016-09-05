@@ -163,8 +163,8 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
 
     public void correctOverheadText() {
         // whenever they put in the right overhead text
-        mComponent.overheadText.setWritable(false);
-        mComponent.overheadTextSupplement.setWritable(false);
+        mComponent.overheadText.cancelResult();
+        mComponent.overheadTextSupplement.cancelResult();
 
         if(mComponent.overheadVal == mComponent.corValue) {
             mComponent.overheadText.setBackground(null);

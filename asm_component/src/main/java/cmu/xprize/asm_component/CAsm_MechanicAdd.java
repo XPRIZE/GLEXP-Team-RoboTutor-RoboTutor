@@ -27,6 +27,18 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         int totalValue = 0;
 
         for (CAsm_Alley alley: allAlleys) {
+            if (allAlleys.indexOf(alley) == overheadIndex) {
+                CAsm_Text cur = alley.getTextLayout().getTextLayout(mComponent.digitIndex).getText(1);
+                if (cur.getText().equals("") && cur.isWritable == true) {
+                    cur.cancelResult();
+                    cur.setText("1");
+                    alley.getDotBag().setRows(1);
+                    alley.getDotBag().setCols(1);
+                    alley.getDotBag().setImage(mComponent.currImage);
+                    alley.getDotBag().setIsClickable(true);
+                    alley.getDotBag().resetOverflowNum();
+                }
+            }
 
             currLayout = alley.getTextLayout();
             currValue = currLayout.getDigit(mComponent.digitIndex);
@@ -77,10 +89,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
         if (clickedDot != null) {
             animateAdd(clickedDot, alleyNum);
-
-
             mComponent.playChime();
-
         }
 
     }

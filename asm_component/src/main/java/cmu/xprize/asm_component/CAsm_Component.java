@@ -81,7 +81,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     public CAsm_Data[] dataSource;
 
     //Writing
-    private CAsm_Popup mPopup;
+    protected CAsm_Popup mPopup;
+    protected CAsm_Popup mPopupSupplement;
+    private boolean hasTwoPopup = false;
 
     private boolean clickPaused = false;
 
@@ -132,7 +134,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         //Scontent = (CAsm_LetterBoxLayout) findViewById(R.id.Scontent);
         //Scontent.setOnClickListener(this);
         mPopup = new CAsm_Popup(mContext);
-
+        mPopupSupplement = new CAsm_Popup(mContext);
     }
 
     public void setDataSource(CAsm_Data[] _dataSource) {
@@ -148,7 +150,11 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
             if (_dotbagsVisible && !hasShown && !isWriting) {
                 if(curOverheadCol >= 0)
-                    if(allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(1).getText().equals("")
+                    if((allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(0).getText().equals("")
+                            || allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(0).getCurrentTextColor() == Color.RED) && curOverheadCol > 9) {
+                        mechanics.highlightBorrowable();
+                        return;
+                    } else if(allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(1).getText().equals("")
                             || allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(1).getCurrentTextColor() == Color.RED) {
                         mechanics.highlightBorrowable();
                         return;
@@ -158,8 +164,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                 hasShown = true;
 
                 int delayTime = 0;
-                for (int alley = 0; alley < allAlleys.size(); alley++) {
-                    final CAsm_Alley curAlley = allAlleys.get(alley);
+                for (int i = 0; i < allAlleys.size(); i++) {
+                    final CAsm_Alley curAlley = allAlleys.get(i);
                     final int _curDigitIndex = curDigitIndex;
                     delayTime = wiggleDigitAndDotbag(curAlley, delayTime, _curDigitIndex);
                 }
@@ -505,11 +511,24 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
             if (overheadCorrect)
                 mechanics.correctOverheadText();
-            else if (overheadVal < 10)
-                wrongDigit(overheadText);
-            else {
-                if (overheadTextSupplement.getDigit() != null && overheadTextSupplement.getDigit() != overheadVal/10) wrongDigit(overheadTextSupplement);
-                if (overheadText.getDigit() != null && overheadText.getDigit() != overheadVal%10) wrongDigit(overheadText);
+            else if (overheadVal < 10 ) {
+                if (overheadText.getDigit() != null)
+                    wrongDigit(overheadText);
+            } else {
+                if (overheadTextSupplement.getDigit() != null) {
+                    if (overheadTextSupplement.getDigit() != overheadVal / 10)
+                        wrongDigit(overheadTextSupplement);
+                    else
+                        overheadTextSupplement.cancelResult();
+                }
+
+                if (overheadText.getDigit() != null) {
+                    if (overheadText.getDigit() != overheadVal % 10)
+                        wrongDigit(overheadText);
+                    else
+                        overheadText.cancelResult();
+                }
+
             }
         }
 
@@ -621,21 +640,41 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         }
     }
 
-    public void updateText(CAsm_Text t, boolean isClickingBorrowing) {
+    public void updateText(CAsm_Text t1, CAsm_Text t2, boolean isClickingBorrowing) {
         isWriting = true;
-        if (!mPopup.isActive) {
+        if (!mPopup.isActive && !mPopupSupplement.isActive) {
             ArrayList<IEventListener> listeners = new ArrayList<>();
-            listeners.add(t);
+            listeners.add(t2);
             listeners.add(this);
             mPopup.showAtLocation(this, Gravity.LEFT, 10, 10);
             mPopup.enable(true, listeners);
 
             if(isClickingBorrowing)
-                mPopup.update(t, 120, -300, 300, 300);
+                mPopup.update(t2, 120, -300, 300, 300);
             else
-                mPopup.update(t, 60, 0, 300, 300);
+                mPopup.update(t2, 60, 0, 300, 300);
 
             mPopup.isActive = true;
+
+            if (t1 != null) {
+                hasTwoPopup = true;
+                listeners = new ArrayList<>();
+                listeners.add(t1);
+                listeners.add(this);
+
+                mPopupSupplement.showAtLocation(this, Gravity.LEFT, 10, 10);
+                mPopupSupplement.enable(true, listeners);
+
+                if (isClickingBorrowing) {
+                    mPopup.update(t2, 420, -300, 300, 300);
+                    mPopupSupplement.update(t2, 120, -300, 300, 300);
+                } else {
+                    mPopup.update(t2, 360, 0, 300, 300);
+                    mPopupSupplement.update(t2, 60, 0, 300, 300);
+                }
+
+                mPopupSupplement.isActive = true;
+            }
         }
     }
 
@@ -644,6 +683,10 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         mPopup.isActive = false;
         mPopup.enable(false,null);
         mPopup.dismiss();
+
+        mPopupSupplement.isActive = false;
+        mPopupSupplement.enable(false,null);
+        mPopupSupplement.dismiss();
 
         resetHesitationTimer(3000);
     }
@@ -664,9 +707,18 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     }
 
     public void onEvent(IEvent event) {
-        mPopup.isActive = false;
-        mPopup.enable(false,null);
-        mPopup.dismiss();
+
+        if (!hasTwoPopup) {
+            mPopup.reset();
+            mPopupSupplement.reset();
+        } else if (!overheadText.getText().equals("") && overheadTextSupplement.getText().equals("")) {
+            mPopup.reset();
+            hasTwoPopup = false;
+        } else if (overheadText.getText().equals("") && !overheadTextSupplement.getText().equals("")) {
+            mPopupSupplement.reset();
+            hasTwoPopup = false;
+        }
+
     }
 
     @Override
