@@ -325,6 +325,14 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         updateAlley(4, 0, ASM_CONST.ADD_MULTI_PART3, operation, false);
         updateAlley(5, 0, ASM_CONST.RESULT_MULTI_BACKUP, operation, false);
 
+        // delete extra alleys
+        int delta = numAlleys - (numbers.length + 3);
+
+        if (delta > 0) {
+            for (int i = 0; i < delta; i++) {
+                delAlley();
+            }
+        }
     }
 
     private void readInData(CAsm_Data data) {

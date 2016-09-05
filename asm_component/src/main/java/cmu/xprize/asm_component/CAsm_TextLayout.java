@@ -260,8 +260,10 @@ public class CAsm_TextLayout extends LinearLayout {
                 }
                 getTextLayout(digitIndex).getText(0).reset();
             }
-        } else if (id == ASM_CONST.RESULT)
+        } else if (id == ASM_CONST.RESULT) {
             getTextLayout(digitIndex).getText(0).reset();
+            curText.setResult();
+        }
 
     }
 

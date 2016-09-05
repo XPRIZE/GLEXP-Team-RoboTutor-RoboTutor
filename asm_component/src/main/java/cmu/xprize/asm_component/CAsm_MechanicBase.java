@@ -50,6 +50,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
     public void next(){
 
         reset();
+        mComponent.downwardResult = false;
 
     }
 
@@ -76,7 +77,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
         for (CAsm_Alley alley: allAlleys) {
             text = alley.getTextLayout().getTextLayout(mComponent.digitIndex).getText(1);
 
-            if(!(mComponent.operation.equals("x") && allAlleys.indexOf(alley) == resultIndex)) {
+            if(!(mComponent.operation.equals("x") && allAlleys.indexOf(alley) == resultOrAddInMultiPart1)) {
                 if (!text.getIsStruck()) {
                     CAnimatorUtil.zoomInOut(text, 1.5f, 1500L);
                 }

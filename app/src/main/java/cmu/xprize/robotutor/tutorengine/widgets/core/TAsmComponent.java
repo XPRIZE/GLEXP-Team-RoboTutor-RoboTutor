@@ -306,7 +306,4 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
         }
     }
 
-    public void setAddFeature(String feature){
-        mTutor.setAddFeature(feature);
-    }
 }

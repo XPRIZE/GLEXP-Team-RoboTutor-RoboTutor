@@ -37,7 +37,6 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         mComponent.overheadTextSupplement = resultInAddition.getText(0);
         mComponent.overheadTextSupplement.setTypeface(null, Typeface.BOLD);
 
-        mComponent.downwardResult = false;
         for(int i = resultOrAddInMultiPart1 + 1; i < allAlleys.size(); i++)
             allAlleys.get(i).getTextLayout().resetAllValues();
 
