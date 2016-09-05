@@ -9,6 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
+
 /**
  * all subtraction-specific operations are implemented here
  */
@@ -126,7 +128,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         // for case: x - 0
         if (subtrahendBag.getCols() == 0) {
-            createDownwardBagAnimator(minuendIndex).start();
+            createDownwardBagAnimator(minuendIndex);
         }
 /*        else {
             subtrahendBag.wiggle(300, 1, 100, .05f);
@@ -194,7 +196,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    createDownwardBagAnimator(minuendIndex).start();
+                    createDownwardBagAnimator(minuendIndex);
                 }
 
                 @Override
@@ -287,7 +289,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         minuendIndex = digitBorrowingCol;
     }
 
-    private ObjectAnimator createDownwardBagAnimator(int startIndex) {
+    private void createDownwardBagAnimator(int startIndex) {
 
         CAsm_DotBag startDotBag = allAlleys.get(startIndex).getDotBag();
         CAsm_DotBag resultDotBag = allAlleys.get(resultIndex).getDotBag();
@@ -306,11 +308,21 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
             dy += allAlleys.get(i).getHeight() + mComponent.alleyMargin;
         }
 
-        resultDotBag.setTranslationY(-dy);
-        ObjectAnimator anim = ObjectAnimator.ofFloat(resultDotBag, "translationY", 0);
-        anim.setDuration(3000);
+        AnimatorSet animSet = new AnimatorSet();
+        ArrayList<Animator> animList = new ArrayList<Animator>();
+        ObjectAnimator anim;
 
-        return anim;
+
+        for (int i = 0; i < resultDotBag.getRows(); i++) {
+            for (int j = 0; j < resultDotBag.getCols(); j++) {
+                resultDotBag.getDot(i, j).setTranslationY(-dy);
+                anim = ObjectAnimator.ofFloat( resultDotBag.getDot(i, j), "translationY", 0);
+                anim.setDuration(200);
+                animList.add(anim);
+            }
+        }
+        animSet.playSequentially(animList);
+        animSet.start();
 
     }
 
