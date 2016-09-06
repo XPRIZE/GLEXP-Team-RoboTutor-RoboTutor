@@ -179,8 +179,6 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         subtrahendBag.setHallowChime();
         mComponent.playChime();
 
-
-
         CAsm_Dot correspondingDot = correspondingBag.getDot(0, correspondingCol);
         correspondingDot.setVisibility(View.INVISIBLE);
 

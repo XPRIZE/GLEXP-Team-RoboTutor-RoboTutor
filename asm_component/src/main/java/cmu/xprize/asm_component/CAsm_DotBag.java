@@ -235,10 +235,6 @@ public class CAsm_DotBag extends TableLayout {
         }
     }
 
-
-
-
-
     protected void setZero() {
 
         rows = 0;
@@ -437,6 +433,9 @@ public class CAsm_DotBag extends TableLayout {
     public int getSize() {return this.size; }
     public int getRows(){ return this.rows;}
     public int getCols(){ return this.cols;}
+    public boolean getDrawBorder() {
+        return drawBorder;
+    }
 
     public TableRow getRow(int index) {return allTableRows.get(index); }
 
@@ -548,5 +547,19 @@ public class CAsm_DotBag extends TableLayout {
 
     public void setIsisAudible(boolean isAudible){
         this.isAudible = isAudible;
+    }
+
+    public void copyFrom(CAsm_DotBag _dotBag) {
+        this.drawBorder = _dotBag.drawBorder;
+        this.imageName = _dotBag.imageName;
+        setRows(_dotBag.getRows());
+        setCols(_dotBag.getCols());
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (_dotBag.getDot(i, j) == null || _dotBag.getDot(i, j).getVisibility() == INVISIBLE)
+                    getDot(i, j).setVisibility(INVISIBLE);
+            }
+        }
     }
 }

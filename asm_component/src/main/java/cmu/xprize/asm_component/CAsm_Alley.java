@@ -115,7 +115,7 @@ public class CAsm_Alley extends LinearLayout {
             if (id == ASM_CONST.RESULT_OR_ADD_MULTI_PART1 && !downwardResult)
                 cols = 0;
             else if (id == ASM_CONST.RESULT_MULTI_BACKUP && downwardResult)
-                cols = 0;
+                return;
             else {
                 cols = STextLayout.getDigit(digitIndex);
                 cols = (cols != null)?cols:0;

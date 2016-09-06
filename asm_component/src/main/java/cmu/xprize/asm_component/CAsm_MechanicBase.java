@@ -109,7 +109,6 @@ public class CAsm_MechanicBase implements IDotMechanics {
         CAsm_Text clickedText = clickedTextLayout.findClickedText();
 
         if (clickedText != null) {
-
             if (clickedText.isWritable) {
                 if (mComponent.overheadTextSupplement != null) {
                     if ((clickedText.equals(mComponent.overheadText) || clickedText.equals(mComponent.overheadTextSupplement))

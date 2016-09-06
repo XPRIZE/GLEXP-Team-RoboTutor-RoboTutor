@@ -95,7 +95,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
                 public void run() {
                     setDotBagsVisible(true, digitIndex);
                 }
-            }, 1500);
+            }, 3000);
 
             mTutor.setAddFeature(TCONST.GENERIC_WRONG);
         }

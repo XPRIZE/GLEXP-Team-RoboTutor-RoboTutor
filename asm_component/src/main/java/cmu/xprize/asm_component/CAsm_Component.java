@@ -167,7 +167,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                 for (int i = 0; i < allAlleys.size(); i++) {
                     final CAsm_Alley curAlley = allAlleys.get(i);
                     final int _curDigitIndex = curDigitIndex;
-                    delayTime = wiggleDigitAndDotbag(curAlley, delayTime, _curDigitIndex);
+                    if (curAlley.getDotBag().getVisibility() != VISIBLE)
+                        delayTime = wiggleDigitAndDotbag(curAlley, delayTime, _curDigitIndex);
                 }
 
                 if (!dotbagsVisible)
@@ -196,13 +197,22 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
             Handler h = new Handler();
 
             //wiggle operator
-            if((allAlleys.indexOf(curAlley) == ASM_CONST.OPERATION - 1 && !operation.equals("x")) ||
+            if ((allAlleys.indexOf(curAlley) == ASM_CONST.OPERATION - 1 && !operation.equals("x")) ||
                     (allAlleys.indexOf(curAlley) == ASM_CONST.OPERATION_MULTI - 1 && operation.equals("x")) ) {
                 h.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         if(curDigitIndex != digitIndex) return;
                         curAlley.getTextLayout().getTextLayout(0).getText(1).wiggle(300, 1, 0, .5f);
+                    }
+                }, delayTime);
+                delayTime += 1000;
+            } else if (allAlleys.indexOf(curAlley) == ASM_CONST.ADD_MULTI_PART2 - 1 && operation.equals("x")) {
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(curDigitIndex != digitIndex) return;
+                        curAlley.getTextLayout().getTextLayout(numSlots - 1).getText(0).wiggle(300, 1, 0, .3f);
                     }
                 }, delayTime);
                 delayTime += 1000;
@@ -228,6 +238,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     public void next() {
         isWriting = false;
+        hasShown = false;
 
         try {
             if (dataSource != null) {
@@ -326,8 +337,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         // update alleys
         updateAlley(0, numbers[0], ASM_CONST.REGULAR_MULTI, operation, true);
         updateAlley(1, numbers[1], ASM_CONST.OPERATION_MULTI, operation, false);
-        updateAlley(2, numbers[2], ASM_CONST.RESULT_OR_ADD_MULTI_PART1, operation, false);
-        updateAlley(3, 0, ASM_CONST.ADD_MULTI_PART2, operation, false);
+        updateAlley(2, numbers[2], ASM_CONST.RESULT_OR_ADD_MULTI_PART1, operation, true);
+        updateAlley(3, 0, ASM_CONST.ADD_MULTI_PART2, operation, true);
         updateAlley(4, 0, ASM_CONST.ADD_MULTI_PART3, operation, false);
         updateAlley(5, 0, ASM_CONST.RESULT_MULTI_BACKUP, operation, false);
 
