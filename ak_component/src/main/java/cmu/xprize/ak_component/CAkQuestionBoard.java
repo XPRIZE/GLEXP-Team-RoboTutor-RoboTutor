@@ -22,6 +22,7 @@ public class CAkQuestionBoard extends View {
     public CAkPlayer.Lane answerLane;
 
     private Bitmap roadSign;
+    private Bitmap greenPole;
 
     public CAkQuestionBoard(Context context, CAkPlayer.Lane answerLane, String[] choices) {
         super(context);
@@ -43,6 +44,7 @@ public class CAkQuestionBoard extends View {
         this.choices = choices;
         this.answerLane = answerLane;
         roadSign = BitmapFactory.decodeResource(getResources(), R.drawable.roadsign);
+        greenPole = BitmapFactory.decodeResource(getResources(),R.drawable.greenpole);
         textSize = 20;
     }
 
@@ -60,12 +62,16 @@ public class CAkQuestionBoard extends View {
         vPaint.setTextSize(textSize);
 
         roadSign = Bitmap.createScaledBitmap(roadSign, width / 3, height / 2, false);
+        greenPole = Bitmap.createScaledBitmap(greenPole,(int)(width*1.1),height/2,false);
+
         switch (choices.length) {
             case 1:
+                canvas.drawBitmap(greenPole,-width/20, height/16, vPaint);
                 canvas.drawBitmap(roadSign, width / 3, 0, vPaint);
                 canvas.drawText(String.valueOf(choices[0]), width / 2, height * 5.0f / 12, vPaint);
                 break;
             case 2:
+                canvas.drawBitmap(greenPole,-width/20, height/16, vPaint);
                 canvas.drawBitmap(roadSign, width / 12, 0, vPaint);
                 canvas.drawText(String.valueOf(choices[0]), width * 6.0f / 24, height * 5.0f / 12, vPaint);
                 Matrix matrix1 = new Matrix();
@@ -76,6 +82,7 @@ public class CAkQuestionBoard extends View {
                 canvas.drawText(String.valueOf(choices[1]), width * 18.0f / 24, height * 5.0f / 12, vPaint);
                 break;
             case 3:
+                canvas.drawBitmap(greenPole,-width/20, height/16, vPaint);
                 canvas.drawBitmap(roadSign, 0, 0, vPaint);
                 canvas.drawText(String.valueOf(choices[0]), width / 6, height * 5.0f / 12, vPaint);
 
