@@ -51,11 +51,14 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         } else if (mComponent.digitIndex < digitBorrowingIndex){
             hasBorrowed = false;
 
+            allAlleys.get(digitBorrowingCol).getTextLayout().getTextLayout(digitBorrowingIndex).getText(1).setBorrowable(false);
+
             if (allAlleys.get(digitBorrowingCol).getTextLayout().getTextLayout(digitBorrowingIndex).getText(0).getText().equals("1")) {
                 allAlleys.get(digitBorrowingCol).getTextLayout().getTextLayout(digitBorrowingIndex).getText(0).setBorrowable(false);
                 mComponent.curOverheadCol = digitBorrowingCol - 1;
-            }
-            allAlleys.get(digitBorrowingCol).getTextLayout().getTextLayout(digitBorrowingIndex).getText(1).setBorrowable(false);
+            } else if (mComponent.curOverheadCol < overheadIndex)
+                mComponent.curOverheadCol = digitBorrowingCol + 1;
+
         }
 
         if (mComponent.digitIndex == borrowBlockStartIndex - 1) {

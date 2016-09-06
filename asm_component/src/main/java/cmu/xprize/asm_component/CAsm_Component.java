@@ -579,6 +579,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                     t.setText("");
                     t.setTextColor(Color.BLACK);
                     clickPaused = false;
+                    setDotBagsVisible(true, digitIndex);
                 }
             }, 1500);
     }
