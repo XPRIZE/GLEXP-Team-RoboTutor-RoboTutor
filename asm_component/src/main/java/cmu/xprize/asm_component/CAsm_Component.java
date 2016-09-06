@@ -239,6 +239,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     public void next() {
         isWriting = false;
         hasShown = false;
+        curOverheadCol = -1;
 
         try {
             if (dataSource != null) {
