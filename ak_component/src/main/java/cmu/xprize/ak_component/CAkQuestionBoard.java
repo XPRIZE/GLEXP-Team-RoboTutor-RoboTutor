@@ -42,14 +42,14 @@ public class CAkQuestionBoard extends View {
     protected void init(CAkPlayer.Lane answerLane, String[] choices) {
         this.choices = choices;
         this.answerLane = answerLane;
-        roadSign = BitmapFactory.decodeResource(getResources(), R.drawable.roadsignb);
+        roadSign = BitmapFactory.decodeResource(getResources(), R.drawable.roadsign);
         textSize = 20;
     }
 
     @Override
     public void onDraw(Canvas canvas) {
 
-
+        //Paint paint = new Paint();
         Paint vPaint = new Paint();
         vPaint.setAlpha( 220 );
         int width = getWidth();
@@ -59,19 +59,15 @@ public class CAkQuestionBoard extends View {
         vPaint.setColor(Color.BLACK);
         vPaint.setTextSize(textSize);
 
-        roadSign = Bitmap.createScaledBitmap(roadSign, width / 3, height, false);
-
+        roadSign = Bitmap.createScaledBitmap(roadSign, width / 3, height / 2, false);
         switch (choices.length) {
             case 1:
-
-
                 canvas.drawBitmap(roadSign, width / 3, 0, vPaint);
                 canvas.drawText(String.valueOf(choices[0]), width / 2, height * 5.0f / 12, vPaint);
                 break;
             case 2:
                 canvas.drawBitmap(roadSign, width / 12, 0, vPaint);
                 canvas.drawText(String.valueOf(choices[0]), width * 6.0f / 24, height * 5.0f / 12, vPaint);
-
                 Matrix matrix1 = new Matrix();
                 matrix1.preScale(-1, 1);
                 canvas.drawBitmap(Bitmap.createBitmap(roadSign, 0, 0,
@@ -85,8 +81,8 @@ public class CAkQuestionBoard extends View {
 
                 canvas.drawBitmap(roadSign, width / 3, 0, vPaint);
                 canvas.drawText(String.valueOf(choices[1]), width / 2, height * 5.0f / 12, vPaint);
-
                 Matrix matrix2 = new Matrix();
+
                 matrix2.preScale(-1, 1);
                 canvas.drawBitmap(Bitmap.createBitmap(roadSign, 0, 0,
                         roadSign.getWidth(),roadSign.getHeight(), matrix2, false),

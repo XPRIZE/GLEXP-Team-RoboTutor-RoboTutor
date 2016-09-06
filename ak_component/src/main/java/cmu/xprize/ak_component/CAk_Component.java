@@ -4,8 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.media.AudioManager;
@@ -17,6 +19,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -106,6 +109,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     protected Animator cityAnimator;
     protected CAkQuestionBoard stopQuestionBoard;
     public int errornum=0;
+    public boolean questionBoard_exist;
 
 
 
@@ -130,12 +134,12 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         final float width = right - left;
         final float height = bottom - top;
 
-        sidewalkLeftPoints[0].x = width * 0.3f;
+        sidewalkLeftPoints[0].x = width * 0.20f;
         sidewalkLeftPoints[0].y = height * 0.25f;
         sidewalkLeftPoints[1].x = - width * 0.1f;
         sidewalkLeftPoints[1].y = height;
 
-        sidewalkRightPoints[0].x = width * 0.6f;
+        sidewalkRightPoints[0].x = width * 0.70f;
         sidewalkRightPoints[0].y = height * 0.25f;
         sidewalkRightPoints[1].x = width;
         sidewalkRightPoints[1].y = height;
@@ -175,11 +179,13 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                     if(extraSpeed>speed)     //slow down the speed
                     {
                         soundPool.play(slowdown, 0.1f, 0.1f, 1, 0, 1.0f);
+                        System.out.println("slow down");
                         //soundPool.play(carscreechMedia, 0.1f, 0.1f, 1, 0, 1.0f);
                     }
                     else if(extraSpeed<speed)  //increase the speed
                     {
                         soundPool.play(speedup, 0.1f, 0.1f, 1, 0, 1.0f);
+                        System.out.println("speed up");
                         //soundPool.play(carscreechMedia, 0.1f, 0.1f, 1, 0, 1.0f);
                     }
                     extraSpeed = speed;
@@ -279,14 +285,18 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     protected void updateDataSet(CAk_Data data) {
         boolean isAudio = isAudio(data);
         questionBoard = new CAkQuestionBoard(mContext, data.answerLane, data.choices);
-
+        questionBoard_exist = true;
         if(isAudio){
             playAudio(data);
             player.setText("", "");
         }else{
+            player.aboveTextView.setScaleX((float)1.25);
+            player.belowTextView.setScaleX((float)1.25);
+            player.aboveTextView.setScaleY((float)1.25);
+            player.belowTextView.setScaleY((float)1.25);
             player.setText(data.aboveString, data.belowString);
-            CAnimatorUtil.zoomInOut(player.belowTextView,(float)0.5,500);
-            CAnimatorUtil.zoomInOut(player.aboveTextView,(float)0.5,500);
+            CAnimatorUtil.zoomOut(player.belowTextView,(float)0.8,500);
+            CAnimatorUtil.zoomOut(player.aboveTextView,(float)0.8,500);
         }
     }
 
@@ -326,7 +336,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                 set.pause();
                 ArrayList<Animator> list = set.getChildAnimations();
                 for(int j = 0; j < list.size(); j++) {
-                    ObjectAnimator objectAnimator = (ObjectAnimator) list.get(j);
+                    Animator objectAnimator = (Animator) list.get(j);
                     objectAnimator.setDuration(5000 - s);
                 }
                 set.resume();
@@ -381,13 +391,16 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                 }
 
                 percentLayout.addView(sidewalkStuff);
-              //  scoreboard.bringToFront();
+                //scoreboard.bringToFront();
 
+                sidewalkStuff.setX(sidewalkRightPoints[0].x);
 
-                final Animator sidewalkAnimator = CAnimatorUtil.configTranslate(sidewalkStuff,
-                        5000-s, 0, sidewalkRightPoints[0], sidewalkRightPoints[1]
-                );
+                final AnimatorSet sidewalkAnimator = CAnimatorUtil.configZoomIn(sidewalkStuff,3500,0,new LinearInterpolator(), 2f);
                 ongoingAnimator.add(sidewalkAnimator);
+                Animator sideWalkTranslationAnimator1 = CAnimatorUtil.configTranslate(sidewalkStuff,5000-s, 0, sidewalkRightPoints[0], sidewalkRightPoints[1]);
+                sidewalkAnimator.setDuration(5000-s);
+                sidewalkAnimator.setInterpolator(new LinearInterpolator());
+                sidewalkAnimator.playTogether(sideWalkTranslationAnimator1);
 
                 sidewalkAnimator.addListener(new AnimatorListenerAdapter() {
                     @Override
@@ -402,7 +415,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                 sidewalkRightTime = System.nanoTime();
             }
 
-            if(isRunning && elapseLeft > 2500) {
+            if(isRunning && elapseLeft > 3500) {
                 int r = random.nextInt() % 3;
 
                 final ImageView sidewalkStuff  = new ImageView(mContext);
@@ -421,11 +434,14 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                 percentLayout.addView(sidewalkStuff);
                 scoreboard.bringToFront();
 
-                final Animator sidewalkAnimator = CAnimatorUtil.configTranslate(sidewalkStuff,
-                        5000-s, 0, sidewalkLeftPoints[0], sidewalkLeftPoints[1]
-                );
+                sidewalkStuff.setX(sidewalkLeftPoints[0].x);
+                final AnimatorSet sidewalkAnimator = CAnimatorUtil.configZoomIn(sidewalkStuff,3500,0,new LinearInterpolator(), 2f);
                 ongoingAnimator.add(sidewalkAnimator);
-
+                Animator sideWalkTranslationAnimator1 = CAnimatorUtil.configTranslate(sidewalkStuff,5000-s, 0, sidewalkLeftPoints[0], sidewalkLeftPoints[1]);
+                sidewalkAnimator.setDuration(5000-s);
+                sidewalkAnimator.setInterpolator(new LinearInterpolator());
+                sidewalkAnimator.playTogether(sideWalkTranslationAnimator1);
+                ongoingAnimator.add(sidewalkAnimator);
 
                 sidewalkAnimator.addListener(new AnimatorListenerAdapter() {
                     @Override

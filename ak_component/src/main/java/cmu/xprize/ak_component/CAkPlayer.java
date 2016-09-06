@@ -30,6 +30,7 @@ public class CAkPlayer extends LinearLayout{
     public int score;
     public String rearString;
     public Lane lane = Lane.MID;
+    public float textSize;
 
     private Drawable car_left, car_mid, car_right;
     private AnimationDrawable fishTail;
@@ -72,20 +73,21 @@ public class CAkPlayer extends LinearLayout{
         display.getSize(size);
         AnimatorSet tmp;
         if(size.x > 1400){
-            aboveTextView.setTextSize(26);
-            belowTextView.setTextSize(26);
+            aboveTextView.setTextSize(32);
+            belowTextView.setTextSize(32);
             aboveTextView.setTypeface(null, Typeface.BOLD);
             belowTextView.setTypeface(null, Typeface.BOLD);
             aboveTextView.setTextColor(Color.GREEN);
             belowTextView.setTextColor(Color.GREEN);
-
+            textSize = 32;
         }else {
-            aboveTextView.setTextSize(18);
-            belowTextView.setTextSize(18);
+            aboveTextView.setTextSize(22);
+            belowTextView.setTextSize(22);
             aboveTextView.setTypeface(null, Typeface.BOLD);
             belowTextView.setTypeface(null, Typeface.BOLD);
             aboveTextView.setTextColor(Color.GREEN);
             belowTextView.setTextColor(Color.GREEN);
+            textSize = 22;
         }
 
 
@@ -201,6 +203,8 @@ public class CAkPlayer extends LinearLayout{
     }
 
     public void setText(String above, String below) {
+        aboveTextView.setTextSize(textSize);
+        belowTextView.setTextSize(textSize);
         aboveTextView.setText(above);
         belowTextView.setText(below);
     }

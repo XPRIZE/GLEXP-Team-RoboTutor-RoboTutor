@@ -219,11 +219,10 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         LayoutParams params = new LayoutParams(360, 80);
         params.addRule(CENTER_HORIZONTAL);
         percentLayout.addView(questionBoard, params);
-
-       // player.bringToFront();
+        //player.bringToFront();
         //scoreboard.bringToFront();
         questionBoard.bringToFront();
-        //(questionBoard.getParent()).requestLayout();
+
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -248,6 +247,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         questionboardAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
+                questionBoard_exist = false;
                 super.onAnimationEnd(animation);
                 percentLayout.removeView(questionBoard);
                 applyEventNode("NEXT");
