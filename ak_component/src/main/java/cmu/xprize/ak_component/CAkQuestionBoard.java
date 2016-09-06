@@ -49,44 +49,49 @@ public class CAkQuestionBoard extends View {
     @Override
     public void onDraw(Canvas canvas) {
 
-        Paint paint = new Paint();
+
+        Paint vPaint = new Paint();
+        vPaint.setAlpha( 220 );
         int width = getWidth();
         int height = getHeight();
 
-        paint.setTextAlign(Paint.Align.CENTER);
-        paint.setColor(Color.BLACK);
-        paint.setTextSize(textSize);
+        vPaint.setTextAlign(Paint.Align.CENTER);
+        vPaint.setColor(Color.BLACK);
+        vPaint.setTextSize(textSize);
 
         roadSign = Bitmap.createScaledBitmap(roadSign, width / 3, height, false);
+
         switch (choices.length) {
             case 1:
-                canvas.drawBitmap(roadSign, width / 3, 0, paint);
-                canvas.drawText(String.valueOf(choices[0]), width / 2, height * 5.0f / 12, paint);
+
+
+                canvas.drawBitmap(roadSign, width / 3, 0, vPaint);
+                canvas.drawText(String.valueOf(choices[0]), width / 2, height * 5.0f / 12, vPaint);
                 break;
             case 2:
-                canvas.drawBitmap(roadSign, width / 12, 0, paint);
-                canvas.drawText(String.valueOf(choices[0]), width * 6.0f / 24, height * 5.0f / 12, paint);
+                canvas.drawBitmap(roadSign, width / 12, 0, vPaint);
+                canvas.drawText(String.valueOf(choices[0]), width * 6.0f / 24, height * 5.0f / 12, vPaint);
 
                 Matrix matrix1 = new Matrix();
                 matrix1.preScale(-1, 1);
                 canvas.drawBitmap(Bitmap.createBitmap(roadSign, 0, 0,
                         roadSign.getWidth(),roadSign.getHeight(), matrix1, false),
-                        width * 7.0f / 12, 0, paint);
-                canvas.drawText(String.valueOf(choices[1]), width * 18.0f / 24, height * 5.0f / 12, paint);
+                        width * 7.0f / 12, 0, vPaint);
+                canvas.drawText(String.valueOf(choices[1]), width * 18.0f / 24, height * 5.0f / 12, vPaint);
                 break;
             case 3:
-                canvas.drawBitmap(roadSign, 0, 0, paint);
-                canvas.drawText(String.valueOf(choices[0]), width / 6, height * 5.0f / 12, paint);
+                canvas.drawBitmap(roadSign, 0, 0, vPaint);
+                canvas.drawText(String.valueOf(choices[0]), width / 6, height * 5.0f / 12, vPaint);
 
-                canvas.drawBitmap(roadSign, width / 3, 0, paint);
-                canvas.drawText(String.valueOf(choices[1]), width / 2, height * 5.0f / 12, paint);
+                canvas.drawBitmap(roadSign, width / 3, 0, vPaint);
+                canvas.drawText(String.valueOf(choices[1]), width / 2, height * 5.0f / 12, vPaint);
 
                 Matrix matrix2 = new Matrix();
                 matrix2.preScale(-1, 1);
                 canvas.drawBitmap(Bitmap.createBitmap(roadSign, 0, 0,
                         roadSign.getWidth(),roadSign.getHeight(), matrix2, false),
-                        width * 2 / 3, 0, paint);
-                canvas.drawText(String.valueOf(choices[2]), width * 5.0f / 6, height * 5.0f / 12, paint);
+                        width * 2 / 3, 0, vPaint);
+                canvas.drawText(String.valueOf(choices[2]), width * 5.0f / 6, height * 5.0f / 12, vPaint);
                 break;
         }
 

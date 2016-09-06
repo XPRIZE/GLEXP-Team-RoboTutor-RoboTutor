@@ -381,7 +381,8 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                 }
 
                 percentLayout.addView(sidewalkStuff);
-                scoreboard.bringToFront();
+              //  scoreboard.bringToFront();
+
 
                 final Animator sidewalkAnimator = CAnimatorUtil.configTranslate(sidewalkStuff,
                         5000-s, 0, sidewalkRightPoints[0], sidewalkRightPoints[1]
