@@ -221,7 +221,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         percentLayout.addView(questionBoard, params);
         player.bringToFront();
         scoreboard.bringToFront();
-        //questionBoard.bringToFront();
+        questionBoard.bringToFront();
 
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
