@@ -351,7 +351,7 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (isFinalResult)
+                if (isFinalResult && !mComponent.hasShown)
                     mComponent.onEvent(null);
             }
 
