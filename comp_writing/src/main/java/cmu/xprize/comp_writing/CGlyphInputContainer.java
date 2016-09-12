@@ -26,6 +26,7 @@ import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Region;
 import android.graphics.Typeface;
 import android.os.CountDownTimer;
 import android.support.v4.content.LocalBroadcastManager;
@@ -95,6 +96,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
     private float                 _topLine;
     private float                 _baseLine;
+    private Rect                  _clipRect          = new Rect();
     private float                 _dotSize;
 
     protected float               _aspect            = 1;  // w/h
@@ -102,6 +104,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private String                _fontWidthSample   = "W";
     private String                _lcaseSample       = "m";
     private int                   _fontVOffset       = 0;
+    private float                 _stroke_weight     = 45f;
 
     private boolean               mLogGlyphs = false;
 
@@ -126,10 +129,11 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
     private boolean               _drawUpper = false;
     private boolean               _drawBase  = true;
+    private boolean               _isLast    = false;
 
 
 
-    private static final String   TAG = "WritingComp";
+    private static final String   TAG = "CGlyphInputContainer";
 
 
     public CGlyphInputContainer(Context context) {
@@ -164,7 +168,8 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                     0, 0);
 
             try {
-                _aspect = a.getFloat(R.styleable.RoboTutor_aspectratio, 1.0f);
+                _aspect       = a.getFloat(R.styleable.RoboTutor_aspectratio, 1.0f);
+                _stroke_weight= a.getFloat(R.styleable.RoboTutor_strokeweight, 45f);
 
             } finally {
                 a.recycle();
@@ -192,14 +197,14 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(GCONST.STROKE_WEIGHT);
+        mPaint.setStrokeWidth(_stroke_weight);
         mPaint.setAntiAlias(true);
 
 
         // Create a paint object for the background
         mPaintBG = new Paint();
 
-        mPaintBG.setStrokeWidth(GCONST.STROKE_WEIGHT);
+        mPaintBG.setStrokeWidth(_stroke_weight);
         mPaintBG.setAntiAlias(true);
 
 
@@ -217,7 +222,9 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         // Create a paint object to define the baseline parameters
         mPaintBase = new Paint();
 
-        mPaintBase.setColor(getResources().getColor(R.color.fingerWriterBackground));
+        //mPaintBase.setColor(getResources().getColor(R.color.fingerWriterBackground));
+        mPaintBase.setColor(Color.parseColor("#000000"));
+
         mPaintBase.setStyle(Paint.Style.STROKE);
         mPaintBase.setStrokeJoin(Paint.Join.ROUND);
         mPaintBase.setStrokeWidth(GCONST.LINE_WEIGHT);
@@ -303,6 +310,15 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             mInputController.setHasGlyph(hasGlyph);
     }
 
+
+    /**
+     * Flag to indicate the last glyph in the input string - used to limit the baseline length
+     *
+     * @param isLast
+     */
+    public void setIsLast(boolean isLast) {
+        _isLast = isLast;
+    }
 
     /**
      * This is used for the background when this is an ImageView
@@ -592,13 +608,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     @Override
     protected void onDraw(Canvas canvas) {
 
-        View parent = (View) getParent();
-        parent.getDrawingRect(_parentBnds);
-
-        float parentaspect = (float) _parentBnds.width() / (float) _parentBnds.height();
-        float fontaspect   = (float) _fontBnds.width() / (float) _fontBnds.height();
-        float drawaspect   = (float) _viewBnds.width() / (float) _viewBnds.height();
-
         Rect textBnds = new Rect();
 
         super.onDraw(canvas);
@@ -629,7 +638,20 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             canvas.drawPath(linePath, mPaintUpper);
         }
         if(_drawBase) {
-            canvas.drawLine(0, _baseLine, getWidth(), _baseLine, mPaintBase);
+
+            // We want the baseline to appear to be continuous.  However the baseline should not
+            // extend past the last character in the string.
+            //
+            canvas.getClipBounds(_clipRect);
+
+            int extension = _isLast? 0:_clipRect.width()/2;
+
+            canvas.save();
+            _clipRect.right += extension;
+            canvas.clipRect(_clipRect, Region.Op.UNION);
+
+            canvas.drawLine(0, _baseLine, getWidth() + extension, _baseLine, mPaintBase);
+            canvas.restore();
         }
 
         mPaint.setStrokeWidth(1);
@@ -646,7 +668,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
             if(_drawGlyph != null) {
 
-                _bitmap = _drawGlyph.getMetric().generateVisualComparison(_fontBnds, _sampleExpected, _drawGlyph, mPaint, false);
+                _bitmap = _drawGlyph.getMetric().generateVisualComparison(_fontBnds, _sampleExpected, _drawGlyph, mPaint, _stroke_weight, false);
 
                 canvas.drawBitmap(_bitmap, _fontCharBnds.left, _fontCharBnds.top, null);
             }
@@ -696,12 +718,12 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             if(_showUserGlyph && _userGlyph != null) {
                 mPaintDBG.setStyle(Paint.Style.STROKE);
                 mPaintDBG.setColor(Color.MAGENTA);
-                canvas.drawRect(_userGlyph.getGlyphViewBounds(_viewBnds, GCONST.STROKE_WEIGHT), mPaintDBG);
+                canvas.drawRect(_userGlyph.getGlyphViewBounds(_viewBnds, _stroke_weight), mPaintDBG);
             }
         }
 
         mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeWidth(GCONST.STROKE_WEIGHT);
+        mPaint.setStrokeWidth(_stroke_weight);
 
         // Redraw the current glyph path
         //
@@ -743,7 +765,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
                     case TCONST.STROKE_OVERLAY:
 
-                        int  inset     = (int) (GCONST.STROKE_WEIGHT / 2);
+                        int  inset     = (int) (_stroke_weight / 2);
                         Rect protoBnds = new Rect(_fontCharBnds);
 
                         protoBnds.inset(inset, inset);
@@ -762,7 +784,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         RectF glyphBnds = null;
         RectF protoBnds = null;
 
-        float inset = GCONST.STROKE_WEIGHT / 2;
+        float inset = _stroke_weight / 2;
 
         if(_showUserGlyph)
             _animGlyph = _userGlyph;
@@ -882,7 +904,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
                     case TCONST.STROKE_OVERLAY:
 
-                        int inset = (int) (GCONST.STROKE_WEIGHT / 2);
+                        int inset = (int) (_stroke_weight / 2);
 
                         protoBnds = new Rect(_fontCharBnds);
                         protoBnds.inset(inset, inset);
@@ -908,7 +930,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
                     case TCONST.STROKE_OVERLAY:
 
-                        int inset = (int) (GCONST.STROKE_WEIGHT / 2);
+                        int inset = (int) (_stroke_weight / 2);
 
                         protoBnds = new Rect(_fontCharBnds);
                         protoBnds.inset(inset, inset);
@@ -1198,6 +1220,13 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         return fontCharBnds;
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        Log.d(TAG, "width  : " + getMeasuredWidth());
+        Log.d(TAG, "height : " + getMeasuredHeight());
+    }
 }
 
 

@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout
+<cmu.xprize.robotutor.tutorengine.widgets.core.TWritingContoller
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/digit_copy">
+    android:id="@+id/word_copy">
 
     <cmu.xprize.robotutor.tutorengine.widgets.core.TBanner
         android:id="@+id/Sbanner"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
         app:layout_heightPercent="10%"
         android:text="This is the Banner Area."/>
 
 
+
+    <!--Background color only -->
     <cmu.xprize.robotutor.tutorengine.widgets.core.TView
         android:id="@+id/SstimulusBG"
         android:layout_below="@id/Sbanner"
@@ -40,7 +41,7 @@
     <cmu.xprize.robotutor.tutorengine.widgets.core.TStimRespBase
         android:id="@+id/Sstimulus"
         android:layout_below="@id/Sbanner"
-        app:linked_views="Sresponse,SfingerWriter"
+        app:linked_views="word_copy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_heightPercent="12%"
@@ -49,10 +50,9 @@
         android:text=""/>
 
 
-    <cmu.xprize.robotutor.tutorengine.widgets.core.TResponseScrollController
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView
         android:id="@+id/Sresponse"
         android:layout_below="@id/Sstimulus"
-        app:linked_views="Sstimulus"
         app:layout_heightPercent="18%"
         android:layout_width="wrap_content"
         android:scrollbars="none"
@@ -66,21 +66,21 @@
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@null">
         </LinearLayout>
 
-    </cmu.xprize.robotutor.tutorengine.widgets.core.TResponseScrollController>
+    </cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView>
 
 
-    <cmu.xprize.robotutor.tutorengine.widgets.core.TWritingScrollController
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView
         android:id="@+id/SfingerWriter"
         android:layout_below="@id/Sresponse"
-        app:linked_views="Sresponse"
         app:layout_heightPercent="60%"
         android:layout_width="wrap_content"
         android:scrollbars="none"
         android:layout_centerHorizontal="true"
-        android:background="@null">
+        android:background="#44FF0000">
 
         <LinearLayout
             android:id="@+id/Sdrawn_glyphs"
@@ -95,6 +95,6 @@
             android:background="@null">
         </LinearLayout>
 
-    </cmu.xprize.robotutor.tutorengine.widgets.core.TWritingScrollController>
+    </cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView>
 
-</cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>
+</cmu.xprize.robotutor.tutorengine.widgets.core.TWritingContoller>

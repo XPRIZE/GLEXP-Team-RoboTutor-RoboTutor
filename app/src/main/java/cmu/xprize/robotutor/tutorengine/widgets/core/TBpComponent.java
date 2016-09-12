@@ -446,7 +446,7 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
     }
 
     @Override
-    public void postInflate() {
+    public void onCreate() {
 
         // Do deferred listeners configuration - this cannot be done until after the tutor is instantiated
         //

@@ -31,7 +31,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import cmu.xprize.util.TCONST;
 
 
+// TODO: Convert to singleton
+//
 public class CRecognizerPlus implements IGlyphSink {
+
+    private static CRecognizerPlus ourInstance = new CRecognizerPlus();
 
     private Context                mContext;
 
@@ -59,17 +63,23 @@ public class CRecognizerPlus implements IGlyphSink {
     private CGlyph                 _drawGlyph         = null;
 
     private boolean                _boostExpected     = true;
+    private boolean                _boostUnExpected   = true;
     private boolean                _boostPunctuation  = false;
 
     private boolean                _boostDigitClass   = false;
     private boolean                _boostAlphaClass   = false;
     private boolean                _boostSampleClass  = false;
 
+
     private CLipiTKJNIInterface _recognizer;
 
     private static final String   TAG = "CRecognizer";
 
-    public CRecognizerPlus(Context context, String alphabet) {
+
+    private CRecognizerPlus() {
+    }
+
+    public void initialize(Context context, String alphabet) {
 
         mContext = context;
 
@@ -97,6 +107,16 @@ public class CRecognizerPlus implements IGlyphSink {
     }
 
 
+    /**
+     * Singleton Instance
+     *
+     * @return
+     */
+    public static CRecognizerPlus getInstance() {
+        return ourInstance;
+    }
+
+
     public CGlyphSet getGlyphPrototypes() {
         return _glyphSet;
     }
@@ -121,12 +141,21 @@ public class CRecognizerPlus implements IGlyphSink {
 
         return _boostExpected;
     }
+
+    public boolean toggleUnExpectedBoost() {
+
+        _boostUnExpected = !_boostUnExpected;
+
+        return _boostUnExpected;
+    }
+
     public boolean togglePunctBoost() {
 
         _boostPunctuation = !_boostPunctuation;
 
         return _boostPunctuation;
     }
+
     public void setClassBoost(String classID) {
 
         _boostAlphaClass = false;
@@ -413,10 +442,13 @@ public class CRecognizerPlus implements IGlyphSink {
         String      candidateLTK;
         char        sampleChar;
         char        ltkChar;
-        Rect        compCharBnds;
+        Rect        compCharBnds    = new Rect();
         RectF       glyphVisualBnds;
-        int         sampleIndex     = -1;
+        int         sampleIndex     = GCONST.EXPECTED_NOT_FOUND;
         boolean     forceProcessing = false;
+        boolean     sampDigit       = false;
+        boolean     sampUpper       = false;
+        boolean     sampAlpha       = false;
 
         _sampleExpected    = glyphSrc.getExpectedChar();
         _drawGlyph         = glyphSrc.getGlyph();
@@ -426,12 +458,18 @@ public class CRecognizerPlus implements IGlyphSink {
         _dotSize           = glyphSrc.getDotSize();
         _Paint             = glyphSrc.getPaint();
 
+        // Filter invalid character expecations.
+        //
+        if(_sampleExpected == null || _sampleExpected == "") {
+            _sampleExpected = " ";
+            sampleIndex     = GCONST.EXPECT_NONE;
+        }
+
         candidateLTK = _ltkCandidates[0].getRecChar();
-        sampleChar   = _sampleExpected.charAt(0);
         ltkChar      = candidateLTK.charAt(0);
 
-        // The LTK inferred confidence is Confidence
-        // Initialize the overall Confidence
+        // The LTK inferred confidence is the Confidence property
+        // Initialize the "overall Confidence"  LTK+ inferred confidence
         // locate the position of the sampleChar in the recognition set. (it may not be there)
         //
         _ltkCandidates[0].setIsBestLTK(true);
@@ -440,6 +478,8 @@ public class CRecognizerPlus implements IGlyphSink {
 
             _ltkCandidates[i1].updateORConfidence(_ltkCandidates[i1].Confidence);
 
+            // We make an assumption that LTK will never produce " " as a candidate
+            //
             if(_ltkCandidates[i1].getRecChar().equals(_sampleExpected)) {
                 _ltkCandidates[i1].setIsExpected(true);
                 sampleIndex = i1;
@@ -448,7 +488,7 @@ public class CRecognizerPlus implements IGlyphSink {
 
         // If the sample (i.e. expected character) is not amongst the LipiTK candidates then we add it.
         //
-        if(sampleIndex == -1) {
+        if(sampleIndex == GCONST.EXPECTED_NOT_FOUND) {
 
             // Special processing = LTK essentially never recognizes a comma nor an apostrophe.
             // so to allow the system to recognize either and disambiguate the result we add
@@ -484,36 +524,44 @@ public class CRecognizerPlus implements IGlyphSink {
         // By always doing it we allow for partial extemporaneous input - i.e. they don't input the expected character
         // Note that this does nothing if it is not alphabetic
         // Note if we are boosting the expected then we don't add the alternate of LTKBest if it is
-        //      not the sample.
+        //      not the expected sample.
         //
         if((sampleIndex > 0) && !_boostExpected)
             forceProcessing |= ensureAlternateCase(candidateLTK, 0);
 
-        // We always ensure the alternate of the expected is present as we know that LTK is often wrong and we
-        // want both case alternates of the expected char to be evaluated
+
+        // We always ensure the alternate case of the expected is present as we know that LTK is often wrong on case
+        // differentiation and we want both case alternates of the expected char to be evaluated e.g. X and x
         //
         forceProcessing |= ensureAlternateCase(_sampleExpected, sampleIndex);
 
 
         // If the LTK candidate is not the sample char then do LTK+ post processing.
+        // If we added alternate cases or virtual cases then forceprocessing
+        // If we want to boost extemporaneous input (boostUnExpected) then force processing i.e. boost
+        // other than the lipiTK output based on topological metrics from LTK+
         //
-        if(sampleIndex > 0 || forceProcessing) {
+        if(sampleIndex > 0 || forceProcessing || _boostUnExpected) {
 
             _ltkPlusCandidates = new CRecResult[_ltkCandidates.length];
             int index = 0;
 
-            compCharBnds = glyphSrc.getFontCharBounds(_sampleExpected);
 
-            boolean sampDigit = Character.isDigit(sampleChar);
-            boolean sampUpper = Character.isUpperCase(sampleChar);
-            boolean sampAlpha = Character.isLetterOrDigit(sampleChar);
+            if(sampleIndex != GCONST.EXPECT_NONE) {
+
+                compCharBnds = glyphSrc.getFontCharBounds(_sampleExpected);
+
+                sampleChar = _sampleExpected.charAt(0);
+
+                sampDigit = Character.isDigit(sampleChar);
+                sampUpper = Character.isUpperCase(sampleChar);
+                sampAlpha = Character.isLetterOrDigit(sampleChar);
+            }
 
             // Generate the visual bounds for the glyph that was drawn
             glyphVisualBnds = _drawGlyph.getGlyphViewBounds(_viewBnds, GCONST.STROKE_WEIGHT);
 
             // Clone a prototype glyph for each LTK candidate
-            // TODO: it may be possible to optimize this by using the Glyph in the Alphabet directly
-            // TODO: instead of cloning
             //
             for(CRecResult candidate : _ltkCandidates) {
 
@@ -533,9 +581,9 @@ public class CRecognizerPlus implements IGlyphSink {
                 // Generate the dimensional metrics for the given candidate char
                 // Generate the visual comparison metric for the given char
                 //
-                metric.calcMetrics(_drawGlyph, glyphVisualBnds, candCharBnds, compCharBnds, GCONST.STROKE_WEIGHT);
+                metric.calcMetrics(_drawGlyph, glyphVisualBnds, candCharBnds, (sampleIndex != GCONST.EXPECT_NONE)? compCharBnds:candCharBnds , GCONST.STROKE_WEIGHT);
 
-                candidate.setVisualConfidence(metric.generateVisualMetric(_fontBnds, candChar, _sampleExpected, _drawGlyph, _Paint, TCONST.VOLATILE));
+                candidate.setVisualConfidence(metric.generateVisualMetric(_fontBnds, candChar, (sampleIndex != GCONST.EXPECT_NONE)? _sampleExpected:candChar, _drawGlyph, _Paint, GCONST.CALIBRATED_WEIGHT, TCONST.VOLATILE));
 
                 Log.d("Metrics Initial: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence())) ;
 
@@ -545,7 +593,8 @@ public class CRecognizerPlus implements IGlyphSink {
 
                 // Disambiguate puntucation from non-puntuation
                 //
-                if(candAlpha != sampAlpha) {
+                if((sampleIndex != GCONST.EXPECT_NONE) && (candAlpha != sampAlpha)) {
+
                     candidate.updateORConfidence((isSample)? 0.7f:0.5f);
                     Log.d("Metrics punct MM: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence())) ;
                 }
@@ -617,6 +666,13 @@ public class CRecognizerPlus implements IGlyphSink {
             _ltkPlusCandidates[0].setGlyph(_drawGlyph);
         }
 
+        // If there is no valid sample in the recognition set then use the TLK candidate = i.e. elemenet 0
+        //
+        if(sampleIndex < 0)
+            sampleIndex = 0;
+
         return sampleIndex;
     }
 }
+
+

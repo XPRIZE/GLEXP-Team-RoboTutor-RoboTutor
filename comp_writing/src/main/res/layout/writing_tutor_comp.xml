@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- NOTE; This is for use in the standalone GlyphRecognizer project that is used for development -->
+
 <cmu.xprize.comp_writing.CWritingController
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -29,7 +32,7 @@
 
 
     <cmu.xprize.util.CLinkedScrollView
-        android:id="@+id/Srecognized_scroller"
+        android:id="@+id/Sresponse"
         android:layout_below="@id/Sstimulus"
         app:layout_heightPercent="18%"
         android:layout_width="wrap_content"
@@ -51,8 +54,8 @@
 
 
     <cmu.xprize.util.CLinkedScrollView
-        android:id="@+id/Sdrawn_scroller"
-        android:layout_below="@id/Srecognized_scroller"
+        android:id="@+id/SfingerWriter"
+        android:layout_below="@id/Sresponse"
         app:layout_heightPercent="60%"
         android:layout_width="wrap_content"
         android:scrollbars="none"

@@ -379,7 +379,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     }
 
     @Override
-    public void postInflate() {}
+    public void onCreate() {}
 
     @Override
     public void setNavigator(ITutorGraph navigator) {

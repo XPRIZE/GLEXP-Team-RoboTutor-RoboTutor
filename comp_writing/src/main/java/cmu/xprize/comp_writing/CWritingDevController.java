@@ -100,9 +100,9 @@ public class CWritingDevController extends CWritingController  {
 
     }
 
-    public void onCreate(Context context) {
+    public void onCreate() {
 
-        super.onCreate(context);
+        super.onCreate();
 
         mLtkStats    = (TextView)findViewById(R.id.Smetrics_Ltk);
         mLtkPlus     = (TextView)findViewById(R.id.Smetrics_LtkPlus);
@@ -116,7 +116,7 @@ public class CWritingDevController extends CWritingController  {
         mFontSelector  = (Spinner) findViewById(R.id.SfontSelector);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mContext,
                 R.array.fonts_array, android.R.layout.simple_spinner_item);
 
         // Specify the layout to use when the list of choices appears
@@ -134,7 +134,7 @@ public class CWritingDevController extends CWritingController  {
         mBoostClass  = (Spinner) findViewById(R.id.SboostClass);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> boostadapter = ArrayAdapter.createFromResource(context,
+        ArrayAdapter<CharSequence> boostadapter = ArrayAdapter.createFromResource(mContext,
                 R.array.boost_array, android.R.layout.simple_spinner_item);
 
         // Specify the layout to use when the list of choices appears

@@ -27,6 +27,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -73,6 +74,7 @@ public class CDrawnInputController extends PercentRelativeLayout implements View
     PercentLayoutHelper.PercentLayoutInfo info;
 
     final private String TAG = "DrawnInputComp";
+    private boolean isLast;
 
 
     public CDrawnInputController(Context context) {
@@ -147,6 +149,10 @@ public class CDrawnInputController extends PercentRelativeLayout implements View
         info.aspectRatio = mDrawnInput.getFontAspect();     // = 0.84f;
 
         mDrawnInput.setReplayComp(mReplayComp);
+    }
+
+    public void setIsLast(boolean isLast) {
+        mDrawnInput.setIsLast(isLast);
     }
 
 
@@ -317,8 +323,12 @@ public class CDrawnInputController extends PercentRelativeLayout implements View
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        mHelper.adjustChildren(widthMeasureSpec, heightMeasureSpec);
+
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        Log.d(TAG, "width  : " + getMeasuredWidth());
+        Log.d(TAG, "height : " + getMeasuredHeight());
+
         if (mHelper.handleMeasuredStateTooSmall()) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }

@@ -20,7 +20,11 @@
 package cmu.xprize.ltkplus;
 
 
+import android.content.Context;
+
 public interface IGlyphSink {
+
+    public void initialize(Context context, String alphabet);
 
     public void execCommand(String command );
 

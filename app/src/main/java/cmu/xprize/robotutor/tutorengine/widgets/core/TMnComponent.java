@@ -203,7 +203,7 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl, ID
     }
 
     @Override
-    public void postInflate() {}
+    public void onCreate() {}
 
     @Override
     public void setNavigator(ITutorGraph navigator) {

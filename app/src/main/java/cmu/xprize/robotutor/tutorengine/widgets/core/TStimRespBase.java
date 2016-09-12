@@ -309,7 +309,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, ID
     // view has been inflated and init'd - where it is connected to the TutorEngine
     //
     @Override
-    public void postInflate() {
+    public void onCreate() {
 
         // Do deferred listeners configuration - this cannot be done until after the tutor is instantiated
         //

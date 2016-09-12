@@ -27,13 +27,15 @@ import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 
 import java.io.IOException;
 
+import cmu.xprize.ltkplus.CRecognizerPlus;
+import cmu.xprize.ltkplus.GCONST;
+import cmu.xprize.ltkplus.IGlyphSink;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.util.CLoaderView;
 import cmu.xprize.util.CLogManager;
@@ -72,6 +74,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     public TTSsynthesizer       TTS = null;
     public ListenerBase         ASR;
+    public IGlyphSink           LTKPlus = null;
 
     static public ITutorManager masterContainer;
     static public ILogManager   logManager;
@@ -206,6 +209,12 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                     tutorAssetManager.extractAsset(TCONST.LTK_DATA_FILE, TCONST.LTK_DATA_FOLDER);
                     logManager.postEvent(TAG, "INFO: LTK Assets installed:");
                 }
+
+                // Create the one system level LTKPLUS recognizer
+                //
+                LTKPlus = CRecognizerPlus.getInstance();
+                LTKPlus.initialize(getApplicationContext(), GCONST.ALPHABET);
+
                 result = true;
 
             } catch (IOException e) {

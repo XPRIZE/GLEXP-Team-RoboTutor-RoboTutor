@@ -12,7 +12,7 @@
         app:layout_heightPercent="40%">
 
         <cmu.xprize.util.CLinkedScrollView
-            android:id="@+id/Srecognized_scroller"
+            android:id="@+id/Sresponse"
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:scrollbars="none"
@@ -191,7 +191,7 @@
 
 
     <cmu.xprize.util.CLinkedScrollView
-        android:id="@+id/Sdrawn_scroller"
+        android:id="@+id/SfingerWriter"
         app:layout_heightPercent="60%"
         android:layout_width="wrap_content"
         android:scrollbars="none"
@@ -253,7 +253,7 @@
 
     <Button
         android:id="@+id/SboostExpected"
-        android:layout_above="@+id/Sdrawn_scroller"
+        android:layout_above="@+id/SfingerWriter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -263,7 +263,7 @@
     <Button
         android:id="@+id/SboostPunct"
         android:layout_toRightOf="@+id/SboostExpected"
-        android:layout_above="@+id/Sdrawn_scroller"
+        android:layout_above="@+id/SfingerWriter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -273,7 +273,7 @@
     <Spinner
         android:id="@+id/SboostClass"
         android:layout_toRightOf="@+id/SboostPunct"
-        android:layout_above="@+id/Sdrawn_scroller"
+        android:layout_above="@+id/SfingerWriter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"

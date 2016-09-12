@@ -8,7 +8,7 @@ import cmu.xprize.ltkplus.CRecResult;
 
 public interface IWritingController {
 
-    public void onCreate(Context context);
+    public void onCreate();
 
     public void deleteItem(View child);
     public void addItemAt(View child, int inc);

@@ -136,9 +136,9 @@ public class CGlyphMetrics {
     }
 
 
-    public Bitmap generateVisualComparison(Rect fontBounds, String charToCompare, CGlyph glyphToCompare, Paint mPaint, boolean isVolatile) {
+    public Bitmap generateVisualComparison(Rect fontBounds, String charToCompare, CGlyph glyphToCompare, Paint mPaint, float strokeWeight, boolean isVolatile) {
 
-        generateVisualMetric(fontBounds, charToCompare, charToCompare,  glyphToCompare,  mPaint,  isVolatile);
+        generateVisualMetric(fontBounds, charToCompare, charToCompare,  glyphToCompare,  mPaint, strokeWeight,  isVolatile);
 
         // If we are going to use the bitmap after then we apply the pixels back to the bitmap and
         // return the result to be drawn externally
@@ -153,10 +153,22 @@ public class CGlyphMetrics {
 
 
 
-    public float generateVisualMetric(Rect fontBounds, String charToCompare, String expectedChar, CGlyph glyphToCompare, Paint mPaint, boolean isVolatile) {
+    public float generateVisualMetric(Rect fontBounds, String charToCompare, String expectedChar, CGlyph glyphToCompare, Paint mPaint, float strokeWeight, boolean isVolatile) {
 
         Rect charBnds = new Rect();
         visualMatch   = 0;
+
+        // Setup the stroke weight -
+        // The visual comparator was calibrated with a line weight of 45f so we scale that to whatever
+        // font size we use to get approx the same visual coverage on the visual metric.  Otherwise we use
+        // the pen size defined by the tutor author.
+        //
+        if(strokeWeight == GCONST.CALIBRATED_WEIGHT) {
+
+            strokeWeight = fontBounds.height() / GCONST.CALIBRATION_CONST;
+        }
+        mPaint.setStrokeWidth(strokeWeight);
+
 
         // Ensure that there is a testable region - otherwise Bitmap.createBitmap will fail
         //
@@ -170,7 +182,7 @@ public class CGlyphMetrics {
             mPaint.getTextBounds(charToCompare, 0, 1, charBnds);
 
             Rect insetBnds = new Rect(0, 0, charBnds.width(), charBnds.height());
-            int inset = (int) (GCONST.STROKE_WEIGHT / 2);
+            int inset = (int) (strokeWeight / 2);
 
             insetBnds.inset(inset, inset);
 
@@ -201,7 +213,7 @@ public class CGlyphMetrics {
             // obscured by the glyph - represents a metric of the correspondence between the two
             //
             mPaint.setStyle(Paint.Style.STROKE);
-            mPaint.setStrokeWidth(GCONST.STROKE_WEIGHT);
+            mPaint.setStrokeWidth(strokeWeight);
 
             // Redraw the current glyph path to the bitmap surface
             //

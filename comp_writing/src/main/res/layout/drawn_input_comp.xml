@@ -18,7 +18,8 @@
         android:alpha="0.15"
         android:background="@null"/>
 
-    <FrameLayout
+    <!-- NOTE: aspect here is just a reminder that this object has it aspect set programmatically-->
+    <cmu.xprize.comp_writing.CFrameLayout
         android:id="@+id/drawn_container"
         app:layout_heightPercent="63%"
         app:layout_aspectRatio = "100%"
@@ -29,16 +30,14 @@
             android:id="@+id/drawn_box"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:src="@drawable/drawn_box"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
+            app:strokeweight = "5"
             android:background="@null" />
 
         <cmu.xprize.comp_writing.CGlyphReplayContainer
             android:id="@+id/replay_box"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-    </FrameLayout>
+    </cmu.xprize.comp_writing.CFrameLayout>
 
     <ImageButton
         android:id="@+id/delete_space"
@@ -49,6 +48,18 @@
         android:scaleType="fitCenter"
         android:layout_below="@id/drawn_container"
         android:layout_centerHorizontal="true"
+        android:alpha="0.15"
+        android:background="@null"/>
+
+    <ImageButton
+        android:id="@+id/glyph_playback"
+        android:src="@drawable/delete_glyph_button"
+        app:layout_aspectRatio="100%"
+        app:layout_heightPercent="13%"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:layout_below="@id/drawn_container"
+        android:layout_alignParentStart="true"
         android:alpha="0.15"
         android:background="@null"/>
 
@@ -90,18 +101,7 @@
         android:scaleType="fitCenter"
         android:layout_below="@id/drawn_container"
         android:layout_centerHorizontal="true"
-        android:alpha="0.15"
-        android:background="@null"/>
-
-    <ImageButton
-        android:id="@+id/glyph_playback"
-        android:src="@drawable/delete_glyph_button"
-        app:layout_aspectRatio="100%"
-        app:layout_heightPercent="13%"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:layout_below="@id/drawn_container"
-        android:layout_alignParentStart="true"
+        android:visibility="gone"
         android:alpha="0.15"
         android:background="@null"/>
 
@@ -114,6 +114,7 @@
         android:scaleType="fitCenter"
         android:layout_below="@id/drawn_container"
         android:layout_alignParentEnd="true"
+        android:visibility="gone"
         android:alpha="0.15"
         android:background="@null"/>
 
@@ -126,6 +127,7 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:layout_marginTop="20dp"
+        android:visibility="gone"
         android:background="#FF0000BB"
         android:textColor="#FFFFFFFF"
         android:textSize="24sp"

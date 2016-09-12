@@ -170,7 +170,7 @@ public class TMasterAnimatorLayout extends ViewAnimator implements ITutorManager
     }
 
     @Override
-    public void postInflate() {}
+    public void onCreate() {}
 
     @Override
     public void setNavigator(ITutorGraph navigator) {

@@ -32,20 +32,13 @@ import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.util.CLinkedScrollView;
 import cmu.xprize.util.ILogManager;
 
-public class TLinkedScrollView  extends HorizontalScrollView implements ITutorObjectImpl, View.OnTouchListener{
+public class TLinkedScrollView  extends CLinkedScrollView implements ITutorObjectImpl, View.OnTouchListener{
 
     private CObjectDelegate mSceneObject;
 
-    private   boolean        mEnableScrolling   = true;
-    protected boolean        mIsInitiator       = false;
-    protected boolean        mCaptureInitiator  = false;
-
-    private TLinkedScrollView mLinkedScrollView;
-
-    private float            mScrollRatio;
-    private boolean          mRatioDirty = true;
 
     final private String TAG = "LinkScrollView";
 
@@ -72,136 +65,8 @@ public class TLinkedScrollView  extends HorizontalScrollView implements ITutorOb
         setOnTouchListener(this);
     }
 
-
-    public boolean isEnableScrolling() {
-        return mEnableScrolling;
-    }
-
-    public void setEnableScrolling(boolean enableScrolling) {
-        this.mEnableScrolling = enableScrolling;
-    }
-
-    public float getScrollRange() {
-        return computeHorizontalScrollRange();
-    }
-
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-
-        if (isEnableScrolling()) {
-            return super.onInterceptTouchEvent(ev);
-        } else {
-            return false;
-        }
-    }
-
-    public void setLinkedScroll(TLinkedScrollView linkedScroll) {
-        mLinkedScrollView  = linkedScroll;
-    }
-
-    public void updateScrollRatio() {
-
-        if(mRatioDirty && (mLinkedScrollView != null)) {
-            mRatioDirty  = false;
-            mScrollRatio = getScrollRange() / mLinkedScrollView.getScrollRange();
-
-            if(mIsInitiator)
-                mLinkedScrollView.updateScrollRatio();
-        }
-    }
-
-    public void doProportionalScroll(int x, int y) {
-
-        scrollTo((int) (x * mScrollRatio), y);
-
-        Log.i(TAG, "PROPORTIONAL SCROLL :  x: " + x + " y:" + y);
-    }
-
-
-    @Override
-    protected void onScrollChanged(int x, int y, int oldx, int oldy) {
-        super.onScrollChanged(x, y, oldx, oldy);
-
-        if(mIsInitiator && (mLinkedScrollView != null)) {
-            updateScrollRatio();
-            mLinkedScrollView.doProportionalScroll(x, y);
-        }
-        //Log.i(TAG, "SCROLLCHANGED :  x: " + x + " y:" + y + "  RANGE: " + computeHorizontalScrollRange() );
-    }
-
-
-//    @Override
-//    public void computeScroll() {
-//        super.computeScroll();
-//
-//        Log.i(TAG, "computeScroll");
-//        if(mIsInitiator && (mLinkedScrollView != null)) {
-//            updateScrollRatio();
-//
-//            mLinkedScrollView.doProportionalScroll(getScrollX(), getScrollY());
-//        }
-//    }
-
-    /**
-     * We can't capture initiator status until the linked view releases it
-     * TODO: We can stop the linked view in mid fling - should try an address that
-     *       Note that it just allows them to get out of sync and does no harm.
-     */
-    private void captureInitiatorStatus() {
-
-        if((mLinkedScrollView != null) && (!mLinkedScrollView.mCaptureInitiator)) {
-            mCaptureInitiator              = true;
-
-            mLinkedScrollView.mIsInitiator = false;
-            mIsInitiator      = true;
-        }
-
-    }
-
-
-    /**
-     * Only one of the linked scrollviews can be the controlling (initiator) view (i.e. the one that drives the updates)
-     * otherwise there would be a circular reference.  However in a multi-touch environment both views may
-     * be touched before one is released.  Therefore we need to lock mIsInitiator to the first one until
-     * it is released. But we can't release mIsInitiator on ACTION_UP or we will inhibit fling events.
-     * So we use mCaptureInitiator to inhibit the linked view from capturing the initiator status.
-     *
-     * @param v
-     * @param event
-     * @return
-     */
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        PointF touchPt;
-        boolean result = true;
-        final int action = event.getAction();
-
-        touchPt = new PointF(event.getX(), event.getY());
-
-        if (isEnableScrolling()) {
-
-            switch (action) {
-                case MotionEvent.ACTION_DOWN:
-                    captureInitiatorStatus();
-                    Log.i(TAG, "DRAWN _ ACTION_DOWN");
-                    break;
-
-                case MotionEvent.ACTION_MOVE:
-                    captureInitiatorStatus();
-                    Log.i(TAG, "DRAWN _ ACTION_MOVE");
-                    break;
-
-                case MotionEvent.ACTION_UP:
-                    // Allow the other view to capture the initiator status
-                    mCaptureInitiator = false;
-                    Log.i(TAG, "DRAWN _ ACTION_UP");
-                    break;
-            }
-            result = super.onTouchEvent(event);
-        }
-
-        return result;
-    }
+    public void onCreate() {}
 
     @Override
     public void onDestroy() {
@@ -209,9 +74,87 @@ public class TLinkedScrollView  extends HorizontalScrollView implements ITutorOb
     }
 
 
-    public void setDataSource(String dataSource) {
+
+    //************************************************************************
+    //************************************************************************
+    // Tutor methods  Start
+
+
+    /**
+     * TODO: rewrite the LTK project format
+     * @param recogId
+     */
+    public void setRecognizer(String recogId) {
 
     }
+
+
+    /**
+     * TODO: rewrite the LTK project format
+     * @param recogId
+     */
+    public void setRecognizer(String recogId, String subset) {
+
+    }
+
+
+    /**
+     * Enable or Disable the finger writer
+     * @param enableState
+     */
+    public void enable(Boolean enableState) {
+
+    }
+
+
+    /**
+     * Enable or disable persona messages.  Whether or not the persona will
+     * watch finger motion
+     *
+     * @param watchEnabled
+     */
+    public void personaWatch(Boolean watchEnabled) {
+
+//        _watchable = watchEnabled;
+    }
+
+
+    public void onStartWriting(String symbol) {
+//        _onStartWriting = symbol;
+    }
+
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    protected void applyEventNode(String nodeName) {
+    }
+
+
+    // Tutor methods  End
+    //************************************************************************
+    //************************************************************************
+
+
+
+
+    /**
+     * Deprecated - in favor of onRecognitionEvent
+     *
+     * @param symbol
+     */
+    public void onRecognitionComplete(String symbol) {
+        onRecognitionEvent(symbol);
+    }
+
+
+    public void onRecognitionEvent(String symbol) {    }
+
+
+
+    public void setDataSource(String dataSource) {
+    }
+
 
     @Override
     public void setName(String name) {
@@ -232,9 +175,6 @@ public class TLinkedScrollView  extends HorizontalScrollView implements ITutorOb
     public void setTutor(CTutor tutor) {
         mSceneObject.setTutor(tutor);
     }
-
-    @Override
-    public void postInflate() {}
 
     @Override
     public void setNavigator(ITutorGraph navigator) {
@@ -265,4 +205,48 @@ public class TLinkedScrollView  extends HorizontalScrollView implements ITutorOb
     public void setAlpha(Float alpha) {
         mSceneObject.setAlpha(alpha);
     }
+
+
+
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
+        // TODO: DBUG DEBUG DEBUG   START
+
+        int size = 1298;
+
+        final int specMode = MeasureSpec.getMode(widthMeasureSpec);
+        final int specSize = MeasureSpec.getSize(widthMeasureSpec);
+        final int result;
+        switch (specMode) {
+            case MeasureSpec.AT_MOST:
+                if (specSize < size) {
+                    result = specSize | MEASURED_STATE_TOO_SMALL;
+                } else {
+                    result = size;
+                }
+                break;
+            case MeasureSpec.EXACTLY:
+                result = specSize;
+                break;
+            case MeasureSpec.UNSPECIFIED:
+            default:
+                result = size;
+        }
+
+        // TODO: DBUG DEBUG DEBUG  END
+
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        Log.d(TAG, "width  : " + getMeasuredWidth());
+        Log.d(TAG, "height : " + getMeasuredHeight());
+
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+    }
+
 }

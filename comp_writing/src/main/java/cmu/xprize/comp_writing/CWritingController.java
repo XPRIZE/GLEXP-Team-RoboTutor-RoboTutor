@@ -23,6 +23,7 @@ import android.content.Context;
 import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.percent.PercentLayoutHelper;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -30,12 +31,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -49,6 +45,9 @@ import cmu.xprize.ltkplus.IGlyphSink;
 import cmu.xprize.ltkplus.CRecResult;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CLinkedScrollView;
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventListener;
+import cmu.xprize.util.TCONST;
 
 
 /**
@@ -58,86 +57,94 @@ import cmu.xprize.util.CLinkedScrollView;
  *  settings will not work correctly.
  *
  */
-public class CWritingController extends PercentRelativeLayout implements IWritingController {
+public class CWritingController extends PercentRelativeLayout implements IEventListener, IWritingController {
 
-    protected char[]           mStimulusData;
+    protected Context         mContext;
+    protected char[]          mStimulusData;
 
     private CLinkedScrollView mRecognizedScroll;
     private CLinkedScrollView mDrawnScroll;
 
     private LinearLayout      mRecogList;
     protected LinearLayout    mDrawnList;
-    private CGlyphSet         mGlyphSet;
 
-    private int               mMaxLength = 6; //GCONST.ALPHABET.length();                // Maximum string length
+    private int               mMaxLength = 1; //GCONST.ALPHABET.length();                // Maximum string length
 
     protected final Handler   mainHandler = new Handler(Looper.getMainLooper());
     protected HashMap         queueMap    = new HashMap();
     protected boolean         _qDisabled  = false;
 
     protected IGlyphSink      _recognizer;
+    private CGlyphSet         _glyphSet;
+
+    private String            mResponse;
+    private String            mStimulus;
+
+    protected boolean         _dataEOI   = false;
 
     final private String  TAG        = "CWritingController";
 
 
     public CWritingController(Context context) {
         super(context);
-        init(null, 0);
+        init(context, null);
     }
 
     public CWritingController(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(attrs, 0);
+        init(context, attrs);
     }
 
     public CWritingController(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init(attrs, defStyle);
+        init(context, attrs);
     }
 
-    private void init(AttributeSet attrs, int defStyle) {
+    protected void init(Context context, AttributeSet attrs) {
+        mContext = context;
 
         setClipChildren(false);
     }
 
-    public void onCreate(Context context) {
+    public void onCreate() {
 
-        View v;
+        CDrawnInputController v;
+        CResponseContainer    r;
+
         mStimulusData = new char[mMaxLength];
 
-        // Create the one system level recognizer
-        _recognizer = new CRecognizerPlus(context, GCONST.ALPHABET);
-
         // Setup the Recycler for the recognized input views
-        mRecognizedScroll = (CLinkedScrollView) findViewById(R.id.Srecognized_scroller);
+        mRecognizedScroll = (CLinkedScrollView) findViewById(R.id.Sresponse);
         mRecogList = (LinearLayout) findViewById(R.id.Srecognized_glyphs);
 
+        // Note: this is used in the GlyphRecognizer project to initialize the sample
+        //
         for(int i1 =0 ; i1 < mStimulusData.length ; i1++)
         {
             // create a new view
-            v = LayoutInflater.from(getContext())
-                    .inflate(R.layout.recog_resp_comp, null, false);
+            r = (CResponseContainer)LayoutInflater.from(getContext())
+                                        .inflate(R.layout.recog_resp_comp, null, false);
 
-            mRecogList.addView(v);
+            mRecogList.addView(r);
         }
 
         //****************************
 
-        mDrawnScroll = (CLinkedScrollView) findViewById(R.id.Sdrawn_scroller);
+        mDrawnScroll = (CLinkedScrollView) findViewById(R.id.SfingerWriter);
         mDrawnScroll.setClipChildren(false);
 
         mDrawnList = (LinearLayout) findViewById(R.id.Sdrawn_glyphs);
-        mDrawnList.setClipChildren(true);
+        mDrawnList.setClipChildren(false);
 
-        for(int i1 =0 ; i1 < mStimulusData.length ; i1++)
+        // Note: this is used in the GlyphRecognizer project to initialize the sample
+        //
+        for(int i1 = 0 ; i1 < mStimulusData.length ; i1++)
         {
             // create a new view
-            v = LayoutInflater.from(getContext())
-                    .inflate(R.layout.drawn_input_comp, null, false);
+            v = (CDrawnInputController)LayoutInflater.from(getContext())
+                                        .inflate(R.layout.drawn_input_comp, null, false);
 
-            // Control whether glyphs are clipped at the draw view boundry
-            //
-            ((ViewGroup)v).setClipChildren(false);
+            v.setIsLast(i1 ==  mStimulusData.length-1);
 
             mDrawnList.addView(v);
             ((CDrawnInputController)v).setRecognizer(_recognizer);
@@ -145,15 +152,17 @@ public class CWritingController extends PercentRelativeLayout implements IWritin
             ((CDrawnInputController)v).setWritingController(this);
         }
 
-        // Load the prototype glyphs
+        // Obtain the prototype glyphs from the singleton
         //
-        mGlyphSet = _recognizer.getGlyphPrototypes(); //new GlyphSet(TCONST.ALPHABET);
+        _recognizer = CRecognizerPlus.getInstance();
+
+        _glyphSet = _recognizer.getGlyphPrototypes(); //new GlyphSet(TCONST.ALPHABET);
 
         for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
 
             CDrawnInputController comp = (CDrawnInputController) mDrawnList.getChildAt(i1);
 
-            comp.setProtoGlyph(GCONST.ALPHABET.substring(i1,i1+1), mGlyphSet.cloneGlyph(GCONST.ALPHABET.substring(i1,i1+1)));
+            comp.setProtoGlyph(GCONST.ALPHABET.substring(i1,i1+1), _glyphSet.cloneGlyph(GCONST.ALPHABET.substring(i1,i1+1)));
         }
 
         mRecogList.setOnTouchListener(new RecogTouchListener());
@@ -163,10 +172,14 @@ public class CWritingController extends PercentRelativeLayout implements IWritin
         mDrawnScroll.setLinkedScroll(mRecognizedScroll);
     }
 
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b);
+    public void onDestroy() {
+
     }
+
+
+    //************************************************************************
+    //************************************************************************
+    // IWritingController Start
 
 
     /**
@@ -189,24 +202,35 @@ public class CWritingController extends PercentRelativeLayout implements IWritin
      */
     public void addItemAt(View child, int inc) {
 
+        CDrawnInputController v;
+        CResponseContainer    r;
+
         int index = mDrawnList.indexOfChild(child);
 
         // create a new view
-        View rv = LayoutInflater.from(getContext())
-                .inflate(R.layout.recog_resp_comp, null, false);
+        r = (CResponseContainer)LayoutInflater.from(getContext())
+                                    .inflate(R.layout.recog_resp_comp, null, false);
+
+        mRecogList.addView(r, index + inc);
+
 
         // create a new view
-        View dv = LayoutInflater.from(getContext())
-                .inflate(R.layout.drawn_input_comp, null, false);
+        v = (CDrawnInputController)LayoutInflater.from(getContext())
+                                    .inflate(R.layout.drawn_input_comp, null, false);
 
-        ((CDrawnInputController)dv).setClipChildren(false);
+        // Update the last child flag
+        //
+        if(index == mDrawnList.getChildCount()-1) {
+            ((CDrawnInputController)child).setIsLast(false);
+            v.setIsLast(true);
+        }
 
-        mDrawnList.addView(dv, index + inc);
+        mDrawnList.addView(v, index + inc);
 
-        ((CDrawnInputController)dv).setLinkedScroll(mDrawnScroll);
-        ((CDrawnInputController)dv).setWritingController(this);
+        ((CDrawnInputController)v).setRecognizer(_recognizer);
+        ((CDrawnInputController)v).setLinkedScroll(mDrawnScroll);
+        ((CDrawnInputController)v).setWritingController(this);
 
-        mRecogList.addView(rv, index + inc);
     }
 
 
@@ -218,6 +242,89 @@ public class CWritingController extends PercentRelativeLayout implements IWritin
 
         respText.setResponseChar(glyph);
     }
+
+
+    // Debug component requirement
+    @Override
+    public void updateGlyphStats(CRecResult[] ltkPlusResult, CRecResult[] ltkresult, CGlyphMetrics metricsA, CGlyphMetrics metricsB) {
+    }
+
+
+    // IWritingController End
+    //************************************************************************
+    //************************************************************************
+
+
+
+    //***********************************************************
+    // Event Listener/Dispatcher - Start
+
+    /**
+     *
+     * @param event
+     */
+    @Override
+    public void onEvent(IEvent event) {
+
+        CDrawnInputController v;
+        CResponseContainer    r;
+
+        switch(event.getType()) {
+
+            // Message from Stimiulus variant to share state with response variant
+            case TCONST.FW_STIMULUS:
+
+                mStimulus = (String)event.getString(TCONST.FW_VALUE);
+
+
+                // Add the recognized response display containers
+                //
+                mRecogList = (LinearLayout) findViewById(R.id.Srecognized_glyphs);
+
+                for(int i1 =0 ; i1 < mStimulus.length() ; i1++)
+                {
+                    // create a new view
+                    r = (CResponseContainer)LayoutInflater.from(getContext())
+                                                .inflate(R.layout.recog_resp_comp, null, false);
+
+                    mRecogList.addView(r);
+                }
+
+
+                // Add the Glyph input containers
+                //
+                mDrawnList = (LinearLayout) findViewById(R.id.Sdrawn_glyphs);
+                mDrawnList.setClipChildren(false);
+
+                for(int i1 =0 ; i1 < mStimulus.length() ; i1++)
+                {
+                    // create a new view
+                    v = (CDrawnInputController)LayoutInflater.from(getContext())
+                                                .inflate(R.layout.drawn_input_comp, null, false);
+
+                    v.setIsLast(i1 ==  mStimulus.length()-1);
+
+                    mDrawnList.addView(v);
+                    ((CDrawnInputController)v).setRecognizer(_recognizer);
+                    ((CDrawnInputController)v).setLinkedScroll(mDrawnScroll);
+                    ((CDrawnInputController)v).setWritingController(this);
+                }
+
+                break;
+
+            // Message from the recognizer to update the response state
+            case TCONST.FW_RESPONSE:
+                break;
+
+            case TCONST.FW_EOI:
+                _dataEOI = true;        // tell the response that the data is exhausted
+                break;
+        }
+    }
+
+    // Event Listener/Dispatcher - End
+    //***********************************************************
+
 
 
     public class RecogTouchListener implements View.OnTouchListener {
@@ -429,9 +536,48 @@ public class CWritingController extends PercentRelativeLayout implements IWritin
     //************************************************************************
 
 
-    // Debug component requirement
+
+
+
+
     @Override
-    public void updateGlyphStats(CRecResult[] ltkPlusResult, CRecResult[] ltkresult, CGlyphMetrics metricsA, CGlyphMetrics metricsB) {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
+        // TODO: DBUG DEBUG DEBUG   START
+
+        int size = 1298;
+
+        final int specMode = MeasureSpec.getMode(widthMeasureSpec);
+        final int specSize = MeasureSpec.getSize(widthMeasureSpec);
+        final int result;
+        switch (specMode) {
+            case MeasureSpec.AT_MOST:
+                if (specSize < size) {
+                    result = specSize | MEASURED_STATE_TOO_SMALL;
+                } else {
+                    result = size;
+                }
+                break;
+            case MeasureSpec.EXACTLY:
+                result = specSize;
+                break;
+            case MeasureSpec.UNSPECIFIED:
+            default:
+                result = size;
+        }
+
+        // TODO: DBUG DEBUG DEBUG  END
+
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        Log.d(TAG, "width  : " + getMeasuredWidth());
+        Log.d(TAG, "height : " + getMeasuredHeight());
+
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
     }
 
 

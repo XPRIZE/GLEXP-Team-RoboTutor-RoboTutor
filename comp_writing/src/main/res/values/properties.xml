@@ -6,6 +6,7 @@
 
         <attr name="isResponse" format="boolean" />
         <attr name="aspectratio" format="float"/>
+        <attr name="strokeweight" format="float"/>
         <attr name="textcolor" format="color" />
         <attr name="linked_views" format="string"/>
         <attr name="type_face" format="string"/>
