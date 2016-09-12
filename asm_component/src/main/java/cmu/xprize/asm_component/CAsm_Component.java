@@ -163,6 +163,10 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
                 hasShown = true;
 
+                if (operation.equals("x") && allAlleys.get(ASM_CONST.OPERATION_MULTI - 1).getDotBag().getVisibility() == VISIBLE)
+                    // turn the dotbag of multiplier_2 to ghost dotbag
+                    allAlleys.get(ASM_CONST.OPERATION_MULTI - 1).getDotBag().setHollow(true);
+
                 int delayTime = 0;
                 for (int i = 0; i < allAlleys.size(); i++) {
                     final CAsm_Alley curAlley = allAlleys.get(i);

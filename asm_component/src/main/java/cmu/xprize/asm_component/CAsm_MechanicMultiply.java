@@ -124,6 +124,7 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
             downwardAddend1(secondText);
             clickedDot.setHollow(true);
             copyDotbag(secondBagIndexForMulti, resultOrAddInMultiPart1);
+
         } else {
             CAsm_Text text = allAlleys.get(addInMultiPart2).getTextLayout().getTextLayout(mComponent.numSlots-1).getText(1);
             if(!text.getText().equals("")) {
@@ -134,6 +135,7 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
             downwardAddend2(secondText, clickedDot);
             copyDotbag(secondBagIndexForMulti, addInMultiPart2);
 
+            //reset timer, show dotbags when user hesitates
             mComponent.hasShown = false;
             mComponent.startTime = System.currentTimeMillis();
             Handler h = new Handler();
