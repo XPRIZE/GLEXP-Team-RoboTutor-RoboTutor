@@ -288,29 +288,36 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
 
     public void correctOverheadText() {
         // whenever they put in the right overhead text
-        if (!(mComponent.overheadVal == mComponent.corValue &&
-                allAlleys.get(resultIndexForMultiBackup).getDotBag().getDrawBorder())) {
-            upwardAdditionResult();
+        upwardAdditionResult(mComponent.overheadVal == mComponent.corValue);
 
-            if (mComponent.hasShown)
-                upwardAdditionResultDotbag();
-            else
-                updateFirstBagInAdd();
-        }
+        if (mComponent.hasShown)
+            upwardAdditionResultDotbag();
+        else
+            updateFirstBagInAdd();
+
     }
 
-    private void upwardAdditionResult() {
+    private void upwardAdditionResult(final boolean isFinalResult) {
+        if(isFinalResult) {
+            mComponent.downwardResult = false;
+            allAlleys.get(addInMultiPart3).getTextLayout().setBackground(null);
+            allAlleys.get(resultIndexForMultiBackup).getTextLayout().getTextLayout(mComponent.numSlots-1).getText(1).cancelResult();
+            allAlleys.get(resultIndexForMultiBackup).getTextLayout().getTextLayout(mComponent.numSlots-1).getText(1).setText("");
+            allAlleys.get(resultIndexForMultiBackup).getTextLayout().getTextLayout(mComponent.numSlots-2).getText(1).cancelResult();
+            allAlleys.get(resultIndexForMultiBackup).getTextLayout().getTextLayout(mComponent.numSlots-2).getText(1).setText("");
+        }
+
         mComponent.overheadText.cancelResult();
         mComponent.overheadTextSupplement.cancelResult();
 
-        if(mComponent.overheadVal == mComponent.corValue) {
+        if(isFinalResult) {
             mComponent.overheadText.setBackground(null);
             mComponent.overheadTextSupplement.setBackground(null);
-            return;
         }
-        CAsm_TextLayout firstTextLayout = allAlleys.get(resultOrAddInMultiPart1).getTextLayout().getTextLayout(mComponent.numSlots-1);
-        CAsm_Text firstText1 = firstTextLayout.getText(0);
-        CAsm_Text firstText2 = firstTextLayout.getText(1);
+
+        CAsm_TextLayout firstTextLayout = allAlleys.get(resultOrAddInMultiPart1).getTextLayout();
+        CAsm_Text firstText1 = isFinalResult? firstTextLayout.getTextLayout(mComponent.numSlots-2).getText(1) : firstTextLayout.getTextLayout(mComponent.numSlots-1).getText(0);
+        CAsm_Text firstText2 = firstTextLayout.getTextLayout(mComponent.numSlots-1).getText(1);
         CAsm_TextLayout secondTextLayout = allAlleys.get(addInMultiPart2).getTextLayout().getTextLayout(mComponent.numSlots-1);
         CAsm_Text secondText1 = secondTextLayout.getText(0);
         CAsm_Text secondText2 = secondTextLayout.getText(1);
@@ -334,6 +341,26 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         ObjectAnimator anim = ObjectAnimator.ofFloat(firstTextLayout, "translationY", 0);
         anim.setDuration(1000);
         setAllParentsClip(firstTextLayout, false);
+
+        anim.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (isFinalResult)
+                    mComponent.onEvent(null);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
         anim.start();
 
     }
@@ -376,10 +403,7 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (mComponent.overheadVal != mComponent.corValue)
-                    _upwardAdditionResultDotbag();
-                else
-                    downwardAdditionResultDotbag();
+                _upwardAdditionResultDotbag();
             }
 
             @Override
@@ -397,12 +421,7 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
     private void updateFirstBagInAdd() {
 
         mComponent.hasShown = true;
-        CAsm_DotBag bagToChange;
-
-        if (mComponent.overheadVal == mComponent.corValue)
-            bagToChange = allAlleys.get(resultIndexForMultiBackup).getDotBag();
-        else
-            bagToChange = allAlleys.get(resultOrAddInMultiPart1).getDotBag();
+        CAsm_DotBag bagToChange = allAlleys.get(resultOrAddInMultiPart1).getDotBag();
 
         bagToChange.setDrawBorder(true);
         bagToChange.setZero();
@@ -428,8 +447,8 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         CAsm_DotBag resultBagInAdd = allAlleys.get(addInMultiPart3).getDotBag();
 
         firstBagInAdd.setCols(0);
-        firstBagInAdd.setRows(resultBagInAdd.getRows());
-        firstBagInAdd.setCols(resultBagInAdd.getCols());
+        firstBagInAdd.copyFrom(resultBagInAdd);
+        firstBagInAdd.setClickable(false);
 
         int dy = allAlleys.get(resultOrAddInMultiPart1).getHeight() * 2 + mComponent.alleyMargin;;
 
@@ -437,6 +456,27 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         ObjectAnimator anim = ObjectAnimator.ofFloat(firstBagInAdd, "translationY", 0);
         anim.setDuration(1000);
         setAllParentsClip(firstBagInAdd, false);
+
+        anim.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (mComponent.overheadVal == mComponent.corValue)
+                    mComponent.onEvent(null);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
+
         anim.start();
 
         secondBagInAdd.setZero();
