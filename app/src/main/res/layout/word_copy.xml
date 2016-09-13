@@ -80,7 +80,7 @@
         android:layout_width="wrap_content"
         android:scrollbars="none"
         android:layout_centerHorizontal="true"
-        android:background="#44FF0000">
+        android:background="@null">
 
         <LinearLayout
             android:id="@+id/Sdrawn_glyphs"

@@ -19,7 +19,7 @@
         android:background="@null"/>
 
     <!-- NOTE: aspect here is just a reminder that this object has it aspect set programmatically-->
-    <cmu.xprize.comp_writing.CFrameLayout
+    <FrameLayout
         android:id="@+id/drawn_container"
         app:layout_heightPercent="63%"
         app:layout_aspectRatio = "100%"
@@ -37,7 +37,7 @@
             android:id="@+id/replay_box"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-    </cmu.xprize.comp_writing.CFrameLayout>
+    </FrameLayout>
 
     <ImageButton
         android:id="@+id/delete_space"
