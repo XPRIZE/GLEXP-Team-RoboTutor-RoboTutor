@@ -76,6 +76,61 @@ public class CAnimatorUtil {
     }
 
 
+    static public AnimatorSet fadeInOut(View _tarView, long duration) {
+
+        float[] wayPoints = new float[3];
+
+        Animator    fadeAnimator;
+        AnimatorSet animation = new AnimatorSet();
+
+        wayPoints[0] = 0;
+        wayPoints[1] = .30f;
+        wayPoints[2] = 0;
+
+        fadeAnimator = createFloatAnimator(_tarView, "alpha", duration, 0, ValueAnimator.RESTART, new LinearInterpolator(), 0, wayPoints);
+
+        animation.play(fadeAnimator);
+
+        return animation;
+    }
+
+
+    static public AnimatorSet configFadeIn(View _tarView, long duration) {
+
+        float[] wayPoints = new float[2];
+
+        Animator    fadeAnimator;
+        AnimatorSet animation = new AnimatorSet();
+
+        wayPoints[0] = 0;
+        wayPoints[1] = 1;
+
+        fadeAnimator = createFloatAnimator(_tarView, "alpha", duration, 0, ValueAnimator.RESTART, new LinearInterpolator(), 0, wayPoints);
+
+        animation.play(fadeAnimator);
+
+        return animation;
+    }
+
+
+    static public AnimatorSet configFadeOut(View _tarView, long duration) {
+
+        float[] wayPoints = new float[2];
+
+        Animator    fadeAnimator;
+        AnimatorSet animation = new AnimatorSet();
+
+        wayPoints[0] = 1;
+        wayPoints[1] = 0;
+
+        fadeAnimator = createFloatAnimator(_tarView, "alpha", duration, 0, ValueAnimator.RESTART, new LinearInterpolator(), 0, wayPoints);
+
+        animation.play(fadeAnimator);
+
+        return animation;
+    }
+
+
     static public void wiggle(View _tarView, String direction, float magnitude, long duration, int repetition ) {
 
         AnimatorSet animation = configWiggle( _tarView,  direction,  duration,  repetition, magnitude );
@@ -203,6 +258,18 @@ public class CAnimatorUtil {
         return animation;
     }
 
+
+
+
+    /**
+     * comp_writing specific - uses virtual properties
+     *
+     * @param _tarView
+     * @param duration
+     * @param delay
+     * @param absPos
+     * @return
+     */
     static public AnimatorSet configTranslator(View _tarView, long duration, long delay, PointF... absPos) {
 
         ArrayList<Animator> moveAnimators = new ArrayList<Animator>();

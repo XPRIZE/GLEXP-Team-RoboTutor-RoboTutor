@@ -309,6 +309,7 @@ public class CStimRespBase extends TextView  implements View.OnClickListener, IE
         }
     }
 
+
     public boolean allCorrect(int numCorrect) {
         return (numCorrect == _data.size());
     }

@@ -44,10 +44,11 @@ import cmu.xprize.robotutor.tutorengine.ITutorManager;
 import cmu.xprize.robotutor.tutorengine.widgets.core.IGuidView;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CPreferenceCache;
-import cmu.xprize.util.CStartView;
+import cmu.xprize.robotutor.startup.CStartView;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.IReadyListener;
 import cmu.xprize.util.IRoboTutor;
+import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutorAssetManager;
 import cmu.xprize.util.TTSsynthesizer;
@@ -85,6 +86,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     static public float         designDensity   = 2.0f;
     static public float         instanceDensity;
     static public float         densityRescale;
+
+    final static public  String CacheSource = TCONST.ASSETS;                // assets or extern
 
     private boolean             isReady       = false;
     private boolean             engineStarted = false;
@@ -131,6 +134,11 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         setFullScreen();
 
         APP_PRIVATE_FILES = getApplicationContext().getExternalFilesDir("").getPath();
+
+        // Initialize the JSON Helper statics - just throw away the object.
+        //
+        new JSON_Helper(getAssets(), CacheSource, RoboTutor.APP_PRIVATE_FILES);
+
 
         // Initialize the media manager singleton - it needs access to the App assets.
         //
@@ -197,17 +205,31 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
             try {
                 // TODO: Don't do this in production
                 // At the moment we always reinstall the tutor spec data - for development
-                if(CTutorEngine.CacheSource.equals(TCONST.EXTERN)) {
+                if(CacheSource.equals(TCONST.EXTERN)) {
                     tutorAssetManager.installAssets(TCONST.TUTORROOT);
                     logManager.postEvent(TAG, "INFO: Tutor Assets installed:");
                 }
 
-                if(!tutorAssetManager.fileCheck(TCONST.INSTALL_FLAG)) {
-                    tutorAssetManager.installAssets(TCONST.LTK_ASSETS);
-                    logManager.postEvent(TAG, "INFO: LTK Assets copied:");
+                if(!tutorAssetManager.fileCheck(TCONST.LTK_PROJECT_ASSETS)) {
+                    tutorAssetManager.installAssets(TCONST.LTK_PROJEXCTS);
+                    logManager.postEvent(TAG, "INFO: LTK Projects installed:");
 
-                    tutorAssetManager.extractAsset(TCONST.LTK_DATA_FILE, TCONST.LTK_DATA_FOLDER);
-                    logManager.postEvent(TAG, "INFO: LTK Assets installed:");
+                    // Note the Projects Zip file is anticipated to contain a folder called "projects"
+                    // containing the ltk data - this is unpacked to RoboTutor.APP_PRIVATE_FILES + TCONST.LTK_DATA_FOLDER
+                    //
+                    tutorAssetManager.extractAsset(TCONST.LTK_PROJEXCTS, TCONST.LTK_DATA_FOLDER);
+                    logManager.postEvent(TAG, "INFO: LTK Projects extracted:");
+                }
+
+                if(!tutorAssetManager.fileCheck(TCONST.LTK_GLYPH_ASSETS)) {
+                    tutorAssetManager.installAssets(TCONST.LTK_GLYPHS);
+                    logManager.postEvent(TAG, "INFO: LTK Glyphs installed:");
+
+                    // Note the Glyphs Zip file is anticipated to contain a folder called "glyphs"
+                    // containing the ltk glyph data - this is unpacked to RoboTutor.APP_PRIVATE_FILES + TCONST.LTK_DATA_FOLDER
+                    //
+                    tutorAssetManager.extractAsset(TCONST.LTK_GLYPHS, TCONST.LTK_DATA_FOLDER);
+                    logManager.postEvent(TAG, "INFO: LTK Glyphs extracted:");
                 }
 
                 // Create the one system level LTKPLUS recognizer
@@ -289,6 +311,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 // TODO: This is a temporary log update mechanism - see below
                 //
                 masterContainer.addAndShow(startView);
+                startView.startTapTutor();
                 setFullScreen();
             }
             // Note that it is possible for the masterContainer to be recreated without the
@@ -318,6 +341,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         tutorEngine.startSessionManager();
 
+        startView.flushQueue();
         masterContainer.removeView(startView);
         setFullScreen();
 

@@ -193,7 +193,13 @@ public class CLinkedScrollView extends HorizontalScrollView implements View.OnTo
         //       upon an incorrect height for this child.
         //
         ViewGroup.LayoutParams params = getLayoutParams();
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(params.height, MeasureSpec.AT_MOST);
+
+        if(params.height > 0)
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(params.height, MeasureSpec.AT_MOST);
+
+        if(params.width > 0)
+            widthMeasureSpec = MeasureSpec.makeMeasureSpec(params.width, MeasureSpec.AT_MOST);
+
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }

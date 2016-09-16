@@ -68,7 +68,7 @@ public class CWritingController extends PercentRelativeLayout implements IEventL
     private LinearLayout      mRecogList;
     protected LinearLayout    mDrawnList;
 
-    private int               mMaxLength = 1; //GCONST.ALPHABET.length();                // Maximum string length
+    private int               mMaxLength = 0; //GCONST.ALPHABET.length();                // Maximum string length
 
     protected final Handler   mainHandler = new Handler(Looper.getMainLooper());
     protected HashMap         queueMap    = new HashMap();
@@ -111,6 +111,9 @@ public class CWritingController extends PercentRelativeLayout implements IEventL
         CDrawnInputController v;
         CResponseContainer    r;
 
+        // Note: this is used in the GlyphRecognizer project to initialize the sample
+        //       In normal operation mMaxLength is zero here.
+        //
         mStimulusData = new char[mMaxLength];
 
         // Setup the Recycler for the recognized input views
@@ -147,17 +150,17 @@ public class CWritingController extends PercentRelativeLayout implements IEventL
             v.setIsLast(i1 ==  mStimulusData.length-1);
 
             mDrawnList.addView(v);
-            ((CDrawnInputController)v).setRecognizer(_recognizer);
             ((CDrawnInputController)v).setLinkedScroll(mDrawnScroll);
             ((CDrawnInputController)v).setWritingController(this);
         }
 
-        // Obtain the prototype glyphs from the singleton
+        // Obtain the prototype glyphs from the singleton recognizer
         //
         _recognizer = CRecognizerPlus.getInstance();
+        _glyphSet   = _recognizer.getGlyphPrototypes(); //new GlyphSet(TCONST.ALPHABET);
 
-        _glyphSet = _recognizer.getGlyphPrototypes(); //new GlyphSet(TCONST.ALPHABET);
-
+        // Note: this is used in the GlyphRecognizer project to initialize the sample
+        //
         for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
 
             CDrawnInputController comp = (CDrawnInputController) mDrawnList.getChildAt(i1);
@@ -227,7 +230,6 @@ public class CWritingController extends PercentRelativeLayout implements IEventL
 
         mDrawnList.addView(v, index + inc);
 
-        ((CDrawnInputController)v).setRecognizer(_recognizer);
         ((CDrawnInputController)v).setLinkedScroll(mDrawnScroll);
         ((CDrawnInputController)v).setWritingController(this);
 
@@ -305,7 +307,6 @@ public class CWritingController extends PercentRelativeLayout implements IEventL
                     v.setIsLast(i1 ==  mStimulus.length()-1);
 
                     mDrawnList.addView(v);
-                    ((CDrawnInputController)v).setRecognizer(_recognizer);
                     ((CDrawnInputController)v).setLinkedScroll(mDrawnScroll);
                     ((CDrawnInputController)v).setWritingController(this);
                 }
@@ -534,51 +535,6 @@ public class CWritingController extends PercentRelativeLayout implements IEventL
     // Component Message Queue  -- End
     //************************************************************************
     //************************************************************************
-
-
-
-
-
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
-        // TODO: DBUG DEBUG DEBUG   START
-
-        int size = 1298;
-
-        final int specMode = MeasureSpec.getMode(widthMeasureSpec);
-        final int specSize = MeasureSpec.getSize(widthMeasureSpec);
-        final int result;
-        switch (specMode) {
-            case MeasureSpec.AT_MOST:
-                if (specSize < size) {
-                    result = specSize | MEASURED_STATE_TOO_SMALL;
-                } else {
-                    result = size;
-                }
-                break;
-            case MeasureSpec.EXACTLY:
-                result = specSize;
-                break;
-            case MeasureSpec.UNSPECIFIED:
-            default:
-                result = size;
-        }
-
-        // TODO: DBUG DEBUG DEBUG  END
-
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        Log.d(TAG, "width  : " + getMeasuredWidth());
-        Log.d(TAG, "height : " + getMeasuredHeight());
-
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b);
-    }
 
 
 }

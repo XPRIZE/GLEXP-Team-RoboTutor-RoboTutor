@@ -264,11 +264,6 @@ public class CDrawnInputController extends PercentRelativeLayout implements View
     }
 
 
-    public void setRecognizer(IGlyphSink recognizer) {
-        mDrawnInput.setRecognizer(recognizer);
-    }
-
-
     public void setLinkedScroll(CLinkedScrollView linkedScroll) {
 
         mScrollView = linkedScroll;
@@ -318,21 +313,5 @@ public class CDrawnInputController extends PercentRelativeLayout implements View
         }
         return true;
     }
-
-    private final PercentLayoutHelper mHelper = new PercentLayoutHelper(this);
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        Log.d(TAG, "width  : " + getMeasuredWidth());
-        Log.d(TAG, "height : " + getMeasuredHeight());
-
-        if (mHelper.handleMeasuredStateTooSmall()) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        }
-    }
-
 
 }

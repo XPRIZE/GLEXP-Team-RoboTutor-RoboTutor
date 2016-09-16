@@ -69,20 +69,24 @@ public class TCONST {
     public static final String LAST_ATTEMPT     = "FTR_LASTATTEMPT";
 
 
-    public static final String FONT_FOLDER      = "fonts/";
-    public static final String SHOWICONS        = "SHOWICONS";
-    public static final String SHOWNUM          = "SHOWNUM";
-    public static final String VIEW_SCALED      = "VIEW_SCALED";
-    public static final String VIEW_NORMAL      = "VIEW_NORMAL";
-    public static final String VIEW_ANIMATE     = "VIEW_ANIMATE";
-    public static final String STROKE_ORIGINAL  = "STROKE_ORIGINAL";
-    public static final String STROKE_OVERLAY   = "STROKE_OVERLAY";
-    public static final int    GLYPHCOLOR1      = 0xAA000000;
-    public static final int    FONTCOLOR1       = 0xFF0000FF;
-    public static final int    ERRORCOLOR1      = 0xFFFF0000;
+    public static final String  FONT_FOLDER     = "fonts/";
+    public static final String  SHOWICONS       = "SHOWICONS";
+    public static final String  SHOWNUM         = "SHOWNUM";
+    public static final String  VIEW_SCALED     = "VIEW_SCALED";
+    public static final String  VIEW_NORMAL     = "VIEW_NORMAL";
+    public static final String  VIEW_ANIMATE    = "VIEW_ANIMATE";
+    public static final String  STROKE_ORIGINAL = "STROKE_ORIGINAL";
+    public static final String  STROKE_OVERLAY  = "STROKE_OVERLAY";
+    public static final int     GLYPHCOLOR1     = 0xAA000000;
+    public static final int     FONTCOLOR1      = 0xFF0000FF;
+    public static final int     ERRORCOLOR1     = 0xFFFF0000;
     public static final boolean VOLATILE        = true;
     public static final int     DOT_SIZE        = 40;
-    public static final String CONTAINER_SCALED = "CONTAINER_SCALED";
+    public static final String  CONTAINER_SCALED= "CONTAINER_SCALED";
+
+    public static final String GRUNDSCHRIFT        = "Grundschrift";
+    public static final String GRUNDSCHRIFT_Punkt  = "Grundschrift-Punkt";
+    public static final String GRUNDSCHRIFT_Kontur = "Grundschrift-Kontur";
 
     static public HashMap<String, String> fontMap = new HashMap<String, String>();
 
@@ -123,30 +127,30 @@ public class TCONST {
 
     // JSON parameter constants
 
+
     // Loader Constants
+    static final public String TUTORROOT          = "tutors";
 
-    static final public String TUTORROOT       = "tutors";
+    static final public String ALL_ASSETS         = "";
 
-    static final public String ALL_ASSETS      = "";
-    static final public String INSTALL_FLAG    = "projects";          // if projects folder exists - assume installed
+    static final public String LTK_PROJECT_ASSETS = "projects";
+    static final public String LTK_GLYPH_ASSETS   = "glyphs";
 
-    static final public String LTK_ASSETS      = "projects.zip";
-    static final public String LTK_DATA_FILE   = "projects.zip";
-    static final public String LTK_DATA_FOLDER = "/";                 // should terminate in path sep '/'
+    static final public String LTK_PROJEXCTS      = "projects.zip";
+    static final public String LTK_GLYPHS         = "glyphs.zip";
+    static final public String LTK_DATA_FOLDER    = "/";                // should terminate in path sep '/'
 
-    static final public String EDESC           = "engine_descriptor.json";
-    static final public String TDESC           = "tutor_descriptor.json";
-    static final public String SGDESC          = "scene_graph.json";
-    static final public String SNDESC          = "navigator_descriptor.json";
-    static final public String AGDESC          = "animator_graph.json";
-    static final public String TDATA           = "trackdata/LIBRARY";
-    static final public String AUDIOPATH       = "audio";
-    static final public String TASSETS         = "assets";
-    static final public String DEFAULT         = "default";
+    static final public String EDESC              = "engine_descriptor.json";
+    static final public String TDESC              = "tutor_descriptor.json";
+    static final public String SGDESC             = "scene_graph.json";
+    static final public String SNDESC             = "navigator_descriptor.json";
+    static final public String AGDESC             = "animator_graph.json";
+    static final public String TDATA              = "trackdata/LIBRARY";
+    static final public String AUDIOPATH          = "audio";
+    static final public String TASSETS            = "assets";
+    static final public String DEFAULT            = "default";
 
     // CTutorNavigator Constants
-
-
     public static final String ENDTUTOR        = "END_TUTOR";           // Terminate a tutor from within
     public static final String KILLTUTOR       = "KILL_TUTOR";          // Kill a tutor exteranlly
     public static final String CONTINUETUTOR   = "CONTINUE_TUTOR";
@@ -328,8 +332,8 @@ public class TCONST {
     public static final String FW_RESPONSE = "FW_RESPONSE";
 
     public static final String WRITINGTUTOR_FOLDER = "/WritingTutor/";
-    public static final String ROBOTUTOR_FOLDER     = "/RoboTutor/";
-    public static final String GLYPHS_FOLDER = "/glyphs/";
+    public static final String ROBOTUTOR_FOLDER    = "/RoboTutor/";
+    public static final String GLYPHS_FOLDER       = "/glyphs/";
 
 
     // Listener Control message types

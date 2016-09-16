@@ -1,4 +1,4 @@
-package cmu.xprize.util;
+package cmu.xprize.robotutor.startup;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -8,14 +8,15 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 
-import cmu.xprize.common.R;
+import cmu.xprize.robotutor.R;
+import cmu.xprize.util.IRoboTutor;
 
 
 public class StartDialog {
 
     private final Dialog dialog;
     private ImageButton  start;
-    private IRoboTutor   callback;
+    private IRoboTutor callback;
 
     public StartDialog(Context context) {
 

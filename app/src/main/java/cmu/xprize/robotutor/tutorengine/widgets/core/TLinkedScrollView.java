@@ -206,47 +206,4 @@ public class TLinkedScrollView  extends CLinkedScrollView implements ITutorObjec
         mSceneObject.setAlpha(alpha);
     }
 
-
-
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
-        // TODO: DBUG DEBUG DEBUG   START
-
-        int size = 1298;
-
-        final int specMode = MeasureSpec.getMode(widthMeasureSpec);
-        final int specSize = MeasureSpec.getSize(widthMeasureSpec);
-        final int result;
-        switch (specMode) {
-            case MeasureSpec.AT_MOST:
-                if (specSize < size) {
-                    result = specSize | MEASURED_STATE_TOO_SMALL;
-                } else {
-                    result = size;
-                }
-                break;
-            case MeasureSpec.EXACTLY:
-                result = specSize;
-                break;
-            case MeasureSpec.UNSPECIFIED:
-            default:
-                result = size;
-        }
-
-        // TODO: DBUG DEBUG DEBUG  END
-
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        Log.d(TAG, "width  : " + getMeasuredWidth());
-        Log.d(TAG, "height : " + getMeasuredHeight());
-
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b);
-    }
-
 }

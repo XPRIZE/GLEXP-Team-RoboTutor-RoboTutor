@@ -13,7 +13,6 @@
         android:text="This is the Banner Area."/>
 
 
-
     <!--Background color only -->
     <cmu.xprize.robotutor.tutorengine.widgets.core.TView
         android:id="@+id/SstimulusBG"
@@ -24,18 +23,17 @@
 
     <cmu.xprize.robotutor.tutorengine.widgets.core.TView
         android:id="@+id/SresponseBG"
-        android:layout_below="@id/Sstimulus"
+        android:layout_below="@id/SstimulusBG"
         app:layout_heightPercent="18%"
         android:layout_width="match_parent"
         android:background="#FFFFFF"/>
 
     <cmu.xprize.robotutor.tutorengine.widgets.core.TView
         android:id="@+id/SinputBG"
-        android:layout_below="@id/Sresponse"
+        android:layout_below="@id/SresponseBG"
         app:layout_heightPercent="60%"
         android:layout_width="match_parent"
         android:background="@color/fingerWriterBackground"/>
-
 
 
     <cmu.xprize.robotutor.tutorengine.widgets.core.TStimRespBase
@@ -52,7 +50,7 @@
 
     <cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView
         android:id="@+id/Sresponse"
-        android:layout_below="@id/Sstimulus"
+        android:layout_below="@id/SstimulusBG"
         app:layout_heightPercent="18%"
         android:layout_width="wrap_content"
         android:scrollbars="none"
@@ -67,7 +65,7 @@
             android:paddingRight="30dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:background="@null">
+            android:background="#88444444">
         </LinearLayout>
 
     </cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView>
@@ -75,7 +73,7 @@
 
     <cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView
         android:id="@+id/SfingerWriter"
-        android:layout_below="@id/Sresponse"
+        android:layout_below="@id/SresponseBG"
         app:layout_heightPercent="60%"
         android:layout_width="wrap_content"
         android:scrollbars="none"

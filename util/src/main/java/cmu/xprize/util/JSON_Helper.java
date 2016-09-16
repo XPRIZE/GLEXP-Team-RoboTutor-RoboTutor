@@ -66,7 +66,18 @@ public class JSON_Helper {
         return _assetManager;
     }
 
+
     static public String cacheData(String fileName) {
+        return cacheData(fileName, _cacheSource);
+    }
+
+
+    static public String cacheDataByName(String fileName) {
+        return cacheData(fileName, TCONST.DEFINED);
+    }
+
+
+    static public String cacheData(String fileName, String localcacheSource) {
 
         InputStream in = null;
 
@@ -85,7 +96,7 @@ public class JSON_Helper {
                 // We can load from Android Assets or from an external file based on the
                 // CacheSource setting
                 //
-                switch(_cacheSource) {
+                switch(localcacheSource) {
                     case TCONST.ASSETS:
 
                         in = _assetManager.open(fileName);

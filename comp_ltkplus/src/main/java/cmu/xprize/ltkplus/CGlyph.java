@@ -810,7 +810,7 @@ public class CGlyph implements ILoadableObject, Cloneable {
                 if (inputFile.exists()) {
 
                     try {
-                        loadJSON(new JSONObject(JSON_Helper.cacheData(inPath)), scope);
+                        loadJSON(new JSONObject(JSON_Helper.cacheDataByName(inPath)), scope);
                         result = true;
 
                     } catch (JSONException e) {

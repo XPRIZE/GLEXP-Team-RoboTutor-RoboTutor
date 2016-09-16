@@ -17,60 +17,62 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.util;
+package cmu.xprize.comp_pointtap;
+
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 
-import cmu.xprize.common.R;
+public class CRipple extends View {
+
+    private Paint   _paint = new Paint();
+    private float   _radius;
+
+    private float   _originX = 0;
+    private float   _originY = 0;
 
 
-public class CStartView extends FrameLayout {
-
-    private ImageButton  start;
-    private IRoboTutor   callback;
-
-    public CStartView(Context context) {
+    public CRipple(Context context) {
         super(context);
-        init(context, null);
     }
 
-    public CStartView(Context context, AttributeSet attrs) {
+    public CRipple(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context, attrs);
     }
 
-    public CStartView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CRipple(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context, attrs);
     }
 
+    
+    public void initRipple(int color, float strokeWeight, float radius) {
 
-    public void init(Context context, AttributeSet attrs) {
+        _paint.setColor(color);
+        _paint.setStyle(Paint.Style.STROKE);
+        _paint.setStrokeWidth(strokeWeight);
+        _paint.setAntiAlias(true);
+
+        _radius = radius;
+
+        setAlpha(0);
     }
 
+    public void setOrigin(float x, float y) {
 
-    public void setCallback(IRoboTutor _callback) {
+        _originX = x;
+        _originY = y;
+    }
 
-        callback = _callback;
+    @Override
+    protected void onDraw(Canvas canvas) {
 
-        start = (ImageButton)findViewById(R.id.SstartSelector);
+        super.onDraw(canvas);
 
-        // Allow hits anywhere on screen
-        //
-        setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                callback.onStartTutor();
-            }
-        });
-        start.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                callback.onStartTutor();
-            }
-        });
+        canvas.drawCircle(_originX, _originY, _radius, _paint);
     }
 }

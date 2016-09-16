@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RoboTutor">
+        <attr name="ripple_color" format="integer" />
+        <attr name="stroke_weight" format="float"/>
+        <attr name="radius_inc" format="float"/>
+        <attr name="scale_factor" format="float"/>
+
+    </declare-styleable>
+</resources>

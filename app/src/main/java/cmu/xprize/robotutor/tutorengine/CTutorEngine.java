@@ -81,7 +81,6 @@ public class CTutorEngine implements ILoadableObject2 {
     static public String                         language;                       // Accessed from a static context
 
 
-    final static public  String CacheSource = TCONST.ASSETS;                // assets or extern
     final static private String TAG         = "CTutorEngine";
 
 
@@ -101,11 +100,6 @@ public class CTutorEngine implements ILoadableObject2 {
 
         Activity        = context;
         TutorLogManager = CLogManager.getInstance();
-
-        // TODO: is this initialization required?
-        // Initialize the JSON Helper statics - just throw away the object.
-        //
-        new JSON_Helper(Activity.getAssets(), CacheSource, RoboTutor.APP_PRIVATE_FILES);
 
         // Load the TCONST.EDESC and generate the root tutor
         //

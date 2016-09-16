@@ -35,8 +35,8 @@
           "COMMENT": "Intro Clip",
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
-//          "preenter":["SET_VERSION","SET_DATASOURCE","FW_SET_REC","FW_DISABLE"],
-          "preenter":["SET_VERSION","FW_SET_REC","FW_DISABLE"],
+          "preenter":["SET_VERSION","SET_DATASOURCE","FW_SET_REC","FW_DISABLE"],
+//          "preenter":["SET_VERSION","FW_SET_REC","FW_DISABLE"],
           "preexit" :[],
           "edges": [
             {

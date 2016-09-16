@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:background="@null">
+
+    <FrameLayout
+        android:id="@+id/Sripples"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:background="@null">
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/Shand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/hand_image"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:clipChildren="false"
+        android:alpha="0"
+        android:background="@null"/>
+
+
+</FrameLayout>
+
+

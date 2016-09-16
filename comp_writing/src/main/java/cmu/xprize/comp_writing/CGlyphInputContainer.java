@@ -37,6 +37,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
+import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.ltkplus.CGlyph;
 import cmu.xprize.ltkplus.IGlyphSink;
@@ -209,15 +210,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
 
         // Font Face selection
-//        String fontPath = "fonts/Grundschrift-Punkt.otf";
-//        String fontPath = "fonts/Grundschrift-Kontur.otf";
-
-        String fontPath = "fonts/Grundschrift.ttf";
-
-        _fontFace = Typeface.createFromAsset(mContext.getAssets(), fontPath);
-
-        mPaint.setTypeface(_fontFace);
-
+        selectFont(TCONST.GRUNDSCHRIFT);
 
         // Create a paint object to define the baseline parameters
         mPaintBase = new Paint();
@@ -244,6 +237,8 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         this.setOnTouchListener(this);
 
         _counter = new RecogDelay(RECDELAY, RECDELAYNT);
+
+        _recognizer = CRecognizerPlus.getInstance();
 
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(getContext());
@@ -648,9 +643,9 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
             canvas.save();
             _clipRect.right += extension;
-            canvas.clipRect(_clipRect, Region.Op.UNION);
+            canvas.clipRect(_clipRect, Region.Op.REPLACE);
 
-            canvas.drawLine(0, _baseLine, getWidth() + extension, _baseLine, mPaintBase);
+            canvas.drawLine(0, _baseLine, _clipRect.width(), _baseLine, mPaintBase);
             canvas.restore();
         }
 
@@ -1038,11 +1033,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     }
 
 
-    public void setRecognizer(IGlyphSink recognizer) {
-        _recognizer = recognizer;
-    }
-
-
     public void setProtoGlyph(String protoChar, CGlyph protoGlyph) {
 
         _sampleExpected = protoChar;
@@ -1220,13 +1210,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         return fontCharBnds;
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        Log.d(TAG, "width  : " + getMeasuredWidth());
-        Log.d(TAG, "height : " + getMeasuredHeight());
-    }
 }
 
 
