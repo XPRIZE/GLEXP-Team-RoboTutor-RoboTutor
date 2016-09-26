@@ -2,6 +2,7 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.util.AttributeSet;
 import android.util.Log;
 
@@ -31,6 +32,8 @@ import cmu.xprize.util.IEvent;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
+
+import static java.lang.Thread.sleep;
 
 public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
 
@@ -66,14 +69,19 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
 
     public void evaluateWhole () {
 
-
         reset();
 
         boolean correct = isWholeCorrect();
 
-        if(correct)
+        if(correct) {
+            try {
+                if (operation.equals("x") && allAlleys.get(ASM_CONST.ADD_MULTI_PART3 - 1).getDotBag().getVisibility() == VISIBLE)
+                    sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
-        else
+        } else
             mTutor.setAddFeature(TCONST.GENERIC_WRONG);
     }
 

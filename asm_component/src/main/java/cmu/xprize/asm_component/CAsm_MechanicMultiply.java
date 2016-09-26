@@ -120,18 +120,20 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         if (clickedDot == null) {return;}
 
         if(!mComponent.downwardResult) {
+            //If it is the first time to click dot in dotbag of multiplier, downward the multiplier to addend1;
             dowanwardResult();
             downwardAddend1(secondText);
             clickedDot.setHollow(true);
             copyDotbag(secondBagIndexForMulti, resultOrAddInMultiPart1);
-
         } else {
+            //If it is not the first time to click dot in dotbag of multiplier, downward the multiplier to addend2;
             CAsm_Text text = allAlleys.get(addInMultiPart2).getTextLayout().getTextLayout(mComponent.numSlots-1).getText(1);
             if(!text.getText().equals("")) {
                 clickedDot.setIsClickable(true);
                 return;
             }
 
+            //Downward the multiplier to addend2, and copy corresponding dotbag.
             downwardAddend2(secondText, clickedDot);
             copyDotbag(secondBagIndexForMulti, addInMultiPart2);
 
@@ -183,6 +185,14 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         if(mComponent.overheadVal > 9)
             mComponent.overheadTextSupplement.setResult();
         mComponent.overheadText.setResult();
+
+        if (mComponent.overheadVal == mComponent.corValue) {
+            allAlleys.get(addInMultiPart3).getTextLayout().setBackground(null);
+            allAlleys.get(resultIndexForMultiBackup).getTextLayout().getTextLayout(mComponent.numSlots-1).getText(1).cancelResult();
+            allAlleys.get(resultIndexForMultiBackup).getTextLayout().getTextLayout(mComponent.numSlots-1).getText(1).setText("");
+            allAlleys.get(resultIndexForMultiBackup).getTextLayout().getTextLayout(mComponent.numSlots-2).getText(1).cancelResult();
+            allAlleys.get(resultIndexForMultiBackup).getTextLayout().getTextLayout(mComponent.numSlots-2).getText(1).setText("");
+        }
     }
 
     private void dowanwardTextAnimation(CAsm_Text text, int dy) {
@@ -201,11 +211,13 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         for (int i = 1; i < mComponent.numSlots; i++) {
             oriText = oriResult.getTextLayout(i).getText(1);
             newText = newResult.getTextLayout(i).getText(1);
+
             newText.setText(oriText.getText());
             newText.setBackground(oriText.getBackground());
             newText.setAlpha(oriText.getAlpha());
             newText.setWritable(oriText.isWritable);
             oriText.reset();
+            oriText.setText("");
         }
         newSecond.setBackground(newSecond.getResources().getDrawable(R.drawable.underline));
         mComponent.downwardResult = true;
@@ -292,27 +304,20 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         // whenever they put in the right overhead text
         upwardAdditionResult(mComponent.overheadVal == mComponent.corValue);
 
+        //if dotbags are showing, play animation to upward dotbag
         if (mComponent.hasShown)
             upwardAdditionResultDotbag();
         else
             updateFirstBagInAdd();
-
     }
 
     private void upwardAdditionResult(final boolean isFinalResult) {
-        if(isFinalResult) {
-            mComponent.downwardResult = false;
-            allAlleys.get(addInMultiPart3).getTextLayout().setBackground(null);
-            allAlleys.get(resultIndexForMultiBackup).getTextLayout().getTextLayout(mComponent.numSlots-1).getText(1).cancelResult();
-            allAlleys.get(resultIndexForMultiBackup).getTextLayout().getTextLayout(mComponent.numSlots-1).getText(1).setText("");
-            allAlleys.get(resultIndexForMultiBackup).getTextLayout().getTextLayout(mComponent.numSlots-2).getText(1).cancelResult();
-            allAlleys.get(resultIndexForMultiBackup).getTextLayout().getTextLayout(mComponent.numSlots-2).getText(1).setText("");
-        }
 
         mComponent.overheadText.cancelResult();
         mComponent.overheadTextSupplement.cancelResult();
 
         if(isFinalResult) {
+            mComponent.downwardResult = false;
             mComponent.overheadText.setBackground(null);
             mComponent.overheadTextSupplement.setBackground(null);
         }
@@ -468,6 +473,8 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
             public void onAnimationEnd(Animator animation) {
                 if (mComponent.overheadVal == mComponent.corValue)
                     mComponent.onEvent(null);
+                else
+                    allAlleys.get(resultOrAddInMultiPart1).getDotBag().setVisibility(View.INVISIBLE);
             }
 
             @Override

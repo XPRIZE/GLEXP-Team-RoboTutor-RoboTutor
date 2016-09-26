@@ -80,7 +80,6 @@ public class CAsm_Text extends TextView implements IEventListener {
 
         setPaintFlags(0);
 
-
     }
 
     public void setResult(){
