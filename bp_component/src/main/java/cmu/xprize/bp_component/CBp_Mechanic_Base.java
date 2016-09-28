@@ -26,8 +26,6 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -40,11 +38,8 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import cmu.xprize.util.CAnimatorUtil;
-import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.TCONST;
 
 public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener, View.OnClickListener {
@@ -52,12 +47,13 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
     protected Context                     mContext;
     protected CBP_Component               mComponent;
     protected CBP_LetterBoxLayout         mParent;
-    protected boolean                     mInitialized = false;
+    protected boolean                     mInitialized      = false;
 
-    protected boolean                     _isRunning   = false;
+    protected boolean                     _isRunning        = false;
+    protected boolean                     _enableTouchEvent = false;
 
-    private boolean                       _watchable    = true;
-    private int[]                         _screenCoord  = new int[2];
+    private boolean                       _watchable        = true;
+    private int[]                         _screenCoord      = new int[2];
     private long                          _time;
     private long                          _prevTime;
     protected boolean                     _enabled    = true;
@@ -302,6 +298,10 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
             case BP_CONST.SHOW_SCORE:
 
+                // We have to be sure that the feedback has been created even if they always
+                // were in error - where no "SHOW_FEEDBACK" would be given
+                showFeedback((Integer) target);
+
                 SfeedBack.setX((mParent.getWidth() - SfeedBack.getWidth()) / 2);
                 SfeedBack.setY((mParent.getHeight() - SfeedBack.getHeight()) / 2);
 
@@ -500,12 +500,23 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
 
     @Override
+    public void enableTouchEvents() {
+        _enableTouchEvent = true;
+    }
+
+
+    @Override
     public void onClick(View view) {
 
         CBubble bubble = (CBubble)view;
 
-        mComponent.publishState(bubble);
-        mComponent.applyEvent(BP_CONST.BUBBLE_TOUCH_EVENT);
+        if(_enableTouchEvent) {
+
+            _enableTouchEvent = false;
+
+            mComponent.publishState(bubble);
+            mComponent.applyEvent(BP_CONST.BUBBLE_TOUCH_EVENT);
+        }
     }
 
 

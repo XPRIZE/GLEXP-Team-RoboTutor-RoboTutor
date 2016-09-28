@@ -214,6 +214,51 @@ public class CAnimatorUtil {
         return animation;
     }
 
+    static public AnimatorSet configTranslator(View _tarView, long duration, long delay, PointF... absPos) {
+
+        ArrayList<Animator> moveAnimators = new ArrayList<Animator>();
+
+        float[]  wayPointsX  = new float[absPos.length];
+        float[]  wayPointsY  = new float[absPos.length];
+
+        for(int i1 = 0 ; i1 < absPos.length ; i1++) {
+            wayPointsX[i1] = absPos[i1].x;
+            wayPointsY[i1] = absPos[i1].y;
+        }
+
+        AnimatorSet animation = new AnimatorSet();
+
+        moveAnimators.add(createFloatAnimator(_tarView, "glyphX", duration, 0, 0, new LinearInterpolator(), delay, wayPointsX));
+        moveAnimators.add(createFloatAnimator(_tarView, "glyphY", duration, 0, 0, new LinearInterpolator(), delay, wayPointsY));
+
+        animation.playTogether(moveAnimators);
+
+        return animation;
+    }
+
+
+    static public AnimatorSet configScaler(View _tarView, long duration, long delay, PointF... absPos) {
+
+        ArrayList<Animator> moveAnimators = new ArrayList<Animator>();
+
+        float[]  wayPointsX  = new float[absPos.length];
+        float[]  wayPointsY  = new float[absPos.length];
+
+        for(int i1 = 0 ; i1 < absPos.length ; i1++) {
+            wayPointsX[i1] = absPos[i1].x;
+            wayPointsY[i1] = absPos[i1].y;
+        }
+
+        AnimatorSet animation = new AnimatorSet();
+
+        moveAnimators.add(createFloatAnimator(_tarView, "glyphScaleX", duration, 0, 0, new LinearInterpolator(), delay, wayPointsX));
+        moveAnimators.add(createFloatAnimator(_tarView, "glyphScaleY", duration, 0, 0, new LinearInterpolator(), delay, wayPointsY));
+
+        animation.playTogether(moveAnimators);
+
+        return animation;
+    }
+
 
 
 }

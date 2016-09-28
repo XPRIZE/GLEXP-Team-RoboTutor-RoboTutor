@@ -43,9 +43,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import cmu.xprize.ltk.AffineXform;
-import cmu.xprize.ltk.Stroke;
-import cmu.xprize.ltk.StrokeSet;
+import cmu.xprize.ltkplus.CAffineXform;
+import cmu.xprize.ltkplus.CStroke;
+import cmu.xprize.ltkplus.CGlyph;
+import cmu.xprize.ltkplus.CStrokeInfo;
 import cmu.xprize.util.TCONST;
 
 
@@ -57,11 +58,12 @@ public class ReplayComponent extends View implements Animator.AnimatorListener {
     private PointF          tPoint;
     private int             _index;
 
-    private AnimatorSet                    fullAnimation;
-    private ArrayList<Animator>            drawAnimation;
-    private Iterator<StrokeSet.StrokeInfo> StrokeIterator;
-    private Stroke                         _strokeToDraw;
-    private AffineXform                    _glyphXform;
+    private AnimatorSet             fullAnimation;
+    private ArrayList<Animator>     drawAnimation;
+    private Iterator<CStrokeInfo>   StrokeIterator;
+
+    private CStroke                 _strokeToDraw;
+    private CAffineXform            _glyphXform;
 
     private static final float TOLERANCE = 3;
 
@@ -157,7 +159,7 @@ public class ReplayComponent extends View implements Animator.AnimatorListener {
     }
 
 
-    private void animateGlyph(IReplayListener callback, StrokeSet glyphToDraw, AffineXform showXform) {
+    private void animateGlyph(IReplayListener callback, CGlyph glyphToDraw, CAffineXform showXform) {
 
         _callback = callback;
         clearReplay();
@@ -175,7 +177,7 @@ public class ReplayComponent extends View implements Animator.AnimatorListener {
 
         if(StrokeIterator.hasNext()) {
 
-            _strokeToDraw = StrokeIterator.next().stroke();
+            _strokeToDraw = StrokeIterator.next().getStroke();
 
             animateStroke();
             result = true;
@@ -248,11 +250,11 @@ public class ReplayComponent extends View implements Animator.AnimatorListener {
 
         ArrayList<Animator> outerColl = new ArrayList<Animator>();
 
-        Iterator<Stroke.StrokePoint> PathIterator = _strokeToDraw.iterator();
+        Iterator<CStroke.StrokePoint> PathIterator = _strokeToDraw.iterator();
 
         if(PathIterator.hasNext()) {
 
-            Stroke.StrokePoint nextPoint = PathIterator.next();
+            CStroke.StrokePoint nextPoint = PathIterator.next();
 
             _glyphXform.setOrigX((int) ((nextPoint.getX() * _glyphXform.getScaleX()) + _glyphXform.getOffsetX()));
             _glyphXform.setOrigY((int) ((nextPoint.getY() * _glyphXform.getScaleY()) + _glyphXform.getOffsetY()));
@@ -261,7 +263,7 @@ public class ReplayComponent extends View implements Animator.AnimatorListener {
             index = 1;
             delta = 0;
 
-            cPath = _strokeToDraw.startReplaySegments(_glyphXform);
+            cPath = _strokeToDraw.initReplayPath(_glyphXform);
 
             drawAnimation = new ArrayList<Animator>();
             drawAnimation.add(createDrawAnimation("alpha", 1, 10));
@@ -300,7 +302,7 @@ public class ReplayComponent extends View implements Animator.AnimatorListener {
             _index = index;
 
             if(_index != -1) {
-                cPath  = _strokeToDraw.addReplaySegments(_glyphXform, _index);
+                cPath  = _strokeToDraw.incrReplayPath(_glyphXform, _index);
                 tPoint = _strokeToDraw.getReplayPoint(_glyphXform, _index);
 
                 Log.i(TAG, "replay Index: " + index);
@@ -318,7 +320,7 @@ public class ReplayComponent extends View implements Animator.AnimatorListener {
     //  The replayRegion is relative to the upper left corner of the replayComponent.
     //  The baseline is also relative to the upper left corner of the replayComponent.
     //
-    public void replayGlyph(StrokeSet glyph, float baseLine, String type, IReplayListener callback) {
+    public void replayGlyph(CGlyph glyph, float baseLine, String type, IReplayListener callback) {
 
         ViewGroup parentObj = (ViewGroup) getParent();
         float vscaleX = 1.0f;
@@ -372,7 +374,7 @@ public class ReplayComponent extends View implements Animator.AnimatorListener {
         }
 
         animateGlyph(callback, glyph,
-                new AffineXform(scaleX, scaleY, replayRegion.left, replayRegion.top, timeScale));
+                new CAffineXform(scaleX, scaleY, replayRegion.left, replayRegion.top, timeScale));
 
         invalidate();
     }

@@ -2,237 +2,147 @@ package cmu.xprize.asm_component;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.TextView;
+
+import cmu.xprize.util.CAnimatorUtil;
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventListener;
+import cmu.xprize.util.TCONST;
 
 /**
- * horizontal layout of edit texts to display numbers + operation. fixed number of slots for
- * between alleys
+ *
  */
-public class CAsm_Text extends LinearLayout {
-
-    private Context mContext;
-
-    private int digitIndex;
-    private int numSlots;
-    private int value;
-    private int id;
-
-    private String operation;
+public class CAsm_Text extends TextView implements IEventListener {
 
     float scale = getResources().getDisplayMetrics().density;
     final int textSize = (int)(ASM_CONST.textSize*scale);
 
+    public boolean isWritable = false;
+    public boolean isClicked = false;
+
+    private boolean isStruck = false;
+    private boolean isBorrowable = false;
+
     public CAsm_Text(Context context) {
 
         super(context);
-        init(context, null);
+        reset();
     }
 
     public CAsm_Text(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(context, attrs);
-    }
 
+        super(context, attrs);
+        reset();
+    }
 
     public CAsm_Text(Context context, AttributeSet attrs, int defStyle) {
 
         super(context, attrs, defStyle);
-        init(context, attrs);
+        reset();
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    public void setWritable(boolean _isWritable) {this.isWritable = _isWritable; }
 
-        mContext = context;
-        //setClipChildren(false);
-        //setClipToPadding(false);
+    public boolean getIsClicked() {
+        if (isClicked) {
+            isClicked = false;
+            return true;
+        } else return false;
     }
 
-    public void update(int id, int val, String operation, int numSlots) {
 
-        this.digitIndex = numSlots;
-        this.value = val;
-        this.id = id;
-        this.operation = operation;
-        this.numSlots = numSlots;
+    public void reset() {
 
-        int delta = numSlots - getChildCount();
+        isClicked = false;
 
-        while (delta > 0) {
-            addText(getChildCount());
-            delta--;
-        }
+        setStruck(false);
+        setWritable(false);
+        setBorrowable(false);
+        setEnabled(false);
 
-        while (delta < 0) {
-            delText();
-            delta++;
-        }
+        setTextColor(Color.BLACK);
+        setGravity(Gravity.CENTER);
+        setTextSize(textSize);
 
-        if (id == ASM_CONST.OPERATION) {
-            setBackground(getResources().getDrawable(R.drawable.underline));
+        setBackground(null);
+        setTypeface(null);
+        setSingleLine(true);
+
+        setPaintFlags(0);
+
+
+    }
+
+    public void setResult(){
+
+        setEnabled(true);
+        setBackground(getResources().getDrawable(R.drawable.back));
+        setWritable(true);
+
+    }
+
+    public void setStruck(boolean _isStruck){
+
+        this.isStruck = _isStruck;
+
+        if (isStruck) {
+            setPaintFlags(getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            setAlpha(0.5f);
         }
         else {
-            setBackground(null);
-        }
-
-        setText();
-
-    }
-
-    private void addText(int index){
-
-        EditText newText = new EditText(getContext());
-
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(textSize/2, textSize);
-        newText.setLayoutParams(lp);
-        newText.setBackground(null);
-        newText.setGravity(Gravity.CENTER);
-        newText.setTextSize(textSize/4);
-        newText.setTextColor(Color.BLACK);
-        newText.setSingleLine(true);
-
-        addView(newText, index);
-
-    }
-
-    private void delText(){
-
-        removeViewAt(getChildCount()-1);
-
-    }
-
-    private void setText() {
-
-        int numSlots = getChildCount();
-        String[] digits = CAsm_Util.intToDigits(value, numSlots);
-        EditText curText;
-
-        switch(id){
-
-            case ASM_CONST.REGULAR:
-
-                for (int i = 0; i < numSlots; i++) {
-
-                    curText = (EditText) getChildAt(i);
-                    resetText(curText);
-                    curText.setText(digits[i]);
-
-                }
-
-                break;
-
-            case ASM_CONST.OPERATION:
-
-                for (int i = 0; i < numSlots; i++) {
-
-                    curText = (EditText) getChildAt(i);
-                    resetText(curText);
-
-                    if (i == 0) {
-                        curText.setText(operation);
-                        curText.setAlpha(1f);
-                    }
-                    else {
-                        curText.setText(digits[i]);
-                    }
-
-                }
-
-                break;
-
-            case ASM_CONST.RESULT:
-
-                for (int i = 0; i < numSlots; i++) {
-                    curText = (EditText) getChildAt(i);
-                    resetText(curText);
-                }
-
-                break;
-        }
-    }
-
-    public void performNextDigit() {
-
-        EditText curText;
-
-        digitIndex--;
-
-        if (digitIndex != getChildCount()-1){
-
-            curText = (EditText) getChildAt(digitIndex+1);
-            resetText(curText);
-
-        }
-
-        curText = (EditText) getChildAt(digitIndex);
-        curText.setTextColor(Color.BLACK);
-        curText.setAlpha(1.0f);
-
-        if (id == ASM_CONST.RESULT) {
-            curText.setEnabled(true);
-            curText.setBackground(getResources().getDrawable(R.drawable.back));
+            setPaintFlags(getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+            setAlpha(1f);
         }
 
     }
 
-    public void resetValue(int index) {
+    public boolean getIsStruck() {return this.isStruck;}
 
-        EditText t = (EditText) getChildAt(index);
-        t.setText("");
-
-    }
-
-    public void resetAllValues() {
-
-        for (int i = 0; i < numSlots; i++) {
-            resetValue(i);
-        }
-    }
-
-    private void resetText(EditText toReset) {
-        // TODO: change function name?
-        toReset.setEnabled(false);
-        toReset.setTextColor(Color.BLACK);
-        toReset.setAlpha(.5f);
-        toReset.setBackground(null);
-
-    }
-
-    public Integer getNum() {
-
-        if (id != ASM_CONST.RESULT) {return value;}
-
-        int j = 0;
-        int digit;
-
-        for (int i = 0; i < numSlots; i++) {
-
-            EditText t = (EditText)getChildAt(i);
-            String test = t.getText().toString();
-
-            try {
-                digit = Integer.parseInt(test);
-            } catch (NumberFormatException e) {
-                continue;
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        final int action = MotionEventCompat.getActionMasked(event);
+        if (action == MotionEvent.ACTION_DOWN) {
+            if (isWritable || isBorrowable) {
+                isClicked = true;
             }
-            j += (int)((Math.pow(10,(getChildCount()-i-1))*digit));
         }
-
-        return j;
+        return false;
     }
 
-    public Integer getDigit(int index) {
+    public void onEvent(IEvent event) {
+        //Called when user responds through the fingerwriter, to change the text to user's response.
+        String response  = (String)event.getString(TCONST.FW_VALUE);
+        this.setText(response);
+    }
 
-        EditText t = (EditText)getChildAt(index);
-        String input = t.getText().toString();
+    public void setIsClicked(boolean _isClicked) {this.isClicked = _isClicked;}
 
-        if (input.equals("") || input.equals(operation)) {
+    public void setBorrowable(boolean _isBorrowable) {this.isBorrowable = _isBorrowable;}
+
+    public boolean getIsBorrowable() {return isBorrowable;}
+
+    public Integer getDigit() {
+
+        String input = getText().toString();
+
+        if (input.equals("")) {
             return null;
         }
         else {
-            return Integer.parseInt(input);
+            try {
+                return Integer.parseInt(input);
+            }
+            catch (NumberFormatException e) {
+                return null;
+            }
         }
 
     }

@@ -32,7 +32,6 @@
         "PROBLEM":{
           "COMMENT":"This node presents the first problem.",
           "type":"node",
-          "preenter":[],
           "maptype":"moduleMap",
           "mapname": "SHOWPROBLEM",
           "preenter":[],
@@ -46,11 +45,10 @@
         "NEXTDIGIT":{
           "COMMENT":"This node presents the first digit.",
           "type":"node",
-          "preenter":[],
           "maptype":"moduleMap",
           "mapname": "SHOWDIGIT",
-          "preenter":[],
-          "preexit" :[],
+          "preenter":["SET_DOTBAGS_INVISIBLE", "CREATE_HESITATION_TIMER"],
+          "preexit" :["PROMPT_COL"],
           "edges":
           [
             {"constraint":"","edge":"USERINPUT"}
@@ -64,7 +62,7 @@
           "type":"node",
           "maptype":"moduleMap",
           "mapname": "CLICKDOTS",
-          "preenter":["CREATE_COMPLETION_TIMER"],
+          "preenter":[],
           "preexit" :[],
           "edges":
           [
@@ -79,7 +77,7 @@
           "maptype":"moduleMap",
           "mapname": "PLAYCORRECT",
           "preenter":[],
-          "preexit" :["CANCEL_COMPLETION_TIMER"],
+          "preexit" :[],
           "edges":
           [
             {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
@@ -94,7 +92,7 @@
           "maptype":"moduleMap",
           "mapname": "EVALUATEDIGIT",
           "preenter":[],
-          "preexit" :["CANCEL_COMPLETION_TIMER"],
+          "preexit" :[],
           "edges":
           [
             {"constraint":"FTR_RIGHT","edge":"NEXTDIGIT"},
@@ -120,7 +118,7 @@
           "maptype":"moduleMap",
           "mapname": "PLAYEXIT2",
           "preenter":[],
-          "preexit" :["CANCEL_COMPLETION_TIMER"],
+          "preexit" :[],
           "edges":
           [
             {"constraint":"","edge":"NEXTSCENE"}
@@ -229,6 +227,19 @@
           "COMMENT": "TBD",
           "tracks": [
           ]
+        },
+        "FINGERWRITING":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "SDigitWriter", "method": "onStartWriting", "parms": "CANCEL_REMINDER:String"},
+            // This would call the cancel reminder action below when the user starts writing
+            {"type": "COMMAND", "id": "Sresponse", "method": "onRecognitionComplete", "parms": "NEXT:String"},
+            // This would increment the animation_graph when it is in a wait state.  e.g if it is sitting at the end of a stream audio clip
+            {"type": "COMMAND", "cmd": "WAIT" }
+            //{"type": "COMMAND", "id": "Sresponse", "method": "show", "parms": "TRUE:Boolean","features":""}
+          ]
         }
       },
 
@@ -244,6 +255,13 @@
         "RESTART_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "action":"RESTART", "ontimer":"EVALUATEWHOLE", "features": "" },
         "CANCEL_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "action":"CANCEL", "features": "" },
 
+
+//        "SET_VISIBILITY":{"type": "COMMAND", "id": "SAddSubtract", "method": "setVisible", "parms":"false:bool", "features":""},
+        "SET_DOTBAGS_VISIBLE": {"type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"true:bool"},
+        "SET_DOTBAGS_INVISIBLE": {"type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"false:bool"},
+        "CREATE_HESITATION_TIMER": {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "period":"3000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"SET_DOTBAGS_VISIBLE"},
+//        {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "action":"CREATEANDSTART", "repeat":"false", "period":"1000", "features":"", "onTimer":"SET_VISIBILITY"},
+
         "SET_DATASOURCE":{"type": "COMMAND", "id": "SAddSubtract", "method": "setDataSource", "parms": "[file]asm_data.json:String","features":""},
         "NEXT_DATASET":{"type": "COMMAND", "id": "SAddSubtract", "method": "next" ,"features":""},
 
@@ -251,7 +269,18 @@
 
         "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "NEXTSCENE" },
         "NEXT": {"type": "COMMAND", "cmd": "NEXT" },
-        "PAUSE":{"type": "COMMAND", "cmd": "WAIT" }
+        "PAUSE":{"type": "COMMAND", "cmd": "WAIT" },
+
+        //FINGERWRITING ADDITIONS
+        "PLAY_CHIME": {"type": "AUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{TestChimes}}.mp3", "repeat":false, "volume": ".9", "mode":"event", "features": ""},
+
+        "FW_DISABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "FALSE:Boolean","features":""},
+        //disable FingerWriting
+        "FW_ENABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "TRUE:Boolean","features":""},
+        //enable FingerWriting
+
+        //Visual cues
+        "PROMPT_COL":{"type": "COMMAND","id":"SAddSubtract","method":"highlightCurrentColumn","parms":"","features":""}
 
       },
 

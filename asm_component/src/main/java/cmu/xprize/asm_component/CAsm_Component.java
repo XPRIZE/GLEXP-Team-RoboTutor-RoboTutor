@@ -1,22 +1,34 @@
 package cmu.xprize.asm_component;
 
+import android.animation.Animator;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.os.Handler;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
-import android.view.View;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.Gravity;
 import android.widget.LinearLayout;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
 
-public class CAsm_Component extends LinearLayout implements ILoadableObject, View.OnClickListener {
+public class CAsm_Component extends LinearLayout implements ILoadableObject, IEventListener {
+
 
     private Context mContext;
 
@@ -24,27 +36,44 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
     private int _dataIndex;
 
     private int[] numbers;
-    private int digitIndex;
-    private int numSlots;
+
+    protected int digitIndex;
+    protected int numSlots;
 
     protected Integer corDigit;
     protected Integer corValue;
     protected String operation;
     protected String currImage;
 
+    protected boolean dotbagsVisible = true;
+
+    protected Integer overheadVal = null;
+    protected CAsm_Text overheadText = null;
+
     protected int numAlleys = 0;
 
     private float scale = getResources().getDisplayMetrics().density;
     protected int alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
 
+//    Arithmetic problems will start with the
+    protected int               placeValIndex;
+    protected String[]          chimes = ASM_CONST.CHIMES[placeValIndex];
+    protected String            currentChime;
+
     protected ArrayList<CAsm_Alley> allAlleys = new ArrayList<>();
 
     protected IDotMechanics mechanics = new CAsm_MechanicBase();
 
+    // TODO: wrap in LetterBox
     //protected CAsm_LetterBoxLayout Scontent;
 
     // json loadable
     public CAsm_Data[] dataSource;
+
+    //Writing
+    private CAsm_Popup mPopup;
+
+    private boolean clickPaused;
 
     static final String TAG = "CAsm_Component";
 
@@ -68,10 +97,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
     public void init(Context context, AttributeSet attrs) {
 
         setOrientation(VERTICAL);
-        setOnClickListener(this);
+
 
         //inflate(getContext(), R.layout.asm_container, this);
-
 
         mContext = context;
 
@@ -93,7 +121,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         //
         //Scontent = (CAsm_LetterBoxLayout) findViewById(R.id.Scontent);
         //Scontent.setOnClickListener(this);
-
+        mPopup = new CAsm_Popup(mContext);
 
     }
 
@@ -102,6 +130,30 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         dataSource = _dataSource;
         _dataIndex = 0;
     }
+
+
+    public void setDotBagsVisible(Boolean _dotbagsVisible) {
+
+        for (int alley = 0; alley < allAlleys.size(); alley++) {
+            CAsm_Alley curAlley = allAlleys.get(alley);
+            CAsm_DotBag curDB = curAlley.getDotBag();
+
+                if (_dotbagsVisible) {
+                    curDB.setVisibility(VISIBLE);
+
+                } else {
+                    curDB.setVisibility(INVISIBLE);
+                }
+            }
+
+            if (_dotbagsVisible && !dotbagsVisible) {
+                mechanics.preClickSetup();
+            }
+
+            dotbagsVisible = _dotbagsVisible;
+
+    }
+
 
     public void next() {
 
@@ -117,19 +169,18 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
             CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, false);
         }
 
+        mechanics.next();
+
     }
+
 
     public void nextDigit() {
 
         digitIndex--;
 
-        for (CAsm_Alley alley: allAlleys) {
-            alley.nextDigit();
-        }
+        mechanics.nextDigit();
 
         corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[digitIndex]);
-
-        mechanics.preClickSetup();
 
     }
 
@@ -140,6 +191,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
     protected void updateDataSet(CAsm_Data data) {
 
+        // TODO: talk about whether this should be part of base mechanics
+
         int val, id;
         boolean clickable = true;
 
@@ -148,7 +201,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         numSlots = CAsm_Util.maxDigits(numbers) + 2;
         digitIndex = numSlots;
 
-        // TODO: talk about whether this should be part of base mechanics
+        updateAlley(0, 0, ASM_CONST.ANIMATOR, operation, false); // animator alley
+        updateAlley(1, 0, ASM_CONST.OVERHEAD, operation, true); // carry/borrow alley
 
         // update alleys
         for (int i = 0; i < numbers.length; i++) {
@@ -169,11 +223,11 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
                 id = ASM_CONST.REGULAR;
             }
 
-            updateAlley(i, val, id, operation, clickable);
+            updateAlley(i+2, val, id, operation, clickable);
         }
 
         // delete extra alleys
-        int delta = numAlleys - numbers.length;
+        int delta = numAlleys - (numbers.length+2);
 
         if (delta > 0) {
             for (int i = 0; i < delta; i++) {
@@ -182,6 +236,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         }
 
         setMechanics();
+        setSound();
 
     }
 
@@ -193,6 +248,20 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         operation = data.operation;
 
     }
+    private void setSound() {
+        switch (operation) {
+            case "+":
+//                result dotbag will be the only one playing sound
+                allAlleys.get(allAlleys.size() - 1).getDotBag().setIsAudible(true);
+                break;
+            case "-":
+//                minuend dotbag is the only one that plays
+                allAlleys.get(1).getDotBag().setIsAudible(true);
+                break;
+        }
+    }
+
+
 
     private void setMechanics() {
 
@@ -247,6 +316,25 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         return newAlley;
     }
 
+    public void nextPlaceValue() {
+        placeValIndex++;
+        chimes = ASM_CONST.CHIMES[placeValIndex % 4];
+        for (CAsm_Alley alley: allAlleys) {
+            CAsm_DotBag dotBag = alley.getDotBag();
+            dotBag.setChimes(chimes);
+            dotBag.setChimeIndex(-1);
+        }
+    }
+
+    public void playChime() {
+
+    }
+
+    public void resetPlaceValue() {
+        placeValIndex = -1;
+    }
+
+
     private void delAlley() {
 
         int index = numAlleys - 1;
@@ -270,20 +358,122 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
 
     public boolean isDigitCorrect() {
 
-        boolean correct = (corDigit.equals(allAlleys.get(numAlleys - 1).getCurrentDigit()));
+        boolean overheadCorrect, bottomCorrect;
 
-        if (!correct) {
-            allAlleys.get(numAlleys-1).getText().resetValue(digitIndex); // reset answer text
+        // first check bottom answer
+        CAsm_TextLayout textLayout = allAlleys.get(numAlleys - 1).getTextLayout();
+        bottomCorrect = corDigit.equals(textLayout.getDigit(digitIndex));
+
+        if (!bottomCorrect) {
+            wrongDigit(textLayout.getText(digitIndex));
         }
-        return correct;
+
+        // now check overhead answer
+        if (overheadVal != null) {
+            overheadCorrect = overheadVal.equals(overheadText.getDigit());
+
+            if (overheadCorrect) {
+                mechanics.correctOverheadText();
+            }
+            else {
+                wrongDigit(overheadText);
+            }
+        }
+
+        overheadCorrect = (overheadVal == null); // make sure there is no new overhead val
+
+        return (bottomCorrect & overheadCorrect);
+    }
+
+    public void wrongDigit(final CAsm_Text t) {
+            //Indicates that the digit the user entered is wrong w/ red text.
+            t.setTextColor(Color.RED);
+            clickPaused = true;
+            Handler h = new Handler();
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    t.setText("");
+                    t.setTextColor(Color.BLACK);
+                    clickPaused = false;
+                }
+            }, 2500);
+    }
+
+    public boolean getClickPaused() {return clickPaused;}
+
+    public void highlightText(final CAsm_Text t) {
+        //Useful to highlight individual Text-fields to call importance to them.
+        int colorStart = Color.YELLOW;
+        int colorEnd = Color.TRANSPARENT;
+        ValueAnimator v = ValueAnimator.ofObject(new ArgbEvaluator(),colorStart,colorEnd);
+        v.setDuration(1250);
+        v.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                t.setBackgroundColor((int) animator.getAnimatedValue());
+            }
+        });
+        v.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {}
+            @Override
+            public void onAnimationRepeat(Animator animation) {}
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (t.isWritable) t.setResult();
+            }
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                if (t.isWritable) t.setResult();
+            }
+        });
+        v.start();
+    }
+
+    public void highlightCurrentColumn() {
+        //Highlights user's active column.
+        for (CAsm_Alley alley: allAlleys) {
+            try {
+                CAsm_Text text = alley.getTextLayout().getText(digitIndex);
+                if (text.getDigit() != null || text.isWritable) {highlightText(text); }
+            } catch (NullPointerException e) { continue;}
+        }
+    }
+
+    public void updateText(CAsm_Text t) {
+        if (!mPopup.isActive) {
+            ArrayList<IEventListener> listeners = new ArrayList<>();
+            listeners.add(t);
+            listeners.add(this);
+            mPopup.showAtLocation(this, Gravity.LEFT, 10, 10);
+            mPopup.enable(true, listeners);
+            mPopup.update(t, 50, 50, 300, 300);
+            mPopup.isActive = true;
+        }
+    }
+
+    public void exitWrite() {
+        mPopup.isActive = false;
+        mPopup.enable(false,null);
+        mPopup.dismiss();
+    }
+
+    public void onEvent(IEvent event) {
+        mPopup.isActive = false;
+        mPopup.enable(false,null);
+        mPopup.dismiss();
     }
 
 
-
-//  TODO: fix the onTouch to see results
-
-    public void onClick(View v) {mechanics.handleClick();}
-
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        final int action = MotionEventCompat.getActionMasked(event);
+        if (action == MotionEvent.ACTION_DOWN) {
+            mechanics.handleClick();
+        }
+        return true;
+    }
 
 
     /**
@@ -298,5 +488,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, Vie
         _dataIndex = 0;
 
     }
+
+
 
 }

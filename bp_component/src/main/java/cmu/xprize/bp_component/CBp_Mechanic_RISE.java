@@ -223,6 +223,29 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                 }
                 break;
 
+            case BP_CONST.PAUSE_ANIMATION:
+
+                if (_isRunning) {
+                    for(Animator animation : translators.keySet()) {
+                        animation.pause();
+                    }
+
+                    _isRunning = false;
+                }
+                break;
+
+            case BP_CONST.RESUME_ANIMATION:
+
+                if (!_isRunning) {
+                    for(Animator animation : translators.keySet()) {
+                        animation.resume();
+                    }
+
+                    _isRunning = true;
+                    mComponent.post(BP_CONST.SPAWN_BUBBLE);
+                }
+                break;
+
             case BP_CONST.SPAWN_BUBBLE:
 
                 if(_isRunning) {

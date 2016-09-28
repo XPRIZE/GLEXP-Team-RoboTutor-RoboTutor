@@ -2,18 +2,29 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
+
+import cmu.xprize.asm_component.ASM_CONST;
+import cmu.xprize.asm_component.CAsm_Alley;
 import cmu.xprize.asm_component.CAsm_Component;
 import cmu.xprize.asm_component.CAsm_Data;
+import cmu.xprize.asm_component.CAsm_DotBag;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.IEvent;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -23,7 +34,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
     private CTutor           mTutor;
     private CObjectDelegate  mSceneObject;
 
-    static final String TAG = "TArComponent";
+    static final String TAG = "TAsmComponent";
 
     public TAsmComponent(Context context) {
         super(context);
@@ -38,11 +49,12 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
     }
 
 
+
+
     @Override
     public void init(Context context, AttributeSet attrs) {
 
         super.init(context, attrs);
-
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
     }
@@ -51,7 +63,6 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
     //**********************************************************
     //**********************************************************
     //*****************  Tutor Interface
-    
 
     public void evaluateWhole () {
 
@@ -142,6 +153,21 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
     }
 
 
+    @Override
+    public void playChime() {
+        TScope scope = mTutor.getScope();
+        for (CAsm_Alley alley: allAlleys) {
+            CAsm_DotBag dotBag = alley.getDotBag();
+            if (dotBag.getIsAudible()) {
+                currentChime = dotBag.getCurrentChime();
+            }
+        }
+        Log.d("PlayChime", currentChime);
+        scope.addUpdateVar("TestChimes", new TString(currentChime));
+        applyEventNode("PLAY_CHIME");
+
+    }
+
     public void next() {
 
         // If wrong reset ALLCORRECT
@@ -153,7 +179,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
         reset();
 
         super.next();
-
+        resetPlaceValue();
         if(dataExhausted())
             mTutor.setAddFeature(TCONST.FTR_EOI);
 
@@ -163,6 +189,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
 
         reset();
         super.nextDigit();
+        nextPlaceValue();
 
     }
 
@@ -208,7 +235,9 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
     }
 
     @Override
-    public void postInflate() {}
+    public void postInflate() {
+
+    }
 
     @Override
     public void setNavigator(ITutorGraph navigator) {
@@ -236,8 +265,31 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
 
     }
 
+
     @Override
     public void setAlpha(Float alpha) {
 
+    }
+
+    @Override
+    public void onEvent(IEvent event) {
+        super.onEvent(event);
+        evaluateWhole();
+        applyEventNode("NEXT");
+    }
+
+    protected void applyEventNode(String nodeName) {
+        IScriptable2 obj = null;
+
+        if(nodeName != null && !nodeName.equals("")) {
+            try {
+                obj = mTutor.getScope().mapSymbol(nodeName);
+                obj.applyNode();
+
+            } catch (Exception e) {
+                // TODO: Manage invalid Behavior
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@ android {
         //
         targetSdkVersion 22
         versionCode 1
-        versionName "0.3.0-alpha.1"
+        versionName "0.4.1"
     }
     buildTypes {
         release {
@@ -37,7 +37,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:percent:23.2.0'
     compile project(':banner')
-    compile project(':ltk')
+    compile project(':comp_ltkplus')
     compile project(':util')
     compile project(':mn_component')
     compile project(':listener')

@@ -28,6 +28,7 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.support.v4.content.LocalBroadcastManager;
@@ -45,10 +46,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cmu.xprize.ltk.LipiTKJNIInterface;
-import cmu.xprize.ltk.RecResult;
-import cmu.xprize.ltk.Stroke;
-import cmu.xprize.ltk.StrokeSet;
+import cmu.xprize.ltkplus.CLipiTKJNIInterface;
+import cmu.xprize.ltkplus.CRecResult;
+import cmu.xprize.ltkplus.CStroke;
+import cmu.xprize.ltkplus.CGlyph;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CEvent;
 import cmu.xprize.util.IEvent;
@@ -59,44 +60,43 @@ import cmu.xprize.util.TCONST;
 
 public class CFingerWriter extends View implements OnTouchListener, IEventDispatcher, IEventListener {
 
-    private Context             mContext;
-    public List<IEventListener> mListeners = new ArrayList<IEventListener>();
-    protected List<String>      mLinkedViews;
-    protected boolean           mListenerConfigured = false;
+    private Context               mContext;
+    public List<IEventListener>   mListeners = new ArrayList<IEventListener>();
+    protected List<String>        mLinkedViews;
+    protected boolean             mListenerConfigured = false;
 
-    protected boolean          _enabled = false;
-    protected float            mAspect = 1;  // w/h
+    protected boolean             _enabled = false;
+    protected float               mAspect = 1;  // w/h
 
-    private float              mTopLine;
-    private float              mBaseLine;
-    private boolean            mLogGlyphs = true;
+    private float                 mTopLine;
+    private float                 mBaseLine;
+    private boolean               mLogGlyphs = true;
 
-    private Path               mPath;
-    private Paint              mPaint;
-    private Paint              mPaintBase;
-    private Paint              mPaintUpper;
-    private PointF             mPoint;
+    private Paint                 mPaint;
+    private Paint                 mPaintBase;
+    private Paint                 mPaintUpper;
+    private PointF                mPoint;
 
-    private static final float TOLERANCE = 5;
+    private static final float    TOLERANCE = 5;
 
-    private LipiTKJNIInterface _recognizer;
-    private String             _configFolder;
-    private boolean            _initialized   = false;
-    private RecognizerThread   _recThread;
-    private String             _recogId;                // for logging
-    private boolean            _isRecognizing = false;
+    private CLipiTKJNIInterface   _recognizer;
+    private String                _configFolder;
+    private boolean               _initialized   = false;
+    private RecognizerThread      _recThread;
+    private String                _recogId;                // for logging
+    private boolean               _isRecognizing = false;
 
-    private Stroke[]           _recStrokes;
-    private RecResult[]        _recResults;
-    protected ArrayList<String>_recChars;
-    private String             _constraint;
+    private CStroke[]              _recStrokes;
+    private CRecResult[]           _recResults;
+    protected ArrayList<String>   _recChars;
+    private String                _constraint;
 
-    private StrokeSet          _currentGlyph;
-    private int[]              _screenCoord  = new int[2];
-    private Boolean            _watchable    = false;
+    private CGlyph _currentGlyph;
+    private int[]                 _screenCoord  = new int[2];
+    private Boolean               _watchable    = false;
 
-    private Boolean            _touchStarted = false;
-    private String             _onStartWriting;
+    private Boolean               _touchStarted = false;
+    private String                _onStartWriting;
 
     private RecogDelay            _counter;
     private long                  _time;
@@ -174,7 +174,7 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
             }
         }
 
-        // Create a paint object to deine the line parameters
+        // Create a paint object to define the outline parameters
         mPaint = new Paint();
 
         mPaint.setColor(Color.BLACK);
@@ -183,7 +183,7 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
         mPaint.setStrokeWidth(4);
         mPaint.setAntiAlias(true);
 
-        // Create a paint object to deine the line parameters
+        // Create a paint object to define the baseline parameters
         mPaintBase = new Paint();
 
         mPaintBase.setColor(getResources().getColor(R.color.fingerWriterBackground));
@@ -192,7 +192,7 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
         mPaintBase.setStrokeWidth(6);
         mPaintBase.setAntiAlias(true);
 
-        // Create a paint object to deine the line parameters
+        // Create a paint object to define the topline parameters
         mPaintUpper = new Paint();
 
         mPaintUpper.setColor(getResources().getColor(R.color.fingerWriterBackground));
@@ -332,15 +332,12 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
 
         // We always add the next stoke to the glyph set
 
-        if (_currentGlyph == null)
-            _currentGlyph = new StrokeSet(mBaseLine);
+// TODO: ltkplus import fault
+//        if (_currentGlyph == null)
+//            _currentGlyph = new CGlyph(mBaseLine);
 
         _currentGlyph.newStroke();
         _currentGlyph.addPoint(touchPt);
-
-        // Add Root node
-        //
-        mPath.moveTo(touchPt.x, touchPt.y);
 
         // Track current position
         //
@@ -380,7 +377,6 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
 
             _currentGlyph.addPoint(touchPt);
 
-            mPath.quadTo(mPoint.x, mPoint.y, (touchPt.x + mPoint.x) / 2, (touchPt.y + mPoint.y) / 2);
             mPoint = touchPt;
 
             invalidate();
@@ -403,7 +399,6 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
 
             _currentGlyph.addPoint(touchPt);
 
-            mPath.lineTo(touchPt.x, touchPt.y);
             invalidate();
         }
         broadcastLocation(TCONST.LOOKATEND, touchPt);
@@ -467,9 +462,31 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
         canvas.drawPath(linePath,  mPaintUpper);
         canvas.drawLine(0, baseLine, getWidth(), baseLine, mPaintBase);
 
+        Rect drawBnds = new Rect();
+        getDrawingRect(drawBnds);
+
         // Immediate mode graphics -
         // Redraw the current path
-        canvas.drawPath(mPath, mPaint);
+        //
+        if(_currentGlyph != null) {
+
+            for(int i1 = 0 ; i1 < _currentGlyph.size() ; i1++) {
+
+                CStroke stroke = _currentGlyph.getStroke(i1);
+
+                if(stroke.isPoint(drawBnds)) {
+
+                    PointF center = stroke.getPoint();
+
+                    mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+                    canvas.drawCircle(center.x, center.y, drawBnds.width() / 40, mPaint);
+                    mPaint.setStyle(Paint.Style.STROKE);
+                }
+                else {
+                    canvas.drawPath(stroke.getPath(), mPaint);
+                }
+            }
+        }
     }
 
 
@@ -478,15 +495,7 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
         // Create a path object to hold the vector stream
 
         _currentGlyph = null;
-        clearScreen();
-    }
 
-
-    private void clearScreen() {
-
-        // Create a path object to hold the vector stream
-
-        mPath = new Path();
         invalidate();
     }
 
@@ -555,7 +564,7 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
         RecognizerThread() {
         }
 
-        public void setStrokes(Stroke[] _recognitionStrokes) {
+        public void setStrokes(CStroke[] _recognitionStrokes) {
             _recStrokes = _recognitionStrokes;
         }
 
@@ -579,7 +588,7 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
 
             Pattern pattern = Pattern.compile(_constraint);
 
-            for (RecResult result : _recResults) {
+            for (CRecResult result : _recResults) {
                 Log.e("jni", "ShapeID = " + result.Id + " Confidence = " + result.Confidence);
             }
 
@@ -634,7 +643,7 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
         @Override
         protected void onPreExecute() {
 
-            _recStrokes = new Stroke[_currentGlyph.size()];
+            _recStrokes = new CStroke[_currentGlyph.size()];
 
             for (int s = 0; s < _currentGlyph.size(); s++)
                 _recStrokes[s] = _currentGlyph.getStroke(s);
@@ -665,7 +674,7 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
 
         try {
             _recogId      = recogId;
-            _recognizer   = new LipiTKJNIInterface(path, recogMap.get(recogId));
+            _recognizer   = new CLipiTKJNIInterface(path, recogMap.get(recogId));
             _configFolder = _recognizer.getLipiDirectory() + folderMap.get(recogId);
 
             _recognizer.initialize();

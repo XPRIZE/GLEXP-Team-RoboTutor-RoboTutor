@@ -7,7 +7,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -30,11 +33,18 @@ public class CAsm_DotBag extends TableLayout {
 
     private int rows = 0;
     private int cols = 0;
-    private int size = (int)(ASM_CONST.textSize*scale);
+    private int size = (int)(ASM_CONST.textBoxHeight*scale);
 
     private boolean isClickable = false;
     private boolean isClicked = false;
     private boolean isHollow = false;
+
+    private boolean drawBorder = true;
+
+    private String[] chimes;
+    private int chimeIndex= -1;
+    private String currentChime;
+    private boolean isAudible;
 
     private String imageName = "star"; // default
 
@@ -71,25 +81,19 @@ public class CAsm_DotBag extends TableLayout {
         setWillNotDraw(false);
         setClipChildren(false);
         setClipToPadding(false);
-        setOnClickListener(clickListener);
         setPaint();
         setZero();
 
     }
 
-
-    public void update(int _rows, int _cols, String _imageName, boolean clickable) {
+    public void setRows(int _rows) {
 
         TableRow currTableRow;
 
         int deltaRows = _rows - this.rows;
-        int deltaCols = _cols - this.cols;
 
-        this.imageName = _imageName;
-        this.isClickable = clickable;
-        this.isHollow = false;
 
-        if (_rows == 0 || _cols == 0) {
+        if (_rows == 0) {
             setZero();
             return;
         }
@@ -102,12 +106,36 @@ public class CAsm_DotBag extends TableLayout {
         }
 
         else if (deltaRows > 0) {
+
+            while (allTableRows.size() < _rows) {
+                addRow(allTableRows.size());
+            }
+
             for (int i = this.rows; i < _rows; i++) {
                 for (int j = 0; j < this.cols; j++) {
                     addDot(i, j);
                 }
             }
         }
+
+        this.rows = _rows;
+
+        resetDotTranslations();
+        resetBounds();
+
+    }
+
+    public void setCols(int _cols) {
+
+        TableRow currTableRow;
+
+        if (_cols == 0) {
+            setZero();
+            return;
+        }
+
+        int origCols = this.cols;
+        int deltaCols = _cols - origCols;
 
         if (deltaCols < 0) {
             for (int i = 0; i < this.rows; i++) {
@@ -120,51 +148,59 @@ public class CAsm_DotBag extends TableLayout {
         }
 
         else if (deltaCols > 0) {
-            for (int i = 0; i < _rows; i++) {
-                for (int j = this.cols; j < _cols; j++ ) {
+            for (int i = 0; i < this.rows; i++) {
+                for (int j = origCols; j < _cols; j++ ) {
                     addDot(i, j);
                 }
             }
+
         }
 
-        this.rows = _rows;
         this.cols = _cols;
 
-        resetDots();
+        resetDotTranslations();
         resetBounds();
 
     }
 
-    private void setZero() {
-
-        rows = 0;
-        cols = 0;
-        removeAllViews();
-        allTableRows.clear();
-        params.width = size;
-        params.height = size;
-        setLayoutParams(params);
-        resetBounds();
-
-    }
-
-    public void resetDots() {
+    public void setImage(String _imageName) {
 
         TableRow currTableRow;
 
+        this.imageName = _imageName;
+
         for (int i = 0; i < allTableRows.size(); i++) {
             currTableRow = allTableRows.get(i);
-
             for (int j = 0; j < currTableRow.getVirtualChildCount(); j++){
-
                 CAsm_Dot dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
-
                 dot.setImageName(imageName);
-                dot.setHollow(isHollow);
-                dot.setIsClickable(isClickable);
             }
         }
+
     }
+
+
+    public void setChimeIndex(int chimeIndex) {
+        this.chimeIndex = chimeIndex;
+    }
+
+    public void setChimes(String[] chimes) {
+        this.chimes = chimes;
+//        currentChime = chimes[chimeIndex % chimes.length];
+    }
+
+    public void setIsAudible(boolean isAudible) {
+        this.isAudible = isAudible;
+    }
+
+    public String getCurrentChime() {
+        return currentChime;
+    }
+
+    public boolean getIsAudible(){
+        return isAudible;
+    }
+
 
     public CAsm_Dot addDot(int row, int col) {
 
@@ -183,8 +219,29 @@ public class CAsm_DotBag extends TableLayout {
         updateCols();
         resetBounds();
 
+        if (isAudible) {
+            setChimeIndex(chimeIndex + 1);
+            currentChime = chimes[this.chimeIndex % chimes.length];
+        }
+
+
         return dot;
     }
+
+
+    private void setZero() {
+
+        rows = 0;
+        cols = 0;
+        removeAllViews();
+        allTableRows.clear();
+        params.width = size;
+        params.height = size;
+        setLayoutParams(params);
+        resetBounds();
+
+    }
+
 
     private TableRow addRow(int index) {
 
@@ -196,7 +253,8 @@ public class CAsm_DotBag extends TableLayout {
 
         TableRow tableRow = new TableRow(context);
 
-        CAsm_DotBag.LayoutParams lp = new CAsm_DotBag.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        CAsm_DotBag.LayoutParams lp = new CAsm_DotBag.LayoutParams(LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT);
         lp.setMargins(size / 2, 0, size / 2, 0);
         tableRow.setLayoutParams(lp);
 
@@ -205,7 +263,6 @@ public class CAsm_DotBag extends TableLayout {
 
         return tableRow;
     }
-
 
 
     private void setPaint() {
@@ -222,24 +279,25 @@ public class CAsm_DotBag extends TableLayout {
     @Override
     protected void onDraw(Canvas canvas) {
 
-        canvas.drawRoundRect(bounds, size/2, size/2, borderPaint);
+        if (drawBorder) {
+            canvas.drawRoundRect(bounds, size / 2, size / 2, borderPaint);
+            // TODO: make opaque
+
+        }
         resetBounds();
 
     }
 
-    private OnClickListener clickListener = new OnClickListener(){
-        public void onClick(View v) {
-
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        final int action = MotionEventCompat.getActionMasked(event);
+        if (action == MotionEvent.ACTION_DOWN) {
             if (isClickable) {
                 isClicked = true;
             }
-
-            View Component = (View) v.getParent().getParent();
-            Component.performClick();
         }
-    };
-
-
+        return false;
+    }
 
     public CAsm_Dot findClickedDot() {
 
@@ -260,7 +318,7 @@ public class CAsm_DotBag extends TableLayout {
     }
 
 
-    public void removeDot(CAsm_Dot toRemove) {
+    private void removeDot(CAsm_Dot toRemove) {
 
         int row = toRemove.getRow();
 
@@ -294,46 +352,21 @@ public class CAsm_DotBag extends TableLayout {
         return toReturn;
     }
 
-    public void removeInvisibleDots(){
-
-        TableRow currTableRow;
-        int numChildren;
-
-        for (int i = 0; i < allTableRows.size(); i++) {
-            currTableRow = allTableRows.get(i);
-            numChildren = currTableRow.getVirtualChildCount();
-            for (int j = numChildren - 1; j >= 0; j--){
-                CAsm_Dot dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
-
-                if (dot.getVisibility() == INVISIBLE) {
-                    removeDot(dot);
-                }
-            }
-        }
-
-        // now reset dot col index
-
-        for (int i = 0; i < allTableRows.size(); i++) {
-            currTableRow = allTableRows.get(i);
-            numChildren = currTableRow.getVirtualChildCount();
-            for (int j = 0; j < numChildren; j++){
-                CAsm_Dot dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
-                dot.setCol(j);
-            }
-        }
-
-    }
-    /* Adapted from Kevin's CAnimatorUtil. Using translationX instead of X. */
+    /* Adapted from Kevin's CAnimatorUtil. Using setTranslationX instead of setX. */
     public void wiggle(long duration, int repetition, long delay, float magnitude) {
 
+        float currTranslation = getTranslationX();
         float offset = magnitude*getWidth();
-        float[] pts = {0, offset, 0, -offset, 0};
+        float[] pts = {currTranslation, offset + currTranslation, currTranslation,
+                currTranslation-offset, currTranslation};
+
         ObjectAnimator anim = ObjectAnimator.ofFloat(this, "translationX", pts);
         anim.setDuration(duration);
         anim.setRepeatCount(repetition);
         anim.setStartDelay(delay);
         anim.setInterpolator(new LinearInterpolator());
         anim.start();
+
     }
 
     private void resetBounds() {
@@ -377,11 +410,7 @@ public class CAsm_DotBag extends TableLayout {
 
     }
 
-    public void setRows(int _rows) {this.rows = _rows;}
-    public void setCols(int _cols) {
-        this.cols = _cols;
-    }
-    public void setSize(int _size) {this.size = size;}
+    public void setSize(int _size) {this.size = _size;}
 
     public void setRight(float newRight) {
 
@@ -389,6 +418,8 @@ public class CAsm_DotBag extends TableLayout {
         invalidate();
 
     }
+
+    public void setDrawBorder(boolean _drawBorder) {this.drawBorder = _drawBorder;}
 
     public String getImageName() {
         return imageName;
@@ -433,6 +464,66 @@ public class CAsm_DotBag extends TableLayout {
         this.cols = maxCols;
 
     }
+
+    public boolean dotsStatic() {
+
+        TableRow currTableRow;
+        CAsm_Dot dot;
+
+        for (int i = 0; i < allTableRows.size(); i++) {
+            currTableRow = allTableRows.get(i);
+
+            for (int j = 0; j < currTableRow.getVirtualChildCount(); j++){
+                dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
+                if (dot.getTranslationX() != 0) {
+                    return false;
+                };
+            }
+        }
+
+        return true;
+
+    }
+
+    public boolean getIsHollow() {
+
+        TableRow currTableRow;
+        CAsm_Dot dot;
+
+        for (int i = 0; i < allTableRows.size(); i++) {
+            currTableRow = allTableRows.get(i);
+
+            for (int j = 0; j < currTableRow.getVirtualChildCount(); j++){
+                dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
+                if (!dot.getIsHollow()) {
+                    this.isHollow = false;
+                    return false;
+                }
+            }
+        }
+
+        this.isHollow = true;
+        return true;
+
+    }
+
+    private void resetDotTranslations() {
+
+        TableRow currTableRow;
+        CAsm_Dot dot;
+
+        for (int i = 0; i < allTableRows.size(); i++) {
+            currTableRow = allTableRows.get(i);
+
+            for (int j = 0; j < currTableRow.getVirtualChildCount(); j++){
+                dot = (CAsm_Dot) currTableRow.getVirtualChildAt(j);
+                dot.setTranslationX(0);
+                dot.setTranslationY(0);
+
+            }
+        }
+    }
+
 
 
 

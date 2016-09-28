@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -40,32 +42,30 @@ public class CAsm_Dot extends ImageView {
         this.context = context;
     }
 
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
+    public void setImageName(String _imageName) {
+        this.imageName = _imageName;
         createDrawable(this.imageName);
     }
 
-    public void setParams( boolean isClickable, String imageName, int row, int col) {
+    public void setParams( boolean _isClickable, String _imageName, int _row, int _col) {
 
-        this.isClickable = isClickable;
-        setImageName(imageName);
-        setOnClickListener(clickListener);
-        this.row = row;
-        this.col = col;
+        this.isClickable = _isClickable;
+        setImageName(_imageName);
+        this.row = _row;
+        this.col = _col;
     }
 
-    private OnClickListener clickListener = new OnClickListener(){
-        public void onClick(View v) {
-
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        final int action = MotionEventCompat.getActionMasked(event);
+        if (action == MotionEvent.ACTION_DOWN) {
             if (isClickable) {
                 isClicked = true;
                 isClickable = false;
             }
-
-            View parentDotBag = (View) v.getParent().getParent();
-            parentDotBag.performClick();
         }
-    };
+        return false;
+    }
 
     protected void onDraw(Canvas canvas) {super.onDraw(canvas);}
 
@@ -92,6 +92,8 @@ public class CAsm_Dot extends ImageView {
 
     public int getRow() {return this.row;}
     public int getCol() {return this.col;}
+
+    public boolean getIsHollow() {return this.isHollow;}
 
     public boolean getIsClicked(){
         if (isClicked) {

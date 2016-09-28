@@ -1,0 +1,419 @@
+{
+  // Session Manager v0.0.1 Data set.
+  //
+  // Supports multple rows with classes of activities.
+  // This data is ordered in both dimensions,
+  // To add a new Row:
+  //    Create a new Json Object in the dataSource array
+  //    "type" is the classMap for the IloadableObject class for the Row of buttons
+  //    For each tutor in the Row add an Sm_Data json Object describing the tutor
+  //
+  //    "intent" is the tutor name for natives or the full intent for intent based tutors.
+  //    "intentdata" is extra data for the intent
+  //        'native' tutors run in the TED engine and have access to all tutor features.
+  //        'browser' activities are not supported currently
+  //        <Intent> activities run in a webview or are std apps and are initiated through an intent
+  //
+  //    "buttontype" is 'text' or 'image'
+  //    "buttonvalue" is the ascii string for the text or the Drawable used for images.
+  //
+  // Note: Don't actually need the type elements.  It would infer the type from the
+  //       array type in the variable declaration.
+
+  "bgColors": ["#D9FFFF","#b9FFb9"],
+
+  "dataSource": [
+//    {
+//      "type":"Sm_Class",
+//      "description":"Akira",
+//      //"background":"#D9FFFF",
+//      "data": [
+//        { "type":"Sm_Data", "datasource":"", "intent": "akira", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Akira"}
+//      ]
+//    },
+//
+//    {
+//      "type":"Sm_Class",
+//      "description":"add_subtract",
+//      //"background":"#D9FFFF",
+//      "data": [
+//        { "type":"Sm_Data", "datasource":"", "intent": "add_subtract", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Add/Subtract"}
+//      ]
+//    },
+//
+    {
+      "type":"Sm_Class",
+      "description":"numeric",
+      //"background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data", "datasource":"", "intent": "digit_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy"},
+        { "type":"Sm_Data", "datasource":"", "intent": "digit_dictation", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Dictation"}
+//        { "type":"Sm_Data", "datasource":"", "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word Copy"}
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"numeric",
+      //"background":"#b9FFb9",
+      "data": [
+        { "type":"Sm_Data", "datasource":"", "intent": "number_speaking", "intentdata":"native", "buttontype":"text" , "buttonvalue":"number speaking"}
+//        { "type":"Sm_Data", "datasource":"", "intent": "missing_number", "intentdata":"native", "buttontype":"text" , "buttonvalue":"missing number"}
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"writing",
+      //"background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data", "datasource":"", "intent": "letter_copy2", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy a", "features":"FTR_LC" },
+        { "type":"Sm_Data", "datasource":"", "intent": "letter_copy2", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Copy A", "features":"FTR_UC"  },
+        { "type":"Sm_Data", "datasource":"", "intent": "letter_dictation", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Dictation a", "features":"FTR_LC" },
+        { "type":"Sm_Data", "datasource":"", "intent": "letter_dictation", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Letter Dictation A", "features":"FTR_UC"  }
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"reading",
+      //"background":"#D9FFFF",
+      "data": [
+        //{ "type":"Sm_Data", "datasource":"", "intent": "com.carney.readingtutor:com.carney.activity.ReadingTutorActivity", "intentdata":"read", "buttontype":"text" , "buttonvalue":"Reading Tutor Ext" },
+        { "type":"Sm_Data", "datasource":"", "intent": "story_reading", "intentdata":"native", "features":"FTR_MANUAL" ,"buttontype":"text" , "buttonvalue":"Reading Tutor Manual-Flip" },
+        { "type":"Sm_Data", "datasource":"", "intent": "story_reading", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Reading Tutor AutoFlip" }
+
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_numeracy",
+      //"background":"#b9FFb9",
+      "data": [
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_shape_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Shape Pop1"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_shape_YN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Shape Pop2"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_shape_YN_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Shape Pop3"}
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_numeracy",
+      //"background":"#D9FFFF",
+      "data": [
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Number -> Dot 1"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_YY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Number -> Dot 2"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_YN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Number -> Dot 3"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_NY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Number -> Dot 4"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_YY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Number -> Dot 5"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_YN_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Number -> Dot 6"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_NY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Number -> Dot 7"}
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_numeracy",
+      //"background":"#b9FFb9",
+      "data": [
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Dot -> Number 1"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_YY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Dot -> Number 2"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_YN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Dot -> Number 3"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_NY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Dot -> Number 4"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_YY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Dot -> Number 5"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_YN_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Dot -> Number 6"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_NY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Dot -> Number 7"}
+      ]
+    },
+
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_numeracy",
+      //"background":"#b9FFb9",
+      "data": [
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Number Pop1"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_YY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Numbers Pop2"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_YN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Numbers Pop3"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_NY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Numbers Pop4"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_YY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Numbers Pop5"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_YN_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Numbers Pop6"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_NY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Numbers Pop7"}
+      ]
+    },
+
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_Lowercase -sequential",
+      //"background":"#b9FFb9",
+      "data": [
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 1"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_YY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 2"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_YN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 3"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_NY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 4"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_YY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 5"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_YN_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 6"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_NY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 7"}
+      ]
+    },
+
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_Lowercase -random",
+      //"background":"#b9FFb9",
+      "data": [
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 1R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_YY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 2R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_YN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 3R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_NY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 4R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_YY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 5R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_YN_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 6R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_NY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 7R"}
+      ]
+    },
+
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_Uppercase - sequential",
+      //"background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 1"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_YY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 2"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_YN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 3"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_NY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 4"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_YY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 5"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_YN_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 6"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_NY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 7"}
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_Uppercase - random",
+      //"background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 1R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_YY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 2R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_YN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 3R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_NY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 4R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_YY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 5R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_YN_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 6R"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_NY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Uppercase 7R"}
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_Mixed case - sequential",
+      //"background":"#D9FFFF",
+      "data": [
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case MC"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_YY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case MC"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_NY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case MC"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_YY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case Rise"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_NY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case Rise"}
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_Mixed case - random",
+      //"background":"#D9FFFF",
+      "data": [
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_R_NN_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case MC"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_R_YY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case MC"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_R_NY_MC.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case MC"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_R_YY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case Rise"},
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_R_NY_RISE.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case Rise"}
+      ]
+    }
+
+
+  ]
+}

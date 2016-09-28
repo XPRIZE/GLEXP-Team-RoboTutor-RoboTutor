@@ -23,6 +23,7 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import cmu.xprize.robotutor.tutorengine.IEventSource;
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
@@ -33,7 +34,7 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
 
-public class scene_node implements ILoadableObject2, IScriptable2 {
+public class scene_node implements ILoadableObject2, IScriptable2, IEventSource {
 
     protected IScope2       _scope;
 
@@ -179,6 +180,15 @@ public class scene_node implements ILoadableObject2, IScriptable2 {
         }
     }
 
+    @Override
+    public String getEventSourceName() {
+        return name;
+    }
+
+    @Override
+    public String getEventSourceType() {
+        return type;
+    }
 
     public String seekToAnimation(String seek) {
         return null;
@@ -299,6 +309,7 @@ public class scene_node implements ILoadableObject2, IScriptable2 {
         Log.d(TAG, "Loader iteration");
         loadJSON(jsonObj, (IScope2) scope);
     }
+
 }
 
 

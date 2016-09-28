@@ -26,21 +26,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import cmu.xprize.util.CAnimatorUtil;
+import cmu.xprize.util.TCONST;
 import cmu.xprize.util.View_Helper;
 
 public class CMn_Alley extends android.support.percent.PercentRelativeLayout {
 
-    private IValueListener _owner;
-    private boolean        _isMissingNumber;
+    private IValueListener    _owner;
+    private boolean           _isMissingNumber;
 
-    private Button      Splus;
-    private Button      Sminus;
-    private CMn_IconSet SiconSet;
-    private CMn_Text    Snumber;
+    private Button            Splus;
+    private Button            Sminus;
+    private CMn_IconSet       SiconSet;
+    private CMn_Text          Snumber;
 
-    private int         mMaxValue;
-    private int         mCurValue;
+    private List<String>      mOptions;
+
+    private int               mMaxValue;
+    private int               mCurValue;
+
 
     static final String TAG = "CMn_Alley";
 
@@ -147,6 +155,27 @@ public class CMn_Alley extends android.support.percent.PercentRelativeLayout {
         int visible = (_isMissingNumber)? View.VISIBLE: View.INVISIBLE;
 
         mMaxValue = data.maxvalue;
+
+        if(data.options != null) {
+            mOptions = Arrays.asList(data.options.split(","));
+
+            SiconSet.setVisibility(View.GONE);
+            Snumber.setVisibility(View.GONE);
+
+            for(String option : mOptions) {
+
+                switch(option) {
+                    case TCONST.SHOWICONS:
+                        SiconSet.setVisibility(View.VISIBLE);
+                        break;
+
+                    case TCONST.SHOWNUM:
+                        Snumber.setVisibility(View.VISIBLE);
+                        break;
+                }
+            }
+            requestLayout();
+        }
 
         Splus.setVisibility(visible);
         Sminus.setVisibility(visible);
