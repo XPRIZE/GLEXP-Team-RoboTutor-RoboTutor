@@ -71,6 +71,23 @@ public class CPixelArray {
     }
 
 
+    public int scanNotColor(int testColot) {
+
+        int count = 0;
+        int size  = getSize();
+
+        for (int i1 = 0; i1 < size ; i1++) {
+
+            if (_pixels[i1] != 0 && _pixels[i1] != testColot) {
+
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+
     public int scanAndReplace(int testColot, int replaceColor) {
 
         int errValue = 0;

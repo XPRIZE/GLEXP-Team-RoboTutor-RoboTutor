@@ -45,24 +45,21 @@ public class TLinkedScrollView  extends CLinkedScrollView implements ITutorObjec
 
     public TLinkedScrollView(Context context) {
         super(context);
-        init(context, null);
     }
 
     public TLinkedScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context, attrs);
     }
 
     public TLinkedScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context, attrs);
     }
 
     public void init(Context context, AttributeSet attrs) {
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
 
-        setOnTouchListener(this);
+        super.init(context, attrs);
     }
 
     @Override

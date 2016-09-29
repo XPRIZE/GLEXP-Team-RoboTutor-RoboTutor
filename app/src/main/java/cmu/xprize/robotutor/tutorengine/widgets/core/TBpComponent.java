@@ -253,6 +253,7 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
         super.enableTouchEvents();
     }
 
+
     public void setVolatileBehavior(String event, String behavior) {
 
         if (behavior.toUpperCase().equals(TCONST.NULL)) {

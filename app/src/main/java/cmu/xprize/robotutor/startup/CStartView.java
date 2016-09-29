@@ -20,9 +20,11 @@
 package cmu.xprize.robotutor.startup;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -37,6 +39,7 @@ import cmu.xprize.comp_pointtap.HA_CONST;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.IRoboTutor;
+import cmu.xprize.util.TCONST;
 
 
 public class CStartView extends FrameLayout {
@@ -46,10 +49,12 @@ public class CStartView extends FrameLayout {
     private ImageButton  start;
     private IRoboTutor   callback;
 
-    private final Handler mainHandler = new Handler(Looper.getMainLooper());
-    private HashMap       queueMap    = new HashMap();
-    private boolean       _qDisabled  = false;
+    private final Handler mainHandler  = new Handler(Looper.getMainLooper());
+    private HashMap       queueMap     = new HashMap();
+    private boolean       _qDisabled   = false;
+    private int[]         _screenCoord = new int[2];
 
+    private LocalBroadcastManager bManager;
 
     static final String TAG = "CStartView";
 
@@ -72,6 +77,9 @@ public class CStartView extends FrameLayout {
 
     public void init(Context context, AttributeSet attrs) {
         mContext = context;
+
+        // Capture the local broadcast manager
+        bManager = LocalBroadcastManager.getInstance(getContext());
     }
 
 
@@ -97,6 +105,30 @@ public class CStartView extends FrameLayout {
 
 
 
+    private void broadcastLocation(String Action, View target) {
+
+        target.getLocationOnScreen(_screenCoord);
+
+        PointF centerPt = new PointF(_screenCoord[0] + (target.getWidth() / 2), _screenCoord[1] + (target.getHeight() / 2));
+        Intent msg = new Intent(Action);
+        msg.putExtra(TCONST.SCREENPOINT, new float[]{centerPt.x, (float) centerPt.y});
+
+        bManager.sendBroadcast(msg);
+    }
+
+
+    protected void broadcastLocation(String Action, PointF touchPt) {
+
+        getLocationOnScreen(_screenCoord);
+
+        // Let the persona know where to look
+        Intent msg = new Intent(Action);
+        msg.putExtra(TCONST.SCREENPOINT, new float[]{touchPt.x + _screenCoord[0], (float) touchPt.y + _screenCoord[1]});
+
+        bManager.sendBroadcast(msg);
+    }
+
+
     public void execCommand(String command, Object target ) {
 
         long    delay  = 0;
@@ -107,9 +139,15 @@ public class CStartView extends FrameLayout {
 
                 CHandAnimation hand = (CHandAnimation) findViewById(R.id.ShandAnimator);
 
-                PointF targetPoint = new PointF(getWidth() / 5, getHeight() /5);
+                float tapRegionX = (getWidth() * 3 / 4);
+                float tapRegionY = (getHeight() * 3 / 4);
 
-                hand.post(HA_CONST.ANIMATE_MOVE, targetPoint);
+                float padRegionX = (getWidth() / 8);
+                float padRegionY = (getHeight() / 8);
+
+                PointF targetPoint = new PointF((int) (Math.random() * tapRegionX) + padRegionX, (int) (Math.random() * tapRegionY) + padRegionY);
+
+                broadcastLocation(TCONST.POINT_AND_TAP, targetPoint);
 
                 post(HA_CONST.ANIMATE_REPEAT, HA_CONST.TUTOR_RATE);
                 break;

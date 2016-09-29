@@ -65,10 +65,11 @@ public class CRecognizerPlus implements IGlyphSink {
     private boolean                _boostExpected     = true;
     private boolean                _boostUnExpected   = true;
     private boolean                _boostPunctuation  = false;
+    private boolean                _boostMissingSample= false;
 
     private boolean                _boostDigitClass   = false;
     private boolean                _boostAlphaClass   = false;
-    private boolean                _boostSampleClass  = false;
+    private boolean                _boostSampleClass  = true;
 
 
     private CLipiTKJNIInterface _recognizer;
@@ -245,6 +246,7 @@ public class CRecognizerPlus implements IGlyphSink {
     class RecognizerTask extends AsyncTask<Void, Void, String> {
 
         private long         LTKTimer;                  // Used for benchmarking
+        private long         LTKPlusTimer;              // Used for benchmarking
 
         RecognizerTask() {
         }
@@ -263,6 +265,7 @@ public class CRecognizerPlus implements IGlyphSink {
 
             _ltkCandidates = _recognizer.recognize(_recStrokes);
 
+            LTKPlusTimer = System.currentTimeMillis();
             Log.d("LTKPLUS", "Time in LTKProcessor: " + (System.currentTimeMillis() - LTKTimer));
 
             // generate the LTK project folder that contains the symbol to unicode mapping
@@ -291,7 +294,7 @@ public class CRecognizerPlus implements IGlyphSink {
 
             _recStrokes = null;
 
-            Log.d("LTKPLUS", "Time in LTK_PUS_Processor: " + (System.currentTimeMillis() - LTKTimer));
+            Log.d("LTKPLUS", "Time in LTK_PLUS_Processor: " + (System.currentTimeMillis() - LTKPlusTimer));
 
             synchronized (_isRecognizing) {
 
@@ -339,6 +342,7 @@ public class CRecognizerPlus implements IGlyphSink {
         CRecResult[] insCandidates;
         boolean      hasCandidate = false;
         int          insertIndex  = -1;
+        int          lowestIndex  = 0;
 
         if(!force) {
             for (int i1 = 0; i1 < _ltkCandidates.length; i1++) {
@@ -358,17 +362,24 @@ public class CRecognizerPlus implements IGlyphSink {
             for(int i1 = 0; i1 < _ltkCandidates.length ; i1++) {
 
                 insCandidates[i1] = _ltkCandidates[i1];
+
+                // Keep track of the lowest LTK confidence
+                //
+                if(!_ltkCandidates[i1].isVirtual()) {
+                    lowestIndex = i1;
+                }
             }
 
             // Give it the same confidence as the second most likely
             // Handle special case where there is one or no candidates
+            // TODO: The value of 0.5f here is totally arbitrary - i.e. may not be rational
             //
             if(_ltkCandidates.length <= 1) {
                 insCandidates[insertIndex] = new CRecResult(newCandidate, 0.5f, true);
             }
             else {
 
-                insCandidates[insertIndex] = new CRecResult(newCandidate, _ltkCandidates[1].Confidence, true);
+                insCandidates[insertIndex] = new CRecResult(newCandidate, _ltkCandidates[lowestIndex].Confidence, true);
             }
             insCandidates[insertIndex].updateORConfidence(insCandidates[insertIndex].Confidence);
             insCandidates[insertIndex].setVisualRequest(true);
@@ -488,7 +499,11 @@ public class CRecognizerPlus implements IGlyphSink {
 
         // If the sample (i.e. expected character) is not amongst the LipiTK candidates then we add it.
         //
-        if(sampleIndex == GCONST.EXPECTED_NOT_FOUND) {
+        // We are correcting for specific LipiTK named recognizer errors (i.e. the ALPHANUM recognizer) -
+        // Sometime it doesn't produce certain characters that you'd think it should due to training
+        // deficiencies - we force add boostMap characters here -
+        //
+        if(sampleIndex == GCONST.EXPECTED_NOT_FOUND && (_boostMissingSample || GCONST.boostMap.containsKey(_sampleExpected))) {
 
             // Special processing = LTK essentially never recognizes a comma nor an apostrophe.
             // so to allow the system to recognize either and disambiguate the result we add
@@ -533,7 +548,8 @@ public class CRecognizerPlus implements IGlyphSink {
         // We always ensure the alternate case of the expected is present as we know that LTK is often wrong on case
         // differentiation and we want both case alternates of the expected char to be evaluated e.g. X and x
         //
-        forceProcessing |= ensureAlternateCase(_sampleExpected, sampleIndex);
+        if(sampleIndex >= 0)
+            forceProcessing |= ensureAlternateCase(_sampleExpected, sampleIndex);
 
 
         // If the LTK candidate is not the sample char then do LTK+ post processing.

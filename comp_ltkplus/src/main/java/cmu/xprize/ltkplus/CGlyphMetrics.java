@@ -40,11 +40,17 @@ public class CGlyphMetrics {
     private float aspectGl;
     private float aspectVar;
 
-    private float visualMatch;
+    private float _visualMatch;
+    private float _glyphError;
 
     private Bitmap                _bitmap;
     private CPixelArray           _pixels;
-    private int                   _charValue = 0;
+
+    private int                   _charValue   = 0;
+    private int                   _missValue   = 0;
+
+    private int                   _glyphExcess = 0;
+    private int                   _glyphTotal  = 0;
 
     private Paint                 mPaint;
     private Paint                 mPaintDBG;
@@ -110,7 +116,11 @@ public class CGlyphMetrics {
     }
 
     public String getVisualMetric() {
-        return formatFloat(visualMatch);
+        return formatFloat(_visualMatch);
+    }
+
+    public String getGlyphErrorMetric() {
+        return formatFloat(_glyphError);
     }
 
     public void showDebugBounds(boolean showHide) { DBG = showHide; }
@@ -131,9 +141,11 @@ public class CGlyphMetrics {
     public float getDeltaA() {
         return aspectVar;
     }
+
     public float getVisualDelta() {
-        return visualMatch;
+        return _visualMatch;
     }
+
 
 
     public Bitmap generateVisualComparison(Rect fontBounds, String charToCompare, CGlyph glyphToCompare, Paint mPaint, float strokeWeight, boolean isVolatile) {
@@ -156,7 +168,9 @@ public class CGlyphMetrics {
     public float generateVisualMetric(Rect fontBounds, String charToCompare, String expectedChar, CGlyph glyphToCompare, Paint mPaint, float strokeWeight, boolean isVolatile) {
 
         Rect charBnds = new Rect();
-        visualMatch   = 0;
+        _visualMatch = 0;
+
+        long _time = System.currentTimeMillis();
 
         // Setup the stroke weight -
         // The visual comparator was calibrated with a line weight of 45f so we scale that to whatever
@@ -221,24 +235,31 @@ public class CGlyphMetrics {
 
             _pixels.getPixels();
 
-            int errValue    = 0;
-            int excessValue = 0;
-
-            errValue = _pixels.scanAndReplace(TCONST.FONTCOLOR1, TCONST.ERRORCOLOR1);
+            // Count the total pixels in the glyph image
+            // Replace Font pixels that are "missed" and return count
+            // Count glyph pixels outside the font iumage
+            //
+            _glyphTotal  = _pixels.scanNotColor(TCONST.FONTCOLOR1);
+            _missValue   = _pixels.scanAndReplace(TCONST.FONTCOLOR1, TCONST.ERRORCOLOR1);
+            _glyphExcess = _pixels.scanForColor(mPaint.getColor());
 
             // Calc the visual match metric -
             //
             // 0 = complete overlay - glyph may still have undesirable form but covers the char at least
             // 1 = no match
             //
-            visualMatch = (float) (_charValue - errValue - (excessValue / 2)) / (float) _charValue;
-            Log.d(TAG, "Char Error: " + visualMatch);
+            _visualMatch = (float) (_charValue - _missValue) / (float) _charValue;
+            _glyphError  = (float) _glyphExcess / (float) _glyphTotal;
+
+            Log.d(TAG, "Glyph Excess: " + _glyphError);
 
             if (isVolatile)
                 _bitmap.recycle();
         }
 
-        return visualMatch;
+        Log.d("LTKPLUS", "Time in recognizer: " + (System.currentTimeMillis() - _time));
+
+        return _visualMatch;
     }
 
 }

@@ -121,6 +121,17 @@ public class GCONST {
 
     // TODO: make getStroke weight scale sensitive
     //
+    public static final float    REPLAY_WEIGHT = 5f;
     public static final float    STROKE_WEIGHT = 45f;
 
+
+    // We are correcting for specific LipiTK named recognizer errors (i.e. the ALPHANUM recognizer) -
+    // Sometime it doesn't produce certain characters that you'd think it should due to training
+    // deficiencies - we enumaerate those characters here -
+    //
+    static public HashMap<String, Boolean> boostMap = new HashMap<String, Boolean>();
+
+    static {
+        boostMap.put("i", true);
+    }
 }

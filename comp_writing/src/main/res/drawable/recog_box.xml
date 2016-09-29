@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape
 xmlns:android="http://schemas.android.com/apk/res/android"
-android:shape="rectangle">
+android:shape="line">
 
 <size
     android:width="45dp"
     android:height="45dp"/>
 
 <solid
-    android:color="#8fcc8f" />
+    android:color="#FFFF0000" />
+
+<stroke
+    android:color="#FFFF0000"
+    android:width="5dp"/>
 
 </shape>

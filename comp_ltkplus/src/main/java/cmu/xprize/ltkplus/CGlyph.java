@@ -214,7 +214,7 @@ public class CGlyph implements ILoadableObject, Cloneable {
 //            mPaint.setColor(0xEE8217);
 //            mPaint.setAlpha(170);
 
-            mPaint.setColor(TCONST.GLYPHCOLOR1);
+//            mPaint.setColor(TCONST.GLYPHCOLOR1);
 
             if(stroke.isPoint(_drawBnds)) {
 
@@ -228,7 +228,7 @@ public class CGlyph implements ILoadableObject, Cloneable {
                 canvas.drawPath(stroke.getPath(), mPaint);
             }
 
-            mPaint.setColor(Color.BLACK);
+//            mPaint.setColor(Color.BLACK);
             mPaint.setAlpha(255);
         }
     }

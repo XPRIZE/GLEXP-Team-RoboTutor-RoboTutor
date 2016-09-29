@@ -159,11 +159,11 @@ public class TTSsynthesizer extends UtteranceProgressListener implements OnInitL
     public boolean isSpeaking(){
 
         // Can get a dead object here - ignore
+        //
         try {
             isSpeaking = tts.isSpeaking();
 
             if(!isSpeaking) {
-                isSpeaking = false;
 
                 if(mMediaController != null)
                     mMediaController.stopSpeaking();

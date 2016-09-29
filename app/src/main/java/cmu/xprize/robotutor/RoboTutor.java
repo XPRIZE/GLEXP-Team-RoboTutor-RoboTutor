@@ -368,6 +368,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         // TODO: This is a temporary log update mechanism - see below
         //
         masterContainer.addAndShow(startView);
+        startView.startTapTutor();
         setFullScreen();
 
         if(tutorEngine != null) {

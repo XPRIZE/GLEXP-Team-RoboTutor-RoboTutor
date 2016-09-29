@@ -20,35 +20,20 @@
 package cmu.xprize.comp_writing;
 
 import android.content.Context;
-import android.graphics.PointF;
-import android.os.Handler;
-import android.os.Looper;
-import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import cmu.xprize.ltkplus.CGlyphMetrics;
-import cmu.xprize.ltkplus.CRecognizerPlus;
-import cmu.xprize.ltkplus.GCONST;
-import cmu.xprize.ltkplus.CGlyphSet;
-import cmu.xprize.ltkplus.IGlyphSink;
 import cmu.xprize.ltkplus.CRecResult;
 import cmu.xprize.util.CErrorManager;
-import cmu.xprize.util.CLinkedScrollView;
 
 
 /**
@@ -58,7 +43,7 @@ import cmu.xprize.util.CLinkedScrollView;
  *  settings will not work correctly.
  *
  */
-public class CWritingDevController extends CWritingController  {
+public class CWritingDevComponent extends CWritingComponent {
 
     private TextView          mLtkStats;
     private TextView          mLtkPlus;
@@ -79,17 +64,17 @@ public class CWritingDevController extends CWritingController  {
 
     final private String  TAG        = "WritingComp";
 
-    public CWritingDevController(Context context) {
+    public CWritingDevComponent(Context context) {
         super(context);
         init(null, 0);
     }
 
-    public CWritingDevController(Context context, AttributeSet attrs) {
+    public CWritingDevComponent(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs, 0);
     }
 
-    public CWritingDevController(Context context, AttributeSet attrs, int defStyle) {
+    public CWritingDevComponent(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(attrs, defStyle);
     }
@@ -153,7 +138,7 @@ public class CWritingDevController extends CWritingController  {
 
             for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
 
-                CDrawnInputController comp = (CDrawnInputController) mDrawnList.getChildAt(i1);
+                CGlyphController comp = (CGlyphController) mDrawnList.getChildAt(i1);
 
                 if(comp.toggleSampleChar()) {
                     mShowSample.setText("Hide Sample");
@@ -173,7 +158,7 @@ public class CWritingDevController extends CWritingController  {
 
             for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
 
-                CDrawnInputController comp = (CDrawnInputController) mDrawnList.getChildAt(i1);
+                CGlyphController comp = (CGlyphController) mDrawnList.getChildAt(i1);
                 result = comp.toggleProtoGlyph();
             }
 
@@ -196,7 +181,7 @@ public class CWritingDevController extends CWritingController  {
 
             for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
 
-                CDrawnInputController comp = (CDrawnInputController) mDrawnList.getChildAt(i1);
+                CGlyphController comp = (CGlyphController) mDrawnList.getChildAt(i1);
                 result = comp.toggleDebugBounds();
             }
 
@@ -220,7 +205,7 @@ public class CWritingDevController extends CWritingController  {
 
             for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
 
-                CDrawnInputController comp = (CDrawnInputController) mDrawnList.getChildAt(i1);
+                CGlyphController comp = (CGlyphController) mDrawnList.getChildAt(i1);
                 comp.selectFont(fontSelection);
             }
         }

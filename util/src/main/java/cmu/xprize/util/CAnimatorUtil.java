@@ -76,7 +76,7 @@ public class CAnimatorUtil {
     }
 
 
-    static public AnimatorSet fadeInOut(View _tarView, long duration) {
+    static public AnimatorSet fadeInOut(View _tarView, long duration, long delay) {
 
         float[] wayPoints = new float[3];
 
@@ -87,7 +87,7 @@ public class CAnimatorUtil {
         wayPoints[1] = .30f;
         wayPoints[2] = 0;
 
-        fadeAnimator = createFloatAnimator(_tarView, "alpha", duration, 0, ValueAnimator.RESTART, new LinearInterpolator(), 0, wayPoints);
+        fadeAnimator = createFloatAnimator(_tarView, "alpha", duration, 0, ValueAnimator.RESTART, new LinearInterpolator(), delay, wayPoints);
 
         animation.play(fadeAnimator);
 

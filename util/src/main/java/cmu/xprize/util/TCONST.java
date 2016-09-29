@@ -88,6 +88,46 @@ public class TCONST {
     public static final String GRUNDSCHRIFT_Punkt  = "Grundschrift-Punkt";
     public static final String GRUNDSCHRIFT_Kontur = "Grundschrift-Kontur";
 
+    public static final String POINTAT             = "POINTAT";
+    public static final String POINTATEND          = "POINTATEND";
+    public static final String POINT_AND_TAP       = "POINTANDTAP";
+    public static final String POINTAT_COMPLETE    = "POINTAT_COMPLETE";
+    public static final String POINT_LIVE          = "POINT_LIVE";
+    public static final String POINT_FADE          = "POINT_FADE";
+    public static final String CANCEL_POINT        = "CANCEL_POINT";
+
+    public static final String FEEDBACK_DELAYED    = "FEEDBACK_DELAYED";
+    public static final String FEEDBACK_IMMEDIATE  = "FEEDBACK_IMMEDIATE";
+
+    public static final String HIGHLIGHT           = "HIGHLIGHT";
+    public static final String SHOW_NORMAL         = "SHOW_NOTMAL";
+
+    public static final float  TRACKER_WEIGHT      = 5f;
+    public static final int    TRACKER_COLOR       = 0x11000088;
+
+
+    static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
+    //
+    // This is used to map "states" to colors
+
+    static {
+        colorMap.put(TCONST.COLORWRONG,  new Integer(0xFFFF0000));
+        colorMap.put(TCONST.COLORERROR,  new Integer(0x44000000));
+        colorMap.put(TCONST.COLORWARNING,new Integer(0xFFFFFF00));
+        colorMap.put(TCONST.COLORRIGHT,  new Integer(0xff0000ff));
+        colorMap.put(TCONST.COLORNORMAL, new Integer(0xff000000));
+        colorMap.put(TCONST.COLORNONE,   new Integer(0x00000000));
+    }
+
+    public static final String COLORINDET          = "indeterminate";
+    public static final String COLORWRONG          = "wrong";
+    public static final String COLORWARNING        = "warning";
+    public static final String COLORRIGHT          = "right";
+    public static final String COLORERROR          = "error";
+    public static final String COLORNORMAL         = "normal";
+    public static final String COLORNONE           = "none";
+
+
     static public HashMap<String, String> fontMap = new HashMap<String, String>();
 
     static {

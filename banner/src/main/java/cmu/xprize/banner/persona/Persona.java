@@ -76,7 +76,7 @@ public class Persona extends View {
     private int             blinkCnt;
     private Timer           blinkTimer = null;
 
-    private Handler blinkHandler;
+    private Handler         blinkHandler;
 
     private AnimatorSet     animation = null;
     private TimerTask       blinkTask;
@@ -85,6 +85,7 @@ public class Persona extends View {
     private ChangeReceiver        bReceiver;
 
     private int[]           _screenCoord = new int[2];
+
     private static String   TAG          = "PERSONA";
     private static float    OPENEYE      = 0.15f;
     private static float    CLOSEDEYE    = 1.00f;

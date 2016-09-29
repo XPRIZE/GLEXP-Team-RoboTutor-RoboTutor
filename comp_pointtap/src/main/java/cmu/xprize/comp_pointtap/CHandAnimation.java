@@ -21,32 +21,33 @@ package cmu.xprize.comp_pointtap;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Point;
 import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.percent.PercentRelativeLayout;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.TCONST;
 
-public class CHandAnimation extends PercentRelativeLayout {
+public class CHandAnimation extends PercentRelativeLayout implements Animator.AnimatorListener {
 
     private Context       mContext;
 
@@ -66,6 +67,16 @@ public class CHandAnimation extends PercentRelativeLayout {
     private float         _strokeWeight;
     private float         _radIncrement;
     private float         _scaleFactor;
+
+    private LocalBroadcastManager bManager;
+    private ChangeReceiver        bReceiver;
+    private int[]                 _screenCoord = new int[2];
+
+    private AnimatorSet           _animation;
+    private String[]              _animatorSeq;
+    private int                   _animatorNdx;
+    private boolean               _inAnimation = false;
+    private PointF                _animationPoint;
 
     static final String TAG = "CHandAnimation";
 
@@ -100,7 +111,7 @@ public class CHandAnimation extends PercentRelativeLayout {
                     0, 0);
 
             try {
-                _color        = a.getInt(R.styleable.RoboTutor_ripple_color, HA_CONST.DEFCOLOR);
+                _color        = a.getInt(R.styleable.RoboTutor_ripple_color, HA_CONST.RIPPLE_COLOR);
                 _strokeWeight = a.getFloat(R.styleable.RoboTutor_stroke_weight, HA_CONST.DEFSTROKEWEIGHT);
                 _radIncrement = a.getFloat(R.styleable.RoboTutor_radius_inc, HA_CONST.DEFRADIUSINC);
                 _scaleFactor  = a.getFloat(R.styleable.RoboTutor_scale_factor, HA_CONST.DEF_SCALE);
@@ -114,6 +125,107 @@ public class CHandAnimation extends PercentRelativeLayout {
         _hand            = (ImageView) findViewById(R.id.Shand);
 
         initRipples(_color, _strokeWeight, _radIncrement);
+
+        // Capture the local broadcast manager
+        bManager = LocalBroadcastManager.getInstance(getContext());
+
+        IntentFilter filter = new IntentFilter(TCONST.POINTAT);
+        filter.addAction(TCONST.POINTATEND);
+        filter.addAction(TCONST.POINT_AND_TAP);
+        filter.addAction(TCONST.POINT_LIVE);
+        filter.addAction(TCONST.POINT_FADE);
+
+        bReceiver = new ChangeReceiver();
+
+        bManager.registerReceiver(bReceiver, filter);
+    }
+
+
+    public void onDestroy() {
+
+        if(bManager != null) {
+            bManager.unregisterReceiver(bReceiver);
+        }
+    }
+
+
+    class ChangeReceiver extends BroadcastReceiver {
+        public void onReceive (Context context, Intent intent) {
+
+            float[] coord;
+            View    target;
+
+            Log.d("Indicate", "Broadcast recieved: ");
+
+            switch(intent.getAction()) {
+
+                case TCONST.CANCEL_POINT:
+
+                    flushQueue();
+
+                    if(_animation != null) {
+                        _animation.cancel();
+                    }
+                    _hand.setAlpha(0f);
+
+                    break;
+
+                case TCONST.POINT_AND_TAP:
+
+                    if(!_inAnimation) {
+
+                        _inAnimation = true;
+
+                        coord = intent.getFloatArrayExtra(TCONST.SCREENPOINT);
+
+                        _animationPoint = new PointF(coord[0], coord[1]);
+                        _animatorSeq = new String[]{HA_CONST.ANIMATE_MOVE, HA_CONST.ANIMATE_TAP, HA_CONST.ANIMATE_FADE};
+                        post(HA_CONST.STARTSEQ);
+                    }
+                    break;
+
+                case TCONST.POINTAT:
+
+                    if(!_inAnimation) {
+
+                        _inAnimation = true;
+
+                        coord = intent.getFloatArrayExtra(TCONST.SCREENPOINT);
+
+                        _animationPoint = new PointF(coord[0], coord[1]);
+                        _animatorSeq = new String[]{HA_CONST.ANIMATE_MOVE, HA_CONST.ANIMATE_FADE};
+                        post(HA_CONST.STARTSEQ);
+                    }
+                    break;
+
+
+                case TCONST.POINT_LIVE:
+
+                    coord = intent.getFloatArrayExtra(TCONST.SCREENPOINT);
+
+                    _hand.setAlpha(1.0f);
+                    _hand.setX(coord[0] + _offsetX);
+                    _hand.setY(coord[1] + _offsetY);
+                    invalidate();
+
+                    break;
+
+
+                case TCONST.POINT_FADE:
+
+                    if(!_inAnimation) {
+
+                        _inAnimation = true;
+
+                        coord = intent.getFloatArrayExtra(TCONST.SCREENPOINT);
+
+                        _animationPoint = new PointF(coord[0], coord[1]);
+                        _animatorSeq = new String[]{HA_CONST.ANIMATE_FADE};
+                        post(HA_CONST.STARTSEQ);
+                    }
+                    break;
+            }
+        }
     }
 
 
@@ -121,6 +233,10 @@ public class CHandAnimation extends PercentRelativeLayout {
 
         float radius = HA_CONST.BASE_RADIUS;
 
+        // Calcu;ate the ripple center offset
+        // Offsets are required since Android clips anumated views regardless of clipChildren
+        // settings so the view cannot draw outside it's bounods
+        //
         _offsetRippleX = radius + (_ripples.length * radIncrement) + (strokeWeight / 2);
         _offsetRippleY = radius + (_ripples.length * radIncrement) + (strokeWeight / 2);
 
@@ -132,14 +248,10 @@ public class CHandAnimation extends PercentRelativeLayout {
             _ripples[i1].setOrigin(_offsetRippleX, _offsetRippleY);
 
             _rippleContainer.addView(_ripples[i1]);
-            radius += radIncrement;
+
+            radius       += radIncrement;
+            strokeWeight *= 0.7;
         }
-    }
-
-
-    public void animateMoveTap(PointF target) {
-
-        post(HA_CONST.ANIMATE_TAP, target);
     }
 
 
@@ -156,13 +268,7 @@ public class CHandAnimation extends PercentRelativeLayout {
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        _hand.setPivotX(_hand.getWidth()  * _scaleFactor);
-        _hand.setPivotY(_hand.getHeight() * _scaleFactor);
-
-        _hand.setScaleX(_scaleFactor);
-        _hand.setScaleY(_scaleFactor);
     }
-
 
 
     @Override
@@ -172,10 +278,29 @@ public class CHandAnimation extends PercentRelativeLayout {
 
         if(changed) {
 
+            // Set the pivot point to the upper left corner - we scale from their not the center
+            // which is the default.
+            //
+            _hand.setPivotX(0.0f);
+            _hand.setPivotY(0.0f);
+
+            // Correct for Android DPI variance - i.e. the hand will be a different
+            // size based on display dpi
+            _scaleFactor *= HA_CONST.DESIGN_SIZE / _hand.getWidth();
+
+            _hand.setScaleX(_scaleFactor);
+            _hand.setScaleY(_scaleFactor);
+
+            // Generate the offset to the finger tip - used to position over the target point
+            // Offsets are required since Android clips "animated" views regardless of clipChildren
+            // settings so the view cannot draw outside it's bounds. So we cannot move the drawables
+            // origin to have the finger tip at 0,0 (note that static images clip correctly)
+            //
             _offsetX = (int)(-(_hand.getWidth() * _hand.getScaleX())/5);
             _offsetY = (int)(-(_hand.getHeight() * _hand.getScaleY())/10);
         }
     }
+
 
     public void execCommand(String command, Object target ) {
 
@@ -183,99 +308,140 @@ public class CHandAnimation extends PercentRelativeLayout {
 
         switch(command) {
 
+            case HA_CONST.STARTSEQ:
+                _animatorNdx = 0;
+                post(_animatorSeq[0], _animationPoint);
+                break;
+
             case HA_CONST.ANIMATE_MOVE:
 
                 PointF tarPoint    = (PointF) target;
 
+                // Move the ripple center to the target point
+                //
                 _rippleContainer.setX(tarPoint.x - _offsetRippleX);
                 _rippleContainer.setY(tarPoint.y - _offsetRippleY);
 
+                // Move the finger tip to the target point
+                //
                 tarPoint.x += _offsetX;
                 tarPoint.y += _offsetY;
 
                 PointF wayPoints[] = new PointF[2];
 
-                wayPoints[0] = new PointF(tarPoint.x * 2, tarPoint.y * 2);
+                wayPoints[0] = new PointF(tarPoint.x * 1.5f, tarPoint.y * 1.5f);
                 wayPoints[1] = tarPoint;
 
-                AnimatorSet fader      = CAnimatorUtil.configFadeIn(_hand, HA_CONST.TRANSLATE_TIME);
-                Animator    translator = CAnimatorUtil.configTranslate(_hand, HA_CONST.TRANSLATE_TIME, 0, wayPoints);
+                Animator fader      = CAnimatorUtil.configFadeIn(_hand, HA_CONST.TRANSLATE_TIME);
+                Animator translator = CAnimatorUtil.configTranslate(_hand, HA_CONST.TRANSLATE_TIME, 0, wayPoints);
 
-                translator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationCancel(Animator arg0) {
-                        //Functionality here
-                    }
-
-                    @Override
-                    public void onAnimationStart(Animator arg0) {
-                        //Functionality here
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-
-                        post(HA_CONST.ANIMATE_TAP);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator arg0) {
-                        //Functionality here
-                    }
-                });
-
-                fader.start();
-                translator.start();
+                _animation = new AnimatorSet();
+                _animation.playTogether(fader,translator);
+                _animation.addListener(CHandAnimation.this);
+                _animation.start();
                 break;
 
             case HA_CONST.ANIMATE_TAP:
 
+                ArrayList<Animator> ripples = new ArrayList<>();
                 delay = 0;
 
                 for (CRipple iripple : _ripples) {
-                    post(HA_CONST.ANIMATE_RIPPLE, iripple, delay);
+
+                    ripples.add(CAnimatorUtil.fadeInOut(iripple, HA_CONST.RIPPLE_DELAY * 2, delay));
 
                     delay += HA_CONST.RIPPLE_DELAY;
                 }
 
-                post(HA_CONST.ANIMATE_HANDOFF, _hand, HA_CONST.HAND_TIMEOUT);
+                _animation = new AnimatorSet();
+                _animation.playTogether(ripples);
+                _animation.addListener(CHandAnimation.this);
+                _animation.start();
                 break;
 
 
-            case HA_CONST.ANIMATE_HANDOFF:
-                AnimatorSet fadeHand = CAnimatorUtil.configFadeOut(_hand, 500);
-                fadeHand.start();
+            case HA_CONST.ANIMATE_FADE:
+
+                _animation = new AnimatorSet();
+                _animation = CAnimatorUtil.configFadeOut(_hand, 500);
+                _animation.addListener(CHandAnimation.this);
+                _animation.start();
                 break;
 
-            case HA_CONST.ANIMATE_RIPPLE:
-
-                Animator ripple = CAnimatorUtil.fadeInOut((View)target, HA_CONST.RIPPLE_DELAY * 2);
-
-                ripple.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationCancel(Animator arg0) {
-                        //Functionality here
-                    }
-
-                    @Override
-                    public void onAnimationStart(Animator arg0) {
-                        //Functionality here
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator arg0) {
-                        //Functionality here
-                    }
-                });
-
-                ripple.start();
-                break;
+//            case HA_CONST.ANIMATE_RIPPLE:
+//
+//                Animator ripple = CAnimatorUtil.fadeInOut((View)target, HA_CONST.RIPPLE_DELAY * 2);
+//
+//                ripple.addListener(new Animator.AnimatorListener() {
+//                    @Override
+//                    public void onAnimationCancel(Animator arg0) {
+//                        //Functionality here
+//                    }
+//
+//                    @Override
+//                    public void onAnimationStart(Animator arg0) {
+//                        //Functionality here
+//                    }
+//
+//                    @Override
+//                    public void onAnimationEnd(Animator animation) {
+//                    }
+//
+//                    @Override
+//                    public void onAnimationRepeat(Animator arg0) {
+//                        //Functionality here
+//                    }
+//                });
+//
+//                ripple.start();
+//                break;
         }
     }
+
+
+    //************************************************************************
+    //************************************************************************
+    // Animator Listener  -- Start
+
+    @Override
+    public void onAnimationStart(Animator animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animator animation) {
+
+        _animatorNdx++;
+
+        if(_animatorNdx < _animatorSeq.length) {
+
+            post(_animatorSeq[_animatorNdx], _animationPoint);
+        }
+        else {
+            _inAnimation = false;
+            broadcast(TCONST.POINTAT_COMPLETE);
+        }
+    }
+
+    @Override
+    public void onAnimationCancel(Animator animation) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animator animation) {
+
+    }
+
+
+
+    protected void broadcast(String Action) {
+
+        // Let the persona know where to look
+        Intent msg = new Intent(Action);
+        bManager.sendBroadcast(msg);
+    }
+
 
 
     //************************************************************************

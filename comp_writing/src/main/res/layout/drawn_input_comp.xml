@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<cmu.xprize.comp_writing.CDrawnInputController
+<cmu.xprize.comp_writing.CGlyphController
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
@@ -36,7 +36,8 @@
         <cmu.xprize.comp_writing.CGlyphReplayContainer
             android:id="@+id/replay_box"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="@null"/>
     </FrameLayout>
 
     <ImageButton
@@ -135,4 +136,4 @@
 
 
 
-</cmu.xprize.comp_writing.CDrawnInputController>
+</cmu.xprize.comp_writing.CGlyphController>
