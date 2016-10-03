@@ -145,7 +145,7 @@ public class type_audio extends type_action implements IMediaListener {
                 mPlayer = null;
             }
 
-            // Flows automatically emit a NEXT_NODE event to next scenegraph.
+            // Flows automatically emit a NEXT_NODE event to scenegraph.
             //
             if (mode.equals(TCONST.AUDIOFLOW)) {
                 Log.d(TAG, "Processing: Audio Flow");

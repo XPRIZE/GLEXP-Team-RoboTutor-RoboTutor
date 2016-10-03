@@ -53,7 +53,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
 
     private Context                 mContext;
 
-    private IWritingComponent mWritingComponent;
+    private IWritingComponent       mWritingComponent;
     private CGlyphController        mThis;
     private CLinkedScrollView       mScrollView;
 
@@ -208,7 +208,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     public class glyphReplayListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            mGlyphInput.replayGlyph();
+            mGlyphInput.replayGlyph(WR_CONST.REPLAY_DEFAULT);
         }
     }
 
@@ -426,7 +426,25 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
                         mGlyphInput.setBoxColor(WR_CONST.BOX_COLOR);
                         mGlyphInput.invalidate();
 
-                        mWritingComponent.applyEvent(WR_CONST.ACTION_COMPLETE);
+                        mWritingComponent.applyBehavior(WR_CONST.ACTION_COMPLETE);
+                        break;
+
+                    case WR_CONST.RIPPLE_DEMO:
+
+                        mGlyphReplay.setPointAtStroke(true);
+                        mGlyphInput.replayGlyph(WR_CONST.REPLAY_PROTOGLYPH);
+                        break;
+
+                    case WR_CONST.RIPPLE_REPLAY:
+
+                        mGlyphReplay.setPointAtStroke(false);
+                        mGlyphInput.replayGlyph(WR_CONST.REPLAY_USERGLYPH);
+                        break;
+
+                    case WR_CONST.RIPPLE_PROTO:
+
+                        mGlyphReplay.setPointAtStroke(false);
+                        mGlyphInput.replayGlyph(WR_CONST.REPLAY_PROTOGLYPH);
                         break;
                 }
             }

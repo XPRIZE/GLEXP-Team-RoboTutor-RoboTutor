@@ -771,19 +771,33 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     }
 
 
-    public void replayGlyph() {
+    public void replayGlyph(String replayTarget) {
 
         if(!isPlaying) {
 
-            if(mHasGlyph) {
-                isPlaying  = true;
+            isPlaying  = true;
 
-                if(_showUserGlyph)
-                    _animGlyph = _userGlyph;
-                else
+            switch(replayTarget) {
+
+                case WR_CONST.REPLAY_PROTOGLYPH:
                     _animGlyph = _protoGlyph;
+                    break;
 
-                switch(_animGlyph.getDrawnState()) {
+                case WR_CONST.REPLAY_USERGLYPH:
+                    _animGlyph = _userGlyph;
+                    break;
+
+                case WR_CONST.REPLAY_DEFAULT:
+                    if (_showUserGlyph)
+                        _animGlyph = _userGlyph;
+                    else
+                        _animGlyph = _protoGlyph;
+                    break;
+            }
+
+            if(_animGlyph != null) {
+
+                switch (_animGlyph.getDrawnState()) {
 
                     case TCONST.STROKE_ORIGINAL:
 
@@ -792,7 +806,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
                     case TCONST.STROKE_OVERLAY:
 
-                        int  inset     = (int) (_stroke_weight / 2);
+                        int inset = (int) (_stroke_weight / 2);
                         Rect protoBnds = new Rect(_fontCharBnds);
 
                         protoBnds.inset(inset, inset);
@@ -876,7 +890,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                 @Override
                 public void onAnimationEnd(Animator animation) {
 
-                    mWritingComponent.applyEvent(WR_CONST.ACTION_COMPLETE);
+                    mWritingComponent.applyBehavior(WR_CONST.ACTION_COMPLETE);
                 }
 
                 @Override
@@ -910,7 +924,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                 break;
         }
 
-        result = mWritingComponent.applyEvent(event);
+        result = mWritingComponent.applyBehavior(event);
 
         return result;
     }

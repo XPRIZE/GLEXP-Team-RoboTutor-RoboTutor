@@ -126,6 +126,7 @@ public class Persona extends View {
         filter.addAction(TCONST.LOOKAT);
         filter.addAction(TCONST.LOOKATEND);
         filter.addAction(TCONST.GLANCEAT);
+        filter.addAction(TCONST.STARE_STOP);
 
         bReceiver = new ChangeReceiver();
 
@@ -262,6 +263,7 @@ public class Persona extends View {
     protected float getPupilaryDist() {return pupilaryDist; }
     protected void setPupilaryDist(float newDist) { pupilaryDist = newDist; }
 
+    // TODO: clean up STORE_STOP - doesn't need point
 
     class ChangeReceiver extends BroadcastReceiver {
         public void onReceive (Context context, Intent intent) {
@@ -279,6 +281,10 @@ public class Persona extends View {
             PointF localPt = new PointF(point[0], point[1]);
 
             switch(intent.getAction()) {
+
+                case TCONST.STARE_STOP:
+                    cancelStare();
+                    break;
 
                 case TCONST.LOOKATSTART:
                     startTouch(localPt);

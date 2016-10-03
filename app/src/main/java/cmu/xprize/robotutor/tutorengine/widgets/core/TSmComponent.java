@@ -57,20 +57,20 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
 
     public TSmComponent(Context context) {
         super(context);
-        initT(context, null);
     }
 
     public TSmComponent(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initT(context, attrs);
     }
 
     public TSmComponent(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        initT(context, attrs);
     }
 
-    public void initT(Context context, AttributeSet attrs) {
+    @Override
+    public void init(Context context, AttributeSet attrs) {
+
+        super.init(context, attrs);
 
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);

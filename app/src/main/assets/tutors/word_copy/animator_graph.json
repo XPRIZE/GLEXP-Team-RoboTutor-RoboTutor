@@ -39,7 +39,7 @@
           "edges": [
             {
               "constraint": "",
-              "edge": "NEWWORD"
+              "edge": "INTRO_STATE"
             }
           ]
         },
@@ -186,10 +186,17 @@
           "type":"MODULE",
           "reuse":true,
           "COMMENT": "Initialize the data source - ",
+
           "tracks": [
-            {"type": "COMMAND", "id": "word_copy", "method": "postEvent",  "parms": "RIPPLE_DEMO:String|1000:Integer", "features":""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some words.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
-            {"type": "COMMAND", "cmd": "WAIT"  }
+            {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|NEXTNODE:String" ,"features":""},
+            {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_DEMO:String|500:Integer",         "features":""},
+
+            // This will play during the demo replay
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some words.mp3", "soundpackage":"default", "volume": 1.0, "mode":"stream", "features": ""},
+
+            // Next will fire when replay completes
+            {"type": "COMMAND", "id": "word_copy", "method": "clear", "parms": "", "features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now you try it.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
           ]
         },
 
@@ -212,7 +219,7 @@
             {"type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":""},
             //{"type": "AUDIO", "command": "PLAY", "soundsource": "This is the number.mp3", "mode":"flow", "features": ""},
 //            {"type": "TTS", "command": "SAY", "content": "{{word_copy.value}}", "rate":"1.2", "features": ""}
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3",   "mode":"flow", "features": ""} //the stimulus digit
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3", "soundpackage":"xprize",  "mode":"flow", "features": ""} //the stimulus digit
           ]
         },
 
@@ -326,8 +333,12 @@
         "REMOVESTIMULUS":{"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "FALSE:Boolean","features":""},
         //remove the stimulus
 
+        // support the ASK component
+        "INIT_ASK":     {"type": "COMMAND", "id": "Spicker", "method": "setStickyBehavior", "parms": "SPEAK_BUTTON:String|PICKER_TRACK:String" ,"features":""},
+        "PICKER_TRACK": {"type": "TIMELINE", "trackname": "ASK_BUTTON", "features": ""},
+
         "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "gotoNextScene"},
-        "NEXT": {"type": "COMMAND", "cmd": "NEXT"  },
+        "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"  },
         "WAIT": {"type": "COMMAND", "cmd": "WAIT"  }
       },
 

@@ -135,6 +135,11 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
     }
 
 
+    public void setPointAtStroke(boolean point) {
+        _pointAtStroke = point;
+    }
+
+
     @Override
     public void onDraw(Canvas canvas) {
 
@@ -248,6 +253,7 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
 
         StrokeIterator = _currentGlyph.iterator();
 
+        broadcastLocation(TCONST.STARE_STOP, new PointF(0,0));
         animateNextStroke();
     }
 
@@ -294,7 +300,7 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
             // Tell the touchpane to reset.
             //
             if(_callback != null) {
-                _callback.applyEvent(WR_CONST.REPLAY_COMPLETE);
+                _callback.applyEvent(WR_CONST.FIELD_REPLAY_COMPLETE);
             }
 
             // update the persona and Pointer

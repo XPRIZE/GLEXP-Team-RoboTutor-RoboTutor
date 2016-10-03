@@ -255,7 +255,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                     @Override
                     public void onAnimationEnd(Animator animation) {
 
-                        mComponent.applyEvent(BP_CONST.BUBBLE_WIGGLED);
+                        mComponent.applyBehavior(BP_CONST.BUBBLE_WIGGLED);
                     }
 
                     @Override
@@ -274,7 +274,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
                 removeBubble(bubble);
 
-                mComponent.applyEvent(BP_CONST.BUBBLE_POPPED);
+                mComponent.applyBehavior(BP_CONST.BUBBLE_POPPED);
                 break;
 
             case BP_CONST.REPLACE_BUBBLE:
@@ -283,7 +283,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
                 replaceBubble(bubble);
 
-                mComponent.applyEvent(BP_CONST.BUBBLE_POPPED);
+                mComponent.applyBehavior(BP_CONST.BUBBLE_POPPED);
                 break;
 
             case BP_CONST.SHOW_STIMULUS:
@@ -341,7 +341,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                     @Override
                     public void onAnimationEnd(Animator animation) {
 
-                        mComponent.applyEvent(BP_CONST.FEEDBACK_SHOWN);
+                        mComponent.applyBehavior(BP_CONST.FEEDBACK_SHOWN);
                     }
 
                     @Override
@@ -424,7 +424,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                     @Override
                     public void onAnimationEnd(Animator animation) {
 
-                        mComponent.applyEvent(BP_CONST.STIMULUS_SHOWN);
+                        mComponent.applyBehavior(BP_CONST.STIMULUS_SHOWN);
                     }
 
                     @Override
@@ -480,7 +480,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
                             SBubbles = null;
 
-                            mComponent.applyEvent(BP_CONST.BUBBLES_CLEARED);
+                            mComponent.applyBehavior(BP_CONST.BUBBLES_CLEARED);
                         }
                     }
 
@@ -515,7 +515,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
             _enableTouchEvent = false;
 
             mComponent.publishState(bubble);
-            mComponent.applyEvent(BP_CONST.BUBBLE_TOUCH_EVENT);
+            mComponent.applyBehavior(BP_CONST.BUBBLE_TOUCH_EVENT);
         }
     }
 

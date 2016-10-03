@@ -81,6 +81,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected HashMap           queueMap     = new HashMap();
     protected boolean           _qDisabled   = false;
     protected boolean           _alwaysTrack = true;
+    protected int               _fieldIndex  = 0;
+    protected String            _replayType;
 
     protected IGlyphSink        _recognizer;
     protected CGlyphSet         _glyphSet;
@@ -261,6 +263,21 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
+    /**
+     *
+     */
+    public void clear() {
+
+        // Add the recognized response display containers
+        //
+        mRecogList.removeAllViews();
+
+        // Add the Glyph input containers
+        //
+        mDrawnList.removeAllViews();
+    }
+
+
     public void updateResponse(IGlyphController child, String glyph) {
 
         int index = mDrawnList.indexOfChild((View)child);
@@ -371,7 +388,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
-    public void highLightFields() {
+    public void rippleHighlight() {
 
         long delay = 0;
         CStimulusController r;
@@ -395,6 +412,32 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
 
     }
+
+
+    public void rippleReplay(String type) {
+
+        _fieldIndex = 0;
+        _replayType = type;
+
+        replayNext();
+    }
+    private void replayNext() {
+
+        CStimulusController r;
+        CGlyphController   v;
+
+        if( _fieldIndex < mDrawnList.getChildCount()) {
+
+            v = (CGlyphController)mDrawnList.getChildAt(_fieldIndex);
+            v.post(_replayType);
+
+            _fieldIndex++;
+        }
+        else {
+            applyBehavior(WR_CONST.REPLAY_COMPLETE);
+        }
+    }
+
 
 
     public boolean scanForPendingRecognition(IGlyphController source) {
@@ -550,19 +593,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
      * @param event
      * @return  true of event handled
      */
-    public boolean applyEvent(String event){
+    public boolean applyBehavior(String event){
 
         boolean result = false;
 
         switch(event) {
-            case WR_CONST.REPLAY_COMPLETE:
 
+            case WR_CONST.FIELD_REPLAY_COMPLETE:
+                replayNext();
                 break;
-
-
-
-
-
         }
 
 
@@ -728,11 +767,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 switch(_command) {
 
                     case WR_CONST.RIPPLE_HIGHLIGHT:
-                        highLightFields();
+                        rippleHighlight();
                         break;
 
                     case WR_CONST.RIPPLE_DEMO:
-                        highLightFields();
+                    case WR_CONST.RIPPLE_REPLAY:
+                    case WR_CONST.RIPPLE_PROTO:
+                        rippleReplay(_command);
                         break;
 
                     default:

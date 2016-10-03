@@ -305,6 +305,8 @@ public class TCONST {
     public static final String LOOKATEND   = "PERSONA_LOOKAT_END";
     public static final String GLANCEAT    = "PERSONA_GLANCEAT";
     public static final String SCREENPOINT = "SCREENPOINT";
+    public static final String STARE_START = "STARE_START";
+    public static final String STARE_STOP  = "STARE_STOP";
 
     public static final String FTR_STORY_STARTING = "FTR_STORY_STARTING";
 

@@ -17,7 +17,7 @@ public interface IWritingComponent {
     public boolean scanForPendingRecognition(IGlyphController source);
     public void inhibitInput(IGlyphController source, boolean inhibit);
 
-    public boolean applyEvent(String event);
+    public boolean applyBehavior(String event);
 
     public void updateGlyphStats(CRecResult[] ltkPlusResult, CRecResult[] ltkresult, CGlyphMetrics metricsA, CGlyphMetrics metricsB);
     public void updateResponse(IGlyphController child, String glyph);

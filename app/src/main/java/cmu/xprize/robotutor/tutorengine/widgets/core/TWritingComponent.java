@@ -43,8 +43,8 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.CErrorManager;
-import cmu.xprize.util.CEvent;
 import cmu.xprize.util.CLinkedScrollView;
+import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILogManager;
@@ -54,7 +54,7 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-public class TWritingComponent extends CWritingComponent implements ITutorSceneImpl, IDataSink {
+public class TWritingComponent extends CWritingComponent implements IBehaviorManager, ITutorSceneImpl, IDataSink {
 
     private CTutor                  mTutor;
     private CSceneDelegate          mTutorScene;
@@ -202,6 +202,28 @@ public class TWritingComponent extends CWritingComponent implements ITutorSceneI
     }
 
 
+    public void pointAtEraseButton() {
+        super.pointAtEraseButton();
+    }
+
+
+    public void highlightFields() {
+        super.highlightFields();
+    }
+
+
+    public void clear() { super.clear(); }
+
+
+    // Tutor methods  End
+    //************************************************************************
+    //************************************************************************
+
+
+    //************************************************************************
+    //************************************************************************
+    // IBehaviorManager Interface START
+
     public void setVolatileBehavior(String event, String behavior) {
 
         if (behavior.toUpperCase().equals(TCONST.NULL)) {
@@ -228,24 +250,24 @@ public class TWritingComponent extends CWritingComponent implements ITutorSceneI
     }
 
 
-    // Execute scirpt target if behavior is defined for this event
+    // Execute script target if behavior is defined for this event
     //
-    public boolean applyEvent(String event) {
+    public boolean applyBehavior(String event) {
 
         boolean result = false;
 
-        if(!(result = super.applyEvent(event))) {
+        if(!(result = super.applyBehavior(event))) {
 
             if (volatileMap.containsKey(event)) {
                 Log.d(TAG, "Processing WC_ApplyEvent: " + event);
-                applyEventNode(volatileMap.get(event));
+                applyBehaviorNode(volatileMap.get(event));
 
                 volatileMap.remove(event);
 
                 result = true;
 
             } else if (stickyMap.containsKey(event)) {
-                applyEventNode(stickyMap.get(event));
+                applyBehaviorNode(stickyMap.get(event));
 
                 result = true;
             }
@@ -260,7 +282,7 @@ public class TWritingComponent extends CWritingComponent implements ITutorSceneI
      *
      * @param nodeName
      */
-    protected void applyEventNode(String nodeName) {
+    public void applyBehaviorNode(String nodeName) {
         IScriptable2 obj = null;
 
         if (nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
@@ -280,22 +302,9 @@ public class TWritingComponent extends CWritingComponent implements ITutorSceneI
         }
     }
 
-
-    public void pointAtEraseButton() {
-        super.pointAtEraseButton();
-    }
-
-
-    public void highlightFields() {
-        super.highlightFields();
-    }
-
-
-    // Tutor methods  End
+    // IBehaviorManager Interface END
     //************************************************************************
     //************************************************************************
-
-
 
 
     //************************************************************************
@@ -367,11 +376,6 @@ public class TWritingComponent extends CWritingComponent implements ITutorSceneI
 
             // set the script 'Feature'
             mTutor.setAddFeature(TCONST.FTR_EOI);
-
-            // For stimulus controls broadcast the change so the response knows
-            // Let interested listeners know the stimulus has been exhausted
-            //
-            dispatchEvent(new CEvent(TCONST.FW_EOI));
         }
     }
 
