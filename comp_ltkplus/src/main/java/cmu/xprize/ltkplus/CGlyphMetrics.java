@@ -40,11 +40,17 @@ public class CGlyphMetrics {
     private float aspectGl;
     private float aspectVar;
 
-    private float visualMatch;
+    private float _visualMatch;
+    private float _glyphError;
 
     private Bitmap                _bitmap;
     private CPixelArray           _pixels;
-    private int                   _charValue = 0;
+
+    private int                   _charValue   = 0;
+    private int                   _missValue   = 0;
+
+    private int                   _glyphExcess = 0;
+    private int                   _glyphTotal  = 0;
 
     private Paint                 mPaint;
     private Paint                 mPaintDBG;
@@ -110,7 +116,11 @@ public class CGlyphMetrics {
     }
 
     public String getVisualMetric() {
-        return formatFloat(visualMatch);
+        return formatFloat(_visualMatch);
+    }
+
+    public String getGlyphErrorMetric() {
+        return formatFloat(_glyphError);
     }
 
     public void showDebugBounds(boolean showHide) { DBG = showHide; }
@@ -131,14 +141,16 @@ public class CGlyphMetrics {
     public float getDeltaA() {
         return aspectVar;
     }
+
     public float getVisualDelta() {
-        return visualMatch;
+        return _visualMatch;
     }
 
 
-    public Bitmap generateVisualComparison(Rect fontBounds, String charToCompare, CGlyph glyphToCompare, Paint mPaint, boolean isVolatile) {
 
-        generateVisualMetric(fontBounds, charToCompare, charToCompare,  glyphToCompare,  mPaint,  isVolatile);
+    public Bitmap generateVisualComparison(Rect fontBounds, String charToCompare, CGlyph glyphToCompare, Paint mPaint, float strokeWeight, boolean isVolatile) {
+
+        generateVisualMetric(fontBounds, charToCompare, charToCompare,  glyphToCompare,  mPaint, strokeWeight,  isVolatile);
 
         // If we are going to use the bitmap after then we apply the pixels back to the bitmap and
         // return the result to be drawn externally
@@ -153,10 +165,24 @@ public class CGlyphMetrics {
 
 
 
-    public float generateVisualMetric(Rect fontBounds, String charToCompare, String expectedChar, CGlyph glyphToCompare, Paint mPaint, boolean isVolatile) {
+    public float generateVisualMetric(Rect fontBounds, String charToCompare, String expectedChar, CGlyph glyphToCompare, Paint mPaint, float strokeWeight, boolean isVolatile) {
 
         Rect charBnds = new Rect();
-        visualMatch   = 0;
+        _visualMatch = 0;
+
+        long _time = System.currentTimeMillis();
+
+        // Setup the stroke weight -
+        // The visual comparator was calibrated with a line weight of 45f so we scale that to whatever
+        // font size we use to get approx the same visual coverage on the visual metric.  Otherwise we use
+        // the pen size defined by the tutor author.
+        //
+        if(strokeWeight == GCONST.CALIBRATED_WEIGHT) {
+
+            strokeWeight = fontBounds.height() / GCONST.CALIBRATION_CONST;
+        }
+        mPaint.setStrokeWidth(strokeWeight);
+
 
         // Ensure that there is a testable region - otherwise Bitmap.createBitmap will fail
         //
@@ -170,7 +196,7 @@ public class CGlyphMetrics {
             mPaint.getTextBounds(charToCompare, 0, 1, charBnds);
 
             Rect insetBnds = new Rect(0, 0, charBnds.width(), charBnds.height());
-            int inset = (int) (GCONST.STROKE_WEIGHT / 2);
+            int inset = (int) (strokeWeight / 2);
 
             insetBnds.inset(inset, inset);
 
@@ -183,16 +209,8 @@ public class CGlyphMetrics {
             drawSurface.drawText(charToCompare, -charBnds.left, -charBnds.top, mPaint);
 
             _pixels = new CPixelArray(_bitmap);
-            _charValue = 0;
 
-            for (int i1 = 0; i1 < _pixels.getWidth(); i1++) {
-                for (int i2 = 0; i2 < _pixels.getHeight(); i2++) {
-
-                    if (_pixels.getPixel(i1, i2) == TCONST.FONTCOLOR1) {
-                        _charValue++;
-                    }
-                }
-            }
+            _charValue = _pixels.scanForColor(TCONST.FONTCOLOR1);
 
             // Draw a border around the draw region - debug only
             //
@@ -209,42 +227,39 @@ public class CGlyphMetrics {
             // obscured by the glyph - represents a metric of the correspondence between the two
             //
             mPaint.setStyle(Paint.Style.STROKE);
-            mPaint.setStrokeWidth(GCONST.STROKE_WEIGHT);
+            mPaint.setStrokeWidth(strokeWeight);
 
             // Redraw the current glyph path to the bitmap surface
             //
             glyphToCompare.drawGylyph(drawSurface, mPaint, fontBounds);
 
             _pixels.getPixels();
-            int errValue = 0;
-            int excessValue = 0;
 
-            for (int i1 = 0; i1 < _pixels.getWidth(); i1++) {
-                for (int i2 = 0; i2 < _pixels.getHeight(); i2++) {
-
-                    if (_pixels.getPixel(i1, i2) == TCONST.FONTCOLOR1) {
-
-                        _pixels.setPixel(i1, i2, TCONST.ERRORCOLOR1);
-                        errValue++;
-                    } else if (_pixels.getPixel(i1, i2) == TCONST.GLYPHCOLOR1) {
-                        //excessValue++;
-                    }
-                }
-            }
+            // Count the total pixels in the glyph image
+            // Replace Font pixels that are "missed" and return count
+            // Count glyph pixels outside the font iumage
+            //
+            _glyphTotal  = _pixels.scanNotColor(TCONST.FONTCOLOR1);
+            _missValue   = _pixels.scanAndReplace(TCONST.FONTCOLOR1, TCONST.ERRORCOLOR1);
+            _glyphExcess = _pixels.scanForColor(mPaint.getColor());
 
             // Calc the visual match metric -
             //
             // 0 = complete overlay - glyph may still have undesirable form but covers the char at least
             // 1 = no match
             //
-            visualMatch = (float) (_charValue - errValue - (excessValue / 2)) / (float) _charValue;
-            Log.d(TAG, "Char Error: " + visualMatch);
+            _visualMatch = (float) (_charValue - _missValue) / (float) _charValue;
+            _glyphError  = (float) _glyphExcess / (float) _glyphTotal;
+
+            Log.d(TAG, "Glyph Excess: " + _glyphError);
 
             if (isVolatile)
                 _bitmap.recycle();
         }
 
-        return visualMatch;
+        Log.d("LTKPLUS", "Time in recognizer: " + (System.currentTimeMillis() - _time));
+
+        return _visualMatch;
     }
 
 }

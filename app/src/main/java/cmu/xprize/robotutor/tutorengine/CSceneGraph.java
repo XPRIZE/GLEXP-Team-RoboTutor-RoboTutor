@@ -293,13 +293,14 @@ public class CSceneGraph  {
 
 
 
+
     //************ Serialization
 
 
 
     /**
      * Load the Tutor specification from JSON file data
-     * from assets/tutors/<tutorname>/tutor_descriptor.json
+     * from assets/tutors/<tutorname>/animator_graph.json
      *
      */
     private void loadSceneGraphFactory(IScope2 scope) {

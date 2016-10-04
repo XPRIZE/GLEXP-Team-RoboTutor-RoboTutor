@@ -8,13 +8,13 @@
       "title": "Word copying tutor",
       "COMMENT": "This tutor is designed for copying words.",
       "version": "1.0.0",
-      "rootnode": "TEMP_STATE",
+      "rootnode": "DEMO_STATE",
 
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
 
-        "TEMP_STATE": {
+        "DEMO_SELECT": {
           "type": "NODE",
           "COMMENT": "Intro Clip",
           "maptype":"actionMap",
@@ -29,13 +29,28 @@
           ]
         },
 
+        "DEMO_STATE": {
+          "type": "NODE",
+          "COMMENT": "Interaction Demo",
+          "maptype":"moduleMap",
+          "mapname":"DEMO_MODULE",
+          "preenter":["SET_VERSION","SET_DEMOSOURCE","FW_DISABLE","NEXT_WORD"],
+          "preexit" :[],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "INTRO_STATE"
+            }
+          ]
+        },
 
         "INTRO_STATE": {
           "type": "NODE",
           "COMMENT": "Intro Clip",
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
-          "preenter":["SET_VERSION","SET_DATASOURCE","FW_SET_REC","FW_DISABLE"],
+          "preenter":["SET_VERSION","SET_DATASOURCE","FW_DISABLE"],
+//          "preenter":["SET_VERSION","FW_DISABLE"],
           "preexit" :[],
           "edges": [
             {
@@ -48,7 +63,7 @@
         "NEWWORD":{
           "COMMENT":"This node presents a word for user to copy.",
           "type":"node",
-          "preenter":["GETWORD"],
+          "preenter":["NEXT_WORD"],
           "maptype":"moduleMap",
           "mapname": "PLAYWORD",
           "preexit" :[],
@@ -157,6 +172,35 @@
 
         "COMMENT": "@@@@@  CModules  @@@@@",
 
+        "SET_DEMOSOURCE": {
+          "type":"MODULE",
+          "reuse":true,
+          "COMMENT": "Initialize the data source - ",
+          "tracks": [
+            {"type": "COMMAND", "id": "word_copy", "method": "setDataSource", "parms": "[saba]:String","features":"LANG_SW"},
+            {"type": "COMMAND", "id": "word_copy", "method": "setDataSource", "parms": "[one]:String","features":"LANG_EN"}
+          ]
+        },
+
+        "DEMO_MODULE": {
+          "type":"MODULE",
+          "reuse":true,
+          "COMMENT": "Initialize the data source - ",
+
+          "tracks": [
+            {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|NEXTNODE:String" ,"features":""},
+            {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_DEMO:String|500:Integer",         "features":""},
+
+            // This will play during the demo replay
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some words.mp3", "soundpackage":"default", "volume": 1.0, "mode":"stream", "features": ""},
+
+            // Next will fire when replay completes
+            {"type": "COMMAND", "id": "word_copy", "method": "clear", "parms": "", "features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now you try it.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+          ]
+        },
+
+
         "PLAYINTRO":{
           "type": "MODULE",
           "reuse":true,
@@ -171,10 +215,11 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "TRUE:Boolean","features":""},
+            //{"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "TRUE:Boolean","features":""},
             {"type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":""},
             //{"type": "AUDIO", "command": "PLAY", "soundsource": "This is the number.mp3", "mode":"flow", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3",   "mode":"flow", "features": ""} //the stimulus digit
+//            {"type": "TTS", "command": "SAY", "content": "{{word_copy.value}}", "rate":"1.2", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3", "soundpackage":"xprize",  "mode":"flow", "features": ""} //the stimulus digit
           ]
         },
 
@@ -185,7 +230,7 @@
           "tracks": [
             {"type": "COMMAND", "id": "SfingerWriter", "method": "onStartWriting", "parms": "CANCEL_REMINDER:String"},
             // This would call the cancel reminder action below when the user starts writing
-            {"type": "COMMAND", "id": "Sresponse", "method": "onRecognitionComplete", "parms": "NEXT:String"},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "onRecognitionComplete", "parms": "NEXT:String"},
             // This would increment the animation_graph when it is in a wait state.  e.g if it is sitting at the end of a stream audio clip
             {"type": "COMMAND", "cmd": "WAIT" }
             //{"type": "COMMAND", "id": "Sresponse", "method": "show", "parms": "TRUE:Boolean","features":""}
@@ -222,7 +267,7 @@
             {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""}, //flag the incorrect string in red color
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Huh.mp3", "mode":"flow","features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "That doesnt look like.mp3", "mode":"flow","features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sstimulus.value}}.mp3","mode":"flow", "features": ""}, //the stimulus digit
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","mode":"flow", "features": ""}, //the stimulus digit
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
           ]
         },
@@ -255,11 +300,9 @@
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
+        "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.1.0:String","features":""},
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[saba,sifuri,mbili]:String","features":""},
-
-        "FW_SET_REC":{"type": "COMMAND", "id": "SfingerWriter", "method": "setRecognizer", "parms": "EN_STD_NUM:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "word_copy", "method": "setDataSource", "parms": "[0,sabalicious ontological test of line length,sifuri,mbili]:String","features":"!DATA_WORD_COPY"},
 
         "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HESITATION_TRACK", "features": "" },
         //set the waiting time limit as 10 seconds
@@ -276,7 +319,7 @@
         "FW_ENABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "TRUE:Boolean","features":""},
         //enable FingerWriting
 
-        "GETCHAR":{"type": "COMMAND", "id": "Sstimulus", "method": "next" ,"features":""},
+        "NEXT_WORD":{"type": "COMMAND", "id": "word_copy", "method": "next" ,"features":""},
         //get a new digit from the list.
 
         //"GETRESPONSE":{"type": "COMMAND", "id": "Sresponse", "method": "???" ,"features":""},
@@ -290,8 +333,12 @@
         "REMOVESTIMULUS":{"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "FALSE:Boolean","features":""},
         //remove the stimulus
 
+        // support the ASK component
+        "INIT_ASK":     {"type": "COMMAND", "id": "Spicker", "method": "setStickyBehavior", "parms": "SPEAK_BUTTON:String|PICKER_TRACK:String" ,"features":""},
+        "PICKER_TRACK": {"type": "TIMELINE", "trackname": "ASK_BUTTON", "features": ""},
+
         "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "gotoNextScene"},
-        "NEXT": {"type": "COMMAND", "cmd": "NEXT"  },
+        "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"  },
         "WAIT": {"type": "COMMAND", "cmd": "WAIT"  }
       },
 

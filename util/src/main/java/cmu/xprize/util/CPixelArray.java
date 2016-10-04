@@ -54,14 +54,75 @@ public class CPixelArray {
     }
 
 
+    public int scanForColor(int testColot) {
+
+        int count = 0;
+        int size  = getSize();
+
+        for (int i1 = 0; i1 < size ; i1++) {
+
+            if (_pixels[i1] == testColot) {
+
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+
+    public int scanNotColor(int testColot) {
+
+        int count = 0;
+        int size  = getSize();
+
+        for (int i1 = 0; i1 < size ; i1++) {
+
+            if (_pixels[i1] != 0 && _pixels[i1] != testColot) {
+
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+
+    public int scanAndReplace(int testColot, int replaceColor) {
+
+        int errValue = 0;
+        int size     = getSize();
+
+        for (int i1 = 0; i1 < size ; i1++) {
+
+            if (_pixels[i1] == testColot) {
+
+                _pixels[i1] =  replaceColor;
+                errValue++;
+            }
+        }
+
+        return errValue;
+    }
+
+
 
     public int getPixel(int x, int y){
         return _pixels[x+y* _width];
     }
 
 
+    public int getPixel(int x){
+        return _pixels[x];
+    }
+
+
     public void setPixel(int x, int y, int color){
         _pixels[x+y* _width]=color;
+    }
+
+    public void setPixel(int x, int color){
+        _pixels[x]=color;
     }
 
 
@@ -80,4 +141,7 @@ public class CPixelArray {
     public int getHeight(){
         return _height;
     }
+
+
+    public int getSize() { return _width * _height;}
 }

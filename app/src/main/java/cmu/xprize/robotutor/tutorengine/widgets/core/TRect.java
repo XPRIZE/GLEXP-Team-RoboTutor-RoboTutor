@@ -130,7 +130,7 @@ public class TRect extends View  implements ITutorObjectImpl {
     }
 
     @Override
-    public void postInflate() {}
+    public void onCreate() {}
 
     @Override
     public void setNavigator(ITutorGraph navigator) {

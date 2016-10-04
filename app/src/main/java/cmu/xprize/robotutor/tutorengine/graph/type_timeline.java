@@ -894,7 +894,7 @@ public class type_timeline extends type_action implements IMediaListener {
             XmlPullParser xpparser = factory.newPullParser();
 
             try {
-                if (CTutorEngine.CacheSource.equals(TCONST.ASSETS)) {
+                if (RoboTutor.CacheSource.equals(TCONST.ASSETS)) {
 
                     in = _scope.tutor().openAsset(factoryPATH);
 

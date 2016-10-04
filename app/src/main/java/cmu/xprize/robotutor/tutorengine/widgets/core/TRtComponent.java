@@ -445,7 +445,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
     }
 
     @Override
-    public void postInflate() {}
+    public void onCreate() {}
 
     @Override
     public void setNavigator(ITutorGraph navigator) {

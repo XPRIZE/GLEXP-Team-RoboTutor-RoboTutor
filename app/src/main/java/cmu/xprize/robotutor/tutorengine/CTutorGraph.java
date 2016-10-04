@@ -485,7 +485,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
 
                     dataSink.setDataSource(binding.datasource);
 
-                    // Add a feature to show the compoonent has been initialized
+                    // Add a feature to show the component has been initialized
                     //
                     mTutor.setAddFeature(TCONST.DATA_PREFIX + binding.name.toUpperCase());
                 }

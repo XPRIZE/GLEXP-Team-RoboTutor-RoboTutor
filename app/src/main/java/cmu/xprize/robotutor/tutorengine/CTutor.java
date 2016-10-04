@@ -500,7 +500,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
         // Generate the automation hooks
         automateScene((ITutorSceneImpl) tarScene, scenedata);
 
-        // Parse the JSON onCreate spec data
+        // Parse the JSON spec data for onCreate Commands
         onCreate(scenedata);
 
         return (View) tarScene;
@@ -534,7 +534,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
             while (tObjects.hasNext()) {
                 Map.Entry entry = (Map.Entry) tObjects.next();
 
-                ((ITutorObject) (entry.getValue())).postInflate();
+                ((ITutorObject) (entry.getValue())).onCreate();
             }
         }
         catch(Exception e) {
@@ -547,6 +547,10 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         ITutorObject child;
 
+        // Add the container as well so we can find it in a getViewByName search
+        //
+        childMap.put(tutorContainer.name(), tutorContainer);
+
         int count = ((ViewGroup) tutorContainer).getChildCount();
 
         // Iterate through all children
@@ -556,7 +560,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
                 if(childMap.containsKey(child.name())) {
 
-                    CErrorManager.logEvent(TAG, "ERROR: Duplicate child view in:" + tutorContainer.name(),  new Exception("no-exception"), false);
+                    CErrorManager.logEvent(TAG, "ERROR: Duplicate child view in:" + tutorContainer.name() + " - Duplicate of: " + child.name(),  new Exception("no-exception"), false);
                 }
 
                 childMap.put(child.name(), child);
@@ -585,6 +589,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
         type_action[] createCmds    = _sceneMap.get(scenedata.id).oncreate;
 
         // Can have an empty JSON array - so filter that out
+        //
         if(createCmds != null) {
 
             for (type_action cmd : createCmds) {

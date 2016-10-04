@@ -56,7 +56,7 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
 
     private Rect                    replayRegion = new Rect();
 
-    private CGlyph _currentGlyph;
+    private CGlyph                  _currentGlyph;
     private int                     _index;
     private Path                    cPath;
     private Paint                   mPaint;
@@ -64,12 +64,14 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
 
     private AnimatorSet             fullAnimation;
     private ArrayList<Animator>     drawAnimation;
-    private Iterator<CStrokeInfo>    StrokeIterator;
-    private CStroke _strokeToDraw;
-    private CAffineXform _glyphXform;
+    private Iterator<CStrokeInfo>   StrokeIterator;
+    private CStroke                 _strokeToDraw;
+    private boolean                 _pointAtStroke = true;
+    private CAffineXform            _glyphXform;
 
     private int[]                   _screenCoord = new int[2];
     private IGlyphReplayListener    _callback;
+
     private LocalBroadcastManager   bManager;
 
     public static final int FIT_VERT        = 0x01;
@@ -125,11 +127,16 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(GCONST.STROKE_WEIGHT);
+        mPaint.setStrokeWidth(GCONST.REPLAY_WEIGHT);
         mPaint.setAntiAlias(true);
 
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(getContext());
+    }
+
+
+    public void setPointAtStroke(boolean point) {
+        _pointAtStroke = point;
     }
 
 
@@ -158,11 +165,17 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
                     }
 
                     if(tPoint != null) {
-                        mPaint.setColor(Color.YELLOW);
-                        mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-                        canvas.drawCircle(tPoint.x, tPoint.y, replayRegion.width() / 40, mPaint);
-                        mPaint.setStyle(Paint.Style.STROKE);
-                        mPaint.setColor(Color.BLUE);
+
+                        if(_pointAtStroke) {
+                            broadcastLocation(TCONST.POINT_LIVE, tPoint);
+                        }
+                        else {
+                            mPaint.setColor(Color.YELLOW);
+                            mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+                            canvas.drawCircle(tPoint.x, tPoint.y, replayRegion.width() / 40, mPaint);
+                            mPaint.setStyle(Paint.Style.STROKE);
+                            mPaint.setColor(Color.BLUE);
+                        }
                     }
 
                     // The replay path on the existing getStroke is generated a getStroke at a getTime
@@ -200,6 +213,7 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
 
 
     private void broadcastLocation(String Action, PointF touchPt) {
+
         getLocationOnScreen(_screenCoord);
 
         // Let the persona know where to look
@@ -239,6 +253,7 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
 
         StrokeIterator = _currentGlyph.iterator();
 
+        broadcastLocation(TCONST.STARE_STOP, new PointF(0,0));
         animateNextStroke();
     }
 
@@ -281,19 +296,25 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
     public void onAnimationEnd(Animator animation) {
 
         if (!animateNextStroke()) {
+
+            // Tell the touchpane to reset.
+            //
+            if(_callback != null) {
+                _callback.applyEvent(WR_CONST.FIELD_REPLAY_COMPLETE);
+            }
+
+            // update the persona and Pointer
+            //
             broadcastEnd();
         }
     }
 
     private void broadcastEnd() {
 
-        // Tell the touchpane to reset.
-        if(_callback != null) {
-            _callback.endReplay();
-        }
-
-        if (tPoint != null)
+        if (tPoint != null) {
+            broadcastLocation(TCONST.POINT_FADE, tPoint);
             broadcastLocation(TCONST.LOOKATEND, tPoint);
+        }
     }
 
     /** AnimatorListener Implmentation start */
@@ -358,8 +379,8 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
             }
 
             // Fade out on the last getStroke
-            if(!StrokeIterator.hasNext())
-                drawAnimation.add(createDrawAnimation("alpha", 0, 750));
+//            if(!StrokeIterator.hasNext())
+//                drawAnimation.add(createDrawAnimation("alpha", 0, 750));
 
             fullAnimation.addListener(this);
 

@@ -14,6 +14,7 @@
 package cmu.xprize.comp_writing;
 
 import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -26,6 +27,7 @@ import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Region;
 import android.graphics.Typeface;
 import android.os.CountDownTimer;
 import android.support.v4.content.LocalBroadcastManager;
@@ -36,6 +38,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
+import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.ltkplus.CGlyph;
 import cmu.xprize.ltkplus.IGlyphSink;
@@ -54,10 +57,12 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private Context               mContext;
 
     private IGlyphSink            _recognizer;
+    private boolean               _recPending = false;
     private int                   _recIndex;
+    private boolean               _inhibit    = false;
 
-    private IWritingController    mWritingController;
-    private IDrawnInputController mInputController;
+    private IWritingComponent     mWritingComponent;
+    private IGlyphController      mInputController;
     private CLinkedScrollView     mScrollView;
 
     private Paint                 mPaint;
@@ -88,6 +93,8 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private float                 _sampleVertAdjusted = 0;
 
     private Rect                  _viewBnds          = new Rect();  // The view draw bounds
+    private float                 _dotSize;
+
     private Rect                  _fontBnds          = new Rect();  // The bounds for the font size limits
     private Rect                  _lcaseBnds         = new Rect();  // Lower case character limits - gives upper bound line
     private Rect                  _fontCharBnds      = new Rect();  // The expected char bounds
@@ -95,13 +102,16 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
     private float                 _topLine;
     private float                 _baseLine;
-    private float                 _dotSize;
+    private Rect                  _clipRect          = new Rect();
 
     protected float               _aspect            = 1;  // w/h
     private String                _fontHeightSample  = "Kg";
     private String                _fontWidthSample   = "W";
     private String                _lcaseSample       = "m";
     private int                   _fontVOffset       = 0;
+    private float                 _stroke_weight     = 45f;
+    private int                   _glyphColor        = Color.BLACK;
+    private int                   _boxColor          = WR_CONST.BOX_COLOR;
 
     private boolean               mLogGlyphs = false;
 
@@ -114,6 +124,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
     private boolean               mHasGlyph = false;
 
+    private boolean               _DEVMODE = false;             // Used in GlyphRecognizer project to update metrics etc.
 
     private static final float    TOLERANCE = 5;
     private static final int[]    STATE_HASGLYPH = {R.attr.state_hasglyph};
@@ -126,10 +137,12 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
     private boolean               _drawUpper = false;
     private boolean               _drawBase  = true;
+    private boolean               _isLast    = false;
+    private boolean               _correct   = false;
 
 
 
-    private static final String   TAG = "WritingComp";
+    private static final String   TAG = "CGlyphInputContainer";
 
 
     public CGlyphInputContainer(Context context) {
@@ -164,15 +177,13 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                     0, 0);
 
             try {
-                _aspect = a.getFloat(R.styleable.RoboTutor_aspectratio, 1.0f);
+                _aspect       = a.getFloat(R.styleable.RoboTutor_aspectratio, 1.0f);
+                _stroke_weight= a.getFloat(R.styleable.RoboTutor_strokeweight, 45f);
 
             } finally {
                 a.recycle();
             }
         }
-
-        // reset the internal state
-        clear();
 
         // Create a paint object to hold the line parameters
         mPaintDBG = new Paint();
@@ -192,32 +203,26 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(GCONST.STROKE_WEIGHT);
+        mPaint.setStrokeWidth(_stroke_weight);
         mPaint.setAntiAlias(true);
 
 
         // Create a paint object for the background
         mPaintBG = new Paint();
 
-        mPaintBG.setStrokeWidth(GCONST.STROKE_WEIGHT);
+        mPaintBG.setStrokeWidth(_stroke_weight);
         mPaintBG.setAntiAlias(true);
 
 
         // Font Face selection
-//        String fontPath = "fonts/Grundschrift-Punkt.otf";
-//        String fontPath = "fonts/Grundschrift-Kontur.otf";
-
-        String fontPath = "fonts/Grundschrift.ttf";
-
-        _fontFace = Typeface.createFromAsset(mContext.getAssets(), fontPath);
-
-        mPaint.setTypeface(_fontFace);
-
+        selectFont(TCONST.GRUNDSCHRIFT);
 
         // Create a paint object to define the baseline parameters
         mPaintBase = new Paint();
 
-        mPaintBase.setColor(getResources().getColor(R.color.fingerWriterBackground));
+        //mPaintBase.setColor(getResources().getColor(R.color.fingerWriterBackground));
+        mPaintBase.setColor(Color.parseColor("#000000"));
+
         mPaintBase.setStyle(Paint.Style.STROKE);
         mPaintBase.setStrokeJoin(Paint.Join.ROUND);
         mPaintBase.setStrokeWidth(GCONST.LINE_WEIGHT);
@@ -234,22 +239,26 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         mPaintUpper.setPathEffect(new DashPathEffect(new float[]{25f, 12f}, 0f));
         mPaintUpper.setAntiAlias(true);
 
-        this.setOnTouchListener(this);
+        // Clear the gly[h state and start listening for touch events
+        //
+        erase();
 
         _counter = new RecogDelay(RECDELAY, RECDELAYNT);
+
+        _recognizer = CRecognizerPlus.getInstance();
 
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(getContext());
     }
 
-    public void setWritingController(IWritingController writingController) {
+    public void setWritingController(IWritingComponent writingController) {
 
         // We use callbacks on the parent control
-        mWritingController = writingController;
+        mWritingComponent = writingController;
     }
 
 
-    public void setInputManager(IDrawnInputController inputManager) {
+    public void setInputManager(IGlyphController inputManager) {
 
         // We use callbacks on the parent control
         mInputController = inputManager;
@@ -271,11 +280,23 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         if (_counter != null)
             _counter.cancel();
 
+        // Set pending flag - Used to initiate recognition when moving between fields
+        //
+        _recPending = true;
+
+        // This is to support immediate feedback
+        //
+        mWritingComponent.scanForPendingRecognition(mInputController);
+
         // We always add the next stoke start to the glyph set
 
         if (_drawGlyph == null) {
             _drawGlyph = new CGlyph(mContext, _baseLine, _viewBnds, _dotSize);
             _isDrawing = true;
+
+            if(_drawGlyph == null) {
+                Log.e(TAG, "_drawGlyph Creation Failed");
+            }
         }
 
         _drawGlyph.newStroke();
@@ -288,7 +309,13 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     }
 
 
-    public void setHasGlyph(boolean hasGlyph) {
+    public void setBoxColor(int newColor) {
+
+        _boxColor = newColor;
+    }
+
+
+    private void setHasGlyph(boolean hasGlyph) {
 
         final boolean needsRefresh = mHasGlyph != hasGlyph;
 
@@ -298,11 +325,24 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
            refreshDrawableState();
            invalidate();
         }
-
-        if(mInputController != null)
-            mInputController.setHasGlyph(hasGlyph);
     }
 
+
+    private void updateGlyphState() {
+
+        if(mInputController != null)
+            mInputController.setGlyphStatus(_correct, mHasGlyph);
+    }
+
+
+    /**
+     * Flag to indicate the last glyph in the input string - used to limit the baseline length
+     *
+     * @param isLast
+     */
+    public void setIsLast(boolean isLast) {
+        _isLast = isLast;
+    }
 
     /**
      * This is used for the background when this is an ImageView
@@ -354,6 +394,8 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             mX = x;
             mY = y;
 
+            // TODO: BUG - drawGlyph may be null ?????
+            //
             _drawGlyph.addPoint(touchPt);
             invalidate();
         }
@@ -407,7 +449,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
                     startTouch(x, y);
                 }
-                else {
+                else if(_DEVMODE) {
 
                     if(_showUserGlyph)
                         _drawGlyph = _userGlyph;
@@ -418,7 +460,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
                         _recognizer.postToQueue(CGlyphInputContainer.this, _drawGlyph);
                     }
-                    result = false;
                 }
                 break;
 
@@ -592,13 +633,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     @Override
     protected void onDraw(Canvas canvas) {
 
-        View parent = (View) getParent();
-        parent.getDrawingRect(_parentBnds);
-
-        float parentaspect = (float) _parentBnds.width() / (float) _parentBnds.height();
-        float fontaspect   = (float) _fontBnds.width() / (float) _fontBnds.height();
-        float drawaspect   = (float) _viewBnds.width() / (float) _viewBnds.height();
-
         Rect textBnds = new Rect();
 
         super.onDraw(canvas);
@@ -616,7 +650,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
             mPaintBG.setStyle(Paint.Style.STROKE);
             mPaintBG.setStrokeWidth(GCONST.LINE_WEIGHT);
-            mPaintBG.setColor(Color.parseColor("#33A5C4D4"));
+            mPaintBG.setColor(_boxColor);
             canvas.drawRoundRect(viewBndsF, GCONST.CORNER_RAD, GCONST.CORNER_RAD, mPaintBG);
         }
 
@@ -628,8 +662,22 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             linePath.lineTo(getWidth(), _topLine);
             canvas.drawPath(linePath, mPaintUpper);
         }
+
         if(_drawBase) {
-            canvas.drawLine(0, _baseLine, getWidth(), _baseLine, mPaintBase);
+
+            // We want the baseline to appear to be continuous.  However the baseline should not
+            // extend past the last character in the string.
+            //
+            canvas.getClipBounds(_clipRect);
+
+            int extension = _isLast? 0:_clipRect.width()/2;
+
+            canvas.save();
+            _clipRect.right += extension;
+            canvas.clipRect(_clipRect, Region.Op.REPLACE);
+
+            canvas.drawLine(0, _baseLine, _clipRect.width(), _baseLine, mPaintBase);
+            canvas.restore();
         }
 
         mPaint.setStrokeWidth(1);
@@ -646,7 +694,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
             if(_drawGlyph != null) {
 
-                _bitmap = _drawGlyph.getMetric().generateVisualComparison(_fontBnds, _sampleExpected, _drawGlyph, mPaint, false);
+                _bitmap = _drawGlyph.getMetric().generateVisualComparison(_fontBnds, _sampleExpected, _drawGlyph, mPaint, _stroke_weight, false);
 
                 canvas.drawBitmap(_bitmap, _fontCharBnds.left, _fontCharBnds.top, null);
             }
@@ -659,7 +707,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         if(_sampleExpected != "" && _showSampleChar) {
             getFontCharBounds(_sampleExpected);
 
-            mPaint.setColor(Color.BLUE);
+            mPaint.setColor(WR_CONST.SAMPLE_COLOR);
             canvas.drawText(_sampleExpected, _sampleHorzAdjusted, _sampleVertAdjusted, mPaint);
         }
 
@@ -696,12 +744,13 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             if(_showUserGlyph && _userGlyph != null) {
                 mPaintDBG.setStyle(Paint.Style.STROKE);
                 mPaintDBG.setColor(Color.MAGENTA);
-                canvas.drawRect(_userGlyph.getGlyphViewBounds(_viewBnds, GCONST.STROKE_WEIGHT), mPaintDBG);
+                canvas.drawRect(_userGlyph.getGlyphViewBounds(_viewBnds, _stroke_weight), mPaintDBG);
             }
         }
 
+        mPaint.setColor(_glyphColor);
         mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeWidth(GCONST.STROKE_WEIGHT);
+        mPaint.setStrokeWidth(_stroke_weight);
 
         // Redraw the current glyph path
         //
@@ -722,19 +771,33 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     }
 
 
-    public void replayGlyph() {
+    public void replayGlyph(String replayTarget) {
 
         if(!isPlaying) {
 
-            if(mHasGlyph) {
-                isPlaying  = true;
+            isPlaying  = true;
 
-                if(_showUserGlyph)
-                    _animGlyph = _userGlyph;
-                else
+            switch(replayTarget) {
+
+                case WR_CONST.REPLAY_PROTOGLYPH:
                     _animGlyph = _protoGlyph;
+                    break;
 
-                switch(_animGlyph.getDrawnState()) {
+                case WR_CONST.REPLAY_USERGLYPH:
+                    _animGlyph = _userGlyph;
+                    break;
+
+                case WR_CONST.REPLAY_DEFAULT:
+                    if (_showUserGlyph)
+                        _animGlyph = _userGlyph;
+                    else
+                        _animGlyph = _protoGlyph;
+                    break;
+            }
+
+            if(_animGlyph != null) {
+
+                switch (_animGlyph.getDrawnState()) {
 
                     case TCONST.STROKE_ORIGINAL:
 
@@ -743,7 +806,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
                     case TCONST.STROKE_OVERLAY:
 
-                        int  inset     = (int) (GCONST.STROKE_WEIGHT / 2);
+                        int inset = (int) (_stroke_weight / 2);
                         Rect protoBnds = new Rect(_fontCharBnds);
 
                         protoBnds.inset(inset, inset);
@@ -759,10 +822,12 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
     public void animateOverlay() {
 
+        AnimatorSet animator = new AnimatorSet();
+
         RectF glyphBnds = null;
         RectF protoBnds = null;
 
-        float inset = GCONST.STROKE_WEIGHT / 2;
+        float inset = _stroke_weight / 2;
 
         if(_showUserGlyph)
             _animGlyph = _userGlyph;
@@ -806,11 +871,35 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             }
 
 
-            Animator translator = CAnimatorUtil.configTranslator(this, 2000, 0, wayPoints);
-            Animator scaler     = CAnimatorUtil.configScaler(this, 2000, 0, scalePoints);
+            Animator translator = CAnimatorUtil.configTranslator(this, 1500, 0, wayPoints);
+            Animator scaler     = CAnimatorUtil.configScaler(this, 1500, 0, scalePoints);
 
-            translator.start();
-            scaler.start();
+            animator.playTogether(translator, scaler);
+
+            animator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationCancel(Animator arg0) {
+                    //Functionality here
+                }
+
+                @Override
+                public void onAnimationStart(Animator arg0) {
+                    //Functionality here
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+
+                    mWritingComponent.applyBehavior(WR_CONST.ACTION_COMPLETE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator arg0) {
+                    //Functionality here
+                }
+            });
+
+            animator.start();
         }
     }
 
@@ -824,12 +913,20 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     }
 
 
-
-
-
     @Override
-    public void endReplay() {
-        isPlaying = false;
+    public boolean applyEvent(String event) {
+
+        boolean result = false;
+
+        switch(event) {
+            case WR_CONST.REPLAY_COMPLETE:
+                isPlaying = false;
+                break;
+        }
+
+        result = mWritingComponent.applyBehavior(event);
+
+        return result;
     }
 
 
@@ -882,7 +979,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
                     case TCONST.STROKE_OVERLAY:
 
-                        int inset = (int) (GCONST.STROKE_WEIGHT / 2);
+                        int inset = (int) (_stroke_weight / 2);
 
                         protoBnds = new Rect(_fontCharBnds);
                         protoBnds.inset(inset, inset);
@@ -908,7 +1005,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
                     case TCONST.STROKE_OVERLAY:
 
-                        int inset = (int) (GCONST.STROKE_WEIGHT / 2);
+                        int inset = (int) (_stroke_weight / 2);
 
                         protoBnds = new Rect(_fontCharBnds);
                         protoBnds.inset(inset, inset);
@@ -996,8 +1093,18 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     //***********************************************************************
 
 
+    public void erase() {
 
-    public void clear() {
+        // This can be set by a feedback mode - so we always resest it when clearing
+        _showSampleChar = false;
+        _showUserGlyph  = true;
+
+        clear();
+        setOnTouchListener(this);
+    }
+
+
+    private void clear() {
 
         // Create a path object to hold the vector stream
 
@@ -1010,20 +1117,27 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         if(mInputController != null)
             mInputController.setProtoTypeDirty(false);
 
-        _drawGlyph = null;
+        _glyphColor = TCONST.colorMap.get(TCONST.COLORNORMAL);
+
+        _recPending = false;
+        _isDrawing  = false;
+        _correct    = false;
+
+        _drawGlyph  = null;
         setHasGlyph(false);
         invalidate();
+
+        updateGlyphState();
     }
 
 
-    public void setRecognizer(IGlyphSink recognizer) {
-        _recognizer = recognizer;
-    }
-
-
-    public void setProtoGlyph(String protoChar, CGlyph protoGlyph) {
+    public void setExpectedChar(String protoChar) {
 
         _sampleExpected = protoChar;
+    }
+
+
+    public void setProtoGlyph(CGlyph protoGlyph) {
 
         // If the prototype is not yet created in the glyphs Zip then this could be null
         //
@@ -1033,34 +1147,37 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         }
     }
 
+    public boolean isCorrect() {
+        return _correct;
+    }
 
     public void rebuildProtoType(String options, Rect region) {
 
         if(_protoGlyph != null)
             _protoGlyph.rebuildGlyph(options, region);
-
-// TODO: DEBUGGING Comments
-//        _userGlyph = _protoGlyph;
-//        setHasGlyph(true);
-//        Log.i(TAG, "Rebuild Done");
-//        mWritingController.updateGlyph((IDrawnInputController) mInputController, _sampleExpected);
     }
 
 
-    /**
-     * This is how recognition is initiated - if the user stops writing for a
-     * predefined period we assume they are finished writing.
-     */
-    public class RecogDelay extends CountDownTimer {
+    // This may be called by a foreign glyphinputcontainer (i.e. not this one) that has started
+    // writing in order to initiate recognition on fields that are still pending -
+    // i.e. haven't timed out
+    //
+    // Note that this makes the assumption that the recognizer keeps ahead of the user - i.e.
+    // that they cannot move to more than one successive field before the recognition on the
+    // previous field completes
+    //
+    public boolean firePendingRecognition() {
 
-        public RecogDelay(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-        }
+        boolean result = false;
 
-        @Override
-        public void onFinish() {
+        if(_recPending) {
 
-            _isDrawing = false;
+            // kill the countdown timer
+            //
+            _counter.cancel();
+
+            _recPending = false;
+            _isDrawing  = false;
 
             // Do any required post processing on the glyph
             //
@@ -1078,14 +1195,66 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                     mInputController.setProtoTypeDirty(true);
             }
 
-            // We need to ensure we are using the correct path data when analysing
-            //
-            //rebuildGlyph();
-
             setHasGlyph(true);
             Log.i(TAG, "Recognition Done");
 
             _recognizer.postToQueue(CGlyphInputContainer.this, _drawGlyph);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * This is used in Immedaite feedback mode when a error occurs in another field.
+     * We inhibit further input and recognition on all other fields and reset the glyph state
+     * on pending fields.
+     */
+    public void inhibitInput(boolean inhibit) {
+
+        _inhibit = inhibit;
+
+        if(_inhibit) {
+
+            if(_counter != null)
+                _counter.cancel();
+
+            this.setOnTouchListener(null);
+
+            // If user is in the process of writing in this field then clear it.
+            //
+            if(_recPending)
+                    clear();
+        }
+        else {
+            if(!mHasGlyph)
+               this.setOnTouchListener(this);
+        }
+    }
+
+    public boolean hasGlyph() {
+        return mHasGlyph;
+    }
+
+
+    /**
+     * This is how recognition is initiated - if the user stops writing for a
+     * predefined period we assume they are finished writing.
+     */
+    public class RecogDelay extends CountDownTimer {
+
+        public RecogDelay(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onFinish() {
+
+            // TODO: DEBUG TEST
+            //
+            mWritingComponent.autoScroll(mInputController);
+
+            firePendingRecognition();
         }
 
         @Override
@@ -1137,20 +1306,40 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     @Override
     public Paint        getPaint() { return mPaint; }
 
-
     @Override
     public void recCallBack(CRecResult[] _ltkCandidates, CRecResult[] _ltkPlusCandidates, int sampleIndex) {
 
 
-        mWritingController.updateGlyphStats(_ltkPlusCandidates, _ltkCandidates, _ltkCandidates[sampleIndex].getGlyph().getMetric(), _ltkCandidates[0].getGlyph().getMetric());
+        mWritingComponent.updateGlyphStats(_ltkPlusCandidates, _ltkCandidates, _ltkCandidates[sampleIndex].getGlyph().getMetric(), _ltkCandidates[0].getGlyph().getMetric());
 
         // Update the final result
         //
         _ltkPlusResult = _ltkPlusCandidates[0].getRecChar();
 
+        // Depending upon the result we allow the controller to disable other fields if it is working
+        // in Immediate feedback mode
+        //
+        if(_sampleExpected.equals(_ltkPlusResult)) {
+
+            mWritingComponent.inhibitInput(mInputController, false);
+            _glyphColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
+            _correct    = true;
+        }
+        else {
+            mWritingComponent.inhibitInput(mInputController, true);
+            _glyphColor = TCONST.colorMap.get(TCONST.COLORWRONG);
+            _correct    = false;
+        }
+
+        // Stop listening to touch events - when there is a glyph - whether or not it's right or wrong
+        //
+        setOnTouchListener(null);
+        updateGlyphState();
+
         // Reconstitute the path in the correct orientation after LTK+ post-processing
         //
         rebuildGlyph();
+        invalidate();
 
         // TODO: check for performance issues and run this in a separate thread if required.
         //
@@ -1160,8 +1349,17 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         // Let anyone interested know there is a new recognition set available
         //bManager.sendBroadcast(new Intent(RECMSG));
 
-        mWritingController.updateGlyph((IDrawnInputController) mInputController, _ltkPlusResult);
+        mWritingComponent.updateResponse((IGlyphController) mInputController, _ltkPlusResult);
 
+        // TODO: DEBUG TEST
+        if(!_correct) {
+            animateOverlay();
+            _showSampleChar = true;
+        }
+        else {
+//            _showUserGlyph = false;
+//            replayGlyph();
+        }
     }
 
     @Override
@@ -1197,6 +1395,14 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         return fontCharBnds;
     }
+
+
+    @Override
+    public void setOnTouchListener(OnTouchListener l) {
+        Log.d("TEST", "setonTouch: " + l);
+        super.setOnTouchListener(l);
+    }
+
 
 }
 

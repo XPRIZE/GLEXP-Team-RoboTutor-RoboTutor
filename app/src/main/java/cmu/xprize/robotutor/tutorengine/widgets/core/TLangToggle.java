@@ -114,7 +114,7 @@ public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.
     // view has been inflated and init'd - where it is connected to the TutorEngine
     //
     @Override
-    public void postInflate() {
+    public void onCreate() {
 
         mLangState = (mMediaManager.getLanguageFeature(mTutor) == TCONST.LANG_EN);
         setChecked(mLangState);

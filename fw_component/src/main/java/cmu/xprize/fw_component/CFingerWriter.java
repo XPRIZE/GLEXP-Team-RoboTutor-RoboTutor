@@ -91,7 +91,7 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
     protected ArrayList<String>   _recChars;
     private String                _constraint;
 
-    private CGlyph _currentGlyph;
+    private CGlyph                _currentGlyph;
     private int[]                 _screenCoord  = new int[2];
     private Boolean               _watchable    = false;
 
@@ -104,6 +104,9 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
 
     private String                mResponse;
     private String                mStimulus;
+
+    private Rect                  _viewBnds          = new Rect();  // The view draw bounds
+    private float                 _dotSize;
 
     private LocalBroadcastManager bManager;
 
@@ -296,6 +299,12 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
 
+        getDrawingRect(_viewBnds);
+
+        // We calc a view specific dot size for periods colons etc.
+        //
+        _dotSize = _viewBnds.width() / TCONST.DOT_SIZE;
+
         mTopLine  = getHeight() / 3;
         mBaseLine = mTopLine * 2;
     }
@@ -331,10 +340,9 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
             _counter.cancel();
 
         // We always add the next stoke to the glyph set
-
-// TODO: ltkplus import fault
-//        if (_currentGlyph == null)
-//            _currentGlyph = new CGlyph(mBaseLine);
+        //
+        if (_currentGlyph == null)
+            _currentGlyph = new CGlyph(mContext, mBaseLine, _viewBnds, _dotSize);
 
         _currentGlyph.newStroke();
         _currentGlyph.addPoint(touchPt);

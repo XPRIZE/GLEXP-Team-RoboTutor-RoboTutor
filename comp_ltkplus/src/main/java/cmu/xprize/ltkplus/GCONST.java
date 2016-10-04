@@ -14,8 +14,14 @@ public class GCONST {
     public static final String BOOST_EXCLASS  = "Boost Expected Class";
     public static final String RECORD_VERSION = "1.0.0";
     public static final String VERSION_0      = "0";            // Used in RoboTutor.0.4.1 and earlier
-    public static final float LINE_WEIGHT     = 6;
-    public static final float CORNER_RAD      = 40;
+
+    public static final float  LINE_WEIGHT        = 6;
+    public static final float  CORNER_RAD         = 40;
+    public static final int    EXPECTED_NOT_FOUND = -1;
+    public static final int    EXPECT_NONE        = -2;
+    public static final float  CALIBRATED_WEIGHT  = 0f;
+    public static final float  CALIBRATION_CONST  = 14.288889f;
+
 
     static public HashMap<String, String> glyphMap = new HashMap<String, String>();
 
@@ -115,6 +121,17 @@ public class GCONST {
 
     // TODO: make getStroke weight scale sensitive
     //
+    public static final float    REPLAY_WEIGHT = 5f;
     public static final float    STROKE_WEIGHT = 45f;
 
+
+    // We are correcting for specific LipiTK named recognizer errors (i.e. the ALPHANUM recognizer) -
+    // Sometime it doesn't produce certain characters that you'd think it should due to training
+    // deficiencies - we enumaerate those characters here -
+    //
+    static public HashMap<String, Boolean> boostMap = new HashMap<String, Boolean>();
+
+    static {
+        boostMap.put("i", true);
+    }
 }

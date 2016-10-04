@@ -46,9 +46,18 @@
       "description":"numeric",
       //"background":"#D9FFFF",
       "data": [
-          { "type":"Sm_Data", "datasource":"", "intent": "digit_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy"},
-          { "type":"Sm_Data", "datasource":"", "intent": "digit_dictation", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Dictation"},
-          { "type":"Sm_Data", "datasource":"", "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word Copy"}
+          { "type":"Sm_Data",
+            "datasource":"{\"scene_bindings\" : {\"digit_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"Sstimulus\",\"datasource\": \"[file]dc_data.json\"}]}}}",
+            "intent": "digit_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy"},
+
+          { "type":"Sm_Data",
+            "datasource":"{\"scene_bindings\" : {\"digit_dictation\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"Sstimulus\",\"datasource\": \"[file]dd_data.json\"}]}}}",
+            "intent": "digit_dictation", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Dictation"},
+
+          { "type":"Sm_Data",
+            "datasource":"",
+            //"datasource":"{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]wc_data.json\"}]}}}",
+            "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word Copy"}
         ]
     },
 

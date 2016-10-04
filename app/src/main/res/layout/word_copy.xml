@@ -1,111 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout
+<cmu.xprize.robotutor.tutorengine.widgets.core.TWritingComponent
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/digit_copy">
+    android:id="@+id/word_copy">
 
     <cmu.xprize.robotutor.tutorengine.widgets.core.TBanner
         android:id="@+id/Sbanner"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
         app:layout_heightPercent="10%"
         android:text="This is the Banner Area."/>
 
 
-    <cmu.xprize.robotutor.tutorengine.widgets.core.TSceneRelativeLayout
-        android:id="@+id/Sstimulus_Layout"
+    <!--Background color only -->
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TView
+        android:id="@+id/SstimulusBG"
+        android:layout_below="@id/Sbanner"
+        app:layout_heightPercent="30%"
+        android:layout_width="match_parent"
+        android:background="#FFFFFF"/>
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TView
+        android:id="@+id/SinputBG"
+        android:layout_below="@id/SstimulusBG"
+        app:layout_heightPercent="60%"
+        android:layout_width="match_parent"
+        android:background="#FFFFFF"/>
+
+    <!-- Note: the linkedscrollview must be encapsulated in a framelayout or it will not size correctly -->
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TSceneFrameLayout
+        android:id="@+id/SstimulusFrame"
         android:layout_below="@id/Sbanner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_heightPercent="12%"
-        android:gravity="center"
-        android:background="#FFF">
+        app:layout_heightPercent="30%">
 
         <cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView
-            android:id="@+id/Sstimulus_scroll_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scrollbars="none"
-            android:background="@null">
-
-            <cmu.xprize.robotutor.tutorengine.widgets.core.TTextView
-                android:id="@+id/Sstimulus_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:gravity="center_vertical"
-                android:textSize="30sp"
-                android:text="mom"/>
-
-        </cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView>
-
-    </cmu.xprize.robotutor.tutorengine.widgets.core.TSceneRelativeLayout>
-
-
-    <cmu.xprize.robotutor.tutorengine.widgets.core.TSceneRelativeLayout
-        android:id="@+id/Sresponse_Layout"
-        android:layout_below="@id/Sstimulus_Layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_heightPercent="12%"
-        android:gravity="center"
-        android:background="#FFF">
-
-        <cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView
-            android:id="@+id/Sresponse_scroll_view"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:scrollbars="none"
-            android:background="@null">
-
-            <cmu.xprize.robotutor.tutorengine.widgets.core.TTextView
-                android:id="@+id/Sresponse_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:background="@null"
-                android:gravity="center_vertical"
-                app:border_width="4"
-                android:textSize="40sp"
-                app:type_face = "grundschrift"
-                android:text="mcm"/>
-
-        </cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView>
-
-    </cmu.xprize.robotutor.tutorengine.widgets.core.TSceneRelativeLayout>
-
-
-    <cmu.xprize.robotutor.tutorengine.widgets.core.TSceneRelativeLayout
-        android:id="@+id/Sinput_Layout"
-        android:layout_below="@id/Sresponse_Layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_heightPercent="67%"
-        android:gravity="center"
-        android:background="@color/fingerWriterBackground">
-
-        <cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView
-            android:id="@+id/Sdrawn_scroll_view"
-            android:layout_below="@id/Sresponse_Layout"
-            android:layout_width="wrap_content"
+            android:id="@+id/Sstimulus"
+            android:layout_below="@id/Sbanner"
             android:layout_height="match_parent"
-            android:scrollbars="none">
+            android:layout_width="wrap_content"
+            android:scrollbars="none"
+            android:layout_gravity="center_horizontal"
+            app:show_tracker="true"
+            android:background="@null">
 
             <LinearLayout
-                android:id="@+id/Sdrawn_input_layout"
-                android:layout_width="wrap_content"
+                android:id="@+id/SstimulusList"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:showDividers="middle"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
                 android:orientation="horizontal"
-                android:animateLayoutChanges="true"
+                android:gravity="center_vertical"
                 android:background="@null">
             </LinearLayout>
 
         </cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView>
 
-    </cmu.xprize.robotutor.tutorengine.widgets.core.TSceneRelativeLayout>
+    </cmu.xprize.robotutor.tutorengine.widgets.core.TSceneFrameLayout>
 
 
-</cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView
+        android:id="@+id/SfingerWriter"
+        android:layout_below="@id/SstimulusBG"
+        app:layout_heightPercent="60%"
+        android:layout_width="wrap_content"
+        android:scrollbars="none"
+        android:layout_centerHorizontal="true"
+        android:background="@null">
+
+        <LinearLayout
+            android:id="@+id/Sdrawn_glyphs"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:divider="@drawable/drawn_divider"
+            android:showDividers="middle"
+            android:orientation="horizontal"
+            android:animateLayoutChanges="true"
+            android:background="@null">
+        </LinearLayout>
+
+    </cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView>
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.THandAnimation
+        android:id="@+id/ShandAnimator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        app:scale_factor="0.3"
+        android:background="@null"/>
+
+</cmu.xprize.robotutor.tutorengine.widgets.core.TWritingComponent>

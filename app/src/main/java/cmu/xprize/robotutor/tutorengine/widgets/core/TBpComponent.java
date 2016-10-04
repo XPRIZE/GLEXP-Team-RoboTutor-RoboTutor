@@ -22,15 +22,16 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDataSink {
+public class TBpComponent extends CBP_Component implements IBehaviorManager, ITutorObjectImpl, IDataSink {
 
-    private CTutor mTutor;
+    private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
 
     private CBubble _touchedBubble;
@@ -152,6 +153,7 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
                 dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
 
                 String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataSource);
+
                 // Load the datasource in the component module - i.e. the superclass
                 loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 
@@ -252,6 +254,15 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
         super.enableTouchEvents();
     }
 
+    // Scripting Interface  End
+    //************************************************************************
+    //************************************************************************
+
+
+    //************************************************************************
+    //************************************************************************
+    // IBehaviorManager Interface START
+
     public void setVolatileBehavior(String event, String behavior) {
 
         if (behavior.toUpperCase().equals(TCONST.NULL)) {
@@ -280,20 +291,20 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
 
     // Execute scirpt target if behavior is defined for this event
     //
-    public boolean applyEvent(String event) {
+    public boolean applyBehavior(String event) {
 
         boolean result = false;
 
         if (volatileMap.containsKey(event)) {
             Log.d(TAG, "Processing BP_ApplyEvent: " + event);
-            applyEventNode(volatileMap.get(event));
+            applyBehaviorNode(volatileMap.get(event));
 
             volatileMap.remove(event);
 
             result = true;
 
         } else if (stickyMap.containsKey(event)) {
-            applyEventNode(stickyMap.get(event));
+            applyBehaviorNode(stickyMap.get(event));
 
             result = true;
         }
@@ -307,7 +318,7 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
      *
      * @param nodeName
      */
-    protected void applyEventNode(String nodeName) {
+    public void applyBehaviorNode(String nodeName) {
         IScriptable2 obj = null;
 
         if (nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
@@ -327,9 +338,10 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
         }
     }
 
-    // Scripting Interface  End
+    // IBehaviorManager Interface END
     //************************************************************************
     //************************************************************************
+
 
 
     //************************************************************************
@@ -445,7 +457,7 @@ public class TBpComponent extends CBP_Component implements ITutorObjectImpl, IDa
     }
 
     @Override
-    public void postInflate() {
+    public void onCreate() {
 
         // Do deferred listeners configuration - this cannot be done until after the tutor is instantiated
         //
