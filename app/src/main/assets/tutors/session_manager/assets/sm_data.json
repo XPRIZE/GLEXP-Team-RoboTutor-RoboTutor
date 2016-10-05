@@ -37,7 +37,10 @@
       "description":"add_subtract",
       //"background":"#D9FFFF",
       "data": [
-        { "type":"Sm_Data", "datasource":"", "intent": "add_subtract", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Add/Subtract"}
+        { "type":"Sm_Data", "datasource":"", "intent": "add_subtract", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Add/Subtract"},
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]multiplication.json\"}]}}}",
+          "intent": "add_subtract", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Multiplication"}
       ]
     },
 

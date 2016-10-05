@@ -266,7 +266,7 @@
 
         //        {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "action":"CREATEANDSTART", "repeat":"false", "period":"1000", "features":"", "onTimer":"SET_VISIBILITY"},
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "SAddSubtract", "method": "setDataSource", "parms": "[file]asm_data.json:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "SAddSubtract", "method": "setDataSource", "parms": "[file]asm_data.json:String", "features":"!DATA_SADDSUBTRACT"},
         "NEXT_DATASET":{"type": "COMMAND", "id": "SAddSubtract", "method": "next" ,"features":""},
 
         "RESET":{"type": "COMMAND", "id": "SAddSubtract", "method": "reset" ,"features":""},

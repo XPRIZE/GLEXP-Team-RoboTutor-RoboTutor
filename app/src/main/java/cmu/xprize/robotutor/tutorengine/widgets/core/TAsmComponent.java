@@ -35,7 +35,7 @@ import cmu.xprize.util.TCONST;
 
 import static java.lang.Thread.sleep;
 
-public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
+public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, IDataSink {
 
     private CTutor           mTutor;
     private CObjectDelegate  mSceneObject;
