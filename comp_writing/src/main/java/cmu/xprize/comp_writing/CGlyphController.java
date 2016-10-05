@@ -200,8 +200,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
             // TODO: Here, clearing the bad entry allows them complete access again.
             //
             mWritingComponent.inhibitInput(mThis, false);
-
-            mWritingComponent.updateResponse(mThis, "");
+            mWritingComponent.resetResponse(mThis);
         }
     }
 
@@ -263,6 +262,11 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     @Override
     public boolean hasGlyph() {
         return mGlyphInput.hasGlyph();
+    }
+
+    @Override
+    public CGlyph getGlyph() {
+        return mGlyphInput.getGlyph();
     }
 
     @Override
@@ -330,6 +334,11 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         // En/Disable the glyph field
         //
         mGlyphInput.inhibitInput(inhibit);
+    }
+
+
+    public void updateCorrectStatus(boolean correct) {
+        mGlyphInput.updateCorrectStatus(correct);
     }
 
 
@@ -446,6 +455,13 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
                         mGlyphReplay.setPointAtStroke(false);
                         mGlyphInput.replayGlyph(WR_CONST.REPLAY_PROTOGLYPH);
                         break;
+
+                    case WR_CONST.ANIMATE_OVERLAY:
+
+                        mGlyphInput.showSampleChar(true);
+                        mGlyphInput.animateOverlay();
+                        break;
+
                 }
             }
             catch(Exception e) {

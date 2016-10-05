@@ -450,16 +450,17 @@ public class CRecognizerPlus implements IGlyphSink {
      */
     public int ltkPlusProcessor(IGlyphSource glyphSrc ) {
 
-        String      candidateLTK;
-        char        sampleChar;
-        char        ltkChar;
-        Rect        compCharBnds    = new Rect();
-        RectF       glyphVisualBnds;
-        int         sampleIndex     = GCONST.EXPECTED_NOT_FOUND;
-        boolean     forceProcessing = false;
-        boolean     sampDigit       = false;
-        boolean     sampUpper       = false;
-        boolean     sampAlpha       = false;
+        String          candidateLTK;
+        char            sampleChar;
+        CGlyphMetrics   metric;
+        char            ltkChar;
+        Rect            compCharBnds    = new Rect();
+        RectF           glyphVisualBnds;
+        int             sampleIndex     = GCONST.EXPECTED_NOT_FOUND;
+        boolean         forceProcessing = false;
+        boolean         sampDigit       = false;
+        boolean         sampUpper       = false;
+        boolean         sampAlpha       = false;
 
         _sampleExpected    = glyphSrc.getExpectedChar();
         _drawGlyph         = glyphSrc.getGlyph();
@@ -551,6 +552,10 @@ public class CRecognizerPlus implements IGlyphSink {
         if(sampleIndex >= 0)
             forceProcessing |= ensureAlternateCase(_sampleExpected, sampleIndex);
 
+        // Generate the visual bounds for the glyph that was drawn
+        //
+        glyphVisualBnds = _drawGlyph.getGlyphViewBounds(_viewBnds, GCONST.STROKE_WEIGHT);
+
 
         // If the LTK candidate is not the sample char then do LTK+ post processing.
         // If we added alternate cases or virtual cases then forceprocessing
@@ -574,16 +579,13 @@ public class CRecognizerPlus implements IGlyphSink {
                 sampAlpha = Character.isLetterOrDigit(sampleChar);
             }
 
-            // Generate the visual bounds for the glyph that was drawn
-            glyphVisualBnds = _drawGlyph.getGlyphViewBounds(_viewBnds, GCONST.STROKE_WEIGHT);
-
             // Clone a prototype glyph for each LTK candidate
             //
             for(CRecResult candidate : _ltkCandidates) {
 
                 candidate.setGlyph(new CGlyph(mContext, _baseLine, _viewBnds, _dotSize));
 
-                CGlyphMetrics metric = candidate.getGlyph().getMetric();
+                metric = candidate.getGlyph().getMetric();
 
                 boolean isSample     = candidate.getIsExpected();
                 String  candChar     = candidate.getRecChar();
@@ -656,13 +658,13 @@ public class CRecognizerPlus implements IGlyphSink {
 
             // Sort the LTK+ array by Plus confidence levels
             //
-            int       count     = _ltkPlusCandidates.length;
-            boolean   needsSort = true;
+            int        count      = _ltkPlusCandidates.length;
+            boolean    sortResult = true;
             CRecResult temp;
 
-            while(needsSort) {
+            while(sortResult) {
 
-                needsSort = false;
+                sortResult = false;
                 for(int i1 = 1 ; i1 < count ; i1++) {
 
                     if (_ltkPlusCandidates[i1-1].getPlusConfidence() < _ltkPlusCandidates[i1].getPlusConfidence()) {
@@ -670,16 +672,36 @@ public class CRecognizerPlus implements IGlyphSink {
 
                         _ltkPlusCandidates[i1-1] = _ltkPlusCandidates[i1];
                         _ltkPlusCandidates[i1]   = temp;
-                        needsSort = true;
+                        sortResult = true;
                     }
                 }
                 count--;
             }
         }
-        // If the top LTK candidate is correct then just mirror the results
+
+        // If the top LTK candidate matches the expected char then just mirror the results
+        //
         else {
+            CRecResult candidate;
+
             _ltkPlusCandidates = _ltkCandidates;
-            _ltkPlusCandidates[0].setGlyph(_drawGlyph);
+
+            // calc metrics on the ltk candidate to provide the tutor with character quality data
+            //
+            candidate = _ltkCandidates[0];
+            candidate.setGlyph(_drawGlyph);
+
+            metric = candidate.getGlyph().getMetric();
+
+            String  candChar     = candidate.getRecChar();
+            Rect    candCharBnds = glyphSrc.getFontCharBounds( candChar);
+
+            // Generate the dimensional metrics for the given candidate char
+            // Generate the visual comparison metric for the given char
+            //
+            metric.calcMetrics(_drawGlyph, glyphVisualBnds, candCharBnds, (sampleIndex != GCONST.EXPECT_NONE)? compCharBnds:candCharBnds , GCONST.STROKE_WEIGHT);
+
+            candidate.setVisualConfidence(metric.generateVisualMetric(_fontBnds, candChar, (sampleIndex != GCONST.EXPECT_NONE)? _sampleExpected:candChar, _drawGlyph, _Paint, GCONST.CALIBRATED_WEIGHT, TCONST.VOLATILE));
         }
 
         // If there is no valid sample in the recognition set then use the TLK candidate = i.e. elemenet 0

@@ -8,23 +8,25 @@
       "title": "Word copying tutor",
       "COMMENT": "This tutor is designed for copying words.",
       "version": "1.0.0",
-      "rootnode": "DEMO_STATE",
+      "rootnode": "DEMO_SELECT",
 
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
 
+        // TODO: Setup some criteria for when to present the demo
+
         "DEMO_SELECT": {
           "type": "NODE",
           "COMMENT": "Intro Clip",
-          "maptype":"actionMap",
-          "mapname": "WAIT",
-          "preenter":[],
+          "maptype":"moduleMap",
+          "mapname": "EMPTY_MODULE",
+          "preenter":["SET_CONSTRAINT"],
           "preexit" :[],
           "edges": [
             {
               "constraint": "",
-              "edge": "NEWWORD"
+              "edge": "DEMO_STATE"
             }
           ]
         },
@@ -172,13 +174,21 @@
 
         "COMMENT": "@@@@@  CModules  @@@@@",
 
+        "EMPTY_MODULE": {
+          "type":"MODULE",
+          "reuse":true,
+          "COMMENT": "Do Nothing",
+          "tracks": [
+          ]
+        },
+
         "SET_DEMOSOURCE": {
           "type":"MODULE",
           "reuse":true,
           "COMMENT": "Initialize the data source - ",
           "tracks": [
-            {"type": "COMMAND", "id": "word_copy", "method": "setDataSource", "parms": "[saba]:String","features":"LANG_SW"},
-            {"type": "COMMAND", "id": "word_copy", "method": "setDataSource", "parms": "[one]:String","features":"LANG_EN"}
+            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[saba]:String","features":"LANG_SW"},
+            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[one]:String","features":"LANG_EN"}
           ]
         },
 
@@ -196,10 +206,22 @@
 
             // Next will fire when replay completes
             {"type": "COMMAND", "id": "word_copy", "method": "clear", "parms": "", "features":""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now you try it.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now you try it.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+
+            // Restore the initial datasource if present
+            {"type": "COMMAND", "id": "word_copy", "method": "popDataSource", "features":""}
           ]
         },
 
+        "SET_DATASOURCE": {
+          "type":"MODULE",
+          "reuse":true,
+          "COMMENT": "Initialize the data source - ",
+          "tracks": [
+            {"type": "COMMAND", "id": "word_copy", "method": "setDataSource", "parms": "[saba,sifuri,mbili]:String","features":"!DATA_WORD_COPY&LANG_SW"},
+            {"type": "COMMAND", "id": "word_copy", "method": "setDataSource", "parms": "[one,two,three]:String","features":"!DATA_WORD_COPY&LANG_EN"}
+          ]
+        },
 
         "PLAYINTRO":{
           "type": "MODULE",
@@ -302,8 +324,6 @@
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.1.0:String","features":""},
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "word_copy", "method": "setDataSource", "parms": "[0,sabalicious ontological test of line length,sifuri,mbili]:String","features":"!DATA_WORD_COPY"},
-
         "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HESITATION_TRACK", "features": "" },
         //set the waiting time limit as 10 seconds
 
@@ -318,6 +338,9 @@
         //disable FingerWriting
         "FW_ENABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "TRUE:Boolean","features":""},
         //enable FingerWriting
+
+        // Set the LTK+ metric constraint
+        "SET_CONSTRAINT":{"type": "COMMAND", "id": "word_copy", "method": "setConstraint", "parms": "H,0.45;W,0.45;Y,0.25;X,0.25:String", "features":""},
 
         "NEXT_WORD":{"type": "COMMAND", "id": "word_copy", "method": "next" ,"features":""},
         //get a new digit from the list.

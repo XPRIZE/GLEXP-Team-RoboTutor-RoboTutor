@@ -22,6 +22,12 @@ public class GCONST {
     public static final float  CALIBRATED_WEIGHT  = 0f;
     public static final float  CALIBRATION_CONST  = 14.288889f;
 
+    public static final String X_CONSTR           = "X";
+    public static final String Y_CONSTR           = "Y";
+    public static final String W_CONSTR           = "W";
+    public static final String H_CONSTR           = "H";
+    public static final String A_CONSTR           = "A";
+
 
     static public HashMap<String, String> glyphMap = new HashMap<String, String>();
 

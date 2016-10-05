@@ -328,7 +328,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     }
 
 
-    private void updateGlyphState() {
+    private void updateControllerState() {
 
         if(mInputController != null)
             mInputController.setGlyphStatus(_correct, mHasGlyph);
@@ -932,12 +932,18 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
     public boolean toggleSampleChar() {
 
-        _showSampleChar = !_showSampleChar;
+        showSampleChar(!_showSampleChar);
 
         rebuildGlyph();
         invalidate();
 
         return _showSampleChar;
+    }
+
+
+    public void showSampleChar(boolean show) {
+
+        _showSampleChar = show;
     }
 
 
@@ -1127,7 +1133,23 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         setHasGlyph(false);
         invalidate();
 
-        updateGlyphState();
+        updateControllerState();
+    }
+
+
+    public void updateCorrectStatus(boolean correct) {
+
+        _correct = correct;
+
+        if(correct) {
+
+            _glyphColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
+        }
+        else {
+            _glyphColor = TCONST.colorMap.get(TCONST.COLORWRONG);
+        }
+
+        invalidate();
     }
 
 
@@ -1316,50 +1338,23 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         //
         _ltkPlusResult = _ltkPlusCandidates[0].getRecChar();
 
-        // Depending upon the result we allow the controller to disable other fields if it is working
-        // in Immediate feedback mode
-        //
-        if(_sampleExpected.equals(_ltkPlusResult)) {
-
-            mWritingComponent.inhibitInput(mInputController, false);
-            _glyphColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
-            _correct    = true;
-        }
-        else {
-            mWritingComponent.inhibitInput(mInputController, true);
-            _glyphColor = TCONST.colorMap.get(TCONST.COLORWRONG);
-            _correct    = false;
-        }
-
-        // Stop listening to touch events - when there is a glyph - whether or not it's right or wrong
-        //
-        setOnTouchListener(null);
-        updateGlyphState();
-
-        // Reconstitute the path in the correct orientation after LTK+ post-processing
-        //
-        rebuildGlyph();
-        invalidate();
-
         // TODO: check for performance issues and run this in a separate thread if required.
         //
         if(mLogGlyphs)
             _drawGlyph.writeGlyphToLog("SHAPEREC_ALPHANUM", "", _sampleExpected, _ltkPlusResult);
 
-        // Let anyone interested know there is a new recognition set available
-        //bManager.sendBroadcast(new Intent(RECMSG));
+        mWritingComponent.updateResponse((IGlyphController) mInputController, _ltkPlusCandidates);
 
-        mWritingComponent.updateResponse((IGlyphController) mInputController, _ltkPlusResult);
+        // Stop listening to glyph draw events - when there is a glyph - independent of being correct
+        // Update the controller buttons
+        //
+        setOnTouchListener(null);
+        updateControllerState();
 
-        // TODO: DEBUG TEST
-        if(!_correct) {
-            animateOverlay();
-            _showSampleChar = true;
-        }
-        else {
-//            _showUserGlyph = false;
-//            replayGlyph();
-        }
+        // Reconstitute the path in the correct orientation after LTK+ post-processing
+        //
+        rebuildGlyph();
+        invalidate();
     }
 
     @Override

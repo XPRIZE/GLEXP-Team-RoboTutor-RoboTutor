@@ -20,6 +20,7 @@ public class WR_CONST {
     public static final String REPLAY_USERGLYPH         = "REPLAY_USERGLYPH";
     public static final String REPLAY_PROTOGLYPH        = "REPLAY_PROTOGLYPH";
     public static final String REPLAY_DEFAULT           = "REPLAY_DEFAULT";
-    public static final String RIPPLE_PROTO = "RIPPLE_PROTO";
+    public static final String RIPPLE_PROTO             = "RIPPLE_PROTO";
+    public static final String ANIMATE_OVERLAY          = "ANIMATE_OVERLAY";
 }
 

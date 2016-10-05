@@ -41,6 +41,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CLinkedScrollView;
@@ -68,6 +69,15 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     private int                     _wrong   = 0;
     private int                     _correct = 0;
+
+    private ArrayList<CDataSourceImg> _dataStack  = new ArrayList<>();
+    static private ArrayList<String>  _FeatureSet = new ArrayList<>();
+
+    static {
+        _FeatureSet.add(TCONST.ALL_CORRECT);
+        _FeatureSet.add(TCONST.FWCORRECT);
+        _FeatureSet.add(TCONST.FWINCORRECT);
+    }
 
     private static final String  TAG = TWritingComponent.class.getSimpleName();
 
@@ -165,39 +175,6 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
             case WR_CONST.RIPPLE_HIGHLIGHT:
                 break;
-
-
-//            case BP_CONST.RESUME_ANIMATION:
-//                post(BP_CONST.RESUME_ANIMATION);
-//                break;
-//
-//            case BP_CONST.SHOW_SCORE:
-//                post(BP_CONST.SHOW_SCORE, new Integer(correct_Count));
-//                break;
-//
-//            case BP_CONST.SHOW_STIMULUS:
-//                post(BP_CONST.SHOW_STIMULUS, _currData);
-//                break;
-//
-//            case BP_CONST.SHOW_FEEDBACK:
-//                post(BP_CONST.SHOW_FEEDBACK, new Integer(correct_Count));
-//                break;
-//
-//            case BP_CONST.SHOW_BUBBLES:
-//                post(BP_CONST.SHOW_BUBBLES);
-//                break;
-//
-//            case BP_CONST.POP_BUBBLE:
-//                post(BP_CONST.POP_BUBBLE, _touchedBubble);
-//                break;
-//
-//            case BP_CONST.WIGGLE_BUBBLE:
-//                post(BP_CONST.WIGGLE_BUBBLE, _touchedBubble);
-//                break;
-//
-//            case BP_CONST.CLEAR_CONTENT:
-//                post(BP_CONST.CLEAR_CONTENT, _touchedBubble);
-//                break;
         }
     }
 
@@ -309,7 +286,68 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     //************************************************************************
     //************************************************************************
+    // publish component state data - START
+
+
+    @Override
+    protected void publishState() {
+    }
+
+    @Override
+    public void publishValue(String varName, String value) {
+
+        // update the response variable  "<ComponentName>.<varName>"
+        mTutor.getScope().addUpdateVar(name() + varName, new TString(value));
+
+    }
+
+    @Override
+    public void publishValue(String varName, int value) {
+
+        // update the response variable  "<ComponentName>.<varName>"
+        mTutor.getScope().addUpdateVar(name() + varName, new TInteger(value));
+
+    }
+
+
+    // publish component state data - EBD
+    //************************************************************************
+    //************************************************************************
+
+
+    //************************************************************************
+    //************************************************************************
     // DataSink Implementation Start
+
+
+    /**
+     *
+     * @param dataPacket
+     */
+    public void pushDataSource(String dataPacket) {
+
+        if(dataSource != null) {
+            _dataStack.add(new CDataSourceImg());
+        }
+
+        setDataSource(dataPacket);
+    }
+
+
+    /**
+     *
+     */
+    public void popDataSource() {
+
+        int popIndex = _dataStack.size()-1;
+
+        if(popIndex >= 0) {
+            CDataSourceImg popped = _dataStack.get(popIndex);
+            popped.restoreDataSource();
+            _dataStack.remove(popIndex);
+        }
+    }
+
 
     /**
      *
@@ -379,6 +417,58 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         }
     }
 
+
+    class CDataSourceImg {
+
+        private int  _wrongStore   = 0;
+        private int  _correctStore = 0;
+
+        private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
+
+        protected List<String>  _dataStore;
+        protected int           _dataIndexStore;
+        protected boolean       _dataEOIStore;
+
+        String[]                _dataSourceStore;
+
+        public CDataSourceImg() {
+
+            _correctStore = _correct;
+            _wrongStore   = _wrong;
+
+            _dataStore      = _data;
+            _dataIndexStore = _dataIndex;
+            _dataEOIStore   = _dataEOI;
+
+            for(String feature : _FeatureSet) {
+                _FeatureMap.put(feature, mTutor.testFeatureSet(feature));
+
+                mTutor.setDelFeature(feature);
+            }
+
+            _dataSourceStore = dataSource;
+        }
+
+
+        public void restoreDataSource() {
+
+            _correct = _correctStore;
+            _wrong   = _wrongStore;
+
+            _data      = _dataStore;
+            _dataIndex = _dataIndexStore;
+            _dataEOI   = _dataEOIStore;
+
+            for(String feature : _FeatureSet) {
+                if(_FeatureMap.get(feature)) {
+                    mTutor.setAddFeature(feature);
+                }
+            }
+
+            dataSource = _dataSourceStore;
+
+        }
+    }
 
     // DataSink IMplementation End
     //************************************************************************

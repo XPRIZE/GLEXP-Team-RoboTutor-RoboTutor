@@ -55,8 +55,8 @@
             "intent": "digit_dictation", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Dictation"},
 
           { "type":"Sm_Data",
-            "datasource":"",
-            //"datasource":"{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]wc_data.json\"}]}}}",
+//            "datasource":"",
+            "datasource":"{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]wc_data.json\"}]}}}",
             "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word Copy"}
         ]
     },

@@ -312,7 +312,6 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
     private void broadcastEnd() {
 
         if (tPoint != null) {
-            broadcastLocation(TCONST.POINT_FADE, tPoint);
             broadcastLocation(TCONST.LOOKATEND, tPoint);
         }
     }

@@ -216,10 +216,6 @@ public class CHandAnimation extends PercentRelativeLayout implements Animator.An
                     if(!_inAnimation) {
 
                         _inAnimation = true;
-
-                        coord = intent.getFloatArrayExtra(TCONST.SCREENPOINT);
-
-                        _animationPoint = new PointF(coord[0], coord[1]);
                         _animatorSeq = new String[]{HA_CONST.ANIMATE_FADE};
                         post(HA_CONST.STARTSEQ);
                     }

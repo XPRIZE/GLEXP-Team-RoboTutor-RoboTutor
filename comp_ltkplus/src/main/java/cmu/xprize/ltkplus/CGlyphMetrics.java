@@ -145,6 +145,9 @@ public class CGlyphMetrics {
     public float getVisualDelta() {
         return _visualMatch;
     }
+    public float getErrorDelta() {
+        return _glyphError;
+    }
 
 
 

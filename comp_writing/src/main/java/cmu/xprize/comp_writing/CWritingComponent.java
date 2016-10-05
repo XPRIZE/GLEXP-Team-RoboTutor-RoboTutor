@@ -20,10 +20,12 @@
 package cmu.xprize.comp_writing;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.percent.PercentRelativeLayout;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,6 +42,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cmu.xprize.ltkplus.CGlyph;
+import cmu.xprize.ltkplus.CGlyphMetricConstraint;
 import cmu.xprize.ltkplus.CGlyphMetrics;
 import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.CGlyphSet;
@@ -86,16 +90,21 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     protected IGlyphSink        _recognizer;
     protected CGlyphSet         _glyphSet;
+    protected boolean           _isValid;
 
     protected String            mResponse;
     protected String            mStimulus;
 
+    protected CGlyphMetricConstraint _metric = new CGlyphMetricConstraint();
+
     protected List<String>      _data;
     protected int               _dataIndex = 0;
     protected boolean           _dataEOI   = false;
-    public    String            mValue;
 
     public    boolean           _immediateFeedback = true;
+
+    protected LocalBroadcastManager bManager;
+
 
     // json loadable
     public String[]             dataSource;
@@ -122,6 +131,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mContext = context;
 
         setClipChildren(false);
+
+        // Capture the local broadcast manager
+        bManager = LocalBroadcastManager.getInstance(getContext());
     }
 
     /** Note: This is used with the writing_tutor_comp layout in the dev project
@@ -207,6 +219,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
+    private void broadcastMsg(String Action) {
+
+        Intent msg = new Intent(Action);
+
+        bManager.sendBroadcast(msg);
+    }
+
+
     //************************************************************************
     //************************************************************************
     // IWritingController Start
@@ -278,13 +298,45 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
-    public void updateResponse(IGlyphController child, String glyph) {
+    public void updateResponse(IGlyphController drawController, CRecResult[] _ltkPlusCandidates) {
+
+        int index = mDrawnList.indexOfChild((View)drawController);
+
+        CRecResult candidate = _ltkPlusCandidates[0];
+
+        CStimulusController stimController = (CStimulusController)mRecogList.getChildAt(index);
+
+        _isValid = stimController.testStimulus( candidate.getRecChar()) && _metric.testConstraint(candidate.getGlyph());
+
+        // Depending upon the result we allow the controller to disable other fields if it is working
+        // in Immediate feedback mode
+        //
+        drawController.updateCorrectStatus(_isValid);
+        inhibitInput(drawController, !_isValid);
+
+        stimController.updateStimulusState(_isValid);
+
+        // TODO: DEBUG TEST
+        if(!_isValid) {
+            drawController.post(WR_CONST.ANIMATE_OVERLAY);
+        }
+
+
+//        else {
+//            _showUserGlyph = false;
+//            replayGlyph();
+//        }
+
+    }
+
+
+    public void resetResponse(IGlyphController child) {
 
         int index = mDrawnList.indexOfChild((View)child);
 
         CStimulusController respText = (CStimulusController)mRecogList.getChildAt(index);
 
-        respText.setResponseChar(glyph);
+        respText.resetStimulusState();
     }
 
 
@@ -434,6 +486,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             _fieldIndex++;
         }
         else {
+            broadcastMsg(TCONST.POINT_FADE);
+
             applyBehavior(WR_CONST.REPLAY_COMPLETE);
         }
     }
@@ -587,6 +641,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     // Tutor Scriptable methods  Start
 
 
+    public void setConstraint(String constraint) {
+
+        _metric.setConstraint(constraint);
+    }
+
     /**
      * Manage component defined (i.e. specific) events
      *
@@ -633,6 +692,38 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     // Tutor methods  End
     //************************************************************************
     //************************************************************************
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // publish component state data - START
+
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    protected void publishState() {
+
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishValue(String varName, String value) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishValue(String varName, int value) {
+    }
+
+
+    // publish component state data - EBD
+    //************************************************************************
+    //************************************************************************
+
 
 
 
