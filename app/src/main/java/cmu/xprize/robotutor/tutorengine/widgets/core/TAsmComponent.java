@@ -74,12 +74,6 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         boolean correct = isWholeCorrect();
 
         if(correct) {
-            try {
-                if (operation.equals("x") && allAlleys.get(ASM_CONST.ADD_MULTI_PART3 - 1).getDotBag().getVisibility() == VISIBLE)
-                    sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
         } else
             mTutor.setAddFeature(TCONST.GENERIC_WRONG);
@@ -110,7 +104,6 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     }
 
     public void reset() {
-
         mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
         mTutor.setDelFeature(TCONST.GENERIC_WRONG);
     }
@@ -182,7 +175,6 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         Log.d("PlayChime", currentChime);
         scope.addUpdateVar("TestChimes", new TString(currentChime));
         applyEventNode("PLAY_CHIME");
-
     }
 
     public void next() {

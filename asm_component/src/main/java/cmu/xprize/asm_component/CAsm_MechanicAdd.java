@@ -194,12 +194,10 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         ArrayList<Animator> allAnimations = new ArrayList<>();
 
         for (int i = 0; i < resultBag.getCols(); i++) {
-
             currDot = resultBag.getDot(0, i);
             colsToTranslate = (i < 10)?i:9;
             anim = ObjectAnimator.ofFloat(currDot, "translationX", -colsToTranslate*dotSize);
             allAnimations.add(anim);
-
         }
 
         float currRight = resultBag.getBounds().right;
@@ -237,7 +235,6 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
         return animSet;
 
-
     }
 
     private AnimatorSet createCarryAnimation() {
@@ -249,8 +246,8 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
         setAllParentsClip(carryDot, false);
 
-        float transX = -(scale*ASM_CONST.rightPadding + resultBag.getSize() +
-                scale*ASM_CONST.textBoxWidth*(mComponent.numSlots - mComponent.digitIndex + .5f));
+        float transX = -(scale * ASM_CONST.rightPadding + resultBag.getSize() +
+                scale * ASM_CONST.textBoxWidth * (mComponent.numSlots - mComponent.digitIndex + 1));
 
         float transY = -determineAlleyDY(4, allAlleys.size()-1);
 
@@ -279,7 +276,6 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
             @Override
             public void onAnimationEnd(Animator animation) {
-
                 // reset dotbag
                 resultBag.setRows(1);
                 //resultBag.setCols(resultBag.getCols()-1);
@@ -289,13 +285,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
                 CAsm_Text carryText = carryLayout.getTextLayout(mComponent.digitIndex-1).getText(1);
                 Integer currCarryNum = carryLayout.getDigit(mComponent.digitIndex-1);
 
-                if (currCarryNum == null) {
-                    carryText.setText("1");
-                }
-                else {
-                    carryText.setText(String.valueOf(1 + currCarryNum));
-                }
-
+                carryText.setText("1");
             }
 
             @Override
