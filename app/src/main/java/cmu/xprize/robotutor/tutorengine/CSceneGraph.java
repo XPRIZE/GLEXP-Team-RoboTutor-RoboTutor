@@ -58,7 +58,7 @@ public class CSceneGraph  {
     private boolean          mDisabled   = false;
 
     // State fields
-    private scene_graph _scene;
+    private scene_graph              _graph;
     private HashMap<String, Integer> _pFeatures;
 
 
@@ -135,9 +135,9 @@ public class CSceneGraph  {
                         mSceneName = _target;
 
                         try {
-                            _scene = (scene_graph) mScope.mapSymbol(mSceneName);
+                            _graph = (scene_graph) mScope.mapSymbol(mSceneName);
 
-                            Log.d(TAG, "Processing Enter Scene: " + _scene.name + " - mapType: " + _scene.type );
+                            Log.d(TAG, "Processing Enter Scene: " + _graph.name + " - mapType: " + _graph.type );
 
                         } catch (Exception e) {
 
@@ -145,9 +145,11 @@ public class CSceneGraph  {
                         }
                         break;
 
+
+
                     case TCONST.NEXT_NODE:
 
-                        String sceneState = _scene.applyNode();
+                        String sceneState = _graph.applyNode();
 
                         switch (sceneState) {
 
@@ -171,11 +173,11 @@ public class CSceneGraph  {
                         break;
 
                     case TCONST.PLAY:
-                        _scene.play();
+                        _graph.play();
                         break;
 
                     case TCONST.STOP:
-                        _scene.stop();
+                        _graph.stop();
                         break;
 
                     case TCONST.ENDTUTOR:
@@ -188,7 +190,7 @@ public class CSceneGraph  {
                         break;
 
                     case TCONST.GOTO_NODE:
-                        _scene.gotoNode(_target);
+                        _graph.gotoNode(_target);
                         break;
                 }
             }

@@ -80,16 +80,32 @@
           "type":"node",
           "maptype":"moduleMap",
           "mapname": "FINGERWRITING",
-          "preenter":["FW_ENABLE","REMINDER_TIMER"],
+          "preenter":["FW_ENABLE"],
           "preexit" :["FW_DISABLE"],
           "edges":
           [
+            {"constraint":"FTR_IN_HESITATION","edge":"INPUT_HESITATION"},
             {"constraint":"FTR_RIGHT","edge":"CORRECT"},
             {"constraint":"FTR_WRONG","edge":"WRONG"},
             //{"constraint":"","edge":"UNRECOGNIZED"}
 	        {"constraint":"","edge":"UNRECOGNIZED"}
           ]
         },
+
+        "INPUT_HESITATION":{
+          "COMMENT":"User has hesitated entering the next glyph",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "INPUT_HESITATION_MODULE",
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"INPUTLETTER"}
+          ]
+        },
+
+
 
         "CORRECT":{
           "COMMENT":"When user inputs a correct answer...",
@@ -198,8 +214,10 @@
           "COMMENT": "Initialize the data source - ",
 
           "tracks": [
-            {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|NEXTNODE:String" ,"features":""},
-            {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_DEMO:String|500:Integer",         "features":""},
+            {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "TRUE:Boolean","features":""},
+
+            {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|NEXT_NODE:String" ,"features":""},
+            {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_DEMO:String|500:Integer",          "features":""},
 
             // This will play during the demo replay
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some words.mp3", "soundpackage":"default", "volume": 1.0, "mode":"stream", "features": ""},
@@ -209,7 +227,9 @@
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Now you try it.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
 
             // Restore the initial datasource if present
-            {"type": "COMMAND", "id": "word_copy", "method": "popDataSource", "features":""}
+            {"type": "COMMAND", "id": "word_copy", "method": "popDataSource", "features":""},
+
+            {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "FALSE:Boolean","features":""}
           ]
         },
 
@@ -238,10 +258,20 @@
           "COMMENT": "TBD",
           "tracks": [
             //{"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "TRUE:Boolean","features":""},
-            {"type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":""},
+            {"type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":""}
             //{"type": "AUDIO", "command": "PLAY", "soundsource": "This is the number.mp3", "mode":"flow", "features": ""},
 //            {"type": "TTS", "command": "SAY", "content": "{{word_copy.value}}", "rate":"1.2", "features": ""}
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3", "soundpackage":"xprize",  "mode":"flow", "features": ""} //the stimulus digit
+//            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3", "soundpackage":"xprize",  "mode":"flow", "features": ""} //the stimulus digit
+          ]
+        },
+
+        "INPUT_HESITATION_MODULE": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id": "word_copy", "method": "retractFeature", "parms": "FTR_INPUT_HESITATION:String","features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the word.mp3", "soundpackage":"xprize",  "mode":"flow", "features": ""}
           ]
         },
 
@@ -250,7 +280,9 @@
           "reuse":true,
           "COMMENT": "FingerWriting Module",
           "tracks": [
-            {"type": "COMMAND", "id": "SfingerWriter", "method": "onStartWriting", "parms": "CANCEL_REMINDER:String"},
+            {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "ON_START_WRITING:String|CANCEL_HESITATION_PROMPT:String" ,"features":""},
+            {"type": "COMMAND", "id": "word_copy", "method": "postNamed", "parms": "HESITATION_PROMPT:String|FTR_INPUT_HESITATION:String|6000:Long",  "features":""},
+
             // This would call the cancel reminder action below when the user starts writing
             {"type": "COMMAND", "id": "Sstimulus", "method": "onRecognitionComplete", "parms": "NEXT:String"},
             // This would increment the animation_graph when it is in a wait state.  e.g if it is sitting at the end of a stream audio clip
@@ -324,15 +356,8 @@
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.1.0:String","features":""},
 
-        "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HESITATION_TRACK", "features": "" },
-        //set the waiting time limit as 10 seconds
+        "CANCEL_HESITATION_PROMPT": {"type": "COMMAND", "id": "word_copy", "method": "cancelPost", "parms": "HESITATION_PROMPT:String",  "features":""},
 
-        "CANCEL_REMINDER": {"type": "TIMER", "id":"ReminderTimer", "action":"CANCEL", "features": "" },
-
-        "GB_DISABLE":{"type": "COMMAND", "id": "SgoButton", "method": "enable", "parms": "FALSE:Boolean","features":""},
-        //disable Go button
-        "GB_ENABLE":{"type": "COMMAND", "id": "SgoButton", "method": "enable", "parms": "TRUE:Boolean","features":""},
-        //enable Go button
 
         "FW_DISABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "FALSE:Boolean","features":""},
         //disable FingerWriting
@@ -361,7 +386,7 @@
         "PICKER_TRACK": {"type": "TIMELINE", "trackname": "ASK_BUTTON", "features": ""},
 
         "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "gotoNextScene"},
-        "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"  },
+        "NEXT_NODE": {"type": "COMMAND", "cmd": "NEXT"  },
         "WAIT": {"type": "COMMAND", "cmd": "WAIT"  }
       },
 

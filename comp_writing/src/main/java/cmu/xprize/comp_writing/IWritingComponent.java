@@ -20,6 +20,6 @@ public interface IWritingComponent {
     public boolean applyBehavior(String event);
 
     public void updateGlyphStats(CRecResult[] ltkPlusResult, CRecResult[] ltkresult, CGlyphMetrics metricsA, CGlyphMetrics metricsB);
-    public void updateResponse(IGlyphController child, CRecResult[] _ltkPlusCandidates );
+    public void updateStatus(IGlyphController child, CRecResult[] _ltkPlusCandidates );
     public void resetResponse(IGlyphController child );
 }

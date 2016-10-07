@@ -42,7 +42,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import cmu.xprize.ltkplus.CGlyph;
 import cmu.xprize.ltkplus.CGlyphMetricConstraint;
 import cmu.xprize.ltkplus.CGlyphMetrics;
 import cmu.xprize.ltkplus.CRecognizerPlus;
@@ -75,6 +74,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     protected CLinkedScrollView mRecognizedScroll;
     protected CLinkedScrollView mDrawnScroll;
+    private   IGlyphController  mActiveController;
 
     protected LinearLayout      mRecogList;
     protected LinearLayout      mDrawnList;
@@ -83,6 +83,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     protected final Handler     mainHandler  = new Handler(Looper.getMainLooper());
     protected HashMap           queueMap     = new HashMap();
+    protected HashMap           nameMap      = new HashMap();
+
     protected boolean           _qDisabled   = false;
     protected boolean           _alwaysTrack = true;
     protected int               _fieldIndex  = 0;
@@ -90,6 +92,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     protected IGlyphSink        _recognizer;
     protected CGlyphSet         _glyphSet;
+
+    protected boolean           _charValid;
+    protected boolean           _metricValid;
     protected boolean           _isValid;
 
     protected String            mResponse;
@@ -298,35 +303,27 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
-    public void updateResponse(IGlyphController drawController, CRecResult[] _ltkPlusCandidates) {
+    public void updateStatus(IGlyphController drawController, CRecResult[] _ltkPlusCandidates) {
 
-        int index = mDrawnList.indexOfChild((View)drawController);
+        mActiveController = drawController;
+
+        int index = mDrawnList.indexOfChild((View)mActiveController);
 
         CRecResult candidate = _ltkPlusCandidates[0];
 
         CStimulusController stimController = (CStimulusController)mRecogList.getChildAt(index);
 
-        _isValid = stimController.testStimulus( candidate.getRecChar()) && _metric.testConstraint(candidate.getGlyph());
+        _charValid   = stimController.testStimulus( candidate.getRecChar());
+        _metricValid = _metric.testConstraint(candidate.getGlyph());
+        _isValid     = _charValid && _metricValid;
 
         // Depending upon the result we allow the controller to disable other fields if it is working
         // in Immediate feedback mode
         //
-        drawController.updateCorrectStatus(_isValid);
-        inhibitInput(drawController, !_isValid);
+        mActiveController.updateCorrectStatus(_isValid);
+        inhibitInput(mActiveController, !_isValid);
 
         stimController.updateStimulusState(_isValid);
-
-        // TODO: DEBUG TEST
-        if(!_isValid) {
-            drawController.post(WR_CONST.ANIMATE_OVERLAY);
-        }
-
-
-//        else {
-//            _showUserGlyph = false;
-//            replayGlyph();
-//        }
-
     }
 
 
@@ -512,6 +509,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         return result;
     }
 
+
+    public void inhibitInput(boolean inhibit) {
+
+        inhibitInput(null, inhibit);
+    }
 
     public void inhibitInput(IGlyphController source, boolean inhibit) {
 
@@ -719,6 +721,18 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public void publishValue(String varName, int value) {
     }
 
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishFeature(String feature) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void retractFeature(String feature) {
+    }
+
 
     // publish component state data - EBD
     //************************************************************************
@@ -829,22 +843,31 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     public class Queue implements Runnable {
 
-        protected String _command    = "";
-        protected String _target     = "";
-        protected String _item       = "";
+        protected String _name;
+        protected String _command;
+        protected String _target;
+        protected String _item;
 
-        public Queue(String command) {
+
+        public Queue(String name, String command) {
+
+            _name    = name;
             _command = command;
+
+            if(name != null) {
+                nameMap.put(name, this);
+            }
         }
 
-        public Queue(String command, String target) {
-            _command = command;
+        public Queue(String name, String command, String target) {
+
+            this(name, command);
             _target  = target;
         }
 
-        public Queue(String command, String target, String item) {
-            _command = command;
-            _target  = target;
+        public Queue(String name, String command, String target, String item) {
+
+            this(name, command, target);
             _item    = item;
         }
 
@@ -853,22 +876,39 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         public void run() {
 
             try {
+                if(_name != null) {
+                    nameMap.remove(_name);
+                }
+
                 queueMap.remove(this);
 
                 switch(_command) {
 
                     case WR_CONST.RIPPLE_HIGHLIGHT:
+
                         rippleHighlight();
+                        break;
+
+                    case WR_CONST.FTR_INPUT_HESITATION:
+                        publishFeature(_command);
+                        applyBehavior(TCONST.NEXT_NODE);
                         break;
 
                     case WR_CONST.RIPPLE_DEMO:
                     case WR_CONST.RIPPLE_REPLAY:
                     case WR_CONST.RIPPLE_PROTO:
+
                         rippleReplay(_command);
                         break;
 
-                    default:
+                    case WR_CONST.ANIMATE_OVERLAY:
+                    case WR_CONST.REPLAY_PROTOGLYPH:
+                    case WR_CONST.ANIMATE_ALIGN:
 
+                        mActiveController.post(_command);
+                        break;
+
+                    default:
                         break;
                 }
 
@@ -912,6 +952,20 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
 
     /**
+     * Remove named posts
+     *
+     */
+    public void cancelPost(String name) {
+
+        while(nameMap.containsKey(name)) {
+
+            mainHandler.removeCallbacks((Queue) (nameMap.get(name)));
+            nameMap.remove(name);
+        }
+    }
+
+
+    /**
      * Keep a mapping of pending messages so we can flush the queue if we want to terminate
      * the tutor before it finishes naturally.
      *
@@ -939,12 +993,26 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
      *
      * @param command
      */
+    public void postNamed(String name, String command) {
+        postNamed(name, command, 0L);
+    }
+    public void postNamed(String name, String command, Long delay) {
+
+        enQueue(new Queue(name, command), delay);
+    }
+
+
+    /**
+     * Post a command to the queue
+     *
+     * @param command
+     */
     public void post(String command) {
         post(command, 0);
     }
     public void post(String command, long delay) {
 
-        enQueue(new Queue(command), delay);
+        enQueue(new Queue(null, command), delay);
     }
 
 
@@ -956,7 +1024,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public void post(String command, String target) {
         post(command, target, 0);
     }
-    public void post(String command, String target, long delay) { enQueue(new Queue(command, target), delay); }
+    public void post(String command, String target, long delay) { enQueue(new Queue(null, command, target), delay); }
 
 
     /**
@@ -967,7 +1035,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public void post(String command, String target, String item) {
         post(command, target, item, 0);
     }
-    public void post(String command, String target, String item, long delay) { enQueue(new Queue(command, target, item), delay); }
+    public void post(String command, String target, String item, long delay) { enQueue(new Queue(null, command, target, item), delay); }
 
 
 

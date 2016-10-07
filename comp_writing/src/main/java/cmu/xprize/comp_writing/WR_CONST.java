@@ -16,11 +16,18 @@ public class WR_CONST {
     public static final String RIPPLE_DEMO              = "RIPPLE_DEMO";
     public static final String FIELD_REPLAY_COMPLETE    = "FIELD_REPLAY_COMPLETE";
     public static final String REPLAY_COMPLETE          = "REPLAY_COMPLETE";
+    public static final String ON_START_WRITING         = "ON_START_WRITING";
 
     public static final String REPLAY_USERGLYPH         = "REPLAY_USERGLYPH";
     public static final String REPLAY_PROTOGLYPH        = "REPLAY_PROTOGLYPH";
     public static final String REPLAY_DEFAULT           = "REPLAY_DEFAULT";
     public static final String RIPPLE_PROTO             = "RIPPLE_PROTO";
     public static final String ANIMATE_OVERLAY          = "ANIMATE_OVERLAY";
+    public static final String ERROR_METRIC             = "ERROR_METRIC";
+    public static final String ERROR_CHAR               = "ERROR_CHAR";
+    public static final String FIELD_COMPLETE           = "FIELD_COMPLETE";
+    public static final String ANIMATE_ALIGN            = "ANIMATE_ALIGN";
+
+    public static final String FTR_INPUT_HESITATION     = "FTR_INPUT_HESITATION";
 }
 

@@ -64,6 +64,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private IWritingComponent     mWritingComponent;
     private IGlyphController      mInputController;
     private CLinkedScrollView     mScrollView;
+    private Boolean               _touchStarted = false;
 
     private Paint                 mPaint;
     private Paint                 mPaintBG;
@@ -276,6 +277,11 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
      */
     private void startTouch(float x, float y) {
         PointF p;
+
+        if(!_touchStarted) {
+            _touchStarted = true;
+            mWritingComponent.applyBehavior(WR_CONST.ON_START_WRITING);
+        }
 
         if (_counter != null)
             _counter.cancel();
@@ -1249,6 +1255,9 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                     clear();
         }
         else {
+            // Reset the flag so onStartWriting events will fire
+            _touchStarted = false;
+
             if(!mHasGlyph)
                this.setOnTouchListener(this);
         }
@@ -1343,7 +1352,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         if(mLogGlyphs)
             _drawGlyph.writeGlyphToLog("SHAPEREC_ALPHANUM", "", _sampleExpected, _ltkPlusResult);
 
-        mWritingComponent.updateResponse((IGlyphController) mInputController, _ltkPlusCandidates);
+        mWritingComponent.updateStatus((IGlyphController) mInputController, _ltkPlusCandidates);
 
         // Stop listening to glyph draw events - when there is a glyph - independent of being correct
         // Update the controller buttons

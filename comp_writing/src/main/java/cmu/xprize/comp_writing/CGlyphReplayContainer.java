@@ -54,6 +54,7 @@ import cmu.xprize.util.TCONST;
 
 public class CGlyphReplayContainer extends View implements Animator.AnimatorListener {
 
+    private IWritingComponent       mWritingComponent;
     private Rect                    replayRegion = new Rect();
 
     private CGlyph                  _currentGlyph;
@@ -137,6 +138,13 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
 
     public void setPointAtStroke(boolean point) {
         _pointAtStroke = point;
+    }
+
+
+    public void setWritingController(IWritingComponent writingController) {
+
+        // We use callbacks on the parent control
+        mWritingComponent = writingController;
     }
 
 
@@ -314,6 +322,8 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
         if (tPoint != null) {
             broadcastLocation(TCONST.LOOKATEND, tPoint);
         }
+
+        mWritingComponent.applyBehavior(WR_CONST.ACTION_COMPLETE);
     }
 
     /** AnimatorListener Implmentation start */

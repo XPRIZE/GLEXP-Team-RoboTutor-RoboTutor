@@ -71,13 +71,9 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     private int                     _correct = 0;
 
     private ArrayList<CDataSourceImg> _dataStack  = new ArrayList<>();
-    static private ArrayList<String>  _FeatureSet = new ArrayList<>();
 
-    static {
-        _FeatureSet.add(TCONST.ALL_CORRECT);
-        _FeatureSet.add(TCONST.FWCORRECT);
-        _FeatureSet.add(TCONST.FWINCORRECT);
-    }
+    private ArrayList<String>       _FeatureSet = new ArrayList<>();
+    private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
 
     private static final String  TAG = TWritingComponent.class.getSimpleName();
 
@@ -125,6 +121,10 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
         mRecognizedScroll.setLinkedScroll(mDrawnScroll);
         mDrawnScroll.setLinkedScroll(mRecognizedScroll);
+
+        // Iniitalize the static behaviors
+        //
+        setStickyBehavior(TCONST.NEXT_NODE, TCONST.NEXT_NODE);
     }
 
 
@@ -175,9 +175,15 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
             case WR_CONST.RIPPLE_HIGHLIGHT:
                 break;
+
+            case WR_CONST.ANIMATE_OVERLAY:
+            case WR_CONST.REPLAY_PROTOGLYPH:
+            case WR_CONST.ANIMATE_ALIGN:
+                post(event);
+                break;
+
         }
     }
-
 
     public void pointAtEraseButton() {
         super.pointAtEraseButton();
@@ -190,6 +196,9 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
 
     public void clear() { super.clear(); }
+
+
+    public void inhibitInput(Boolean inhibit) { super.inhibitInput(inhibit); }
 
 
     // Tutor methods  End
@@ -288,9 +297,31 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     //************************************************************************
     // publish component state data - START
 
-
     @Override
     protected void publishState() {
+
+        retractFeature(WR_CONST.ERROR_METRIC);
+        retractFeature(WR_CONST.ERROR_CHAR);
+        retractFeature(TCONST.GENERIC_RIGHT);
+        retractFeature(TCONST.GENERIC_WRONG);
+
+        if(_isValid) {
+
+            publishFeature(TCONST.GENERIC_RIGHT);
+        }
+        else {
+
+            publishFeature(TCONST.GENERIC_WRONG);
+
+            if(!_metricValid) {
+                publishFeature(WR_CONST.ERROR_METRIC);
+            }
+            if(!_charValid) {
+                publishFeature(WR_CONST.ERROR_CHAR);
+            }
+        }
+
+        applyBehavior(WR_CONST.FIELD_COMPLETE);
     }
 
     @Override
@@ -309,6 +340,24 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     }
 
+    @Override
+    public void publishFeature(String feature) {
+
+        if(_FeatureSet.indexOf(feature) == -1)
+        {
+            _FeatureSet.add(feature);
+        }
+
+        _FeatureMap.put(feature, true);
+        mTutor.setAddFeature(feature);
+    }
+
+    @Override
+    public void retractFeature(String feature) {
+
+        _FeatureMap.put(feature, false);
+        mTutor.setDelFeature(feature);
+    }
 
     // publish component state data - EBD
     //************************************************************************
@@ -358,9 +407,9 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         _correct = 0;
         _wrong   = 0;
 
-        mTutor.setDelFeature(TCONST.ALL_CORRECT);
-        mTutor.setDelFeature(TCONST.FWCORRECT);
-        mTutor.setDelFeature(TCONST.FWINCORRECT);
+        retractFeature(TCONST.ALL_CORRECT);
+        retractFeature(TCONST.FWCORRECT);
+        retractFeature(TCONST.FWINCORRECT);
 
         try {
             if (dataPacket.startsWith(TCONST.SOURCEFILE)) {
@@ -399,9 +448,9 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     public void next() {
 
-        mTutor.setDelFeature(TCONST.ALL_CORRECT);
-        mTutor.setDelFeature(TCONST.FWCORRECT);
-        mTutor.setDelFeature(TCONST.FWINCORRECT);
+        retractFeature(TCONST.ALL_CORRECT);
+        retractFeature(TCONST.FWCORRECT);
+        retractFeature(TCONST.FWINCORRECT);
 
         super.next();
 
@@ -423,7 +472,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         private int  _wrongStore   = 0;
         private int  _correctStore = 0;
 
-        private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
+        private HashMap<String,Boolean> _FeatureStore;
 
         protected List<String>  _dataStore;
         protected int           _dataIndexStore;
@@ -433,22 +482,21 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
         public CDataSourceImg() {
 
-            _correctStore = _correct;
-            _wrongStore   = _wrong;
+            _correctStore    = _correct;
+            _wrongStore      = _wrong;
 
-            _dataStore      = _data;
-            _dataIndexStore = _dataIndex;
-            _dataEOIStore   = _dataEOI;
+            _dataStore       = _data;
+            _dataIndexStore  = _dataIndex;
+            _dataEOIStore    = _dataEOI;
+
+            _FeatureStore    = _FeatureMap;
+            _dataSourceStore = dataSource;
 
             for(String feature : _FeatureSet) {
-                _FeatureMap.put(feature, mTutor.testFeatureSet(feature));
-
                 mTutor.setDelFeature(feature);
             }
 
-            _dataSourceStore = dataSource;
         }
-
 
         public void restoreDataSource() {
 
@@ -459,16 +507,20 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
             _dataIndex = _dataIndexStore;
             _dataEOI   = _dataEOIStore;
 
+            _FeatureMap= _FeatureStore;
+            dataSource = _dataSourceStore;
+
             for(String feature : _FeatureSet) {
                 if(_FeatureMap.get(feature)) {
                     mTutor.setAddFeature(feature);
                 }
+                else {
+                    mTutor.setDelFeature(feature);
+                }
             }
-
-            dataSource = _dataSourceStore;
-
         }
     }
+
 
     // DataSink IMplementation End
     //************************************************************************

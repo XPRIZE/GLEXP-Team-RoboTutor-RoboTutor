@@ -287,6 +287,8 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
 
         mGlyphInput.setWritingController(writingController);
         mGlyphInput.setInputManager(this);
+
+        mGlyphReplay.setWritingController(writingController);
     }
 
 
@@ -462,6 +464,17 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
                         mGlyphInput.animateOverlay();
                         break;
 
+                    case WR_CONST.ANIMATE_ALIGN:
+
+                        mGlyphInput.showSampleChar(false);
+                        mGlyphInput.animateOverlay();
+                        break;
+
+                    case WR_CONST.REPLAY_PROTOGLYPH:
+
+                        mGlyphReplay.setPointAtStroke(true);
+                        mGlyphInput.replayGlyph(WR_CONST.REPLAY_PROTOGLYPH);
+                        break;
                 }
             }
             catch(Exception e) {
