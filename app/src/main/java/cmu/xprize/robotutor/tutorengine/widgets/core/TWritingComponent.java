@@ -36,6 +36,7 @@ import cmu.xprize.comp_writing.WR_CONST;
 import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.util.IEventSource;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
@@ -55,7 +56,7 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-public class TWritingComponent extends CWritingComponent implements IBehaviorManager, ITutorSceneImpl, IDataSink {
+public class TWritingComponent extends CWritingComponent implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource {
 
     private CTutor                  mTutor;
     private CSceneDelegate          mTutorScene;
@@ -112,12 +113,12 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         mRecogList        = (LinearLayout) findViewById(R.id.SstimulusList);
 
         mDrawnScroll = (CLinkedScrollView) findViewById(R.id.SfingerWriter);
-        mDrawnList   = (LinearLayout) findViewById(R.id.Sdrawn_glyphs);
-        mDrawnList.setClipChildren(false);
+        mGlyphList = (LinearLayout) findViewById(R.id.Sdrawn_glyphs);
+        mGlyphList.setClipChildren(false);
 
 // TODO: DEBUG only
 //        mRecogList.setOnTouchListener(new RecogTouchListener());
-//        mDrawnList.setOnTouchListener(new drawnTouchListener());
+//        mGlyphList.setOnTouchListener(new drawnTouchListener());
 
         mRecognizedScroll.setLinkedScroll(mDrawnScroll);
         mDrawnScroll.setLinkedScroll(mRecognizedScroll);
@@ -198,7 +199,13 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     public void clear() { super.clear(); }
 
 
+    // TODO: Should renanme this to "enable"
     public void inhibitInput(Boolean inhibit) { super.inhibitInput(inhibit); }
+
+
+    protected void callSubGgraph(String targetNode) {
+        mTutor.getSceneGraph().post(this, TCONST.SUBGRAPH_CALL, targetNode);
+    }
 
 
     // Tutor methods  End
@@ -343,20 +350,39 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     @Override
     public void publishFeature(String feature) {
 
-        if(_FeatureSet.indexOf(feature) == -1)
-        {
-            _FeatureSet.add(feature);
-        }
+        trackFeatures(feature);
 
         _FeatureMap.put(feature, true);
         mTutor.setAddFeature(feature);
     }
 
+    /**
+     * Note that we may retract features before they're published to add them to the
+     * FeatureSet that should be pushed/popped when using pushDataSource
+     * e.g. we want EOD to track even if it has never been set
+     *
+     * @param feature
+     */
     @Override
     public void retractFeature(String feature) {
 
+        trackFeatures(feature);
+
         _FeatureMap.put(feature, false);
         mTutor.setDelFeature(feature);
+    }
+
+    /**
+     * _FeatureSet keeps track of used features
+     *
+     * @param feature
+     */
+    private void trackFeatures(String feature) {
+
+        if(_FeatureSet.indexOf(feature) == -1)
+        {
+            _FeatureSet.add(feature);
+        }
     }
 
     // publish component state data - EBD
@@ -407,6 +433,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         _correct = 0;
         _wrong   = 0;
 
+        retractFeature(TCONST.FTR_EOI);
         retractFeature(TCONST.ALL_CORRECT);
         retractFeature(TCONST.FWCORRECT);
         retractFeature(TCONST.FWINCORRECT);
@@ -464,6 +491,16 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
             // set the script 'Feature'
             mTutor.setAddFeature(TCONST.FTR_EOI);
         }
+    }
+
+    @Override
+    public String getEventSourceName() {
+        return name();
+    }
+
+    @Override
+    public String getEventSourceType() {
+        return "Writing_Component";
     }
 
 

@@ -49,6 +49,7 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
     public HashMap actionMap;
     public HashMap choiceMap;
     public HashMap constraintMap;
+    public HashMap subgraphMap;
 
     static private final String TAG = "tutor_node";
 
@@ -101,7 +102,7 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
                     if (_currNode == null) {
                         Log.d(TAG, "Processing END Node: ");
 
-                        _nodeState = TCONST.NEXTSCENE;
+                        _nodeState = TCONST.END_OF_GRAPH;
                         break;
                     }
                     // otherwise fall through and apply next node action
@@ -149,7 +150,7 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
             _currNode.preEnter();
             result = TCONST.READY;
 
-            Log.d(TAG, "Processing Node: " + rootnode + " : READY");
+            Log.d(TAG, "RootNode: " + rootnode + " : READY");
         }
         else {
             Log.d(TAG, "No Root Node for Scene");

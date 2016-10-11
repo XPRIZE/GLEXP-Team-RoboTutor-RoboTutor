@@ -138,7 +138,7 @@ public class CWritingDevComponent extends CWritingComponent {
 
             for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
 
-                CGlyphController comp = (CGlyphController) mDrawnList.getChildAt(i1);
+                CGlyphController comp = (CGlyphController) mGlyphList.getChildAt(i1);
 
                 if(comp.toggleSampleChar()) {
                     mShowSample.setText("Hide Sample");
@@ -158,7 +158,7 @@ public class CWritingDevComponent extends CWritingComponent {
 
             for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
 
-                CGlyphController comp = (CGlyphController) mDrawnList.getChildAt(i1);
+                CGlyphController comp = (CGlyphController) mGlyphList.getChildAt(i1);
                 result = comp.toggleProtoGlyph();
             }
 
@@ -181,7 +181,7 @@ public class CWritingDevComponent extends CWritingComponent {
 
             for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
 
-                CGlyphController comp = (CGlyphController) mDrawnList.getChildAt(i1);
+                CGlyphController comp = (CGlyphController) mGlyphList.getChildAt(i1);
                 result = comp.toggleDebugBounds();
             }
 
@@ -205,7 +205,7 @@ public class CWritingDevComponent extends CWritingComponent {
 
             for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
 
-                CGlyphController comp = (CGlyphController) mDrawnList.getChildAt(i1);
+                CGlyphController comp = (CGlyphController) mGlyphList.getChildAt(i1);
                 comp.selectFont(fontSelection);
             }
         }

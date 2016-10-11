@@ -29,5 +29,9 @@ public class WR_CONST {
     public static final String ANIMATE_ALIGN            = "ANIMATE_ALIGN";
 
     public static final String FTR_INPUT_HESITATION     = "FTR_INPUT_HESITATION";
+
+    public static final String ITEM_COMPLETE            = "ITEM_COMPLETE";
+    public static final String CHARACTER_RIGHT          = "CHARACTER_RIGHT";
+    public static final String CHARACTER_WRONG          = "CHARACTER_WRONG";
 }
 

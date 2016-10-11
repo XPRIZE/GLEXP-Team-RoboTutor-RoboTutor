@@ -1,20 +1,15 @@
 package cmu.xprize.robotutor.tutorengine;
 
-import android.animation.Animator;
 import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
-
-import java.util.ArrayList;
 
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.util.CAnimatorUtil;
+import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.TCONST;
 

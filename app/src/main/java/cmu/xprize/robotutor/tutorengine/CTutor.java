@@ -45,6 +45,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CPreferenceCache;
+import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -711,8 +712,12 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
 
     // test possibly compound features
+    // TODO: Enhance with fsm
     //
     public boolean testFeatureSet(String featSet) {
+
+        boolean      result = false;
+
         List<String> disjFeat = Arrays.asList(featSet.split("\\|"));   // | Disjunctive features
         List<String> conjFeat;                                          // & Conjunctive features
 
@@ -726,16 +731,21 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         for (String dfeature : disjFeat)
         {
-            conjFeat = Arrays.asList(dfeature.split("\\&"));
+            conjFeat   = Arrays.asList(dfeature.split("\\&"));
+            result = true;
 
             // Check that all conjunctive features are set in fFeatures 
 
             for (String cfeature : conjFeat) {
-                if(testFeature(cfeature))
-                                return true;
+                if(!testFeature(cfeature))
+                    result = false;
             }
+
+            if(result)
+                        break;
         }
-        return false;
+
+        return result;
     }
 
 

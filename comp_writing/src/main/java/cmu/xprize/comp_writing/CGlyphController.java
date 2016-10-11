@@ -344,6 +344,8 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     }
 
 
+    public boolean isCorrect() { return mGlyphInput.isCorrect();  }
+
     private void broadcastLocation(String Action, View target) {
 
         target.getLocationOnScreen(_screenCoord);

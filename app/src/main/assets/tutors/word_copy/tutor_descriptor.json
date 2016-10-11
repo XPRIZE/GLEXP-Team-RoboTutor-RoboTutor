@@ -26,7 +26,8 @@
 		"xprize_effect": {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/global"},
 		"default":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/writing"},
 		"xprize":        {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global"},
-		"_ask":          {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/ask"}
+		"_ask":          {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/ask"},
+		"words":         {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/words"}
 	},
 
 
