@@ -45,7 +45,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     private CTutor mTutor;
     private CObjectDelegate mSceneObject;
-
+    private int wrongTimes = 0;//record the successive wrong times of the player
 
     static final String TAG = "TAkComponent";
 
@@ -97,6 +97,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     private void reset() {
 
         mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
+        mTutor.setDelFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
         mTutor.setDelFeature(TCONST.GENERIC_WRONG);
     }
 
@@ -304,9 +305,15 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         reset();
         if(questionBoard.answerLane == player.lane){
             mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
+            wrongTimes = 0;
         }else {
-            mTutor.setAddFeature(TCONST.GENERIC_WRONG);
-
+            wrongTimes++;
+            if(wrongTimes != 2) {
+                mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+            }else{
+                mTutor.setAddFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
+                wrongTimes = 0;
+            }
         }
     }
 

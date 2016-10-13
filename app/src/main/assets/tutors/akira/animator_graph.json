@@ -59,6 +59,10 @@
               "edge": "CORRECT"
             },
             {
+              "constraint":"FTR_SWRONG",
+              "edge": "PROMPT"
+            },
+            {
               "constraint": "",
               "edge": "WRONG"
             }
@@ -84,7 +88,24 @@
             }
           ]
         },
-
+        "PROMPT": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - instruct user to give right answers",
+          "maptype": "moduleMap",
+          "mapname": "PLAYPROMPT",
+          "preenter": ["PAUSE"],
+          "preexit": ["REUSE", "NEXT_DATASET"],
+          "edges": [
+            {
+              "constraint": "FTR_EOD",
+              "edge": "POSTFINISHLINE"
+            },
+            {
+              "constraint": "",
+              "edge": "POST_QUESTIONBOARD"
+            }
+          ]
+        },
         "WRONG": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
@@ -150,6 +171,16 @@
           "tracks": [
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Correct v1.mp3", "soundpackage":"tutor_effect", "volume": 0.10, "mode":"event", "features": ""},
             {"type": "COMMAND", "id": "SAkira", "method": "increaseScore", "parms": "", "features":""},
+            {"type": "COMMAND", "cmd": "WAIT"}
+          ]
+        },
+        "PLAYPROMPT": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Correct v1.mp3", "soundpackage":"tutor_effect", "volume": 0.10, "mode":"event", "features": ""},
+            {"type": "COMMAND", "id": "SAkira", "method": "decreaseScore", "parms": "", "features":""},
             {"type": "COMMAND", "cmd": "WAIT"}
           ]
         },
@@ -240,7 +271,10 @@
           "type": "CONDITION",
           "test":"FTR_WRONG"
         },
-
+        "FTR_SWRONG":{
+          "type": "CONDITION",
+          "test": "FTR_SWRONG"
+        },
         "FTR_EOD":{
           "type": "CONDITION",
           "test":"FTR_EOD"

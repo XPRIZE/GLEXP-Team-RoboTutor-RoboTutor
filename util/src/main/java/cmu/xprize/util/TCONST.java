@@ -375,6 +375,7 @@ public class TCONST {
     // Generic error codes
     public static final String GENERIC_RIGHT  = "FTR_RIGHT";
     public static final String GENERIC_WRONG  = "FTR_WRONG";
+    public static final String GENERIC_SUCCESSIVEWRONG = "FTR_SWRONG";
     public static final boolean TRUE_ERROR    = true;
     public static final boolean TRUE_NOERROR  = true;
     public static final boolean FALSE_NOERROR = false;
