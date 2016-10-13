@@ -12,6 +12,8 @@ public interface IGlyphController {
     public boolean firePendingRecognition();
     public void inhibitInput(boolean newState);
 
+    public int incAttempt();
+
     public void setLinkedScroll(CLinkedScrollView linkedScroll);
     public void setItemGlyph(int index, int glyph);
     public void setGlyphStatus(boolean validGlyph, boolean hasGlyph);

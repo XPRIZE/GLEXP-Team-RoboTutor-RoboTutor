@@ -74,6 +74,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     private boolean                 _allowEraseCorrect = false;
     private int[]                   _screenCoord       = new int[2];
     private boolean                 _isLast;
+    private int                     _attempt           = 0;
 
     protected final Handler         mainHandler = new Handler(Looper.getMainLooper());
     protected HashMap               queueMap    = new HashMap();
@@ -130,11 +131,6 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         mDeleteSpaceBut.setVisibility(INVISIBLE);
         mEraseGlyphBut.setVisibility(INVISIBLE);
 
-        mInsLftSpaceBut.setOnClickListener(new insLSpaceClickListener());
-        mInsRgtSpaceBut.setOnClickListener(new insRSpaceClickListener());
-        mDeleteSpaceBut.setOnClickListener(new delSpaceClickListener());
-        mEraseGlyphBut.setOnClickListener(new eraseGlyphClickListener());
-
         mGlyphReplayBut = (ImageButton)findViewById(R.id.glyph_playback);
         mGlyphMorphBut = (ImageButton)findViewById(R.id.glyph_align);
         mGlyphFlashBut  = (ImageButton)findViewById(R.id.glyph_flash);
@@ -145,11 +141,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         mGlyphFlashBut.setVisibility(INVISIBLE);
         mGlyphSaveBut.setVisibility(INVISIBLE);
 
-        mGlyphReplayBut.setOnClickListener(new glyphReplayListener());
-        mGlyphMorphBut.setOnClickListener(new glyphMorphListener());
-        mGlyphFlashBut.setOnClickListener(new glyphFlashListener());
-
-        mGlyphSaveBut.setOnClickListener(new glyphSaveListener());
+        enableButtons(true);
 
         // Update the control aspect ratio based on the prototype font used in the drawn control
         //
@@ -160,6 +152,37 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         info.aspectRatio = mGlyphInput.getFontAspect();     // = 0.84f;
 
         mGlyphInput.setReplayComp(mGlyphReplay);
+    }
+
+
+    public void enableButtons(boolean listen) {
+
+        if(listen) {
+
+            mInsLftSpaceBut.setOnClickListener(new insLSpaceClickListener());
+            mInsRgtSpaceBut.setOnClickListener(new insRSpaceClickListener());
+            mDeleteSpaceBut.setOnClickListener(new delSpaceClickListener());
+            mEraseGlyphBut.setOnClickListener(new eraseGlyphClickListener());
+
+            mGlyphReplayBut.setOnClickListener(new glyphReplayListener());
+            mGlyphMorphBut.setOnClickListener(new glyphMorphListener());
+            mGlyphFlashBut.setOnClickListener(new glyphFlashListener());
+
+            mGlyphSaveBut.setOnClickListener(new glyphSaveListener());
+        }
+        else {
+
+            mInsLftSpaceBut.setOnClickListener(null);
+            mInsRgtSpaceBut.setOnClickListener(null);
+            mDeleteSpaceBut.setOnClickListener(null);
+            mEraseGlyphBut.setOnClickListener(null);
+
+            mGlyphReplayBut.setOnClickListener(null);
+            mGlyphMorphBut.setOnClickListener(null);
+            mGlyphFlashBut.setOnClickListener(null);
+
+            mGlyphSaveBut.setOnClickListener(null);
+        }
     }
 
     public void setIsLast(boolean isLast) {
@@ -194,14 +217,26 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         @Override
         public void onClick(View v) {
 
-            mGlyphInput.erase();
-
-            // TODO: this is a test of one feedback modality - in Immediate feeback mode
-            // TODO: Here, clearing the bad entry allows them complete access again.
-            //
-            mWritingComponent.inhibitInput(mThis, false);
-            mWritingComponent.resetResponse(mThis);
+            eraseGlyph();
         }
+    }
+
+    public void eraseGlyph() {
+
+        mGlyphInput.erase();
+
+        mWritingComponent.applyBehavior(WR_CONST.ON_ERASE);
+
+        // TODO: this is a test of one feedback modality - in Immediate feeback mode
+        // TODO: Here, clearing the bad entry allows them complete access again.
+        //
+        mWritingComponent.inhibitInput(mThis, false);
+        mWritingComponent.resetResponse(mThis);
+    }
+
+
+    public void showSampleChar(Boolean show) {
+        mGlyphInput.showSampleChar(show);
     }
 
     public class glyphReplayListener implements View.OnClickListener {
@@ -229,8 +264,22 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         mGlyphInput.setExpectedChar(protoChar);
     }
 
+    public void hideUserGlyph() {
+        mGlyphInput.hideUserGlyph();
+    }
+
+
     public void setProtoGlyph(CGlyph protoGlyph) {
         mGlyphInput.setProtoGlyph(protoGlyph);
+    }
+
+    public int getAttempt() {
+        return _attempt;
+    }
+
+    public int incAttempt() {
+        _attempt++;
+        return _attempt;
     }
 
     public class glyphSaveListener implements View.OnClickListener {
@@ -309,14 +358,12 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     public void setItemGlyph(int index, int glyph) {
     }
 
-
     public void setLinkedScroll(CLinkedScrollView linkedScroll) {
 
         mScrollView = linkedScroll;
 
         mGlyphInput.setLinkedScroll(mScrollView);
     }
-
 
     public ImageButton getInsertBut() {
         return mInsLftSpaceBut;
@@ -333,8 +380,10 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
 
     public void inhibitInput(boolean inhibit) {
 
-        // En/Disable the glyph field
+        // En/Disable the buttons and glyph field
         //
+        enableButtons(!inhibit);
+
         mGlyphInput.inhibitInput(inhibit);
     }
 
@@ -343,6 +392,9 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         mGlyphInput.updateCorrectStatus(correct);
     }
 
+    public boolean getGlyphStarted() {
+        return mGlyphInput.getGlyphStarted();
+    }
 
     public boolean isCorrect() { return mGlyphInput.isCorrect();  }
 
@@ -426,6 +478,21 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
 
                 switch(_command) {
 
+                    case WR_CONST.SHOW_SAMPLE:
+
+                        mGlyphInput.showSampleChar(true);
+                        break;
+
+                    case WR_CONST.HIDE_SAMPLE:
+
+                        mGlyphInput.showSampleChar(false);
+                        break;
+
+                    case WR_CONST.ERASE_GLYPH:
+
+                        eraseGlyph();
+                        break;
+
                     case TCONST.HIGHLIGHT:
 
                         mGlyphInput.setBoxColor(WR_CONST.HLCOLOR);
@@ -472,9 +539,15 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
                         mGlyphInput.animateOverlay();
                         break;
 
-                    case WR_CONST.REPLAY_PROTOGLYPH:
+                    case WR_CONST.DEMO_PROTOGLYPH:
 
                         mGlyphReplay.setPointAtStroke(true);
+                        mGlyphInput.replayGlyph(WR_CONST.REPLAY_PROTOGLYPH);
+                        break;
+
+                    case WR_CONST.ANIMATE_PROTOGLYPH:
+
+                        mGlyphReplay.setPointAtStroke(false);
                         mGlyphInput.replayGlyph(WR_CONST.REPLAY_PROTOGLYPH);
                         break;
                 }

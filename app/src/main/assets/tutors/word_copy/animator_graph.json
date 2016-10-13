@@ -12,19 +12,189 @@
 
       "subgraphMap": {
 
-        "HESITATION_FEEDBACK": {
+        "INPUT_HESITATION_FEEDBACK": {
           "type": "SUBGRAPH",
           "rootnode": "INPUT_HESITATION_MODULE",
 
           "nodeMap": {
             "INPUT_HESITATION_MODULE": {
               "type": "MODULE",
-              "COMMENT": "Interaction Demo",
+              "COMMENT": "prompt when user hesitates when they should be writing.",
               "preenter": [],
               "reuse": true,
               "tracks": [
-                { "type": "AUDIO","command": "PLAY", "soundsource": "Please write the word.mp3","soundpackage": "default","mode": "flow", "features": ""},
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3",  "soundpackage": "words",  "mode": "flow", "features": ""} //the stimulus digit
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_HIGHLIGHT:String|1000:Integer", "features":""},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the word.mp3","soundpackage": "default","mode": "flow", "features": ""},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3",  "soundpackage": "words",  "mode": "flow", "features": ""}
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "ERASE_HESITATION_FEEDBACK": {
+          "type": "SUBGRAPH",
+          "rootnode": "ERASE_BUTTON_FEEDBACK_MODULE",
+
+          "nodeMap": {
+            "ERASE_BUTTON_FEEDBACK_MODULE": {
+              "type": "MODULE",
+              "COMMENT": "Explain the erase button",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+//                {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput",        "parms": "TRUE:Boolean",                 "features":""},
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "POINT_AT_ERASE_BUTTON:String", "features":""},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please tap here to try again.mp3","soundpackage": "default","mode": "flow", "features": ""}
+
+//                {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "FALSE:Boolean","features":""},
+//                {"type": "COMMAND", "id": "word_copy", "method": "postNamed",    "parms": "ERASE_BUTTON_PROMPT:String|APPLY_BEHAVIOR:String|ERASE_HESITATION_FEEDBACK:String|12000:Long",  "features":""}
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "GENERAL_CORRECT_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "rootnode": "CORRECT_BEHAVIOR_MODULE",
+
+          "nodeMap": {
+
+            "CORRECT_BEHAVIOR_MODULE": {
+              "type": "MODULE",
+              "COMMENT": "Configure delayed erase button feedabck",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "HIGHLIGHT_NEXT:String|0:Integer",    "features":"FTR_INPUT_STALLED"},
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "HIGHLIGHT_NEXT:String|500:Integer",  "features":"FTR_INPUT_STALLED"},
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "HIGHLIGHT_NEXT:String|1000:Integer", "features":"FTR_INPUT_STALLED"}
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "GENERAL_ERROR_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "rootnode": "ERROR_BEHAVIOR_MODULE",
+
+          "nodeMap": {
+
+            "ERROR_BEHAVIOR_MODULE": {
+              "type": "MODULE",
+              "COMMENT": "Configure delayed erase button feedabck",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+
+                {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "ON_ERASE:String|CANCEL_ERASE_BUTTON_FEEDBACK:String" ,"features":"!FTR_ATTEMPT_4"},
+                {"type": "COMMAND", "id": "word_copy", "method": "postNamed",           "parms": "ERASE_BUTTON_PROMPT:String|APPLY_BEHAVIOR:String|ERASE_HESITATION_FEEDBACK:String|6000:Long",  "features":"!FTR_ATTEMPT_4"},
+
+                {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput",        "parms": "TRUE:Boolean",                           "features":"FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","soundpackage": "default","mode": "flow", "features": "FTR_ATTEMPT_1"},
+
+                {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "ACTION_COMPLETE:String|NEXT_NODE:String" ,"features":"FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "ANIMATE_ALIGN:String",                    "features":"FTR_ATTEMPT_2"},
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "ANIMATE_OVERLAY:String",                  "features":"FTR_ATTEMPT_3"},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "That doesnt look like.mp3", "soundpackage": "default","mode": "flow",   "features": "FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3",   "soundpackage": "default","mode": "stream", "features": "FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
+
+
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "ERASE_GLYPH:String",                  "features":"FTR_ATTEMPT_4"},
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "SHOW_SAMPLE:String",                  "features":"FTR_ATTEMPT_4"},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please trace the letter.mp3", "soundpackage": "default","mode": "flow",   "features": "FTR_ATTEMPT_4"},
+
+                {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput",        "parms": "FALSE:Boolean","features":"FTR_ATTEMPT_2|FTR_ATTEMPT_3"}
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "GLYPH_ERROR_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "COMMENT": "glyph metrics have been violated",
+          "rootnode": "GLYPH_ERROR_MODULE",
+
+          "nodeMap": {
+
+            "GLYPH_ERROR_MODULE": {
+              "type": "MODULE",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "CHAR_ERROR_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "COMMENT": "wrong character was selected by recognizer",
+          "rootnode": "CHAR_ERROR_MODULE",
+
+          "nodeMap": {
+
+            "CHAR_ERROR_MODULE": {
+              "type": "MODULE",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "ITEM_COMPLETE_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "COMMENT": "The data item - letter/word/sentence is finished",
+          "rootnode": "ITEM_COMPLETE_MODULE",
+
+          "nodeMap": {
+
+            "ITEM_COMPLETE_MODULE": {
+              "type": "MODULE",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+
+                {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|DELAYED_NEXT:String" ,"features":"FTR_HAD_ERRORS"},
+
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "HIDE_GLYPHS:String",                     "features":"FTR_HAD_ERRORS"},
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_PROTO:String",                    "features":"FTR_HAD_ERRORS"},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "words",  "mode":"flow", "features": ""},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Very good.mp3",          "soundpackage": "default","mode":"flow", "features": "!FTR_HAD_ERRORS"},
+
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "APPLY_BEHAVIOR:String|NEXT_NODE:String|600:Integer", "features":"!FTR_HAD_ERRORS"}
+
               ],
               "preexit": [
               ],
@@ -33,7 +203,6 @@
             }
           }
         }
-
 
       },
 
@@ -262,16 +431,21 @@
           ]
         },
 
-
         "FINGERWRITING":{
           "type":"MODULE",
           "reuse":true,
           "COMMENT": "FingerWriting Module",
           "tracks": [
-            {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "ON_START_WRITING:String|CANCEL_HESITATION_FEEDBACK:String" ,"features":""},
-            {"type": "COMMAND", "id": "word_copy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|SUBGRAPH_CALL:String|HESITATION_FEEDBACK:String|6000:Long",  "features":""},
+            {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_ERROR:String|GENERAL_ERROR_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_CORRECT:String|GENERAL_CORRECT_BEHAVIOR:String" ,"features":""},
 
-            {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "ITEM_COMPLETE:String|NEXT_NODE:String" ,"features":""},
+            {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_GLYPH_ERROR:String|GLYPH_ERROR_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_CHAR_ERROR:String|CHAR_ERROR_BEHAVIOR:String" ,"features":""},
+
+            {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_START_WRITING:String|CANCEL_INPUT_HESITATION_FEEDBACK:String" ,"features":""},
+            {"type": "COMMAND", "id": "word_copy", "method": "postNamed",         "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long",  "features":""},
+
+            {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "DATA_ITEM_COMPLETE:String|ITEM_COMPLETE_BEHAVIOR:String" ,"features":""},
             {"type": "COMMAND", "cmd": "WAIT" }
           ]
         },
@@ -350,7 +524,8 @@
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.1.0:String","features":""},
 
-        "CANCEL_HESITATION_FEEDBACK": {"type": "COMMAND", "id": "word_copy", "method": "cancelPost", "parms": "HESITATION_PROMPT:String",  "features":""},
+        "CANCEL_INPUT_HESITATION_FEEDBACK": {"type": "COMMAND", "id": "word_copy", "method": "cancelPost", "parms": "HESITATION_PROMPT:String",    "features":""},
+        "CANCEL_ERASE_BUTTON_FEEDBACK":     {"type": "COMMAND", "id": "word_copy", "method": "cancelPost", "parms": "ERASE_BUTTON_PROMPT:String",  "features":""},
 
 
         "FW_DISABLE":{"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "TRUE:Boolean","features":""},
@@ -378,6 +553,8 @@
         // support the ASK component
         "INIT_ASK":     {"type": "COMMAND", "id": "Spicker", "method": "setStickyBehavior", "parms": "SPEAK_BUTTON:String|PICKER_TRACK:String" ,"features":""},
         "PICKER_TRACK": {"type": "TIMELINE", "trackname": "ASK_BUTTON", "features": ""},
+
+        "DELAYED_NEXT":{"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "APPLY_BEHAVIOR:String|NEXT_NODE:String|600:Integer", "features":""},
 
         "GOTONEXTSCENE":   {"type": "COMMAND", "cmd": "NEXTSCENE"},
         "RETURN_AND_GO":   {"type": "COMMAND", "cmd": "SUBGRAPH_RETURN_AND_GO"},

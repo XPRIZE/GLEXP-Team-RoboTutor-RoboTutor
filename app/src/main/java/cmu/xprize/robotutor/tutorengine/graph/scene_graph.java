@@ -162,6 +162,14 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
 
 
     @Override
+    public void resetNode() {
+        super.resetNode();
+
+        _currNode  = this;
+        _nodeState = null;
+    }
+
+    @Override
     public void play() {
         _currNode.play();
     }

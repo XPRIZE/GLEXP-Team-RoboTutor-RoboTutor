@@ -190,6 +190,7 @@ public class CSceneGraph  {
 
                         try {
                             _graph = (scene_graph) mScope.mapSymbol(mGraphName);
+                            _graph.resetNode();
 
                             Log.d(TAG, "Processing call graph: " + _graph.name + " - mapType: " + _graph.type );
 

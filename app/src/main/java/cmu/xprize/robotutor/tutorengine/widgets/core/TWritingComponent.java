@@ -164,48 +164,26 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     public void postEvent(String event, Integer delay) {
 
-        switch (event) {
+        post(event, delay);
+    }
 
-            case WR_CONST.RIPPLE_DEMO:
-                post(WR_CONST.RIPPLE_DEMO, delay);
-                break;
+    public void postEvent(String event, String param, Integer delay) {
 
-            case WR_CONST.RIPPLE_REPLAY:
-                post(WR_CONST.RIPPLE_REPLAY, delay);
-                break;
-
-            case WR_CONST.RIPPLE_HIGHLIGHT:
-                break;
-
-            case WR_CONST.ANIMATE_OVERLAY:
-            case WR_CONST.REPLAY_PROTOGLYPH:
-            case WR_CONST.ANIMATE_ALIGN:
-                post(event);
-                break;
-
-        }
+        post(event, param, delay);
     }
 
     public void pointAtEraseButton() {
         super.pointAtEraseButton();
     }
 
-
     public void highlightFields() {
         super.highlightFields();
     }
 
-
     public void clear() { super.clear(); }
-
 
     // TODO: Should renanme this to "enable"
     public void inhibitInput(Boolean inhibit) { super.inhibitInput(inhibit); }
-
-
-    protected void callSubGgraph(String targetNode) {
-        mTutor.getSceneGraph().post(this, TCONST.SUBGRAPH_CALL, targetNode);
-    }
 
 
     // Tutor methods  End
@@ -245,6 +223,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     // Execute script target if behavior is defined for this event
     //
+    @Override
     public boolean applyBehavior(String event) {
 
         boolean result = false;
@@ -260,6 +239,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                 result = true;
 
             } else if (stickyMap.containsKey(event)) {
+
                 applyBehaviorNode(stickyMap.get(event));
 
                 result = true;
@@ -275,6 +255,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
      *
      * @param nodeName
      */
+    @Override
     public void applyBehaviorNode(String nodeName) {
         IScriptable2 obj = null;
 
@@ -284,8 +265,25 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                 obj = mTutor.getScope().mapSymbol(nodeName);
 
                 if (obj != null) {
-                    obj.preEnter();
-                    obj.applyNode();
+
+                    switch(obj.getType()) {
+
+                        case TCONST.SUBGRAPH:
+
+                            mTutor.getSceneGraph().post(this, TCONST.SUBGRAPH_CALL, nodeName);
+                            break;
+
+                        case TCONST.MODULE:
+
+                            // Disallow module "calls"
+                            Log.e(TAG, "MODULE Behaviors are not supported");
+                            break;
+
+                        default:
+                            obj.preEnter();
+                            obj.applyNode();
+                            break;
+                    }
                 }
 
             } catch (Exception e) {
@@ -327,8 +325,6 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                 publishFeature(WR_CONST.ERROR_CHAR);
             }
         }
-
-        applyBehavior(WR_CONST.FIELD_COMPLETE);
     }
 
     @Override
@@ -493,17 +489,6 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         }
     }
 
-    @Override
-    public String getEventSourceName() {
-        return name();
-    }
-
-    @Override
-    public String getEventSourceType() {
-        return "Writing_Component";
-    }
-
-
     class CDataSourceImg {
 
         private int  _wrongStore   = 0;
@@ -560,6 +545,27 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
 
     // DataSink IMplementation End
+    //************************************************************************
+    //************************************************************************
+
+
+    //************************************************************************
+    //************************************************************************
+    // IEventSource Interface START
+
+
+    @Override
+    public String getEventSourceName() {
+        return name();
+    }
+
+    @Override
+    public String getEventSourceType() {
+        return "Writing_Component";
+    }
+
+
+    // IEventSource Interface END
     //************************************************************************
     //************************************************************************
 

@@ -62,7 +62,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private boolean               _inhibit    = false;
 
     private IWritingComponent     mWritingComponent;
-    private IGlyphController mGlyphController;
+    private IGlyphController      mGlyphController;
     private CLinkedScrollView     mScrollView;
     private Boolean               _touchStarted = false;
 
@@ -279,8 +279,13 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         PointF p;
 
         if(!_touchStarted) {
+
             _touchStarted = true;
             mWritingComponent.applyBehavior(WR_CONST.ON_START_WRITING);
+
+            // This is to support immediate feedback
+            //
+            mWritingComponent.scanForPendingRecognition(mGlyphController);
         }
 
         if (_counter != null)
@@ -289,10 +294,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         // Set pending flag - Used to initiate recognition when moving between fields
         //
         _recPending = true;
-
-        // This is to support immediate feedback
-        //
-        mWritingComponent.scanForPendingRecognition(mGlyphController);
 
         // We always add the next stoke start to the glyph set
 
@@ -777,6 +778,11 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     }
 
 
+    public void hideUserGlyph() {
+        _showUserGlyph = false;
+        invalidate();
+    }
+
     public void replayGlyph(String replayTarget) {
 
         if(!isPlaying) {
@@ -1107,12 +1113,20 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
     public void erase() {
 
+        // Reset the flag so onStartWriting events will fire
+        //
+        _touchStarted = false;
+
         // This can be set by a feedback mode - so we always resest it when clearing
         _showSampleChar = false;
         _showUserGlyph  = true;
 
         clear();
         setOnTouchListener(this);
+    }
+
+    public boolean getGlyphStarted() {
+        return _touchStarted;
     }
 
 
@@ -1211,6 +1225,9 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             //
             _drawGlyph.terminateGlyph();
 
+            // This can be  used to generate protoglyph samples -
+            // This is where we define either the user or proto glyph as what was just drawn.
+            //
             if(_showUserGlyph)
                 _userGlyph = _drawGlyph;
             else {
@@ -1255,9 +1272,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                     clear();
         }
         else {
-            // Reset the flag so onStartWriting events will fire
-            _touchStarted = false;
-
             if(!mHasGlyph)
                this.setOnTouchListener(this);
         }

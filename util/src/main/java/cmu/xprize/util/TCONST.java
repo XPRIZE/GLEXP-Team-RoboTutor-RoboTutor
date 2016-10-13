@@ -259,6 +259,9 @@ public class TCONST {
 
     public static final String END_OF_GRAPH             = "END_OF_GRAPH";
 
+    public static final String APPLY_BEHAVIOR           = "APPLY_BEHAVIOR";
+
+    public static final String SUBGRAPH                 = "SUBGRAPH";
     public static final String SUBGRAPH_CALL            = "SUBGRAPH_CALL";
     public static final String SUBGRAPH_RETURN_AND_GO   = "SUBGRAPH_RETURN_AND_GO";
     public static final String SUBGRAPH_RETURN_AND_WAIT = "SUBGRAPH_RETURN_AND_WAIT";

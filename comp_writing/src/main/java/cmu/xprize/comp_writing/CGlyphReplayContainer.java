@@ -86,7 +86,9 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
     private static final float POINT_SIZE = 40f;
 
     final private String TAG  = "REPLAY";
+
     private float _replayTime = 1200f;
+    private boolean  DBG = false;
 
 
     /**
@@ -177,7 +179,7 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
                         if(_pointAtStroke) {
                             broadcastLocation(TCONST.POINT_LIVE, tPoint);
                         }
-                        else {
+                        else if(DBG) {
                             mPaint.setColor(Color.YELLOW);
                             mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
                             canvas.drawCircle(tPoint.x, tPoint.y, replayRegion.width() / 40, mPaint);
