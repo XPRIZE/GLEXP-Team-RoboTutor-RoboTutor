@@ -20,10 +20,12 @@
 package cmu.xprize.comp_writing;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.percent.PercentRelativeLayout;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,6 +42,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cmu.xprize.ltkplus.CGlyphMetricConstraint;
 import cmu.xprize.ltkplus.CGlyphMetrics;
 import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.CGlyphSet;
@@ -71,31 +74,45 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     protected CLinkedScrollView mRecognizedScroll;
     protected CLinkedScrollView mDrawnScroll;
+    private   IGlyphController  mActiveController;
+    private   int               mActiveIndex;
 
     protected LinearLayout      mRecogList;
-    protected LinearLayout      mDrawnList;
+    protected LinearLayout      mGlyphList;
 
     protected int               mMaxLength   = 0; //GCONST.ALPHABET.length();                // Maximum string length
 
     protected final Handler     mainHandler  = new Handler(Looper.getMainLooper());
     protected HashMap           queueMap     = new HashMap();
+    protected HashMap           nameMap      = new HashMap();
+
     protected boolean           _qDisabled   = false;
     protected boolean           _alwaysTrack = true;
     protected int               _fieldIndex  = 0;
     protected String            _replayType;
+    protected boolean           _isDemo;
 
     protected IGlyphSink        _recognizer;
     protected CGlyphSet         _glyphSet;
 
+    protected boolean           _charValid;
+    protected boolean           _metricValid;
+    protected boolean           _isValid;
+    protected ArrayList<String> _attemptFTR = new ArrayList<>();
+
     protected String            mResponse;
     protected String            mStimulus;
+
+    protected CGlyphMetricConstraint _metric = new CGlyphMetricConstraint();
 
     protected List<String>      _data;
     protected int               _dataIndex = 0;
     protected boolean           _dataEOI   = false;
-    public    String            mValue;
 
     public    boolean           _immediateFeedback = true;
+
+    protected LocalBroadcastManager bManager;
+
 
     // json loadable
     public String[]             dataSource;
@@ -122,6 +139,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mContext = context;
 
         setClipChildren(false);
+
+        _attemptFTR.add(WR_CONST.FTR_ATTEMPT_1);
+        _attemptFTR.add(WR_CONST.FTR_ATTEMPT_2);
+        _attemptFTR.add(WR_CONST.FTR_ATTEMPT_3);
+        _attemptFTR.add(WR_CONST.FTR_ATTEMPT_4);
+
+        // Capture the local broadcast manager
+        bManager = LocalBroadcastManager.getInstance(getContext());
     }
 
     /** Note: This is used with the writing_tutor_comp layout in the dev project
@@ -159,8 +184,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mDrawnScroll = (CLinkedScrollView) findViewById(R.id.SfingerWriter);
         mDrawnScroll.setClipChildren(false);
 
-        mDrawnList = (LinearLayout) findViewById(R.id.Sdrawn_glyphs);
-        mDrawnList.setClipChildren(false);
+        mGlyphList = (LinearLayout) findViewById(R.id.Sdrawn_glyphs);
+        mGlyphList.setClipChildren(false);
 
         // Note: this is used in the GlyphRecognizer project to initialize the sample
         //
@@ -172,7 +197,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
             v.setIsLast(i1 ==  mStimulusData.length-1);
 
-            mDrawnList.addView(v);
+            mGlyphList.addView(v);
             ((CGlyphController)v).setLinkedScroll(mDrawnScroll);
             ((CGlyphController)v).setWritingController(this);
         }
@@ -186,7 +211,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         //
         for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
 
-            CGlyphController comp = (CGlyphController) mDrawnList.getChildAt(i1);
+            CGlyphController comp = (CGlyphController) mGlyphList.getChildAt(i1);
 
             String expectedChar = mStimulus.substring(i1,i1+1);
 
@@ -196,7 +221,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
 // TODO: Dev only
 //        mRecogList.setOnTouchListener(new RecogTouchListener());
-//        mDrawnList.setOnTouchListener(new drawnTouchListener());
+//        mGlyphList.setOnTouchListener(new drawnTouchListener());
 
         mRecognizedScroll.setLinkedScroll(mDrawnScroll);
         mDrawnScroll.setLinkedScroll(mRecognizedScroll);
@@ -207,25 +232,33 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
+    private void broadcastMsg(String Action) {
+
+        Intent msg = new Intent(Action);
+
+        bManager.sendBroadcast(msg);
+    }
+
+
     //************************************************************************
     //************************************************************************
     // IWritingController Start
 
     /**
-     * Note that only the mDrawnList will initiate this call
+     * Note that only the mGlyphList will initiate this call
      *
      * @param child
      */
     public void deleteItem(View child) {
-        int index = mDrawnList.indexOfChild(child);
+        int index = mGlyphList.indexOfChild(child);
 
-        mDrawnList.removeViewAt(index);
+        mGlyphList.removeViewAt(index);
         mRecogList.removeViewAt(index);
     }
 
 
     /**
-     * Note that only the mDrawnList will initiate this call
+     * Note that only the mGlyphList will initiate this call
      *
      * @param child
      */
@@ -234,7 +267,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         CGlyphController v;
         CStimulusController r;
 
-        int index = mDrawnList.indexOfChild(child);
+        int index = mGlyphList.indexOfChild(child);
 
         // create a new view
         r = (CStimulusController)LayoutInflater.from(getContext())
@@ -251,12 +284,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         // Update the last child flag
         //
-        if(index == mDrawnList.getChildCount()-1) {
+        if(index == mGlyphList.getChildCount()-1) {
             ((CGlyphController)child).setIsLast(false);
             v.setIsLast(true);
         }
 
-        mDrawnList.addView(v, index + inc);
+        mGlyphList.addView(v, index + inc);
 
         v.setLinkedScroll(mDrawnScroll);
         v.setWritingController(this);
@@ -274,17 +307,122 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         // Add the Glyph input containers
         //
-        mDrawnList.removeAllViews();
+        mGlyphList.removeAllViews();
     }
 
 
-    public void updateResponse(IGlyphController child, String glyph) {
+    public void updateStatus(IGlyphController glyphController, CRecResult[] _ltkPlusCandidates) {
 
-        int index = mDrawnList.indexOfChild((View)child);
+        mActiveController = glyphController;
+
+        mActiveIndex = mGlyphList.indexOfChild((View)mActiveController);
+
+        CRecResult          candidate      = _ltkPlusCandidates[0];
+        CStimulusController stimController = (CStimulusController)mRecogList.getChildAt(mActiveIndex);
+
+        publishValue(WR_CONST.CANDIDATE_VAR, candidate.getRecChar().toUpperCase());
+        publishValue(WR_CONST.EXPECTED_VAR, mActiveController.getExpectedChar().toUpperCase());
+
+        _charValid   = stimController.testStimulus( candidate.getRecChar());
+        _metricValid = _metric.testConstraint(candidate.getGlyph());
+        _isValid     = _charValid && _metricValid;
+
+        // Depending upon the result we allow the controller to disable other fields if it is working
+        // in Immediate feedback mode
+        //
+        mActiveController.updateCorrectStatus(_isValid);
+        inhibitInput(mActiveController, !_isValid);
+
+        stimController.updateStimulusState(_isValid);
+
+        // Fire the appropriate behavior
+        //
+        if(isComplete()) {
+
+            applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
+        }
+        else {
+
+            if(!_isValid) {
+
+                publishFeature(WR_CONST.FTR_HAD_ERRORS);
+
+                updateAttemptFeature();
+
+                applyBehavior(WR_CONST.ON_ERROR);
+
+//                if (!_charValid)
+//                    applyBehavior(WR_CONST.ON_CHAR_ERROR);
+//                else if (!_metricValid)
+//                    applyBehavior(WR_CONST.ON_GLYPH_ERROR);
+            }
+            else {
+                updateStalledStatus();
+
+                applyBehavior(WR_CONST.ON_CORRECT);
+            }
+        }
+    }
+
+
+    private void updateStalledStatus() {
+
+        CGlyphController   v;
+
+        retractFeature(WR_CONST.FTR_INPUT_STALLED);
+
+        v = (CGlyphController) mGlyphList.getChildAt(mActiveIndex+1);
+
+        if(v != null) {
+
+            if(!v.getGlyphStarted())
+                publishFeature(WR_CONST.FTR_INPUT_STALLED);
+        }
+    }
+
+
+    private void clearAttemptFeature() {
+
+        for (String attempt : _attemptFTR) {
+            retractFeature(attempt);
+        }
+    }
+
+
+    private void updateAttemptFeature() {
+
+        clearAttemptFeature();
+
+        int attempt = mActiveController.incAttempt();
+
+        if(attempt > 4) attempt = 4;
+
+        publishFeature(_attemptFTR.get(attempt-1));
+    }
+
+
+    private boolean isComplete() {
+
+        boolean result = true;
+
+        for(int i1 = 0 ; i1 < mGlyphList.getChildCount() ; i1++) {
+
+            if(!((CGlyphController)mGlyphList.getChildAt(i1)).isCorrect()) {
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+
+
+    public void resetResponse(IGlyphController child) {
+
+        int index = mGlyphList.indexOfChild((View)child);
 
         CStimulusController respText = (CStimulusController)mRecogList.getChildAt(index);
 
-        respText.setResponseChar(glyph);
+        respText.resetStimulusState();
     }
 
 
@@ -299,7 +437,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         int index = mRecogList.indexOfChild(controller);
 
-        v = (CGlyphController)mDrawnList.getChildAt(index);
+        v = (CGlyphController) mGlyphList.getChildAt(index);
 
         // Capture the initiator status to force the tracker to update in the stimulus field
         //
@@ -334,9 +472,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         int                skip = padding;
         CGlyphController   v;
 
-        for(i1 = 0 ; i1 < mDrawnList.getChildCount() ; i1++) {
+        for(i1 = 0 ; i1 < mGlyphList.getChildCount() ; i1++) {
 
-            v = (CGlyphController)mDrawnList.getChildAt(i1);
+            v = (CGlyphController) mGlyphList.getChildAt(i1);
 
             newScroll = (int) v.getX();
 
@@ -378,6 +516,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 mDrawnScroll.smoothScrollTo(calcOffsetToMakeGlyphVisible(sx, padding), 0);
                 mDrawnScroll.releaseInitiatorStatus();
             }
+            else if(sx > gx) {
+
+                mDrawnScroll.captureInitiatorStatus();
+                mDrawnScroll.smoothScrollTo(gx, 0);
+                mDrawnScroll.releaseInitiatorStatus();
+            }
+
         }
     }
 
@@ -403,9 +548,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
 
         delay = 0;
-        for(int i1 = 0 ; i1 < mDrawnList.getChildCount() ; i1++) {
+        for(int i1 = 0; i1 < mGlyphList.getChildCount() ; i1++) {
 
-            v = (CGlyphController)mDrawnList.getChildAt(i1);
+            v = (CGlyphController) mGlyphList.getChildAt(i1);
 
             v.post(TCONST.HIGHLIGHT, delay);
             delay += WR_CONST.RIPPLE_DELAY;
@@ -414,10 +559,57 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
-    public void rippleReplay(String type) {
+    public void hideGlyphs() {
+
+        CGlyphController   v;
+
+        for(int i1 = 0; i1 < mGlyphList.getChildCount() ; i1++) {
+
+            v = (CGlyphController) mGlyphList.getChildAt(i1);
+
+            v.hideUserGlyph();
+        }
+    }
+
+
+    public void hideSamples() {
+
+        CGlyphController   v;
+
+        for(int i1 = 0; i1 < mGlyphList.getChildCount() ; i1++) {
+
+            v = (CGlyphController) mGlyphList.getChildAt(i1);
+
+            v.showSampleChar(false);
+        }
+    }
+
+
+    public void highlightNext() {
+
+        CStimulusController r;
+        CGlyphController   v;
+
+        r = (CStimulusController)mRecogList.getChildAt(mActiveIndex+1);
+
+        if(r != null) {
+
+            r.post(TCONST.HIGHLIGHT);
+        }
+
+        v = (CGlyphController) mGlyphList.getChildAt(mActiveIndex+1);
+
+        if(v != null) {
+            v.post(TCONST.HIGHLIGHT);
+        }
+    }
+
+
+    public void rippleReplay(String type, boolean isDemo) {
 
         _fieldIndex = 0;
         _replayType = type;
+        _isDemo     = isDemo;
 
         replayNext();
     }
@@ -426,14 +618,17 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         CStimulusController r;
         CGlyphController   v;
 
-        if( _fieldIndex < mDrawnList.getChildCount()) {
+        if( _fieldIndex < mGlyphList.getChildCount()) {
 
-            v = (CGlyphController)mDrawnList.getChildAt(_fieldIndex);
+            v = (CGlyphController) mGlyphList.getChildAt(_fieldIndex);
             v.post(_replayType);
 
             _fieldIndex++;
         }
         else {
+            if(_isDemo)
+              broadcastMsg(TCONST.POINT_FADE);
+
             applyBehavior(WR_CONST.REPLAY_COMPLETE);
         }
     }
@@ -442,16 +637,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     public boolean scanForPendingRecognition(IGlyphController source) {
 
-        boolean               result = false;
-        IGlyphController glyphInput;
+        boolean          result = false;
+        IGlyphController glyphController;
 
-        for(int i1 = 0 ; i1 < mDrawnList.getChildCount() ; i1++) {
+        for(int i1 = 0; i1 < mGlyphList.getChildCount() ; i1++) {
 
-            glyphInput = (IGlyphController)mDrawnList.getChildAt(i1);
+            glyphController = (IGlyphController) mGlyphList.getChildAt(i1);
 
-            if(glyphInput != source) {
+            if(glyphController != source) {
 
-                result = glyphInput.firePendingRecognition();
+                result = glyphController.firePendingRecognition();
             }
         }
 
@@ -459,23 +654,35 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
+    public void inhibitInput(boolean inhibit) {
+
+        inhibitInput(null, inhibit);
+    }
+
     public void inhibitInput(IGlyphController source, boolean inhibit) {
 
-        boolean               result = false;
-        IGlyphController glyphInput;
-        int                   i1 = 0;
+        boolean          result = false;
+        IGlyphController glyphController;
+        int              i1 = 0;
 
         if(_immediateFeedback) {
 
-            for (i1 = 0; i1 < mDrawnList.getChildCount(); i1++) {
+            for (i1 = 0; i1 < mGlyphList.getChildCount(); i1++) {
 
-                glyphInput = (IGlyphController) mDrawnList.getChildAt(i1);
+                glyphController = (IGlyphController) mGlyphList.getChildAt(i1);
 
-                if (glyphInput != source) {
+                if (glyphController != source) {
 
-                    glyphInput.inhibitInput(inhibit);
+                    glyphController.inhibitInput(inhibit);
                 }
             }
+        }
+    }
+
+    public void showEraseButton(Boolean show) {
+
+        if(mActiveController != null) {
+            mActiveController.showEraseButton(show);
         }
     }
 
@@ -506,11 +713,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     public void next() {
 
-        // May only call next on stimulus variants
-        //
         try {
             if (_data != null) {
+
+                retractFeature(WR_CONST.FTR_HAD_ERRORS);
+
                 updateText(_data.get(_dataIndex));
+                mDrawnScroll.scrollTo(0, 0);
 
                 _dataIndex++;
             } else {
@@ -553,8 +762,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         // Add the Glyph input containers
         //
-        mDrawnList.removeAllViews();
-        mDrawnList.setClipChildren(false);
+        mGlyphList.removeAllViews();
+        mGlyphList.setClipChildren(false);
 
         for(int i1 =0 ; i1 < mStimulus.length() ; i1++)
         {
@@ -573,7 +782,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 v.setProtoGlyph(_glyphSet.cloneGlyph(expectedChar));
             }
 
-            mDrawnList.addView(v);
+            mGlyphList.addView(v);
 
             v.setLinkedScroll(mDrawnScroll);
             v.setWritingController(this);
@@ -586,6 +795,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     //************************************************************************
     // Tutor Scriptable methods  Start
 
+
+    public void setConstraint(String constraint) {
+
+        _metric.setConstraint(constraint);
+    }
 
     /**
      * Manage component defined (i.e. specific) events
@@ -608,14 +822,21 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         return result;
     }
 
+    /**
+     * Overridden in TClass to fire graph behaviors
+     *
+     * @param nodeName
+     */
+    public void applyBehaviorNode(String nodeName) {
+    }
 
     public void pointAtEraseButton() {
 
         IGlyphController glyphInput;
 
-        for (int i1 = 0; i1 < mDrawnList.getChildCount(); i1++) {
+        for (int i1 = 0; i1 < mGlyphList.getChildCount(); i1++) {
 
-            glyphInput = (IGlyphController) mDrawnList.getChildAt(i1);
+            glyphInput = (IGlyphController) mGlyphList.getChildAt(i1);
 
             if(glyphInput.hasError()) {
                 glyphInput.pointAtEraseButton();
@@ -630,9 +851,59 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         post(TCONST.HIGHLIGHT, 500);
     }
 
+    /**
+     * See TClass subclass for implementation
+     * @param targetNode
+     */
+    protected void callSubGgraph(String targetNode) {
+    }
+
     // Tutor methods  End
     //************************************************************************
     //************************************************************************
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // publish component state data - START
+
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    protected void publishState() {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishValue(String varName, String value) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishValue(String varName, int value) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishFeature(String feature) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void retractFeature(String feature) {
+    }
+
+
+    // publish component state data - EBD
+    //************************************************************************
+    //************************************************************************
+
 
 
 
@@ -738,22 +1009,31 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     public class Queue implements Runnable {
 
-        protected String _command    = "";
-        protected String _target     = "";
-        protected String _item       = "";
+        protected String _name;
+        protected String _command;
+        protected String _target;
+        protected String _item;
 
-        public Queue(String command) {
+
+        public Queue(String name, String command) {
+
+            _name    = name;
             _command = command;
+
+            if(name != null) {
+                nameMap.put(name, this);
+            }
         }
 
-        public Queue(String command, String target) {
-            _command = command;
+        public Queue(String name, String command, String target) {
+
+            this(name, command);
             _target  = target;
         }
 
-        public Queue(String command, String target, String item) {
-            _command = command;
-            _target  = target;
+        public Queue(String name, String command, String target, String item) {
+
+            this(name, command, target);
             _item    = item;
         }
 
@@ -762,22 +1042,79 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         public void run() {
 
             try {
+                if(_name != null) {
+                    nameMap.remove(_name);
+                }
+
                 queueMap.remove(this);
 
                 switch(_command) {
 
+                    case WR_CONST.HIDE_GLYPHS:
+                        hideGlyphs();
+                        break;
+
+                    case WR_CONST.HIDE_SAMPLES:
+                        hideSamples();
+                        break;
+
                     case WR_CONST.RIPPLE_HIGHLIGHT:
+
                         rippleHighlight();
                         break;
 
+                    case WR_CONST.HIGHLIGHT_NEXT:
+
+                        highlightNext();
+                        break;
+
+                    case WR_CONST.INHIBIT_OTHERS:
+
+                        inhibitInput(mActiveController, true);
+                        break;
+
+                    case WR_CONST.CLEAR_ATTEMPT:
+                        // Clear attempt after correct behavior so it can use it to determine on
+                        // which attempt they succeeded - We don't want this persisting if they
+                        // subsequently keep getting them correct
+                        //
+                        clearAttemptFeature();
+                        break;
+
+                    case TCONST.APPLY_BEHAVIOR:
+
+                        applyBehaviorNode(_target);
+                        break;
+
                     case WR_CONST.RIPPLE_DEMO:
+
+                        rippleReplay(_command, true);
+                        break;
+
                     case WR_CONST.RIPPLE_REPLAY:
                     case WR_CONST.RIPPLE_PROTO:
-                        rippleReplay(_command);
+
+                        rippleReplay(_command, false);
+                        break;
+
+                    case WR_CONST.SHOW_SAMPLE:
+                    case WR_CONST.HIDE_SAMPLE:
+                    case WR_CONST.ERASE_GLYPH:
+                    case WR_CONST.DEMO_PROTOGLYPH:
+                    case WR_CONST.ANIMATE_PROTOGLYPH:
+                    case WR_CONST.ANIMATE_OVERLAY:
+                    case WR_CONST.REPLAY_PROTOGLYPH:
+                    case WR_CONST.ANIMATE_ALIGN:
+
+                        mActiveController.post(_command);
+                        break;
+
+                    case WR_CONST.POINT_AT_ERASE_BUTTON:
+
+                        pointAtEraseButton();
                         break;
 
                     default:
-
                         break;
                 }
 
@@ -821,6 +1158,20 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
 
     /**
+     * Remove named posts
+     *
+     */
+    public void cancelPost(String name) {
+
+        while(nameMap.containsKey(name)) {
+
+            mainHandler.removeCallbacks((Queue) (nameMap.get(name)));
+            nameMap.remove(name);
+        }
+    }
+
+
+    /**
      * Keep a mapping of pending messages so we can flush the queue if we want to terminate
      * the tutor before it finishes naturally.
      *
@@ -843,6 +1194,21 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
     }
 
+    public void postNamed(String name, String command, String target) {
+        postNamed(name, command, target, 0L);
+    }
+    public void postNamed(String name, String command, String target, Long delay) {
+        enQueue(new Queue(name, command, target), delay);
+    }
+
+    public void postNamed(String name, String command) {
+        postNamed(name, command, 0L);
+    }
+    public void postNamed(String name, String command, Long delay) {
+        enQueue(new Queue(name, command), delay);
+    }
+
+
     /**
      * Post a command to the queue
      *
@@ -853,7 +1219,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
     public void post(String command, long delay) {
 
-        enQueue(new Queue(command), delay);
+        enQueue(new Queue(null, command), delay);
     }
 
 
@@ -865,7 +1231,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public void post(String command, String target) {
         post(command, target, 0);
     }
-    public void post(String command, String target, long delay) { enQueue(new Queue(command, target), delay); }
+    public void post(String command, String target, long delay) { enQueue(new Queue(null, command, target), delay); }
 
 
     /**
@@ -876,7 +1242,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public void post(String command, String target, String item) {
         post(command, target, item, 0);
     }
-    public void post(String command, String target, String item, long delay) { enQueue(new Queue(command, target, item), delay); }
+    public void post(String command, String target, String item, long delay) { enQueue(new Queue(null, command, target, item), delay); }
 
 
 

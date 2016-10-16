@@ -198,6 +198,7 @@ public class CStimulusController extends LinearLayout implements IEventListener,
         }
     }
 
+
     public void setStimulusChar(String stim) {
 
         mStimulusString = stim;
@@ -206,17 +207,14 @@ public class CStimulusController extends LinearLayout implements IEventListener,
     }
 
 
-    public void setResponseChar(String resp) {
+    public void updateStimulusState(boolean match) {
 
-        int charColor   = WR_CONST.NORMALCOLOR;
+        int charColor;
         int borderColor = TCONST.colorMap.get(TCONST.COLORNONE);
 
         mUnderline.setVisibility(View.INVISIBLE);
 
-        if(resp.equals("")) {
-            charColor = TCONST.colorMap.get(TCONST.COLORNORMAL);
-        }
-        else if(!mStimulusString.equals(resp)) {
+        if(!match) {
             charColor = TCONST.colorMap.get(TCONST.COLORERROR);
             mUnderline.setVisibility(View.VISIBLE);
         }
@@ -224,6 +222,24 @@ public class CStimulusController extends LinearLayout implements IEventListener,
             charColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
         }
 
+        mRecogChar.setTextColor(charColor);
+        _Paint.setColor(borderColor);
+
+        invalidate();
+    }
+
+
+    public boolean testStimulus(String resp) {
+        return mStimulusString.equals(resp);
+    }
+
+
+    public void resetStimulusState() {
+
+        int charColor   = TCONST.colorMap.get(TCONST.COLORNORMAL);
+        int borderColor = TCONST.colorMap.get(TCONST.COLORNONE);
+
+        mUnderline.setVisibility(View.INVISIBLE);
         mRecogChar.setTextColor(charColor);
         _Paint.setColor(borderColor);
 

@@ -24,12 +24,13 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEventListener;
+import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-public class TBpComponent extends CBP_Component implements IBehaviorManager, ITutorObjectImpl, IDataSink {
+public class TBpComponent extends CBP_Component implements IBehaviorManager, ITutorObjectImpl, IDataSink, IEventSource {
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
@@ -318,6 +319,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
      *
      * @param nodeName
      */
+    @Override
     public void applyBehaviorNode(String nodeName) {
         IScriptable2 obj = null;
 
@@ -327,8 +329,25 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 obj = mTutor.getScope().mapSymbol(nodeName);
 
                 if (obj != null) {
-                    obj.preEnter();
-                    obj.applyNode();
+
+                    switch(obj.getType()) {
+
+                        case TCONST.SUBGRAPH:
+
+                            mTutor.getSceneGraph().post(this, TCONST.SUBGRAPH_CALL, nodeName);
+                            break;
+
+                        case TCONST.MODULE:
+
+                            // Disallow module "calls"
+                            Log.e(TAG, "MODULE Behaviors are not supported");
+                            break;
+
+                        default:
+                            obj.preEnter();
+                            obj.applyNode();
+                            break;
+                    }
                 }
 
             } catch (Exception e) {
@@ -338,10 +357,31 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         }
     }
 
+
     // IBehaviorManager Interface END
     //************************************************************************
     //************************************************************************
 
+
+    //************************************************************************
+    //************************************************************************
+    // IEventSource Interface START
+
+
+    @Override
+    public String getEventSourceName() {
+        return name();
+    }
+
+    @Override
+    public String getEventSourceType() {
+        return "BubblePop_Copmonent";
+    }
+
+
+    // IEventSource Interface END
+    //************************************************************************
+    //************************************************************************
 
 
     //************************************************************************

@@ -8,24 +8,258 @@
       "title": "Word copying tutor",
       "COMMENT": "This tutor is designed for copying words.",
       "version": "1.0.0",
-      "rootnode": "DEMO_STATE",
+      "rootnode": "DEMO_SELECT",
+
+      "subgraphMap": {
+
+        "INPUT_HESITATION_FEEDBACK": {
+          "type": "SUBGRAPH",
+          "rootnode": "INPUT_HESITATION_MODULE",
+
+          "nodeMap": {
+            "INPUT_HESITATION_MODULE": {
+              "type": "MODULE",
+              "COMMENT": "prompt when user hesitates when they should be writing.",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_HIGHLIGHT:String|1000:Integer", "features":""},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the word.mp3","soundpackage": "default","mode": "flow", "features": ""},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3",  "soundpackage": "words",  "mode": "flow", "features": ""}
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "ERASE_HESITATION_FEEDBACK": {
+          "type": "SUBGRAPH",
+          "rootnode": "ERASE_BUTTON_FEEDBACK_MODULE",
+
+          "nodeMap": {
+            "ERASE_BUTTON_FEEDBACK_MODULE": {
+              "type": "MODULE",
+              "COMMENT": "Explain the erase button",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+//                {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput",        "parms": "TRUE:Boolean",                 "features":""},
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "POINT_AT_ERASE_BUTTON:String", "features":""},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please tap here to try again.mp3","soundpackage": "default","mode": "flow", "features": ""}
+
+//                {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "FALSE:Boolean","features":""},
+//                {"type": "COMMAND", "id": "word_copy", "method": "postNamed",    "parms": "ERASE_BUTTON_PROMPT:String|APPLY_BEHAVIOR:String|ERASE_HESITATION_FEEDBACK:String|12000:Long",  "features":""}
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+
+        "ERASE_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "COMMENT": "glyph metrics have been violated",
+          "rootnode": "ERASE_MODULE",
+
+          "nodeMap": {
+
+            "ERASE_MODULE": {
+              "type": "MODULE",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+                {"type": "COMMAND", "id": "word_copy", "method": "cancelPost",      "parms": "ERASE_BUTTON_PROMPT:String", "features":""},
+                {"type": "COMMAND", "id": "word_copy", "method": "showEraseButton", "parms": "FALSE:Boolean",              "features":""}
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+
+        "GENERAL_CORRECT_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "rootnode": "CORRECT_BEHAVIOR_MODULE",
+
+          "nodeMap": {
+
+            "CORRECT_BEHAVIOR_MODULE": {
+              "type": "MODULE",
+              "COMMENT": "Configure delayed erase button feedabck",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+                // clean up after tracing - hide the sample and ensure the other fields are re-enabled
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "HIDE_SAMPLE:String",  "features":""},
+                {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput",        "parms": "FALSE:Boolean",       "features":""},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","soundpackage": "default","mode": "flow", "features": "FTR_ATTEMPT_4"},
+
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "HIGHLIGHT_NEXT:String|0:Integer",    "features":"FTR_INPUT_STALLED"},
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "HIGHLIGHT_NEXT:String|500:Integer",  "features":"FTR_INPUT_STALLED"},
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "HIGHLIGHT_NEXT:String|1000:Integer", "features":"FTR_INPUT_STALLED"},
+
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "CLEAR_ATTEMPT:String",  "features":""}
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "GENERAL_ERROR_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "rootnode": "ERROR_BEHAVIOR_MODULE",
+
+          "nodeMap": {
+
+            "ERROR_BEHAVIOR_MODULE": {
+              "type": "MODULE",
+              "COMMENT": "Configure delayed erase button feedabck",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+
+                {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "ON_ERASE:String|ERASE_BEHAVIOR:String" ,"features":"!FTR_ATTEMPT_4"},
+                {"type": "COMMAND", "id": "word_copy", "method": "postNamed",           "parms": "ERASE_BUTTON_PROMPT:String|APPLY_BEHAVIOR:String|ERASE_HESITATION_FEEDBACK:String|6000:Long",  "features":"!FTR_ATTEMPT_4"},
+
+                {"type": "COMMAND", "id": "word_copy", "method": "showEraseButton",     "parms": "TRUE:Boolean",                           "features":"FTR_ATTEMPT_1"},
+                {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput",        "parms": "TRUE:Boolean",                           "features":"FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","soundpackage": "default","mode": "flow", "features": "FTR_ATTEMPT_1"},
+
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "ANIMATE_ALIGN:String",                    "features":"FTR_ATTEMPT_2"},
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "ANIMATE_OVERLAY:String",                  "features":"FTR_ATTEMPT_3"},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "That doesnt look like.mp3",  "soundpackage": "default","mode": "flow",   "features": "FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.expected}}.mp3", "soundpackage": "xprize", "mode": "flow", "features": "FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
+
+                // On iteration 2 / 3 we do a delayed show of the erase button and prompt to retry
+                {"type": "COMMAND", "id": "word_copy", "method": "showEraseButton",     "parms": "TRUE:Boolean",              "features":"FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","soundpackage": "default","mode": "flow", "features":"FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
+
+                // On iteration 4+ we ask them to trace the character.
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "ERASE_GLYPH:String",                  "features":"FTR_ATTEMPT_4"},
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "SHOW_SAMPLE:String",                  "features":"FTR_ATTEMPT_4"},
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "INHIBIT_OTHERS:String",               "features":"FTR_ATTEMPT_4"},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please trace the letter.mp3", "soundpackage": "default","mode": "flow",   "features": "FTR_ATTEMPT_4"}
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "GLYPH_ERROR_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "COMMENT": "glyph metrics have been violated",
+          "rootnode": "GLYPH_ERROR_MODULE",
+
+          "nodeMap": {
+
+            "GLYPH_ERROR_MODULE": {
+              "type": "MODULE",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "CHAR_ERROR_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "COMMENT": "wrong character was selected by recognizer",
+          "rootnode": "CHAR_ERROR_MODULE",
+
+          "nodeMap": {
+
+            "CHAR_ERROR_MODULE": {
+              "type": "MODULE",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "ITEM_COMPLETE_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "COMMENT": "The data item - letter/word/sentence is finished",
+          "rootnode": "ITEM_COMPLETE_MODULE",
+
+          "nodeMap": {
+
+            "ITEM_COMPLETE_MODULE": {
+              "type": "MODULE",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+
+                {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|DELAYED_NEXT:String" ,"features":"FTR_HAD_ERRORS"},
+
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "HIDE_GLYPHS:String",                     "features":"FTR_HAD_ERRORS"},
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_PROTO:String",                    "features":"FTR_HAD_ERRORS"},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","soundpackage": "default","mode": "flow", "features": "FTR_HAD_ERRORS"},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "words",  "mode":"flow", "features": ""},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Very good.mp3",          "soundpackage": "default","mode":"flow", "features": "!FTR_HAD_ERRORS"},
+
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "APPLY_BEHAVIOR:String|NEXT_NODE:String|600:Integer", "features":"!FTR_HAD_ERRORS"}
+
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        }
+
+      },
 
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
 
+        // TODO: Setup some criteria for when to present the demo
+
         "DEMO_SELECT": {
           "type": "NODE",
           "COMMENT": "Intro Clip",
-          "maptype":"actionMap",
-          "mapname": "WAIT",
-          "preenter":[],
+          "maptype":"moduleMap",
+          "mapname": "EMPTY_MODULE",
+          "preenter":["SET_CONSTRAINT"],
           "preexit" :[],
           "edges": [
-            {
-              "constraint": "",
-              "edge": "NEWWORD"
-            }
+            {"constraint": "FTR_NO_DEMO", "edge": "INTRO_STATE"},
+            {"constraint": "", "edge": "DEMO_STATE"}
           ]
         },
 
@@ -34,7 +268,7 @@
           "COMMENT": "Interaction Demo",
           "maptype":"moduleMap",
           "mapname":"DEMO_MODULE",
-          "preenter":["SET_VERSION","SET_DEMOSOURCE","FW_DISABLE","NEXT_WORD"],
+          "preenter":["SET_VERSION","SET_DEMOSOURCE","FW_DISABLE","NEXT_DATA_ITEM"],
           "preexit" :[],
           "edges": [
             {
@@ -50,20 +284,19 @@
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
           "preenter":["SET_VERSION","SET_DATASOURCE","FW_DISABLE"],
-//          "preenter":["SET_VERSION","FW_DISABLE"],
           "preexit" :[],
           "edges": [
             {
               "constraint": "",
-              "edge": "NEWWORD"
+              "edge": "NEXTITEM"
             }
           ]
         },
 
-        "NEWWORD":{
+        "NEXTITEM":{
           "COMMENT":"This node presents a word for user to copy.",
           "type":"node",
-          "preenter":["NEXT_WORD"],
+          "preenter":["NEXT_DATA_ITEM"],
           "maptype":"moduleMap",
           "mapname": "PLAYWORD",
           "preexit" :[],
@@ -78,14 +311,13 @@
           "type":"node",
           "maptype":"moduleMap",
           "mapname": "FINGERWRITING",
-          "preenter":["FW_ENABLE","REMINDER_TIMER"],
+          "preenter":["FW_ENABLE"],
           "preexit" :["FW_DISABLE"],
           "edges":
           [
-            {"constraint":"FTR_RIGHT","edge":"CORRECT"},
-            {"constraint":"FTR_WRONG","edge":"WRONG"},
-            //{"constraint":"","edge":"UNRECOGNIZED"}
-	        {"constraint":"","edge":"UNRECOGNIZED"}
+            {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
+            {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
+            {"constraint":"","edge":"NEXTITEM"}
           ]
         },
 
@@ -100,7 +332,7 @@
           [
             {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
             {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
-            {"constraint":"","edge":"NEWCHAR"}
+            {"constraint":"","edge":"NEXTITEM"}
           ]
         },
 
@@ -172,13 +404,21 @@
 
         "COMMENT": "@@@@@  CModules  @@@@@",
 
+        "EMPTY_MODULE": {
+          "type":"MODULE",
+          "reuse":true,
+          "COMMENT": "Do Nothing",
+          "tracks": [
+          ]
+        },
+
         "SET_DEMOSOURCE": {
           "type":"MODULE",
           "reuse":true,
           "COMMENT": "Initialize the data source - ",
           "tracks": [
-            {"type": "COMMAND", "id": "word_copy", "method": "setDataSource", "parms": "[saba]:String","features":"LANG_SW"},
-            {"type": "COMMAND", "id": "word_copy", "method": "setDataSource", "parms": "[one]:String","features":"LANG_EN"}
+            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[saba]:String","features":"LANG_SW"},
+            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[one]:String", "features":"LANG_EN"}
           ]
         },
 
@@ -188,25 +428,34 @@
           "COMMENT": "Initialize the data source - ",
 
           "tracks": [
-            {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|NEXTNODE:String" ,"features":""},
-            {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_DEMO:String|500:Integer",         "features":""},
+            // Disable the writing controllers while the demo is in progress
+            {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "TRUE:Boolean","features":""},
+
+            // When the word replay is complete move to the next node
+            {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|NEXT_NODE:String" ,"features":""},
+            {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_DEMO:String|500:Integer",          "features":""},
 
             // This will play during the demo replay
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some words.mp3", "soundpackage":"default", "volume": 1.0, "mode":"stream", "features": ""},
 
             // Next will fire when replay completes
             {"type": "COMMAND", "id": "word_copy", "method": "clear", "parms": "", "features":""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now you try it.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now you try it.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+
+            // Restore the initial datasource if present
+            {"type": "COMMAND", "id": "word_copy", "method": "popDataSource", "features":""},
+
+            {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "FALSE:Boolean","features":""},
+            {"type": "COMMAND", "cmd":"FEATURE-ADD", "value": "FTR_DEMO_SHOWN", "features":""}
           ]
         },
-
 
         "PLAYINTRO":{
           "type": "MODULE",
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-//            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some words.mp3", "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some words.mp3", "mode":"flow", "features": "!FTR_DEMO_SHOWN"}
           ]
         },
 
@@ -215,11 +464,8 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            //{"type": "COMMAND", "id": "Sstimulus", "method": "show", "parms": "TRUE:Boolean","features":""},
             {"type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":""},
-            //{"type": "AUDIO", "command": "PLAY", "soundsource": "This is the number.mp3", "mode":"flow", "features": ""},
-//            {"type": "TTS", "command": "SAY", "content": "{{word_copy.value}}", "rate":"1.2", "features": ""}
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3", "soundpackage":"xprize",  "mode":"flow", "features": ""} //the stimulus digit
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "words","mode":"flow", "features": ""}
           ]
         },
 
@@ -228,12 +474,17 @@
           "reuse":true,
           "COMMENT": "FingerWriting Module",
           "tracks": [
-            {"type": "COMMAND", "id": "SfingerWriter", "method": "onStartWriting", "parms": "CANCEL_REMINDER:String"},
-            // This would call the cancel reminder action below when the user starts writing
-            {"type": "COMMAND", "id": "Sstimulus", "method": "onRecognitionComplete", "parms": "NEXT:String"},
-            // This would increment the animation_graph when it is in a wait state.  e.g if it is sitting at the end of a stream audio clip
+            {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_ERROR:String|GENERAL_ERROR_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_CORRECT:String|GENERAL_CORRECT_BEHAVIOR:String" ,"features":""},
+
+            {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_GLYPH_ERROR:String|GLYPH_ERROR_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_CHAR_ERROR:String|CHAR_ERROR_BEHAVIOR:String" ,"features":""},
+
+            {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_START_WRITING:String|CANCEL_INPUT_HESITATION_FEEDBACK:String" ,"features":""},
+            {"type": "COMMAND", "id": "word_copy", "method": "postNamed",         "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long",  "features":""},
+
+            {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "DATA_ITEM_COMPLETE:String|ITEM_COMPLETE_BEHAVIOR:String" ,"features":""},
             {"type": "COMMAND", "cmd": "WAIT" }
-            //{"type": "COMMAND", "id": "Sresponse", "method": "show", "parms": "TRUE:Boolean","features":""}
           ]
         },
 
@@ -277,8 +528,8 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "You did a good job.mp3", "mode":"flow", "features": ""}
-            //{"type": "AUDIO", "command": "PLAY", "soundsource": "You wrote all of them correctly.mp3",   "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "You did a good job.mp3", "soundpackage":"xprize", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "You wrote all of them correctly.mp3", "soundpackage":"xprize", "mode":"flow", "features": ""}
           ]
         },
 
@@ -287,11 +538,20 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "You did a good job.mp3", "mode":"flow", "features": ""}
-            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Next time you can do better.mp3",   "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "You did a good job.mp3", "soundpackage":"xprize", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Next time you can do better.mp3", "soundpackage":"xprize", "mode":"flow", "features": ""}
+          ]
+        },
+
+        "SET_DATASOURCE": {
+          "type":"MODULE",
+          "reuse":true,
+          "COMMENT": "Initialize the data source - ",
+          "tracks": [
+            {"type": "COMMAND", "id": "word_copy", "method": "setDataSource", "parms": "[saba,sifuri,mbili]:String","features":"!DATA_WORD_COPY&LANG_SW"},
+            {"type": "COMMAND", "id": "word_copy", "method": "setDataSource", "parms": "[one,two,three]:String","features":"!DATA_WORD_COPY&LANG_EN"}
           ]
         }
-
       },
 
       "actionMap": {
@@ -302,24 +562,18 @@
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.1.0:String","features":""},
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "word_copy", "method": "setDataSource", "parms": "[0,sabalicious ontological test of line length,sifuri,mbili]:String","features":"!DATA_WORD_COPY"},
+        "CANCEL_INPUT_HESITATION_FEEDBACK": {"type": "COMMAND", "id": "word_copy", "method": "cancelPost", "parms": "HESITATION_PROMPT:String",    "features":""},
 
-        "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HESITATION_TRACK", "features": "" },
-        //set the waiting time limit as 10 seconds
 
-        "CANCEL_REMINDER": {"type": "TIMER", "id":"ReminderTimer", "action":"CANCEL", "features": "" },
-
-        "GB_DISABLE":{"type": "COMMAND", "id": "SgoButton", "method": "enable", "parms": "FALSE:Boolean","features":""},
-        //disable Go button
-        "GB_ENABLE":{"type": "COMMAND", "id": "SgoButton", "method": "enable", "parms": "TRUE:Boolean","features":""},
-        //enable Go button
-
-        "FW_DISABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "FALSE:Boolean","features":""},
+        "FW_DISABLE":{"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "TRUE:Boolean","features":""},
         //disable FingerWriting
-        "FW_ENABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "TRUE:Boolean","features":""},
+        "FW_ENABLE":{"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "FALSE:Boolean","features":""},
         //enable FingerWriting
 
-        "NEXT_WORD":{"type": "COMMAND", "id": "word_copy", "method": "next" ,"features":""},
+        // Set the LTK+ metric constraint
+        "SET_CONSTRAINT":{"type": "COMMAND", "id": "word_copy", "method": "setConstraint", "parms": "H,0.15;W,0.15;Y,0.10;X,0.15:String", "features":""},
+
+        "NEXT_DATA_ITEM":{"type": "COMMAND", "id": "word_copy", "method": "next" ,"features":""},
         //get a new digit from the list.
 
         //"GETRESPONSE":{"type": "COMMAND", "id": "Sresponse", "method": "???" ,"features":""},
@@ -337,9 +591,13 @@
         "INIT_ASK":     {"type": "COMMAND", "id": "Spicker", "method": "setStickyBehavior", "parms": "SPEAK_BUTTON:String|PICKER_TRACK:String" ,"features":""},
         "PICKER_TRACK": {"type": "TIMELINE", "trackname": "ASK_BUTTON", "features": ""},
 
-        "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "gotoNextScene"},
-        "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"  },
-        "WAIT": {"type": "COMMAND", "cmd": "WAIT"  }
+        "DELAYED_NEXT":{"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "APPLY_BEHAVIOR:String|NEXT_NODE:String|600:Integer", "features":""},
+
+        "GOTONEXTSCENE":   {"type": "COMMAND", "cmd": "NEXTSCENE"},
+        "RETURN_AND_GO":   {"type": "COMMAND", "cmd": "SUBGRAPH_RETURN_AND_GO"},
+        "RETURN_AND_WAIT": {"type": "COMMAND", "cmd": "SUBGRAPH_RETURN_AND_WAIT"},
+        "NEXT_NODE":       {"type": "COMMAND", "cmd": "NEXT"  },
+        "WAIT":            {"type": "COMMAND", "cmd": "WAIT"  }
       },
 
       "constraintMap": {
@@ -368,6 +626,11 @@
         "FTR_WORDS":{
           "type": "CONDITION",
           "test":"!FTR_NOWORDS"
+        },
+
+        "FTR_NO_DEMO":{
+          "type": "CONDITION",
+          "test":"FTR_NO_DEMO"
         },
 
         "ALL_CORRECT":{

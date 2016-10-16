@@ -54,6 +54,7 @@ import cmu.xprize.util.TCONST;
 
 public class CGlyphReplayContainer extends View implements Animator.AnimatorListener {
 
+    private IWritingComponent       mWritingComponent;
     private Rect                    replayRegion = new Rect();
 
     private CGlyph                  _currentGlyph;
@@ -85,7 +86,9 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
     private static final float POINT_SIZE = 40f;
 
     final private String TAG  = "REPLAY";
+
     private float _replayTime = 1200f;
+    private boolean  DBG = false;
 
 
     /**
@@ -140,6 +143,13 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
     }
 
 
+    public void setWritingController(IWritingComponent writingController) {
+
+        // We use callbacks on the parent control
+        mWritingComponent = writingController;
+    }
+
+
     @Override
     public void onDraw(Canvas canvas) {
 
@@ -169,7 +179,7 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
                         if(_pointAtStroke) {
                             broadcastLocation(TCONST.POINT_LIVE, tPoint);
                         }
-                        else {
+                        else if(DBG) {
                             mPaint.setColor(Color.YELLOW);
                             mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
                             canvas.drawCircle(tPoint.x, tPoint.y, replayRegion.width() / 40, mPaint);
@@ -312,9 +322,10 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
     private void broadcastEnd() {
 
         if (tPoint != null) {
-            broadcastLocation(TCONST.POINT_FADE, tPoint);
             broadcastLocation(TCONST.LOOKATEND, tPoint);
         }
+
+        mWritingComponent.applyBehavior(WR_CONST.ACTION_COMPLETE);
     }
 
     /** AnimatorListener Implmentation start */

@@ -36,11 +36,13 @@ import cmu.xprize.comp_writing.WR_CONST;
 import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.util.IEventSource;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CLinkedScrollView;
@@ -54,7 +56,7 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-public class TWritingComponent extends CWritingComponent implements IBehaviorManager, ITutorSceneImpl, IDataSink {
+public class TWritingComponent extends CWritingComponent implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource {
 
     private CTutor                  mTutor;
     private CSceneDelegate          mTutorScene;
@@ -68,6 +70,11 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     private int                     _wrong   = 0;
     private int                     _correct = 0;
+
+    private ArrayList<CDataSourceImg> _dataStack  = new ArrayList<>();
+
+    private ArrayList<String>       _FeatureSet = new ArrayList<>();
+    private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
 
     private static final String  TAG = TWritingComponent.class.getSimpleName();
 
@@ -106,15 +113,19 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         mRecogList        = (LinearLayout) findViewById(R.id.SstimulusList);
 
         mDrawnScroll = (CLinkedScrollView) findViewById(R.id.SfingerWriter);
-        mDrawnList   = (LinearLayout) findViewById(R.id.Sdrawn_glyphs);
-        mDrawnList.setClipChildren(false);
+        mGlyphList = (LinearLayout) findViewById(R.id.Sdrawn_glyphs);
+        mGlyphList.setClipChildren(false);
 
 // TODO: DEBUG only
 //        mRecogList.setOnTouchListener(new RecogTouchListener());
-//        mDrawnList.setOnTouchListener(new drawnTouchListener());
+//        mGlyphList.setOnTouchListener(new drawnTouchListener());
 
         mRecognizedScroll.setLinkedScroll(mDrawnScroll);
         mDrawnScroll.setLinkedScroll(mRecognizedScroll);
+
+        // Iniitalize the static behaviors
+        //
+        setStickyBehavior(TCONST.NEXT_NODE, TCONST.NEXT_NODE);
     }
 
 
@@ -153,66 +164,26 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     public void postEvent(String event, Integer delay) {
 
-        switch (event) {
-
-            case WR_CONST.RIPPLE_DEMO:
-                post(WR_CONST.RIPPLE_DEMO, delay);
-                break;
-
-            case WR_CONST.RIPPLE_REPLAY:
-                post(WR_CONST.RIPPLE_REPLAY, delay);
-                break;
-
-            case WR_CONST.RIPPLE_HIGHLIGHT:
-                break;
-
-
-//            case BP_CONST.RESUME_ANIMATION:
-//                post(BP_CONST.RESUME_ANIMATION);
-//                break;
-//
-//            case BP_CONST.SHOW_SCORE:
-//                post(BP_CONST.SHOW_SCORE, new Integer(correct_Count));
-//                break;
-//
-//            case BP_CONST.SHOW_STIMULUS:
-//                post(BP_CONST.SHOW_STIMULUS, _currData);
-//                break;
-//
-//            case BP_CONST.SHOW_FEEDBACK:
-//                post(BP_CONST.SHOW_FEEDBACK, new Integer(correct_Count));
-//                break;
-//
-//            case BP_CONST.SHOW_BUBBLES:
-//                post(BP_CONST.SHOW_BUBBLES);
-//                break;
-//
-//            case BP_CONST.POP_BUBBLE:
-//                post(BP_CONST.POP_BUBBLE, _touchedBubble);
-//                break;
-//
-//            case BP_CONST.WIGGLE_BUBBLE:
-//                post(BP_CONST.WIGGLE_BUBBLE, _touchedBubble);
-//                break;
-//
-//            case BP_CONST.CLEAR_CONTENT:
-//                post(BP_CONST.CLEAR_CONTENT, _touchedBubble);
-//                break;
-        }
+        post(event, delay);
     }
 
+    public void postEvent(String event, String param, Integer delay) {
+
+        post(event, param, delay);
+    }
 
     public void pointAtEraseButton() {
         super.pointAtEraseButton();
     }
 
-
     public void highlightFields() {
         super.highlightFields();
     }
 
-
     public void clear() { super.clear(); }
+
+    // TODO: Should renanme this to "enable"
+    public void inhibitInput(Boolean inhibit) { super.inhibitInput(inhibit); }
 
 
     // Tutor methods  End
@@ -252,6 +223,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     // Execute script target if behavior is defined for this event
     //
+    @Override
     public boolean applyBehavior(String event) {
 
         boolean result = false;
@@ -267,6 +239,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                 result = true;
 
             } else if (stickyMap.containsKey(event)) {
+
                 applyBehaviorNode(stickyMap.get(event));
 
                 result = true;
@@ -282,6 +255,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
      *
      * @param nodeName
      */
+    @Override
     public void applyBehaviorNode(String nodeName) {
         IScriptable2 obj = null;
 
@@ -291,8 +265,25 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                 obj = mTutor.getScope().mapSymbol(nodeName);
 
                 if (obj != null) {
-                    obj.preEnter();
-                    obj.applyNode();
+
+                    switch(obj.getType()) {
+
+                        case TCONST.SUBGRAPH:
+
+                            mTutor.getSceneGraph().post(this, TCONST.SUBGRAPH_CALL, nodeName);
+                            break;
+
+                        case TCONST.MODULE:
+
+                            // Disallow module "calls"
+                            Log.e(TAG, "MODULE Behaviors are not supported");
+                            break;
+
+                        default:
+                            obj.preEnter();
+                            obj.applyNode();
+                            break;
+                    }
                 }
 
             } catch (Exception e) {
@@ -309,7 +300,125 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     //************************************************************************
     //************************************************************************
+    // publish component state data - START
+
+    @Override
+    protected void publishState() {
+
+        retractFeature(WR_CONST.ERROR_METRIC);
+        retractFeature(WR_CONST.ERROR_CHAR);
+        retractFeature(TCONST.GENERIC_RIGHT);
+        retractFeature(TCONST.GENERIC_WRONG);
+
+        if(_isValid) {
+
+            publishFeature(TCONST.GENERIC_RIGHT);
+        }
+        else {
+
+            publishFeature(TCONST.GENERIC_WRONG);
+
+            if(!_metricValid) {
+                publishFeature(WR_CONST.ERROR_METRIC);
+            }
+            if(!_charValid) {
+                publishFeature(WR_CONST.ERROR_CHAR);
+            }
+        }
+    }
+
+    @Override
+    public void publishValue(String varName, String value) {
+
+        // update the response variable  "<ComponentName>.<varName>"
+        mTutor.getScope().addUpdateVar(name() + varName, new TString(value));
+
+    }
+
+    @Override
+    public void publishValue(String varName, int value) {
+
+        // update the response variable  "<ComponentName>.<varName>"
+        mTutor.getScope().addUpdateVar(name() + varName, new TInteger(value));
+
+    }
+
+    @Override
+    public void publishFeature(String feature) {
+
+        trackFeatures(feature);
+
+        _FeatureMap.put(feature, true);
+        mTutor.setAddFeature(feature);
+    }
+
+    /**
+     * Note that we may retract features before they're published to add them to the
+     * FeatureSet that should be pushed/popped when using pushDataSource
+     * e.g. we want EOD to track even if it has never been set
+     *
+     * @param feature
+     */
+    @Override
+    public void retractFeature(String feature) {
+
+        trackFeatures(feature);
+
+        _FeatureMap.put(feature, false);
+        mTutor.setDelFeature(feature);
+    }
+
+    /**
+     * _FeatureSet keeps track of used features
+     *
+     * @param feature
+     */
+    private void trackFeatures(String feature) {
+
+        if(_FeatureSet.indexOf(feature) == -1)
+        {
+            _FeatureSet.add(feature);
+        }
+    }
+
+    // publish component state data - EBD
+    //************************************************************************
+    //************************************************************************
+
+
+    //************************************************************************
+    //************************************************************************
     // DataSink Implementation Start
+
+
+    /**
+     *
+     * @param dataPacket
+     */
+    public void pushDataSource(String dataPacket) {
+
+        if(dataSource != null) {
+            _dataStack.add(new CDataSourceImg());
+        }
+
+        setDataSource(dataPacket);
+    }
+
+
+    /**
+     *
+     */
+    public void popDataSource() {
+
+        int popIndex = _dataStack.size()-1;
+
+        if(popIndex >= 0) {
+            CDataSourceImg popped = _dataStack.get(popIndex);
+            popped.restoreDataSource();
+            _dataStack.remove(popIndex);
+        }
+    }
+
 
     /**
      *
@@ -320,9 +429,10 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         _correct = 0;
         _wrong   = 0;
 
-        mTutor.setDelFeature(TCONST.ALL_CORRECT);
-        mTutor.setDelFeature(TCONST.FWCORRECT);
-        mTutor.setDelFeature(TCONST.FWINCORRECT);
+        retractFeature(TCONST.FTR_EOI);
+        retractFeature(TCONST.ALL_CORRECT);
+        retractFeature(TCONST.FWCORRECT);
+        retractFeature(TCONST.FWINCORRECT);
 
         try {
             if (dataPacket.startsWith(TCONST.SOURCEFILE)) {
@@ -361,9 +471,9 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     public void next() {
 
-        mTutor.setDelFeature(TCONST.ALL_CORRECT);
-        mTutor.setDelFeature(TCONST.FWCORRECT);
-        mTutor.setDelFeature(TCONST.FWINCORRECT);
+        retractFeature(TCONST.ALL_CORRECT);
+        retractFeature(TCONST.FWCORRECT);
+        retractFeature(TCONST.FWINCORRECT);
 
         super.next();
 
@@ -379,8 +489,83 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         }
     }
 
+    class CDataSourceImg {
+
+        private int  _wrongStore   = 0;
+        private int  _correctStore = 0;
+
+        private HashMap<String,Boolean> _FeatureStore;
+
+        protected List<String>  _dataStore;
+        protected int           _dataIndexStore;
+        protected boolean       _dataEOIStore;
+
+        String[]                _dataSourceStore;
+
+        public CDataSourceImg() {
+
+            _correctStore    = _correct;
+            _wrongStore      = _wrong;
+
+            _dataStore       = _data;
+            _dataIndexStore  = _dataIndex;
+            _dataEOIStore    = _dataEOI;
+
+            _FeatureStore    = _FeatureMap;
+            _dataSourceStore = dataSource;
+
+            for(String feature : _FeatureSet) {
+                mTutor.setDelFeature(feature);
+            }
+
+        }
+
+        public void restoreDataSource() {
+
+            _correct = _correctStore;
+            _wrong   = _wrongStore;
+
+            _data      = _dataStore;
+            _dataIndex = _dataIndexStore;
+            _dataEOI   = _dataEOIStore;
+
+            _FeatureMap= _FeatureStore;
+            dataSource = _dataSourceStore;
+
+            for(String feature : _FeatureSet) {
+                if(_FeatureMap.get(feature)) {
+                    mTutor.setAddFeature(feature);
+                }
+                else {
+                    mTutor.setDelFeature(feature);
+                }
+            }
+        }
+    }
+
 
     // DataSink IMplementation End
+    //************************************************************************
+    //************************************************************************
+
+
+    //************************************************************************
+    //************************************************************************
+    // IEventSource Interface START
+
+
+    @Override
+    public String getEventSourceName() {
+        return name();
+    }
+
+    @Override
+    public String getEventSourceType() {
+        return "Writing_Component";
+    }
+
+
+    // IEventSource Interface END
     //************************************************************************
     //************************************************************************
 

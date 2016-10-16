@@ -62,8 +62,9 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private boolean               _inhibit    = false;
 
     private IWritingComponent     mWritingComponent;
-    private IGlyphController      mInputController;
+    private IGlyphController      mGlyphController;
     private CLinkedScrollView     mScrollView;
+    private Boolean               _touchStarted = false;
 
     private Paint                 mPaint;
     private Paint                 mPaintBG;
@@ -258,10 +259,10 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     }
 
 
-    public void setInputManager(IGlyphController inputManager) {
+    public void setInputManager(IGlyphController glyphController) {
 
         // We use callbacks on the parent control
-        mInputController = inputManager;
+        mGlyphController = glyphController;
     }
 
     public void setLinkedScroll(CLinkedScrollView linkedScroll) {
@@ -277,16 +278,22 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private void startTouch(float x, float y) {
         PointF p;
 
+        if(!_touchStarted) {
+
+            _touchStarted = true;
+            mWritingComponent.applyBehavior(WR_CONST.ON_START_WRITING);
+
+            // This is to support immediate feedback
+            //
+            mWritingComponent.scanForPendingRecognition(mGlyphController);
+        }
+
         if (_counter != null)
             _counter.cancel();
 
         // Set pending flag - Used to initiate recognition when moving between fields
         //
         _recPending = true;
-
-        // This is to support immediate feedback
-        //
-        mWritingComponent.scanForPendingRecognition(mInputController);
 
         // We always add the next stoke start to the glyph set
 
@@ -325,13 +332,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
            refreshDrawableState();
            invalidate();
         }
-    }
-
-
-    private void updateGlyphState() {
-
-        if(mInputController != null)
-            mInputController.setGlyphStatus(_correct, mHasGlyph);
     }
 
 
@@ -771,6 +771,11 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     }
 
 
+    public void hideUserGlyph() {
+        _showUserGlyph = false;
+        invalidate();
+    }
+
     public void replayGlyph(String replayTarget) {
 
         if(!isPlaying) {
@@ -796,6 +801,10 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             }
 
             if(_animGlyph != null) {
+
+                // Ensure this field is visible.
+                //
+                mWritingComponent.autoScroll(mGlyphController);
 
                 switch (_animGlyph.getDrawnState()) {
 
@@ -932,12 +941,19 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
     public boolean toggleSampleChar() {
 
-        _showSampleChar = !_showSampleChar;
+        showSampleChar(!_showSampleChar);
 
         rebuildGlyph();
         invalidate();
 
         return _showSampleChar;
+    }
+
+
+    public void showSampleChar(boolean show) {
+
+        _showSampleChar = show;
+        invalidate();
     }
 
 
@@ -948,9 +964,9 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         // Show the save button for dirty protoglyphs - i.e. changed but unsaved
         //
-        if(mInputController != null) {
+        if(mGlyphController != null) {
             boolean isDirty = (_protoGlyph != null)? _protoGlyph.getDirty():false;
-            mInputController.setProtoTypeDirty(_showProtoGlyph ?  isDirty: false);
+            mGlyphController.setProtoTypeDirty(_showProtoGlyph ?  isDirty: false);
         }
 
         rebuildGlyph();
@@ -1095,12 +1111,20 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
     public void erase() {
 
+        // Reset the flag so onStartWriting events will fire
+        //
+        _touchStarted = false;
+
         // This can be set by a feedback mode - so we always resest it when clearing
         _showSampleChar = false;
         _showUserGlyph  = true;
 
         clear();
         setOnTouchListener(this);
+    }
+
+    public boolean getGlyphStarted() {
+        return _touchStarted;
     }
 
 
@@ -1114,8 +1138,8 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             _protoGlyph = null;
 
         // Remove the save button
-        if(mInputController != null)
-            mInputController.setProtoTypeDirty(false);
+        if(mGlyphController != null)
+            mGlyphController.setProtoTypeDirty(false);
 
         _glyphColor = TCONST.colorMap.get(TCONST.COLORNORMAL);
 
@@ -1126,8 +1150,22 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         _drawGlyph  = null;
         setHasGlyph(false);
         invalidate();
+    }
 
-        updateGlyphState();
+
+    public void updateCorrectStatus(boolean correct) {
+
+        _correct = correct;
+
+        if(correct) {
+
+            _glyphColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
+        }
+        else {
+            _glyphColor = TCONST.colorMap.get(TCONST.COLORWRONG);
+        }
+
+        invalidate();
     }
 
 
@@ -1183,6 +1221,9 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             //
             _drawGlyph.terminateGlyph();
 
+            // This can be  used to generate protoglyph samples -
+            // This is where we define either the user or proto glyph as what was just drawn.
+            //
             if(_showUserGlyph)
                 _userGlyph = _drawGlyph;
             else {
@@ -1191,8 +1232,8 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
                 // Show the save button for this glyph
                 //
-                if(mInputController != null)
-                    mInputController.setProtoTypeDirty(true);
+                if(mGlyphController != null)
+                    mGlyphController.setProtoTypeDirty(true);
             }
 
             setHasGlyph(true);
@@ -1250,9 +1291,9 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         @Override
         public void onFinish() {
 
-            // TODO: DEBUG TEST
+            // Ensure the next field is visible.
             //
-            mWritingComponent.autoScroll(mInputController);
+            mWritingComponent.autoScroll(mGlyphController);
 
             firePendingRecognition();
         }
@@ -1274,7 +1315,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             _protoGlyph.saveGlyphPrototype("SHAPEREC_ALPHANUM", "", _sampleExpected, _sampleExpected);
             _protoGlyph.setDirty(false);
 
-            mInputController.setProtoTypeDirty(false);
+            mGlyphController.setProtoTypeDirty(false);
         }
     }
 
@@ -1316,50 +1357,22 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         //
         _ltkPlusResult = _ltkPlusCandidates[0].getRecChar();
 
-        // Depending upon the result we allow the controller to disable other fields if it is working
-        // in Immediate feedback mode
-        //
-        if(_sampleExpected.equals(_ltkPlusResult)) {
-
-            mWritingComponent.inhibitInput(mInputController, false);
-            _glyphColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
-            _correct    = true;
-        }
-        else {
-            mWritingComponent.inhibitInput(mInputController, true);
-            _glyphColor = TCONST.colorMap.get(TCONST.COLORWRONG);
-            _correct    = false;
-        }
-
-        // Stop listening to touch events - when there is a glyph - whether or not it's right or wrong
-        //
-        setOnTouchListener(null);
-        updateGlyphState();
-
-        // Reconstitute the path in the correct orientation after LTK+ post-processing
-        //
-        rebuildGlyph();
-        invalidate();
-
         // TODO: check for performance issues and run this in a separate thread if required.
         //
         if(mLogGlyphs)
             _drawGlyph.writeGlyphToLog("SHAPEREC_ALPHANUM", "", _sampleExpected, _ltkPlusResult);
 
-        // Let anyone interested know there is a new recognition set available
-        //bManager.sendBroadcast(new Intent(RECMSG));
+        mWritingComponent.updateStatus((IGlyphController) mGlyphController, _ltkPlusCandidates);
 
-        mWritingComponent.updateResponse((IGlyphController) mInputController, _ltkPlusResult);
+        // Stop listening to glyph draw events - when there is a glyph - independent of being correct
+        // Update the controller buttons
+        //
+        setOnTouchListener(null);
 
-        // TODO: DEBUG TEST
-        if(!_correct) {
-            animateOverlay();
-            _showSampleChar = true;
-        }
-        else {
-//            _showUserGlyph = false;
-//            replayGlyph();
-        }
+        // Reconstitute the path in the correct orientation after LTK+ post-processing
+        //
+        rebuildGlyph();
+        invalidate();
     }
 
     @Override
