@@ -77,7 +77,7 @@ public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.
     public void onClick(View v) {
         mLangState    = !mLangState;
 
-        CTutorEngine.changeDefaultLanguage(mLangState? TCONST.LANG_EN: TCONST.LANG_SW);
+        CTutorEngine.setDefaultLanguage(mLangState? TCONST.LANG_EN: TCONST.LANG_SW);
     }
 
     //**********************************************************
