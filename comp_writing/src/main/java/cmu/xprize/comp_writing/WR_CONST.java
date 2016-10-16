@@ -23,10 +23,10 @@ public class WR_CONST {
     public static final String ON_ERASE                 = "ON_ERASE";
     public static final String POINT_AT_ERASE_BUTTON    = "POINT_AT_ERASE_BUTTON";
 
-    public static final String ATTEMPT1                 = "FTR_ATTEMPT_1";
-    public static final String ATTEMPT2                 = "FTR_ATTEMPT_2";
-    public static final String ATTEMPT3                 = "FTR_ATTEMPT_3";
-    public static final String ATTEMPT4                 = "FTR_ATTEMPT_4";
+    public static final String FTR_ATTEMPT_1            = "FTR_ATTEMPT_1";
+    public static final String FTR_ATTEMPT_2            = "FTR_ATTEMPT_2";
+    public static final String FTR_ATTEMPT_3            = "FTR_ATTEMPT_3";
+    public static final String FTR_ATTEMPT_4            = "FTR_ATTEMPT_4";
 
     public static final String ACTION_COMPLETE          = "ACTION_COMPLETE";
     public static final String RIPPLE_REPLAY            = "RIPPLE_REPLAY";
@@ -51,12 +51,16 @@ public class WR_CONST {
     public static final String DEMO_PROTOGLYPH          = "DEMO_PROTOGLYPH";
     public static final String ANIMATE_PROTOGLYPH       = "ANIMATE_PROTOGLYPH";
     public static final String HIDE_SAMPLE              = "HIDE_SAMPLE";
+    public static final String HIDE_GLYPHS              = "HIDE_GLYPHS";
+    public static final String HIDE_SAMPLES             = "HIDE_SAMPLES";
+    public static final String INHIBIT_OTHERS           = "INHIBIT_OTHERS";
+    public static final String CLEAR_ATTEMPT            = "CLEAR_ATTEMPT";
 
-    public static final String CANDIDATE_VAR            = "candidate";
-    public static final String SAMPLE_VAR               = "sample";
+    public static final String CANDIDATE_VAR            = ".candidate";
+    public static final String EXPECTED_VAR             = ".expected";
 
     public static final String FTR_INPUT_STALLED        = "FTR_INPUT_STALLED";
-    public static final String HIDE_GLYPHS              = "HIDE_GLYPHS";
     public static final String FTR_HAD_ERRORS           = "FTR_HAD_ERRORS";
+
 }
 

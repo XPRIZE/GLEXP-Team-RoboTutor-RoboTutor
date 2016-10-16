@@ -335,13 +335,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     }
 
 
-    private void updateControllerState() {
-
-        if(mGlyphController != null)
-            mGlyphController.setGlyphStatus(_correct, mHasGlyph);
-    }
-
-
     /**
      * Flag to indicate the last glyph in the input string - used to limit the baseline length
      *
@@ -809,6 +802,10 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
             if(_animGlyph != null) {
 
+                // Ensure this field is visible.
+                //
+                mWritingComponent.autoScroll(mGlyphController);
+
                 switch (_animGlyph.getDrawnState()) {
 
                     case TCONST.STROKE_ORIGINAL:
@@ -956,6 +953,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     public void showSampleChar(boolean show) {
 
         _showSampleChar = show;
+        invalidate();
     }
 
 
@@ -1152,8 +1150,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         _drawGlyph  = null;
         setHasGlyph(false);
         invalidate();
-
-        updateControllerState();
     }
 
 
@@ -1295,7 +1291,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         @Override
         public void onFinish() {
 
-            // TODO: DEBUG TEST
+            // Ensure the next field is visible.
             //
             mWritingComponent.autoScroll(mGlyphController);
 
@@ -1372,7 +1368,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         // Update the controller buttons
         //
         setOnTouchListener(null);
-        updateControllerState();
 
         // Reconstitute the path in the correct orientation after LTK+ post-processing
         //

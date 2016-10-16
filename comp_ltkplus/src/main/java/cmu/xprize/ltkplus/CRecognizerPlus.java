@@ -599,7 +599,7 @@ public class CRecognizerPlus implements IGlyphSink {
                 // Generate the dimensional metrics for the given candidate char
                 // Generate the visual comparison metric for the given char
                 //
-                metric.calcMetrics(_drawGlyph, glyphVisualBnds, candCharBnds, (sampleIndex != GCONST.EXPECT_NONE)? compCharBnds:candCharBnds , GCONST.STROKE_WEIGHT);
+                metric.calcMetrics(_drawGlyph, glyphVisualBnds, candCharBnds, _viewBnds, (sampleIndex != GCONST.EXPECT_NONE)? compCharBnds:candCharBnds , GCONST.STROKE_WEIGHT);
 
                 candidate.setVisualConfidence(metric.generateVisualMetric(_fontBnds, candChar, (sampleIndex != GCONST.EXPECT_NONE)? _sampleExpected:candChar, _drawGlyph, _Paint, GCONST.CALIBRATED_WEIGHT, TCONST.VOLATILE));
 
@@ -699,7 +699,7 @@ public class CRecognizerPlus implements IGlyphSink {
             // Generate the dimensional metrics for the given candidate char
             // Generate the visual comparison metric for the given char
             //
-            metric.calcMetrics(_drawGlyph, glyphVisualBnds, candCharBnds, (sampleIndex != GCONST.EXPECT_NONE)? compCharBnds:candCharBnds , GCONST.STROKE_WEIGHT);
+            metric.calcMetrics(_drawGlyph, glyphVisualBnds, candCharBnds, _viewBnds, (sampleIndex != GCONST.EXPECT_NONE)? compCharBnds:candCharBnds , GCONST.STROKE_WEIGHT);
 
             candidate.setVisualConfidence(metric.generateVisualMetric(_fontBnds, candChar, (sampleIndex != GCONST.EXPECT_NONE)? _sampleExpected:candChar, _drawGlyph, _Paint, GCONST.CALIBRATED_WEIGHT, TCONST.VOLATILE));
         }

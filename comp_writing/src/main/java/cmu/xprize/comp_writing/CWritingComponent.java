@@ -140,10 +140,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         setClipChildren(false);
 
-        _attemptFTR.add(WR_CONST.ATTEMPT1);
-        _attemptFTR.add(WR_CONST.ATTEMPT2);
-        _attemptFTR.add(WR_CONST.ATTEMPT3);
-        _attemptFTR.add(WR_CONST.ATTEMPT4);
+        _attemptFTR.add(WR_CONST.FTR_ATTEMPT_1);
+        _attemptFTR.add(WR_CONST.FTR_ATTEMPT_2);
+        _attemptFTR.add(WR_CONST.FTR_ATTEMPT_3);
+        _attemptFTR.add(WR_CONST.FTR_ATTEMPT_4);
 
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(getContext());
@@ -320,8 +320,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         CRecResult          candidate      = _ltkPlusCandidates[0];
         CStimulusController stimController = (CStimulusController)mRecogList.getChildAt(mActiveIndex);
 
-        publishValue(WR_CONST.CANDIDATE_VAR, candidate.getRecChar());
-        publishValue(WR_CONST.SAMPLE_VAR, candidate.getRecChar());
+        publishValue(WR_CONST.CANDIDATE_VAR, candidate.getRecChar().toUpperCase());
+        publishValue(WR_CONST.EXPECTED_VAR, mActiveController.getExpectedChar().toUpperCase());
 
         _charValid   = stimController.testStimulus( candidate.getRecChar());
         _metricValid = _metric.testConstraint(candidate.getGlyph());
@@ -351,10 +351,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 applyBehavior(WR_CONST.ON_ERROR);
 
-                if (!_charValid)
-                    applyBehavior(WR_CONST.ON_CHAR_ERROR);
-                else if (!_metricValid)
-                    applyBehavior(WR_CONST.ON_GLYPH_ERROR);
+//                if (!_charValid)
+//                    applyBehavior(WR_CONST.ON_CHAR_ERROR);
+//                else if (!_metricValid)
+//                    applyBehavior(WR_CONST.ON_GLYPH_ERROR);
             }
             else {
                 updateStalledStatus();
@@ -381,11 +381,17 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
-    private void updateAttemptFeature() {
+    private void clearAttemptFeature() {
 
         for (String attempt : _attemptFTR) {
             retractFeature(attempt);
         }
+    }
+
+
+    private void updateAttemptFeature() {
+
+        clearAttemptFeature();
 
         int attempt = mActiveController.incAttempt();
 
@@ -510,6 +516,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 mDrawnScroll.smoothScrollTo(calcOffsetToMakeGlyphVisible(sx, padding), 0);
                 mDrawnScroll.releaseInitiatorStatus();
             }
+            else if(sx > gx) {
+
+                mDrawnScroll.captureInitiatorStatus();
+                mDrawnScroll.smoothScrollTo(gx, 0);
+                mDrawnScroll.releaseInitiatorStatus();
+            }
+
         }
     }
 
@@ -546,7 +559,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
-    public void rippleHide() {
+    public void hideGlyphs() {
 
         CGlyphController   v;
 
@@ -555,6 +568,19 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             v = (CGlyphController) mGlyphList.getChildAt(i1);
 
             v.hideUserGlyph();
+        }
+    }
+
+
+    public void hideSamples() {
+
+        CGlyphController   v;
+
+        for(int i1 = 0; i1 < mGlyphList.getChildCount() ; i1++) {
+
+            v = (CGlyphController) mGlyphList.getChildAt(i1);
+
+            v.showSampleChar(false);
         }
     }
 
@@ -650,6 +676,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     glyphController.inhibitInput(inhibit);
                 }
             }
+        }
+    }
+
+    public void showEraseButton(Boolean show) {
+
+        if(mActiveController != null) {
+            mActiveController.showEraseButton(show);
         }
     }
 
@@ -1018,7 +1051,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 switch(_command) {
 
                     case WR_CONST.HIDE_GLYPHS:
-                        rippleHide();
+                        hideGlyphs();
+                        break;
+
+                    case WR_CONST.HIDE_SAMPLES:
+                        hideSamples();
                         break;
 
                     case WR_CONST.RIPPLE_HIGHLIGHT:
@@ -1029,6 +1066,19 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     case WR_CONST.HIGHLIGHT_NEXT:
 
                         highlightNext();
+                        break;
+
+                    case WR_CONST.INHIBIT_OTHERS:
+
+                        inhibitInput(mActiveController, true);
+                        break;
+
+                    case WR_CONST.CLEAR_ATTEMPT:
+                        // Clear attempt after correct behavior so it can use it to determine on
+                        // which attempt they succeeded - We don't want this persisting if they
+                        // subsequently keep getting them correct
+                        //
+                        clearAttemptFeature();
                         break;
 
                     case TCONST.APPLY_BEHAVIOR:

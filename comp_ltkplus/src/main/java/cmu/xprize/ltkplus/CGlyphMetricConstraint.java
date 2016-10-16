@@ -90,26 +90,27 @@ public class CGlyphMetricConstraint {
 
         boolean result = false;
 
-        // Check for any metric that violates the constraint
+        // Check for any metric that violates the constraint - The CG? deltas are relative to the
+        // size of the draw box.
         //
-        if(metric.getDeltaX() > XConst) {
-            Log.d("Metric", "X - Violation : " + (metric.getDeltaX()-XConst));
+        if(metric.getDeltaCGX() > XConst) {
+            Log.d("Metrics", "X - Violation : " + (metric.getDeltaCGX()-XConst));
             result = true;
         }
-        if(metric.getDeltaY() > YConst) {
-            Log.d("Metric", "Y - Violation : " + (metric.getDeltaY()-YConst));
+        if(metric.getDeltaCGY() > YConst) {
+            Log.d("Metrics", "Y - Violation : " + (metric.getDeltaCGY()-YConst));
             result = true;
         }
-        if(metric.getDeltaW() > WConst) {
-            Log.d("Metric", "W - Violation : " + (metric.getDeltaW()-WConst));
+        if(metric.getDeltaCGW() > WConst) {
+            Log.d("Metrics", "W - Violation : " + (metric.getDeltaCGW()-WConst));
             result = true;
         }
-        if(metric.getDeltaH() > HConst) {
-            Log.d("Metric", "H - Violation : " + (metric.getDeltaH()-HConst));
+        if(metric.getDeltaCGH() > HConst) {
+            Log.d("Metrics", "H - Violation : " + (metric.getDeltaCGH()-HConst));
             result = true;
         }
         if(metric.getDeltaA() > aspRConst) {
-            Log.d("Metric", "Aspect - Violation : " + (metric.getDeltaA()-aspRConst));
+            Log.d("Metrics", "Aspect - Violation : " + (metric.getDeltaA()-aspRConst));
             result = true;
         }
 

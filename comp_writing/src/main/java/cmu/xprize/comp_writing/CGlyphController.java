@@ -218,14 +218,19 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         public void onClick(View v) {
 
             eraseGlyph();
+            resetState();
+
+            mWritingComponent.applyBehavior(WR_CONST.ON_ERASE);
         }
     }
 
     public void eraseGlyph() {
 
         mGlyphInput.erase();
+    }
 
-        mWritingComponent.applyBehavior(WR_CONST.ON_ERASE);
+
+    public void resetState() {
 
         // TODO: this is a test of one feedback modality - in Immediate feeback mode
         // TODO: Here, clearing the bad entry allows them complete access again.
@@ -264,6 +269,10 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         mGlyphInput.setExpectedChar(protoChar);
     }
 
+    public String getExpectedChar() {
+        return mGlyphInput.getExpectedChar();
+    }
+
     public void hideUserGlyph() {
         mGlyphInput.hideUserGlyph();
     }
@@ -290,17 +299,11 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     }
 
 
-    public void setGlyphStatus(boolean validGlyph, boolean hasGlyph) {
+    public void showEraseButton(boolean show) {
 
         // Ensure it's off - then make a decision on visibility based on state
         //
-        mEraseGlyphBut.setVisibility(INVISIBLE);
-
-        // We may always allow users to erase the glyph or we may only allow erasure when incorrect
-        //
-        if(_allowEraseCorrect || (hasGlyph && !validGlyph)) {
-            mEraseGlyphBut.setVisibility(VISIBLE);
-        }
+        mEraseGlyphBut.setVisibility(show? VISIBLE:INVISIBLE);
     }
 
     @Override
@@ -380,10 +383,8 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
 
     public void inhibitInput(boolean inhibit) {
 
-        // En/Disable the buttons and glyph field
+        // En/Disable the glyph field
         //
-        enableButtons(!inhibit);
-
         mGlyphInput.inhibitInput(inhibit);
     }
 

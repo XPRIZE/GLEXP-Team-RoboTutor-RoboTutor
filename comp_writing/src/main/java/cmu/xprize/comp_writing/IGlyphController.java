@@ -16,7 +16,11 @@ public interface IGlyphController {
 
     public void setLinkedScroll(CLinkedScrollView linkedScroll);
     public void setItemGlyph(int index, int glyph);
-    public void setGlyphStatus(boolean validGlyph, boolean hasGlyph);
+
+    public void setExpectedChar(String sample);
+    public String getExpectedChar();
+
+    public void showEraseButton(boolean show);
 
     public boolean hasError();
     public boolean hasGlyph();

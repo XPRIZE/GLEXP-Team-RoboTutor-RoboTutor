@@ -63,6 +63,31 @@
           }
         },
 
+
+        "ERASE_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "COMMENT": "glyph metrics have been violated",
+          "rootnode": "ERASE_MODULE",
+
+          "nodeMap": {
+
+            "ERASE_MODULE": {
+              "type": "MODULE",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+                {"type": "COMMAND", "id": "word_copy", "method": "cancelPost",      "parms": "ERASE_BUTTON_PROMPT:String", "features":""},
+                {"type": "COMMAND", "id": "word_copy", "method": "showEraseButton", "parms": "FALSE:Boolean",              "features":""}
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+
         "GENERAL_CORRECT_BEHAVIOR": {
           "type": "SUBGRAPH",
           "rootnode": "CORRECT_BEHAVIOR_MODULE",
@@ -75,9 +100,17 @@
               "preenter": [],
               "reuse": true,
               "tracks": [
+                // clean up after tracing - hide the sample and ensure the other fields are re-enabled
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "HIDE_SAMPLE:String",  "features":""},
+                {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput",        "parms": "FALSE:Boolean",       "features":""},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","soundpackage": "default","mode": "flow", "features": "FTR_ATTEMPT_4"},
+
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "HIGHLIGHT_NEXT:String|0:Integer",    "features":"FTR_INPUT_STALLED"},
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "HIGHLIGHT_NEXT:String|500:Integer",  "features":"FTR_INPUT_STALLED"},
-                {"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "HIGHLIGHT_NEXT:String|1000:Integer", "features":"FTR_INPUT_STALLED"}
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "HIGHLIGHT_NEXT:String|1000:Integer", "features":"FTR_INPUT_STALLED"},
+
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "CLEAR_ATTEMPT:String",  "features":""}
               ],
               "preexit": [
               ],
@@ -100,27 +133,30 @@
               "reuse": true,
               "tracks": [
 
-                {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "ON_ERASE:String|CANCEL_ERASE_BUTTON_FEEDBACK:String" ,"features":"!FTR_ATTEMPT_4"},
+                {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "ON_ERASE:String|ERASE_BEHAVIOR:String" ,"features":"!FTR_ATTEMPT_4"},
                 {"type": "COMMAND", "id": "word_copy", "method": "postNamed",           "parms": "ERASE_BUTTON_PROMPT:String|APPLY_BEHAVIOR:String|ERASE_HESITATION_FEEDBACK:String|6000:Long",  "features":"!FTR_ATTEMPT_4"},
 
+                {"type": "COMMAND", "id": "word_copy", "method": "showEraseButton",     "parms": "TRUE:Boolean",                           "features":"FTR_ATTEMPT_1"},
                 {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput",        "parms": "TRUE:Boolean",                           "features":"FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
 
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","soundpackage": "default","mode": "flow", "features": "FTR_ATTEMPT_1"},
 
-                {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "ACTION_COMPLETE:String|NEXT_NODE:String" ,"features":"FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "ANIMATE_ALIGN:String",                    "features":"FTR_ATTEMPT_2"},
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "ANIMATE_OVERLAY:String",                  "features":"FTR_ATTEMPT_3"},
 
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "That doesnt look like.mp3", "soundpackage": "default","mode": "flow",   "features": "FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3",   "soundpackage": "default","mode": "stream", "features": "FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "That doesnt look like.mp3",  "soundpackage": "default","mode": "flow",   "features": "FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.expected}}.mp3", "soundpackage": "xprize", "mode": "flow", "features": "FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
 
+                // On iteration 2 / 3 we do a delayed show of the erase button and prompt to retry
+                {"type": "COMMAND", "id": "word_copy", "method": "showEraseButton",     "parms": "TRUE:Boolean",              "features":"FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","soundpackage": "default","mode": "flow", "features":"FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
 
+                // On iteration 4+ we ask them to trace the character.
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "ERASE_GLYPH:String",                  "features":"FTR_ATTEMPT_4"},
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "SHOW_SAMPLE:String",                  "features":"FTR_ATTEMPT_4"},
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "INHIBIT_OTHERS:String",               "features":"FTR_ATTEMPT_4"},
 
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please trace the letter.mp3", "soundpackage": "default","mode": "flow",   "features": "FTR_ATTEMPT_4"},
-
-                {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput",        "parms": "FALSE:Boolean","features":"FTR_ATTEMPT_2|FTR_ATTEMPT_3"}
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please trace the letter.mp3", "soundpackage": "default","mode": "flow",   "features": "FTR_ATTEMPT_4"}
               ],
               "preexit": [
               ],
@@ -189,6 +225,8 @@
 
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "HIDE_GLYPHS:String",                     "features":"FTR_HAD_ERRORS"},
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_PROTO:String",                    "features":"FTR_HAD_ERRORS"},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","soundpackage": "default","mode": "flow", "features": "FTR_HAD_ERRORS"},
 
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "words",  "mode":"flow", "features": ""},
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "Very good.mp3",          "soundpackage": "default","mode":"flow", "features": "!FTR_HAD_ERRORS"},
@@ -525,7 +563,6 @@
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.1.0:String","features":""},
 
         "CANCEL_INPUT_HESITATION_FEEDBACK": {"type": "COMMAND", "id": "word_copy", "method": "cancelPost", "parms": "HESITATION_PROMPT:String",    "features":""},
-        "CANCEL_ERASE_BUTTON_FEEDBACK":     {"type": "COMMAND", "id": "word_copy", "method": "cancelPost", "parms": "ERASE_BUTTON_PROMPT:String",  "features":""},
 
 
         "FW_DISABLE":{"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "TRUE:Boolean","features":""},
@@ -534,7 +571,7 @@
         //enable FingerWriting
 
         // Set the LTK+ metric constraint
-        "SET_CONSTRAINT":{"type": "COMMAND", "id": "word_copy", "method": "setConstraint", "parms": "H,0.45;W,0.45;Y,0.25;X,0.25:String", "features":""},
+        "SET_CONSTRAINT":{"type": "COMMAND", "id": "word_copy", "method": "setConstraint", "parms": "H,0.15;W,0.15;Y,0.10;X,0.15:String", "features":""},
 
         "NEXT_DATA_ITEM":{"type": "COMMAND", "id": "word_copy", "method": "next" ,"features":""},
         //get a new digit from the list.

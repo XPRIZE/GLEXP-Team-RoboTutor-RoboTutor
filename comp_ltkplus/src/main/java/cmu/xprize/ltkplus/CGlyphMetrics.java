@@ -32,10 +32,15 @@ import cmu.xprize.util.TCONST;
 
 public class CGlyphMetrics {
 
-    private float PosVarV;
-    private float SizVarV;
-    private float PosVarH;
+    private float CGVarX;
+    private float CGVarY;
+    private float CGVarW;
+    private float CGVarH;
+
+    private float PosVarY;
     private float SizVarH;
+    private float PosVarX;
+    private float SizVarW;
     private float aspectPr;
     private float aspectGl;
     private float aspectVar;
@@ -74,13 +79,30 @@ public class CGlyphMetrics {
     }
 
 
-    public void calcMetrics(CGlyph currentGlyph, RectF glyphBnds, Rect protoBnds, Rect expectBnds, float STROKE_WEIGHT) {
+    public void calcMetrics(CGlyph currentGlyph, RectF glyphBnds, Rect protoBnds, Rect viewBnds, Rect expectBnds, float STROKE_WEIGHT) {
 
-        PosVarV = Math.abs(protoBnds.top - glyphBnds.top) / expectBnds.height();
-        PosVarH = Math.abs(protoBnds.left - glyphBnds.left) / expectBnds.width();
+        // Calc the center of gravity (center) of the glyph / prototype
 
-        SizVarV = Math.abs(protoBnds.height() - glyphBnds.height()) / expectBnds.height();
-        SizVarH = Math.abs(protoBnds.width() - glyphBnds.width()) / expectBnds.width();
+        float cgx = (glyphBnds.left + glyphBnds.right) / 2;
+        float cgy = (glyphBnds.bottom + glyphBnds.top) / 2;
+
+        float cgpx = (protoBnds.left + protoBnds.right) / 2;
+        float cgpy = (protoBnds.bottom + protoBnds.top) / 2;
+
+        // Calc the relative variance between the glyph and the proto CG as a percentage
+        // of the viewbox
+
+        CGVarX = Math.abs(cgx - cgpx) / viewBnds.width();
+        CGVarY = Math.abs(cgy - cgpy) / viewBnds.height();
+
+        CGVarW = Math.abs(protoBnds.width() - glyphBnds.width()) / viewBnds.width();
+        CGVarH = Math.abs(protoBnds.height() - glyphBnds.height()) / viewBnds.height();
+
+        PosVarY = Math.abs(protoBnds.top - glyphBnds.top) / expectBnds.height();
+        PosVarX = Math.abs(protoBnds.left - glyphBnds.left) / expectBnds.width();
+
+        SizVarH = Math.abs(protoBnds.height() - glyphBnds.height()) / expectBnds.height();
+        SizVarW = Math.abs(protoBnds.width() - glyphBnds.width()) / expectBnds.width();
 
         aspectPr = ((float) protoBnds.width() / (float) protoBnds.height());
         aspectGl = (glyphBnds.width() / glyphBnds.height());
@@ -96,19 +118,19 @@ public class CGlyphMetrics {
 
 
     public String getVerticalDeviation() {
-        return formatFloat(PosVarV);
+        return formatFloat(PosVarY);
     }
 
     public String getHorizontalDeviation() {
-        return formatFloat(PosVarH);
+        return formatFloat(PosVarX);
     }
 
     public String getHeightDeviation() {
-        return formatFloat(SizVarV);
+        return formatFloat(SizVarH);
     }
 
     public String getWidthDeviation() {
-        return formatFloat(SizVarH);
+        return formatFloat(SizVarW);
     }
 
     public String getAspectDeviation() {
@@ -126,17 +148,30 @@ public class CGlyphMetrics {
     public void showDebugBounds(boolean showHide) { DBG = showHide; }
 
 
+    public float getDeltaCGY() {
+        return CGVarY;
+    }
+    public float getDeltaCGX() {
+        return CGVarX;
+    }
+    public float getDeltaCGH() {
+        return CGVarH;
+    }
+    public float getDeltaCGW() {
+        return CGVarW;
+    }
+
     public float getDeltaY() {
-        return PosVarV;
+        return PosVarY;
     }
     public float getDeltaX() {
-        return PosVarH;
+        return PosVarX;
     }
     public float getDeltaH() {
-        return SizVarV;
+        return SizVarH;
     }
     public float getDeltaW() {
-        return SizVarH;
+        return SizVarW;
     }
     public float getDeltaA() {
         return aspectVar;
