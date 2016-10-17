@@ -221,6 +221,7 @@
               "reuse": true,
               "tracks": [
 
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "HIDE_SAMPLE:String",  "features":""},
                 {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|DELAYED_NEXT:String" ,"features":"FTR_HAD_ERRORS"},
 
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "HIDE_GLYPHS:String",                     "features":"FTR_HAD_ERRORS"},

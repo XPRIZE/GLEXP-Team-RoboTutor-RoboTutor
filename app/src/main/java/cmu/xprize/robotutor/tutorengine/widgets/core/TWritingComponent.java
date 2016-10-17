@@ -34,6 +34,8 @@ import java.util.List;
 import cmu.xprize.comp_writing.CWritingComponent;
 import cmu.xprize.comp_writing.WR_CONST;
 import cmu.xprize.ltkplus.CRecognizerPlus;
+import cmu.xprize.robotutor.tutorengine.CMediaController;
+import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.util.IEventSource;
@@ -60,6 +62,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     private CTutor                  mTutor;
     private CSceneDelegate          mTutorScene;
+    private CMediaManager           mMediaManager;
 
     public List<IEventListener>     mListeners          = new ArrayList<IEventListener>();
     protected List<String>          mLinkedViews;
@@ -422,9 +425,9 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     /**
      *
-     * @param dataPacket
+     * @param dataNameDescriptor
      */
-    public void setDataSource(String dataPacket) {
+    public void setDataSource(String dataNameDescriptor) {
 
         _correct = 0;
         _wrong   = 0;
@@ -435,28 +438,37 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         retractFeature(TCONST.FWINCORRECT);
 
         try {
-            if (dataPacket.startsWith(TCONST.SOURCEFILE)) {
-                dataPacket = dataPacket.substring(TCONST.SOURCEFILE.length());
+            if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
-                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataPacket);
+                String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
+
+                // Generate a langauage specific path to the data source -
+                // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
+                // e.g. tutors/word_copy/assets/data/sw/
+                //
+                String dataPath = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS;
+                dataPath += "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+
+                String jsonData = JSON_Helper.cacheData(dataPath + dataFile);
 
                 // Load the datasource in the component module - i.e. the superclass
+                //
                 loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 
                 // Pass the loaded json dataSource array
                 //
                 setDataSource(dataSource);
 
-            } else if (dataPacket.startsWith("db|")) {
-                dataPacket = dataPacket.substring(3);
+            } else if (dataNameDescriptor.startsWith("db|")) {
+                dataNameDescriptor = dataNameDescriptor.substring(3);
 
-            } else if (dataPacket.startsWith("[")) {
+            } else if (dataNameDescriptor.startsWith("[")) {
 
-                dataPacket = dataPacket.substring(1, dataPacket.length()-1);
+                dataNameDescriptor = dataNameDescriptor.substring(1, dataNameDescriptor.length()-1);
 
                 // Pass an array of strings as the data source.
                 //
-                setDataSource(dataPacket.split(","));
+                setDataSource(dataNameDescriptor.split(","));
 
             } else {
                 throw (new Exception("test"));
@@ -479,8 +491,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
         // update the Scope response variable  "<Sstimulus>.value"
         //
-        mTutor.getScope().addUpdateVar(name() + ".value", new TString(mStimulus));
-        mTutor.getScope().addUpdateVar(name() + ".valueUC", new TString(mStimulus.toUpperCase()));
+        publishValue(WR_CONST.VALUE_VAR, mStimulus.toLowerCase());
 
         if(dataExhausted()) {
 
@@ -489,6 +500,11 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         }
     }
 
+
+    /**
+     * This is used to push pop a datasource at run time - i.e. it allows you to switch datasources
+     * on the fly.
+     */
     class CDataSourceImg {
 
         private int  _wrongStore   = 0;
@@ -595,6 +611,11 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     public void setTutor(CTutor tutor) {
         mTutor = tutor;
         mTutorScene.setTutor(tutor);
+
+        // The media manager is tutor specific so we have to use the tutor to access
+        // the correct instance for this component.
+        //
+        mMediaManager = CMediaController.getInstance(mTutor);
     }
 
     @Override

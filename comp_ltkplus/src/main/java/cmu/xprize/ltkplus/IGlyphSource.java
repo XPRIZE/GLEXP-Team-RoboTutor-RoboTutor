@@ -25,8 +25,9 @@ import android.graphics.Rect;
 
 public interface IGlyphSource {
 
-    public void recCallBack(CRecResult[] _ltkCandidates, CRecResult[] _ltkPlusCandidates, int sampleIndex);
+    public boolean recCallBack(CRecResult[] _ltkCandidates, CRecResult[] _ltkPlusCandidates, int sampleIndex);
 
+    public void         erase();
 
     public String       getExpectedChar();
 

@@ -280,6 +280,10 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         if(!_touchStarted) {
 
+            // Set pending flag - Used to initiate recognition when moving between fields
+            //
+            _recPending = true;
+
             _touchStarted = true;
             mWritingComponent.applyBehavior(WR_CONST.ON_START_WRITING);
 
@@ -290,10 +294,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         if (_counter != null)
             _counter.cancel();
-
-        // Set pending flag - Used to initiate recognition when moving between fields
-        //
-        _recPending = true;
 
         // We always add the next stoke start to the glyph set
 
@@ -1111,16 +1111,12 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
     public void erase() {
 
-        // Reset the flag so onStartWriting events will fire
-        //
-        _touchStarted = false;
-
         // This can be set by a feedback mode - so we always resest it when clearing
         _showSampleChar = false;
         _showUserGlyph  = true;
 
         clear();
-        setOnTouchListener(this);
+        inhibitInput(false);
     }
 
     public boolean getGlyphStarted() {
@@ -1142,6 +1138,10 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             mGlyphController.setProtoTypeDirty(false);
 
         _glyphColor = TCONST.colorMap.get(TCONST.COLORNORMAL);
+
+        // Reset the flag so onStartWriting events will fire
+        //
+        _touchStarted = false;
 
         _recPending = false;
         _isDrawing  = false;
@@ -1196,13 +1196,73 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     }
 
 
+    /**
+     * This is used in Immedaite feedback mode when a error occurs in another field.
+     * We inhibit further input and recognition on all other fields and reset the glyph state
+     * on pending fields.
+     */
+    public void inhibitInput(boolean inhibit) {
+
+        _inhibit = inhibit;
+
+        if(_inhibit) {
+
+            Log.d("INHIBIT", "muting: " + _sampleExpected);
+
+            if(_counter != null)
+                _counter.cancel();
+
+            this.setOnTouchListener(null);
+
+            // If user is in the process of writing in this field then clear it.
+            //
+            if(_recPending)
+                    clear();
+        }
+        else {
+            if(!mHasGlyph)
+               this.setOnTouchListener(this);
+
+            Log.d("INHIBIT", "UN-muting: " + _sampleExpected);
+        }
+    }
+
+    public boolean hasGlyph() {
+        return mHasGlyph;
+    }
+
+
+    /**
+     * This is how recognition is initiated - if the user stops writing for a
+     * predefined period we assume they are finished writing.
+     */
+    public class RecogDelay extends CountDownTimer {
+
+        public RecogDelay(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onFinish() {
+
+            // Ensure the next field is visible.
+            //
+            mWritingComponent.autoScroll(mGlyphController);
+
+            firePendingRecognition();
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            Log.i(TAG, "Tick Done");
+        }
+
+    }
+
+
     // This may be called by a foreign glyphinputcontainer (i.e. not this one) that has started
     // writing in order to initiate recognition on fields that are still pending -
     // i.e. haven't timed out
-    //
-    // Note that this makes the assumption that the recognizer keeps ahead of the user - i.e.
-    // that they cannot move to more than one successive field before the recognition on the
-    // previous field completes
     //
     public boolean firePendingRecognition() {
 
@@ -1240,69 +1300,11 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             Log.i(TAG, "Recognition Done");
 
             _recognizer.postToQueue(CGlyphInputContainer.this, _drawGlyph);
+
+            result = true;
         }
 
         return result;
-    }
-
-
-    /**
-     * This is used in Immedaite feedback mode when a error occurs in another field.
-     * We inhibit further input and recognition on all other fields and reset the glyph state
-     * on pending fields.
-     */
-    public void inhibitInput(boolean inhibit) {
-
-        _inhibit = inhibit;
-
-        if(_inhibit) {
-
-            if(_counter != null)
-                _counter.cancel();
-
-            this.setOnTouchListener(null);
-
-            // If user is in the process of writing in this field then clear it.
-            //
-            if(_recPending)
-                    clear();
-        }
-        else {
-            if(!mHasGlyph)
-               this.setOnTouchListener(this);
-        }
-    }
-
-    public boolean hasGlyph() {
-        return mHasGlyph;
-    }
-
-
-    /**
-     * This is how recognition is initiated - if the user stops writing for a
-     * predefined period we assume they are finished writing.
-     */
-    public class RecogDelay extends CountDownTimer {
-
-        public RecogDelay(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-        }
-
-        @Override
-        public void onFinish() {
-
-            // Ensure the next field is visible.
-            //
-            mWritingComponent.autoScroll(mGlyphController);
-
-            firePendingRecognition();
-        }
-
-        @Override
-        public void onTick(long millisUntilFinished) {
-            Log.i(TAG, "Tick Done");
-        }
-
     }
 
 
@@ -1348,8 +1350,9 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     public Paint        getPaint() { return mPaint; }
 
     @Override
-    public void recCallBack(CRecResult[] _ltkCandidates, CRecResult[] _ltkPlusCandidates, int sampleIndex) {
+    public boolean recCallBack(CRecResult[] _ltkCandidates, CRecResult[] _ltkPlusCandidates, int sampleIndex) {
 
+        boolean isValid;
 
         mWritingComponent.updateGlyphStats(_ltkPlusCandidates, _ltkCandidates, _ltkCandidates[sampleIndex].getGlyph().getMetric(), _ltkCandidates[0].getGlyph().getMetric());
 
@@ -1362,17 +1365,18 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         if(mLogGlyphs)
             _drawGlyph.writeGlyphToLog("SHAPEREC_ALPHANUM", "", _sampleExpected, _ltkPlusResult);
 
-        mWritingComponent.updateStatus((IGlyphController) mGlyphController, _ltkPlusCandidates);
+        isValid = mWritingComponent.updateStatus((IGlyphController) mGlyphController, _ltkPlusCandidates);
 
-        // Stop listening to glyph draw events - when there is a glyph - independent of being correct
-        // Update the controller buttons
+        // Stop listening to glyph draw events - when there is a glyph
         //
-        setOnTouchListener(null);
+        inhibitInput(true);
 
         // Reconstitute the path in the correct orientation after LTK+ post-processing
         //
         rebuildGlyph();
         invalidate();
+
+        return isValid;
     }
 
     @Override
@@ -1407,13 +1411,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         fontCharBnds.offsetTo((int) xloc, (int) (_baseLine + fontCharBnds.top));
 
         return fontCharBnds;
-    }
-
-
-    @Override
-    public void setOnTouchListener(OnTouchListener l) {
-        Log.d("TEST", "setonTouch: " + l);
-        super.setOnTouchListener(l);
     }
 
 

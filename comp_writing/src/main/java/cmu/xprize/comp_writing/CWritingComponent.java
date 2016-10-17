@@ -113,11 +113,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     protected LocalBroadcastManager bManager;
 
-
     // json loadable
     public String[]             dataSource;
 
     final private String  TAG        = "CWritingController";
+
 
 
     public CWritingComponent(Context context) {
@@ -311,7 +311,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
-    public void updateStatus(IGlyphController glyphController, CRecResult[] _ltkPlusCandidates) {
+    public boolean updateStatus(IGlyphController glyphController, CRecResult[] _ltkPlusCandidates) {
 
         mActiveController = glyphController;
 
@@ -327,13 +327,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         _metricValid = _metric.testConstraint(candidate.getGlyph());
         _isValid     = _charValid && _metricValid;
 
+        // Update the controller feedback colors
+        //
+        mActiveController.updateCorrectStatus(_isValid);
+        stimController.updateStimulusState(_isValid);
+
         // Depending upon the result we allow the controller to disable other fields if it is working
         // in Immediate feedback mode
         //
-        mActiveController.updateCorrectStatus(_isValid);
         inhibitInput(mActiveController, !_isValid);
-
-        stimController.updateStimulusState(_isValid);
 
         // Fire the appropriate behavior
         //
@@ -362,6 +364,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 applyBehavior(WR_CONST.ON_CORRECT);
             }
         }
+
+        return _isValid;
     }
 
 
@@ -647,6 +651,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             if(glyphController != source) {
 
                 result = glyphController.firePendingRecognition();
+
+                if(result) {
+                    inhibitInput(source, true);
+                }
             }
         }
 
