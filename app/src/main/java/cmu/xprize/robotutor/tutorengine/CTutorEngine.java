@@ -128,8 +128,17 @@ public class CTutorEngine implements ILoadableObject2 {
      * at runtime.
      * @param newLang
      */
-    static public void changeDefaultLanguage(String newLang) {
+    static public void setDefaultLanguage(String newLang) {
         language = newLang;
+    }
+
+
+    /**
+     * This is primarily intended as a development API to allow updating the working language
+     * at runtime.
+     */
+    static public String getDefaultLanguage() {
+        return language;
     }
 
 
