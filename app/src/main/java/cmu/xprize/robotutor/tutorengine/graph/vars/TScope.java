@@ -339,6 +339,7 @@ public class TScope implements IScope2 {
                 //TODO : Manage symbol not found
                 // NOTE: this is not reliably being flushed to LogCat
                 //CErrorManager.logEvent(TAG, "Symbol not found : " + name + " Exception: " , e, false);
+                //System.out.printf( "TScope: Symbol not found : %s Exception:\n" , name);
 
                 // Don't exit
                 Log.e(TAG, "Symbol not found : " + name + " Exception: " + e);

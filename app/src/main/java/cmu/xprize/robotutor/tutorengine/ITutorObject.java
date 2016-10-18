@@ -27,13 +27,13 @@ import cmu.xprize.util.ILogManager;
 public interface ITutorObject {
 
     public void init(Context context, AttributeSet attrs);
+    public void onCreate();
     public void onDestroy();
 
     public void   setName(String name);
     public String name();
 
     public void setParent(ITutorSceneImpl mParent);
-    public void postInflate();
     public void setTutor(CTutor tutor);
     public void setNavigator(ITutorGraph navigator);
     public void setLogManager(ILogManager logManager);

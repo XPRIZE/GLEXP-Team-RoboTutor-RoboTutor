@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cmu.xprize.comp_writing.CWritingDevComponent
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/writingComponent">
+
+    <FrameLayout
+        android:id="@+id/SresponseFrame"
+        app:layout_widthPercent="48%"
+        app:layout_heightPercent="40%">
+
+        <cmu.xprize.util.CLinkedScrollView
+            android:id="@+id/Sresponse"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:scrollbars="none"
+            android:background="@null">
+
+            <LinearLayout
+                android:id="@+id/Srecognized_glyphs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+            </LinearLayout>
+
+        </cmu.xprize.util.CLinkedScrollView>
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:id="@+id/SmetricsFrame1A"
+        app:layout_widthPercent="10%"
+        app:layout_heightPercent="40%"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:padding="10dp"
+        android:layout_toRightOf="@id/SresponseFrame">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:background="#000"
+            android:textColor="#FFF"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:text="LTK+"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Smetrics_LtkPlus"
+            android:padding="5dp"
+            android:background="#00f"
+            android:textColor="#FFF"
+            android:textSize="20sp"
+            android:text="Tap Glyph"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/SmetricsFrame1B"
+        app:layout_widthPercent="10%"
+        app:layout_heightPercent="40%"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:layout_toRightOf="@id/SmetricsFrame1A">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:background="#000"
+            android:textColor="#FFF"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:text="LTK"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Smetrics_Ltk"
+            android:padding="5dp"
+            android:background="#f0f"
+            android:textColor="#FFF"
+            android:textSize="20sp"
+            android:text="Tap Glyph"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/SmetricsVisualA"
+        app:layout_widthPercent="10%"
+        app:layout_heightPercent="40%"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:layout_toRightOf="@id/SmetricsFrame1B">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:background="#000"
+            android:textColor="#FFF"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:text="Visual"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Smetrics_Visual"
+            android:padding="5dp"
+            android:background="#f0f"
+            android:textColor="#FFF"
+            android:textSize="20sp"
+            android:text="Tap Glyph"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/SmetricsFrame2A"
+        app:layout_widthPercent="10%"
+        app:layout_heightPercent="40%"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:layout_toRightOf="@id/SmetricsVisualA">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:background="#000"
+            android:textColor="#FFF"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:text="Proto Fit"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Smetrics_FitA"
+            android:padding="5dp"
+            android:background="#EE8217"
+            android:textColor="#FFF"
+            android:textSize="20sp"
+            android:text="Tap Glyph"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/SmetricsFrame2B"
+        app:layout_widthPercent="10%"
+        app:layout_heightPercent="40%"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:layout_toRightOf="@id/SmetricsFrame2A">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:background="#000"
+            android:textColor="#FFF"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:text="LTK Fit"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Smetrics_FitB"
+            android:padding="5dp"
+            android:background="#EE8217"
+            android:textColor="#FFF"
+            android:textSize="20sp"
+            android:text="Tap Glyph"/>
+    </LinearLayout>
+
+
+    <cmu.xprize.util.CLinkedScrollView
+        android:id="@+id/SfingerWriter"
+        app:layout_heightPercent="60%"
+        android:layout_width="wrap_content"
+        android:scrollbars="none"
+        android:layout_below="@id/SresponseFrame"
+        android:background="@null">
+
+        <LinearLayout
+            android:id="@+id/Sdrawn_glyphs"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:divider="@drawable/drawn_divider"
+            android:showDividers="middle"
+            android:orientation="horizontal"
+            android:animateLayoutChanges="true"
+            android:background="@null">
+        </LinearLayout>
+
+    </cmu.xprize.util.CLinkedScrollView>
+
+
+    <Button
+        android:id="@+id/SshowSample"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Show Sample"
+        android:textSize="16sp"/>
+
+    <Button
+        android:id="@+id/SshowPrototype"
+        android:layout_toRightOf="@+id/SshowSample"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Show Prototype"
+        android:textSize="16sp"/>
+
+    <Button
+        android:id="@+id/SshowBounds"
+        android:layout_toRightOf="@+id/SshowPrototype"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Show Bounds"
+        android:textSize="16sp"/>
+
+    <Spinner
+        android:id="@+id/SfontSelector"
+        android:layout_toRightOf="@+id/SshowBounds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Select Font"
+        android:textSize="24sp"/>
+
+
+
+    <Button
+        android:id="@+id/SboostExpected"
+        android:layout_above="@+id/SfingerWriter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Boost Expected : YES"
+        android:textSize="16sp"/>
+
+    <Button
+        android:id="@+id/SboostPunct"
+        android:layout_toRightOf="@+id/SboostExpected"
+        android:layout_above="@+id/SfingerWriter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Boost Punctuation : NO "
+        android:textSize="16sp"/>
+
+    <Spinner
+        android:id="@+id/SboostClass"
+        android:layout_toRightOf="@+id/SboostPunct"
+        android:layout_above="@+id/SfingerWriter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Boost Class"
+        android:textSize="24sp"/>
+
+
+
+
+</cmu.xprize.comp_writing.CWritingDevComponent>

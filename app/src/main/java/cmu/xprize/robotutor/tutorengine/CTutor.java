@@ -45,6 +45,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CPreferenceCache;
+import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -500,7 +501,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
         // Generate the automation hooks
         automateScene((ITutorSceneImpl) tarScene, scenedata);
 
-        // Parse the JSON onCreate spec data
+        // Parse the JSON spec data for onCreate Commands
         onCreate(scenedata);
 
         return (View) tarScene;
@@ -534,7 +535,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
             while (tObjects.hasNext()) {
                 Map.Entry entry = (Map.Entry) tObjects.next();
 
-                ((ITutorObject) (entry.getValue())).postInflate();
+                ((ITutorObject) (entry.getValue())).onCreate();
             }
         }
         catch(Exception e) {
@@ -547,6 +548,10 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         ITutorObject child;
 
+        // Add the container as well so we can find it in a getViewByName search
+        //
+        childMap.put(tutorContainer.name(), tutorContainer);
+
         int count = ((ViewGroup) tutorContainer).getChildCount();
 
         // Iterate through all children
@@ -556,7 +561,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
                 if(childMap.containsKey(child.name())) {
 
-                    CErrorManager.logEvent(TAG, "ERROR: Duplicate child view in:" + tutorContainer.name(),  new Exception("no-exception"), false);
+                    CErrorManager.logEvent(TAG, "ERROR: Duplicate child view in:" + tutorContainer.name() + " - Duplicate of: " + child.name(),  new Exception("no-exception"), false);
                 }
 
                 childMap.put(child.name(), child);
@@ -585,6 +590,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
         type_action[] createCmds    = _sceneMap.get(scenedata.id).oncreate;
 
         // Can have an empty JSON array - so filter that out
+        //
         if(createCmds != null) {
 
             for (type_action cmd : createCmds) {
@@ -706,8 +712,12 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
 
     // test possibly compound features
+    // TODO: Enhance with fsm
     //
     public boolean testFeatureSet(String featSet) {
+
+        boolean      result = false;
+
         List<String> disjFeat = Arrays.asList(featSet.split("\\|"));   // | Disjunctive features
         List<String> conjFeat;                                          // & Conjunctive features
 
@@ -721,16 +731,21 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         for (String dfeature : disjFeat)
         {
-            conjFeat = Arrays.asList(dfeature.split("\\&"));
+            conjFeat   = Arrays.asList(dfeature.split("\\&"));
+            result = true;
 
             // Check that all conjunctive features are set in fFeatures 
 
             for (String cfeature : conjFeat) {
-                if(testFeature(cfeature))
-                                return true;
+                if(!testFeature(cfeature))
+                    result = false;
             }
+
+            if(result)
+                        break;
         }
-        return false;
+
+        return result;
     }
 
 

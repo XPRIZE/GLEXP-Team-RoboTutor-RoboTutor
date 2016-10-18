@@ -50,6 +50,7 @@ public class TCONST {
     public static final int     MAX_DIGITS      = 4;
     public static final String  NO_DATASOURCE   = "";
     public static final String  DATA_PREFIX     = "DATA_";
+    public static final String DATA_PATH        = "data";
 
     public static final String FW_PREPLISTENER  = "FW_PREPLISTENER";
     public static final String FW_TTS           = "FW_TTS";
@@ -69,17 +70,73 @@ public class TCONST {
     public static final String LAST_ATTEMPT     = "FTR_LASTATTEMPT";
 
 
-    public static final String FONT_FOLDER      = "fonts/";
-    public static final String SHOWICONS        = "SHOWICONS";
-    public static final String SHOWNUM          = "SHOWNUM";
+    public static final String  FONT_FOLDER     = "fonts/";
+    public static final String  SHOWICONS       = "SHOWICONS";
+    public static final String  SHOWNUM         = "SHOWNUM";
+    public static final String  VIEW_SCALED     = "VIEW_SCALED";
+    public static final String  VIEW_NORMAL     = "VIEW_NORMAL";
+    public static final String  VIEW_ANIMATE    = "VIEW_ANIMATE";
+    public static final String  STROKE_ORIGINAL = "STROKE_ORIGINAL";
+    public static final String  STROKE_OVERLAY  = "STROKE_OVERLAY";
+    public static final int     GLYPHCOLOR1     = 0xAA000000;
+    public static final int     FONTCOLOR1      = 0xFF0000FF;
+    public static final int     ERRORCOLOR1     = 0xFFFF0000;
+    public static final boolean VOLATILE        = true;
+    public static final int     DOT_SIZE        = 40;
+    public static final String  CONTAINER_SCALED= "CONTAINER_SCALED";
+
+    public static final String GRUNDSCHRIFT        = "Grundschrift";
+    public static final String GRUNDSCHRIFT_Punkt  = "Grundschrift-Punkt";
+    public static final String GRUNDSCHRIFT_Kontur = "Grundschrift-Kontur";
+
+    public static final String POINTAT             = "POINTAT";
+    public static final String POINTATEND          = "POINTATEND";
+    public static final String POINT_AND_TAP       = "POINTANDTAP";
+    public static final String POINTAT_COMPLETE    = "POINTAT_COMPLETE";
+    public static final String POINT_LIVE          = "POINT_LIVE";
+    public static final String POINT_FADE          = "POINT_FADE";
+    public static final String CANCEL_POINT        = "CANCEL_POINT";
+
+    public static final String FEEDBACK_DELAYED    = "FEEDBACK_DELAYED";
+    public static final String FEEDBACK_IMMEDIATE  = "FEEDBACK_IMMEDIATE";
+
+    public static final String HIGHLIGHT           = "HIGHLIGHT";
+    public static final String SHOW_NORMAL         = "SHOW_NOTMAL";
+
+    public static final float  TRACKER_WEIGHT      = 5f;
+    public static final int    TRACKER_COLOR       = 0x11000088;
+
+
+    static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
+    //
+    // This is used to map "states" to colors
+
+    static {
+        colorMap.put(TCONST.COLORWRONG,  new Integer(0xFFFF0000));
+        colorMap.put(TCONST.COLORERROR,  new Integer(0x44000000));
+        colorMap.put(TCONST.COLORWARNING,new Integer(0xFFFFFF00));
+        colorMap.put(TCONST.COLORRIGHT,  new Integer(0xff0000ff));
+        colorMap.put(TCONST.COLORNORMAL, new Integer(0xff000000));
+        colorMap.put(TCONST.COLORNONE,   new Integer(0x00000000));
+    }
+
+    public static final String COLORINDET          = "indeterminate";
+    public static final String COLORWRONG          = "wrong";
+    public static final String COLORWARNING        = "warning";
+    public static final String COLORRIGHT          = "right";
+    public static final String COLORERROR          = "error";
+    public static final String COLORNORMAL         = "normal";
+    public static final String COLORNONE           = "none";
+
 
     static public HashMap<String, String> fontMap = new HashMap<String, String>();
 
     static {
         fontMap.put("grundschrift",         FONT_FOLDER + "Grundschrift.ttf");
-        fontMap.put("grundschrift_kontur",  FONT_FOLDER + "Grundschrift-Kontur.otf");
-        fontMap.put("grundschrift_punkt",   FONT_FOLDER + "Grundschrift-Punkt.otf");
+        fontMap.put("grundschrift-kontur",  FONT_FOLDER + "Grundschrift-Kontur.otf");
+        fontMap.put("grundschrift-punkt",   FONT_FOLDER + "Grundschrift-Punkt.otf");
     }
+
 
     //*** Reading Tutor compatible string combinations
 
@@ -111,30 +168,30 @@ public class TCONST {
 
     // JSON parameter constants
 
+
     // Loader Constants
+    static final public String TUTORROOT          = "tutors";
 
-    static final public String TUTORROOT       = "tutors";
+    static final public String ALL_ASSETS         = "";
 
-    static final public String ALL_ASSETS      = "";
-    static final public String INSTALL_FLAG    = "projects";          // if projects folder exists - assume installed
+    static final public String LTK_PROJECT_ASSETS = "projects";
+    static final public String LTK_GLYPH_ASSETS   = "glyphs";
 
-    static final public String LTK_ASSETS      = "projects.zip";
-    static final public String LTK_DATA_FILE   = "projects.zip";
-    static final public String LTK_DATA_FOLDER = "/";                 // should terminate in path sep '/'
+    static final public String LTK_PROJEXCTS      = "projects.zip";
+    static final public String LTK_GLYPHS         = "glyphs.zip";
+    static final public String LTK_DATA_FOLDER    = "/";                // should terminate in path sep '/'
 
-    static final public String EDESC           = "engine_descriptor.json";
-    static final public String TDESC           = "tutor_descriptor.json";
-    static final public String SGDESC          = "scene_graph.json";
-    static final public String SNDESC          = "navigator_descriptor.json";
-    static final public String AGDESC          = "animator_graph.json";
-    static final public String TDATA           = "trackdata/LIBRARY";
-    static final public String AUDIOPATH       = "audio";
-    static final public String TASSETS         = "assets";
-    static final public String DEFAULT         = "default";
+    static final public String EDESC              = "engine_descriptor.json";
+    static final public String TDESC              = "tutor_descriptor.json";
+    static final public String SGDESC             = "scene_graph.json";
+    static final public String SNDESC             = "navigator_descriptor.json";
+    static final public String AGDESC             = "animator_graph.json";
+    static final public String TDATA              = "trackdata/LIBRARY";
+    static final public String AUDIOPATH          = "audio";
+    static final public String TASSETS            = "assets";
+    static final public String DEFAULT            = "default";
 
     // CTutorNavigator Constants
-
-
     public static final String ENDTUTOR        = "END_TUTOR";           // Terminate a tutor from within
     public static final String KILLTUTOR       = "KILL_TUTOR";          // Kill a tutor exteranlly
     public static final String CONTINUETUTOR   = "CONTINUE_TUTOR";
@@ -149,6 +206,7 @@ public class TCONST {
     public static final String ASSETS          = "ASSETS";
     public static final String RESOURCES       = "RESOURCE";
     public static final String EXTERN          = "EXTERN";
+    public static final String DEFINED         = "DEFINED";
 
     // Navigator types
     final static public String SIMPLENAV       = "SIMPLE_NAVIGATOR";
@@ -157,6 +215,7 @@ public class TCONST {
     public static final String NEXT_TNODE      = "NEXT_TNODE";
     public static final String NEXTSCENE       = "NEXTSCENE";
     public static final String FIRST_SCENE     = "GOTO_FIRST_SCENE";
+    public static final String REC_GLYPH       = "REC_GLYPH";
 
 
 
@@ -198,6 +257,16 @@ public class TCONST {
     public static final String CREATE          = "CREATE";
     public static final String CREATEANDSTART  = "CREATEANDSTART";
     public static final String ENTER_SCENE     = "ENTER_SCENE";
+
+    public static final String END_OF_GRAPH             = "END_OF_GRAPH";
+
+    public static final String APPLY_BEHAVIOR           = "APPLY_BEHAVIOR";
+
+    public static final String SUBGRAPH                 = "SUBGRAPH";
+    public static final String SUBGRAPH_CALL            = "SUBGRAPH_CALL";
+    public static final String SUBGRAPH_RETURN_AND_GO   = "SUBGRAPH_RETURN_AND_GO";
+    public static final String SUBGRAPH_RETURN_AND_WAIT = "SUBGRAPH_RETURN_AND_WAIT";
+
 
     // Condition parser FSM states
     public static final int STARTSTATE = 0;
@@ -247,6 +316,8 @@ public class TCONST {
     public static final String LOOKATEND   = "PERSONA_LOOKAT_END";
     public static final String GLANCEAT    = "PERSONA_GLANCEAT";
     public static final String SCREENPOINT = "SCREENPOINT";
+    public static final String STARE_START = "STARE_START";
+    public static final String STARE_STOP  = "STARE_STOP";
 
     public static final String FTR_STORY_STARTING = "FTR_STORY_STARTING";
 
@@ -302,6 +373,7 @@ public class TCONST {
     public static final String DATASHOP    = "-DS";
     public static final String JSONLOG     = ".json";
     public static final boolean APPEND     = true;
+    public static final boolean REPLACE    = false;
 
     public static final String GLYPH_DATA  = "glyphdata";
 
@@ -312,7 +384,9 @@ public class TCONST {
     public static final String FW_EOI      = "FW_EOI";
     public static final String FW_RESPONSE = "FW_RESPONSE";
 
-    public static final String ROBOTUTOR_FOLDER = "/RoboTutor/";
+    public static final String WRITINGTUTOR_FOLDER = "/WritingTutor/";
+    public static final String ROBOTUTOR_FOLDER    = "/RoboTutor/";
+    public static final String GLYPHS_FOLDER       = "/glyphs/";
 
 
     // Listener Control message types

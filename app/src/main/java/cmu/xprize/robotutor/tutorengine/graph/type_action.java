@@ -189,6 +189,11 @@ public class type_action extends scene_node {
                         _scope.tutor().mTutorGraph.post(this, TCONST.NEXTSCENE);
                         break;
 
+                    case TCONST.SUBGRAPH_RETURN_AND_GO:
+                    case TCONST.SUBGRAPH_RETURN_AND_WAIT:
+                        _scope.sceneGraph().post(this, cmd);
+                        break;
+
                     case TCONST.CMD_GOTO:
                         _scope.tutor().gotoNode(id);
                         break;

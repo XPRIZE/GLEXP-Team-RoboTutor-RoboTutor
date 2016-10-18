@@ -27,6 +27,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -35,6 +36,7 @@ import cmu.xprize.robotutor.tutorengine.graph.scene_graph;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
@@ -50,7 +52,7 @@ public class CSceneGraph  {
     private TScope           mScope;
 
     protected CTutor         mTutor;
-    private String           mSceneName;
+    private String           mGraphName;
     private ITutorGraph      mTutorGraph;
 
     private final Handler    mainHandler = new Handler(Looper.getMainLooper());
@@ -58,8 +60,9 @@ public class CSceneGraph  {
     private boolean          mDisabled   = false;
 
     // State fields
-    private scene_graph _scene;
+    private scene_graph              _graph;
     private HashMap<String, Integer> _pFeatures;
+    private ArrayList<scene_graph>   _dataStack  = new ArrayList<>();
 
 
     // json loadable
@@ -87,6 +90,37 @@ public class CSceneGraph  {
     public void onDestroy() {
 
     }
+
+
+    /**
+     *
+     */
+    public void pushGraph() {
+
+        if(_graph != null) {
+            _dataStack.add(_graph);
+        }
+    }
+
+
+    /**
+     *
+     */
+    public boolean popGraph() {
+
+        boolean popped   = false;
+        int     popIndex = _dataStack.size()-1;
+
+        if(popIndex >= 0) {
+            _graph = _dataStack.get(popIndex);
+            _dataStack.remove(popIndex);
+
+            popped = true;
+        }
+
+        return popped;
+    }
+
 
 
     /**
@@ -132,12 +166,12 @@ public class CSceneGraph  {
                 switch (_command) {
                     case TCONST.ENTER_SCENE:
 
-                        mSceneName = _target;
+                        mGraphName = _target;
 
                         try {
-                            _scene = (scene_graph) mScope.mapSymbol(mSceneName);
+                            _graph = (scene_graph) mScope.mapSymbol(mGraphName);
 
-                            Log.d(TAG, "Processing Enter Scene: " + _scene.name + " - mapType: " + _scene.type );
+                            Log.d(TAG, "Processing Enter Scene: " + _graph.name + " - mapType: " + _graph.type );
 
                         } catch (Exception e) {
 
@@ -145,17 +179,61 @@ public class CSceneGraph  {
                         }
                         break;
 
+
+                    case TCONST.SUBGRAPH_CALL:
+
+                        mGraphName = _target;
+
+                        // Save the current graph state
+                        //
+                        pushGraph();
+
+                        try {
+                            _graph = (scene_graph) mScope.mapSymbol(mGraphName);
+                            _graph.resetNode();
+
+                            Log.d(TAG, "Processing call graph: " + _graph.name + " - mapType: " + _graph.type );
+
+                            // Seek the graph to the root node and execute it
+                            //
+                            if(_graph != null) {
+                                post(this, TCONST.NEXT_NODE);
+                            }
+
+                        } catch (Exception e) {
+
+                            CErrorManager.logEvent(TAG, "subgraph not found", e, false);
+                        }
+                        break;
+
+                    case TCONST.SUBGRAPH_RETURN_AND_GO:
+
+                        post(this, TCONST.NEXT_NODE);
+
+                    case TCONST.SUBGRAPH_RETURN_AND_WAIT:
+
+                        // Restore the previous state and continue processing it's nodes.
+                        //
+                        popGraph();
+                        break;
+
+
+
                     case TCONST.NEXT_NODE:
 
-                        String sceneState = _scene.applyNode();
+                        String sceneState = _graph.applyNode();
 
                         switch (sceneState) {
 
                             // TCONST.NEXTSCENE is used to end the current scene and step through to the
                             // next scene in the TutorGraph.
 
-                            case TCONST.NEXTSCENE:
-                                mTutorGraph.post(this, TCONST.NEXTSCENE);
+                            case TCONST.END_OF_GRAPH:
+                                // If this is the root graph then we do to the next scene
+                                //
+                                if(!popGraph()) {
+                                    mTutorGraph.post(this, TCONST.NEXTSCENE);
+                                }
                                 break;
 
                             // TCONST.WAIT indicates that next node will be driven by a
@@ -171,11 +249,11 @@ public class CSceneGraph  {
                         break;
 
                     case TCONST.PLAY:
-                        _scene.play();
+                        _graph.play();
                         break;
 
                     case TCONST.STOP:
-                        _scene.stop();
+                        _graph.stop();
                         break;
 
                     case TCONST.ENDTUTOR:
@@ -188,7 +266,7 @@ public class CSceneGraph  {
                         break;
 
                     case TCONST.GOTO_NODE:
-                        _scene.gotoNode(_target);
+                        _graph.gotoNode(_target);
                         break;
                 }
             }
@@ -293,13 +371,14 @@ public class CSceneGraph  {
 
 
 
+
     //************ Serialization
 
 
 
     /**
      * Load the Tutor specification from JSON file data
-     * from assets/tutors/<tutorname>/tutor_descriptor.json
+     * from assets/tutors/<tutorname>/animator_graph.json
      *
      */
     private void loadSceneGraphFactory(IScope2 scope) {

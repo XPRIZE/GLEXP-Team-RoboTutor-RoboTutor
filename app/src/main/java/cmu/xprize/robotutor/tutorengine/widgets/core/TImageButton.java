@@ -109,7 +109,7 @@ public class TImageButton extends ImageButton implements ITutorObjectImpl {
     }
 
     @Override
-    public void postInflate() {}
+    public void onCreate() {}
 
     @Override
     public void setNavigator(ITutorGraph navigator) {

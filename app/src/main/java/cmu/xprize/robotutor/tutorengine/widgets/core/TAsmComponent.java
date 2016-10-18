@@ -244,7 +244,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     }
 
     @Override
-    public void postInflate() {
+    public void onCreate() {
 
     }
 

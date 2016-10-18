@@ -167,7 +167,7 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl, IDataSink 
     }
 
     @Override
-    public void postInflate() {}
+    public void onCreate() {}
 
     @Override
     public void setNavigator(ITutorGraph navigator) {

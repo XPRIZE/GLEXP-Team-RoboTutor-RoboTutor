@@ -23,7 +23,7 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
-import cmu.xprize.robotutor.tutorengine.IEventSource;
+import cmu.xprize.util.IEventSource;
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;

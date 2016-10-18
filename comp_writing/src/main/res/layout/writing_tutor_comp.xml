@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- NOTE; This is for use in the standalone GlyphRecognizer project that is used for development -->
+
+<cmu.xprize.comp_writing.CWritingComponent
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/writingComponent"
+    android:background="#FFFFFF">
+
+    <TextView
+        android:id="@+id/SBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_heightPercent="10%"
+        android:gravity="center"
+        android:background="#44FF0000"
+        android:text="Banner Area"/>
+
+
+    <TextView
+        android:id="@+id/Sstimulus"
+        android:layout_below="@id/SBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_heightPercent="12%"
+        android:gravity="center"
+        android:background="#FFFFFF"
+        android:text="Stimulus Area"/>
+
+
+    <cmu.xprize.util.CLinkedScrollView
+        android:id="@+id/Sresponse"
+        android:layout_below="@id/Sstimulus"
+        app:layout_heightPercent="18%"
+        android:layout_width="wrap_content"
+        android:scrollbars="none"
+        android:layout_centerHorizontal="true"
+        android:background="#FFFFFF">
+
+        <LinearLayout
+            android:id="@+id/Srecognized_glyphs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+        </LinearLayout>
+
+    </cmu.xprize.util.CLinkedScrollView>
+
+
+    <cmu.xprize.util.CLinkedScrollView
+        android:id="@+id/SfingerWriter"
+        android:layout_below="@id/Sresponse"
+        app:layout_heightPercent="60%"
+        android:layout_width="wrap_content"
+        android:scrollbars="none"
+        android:layout_centerHorizontal="true"
+        android:background="#FFFFFF">
+
+        <LinearLayout
+            android:id="@+id/Sdrawn_glyphs"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:divider="@drawable/drawn_divider"
+            android:showDividers="middle"
+            android:orientation="horizontal"
+            android:animateLayoutChanges="true"
+            android:background="@null">
+        </LinearLayout>
+
+    </cmu.xprize.util.CLinkedScrollView>
+
+
+
+</cmu.xprize.comp_writing.CWritingComponent>

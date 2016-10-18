@@ -133,7 +133,7 @@ public class TBanner extends CBanner implements ITutorObjectImpl, View.OnClickLi
     }
 
     @Override
-    public void postInflate() {}
+    public void onCreate() {}
 
     @Override
     public void setNavigator(ITutorGraph navigator) {

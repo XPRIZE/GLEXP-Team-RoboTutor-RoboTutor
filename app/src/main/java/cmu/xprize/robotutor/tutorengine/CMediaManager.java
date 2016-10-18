@@ -487,6 +487,10 @@ public class CMediaManager {
 
             } catch (Exception e) {
                 Log.e(TAG, "Audio error: " + e);
+
+                // Do the completion event to keep the tutor moving.
+                //
+                onCompletion(mPlayer);
             }
         }
 

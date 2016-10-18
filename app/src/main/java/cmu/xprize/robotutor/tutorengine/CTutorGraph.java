@@ -40,6 +40,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.robotutor.tutorengine.widgets.core.IDataSink;
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -485,7 +486,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
 
                     dataSink.setDataSource(binding.datasource);
 
-                    // Add a feature to show the compoonent has been initialized
+                    // Add a feature to show the component has been initialized
                     //
                     mTutor.setAddFeature(TCONST.DATA_PREFIX + binding.name.toUpperCase());
                 }

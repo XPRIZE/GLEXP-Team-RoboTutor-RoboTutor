@@ -105,7 +105,7 @@ public class scene_module extends scene_node implements ILoadableObject2 {
         resetNode();
 
         // TODO: At the moment this loop is used to allow Module callouts from timer events
-        // TODO: Make it so that timer events runin their own graph so this is not needed.
+        // TODO: Make it so that timer events run in their own graph so this is not needed.
         //
         do {
 

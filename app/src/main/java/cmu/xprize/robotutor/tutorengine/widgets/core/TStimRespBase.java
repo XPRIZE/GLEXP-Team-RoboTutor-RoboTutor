@@ -15,14 +15,19 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
+
+import org.json.JSONObject;
 
 import cmu.xprize.fw_component.CStimRespBase;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CEvent;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILogManager;
+import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutor;
@@ -40,7 +45,8 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, ID
     private int   _wrong   = 0;
     private int   _correct = 0;
 
-    private static final String  TAG = TStimResp.class.getSimpleName();
+
+    private static final String  TAG = TStimRespBase.class.getSimpleName();
 
 
 
@@ -134,9 +140,9 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, ID
 
     /**
      *
-     * @param dataSource
+     * @param dataPacket
      */
-    public void setDataSource(String dataSource) {
+    public void setDataSource(String dataPacket) {
 
         _correct = 0;
         _wrong   = 0;
@@ -146,16 +152,28 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, ID
         mTutor.setDelFeature(TCONST.FWINCORRECT);
 
         try {
-            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
-                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
+            if (dataPacket.startsWith(TCONST.SOURCEFILE)) {
+                dataPacket = dataPacket.substring(TCONST.SOURCEFILE.length());
 
-                JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.TASSETS + "/" + dataSource);
+                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataPacket);
 
-            } else if (dataSource.startsWith("db|")) {
-                dataSource = dataSource.substring(3);
+                // Load the datasource in the component module - i.e. the superclass
+                loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 
-            } else if (dataSource.startsWith("[")) {
-                dataSource = dataSource.substring(1, dataSource.length()-1);
+                // Pass the loaded json dataSource array
+                //
+                setDataSource(dataSource);
+
+            } else if (dataPacket.startsWith("db|")) {
+                dataPacket = dataPacket.substring(3);
+
+            } else if (dataPacket.startsWith("[")) {
+
+                dataPacket = dataPacket.substring(1, dataPacket.length()-1);
+
+                // Pass an array of strings as the data source.
+                //
+                setDataSource(dataPacket.split(","));
 
             } else {
                 throw (new Exception("test"));
@@ -165,9 +183,6 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, ID
             CErrorManager.logEvent(TAG, "Invalid Data Source for : " + name(), null, false);
         }
 
-        // Pass an array of strings as the data source.
-        //
-        setDataSource(dataSource.split(","));
     }
 
 
@@ -294,13 +309,16 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, ID
     // view has been inflated and init'd - where it is connected to the TutorEngine
     //
     @Override
-    public void postInflate() {
+    public void onCreate() {
 
         // Do deferred listeners configuration - this cannot be done until after the tutor is instantiated
         //
         if(!mListenerConfigured) {
-            for (String linkedView : mLinkedViews) {
-                addEventListener(linkedView);
+
+            if(mLinkedViews != null) {
+                for (String linkedView : mLinkedViews) {
+                    addEventListener(linkedView);
+                }
             }
             mListenerConfigured = true;
         }
@@ -334,5 +352,17 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, ID
     @Override
     public void setAlpha(Float alpha) {
         mSceneObject.setAlpha(alpha);
+    }
+
+
+
+    // *** Serialization
+
+
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
+        Log.d(TAG, "Loader iteration");
+        super.loadJSON(jsonObj, (IScope2) scope);
+
     }
 }
