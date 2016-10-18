@@ -711,9 +711,19 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     public void setDataSource(String[] dataSource) {
 
+        ArrayList<String> dataSet = new ArrayList<String>(Arrays.asList(dataSource));
+
         // _data takes the form - ["92","3","146"]
         //
-        _data      = new ArrayList<String>(Arrays.asList(dataSource));
+        _data = new ArrayList<String>();
+
+        for(int i1 = 0 ; i1 < 10 ; i1++) {
+            int randIndex =  (int) (Math.random() * dataSet.size());
+
+            _data.add(dataSet.get(randIndex));
+            dataSet.remove(randIndex);
+        }
+
         _dataIndex = 0;
         _dataEOI   = false;
     }
