@@ -70,8 +70,7 @@ public class CAsm_Alley extends LinearLayout {
             if(id != ASM_CONST.OPERATION_MULTI && id != ASM_CONST.REGULAR_MULTI)
                 STextLayout.resetAllBackground();
             STextLayout.update(id, val, operation, numSlots);
-
-            SdotBag.setDrawBorder(id == ASM_CONST.REGULAR_MULTI || id == ASM_CONST.OPERATION_MULTI);
+            SdotBag.setDrawBorder(false);
         } else {
             if (id != ASM_CONST.OPERATION && id != ASM_CONST.REGULAR)
                 STextLayout.resetAllBackground();
@@ -103,23 +102,21 @@ public class CAsm_Alley extends LinearLayout {
 
     }
 
-    public void nextDigit(boolean downwardResult) {
+    public void nextDigit() {
 
-        Integer cols;
+        Integer cols = 0;
 
         digitIndex--;
 
-        STextLayout.performNextDigit(downwardResult);
+        STextLayout.performNextDigit();
 
         if (operation.equals("x")) {
-            if (id == ASM_CONST.RESULT_OR_ADD_MULTI_PART1 && !downwardResult)
+/*            if (id == ASM_CONST.RESULT_OR_ADD_MULTI_PART1)
                 cols = 0;
-            else if (id == ASM_CONST.RESULT_MULTI_BACKUP && downwardResult)
-                return;
             else {
                 cols = STextLayout.getDigit(digitIndex);
                 cols = (cols != null)?cols:0;
-            }
+            }*/
         } else {
             if (id == ASM_CONST.RESULT)
                 cols = 0;

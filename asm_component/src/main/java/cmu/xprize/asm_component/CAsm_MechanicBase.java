@@ -48,16 +48,13 @@ public class CAsm_MechanicBase implements IDotMechanics {
     }
 
     public void next(){
-
         reset();
-        mComponent.downwardResult = false;
-
     }
 
     public void nextDigit(){
 
         for (CAsm_Alley alley: allAlleys) {
-            alley.nextDigit(mComponent.downwardResult);
+            alley.nextDigit();
         }
 
         if (mComponent.dotbagsVisible) {
@@ -190,5 +187,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     public void highlightBorrowable() {
     }
+
+    public int getCurRow() { return 2; }
 
 }

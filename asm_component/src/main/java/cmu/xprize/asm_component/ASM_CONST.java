@@ -24,16 +24,16 @@ public class ASM_CONST {
     public static final int ADD_MULTI_PART3                = 5;
     public static final int RESULT_MULTI_BACKUP            = 6;
 
-    public static final int alleyMargin  = 10;
+    public static final int alleyMargin  = 1;
     public static final int rightPadding = 15;
 
 
     public static final int textSize     = 14;
-    public static final int textBoxWidth = 30;
-    public static final int textBoxHeight= 50;
+    public static final int textBoxWidth = 20;
+    public static final int textBoxHeight= 28;
 
 
-    public static final int borderWidth  = 3;
+    public static final int borderWidth  = 2;
 
     public static final int DESIGNWIDTH  = 2560;
     public static final int DESIGNHEIGHT = 1620;

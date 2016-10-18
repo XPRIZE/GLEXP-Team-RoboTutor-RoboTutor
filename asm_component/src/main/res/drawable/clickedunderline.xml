@@ -4,10 +4,10 @@
         android:bottom="0dp"
         android:left="0dp"
         android:right="0dp"
-        android:top="40dp">
+        android:top="18dp">
         <shape android:shape="line" >
             <stroke
-                android:width="3dp"
+                android:width="1.5dp"
                 android:alpha = "140"
                 android:color="#000000" />
 

@@ -11,6 +11,7 @@ public interface IDotMechanics {
     void handleClick();
     void correctOverheadText();
     void highlightBorrowable();
+    int getCurRow();
     String getOperation();
 
 }
