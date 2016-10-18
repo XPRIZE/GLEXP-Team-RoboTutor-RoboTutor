@@ -58,6 +58,7 @@ public class WR_CONST {
 
     public static final String CANDIDATE_VAR            = ".candidate";
     public static final String EXPECTED_VAR             = ".expected";
+    public static final String VALUE_VAR                = ".value";
 
     public static final String FTR_INPUT_STALLED        = "FTR_INPUT_STALLED";
     public static final String FTR_HAD_ERRORS           = "FTR_HAD_ERRORS";

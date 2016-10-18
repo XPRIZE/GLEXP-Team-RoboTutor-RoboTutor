@@ -377,17 +377,14 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         mInsRgtSpaceBut.setTranslationX(-offset);
     }
 
+
     public boolean firePendingRecognition() {
         return mGlyphInput.firePendingRecognition();
     }
 
     public void inhibitInput(boolean inhibit) {
-
-        // En/Disable the glyph field
-        //
         mGlyphInput.inhibitInput(inhibit);
     }
-
 
     public void updateCorrectStatus(boolean correct) {
         mGlyphInput.updateCorrectStatus(correct);

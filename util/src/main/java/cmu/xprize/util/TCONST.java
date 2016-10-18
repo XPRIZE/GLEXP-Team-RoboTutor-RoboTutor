@@ -50,6 +50,7 @@ public class TCONST {
     public static final int     MAX_DIGITS      = 4;
     public static final String  NO_DATASOURCE   = "";
     public static final String  DATA_PREFIX     = "DATA_";
+    public static final String DATA_PATH        = "data";
 
     public static final String FW_PREPLISTENER  = "FW_PREPLISTENER";
     public static final String FW_TTS           = "FW_TTS";

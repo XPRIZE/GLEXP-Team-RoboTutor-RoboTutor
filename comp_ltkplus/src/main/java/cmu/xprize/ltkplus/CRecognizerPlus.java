@@ -179,67 +179,6 @@ public class CRecognizerPlus implements IGlyphSink {
 
 
     /**
-     * Remove any pending scenegraph commands.
-     *
-     */
-    public void flushQueue() {
-
-        _glyphQueue = new ConcurrentLinkedQueue();
-    }
-
-
-    /**
-     *
-     */
-    public class QueuedGlyph {
-
-        protected IGlyphSource _source;
-        protected CGlyph _glyph;
-
-        public QueuedGlyph(IGlyphSource source, CGlyph glyph) {
-
-            _source  = source;
-            _glyph   = glyph;
-        }
-    }
-
-
-    /**
-     * Add a glyph to the recognition queue
-     *
-     */
-    public void postToQueue(IGlyphSource source, CGlyph glyph) {
-
-        _glyphQueue.add(new QueuedGlyph(source, glyph));
-
-        // Try and recognize it if not already working on another one.
-        //
-        nextQueued();
-    }
-
-
-    private void nextQueued() {
-
-        synchronized (_isRecognizing) {
-
-            if(!_isRecognizing) {
-
-                _nextGlyph = (QueuedGlyph) _glyphQueue.poll();
-
-                if (_nextGlyph != null) {
-
-                    _isRecognizing = true;
-
-                    // Tasks can only run once so create a new one for each recognition task.
-                    _recTask = new RecognizerTask();
-                    _recTask.execute();
-                }
-            }
-        }
-    }
-
-
-    /**
      * The RecognizerThread provides a background thread on which to do the rocognition task
      * TODO: We may need a scrim on the UI thread depending on the observed performance
      */
@@ -300,11 +239,18 @@ public class CRecognizerPlus implements IGlyphSink {
 
                 _isRecognizing = false;
 
-                _nextGlyph._source.recCallBack(_ltkCandidates, _ltkPlusCandidates, _sampleIndex);
+                // If the result is not valid - flush the queue
+                //
+                if(!_nextGlyph._source.recCallBack(_ltkCandidates, _ltkPlusCandidates, _sampleIndex)) {
+
+                    flushQueue();
+                }
 
                 // Check if any more recognizer requests are queued
                 //
-                nextQueued();
+                else {
+                    nextQueued();
+                }
             }
         }
 
@@ -711,6 +657,90 @@ public class CRecognizerPlus implements IGlyphSink {
 
         return sampleIndex;
     }
+
+
+    //************************************************************************
+    //************************************************************************
+    // Component Message Queue  -- Start
+
+    /**
+     *
+     */
+    public class QueuedGlyph {
+
+        protected IGlyphSource _source;
+        protected CGlyph _glyph;
+
+        public QueuedGlyph(IGlyphSource source, CGlyph glyph) {
+
+            _source  = source;
+            _glyph   = glyph;
+        }
+    }
+
+
+    private void nextQueued() {
+
+        synchronized (_isRecognizing) {
+
+            if(!_isRecognizing) {
+
+                _nextGlyph = (QueuedGlyph) _glyphQueue.poll();
+
+                if (_nextGlyph != null) {
+
+                    _isRecognizing = true;
+
+                    // Tasks can only run once so create a new one for each recognition task.
+                    _recTask = new RecognizerTask();
+                    _recTask.execute();
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Remove any pending scenegraph commands.  And reset their glyph
+     *
+     */
+    public void flushQueue() {
+
+        QueuedGlyph  queueItem;
+        IGlyphSource source;
+
+        do {
+            queueItem = (QueuedGlyph) _glyphQueue.poll();
+
+            if(queueItem != null) {
+
+                source = queueItem._source;
+                source.erase();
+            }
+
+        } while(queueItem != null);
+    }
+
+
+    /**
+     * Add a glyph to the recognition queue
+     *
+     */
+    public void postToQueue(IGlyphSource source, CGlyph glyph) {
+
+        _glyphQueue.add(new QueuedGlyph(source, glyph));
+
+        // Try and recognize it if not already working on another one.
+        //
+        nextQueued();
+    }
+
+
+    // Component Message Queue  -- END
+    //************************************************************************
+    //************************************************************************
+
+
 }
 
 

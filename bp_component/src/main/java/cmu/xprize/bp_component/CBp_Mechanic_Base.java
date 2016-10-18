@@ -58,8 +58,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
     private long                          _prevTime;
     protected boolean                     _enabled    = true;
 
-    private LocalBroadcastManager         bManager;
-
     protected float                       _alpha       = 0.80f;
     protected float[]                     _scaleRange  = {0.85f, 1.3f};
 
@@ -71,6 +69,8 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
     protected HashMap<Animator, CBubble>  inflators   = new HashMap<Animator, CBubble>();
     protected HashMap<Animator, CBubble>  translators = new HashMap<Animator, CBubble>();
+
+    private LocalBroadcastManager         bManager;
 
 
     static final String TAG = "CBp_Mechanic_Base";
