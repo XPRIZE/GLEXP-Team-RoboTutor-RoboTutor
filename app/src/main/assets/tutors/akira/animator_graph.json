@@ -94,7 +94,7 @@
           "maptype": "moduleMap",
           "mapname": "PLAYPROMPT",
           "preenter": ["PAUSE"],
-          "preexit": ["RESUME", "NEXT_DATASET"],
+          "preexit": ["REUSE", "NEXT_DATASET"],
           "edges": [
             {
               "constraint": "FTR_EOD",
@@ -179,7 +179,9 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
-            {"type": "COMMAND", "id": "SAkira", "method": "instruct", "parms": "", "features":""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Correct v1.mp3", "soundpackage":"tutor_effect", "volume": 0.10, "mode":"event", "features": ""},
+            {"type": "COMMAND", "id": "SAkira", "method": "decreaseScore", "parms": "", "features":""},
+            {"type": "COMMAND", "cmd": "WAIT"}
           ]
         },
         "PLAYWRONG": {
@@ -220,6 +222,7 @@
             {"type": "COMMAND", "cmd": "WAIT"}
           ]
         }
+
       },
 
       "actionMap": {
@@ -241,8 +244,8 @@
         "NEXT": {"type": "COMMAND", "cmd": "NEXT"  },
 
         "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{TestAudio}}.mp3","soundpackage":"xprize" ,"repeat":false, "volume": "0.7", "mode":"event", "features": ""},
-        "INSTRUCT_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{audio}}.wav","soundpackage":"tutor_effect" ,"repeat":false, "volume": "0.7", "mode":"event", "features": ""},
-        "WAIT":{"type": "COMMAND", "cmd": "WAIT"},
+
+
 
         "PAUSE":{
           "type": "COMMAND", "id": "SAkira", "method": "pause" ,"features":""
@@ -251,6 +254,8 @@
         "RESUME":{
           "type": "COMMAND", "id": "SAkira", "method": "resume" ,"features":""
         }
+
+
       },
 
       "constraintMap": {

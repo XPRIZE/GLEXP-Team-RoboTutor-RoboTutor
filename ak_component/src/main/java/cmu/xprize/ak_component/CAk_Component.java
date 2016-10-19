@@ -59,7 +59,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     static public Context mContext;
 
     protected String        mDataSource;
-    protected   int           _dataIndex = 0;
+    private   int           _dataIndex = 0;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     static final String TAG = "CAk_Component";
