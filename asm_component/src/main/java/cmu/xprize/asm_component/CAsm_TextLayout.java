@@ -38,7 +38,6 @@ public class CAsm_TextLayout extends LinearLayout {
     final int textBoxWidth = (int)(ASM_CONST.textBoxWidth*scale);
     final int textBoxHeight = (int)(ASM_CONST.textBoxHeight*scale);
 
-
     public CAsm_TextLayout(Context context) {
 
         super(context);
@@ -57,16 +56,14 @@ public class CAsm_TextLayout extends LinearLayout {
     }
 
     private void init(Context context, AttributeSet attrs) {
-
         mContext = context;
         setClipChildren(false);
         setClipToPadding(false);
-
     }
 
     public void update(int id, int val, String operation, int numSlots) {
 
-        this.digitIndex = operation.equals("x")? numSlots-1 : numSlots;
+        this.digitIndex = operation.equals("x")? numSlots-2 : numSlots;
         this.value = val;
         this.id = id;
         this.operation = operation;
@@ -102,7 +99,6 @@ public class CAsm_TextLayout extends LinearLayout {
         if (operation.equals("x")) {
             if (id == ASM_CONST.OPERATION_MULTI) {
                 //setBackground(getResources().getDrawable(R.drawable.underline));
-                getChildAt(0).setBackground(getResources().getDrawable(R.drawable.underline));
                 getChildAt(1).setBackground(getResources().getDrawable(R.drawable.underline));
                 getChildAt(2).setBackground(getResources().getDrawable(R.drawable.underline));
             } else
@@ -192,7 +188,7 @@ public class CAsm_TextLayout extends LinearLayout {
 
     private void setTextForMultiplication() {
 
-        int numSlots = getChildCount() - 1;
+        int numSlots = getChildCount() - 2;
         String[] digits = CAsm_Util.intToDigits(value, numSlots);
         CAsm_TextLayout curTextLayout;
 
@@ -209,8 +205,7 @@ public class CAsm_TextLayout extends LinearLayout {
 
             case ASM_CONST.OPERATION_MULTI:
 
-                digits[0] = operation;
-
+                digits[1] = operation;
                 for (int i = 0; i < numSlots; i++) {
                     curTextLayout = getTextLayout(i);
                     curTextLayout.getText(1).setText(digits[i]);
@@ -291,7 +286,7 @@ public class CAsm_TextLayout extends LinearLayout {
         int j = 0;
         int digit;
 
-        int num = operation.equals("x")? numSlots-1 : numSlots;
+        int num = operation.equals("x")? numSlots-2 : numSlots;
         for (int i = 1; i < num; i++) {
 
             CAsm_Text t = getTextLayout(i).getText(1);

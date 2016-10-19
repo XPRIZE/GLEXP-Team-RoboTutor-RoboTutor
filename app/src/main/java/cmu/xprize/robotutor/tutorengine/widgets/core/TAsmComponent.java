@@ -180,7 +180,6 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     public void next() {
 
         // If wrong reset ALLCORRECT
-        //
         if(mTutor.testFeatureSet(TCONST.GENERIC_WRONG)) {
             mTutor.setDelFeature(TCONST.ALL_CORRECT);
         }

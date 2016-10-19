@@ -272,7 +272,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         mechanics.nextDigit();
 
         if(operation.equals("x")) {
-            corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots-1)[digitIndex]);
+            corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots-2)[digitIndex]);
             if(corDigit.equals(allAlleys.get(ASM_CONST.RESULT_OR_ADD_MULTI_PART1 - 1).getTextLayout().getDigit(digitIndex)))
                 nextDigit();
         } else
@@ -338,27 +338,16 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     }
 
     private void updateAllAlleyForMultiplication() {
-        numSlots++;
+        numSlots += 2;
 
         // update alleys
         updateAlley(0, numbers[0], ASM_CONST.REGULAR_MULTI, operation, false);
         updateAlley(1, numbers[1], ASM_CONST.OPERATION_MULTI, operation, false);
         updateAlley(2, numbers[2], ASM_CONST.RESULT_OR_ADD_MULTI_PART1, operation, false);
-        updateAlley(3, 0, ASM_CONST.ADD_MULTI_PART2, operation, false);
-        updateAlley(4, 0, ASM_CONST.ADD_MULTI_PART3, operation, false);
-        updateAlley(5, 0, ASM_CONST.RESULT_MULTI_BACKUP, operation, false);
 
-        updateAlley(6, 5, 7, operation, false);
-        updateAlley(7, 0, 8, operation, false);
-        updateAlley(8, 0, 9, operation, false);
-        updateAlley(9, 0, 10, operation, false);
-        updateAlley(10, 0, 11, operation, false);
-        updateAlley(11, 0, 12, operation, false);
-        updateAlley(12, 0, 13, operation, false);
-        updateAlley(13, 0, 14, operation, false);
-        updateAlley(14, 0, 15, operation, false);
-        updateAlley(15, 0, 16, operation, false);
-        updateAlley(16, 9, 17, operation, false);
+        //Spare space to show repeated addition
+        for (int i = 3; i < 17; i++)
+            updateAlley(i, 0, i+1, operation, false);
 
         // delete extra alleys
         int delta = numAlleys - (numbers.length + 14);
@@ -413,11 +402,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     }
 
     private void updateAlley(int index, int val, int id, String operation, boolean clickable) {
-
-        if (index + 1 > numAlleys) {
+        if (index + 1 > numAlleys)
             addAlley(index, val, id, operation, clickable);
-        }
-
         else {
             CAsm_Alley currAlley = allAlleys.get(index);
             currAlley.update(val, currImage, id, operation, clickable, numSlots);
@@ -563,7 +549,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     public void checkOtherBottomCorrect(CAsm_TextLayout textLayout) {
         int otherBottomCorrect = 0;
         for(int i = 1; i < digitIndex; i++) {
-            Integer curDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots-1)[i]);
+            Integer curDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots-2)[i]);
             Integer digit = textLayout.getDigit(i);
             if(digit != null && !digit.equals(""))
                 otherBottomCorrect = curDigit.equals(textLayout.getDigit(i))? 1 : 2;
@@ -718,7 +704,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
             h.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    setDotBagsVisible(true, digitIndex);
+                    setDotBagsVisible(true, digitIndex, mechanics.getCurRow()-2);
                 }
             }, delayTime);
         }

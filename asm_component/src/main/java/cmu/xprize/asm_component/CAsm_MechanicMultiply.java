@@ -23,7 +23,7 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
 
         //User could choose the order of writing result digits
         CAsm_TextLayout resultTextLayout = allAlleys.get(resultOrAddInMultiPart1).getTextLayout();
-        for(int i = 1; i < resultTextLayout.getChildCount()-1; i++) {
+        for(int i = 1; i < resultTextLayout.getChildCount()-2; i++) {
             resultTextLayout.getTextLayout(i).getText(0).setVisibility(View.INVISIBLE);
             resultTextLayout.getTextLayout(i).getText(1).setResult();
         }
@@ -99,7 +99,7 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         if (mComponent.overheadVal > multiplier) {
             CAsm_TextLayout secondInAddition = allAlleys.get(curRowIndexInAddition-1).getTextLayout().getTextLayout(mComponent.numSlots-1);
             secondInAddition.getText(0).setText("+");
-            secondInAddition.setBackground(secondInAddition.getResources().getDrawable(R.drawable.underline_add_in_mul));
+            secondInAddition.setBackground(secondInAddition.getResources().getDrawable(R.drawable.underline));
 
             updateDotbagsInAddition();
         }
@@ -221,7 +221,7 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
     @Override
     public void nextDigit() {
 
-        if (mComponent.digitIndex == mComponent.numSlots-2) {
+        if (mComponent.digitIndex == mComponent.numSlots-3) {
             super.nextDigit();
             mComponent.hasShown = true;
             mComponent.overheadText.setResult();
@@ -491,7 +491,8 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
             if (mComponent.hasShown) {
                 mComponent.overheadVal += multiplier;
                 fillDotbagAutomatically(curRowIndexInAddition);
-            }
+            } else
+                mComponent.hasShown = true;
         }
     }
 
