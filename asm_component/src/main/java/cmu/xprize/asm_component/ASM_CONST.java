@@ -21,8 +21,8 @@ public class ASM_CONST {
     public static final int OPERATION_MULTI                = 2;
     public static final int RESULT_OR_ADD_MULTI_PART1     = 3;
 
-    public static final int alleyMargin  = 3;
-    public static final int alleyMarginMul  = 1;
+    public static final int alleyMargin  = 10;
+    public static final int alleyMarginMul  = 3;
     public static final int rightPadding = 15;
 
     public static final int textSize     = 18;
@@ -31,7 +31,7 @@ public class ASM_CONST {
     public static final int textBoxWidth = 30;
     public static final int textBoxHeight= 50;
     public static final int textBoxWidthMul = 20;
-    public static final int textBoxHeightMul= 28;
+    public static final int textBoxHeightMul= 30;
 
     public static final int borderWidth  = 2;
 

@@ -122,6 +122,9 @@ public class CAsm_TextLayout extends LinearLayout {
         if (isMultiplication) {
             textBoxWidth = (int)(ASM_CONST.textBoxWidthMul*scale);
             textBoxHeight = (int)(ASM_CONST.textBoxHeightMul*scale);
+        } else {
+            textBoxWidth = (int)(ASM_CONST.textBoxWidth*scale);
+            textBoxHeight = (int)(ASM_CONST.textBoxHeight*scale);
         }
         CAsm_Text newText = new CAsm_Text(getContext(), isMultiplication);
 
