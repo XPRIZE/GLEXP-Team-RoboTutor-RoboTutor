@@ -48,8 +48,6 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
 
         for(int i = resultOrAddInMultiPart1 + 1; i < allAlleys.size(); i++)
             allAlleys.get(i).getTextLayout().resetAllValues();
-
-        allAlleys.get(ASM_CONST.OPERATION_MULTI - 1).getTextLayout().getTextLayout(mComponent.numSlots - 1).setBackground(null);
     }
 
     private void initArrayInAddition() {
@@ -142,7 +140,7 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         }, 3000);
     }
 
-    private void fillDotbagAutomatically(int indexOfLastResult) {
+    private void fillDotbagAutomatically(final int indexOfLastResult) {
         CAsm_DotBag dotbagOfAddend1 = allAlleys.get(indexOfLastResult-2).getDotBag();
         CAsm_DotBag dotbagOfAddend2 = allAlleys.get(indexOfLastResult-1).getDotBag();
         final CAsm_DotBag dotbagOfResult = allAlleys.get(indexOfLastResult).getDotBag();
@@ -182,12 +180,14 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
             public void onAnimationEnd(Animator animation) {
                 if (mComponent.overheadVal - multiplier < mComponent.corValue)
                     dotbagOfResult.setVisibility(View.INVISIBLE);
+                setAllDotsHollow(indexOfLastResult);
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
                 if (mComponent.overheadVal - multiplier < mComponent.corValue)
                     dotbagOfResult.setVisibility(View.INVISIBLE);
+                setAllDotsHollow(indexOfLastResult);
             }
 
             @Override
@@ -197,6 +197,27 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         animSet.start();
     }
 
+    private void setAllDotsHollow(int indexOfLastResult) {
+        CAsm_DotBag dotbagOfAddend1 = allAlleys.get(indexOfLastResult-2).getDotBag();
+        CAsm_DotBag dotbagOfAddend2 = allAlleys.get(indexOfLastResult-1).getDotBag();
+        CAsm_Dot curDot;
+
+        for (int i = 0; i < dotbagOfAddend1.getRows(); i++) {
+            for (int j = 0; j < dotbagOfAddend1.getCols(); j++) {
+                curDot = dotbagOfAddend1.getDot(i, j);
+                if (!curDot.getIsHollow())
+                    curDot.setHollow(true);
+            }
+        }
+
+        for (int i = 0; i < dotbagOfAddend2.getRows(); i++) {
+            for (int j = 0; j < dotbagOfAddend2.getCols(); j++) {
+                curDot = dotbagOfAddend2.getDot(i, j);
+                if (!curDot.getIsHollow())
+                    curDot.setHollow(true);
+            }
+        }
+    }
     private void updateFirstBagInAdd(int indexOfLastResult) {
         CAsm_DotBag bagToChange = allAlleys.get(indexOfLastResult).getDotBag();
         int val = mComponent.overheadVal - multiplier;

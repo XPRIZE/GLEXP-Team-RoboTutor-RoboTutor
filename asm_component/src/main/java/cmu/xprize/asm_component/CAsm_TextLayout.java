@@ -98,12 +98,12 @@ public class CAsm_TextLayout extends LinearLayout {
 
         if (operation.equals("x")) {
             if (id == ASM_CONST.OPERATION_MULTI) {
+                getChildAt(2).setBackground(null);
+                getChildAt(3).setBackground(null);
                 //setBackground(getResources().getDrawable(R.drawable.underline));
                 getChildAt(1).setBackground(getResources().getDrawable(R.drawable.underline_mul));
-                if (numSlots > 4)
-                    getChildAt(2).setBackground(getResources().getDrawable(R.drawable.underline_mul));
-                else
-                    getChildAt(2).setBackground(null);
+                if (numSlots > 4) getChildAt(2).setBackground(getResources().getDrawable(R.drawable.underline_mul));
+
             } else
                 setBackground(null);
             setTextForMultiplication();
