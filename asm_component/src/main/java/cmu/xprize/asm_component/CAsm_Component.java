@@ -167,6 +167,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                 hasShown = true;
 
                 int delayTime = 0;
+                startRow = startRow >= 0? startRow : 0;
                 int lastRow = operation.equals("x") ? startRow + 3 : allAlleys.size();
                 for (int i = startRow; i < lastRow; i++) {
                     final CAsm_Alley curAlley = allAlleys.get(i);
@@ -242,6 +243,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     }
 
     public void next() {
+        if (operation != null && operation.equals("x"))
+            alleyMargin = (int) (ASM_CONST.alleyMarginMul * scale);
         isWriting = false;
         hasShown = false;
         curOverheadCol = -1;
@@ -505,7 +508,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         // first check bottom answer
         bottomCorrect = corDigit.equals(textLayout.getDigit(digitIndex));
 
-        if (!bottomCorrect) {
+        if (!bottomCorrect && textLayout.getDigit(digitIndex) != null) {
             wrongDigit(textLayout.getTextLayout(digitIndex).getText(1));
         }
 

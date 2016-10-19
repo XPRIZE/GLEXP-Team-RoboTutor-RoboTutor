@@ -35,8 +35,8 @@ public class CAsm_TextLayout extends LinearLayout {
     private int clickedTextLayoutIndex = -1;
 
     float scale = getResources().getDisplayMetrics().density;
-    final int textBoxWidth = (int)(ASM_CONST.textBoxWidth*scale);
-    final int textBoxHeight = (int)(ASM_CONST.textBoxHeight*scale);
+    int textBoxWidth = (int)(ASM_CONST.textBoxWidth*scale);
+    int textBoxHeight = (int)(ASM_CONST.textBoxHeight*scale);
 
     public CAsm_TextLayout(Context context) {
 
@@ -75,8 +75,8 @@ public class CAsm_TextLayout extends LinearLayout {
 
         while (delta > 0) {
             newTextLayout = new CAsm_TextLayout(this.mContext);
-            newTextLayout.addText(0);
-            newTextLayout.addText(1);
+            newTextLayout.addText(0, operation.equals("x"));
+            newTextLayout.addText(1, operation.equals("x"));
             addView(newTextLayout, getChildCount());
 
             delta--;
@@ -99,8 +99,11 @@ public class CAsm_TextLayout extends LinearLayout {
         if (operation.equals("x")) {
             if (id == ASM_CONST.OPERATION_MULTI) {
                 //setBackground(getResources().getDrawable(R.drawable.underline));
-                getChildAt(1).setBackground(getResources().getDrawable(R.drawable.underline));
-                getChildAt(2).setBackground(getResources().getDrawable(R.drawable.underline));
+                getChildAt(1).setBackground(getResources().getDrawable(R.drawable.underline_mul));
+                if (numSlots > 4)
+                    getChildAt(2).setBackground(getResources().getDrawable(R.drawable.underline_mul));
+                else
+                    getChildAt(2).setBackground(null);
             } else
                 setBackground(null);
             setTextForMultiplication();
@@ -115,9 +118,12 @@ public class CAsm_TextLayout extends LinearLayout {
 
     }
 
-    private void addText(int index){
-
-        CAsm_Text newText = new CAsm_Text(getContext());
+    private void addText(int index, boolean isMultiplication){
+        if (isMultiplication) {
+            textBoxWidth = (int)(ASM_CONST.textBoxWidthMul*scale);
+            textBoxHeight = (int)(ASM_CONST.textBoxHeightMul*scale);
+        }
+        CAsm_Text newText = new CAsm_Text(getContext(), isMultiplication);
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(textBoxWidth, textBoxHeight);
         newText.setLayoutParams(lp);
@@ -205,11 +211,11 @@ public class CAsm_TextLayout extends LinearLayout {
 
             case ASM_CONST.OPERATION_MULTI:
 
-                digits[1] = operation;
                 for (int i = 0; i < numSlots; i++) {
                     curTextLayout = getTextLayout(i);
                     curTextLayout.getText(1).setText(digits[i]);
                 }
+                getTextLayout(1).getText(0).setText("x");
 
                 break;
 

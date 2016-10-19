@@ -99,9 +99,10 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         if (mComponent.overheadVal > multiplier) {
             CAsm_TextLayout secondInAddition = allAlleys.get(curRowIndexInAddition-1).getTextLayout().getTextLayout(mComponent.numSlots-1);
             secondInAddition.getText(0).setText("+");
-            secondInAddition.setBackground(secondInAddition.getResources().getDrawable(R.drawable.underline));
+            secondInAddition.setBackground(secondInAddition.getResources().getDrawable(R.drawable.underline_mul));
 
             updateDotbagsInAddition();
+            if (mComponent.overheadVal > multiplier*2) setStruck(curRowIndexInAddition - 4);
         }
     }
 
@@ -218,6 +219,16 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         }
     }
 
+    private void setStruck(int startIndex) {
+        CAsm_TextLayout tmp;
+        tmp = allAlleys.get(startIndex).getTextLayout().getTextLayout(mComponent.numSlots - 1);
+        if (!tmp.getText(0).getText().equals("")) tmp.getText(0).setStruck(true);
+        tmp.getText(1).setStruck(true);
+        tmp = allAlleys.get(startIndex + 1).getTextLayout().getTextLayout(mComponent.numSlots - 1);
+        if (!tmp.getText(0).getText().equals("")) tmp.getText(0).setStruck(true);
+        tmp.getText(1).setStruck(true);
+        tmp.getBackground().setAlpha(100);
+    }
     @Override
     public void nextDigit() {
 

@@ -77,7 +77,6 @@ public class CAsm_DotBag extends TableLayout {
 
     }
 
-
     private void init() {
 
         setWillNotDraw(false);
@@ -247,7 +246,6 @@ public class CAsm_DotBag extends TableLayout {
         resetBounds();
 
     }
-
 
     private TableRow addRow(int index) {
 
@@ -454,6 +452,13 @@ public class CAsm_DotBag extends TableLayout {
         else {
             return false;
         }
+    }
+
+    public void updateSize(boolean isMultiplication) {
+        if (isMultiplication)
+            size = (int)(ASM_CONST.textBoxHeightMul * scale);
+        else
+            size = (int)(ASM_CONST.textBoxHeight * scale);
     }
 
     private void updateRows() {this.rows = allTableRows.size(); }

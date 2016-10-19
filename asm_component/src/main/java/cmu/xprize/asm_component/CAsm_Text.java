@@ -25,7 +25,7 @@ import cmu.xprize.util.TCONST;
 public class CAsm_Text extends TextView implements IEventListener {
 
     float scale = getResources().getDisplayMetrics().density;
-    final int textSize = (int)(ASM_CONST.textSize*scale);
+    int textSize = (int)(ASM_CONST.textSize*scale);
 
     public boolean isWritable = false;
     public boolean isClicked = false;
@@ -37,6 +37,12 @@ public class CAsm_Text extends TextView implements IEventListener {
 
         super(context);
         reset();
+    }
+
+    public CAsm_Text(Context context, boolean isMultiplication) {
+
+        super(context);
+        reset(isMultiplication);
     }
 
     public CAsm_Text(Context context, AttributeSet attrs) {
@@ -60,9 +66,12 @@ public class CAsm_Text extends TextView implements IEventListener {
         } else return false;
     }
 
-
     public void reset() {
+        reset(false);
+    }
 
+    public void reset(boolean isMultiplication) {
+        if (isMultiplication) textSize = (int)(ASM_CONST.textSizeMul*scale);
         isClicked = false;
 
         setStruck(false);

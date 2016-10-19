@@ -31,7 +31,6 @@ public class CAsm_Alley extends LinearLayout {
     static final String TAG = "CAsm_Alley";
 
     public CAsm_Alley(Context context) {
-
         super(context);
         init(context, null);
     }
@@ -65,6 +64,7 @@ public class CAsm_Alley extends LinearLayout {
         this.numSlots = _numSlots;
         this.image = _image;
 
+        SdotBag.updateSize(operation.equals("x"));
         STextLayout.resetAllValues();
         if(operation.equals("x")) {
             if(id != ASM_CONST.OPERATION_MULTI && id != ASM_CONST.REGULAR_MULTI)
