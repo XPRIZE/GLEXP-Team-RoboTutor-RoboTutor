@@ -18,6 +18,7 @@ import android.widget.ImageView;
 
 import org.json.JSONObject;
 
+import cmu.xprize.ak_component.CAkPlayer;
 import cmu.xprize.ak_component.CAkQuestionBoard;
 import cmu.xprize.ak_component.CAk_Component;
 import cmu.xprize.ak_component.CAk_Data;
@@ -186,6 +187,12 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         applyEventNode("PLAY_AUDIO");
     }
 
+    public void instructAudio(String instruction){
+        TScope scope = mTutor.getScope();
+        Log.d("InstructAudio", instruction);
+        scope.addUpdateVar("audio", new TString(instruction));
+        applyEventNode("INSTRUCT_AUDIO");
+    }
 
     public void enable(Boolean enable) {
     }
@@ -314,6 +321,57 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
                 mTutor.setAddFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
                 wrongTimes = 0;
             }
+        }
+    }
+
+    public void instruct(){
+
+        switch(questionBoard.choices.length){
+            case 1:
+                if(dataSource[_dataIndex - 1].belowString.equals("audio")){//if it is an audio question
+                    instructAudio("This says");
+                }else{//else
+                    instructAudio("this is");
+                }
+                if(questionBoard.answerLane == CAkPlayer.Lane.LEFT){
+
+                }else if(questionBoard.answerLane == CAkPlayer.Lane.MID){
+
+                }else if(questionBoard.answerLane == CAkPlayer.Lane.RIGHT){
+
+                }else{
+                    //exception handle here
+                }
+
+                break;
+            case 2:
+                if(dataSource[_dataIndex - 1].belowString.equals("audio")){//if it is an audio question
+                    instructAudio("This says");
+                    playAudio(dataSource[_dataIndex - 1]);
+                }else{//else
+
+                }
+                if(questionBoard.answerLane == CAkPlayer.Lane.LEFT){
+
+                }else if(questionBoard.answerLane == CAkPlayer.Lane.MID){
+                    instructAudio("between");
+                    instructAudio("this");
+                    instructAudio("and");
+                    instructAudio("this");
+                }else if(questionBoard.answerLane == CAkPlayer.Lane.RIGHT){
+
+                }else{
+                    //exception handle here
+                }
+                instructAudio("so tap here");
+                break;
+            case 3:
+                if(dataSource[_dataIndex - 1].belowString.equals("audio")){//if it is an audio question
+
+                }else{//else
+
+                }
+                break;
         }
     }
 
