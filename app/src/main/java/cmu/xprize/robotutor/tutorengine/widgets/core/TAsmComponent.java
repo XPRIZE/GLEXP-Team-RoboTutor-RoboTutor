@@ -180,16 +180,25 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     public void next() {
 
         // If wrong reset ALLCORRECT
-        if(mTutor.testFeatureSet(TCONST.GENERIC_WRONG)) {
+        if (mTutor.testFeatureSet(TCONST.GENERIC_WRONG))
             mTutor.setDelFeature(TCONST.ALL_CORRECT);
-        }
 
         reset();
 
         super.next();
         resetPlaceValue();
-        if(dataExhausted())
-            mTutor.setAddFeature(TCONST.FTR_EOI);
+
+        if (operation != null) {
+            switch (operation) {
+                case "+" :
+                    mTutor.setAddFeature(TCONST.ASM_ADD);break;
+                case "-" :
+                    mTutor.setAddFeature(TCONST.ASM_SUBTRACT);break;
+                case "x" :
+                    mTutor.setAddFeature(TCONST.ASM_MULTI);break;
+            }
+        }
+        if (dataExhausted()) mTutor.setAddFeature(TCONST.FTR_EOI);
 
     }
 

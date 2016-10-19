@@ -151,7 +151,10 @@
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "next", "features": ""}
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "next", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Let's add some numbers now.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_ADD"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Let's subtract some numbers now.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_SUBTRACT"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Let's multiply some numbers now.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_MULTI"}
           ]
         },
 

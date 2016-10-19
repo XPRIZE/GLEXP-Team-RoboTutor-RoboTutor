@@ -50,7 +50,7 @@ public class TCONST {
     public static final int     MAX_DIGITS      = 4;
     public static final String  NO_DATASOURCE   = "";
     public static final String  DATA_PREFIX     = "DATA_";
-    public static final String DATA_PATH        = "data";
+    public static final String  DATA_PATH        = "data";
 
     public static final String FW_PREPLISTENER  = "FW_PREPLISTENER";
     public static final String FW_TTS           = "FW_TTS";
@@ -59,6 +59,10 @@ public class TCONST {
     public static final String NULL             = "NULL";
     public static final String SAY_STIMULUS     = "FTR_SAY";
     public static final String SHOW_STIMULUS    = "FTR_SHOW";
+
+    public static final String ASM_ADD          = "ASM_ADD";
+    public static final String ASM_SUBTRACT     = "ASM_SUBTRACT";
+    public static final String ASM_MULTI        = "ASM_MULTI";
 
     public static final String TYPE_CTUTOR      = "CTutor";
     public static final String TYPE_CSCENEGRAPH = "CSceneGraph";

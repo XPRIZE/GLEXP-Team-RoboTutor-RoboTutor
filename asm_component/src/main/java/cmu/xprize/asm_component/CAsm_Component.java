@@ -288,17 +288,16 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         // TODO: talk about whether this should be part of base mechanics
         readInData(data);
 
-        if (operation != null && operation.equals("x"))
-            alleyMargin = (int) (ASM_CONST.alleyMarginMul * scale);
-        else
-            alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
         numSlots = CAsm_Util.maxDigits(numbers) + 1;
         digitIndex = numSlots;
 
-        if (operation.equals("x"))
+        if (operation != null && operation.equals("x")) {
+            alleyMargin = (int) (ASM_CONST.alleyMarginMul * scale);
             updateAllAlleyForMultiplication();
-        else
+        } else {
+            alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
             updateAllAlleyForAddSubtract();
+        }
 
         setMechanics();
         setSound();
