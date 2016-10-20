@@ -8,7 +8,7 @@ import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.TextView;
-
+import android.graphics.Color;
 import static cmu.xprize.ak_component.CAkTeachFinger.Lane.LEFT;
 import static cmu.xprize.ak_component.CAkTeachFinger.Lane.MID;
 import static cmu.xprize.ak_component.CAkTeachFinger.Lane.RIGHT;
@@ -83,7 +83,7 @@ public class CAkTeachFinger extends TextView {
                     info.leftMarginPercent = 0.36f;
                     break;
                 case RIGHT:
-                    info.leftMarginPercent = 0.41f;
+                    info.leftMarginPercent = 0.47f;
                     break;
             }
             requestLayout();
@@ -169,7 +169,16 @@ public class CAkTeachFinger extends TextView {
             update();
             invalidate();
         }
-
         setText(words);
+    }
+    public void setPostion(CAkPlayer.Lane rightlane){
+        setTextColor(Color.argb(0, 0, 255, 0));
+        if(rightlane == CAkPlayer.Lane.LEFT)
+            lane = LEFT;
+        else if(rightlane == CAkPlayer.Lane.MID)
+            lane = MID;
+        else
+            lane = RIGHT;
+        update();
     }
 }

@@ -47,6 +47,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     private CTutor mTutor;
     private CObjectDelegate mSceneObject;
     private int wrongTimes = 0;//record the successive wrong times of the player
+    private PercentRelativeLayout curpercentLayout = (PercentRelativeLayout) getChildAt(0);
 
     static final String TAG = "TAkComponent";
 
@@ -100,6 +101,14 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
         mTutor.setDelFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
         mTutor.setDelFeature(TCONST.GENERIC_WRONG);
+        mTutor.setDelFeature(TCONST.PROMPT_1LEFT);
+        mTutor.setDelFeature(TCONST.PROMPT_1MID);
+        mTutor.setDelFeature(TCONST.PROMPT_1RIGHT);
+        mTutor.setDelFeature(TCONST.PROMPT_2LEFT);
+        mTutor.setDelFeature(TCONST.PROMPT_2MID);
+        mTutor.setDelFeature(TCONST.PROMPT_2RIGHT);
+        mTutor.setDelFeature(TCONST.PROMPT_3);
+        mTutor.setDelFeature(TCONST.PROMPT_3V);
     }
 
 
@@ -191,7 +200,9 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         TScope scope = mTutor.getScope();
         Log.d("InstructAudio", instruction);
         scope.addUpdateVar("audio", new TString(instruction));
+        applyEventNode("PAUSE");
         applyEventNode("INSTRUCT_AUDIO");
+        applyEventNode("RESUME");
     }
 
     public void enable(Boolean enable) {
@@ -324,55 +335,43 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         }
     }
 
-    public void instruct(){
-
+    public void judge_instruct(){
+        reset();
         switch(questionBoard.choices.length){
             case 1:
-                if(dataSource[_dataIndex - 1].belowString.equals("audio")){//if it is an audio question
-                    instructAudio("This says");
-                }else{//else
-                    instructAudio("this is");
-                }
                 if(questionBoard.answerLane == CAkPlayer.Lane.LEFT){
-
+                    mTutor.setAddFeature(TCONST.PROMPT_1LEFT);
                 }else if(questionBoard.answerLane == CAkPlayer.Lane.MID){
-
+                    mTutor.setAddFeature(TCONST.PROMPT_1MID);
                 }else if(questionBoard.answerLane == CAkPlayer.Lane.RIGHT){
-
-                }else{
-                    //exception handle here
+                    mTutor.setAddFeature(TCONST.PROMPT_1RIGHT);
                 }
-
                 break;
             case 2:
-                if(dataSource[_dataIndex - 1].belowString.equals("audio")){//if it is an audio question
-                    instructAudio("This says");
-                    playAudio(dataSource[_dataIndex - 1]);
-                }else{//else
-
-                }
                 if(questionBoard.answerLane == CAkPlayer.Lane.LEFT){
-
+                    mTutor.setAddFeature(TCONST.PROMPT_2LEFT);
                 }else if(questionBoard.answerLane == CAkPlayer.Lane.MID){
-                    instructAudio("between");
-                    instructAudio("this");
-                    instructAudio("and");
-                    instructAudio("this");
+                    mTutor.setAddFeature(TCONST.PROMPT_2MID);
                 }else if(questionBoard.answerLane == CAkPlayer.Lane.RIGHT){
-
-                }else{
-                    //exception handle here
+                    mTutor.setAddFeature(TCONST.PROMPT_2RIGHT);
                 }
-                instructAudio("so tap here");
                 break;
             case 3:
                 if(dataSource[_dataIndex - 1].belowString.equals("audio")){//if it is an audio question
-
-                }else{//else
-
+                    //TScope scope = mTutor.getScope();
+                    //scope.addUpdateVar("TestAudio", new TString(getAboveString(dataSource[_dataIndex - 1])));
+                    mTutor.setAddFeature(TCONST.PROMPT_3V);
+                }else{
+                    mTutor.setAddFeature(TCONST.PROMPT_3);
                 }
                 break;
         }
+    }
+
+    public void instruct_finger(){
+        teachFinger.bringToFront();
+        teachFinger.setPostion(questionBoard.answerLane);
+        teachFinger.setVisibility(VISIBLE);
     }
 
     public void crash() {
@@ -383,13 +382,38 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         isRunning = false;
         for(Animator animator : ongoingAnimator)
             animator.pause();
-
     }
+
 
     public void resume() {
         isRunning = true;
         for(Animator animator : ongoingAnimator)
             animator.resume();
+    }
+
+    public void prompt_pause(){
+        isRunning = false;
+        for(Animator animator : ongoingAnimator)
+            animator.pause();
+        LayoutParams params = new LayoutParams(360, 80);
+        params.addRule(CENTER_HORIZONTAL);
+        curpercentLayout.addView(questionBoard, params);
+        player.bringToFront();
+    }
+
+    public void prompt_resume(){
+        isRunning = true;
+        for(Animator animator : ongoingAnimator)
+            animator.resume();
+        teachFinger.setVisibility(INVISIBLE);
+        curpercentLayout.removeView(questionBoard);
+    }
+
+    public void indicateCarText(){
+        CAnimatorUtil.zoomInOut(player.belowTextView,(float)2.0,500);
+        CAnimatorUtil.zoomInOut(player.belowTextView,(float)2.0,500);
+        CAnimatorUtil.zoomInOut(player.belowTextView,(float)2.0,500);
+        CAnimatorUtil.zoomInOut(player.belowTextView,(float)2.0,500);
     }
 
     public void increaseScore() {
