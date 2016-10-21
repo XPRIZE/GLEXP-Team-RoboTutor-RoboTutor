@@ -152,9 +152,17 @@
           "COMMENT": "TBD",
           "tracks": [
             {"type": "COMMAND", "id": "SAddSubtract", "method": "next", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Let's add some numbers now.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_ADD"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Let's subtract some numbers now.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_SUBTRACT"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Let's multiply some numbers now.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_MULTI"}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Let's add some numbers now.mp3",        "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Let's subtract some numbers now.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUBTRACT"},
+            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Let's multiply some numbers now.mp3",          "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_MULTI"}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Multiplying.mp3",                         "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.multiplicand}}.mp3",     "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "times.mp3",                                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.multiplier}}.mp3",       "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            {"type":  "AUDIO", "command": "PLAY", "soundsource": "means adding up.mp3",                    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.multiplier}}.mp3",       "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.multiplicand}}.mp3",     "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "times.mp3",                                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"}
           ]
         },
 

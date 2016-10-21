@@ -108,6 +108,14 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         mTutor.setDelFeature(TCONST.GENERIC_WRONG);
     }
 
+    public void resetAll() {
+        mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
+        mTutor.setDelFeature(TCONST.GENERIC_WRONG);
+
+        mTutor.setDelFeature(TCONST.ASM_ADD);
+        mTutor.setDelFeature(TCONST.ASM_SUBTRACT);
+        mTutor.setDelFeature(TCONST.ASM_MULTI);
+    }
 
     /**
      * Preprocess the data set
@@ -183,7 +191,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         if (mTutor.testFeatureSet(TCONST.GENERIC_WRONG))
             mTutor.setDelFeature(TCONST.ALL_CORRECT);
 
-        reset();
+        resetAll();
 
         super.next();
         resetPlaceValue();
@@ -195,7 +203,10 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
                 case "-" :
                     mTutor.setAddFeature(TCONST.ASM_SUBTRACT);break;
                 case "x" :
-                    mTutor.setAddFeature(TCONST.ASM_MULTI);break;
+                    mTutor.setAddFeature(TCONST.ASM_MULTI);
+                    mTutor.getScope().addUpdateVar(name() + ".multiplicand", new TString(numbers[0] + ""));
+                    mTutor.getScope().addUpdateVar(name() + ".multiplier", new TString(numbers[1] + ""));
+                    break;
             }
         }
         if (dataExhausted()) mTutor.setAddFeature(TCONST.FTR_EOI);
