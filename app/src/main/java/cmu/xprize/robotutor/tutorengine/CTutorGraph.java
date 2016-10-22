@@ -428,7 +428,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
 
             navigatedata[_scenePrev].instance.onExitScene();
 
-            // increment the current scene - this is feature reactive
+            // increment the current scene - this is Feature reactive
             sceneCurrINC();
 
             if (navigatedata[_sceneCurr].instance == null) {

@@ -114,6 +114,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected LocalBroadcastManager bManager;
 
     // json loadable
+    public boolean              random      = false;
     public String[]             dataSource;
 
     final private String  TAG        = "CWritingController";
@@ -320,8 +321,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         CRecResult          candidate      = _ltkPlusCandidates[0];
         CStimulusController stimController = (CStimulusController)mRecogList.getChildAt(mActiveIndex);
 
-        publishValue(WR_CONST.CANDIDATE_VAR, candidate.getRecChar().toUpperCase());
-        publishValue(WR_CONST.EXPECTED_VAR, mActiveController.getExpectedChar().toUpperCase());
+        publishValue(WR_CONST.CANDIDATE_VAR, candidate.getRecChar().toLowerCase());
+        publishValue(WR_CONST.EXPECTED_VAR, mActiveController.getExpectedChar().toLowerCase());
 
         _charValid   = stimController.testStimulus( candidate.getRecChar());
         _metricValid = _metric.testConstraint(candidate.getGlyph());
@@ -711,17 +712,25 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     public void setDataSource(String[] dataSource) {
 
-        ArrayList<String> dataSet = new ArrayList<String>(Arrays.asList(dataSource));
 
-        // _data takes the form - ["92","3","146"]
-        //
-        _data = new ArrayList<String>();
+        if(random) {
 
-        for(int i1 = 0 ; i1 < 10 ; i1++) {
-            int randIndex =  (int) (Math.random() * dataSet.size());
+            ArrayList<String> dataSet = new ArrayList<String>(Arrays.asList(dataSource));
 
-            _data.add(dataSet.get(randIndex));
-            dataSet.remove(randIndex);
+            // _data takes the form - ["92","3","146"]
+            //
+            _data = new ArrayList<String>();
+
+            for (int i1 = 0; i1 < 10; i1++) {
+                int randIndex = (int) (Math.random() * dataSet.size());
+
+                _data.add(dataSet.get(randIndex));
+                dataSet.remove(randIndex);
+            }
+        }
+        else {
+
+            _data = new ArrayList<String>(Arrays.asList(dataSource));
         }
 
         _dataIndex = 0;

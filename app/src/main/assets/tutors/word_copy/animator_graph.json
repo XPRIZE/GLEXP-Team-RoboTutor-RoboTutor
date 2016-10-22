@@ -25,8 +25,13 @@
               "tracks": [
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_HIGHLIGHT:String|1000:Integer", "features":""},
 
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the word.mp3","soundpackage": "default","mode": "flow", "features": ""},
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3",  "soundpackage": "words",  "mode": "flow", "features": ""}
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DIGITS"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the letter.mp3","soundpackage": "default","mode": "flow", "features": "FTR_LETTERS"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the word.mp3","soundpackage": "default","mode": "flow", "features": "FTR_WORDS"},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "words","mode":"flow", "features": "FTR_WORDS"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "letters","mode":"flow", "features": "FTR_LETTERS"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "numbers","mode":"flow", "features": "FTR_NUMBERS"}
               ],
               "preexit": [
               ],
@@ -145,7 +150,7 @@
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "ANIMATE_OVERLAY:String",                  "features":"FTR_ATTEMPT_3"},
 
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "That doesnt look like.mp3",  "soundpackage": "default","mode": "flow",   "features": "FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.expected}}.mp3", "soundpackage": "xprize", "mode": "flow", "features": "FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.expected}}.mp3", "soundpackage": "letters", "mode": "flow", "features": "FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
 
                 // On iteration 2 / 3 we do a delayed show of the erase button and prompt to retry
                 {"type": "COMMAND", "id": "word_copy", "method": "showEraseButton",     "parms": "TRUE:Boolean",              "features":"FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
@@ -227,9 +232,12 @@
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "HIDE_GLYPHS:String",                     "features":"FTR_HAD_ERRORS"},
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_PROTO:String",                    "features":"FTR_HAD_ERRORS"},
 
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","soundpackage": "default","mode": "flow", "features": "FTR_HAD_ERRORS"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Yay.mp3","soundpackage": "default","mode": "flow", "features": "FTR_HAD_ERRORS"},
 
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "words",  "mode":"flow", "features": ""},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "words","mode":"flow", "features": "FTR_WORDS"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "letters","mode":"flow", "features": "FTR_LETTERS"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "numbers","mode":"flow", "features": "FTR_NUMBERS"},
+
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "Very good.mp3",          "soundpackage": "default","mode":"flow", "features": "!FTR_HAD_ERRORS"},
 
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "APPLY_BEHAVIOR:String|NEXT_NODE:String|600:Integer", "features":"!FTR_HAD_ERRORS"}
@@ -418,8 +426,17 @@
           "reuse":true,
           "COMMENT": "Initialize the data source - ",
           "tracks": [
-            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[saba]:String","features":"LANG_SW"},
-            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[one]:String", "features":"LANG_EN"}
+            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[saba]:String","features":"LANG_SW&FTR_WORDS"},
+            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[one]:String", "features":"LANG_EN&FTR_WORDS"},
+
+            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[f]:String","features":"LANG_SW&FTR_LOWERCASE"},
+            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[f]:String", "features":"LANG_EN&FTR_LOWERCASE"},
+
+            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[G]:String","features":"LANG_SW&FTR_UPPERCASE"},
+            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[G]:String", "features":"LANG_EN&FTR_UPPERCASE"},
+
+            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[4]:String","features":"LANG_SW&FTR_DIGITS"},
+            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[5]:String", "features":"LANG_EN&FTR_DIGITS"}
           ]
         },
 
@@ -437,7 +454,9 @@
             {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_DEMO:String|500:Integer",          "features":""},
 
             // This will play during the demo replay
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some words.mp3", "soundpackage":"default", "volume": 1.0, "mode":"stream", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now we will practice writing some letters.mp3", "soundpackage":"default", "volume": 1.0, "mode":"stream", "features": "FTR_LETTERS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some numbers.mp3", "soundpackage":"default", "volume": 1.0, "mode":"stream", "features": "FTR_DIGITS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some words.mp3", "soundpackage":"default", "volume": 1.0, "mode":"stream", "features": "FTR_WORDS"},
 
             // Next will fire when replay completes
             {"type": "COMMAND", "id": "word_copy", "method": "clear", "parms": "", "features":""},
@@ -466,7 +485,9 @@
           "COMMENT": "TBD",
           "tracks": [
             {"type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "words","mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "words","mode":"flow", "features": "FTR_WORDS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "letters","mode":"flow", "features": "FTR_LETTERS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "numbers","mode":"flow", "features": "FTR_NUMBERS"}
           ]
         },
 
