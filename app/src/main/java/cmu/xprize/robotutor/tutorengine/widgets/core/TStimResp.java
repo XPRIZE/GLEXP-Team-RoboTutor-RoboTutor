@@ -101,7 +101,7 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl, IDataSink 
 
 
     /**
-     *
+     * TODO: This is incorrect - remove?
      * @param dataSource
      */
     public void setDataSource(String dataSource) {
@@ -110,7 +110,8 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl, IDataSink 
             if (dataSource.startsWith(TCONST.SOURCEFILE)) {
                 dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
 
-                JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.TDESC + "/" + dataSource);
+// TODO: This isn't correct
+//                JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.TDESC + "/" + dataSource);
 
             } else if (dataSource.startsWith("db|")) {
                 dataSource = dataSource.substring(3);

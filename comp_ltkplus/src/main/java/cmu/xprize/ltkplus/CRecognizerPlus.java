@@ -65,7 +65,7 @@ public class CRecognizerPlus implements IGlyphSink {
     private boolean                _boostExpected     = true;
     private boolean                _boostUnExpected   = true;
     private boolean                _boostPunctuation  = false;
-    private boolean                _boostMissingSample= false;
+    private boolean                _boostMissingSample= true;
 
     private boolean                _boostDigitClass   = false;
     private boolean                _boostAlphaClass   = false;

@@ -250,7 +250,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
             CMediaController.destroyMediaManager(CTutor.this);
 
-            // disable the input queue permenantly in prep for destruction
+            // disable the input queue permanently in prep for destruction
             // walks the queue chain to diaable the tutor and scene queues
             //
             mSceneGraph.terminateQueue();
@@ -487,6 +487,8 @@ public class CTutor implements ILoadableObject2, IEventSource {
         View tarScene;
         View subScene;
 
+        // Map the sceneid to it's named xml Layout resource.
+        //
         int id = mContext.getResources().getIdentifier(scenedata.id, "layout", mContext.getPackageName());
 
         LayoutInflater inflater = (LayoutInflater)mContext.getSystemService
