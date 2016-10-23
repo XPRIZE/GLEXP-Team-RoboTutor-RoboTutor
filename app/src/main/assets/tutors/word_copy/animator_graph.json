@@ -68,7 +68,7 @@
           }
         },
 
-
+        
         "ERASE_BEHAVIOR": {
           "type": "SUBGRAPH",
           "COMMENT": "glyph metrics have been violated",
@@ -277,7 +277,7 @@
           "COMMENT": "Interaction Demo",
           "maptype":"moduleMap",
           "mapname":"DEMO_MODULE",
-          "preenter":["SET_VERSION","SET_DEMOSOURCE","FW_DISABLE","NEXT_DATA_ITEM"],
+          "preenter":["SET_VERSION","SET_DEMOSOURCE","NEXT_DEMO_MODULE"],
           "preexit" :[],
           "edges": [
             {
@@ -292,7 +292,7 @@
           "COMMENT": "Intro Clip",
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
-          "preenter":["SET_VERSION","SET_DATASOURCE","FW_DISABLE"],
+          "preenter":["SET_VERSION","SET_DATASOURCE"],
           "preexit" :[],
           "edges": [
             {
@@ -305,7 +305,7 @@
         "NEXTITEM":{
           "COMMENT":"This node presents a word for user to copy.",
           "type":"node",
-          "preenter":["NEXT_DATA_ITEM"],
+          "preenter":["NEXT_DATA_MODULE"],
           "maptype":"moduleMap",
           "mapname": "PLAYWORD",
           "preexit" :[],
@@ -319,9 +319,9 @@
           "COMMENT":"Input a letter",
           "type":"node",
           "maptype":"moduleMap",
-          "mapname": "FINGERWRITING",
-          "preenter":["FW_ENABLE"],
-          "preexit" :["FW_DISABLE"],
+          "mapname": "INPUT_MODULE",
+          "preenter":[],
+          "preexit" :[],
           "edges":
           [
             {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
@@ -450,7 +450,7 @@
             {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "TRUE:Boolean","features":""},
 
             // When the word replay is complete move to the next node
-            {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|NEXT_NODE:String" ,"features":""},
+            {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|DELAYED_NEXT:String" ,"features":""},
             {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_DEMO:String|500:Integer",          "features":""},
 
             // This will play during the demo replay
@@ -491,11 +491,15 @@
           ]
         },
 
-        "FINGERWRITING":{
-          "type":"MODULE",
-          "reuse":true,
-          "COMMENT": "FingerWriting Module",
+        "NEXT_DATA_MODULE": {
+          "type": "MODULE",
+          "preenter": [],
+          "reuse": true,
           "tracks": [
+            // Input must be inhibited until all the behaviors are set
+            //
+            {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "TRUE:Boolean","features":""},
+
             {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_ERROR:String|GENERAL_ERROR_BEHAVIOR:String" ,"features":""},
             {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_CORRECT:String|GENERAL_CORRECT_BEHAVIOR:String" ,"features":""},
 
@@ -506,7 +510,37 @@
             {"type": "COMMAND", "id": "word_copy", "method": "postNamed",         "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long",  "features":""},
 
             {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "DATA_ITEM_COMPLETE:String|ITEM_COMPLETE_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "cmd": "WAIT" }
+
+            {"type": "COMMAND", "id": "word_copy", "method": "next" ,"features":""}
+          ],
+          "preexit": [
+          ],
+          "edges": [
+          ]
+        },
+
+        "NEXT_DEMO_MODULE": {
+          "type": "MODULE",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "TRUE:Boolean","features":""},
+            {"type": "COMMAND", "id": "word_copy", "method": "next" ,"features":""}
+          ],
+          "preexit": [
+          ],
+          "edges": [
+          ]
+        },
+
+        "INPUT_MODULE":{
+          "type":"MODULE",
+          "reuse":true,
+          "COMMENT": "glyph input module",
+          "tracks": [
+            {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "FALSE:Boolean","features":""},
+            {"type": "COMMAND", "cmd": "WAIT" },
+            {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "TRUE:Boolean","features":""}
           ]
         },
 
@@ -594,10 +628,7 @@
 
         // Set the LTK+ metric constraint
         "SET_CONSTRAINT":{"type": "COMMAND", "id": "word_copy", "method": "setConstraint", "parms": "H,0.15;W,0.15;Y,0.10;X,0.15:String", "features":""},
-
-        "NEXT_DATA_ITEM":{"type": "COMMAND", "id": "word_copy", "method": "next" ,"features":""},
-        //get a new digit from the list.
-
+        
         //"GETRESPONSE":{"type": "COMMAND", "id": "Sresponse", "method": "???" ,"features":""},
         //get the recognized character from the recognizer???
 
