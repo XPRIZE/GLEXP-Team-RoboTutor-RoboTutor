@@ -17,7 +17,7 @@
         "INTRO_STATE": {
           "type": "NODE",
           "COMMENT": "Intro Clip",
-          "preenter":["SET_VERSION","SET_LANGUAGE","SET_STORYNAME","CONFIG_TUTOR"],
+          "preenter":["SET_VERSION","CONFIG_TUTOR"],
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
           "preexit" :[],
@@ -326,8 +326,6 @@
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
 
-        "SET_LANGUAGE":{"type": "COMMAND", "id": "SstoryReading", "method": "setLanguage", "parms": "LANG_SW:String","features":""},
-        "SET_STORYNAME":{"type": "COMMAND", "id": "SstoryReading", "method": "setStory", "parms": "Ajali mbaya:String","features":""},
         "START_STORY":{"type": "COMMAND", "id": "SstoryReading", "method": "startStory", "features":""},
 
         "HESTITATION_TIMER": {"type": "COMMAND", "id":"SstoryReading", "method":"configureTimedEvent", "parms": "START_TIMEOUT:String|HESITATION_PROMPT:String|5000:Integer", "features": "" },

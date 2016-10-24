@@ -28,12 +28,35 @@
         android:layout_width="match_parent"
         android:background="#FFFFFF"/>
 
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout
+        android:id="@+id/SaudioReplay"
+        android:layout_below="@id/Sbanner"
+        android:layout_width="match_parent"
+        app:layout_heightPercent="30%"
+        android:visibility="invisible"
+        android:background="@null">
+
+        <cmu.xprize.robotutor.tutorengine.widgets.core.TImageButton
+            android:id="@+id/Sreplay"
+            android:background="@null"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"
+            android:src="@drawable/replay_button"/>
+
+    </cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>
+
+
+
     <!-- Note: the linkedscrollview must be encapsulated in a framelayout or it will not size correctly -->
 
     <cmu.xprize.robotutor.tutorengine.widgets.core.TSceneFrameLayout
         android:id="@+id/SstimulusFrame"
         android:layout_below="@id/Sbanner"
         android:layout_width="match_parent"
+        android:visibility="invisible"
         app:layout_heightPercent="30%">
 
         <cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView
@@ -86,6 +109,7 @@
 
     </cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView>
 
+
     <cmu.xprize.robotutor.tutorengine.widgets.core.THandAnimation
         android:id="@+id/ShandAnimator"
         android:layout_width="match_parent"
@@ -93,5 +117,6 @@
         android:clipChildren="false"
         app:scale_factor="0.3"
         android:background="@null"/>
+
 
 </cmu.xprize.robotutor.tutorengine.widgets.core.TWritingComponent>

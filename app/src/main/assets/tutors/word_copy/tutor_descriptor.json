@@ -6,7 +6,11 @@
 	  "id":"word_copy",
 
 	  "oncreate":[
-        {"type": "COMMAND", "id": "SinputBG", "method": "setBackground", "parms": "#A5C4D4:String", "features":"FTR_LETTERS|FTR_DIGITS"}
+        {"type": "COMMAND", "id": "SinputBG", "method": "setBackground", "parms": "#A5C4D4:String", "features":"FTR_LETTERS|FTR_NUMBERS"},
+
+		{"type": "COMMAND", "id": "SaudioReplay",   "method": "setVisibility", "parms": "VISIBLE:String", "features":"FTR_DICTATION"},
+		{"type": "COMMAND", "id": "SstimulusFrame", "method": "setVisibility", "parms": "VISIBLE:String", "features":"!FTR_DICTATION"}
+
 	  ],
 	  "onenter":[
 	  ],

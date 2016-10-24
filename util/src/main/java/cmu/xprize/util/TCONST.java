@@ -106,6 +106,10 @@ public class TCONST {
     public static final float  TRACKER_WEIGHT      = 5f;
     public static final int    TRACKER_COLOR       = 0x11000088;
 
+    public static final String VISIBLE             = "VISIBLE";
+    public static final String INVISIBLE           = "INVISIBLE";
+    public static final String GONE                = "GONE";
+
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
     //

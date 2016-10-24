@@ -93,6 +93,13 @@ public class TFingerWriter extends CFingerWriter implements ITutorObjectImpl, ID
     // Tutor scriptiable methods  Start
 
 
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
+
+
     public void setRecognizer(String recogId) {
         super.setRecognizer(recogId);
     }

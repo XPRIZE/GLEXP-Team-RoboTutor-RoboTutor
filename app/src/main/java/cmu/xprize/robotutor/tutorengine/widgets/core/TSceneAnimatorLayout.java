@@ -68,4 +68,12 @@ public class TSceneAnimatorLayout extends TMasterAnimatorLayout implements ITuto
         setOutAnimation(fade_out);
     }
 
+
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mTutorScene.setVisibility(visible);
+    }
+
 }

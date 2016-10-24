@@ -100,6 +100,12 @@ public class TStimResp extends CStimResp implements ITutorObjectImpl, IDataSink 
     // Tutor methods  Start
 
 
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
+
     /**
      * TODO: This is incorrect - remove?
      * @param dataSource

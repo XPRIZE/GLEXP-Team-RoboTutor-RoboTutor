@@ -31,6 +31,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import org.json.JSONObject;
@@ -76,6 +77,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected CLinkedScrollView mDrawnScroll;
     private   IGlyphController  mActiveController;
     private   int               mActiveIndex;
+
+    protected ImageButton       mReplayButton;
 
     protected LinearLayout      mRecogList;
     protected LinearLayout      mGlyphList;
@@ -338,6 +341,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         //
         inhibitInput(mActiveController, !_isValid);
 
+        // Publish the state features.
+        //
+        publishState();
+
         // Fire the appropriate behavior
         //
         if(isComplete()) {
@@ -354,10 +361,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 applyBehavior(WR_CONST.ON_ERROR);
 
-//                if (!_charValid)
-//                    applyBehavior(WR_CONST.ON_CHAR_ERROR);
-//                else if (!_metricValid)
-//                    applyBehavior(WR_CONST.ON_GLYPH_ERROR);
+                if (!_charValid)
+                    applyBehavior(WR_CONST.ON_CHAR_ERROR);
+                else if (!_metricValid)
+                    applyBehavior(WR_CONST.ON_METRIC_ERROR);
             }
             else {
                 updateStalledStatus();
@@ -873,6 +880,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
+    /**
+     * Overloaded in
+     */
+    public void pointAtReplayButton() {
+    }
+
+
     public void highlightFields() {
 
         post(TCONST.HIGHLIGHT, 500);
@@ -1140,6 +1154,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                         pointAtEraseButton();
                         break;
+
+                    case WR_CONST.POINT_AT_REPLAY_BUTTON:
+
+                        pointAtReplayButton();
+                        break;
+
 
                     default:
                         break;

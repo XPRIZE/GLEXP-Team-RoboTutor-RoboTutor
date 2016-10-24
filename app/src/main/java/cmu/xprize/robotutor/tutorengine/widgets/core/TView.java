@@ -73,6 +73,13 @@ public class TView extends View implements ITutorObjectImpl {
         setBackgroundColor(Color.parseColor(color));
     }
 
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
+
     @Override
     public void setName(String name) {
         mSceneObject.setName(name);

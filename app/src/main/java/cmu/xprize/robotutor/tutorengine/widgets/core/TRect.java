@@ -102,6 +102,11 @@ public class TRect extends View  implements ITutorObjectImpl {
     // Tutor methods  Start
 
 
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
 
     // Tutor methods  End
     //************************************************************************

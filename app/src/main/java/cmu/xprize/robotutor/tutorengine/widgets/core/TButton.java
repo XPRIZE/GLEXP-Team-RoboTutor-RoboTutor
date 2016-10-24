@@ -74,6 +74,13 @@ public class TButton extends Button implements ITutorObjectImpl {
     // Tutor methods  Start
 
 
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
+
     //** Special Object methods for missing method parameter type combinations -
     //   e.g. This is the simplest way instead of using CharSequence
 

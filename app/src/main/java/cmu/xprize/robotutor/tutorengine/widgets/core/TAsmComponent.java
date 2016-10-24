@@ -64,6 +64,13 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl {
     //**********************************************************
     //*****************  Tutor Interface
 
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
+
     public void evaluateWhole () {
 
 
