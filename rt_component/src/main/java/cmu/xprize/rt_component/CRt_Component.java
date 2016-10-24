@@ -525,38 +525,6 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
 
 
     /**
-     *
-     * @param dataSource
-     */
-//    public void setDataSource(String dataSource, String tutorName) {
-//
-//        try {
-//            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
-//                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
-//
-//                DATASOURCEPATH = TCONST.TUTORROOT + "/" + tutorName + "/" + TCONST.TASSETS + "/" + mLanguage + "/";
-//
-//                String jsonData = JSON_Helper.cacheData(DATASOURCEPATH + dataSource);
-//                loadJSON(new JSONObject(jsonData), null);
-//
-//            } else if (dataSource.startsWith("db|")) {
-//
-//
-//            } else if (dataSource.startsWith("{")) {
-//
-//                loadJSON(new JSONObject(dataSource), null);
-//
-//            } else {
-//                throw (new Exception("BadDataSource"));
-//            }
-//        }
-//        catch (Exception e) {
-//            CErrorManager.logEvent(TAG, "Invalid Data Source for : " + tutorName, e, false);
-//        }
-//    }
-
-
-    /**
      * @param storyName
      */
     public void setStory(String storyName) {

@@ -110,26 +110,33 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
 
     /**
      *
-     * @param dataSource
+     * @param dataNameDescriptor
      */
     @Override
-    public void setDataSource(String dataSource) {
+    public void setDataSource(String dataNameDescriptor) {
 
         try {
-            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
-                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
+            if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
-                DATASOURCEPATH = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + mLanguage + "/";
+                String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
 
-                String jsonData = JSON_Helper.cacheData(DATASOURCEPATH + dataSource);
-                loadJSON(new JSONObject(jsonData), null);
+                // Generate a langauage specific path to the data source -
+                // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
+                // e.g. tutors/word_copy/assets/data/sw/
+                //
+                DATASOURCEPATH = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS +
+                                 "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
 
-            } else if (dataSource.startsWith("db|")) {
+                String jsonData = JSON_Helper.cacheData(DATASOURCEPATH + dataFile);
 
+                // Load the datasource in the component module - i.e. the superclass
+                //
+                loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 
-            } else if (dataSource.startsWith("{")) {
+            } else if (dataNameDescriptor.startsWith("db|")) {
+            } else if (dataNameDescriptor.startsWith("{")) {
 
-                loadJSON(new JSONObject(dataSource), null);
+                loadJSON(new JSONObject(dataNameDescriptor), null);
 
             } else {
                 throw (new Exception("BadDataSource"));
@@ -163,6 +170,13 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
     //**********************************************************
     //**********************************************************
     //*****************  Scripting Interface
+
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
 
     /**
      * @param language

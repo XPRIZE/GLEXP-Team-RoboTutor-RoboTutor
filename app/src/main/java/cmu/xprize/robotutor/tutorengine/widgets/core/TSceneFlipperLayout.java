@@ -63,6 +63,12 @@ public class TSceneFlipperLayout extends ViewFlipper implements ITutorSceneImpl 
     // Tutor methods  Start
 
 
+    @Override
+    public void setVisibility(String visible) {
+
+        mTutorScene.setVisibility(visible);
+    }
+
 
     // Tutor methods  End
     //************************************************************************

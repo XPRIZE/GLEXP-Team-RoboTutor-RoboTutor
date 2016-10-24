@@ -86,6 +86,13 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
     //**********************************************************
     //*****************  Tutor Interface
 
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
+
     /**
      *
      * @param dataSource

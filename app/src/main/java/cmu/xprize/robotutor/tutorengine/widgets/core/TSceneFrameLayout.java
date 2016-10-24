@@ -66,15 +66,22 @@ public class TSceneFrameLayout extends FrameLayout implements ITutorSceneImpl {
 
 
 
-    public void setDataSource(String dataSource) {
-
-    }
-
 
     //************************************************************************
     //************************************************************************
     // Tutor methods  Start
 
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mTutorScene.setVisibility(visible);
+    }
+
+
+    public void setDataSource(String dataSource) {
+
+    }
 
 
     // Tutor methods  End

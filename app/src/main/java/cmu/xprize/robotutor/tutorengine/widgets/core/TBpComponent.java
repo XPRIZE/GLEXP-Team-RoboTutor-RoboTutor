@@ -95,6 +95,13 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     //*****************  Tutor Interface
 
 
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
+
+
     private void reset() {
 
         resetValid();

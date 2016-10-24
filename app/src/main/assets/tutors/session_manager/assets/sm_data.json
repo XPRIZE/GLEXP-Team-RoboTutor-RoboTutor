@@ -23,23 +23,23 @@
   "bgColors": ["#D9FFFF","#b9FFb9"],
 
   "dataSource": [
-    {
-      "type":"Sm_Class",
-      "description":"Akira",
-      //"background":"#D9FFFF",
-      "data": [
-        { "type":"Sm_Data", "datasource":"", "intent": "akira", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Akira"}
-      ]
-    },
+//    {
+//      "type":"Sm_Class",
+//      "description":"Akira",
+//      //"background":"#D9FFFF",
+//      "data": [
+//        { "type":"Sm_Data", "datasource":"", "intent": "akira", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Akira"}
+//      ]
+//    },
 
-    {
-      "type":"Sm_Class",
-      "description":"add_subtract",
-      //"background":"#D9FFFF",
-      "data": [
-        { "type":"Sm_Data", "datasource":"", "intent": "add_subtract", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Add/Subtract"}
-      ]
-    },
+//    {
+//      "type":"Sm_Class",
+//      "description":"add_subtract",
+//      //"background":"#D9FFFF",
+//      "data": [
+//        { "type":"Sm_Data", "datasource":"", "intent": "add_subtract", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Add/Subtract"}
+//      ]
+//    },
 
 //    {
 //      "type":"Sm_Class",
@@ -55,26 +55,26 @@
 //            "intent": "digit_dictation", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Dictation"}
 //        ]
 //    },
-//
 
-//    {
-//      "type":"Sm_Class",
-//      "description":"numeric",
-//      //"background":"#D9FFFF",
-//      "data": [
-//        { "type":"Sm_Data",
-//          "datasource":"{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]digit_level1_data.json\"}]}}}",
-//          "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy 1", "features":"FTR_DIGITS" },
-//
-//        { "type":"Sm_Data",
-//          "datasource":"{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]digit_level2_data.json\"}]}}}",
-//          "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy 2", "features":"FTR_DIGITS" },
-//
-//        { "type":"Sm_Data",
-//          "datasource":"{\"scene_bindings\" : {\"digit_dictation\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"Sstimulus\",\"datasource\": \"[file]dd_data.json\"}]}}}",
-//          "intent": "digit_dictation", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Dictation"}
-//      ]
-//    },
+
+    {
+      "type":"Sm_Class",
+      "description":"numeric",
+      //"background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]digit_level1_data.json\"}]}}}",
+          "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy 1", "features":"FTR_NUMBERS" },
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]digit_level2_data.json\"}]}}}",
+          "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy 2", "features":"FTR_NUMBERS" },
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"digit_dictation\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"Sstimulus\",\"datasource\": \"[file]dd_data.json\"}]}}}",
+          "intent": "digit_dictation", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Dictation 1", "features":"FTR_NUMBERS" }
+      ]
+    },
 
 
     {
@@ -124,16 +124,40 @@
     },
 
 
-
     {
       "type":"Sm_Class",
-      "description":"numeric",
-      //"background":"#b9FFb9",
+      "description":"Letter lists",
+      //"background":"#D9FFFF",
       "data": [
-        { "type":"Sm_Data", "datasource":"", "intent": "number_speaking", "intentdata":"native", "buttontype":"text" , "buttonvalue":"number speaking"},
-        { "type":"Sm_Data", "datasource":"", "intent": "missing_number", "intentdata":"native", "buttontype":"text" , "buttonvalue":"missing number"}
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]lowercase_level1_data.json\"}]}}}",
+          "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Dictation Lowercase 1", "features":"FTR_LETTERS:FTR_LOWERCASE:FTR_DICTATION" },
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]lowercase_level2_data.json\"}]}}}",
+          "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Dictation Lowercase 2", "features":"FTR_LETTERS:FTR_LOWERCASE:FTR_DICTATION" },
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]uppercase_level1_data.json\"}]}}}",
+          "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Dictation Uppercase 1", "features":"FTR_LETTERS:FTR_UPPERCASE:FTR_DICTATION" },
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]uppercase_level2_data.json\"}]}}}",
+          "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Dictation Uppercase 2", "features":"FTR_LETTERS:FTR_UPPERCASE:FTR_DICTATION" }
       ]
     },
+
+
+
+    //    {
+//      "type":"Sm_Class",
+//      "description":"numeric",
+//      //"background":"#b9FFb9",
+//      "data": [
+//        { "type":"Sm_Data", "datasource":"", "intent": "number_speaking", "intentdata":"native", "buttontype":"text" , "buttonvalue":"number speaking"},
+//        { "type":"Sm_Data", "datasource":"", "intent": "missing_number", "intentdata":"native", "buttontype":"text" , "buttonvalue":"missing number"}
+//      ]
+//    },
 
 //    {
 //      "type":"Sm_Class",
@@ -150,10 +174,8 @@
     {
       "type":"Sm_Class",
       "description":"reading",
-      //"background":"#D9FFFF",
       "data": [
-        //{ "type":"Sm_Data", "datasource":"", "intent": "com.carney.readingtutor:com.carney.activity.ReadingTutorActivity", "intentdata":"read", "buttontype":"text" , "buttonvalue":"Reading Tutor Ext" },
-        { "type":"Sm_Data", "datasource":"", "intent": "story_reading", "intentdata":"native", "features":"FTR_MANUAL" ,"buttontype":"text" , "buttonvalue":"Reading Tutor Manual-Flip" },
+        { "type":"Sm_Data", "datasource":"", "intent": "story_reading", "intentdata":"native" ,"buttontype":"text" , "buttonvalue":"Reading Tutor Manual-Flip" , "features":"FTR_MANUAL"},
         { "type":"Sm_Data", "datasource":"", "intent": "story_reading", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Reading Tutor AutoFlip" }
 
       ]

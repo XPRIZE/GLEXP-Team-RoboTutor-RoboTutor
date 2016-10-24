@@ -497,6 +497,13 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
     //**********************************************************
     //*****************  Common Tutor Object Methods
 
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
+
     @Override
     public void setName(String name) {
         mSceneObject.setName(name);

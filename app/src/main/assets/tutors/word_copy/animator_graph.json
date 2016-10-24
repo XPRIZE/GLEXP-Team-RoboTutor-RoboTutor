@@ -25,13 +25,70 @@
               "tracks": [
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_HIGHLIGHT:String|1000:Integer", "features":""},
 
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DIGITS"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3","soundpackage": "default","mode": "flow", "features": "FTR_NUMBERS"},
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the letter.mp3","soundpackage": "default","mode": "flow", "features": "FTR_LETTERS"},
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the word.mp3","soundpackage": "default","mode": "flow", "features": "FTR_WORDS"},
 
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "words","mode":"flow", "features": "FTR_WORDS"},
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "letters","mode":"flow", "features": "FTR_LETTERS"},
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "numbers","mode":"flow", "features": "FTR_NUMBERS"}
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "REPLAY_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "rootnode": "REPLAY_MODULE",
+
+          "nodeMap": {
+            "REPLAY_MODULE": {
+              "type": "MODULE",
+              "COMMENT": "prompt when user hesitates when they should be writing.",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+                {"type": "COMMAND", "id": "word_copy", "method": "cancelPost", "parms": "HESITATION_PROMPT:String",    "features":""},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3","soundpackage": "default","mode": "flow", "features": "FTR_NUMBERS"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the letter.mp3","soundpackage": "default","mode": "flow", "features": "FTR_LETTERS"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the word.mp3","soundpackage": "default","mode": "flow", "features": "FTR_WORDS"},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "words","mode":"flow", "features": "FTR_WORDS"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "letters","mode":"flow", "features": "FTR_LETTERS"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "numbers","mode":"flow", "features": "FTR_NUMBERS"},
+
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_HIGHLIGHT:String", "features":""}
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "DICTATION_HESITATION_FEEDBACK": {
+          "type": "SUBGRAPH",
+          "rootnode": "DICTATION_HESITATION_MODULE",
+
+          "nodeMap": {
+            "DICTATION_HESITATION_MODULE": {
+              "type": "MODULE",
+              "COMMENT": "prompt when user hesitates when they should be writing.",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+                {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput",        "parms": "TRUE:Boolean",                  "features":""},
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "POINT_AT_REPLAY_BUTTON:String", "features":""},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please tap here to hear the word again.mp3","soundpackage": "default","mode": "flow", "features": ""},
+
+                {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput",        "parms": "FALSE:Boolean",           "features":""}
               ],
               "preexit": [
               ],
@@ -137,31 +194,39 @@
               "preenter": [],
               "reuse": true,
               "tracks": [
+//                Un-comment to use erase button
+//                {"type": "COMMAND", "cmd": "FEATURE-ADD", "value": "FTR_ERASE_BTN" },
 
-                {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "ON_ERASE:String|ERASE_BEHAVIOR:String" ,"features":"!FTR_ATTEMPT_4"},
-                {"type": "COMMAND", "id": "word_copy", "method": "postNamed",           "parms": "ERASE_BUTTON_PROMPT:String|APPLY_BEHAVIOR:String|ERASE_HESITATION_FEEDBACK:String|6000:Long",  "features":"!FTR_ATTEMPT_4"},
+                {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "ON_ERASE:String|ERASE_BEHAVIOR:String" ,"features":"!FTR_ATTEMPT_4&FTR_ERASE_BTN"},
+                {"type": "COMMAND", "id": "word_copy", "method": "postNamed",           "parms": "ERASE_BUTTON_PROMPT:String|APPLY_BEHAVIOR:String|ERASE_HESITATION_FEEDBACK:String|6000:Long",  "features":"!FTR_ATTEMPT_4&FTR_ERASE_BTN"},
 
-                {"type": "COMMAND", "id": "word_copy", "method": "showEraseButton",     "parms": "TRUE:Boolean",                           "features":"FTR_ATTEMPT_1"},
+                {"type": "COMMAND", "id": "word_copy", "method": "showEraseButton",     "parms": "TRUE:Boolean",                           "features":"FTR_ATTEMPT_1&FTR_ERASE_BTN"},
                 {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput",        "parms": "TRUE:Boolean",                           "features":"FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
-
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","soundpackage": "default","mode": "flow", "features": "FTR_ATTEMPT_1"},
 
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "ANIMATE_ALIGN:String",                    "features":"FTR_ATTEMPT_2"},
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "ANIMATE_OVERLAY:String",                  "features":"FTR_ATTEMPT_3"},
 
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "That doesnt look like.mp3",  "soundpackage": "default","mode": "flow",   "features": "FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.expected}}.mp3", "soundpackage": "letters", "mode": "flow", "features": "FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "That doesnt look like.mp3",  "soundpackage": "default", "mode": "flow", "features": "!FTR_ATTEMPT_4"},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.expected}}.mp3", "soundpackage": "words",   "mode": "flow", "features": "FTR_WORDS&!FTR_ATTEMPT_4"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.expected}}.mp3", "soundpackage": "letters", "mode": "flow", "features": "FTR_LETTERS&!FTR_ATTEMPT_4"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.expected}}.mp3", "soundpackage": "numbers", "mode": "flow", "features": "FTR_NUMBERS&!FTR_ATTEMPT_4"},
 
                 // On iteration 2 / 3 we do a delayed show of the erase button and prompt to retry
-                {"type": "COMMAND", "id": "word_copy", "method": "showEraseButton",     "parms": "TRUE:Boolean",              "features":"FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","soundpackage": "default","mode": "flow", "features":"FTR_ATTEMPT_2|FTR_ATTEMPT_3"},
+                {"type": "COMMAND", "id": "word_copy", "method": "showEraseButton",     "parms": "TRUE:Boolean",              "features":"FTR_ATTEMPT_2&FTR_ERASE_BTN"},
+                {"type": "COMMAND", "id": "word_copy", "method": "showEraseButton",     "parms": "TRUE:Boolean",              "features":"FTR_ATTEMPT_3&FTR_ERASE_BTN"},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","soundpackage": "default","mode": "flow", "features":"!FTR_ATTEMPT_4"},
+
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "ERASE_GLYPH:String",                  "features":"!FTR_ERASE_BTN"},
 
                 // On iteration 4+ we ask them to trace the character.
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "ERASE_GLYPH:String",                  "features":"FTR_ATTEMPT_4"},
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "SHOW_SAMPLE:String",                  "features":"FTR_ATTEMPT_4"},
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "INHIBIT_OTHERS:String",               "features":"FTR_ATTEMPT_4"},
 
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please trace the letter.mp3", "soundpackage": "default","mode": "flow",   "features": "FTR_ATTEMPT_4"}
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please trace the letter.mp3", "soundpackage": "default","mode": "flow", "features": "FTR_ATTEMPT_4"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.expected}}.mp3", "soundpackage": "letters", "mode": "flow", "features": "FTR_ATTEMPT_4"}
               ],
               "preexit": [
               ],
@@ -171,14 +236,14 @@
           }
         },
 
-        "GLYPH_ERROR_BEHAVIOR": {
+        "METRIC_ERROR_BEHAVIOR": {
           "type": "SUBGRAPH",
           "COMMENT": "glyph metrics have been violated",
-          "rootnode": "GLYPH_ERROR_MODULE",
+          "rootnode": "METRIC_ERROR_MODULE",
 
           "nodeMap": {
 
-            "GLYPH_ERROR_MODULE": {
+            "METRIC_ERROR_MODULE": {
               "type": "MODULE",
               "preenter": [],
               "reuse": true,
@@ -234,9 +299,9 @@
 
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "Yay.mp3","soundpackage": "default","mode": "flow", "features": "FTR_HAD_ERRORS"},
 
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "words","mode":"flow", "features": "FTR_WORDS"},
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "letters","mode":"flow", "features": "FTR_LETTERS"},
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "numbers","mode":"flow", "features": "FTR_NUMBERS"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "words",   "mode":"flow", "features": "FTR_WORDS"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "letters", "mode":"flow", "features": "FTR_LETTERS"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "numbers", "mode":"flow", "features": "FTR_NUMBERS"},
 
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "Very good.mp3",          "soundpackage": "default","mode":"flow", "features": "!FTR_HAD_ERRORS"},
 
@@ -264,7 +329,11 @@
           "COMMENT": "Intro Clip",
           "maptype":"moduleMap",
           "mapname": "EMPTY_MODULE",
-          "preenter":["SET_CONSTRAINT"],
+
+//          Use this to enable metric constraints on glyphs
+//          "preenter":["SET_CONSTRAINT"],
+          "preenter":[],
+
           "preexit" :[],
           "edges": [
             {"constraint": "FTR_NO_DEMO", "edge": "INTRO_STATE"},
@@ -429,14 +498,11 @@
             {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[saba]:String","features":"LANG_SW&FTR_WORDS"},
             {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[one]:String", "features":"LANG_EN&FTR_WORDS"},
 
-            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[f]:String","features":"LANG_SW&FTR_LOWERCASE"},
-            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[f]:String", "features":"LANG_EN&FTR_LOWERCASE"},
+            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[f]:String","features":"FTR_LOWERCASE"},
 
-            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[G]:String","features":"LANG_SW&FTR_UPPERCASE"},
-            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[G]:String", "features":"LANG_EN&FTR_UPPERCASE"},
+            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[G]:String","features":"FTR_UPPERCASE"},
 
-            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[4]:String","features":"LANG_SW&FTR_DIGITS"},
-            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[5]:String", "features":"LANG_EN&FTR_DIGITS"}
+            {"type": "COMMAND", "id": "word_copy", "method": "pushDataSource", "parms": "[4]:String","features":"FTR_NUMBERS"}
           ]
         },
 
@@ -449,14 +515,15 @@
             // Disable the writing controllers while the demo is in progress
             {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "TRUE:Boolean","features":""},
 
+            // This will play during the demo replay
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now we will practice writing some letters.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_LETTERS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some numbers.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_NUMBERS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some words.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_WORDS"},
+
             // When the word replay is complete move to the next node
             {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|DELAYED_NEXT:String" ,"features":""},
-            {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_DEMO:String|500:Integer",          "features":""},
-
-            // This will play during the demo replay
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now we will practice writing some letters.mp3", "soundpackage":"default", "volume": 1.0, "mode":"stream", "features": "FTR_LETTERS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some numbers.mp3", "soundpackage":"default", "volume": 1.0, "mode":"stream", "features": "FTR_DIGITS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some words.mp3", "soundpackage":"default", "volume": 1.0, "mode":"stream", "features": "FTR_WORDS"},
+            {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_DEMO:String|500:Integer",             "features":""},
+            {"type": "COMMAND", "cmd": "WAIT" },
 
             // Next will fire when replay completes
             {"type": "COMMAND", "id": "word_copy", "method": "clear", "parms": "", "features":""},
@@ -500,18 +567,24 @@
             //
             {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "TRUE:Boolean","features":""},
 
+            {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_REPLAY_COMMAND:String|REPLAY_BEHAVIOR:String" ,"features":""},
+
             {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_ERROR:String|GENERAL_ERROR_BEHAVIOR:String" ,"features":""},
             {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_CORRECT:String|GENERAL_CORRECT_BEHAVIOR:String" ,"features":""},
 
-            {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_GLYPH_ERROR:String|GLYPH_ERROR_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_METRIC_ERROR:String|METRIC_ERROR_BEHAVIOR:String" ,"features":""},
             {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_CHAR_ERROR:String|CHAR_ERROR_BEHAVIOR:String" ,"features":""},
 
-            {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_START_WRITING:String|CANCEL_INPUT_HESITATION_FEEDBACK:String" ,"features":""},
-            {"type": "COMMAND", "id": "word_copy", "method": "postNamed",         "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long",  "features":""},
+            {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_START_WRITING:String|CANCEL_HESITATION_FEEDBACK:String" ,"features":""},
+
+            {"type": "COMMAND", "id": "word_copy", "method": "postNamed",         "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long",      "features":"!FTR_DICTATION"},
+            {"type": "COMMAND", "id": "word_copy", "method": "postNamed",         "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|DICTATION_HESITATION_FEEDBACK:String|6000:Long",  "features":"FTR_DICTATION"},
 
             {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "DATA_ITEM_COMPLETE:String|ITEM_COMPLETE_BEHAVIOR:String" ,"features":""},
 
-            {"type": "COMMAND", "id": "word_copy", "method": "next" ,"features":""}
+            {"type": "COMMAND", "id": "word_copy", "method": "next" ,"features":""},
+
+            {"type": "COMMAND", "id": "word_copy", "method": "showReplayButton", "parms": "TRUE:Boolean", "features":"FTR_DICTATION"}
           ],
           "preexit": [
           ],
@@ -561,7 +634,9 @@
           "tracks": [
             {"type": "COMMAND", "id": "Sresponse", "method": "setForeGround", "parms": "wrong:String","features":""}, //flag the incorrect string in red color
             {"type": "AUDIO", "command": "PLAY", "soundsource": "That looks like.mp3", "mode":"flow","features": ""},
+
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{Sresponse.value}}.mp3","mode":"flow", "features": ""},  // the recognizer output
+
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","mode":"flow", "features": ""}
           ]
         },
@@ -618,7 +693,7 @@
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.1.0:String","features":""},
 
-        "CANCEL_INPUT_HESITATION_FEEDBACK": {"type": "COMMAND", "id": "word_copy", "method": "cancelPost", "parms": "HESITATION_PROMPT:String",    "features":""},
+        "CANCEL_HESITATION_FEEDBACK": {"type": "COMMAND", "id": "word_copy", "method": "cancelPost", "parms": "HESITATION_PROMPT:String",    "features":""},
 
 
         "FW_DISABLE":{"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "TRUE:Boolean","features":""},

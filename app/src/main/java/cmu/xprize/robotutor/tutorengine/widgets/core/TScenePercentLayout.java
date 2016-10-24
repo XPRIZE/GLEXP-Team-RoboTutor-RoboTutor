@@ -77,6 +77,12 @@ public class TScenePercentLayout extends PercentRelativeLayout implements ITutor
     // Tutor methods  Start
 
 
+    @Override
+    public void setVisibility(String visible) {
+
+        mTutorScene.setVisibility(visible);
+    }
+
 
     // Tutor methods  End
     //************************************************************************

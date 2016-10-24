@@ -30,7 +30,9 @@ public interface ITutorObject {
     public void onCreate();
     public void onDestroy();
 
-    public void   setName(String name);
+    public void setVisibility(String visible);
+    public void setName(String name);
+
     public String name();
 
     public void setParent(ITutorSceneImpl mParent);

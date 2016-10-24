@@ -63,6 +63,13 @@ public class THandAnimation extends CHandAnimation implements ITutorObjectImpl  
     }
 
 
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
+
     @Override
     public void setName(String name) {
         mSceneObject.setName(name);

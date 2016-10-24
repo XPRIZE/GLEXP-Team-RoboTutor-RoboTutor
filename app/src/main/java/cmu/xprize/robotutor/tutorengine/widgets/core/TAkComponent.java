@@ -67,6 +67,13 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 //    **********************************************************
 //    *****************  Tutor Interface
 
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
+
     @Override
     public void UpdateValue(int value) {
 
