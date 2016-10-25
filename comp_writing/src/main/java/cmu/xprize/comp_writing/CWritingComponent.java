@@ -1144,7 +1144,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     case WR_CONST.DEMO_PROTOGLYPH:
                     case WR_CONST.ANIMATE_PROTOGLYPH:
                     case WR_CONST.ANIMATE_OVERLAY:
-                    case WR_CONST.REPLAY_PROTOGLYPH:
                     case WR_CONST.ANIMATE_ALIGN:
 
                         mActiveController.post(_command);
