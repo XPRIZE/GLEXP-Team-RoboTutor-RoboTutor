@@ -74,10 +74,6 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
 
-        // Default to English language stories
-        //
-        mLanguage = TCONST.langMap.get("LANG_EN");
-
         // Push the ASR listener reference into the super class in the Java domain
         //
         prepareListener(CMediaController.getTTS());
@@ -133,6 +129,9 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
                 //
                 loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 
+                configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
+                setStory(dataSource[0].story);
+
             } else if (dataNameDescriptor.startsWith("db|")) {
             } else if (dataNameDescriptor.startsWith("{")) {
 
@@ -176,20 +175,6 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
     public void setVisibility(String visible) {
 
         mSceneObject.setVisibility(visible);
-    }
-
-    /**
-     * @param language
-     */
-    @Override
-    public void setLanguage(String language) {
-
-        super.setLanguage(language);
-
-        // At the moment
-        // The data source is the language specific story index file.
-        //
-        setDataSource( TCONST.SOURCEFILE + TCONST.STORYINDEX);
     }
 
 

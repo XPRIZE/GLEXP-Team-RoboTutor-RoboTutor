@@ -1,10 +1,14 @@
 {
-  "language":"LANG_SW",
+//  "language":"LANG_SW",
 
   "scenedata": [
 	{
 	  "id":"story_reading",
 	  "oncreate":[
+		  {"type": "COMMAND", "id":"SstoryReading", "method":"setSpeakButton",        "parms": "HIDE:String",    "features": "" },
+		  {"type": "COMMAND", "id":"SstoryReading", "method":"setPageFlipButton",     "parms": "SHOW:String",    "features": "FTR_MANUAL" },
+		  {"type": "COMMAND", "id":"SstoryReading", "method":"setPageFlipButton",     "parms": "DISABLE:String", "features": "FTR_MANUAL" },
+		  {"type": "COMMAND", "id":"SstoryReading", "method":"setPageFlipButton",     "parms": "HIDE:String",    "features": "!FTR_MANUAL" }
 	  ],
 	  "onenter":[
 	  ],

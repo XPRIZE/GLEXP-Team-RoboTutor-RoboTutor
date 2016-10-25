@@ -538,12 +538,15 @@ public class SpeechRecognizer {
                     //
                     if(!isRecording) {
 
+//                        Don't want to do this - misses front end of utterance
+//
                         // Flush the input buffer
 //                        int readf = recorder.read(buffer, 0, buffer.length);
 //
 //                        if(readf > 0) {
 //                            Log.i("ASR", "Flushed input buffer: " + readf);
 //                        }
+
 
                         Log.i("ASR", "Resume recording");
                         recorder.startRecording();
