@@ -194,8 +194,8 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Tafadhali sema hadithi kwa sauti.mp3", "mode":"flow","features": ""}
-            //{"type": "TTS", "command": "SAY", "content": "kusoma hadithi kwa sauti kubwa", "rate":"1.3", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please read the story aloud.mp3", "mode":"flow","features": "LANG_SW"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please read aloud.mp3", "mode":"flow","features": "LANG_EN"}
           ]
         },
 
