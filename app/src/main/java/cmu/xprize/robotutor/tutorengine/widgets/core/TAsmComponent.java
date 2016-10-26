@@ -8,6 +8,13 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -191,7 +198,10 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
         // TODO: globally make startWith type TCONST
         try {
-            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
+            if (dataSource.equals(ASM_CONST.LOCAL_FILE)) {
+                String jsonData = JSON_Helper.cacheDataByName(ASM_CONST.LOCAL_FILE_PATH);
+                loadJSON(new JSONObject(jsonData), null);
+            } else if (dataSource.startsWith(TCONST.SOURCEFILE)) {
                 dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
 
                 String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataSource);
@@ -213,7 +223,6 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
             CErrorManager.logEvent(TAG, "Invalid Data Source for : " + name(), e, false);
         }
     }
-
 
     @Override
     public void playChime() {

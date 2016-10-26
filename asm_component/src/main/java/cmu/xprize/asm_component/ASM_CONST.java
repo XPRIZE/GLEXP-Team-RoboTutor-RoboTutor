@@ -5,7 +5,12 @@ import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
 
+import cmu.xprize.util.TCONST;
+
 public class ASM_CONST {
+
+    public static final String LOCAL_FILE = "LOCAL_FILE";
+    public static final String LOCAL_FILE_PATH = "/sdcard/Arithmetic/asm_data.txt";
 
     //for add and subtract
     public static final int ANIMATOR3    = 1;
