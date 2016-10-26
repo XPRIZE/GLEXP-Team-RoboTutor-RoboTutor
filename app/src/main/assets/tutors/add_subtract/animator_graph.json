@@ -62,7 +62,22 @@
           "type":"node",
           "maptype":"moduleMap",
           "mapname": "CLICKDOTS",
-          "preenter":["HIGHLIGHT_BORROWABLE", "CREATE_HESITATION_TIMER_SHOW_DOTBAG"],
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"FTR_RIGHT","edge":"WHOLECORRECT"},
+            {"constraint":"FTR_WRONG","edge":"WHOLEWRONG"}
+            //{"constraint":"", "edge":"REPEATED_ADD"}
+          ]
+        },
+
+        "REPEATED_ADD":{
+          "COMMENT":"When the user touches for the first time",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "START_REPEATED_ADD",
+          "preenter":[],
           "preexit" :[],
           "edges":
           [
@@ -146,24 +161,17 @@
           "tracks": [
           ]
         },
+
         "SHOWPROBLEM": {
           "type": "MODULE",
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "next", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Let's add some numbers now.mp3",        "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "next", "features": ""}
+/*            {"type": "AUDIO", "command": "PLAY", "soundsource": "Let's add some numbers now.mp3",        "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Let's subtract some numbers now.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUBTRACT"},
-            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Let's multiply some numbers now.mp3",          "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_MULTI"}
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Multiplying.mp3",                         "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.multiplicand}}.mp3",     "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "times.mp3",                                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.multiplier}}.mp3",       "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            {"type":  "AUDIO", "command": "PLAY", "soundsource": "means adding up.mp3",                    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.multiplier}}.mp3",       "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.multiplicand}}.mp3",     "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "times.mp3",                                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"}
-          ]
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Let's multiply some numbers now.mp3",          "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_MULTI"}
+ */         ]
         },
 
         "SHOWDIGIT": {
@@ -171,7 +179,18 @@
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
+            {"type": "TIMER", "id":"RA_Timer", "action":"RESTART", "features": "" },
             {"type": "COMMAND", "id": "SAddSubtract", "method": "nextDigit", "features": ""}
+          ]
+        },
+
+        "PROMPT_COL": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "COMMAND", "id":"SAddSubtract", "method":"highlightCurrentColumn", "parms":"", "features":""}
+
           ]
         },
 
@@ -180,6 +199,48 @@
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
+            //Adding prompts in multiplication hasn't been done. If you continue to do it, the codes following could be reused.
+
+/*            {"type": "AUDIO", "command": "PLAY", "soundsource": "Multiplying.mp3",                         "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.multiplicand}}.mp3",     "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "times.mp3",                                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.multiplier}}.mp3",       "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "means writing.mp3",                      "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.multiplier}}.mp3",       "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.multiplicand}}.mp3",     "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "times.mp3",                                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "and adding them up.mp3",                 "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},*/
+            // Note that this timer doesn't work for multiplication
+            {"type": "TIMER", "id":"HesitationTimer1", "startdelay":"0", "period":"3000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"SET_DOTBAGS_VISIBLE", "features": "" },
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_OVERHEAD:String"},
+            //{"type": "TIMER", "id":"RA_Timer", "startdelay":"0", "period":"3000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"NEXTNODE", "features": "" },
+            {"type": "COMMAND", "cmd": "WAIT"}
+          ]
+        },
+
+        //Adding prompts in multiplication hasn't been done. If you continue to do it, the codes following could be reused.
+        "START_REPEATED_ADD": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "TIMER", "id":"RA_Timer", "action":"CANCEL", "features": "" },
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Let’s write.mp3",                         "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.multiplier}}.mp3",        "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.multiplicand}}.mp3",      "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "times one under the other.mp3",           "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.WriteNextNumber}}.mp3",    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_NUMBER"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.multiplier}}.mp3",         "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_NUMBER"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "here.mp3",                                   "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_NUMBER"},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.WriteNextResult}}.mp3",    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_RESULT"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.multiplier}}.mp3",         "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_RESULT"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "s and write their sum here.mp3",            "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RESULT_FIRST_TWO"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "and write the result here.mp3",            "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RESULT_NEXT_OR_LAST"},
+
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_OVERHEAD:String"},
             {"type": "COMMAND", "cmd": "WAIT"}
           ]
         },
@@ -220,7 +281,18 @@
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "evaluateDigit"}
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "evaluateDigit"},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3",                        "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_DIGIT_OR_OVERHEAD_CORRECT"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3",       "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_DIGIT_OR_OVERHEAD_WRONG"}
+
+            //Adding prompts in multiplication hasn't been done. If you continue to do it, the codes following could be reused.
+/*            {"type": "AUDIO", "command": "PLAY", "soundsource": "So what is.mp3",                          "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_REPEATED_ADD_DOWN"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.multiplicand}}.mp3",     "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_REPEATED_ADD_DOWN"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "times.mp3",                                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_REPEATED_ADD_DOWN"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.multiplier}}.mp3",       "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_REPEATED_ADD_DOWN"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Copy your answer here.mp3",              "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_REPEATED_ADD_DOWN"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_RESULT:String", "features": "ASM_REPEATED_ADD_DOWN"}*/
           ]
         },
 
@@ -270,10 +342,10 @@
 //        "SET_VISIBILITY":{"type": "COMMAND", "id": "SAddSubtract", "method": "setVisible", "parms":"false:bool", "features":""},
         "SET_DOTBAGS_VISIBLE": {"type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"true:bool"},
         "SET_DOTBAGS_INVISIBLE": {"type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"false:bool"},
-        "CREATE_HESITATION_TIMER_SHOW_DOTBAG": {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "period":"3000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"SET_DOTBAGS_VISIBLE"},
+        //"CREATE_HESITATION_TIMER_SHOW_DOTBAG": {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "period":"3000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"SET_DOTBAGS_VISIBLE"},
 
-        "HIGHLIGHT_BORROWABLE": {"type": "COMMAND", "id": "SAddSubtract", "method": "highlightBorrowable"},
-        "CREATE_HESITATION_TIMER_HIGHLIGHT_BORROWABLE": {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "period":"3000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HIGHLIGHT_BORROWABLE"},
+        "HIGHLIGHT_OVERHEAD": {"type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_OVERHEAD:String"},
+        "CREATE_HESITATION_TIMER_HIGHLIGHT_OVERHEAD": {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "period":"3000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HIGHLIGHT_OVERHEAD"},
 
         //        {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "action":"CREATEANDSTART", "repeat":"false", "period":"1000", "features":"", "onTimer":"SET_VISIBILITY"},
 
@@ -283,6 +355,7 @@
         "RESET":{"type": "COMMAND", "id": "SAddSubtract", "method": "reset" ,"features":""},
 
         "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "NEXTSCENE" },
+        "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"  },
         "NEXT": {"type": "COMMAND", "cmd": "NEXT" },
         "PAUSE":{"type": "COMMAND", "cmd": "WAIT" },
 
@@ -291,11 +364,11 @@
 
         "FW_DISABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "FALSE:Boolean","features":""},
         //disable FingerWriting
-        "FW_ENABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "TRUE:Boolean","features":""},
+        "FW_ENABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "TRUE:Boolean","features":""}
         //enable FingerWriting
 
         //Visual cues
-        "PROMPT_COL":{"type": "COMMAND","id":"SAddSubtract","method":"highlightCurrentColumn","parms":"","features":""}
+        //"PROMPT_COL":{"type": "COMMAND","id":"SAddSubtract","method":"highlightCurrentColumn","parms":"","features":""}
 
       },
 

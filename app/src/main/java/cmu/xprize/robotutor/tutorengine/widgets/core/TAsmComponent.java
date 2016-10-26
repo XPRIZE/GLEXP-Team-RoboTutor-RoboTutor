@@ -9,6 +9,8 @@ import android.util.Log;
 import org.json.JSONObject;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 import cmu.xprize.asm_component.ASM_CONST;
 import cmu.xprize.asm_component.CAsm_Alley;
@@ -41,6 +43,9 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     private CObjectDelegate  mSceneObject;
 
     static final String TAG = "TAsmComponent";
+
+    //used to store the current features about overhead
+    private List<String> curFeatures = new ArrayList<String>();
 
     public TAsmComponent(Context context) {
         super(context);
@@ -85,11 +90,14 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
         boolean correct = isDigitCorrect();
 
-        if(correct)
+        if (correct) {
             mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
-        else {
-            if (!mPopup.isActive && !mPopupSupplement.isActive)
-                isWriting = false;
+            mTutor.setAddFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
+
+            saveCurFeaturesAboutOverhead();
+            delCurFeaturesAboutOverhead();
+        } else {
+            if (!mPopup.isActive && !mPopupSupplement.isActive) isWriting = false;
 
             Handler h = new Handler();
             h.postDelayed(new Runnable() {
@@ -100,12 +108,40 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
             }, 3000);
 
             mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+
+            if (overheadCorrect == ASM_CONST.ALL_INPUT_TO_OVERHEAD_RIGHT) mTutor.setAddFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
+            else mTutor.setAddFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
         }
+
     }
 
+    public void saveCurFeaturesAboutOverhead() {
+        if (mTutor.testFeature(TCONST.ASM_RA_START)) curFeatures.add(TCONST.ASM_RA_START);
+        if (mTutor.testFeature(TCONST.ASM_NEXT_NUMBER)) curFeatures.add(TCONST.ASM_NEXT_NUMBER);
+        if (mTutor.testFeature(TCONST.ASM_NEXT_RESULT)) curFeatures.add(TCONST.ASM_NEXT_RESULT);
+        if (mTutor.testFeature(TCONST.ASM_RESULT_FIRST_TWO)) curFeatures.add(TCONST.ASM_RESULT_FIRST_TWO);
+        if (mTutor.testFeature(TCONST.ASM_RESULT_NEXT_OR_LAST)) curFeatures.add(TCONST.ASM_RESULT_NEXT_OR_LAST);
+    }
+
+    public void delCurFeaturesAboutOverhead() {
+        mTutor.setDelFeature(TCONST.ASM_RA_START);
+        mTutor.setDelFeature(TCONST.ASM_NEXT_NUMBER);
+        mTutor.setDelFeature(TCONST.ASM_NEXT_RESULT);
+        mTutor.setDelFeature(TCONST.ASM_RESULT_FIRST_TWO);
+        mTutor.setDelFeature(TCONST.ASM_RESULT_NEXT_OR_LAST);
+    }
+
+    public void retrieveCurFeaturesAboutOverhead() {
+        for (int i = 0; i < curFeatures.size(); i++) {
+            mTutor.setAddFeature(curFeatures.get(i));
+        }
+    }
     public void reset() {
         mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
         mTutor.setDelFeature(TCONST.GENERIC_WRONG);
+
+        mTutor.setDelFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
+        mTutor.setDelFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
     }
 
     public void resetAll() {
@@ -115,6 +151,14 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         mTutor.setDelFeature(TCONST.ASM_ADD);
         mTutor.setDelFeature(TCONST.ASM_SUBTRACT);
         mTutor.setDelFeature(TCONST.ASM_MULTI);
+        mTutor.setDelFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
+        mTutor.setDelFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
+        mTutor.setDelFeature(TCONST.ASM_RA_START);
+        mTutor.setDelFeature(TCONST.ASM_NEXT_NUMBER);
+        mTutor.setDelFeature(TCONST.ASM_NEXT_RESULT);
+        mTutor.setDelFeature(TCONST.ASM_RESULT_FIRST_TWO);
+        mTutor.setDelFeature(TCONST.ASM_RESULT_NEXT_OR_LAST);
+        mTutor.setDelFeature(TCONST.ASM_REPEATED_ADD_DOWN);
     }
 
     /**
@@ -209,8 +253,10 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
                     break;
             }
         }
+
         if (dataExhausted()) mTutor.setAddFeature(TCONST.FTR_EOI);
 
+        curFeatures.clear();
     }
 
     public void nextDigit() {
@@ -219,6 +265,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         super.nextDigit();
         nextPlaceValue();
 
+        retrieveCurFeaturesAboutOverhead();
     }
 
 
@@ -301,6 +348,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
     @Override
     public void onEvent(IEvent event) {
+        mTutor.setDelFeature(TCONST.ASM_MULTI);
         super.onEvent(event);
         evaluateWhole();
         applyEventNode("NEXT");
@@ -321,10 +369,20 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         }
     }
 
-    public void highlightBorrowable() {
-        if(operation.equals("-")) {
-            mechanics.highlightBorrowable();
-        }
+    public void exitWrite() {
+        super.exitWrite();
     }
 
+    public void highlightOverheadOrResult(String whichToHighlight) {
+        mechanics.highlightOverheadOrResult(whichToHighlight);
+    }
+
+    public void addMapToTutor(String key, String value) {
+        mTutor.getScope().addUpdateVar(name() + key, new TString(value));
+    }
+
+    public void delAddFeature(String delFeature, String addFeature) {
+        mTutor.setDelFeature(delFeature);
+        mTutor.setAddFeature(addFeature);
+    }
 }

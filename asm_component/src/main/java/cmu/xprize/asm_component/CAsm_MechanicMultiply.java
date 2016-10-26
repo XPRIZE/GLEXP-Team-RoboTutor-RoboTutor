@@ -5,10 +5,12 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.graphics.Typeface;
 import android.os.Handler;
+import android.support.v4.view.MenuCompat;
 import android.view.View;
 import android.widget.TableRow;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cmu.xprize.util.TCONST;
 
@@ -34,20 +36,25 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
     private int curIndexInArray = -1;
     private int curRowIndexInAddition;
     private int multiplicand, multiplier;
+    //used to play audio in repeated addition
+    private int indexOfNextNumber;
 
     public void next() {
         super.next();
 
         multiplicand = mComponent.numbers[0];
         multiplier = mComponent.numbers[1];
+        indexOfNextNumber = 1;
 
         if (multiplicand > 0) {
             initArrayInAddition();
-            updateOverhead();
+            updateOverhead(false);
         }
 
         for(int i = resultOrAddInMultiPart1 + 1; i < allAlleys.size(); i++)
             allAlleys.get(i).getTextLayout().resetAllValues();
+
+        mComponent.delAddFeature("", TCONST.ASM_RA_START);
     }
 
     private void initArrayInAddition() {
@@ -73,7 +80,7 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         }
     }
 
-    private void updateOverhead() {
+    private void updateOverhead(boolean showOverhead) {
         if (mComponent.overheadText != null && mComponent.overheadText.getVisibility() == View.VISIBLE) mComponent.overheadText.cancelResult();
         if (mComponent.overheadTextSupplement != null && mComponent.overheadTextSupplement.getVisibility() == View.VISIBLE) mComponent.overheadTextSupplement.cancelResult();
 
@@ -85,13 +92,15 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         mComponent.overheadText = curColInAddition.getText(1);
         mComponent.overheadText.setTypeface(null, Typeface.BOLD);
         mComponent.overheadText.setResult();
-        mComponent.overheadText.setVisibility(View.VISIBLE);
+        if (showOverhead) mComponent.overheadText.setVisibility(View.VISIBLE);
+        else  mComponent.overheadText.setVisibility(View.INVISIBLE);
 
         mComponent.overheadTextSupplement = curColInAddition.getText(0);
         mComponent.overheadTextSupplement.setTypeface(null, Typeface.BOLD);
         if (mComponent.overheadVal > 9) {
             mComponent.overheadTextSupplement.setResult();
-            mComponent.overheadTextSupplement.setVisibility(View.VISIBLE);
+            if (showOverhead) mComponent.overheadTextSupplement.setVisibility(View.VISIBLE);
+            else mComponent.overheadTextSupplement.setVisibility(View.INVISIBLE);
         }
 
         if (mComponent.overheadVal > multiplier) {
@@ -101,6 +110,25 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
 
             updateDotbagsInAddition();
             if (mComponent.overheadVal > multiplier*2) setStruck(curRowIndexInAddition - 4);
+
+            if (mComponent.overheadVal == multiplier * 2) {
+                mComponent.addMapToTutor(".WriteNextResult", ASM_CONST.RESULT_PREFIX + ASM_CONST.FIRST_TWO);
+                mComponent.delAddFeature(TCONST.ASM_RESULT_NEXT_OR_LAST, TCONST.ASM_RESULT_FIRST_TWO);
+            } else if (allValueInAddition[curIndexInArray + 1] == mComponent.corValue) {
+                mComponent.addMapToTutor(".WriteNextResult", ASM_CONST.RESULT_PREFIX + ASM_CONST.LAST);
+                mComponent.delAddFeature(TCONST.ASM_RESULT_FIRST_TWO, TCONST.ASM_RESULT_NEXT_OR_LAST);
+            } else {
+                mComponent.addMapToTutor(".WriteNextResult", ASM_CONST.RESULT_PREFIX + ASM_CONST.NEXT);
+                mComponent.delAddFeature(TCONST.ASM_RESULT_FIRST_TWO, TCONST.ASM_RESULT_NEXT_OR_LAST);
+            }
+
+            mComponent.delAddFeature(TCONST.ASM_NEXT_NUMBER, TCONST.ASM_NEXT_RESULT);
+        } else {
+            if (allValueInAddition[curIndexInArray + 1] > multiplier)
+                mComponent.addMapToTutor(".WriteNextNumber", ASM_CONST.writeNextNumber.get(0));
+            else
+                mComponent.addMapToTutor(".WriteNextNumber", ASM_CONST.writeNextNumber.get(indexOfNextNumber++));
+            mComponent.delAddFeature(TCONST.ASM_NEXT_RESULT, TCONST.ASM_NEXT_NUMBER);
         }
     }
 
@@ -130,14 +158,14 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
 
         //reset timer, show dotbags when user hesitates
         mComponent.hasShown = false;
-        mComponent.startTime = System.currentTimeMillis();
+/*        mComponent.startTime = System.currentTimeMillis();
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mComponent.setDotBagsVisible(true, mComponent.digitIndex, curRowIndexInAddition-2);
             }
-        }, 3000);
+        }, 3000);*/
     }
 
     private void fillDotbagAutomatically(final int indexOfLastResult) {
@@ -256,13 +284,12 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         if (mComponent.digitIndex == mComponent.numSlots-3) {
             super.nextDigit();
             mComponent.hasShown = true;
-            mComponent.overheadText.setResult();
-            mComponent.overheadText.setVisibility(View.VISIBLE);
         } else {
 //            CAsm_DotBag firstBag, secondBag, resultBag;
             allAlleys.get(resultOrAddInMultiPart1).getTextLayout().performNextDigit();
 
-/*            firstBag = allAlleys.get(firstBagIndexForMulti).getDotBag();
+/*          //old version
+            firstBag = allAlleys.get(firstBagIndexForMulti).getDotBag();
             secondBag = allAlleys.get(secondBagIndexForMulti).getDotBag();
             resultBag = allAlleys.get(resultOrAddInMultiPart1).getDotBag();
 
@@ -515,8 +542,9 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
         else
             updateFirstBagInAdd();*/
 
+        mComponent.delAddFeature(TCONST.ASM_RA_START, "");
         if (mComponent.overheadVal < mComponent.corValue)
-            updateOverhead();
+            updateOverhead(true);
         else {
             mComponent.overheadText.cancelResult();
             mComponent.overheadTextSupplement.cancelResult();
@@ -525,11 +553,35 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
                 fillDotbagAutomatically(curRowIndexInAddition);
             } else
                 mComponent.hasShown = true;
+
+            mComponent.delAddFeature("", TCONST.ASM_REPEATED_ADD_DOWN);
+            mComponent.delAddFeature(TCONST.ASM_NEXT_NUMBER, "");
+            mComponent.delAddFeature(TCONST.ASM_NEXT_RESULT, "");
+            mComponent.delAddFeature(TCONST.ASM_RESULT_FIRST_TWO, "");
+            mComponent.delAddFeature(TCONST.ASM_RESULT_NEXT_OR_LAST, "");
+            mComponent.delAddFeature(TCONST.ASM_REPEATED_ADD_DOWN, "");
         }
     }
 
     public int getCurRow() {
         return curRowIndexInAddition;
+    }
+
+    public void highlightOverheadOrResult(String whichToHighlight) {
+        if (whichToHighlight.equals(ASM_CONST.HIGHLIGHT_OVERHEAD)) {
+            if (mComponent.overheadText != null && mComponent.overheadText.isWritable) {
+                //mComponent.overheadText.setVisibility(View.VISIBLE);
+                mComponent.highlightText(mComponent.overheadText);
+            }
+            if (mComponent.overheadTextSupplement != null && mComponent.overheadTextSupplement.isWritable) {
+                //mComponent.overheadTextSupplement.setVisibility(View.VISIBLE);
+                mComponent.highlightText(mComponent.overheadTextSupplement);
+            }
+        }
+
+        if (whichToHighlight.equals(ASM_CONST.HIGHLIGHT_RESULT)) {
+            mComponent.highlightText(allAlleys.get(resultOrAddInMultiPart1).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1));
+        }
     }
 
 /*

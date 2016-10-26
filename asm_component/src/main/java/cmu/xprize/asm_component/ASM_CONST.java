@@ -45,4 +45,31 @@ public class ASM_CONST {
             {"13", "15", "17", "18", "20", "21", "22", "23", "24", "25"}
     };
 
+    public static final int NO_INPUT_TO_OVERHEAD = -1;
+    public static final int ALL_INPUT_TO_OVERHEAD_RIGHT = 0;
+    public static final int NOT_ALL_INPUT_TO_OVERHEAD_RIGHT = 1;
+
+    public static final String NUMBER_PREFIX = "Write the ";
+    public static final Map<Integer, String> writeNextNumber = new HashMap<Integer, String>();
+
+    static {
+        writeNextNumber.put(0, NUMBER_PREFIX + "last");
+        writeNextNumber.put(1, NUMBER_PREFIX + "first");
+        writeNextNumber.put(2, NUMBER_PREFIX + "second");
+        writeNextNumber.put(3, NUMBER_PREFIX + "third");
+        writeNextNumber.put(4, NUMBER_PREFIX + "fourth");
+        writeNextNumber.put(5, NUMBER_PREFIX + "fifth");
+        writeNextNumber.put(6, NUMBER_PREFIX + "sixth");
+        writeNextNumber.put(7, NUMBER_PREFIX + "seventh");
+        writeNextNumber.put(8, NUMBER_PREFIX + "eighth");
+        writeNextNumber.put(9, NUMBER_PREFIX + "ninth");
+    }
+
+    public static final String RESULT_PREFIX = "Now add the ";
+    public static final String FIRST_TWO = "first two";
+    public static final String NEXT = "next";
+    public static final String LAST = "last";
+
+    public static final String HIGHLIGHT_OVERHEAD = "HIGHLIGHT_OVERHEAD";
+    public static final String HIGHLIGHT_RESULT   = "HIGHLIGHT_RESULT";
 }

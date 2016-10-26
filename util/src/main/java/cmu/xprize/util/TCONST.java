@@ -60,9 +60,17 @@ public class TCONST {
     public static final String SAY_STIMULUS     = "FTR_SAY";
     public static final String SHOW_STIMULUS    = "FTR_SHOW";
 
-    public static final String ASM_ADD          = "ASM_ADD";
-    public static final String ASM_SUBTRACT     = "ASM_SUBTRACT";
-    public static final String ASM_MULTI        = "ASM_MULTI";
+    public static final String ASM_ADD                           = "ASM_ADD";
+    public static final String ASM_SUBTRACT                      = "ASM_SUBTRACT";
+    public static final String ASM_MULTI                         = "ASM_MULTI";
+    public static final String ASM_DIGIT_OR_OVERHEAD_CORRECT   = "ASM_DIGIT_OR_OVERHEAD_CORRECT";
+    public static final String ASM_DIGIT_OR_OVERHEAD_WRONG     = "ASM_DIGIT_OR_OVERHEAD_WRONG";
+    public static final String ASM_RA_START                      = "ASM_RA_START";
+    public static final String ASM_NEXT_NUMBER                   = "ASM_NEXT_NUMBER";
+    public static final String ASM_NEXT_RESULT                   = "ASM_NEXT_RESULT";
+    public static final String ASM_RESULT_FIRST_TWO             = "ASM_RESULT_FIRST_TWO";
+    public static final String ASM_RESULT_NEXT_OR_LAST          = "ASM_RESULT_NEXT_OR_LAST";
+    public static final String ASM_REPEATED_ADD_DOWN            = "ASM_REPEATED_ADD_DOWN";
 
     public static final String TYPE_CTUTOR      = "CTutor";
     public static final String TYPE_CSCENEGRAPH = "CSceneGraph";

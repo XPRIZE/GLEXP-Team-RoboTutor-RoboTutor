@@ -84,6 +84,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     private boolean hasTwoPopup = false;
 
     private boolean clickPaused = false;
+    protected int overheadCorrect = ASM_CONST.NO_INPUT_TO_OVERHEAD;
 
     static final String TAG = "CAsm_Component";
 
@@ -155,11 +156,11 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                 if(curOverheadCol >= 0)
                     if((allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(0).getText().equals("")
                             || allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(0).getCurrentTextColor() == Color.RED) && curOverheadCol > 9) {
-                        mechanics.highlightBorrowable();
+                        mechanics.highlightOverheadOrResult(ASM_CONST.HIGHLIGHT_OVERHEAD);
                         return;
                     } else if(allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(1).getText().equals("")
                             || allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(1).getCurrentTextColor() == Color.RED) {
-                        mechanics.highlightBorrowable();
+                        mechanics.highlightOverheadOrResult(ASM_CONST.HIGHLIGHT_OVERHEAD);
                         return;
                     } else
                         curOverheadCol = -1;
@@ -494,7 +495,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     public boolean isDigitCorrect() {
 
-        boolean overheadCorrect, bottomCorrect;
+        boolean isOverheadCorrect, bottomCorrect;
 
         CAsm_TextLayout textLayout;
         if(operation.equals("x"))
@@ -516,36 +517,48 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         // now check overhead answer
         if (overheadVal != null && overheadVal <= corValue) {
             if (overheadVal < 10)
-                overheadCorrect = overheadVal.equals(overheadText.getDigit());
+                isOverheadCorrect = overheadVal.equals(overheadText.getDigit());
             else if (overheadTextSupplement.getDigit() == null || overheadText.getDigit() == null)
-                overheadCorrect = false;
+                isOverheadCorrect = false;
             else
-                overheadCorrect = overheadVal.equals(overheadTextSupplement.getDigit() * 10 + overheadText.getDigit());
+                isOverheadCorrect = overheadVal.equals(overheadTextSupplement.getDigit() * 10 + overheadText.getDigit());
 
-            if (overheadCorrect)
+            if (isOverheadCorrect) {
                 mechanics.correctOverheadText();
-            else if (overheadVal < 10 ) {
-                if (overheadText.getDigit() != null)
+                overheadCorrect = ASM_CONST.ALL_INPUT_TO_OVERHEAD_RIGHT;
+            } else if (overheadVal < 10 ) {
+                if (overheadText.getDigit() != null) {
                     wrongDigit(overheadText);
+                    overheadCorrect = ASM_CONST.NOT_ALL_INPUT_TO_OVERHEAD_RIGHT;
+                } else
+                    overheadCorrect = ASM_CONST.NO_INPUT_TO_OVERHEAD;
             } else {
+                boolean allRight = true, allEmpty = true;
+
                 if (overheadTextSupplement.getDigit() != null) {
-                    if (overheadTextSupplement.getDigit() != overheadVal / 10)
+                    if (overheadTextSupplement.getDigit() != overheadVal / 10) {
                         wrongDigit(overheadTextSupplement);
-                    else
+                        overheadCorrect = ASM_CONST.NOT_ALL_INPUT_TO_OVERHEAD_RIGHT;
+                        allRight = false;
+                    } else
                         overheadTextSupplement.cancelResult();
+                    allEmpty = false;
                 }
 
                 if (overheadText.getDigit() != null) {
-                    if (overheadText.getDigit() != overheadVal % 10)
+                    if (overheadText.getDigit() != overheadVal % 10) {
                         wrongDigit(overheadText);
-                    else
+                        overheadCorrect = ASM_CONST.NOT_ALL_INPUT_TO_OVERHEAD_RIGHT;
+                        allRight = false;
+                    } else
                         overheadText.cancelResult();
+                    allEmpty = false;
                 }
 
+                if (allRight) overheadCorrect = ASM_CONST.ALL_INPUT_TO_OVERHEAD_RIGHT;
+                if (allEmpty) overheadCorrect = ASM_CONST.NO_INPUT_TO_OVERHEAD;
             }
         }
-
-//        overheadCorrect = (overheadVal == null); // make sure there is no new overhead val
 
         return (bottomCorrect);
     }
@@ -615,8 +628,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                             if(resultTextLayout.getTextLayout(i).getText(1).isWritable)
                                 resultTextLayout.getTextLayout(i).getText(1).setResult();
                         }
-                    } else
-                        t.setResult();
+                    }
+                    t.setResult();
                 }
             }
             @Override
@@ -751,4 +764,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     }
 
+    public void addMapToTutor(String key, String value) {
+    }
+
+    public void delAddFeature(String delFeature, String addFeature) {
+    }
 }

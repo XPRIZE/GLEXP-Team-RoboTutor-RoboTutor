@@ -699,7 +699,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
     //## Mod Jul 01 2012 - Support for NOT operation on features.
     //
     //	
-    private boolean testFeature(String element)
+    public boolean testFeature(String element)
     {
         if(element.charAt(0) == '!')
         {

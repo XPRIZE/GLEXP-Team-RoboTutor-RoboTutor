@@ -185,7 +185,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     }
 
-    public void highlightBorrowable() {
+    public void highlightOverheadOrResult(String whichToHighlight) {
     }
 
     public int getCurRow() { return 2; }
