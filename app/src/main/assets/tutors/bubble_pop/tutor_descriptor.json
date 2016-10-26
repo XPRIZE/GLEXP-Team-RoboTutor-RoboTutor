@@ -24,7 +24,11 @@
 		"tutor_effect":  {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/bubble_pop"},
 		"xprize_effect": {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/global"},
 		"default":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/bubble_pop"},
-		"xprize":        {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global"}
+		"xprize":        {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global"},
+		"words":         {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/words"},
+		"numbers":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/numbers"},
+		"letters":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/letters"},
+		"shapes":        {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/shapes"}
 	},
 
 	"navigatorType":"SIMPLE_NAVIGATOR"

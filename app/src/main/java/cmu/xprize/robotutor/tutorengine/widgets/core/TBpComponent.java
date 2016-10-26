@@ -88,8 +88,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
 
 
-
-
     //**********************************************************
     //**********************************************************
     //*****************  Tutor Interface
@@ -351,6 +349,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                             break;
 
                         default:
+
                             obj.preEnter();
                             obj.applyNode();
                             break;
@@ -403,14 +402,15 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         _touchedBubble = bubble;
 
-        TScope scope = mTutor.getScope();
-
+        TScope scope  = mTutor.getScope();
         String answer = bubble.getStimulus();
 
+        // Ensure letters are lowercase for mp3 matching
+        //
         if(answer.length() == 1)
-            answer = answer.toUpperCase();
+            answer = answer.toLowerCase();
 
-        scope.addUpdateVar(name() + ".ansValue", new TString(answer));
+        scope.addUpdateVar(name() + BP_CONST.ANSWER_VAR, new TString(answer));
 
         resetValid();
 
@@ -444,10 +444,12 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         String correctVal = _stimulus_data[data.dataset[data.stimulus_index]];
 
+        // Ensure letters are lowercase for mp3 matching
+        //
         if(correctVal.length() == 1)
-            correctVal = correctVal.toUpperCase();
+            correctVal = correctVal.toLowerCase();
 
-        scope.addUpdateVar(name() + ".questValue", new TString(correctVal));
+        scope.addUpdateVar(name() + BP_CONST.QUEST_VAR, new TString(correctVal));
 
         if (data.question_say) {
             mTutor.setAddFeature(TCONST.SAY_STIMULUS);
