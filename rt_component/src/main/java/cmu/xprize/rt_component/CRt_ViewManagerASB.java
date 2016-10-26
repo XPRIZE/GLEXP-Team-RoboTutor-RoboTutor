@@ -28,7 +28,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -85,12 +84,12 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private int                     mCurrPara;
     private int                     mCurrLine;
     private int                     mCurrWord;
-    private int                     mHearWord;                          // The expected location of mCurrWord in heardWords - see PLRT version of onUpdate below
+    private int                     mHeardWord;                          // The expected location of mCurrWord in heardWords - see PLRT version of onUpdate below
 
-    private String                  speakButtonEnable = "";
-    private String                  speakButtonShow   = "";
-    private String                  pageButtonEnable  = "";
-    private String                  pageButtonShow    = "";
+    private String                  speakButtonEnable = "DISABLE";
+    private String                  speakButtonShow   = "HIDE";
+    private String                  pageButtonEnable  = "DISABLE";
+    private String                  pageButtonShow    = "HIDE";
 
     private int                     mPageCount;
     private int                     mParaCount;
@@ -359,6 +358,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             mPageImage.setImageBitmap(BitmapFactory.decodeStream(in));
 
         } catch (IOException e) {
+
+            mPageImage.setImageBitmap(null);
             e.printStackTrace();
         }
     }
@@ -751,7 +752,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     public void seekToWord(int wordIndex) {
 
         mCurrWord = wordIndex;
-        mHearWord = 0;
+        mHeardWord = 0;
 
         if(mCurrWord > mWordCount-1) mCurrWord = mWordCount-1;
         if(mCurrWord < TCONST.ZERO)  mCurrWord = TCONST.ZERO;
@@ -853,9 +854,9 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         if (mListener != null) {
 
             // reset the relative position of mCurrWord in the incoming PLRT heardWords array
-            mHearWord = 0;
+            mHeardWord = 0;
             mListener.reInitializeListener(true);
-            mListener.updateNextWordIndex(mHearWord);
+            mListener.updateNextWordIndex(mHeardWord);
 
             mListener.listenFor(wordsToListenFor.toArray(new String[wordsToListenFor.size()]), 0);
             mListener.setPauseListener(false);
@@ -1004,14 +1005,14 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             }
             Log.i("ASR", "New HypSet: " + logString);
 
-            while (mHearWord < heardWords.length) {
+            while (mHeardWord < heardWords.length) {
 
-                if (wordsToSpeak[mCurrWord].equals(heardWords[mHearWord].hypWord)) {
+                if (wordsToSpeak[mCurrWord].equals(heardWords[mHeardWord].hypWord)) {
 
                     nextWord();
-                    mHearWord++;
+                    mHeardWord++;
 
-                    mListener.updateNextWordIndex(mHearWord);
+                    mListener.updateNextWordIndex(mHeardWord);
 
                     Log.i("ASR", "RIGHT");
                     attemptNum = 0;

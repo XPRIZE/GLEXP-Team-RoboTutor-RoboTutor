@@ -55,7 +55,6 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
 
     protected ListenerBase          mListener;
     protected TTSsynthesizer        mSynthesizer;
-    protected String                mLanguage;
 
     protected ICRt_ViewManager      mViewManager;                                   // Created in TRt_Component sub-class in the tutor domain
     protected String                mDataSource;
@@ -176,9 +175,7 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
      *
      * @param language Feature string (e.g. LANG_EN)
      */
-    public void setLanguage(String language) {
-
-        mLanguage = TCONST.langMap.get(language);
+    public void configListenerLanguage(String language) {
 
         // Configure the mListener for our story
         //
