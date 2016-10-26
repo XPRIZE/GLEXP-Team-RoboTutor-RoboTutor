@@ -71,7 +71,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     public List<IEventListener>     mListeners          = new ArrayList<IEventListener>();
     protected List<String>          mLinkedViews;
     protected boolean               mListenerConfigured = false;
-    private int[]                   _screenCoord       = new int[2];
+    private int[]                   _screenCoord        = new int[2];
 
     private HashMap<String, String> volatileMap = new HashMap<>();
     private HashMap<String, String> stickyMap = new HashMap<>();
