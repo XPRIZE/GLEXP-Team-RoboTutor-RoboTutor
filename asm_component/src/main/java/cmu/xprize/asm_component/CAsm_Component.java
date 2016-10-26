@@ -45,6 +45,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     protected Integer corValue;
     protected String operation;
     protected String currImage;
+    //used for addition
+    protected String curStrategy;
 
     protected boolean dotbagsVisible = true;
 
@@ -370,6 +372,10 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         currImage = data.image;
         corValue = numbers[numbers.length - 1];
         operation = data.operation;
+
+        //set default strategy as "count_up"
+        if (data.strategy.equals("")) curStrategy = ASM_CONST.STRATEGY_COUNT_UP;
+        else curStrategy = data.strategy;
 
     }
 

@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * all addition specific operations are implemented here
@@ -16,6 +17,13 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
     public CAsm_MechanicAdd(CAsm_Component mComponent) {super.init(mComponent);}
 
     protected String operation = "+";
+    private boolean firstRowHasDown = false;
+
+    @Override
+    public void next() {
+        super.next();
+        firstRowHasDown = false;
+    }
 
     @Override
     public void nextDigit() {
@@ -88,7 +96,15 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         CAsm_Dot clickedDot = clickedBag.findClickedDot();
 
         if (clickedDot != null) {
-            animateAdd(clickedDot, alleyNum);
+            //check the strategy of putting down
+            if (alleyNum == ASM_CONST.OPERATION - 1 && mComponent.curStrategy.equals(ASM_CONST.STRATEGY_COUNT_FROM) && !firstRowHasDown)
+                return;
+            else if (alleyNum == ASM_CONST.REGULAR - 1 && mComponent.curStrategy.equals(ASM_CONST.STRATEGY_COUNT_FROM)) {
+                animateAddForCountFrom(clickedBag, alleyNum);
+                firstRowHasDown = true;
+            } else
+                animateAdd(clickedDot, alleyNum);
+
             mComponent.playChime();
         }
 
@@ -153,6 +169,67 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         });
 
         animSetXY.start();
+    }
+
+    public void animateAddForCountFrom(final CAsm_DotBag clickedBag, int alleyNum) {
+        final CAsm_DotBag resultBag = allAlleys.get(resultIndex).getDotBag();
+        int dy = determineAlleyDY(alleyNum, resultIndex);
+
+        AnimatorSet animSet = new AnimatorSet();
+        List<Animator> animList = new ArrayList<Animator>();
+        CAsm_Dot curDot;
+
+        resultBag.setRows(clickedBag.getRows());
+        resultBag.setCols(clickedBag.getCols());
+
+        for (int i = 0; i < clickedBag.getRows(); i++) {
+            for (int j = 0; j < clickedBag.getCols(); j++) {
+                curDot = resultBag.getDot(i, j);
+                curDot.setTranslationY(-dy);
+                curDot.setIsClickable(false);
+                animList.add(ObjectAnimator.ofFloat(curDot, "translationY", 0));
+            }
+        }
+        animSet.playTogether(animList);
+        animSet.setDuration(1000);
+        animSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                CAsm_Dot oldDot;
+                for (int i = 0; i < clickedBag.getRows(); i++) {
+                    for (int j = 0; j < clickedBag.getCols(); j++) {
+                        oldDot = clickedBag.getDot(i, j);
+                        oldDot.setHollow(true);
+                        oldDot.setIsClickable(false);
+                    }
+                }
+                clickedBag.setClickable(false);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if(resultBag.getCols() >= 10 && resultBag.dotsStatic()) {
+                    Integer temp = allAlleys.get(overheadIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit();
+                    int number1 = (temp == null || temp.equals("")) ? 0 : temp.intValue();
+                    int number2 = allAlleys.get(firstBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit().intValue();
+                    int number3 = allAlleys.get(secondBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit().intValue();
+
+                    if (number1 + number2 + number3 == 10 + resultBag.getOverflowNum()) {
+                        performCarry();
+                    }
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
+
+        animSet.start();
     }
 
     private int determineColumnDX(CAsm_Dot startDot, int targetCol) {
