@@ -56,6 +56,7 @@ import cmu.xprize.util.IEvent;
 import cmu.xprize.util.IEventDispatcher;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -68,7 +69,7 @@ import cmu.xprize.util.TCONST;
  *  settings will not work correctly.
  *
  */
-public class CWritingComponent extends PercentRelativeLayout implements IEventListener, IEventDispatcher, IWritingComponent, ILoadableObject {
+public class CWritingComponent extends PercentRelativeLayout implements IEventListener, IEventDispatcher, IWritingComponent, ILoadableObject, IPublisher {
 
     protected Context           mContext;
     protected char[]            mStimulusData;
@@ -328,7 +329,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         publishValue(WR_CONST.EXPECTED_VAR, mActiveController.getExpectedChar().toLowerCase());
 
         _charValid   = stimController.testStimulus( candidate.getRecChar());
-        _metricValid = _metric.testConstraint(candidate.getGlyph());
+        _metricValid = _metric.testConstraint(candidate.getGlyph(), this);
         _isValid     = _charValid && _metricValid;
 
         // Update the controller feedback colors
@@ -907,13 +908,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     //************************************************************************
     //************************************************************************
-    // publish component state data - START
+    // IPublisher - START
 
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
-    protected void publishState() {
+    public void publishState() {
     }
 
     // Must override in TClass
@@ -941,7 +942,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
-    // publish component state data - EBD
+    // IPublisher - EBD
     //************************************************************************
     //************************************************************************
 

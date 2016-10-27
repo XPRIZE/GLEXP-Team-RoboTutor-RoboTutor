@@ -208,7 +208,7 @@
 
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "That doesnt look like.mp3",  "soundpackage": "default", "mode": "flow", "features": "!FTR_ATTEMPT_4"},
 
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.expected}}.mp3", "soundpackage": "words",   "mode": "flow", "features": "FTR_WORDS&!FTR_ATTEMPT_4"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.expected}}.mp3", "soundpackage": "letters", "mode": "flow", "features": "FTR_WORDS&!FTR_ATTEMPT_4"},
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.expected}}.mp3", "soundpackage": "letters", "mode": "flow", "features": "FTR_LETTERS&!FTR_ATTEMPT_4"},
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.expected}}.mp3", "soundpackage": "numbers", "mode": "flow", "features": "FTR_NUMBERS&!FTR_ATTEMPT_4"},
 
@@ -226,7 +226,10 @@
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "INHIBIT_OTHERS:String",               "features":"FTR_ATTEMPT_4"},
 
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "Please trace the letter.mp3", "soundpackage": "default","mode": "flow", "features": "FTR_ATTEMPT_4"},
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.expected}}.mp3", "soundpackage": "letters", "mode": "flow", "features": "FTR_ATTEMPT_4"}
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.expected}}.mp3", "soundpackage": "letters", "mode": "flow", "features": "FTR_WORDS&FTR_ATTEMPT_4"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.expected}}.mp3", "soundpackage": "letters", "mode": "flow", "features": "FTR_LETTERS&FTR_ATTEMPT_4"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.expected}}.mp3", "soundpackage": "numbers", "mode": "flow", "features": "FTR_NUMBERS&FTR_ATTEMPT_4"}
               ],
               "preexit": [
               ],
@@ -331,9 +334,7 @@
           "mapname": "EMPTY_MODULE",
 
 //          Use this to enable metric constraints on glyphs
-//          "preenter":["SET_CONSTRAINT"],
-          "preenter":[],
-
+          "preenter":["SET_CONSTRAINT"],
           "preexit" :[],
           "edges": [
             {"constraint": "FTR_NO_DEMO", "edge": "INTRO_STATE"},

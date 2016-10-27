@@ -37,6 +37,11 @@ public class CGlyphMetrics {
     private float CGVarW;
     private float CGVarH;
 
+    private boolean CG_isTooLeft;
+    private boolean CG_isTooHigh;
+    private boolean CG_isTooWide;
+    private boolean CG_isTooTall;
+
     private float PosVarY;
     private float SizVarH;
     private float PosVarX;
@@ -91,6 +96,11 @@ public class CGlyphMetrics {
 
         // Calc the relative variance between the glyph and the proto CG as a percentage
         // of the viewbox
+
+        CG_isTooLeft = cgx < cgpx;
+        CG_isTooHigh = cgy < cgpy;
+        CG_isTooWide = glyphBnds.width() > protoBnds.width();
+        CG_isTooTall = glyphBnds.height() > protoBnds.height();
 
         CGVarX = Math.abs(cgx - cgpx) / viewBnds.width();
         CGVarY = Math.abs(cgy - cgpy) / viewBnds.height();
@@ -147,6 +157,10 @@ public class CGlyphMetrics {
 
     public void showDebugBounds(boolean showHide) { DBG = showHide; }
 
+    public boolean getIsLeft() { return CG_isTooLeft; }
+    public boolean getIsHigh() { return CG_isTooHigh; }
+    public boolean getIsWide() { return CG_isTooWide; }
+    public boolean getIsTall() { return CG_isTooTall; }
 
     public float getDeltaCGY() {
         return CGVarY;

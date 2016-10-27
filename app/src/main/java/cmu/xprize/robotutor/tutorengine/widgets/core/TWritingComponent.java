@@ -354,7 +354,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     // publish component state data - START
 
     @Override
-    protected void publishState() {
+    public void publishState() {
 
         retractFeature(WR_CONST.ERROR_METRIC);
         retractFeature(WR_CONST.ERROR_CHAR);
