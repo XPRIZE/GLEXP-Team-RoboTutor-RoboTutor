@@ -94,6 +94,9 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     public void evaluateDigit () {
 
         reset();
+        mTutor.setDelFeature(TCONST.ASM_ADD_PROMPT);
+        mTutor.setDelFeature(TCONST.ASM_ADD_PROMPT_COUNT_FROM);
+        mTutor.setDelFeature(TCONST.ASM_SUB_PROMPT);
 
         boolean correct = isDigitCorrect();
 
@@ -116,8 +119,13 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
             mTutor.setAddFeature(TCONST.GENERIC_WRONG);
 
-            if (overheadCorrect == ASM_CONST.ALL_INPUT_TO_OVERHEAD_RIGHT) mTutor.setAddFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
-            else mTutor.setAddFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
+            if (resultCorrect == ASM_CONST.NOT_ALL_INPUT_RIGHT) {
+                mTutor.setAddFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
+                resultCorrect = ASM_CONST.NO_INPUT;
+            } else if (overheadCorrect == ASM_CONST.ALL_INPUT_RIGHT)
+                mTutor.setAddFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
+            else
+                mTutor.setAddFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
         }
 
     }
@@ -143,23 +151,43 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
             mTutor.setAddFeature(curFeatures.get(i));
         }
     }
+
     public void reset() {
         mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
         mTutor.setDelFeature(TCONST.GENERIC_WRONG);
 
         mTutor.setDelFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
         mTutor.setDelFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
+
+        mTutor.setDelFeature(TCONST.ASM_ALL_DOTS_DOWN);
     }
 
     public void resetAll() {
         mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
         mTutor.setDelFeature(TCONST.GENERIC_WRONG);
-
-        mTutor.setDelFeature(TCONST.ASM_ADD);
-        mTutor.setDelFeature(TCONST.ASM_SUBTRACT);
-        mTutor.setDelFeature(TCONST.ASM_MULTI);
         mTutor.setDelFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
         mTutor.setDelFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
+
+        resetAllAboutAdd();
+        resetAllAboutSub();
+        resetAllAboutMulti();
+    }
+
+    public void resetAllAboutAdd() {
+        mTutor.setDelFeature(TCONST.ASM_ADD);
+        mTutor.setDelFeature(TCONST.ASM_ADD_PROMPT);
+        mTutor.setDelFeature(TCONST.ASM_ADD_PROMPT_COUNT_FROM);
+        mTutor.setDelFeature(TCONST.ASM_ALL_DOTS_DOWN);
+    }
+
+    public void resetAllAboutSub() {
+        mTutor.setDelFeature(TCONST.ASM_SUBTRACT);
+        mTutor.setDelFeature(TCONST.ASM_SUB_PROMPT);
+    }
+
+    public void resetAllAboutMulti() {
+        mTutor.setDelFeature(TCONST.ASM_MULTI);
+        mTutor.setDelFeature(TCONST.ASM_MULTI_PROMPT);
         mTutor.setDelFeature(TCONST.ASM_RA_START);
         mTutor.setDelFeature(TCONST.ASM_NEXT_NUMBER);
         mTutor.setDelFeature(TCONST.ASM_NEXT_RESULT);
@@ -249,20 +277,22 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         super.next();
         resetPlaceValue();
 
+        mTutor.getScope().addUpdateVar(name() + ".image", new TString(curImage));
         if (operation != null) {
             switch (operation) {
                 case "+" :
-                    mTutor.setAddFeature(TCONST.ASM_ADD);break;
+                    mTutor.setAddFeature(TCONST.ASM_ADD);
+                    mTutor.getScope().addUpdateVar(name() + ".operand1", new TString(numbers[0] + ""));
+                    break;
                 case "-" :
                     mTutor.setAddFeature(TCONST.ASM_SUBTRACT);break;
                 case "x" :
                     mTutor.setAddFeature(TCONST.ASM_MULTI);
-                    mTutor.getScope().addUpdateVar(name() + ".multiplicand", new TString(numbers[0] + ""));
-                    mTutor.getScope().addUpdateVar(name() + ".multiplier", new TString(numbers[1] + ""));
+                    mTutor.getScope().addUpdateVar(name() + ".operand1", new TString(numbers[0] + ""));
+                    mTutor.getScope().addUpdateVar(name() + ".operand2", new TString(numbers[1] + ""));
                     break;
             }
         }
-
         if (dataExhausted()) mTutor.setAddFeature(TCONST.FTR_EOI);
 
         curFeatures.clear();
@@ -357,13 +387,15 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
     @Override
     public void onEvent(IEvent event) {
-        mTutor.setDelFeature(TCONST.ASM_MULTI);
+        mTutor.setDelFeature(TCONST.ASM_ALL_DOTS_DOWN);
+        //mTutor.setDelFeature(TCONST.ASM_MULTI);
         super.onEvent(event);
         evaluateWhole();
+        if (curNode.equals(ASM_CONST.NODE_USERINPUT)) applyEventNode("NEXT");
         applyEventNode("NEXT");
     }
 
-    protected void applyEventNode(String nodeName) {
+    public void applyEventNode(String nodeName) {
         IScriptable2 obj = null;
 
         if(nodeName != null && !nodeName.equals("")) {
@@ -394,4 +426,27 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         mTutor.setDelFeature(delFeature);
         mTutor.setAddFeature(addFeature);
     }
+
+    public void setDotBagsVisible(Boolean _dotbagsVisible, int curDigitIndex, int startRow) {
+        boolean oldState = hasShown;
+        super.setDotBagsVisible(_dotbagsVisible, curDigitIndex, startRow);
+
+        if (oldState == false && hasShown == true) {
+            if (curStrategy.equals(ASM_CONST.STRATEGY_COUNT_FROM))
+                mTutor.setAddFeature(TCONST.ASM_ADD_PROMPT_COUNT_FROM);
+            else
+                mTutor.setAddFeature(TCONST.ASM_ADD_PROMPT);
+            mTutor.setAddFeature(TCONST.ASM_SUB_PROMPT);
+
+            if (curNode.equals(ASM_CONST.NODE_ADD_PROMPT) || curNode.equals(ASM_CONST.NODE_SUB_PROMPT)) {
+                mTutor.setAddFeature(TCONST.ASM_CLICK_ON_DOT);
+                applyEventNode("NEXT");
+            }
+        }
+    }
+
+    public void updateCurNode(String curNode) {
+        this.curNode = curNode;
+    }
+
 }

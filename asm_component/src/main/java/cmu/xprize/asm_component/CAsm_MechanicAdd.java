@@ -8,6 +8,8 @@ import android.animation.ObjectAnimator;
 import java.util.ArrayList;
 import java.util.List;
 
+import cmu.xprize.util.TCONST;
+
 /**
  * all addition specific operations are implemented here
  */
@@ -42,7 +44,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
                     cur.setText("1");
                     alley.getDotBag().setRows(1);
                     alley.getDotBag().setCols(1);
-                    alley.getDotBag().setImage(mComponent.currImage);
+                    alley.getDotBag().setImage(mComponent.curImage);
                     alley.getDotBag().setIsClickable(true);
                     alley.getDotBag().resetOverflowNum();
                 }
@@ -80,7 +82,6 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         int alleyNum = 0;
 
         for (int i = 0; i < allAlleys.size(); i++) {
-
             currBag = allAlleys.get(i).getDotBag();
             if (currBag.getIsClicked()) {
                 clickedBag = currBag;
@@ -96,17 +97,23 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         CAsm_Dot clickedDot = clickedBag.findClickedDot();
 
         if (clickedDot != null) {
+            mComponent.delAddFeature(TCONST.ASM_ADD_PROMPT, "");
+            mComponent.delAddFeature(TCONST.ASM_ADD_PROMPT_COUNT_FROM, "");
+            mComponent.delAddFeature("", TCONST.ASM_CLICK_ON_DOT);
             //check the strategy of putting down
             if (alleyNum == ASM_CONST.OPERATION - 1 && mComponent.curStrategy.equals(ASM_CONST.STRATEGY_COUNT_FROM) && !firstRowHasDown)
                 return;
             else if (alleyNum == ASM_CONST.REGULAR - 1 && mComponent.curStrategy.equals(ASM_CONST.STRATEGY_COUNT_FROM)) {
-                animateAddForCountFrom(clickedBag, alleyNum);
                 firstRowHasDown = true;
+                animateAddForCountFrom(clickedBag, alleyNum);
             } else
                 animateAdd(clickedDot, alleyNum);
 
             mComponent.playChime();
+            mComponent.applyEventNode("NEXT");
         }
+
+        if (allDotsDown()) mComponent.delAddFeature("", TCONST.ASM_ALL_DOTS_DOWN);
 
     }
 
@@ -230,6 +237,25 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         });
 
         animSet.start();
+    }
+
+    public boolean allDotsDown() {
+        CAsm_DotBag dotBag1 = allAlleys.get(firstBagIndex).getDotBag();
+        CAsm_DotBag dotBag2 = allAlleys.get(secondBagIndex).getDotBag();
+
+        boolean allDotsDown = true;
+
+        for (int i = 0; i < dotBag1.getRows(); i++)
+            for (int j = 0; j < dotBag1.getCols(); j++)
+                if (!dotBag1.getDot(i, j).getIsHollow())
+                    allDotsDown = false;
+
+        for (int i = 0; i < dotBag2.getRows(); i++)
+            for (int j = 0; j < dotBag2.getCols(); j++)
+                if (!dotBag2.getDot(i, j).getIsHollow())
+                    allDotsDown = false;
+
+        return allDotsDown;
     }
 
     private int determineColumnDX(CAsm_Dot startDot, int targetCol) {

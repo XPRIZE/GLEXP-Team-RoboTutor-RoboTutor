@@ -91,9 +91,9 @@ public class CAsm_TextLayout extends LinearLayout {
 
         for (int i = 0; i < getChildCount(); i++) {
             currText = getTextLayout(i).getText(0);
-            currText.reset();
+            currText.reset(operation.equals("x"));
             currText = getTextLayout(i).getText(1);
-            currText.reset();
+            currText.reset(operation.equals("x"));
         }
 
         if (operation.equals("x")) {

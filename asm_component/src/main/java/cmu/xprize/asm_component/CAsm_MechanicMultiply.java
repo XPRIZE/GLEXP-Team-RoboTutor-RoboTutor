@@ -332,12 +332,22 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
 
             if (firstBagInAdd.getIsClicked()) {
                 clickedDot = firstBagInAdd.findClickedDot();
-                if (clickedDot != null)
+                if (clickedDot != null) {
+                    mComponent.delAddFeature(TCONST.ASM_RA_START, "");
+                    mComponent.delAddFeature(TCONST.ASM_MULTI_PROMPT, "");
+                    mComponent.delAddFeature("", TCONST.ASM_CLICK_ON_DOT);
                     animateAdd(clickedDot, curRowIndexInAddition - 2, curRowIndexInAddition, 1000).start();
+                    //mComponent.applyEventNode("NEXT");
+                }
             } else if (secondBagInAdd.getIsClicked()) {
                 clickedDot = secondBagInAdd.findClickedDot();
-                if (clickedDot != null)
+                if (clickedDot != null) {
+                    mComponent.delAddFeature(TCONST.ASM_RA_START, "");
+                    mComponent.delAddFeature(TCONST.ASM_MULTI_PROMPT, "");
+                    mComponent.delAddFeature("", TCONST.ASM_CLICK_ON_DOT);
                     animateAdd(clickedDot, curRowIndexInAddition - 1, curRowIndexInAddition, 1000).start();
+                    //mComponent.applyEventNode("NEXT");
+                }
             }
         }
     }
@@ -570,11 +580,11 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
     public void highlightOverheadOrResult(String whichToHighlight) {
         if (whichToHighlight.equals(ASM_CONST.HIGHLIGHT_OVERHEAD)) {
             if (mComponent.overheadText != null && mComponent.overheadText.isWritable) {
-                //mComponent.overheadText.setVisibility(View.VISIBLE);
+                mComponent.overheadText.setVisibility(View.VISIBLE);
                 mComponent.highlightText(mComponent.overheadText);
             }
             if (mComponent.overheadTextSupplement != null && mComponent.overheadTextSupplement.isWritable) {
-                //mComponent.overheadTextSupplement.setVisibility(View.VISIBLE);
+                mComponent.overheadTextSupplement.setVisibility(View.VISIBLE);
                 mComponent.highlightText(mComponent.overheadTextSupplement);
             }
         }

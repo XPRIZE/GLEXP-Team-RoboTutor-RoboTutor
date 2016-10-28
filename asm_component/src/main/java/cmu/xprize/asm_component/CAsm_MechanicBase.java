@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import cmu.xprize.util.CAnimatorUtil;
+import cmu.xprize.util.TCONST;
 
 /**
  *
@@ -107,6 +108,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
         if (clickedText != null) {
             if (clickedText.isWritable) {
+                mComponent.delAddFeature(TCONST.ASM_CLICK_ON_DOT, "");
                 if (mComponent.overheadTextSupplement != null) {
                     if ((clickedText.equals(mComponent.overheadText) || clickedText.equals(mComponent.overheadTextSupplement))
                             && mComponent.overheadText.isWritable == true && mComponent.overheadTextSupplement.isWritable == true)
@@ -186,6 +188,10 @@ public class CAsm_MechanicBase implements IDotMechanics {
     }
 
     public void highlightOverheadOrResult(String whichToHighlight) {
+        if (whichToHighlight.equals(ASM_CONST.HIGHLIGHT_RESULT)) {
+            mComponent.highlightText(allAlleys.get(resultIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1));
+            mComponent.delAddFeature(TCONST.ASM_ALL_DOTS_DOWN, "");
+        }
     }
 
     public int getCurRow() { return 2; }

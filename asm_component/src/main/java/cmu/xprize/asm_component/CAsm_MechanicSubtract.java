@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
+import cmu.xprize.util.TCONST;
+
 /**
  * all subtraction-specific operations are implemented here
  */
@@ -162,6 +164,8 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
             return;
         }
 
+        mComponent.delAddFeature(TCONST.ASM_SUB_PROMPT, "");
+        mComponent.delAddFeature("", TCONST.ASM_CLICK_ON_DOT);
         int clickedDotCol = clickedDot.getCol();
         int minuend = allAlleys.get(minuendIndex).getCurrentDigit();
         if(minuendIndex != firstBagIndex &&
@@ -216,6 +220,21 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
             shrink.start();
         }
 
+        if (allDotsDown()) mComponent.delAddFeature("", TCONST.ASM_ALL_DOTS_DOWN);
+        mComponent.applyEventNode("NEXT");
+    }
+
+    public boolean allDotsDown() {
+        CAsm_DotBag subtrahendBag = allAlleys.get(secondBagIndex).getDotBag();
+
+        boolean allDotsDown = true;
+
+        for (int i = 0; i < subtrahendBag.getRows(); i++)
+            for (int j = 0; j < subtrahendBag.getCols(); j++)
+                if (!subtrahendBag.getDot(i, j).getIsHollow())
+                    allDotsDown = false;
+
+        return allDotsDown;
     }
 
     private AnimatorSet createShrinkAnimator(final CAsm_DotBag changingBag) {
@@ -440,6 +459,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
     @Override
     public void highlightOverheadOrResult(String whichToHighlight) {
+        super.highlightOverheadOrResult(whichToHighlight);
         if (whichToHighlight.equals(ASM_CONST.HIGHLIGHT_OVERHEAD)) {
             if (digitBorrowingCol == 0 && digitBorrowingIndex == 0 || mComponent.digitIndex < digitBorrowingIndex)
                 return;

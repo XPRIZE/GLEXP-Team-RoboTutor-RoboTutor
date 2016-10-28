@@ -44,7 +44,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     protected Integer corDigit;
     protected Integer corValue;
     protected String operation;
-    protected String currImage;
+    protected String curImage;
     //used for addition
     protected String curStrategy;
 
@@ -86,7 +86,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     private boolean hasTwoPopup = false;
 
     private boolean clickPaused = false;
-    protected int overheadCorrect = ASM_CONST.NO_INPUT_TO_OVERHEAD;
+    protected int overheadCorrect = ASM_CONST.NO_INPUT;
+    protected int resultCorrect = ASM_CONST.NO_INPUT;
+    protected String curNode = "";
 
     static final String TAG = "CAsm_Component";
 
@@ -369,7 +371,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     private void readInData(CAsm_Data data) {
 
         numbers = data.dataset;
-        currImage = data.image;
+        curImage = data.image;
         corValue = numbers[numbers.length - 1];
         operation = data.operation;
 
@@ -417,7 +419,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
             addAlley(index, val, id, operation, clickable);
         else {
             CAsm_Alley currAlley = allAlleys.get(index);
-            currAlley.update(val, currImage, id, operation, clickable, numSlots);
+            currAlley.update(val, curImage, id, operation, clickable, numSlots);
         }
     }
 
@@ -431,7 +433,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         lp.setMargins(0, 0, 0, alleyMargin);
         newAlley.setLayoutParams(lp);
 
-        newAlley.update(val, currImage, id, operation, clickable, numSlots);
+        newAlley.update(val, curImage, id, operation, clickable, numSlots);
 
         //Scontent.addView(newAlley, index);
         addView(newAlley, index);
@@ -501,6 +503,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     public boolean isDigitCorrect() {
 
+        overheadCorrect = ASM_CONST.NO_INPUT;
+        resultCorrect = ASM_CONST.NO_INPUT;
         boolean isOverheadCorrect, bottomCorrect;
 
         CAsm_TextLayout textLayout;
@@ -518,6 +522,8 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
         if (!bottomCorrect && textLayout.getDigit(digitIndex) != null) {
             wrongDigit(textLayout.getTextLayout(digitIndex).getText(1));
+            if (!(operation.equals("x") && resultCorrect == ASM_CONST.ALL_INPUT_RIGHT))
+                resultCorrect = ASM_CONST.NOT_ALL_INPUT_RIGHT;
         }
 
         // now check overhead answer
@@ -531,20 +537,20 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
             if (isOverheadCorrect) {
                 mechanics.correctOverheadText();
-                overheadCorrect = ASM_CONST.ALL_INPUT_TO_OVERHEAD_RIGHT;
+                overheadCorrect = ASM_CONST.ALL_INPUT_RIGHT;
             } else if (overheadVal < 10 ) {
                 if (overheadText.getDigit() != null) {
                     wrongDigit(overheadText);
-                    overheadCorrect = ASM_CONST.NOT_ALL_INPUT_TO_OVERHEAD_RIGHT;
+                    overheadCorrect = ASM_CONST.NOT_ALL_INPUT_RIGHT;
                 } else
-                    overheadCorrect = ASM_CONST.NO_INPUT_TO_OVERHEAD;
+                    overheadCorrect = ASM_CONST.NO_INPUT;
             } else {
                 boolean allRight = true, allEmpty = true;
 
                 if (overheadTextSupplement.getDigit() != null) {
                     if (overheadTextSupplement.getDigit() != overheadVal / 10) {
                         wrongDigit(overheadTextSupplement);
-                        overheadCorrect = ASM_CONST.NOT_ALL_INPUT_TO_OVERHEAD_RIGHT;
+                        overheadCorrect = ASM_CONST.NOT_ALL_INPUT_RIGHT;
                         allRight = false;
                     } else
                         overheadTextSupplement.cancelResult();
@@ -554,19 +560,19 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                 if (overheadText.getDigit() != null) {
                     if (overheadText.getDigit() != overheadVal % 10) {
                         wrongDigit(overheadText);
-                        overheadCorrect = ASM_CONST.NOT_ALL_INPUT_TO_OVERHEAD_RIGHT;
+                        overheadCorrect = ASM_CONST.NOT_ALL_INPUT_RIGHT;
                         allRight = false;
                     } else
                         overheadText.cancelResult();
                     allEmpty = false;
                 }
 
-                if (allRight) overheadCorrect = ASM_CONST.ALL_INPUT_TO_OVERHEAD_RIGHT;
-                if (allEmpty) overheadCorrect = ASM_CONST.NO_INPUT_TO_OVERHEAD;
+                if (allRight) overheadCorrect = ASM_CONST.ALL_INPUT_RIGHT;
+                if (allEmpty) overheadCorrect = ASM_CONST.NO_INPUT;
             }
         }
 
-        return (bottomCorrect);
+        return bottomCorrect;
     }
 
     public void checkOtherBottomCorrect(CAsm_TextLayout textLayout) {
@@ -580,9 +586,11 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                 break;
             if(otherBottomCorrect == 1) {
                 textLayout.getTextLayout(i).getText(1).reset();
+                resultCorrect = ASM_CONST.ALL_INPUT_RIGHT;
                 i = digitIndex;
             } else if(otherBottomCorrect == 2) {
                 wrongDigit(textLayout.getTextLayout(i).getText(1));
+                resultCorrect = ASM_CONST.NOT_ALL_INPUT_RIGHT;
                 i = digitIndex;
             }
         }
@@ -775,4 +783,9 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     public void delAddFeature(String delFeature, String addFeature) {
     }
+
+    public void applyEventNode(String nodeName) {
+
+    }
+
 }

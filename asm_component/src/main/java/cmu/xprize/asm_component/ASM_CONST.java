@@ -15,6 +15,11 @@ public class ASM_CONST {
     public static final String STRATEGY_COUNT_UP = "count_up";
     public static final String STRATEGY_COUNT_FROM = "count_from";
 
+    public static final String NODE_USERINPUT = "USERINPUT";
+    public static final String NODE_ADD_PROMPT = "ADD_PROMPT";
+    public static final String NODE_SUB_PROMPT = "SUB_PROMPT";
+    public static final String NODE_MULTI_PROMPT = "MULTI_PROMPT";
+
     //for add and subtract
     public static final int ANIMATOR3    = 1;
     public static final int ANIMATOR2    = 2;
@@ -34,7 +39,6 @@ public class ASM_CONST {
     public static final int rightPadding = 15;
 
     public static final int textSize     = 18;
-    public static final int textSizeMul     = 14;
 
     public static final int textBoxWidth = 30;
     public static final int textBoxHeight= 50;
@@ -53,9 +57,9 @@ public class ASM_CONST {
             {"13", "15", "17", "18", "20", "21", "22", "23", "24", "25"}
     };
 
-    public static final int NO_INPUT_TO_OVERHEAD = -1;
-    public static final int ALL_INPUT_TO_OVERHEAD_RIGHT = 0;
-    public static final int NOT_ALL_INPUT_TO_OVERHEAD_RIGHT = 1;
+    public static final int NO_INPUT = -1;
+    public static final int ALL_INPUT_RIGHT = 0;
+    public static final int NOT_ALL_INPUT_RIGHT = 1;
 
     public static final String NUMBER_PREFIX = "Write the ";
     public static final Map<Integer, String> writeNextNumber = new HashMap<Integer, String>();
