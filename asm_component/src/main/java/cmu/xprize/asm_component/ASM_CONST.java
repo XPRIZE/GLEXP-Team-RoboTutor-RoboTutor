@@ -9,12 +9,15 @@ import cmu.xprize.util.TCONST;
 
 public class ASM_CONST {
 
+    //the path of local data file
     public static final String LOCAL_FILE = "LOCAL_FILE";
     public static final String LOCAL_FILE_PATH = "/sdcard/Arithmetic/asm_data.txt";
 
+    //different strategy used in addition
     public static final String STRATEGY_COUNT_UP = "count_up";
     public static final String STRATEGY_COUNT_FROM = "count_from";
 
+    //used to judge the current node in animator_graph
     public static final String NODE_USERINPUT = "USERINPUT";
     public static final String NODE_ADD_PROMPT = "ADD_PROMPT";
     public static final String NODE_SUB_PROMPT = "SUB_PROMPT";
@@ -57,10 +60,12 @@ public class ASM_CONST {
             {"13", "15", "17", "18", "20", "21", "22", "23", "24", "25"}
     };
 
+    //used to judge which audio to play after user input
     public static final int NO_INPUT = -1;
     public static final int ALL_INPUT_RIGHT = 0;
     public static final int NOT_ALL_INPUT_RIGHT = 1;
 
+    //used to play the prompts in multiplication when showing repeated addition
     public static final String NUMBER_PREFIX = "Write the ";
     public static final Map<Integer, String> writeNextNumber = new HashMap<Integer, String>();
 
@@ -82,6 +87,7 @@ public class ASM_CONST {
     public static final String NEXT = "next";
     public static final String LAST = "last";
 
+    //indicate which thing to highlight
     public static final String HIGHLIGHT_OVERHEAD = "HIGHLIGHT_OVERHEAD";
     public static final String HIGHLIGHT_RESULT   = "HIGHLIGHT_RESULT";
 }

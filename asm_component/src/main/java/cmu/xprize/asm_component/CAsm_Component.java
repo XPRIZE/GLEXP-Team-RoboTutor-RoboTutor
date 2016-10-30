@@ -38,9 +38,12 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     protected int[] numbers;
 
+    //current digit
     protected int digitIndex;
     protected int numSlots;
 
+    //corValue is the correct result
+    //corDigit is current correct digit
     protected Integer corDigit;
     protected Integer corValue;
     protected String operation;
@@ -50,16 +53,23 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     protected boolean dotbagsVisible = true;
 
+    //used to show:
+    //carrying in addition
+    //borrowing in subtraction
+    //repeated addition in multiplication
     protected Integer overheadVal = null;
     protected CAsm_Text overheadText = null;
     protected CAsm_Text overheadTextSupplement = null;
     protected int curOverheadCol = -1;
 
+    //the number of Alleys
     protected int numAlleys = 0;
 
     private float scale = getResources().getDisplayMetrics().density;
     protected int alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
 
+    //if user is writing, stop the timer used to show dotbags
+    //use TimeStamp to judge if it is the time to show the dotbags
     protected  boolean isWriting = false;
     protected boolean hasShown = false;
     protected long startTime;

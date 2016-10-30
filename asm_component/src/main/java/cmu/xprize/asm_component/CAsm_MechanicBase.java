@@ -91,6 +91,10 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     public void preClickSetup() {}
 
+    /**
+     * Handle the click on text in MechanicBase
+     * Handle the click on dots in MechanicAdd, MechanicSubtract, MechanicMultiply
+     */
     public void handleClick() {
 
         if (mComponent.getClickPaused()) {
@@ -129,6 +133,9 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     public String getOperation() {return operation;}
 
+    /**
+     * If user input the overhead value correctly
+     */
     public void correctOverheadText() {
         // whenever they put in the right overhead text
 
