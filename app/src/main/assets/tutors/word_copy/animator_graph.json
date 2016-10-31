@@ -52,17 +52,23 @@
               "preenter": [],
               "reuse": true,
               "tracks": [
-                {"type": "COMMAND", "id": "word_copy", "method": "cancelPost", "parms": "HESITATION_PROMPT:String",    "features":""},
+                {"type": "COMMAND", "id": "word_copy", "method": "enableReplayButton", "parms": "FALSE:Boolean", "features":""},
+
+                {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "TRUE:Boolean",             "features":"" },
+                {"type": "COMMAND", "id": "word_copy", "method": "cancelPost",   "parms": "HESITATION_PROMPT:String", "features":"" },
 
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3","soundpackage": "default","mode": "flow", "features": "FTR_NUMBERS"},
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the letter.mp3","soundpackage": "default","mode": "flow", "features": "FTR_LETTERS"},
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the word.mp3","soundpackage": "default","mode": "flow", "features": "FTR_WORDS"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please write the word.mp3",  "soundpackage": "default","mode": "flow", "features": "FTR_WORDS"},
 
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "words","mode":"flow", "features": "FTR_WORDS"},
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "letters","mode":"flow", "features": "FTR_LETTERS"},
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "{{word_copy.value}}.mp3","soundpackage": "numbers","mode":"flow", "features": "FTR_NUMBERS"},
 
-                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_HIGHLIGHT:String", "features":""}
+                {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "RIPPLE_HIGHLIGHT:String", "features":""},
+                {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput",        "parms": "FALSE:Boolean",           "features":""},
+
+                {"type": "COMMAND", "id": "word_copy", "method": "enableReplayButton", "parms": "TRUE:Boolean", "features":""}
               ],
               "preexit": [
               ],
@@ -585,7 +591,8 @@
 
             {"type": "COMMAND", "id": "word_copy", "method": "next" ,"features":""},
 
-            {"type": "COMMAND", "id": "word_copy", "method": "showReplayButton", "parms": "TRUE:Boolean", "features":"FTR_DICTATION"}
+            {"type": "COMMAND", "id": "word_copy", "method": "showReplayButton",   "parms": "TRUE:Boolean", "features":"FTR_DICTATION"},
+            {"type": "COMMAND", "id": "word_copy", "method": "enableReplayButton", "parms": "TRUE:Boolean", "features":"FTR_DICTATION"}
           ],
           "preexit": [
           ],

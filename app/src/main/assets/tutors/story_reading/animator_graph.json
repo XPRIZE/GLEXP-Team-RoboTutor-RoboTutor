@@ -17,7 +17,7 @@
         "INTRO_STATE": {
           "type": "NODE",
           "COMMENT": "Intro Clip",
-          "preenter":["SET_VERSION","CONFIG_TUTOR"],
+          "preenter":["SET_VERSION"],
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
           "preexit" :[],
@@ -243,18 +243,6 @@
           ]
         },
 
-
-        "CONFIG_TUTOR":{
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-            {"type": "COMMAND", "id":"SstoryReading", "method":"setSpeakButton",        "parms": "HIDE:String",    "features": "" },
-            {"type": "COMMAND", "id":"SstoryReading", "method":"setPageFlipButton",     "parms": "SHOW:String",    "features": "FTR_MANUAL" },
-            {"type": "COMMAND", "id":"SstoryReading", "method":"setPageFlipButton",     "parms": "DISABLE:String", "features": "FTR_MANUAL" },
-            {"type": "COMMAND", "id":"SstoryReading", "method":"setPageFlipButton",     "parms": "HIDE:String",    "features": "!FTR_MANUAL" }
-          ]
-        },
 
         "CONFIG_SPEAK_BUTTON":{
           "type": "MODULE",

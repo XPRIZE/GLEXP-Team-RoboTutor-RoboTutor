@@ -125,7 +125,6 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         mGlyphList.setClipChildren(false);
 
         mReplayButton = (ImageButton) findViewById(R.id.Sreplay);
-        mReplayButton.setOnClickListener(new replayClickListener());
 
 // TODO: DEBUG only
 //        mRecogList.setOnTouchListener(new RecogTouchListener());
@@ -172,6 +171,11 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
             mReplayButton.setOnClickListener(new replayClickListener());
         }
+    }
+
+    public void enableReplayButton(Boolean enable) {
+
+        mReplayButton.setOnClickListener(enable? new replayClickListener(): null);
     }
 
 

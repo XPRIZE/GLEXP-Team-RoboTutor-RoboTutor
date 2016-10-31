@@ -31,6 +31,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import cmu.xprize.util.CAnimatorUtil;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.TCONST;
 
 public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMechanic {
@@ -78,114 +79,117 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
         boolean launched   = false;
         int     colorNdx;
 
-        // Find a bubble that is not currently on screen.
-        //
-        for(CBubble bubble : SBubbles) {
-            if(!bubble.getOnScreen()) {
-                nextBubble = bubble;
-                nextBubble.setOnScreen(true);
-                break;
-            }
-        }
+        if (SBubbles != null) {
 
-        // If there is a free bubble then set it up and launch it
-        //
-        if(nextBubble != null) {
-
-            launched = true;
-
-            do {
-                colorNdx = (int)(Math.random() * BP_CONST.bubbleColors.length);
-            }while(colorNdx == _prevColorNdx);
-
-            _prevColorNdx = colorNdx;
-
-            String correctVal = mComponent._stimulus_data[_currData.dataset[_currData.stimulus_index]];
-
-            nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
-            nextBubble.setScale(getRandInRange(_scaleRange));
-
-            // Cycle on the indexes to display
+            // Find a bubble that is not currently on screen.
             //
-            stimNdx =( stimNdx + 1) % _currData.dataset.length;
-
-            String stiumulusVal = mComponent._stimulus_data[_currData.dataset[stimNdx]];
-
-            switch (mComponent.stimulus_type) {
-
-                case BP_CONST.REFERENCE:
-
-                    int[] shapeSet = BP_CONST.drawableMap.get(stiumulusVal);
-
-                    nextBubble.configData(stiumulusVal, correctVal);
-                    nextBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
+            for (CBubble bubble : SBubbles) {
+                if (!bubble.getOnScreen()) {
+                    nextBubble = bubble;
+                    nextBubble.setOnScreen(true);
                     break;
-
-                case BP_CONST.TEXTDATA:
-
-                    nextBubble.configData(stiumulusVal, correctVal);
-                    nextBubble.setContents(0, stiumulusVal);
-                    break;
+                }
             }
 
-            float xRange[] = new float[]{0, mParent.getWidth() - (BP_CONST.BUBBLE_DESIGN_RADIUS * nextBubble.getAssignedScale())};
-            float xPos;
+            // If there is a free bubble then set it up and launch it
+            //
+            if (nextBubble != null) {
 
-            do {
-                xPos = getRandInRange(xRange);
-            }while(Math.abs(xPos - _prevXpos) < nextBubble.getWidth());
+                launched = true;
 
-            _prevXpos = xPos;
+                do {
+                    colorNdx = (int) (Math.random() * BP_CONST.bubbleColors.length);
+                } while (colorNdx == _prevColorNdx);
 
-            nextBubble.setPosition((int) xPos, mParent.getHeight());
-            nextBubble.setAlpha(1.0f);
+                _prevColorNdx = colorNdx;
 
-            long timeOfFlight = (long) (_travelTime / nextBubble.getAssignedScale());
+                String correctVal = mComponent._stimulus_data[_currData.dataset[_currData.stimulus_index]];
 
-            PointF wayPoints[] = new PointF[1];
-            PointF posFinal    = new PointF();
+                nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
+                nextBubble.setScale(getRandInRange(_scaleRange));
 
-            posFinal.x =  nextBubble.getX();
-            posFinal.y = -BP_CONST.BUBBLE_DESIGN_RADIUS * 2.5f * nextBubble.getAssignedScale();
+                // Cycle on the indexes to display
+                //
+                stimNdx = (stimNdx + 1) % _currData.dataset.length;
 
-            wayPoints[0] = posFinal;
+                String stiumulusVal = mComponent._stimulus_data[_currData.dataset[stimNdx]];
 
-            Log.d(TAG, "Time of Flight: " + timeOfFlight);
-            Log.d(TAG, "Final YPos: " + posFinal.y);
+                switch (mComponent.stimulus_type) {
 
-            Animator translator = CAnimatorUtil.configTranslate(nextBubble, timeOfFlight, 0, wayPoints);
+                    case BP_CONST.REFERENCE:
 
-            translator.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationCancel(Animator arg0) {
-                    //Functionality here
+                        int[] shapeSet = BP_CONST.drawableMap.get(stiumulusVal);
+
+                        nextBubble.configData(stiumulusVal, correctVal);
+                        nextBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
+                        break;
+
+                    case BP_CONST.TEXTDATA:
+
+                        nextBubble.configData(stiumulusVal, correctVal);
+                        nextBubble.setContents(0, stiumulusVal);
+                        break;
                 }
 
-                @Override
-                public void onAnimationStart(Animator arg0) {
-                    //Functionality here
-                }
+                float xRange[] = new float[]{0, mParent.getWidth() - (BP_CONST.BUBBLE_DESIGN_RADIUS * nextBubble.getAssignedScale())};
+                float xPos;
 
-                @Override
-                public void onAnimationEnd(Animator animation) {
+                do {
+                    xPos = getRandInRange(xRange);
+                } while (Math.abs(xPos - _prevXpos) < nextBubble.getWidth());
 
-                    CBubble bubble = translators.get(animation);
-                    translators.remove(animation);
+                _prevXpos = xPos;
 
-                    bubble.setOnScreen(false);
-                }
+                nextBubble.setPosition((int) xPos, mParent.getHeight());
+                nextBubble.setAlpha(1.0f);
 
-                @Override
-                public void onAnimationRepeat(Animator arg0) {
-                    //Functionality here
-                }
-            });
+                long timeOfFlight = (long) (_travelTime / nextBubble.getAssignedScale());
 
-            setupWiggle(nextBubble, 0);
-            nextBubble.setOnClickListener(CBp_Mechanic_RISE.this);
+                PointF wayPoints[] = new PointF[1];
+                PointF posFinal = new PointF();
 
-            translators.put(translator, nextBubble);
-            translator.start();
+                posFinal.x = nextBubble.getX();
+                posFinal.y = -BP_CONST.BUBBLE_DESIGN_RADIUS * 2.5f * nextBubble.getAssignedScale();
+
+                wayPoints[0] = posFinal;
+
+                Log.d(TAG, "Time of Flight: " + timeOfFlight);
+                Log.d(TAG, "Final YPos: " + posFinal.y);
+
+                Animator translator = CAnimatorUtil.configTranslate(nextBubble, timeOfFlight, 0, wayPoints);
+
+                translator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationCancel(Animator arg0) {
+                        //Functionality here
+                    }
+
+                    @Override
+                    public void onAnimationStart(Animator arg0) {
+                        //Functionality here
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+
+                        CBubble bubble = translators.get(animation);
+                        translators.remove(animation);
+
+                        bubble.setOnScreen(false);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator arg0) {
+                        //Functionality here
+                    }
+                });
+
+                setupWiggle(nextBubble, 0);
+                nextBubble.setOnClickListener(CBp_Mechanic_RISE.this);
+
+                translators.put(translator, nextBubble);
+                translator.start();
+            }
         }
 
         return launched;

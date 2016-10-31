@@ -110,6 +110,8 @@ public class TCONST {
     public static final String INVISIBLE           = "INVISIBLE";
     public static final String GONE                = "GONE";
 
+    public static final String ENGINEMESSAGE       = "EngineMessage: ";
+
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
     //

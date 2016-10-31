@@ -40,6 +40,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.robotutor.tutorengine.widgets.core.IDataSink;
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.CLogManager;
 import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.IScope;
@@ -99,6 +100,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
         mTutor          = tutor;
         mTutorName      = name;
         mTutorContainer = tutorContainer;
+        mLogManager     = CLogManager.getInstance();
 
         _sceneCurr = 0;
         _scenePrev = 0;
@@ -483,6 +485,8 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
                 IDataSink dataSink = (IDataSink) childMap.get(binding.name);
 
                 if(dataSink != null) {
+
+                    mLogManager.postEvent(TAG, "PreEnter DataSource: " + binding.datasource);
 
                     dataSink.setDataSource(binding.datasource);
 

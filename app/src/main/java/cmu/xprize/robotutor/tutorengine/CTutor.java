@@ -133,6 +133,8 @@ public class CTutor implements ILoadableObject2, IEventSource {
         mMediaManager.setLanguageFeature(this, tarLanguage);
 
         inflateTutor();
+
+        mTutorLogManager.postEvent(TAG, "Create Tutor: " + name);
     }
 
 
