@@ -52,7 +52,7 @@ public class CAkTeachFinger extends TextView {
         Drawable image = context.getResources().getDrawable( R.drawable.finger);
         int h = image.getIntrinsicHeight();
         int w = image.getIntrinsicWidth();
-        image.setBounds( 0, 0, w, h );
+        image.setBounds( 0, 0, w, h);
         setCompoundDrawables(null, image,
                 null, null);
         setText(words);
@@ -77,13 +77,13 @@ public class CAkTeachFinger extends TextView {
             PercentLayoutHelper.PercentLayoutInfo info = params.getPercentLayoutInfo();
             switch (lane) {
                 case LEFT:
-                    info.leftMarginPercent = 0.25f;
+                    info.leftMarginPercent = 0.16f;
                     break;
                 case MID:
-                    info.leftMarginPercent = 0.36f;
+                    info.leftMarginPercent = 0.34f;
                     break;
                 case RIGHT:
-                    info.leftMarginPercent = 0.47f;
+                    info.leftMarginPercent = 0.52f;
                     break;
             }
             requestLayout();
