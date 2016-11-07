@@ -139,7 +139,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         //
         new JSON_Helper(getAssets(), CacheSource, RoboTutor.APP_PRIVATE_FILES);
 
-
         // Initialize the media manager singleton - it needs access to the App assets.
         //
         mMediaController = CMediaController.getInstance();

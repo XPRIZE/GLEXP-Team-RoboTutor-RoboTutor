@@ -21,6 +21,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
     lintOptions {
         // set to true to turn off analysis progress reporting by lint
         quiet true

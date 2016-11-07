@@ -547,7 +547,9 @@ public class CRecognizerPlus implements IGlyphSink {
                 //
                 metric.calcMetrics(_drawGlyph, glyphVisualBnds, candCharBnds, _viewBnds, (sampleIndex != GCONST.EXPECT_NONE)? compCharBnds:candCharBnds , GCONST.STROKE_WEIGHT);
 
-                candidate.setVisualConfidence(metric.generateVisualMetric(_fontBnds, candChar, (sampleIndex != GCONST.EXPECT_NONE)? _sampleExpected:candChar, _drawGlyph, _Paint, GCONST.CALIBRATED_WEIGHT, TCONST.VOLATILE));
+                metric.generateVisualMetric(_fontBnds, candChar, (sampleIndex != GCONST.EXPECT_NONE)? _sampleExpected:candChar, _drawGlyph, _Paint, GCONST.CALIBRATED_WEIGHT, TCONST.VOLATILE);
+
+                candidate.setVisualConfidence(metric);
 
                 Log.d("Metrics Initial: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence())) ;
 
@@ -564,7 +566,7 @@ public class CRecognizerPlus implements IGlyphSink {
                 }
 
 
-                // Manage class boosts
+                // Manage class boosts - Digit and Alpha act as filters when you only want to consider those classes
                 //
                 if(_boostDigitClass) {
                     candidate.updateORConfidence((candDigit)? 1.0f:0.0f);
@@ -578,6 +580,8 @@ public class CRecognizerPlus implements IGlyphSink {
                     Log.d("Metrics Alpha Boost: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence())) ;
                 }
 
+                // If candidate is not same class as sample - reduce it's confidence
+                //
                 else if(_boostSampleClass && (candDigit != sampDigit)) {
                     candidate.updateORConfidence((isSample)? 0.75f:0.3f);
 
@@ -597,7 +601,10 @@ public class CRecognizerPlus implements IGlyphSink {
                 // Update the visual confidence
                 //
                 candidate.updateANDConfidence(candidate.getVisualConfidence(), (isSample)? 0.75f:0.5f);
-                Log.d("Metrics Visual: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence()) + "  Visual: " + String.format("%.3f", candidate.getVisualConfidence()));
+                Log.d("Metrics Visual Match: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence()) + "  Match: " + String.format("%.3f", candidate.getVisualConfidence()));
+
+                candidate.updateANDConfidence(candidate.getVisualErrorConfidence(), (isSample)? 0.75f:0.5f);
+                Log.d("Metrics Visual Error: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence()) + "  Error: " + String.format("%.3f", candidate.getVisualErrorConfidence()));
 
                 _ltkPlusCandidates[index++] = candidate;
             }
@@ -647,7 +654,9 @@ public class CRecognizerPlus implements IGlyphSink {
             //
             metric.calcMetrics(_drawGlyph, glyphVisualBnds, candCharBnds, _viewBnds, (sampleIndex != GCONST.EXPECT_NONE)? compCharBnds:candCharBnds , GCONST.STROKE_WEIGHT);
 
-            candidate.setVisualConfidence(metric.generateVisualMetric(_fontBnds, candChar, (sampleIndex != GCONST.EXPECT_NONE)? _sampleExpected:candChar, _drawGlyph, _Paint, GCONST.CALIBRATED_WEIGHT, TCONST.VOLATILE));
+            metric.generateVisualMetric(_fontBnds, candChar, (sampleIndex != GCONST.EXPECT_NONE)? _sampleExpected:candChar, _drawGlyph, _Paint, GCONST.CALIBRATED_WEIGHT, TCONST.VOLATILE);
+
+            candidate.setVisualConfidence(metric);
         }
 
         // If there is no valid sample in the recognition set then use the TLK candidate = i.e. elemenet 0

@@ -19,7 +19,6 @@
 
 package cmu.xprize.robotutor.tutorengine.graph;
 
-import android.media.MediaPlayer;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -28,6 +27,7 @@ import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.IMediaListener;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.util.CFileNameHasher;
 import cmu.xprize.util.TCONST;
 
 
@@ -41,12 +41,15 @@ public class type_audio extends type_action implements IMediaListener {
     // NOTE: we run at a Flash default of 24fps - which is the units in which
     // index and duration are calibrated
 
+    private CFileNameHasher               mFileNameHasher;
     private CMediaManager                 mMediaManager;
     private CMediaManager.PlayerManager   mPlayer;
     private boolean                       mPreLoaded = false;
 
     private String                        mSoundSource;
     private String                        mSourcePath;
+
+    private boolean                       _useHashName = true;
 
     // json loadable fields
     public String        command;
@@ -65,6 +68,7 @@ public class type_audio extends type_action implements IMediaListener {
 
 
     public type_audio() {
+        mFileNameHasher = CFileNameHasher.getInstance();
     }
 
     /**
@@ -308,6 +312,17 @@ public class type_audio extends type_action implements IMediaListener {
         mMediaManager = CMediaController.getInstance(_scope.tutor());
 
         langPath = mMediaManager.mapMediaPackage(_scope.tutor(), soundpackage, lang);
+
+        if(_useHashName) {
+
+            // NOTE: ASSUME mp3 - trim the mp3 - we just want the text in the Hash
+            //
+            String text = mSoundSource.substring(0, mSoundSource.length() - 4);
+
+            // add the extension back on the generated filename hash
+            //
+            mSoundSource = mFileNameHasher.generateHash(text) + ".mp3";
+        }
 
         // Update the path to the sound source file
         mSoundSource = TCONST.AUDIOPATH + "/" + langPath + "/" + soundsource;

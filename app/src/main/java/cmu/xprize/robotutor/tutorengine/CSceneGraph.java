@@ -229,6 +229,7 @@ public class CSceneGraph  {
                             // next scene in the TutorGraph.
 
                             case TCONST.END_OF_GRAPH:
+
                                 // If this is the root graph then we do to the next scene
                                 //
                                 if(!popGraph()) {
