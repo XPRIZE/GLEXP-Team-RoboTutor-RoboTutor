@@ -98,6 +98,16 @@ public class type_timeline extends type_action implements IMediaListener {
     private boolean mWasPlaying = false;
 
     @Override
+    public String sourceName() {
+        return "type_timeline";
+    }
+
+    @Override
+    public String resolvedName() {
+        return "";
+    }
+
+    @Override
     public void globalPause() {
 
         globalStop();

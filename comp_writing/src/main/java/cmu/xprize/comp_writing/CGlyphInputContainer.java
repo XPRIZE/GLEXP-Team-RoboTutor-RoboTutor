@@ -116,7 +116,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private int                   _glyphColor        = Color.BLACK;
     private int                   _boxColor          = WR_CONST.BOX_COLOR;
 
-    private boolean               mLogGlyphs = false;
+    private boolean               mLogGlyphs = true;
 
     private RecogDelay            _counter;
     private long                  _time;

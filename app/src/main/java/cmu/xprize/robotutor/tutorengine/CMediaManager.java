@@ -486,7 +486,7 @@ public class CMediaManager {
                 Log.d(TAG, "Audio Loading: " + dataSource);
 
             } catch (Exception e) {
-                Log.e(TAG, "Audio error: " + e);
+                Log.e(TAG, "Audio error: " + mOwner.sourceName() + " => " + mOwner.resolvedName() + " => " + e);
 
                 // Do the completion event to keep the tutor moving.
                 //

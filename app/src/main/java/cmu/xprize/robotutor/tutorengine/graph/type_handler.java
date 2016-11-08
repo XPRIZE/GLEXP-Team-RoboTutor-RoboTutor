@@ -77,7 +77,17 @@ public class type_handler extends type_action implements IMediaListener {
         //
         private boolean mWasPlaying = false;
 
-        @Override
+    @Override
+    public String sourceName() {
+        return "type_handler";
+    }
+
+    @Override
+    public String resolvedName() {
+        return (id == null)? "":id;
+    }
+
+    @Override
         public void globalPause() {
 
             globalStop();

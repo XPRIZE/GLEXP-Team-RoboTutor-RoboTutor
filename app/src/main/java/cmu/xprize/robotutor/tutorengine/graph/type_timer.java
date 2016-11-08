@@ -67,6 +67,16 @@ public class type_timer extends type_action implements IMediaListener {
     private boolean mWasPlaying = false;
 
     @Override
+    public String sourceName() {
+        return "type_timer";
+    }
+
+    @Override
+    public String resolvedName() {
+        return (id == null)? "":id;
+    }
+
+    @Override
     public void globalPause() {
 
         globalStop();

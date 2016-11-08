@@ -21,6 +21,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    task hashTask(type: Exec) {
+
+        commandLine 'java', '-jar', 'filenamehasher.jar'
+//        workingDir "$projectDir"
+//        println 'do prebuild stuff:'
+    }
+
+    preBuild.dependsOn hashTask
+
     lintOptions {
         // set to true to turn off analysis progress reporting by lint
         quiet true

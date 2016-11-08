@@ -146,8 +146,8 @@ public class CGlyphMetricConstraint {
 
         // TODO: These need to be normalized somehow before they can be used
         //
-//        result |= metric.getVisualDelta() > VisConst;
-//        result |= metric.getErrorDelta()  > ErrConst;
+//        result |= metric.getVisualMatch() > VisConst;
+//        result |= metric.getVisualError() > ErrConst;
 
         // Return true if nothing violates the constraint
         return !result;

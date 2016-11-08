@@ -19,7 +19,6 @@
 
 package cmu.xprize.robotutor.tutorengine.graph;
 
-import android.media.MediaPlayer;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -28,6 +27,7 @@ import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.IMediaListener;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.util.CFileNameHasher;
 import cmu.xprize.util.TCONST;
 
 
@@ -41,12 +41,17 @@ public class type_audio extends type_action implements IMediaListener {
     // NOTE: we run at a Flash default of 24fps - which is the units in which
     // index and duration are calibrated
 
+    private CFileNameHasher               mFileNameHasher;
     private CMediaManager                 mMediaManager;
     private CMediaManager.PlayerManager   mPlayer;
     private boolean                       mPreLoaded = false;
 
     private String                        mSoundSource;
     private String                        mSourcePath;
+    private String                        mResolvedName;
+    private String                        mPathResolved;
+
+    private boolean                       _useHashName = true;
 
     // json loadable fields
     public String        command;
@@ -59,12 +64,12 @@ public class type_audio extends type_action implements IMediaListener {
     public long          index    = 0;
 
 
-
     final static public String TAG = "type_audio";
 
 
 
     public type_audio() {
+        mFileNameHasher = CFileNameHasher.getInstance();
     }
 
     /**
@@ -79,6 +84,16 @@ public class type_audio extends type_action implements IMediaListener {
     //**  Global Media Control Start
 
     private boolean mWasPlaying = false;
+
+    @Override
+    public String sourceName() {
+        return soundsource;
+    }
+
+    @Override
+    public String resolvedName() {
+        return (mResolvedName == null)? "":mResolvedName;
+    }
 
     @Override
     public void globalPause() {
@@ -166,6 +181,8 @@ public class type_audio extends type_action implements IMediaListener {
     //*******************************************************
 
 
+
+
     /**
      * This is an optimization used in timeLines to preload the assets - timeline tracks act as the
      * owner so that they are informed directly of audio completion events.  This is necessary to
@@ -175,14 +192,43 @@ public class type_audio extends type_action implements IMediaListener {
      */
     public void preLoad(IMediaListener owner) {
 
-        String pathResolved = getScope().parseTemplate(mSourcePath);
+        mPathResolved = getScope().parseTemplate(mSourcePath);
 
-        Log.i(TAG, "Preload: " + pathResolved);
+        Log.i(TAG, "Preloading audio: " + mPathResolved);
+
+        int endofPath = mPathResolved.lastIndexOf("/") + 1;
+
+        // Extract the path and name portions
+        // NOTE: ASSUME mp3 - trim the mp3 - we just want the text in the Hash
+        //
+        String pathPart = mPathResolved.substring(0,endofPath);
+        String namePart = mPathResolved.substring(endofPath , mPathResolved.length() - 4);
+
+        // Note we do this decomposition to get the resolved name for debug messages
+        //
+        if(_useHashName) {
+
+            // Permit actual hash's in the script using the # prefix
+            //
+            if(namePart.startsWith("#")) {
+                mResolvedName = namePart.substring(1);
+            }
+            // Otherwise generate the hash from the text
+            else {
+                mResolvedName = mFileNameHasher.generateHash(namePart);
+            }
+        } else {
+            mResolvedName = namePart;
+        }
+
+        // add the extension back on the generated filename hash
+        //
+        mPathResolved = pathPart + mResolvedName + ".mp3";
 
         // This allocates a MediaPController for use by this audio_node. The media controller
         // is a managed global resource of CMediaManager
         //
-        mPlayer = mMediaManager.attachMediaPlayer(pathResolved, owner);
+        mPlayer = mMediaManager.attachMediaPlayer(mPathResolved, owner);
 
         mPreLoaded = true;
     }
@@ -310,6 +356,7 @@ public class type_audio extends type_action implements IMediaListener {
         langPath = mMediaManager.mapMediaPackage(_scope.tutor(), soundpackage, lang);
 
         // Update the path to the sound source file
+        //
         mSoundSource = TCONST.AUDIOPATH + "/" + langPath + "/" + soundsource;
         mSourcePath  = TCONST.TUTORROOT + "/" + TCONST.TDATA + "/" + mSoundSource;
     }
