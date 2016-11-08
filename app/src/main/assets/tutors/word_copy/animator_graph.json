@@ -523,9 +523,11 @@
             {"type": "COMMAND", "id": "word_copy", "method": "inhibitInput", "parms": "TRUE:Boolean","features":""},
 
             // This will play during the demo replay
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now we will practice writing some letters.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_LETTERS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some numbers.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_NUMBERS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets practice writing some words.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_WORDS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "now we will practice writing some letters.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_LETTERS"},
+// This show the same result as above using the actual hash value with a # prefix
+//            {"type": "AUDIO", "command": "PLAY", "soundsource": "#17789a6e7851f9eb025208fb221b521b.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_LETTERS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "now lets practice writing some numbers.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_NUMBERS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "now lets practice writing some words.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_WORDS"},
 
             // When the word replay is complete move to the next node
             {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|DELAYED_NEXT:String" ,"features":""},
