@@ -317,11 +317,11 @@ public class type_audio extends type_action implements IMediaListener {
 
             // NOTE: ASSUME mp3 - trim the mp3 - we just want the text in the Hash
             //
-            String text = mSoundSource.substring(0, mSoundSource.length() - 4);
+            String text = soundsource.substring(0, soundsource.length() - 4);
 
             // add the extension back on the generated filename hash
             //
-            mSoundSource = mFileNameHasher.generateHash(text) + ".mp3";
+            soundsource = mFileNameHasher.generateHash(text) + ".mp3";
         }
 
         // Update the path to the sound source file
