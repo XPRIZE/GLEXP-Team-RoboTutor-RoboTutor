@@ -71,15 +71,16 @@ public class CAkQuestionBoard extends View {
                 canvas.drawText(String.valueOf(choices[0]), width / 2, height * 5.0f / 12, vPaint);
                 break;
             case 2:
+                roadSign = Bitmap.createScaledBitmap(roadSign, width / 6, height / 2, false);
                 canvas.drawBitmap(greenPole,-width/20, height/16, vPaint);
-                canvas.drawBitmap(roadSign, width / 12, 0, vPaint);
-                canvas.drawText(String.valueOf(choices[0]), width * 6.0f / 24, height * 5.0f / 12, vPaint);
+                canvas.drawBitmap(roadSign, width * 3.5f/ 12, 0, vPaint);
+                canvas.drawText(String.valueOf(choices[0]), width * 9f / 24, height * 5.0f / 12, vPaint);
                 Matrix matrix1 = new Matrix();
                 matrix1.preScale(-1, 1);
                 canvas.drawBitmap(Bitmap.createBitmap(roadSign, 0, 0,
                         roadSign.getWidth(),roadSign.getHeight(), matrix1, false),
-                        width * 7.0f / 12, 0, vPaint);
-                canvas.drawText(String.valueOf(choices[1]), width * 18.0f / 24, height * 5.0f / 12, vPaint);
+                        width * 6.2f / 12, 0, vPaint);
+                canvas.drawText(String.valueOf(choices[1]), width * 14.5f / 24, height * 5.0f / 12, vPaint);
                 break;
             case 3:
                 canvas.drawBitmap(greenPole,-width/20, height/16, vPaint);
