@@ -121,7 +121,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public boolean              random      = false;
     public String[]             dataSource;
 
-    final private String  TAG        = "CWritingController";
+    final private String  TAG        = "CWritingComponent";
 
 
 

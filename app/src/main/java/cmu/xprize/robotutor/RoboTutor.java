@@ -87,6 +87,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     static public float         instanceDensity;
     static public float         densityRescale;
 
+    static public String        PACKAGE_NAME;
+
     final static public  String CacheSource = TCONST.ASSETS;                // assets or extern
 
     private boolean             isReady       = false;
@@ -107,6 +109,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         // Note = we don't want the system to try and recreate any of our views- always pass null
         super.onCreate(null);
+
+        PACKAGE_NAME = getApplicationContext().getPackageName();
 
         // Prep the CPreferenceCache
         // Update the globally accessible id object for this engine instance.
@@ -172,6 +176,20 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         logManager.postEvent(TAG, "onRestoreInstanceState" + bundle);
     }
 
+
+    public void reBoot() {
+
+        try {
+
+            Process proc = Runtime.getRuntime().exec(new String[] { "su", "-c", "reboot" });
+            proc.waitFor();
+
+        } catch (Exception ex) {
+
+            logManager.postEvent(TAG, "Could not reboot");
+        }
+
+    }
 
     private void setFullScreen() {
 

@@ -60,4 +60,5 @@ dependencies {
     compile project(':bp_component')
     compile project(':comp_writing')
     compile project(':comp_pointtap')
+    compile project(path: ':comp_ask')
 }
