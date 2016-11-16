@@ -1,10 +1,9 @@
 {
   "dataSource" : [
-
-    {"type" : "CAk_Data", "choices" : ["12", "23"], "answer" : "MID", "belowString" : "15"},
     {"type" : "CAk_Data", "choices" : ["5"], "answer" : "LEFT", "belowString" : "2"},
-    {"type" : "CAk_Data", "choices" : ["6", "9"], "answer" : "MID", "belowString" : "8"},
+    {"type" : "CAk_Data", "choices" : ["12", "23"], "answer" : "MID", "belowString" : "15"},
     {"type" : "CAk_Data", "choices" : ["5","6","7"],"answer" :"LEFT", "aboveString":"5","belowString" :"audio"},
+    {"type" : "CAk_Data", "choices" : ["6", "9"], "answer" : "MID", "belowString" : "8"},
     {"type" : "CAk_Data", "choices" : ["5","10"],"answer" :"LEFT", "belowString" :"3"},
     {"type" : "CAk_Data", "choices" : ["1", "2", "3"], "answer" : "RIGHT", "aboveString" : "", "belowString" :  "  o  \no   o"},
     //    {"type" : "CAk_Data", "choices" : ["10", "20"], "answer" : "RIGHT", "belowString" : "60"},

@@ -77,7 +77,7 @@ public class CAkTeachFinger extends TextView {
             PercentLayoutHelper.PercentLayoutInfo info = params.getPercentLayoutInfo();
             switch (lane) {
                 case LEFT:
-                    info.leftMarginPercent = 0.16f;
+                    info.leftMarginPercent = 0.20f;
                     break;
                 case MID:
                     info.leftMarginPercent = 0.34f;

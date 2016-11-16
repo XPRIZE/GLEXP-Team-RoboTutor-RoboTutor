@@ -9,6 +9,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.TextView;
 
 /**
  * Created by jacky on 2016/7/1.
@@ -23,7 +24,6 @@ public class CAkQuestionBoard extends View {
 
     private Bitmap roadSign;
     private Bitmap greenPole;
-
     public CAkQuestionBoard(Context context, CAkPlayer.Lane answerLane, String[] choices) {
         super(context);
         init(answerLane, choices);
@@ -86,11 +86,9 @@ public class CAkQuestionBoard extends View {
                 canvas.drawBitmap(greenPole,-width/20, height/16, vPaint);
                 canvas.drawBitmap(roadSign, 0, 0, vPaint);
                 canvas.drawText(String.valueOf(choices[0]), width / 6, height * 5.0f / 12, vPaint);
-
                 canvas.drawBitmap(roadSign, width / 3, 0, vPaint);
                 canvas.drawText(String.valueOf(choices[1]), width / 2, height * 5.0f / 12, vPaint);
                 Matrix matrix2 = new Matrix();
-
                 matrix2.preScale(-1, 1);
                 canvas.drawBitmap(Bitmap.createBitmap(roadSign, 0, 0,
                         roadSign.getWidth(),roadSign.getHeight(), matrix2, false),

@@ -47,6 +47,9 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     private CTutor mTutor;
     private CObjectDelegate mSceneObject;
     private int wrongTimes = 0;//record the successive wrong times of the player
+    private boolean first1sign = true;
+    private boolean first2sign = true;
+    private boolean first3sign = true;
     private PercentRelativeLayout curpercentLayout = (PercentRelativeLayout) getChildAt(0);
 
     static final String TAG = "TAkComponent";
@@ -321,6 +324,32 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     public void judge(){
         reset();
+        switch(questionBoard.choices.length){
+            case 1:
+                if(first1sign) {
+                    mTutor.setAddFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
+                    first1sign = false;
+                }else
+                    judge_rightwrong();
+                break;
+            case 2:
+                if(first2sign){
+                    mTutor.setAddFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
+                    first2sign = false;
+                }else
+                    judge_rightwrong();
+                break;
+            case 3:
+                if(first3sign){
+                    mTutor.setAddFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
+                    first3sign = false;
+                }else
+                    judge_rightwrong();
+                break;
+        }
+    }
+
+    public void judge_rightwrong(){
         if(questionBoard.answerLane == player.lane){
             mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
             wrongTimes = 0;
@@ -398,7 +427,6 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         LayoutParams params = new LayoutParams(360, 80);
         params.addRule(CENTER_HORIZONTAL);
         curpercentLayout.addView(questionBoard, params);
-        player.bringToFront();
     }
 
     public void prompt_resume(){

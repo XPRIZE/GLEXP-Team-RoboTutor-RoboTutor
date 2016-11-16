@@ -131,7 +131,7 @@
         android:alpha="0.85"
         android:id="@+id/mask"
         android:visibility="invisible"
-        android:layout_alignParentTop="true"
+        android:layout_alignBottom="@+id/pavement"
         android:layout_alignParentStart="true" />
 
 </android.support.percent.PercentRelativeLayout>
