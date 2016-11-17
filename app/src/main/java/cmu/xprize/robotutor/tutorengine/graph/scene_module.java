@@ -127,6 +127,20 @@ public class scene_module extends scene_node implements ILoadableObject2 {
     }
 
 
+    /**
+     */
+    public String cancelNode() {
+
+        _ndx = 0;
+        _moduleState = TCONST.READY;
+
+        if(_nextAction != null)
+            _nextAction.cancelNode();
+
+        return TCONST.NONE;
+    }
+
+
     // Symbol resolution - This allows local maps within modules.
     //
     public IScriptable2 mapSymbol(String symbolName) throws Exception {

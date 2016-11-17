@@ -218,6 +218,7 @@ public class TCONST {
     final static public String SIMPLENAV       = "SIMPLE_NAVIGATOR";
     final static public String GRAPHNAV        = "GRAPH_NAVIGATOR";
     public static final String NEXT_NODE       = "NEXT_NODE";
+    public static final String CANCEL_NODE     = "CANCEL_NODE";
     public static final String NEXT_TNODE      = "NEXT_TNODE";
     public static final String NEXTSCENE       = "NEXTSCENE";
     public static final String FIRST_SCENE     = "GOTO_FIRST_SCENE";
@@ -302,6 +303,7 @@ public class TCONST {
 
 
     // type_action - command types
+    public static final String CMD_DEBUG        = "DEBUG";
     public static final String CMD_WAIT         = "WAIT";
     public static final String CMD_GOTO         = "GOTONODE";
     public static final String CMD_NEXT         = "NEXT";

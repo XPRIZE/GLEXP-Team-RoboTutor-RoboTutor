@@ -462,6 +462,9 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         switch (event.getAction()) {
 
             case MotionEvent.ACTION_DOWN:
+
+                mWritingComponent.applyBehavior(WR_CONST.WRITE_BEHAVIOR);
+
                 mScrollView.setEnableScrolling(mHasGlyph);
 
                 _prevTime = _time = System.nanoTime();

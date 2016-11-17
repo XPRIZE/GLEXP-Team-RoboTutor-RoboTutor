@@ -133,6 +133,46 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
     }
 
 
+    /**
+     */
+    @Override
+    public String cancelNode() {
+
+        // TODO: Watch for feature reactivity and preenter when this is implemented.
+
+        if ((_currNode != null) && (_currNode != this)) {
+
+            _currNode.cancelNode();
+
+            _currNode = _currNode.nextNode();
+
+            if (_currNode == null) {
+                Log.d(TAG, "Processing END Node: ");
+
+                _nodeState = TCONST.END_OF_GRAPH;
+            }
+
+            // This may result in a simple state change - method call etc.
+            // which returns TCONST.DONE indicating the event is complete
+            //
+            // It may start a process that needs to complete before continuing.
+            //
+            // A result of TCONST.NONE indicated the complex source node is exhausted.
+            // which will drive a search for the next node
+            //
+            else {
+                Log.d(TAG, "Processing Node: " + _currNode.name + " - start State: " + _nodeState + " - mapType: " + _currNode.maptype + " - mapName: " + _currNode.mapname);
+
+                _nodeState = _currNode.applyNode();
+
+                Log.d(TAG, "Processing Node: " + _currNode.name + " - end State: " + _nodeState);
+            }
+        }
+
+        return _nodeState;
+    }
+
+
     @Override
     public String next() {
         String result = TCONST.READY;

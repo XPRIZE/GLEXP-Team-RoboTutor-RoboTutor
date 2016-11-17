@@ -182,6 +182,16 @@ public class CSceneGraph  {
 
                     case TCONST.SUBGRAPH_CALL:
 
+                        // Don't permit nested graphs
+                        // This is a kludge to sinmplify feedback on buttons - i.e. if the button
+                        // is pushed during the feedback about the button itself.
+                        //
+                        if(_dataStack.size() > 0) {
+
+                            _graph.cancelNode();
+                            popGraph();
+                        }
+
                         mGraphName = _target;
 
                         // Save the current graph state
@@ -206,9 +216,11 @@ public class CSceneGraph  {
                         }
                         break;
 
+
                     case TCONST.SUBGRAPH_RETURN_AND_GO:
 
                         post(this, TCONST.NEXT_NODE);
+
 
                     case TCONST.SUBGRAPH_RETURN_AND_WAIT:
 
@@ -216,7 +228,6 @@ public class CSceneGraph  {
                         //
                         popGraph();
                         break;
-
 
 
                     case TCONST.NEXT_NODE:
@@ -249,13 +260,38 @@ public class CSceneGraph  {
                         }
                         break;
 
+
+                    case TCONST.CANCEL_NODE:
+
+                        switch (_graph.cancelNode()) {
+
+                            // TCONST.NEXTSCENE is used to end the current scene and step through to the
+                            // next scene in the TutorGraph.
+
+                            case TCONST.END_OF_GRAPH:
+
+                                // If this is the root graph then we do to the next scene
+                                //
+                                if(!popGraph()) {
+                                    mTutorGraph.post(this, TCONST.NEXTSCENE);
+                                }
+                                break;
+
+                            default:
+                                break;
+                        }
+                        break;
+
+
                     case TCONST.PLAY:
                         _graph.play();
                         break;
 
+
                     case TCONST.STOP:
                         _graph.stop();
                         break;
+
 
                     case TCONST.ENDTUTOR:
 

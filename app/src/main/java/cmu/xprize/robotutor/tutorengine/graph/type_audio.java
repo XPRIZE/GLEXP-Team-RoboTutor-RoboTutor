@@ -41,31 +41,30 @@ public class type_audio extends type_action implements IMediaListener {
     // NOTE: we run at a Flash default of 24fps - which is the units in which
     // index and duration are calibrated
 
-    private CFileNameHasher               mFileNameHasher;
-    private CMediaManager                 mMediaManager;
-    private CMediaManager.PlayerManager   mPlayer;
-    private boolean                       mPreLoaded = false;
+    private CFileNameHasher mFileNameHasher;
+    private CMediaManager mMediaManager;
+    private CMediaManager.PlayerManager mPlayer;
+    private boolean mPreLoaded = false;
 
-    private String                        mSoundSource;
-    private String                        mSourcePath;
-    private String                        mResolvedName;
-    private String                        mPathResolved;
+    private String mSoundSource;
+    private String mSourcePath;
+    private String mResolvedName;
+    private String mPathResolved;
 
-    private boolean                       _useHashName = true;
+    private boolean _useHashName = true;
 
     // json loadable fields
-    public String        command;
-    public String        lang;
-    public String        soundsource;
-    public String        soundpackage;
+    public String command;
+    public String lang;
+    public String soundsource;
+    public String soundpackage;
 
-    public boolean       repeat   = false;
-    public float         volume   = -1f;
-    public long          index    = 0;
+    public boolean repeat = false;
+    public float volume = -1f;
+    public long index = 0;
 
 
     final static public String TAG = "type_audio";
-
 
 
     public type_audio() {
@@ -92,13 +91,13 @@ public class type_audio extends type_action implements IMediaListener {
 
     @Override
     public String resolvedName() {
-        return (mResolvedName == null)? "":mResolvedName;
+        return (mResolvedName == null) ? "" : mResolvedName;
     }
 
     @Override
     public void globalPause() {
 
-        if(mPlayer != null) {
+        if (mPlayer != null) {
             if (mPlayer.isPlaying()) {
                 mWasPlaying = true;
 
@@ -110,7 +109,7 @@ public class type_audio extends type_action implements IMediaListener {
     @Override
     public void globalPlay() {
 
-        if(mPlayer != null) {
+        if (mPlayer != null) {
             if (mWasPlaying) {
                 mWasPlaying = false;
 
@@ -123,7 +122,7 @@ public class type_audio extends type_action implements IMediaListener {
     @Override
     public void globalStop() {
 
-        if(mPlayer != null) {
+        if (mPlayer != null) {
             if (mPlayer.isPlaying()) {
                 mWasPlaying = true;
 
@@ -144,14 +143,13 @@ public class type_audio extends type_action implements IMediaListener {
 
     /**
      * Listen to the MediaController for completion events.
-     *
      */
     @Override
     public void onCompletion(CMediaManager.PlayerManager playerManager) {
 
         // If not an AUDIOEVENT then we disconnect the player to allow reuse
         //
-        if(!mode.equals(TCONST.AUDIOEVENT)) {
+        if (!mode.equals(TCONST.AUDIOEVENT)) {
 
             // Release the mediaController for reuse
             //
@@ -181,14 +179,11 @@ public class type_audio extends type_action implements IMediaListener {
     //*******************************************************
 
 
-
-
     /**
      * This is an optimization used in timeLines to preload the assets - timeline tracks act as the
      * owner so that they are informed directly of audio completion events.  This is necessary to
      * keep them sync'd with the mediaManager attach states - otherwise they don't know when their
      * audio players have been detached and may perform operations on a re-purposed players.
-     *
      */
     public void preLoad(IMediaListener owner) {
 
@@ -201,16 +196,16 @@ public class type_audio extends type_action implements IMediaListener {
         // Extract the path and name portions
         // NOTE: ASSUME mp3 - trim the mp3 - we just want the text in the Hash
         //
-        String pathPart = mPathResolved.substring(0,endofPath);
-        String namePart = mPathResolved.substring(endofPath , mPathResolved.length() - 4);
+        String pathPart = mPathResolved.substring(0, endofPath);
+        String namePart = mPathResolved.substring(endofPath, mPathResolved.length() - 4);
 
         // Note we do this decomposition to get the resolved name for debug messages
         //
-        if(_useHashName) {
+        if (_useHashName) {
 
             // Permit actual hash's in the script using the # prefix
             //
-            if(namePart.startsWith("#")) {
+            if (namePart.startsWith("#")) {
                 mResolvedName = namePart.substring(1);
             }
             // Otherwise generate the hash from the text
@@ -243,12 +238,12 @@ public class type_audio extends type_action implements IMediaListener {
         // Otherwise set flag to indicate event was completed/skipped in this case
         // Issue #58 - Make all actions feature reactive.
         //
-        if(testFeatures()) {
+        if (testFeatures()) {
 
             // Non type_timeline audio tracks are not preloaded. So do it inline. This just has a
             // higher latency between the call and when the audio is actually ready to play.
             //
-            if(!mPreLoaded) {
+            if (!mPreLoaded) {
                 preLoad(this);
             }
             mPreLoaded = false;
@@ -275,6 +270,15 @@ public class type_audio extends type_action implements IMediaListener {
         }
 
         return status;
+    }
+
+
+    @Override
+    public String cancelNode() {
+
+        stop();
+
+        return TCONST.NONE;
     }
 
 
