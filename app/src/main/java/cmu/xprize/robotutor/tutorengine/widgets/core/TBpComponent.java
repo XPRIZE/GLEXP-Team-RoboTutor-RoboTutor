@@ -56,10 +56,10 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
 
-    private CBubble                 _touchedBubble;
+    private CBubble         _touchedBubble;
 
     private HashMap<String, String> volatileMap = new HashMap<>();
-    private HashMap<String, String> stickyMap = new HashMap<>();
+    private HashMap<String, String> stickyMap   = new HashMap<>();
 
 
     static final String TAG = "TBpComponent";

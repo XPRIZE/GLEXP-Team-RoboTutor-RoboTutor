@@ -27,12 +27,11 @@ import cmu.xprize.util.*;
 public class CAsk_Data implements ILoadableObject {
 
     // json loadable
-    public String        datatype         = null;   // "text" OR "image"
-    public String        dataSource       = null;   // Path OR text literal
+    public String          name;
+    public String          layoutID;
 
-    public int[]         grid             = null;   // columns / rows
-    public int[]         position         = null;   // column / row
-    public int[]         span             = null;   // column span / row span
+    public CAskElement[]   items;
+
 
 
     //************ Serialization

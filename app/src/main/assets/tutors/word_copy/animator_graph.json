@@ -95,7 +95,7 @@
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "Please tap here to hear the word again.mp3","soundpackage": "default","mode": "flow", "features": ""}
               ],
               "preexit": [
-                "CLEAR_CANCEL_BEHAVIOR"
+                "CLEAR_CANCEL_BEHAVIOR","CANCEL_POINT"
               ],
               "edges": [
               ]
@@ -123,6 +123,7 @@
 //                {"type": "COMMAND", "id": "word_copy", "method": "postNamed",    "parms": "ERASE_BUTTON_PROMPT:String|APPLY_BEHAVIOR:String|ERASE_HESITATION_FEEDBACK:String|12000:Long",  "features":""}
               ],
               "preexit": [
+                "CANCEL_POINT"
               ],
               "edges": [
               ]
@@ -594,6 +595,8 @@
             {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_ERROR:String|GENERAL_ERROR_BEHAVIOR:String" ,"features":""},
             {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_CORRECT:String|GENERAL_CORRECT_BEHAVIOR:String" ,"features":""},
 
+            // NOTE: Due to a limitation in the subgraph architecture you should only enable one of ON_ERROR | ON_METRIC_ERROR | ON_CHAR_ERROR
+
 //            {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_METRIC_ERROR:String|METRIC_ERROR_BEHAVIOR:String" ,"features":""},
 //            {"type": "COMMAND", "id": "word_copy", "method": "setStickyBehavior", "parms": "ON_CHAR_ERROR:String|CHAR_ERROR_BEHAVIOR:String" ,"features":""},
 
@@ -743,6 +746,8 @@
         "PICKER_TRACK": {"type": "TIMELINE", "trackname": "ASK_BUTTON", "features": ""},
 
         "DELAYED_NEXT": {"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "APPLY_BEHAVIOR:String|NEXT_NODE:String|600:Integer", "features":""},
+
+        "CANCEL_POINT": {"type": "COMMAND", "id": "word_copy", "method": "postEvent", "parms": "CANCEL_POINTAT:String", "features":""},
 
         "SET_CANCEL_BEHAVIOR": {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_FEEDBACK:String" ,"features":""},
         "CLEAR_CANCEL_BEHAVIOR": {"type": "COMMAND", "id": "word_copy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|NULL:String" ,"features":""},

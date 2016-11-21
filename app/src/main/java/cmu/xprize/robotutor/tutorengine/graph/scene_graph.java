@@ -186,11 +186,11 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
 
         if(_currNode != null) {
 
+            Log.d(TAG, "Processing RootNode: " + _currNode.name + " - start State: " + _nodeState + " - mapType: " + _currNode.maptype + " - mapName: " + _currNode.mapname);
+
             // TODO: Check if preenter is used - I think we only want this for scene preenter/exit
             _currNode.preEnter();
             result = TCONST.READY;
-
-            Log.d(TAG, "RootNode: " + rootnode + " : READY");
         }
         else {
             Log.d(TAG, "No Root Node for Scene");

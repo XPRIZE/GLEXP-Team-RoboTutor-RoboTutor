@@ -185,7 +185,6 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         broadcastLocation(TCONST.POINT_AND_TAP, mReplayButton);
     }
 
-
     private void broadcastLocation(String Action, View target) {
 
         target.getLocationOnScreen(_screenCoord);

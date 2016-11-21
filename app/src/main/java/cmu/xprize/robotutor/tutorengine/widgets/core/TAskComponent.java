@@ -21,9 +21,17 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import org.json.JSONObject;
+
+import cmu.xprize.comp_ask.ASK_CONST;
 import cmu.xprize.comp_ask.CAskComponent;
 
+import cmu.xprize.comp_ask.CAskElement;
+import cmu.xprize.comp_ask.CAsk_Data;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
@@ -31,15 +39,21 @@ import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.ILogManager;
+import cmu.xprize.util.JSON_Helper;
+import cmu.xprize.util.TCONST;
 
 
 public class TAskComponent extends CAskComponent implements IBehaviorManager, ITutorObjectImpl, IDataSink, IEventSource {
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
+
+    final private String  TAG = "TAskComponent";
+
 
     public TAskComponent(Context context) {
         super(context);
@@ -62,6 +76,8 @@ public class TAskComponent extends CAskComponent implements IBehaviorManager, IT
     public void init(Context context, AttributeSet attrs) {
 
         super.init(context, attrs);
+
+        packageName = RoboTutor.PACKAGE_NAME;
 
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
@@ -154,10 +170,30 @@ public class TAskComponent extends CAskComponent implements IBehaviorManager, IT
     @Override
     public void setDataSource(String dataSource) {
 
-        int layoutID = getResources().getIdentifier("layout", "layout", RoboTutor.PACKAGE_NAME);
+        // TODO: globally make startWith type TCONST
+        try {
+            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
+                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
 
-        _dataIndex = 0;
-        _dataEOI   = false;
+                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataSource);
+
+                // Load the datasource in the component module - i.e. the superclass
+                loadJSON(new JSONObject(jsonData), mTutor.getScope() );
+
+            } else if (dataSource.startsWith("db|")) {
+
+
+            } else if (dataSource.startsWith("{")) {
+
+                loadJSON(new JSONObject(dataSource), null);
+
+            } else {
+                throw (new Exception("BadDataSource"));
+            }
+        } catch (Exception e) {
+            CErrorManager.logEvent(TAG, "Invalid Data Source - " + dataSource + " for : " + name() + " : ", e, false);
+        }
+
     }
 
     // IDataSink Interface END

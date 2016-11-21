@@ -182,7 +182,7 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource 
                 node.applyNode();
 
             } catch (Exception e) {
-                CErrorManager.logEvent(TAG, "ERROR: Symbol Not found:" + nodeName + " : ", e, false);
+                CErrorManager.logEvent(TAG, "ERROR: PRE-POST Symbol Not found:" + nodeName + " : ", e, false);
             }
         }
     }

@@ -21,32 +21,33 @@ package cmu.xprize.comp_ask;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.GridLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
 
 import cmu.xprize.util.CClassMap;
-import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
 
-public class CAskComponent extends FrameLayout implements ILoadableObject {
+public class CAskComponent extends FrameLayout implements ILoadableObject, View.OnClickListener  {
 
-    protected Context           mContext;
+    protected Context               mContext;
+    protected String                packageName;
+    protected HashMap<View,String>  buttonMap;
 
-    protected List<String>      _data;
-    protected int               _dataIndex = 0;
-    protected boolean           _dataEOI   = false;
+    protected IButtonController     mButtonController;
 
     // json loadable
-    public String[]             dataSource;
+    public CAsk_Data            dataSource;
 
     final private String  TAG = "CAskComponent";
 
@@ -79,6 +80,10 @@ public class CAskComponent extends FrameLayout implements ILoadableObject {
     }
 
 
+    public void setmButtonController(IButtonController controller) {
+
+        mButtonController = controller;
+    }
 
     //**********************************************************
     //**********************************************************
@@ -90,7 +95,67 @@ public class CAskComponent extends FrameLayout implements ILoadableObject {
     }
 
 
+    public void setDataSource(CAsk_Data dataSource) {
+
+        int layoutID = getResources().getIdentifier(dataSource.layoutID, "layout", packageName);
+
+        removeAllViews();
+
+        ViewGroup gView = (ViewGroup)inflate(mContext, layoutID, this);
+
+        // Populate the layout elements
+        //
+        buttonMap = new HashMap<>();
+
+        for(CAskElement element : dataSource.items) {
+
+            switch(element.datatype) {
+                case ASK_CONST.IMAGE:
+                    ImageView iView = (ImageView) gView.findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+
+                    iView.setImageResource(getResources().getIdentifier(element.resource, "drawable", packageName));
+                    break;
+
+                case ASK_CONST.TEXT:
+                    TextView tView = (TextView) gView.findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+
+                    tView.setText(element.resource);
+                    break;
+
+                case ASK_CONST.IMAGEBUTTON:
+                    int test = getResources().getIdentifier(element.componentID, "id", packageName);
+
+                    ImageButton ibView = (ImageButton) gView.findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+
+                    ibView.setImageResource(getResources().getIdentifier(element.resource, "drawable", packageName));
+
+                    buttonMap.put(ibView, element.componentID);
+                    break;
+
+                case ASK_CONST.TEXTBUTTON:
+//                    TextButton tbView = (TextView) gView.findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+//
+//                    tbView.setText(element.resource);
+//
+//                    buttonMap.put(tbView, element.componentID);
+                    break;
+            }
+        }
+
+        gView.requestLayout();
+    }
+
+
     public void setDataSource(String[] dataSource) {}
+
+
+
+    @Override
+    public void onClick(View view) {
+
+        mButtonController.doButtonAction(buttonMap.get(view));
+    }
+
 
 
     //************ Serialization

@@ -1,0 +1,150 @@
+{
+  "animatorMap": {
+    "COMMENT": "Animation Graph for the Activity Selector",
+
+    "activity_selector": {
+
+      "type": "ANIMATOR",
+      "title": "Activity Selector",
+      "COMMENT": "This is where you describe your tutor",
+      "version": "1.0.0",
+      "rootnode": "INTRO_STATE",
+
+      "nodeMap": {
+
+        "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        "INTRO_STATE": {
+          "type": "NODE",
+          "COMMENT": "Intro Clip",
+          "maptype":"moduleMap",
+          "mapname": "EMPTY_MODULE",
+          "preenter": [
+            "SHOW_ACTIVITY_SELECTOR"
+          ],
+          "preexit": [
+          ],
+          "edges": [
+            {"constraint": "", "edge": "USERINPUT"}
+          ]
+        },
+
+        "USERINPUT": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"moduleMap",
+          "mapname": "EMPTY_MODULE",
+          "preenter": [
+          ],
+          "preexit": [
+          ],
+          "edges": [
+            { "constraint":"FTR_RIGHT", "edge": "CORRECT" },
+            { "constraint": "",         "edge": "WRONG" }
+          ]
+        },
+
+        "CORRECT": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"moduleMap",
+          "mapname": "EMPTY_MODULE",
+          "preenter": [],
+          "preexit": [
+          ],
+          "edges": [
+            { "constraint": "FTR_NOWORDS", "edge": "NEXTSCENE" },
+            { "constraint": "", "edge": "USERINPUT" }
+          ]
+        },
+
+        "WRONG": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"moduleMap",
+          "mapname": "EMPTY_MODULE",
+          "preenter": [],
+          "preexit": [
+          ],
+          "edges": [
+            { "constraint": "FTR_NOWORDS", "edge": "NEXTSCENE" },
+            { "constraint": "", "edge": "INTRO_STATE" }
+          ]
+        },
+        "NEXTSCENE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname":"GOTONEXTSCENE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+          ]
+        }
+      },
+
+      "moduleMap": {
+
+        "COMMENT": "@@@@@  CModules  @@@@@",
+
+        "EMPTY_MODULE": {
+          "type":"MODULE",
+          "reuse":true,
+          "COMMENT": "Do Nothing",
+          "tracks": [
+            {"type": "COMMAND", "cmd": "WAIT" }
+          ]
+        },
+
+        "PLAYCORRECT": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+          ]
+        },
+        "PLAYWRONG": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+          ]
+        }
+      },
+
+      "actionMap": {
+
+        "SHOW_ACTIVITY_SELECTOR": {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "ACTIVITY_SELECT:String",  "features":""},
+
+        "GOTONEXTSCENE":   {"type": "COMMAND", "cmd": "NEXTSCENE"},
+        "WAIT": {"type": "COMMAND", "cmd": "WAIT" }
+      },
+
+      "constraintMap": {
+
+        "COMMENT": "@@@@@  CConstraints @@@@@ ",
+
+        "FTR_NOWORDS": {
+          "type": "CONDITION",
+          "cmd": "test",
+          "code": "FTR_NOWORDS"
+        },
+        "FTR_WORDS": {
+          "type": "CONDITION",
+          "cmd": "test",
+          "code": "!FTR_NOWORDS"
+        },
+        "FTR_RIGHT": {
+          "type": "CONDITION",
+          "cmd": "test",
+          "code": "FTR_RIGHT"
+        },
+        "FTR_WRONG": {
+          "type": "CONDITION",
+          "cmd": "test",
+          "code": "!FTR_RIGHT"
+        }
+      }
+    }
+  }
+}

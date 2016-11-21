@@ -24,7 +24,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 
-public interface ITutorManager extends ITutorSceneImpl {
+public interface ITutorManager extends ITutorSceneImpl  {
+
+    public void setOnTouchListener(View.OnTouchListener l);
 
     public void addView(ITutorSceneImpl newView);
     public void addView(View newView);

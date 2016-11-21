@@ -1,0 +1,31 @@
+{
+  "dataSource": [
+
+    {
+      "name":"ACTIVITY_SELECT",
+      "layoutID":"ask_activity_selector",
+
+      "items":[
+        {"datatype":"IMAGEBUTTON",
+          "resource":"button_select_letters",
+          "componentID":"Sbutton1"},
+
+        {"datatype":"IMAGEBUTTON",
+          "resource":"button_select_reading",
+          "componentID":"Sbutton2"},
+
+        {"datatype":"IMAGEBUTTON",
+          "resource":"button_select_math",
+          "componentID":"Sbutton3"},
+
+        {"datatype":"IMAGEBUTTON",
+          "resource":"button_select_shapes",
+          "componentID":"Sbutton4"},
+
+        {"datatype":"IMAGEBUTTON",
+          "resource":"button_select_robotutor",
+          "componentID":"Sbutton5"}
+      ]
+    }
+  ]
+}

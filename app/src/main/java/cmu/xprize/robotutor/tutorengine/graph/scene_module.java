@@ -160,7 +160,7 @@ public class scene_module extends scene_node implements ILoadableObject2 {
         }
 
         if(result == null)
-            throw(new Exception("Symbol not found: " + symbolName));
+            throw(new Exception("Local Symbol not found: " + symbolName));
 
         return result;
     }
