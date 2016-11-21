@@ -21,17 +21,19 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 import cmu.xprize.comp_ask.ASK_CONST;
 import cmu.xprize.comp_ask.CAskComponent;
 
-import cmu.xprize.comp_ask.CAskElement;
-import cmu.xprize.comp_ask.CAsk_Data;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
@@ -39,10 +41,15 @@ import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.comp_ask.CAskElement;
+import cmu.xprize.comp_ask.CAsk_Data;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.ILogManager;
+import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
@@ -51,6 +58,9 @@ public class TAskComponent extends CAskComponent implements IBehaviorManager, IT
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
+
+    // json loadable
+    public CAsk_Data dataSource;
 
     final private String  TAG = "TAskComponent";
 
@@ -196,6 +206,8 @@ public class TAskComponent extends CAskComponent implements IBehaviorManager, IT
 
     }
 
+
+
     // IDataSink Interface END
     //************************************************************************
     //************************************************************************
@@ -251,5 +263,24 @@ public class TAskComponent extends CAskComponent implements IBehaviorManager, IT
     // IEventSource Interface END
     //************************************************************************
     //************************************************************************
+
+
+
+    //************ Serialization
+
+
+
+    /**
+     * Load the data source
+     *
+     * @param jsonData
+     */
+    @Override
+    public void loadJSON(JSONObject jsonData, IScope scope) {
+
+        Log.d(TAG, "Loader iteration");
+        super.loadJSON(jsonData, (IScope2) scope);
+
+    }
 
 }

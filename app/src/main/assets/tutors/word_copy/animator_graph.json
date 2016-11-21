@@ -91,7 +91,6 @@
               "reuse": true,
               "tracks": [
                 {"type": "COMMAND", "id": "word_copy", "method": "postEvent",           "parms": "POINT_AT_REPLAY_BUTTON:String", "features":""},
-
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "Please tap here to hear the word again.mp3","soundpackage": "default","mode": "flow", "features": ""}
               ],
               "preexit": [

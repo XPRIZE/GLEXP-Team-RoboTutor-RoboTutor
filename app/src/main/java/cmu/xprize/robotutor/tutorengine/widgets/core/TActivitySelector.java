@@ -1,8 +1,11 @@
 package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 
 import org.json.JSONObject;
@@ -19,7 +22,6 @@ import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
-import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.IBehaviorManager;
@@ -28,6 +30,8 @@ import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
+
+import static cmu.xprize.robotutor.tutorengine.util.CClassMap2.classMap;
 
 public class TActivitySelector extends CActivitySelector implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource {
 
@@ -40,6 +44,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     private HashMap<String, String> volatileMap = new HashMap<>();
     private HashMap<String, String> stickyMap   = new HashMap<>();
 
+    // json loadable
+    public CAsk_Data[]             dataSource;
 
     final private String  TAG = "TActivitySelector";
 
@@ -100,6 +106,25 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             }
         }
 
+    }
+
+
+    private void riplleDescribe() {
+
+    }
+
+
+    private void describeButton(View target) {
+
+        int[] _screenCoord = new int[2];
+
+        target.getLocationOnScreen(_screenCoord);
+
+        PointF centerPt = new PointF(_screenCoord[0] + (target.getWidth() / 2), _screenCoord[1] + (target.getHeight() / 2));
+        Intent msg = new Intent(TCONST.POINT_AND_TAP);
+        msg.putExtra(TCONST.SCREENPOINT, new float[]{centerPt.x, (float) centerPt.y});
+
+        bManager.sendBroadcast(msg);
     }
 
 
@@ -365,8 +390,11 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     public void loadJSON(JSONObject jsonObj, IScope scope) {
 
         Log.d(TAG, "Loader iteration");
-        super.loadJSON(jsonObj, (IScope2) scope);
 
+        // Note we load in the TClass as we need to use the tutor classMap to permit
+        // instantiation of type_audio objects
+        //
+        JSON_Helper.parseSelf(jsonObj, this, classMap, scope);
     }
 
 }

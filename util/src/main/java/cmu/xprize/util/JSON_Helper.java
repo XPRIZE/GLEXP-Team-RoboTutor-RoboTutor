@@ -281,13 +281,20 @@ public class JSON_Helper {
                         // Check for global type
 
                         Class<?> elemClass   = null;
+                        String   classType   = null;
                         boolean  globalType  = false;
                         boolean  isPrimitive = false;
 
                         if(nJsonObj.has("type")) {
-                            elemClass   = classMap.get(nJsonObj.getString("type"));
-                            isPrimitive = !elemClass.isPrimitive();
-                            globalType = true;
+                            try {
+                                classType = nJsonObj.getString("type");
+                                elemClass = classMap.get(classType);
+                                isPrimitive = !elemClass.isPrimitive();
+                                globalType = true;
+                            }
+                            catch (Exception e) {
+                                CErrorManager.logEvent(TAG, "ERROR: no ClassMap defined for: " + classType + "  >> ", e, true);
+                            }
                         }
 
                         while(keys.hasNext() ) {
@@ -386,9 +393,10 @@ public class JSON_Helper {
 
                                     ((ILoadableObject) eObj).loadJSON(elem, scope);
 
-                                    // Initialize graph mode types
+                                    // Initialize graph mode types - define novar on data that shouldn't have a scope
+                                    // variable name - e.g. embedded audio in CAsk_data
                                     //
-                                    if (eObj instanceof IScriptable) {
+                                    if (eObj instanceof IScriptable && !elem.has("novar")) {
 
                                         // Associate the node with its Map name
                                         // This overrides any names assigned in the subtype spec

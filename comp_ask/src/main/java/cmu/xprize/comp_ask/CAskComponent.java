@@ -46,8 +46,6 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
     protected IButtonController     mButtonController;
 
-    // json loadable
-    public CAsk_Data            dataSource;
 
     final private String  TAG = "CAskComponent";
 
@@ -93,6 +91,9 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
     public boolean dataExhausted() {
         return true;
     }
+
+
+    public void setDataSource(String[] dataSource) {}
 
 
     public void setDataSource(CAsk_Data dataSource) {
@@ -144,10 +145,6 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
         gView.requestLayout();
     }
-
-
-    public void setDataSource(String[] dataSource) {}
-
 
 
     @Override

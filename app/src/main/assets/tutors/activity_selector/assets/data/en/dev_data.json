@@ -2,41 +2,52 @@
   "dataSource": [
 
     {
-        "name":"ACTIVITY_SELECT",
-        "layoutID":"ask_activity_selector",
+      "name":"ACTIVITY_SELECT",
+      "layoutID":"ask_activity_selector",
 
-        "items":[
-          {"datatype":"IMAGEBUTTON",
+      // NOTE: define "novar" on audio assets to exclude them from instantiating scope level variables.
+      //
+      "items":[
+        {"datatype":"IMAGEBUTTON",
           "resource":"button_select_letters",
           "componentID":"Sbutton1",
-          "behavior":"SELECT_LETTERS",
-          "prompt":""},
-
-          {"datatype":"IMAGEBUTTON",
-          "resource":"button_select_reading",
-          "componentID":"Sbutton2",
           "behavior":"SELECT_READING",
-          "prompt":""},
+          "prompt":"reading",
+          "help":"tap reading"
+        },
 
-          {"datatype":"IMAGEBUTTON",
+        {"datatype":"IMAGEBUTTON",
+          "resource":"button_select_stories",
+          "componentID":"Sbutton2",
+          "behavior":"SELECT_STORIES",
+          "prompt":"stories",
+          "help":"tap stories"
+        },
+
+        {"datatype":"IMAGEBUTTON",
           "resource":"button_select_math",
           "componentID":"Sbutton3",
           "behavior":"SELECT_MATH",
-          "prompt":""},
+          "prompt":"numbers",
+          "help":"tap numbers"
+        },
 
-          {"datatype":"IMAGEBUTTON",
+        {"datatype":"IMAGEBUTTON",
           "resource":"button_select_shapes",
           "componentID":"Sbutton4",
           "behavior":"SELECT_SHAPES",
-          "prompt":""},
+          "prompt":"shapes",
+          "help":"tap shapes"
+        },
 
-          {"datatype":"IMAGEBUTTON",
+        {"datatype":"IMAGEBUTTON",
           "resource":"button_select_robotutor",
           "componentID":"Sbutton5",
           "behavior":"SELECT_ROBOTUTOR",
-          "prompt":""}
-
-        ]
+          "prompt":"robotutor",
+          "help":"tap robotutor"
+        }
+      ]
     }
- ]
+  ]
 }
