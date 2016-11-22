@@ -363,7 +363,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         }
     }
 
-    public void judge_instruct(){
+    public void judge_instruct(){//judge the prompt type
         reset();
         switch(questionBoard.choices.length){
             case 1:
