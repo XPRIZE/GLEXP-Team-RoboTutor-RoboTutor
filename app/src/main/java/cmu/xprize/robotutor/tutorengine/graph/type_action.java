@@ -300,6 +300,10 @@ public class type_action extends scene_node {
                         //
                         if (parms != null) {
 
+                            // Support templatized parameters
+                            //
+                            parms = getScope().parseTemplate(parms);
+
                             // Break up the parms specification - "parms":"value:type|value:type..."
                             //
                             List<String> parmList = Arrays.asList(parms.split("[:\\|]"));

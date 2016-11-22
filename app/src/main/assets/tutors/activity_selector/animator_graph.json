@@ -45,8 +45,9 @@
               "preenter": ["SET_CANCEL_BEHAVIOR"],
               "reuse": true,
               "tracks": [
-                {"type": "COMMAND", "id": "activity_selector", "method": "postEvent", "parms": "POINT_AT__BUTTON:String", "features":""},
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "Please tap here to hear the word again.mp3","soundpackage": "default","mode": "flow", "features": ""}
+                {"type": "COMMAND", "id": "activity_selector", "method": "postEvent", "parms": "POINT_AT__BUTTON:String|{{activity_selector.buttonid}}:String", "features":""},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{activity_selector.prompt}}.mp3","soundpackage": "default","mode": "flow", "features": ""},
+                {"type": "COMMAND", "id": "activity_selector", "method": "postEvent", "parms": "DESCRIBE_NEXT:String|1000:Integer", "features":""}
               ],
               "preexit": [
                 "CLEAR_CANCEL_BEHAVIOR","CANCEL_POINT"
@@ -276,6 +277,10 @@
 
         "SHOW_ACTIVITY_SELECTOR": {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "ACTIVITY_SELECT:String",  "features":""},
 
+        "SET_CANCEL_BEHAVIOR": {"type": "COMMAND", "id": "activity_selector", "method": "setVolatileBehavior", "parms": "SELECT_BEHAVIOR:String|CANCEL_FEEDBACK:String" ,"features":""},
+        "CLEAR_CANCEL_BEHAVIOR": {"type": "COMMAND", "id": "activity_selector", "method": "setVolatileBehavior", "parms": "SELECT_BEHAVIOR:String|NULL:String" ,"features":""},
+
+        "CANCEL_FEEDBACK": {"type": "COMMAND", "cmd": "CANCEL_NODE"},
         "GOTONEXTSCENE":   {"type": "COMMAND", "cmd": "NEXTSCENE"},
         "WAIT": {"type": "COMMAND", "cmd": "WAIT" }
       },
