@@ -51,7 +51,6 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     private boolean first2sign = true;
     private boolean first3sign = true;
     private PercentRelativeLayout curpercentLayout = (PercentRelativeLayout) getChildAt(0);
-
     static final String TAG = "TAkComponent";
 
     public TAkComponent(Context context) {
@@ -403,6 +402,50 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         teachFinger.setVisibility(VISIBLE);
     }
 
+    public void indicateCarText(){
+        teachFinger.bringToFront();
+        teachFinger.setPostion(player.getLane());
+        teachFinger.setVisibility(VISIBLE);
+    }
+
+    public void indicate1SignText(){
+        teachFinger.bringToFront();
+        teachFinger.setPostion(CAkPlayer.Lane.SIGH1);
+        teachFinger.setVisibility(VISIBLE);
+    }
+
+    public void indicate2SignLeft(){
+        teachFinger.bringToFront();
+        teachFinger.setPostion(CAkPlayer.Lane.SIGH2L);
+        teachFinger.setVisibility(VISIBLE);
+    }
+
+    public void indicate2SignRight(){
+        teachFinger.bringToFront();
+        teachFinger.setPostion(CAkPlayer.Lane.SIGH2R);
+        teachFinger.setVisibility(VISIBLE);
+    }
+
+    public void indicate3Sign(){
+        teachFinger.bringToFront();
+        switch(questionBoard.answerLane){
+            case LEFT:
+                teachFinger.setPostion(CAkPlayer.Lane.SIGH3L);
+                break;
+            case MID:
+                teachFinger.setPostion(CAkPlayer.Lane.SIGH3M);
+                break;
+            case RIGHT:
+                teachFinger.setPostion(CAkPlayer.Lane.SIGH3R);
+                break;
+        }
+        teachFinger.setVisibility(VISIBLE);
+    }
+
+    public void hideFinger(){
+        teachFinger.setVisibility(INVISIBLE);
+    }
+
     public void crash() {
         player.crash();
     }
@@ -437,12 +480,6 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         curpercentLayout.removeView(questionBoard);
     }
 
-    public void indicateCarText(){
-        CAnimatorUtil.zoomInOut(player.belowTextView,(float)2.0,500);
-        CAnimatorUtil.zoomInOut(player.belowTextView,(float)2.0,500);
-        CAnimatorUtil.zoomInOut(player.belowTextView,(float)2.0,500);
-        CAnimatorUtil.zoomInOut(player.belowTextView,(float)2.0,500);
-    }
 
     public void increaseScore() {
         if(extraSpeed != 0) {

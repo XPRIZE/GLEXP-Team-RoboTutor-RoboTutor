@@ -24,7 +24,7 @@ import android.widget.TextView;
  */
 
 public class CAkPlayer extends LinearLayout{
-    public enum Lane{LEFT, MID, RIGHT}
+    public enum Lane{LEFT, MID, RIGHT, SIGH1, SIGH2L, SIGH2R, SIGH3L, SIGH3M, SIGH3R}
 
     protected boolean isPlaying;
     public int score;

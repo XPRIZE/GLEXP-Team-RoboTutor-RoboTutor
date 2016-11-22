@@ -103,18 +103,6 @@
 
     </LinearLayout>
 
-    <cmu.xprize.ak_component.CAkTeachFinger
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_marginTopPercent="50%"
-        android:textAlignment="center"
-        android:textSize="22sp"
-        android:id="@+id/finger"
-        android:visibility="invisible"
-        android:layout_marginStart="20dp"
-        android:layout_alignBottom="@+id/scoreboard"
-        android:layout_alignParentStart="true" />
-
     <cmu.xprize.sb_component.CSb_Scoreboard
         app:layout_widthPercent="15%"
         app:layout_heightPercent="50%"
@@ -124,6 +112,17 @@
         android:layout_above="@+id/linearLayout2"
         android:layout_alignParentStart="true" />
 
+    <cmu.xprize.ak_component.CAkTeachFinger
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_marginTopPercent="75%"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:id="@+id/finger"
+        android:visibility="invisible"
+        android:layout_alignBottom="@+id/scoreboard"
+        android:layout_alignStart="@+id/mask" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -131,7 +130,7 @@
         android:alpha="0.85"
         android:id="@+id/mask"
         android:visibility="invisible"
-        android:layout_alignBottom="@+id/pavement"
+        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
 </android.support.percent.PercentRelativeLayout>

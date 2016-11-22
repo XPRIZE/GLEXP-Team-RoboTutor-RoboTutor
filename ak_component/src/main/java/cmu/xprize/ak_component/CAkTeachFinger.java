@@ -12,6 +12,12 @@ import android.graphics.Color;
 import static cmu.xprize.ak_component.CAkTeachFinger.Lane.LEFT;
 import static cmu.xprize.ak_component.CAkTeachFinger.Lane.MID;
 import static cmu.xprize.ak_component.CAkTeachFinger.Lane.RIGHT;
+import static cmu.xprize.ak_component.CAkTeachFinger.Lane.SIGH1;
+import static cmu.xprize.ak_component.CAkTeachFinger.Lane.SIGH2L;
+import static cmu.xprize.ak_component.CAkTeachFinger.Lane.SIGH2R;
+import static cmu.xprize.ak_component.CAkTeachFinger.Lane.SIGH3L;
+import static cmu.xprize.ak_component.CAkTeachFinger.Lane.SIGH3M;
+import static cmu.xprize.ak_component.CAkTeachFinger.Lane.SIGH3R;
 
 /**
  * Created by Iris on 16/7/7.
@@ -33,7 +39,7 @@ public class CAkTeachFinger extends TextView {
         init(context, attrs);
     }
 
-    protected enum Lane{LEFT, MID, RIGHT};
+    protected enum Lane{LEFT, MID, RIGHT, SIGH1, SIGH2L, SIGH2R, SIGH3L, SIGH3M, SIGH3R};
     private Lane lane;
     private CAkPlayer.Lane PLane;
 
@@ -42,7 +48,6 @@ public class CAkTeachFinger extends TextView {
     protected enum SecondLeft{TRUE,FALSE,DONE};
     private FirstRight firstright=FirstRight.TRUE;
     private SecondLeft secondleft=SecondLeft.TRUE;
-    private float carpos;
     public boolean finishTeaching = false;
 
     private PercentRelativeLayout.LayoutParams params;
@@ -77,14 +82,42 @@ public class CAkTeachFinger extends TextView {
             PercentLayoutHelper.PercentLayoutInfo info = params.getPercentLayoutInfo();
             switch (lane) {
                 case LEFT:
-                    info.leftMarginPercent = 0.20f;
+                    info.leftMarginPercent = 0.22f;
+                    info.topMarginPercent = 0.75f;
                     break;
                 case MID:
-                    info.leftMarginPercent = 0.34f;
+                    info.leftMarginPercent = 0.36f;
+                    info.topMarginPercent = 0.75f;
                     break;
                 case RIGHT:
                     info.leftMarginPercent = 0.52f;
+                    info.topMarginPercent = 0.75f;
                     break;
+                case SIGH1:
+                    info.leftMarginPercent = 0.38f;
+                    info.topMarginPercent = 0.40f;
+                    break;
+                case SIGH2L:
+                    info.leftMarginPercent = 0.31f;
+                    info.topMarginPercent = 0.40f;
+                    break;
+                case SIGH2R:
+                    info.leftMarginPercent = 0.47f;
+                    info.topMarginPercent = 0.40f;
+                    break;
+                case SIGH3L:
+                    info.leftMarginPercent = 0.16f;
+                    info.topMarginPercent = 0.40f;
+                    break;
+                case SIGH3M:
+                    info.leftMarginPercent = 0.39f;
+                    info.topMarginPercent = 0.40f;
+                    break;
+                case SIGH3R:
+                    info.leftMarginPercent = 0.63f;
+                    info.topMarginPercent = 0.40f;
+                    break;
+
             }
             requestLayout();
         }
@@ -177,8 +210,20 @@ public class CAkTeachFinger extends TextView {
             lane = LEFT;
         else if(rightlane == CAkPlayer.Lane.MID)
             lane = MID;
-        else
+        else if(rightlane == CAkPlayer.Lane.RIGHT)
             lane = RIGHT;
+        else if(rightlane == CAkPlayer.Lane.SIGH1)
+            lane = SIGH1;
+        else if(rightlane == CAkPlayer.Lane.SIGH2L)
+            lane = SIGH2L;
+        else if(rightlane == CAkPlayer.Lane.SIGH2R)
+            lane = SIGH2R;
+        else if(rightlane == CAkPlayer.Lane.SIGH3L)
+            lane = SIGH3L;
+        else if(rightlane == CAkPlayer.Lane.SIGH3M)
+            lane = SIGH3M;
+        else
+            lane = SIGH3R;
         update();
     }
 }
