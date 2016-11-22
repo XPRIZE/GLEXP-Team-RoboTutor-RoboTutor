@@ -62,9 +62,6 @@ public class CSm_Button extends Button implements ILauncherButton, View.OnClickL
         setTransformationMethod(null);
 
         setText(mData.buttonvalue);
-        //int id = mContext.getResources().getIdentifier(Button.tutorname, "layout", mContext.getPackageName());
-
-
     }
 
     /**

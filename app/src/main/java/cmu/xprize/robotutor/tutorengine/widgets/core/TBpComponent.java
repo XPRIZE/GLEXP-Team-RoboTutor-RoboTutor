@@ -1,3 +1,22 @@
+//*********************************************************************************
+//
+//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
+//    Copyright(c) Kevin Willows All Rights Reserved
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+//*********************************************************************************
+
 package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
@@ -37,10 +56,10 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
 
-    private CBubble _touchedBubble;
+    private CBubble         _touchedBubble;
 
     private HashMap<String, String> volatileMap = new HashMap<>();
-    private HashMap<String, String> stickyMap = new HashMap<>();
+    private HashMap<String, String> stickyMap   = new HashMap<>();
 
 
     static final String TAG = "TBpComponent";
@@ -58,21 +77,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         super(context, attrs, defStyleAttr);
     }
 
-
-    @Override
-    public void init(Context context, AttributeSet attrs) {
-
-        super.init(context, attrs);
-
-        mSceneObject = new CObjectDelegate(this);
-        mSceneObject.init(context, attrs);
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 
 
     //***********************************************************
@@ -383,7 +387,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
     @Override
     public String getEventSourceType() {
-        return "BubblePop_Copmonent";
+        return "BubblePop_Component";
     }
 
 
@@ -483,7 +487,35 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
     //**********************************************************
     //**********************************************************
-    //*****************  Common Tutor Object Methods
+    //*****************  ITutorObjectImpl Implementation
+
+    @Override
+    public void init(Context context, AttributeSet attrs) {
+
+        super.init(context, attrs);
+
+        mSceneObject = new CObjectDelegate(this);
+        mSceneObject.init(context, attrs);
+    }
+
+
+    @Override
+    public void onCreate() {
+
+        // Do deferred listeners configuration - this cannot be done until after the tutor is instantiated
+        //
+        if(!mListenerConfigured) {
+            for (String linkedView : mLinkedViews) {
+                addEventListener(linkedView);
+            }
+            mListenerConfigured = true;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
 
     @Override
@@ -505,19 +537,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     public void setTutor(CTutor tutor) {
         mTutor = tutor;
         mSceneObject.setTutor(tutor);
-    }
-
-    @Override
-    public void onCreate() {
-
-        // Do deferred listeners configuration - this cannot be done until after the tutor is instantiated
-        //
-        if(!mListenerConfigured) {
-            for (String linkedView : mLinkedViews) {
-                addEventListener(linkedView);
-            }
-            mListenerConfigured = true;
-        }
     }
 
     @Override

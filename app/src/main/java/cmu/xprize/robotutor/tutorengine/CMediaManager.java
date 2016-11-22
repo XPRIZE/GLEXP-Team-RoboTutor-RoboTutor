@@ -606,6 +606,7 @@ public class CMediaManager {
 
 
         public void pause() {
+
             if(mPlaying) {
                 mPlayer.pause();
                 mMediaController.stopSpeaking();

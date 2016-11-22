@@ -1,0 +1,53 @@
+{
+  "dataSource": [
+
+    {
+      "name":"ACTIVITY_SELECT",
+      "layoutID":"ask_activity_selector",
+
+      // NOTE: define "novar" on audio assets to exclude them from instantiating scope level variables.
+      //
+      "items":[
+        {"datatype":"IMAGEBUTTON",
+          "resource":"button_select_letters",
+          "componentID":"Sbutton1",
+          "behavior":"SELECT_READING",
+          "prompt":"reading",
+          "help":"tap reading"
+        },
+
+        {"datatype":"IMAGEBUTTON",
+          "resource":"button_select_stories",
+          "componentID":"Sbutton2",
+          "behavior":"SELECT_STORIES",
+          "prompt":"stories",
+          "help":"tap stories"
+        },
+
+        {"datatype":"IMAGEBUTTON",
+          "resource":"button_select_math",
+          "componentID":"Sbutton3",
+          "behavior":"SELECT_MATH",
+          "prompt":"numbers",
+          "help":"tap numbers"
+        },
+
+        {"datatype":"IMAGEBUTTON",
+          "resource":"button_select_shapes",
+          "componentID":"Sbutton4",
+          "behavior":"SELECT_SHAPES",
+          "prompt":"shapes",
+          "help":"tap shapes"
+        },
+
+        {"datatype":"IMAGEBUTTON",
+          "resource":"button_select_robotutor",
+          "componentID":"Sbutton5",
+          "behavior":"SELECT_ROBOTUTOR",
+          "prompt":"robotutor",
+          "help":"tap robotutor"
+        }
+      ]
+    }
+  ]
+}

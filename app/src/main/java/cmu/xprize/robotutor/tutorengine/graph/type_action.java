@@ -189,6 +189,7 @@ public class type_action extends scene_node {
                         _scope.tutor().mTutorGraph.post(this, TCONST.NEXTSCENE);
                         break;
 
+                    case TCONST.CANCEL_NODE:
                     case TCONST.SUBGRAPH_RETURN_AND_GO:
                     case TCONST.SUBGRAPH_RETURN_AND_WAIT:
                         _scope.sceneGraph().post(this, cmd);
@@ -212,6 +213,10 @@ public class type_action extends scene_node {
 
                     case TCONST.CMD_WAIT:
                         returnState = TCONST.WAIT;
+                        break;
+
+                    case TCONST.CMD_DEBUG:
+                        Log.d(TAG, "Debug Hit");
                         break;
 
                     // By default try and find a matching actionMap object to execute.
@@ -294,6 +299,10 @@ public class type_action extends scene_node {
                         // TODO: This will require FSM or REGEX processing to allow : and | in strings.
                         //
                         if (parms != null) {
+
+                            // Support templatized parameters
+                            //
+                            parms = getScope().parseTemplate(parms);
 
                             // Break up the parms specification - "parms":"value:type|value:type..."
                             //

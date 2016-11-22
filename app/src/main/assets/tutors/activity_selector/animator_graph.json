@@ -1,0 +1,315 @@
+{
+  "animatorMap": {
+    "COMMENT": "Animation Graph for the Activity Selector",
+
+    "activity_selector": {
+
+      "type": "ANIMATOR",
+      "title": "Activity Selector",
+      "COMMENT": "",
+      "version": "1.0.0",
+      "rootnode": "INTRO_STATE",
+
+      "subgraphMap": {
+
+        "INPUT_HESITATION_FEEDBACK": {
+          "type": "SUBGRAPH",
+          "rootnode": "INPUT_HESITATION_MODULE",
+
+          "nodeMap": {
+            "INPUT_HESITATION_MODULE": {
+              "type": "MODULE",
+              "COMMENT": "prompt when user hesitates when they should be writing.",
+              "preenter": ["SET_CANCEL_BEHAVIOR"],
+              "reuse": true,
+              "tracks": [
+                {"type": "COMMAND", "id": "activity_selector", "method": "postEvent", "parms": "RIPPLE_DESCRIBE:String|1000:Integer", "features":""}
+              ],
+              "preexit": [
+                "CLEAR_CANCEL_BEHAVIOR"
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "BUTTON_DESCRIPTION": {
+          "type": "SUBGRAPH",
+          "rootnode": "DICTATION_HESITATION_MODULE",
+
+          "nodeMap": {
+            "BUTTON_DESCRIPTION_MODULE": {
+              "type": "MODULE",
+              "COMMENT": "prompt when user hesitates when they should be writing.",
+              "preenter": ["SET_CANCEL_BEHAVIOR"],
+              "reuse": true,
+              "tracks": [
+                {"type": "COMMAND", "id": "activity_selector", "method": "postEvent", "parms": "POINT_AT__BUTTON:String|{{activity_selector.buttonid}}:String", "features":""},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{activity_selector.prompt}}.mp3","soundpackage": "default","mode": "flow", "features": ""},
+                {"type": "COMMAND", "id": "activity_selector", "method": "postEvent", "parms": "DESCRIBE_NEXT:String|1000:Integer", "features":""}
+              ],
+              "preexit": [
+                "CLEAR_CANCEL_BEHAVIOR","CANCEL_POINT"
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "READING_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "COMMENT": "User selected Math Activity",
+          "rootnode": "READING_BEHAVIOR_MODULE",
+
+          "nodeMap": {
+
+            "READING_BEHAVIOR_MODULE": {
+              "type": "MODULE",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "STORIES_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "COMMENT": "User selected Math Activity",
+          "rootnode": "STORIES_BEHAVIOR_MODULE",
+
+          "nodeMap": {
+
+            "STORIES_BEHAVIOR_MODULE": {
+              "type": "MODULE",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "MATH_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "COMMENT": "User selected Math Activity",
+          "rootnode": "MATH_BEHAVIOR_MODULE",
+
+          "nodeMap": {
+
+            "MATH_BEHAVIOR_MODULE": {
+              "type": "MODULE",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "SHAPES_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "COMMENT": "User selected Math Activity",
+          "rootnode": "SHAPES_BEHAVIOR_MODULE",
+
+          "nodeMap": {
+
+            "SHAPES_BEHAVIOR_MODULE": {
+              "type": "MODULE",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
+        "ROBOTUTOR_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "COMMENT": "User selected Math Activity",
+          "rootnode": "ROBOTUTOR_BEHAVIOR_MODULE",
+
+          "nodeMap": {
+
+            "ROBOTUTOR_BEHAVIOR_MODULE": {
+              "type": "MODULE",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        }
+      },
+
+      "nodeMap": {
+
+        "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        "INTRO_STATE": {
+          "type": "NODE",
+          "COMMENT": "Intro Clip",
+          "maptype":"moduleMap",
+          "mapname": "EMPTY_MODULE",
+          "preenter": [
+            "SHOW_ACTIVITY_SELECTOR", "INIT_MODULE"
+          ],
+          "preexit": [
+          ],
+          "edges": [
+            {"constraint": "", "edge": "USERINPUT"}
+          ]
+        },
+
+        "USERINPUT": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"moduleMap",
+          "mapname": "EMPTY_MODULE",
+          "preenter": [
+          ],
+          "preexit": [
+          ],
+          "edges": [
+            { "constraint":"FTR_RIGHT", "edge": "CORRECT" },
+            { "constraint": "",         "edge": "WRONG" }
+          ]
+        },
+
+        "CORRECT": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"moduleMap",
+          "mapname": "EMPTY_MODULE",
+          "preenter": [],
+          "preexit": [
+          ],
+          "edges": [
+            { "constraint": "FTR_NOWORDS", "edge": "NEXTSCENE" },
+            { "constraint": "", "edge": "USERINPUT" }
+          ]
+        },
+
+        "WRONG": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"moduleMap",
+          "mapname": "EMPTY_MODULE",
+          "preenter": [],
+          "preexit": [
+          ],
+          "edges": [
+            { "constraint": "FTR_NOWORDS", "edge": "NEXTSCENE" },
+            { "constraint": "", "edge": "INTRO_STATE" }
+          ]
+        },
+        "NEXTSCENE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname":"GOTONEXTSCENE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+          ]
+        }
+      },
+
+      "moduleMap": {
+
+        "COMMENT": "@@@@@  CModules  @@@@@",
+
+        "EMPTY_MODULE": {
+          "type":"MODULE",
+          "reuse":true,
+          "COMMENT": "Do Nothing",
+          "tracks": [
+            {"type": "COMMAND", "cmd": "WAIT" }
+          ]
+        },
+
+        "INIT_MODULE": {
+          "type": "MODULE",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            // Input must be inhibited until all the behaviors are set
+            //
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "ON_SELECT:String|CANCEL_HESITATION_FEEDBACK:String" ,"features":""},
+
+            {"type": "COMMAND", "id": "activity_selector", "method": "postNamed",         "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":""},
+
+            // Map the button events defined in the activity_selector dataSource to Behavior subgraphs
+            //
+            {"type": "COMMAND", "id": "activity_selector", "method": "setVolatileBehavior", "parms": "SELECT_READING:String|READING_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setVolatileBehavior", "parms": "SELECT_STORIES:String|STORIES_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setVolatileBehavior", "parms": "SELECT_MATH:String|MATH_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setVolatileBehavior", "parms": "SELECT_SHAPES:String|SHAPES_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setVolatileBehavior", "parms": "SELECT_ROBOTUTOR:String|ROBOTUTOR_BEHAVIOR:String" ,"features":""}
+          ]
+        }
+
+      },
+
+      "actionMap": {
+
+        "SHOW_ACTIVITY_SELECTOR": {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "ACTIVITY_SELECT:String",  "features":""},
+
+        "SET_CANCEL_BEHAVIOR": {"type": "COMMAND", "id": "activity_selector", "method": "setVolatileBehavior", "parms": "SELECT_BEHAVIOR:String|CANCEL_FEEDBACK:String" ,"features":""},
+        "CLEAR_CANCEL_BEHAVIOR": {"type": "COMMAND", "id": "activity_selector", "method": "setVolatileBehavior", "parms": "SELECT_BEHAVIOR:String|NULL:String" ,"features":""},
+
+        "CANCEL_FEEDBACK": {"type": "COMMAND", "cmd": "CANCEL_NODE"},
+        "GOTONEXTSCENE":   {"type": "COMMAND", "cmd": "NEXTSCENE"},
+        "WAIT": {"type": "COMMAND", "cmd": "WAIT" }
+      },
+
+      "constraintMap": {
+
+        "COMMENT": "@@@@@  CConstraints @@@@@ ",
+
+        "FTR_NOWORDS": {
+          "type": "CONDITION",
+          "cmd": "test",
+          "code": "FTR_NOWORDS"
+        },
+        "FTR_WORDS": {
+          "type": "CONDITION",
+          "cmd": "test",
+          "code": "!FTR_NOWORDS"
+        },
+        "FTR_RIGHT": {
+          "type": "CONDITION",
+          "cmd": "test",
+          "code": "FTR_RIGHT"
+        },
+        "FTR_WRONG": {
+          "type": "CONDITION",
+          "cmd": "test",
+          "code": "!FTR_RIGHT"
+        }
+      }
+    }
+  }
+}

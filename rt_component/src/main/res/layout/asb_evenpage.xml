@@ -16,6 +16,15 @@
         android:scaleType="fitCenter"
         android:layout_margin="30dp" />
 
+    <FrameLayout
+        android:id="@+id/SsideViewQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        app:layout_widthPercent="50%"
+        android:scaleType="fitCenter"
+        android:layout_margin="30dp" />
+
     <!--Note: must wrap content height as any vertical centering
     is not accounted for by the text "layout" - -->
 
@@ -52,6 +61,16 @@
         android:layout_marginLeft="250dp"
         android:layout_alignBottom="@id/SpageImage"
         android:src="@drawable/page_flip_button"/>
+
+
+    <FrameLayout
+        android:id="@+id/SfullViewQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_centerVertical="true" />
+
 
 </android.support.percent.PercentRelativeLayout>
 

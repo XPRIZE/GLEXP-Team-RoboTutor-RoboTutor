@@ -494,6 +494,9 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
                     //
                     mTutor.setAddFeature(TCONST.DATA_PREFIX + binding.name.toUpperCase());
                 }
+                else {
+                    Log.e(TAG, "Default Data Binding - View not found by name: " + binding.name);
+                }
             }
         }
     }

@@ -13,6 +13,8 @@
 
         <attr name="show_tracker" format="boolean"/>
 
+        <attr name="state_highlight" format="boolean" />
+
     </declare-styleable>
 
 </resources>

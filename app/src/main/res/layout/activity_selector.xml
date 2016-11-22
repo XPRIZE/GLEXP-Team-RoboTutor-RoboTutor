@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cmu.xprize.robotutor.tutorengine.widgets.core.TActivitySelector
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_selector"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TAskComponent
+        android:id="@+id/SaskActivity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </cmu.xprize.robotutor.tutorengine.widgets.core.TAskComponent>
+
+
+</cmu.xprize.robotutor.tutorengine.widgets.core.TActivitySelector>

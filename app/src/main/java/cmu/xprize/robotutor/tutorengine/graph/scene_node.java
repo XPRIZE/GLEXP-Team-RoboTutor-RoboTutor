@@ -132,7 +132,14 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource 
     }
 
 
-    // TODO: Ideally this would be protected
+    /**
+     */
+    public String cancelNode() {
+        return TCONST.NONE;
+    }
+
+
+        // TODO: Ideally this would be protected
     // Used by Animation graph to init root animation
     // Note: Modules use this to reinisitalize themselves
 
@@ -175,7 +182,7 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource 
                 node.applyNode();
 
             } catch (Exception e) {
-                CErrorManager.logEvent(TAG, "ERROR: Symbol Not found:" + nodeName + " : ", e, false);
+                CErrorManager.logEvent(TAG, "ERROR: PRE-POST Symbol Not found:" + nodeName + " : ", e, false);
             }
         }
     }

@@ -121,7 +121,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public boolean              random      = false;
     public String[]             dataSource;
 
-    final private String  TAG        = "CWritingController";
+    final private String  TAG        = "CWritingComponent";
 
 
 
@@ -882,9 +882,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
 
     /**
-     * Overloaded in
+     * Overloaded in TClass
      */
     public void pointAtReplayButton() {
+    }
+
+
+    public void cancelPointAt() {
+
+        Intent msg = new Intent(TCONST.CANCEL_POINT);
+        bManager.sendBroadcast(msg);
     }
 
 
@@ -893,12 +900,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         post(TCONST.HIGHLIGHT, 500);
     }
 
+
     /**
      * See TClass subclass for implementation
      * @param targetNode
      */
     protected void callSubGgraph(String targetNode) {
     }
+
 
     // Tutor methods  End
     //************************************************************************
@@ -1160,6 +1169,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         pointAtReplayButton();
                         break;
 
+                    case WR_CONST.CANCEL_POINTAT:
+
+                        cancelPointAt();
+                        break;
 
                     default:
                         break;
