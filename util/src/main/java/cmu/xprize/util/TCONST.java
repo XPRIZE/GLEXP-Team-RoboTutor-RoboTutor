@@ -438,6 +438,7 @@ public class TCONST {
     // Generic error codes
     public static final String GENERIC_RIGHT  = "FTR_RIGHT";
     public static final String GENERIC_WRONG  = "FTR_WRONG";
+    public static final String GENERIC_SUCCESSIVEWRONG = "FTR_SWRONG";
     public static final boolean TRUE_ERROR    = true;
     public static final boolean TRUE_NOERROR  = true;
     public static final boolean FALSE_NOERROR = false;
@@ -556,5 +557,15 @@ public class TCONST {
     public static final String RTC_VAR_INDEX      = ".wordindex";
     public static final String RTC_VAR_REMAINING  = ".remainingWords";
     public static final String RTC_VAR_SENTENCE   = ".sentence";
+
+    //Akira Game Prompt Situation
+    public static final String PROMPT_1LEFT = "PROMPT_1LEFT";
+    public static final String PROMPT_1MID = "PROMPT_1MID";
+    public static final String PROMPT_1RIGHT = "PROMPT_1RIGHT";
+    public static final String PROMPT_2LEFT = "PROMPT_2LEFT";
+    public static final String PROMPT_2MID = "PROMPT_2MID";
+    public static final String PROMPT_2RIGHT = "PROMPT_2RIGHT";
+    public static final String PROMPT_3 = "PROMPT_3";
+    public static final String PROMPT_3V = "PROMPT_3V";
 
 }

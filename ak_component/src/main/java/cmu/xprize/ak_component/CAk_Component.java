@@ -2,19 +2,24 @@ package cmu.xprize.ak_component;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.AlertDialog;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.TypedArray;
+import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -32,6 +37,7 @@ import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
+
 
 /**
  * Created by jacky on 2016/7/6.
@@ -53,7 +59,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     static public Context mContext;
 
     protected String        mDataSource;
-    private   int           _dataIndex = 0;
+    protected   int           _dataIndex = 0;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     static final String TAG = "CAk_Component";
@@ -88,11 +94,11 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     private PointF[] sidewalkLeftPoints;
     private PointF[] sidewalkRightPoints;
 
-    protected int carscreechMedia, correctMedia, incorrectMedia, numberchangedMedia;
+    protected int carscreechMedia, correctMedia, incorrectMedia, numberchangedMedia,slowdown,speedup;
     protected boolean flag=true;
 
     protected boolean speedIsZero=false;
-    protected int extraSpeed=0;
+    protected int extraSpeed = 1;
 
     //json loadable
     public    int          gameSpeed          ;
@@ -103,6 +109,9 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     protected Animator cityAnimator;
     protected CAkQuestionBoard stopQuestionBoard;
     public int errornum=0;
+    public boolean questionBoard_exist;
+
+
 
     public CAk_Component(Context context) {
         super(context);
@@ -125,12 +134,12 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         final float width = right - left;
         final float height = bottom - top;
 
-        sidewalkLeftPoints[0].x = width * 0.3f;
+        sidewalkLeftPoints[0].x = width * 0.20f;
         sidewalkLeftPoints[0].y = height * 0.25f;
         sidewalkLeftPoints[1].x = - width * 0.1f;
         sidewalkLeftPoints[1].y = height;
 
-        sidewalkRightPoints[0].x = width * 0.6f;
+        sidewalkRightPoints[0].x = width * 0.70f;
         sidewalkRightPoints[0].y = height * 0.25f;
         sidewalkRightPoints[1].x = width;
         sidewalkRightPoints[1].y = height;
@@ -162,14 +171,36 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
             int resID = getResources().getIdentifier("button" + i, "id",
                     "cmu.xprize.robotutor");
             speedometerButton[i] = (Button) findViewById(resID);
-            final int speed = i - 5;
+            final int speed = i;
             speedometerButton[i].setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    onSpeedChange(speed);
+                    if(extraSpeed>speed)     //slow down the speed
+                    {
+                        soundPool.play(slowdown, 0.1f, 0.1f, 1, 0, 1.0f);
+                        System.out.println("slow down");
+                        //soundPool.play(carscreechMedia, 0.1f, 0.1f, 1, 0, 1.0f);
+                    }
+                    else if(extraSpeed<speed)  //increase the speed
+                    {
+                        soundPool.play(speedup, 0.1f, 0.1f, 1, 0, 1.0f);
+                        System.out.println("speed up");
+                        //soundPool.play(carscreechMedia, 0.1f, 0.1f, 1, 0, 1.0f);
+                    }
                     extraSpeed = speed;
+                    for(Button b : speedometerButton)
+                        b.getBackground().clearColorFilter();
+                    v.getBackground().setColorFilter(0xFFFFCC00,PorterDuff.Mode.SRC);
+                    if(v == speedometerButton[0])
+                        scoreboard.setVisibility(INVISIBLE);
+                    else
+                        scoreboard.setVisibility(VISIBLE);
                 }
             });
         }
+
+        speedometerButton[1].getBackground().setColorFilter(0xFFFFCC00,PorterDuff.Mode.SRC);
 
         teachFinger = (CAkTeachFinger) findViewById(R.id.finger);
         teachFinger.finishTeaching = true;
@@ -190,15 +221,18 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         random = new Random();
         ongoingAnimator=new ArrayList<>();
 
+
         isFirstInstall=true;
         if(isFirstInstall==false)
             teachFinger.finishTeaching=true;
 
-        soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
         carscreechMedia=soundPool.load(mContext, R.raw.carscreech, 1);
         correctMedia=soundPool.load(mContext, R.raw.correct, 1);
         incorrectMedia=soundPool.load(mContext, R.raw.incorrect, 1);
         numberchangedMedia=soundPool.load(mContext, R.raw.numberchanged, 1);
+        slowdown=soundPool.load(mContext,R.raw.slow,1);
+        speedup=soundPool.load(mContext,R.raw.speed,1);
 
         mainHandler.post(gameRunnable);
         if(attrs != null) {
@@ -249,16 +283,67 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     }
 
     protected void updateDataSet(CAk_Data data) {
+        boolean isAudio = isAudio(data);
         questionBoard = new CAkQuestionBoard(mContext, data.answerLane, data.choices);
-        player.setText(data.playerString);
+        questionBoard_exist = true;
+        if(isAudio){
+            playAudio(data);
+            player.setText("", "");
+        }else{
+            player.aboveTextView.setScaleX((float)1.25);
+            player.belowTextView.setScaleX((float)1.25);
+            player.aboveTextView.setScaleY((float)1.25);
+            player.belowTextView.setScaleY((float)1.25);
+            player.setText(data.aboveString, data.belowString);
+            CAnimatorUtil.zoomOut(player.belowTextView,(float)0.8,500);
+            CAnimatorUtil.zoomOut(player.aboveTextView,(float)0.8,500);
+        }
+    }
+
+
+    protected  boolean isAudio(CAk_Data data){
+        if(data.belowString.equals("audio"))
+            return true;
+        else
+            return false;
+    }
+
+    protected String getBelowString(CAk_Data data){
+        return data.belowString;
+    }
+
+    protected String getAboveString(CAk_Data data){
+        return data.aboveString;
     }
 
     public void post(String command, Object target) {
 
     }
 
+
+    public void playAudio(CAk_Data data){
+    }
+
     public void UpdateValue(int value) {
     }
+
+    protected void onSpeedChange(int speed) {
+        int s = speed * 400;
+        for(int i = 0; i < ongoingAnimator.size(); i++) {
+            Animator animator = ongoingAnimator.get(i);
+            if(animator.getClass() == AnimatorSet.class) {
+                AnimatorSet set = (AnimatorSet)animator;
+                set.pause();
+                ArrayList<Animator> list = set.getChildAnimations();
+                for(int j = 0; j < list.size(); j++) {
+                    Animator objectAnimator = (Animator) list.get(j);
+                    objectAnimator.setDuration(5000 - s);
+                }
+                set.resume();
+            }
+        }
+    }
+
 
     /**
      * Main game loop runnable
@@ -279,7 +364,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
             long elapseLeft = (System.nanoTime() - sidewalkLeftTime) / 1000000;
             long elapse = (System.nanoTime() - questionTime) / 1000000;
 
-            int s = extraSpeed * 500;
+            int s = extraSpeed * 400;
 
             final PercentRelativeLayout percentLayout = (PercentRelativeLayout) getChildAt(0);
 
@@ -290,24 +375,32 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
             if(isRunning && elapseRight > 3500) {
 
-                int r = random.nextInt() % 2;
+                int r = random.nextInt() % 3;
 
                 final ImageView sidewalkStuff  = new ImageView(mContext);
                 if(r == 0){
-                    sidewalkStuff.setImageResource(R.drawable.sidewalkcrack);
+                    sidewalkStuff.setImageResource(R.drawable.robotreeleft);
                     sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
                 }else if(r == 1) {
-                    sidewalkStuff.setImageResource(R.drawable.tirepile);
+                    sidewalkStuff.setImageResource(R.drawable.billboardright);
+                    sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
+                }
+                else if(r == 2) {
+                    sidewalkStuff.setImageResource(R.drawable.leftarrowsign);
                     sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
                 }
 
                 percentLayout.addView(sidewalkStuff);
-                scoreboard.bringToFront();
+                //scoreboard.bringToFront();
 
-                final Animator sidewalkAnimator = CAnimatorUtil.configTranslate(sidewalkStuff,
-                        5000-s, 0, sidewalkRightPoints[0], sidewalkRightPoints[1]
-                );
+                sidewalkStuff.setX(sidewalkRightPoints[0].x);
+
+                final AnimatorSet sidewalkAnimator = CAnimatorUtil.configZoomIn(sidewalkStuff,3500,0,new LinearInterpolator(), 2f);
                 ongoingAnimator.add(sidewalkAnimator);
+                Animator sideWalkTranslationAnimator1 = CAnimatorUtil.configTranslate(sidewalkStuff,5000-s, 0, sidewalkRightPoints[0], sidewalkRightPoints[1]);
+                sidewalkAnimator.setDuration(5000-s);
+                sidewalkAnimator.setInterpolator(new LinearInterpolator());
+                sidewalkAnimator.playTogether(sideWalkTranslationAnimator1);
 
                 sidewalkAnimator.addListener(new AnimatorListenerAdapter() {
                     @Override
@@ -322,34 +415,43 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                 sidewalkRightTime = System.nanoTime();
             }
 
-            if(isRunning && elapseLeft > 2500) {
-                int r = random.nextInt() % 2;
+            if(isRunning && elapseLeft > 3500) {
+                int r = random.nextInt() % 3;
 
                 final ImageView sidewalkStuff  = new ImageView(mContext);
                 if(r == 0){
-                    sidewalkStuff.setImageResource(R.drawable.sidewalkcrack);
+                    sidewalkStuff.setImageResource(R.drawable.robotreeright);
                     sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
                 }else if(r == 1) {
-                    sidewalkStuff.setImageResource(R.drawable.tirepile);
+                    sidewalkStuff.setImageResource(R.drawable.billboardleft);
+                    sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
+                }
+                else if(r == 2) {
+                    sidewalkStuff.setImageResource(R.drawable.rightarrowsign);
                     sidewalkStuff.setLayoutParams(new LayoutParams(getWidth() / 10, getHeight() / 5));
                 }
 
                 percentLayout.addView(sidewalkStuff);
                 scoreboard.bringToFront();
 
-                final Animator sidewalkAnimator1 = CAnimatorUtil.configTranslate(sidewalkStuff,
-                        5000-s, 0, sidewalkLeftPoints[0], sidewalkLeftPoints[1]
-                );
-                ongoingAnimator.add(sidewalkAnimator1);
-                sidewalkAnimator1.addListener(new AnimatorListenerAdapter() {
+                sidewalkStuff.setX(sidewalkLeftPoints[0].x);
+                final AnimatorSet sidewalkAnimator = CAnimatorUtil.configZoomIn(sidewalkStuff,3500,0,new LinearInterpolator(), 2f);
+                ongoingAnimator.add(sidewalkAnimator);
+                Animator sideWalkTranslationAnimator1 = CAnimatorUtil.configTranslate(sidewalkStuff,5000-s, 0, sidewalkLeftPoints[0], sidewalkLeftPoints[1]);
+                sidewalkAnimator.setDuration(5000-s);
+                sidewalkAnimator.setInterpolator(new LinearInterpolator());
+                sidewalkAnimator.playTogether(sideWalkTranslationAnimator1);
+                ongoingAnimator.add(sidewalkAnimator);
+
+                sidewalkAnimator.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
                         percentLayout.removeView(sidewalkStuff);
-                        ongoingAnimator.remove(sidewalkAnimator1);
+                        ongoingAnimator.remove(sidewalkAnimator);
                     }
                 });
-                sidewalkAnimator1.start();
+                sidewalkAnimator.start();
 
                 sidewalkLeftTime = System.nanoTime();
             }
@@ -357,36 +459,6 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
             mainHandler.postDelayed(gameRunnable, 400);
         }
     };
-
-
-    public void dialog()
-    {
-        AlertDialog.Builder builder=new AlertDialog.Builder(mContext);
-        builder.setMessage("Do you need help?");
-        builder.setTitle("Help");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //show finger tutor
-                errornum = 0;
-                player.lane= CAkPlayer.Lane.MID;
-                isFirstInstall=true;
-                teachFinger.finishTeaching=false;
-                teachFinger.setVisibility(VISIBLE);
-                teachFinger.reset(mContext,null);
-                flag=true;
-                dialogInterface.dismiss();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                errornum = 0;
-                dialogInterface.dismiss();
-            }
-        });
-        builder.create().show();
-    }
 
 
     @Override
