@@ -44,7 +44,7 @@ public class CMediaController implements IMediaController{
     }
 
 
-    static public CMediaManager getInstance(CTutor parentTutor) {
+    static public CMediaManager getManagerInstance(CTutor parentTutor) {
 
         CMediaManager manager = managerMap.get(parentTutor);
 

@@ -60,7 +60,7 @@ public class CMediaManager {
     private HashMap<String, type_handler>   mHandlerMap    = new HashMap<String, type_handler>();
     private HashMap<String, type_timeline>  mTimeLineMap   = new HashMap<String, type_timeline>();
 
-    private HashMap<CTutor, HashMap>        mMediaPackage  = new HashMap<>();
+    private HashMap<CTutor, HashMap>        mSoundPackageMap = new HashMap<>();
     private AssetManager                    mAssetManager;
 
     // Note that there is per tutor Language capability
@@ -122,13 +122,13 @@ public class CMediaManager {
         }
 
 
-        mPlayerCache = new ArrayList<PlayerManager>();
+        mPlayerCache   = new ArrayList<PlayerManager>();
         mTimerMap      = new HashMap<String, type_timer>();
         mHandlerMap    = new HashMap<String, type_handler>();
         mTimeLineMap   = new HashMap<String, type_timeline>();
 
-        mMediaPackage  = new HashMap<>();
-        mLangFtrMap    = new HashMap<CTutor, String>();
+        mSoundPackageMap = new HashMap<>();
+        mLangFtrMap      = new HashMap<CTutor, String>();
     }
 
 
@@ -164,13 +164,13 @@ public class CMediaManager {
         tTutor.updateLanguageFeature(langFtr);
     }
 
-    public void setMediaPackage(CTutor tTutor, HashMap soundMap) {
+    public void setSoundPackage(CTutor tTutor, HashMap soundMap) {
 
-        mMediaPackage.put(tTutor, soundMap);
+        mSoundPackageMap.put(tTutor, soundMap);
     }
 
 
-    public String mapMediaPackage(CTutor tTutor, String packageName, String langOverride) {
+    public String mapSoundPackage(CTutor tTutor, String packageName, String langOverride) {
 
         HashMap<String,CMediaPackage> soundMap;
         CMediaPackage   mediaPack;
@@ -185,11 +185,11 @@ public class CMediaManager {
         }
 
         try {
-            // If the tutor is configured for mediapackages in the tutor_descriptor
+            // If the tutor is configured for soundpackages in the tutor_descriptor
             // Old tutors may not contain soundMaps - these default to what they expect.
-            // non-soundMap tutors are deprecated.
+            // NOTE: non-soundMap tutors are deprecated.
             //
-            soundMap = mMediaPackage.get(tTutor);
+            soundMap = mSoundPackageMap.get(tTutor);
 
             if (soundMap != null) {
 
@@ -397,7 +397,7 @@ public class CMediaManager {
         //
         if(manager == null) {
 
-            Log.i(TAG, "Creating new PlayerManager");
+            Log.i(TAG, "Creating new PlayerManager: " + mPlayerCache.size());
 
             manager = new PlayerManager(owner, dataSource);
 
@@ -447,7 +447,7 @@ public class CMediaManager {
         private long         mSeekPoint     = 0;
 
 
-        final static public String TAG = "PlayerManager";
+        final static public String TAG = "CMediaManager";
 
 
         protected PlayerManager(Object owner, String _dataSource) {
@@ -463,6 +463,14 @@ public class CMediaManager {
 
             try {
                 mIsReady = false;
+
+                // Ensure the player is released
+                //
+                if(mPlayer != null) {
+                    releasePlayer();
+                }
+
+                Log.d(TAG, "CREATE_PLAYER_MAMANGER");
                 mPlayer  = new MediaPlayer();
 
                 // TODO: permit local file sources - see LoadTrack in type_timeline
@@ -505,6 +513,8 @@ public class CMediaManager {
                 mPlayer.reset();
                 mPlayer.release();
                 mPlayer = null;
+
+                Log.d(TAG, "DESTROY_PLAYER_MANAGER");
 
                 mDataSource = "";
             }

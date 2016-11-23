@@ -806,7 +806,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         // push the soundMap into the MediaManager -
         //
-        mMediaManager.setMediaPackage(this, soundMap);
+        mMediaManager.setSoundPackage(this, soundMap);
 
         // Create a associative cache for the initialization data
         //

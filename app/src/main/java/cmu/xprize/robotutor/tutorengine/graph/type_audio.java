@@ -41,10 +41,10 @@ public class type_audio extends type_action implements IMediaListener {
     // NOTE: we run at a Flash default of 24fps - which is the units in which
     // index and duration are calibrated
 
-    private CFileNameHasher mFileNameHasher;
-    private CMediaManager mMediaManager;
+    private CFileNameHasher             mFileNameHasher;
+    private CMediaManager               mMediaManager;
     private CMediaManager.PlayerManager mPlayer;
-    private boolean mPreLoaded = false;
+    private boolean                     mPreLoaded = false;
 
     private String mSoundSource;
     private String mSourcePath;
@@ -59,9 +59,9 @@ public class type_audio extends type_action implements IMediaListener {
     public String soundsource;
     public String soundpackage;
 
-    public boolean repeat = false;
-    public float volume = -1f;
-    public long index = 0;
+    public boolean  repeat = false;
+    public float    volume = -1f;
+    public long     index  = 0;
 
 
     final static public String TAG = "type_audio";
@@ -165,7 +165,7 @@ public class type_audio extends type_action implements IMediaListener {
                 _scope.tutor().eventNext();
             }
         }
-        // If this is an AUDIOEVENT type then the mPlayer was released alread but we need
+        // If this is an AUDIOEVENT type then the mPlayer was released already but we need
         // to let the independent playerManager know that it is no longer needed.
         //
         else {
@@ -194,12 +194,12 @@ public class type_audio extends type_action implements IMediaListener {
         int endofPath = mPathResolved.lastIndexOf("/") + 1;
 
         // Extract the path and name portions
-        // NOTE: ASSUME mp3 - trim the mp3 - we just want the text in the Hash
+        // NOTE: ASSUME mp3 - trim the mp3 - we just want the filename text to generate the Hash
         //
         String pathPart = mPathResolved.substring(0, endofPath);
         String namePart = mPathResolved.substring(endofPath, mPathResolved.length() - 4);
 
-        // Note we do this decomposition to get the resolved name for debug messages
+        // Note we keep this decomposition to provide the resolved name for debug messages
         //
         if (_useHashName) {
 
@@ -278,6 +278,11 @@ public class type_audio extends type_action implements IMediaListener {
 
         stop();
 
+        mPlayer.detach();
+        mPlayer = null;
+
+        Log.i(TAG, "cancelNode - PlayerDetached");
+
         return TCONST.NONE;
     }
 
@@ -355,9 +360,9 @@ public class type_audio extends type_action implements IMediaListener {
         // An audio source can force a language by setting "lang" to a known language ID
         // e.g. LANG_SW | LANG_EN | LANG_FR
 
-        mMediaManager = CMediaController.getInstance(_scope.tutor());
+        mMediaManager = CMediaController.getManagerInstance(_scope.tutor());
 
-        langPath = mMediaManager.mapMediaPackage(_scope.tutor(), soundpackage, lang);
+        langPath = mMediaManager.mapSoundPackage(_scope.tutor(), soundpackage, lang);
 
         // Update the path to the sound source file
         //

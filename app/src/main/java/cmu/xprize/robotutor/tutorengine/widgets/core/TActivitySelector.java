@@ -1,18 +1,18 @@
 package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import cmu.xprize.comp_ask.CAskElement;
 import cmu.xprize.comp_ask.CAsk_Data;
+import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.comp_session.CActivitySelector;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
@@ -23,6 +23,8 @@ import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEventSource;
@@ -39,13 +41,12 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     private CSceneDelegate          mTutorScene;
     private CMediaManager           mMediaManager;
 
-    private TAskComponent           SaskActivity;
-
     private HashMap<String, String> volatileMap = new HashMap<>();
     private HashMap<String, String> stickyMap   = new HashMap<>();
 
-    // json loadable
-    public CAsk_Data[]             dataSource;
+    private ArrayList<String> _FeatureSet = new ArrayList<>();
+    private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
+
 
     final private String  TAG = "TActivitySelector";
 
@@ -78,6 +79,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         super.onFinishInflate();
 
         SaskActivity = (TAskComponent)findViewById(R.id.SaskActivity);
+
+        SaskActivity.setmButtonController(this);
     }
 
     @Override
@@ -101,6 +104,9 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         for(CAsk_Data layout : dataSource) {
 
             if(layout.name.equals(name)) {
+
+                _activeLayout = layout;
+
                 SaskActivity.setDataSource(layout);
                 break;
             }
@@ -109,23 +115,42 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     }
 
 
-    private void riplleDescribe() {
+    public void rippleDescribe() {
+        _describeIndex = 0;
 
+        describeNext();
+    }
+
+    public void describeNext() {
+
+        if(_describeIndex < _activeLayout.items.length) {
+
+            publishValue(AS_CONST.VAR_BUTTONID,     _activeLayout.items[_describeIndex].componentID);
+            publishValue(AS_CONST.VAR_HELP_AUDIO,   _activeLayout.items[_describeIndex].help);
+            publishValue(AS_CONST.VAR_PROMPT_AUDIO, _activeLayout.items[_describeIndex].prompt);
+
+            applyBehavior(AS_CONST.DESCRIBE_BEHAVIOR);
+
+            _describeIndex++;
+        }
     }
 
 
-    private void describeButton(View target) {
+    @Override
+    public void doButtonAction(String actionid) {
 
-        int[] _screenCoord = new int[2];
+        applyBehavior(AS_CONST.SELECT_BEHAVIOR);
 
-        target.getLocationOnScreen(_screenCoord);
+        for(CAskElement element : _activeLayout.items) {
 
-        PointF centerPt = new PointF(_screenCoord[0] + (target.getWidth() / 2), _screenCoord[1] + (target.getHeight() / 2));
-        Intent msg = new Intent(TCONST.POINT_AND_TAP);
-        msg.putExtra(TCONST.SCREENPOINT, new float[]{centerPt.x, (float) centerPt.y});
+            if(element.componentID.equals(actionid)) {
 
-        bManager.sendBroadcast(msg);
+                publishValue(AS_CONST.VAR_PROMPT_AUDIO, element.prompt);
+                applyBehavior(element.behavior);
+            }
+        }
     }
+
 
 
     //************************************************************************
@@ -155,7 +180,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         // The media manager is tutor specific so we have to use the tutor to access
         // the correct instance for this component.
         //
-        mMediaManager = CMediaController.getInstance(mTutor);
+        mMediaManager = CMediaController.getManagerInstance(mTutor);
     }
 
     @Override
@@ -379,6 +404,73 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     // IEventSource Interface END
     //************************************************************************
     //************************************************************************
+
+    //************************************************************************
+    //************************************************************************
+    // publish component state data - START
+
+    @Override
+    public void publishState() {
+    }
+
+    @Override
+    public void publishValue(String varName, String value) {
+
+        // update the response variable  "<ComponentName>.<varName>"
+        mTutor.getScope().addUpdateVar(name() + varName, new TString(value));
+
+    }
+
+    @Override
+    public void publishValue(String varName, int value) {
+
+        // update the response variable  "<ComponentName>.<varName>"
+        mTutor.getScope().addUpdateVar(name() + varName, new TInteger(value));
+
+    }
+
+    @Override
+    public void publishFeature(String feature) {
+
+        trackFeatures(feature);
+
+        _FeatureMap.put(feature, true);
+        mTutor.setAddFeature(feature);
+    }
+
+    /**
+     * Note that we may retract features before they're published to add them to the
+     * FeatureSet that should be pushed/popped when using pushDataSource
+     * e.g. we want EOD to track even if it has never been set
+     *
+     * @param feature
+     */
+    @Override
+    public void retractFeature(String feature) {
+
+        trackFeatures(feature);
+
+        _FeatureMap.put(feature, false);
+        mTutor.setDelFeature(feature);
+    }
+
+    /**
+     * _FeatureSet keeps track of used features
+     *
+     * @param feature
+     */
+    private void trackFeatures(String feature) {
+
+        if(_FeatureSet.indexOf(feature) == -1)
+        {
+            _FeatureSet.add(feature);
+        }
+    }
+
+    // publish component state data - EBD
+    //************************************************************************
+    //************************************************************************
+
 
 
 

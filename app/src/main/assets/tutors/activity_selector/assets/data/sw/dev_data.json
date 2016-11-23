@@ -13,7 +13,7 @@
           "componentID":"Sbutton1",
           "behavior":"SELECT_READING",
           "prompt":"reading",
-          "help":"tap reading"
+          "help":"Tap here for reading and writing"
         },
 
         {"datatype":"IMAGEBUTTON",
@@ -21,7 +21,7 @@
           "componentID":"Sbutton2",
           "behavior":"SELECT_STORIES",
           "prompt":"stories",
-          "help":"tap stories"
+          "help":"Tap here for a story"
         },
 
         {"datatype":"IMAGEBUTTON",
@@ -29,7 +29,7 @@
           "componentID":"Sbutton3",
           "behavior":"SELECT_MATH",
           "prompt":"numbers",
-          "help":"tap numbers"
+          "help":"Tap here for numbers and math"
         },
 
         {"datatype":"IMAGEBUTTON",
@@ -37,15 +37,15 @@
           "componentID":"Sbutton4",
           "behavior":"SELECT_SHAPES",
           "prompt":"shapes",
-          "help":"tap shapes"
+          "help":"Tap here to learn shapes"
         },
 
         {"datatype":"IMAGEBUTTON",
           "resource":"button_select_robotutor",
           "componentID":"Sbutton5",
           "behavior":"SELECT_ROBOTUTOR",
-          "prompt":"robotutor",
-          "help":"tap robotutor"
+          "prompt":"Let RoboTutor decide",
+          "help":"Tap here to let RoboTutor decide"
         }
       ]
     }

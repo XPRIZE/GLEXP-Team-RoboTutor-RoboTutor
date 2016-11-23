@@ -3,11 +3,14 @@ package cmu.xprize.comp_session;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 
 import org.json.JSONObject;
 
@@ -15,16 +18,22 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import cmu.xprize.comp_ask.CAskComponent;
+import cmu.xprize.comp_ask.CAsk_Data;
 import cmu.xprize.comp_ask.IButtonController;
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.TCONST;
 
 
-public class CActivitySelector extends FrameLayout implements IButtonController, ILoadableObject {
+public class CActivitySelector extends FrameLayout implements IBehaviorManager, IButtonController, ILoadableObject, IPublisher {
 
     protected Context           mContext;
+
+    protected CAskComponent     SaskActivity;
 
     protected final Handler     mainHandler  = new Handler(Looper.getMainLooper());
     protected HashMap           queueMap     = new HashMap();
@@ -32,7 +41,13 @@ public class CActivitySelector extends FrameLayout implements IButtonController,
 
     protected boolean           _qDisabled   = false;
 
+    protected CAsk_Data         _activeLayout;
+    protected int               _describeIndex;
+
     protected LocalBroadcastManager bManager;
+
+    // json loadable
+    public CAsk_Data[]             dataSource;
 
 
     final private String  TAG = "CActivitySelector";
@@ -68,30 +83,46 @@ public class CActivitySelector extends FrameLayout implements IButtonController,
     protected void onDraw(Canvas canvas) {
     }
 
-
     @Override
     public void doButtonAction(String actionid) {
-
     }
-
 
     public void rippleDescribe() {
     }
 
-
-    public void cancelPointAt() {
-
-        Intent msg = new Intent(TCONST.CANCEL_POINT);
-        bManager.sendBroadcast(msg);
+    public void describeNext() {
     }
 
 
-    private void broadcastMsg(String Action) {
+    //************************************************************************
+    //************************************************************************
+    // IBehaviorManager Interface START
 
-        Intent msg = new Intent(Action);
 
-        bManager.sendBroadcast(msg);
+    @Override
+    public void setVolatileBehavior(String event, String behavior) {
+
     }
+
+    @Override
+    public void setStickyBehavior(String event, String behavior) {
+
+    }
+
+    @Override
+    public boolean applyBehavior(String event) {
+        return false;
+    }
+
+    @Override
+    public void applyBehaviorNode(String nodeName) {
+
+    }
+
+    // IBehaviorManager Interface END
+    //************************************************************************
+    //************************************************************************
+
 
 
     //************************************************************************
@@ -142,14 +173,28 @@ public class CActivitySelector extends FrameLayout implements IButtonController,
 
                 switch(_command) {
 
+                    case TCONST.APPLY_BEHAVIOR:
+
+                        applyBehaviorNode(_target);
+                        break;
+
+                    case TCONST.POINT_AT_BUTTON:
+
+                        SaskActivity.pointAtViewByName(_target);
+                        break;
+
                     case AS_CONST.RIPPLE_DESCRIBE:
 
                         rippleDescribe();
                         break;
 
+                    case AS_CONST.DESCRIBE_NEXT:
+
+                        describeNext();
+                        break;
+
                     case AS_CONST.CANCEL_DESCRIBE:
 
-                        cancelPointAt();
                         break;
 
                     default:
@@ -283,11 +328,72 @@ public class CActivitySelector extends FrameLayout implements IButtonController,
     public void post(String command, String target, String item, long delay) { enQueue(new Queue(null, command, target, item), delay); }
 
 
+    public void postEvent(String event) {
+
+        postEvent(event,0);
+    }
+
+    public void postEvent(String event, Integer delay) {
+
+        post(event, delay);
+    }
+
+    public void postEvent(String event, String param, Integer delay) {
+
+        post(event, param, delay);
+    }
+
+    public void postEvent(String event, String target) {
+
+        post(event, target);
+    }
+
 
 
     // Component Message Queue  -- End
     //************************************************************************
     //************************************************************************
+
+    //************************************************************************
+    //************************************************************************
+    // IPublisher - START
+
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishState() {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishValue(String varName, String value) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishValue(String varName, int value) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishFeature(String feature) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void retractFeature(String feature) {
+    }
+
+
+    // IPublisher - EBD
+    //************************************************************************
+    //************************************************************************
+
 
 
 

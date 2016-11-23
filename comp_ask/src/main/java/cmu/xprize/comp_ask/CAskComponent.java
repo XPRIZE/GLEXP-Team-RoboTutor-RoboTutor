@@ -20,9 +20,13 @@
 package cmu.xprize.comp_ask;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.PointF;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -36,6 +40,7 @@ import cmu.xprize.util.CClassMap;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
+import cmu.xprize.util.TCONST;
 
 
 public class CAskComponent extends FrameLayout implements ILoadableObject, View.OnClickListener  {
@@ -46,6 +51,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
     protected IButtonController     mButtonController;
 
+    protected LocalBroadcastManager bManager;
 
     final private String  TAG = "CAskComponent";
 
@@ -70,6 +76,9 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
     public void init(Context context, AttributeSet attrs) {
 
         mContext = context;
+
+        // Capture the local broadcast manager
+        bManager = LocalBroadcastManager.getInstance(getContext());
     }
 
 
@@ -82,6 +91,52 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
         mButtonController = controller;
     }
+
+
+    public void cancelPointAt() {
+
+        Intent msg = new Intent(TCONST.CANCEL_POINT);
+        bManager.sendBroadcast(msg);
+    }
+
+
+    private void broadcastMsg(String Action) {
+
+        Intent msg = new Intent(Action);
+
+        bManager.sendBroadcast(msg);
+    }
+
+
+    public void pointAtViewByName(String name) {
+
+        int id = getResources().getIdentifier(name, "id", packageName);
+
+        if(id != -1)
+            pointAtViewByID(id);
+    }
+
+    public void pointAtViewByID(int id) {
+
+        View view = (View) findViewById(id);
+
+        if(view != null)
+            pointAtView(view);
+    }
+
+    protected void pointAtView(View target) {
+
+        int[] _screenCoord = new int[2];
+
+        target.getLocationOnScreen(_screenCoord);
+
+        PointF centerPt = new PointF(_screenCoord[0] + (target.getWidth() / 2), _screenCoord[1] + (target.getHeight() / 2));
+        Intent msg = new Intent(TCONST.POINT_AND_TAP);
+        msg.putExtra(TCONST.SCREENPOINT, new float[]{centerPt.x, (float) centerPt.y});
+
+        bManager.sendBroadcast(msg);
+    }
+
 
     //**********************************************************
     //**********************************************************
@@ -102,7 +157,9 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
         removeAllViews();
 
-        ViewGroup gView = (ViewGroup)inflate(mContext, layoutID, this);
+        // Inflate the layout into "this" AskComponent
+        //
+        inflate(mContext, layoutID, this);
 
         // Populate the layout elements
         //
@@ -112,13 +169,13 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
             switch(element.datatype) {
                 case ASK_CONST.IMAGE:
-                    ImageView iView = (ImageView) gView.findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+                    ImageView iView = (ImageView) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
 
                     iView.setImageResource(getResources().getIdentifier(element.resource, "drawable", packageName));
                     break;
 
                 case ASK_CONST.TEXT:
-                    TextView tView = (TextView) gView.findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+                    TextView tView = (TextView) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
 
                     tView.setText(element.resource);
                     break;
@@ -126,31 +183,44 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
                 case ASK_CONST.IMAGEBUTTON:
                     int test = getResources().getIdentifier(element.componentID, "id", packageName);
 
-                    ImageButton ibView = (ImageButton) gView.findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+                    ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
 
                     ibView.setImageResource(getResources().getIdentifier(element.resource, "drawable", packageName));
 
                     buttonMap.put(ibView, element.componentID);
+                    ibView.setOnClickListener(this);
                     break;
 
                 case ASK_CONST.TEXTBUTTON:
-//                    TextButton tbView = (TextView) gView.findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
-//
-//                    tbView.setText(element.resource);
-//
-//                    buttonMap.put(tbView, element.componentID);
+                    Button tbView = (Button) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+
+                    tbView.setText(element.resource);
+
+                    buttonMap.put(tbView, element.componentID);
+                    tbView.setOnClickListener(this);
                     break;
             }
         }
 
-        gView.requestLayout();
+        requestLayout();
     }
 
 
     @Override
     public void onClick(View view) {
 
-        mButtonController.doButtonAction(buttonMap.get(view));
+        // Support direct connection to button action manager
+        //
+        if(mButtonController != null) {
+            mButtonController.doButtonAction(buttonMap.get(view));
+        }
+
+        // Also support indirect connection to button action manager
+        //
+        Intent msg = new Intent(TCONST.ASK_SELECTION);
+        msg.putExtra(TCONST.ASK_BUTTON_ID, buttonMap.get(view));
+
+        bManager.sendBroadcast(msg);
     }
 
 
