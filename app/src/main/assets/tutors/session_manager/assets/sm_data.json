@@ -23,14 +23,14 @@
   "bgColors": ["#D9FFFF","#b9FFb9"],
 
   "dataSource": [
-//    {
-//      "type":"Sm_Class",
-//      "description":"Akira",
-//      //"background":"#D9FFFF",
-//      "data": [
-//        { "type":"Sm_Data", "datasource":"", "intent": "akira", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Akira"}
-//      ]
-//    },
+    {
+      "type":"Sm_Class",
+      "description":"Akira",
+      //"background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data", "datasource":"", "intent": "akira", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Akira"}
+      ]
+    },
 
 //    {
 //      "type":"Sm_Class",

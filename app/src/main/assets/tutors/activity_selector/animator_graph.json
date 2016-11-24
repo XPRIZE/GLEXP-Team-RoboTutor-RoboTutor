@@ -20,13 +20,12 @@
             "INPUT_HESITATION_MODULE": {
               "type": "MODULE",
               "COMMENT": "prompt when user hesitates when they should be writing.",
-              "preenter": ["SET_CANCEL_BEHAVIOR"],
+              "preenter": [],
               "reuse": true,
               "tracks": [
-                {"type": "COMMAND", "id": "activity_selector", "method": "postEvent", "parms": "RIPPLE_DESCRIBE:String|1000:Integer", "features":""}
+                {"type": "COMMAND", "id": "activity_selector", "method": "postEvent", "parms": "RIPPLE_DESCRIBE:String", "features":""}
               ],
               "preexit": [
-                "CLEAR_CANCEL_BEHAVIOR"
               ],
               "edges": [
               ]
@@ -36,21 +35,21 @@
 
         "BUTTON_DESCRIPTION": {
           "type": "SUBGRAPH",
-          "rootnode": "DICTATION_HESITATION_MODULE",
+          "rootnode": "BUTTON_DESCRIPTION_MODULE",
 
           "nodeMap": {
             "BUTTON_DESCRIPTION_MODULE": {
               "type": "MODULE",
               "COMMENT": "prompt when user hesitates when they should be writing.",
-              "preenter": ["SET_CANCEL_BEHAVIOR"],
+              "preenter": [],
               "reuse": true,
               "tracks": [
-                {"type": "COMMAND", "id": "activity_selector", "method": "postEvent", "parms": "POINT_AT__BUTTON:String|{{activity_selector.buttonid}}:String", "features":""},
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{activity_selector.prompt}}.mp3","soundpackage": "default","mode": "flow", "features": ""},
-                {"type": "COMMAND", "id": "activity_selector", "method": "postEvent", "parms": "DESCRIBE_NEXT:String|1000:Integer", "features":""}
+                {"type": "COMMAND", "id": "activity_selector", "method": "postEvent", "parms": "POINT_AT_BUTTON:String|{{activity_selector.buttonid}}:String", "features":""},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{activity_selector.helpAudio}}.mp3","soundpackage": "default","mode": "flow", "features": ""},
+                {"type": "COMMAND", "id": "activity_selector", "method": "postEvent", "parms": "DESCRIBE_NEXT:String|600:Integer", "features":""}
               ],
               "preexit": [
-                "CLEAR_CANCEL_BEHAVIOR","CANCEL_POINT"
+                "CANCEL_POINT"
               ],
               "edges": [
               ]
@@ -58,102 +57,20 @@
           }
         },
 
-        "READING_BEHAVIOR": {
+        "BUTTON_BEHAVIOR": {
           "type": "SUBGRAPH",
           "COMMENT": "User selected Math Activity",
-          "rootnode": "READING_BEHAVIOR_MODULE",
+          "rootnode": "BUTTON_BEHAVIOR_MODULE",
 
           "nodeMap": {
 
-            "READING_BEHAVIOR_MODULE": {
+            "BUTTON_BEHAVIOR_MODULE": {
               "type": "MODULE",
               "preenter": [],
               "reuse": true,
               "tracks": [
-              ],
-              "preexit": [
-              ],
-              "edges": [
-              ]
-            }
-          }
-        },
-
-        "STORIES_BEHAVIOR": {
-          "type": "SUBGRAPH",
-          "COMMENT": "User selected Math Activity",
-          "rootnode": "STORIES_BEHAVIOR_MODULE",
-
-          "nodeMap": {
-
-            "STORIES_BEHAVIOR_MODULE": {
-              "type": "MODULE",
-              "preenter": [],
-              "reuse": true,
-              "tracks": [
-              ],
-              "preexit": [
-              ],
-              "edges": [
-              ]
-            }
-          }
-        },
-
-        "MATH_BEHAVIOR": {
-          "type": "SUBGRAPH",
-          "COMMENT": "User selected Math Activity",
-          "rootnode": "MATH_BEHAVIOR_MODULE",
-
-          "nodeMap": {
-
-            "MATH_BEHAVIOR_MODULE": {
-              "type": "MODULE",
-              "preenter": [],
-              "reuse": true,
-              "tracks": [
-              ],
-              "preexit": [
-              ],
-              "edges": [
-              ]
-            }
-          }
-        },
-
-        "SHAPES_BEHAVIOR": {
-          "type": "SUBGRAPH",
-          "COMMENT": "User selected Math Activity",
-          "rootnode": "SHAPES_BEHAVIOR_MODULE",
-
-          "nodeMap": {
-
-            "SHAPES_BEHAVIOR_MODULE": {
-              "type": "MODULE",
-              "preenter": [],
-              "reuse": true,
-              "tracks": [
-              ],
-              "preexit": [
-              ],
-              "edges": [
-              ]
-            }
-          }
-        },
-
-        "ROBOTUTOR_BEHAVIOR": {
-          "type": "SUBGRAPH",
-          "COMMENT": "User selected Math Activity",
-          "rootnode": "ROBOTUTOR_BEHAVIOR_MODULE",
-
-          "nodeMap": {
-
-            "ROBOTUTOR_BEHAVIOR_MODULE": {
-              "type": "MODULE",
-              "preenter": [],
-              "reuse": true,
-              "tracks": [
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{activity_selector.promptAudio}}.mp3","soundpackage": "default","mode": "flow", "features": ""},
+                {"type": "COMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "BUTTON_EVENT:String|{{activity_selector.buttonid}}:String", "features":""}
               ],
               "preexit": [
               ],
@@ -257,17 +174,19 @@
           "tracks": [
             // Input must be inhibited until all the behaviors are set
             //
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "ON_SELECT:String|CANCEL_HESITATION_FEEDBACK:String" ,"features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "DESCRIBE_BEHAVIOR:String|BUTTON_DESCRIPTION:String" ,"features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "DESCRIBE_COMPLETE:String|SET_HESITATION_FEEDBACK:String" ,"features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_BEHAVIOR:String|CLEAR_HESITATION_BEHAVIOR:String" ,"features":""},
 
             {"type": "COMMAND", "id": "activity_selector", "method": "postNamed",         "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":""},
 
             // Map the button events defined in the activity_selector dataSource to Behavior subgraphs
             //
-            {"type": "COMMAND", "id": "activity_selector", "method": "setVolatileBehavior", "parms": "SELECT_READING:String|READING_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setVolatileBehavior", "parms": "SELECT_STORIES:String|STORIES_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setVolatileBehavior", "parms": "SELECT_MATH:String|MATH_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setVolatileBehavior", "parms": "SELECT_SHAPES:String|SHAPES_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setVolatileBehavior", "parms": "SELECT_ROBOTUTOR:String|ROBOTUTOR_BEHAVIOR:String" ,"features":""}
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_READING:String|BUTTON_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_STORIES:String|BUTTON_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_MATH:String|BUTTON_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_SHAPES:String|BUTTON_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_ROBOTUTOR:String|BUTTON_BEHAVIOR:String" ,"features":""}
           ]
         }
 
@@ -275,10 +194,11 @@
 
       "actionMap": {
 
-        "SHOW_ACTIVITY_SELECTOR": {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "ACTIVITY_SELECT:String",  "features":""},
+        "SET_HESITATION_FEEDBACK": {"type": "COMMAND", "id": "activity_selector", "method": "postNamed", "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":""},
+        "CLEAR_HESITATION_BEHAVIOR":  {"type": "COMMAND", "id": "activity_selector", "method": "cancelPost", "parms": "HESITATION_PROMPT:String", "features":"" },
 
-        "SET_CANCEL_BEHAVIOR": {"type": "COMMAND", "id": "activity_selector", "method": "setVolatileBehavior", "parms": "SELECT_BEHAVIOR:String|CANCEL_FEEDBACK:String" ,"features":""},
-        "CLEAR_CANCEL_BEHAVIOR": {"type": "COMMAND", "id": "activity_selector", "method": "setVolatileBehavior", "parms": "SELECT_BEHAVIOR:String|NULL:String" ,"features":""},
+        "SHOW_ACTIVITY_SELECTOR": {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "ACTIVITY_SELECT:String",  "features":""},
+        "CANCEL_POINT":           {"type": "COMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "CANCEL_POINTAT:String", "features":""},
 
         "CANCEL_FEEDBACK": {"type": "COMMAND", "cmd": "CANCEL_NODE"},
         "GOTONEXTSCENE":   {"type": "COMMAND", "cmd": "NEXTSCENE"},

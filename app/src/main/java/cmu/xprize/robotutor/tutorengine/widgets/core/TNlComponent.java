@@ -527,7 +527,7 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
         // The media manager is tutor specific so we have to use the tutor to access
         // the correct instance for this component.
         //
-        mMediaManager = CMediaController.getInstance(mTutor);
+        mMediaManager = CMediaController.getManagerInstance(mTutor);
     }
 
     // Do deferred configuration - anything that cannot be done until after the

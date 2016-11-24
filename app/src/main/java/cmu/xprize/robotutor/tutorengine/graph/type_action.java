@@ -48,6 +48,7 @@ public class type_action extends scene_node {
 
     public String          method;          // Invokes method with parms. using apply
     public String          parms;
+    public String          decodedParms;
 
     public String          features = "";   // default to no features
 
@@ -302,11 +303,11 @@ public class type_action extends scene_node {
 
                             // Support templatized parameters
                             //
-                            parms = getScope().parseTemplate(parms);
+                            decodedParms = getScope().parseTemplate(parms);
 
                             // Break up the parms specification - "parms":"value:type|value:type..."
                             //
-                            List<String> parmList = Arrays.asList(parms.split("[:\\|]"));
+                            List<String> parmList = Arrays.asList(decodedParms.split("[:\\|]"));
 
                             // Create the arrays
                             pType = new Class[parmList.size() / 2];
@@ -344,10 +345,10 @@ public class type_action extends scene_node {
 
                         }
                         catch(InvocationTargetException e) {
-                            CErrorManager.logEvent(TAG, "Script internal ERROR: " + id + " - Apply Method: " + method + "   Parms: " + parms + " : ", e, false);
+                            CErrorManager.logEvent(TAG, "Script internal ERROR: " + id + " - Apply Method: " + method + "   Parms: " + decodedParms + " : ", e, false);
                         }
                         catch (Exception e) {
-                            CErrorManager.logEvent(TAG, "ERROR: " + id + " - Apply Method: " + method + "   Parms: " + parms + " : ", e, false);
+                            CErrorManager.logEvent(TAG, "ERROR: " + id + " - Apply Method: " + method + "   Parms: " + decodedParms + " : ", e, false);
                         }
                         break;
                 }

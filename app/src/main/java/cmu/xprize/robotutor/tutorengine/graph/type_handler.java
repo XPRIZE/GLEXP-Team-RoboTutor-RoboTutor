@@ -27,13 +27,9 @@ import org.json.JSONObject;
 
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
-import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.robotutor.tutorengine.IMediaListener;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
-import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
-import cmu.xprize.util.IScope;
-import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
 /**
@@ -309,7 +305,7 @@ public class type_handler extends type_action implements IMediaListener {
             //
             id = scope.tutor().mTutorName + id;
 
-            mMediaManager = CMediaController.getInstance(scope.tutor());
+            mMediaManager = CMediaController.getManagerInstance(scope.tutor());
 
         }
 }

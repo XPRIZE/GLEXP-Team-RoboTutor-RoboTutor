@@ -666,7 +666,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         // The media manager is tutor specific so we have to use the tutor to access
         // the correct instance for this component.
         //
-        mMediaManager = CMediaController.getInstance(mTutor);
+        mMediaManager = CMediaController.getManagerInstance(mTutor);
     }
 
     @Override

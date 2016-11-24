@@ -96,6 +96,7 @@ public class TCONST {
     public static final String POINT_LIVE          = "POINT_LIVE";
     public static final String POINT_FADE          = "POINT_FADE";
     public static final String CANCEL_POINT        = "CANCEL_POINT";
+    public static final String POINT_AT_BUTTON     = "POINT_AT_BUTTON";
 
     public static final String FEEDBACK_DELAYED    = "FEEDBACK_DELAYED";
     public static final String FEEDBACK_IMMEDIATE  = "FEEDBACK_IMMEDIATE";
@@ -111,6 +112,10 @@ public class TCONST {
     public static final String GONE                = "GONE";
 
     public static final String ENGINEMESSAGE       = "EngineMessage: ";
+
+    public static final String ASK_SELECTION       = "ASK_SELECTION";
+    public static final String ASK_BUTTON_ID       = "ASK_BUTTON_ID";
+    public static final String CANCEL_POINTAT      = "CANCEL_POINTAT";
 
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
