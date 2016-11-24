@@ -3,14 +3,11 @@ package cmu.xprize.comp_session;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
-import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 
 import org.json.JSONObject;
 
@@ -47,8 +44,11 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     protected LocalBroadcastManager bManager;
 
     // json loadable
-    public CAsk_Data[]             dataSource;
-
+    public CAsk_Data[]            dataSource;
+    public CAs_Data[]             letters;
+    public CAs_Data[]             stories;
+    public CAs_Data[]             numbers;
+    public CAs_Data[]             shapes;
 
     final private String  TAG = "CActivitySelector";
 
@@ -83,15 +83,26 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     protected void onDraw(Canvas canvas) {
     }
 
-    @Override
-    public void doButtonAction(String actionid) {
-    }
-
     public void rippleDescribe() {
     }
 
     public void describeNext() {
     }
+
+    public void cancelPointAt() {
+
+        Intent msg = new Intent(TCONST.CANCEL_POINT);
+        bManager.sendBroadcast(msg);
+    }
+
+    @Override
+    public void doButtonAction(String actionid) {
+    }
+
+
+    public void doButtonBehavior(String buttonid) {
+    }
+
 
 
     //************************************************************************
@@ -183,6 +194,11 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
                         SaskActivity.pointAtViewByName(_target);
                         break;
 
+                    case TCONST.CANCEL_POINTAT:
+
+                        cancelPointAt();
+                        break;
+
                     case AS_CONST.RIPPLE_DESCRIBE:
 
                         rippleDescribe();
@@ -191,6 +207,11 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
                     case AS_CONST.DESCRIBE_NEXT:
 
                         describeNext();
+                        break;
+
+                    case AS_CONST.BUTTON_EVENT:
+
+                        doButtonBehavior(_target);
                         break;
 
                     case AS_CONST.CANCEL_DESCRIBE:

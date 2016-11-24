@@ -50,6 +50,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
     protected HashMap<View,String>  buttonMap;
 
     protected IButtonController     mButtonController;
+    protected boolean               mSelected = false;
 
     protected LocalBroadcastManager bManager;
 
@@ -211,7 +212,8 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
         // Support direct connection to button action manager
         //
-        if(mButtonController != null) {
+        if(!mSelected && (mButtonController != null)) {
+            mSelected = true;
             mButtonController.doButtonAction(buttonMap.get(view));
         }
 

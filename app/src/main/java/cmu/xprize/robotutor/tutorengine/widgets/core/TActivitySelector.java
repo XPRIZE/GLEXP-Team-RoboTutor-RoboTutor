@@ -133,6 +133,11 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
             _describeIndex++;
         }
+        else {
+
+            applyBehavior(AS_CONST.DESCRIBE_COMPLETE);
+        }
+
     }
 
 
@@ -145,10 +150,34 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
             if(element.componentID.equals(actionid)) {
 
+                publishValue(AS_CONST.VAR_BUTTONID,     element.componentID);
+                publishValue(AS_CONST.VAR_HELP_AUDIO,   element.help);
                 publishValue(AS_CONST.VAR_PROMPT_AUDIO, element.prompt);
+
                 applyBehavior(element.behavior);
             }
         }
+    }
+
+
+    @Override
+    public void doButtonBehavior(String buttonid) {
+
+        Log.d(TAG, "Button Selected: " + buttonid);
+
+        switch(buttonid.toUpperCase()) {
+            case AS_CONST.BUTTON1:
+                break;
+            case AS_CONST.BUTTON2:
+                break;
+            case AS_CONST.BUTTON3:
+                break;
+            case AS_CONST.BUTTON4:
+                break;
+            case AS_CONST.BUTTON5:
+                break;
+        }
+
     }
 
 
