@@ -90,7 +90,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
     @Override
     public void onDestroy() {
-
+        mTutorScene.onDestroy();
     }
 
     @Override
@@ -167,19 +167,44 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         switch(buttonid.toUpperCase()) {
             case AS_CONST.BUTTON1:
+                doLaunch(letters[0].intent, letters[0].intentdata, letters[0].datasource, letters[0].features);
                 break;
             case AS_CONST.BUTTON2:
+                doLaunch(stories[0].intent, stories[0].intentdata, stories[0].datasource, stories[0].features);
                 break;
             case AS_CONST.BUTTON3:
+                doLaunch(numbers[0].intent, numbers[0].intentdata, numbers[0].datasource, numbers[0].features);
                 break;
             case AS_CONST.BUTTON4:
+                doLaunch(shapes[0].intent, shapes[0].intentdata, shapes[0].datasource, shapes[0].features);
                 break;
             case AS_CONST.BUTTON5:
+                doLaunch(letters[0].intent, letters[0].intentdata, letters[0].datasource, letters[0].features);
                 break;
         }
 
     }
 
+
+    /**
+     * The session manager set the \<varname\>.intent and intentData scoped variables
+     * for use by the scriptable Launch command. see type_action
+     *
+     * @param intent
+     * @param intentData
+     */
+    @Override
+    public void doLaunch(String intent, String intentData, String dataSource, String features) {
+
+        // update the response variable  "<Sresponse>.value"
+
+        mTutor.getScope().addUpdateVar(name() + ".intent", new TString(intent));
+        mTutor.getScope().addUpdateVar(name() + ".intentData", new TString(intentData));
+        mTutor.getScope().addUpdateVar(name() + ".dataSource", new TString(dataSource));
+        mTutor.getScope().addUpdateVar(name() + ".features", new TString(features));
+
+        applyBehavior(AS_CONST.LAUNCH_EVENT);
+    }
 
 
     //************************************************************************
@@ -203,6 +228,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
     @Override
     public void setTutor(CTutor tutor) {
+
         mTutor = tutor;
         mTutorScene.setTutor(tutor);
 

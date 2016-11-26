@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 import org.json.JSONObject;
@@ -104,6 +105,15 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     }
 
 
+    /**
+     * The session manager set the \<varname\>.intent and intentData scoped variables
+     * for use by the scriptable Launch command. see type_action
+     *
+     * @param intent
+     * @param intentData
+     */
+    public void doLaunch(String intent, String intentData, String dataSource, String features) {
+    }
 
     //************************************************************************
     //************************************************************************
@@ -267,7 +277,11 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
      */
     public void cancelPost(String name) {
 
+        Log.d(TAG, "Cancel Post Requested: " + name);
+
         while(nameMap.containsKey(name)) {
+
+            Log.d(TAG, "Post Cancelled: " + name);
 
             mainHandler.removeCallbacks((Queue) (nameMap.get(name)));
             nameMap.remove(name);
@@ -301,6 +315,7 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     public void postNamed(String name, String command, String target) {
         postNamed(name, command, target, 0L);
     }
+
     public void postNamed(String name, String command, String target, Long delay) {
         enQueue(new Queue(name, command, target), delay);
     }

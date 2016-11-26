@@ -1,15 +1,16 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion rootProject.ext.rtCompileSdkVersion
+    buildToolsVersion rootProject.ext.rtBuildToolsVersion
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion rootProject.ext.rtMinSdkVersion
+        targetSdkVersion rootProject.ext.rtTargetSdkVersion
+        versionCode rootProject.ext.rtVersionCode
+        versionName rootProject.ext.rtVersionName
     }
+
     buildTypes {
         release {
             minifyEnabled false

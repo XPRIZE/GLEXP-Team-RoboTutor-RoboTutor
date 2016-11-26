@@ -46,7 +46,7 @@
               "tracks": [
                 {"type": "COMMAND", "id": "activity_selector", "method": "postEvent", "parms": "POINT_AT_BUTTON:String|{{activity_selector.buttonid}}:String", "features":""},
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "{{activity_selector.helpAudio}}.mp3","soundpackage": "default","mode": "flow", "features": ""},
-                {"type": "COMMAND", "id": "activity_selector", "method": "postEvent", "parms": "DESCRIBE_NEXT:String|600:Integer", "features":""}
+                {"type": "COMMAND", "id": "activity_selector", "method": "postNamed", "parms": "DESCRIBE_NEXT:String|DESCRIBE_NEXT:String|600:Long", "features":""}
               ],
               "preexit": [
                 "CANCEL_POINT"
@@ -66,7 +66,7 @@
 
             "BUTTON_BEHAVIOR_MODULE": {
               "type": "MODULE",
-              "preenter": [],
+              "preenter": ["CLEAR_DESCRIBENEXT_BEHAVIOR"],
               "reuse": true,
               "tracks": [
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "{{activity_selector.promptAudio}}.mp3","soundpackage": "default","mode": "flow", "features": ""},
@@ -81,6 +81,7 @@
         }
       },
 
+
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
@@ -89,59 +90,17 @@
           "type": "NODE",
           "COMMENT": "Intro Clip",
           "maptype":"moduleMap",
-          "mapname": "EMPTY_MODULE",
+          "mapname": "PAUSE_MODULE",
           "preenter": [
             "SHOW_ACTIVITY_SELECTOR", "INIT_MODULE"
           ],
           "preexit": [
           ],
           "edges": [
-            {"constraint": "", "edge": "USERINPUT"}
+            {"constraint": "", "edge": "NEXTSCENE"}
           ]
         },
 
-        "USERINPUT": {
-          "type": "NODE",
-          "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"moduleMap",
-          "mapname": "EMPTY_MODULE",
-          "preenter": [
-          ],
-          "preexit": [
-          ],
-          "edges": [
-            { "constraint":"FTR_RIGHT", "edge": "CORRECT" },
-            { "constraint": "",         "edge": "WRONG" }
-          ]
-        },
-
-        "CORRECT": {
-          "type": "NODE",
-          "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"moduleMap",
-          "mapname": "EMPTY_MODULE",
-          "preenter": [],
-          "preexit": [
-          ],
-          "edges": [
-            { "constraint": "FTR_NOWORDS", "edge": "NEXTSCENE" },
-            { "constraint": "", "edge": "USERINPUT" }
-          ]
-        },
-
-        "WRONG": {
-          "type": "NODE",
-          "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"moduleMap",
-          "mapname": "EMPTY_MODULE",
-          "preenter": [],
-          "preexit": [
-          ],
-          "edges": [
-            { "constraint": "FTR_NOWORDS", "edge": "NEXTSCENE" },
-            { "constraint": "", "edge": "INTRO_STATE" }
-          ]
-        },
         "NEXTSCENE": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
@@ -154,11 +113,12 @@
         }
       },
 
+      
       "moduleMap": {
 
         "COMMENT": "@@@@@  CModules  @@@@@",
 
-        "EMPTY_MODULE": {
+        "PAUSE_MODULE": {
           "type":"MODULE",
           "reuse":true,
           "COMMENT": "Do Nothing",
@@ -178,6 +138,8 @@
             {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "DESCRIBE_COMPLETE:String|SET_HESITATION_FEEDBACK:String" ,"features":""},
             {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_BEHAVIOR:String|CLEAR_HESITATION_BEHAVIOR:String" ,"features":""},
 
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "LAUNCH_EVENT:String|LAUNCH_BEHAVIOR:String" ,"features":""},
+
             {"type": "COMMAND", "id": "activity_selector", "method": "postNamed",         "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":""},
 
             // Map the button events defined in the activity_selector dataSource to Behavior subgraphs
@@ -196,6 +158,9 @@
 
         "SET_HESITATION_FEEDBACK": {"type": "COMMAND", "id": "activity_selector", "method": "postNamed", "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":""},
         "CLEAR_HESITATION_BEHAVIOR":  {"type": "COMMAND", "id": "activity_selector", "method": "cancelPost", "parms": "HESITATION_PROMPT:String", "features":"" },
+        "CLEAR_DESCRIBENEXT_BEHAVIOR":  {"type": "COMMAND", "id": "activity_selector", "method": "cancelPost", "parms": "DESCRIBE_NEXT:String", "features":"" },
+
+        "LAUNCH_BEHAVIOR":{"type": "COMMAND", "cmd": "LAUNCH-TUTOR", "parms":"{{activity_selector.intent}}:String|{{activity_selector.intentData}}:String|{{activity_selector.dataSource}}:String|{{activity_selector.features}}:String" },
 
         "SHOW_ACTIVITY_SELECTOR": {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "ACTIVITY_SELECT:String",  "features":""},
         "CANCEL_POINT":           {"type": "COMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "CANCEL_POINTAT:String", "features":""},

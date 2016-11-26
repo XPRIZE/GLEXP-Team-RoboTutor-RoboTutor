@@ -117,6 +117,10 @@ public class TCONST {
     public static final String ASK_BUTTON_ID       = "ASK_BUTTON_ID";
     public static final String CANCEL_POINTAT      = "CANCEL_POINTAT";
 
+    public static final String LEFTLANE            = "LEFT";
+    public static final String CENTERLANE          = "MID";
+    public static final String RIGHTLANE           = "RIGHT";
+
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
     //

@@ -203,9 +203,10 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
         mLangButton = (TLangToggle)parent.findViewById(R.id.SlangToggle);
         mLangButton.setTransformationMethod(null);
 
-        // Hide th language toggle on the release builds
-        // TODO : ensure it is in place for trial releases
-        if(!BuildConfig.DEBUG) {
+        // Hide the language toggle on the release builds
+        // TODO : Use build Variant to ensure release configurations
+        //
+        if(BuildConfig.LANGUAGE_OVERRIDE) {
 
             View view = findViewById(R.id.SsmComponent);
             PercentRelativeLayout.LayoutParams params = (PercentRelativeLayout.LayoutParams) view.getLayoutParams();

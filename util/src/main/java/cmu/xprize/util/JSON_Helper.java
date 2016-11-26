@@ -485,7 +485,7 @@ public class JSON_Helper {
         try {
             for (int i = 0; i < nArr.length(); i++) {
                 try {
-                    Object eObj;
+                    Object eObj = null;
 
                     if (elemClass.isArray()) {
                         subArr = nArr.getJSONArray(i);
@@ -513,7 +513,12 @@ public class JSON_Helper {
                             if(DBG) {
                                 System.out.printf("class type:%s\n", subClass.getName());
                             }
-                            eObj = subClass.newInstance();
+                            if(subClass == null) {
+                                Log.e(TAG, "ClassMap missing for:" + nJsonObj.getString("type"));
+                            }
+                            else {
+                                eObj = subClass.newInstance();
+                            }
                         }
 
                         // Otherwise use the array component type by default.

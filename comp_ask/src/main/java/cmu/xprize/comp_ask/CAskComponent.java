@@ -34,6 +34,7 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import cmu.xprize.util.CClassMap;
@@ -48,6 +49,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
     protected Context               mContext;
     protected String                packageName;
     protected HashMap<View,String>  buttonMap;
+    protected ArrayList<View>       buttonList;
 
     protected IButtonController     mButtonController;
     protected boolean               mSelected = false;
@@ -164,7 +166,8 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
         // Populate the layout elements
         //
-        buttonMap = new HashMap<>();
+        buttonMap  = new HashMap<>();
+        buttonList = new ArrayList<>();
 
         for(CAskElement element : dataSource.items) {
 
@@ -189,7 +192,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
                     ibView.setImageResource(getResources().getIdentifier(element.resource, "drawable", packageName));
 
                     buttonMap.put(ibView, element.componentID);
-                    ibView.setOnClickListener(this);
+                    buttonList.add(ibView);
                     break;
 
                 case ASK_CONST.TEXTBUTTON:
@@ -198,17 +201,20 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
                     tbView.setText(element.resource);
 
                     buttonMap.put(tbView, element.componentID);
-                    tbView.setOnClickListener(this);
+                    buttonList.add(tbView);
                     break;
             }
         }
 
+        enableButtons(true);
         requestLayout();
     }
 
 
     @Override
     public void onClick(View view) {
+
+        enableButtons(false);
 
         // Support direct connection to button action manager
         //
@@ -225,6 +231,15 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
         bManager.sendBroadcast(msg);
     }
 
+
+    public void enableButtons(boolean enable) {
+
+        for(View view : buttonList) {
+            view.setOnClickListener(enable? this:null);
+            view.setClickable(enable);
+
+        }
+    }
 
 
     //************ Serialization

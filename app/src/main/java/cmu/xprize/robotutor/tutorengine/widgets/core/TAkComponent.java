@@ -22,6 +22,8 @@ import cmu.xprize.ak_component.CAkPlayer;
 import cmu.xprize.ak_component.CAkQuestionBoard;
 import cmu.xprize.ak_component.CAk_Component;
 import cmu.xprize.ak_component.CAk_Data;
+import cmu.xprize.robotutor.tutorengine.CMediaController;
+import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
@@ -44,13 +46,17 @@ import cmu.xprize.util.TCONST;
 
 public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDataSink {
 
-    private CTutor mTutor;
+    private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
-    private int wrongTimes = 0;//record the successive wrong times of the player
-    private boolean first1sign = true;
-    private boolean first2sign = true;
-    private boolean first3sign = true;
+    private CMediaManager   mMediaManager;
+
+    private int         wrongTimes = 0;//record the successive wrong times of the player
+    private boolean     first1sign = true;
+    private boolean     first2sign = true;
+    private boolean     first3sign = true;
+
     private PercentRelativeLayout curpercentLayout = (PercentRelativeLayout) getChildAt(0);
+
     static final String TAG = "TAkComponent";
 
     public TAkComponent(Context context) {
@@ -138,9 +144,9 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     /**
      *
-     * @param dataSource
+     * @param dataNameDescriptor
      */
-    public void setDataSource(String dataSource) {
+    public void setDataSource(String dataNameDescriptor) {
 
         // Ensure flags are reset so we don't trigger reset of the ALLCORRECCT flag
         // on the first pass.
@@ -153,19 +159,29 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
         // TODO: globally make startWith type TCONST
         try {
-            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
-                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
+            if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
-                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataSource);
+                String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
+
+                // Generate a langauage specific path to the data source -
+                // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
+                // e.g. tutors/word_copy/assets/data/sw/
+                //
+                String dataPath = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS;
+                dataPath += "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+
+                String jsonData = JSON_Helper.cacheData(dataPath + dataFile);
+
                 // Load the datasource in the component module - i.e. the superclass
-                loadJSON(new JSONObject(jsonData), null);
+                //
+                loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 
-            } else if (dataSource.startsWith("db|")) {
+            } else if (dataNameDescriptor.startsWith("db|")) {
 
 
-            } else if (dataSource.startsWith("{")) {
+            } else if (dataNameDescriptor.startsWith("{")) {
 
-                loadJSON(new JSONObject(dataSource), null);
+                loadJSON(new JSONObject(dataNameDescriptor), null);
 
             } else {
                 throw (new Exception("BadDataSource"));
@@ -198,10 +214,32 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     @Override
     public void playAudio(CAk_Data data){
+
+        String answerString = "";
+
         TScope scope = mTutor.getScope();
-        String currentAudio = new String(getAboveString(data));
-        Log.d("PlayAudio", currentAudio);
-        scope.addUpdateVar("TestAudio", new TString(currentAudio));
+
+        switch(data.answer)  {
+            case TCONST.LEFTLANE:
+                answerString = data.choices[0];
+                break;
+
+            case TCONST.CENTERLANE:
+                answerString = data.choices[1];
+                break;
+
+            case TCONST.RIGHTLANE:
+                if(data.choices.length > 2)
+                    answerString = data.choices[2];
+                else
+                    answerString = data.choices[1];
+                break;
+
+        }
+
+        Log.d("PlayAudio", answerString);
+
+        scope.addUpdateVar("TestAudio", new TString(answerString));
         applyEventNode("PLAY_AUDIO");
     }
 
@@ -594,8 +632,14 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     @Override
     public void setTutor(CTutor tutor) {
+
         mTutor = tutor;
         mSceneObject.setTutor(tutor);
+
+        // The media manager is tutor specific so we have to use the tutor to access
+        // the correct instance for this component.
+        //
+        mMediaManager = CMediaController.getManagerInstance(mTutor);
     }
 
     @Override

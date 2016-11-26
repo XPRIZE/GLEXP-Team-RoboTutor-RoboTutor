@@ -1,0 +1,14 @@
+{
+  "dataSource" : [
+    {"type" : "CAk_Data", "choices" : ["apple", "bed", "car"], "answer" : "RIGHT", "belowString" : "audio"},
+    {"type" : "CAk_Data", "choices" : ["cold", "dog", "eat"], "answer" : "LEFT", "belowString" : "audio"},
+    {"type" : "CAk_Data", "choices" : ["at", "car", "mat"], "answer" : "MID", "belowString" : "audio"},
+    {"type" : "CAk_Data", "choices" : ["but", "car", "get"], "answer" : "MID", "belowString" : "audio"},
+    {"type" : "CAk_Data", "choices" : ["cap", "cat", "cold"], "answer" : "RIGHT", "belowString" : "audio"},
+    {"type" : "CAk_Data", "choices" : ["cup", "crow", "cute"], "answer" : "MID", "belowString" : "audio"},
+    {"type" : "CAk_Data", "choices" : ["bed", "but", "chip"], "answer" : "RIGHT", "belowString" : "audio"},
+    {"type" : "CAk_Data", "choices" : ["but", "cross", "gut"], "answer" : "MID", "belowString" : "audio"},
+    {"type" : "CAk_Data", "choices" : ["bat", "bet", "bite"], "answer" : "RIGHT", "belowString" : "audio"},
+    {"type" : "CAk_Data", "choices" : ["able", "cat", "hat"], "answer" : "LEFT", "belowString" : "audio"}
+  ]
+}

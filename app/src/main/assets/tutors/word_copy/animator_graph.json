@@ -352,7 +352,7 @@
           "mapname": "EMPTY_MODULE",
 
 //          Use this to enable metric constraints on glyphs
-          "preenter":["SET_CONSTRAINT"],
+          "preenter":["SET_CONSTRAINT2"],
           "preexit" :[],
           "edges": [
             {"constraint": "FTR_NO_DEMO", "edge": "INTRO_STATE"},
@@ -727,8 +727,9 @@
         //enable FingerWriting
 
         // Set the LTK+ metric constraint
-        "SET_CONSTRAINT":{"type": "COMMAND", "id": "word_copy", "method": "setConstraint", "parms": "H,0.15;W,0.15;Y,0.10;X,0.15:String", "features":""},
-        
+        "SET_CONSTRAINT1":{"type": "COMMAND", "id": "word_copy", "method": "setConstraint", "parms": "H,0.15;W,0.15;Y,0.10;X,0.15:String", "features":""},
+        "SET_CONSTRAINT2":{"type": "COMMAND", "id": "word_copy", "method": "setConstraint", "parms": "H,0.25;W,0.25;Y,0.20;X,0.25:String", "features":""},
+
         //"GETRESPONSE":{"type": "COMMAND", "id": "Sresponse", "method": "???" ,"features":""},
         //get the recognized character from the recognizer???
 

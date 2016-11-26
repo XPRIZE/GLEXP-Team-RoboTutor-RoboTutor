@@ -62,6 +62,7 @@ public class CMediaManager {
 
     private HashMap<CTutor, HashMap>        mSoundPackageMap = new HashMap<>();
     private AssetManager                    mAssetManager;
+    static private int                      playerCount = 0;
 
     // Note that there is per tutor Language capability
     //
@@ -84,9 +85,7 @@ public class CMediaManager {
     public void restartMediaManager() {
 
         for(PlayerManager controller : mPlayerCache) {
-            if(controller.isPlaying()) {
-                controller.kill();
-            }
+           controller.kill();
         }
 
         Iterator<?> timerObjects = mTimerMap.entrySet().iterator();
@@ -470,7 +469,8 @@ public class CMediaManager {
                     releasePlayer();
                 }
 
-                Log.d(TAG, "CREATE_PLAYER_MAMANGER");
+                playerCount++;
+                Log.d(TAG, "CREATE_PLAYER_MAMANGER: >> " + playerCount);
                 mPlayer  = new MediaPlayer();
 
                 // TODO: permit local file sources - see LoadTrack in type_timeline
@@ -491,7 +491,7 @@ public class CMediaManager {
 
                 mPlayer.prepareAsync();
 
-                Log.d(TAG, "Audio Loading: " + dataSource);
+                Log.d(TAG, "Audio Loading: "  + mOwner.sourceName() + " => " + mOwner.resolvedName() );
 
             } catch (Exception e) {
                 Log.e(TAG, "Audio error: " + mOwner.sourceName() + " => " + mOwner.resolvedName() + " => " + e);
@@ -506,7 +506,10 @@ public class CMediaManager {
         public void releasePlayer() {
 
             if(mPlayer != null) {
-                mPlayer.pause();
+
+                if(mPlaying) {
+                    mPlayer.pause();
+                }
                 mPlaying = false;
                 mIsAlive = true;
 
@@ -514,7 +517,8 @@ public class CMediaManager {
                 mPlayer.release();
                 mPlayer = null;
 
-                Log.d(TAG, "DESTROY_PLAYER_MANAGER");
+                playerCount--;
+                Log.d(TAG, "DESTROY_PLAYER_MANAGER: >> " + playerCount);
 
                 mDataSource = "";
             }
@@ -606,12 +610,7 @@ public class CMediaManager {
             Log.d(TAG, "Kill MediaPlayer");
             mIsAlive = false;
 
-            // Note: using stop instead of pause seems to be preferable. pause seek combination
-            // seems to have a probability of brief restart
-            //
-            if(mPlaying) {
-                mPlayer.stop();
-            }
+            releasePlayer();
         }
 
 
