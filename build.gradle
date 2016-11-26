@@ -15,6 +15,24 @@ allprojects {
     repositories {
         jcenter()
     }
+
+    // Global variables common to all modules
+    // see: http://tools.android.com/tech-docs/new-build-system/tips
+    //
+    ext {
+        rtCompileSdkVersion=24          //Integer
+        rtBuildToolsVersion="24.0.2"    //String
+
+        rtMinSdkVersion=21
+
+        // Note that using target version 22 bypasses the new run-time permissions found
+        // in Marshmallow 23
+        //
+        rtTargetSdkVersion=22
+
+        rtVersionCode=1
+        rtVersionName="0.10.0"
+    }
 }
 
 task clean(type: Delete) {

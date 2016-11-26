@@ -28,7 +28,19 @@
       "description":"Akira",
       //"background":"#D9FFFF",
       "data": [
-        { "type":"Sm_Data", "datasource":"", "intent": "akira", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Akira"}
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]data_ds2.json\"}]}}}",
+          "intent": "akira", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Akira Digit Sense", "features":"" },
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]data_ew3.json\"}]}}}",
+          "intent": "akira", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Akira Words", "features":"" },
+
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]data_di.json\"}]}}}",
+          "intent": "akira", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Akira Image", "features":"" }
+
       ]
     },
 

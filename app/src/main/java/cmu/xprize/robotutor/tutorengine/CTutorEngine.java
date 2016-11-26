@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_scenes;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
@@ -357,8 +358,8 @@ public class CTutorEngine implements ILoadableObject2 {
 
             default:
 
-                // This a special allowance for MARi which placed there activities in a different
-                // package from there app - so we check for intent of the form "<pkgPath>:<appPath>"
+                // This a special allowance for MARi which placed their activities in a different
+                // package from their app - so we check for intent of the form "<pkgPath>:<appPath>"
                 //
                 String[] intentParts = intent.split(":");
 
@@ -401,6 +402,13 @@ public class CTutorEngine implements ILoadableObject2 {
 
         try {
             loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.EDESC)), (IScope2)mRootScope);
+
+            // TODO : Use build Variant to ensure release configurations
+            //
+            if(BuildConfig.LANGUAGE_OVERRIDE) {
+                language = BuildConfig.LANGUAGE_FEATURE_ID;
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

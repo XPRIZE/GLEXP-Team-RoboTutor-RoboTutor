@@ -1,0 +1,17 @@
+{
+  "dataSource" : [
+    {"type" : "CAk_Data", "choices" : ["5"], "answer" : "LEFT", "belowString" : "2"},
+    {"type" : "CAk_Data", "choices" : ["12", "23"], "answer" : "MID", "belowString" : "15"},
+    {"type" : "CAk_Data", "choices" : ["5","6","7"],"answer" :"LEFT", "aboveString":"5","belowString" :"audio"},
+    {"type" : "CAk_Data", "choices" : ["6", "9"], "answer" : "MID", "belowString" : "8"},
+    {"type" : "CAk_Data", "choices" : ["5","10"],"answer" :"LEFT", "belowString" :"3"},
+    {"type" : "CAk_Data", "choices" : ["1", "2", "3"], "answer" : "RIGHT", "aboveString" : "", "belowString" :  "  o  \no   o"},
+    //    {"type" : "CAk_Data", "choices" : ["10", "20"], "answer" : "RIGHT", "belowString" : "60"},
+    //    {"type" : "CAk_Data", "choices" : ["55", "70"], "answer" : "LEFT", "belowString" : "23"},
+    //    {"type" : "CAk_Data", "choices" : ["9"], "answer" : "LEFT", "aboveString" : "3", "belowString" : "+5"},
+    //    {"type" : "CAk_Data", "choices" : ["3", "4", "5"], "answer" : "MID", "aboveString" : "2", "belowString" : "+2"},
+    //    {"type" : "CAk_Data", "choices" : ["2", "4"], "answer" : "RIGHT", "aboveString" : "4", "belowString" : "+2"},
+    {"type" : "CAk_Data", "choices" : ["6", "7"], "answer" : "LEFT", "aboveString" : "", "belowString" : "o   o\n  o  \no   o"},
+    {"type" : "CAk_Data", "choices" : ["5", "6", "7"], "answer" : "MID", "aboveString" : "", "belowString" : "   o   \n  o o  \n o  o  o"}
+  ]
+}

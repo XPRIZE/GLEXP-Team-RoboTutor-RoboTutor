@@ -25,7 +25,8 @@
 		"xprize_effect": {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/global"},
 		"default":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/akira"},
 		"xprize":        {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global"},
-		"xprize_numbers":{"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/numbers"}
+		"xprize_numbers":{"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/numbers"},
+		"xprize_words":  {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/words"}
 	},
 
 	"navigatorType":"SIMPLE_NAVIGATOR"

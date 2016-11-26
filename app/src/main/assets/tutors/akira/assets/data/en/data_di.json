@@ -1,0 +1,7 @@
+{
+  "dataSource" : [
+    {"type" : "CAk_Data", "choices" : ["1", "2", "3"], "answer" : "RIGHT", "belowString" : "  o  \no   o"},
+    {"type" : "CAk_Data", "choices" : ["6", "7"], "answer" : "LEFT", "belowString" :  "o   o\n  o  \no   o"},
+    {"type" : "CAk_Data", "choices" : ["5", "6", "7"], "answer" : "MID", "belowString" : "   o   \n  o o  \n o  o  o"}
+  ]
+}

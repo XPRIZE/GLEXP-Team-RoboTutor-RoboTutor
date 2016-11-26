@@ -16,6 +16,7 @@ public class AS_CONST {
     public static final String SELECT_BEHAVIOR   = "SELECT_BEHAVIOR";
     public static final String DESCRIBE_COMPLETE = "DESCRIBE_COMPLETE";
     public static final String BUTTON_EVENT      = "BUTTON_EVENT";
+    public static final String LAUNCH_EVENT      = "LAUNCH_EVENT";
 
     public static final String BUTTON1           = "SBUTTON1";
     public static final String BUTTON2           = "SBUTTON2";

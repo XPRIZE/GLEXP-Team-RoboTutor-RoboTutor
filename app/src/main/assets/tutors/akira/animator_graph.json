@@ -499,7 +499,7 @@
           "tracks": [
             {"type": "AUDIO", "command": "PLAY", "soundsource": "This says.mp3","soundpackage":"default" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": ""},
             {"type": "COMMAND", "id": "SAkira", "method": "indicate3Sign", "parms": "", "features":""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{TestAudio}}.mp3","soundpackage":"xprize_numbers" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{TestAudio}}.mp3","soundpackage":"xprize_words" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": ""},
             {"type": "COMMAND", "id": "SAkira", "method": "hideFinger", "parms": "", "features":""},
             {"type": "COMMAND", "id": "SAkira", "method": "instruct_finger", "parms": "", "features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "so tap here.mp3","soundpackage":"default" ,"repeat":false, "volume": "20.0", "mode":"flow", "features": ""}
@@ -554,7 +554,7 @@
 
         "USERINPUT_TRACK":  {"type": "COMMAND", "cmd": ""  },
 
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "SAkira", "method": "setDataSource", "parms": "[file]ak_data.json:String", "features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "SAkira", "method": "setDataSource", "parms": "[file]ak_data.json:String", "features":"!DATA_SAKIRA"},
 
         "NEXT_DATASET":{"type": "COMMAND", "id": "SAkira", "method": "next" ,"features":""},
 
@@ -564,7 +564,7 @@
 
         "NEXT": {"type": "COMMAND", "cmd": "NEXT"  },
 
-        "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{TestAudio}}.mp3","soundpackage":"xprize_numbers" ,"repeat":false, "volume": "0.7", "mode":"event", "features": ""},
+        "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{TestAudio}}.mp3","soundpackage":"xprize_words" ,"repeat":false, "volume": "0.7", "mode":"event", "features": ""},
         "INSTRUCT_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{audio}}.mp3","soundpackage":"default" ,"repeat":false, "volume": "0.7", "mode":"event", "features": ""},
         "WAIT":{"type": "COMMAND", "cmd": "WAIT"},
 
