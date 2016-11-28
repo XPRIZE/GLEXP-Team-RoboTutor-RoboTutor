@@ -12,7 +12,7 @@
           "resource":"button_select_letters",
           "componentID":"Sbutton1",
           "behavior":"SELECT_READING",
-          "prompt":"reading",
+          "prompt":"reading and writing",
           "help":"Tap here for reading and writing"
         },
 
@@ -28,7 +28,7 @@
           "resource":"button_select_math",
           "componentID":"Sbutton3",
           "behavior":"SELECT_MATH",
-          "prompt":"numbers",
+          "prompt":"numbers and math",
           "help":"Tap here for numbers and math"
         },
 
@@ -53,7 +53,11 @@
 
   "letters": [
 
-    { 
+    {
+      "datasource":"{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]lowercase_level1_data.json\"}]}}}",
+      "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 1", "features":"FTR_LETTERS:FTR_LOWERCASE" },
+
+    {
       "datasource":"{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]level1_data.json\"}]}}}",
       "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word Copy 1", "features":"FTR_WORDS" },
 
@@ -69,11 +73,7 @@
       "datasource":"{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]level4_data.json\"}]}}}",
       "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word Copy 4", "features":"FTR_WORDS" },
 
-    { 
-      "datasource":"{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]lowercase_level1_data.json\"}]}}}",
-      "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 1", "features":"FTR_LETTERS:FTR_LOWERCASE" },
-
-    { 
+    {
       "datasource":"{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]lowercase_level2_data.json\"}]}}}",
       "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Lowercase 2", "features":"FTR_LETTERS:FTR_LOWERCASE" },
 
@@ -246,7 +246,9 @@
 
   "numbers": [
 
-    {  "datasource":"", "intent": "akira", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Akira"},
+    {
+      "datasource":"{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]data_ds2.json\"}]}}}",
+      "intent": "akira", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Akira Digit Sense", "features":"" },
 
     { 
       "datasource":"{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]digit_level1_data.json\"}]}}}",

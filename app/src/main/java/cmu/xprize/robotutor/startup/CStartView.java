@@ -49,6 +49,7 @@ public class CStartView extends FrameLayout {
 
     private ImageButton  start;
     private IRoboTutor   callback;
+    private boolean      tutorEnable = false;
 
     private final Handler mainHandler  = new Handler(Looper.getMainLooper());
     private HashMap       queueMap     = new HashMap();
@@ -130,6 +131,13 @@ public class CStartView extends FrameLayout {
     }
 
 
+    protected void cancelPointAt() {
+
+        Intent msg = new Intent(TCONST.CANCEL_POINT);
+        bManager.sendBroadcast(msg);
+    }
+
+
     public void execCommand(String command, Object target ) {
 
         long    delay  = 0;
@@ -138,28 +146,36 @@ public class CStartView extends FrameLayout {
 
             case HA_CONST.ANIMATE_REPEAT:
 
-                CHandAnimation hand = (CHandAnimation) findViewById(R.id.ShandAnimator);
+                if(tutorEnable) {
+                    float tapRegionX = (getWidth() * 3 / 4);
+                    float tapRegionY = (getHeight() * 3 / 4);
 
-                float tapRegionX = (getWidth() * 3 / 4);
-                float tapRegionY = (getHeight() * 3 / 4);
+                    float padRegionX = (getWidth() / 8);
+                    float padRegionY = (getHeight() / 8);
 
-                float padRegionX = (getWidth() / 8);
-                float padRegionY = (getHeight() / 8);
+                    PointF targetPoint = new PointF((int) (Math.random() * tapRegionX) + padRegionX, (int) (Math.random() * tapRegionY) + padRegionY);
 
-                PointF targetPoint = new PointF((int) (Math.random() * tapRegionX) + padRegionX, (int) (Math.random() * tapRegionY) + padRegionY);
+                    broadcastLocation(TCONST.POINT_AND_TAP, targetPoint);
 
-                broadcastLocation(TCONST.POINT_AND_TAP, targetPoint);
-
-                post(HA_CONST.ANIMATE_REPEAT, HA_CONST.TUTOR_RATE);
+                    post(HA_CONST.ANIMATE_REPEAT, HA_CONST.TUTOR_RATE);
+                }
                 break;
-
         }
     }
 
 
     public void startTapTutor() {
 
-        post(HA_CONST.ANIMATE_REPEAT, 1000);
+        tutorEnable = true;
+        post(HA_CONST.ANIMATE_REPEAT, HA_CONST.INIT_RATE);
+    }
+
+
+    public void stopTapTutor() {
+
+        tutorEnable = false;
+        flushQueue();
+        cancelPointAt();
     }
 
 

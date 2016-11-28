@@ -384,7 +384,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         tutorEngine.startSessionManager();
 
-        startView.flushQueue();
+        startView.stopTapTutor();
         masterContainer.removeView(startView);
         setFullScreen();
 

@@ -13,6 +13,7 @@ public class HA_CONST {
     public static final long    HAND_TIMEOUT    = 500;
     public static final long    TRANSLATE_TIME  = 1100;
     public static final long    TUTOR_RATE      = 8000;
+    public static final long    INIT_RATE       = 1000;
     public static final float   DEF_SCALE       = 0.4f;
     public static final float   DESIGN_SIZE     = 1000f;
 
