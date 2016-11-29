@@ -28,8 +28,11 @@ android {
         def LANGUAGE_ENGLISH = "\"LANG_EN\""
         def LANGUAGE_UNDEFINED = "\"LANG_NULL\""
 
+        def NO_ASR_APPS = "NO_ASR_APPS"
+
         release {
             buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, FALSE
+            buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_UNDEFINED
 
             minifyEnabled false
@@ -37,6 +40,7 @@ android {
         }
         debug {
             buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, FALSE
+            buildConfigField BOOLEAN, NO_ASR_APPS, TRUE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_UNDEFINED
 
             debuggable true
@@ -47,11 +51,19 @@ android {
         //
         release_sw {
             buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, TRUE
+            buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
+            buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
+        }
+
+        release_sw_noasr {
+            buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, TRUE
+            buildConfigField BOOLEAN, NO_ASR_APPS, TRUE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
         }
 
         release_en {
             buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, TRUE
+            buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
         }
     }

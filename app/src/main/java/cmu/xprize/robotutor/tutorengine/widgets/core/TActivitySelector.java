@@ -14,6 +14,7 @@ import cmu.xprize.comp_ask.CAskElement;
 import cmu.xprize.comp_ask.CAsk_Data;
 import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.comp_session.CActivitySelector;
+import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
@@ -44,7 +45,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     private HashMap<String, String> volatileMap = new HashMap<>();
     private HashMap<String, String> stickyMap   = new HashMap<>();
 
-    private ArrayList<String> _FeatureSet = new ArrayList<>();
+    private ArrayList<String>       _FeatureSet = new ArrayList<>();
     private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
 
 
@@ -169,15 +170,26 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             case AS_CONST.BUTTON1:
                 doLaunch(letters[0].intent, letters[0].intentdata, letters[0].datasource, letters[0].features);
                 break;
+
             case AS_CONST.BUTTON2:
-                doLaunch(stories[0].intent, stories[0].intentdata, stories[0].datasource, stories[0].features);
+
+                // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
+                // reenable the ASK buttons if we don't execute the story_tutor
+                //
+                if(!BuildConfig.NO_ASR_APPS)
+                    doLaunch(stories[0].intent, stories[0].intentdata, stories[0].datasource, stories[0].features);
+                else
+                    SaskActivity.enableButtons(true);
                 break;
+
             case AS_CONST.BUTTON3:
                 doLaunch(numbers[0].intent, numbers[0].intentdata, numbers[0].datasource, numbers[0].features);
                 break;
+
             case AS_CONST.BUTTON4:
                 doLaunch(shapes[0].intent, shapes[0].intentdata, shapes[0].datasource, shapes[0].features);
                 break;
+
             case AS_CONST.BUTTON5:
                 doLaunch(letters[0].intent, letters[0].intentdata, letters[0].datasource, letters[0].features);
                 break;

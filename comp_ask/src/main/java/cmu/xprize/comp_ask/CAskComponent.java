@@ -234,6 +234,8 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
     public void enableButtons(boolean enable) {
 
+        mSelected = false;
+
         for(View view : buttonList) {
             view.setOnClickListener(enable? this:null);
             view.setClickable(enable);

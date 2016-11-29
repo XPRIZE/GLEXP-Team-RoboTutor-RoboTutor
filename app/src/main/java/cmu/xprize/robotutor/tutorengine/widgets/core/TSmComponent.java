@@ -135,14 +135,19 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
     @Override
     public void setTutorIntent(String intent, String intentData, String dataSource, String features) {
 
-        // update the response variable  "<Sresponse>.value"
+        // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
+        //
+        if(!(BuildConfig.NO_ASR_APPS && intent.equals(TCONST.STORY_INTENT))) {
 
-        mTutor.getScope().addUpdateVar(name() + ".intent", new TString(intent));
-        mTutor.getScope().addUpdateVar(name() + ".intentData", new TString(intentData));
-        mTutor.getScope().addUpdateVar(name() + ".dataSource", new TString(dataSource));
-        mTutor.getScope().addUpdateVar(name() + ".features", new TString(features));
+            // update the response variable  "<Sresponse>.value"
 
-        applyEventNode(mSymbol);
+            mTutor.getScope().addUpdateVar(name() + ".intent", new TString(intent));
+            mTutor.getScope().addUpdateVar(name() + ".intentData", new TString(intentData));
+            mTutor.getScope().addUpdateVar(name() + ".dataSource", new TString(dataSource));
+            mTutor.getScope().addUpdateVar(name() + ".features", new TString(features));
+
+            applyEventNode(mSymbol);
+        }
     }
 
 

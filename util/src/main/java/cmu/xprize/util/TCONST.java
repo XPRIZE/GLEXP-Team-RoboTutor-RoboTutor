@@ -121,6 +121,8 @@ public class TCONST {
     public static final String CENTERLANE          = "MID";
     public static final String RIGHTLANE           = "RIGHT";
 
+    public static final String STORY_INTENT        = "story_reading";
+
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
     //
