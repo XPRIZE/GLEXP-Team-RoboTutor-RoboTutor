@@ -1,10 +1,10 @@
 # Built application files
 **/build
 **/captures
-#**/trackdata
+/app/src/main/assets/tutors/trackdata/LIBRARY/audio/*
 
 # External Assets
-#/app/audio_assets/*
+/app/audio_assets/*
 
 local.properties
 
