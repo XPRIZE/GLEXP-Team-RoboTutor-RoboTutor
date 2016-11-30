@@ -3,7 +3,9 @@
 **/captures
 **/trackdata
 
-# Local configuration file (sdk path, etc)
+# External Assets
+/app/audio_assets/**
+
 local.properties
 
 # Gradle generated files
