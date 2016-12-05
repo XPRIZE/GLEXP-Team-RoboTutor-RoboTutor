@@ -34,6 +34,12 @@ public class BP_CONST {
     public static final int ORANGE_BUBBLE = R.drawable.bubble_o_0;
     public static final int GREEN_BUBBLE  = R.drawable.bubble_g_0;
 
+    public static final int RED_ELONGATED_BUBBLE = R.drawable.elongated_bubble_r;
+    public static final int BLUE_ELONGATED_BUBBLE = R.drawable.elongated_bubble_b;
+    public static final int PINK_ELONGATED_BUBBLE = R.drawable.elongated_bubble_p;
+    public static final int ORANGE_ELONGATED_BUBBLE = R.drawable.elongated_bubble_o;
+    public static final int GREEN_ELONGATED_BUBBLE = R.drawable.elongated_bubble_g;
+
     public static final int RED_BUBBLE_VIBE    = R.drawable.bubble_r_vib;
     public static final int BLUE_BUBBLE_VIBE   = R.drawable.bubble_b_vib;
     public static final int PINK_BUBBLE_VIBE   = R.drawable.bubble_p_vib;
@@ -106,6 +112,16 @@ public class BP_CONST {
         bubbleMap.put("PINK", PINK_BUBBLE);
         bubbleMap.put("ORANGE", ORANGE_BUBBLE);
         bubbleMap.put("GREEN", GREEN_BUBBLE);
+    }
+
+    static public HashMap<String, Integer> elongatedBubbleMap = new HashMap<String, Integer>();
+
+    static {
+        elongatedBubbleMap.put("RED", RED_ELONGATED_BUBBLE);
+        elongatedBubbleMap.put("BLUE", BLUE_ELONGATED_BUBBLE);
+        elongatedBubbleMap.put("PINK", PINK_ELONGATED_BUBBLE);
+        elongatedBubbleMap.put("ORANGE", ORANGE_ELONGATED_BUBBLE);
+        elongatedBubbleMap.put("GREEN", GREEN_ELONGATED_BUBBLE);
     }
 
     static public HashMap<String, Integer> audioBubbleMap = new HashMap<String, Integer>();

@@ -621,8 +621,18 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
             data.dataset = new int[stimCount];
 
+            HashMap<Integer, Boolean> dataAlreadyChosen = new HashMap<Integer, Boolean>();
+            dataAlreadyChosen.put(mComponent.question_Index, true);
+
             for(int i1 = 0 ; i1 < stimCount ; i1++) {
-                data.dataset[i1] = (int) (Math.random() * setSize);
+                int randomKey = (int) (Math.random() * setSize);
+
+                while(dataAlreadyChosen.containsKey(randomKey)) {
+                    randomKey = (int) (Math.random() * setSize);
+                }
+
+                data.dataset[i1] = randomKey;
+                dataAlreadyChosen.put(randomKey, true);
             }
         }
 

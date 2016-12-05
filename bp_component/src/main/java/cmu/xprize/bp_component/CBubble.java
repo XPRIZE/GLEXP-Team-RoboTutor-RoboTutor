@@ -148,9 +148,23 @@ public class CBubble extends FrameLayout {
     public void setColor(String color) {
         mColor = color;
 
-        setBackgroundResource(BP_CONST.bubbleMap.get(mColor));
-    }
+        //Specifically for words/letters case on the length
+        if(mText.getText() != null && mText.getText().length() > 0) {
+            //Draw different types of bubble depending on if there is one character or many
+            if(mText.getText().length() == 1) {
+                setBackgroundResource(BP_CONST.bubbleMap.get(mColor));
+            }
 
+            else {
+                setBackgroundResource(BP_CONST.elongatedBubbleMap.get(mColor));
+            }
+        }
+        else {
+            setBackgroundResource(BP_CONST.bubbleMap.get(mColor));
+
+        }
+
+    }
 
     public void setFeedbackColor(String color) {
         mColor = color;
@@ -279,16 +293,45 @@ public class CBubble extends FrameLayout {
         super.getHitRect(outRect);
     }
 
-    public void setVectorPosition(Point relOrigin, float vecDist, float angle) {
+    public void setVectorPosition(Point relOrigin, float vecDist, float angle, float yHeight, int xPosition, boolean isWord) {
 
         mDistance = vecDist;
         mAngle    = angle;
 
-        mPosition.x = ((float) (relOrigin.x + (mDistance * Math.cos(mAngle))) - (getWidth() / 2));
-        mPosition.y = ((float) (relOrigin.y - (mDistance * Math.sin(mAngle))) - (getHeight() / 2));
+
+        System.out.println("Derek Tam: isWord is " + isWord);
+
+        if(isWord) {
+            float xOrigin = relOrigin.x;
+
+            if(xPosition == 0) {
+                xOrigin = xOrigin / 2;
+            }
+            else if(xPosition == 1) {
+                xOrigin = xOrigin * 3/2;
+            }
+            else {
+                System.out.println("Derek Tam: BUG");
+            }
+            mPosition.x = xOrigin;
+            mPosition.y = yHeight;
+        }
+        else {
+            float xOrigin = relOrigin.x;
+            mPosition.x = ((float) (xOrigin + mDistance * Math.cos(mAngle)) - (getWidth()));
+            mPosition.y = ((float) (relOrigin.y - (mDistance * Math.sin(mAngle))) - (getHeight() / 2));
+        }
+
+
 
         setX(mPosition.x);
         setY(mPosition.y);
+
+        float lowerX = mPosition.x - (getWidth() / 2);
+        float higherX = mPosition.x + (getWidth() / 2);
+        float lowerY = mPosition.y - (getHeight() / 2);
+        float higherY = mPosition.y + (getHeight() / 2);
+
     }
 
     public PointF getVectorPosition() {
@@ -305,10 +348,15 @@ public class CBubble extends FrameLayout {
         }
         else {
             mText.setText(text);
+            System.out.println("Derek Tam: text is " + text);
             mText.setVisibility(View.VISIBLE);
         }
 
         invalidate();
+    }
+
+    public TextView getTextView() {
+        return mText;
     }
 
 
