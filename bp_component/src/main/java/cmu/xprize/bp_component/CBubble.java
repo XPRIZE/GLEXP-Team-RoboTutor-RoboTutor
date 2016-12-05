@@ -299,7 +299,6 @@ public class CBubble extends FrameLayout {
         mAngle    = angle;
 
 
-        System.out.println("Derek Tam: isWord is " + isWord);
 
         if(isWord) {
             float xOrigin = relOrigin.x;

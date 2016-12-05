@@ -613,22 +613,27 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
         //
         if(stimCount > setSize)
             stimCount = setSize;
-
         // If the first element of the dataset is < 0 it indicates the number of random items
         // to add to the array
         //
         if(data.rand_data) {
 
             data.dataset = new int[stimCount];
-
             HashMap<Integer, Boolean> dataAlreadyChosen = new HashMap<Integer, Boolean>();
             dataAlreadyChosen.put(mComponent.question_Index, true);
 
             for(int i1 = 0 ; i1 < stimCount ; i1++) {
                 int randomKey = (int) (Math.random() * setSize);
 
+                //Ensures no infinite loop
+                int checkToBreak = 0;
                 while(dataAlreadyChosen.containsKey(randomKey)) {
                     randomKey = (int) (Math.random() * setSize);
+                    checkToBreak++;
+
+                    if(checkToBreak == stimCount) {
+                        break;
+                    }
                 }
 
                 data.dataset[i1] = randomKey;
@@ -653,6 +658,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
             //
             mComponent.question_Index %= setSize;
         }
+
     }
 
 

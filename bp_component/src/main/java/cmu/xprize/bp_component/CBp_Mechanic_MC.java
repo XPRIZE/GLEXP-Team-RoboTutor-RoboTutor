@@ -180,7 +180,6 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
         switch(command) {
 
             case BP_CONST.SHOW_BUBBLES:
-
                 delay = BP_CONST.INFLATE_DELAY;
 
                 if (mInitialized) {
@@ -424,8 +423,6 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
         float rangeYPosition = (mParent.getHeight()) - maxBubbleHeight;
 
         int rangeYRows = (int) (rangeYPosition / maxBubbleHeight);
-
-        System.out.println("Derek Tam: possible y rows" +  rangeYRows);
 
         int[] rowsTaken = new int[rangeYRows];
 

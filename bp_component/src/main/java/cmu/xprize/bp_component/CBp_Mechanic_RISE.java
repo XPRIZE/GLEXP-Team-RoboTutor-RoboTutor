@@ -115,14 +115,15 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
             float xRange[] = null;
             float xPos;
             long timeOfFlight = 0;
-            System.out.println("Derek Tam: Shape 0");
 
             switch (mComponent.stimulus_type) {
 
                 case BP_CONST.REFERENCE:
-                    System.out.println("Derek Tam: Shape 1");
-//                    nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
-//                    nextBubble.setScale(getRandInRange(_scaleRange));
+
+                    //Moved set color and scale here after text has been set
+                    nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
+                    nextBubble.setScale(getRandInRange(_scaleRange));
+
 
                     int[] shapeSet = BP_CONST.drawableMap.get(stiumulusVal);
 
@@ -148,12 +149,15 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                     xRange = new float[]{0, mParent.getWidth() - (newWidth * nextBubble.getAssignedScale())};
                     timeOfFlight = (long) (_travelTime);
 
-
                     //Moved set color and scale here after text has been set
                     nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
                     nextBubble.setScale(getRandInRange(_scaleRange));
+
+
+
                     break;
             }
+
 
 
             do {
@@ -242,7 +246,6 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                 if (!_isRunning && mInitialized) {
 
                     _isRunning = true;
-                    System.out.println("Derek Tam: shape -2");
 
                     mComponent.post(BP_CONST.SPAWN_BUBBLE);
                 }
@@ -274,7 +277,6 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
             case BP_CONST.SPAWN_BUBBLE:
 
                 if(_isRunning) {
-                    System.out.println("Derek Tam: shape -1");
                     if (launchBubble()) {
 
                         int[] launchRange = {_travelTime / mComponent.countRange[BP_CONST.MAX], _travelTime / mComponent.countRange[BP_CONST.MIN]};
