@@ -441,7 +441,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
                 AnimatorSet deflator           = new AnimatorSet();
                 ArrayList<Animator> animations = new ArrayList<Animator>();
-
+                System.out.println("Derek Tam: clear content");
                 for(int i1 = 0; i1 < SBubbles.length ; i1++) {
                     if(SBubbles[i1] != null)
                         animations.add(CAnimatorUtil.configZoomIn(SBubbles[i1], 600, 0, new AnticipateInterpolator(), 0f));

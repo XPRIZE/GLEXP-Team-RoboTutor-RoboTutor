@@ -396,7 +396,6 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
                     //Moved set color to here too so that text would be known when setting the color(generating  bubble)
                     newBubble.setColor(bubbleColor);
-
                     if(newBubble.getTextView().getText().length() > 1) {
                         isWord = true;
                     }
@@ -462,7 +461,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
             //Finds the height corresponding to the row randomly selected
             float yHeight = yRow * maxBubbleHeight + maxBubbleHeight/2;
 
-            SBubbles[i1].setVectorPosition(_viewCenter, getRandInRange(_range), _angle, yHeight, xPosition, isWord);
+            SBubbles[i1].setVectorPosition(_viewCenter, getRandInRange(_range), _angle, yHeight, xPosition, false);
             _angle += _angleInc;
         }
 
