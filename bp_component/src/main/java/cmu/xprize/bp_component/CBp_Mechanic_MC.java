@@ -461,7 +461,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
             //Finds the height corresponding to the row randomly selected
             float yHeight = yRow * maxBubbleHeight + maxBubbleHeight/2;
 
-            SBubbles[i1].setVectorPosition(_viewCenter, getRandInRange(_range), _angle, yHeight, xPosition, false);
+            SBubbles[i1].setVectorPosition(_viewCenter, getRandInRange(_range), _angle, yHeight, xPosition, isWord, newWidth);
             _angle += _angleInc;
         }
 

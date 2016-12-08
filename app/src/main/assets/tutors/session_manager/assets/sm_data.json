@@ -429,11 +429,17 @@
       //"background":"#D9FFFF",
       "data": [
         { "type":"Sm_Data",
-          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_word_MC.json\"}]}}}",
-          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word MC", "features":"FTR_LETTERS:FTR_MIXEDCASE" },
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_word_MC_1.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word MC 1", "features":"FTR_LETTERS:FTR_MIXEDCASE" },
         { "type":"Sm_Data",
-          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_word_RISE.json\"}]}}}",
-          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word RISE", "features":"FTR_LETTERS:FTR_MIXEDCASE" }
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_word_MC_2.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word MC 2", "features":"FTR_LETTERS:FTR_MIXEDCASE" },
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_word_RISE_1.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word RISE 1", "features":"FTR_LETTERS:FTR_MIXEDCASE" },
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_word_RISE_2.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word RISE 2", "features":"FTR_LETTERS:FTR_MIXEDCASE" }
 
       ]
     }

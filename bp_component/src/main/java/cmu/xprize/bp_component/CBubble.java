@@ -293,24 +293,28 @@ public class CBubble extends FrameLayout {
         super.getHitRect(outRect);
     }
 
-    public void setVectorPosition(Point relOrigin, float vecDist, float angle, float yHeight, int xPosition, boolean isWord) {
+    public void setVectorPosition(Point relOrigin, float vecDist, float angle, float yHeight, int xPosition, boolean isWord, float widthBubble) {
 
         mDistance = vecDist;
         mAngle    = angle;
 
-
-
         if(isWord) {
             float xOrigin = relOrigin.x;
 
+            //Choose a random position in the first half of row (subtracts width of bubble to ensure bubble with fit
+            //in half
             if(xPosition == 0) {
-                xOrigin = xOrigin / 2;
+                float endX = xOrigin - widthBubble;
+                float result = (float) Math.random() * (endX);
+                xOrigin = result;
             }
-            else if(xPosition == 1) {
-                xOrigin = xOrigin * 3/2;
-            }
+            //Choose a random position in the first half of row (subtracts width of bubble to ensure bubble with fit
+            //in half
+            //xPosition == 1
             else {
-                System.out.println("Derek Tam: BUG");
+                float endX = 2 * xOrigin - widthBubble;
+                float result = (float) Math.random() * (endX - xOrigin) + xOrigin;
+                xOrigin =result;
             }
             mPosition.x = xOrigin;
             mPosition.y = yHeight;
@@ -347,7 +351,6 @@ public class CBubble extends FrameLayout {
         }
         else {
             mText.setText(text);
-            System.out.println("Derek Tam: text is " + text);
             mText.setVisibility(View.VISIBLE);
         }
 
