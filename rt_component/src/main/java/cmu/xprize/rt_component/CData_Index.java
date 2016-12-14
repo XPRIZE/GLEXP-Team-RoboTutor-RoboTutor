@@ -29,11 +29,18 @@ import cmu.xprize.util.JSON_Helper;
 
 public class CData_Index implements ILoadableObject{
 
+//    The set name becomes the Story_Index filename e.g.  rtasset_stories_sw_set1.json
+
+//    E:\Projects\GitHUB\RTAsset_Publisher\rtasset_stories_sw_set1.1.1.0\assets\story\sw\level1\level1_1
+//    E:\Projects\GitHUB\RTAsset_Publisher\rtasset_stories_sw_set1.1.1.0\assets\audio\sw\cmu\xprize\story_reading\level1
+
+//    "storyName":"Ajali mbaya", "storyFolder": "Level1_1", "levelFolder":"1", "viewtype":"ASB_Data"}
+
     // json loadable
-    public String        story;
-    public String        folder;
-    public String        level;
-    public String        viewtype;
+    public String       storyName;
+    public String       levelFolder;  // Note: The associated audio resources are assumed to reside in ...assets\audio\sw\cmu\xprize\story_reading\<levelFolder>
+    public String       storyFolder;
+    public String       viewtype;
 
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {

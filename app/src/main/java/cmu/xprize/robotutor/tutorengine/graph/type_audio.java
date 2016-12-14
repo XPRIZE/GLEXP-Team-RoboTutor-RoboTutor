@@ -50,6 +50,7 @@ public class type_audio extends type_action implements IMediaListener {
     private String mSourcePath;
     private String mResolvedName;
     private String mPathResolved;
+    private String mLocation;
 
     private boolean _useHashName = true;
 
@@ -223,7 +224,7 @@ public class type_audio extends type_action implements IMediaListener {
         // This allocates a MediaPController for use by this audio_node. The media controller
         // is a managed global resource of CMediaManager
         //
-        mPlayer = mMediaManager.attachMediaPlayer(mPathResolved, owner);
+        mPlayer = mMediaManager.attachMediaPlayer(mPathResolved, mLocation, owner);
 
         mPreLoaded = true;
     }
@@ -349,6 +350,7 @@ public class type_audio extends type_action implements IMediaListener {
     public void loadJSON(JSONObject jsonObj, IScope2 scope) {
 
         String langPath;
+        String assetPath;
 
         super.loadJSON(jsonObj, scope);
 
@@ -357,7 +359,7 @@ public class type_audio extends type_action implements IMediaListener {
 
         // If we have set a language then update the sound source to point to the correct subdir
         // If no language set then use whichever language is used in the Flash XML
-        // An audio source can force a language by setting "lang" to a known language ID
+        // An audio source can force a language by setting "lang" to a known language Feature ID
         // e.g. LANG_SW | LANG_EN | LANG_FR
 
         mMediaManager = CMediaController.getManagerInstance(_scope.tutor());
@@ -365,9 +367,15 @@ public class type_audio extends type_action implements IMediaListener {
         langPath = mMediaManager.mapSoundPackage(_scope.tutor(), soundpackage, lang);
 
         // Update the path to the sound source file
+        // #Mod Dec 13/16 - Moved audio/storyName assets to external storage
         //
         mSoundSource = TCONST.AUDIOPATH + "/" + langPath + "/" + soundsource;
-        mSourcePath  = TCONST.TUTORROOT + "/" + TCONST.TDATA + "/" + mSoundSource;
+
+        assetPath = mMediaManager.mapPackagePath(_scope.tutor(), soundpackage);
+
+        mSourcePath  =  assetPath + "/" + mSoundSource;
+
+        mLocation = mMediaManager.mapPackageLocation(_scope.tutor(), soundpackage);
     }
 
 }

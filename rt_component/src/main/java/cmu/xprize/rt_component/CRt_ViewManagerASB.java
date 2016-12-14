@@ -34,6 +34,7 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -76,7 +77,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private int                     mEvenIndex;
     private int                     mCurrViewIndex;
 
-    // state for the current story - African Story Book
+    // state for the current storyName - African Story Book
 
     private String                  mCurrHighlight = "";
     private int                     mCurrPage;
@@ -110,6 +111,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private String                  futureSentences        = "";
     private boolean                 showFutureContent      = true;
     private boolean                 listenFutureContent    = false;
+    private String                  assetLocation;
 
     private ArrayList<String>       wordsSpoken;
     private ArrayList<String>       futureSpoken;
@@ -156,24 +158,23 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     }
 
 
-
-
     /**
-     *   The startup sequence for a new story is:
+     *   The startup sequence for a new storyName is:
      *   Set - storyBooting flag to inhibit startListening so the script can complete whatever
      *   preparation is required before the listener starts.  Otherwise you get junk hypotheses.
      *
      *   Once the script has completed its introduction etc. it calls nextline to cause a line increment
-     *   which resets storyBooting and enables the listener for the first sentence in the story.
+     *   which resets storyBooting and enables the listener for the first sentence in the storyName.
      *
      * @param owner
      * @param assetPath
      */
-    public void initStory(IVManListener owner, String assetPath) {
+    public void initStory(IVManListener owner, String assetPath, String location) {
 
-        mOwner       = owner;
-        mAsset       = assetPath;
-        storyBooting = true;
+        mOwner        = owner;
+        mAsset        = assetPath;
+        storyBooting  = true;
+        assetLocation = location;
 
         mParent.setFeature(TCONST.FTR_STORY_STARTING, TCONST.ADD_FEATURE);
 
@@ -352,8 +353,17 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     private void configurePageImage() {
 
+        InputStream in;
+
         try {
-            InputStream in = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image);
+            if (assetLocation.equals(TCONST.EXTERN)) {
+
+                in = new FileInputStream(mAsset + data[mCurrPage].image);
+
+            } else {
+
+                in = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image);
+            }
 
             mPageImage.setImageBitmap(BitmapFactory.decodeStream(in));
 
@@ -532,7 +542,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         //
         UpdateDisplay();
 
-        // Once past the story initialization stage - Listen for the target word -
+        // Once past the storyName initialization stage - Listen for the target word -
         //
         if(!storyBooting)
             startListening();
@@ -586,7 +596,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     /**
      *  Configure for specific Page
-     *  Assumes current story
+     *  Assumes current storyName
      *
      * @param pageIndex
      */

@@ -30,7 +30,7 @@ import cmu.xprize.util.TCONST;
 
 
 /**
- * This represents the top level tutor graph object
+ * This represents the top levelFolder tutor graph object
  */
 public class scene_graph extends scene_node implements ILoadableObject2 {
 

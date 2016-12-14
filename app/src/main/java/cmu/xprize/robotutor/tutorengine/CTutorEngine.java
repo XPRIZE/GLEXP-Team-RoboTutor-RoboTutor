@@ -49,7 +49,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.RoboTutor;
 
 /**
- * The tutor engine provides top-level control over the tutor lifecycle and can support multiple
+ * The tutor engine provides top-levelFolder control over the tutor lifecycle and can support multiple
  * simultaneous tutors.  On creation the tutor engine will instantiate and launch the DefTutor
  * specified in the TCONST.EDESC Json tutor engine specification file.
  *
@@ -316,7 +316,7 @@ public class CTutorEngine implements ILoadableObject2 {
         Intent extIntent = new Intent();
         String extPackage;
 
-        // Allow the intent to override any engine level datasource defaults
+        // Allow the intent to override any engine levelFolder datasource defaults
         //
         if(!dataSourceJson.equals(TCONST.NO_DATASOURCE)) {
 
@@ -329,7 +329,7 @@ public class CTutorEngine implements ILoadableObject2 {
                 e.printStackTrace();
             }
         }
-        // If no datasource defined in the external launch request then try and find a engine level default
+        // If no datasource defined in the external launch request then try and find a engine levelFolder default
         //
         else {
             if(defDataSources != null) {

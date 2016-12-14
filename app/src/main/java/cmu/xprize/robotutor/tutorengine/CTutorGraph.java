@@ -157,7 +157,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
                 if(scene.children != null) {
                     Iterator<?> tObjects = scene.children.entrySet().iterator();
 
-                    // Perform component level cleanup first
+                    // Perform component levelFolder cleanup first
                     //
                     while(tObjects.hasNext() ) {
                         Map.Entry entry = (Map.Entry) tObjects.next();

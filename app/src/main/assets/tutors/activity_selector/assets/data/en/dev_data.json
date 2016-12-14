@@ -5,7 +5,7 @@
       "name":"ACTIVITY_SELECT",
       "layoutID":"ask_activity_selector",
 
-      // NOTE: define "novar" on audio assets to exclude them from instantiating scope level variables.
+      // NOTE: define "novar" on audio assets to exclude them from instantiating scope levelFolder variables.
       //
       "items":[
         {"datatype":"IMAGEBUTTON",

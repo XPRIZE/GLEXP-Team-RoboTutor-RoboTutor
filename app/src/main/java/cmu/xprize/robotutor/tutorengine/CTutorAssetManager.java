@@ -21,6 +21,7 @@ package cmu.xprize.robotutor.tutorengine;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Environment;
 import android.util.Log;
@@ -30,16 +31,41 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.zip.ZipFile;
 
 import cmu.xprize.robotutor.RoboTutor;
+import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
 import cmu.xprize.robotutor.tutorengine.util.Zip;
+import cmu.xprize.util.TCONST;
+
+import static cmu.xprize.robotutor.tutorengine.CTutorEngine.getActivity;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.ASSET_DOWNVERSION;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.ASSET_FIRSTRELEASE;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.ASSET_UPVERSION;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.ASSET_VERSIONMATCH;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.DEL_MATCH_SET;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.DEL_NO_MATCH;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.DEL_RELEASE_MATCH;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.HAS_NOMATCH;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.ASSET_TO_MATCH;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.INDEX_ASSET;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.HAS_ORPHAN_MATCH;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.HAS_RELEASE_MATCH;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.HAS_UPDATE_MATCH;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.INDEX_INSTALLED;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.INDEX_RELEASE;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.INDEX_UPDATE;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.ORPHAN_MATCH;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.RELEASE_MATCH;
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.UPDATE_MATCH;
 
 
 public class CTutorAssetManager {
 
     private Context      mContext;
     private AssetManager mAssetManager;
+    private CAssetObject mAssetObject;
 
     private final String TAG = "CTutorAssetManager";
 
@@ -62,8 +88,8 @@ public class CTutorAssetManager {
             files   = mAssetManager.list(baseAsset);
             outPath = RoboTutor.APP_PRIVATE_FILES;
 
-            // catch the special case where we are copying a single folder from assets root
-            // as we may need to precreate the base folder.
+            // catch the special case where we are copying a single storyFolder from assets root
+            // as we may need to precreate the base storyFolder.
 
             if(!baseAsset.equals("") && files.length > 0) {
 
@@ -109,10 +135,10 @@ public class CTutorAssetManager {
         String[] files = null;
 
         // Catch the special case where we are copying a single file from assets root (first pass)
-        // i.e. skip to file copy if this isn't a folder
+        // i.e. skip to file copy if this isn't a storyFolder
         if(folderContents.length > 0) {
 
-            // Paths are relative so don't put '/' path sep on files in base folder
+            // Paths are relative so don't put '/' path sep on files in base storyFolder
             if (inputPath.length() > 0)
                         inputPath += "/";
 
@@ -190,7 +216,297 @@ public class CTutorAssetManager {
     }
 
 
+    private String[] listFolder(String path) {
+
+        File folder = new File(path);
+        int  i1 = 0;
+
+        File[] listOfFiles = folder.listFiles();
+        String[] names = new String[listOfFiles.length];
+
+        System.out.println("Listing storyFolder: " + path);
+
+        for (File fileObj : listOfFiles) {
+
+            names[i1++] = fileObj.getName();
+
+            if (fileObj.isFile()) {
+                System.out.println("File " + fileObj.getName());
+            } else if (fileObj.isDirectory()) {
+                System.out.println("Folder " + fileObj.getName());
+            }
+        }
+
+        return names;
+    }
+
+
+
+
+    private void doUpateMatch(File assetFile, ArrayList assetVersion, int matchConstraint) {
+
+
+        switch (mAssetObject.testConstraint(TCONST.ASSET_UPDATE_VERSION, ASSET_TO_MATCH, matchConstraint)) {
+
+            case ASSET_FIRSTRELEASE:
+
+                switch(matchConstraint) {
+
+                    // There are currently no matching asset found in the storyFolder
+                    //
+                    case ASSET_TO_MATCH:
+                    case RELEASE_MATCH:
+                        mAssetObject.deleteAsset(ASSET_TO_MATCH);
+                        break;
+
+                    // There is currently a release-match - i.e. a full asset distribution zip
+                    //
+                    case UPDATE_MATCH:
+                        // We have found the matching base release for the existing update
+                        //
+                        mAssetObject.addMatch(RELEASE_MATCH, assetFile, assetVersion, DEL_MATCH_SET);
+                        break;
+
+                    // There is currently an orphan-match - i.e. an update match that doesn't have a
+                    // matching or installed full release.
+                    //
+                    case ORPHAN_MATCH:
+                        // We have found the matching base release for the existing update
+                        //
+                        mAssetObject.addMatch(RELEASE_MATCH, assetFile, assetVersion, DEL_MATCH_SET);
+                        mAssetObject.adoptOrphanUpdate();
+                        break;
+                }
+                break;
+
+            case ASSET_VERSIONMATCH:
+
+                mAssetObject.deleteAsset(ASSET_TO_MATCH);
+                break;
+
+            case ASSET_DOWNVERSION:
+
+                if(matchConstraint == HAS_UPDATE_MATCH) {
+
+                    if (mAssetObject.getVersionField(ASSET_TO_MATCH, TCONST.ASSET_UPDATE_VERSION) == 0) {
+
+                        mAssetObject.addMatch(RELEASE_MATCH, assetFile, assetVersion, DEL_RELEASE_MATCH);
+                    }
+                }
+                else {
+                    mAssetObject.deleteAsset(ASSET_TO_MATCH);
+                }
+                break;
+
+            case ASSET_UPVERSION:
+                // we are deleting a release-match and possibly replacing an update-match
+                // so we attempt to delete both downversions
+                //
+                mAssetObject.addMatch(ORPHAN_MATCH, assetFile, assetVersion, DEL_MATCH_SET);
+
+                switch(matchConstraint) {
+
+                    // There are currently no matching asset found in the storyFolder
+                    //
+                    case INDEX_ASSET:
+                        mAssetObject.addMatch(UPDATE_MATCH, assetFile, assetVersion, DEL_NO_MATCH);
+                        break;
+
+                    // There is currently a release-match - i.e. a full asset distribution zip
+                    //
+                    case RELEASE_MATCH:
+                        if(mAssetObject.queryMatch(UPDATE_MATCH)) {
+                            doUpateMatch(assetFile, assetVersion, UPDATE_MATCH);
+                        }
+                        else {
+                            mAssetObject.addMatch(UPDATE_MATCH, assetFile, assetVersion, DEL_NO_MATCH);
+                        }
+                        break;
+
+                    // There is currently a release-match - i.e. a full asset distribution zip
+                    //
+                    case UPDATE_MATCH:
+                        break;
+
+                    // There is currently an orphan-match - i.e. an update match that doesn't have a
+                    // matching or installed full release.
+                    //
+                    case ORPHAN_MATCH:
+                        break;
+                }
+                break;
+
+            default:
+                mAssetObject.deleteAsset(ASSET_TO_MATCH);
+                break;
+        }
+    }
+
+
+    private void doReleaseMatch(File assetFile, ArrayList assetVersion, int matchConstraint) {
+
+        switch (mAssetObject.testConstraint(TCONST.ASSET_RELEASE_VERSION, ASSET_TO_MATCH, matchConstraint)) {
+
+            case ASSET_VERSIONMATCH:
+                doUpateMatch(assetFile, assetVersion, matchConstraint);
+                break;
+
+            case ASSET_DOWNVERSION:
+                mAssetObject.deleteAsset(ASSET_TO_MATCH);
+                break;
+
+            case ASSET_UPVERSION:
+
+                if (mAssetObject.getVersionField(ASSET_TO_MATCH, TCONST.ASSET_UPDATE_VERSION) == 0) {
+
+                    mAssetObject.addMatch(RELEASE_MATCH, assetFile, assetVersion, DEL_MATCH_SET);
+                }
+                else {
+                    mAssetObject.addMatch(ORPHAN_MATCH, assetFile, assetVersion, DEL_MATCH_SET);
+                }
+                break;
+        }
+    }
+
+
+    /**
+     * Search the DOWNLOAD storyFolder for matching asset files
+     *
+     * Find the highest matching version - available
+     *
+     * @param assetName
+     * @param installConstraint
+     * @return
+     */
+    private void updateAssetPackage(String assetName, ArrayList<Integer> installConstraint) {
+
+        CAssetObject assetObject  = null;
+        boolean      killAsset    = false;
+
+        String[]  folderList   = null;
+        File      assetFile    = null;
+        ArrayList foundRelease = null;
+
+        // We add a conveience node to the AssetObject with the installed version spec
+        // This is used in INDEX_INSTALLED comparisons in HAS_NOMATCH
+        //
+        mAssetObject = new CAssetObject();
+        mAssetObject.addMatch(INDEX_INSTALLED, null, installConstraint, DEL_NO_MATCH);
+
+        folderList = listFolder(RoboTutor.DOWNLOAD_PATH);
+
+        for (String objectname : folderList) {
+
+            if (objectname.toLowerCase().startsWith(assetName)) {
+
+                String srcPath = RoboTutor.DOWNLOAD_PATH + File.separator + objectname;
+                assetFile     = new File(srcPath);
+
+                // Extract the Foind assets version spec and assign a File object
+                //
+                ArrayList assetVersion = mAssetObject.setConstraintByName(ASSET_TO_MATCH, objectname);
+                mAssetObject.setAssetFile(ASSET_TO_MATCH, assetFile);
+
+                // i.e. the app can't use an older asset version than it supports.
+                //
+                switch (mAssetObject.testConstraint(TCONST.ASSET_CODE_VERSION, ASSET_TO_MATCH, INDEX_INSTALLED)) {
+
+                    case ASSET_VERSIONMATCH:
+
+                        switch(mAssetObject.queryMatch()) {
+
+                            // There are currently no matching asset found in the storyFolder
+                            //
+                            case HAS_NOMATCH:
+                                doReleaseMatch(assetFile, assetVersion, INDEX_INSTALLED);
+                                break;
+
+                            // There is currently a release-match - i.e. a full asset distribution zip
+                            //
+                            case HAS_RELEASE_MATCH:
+
+                                doReleaseMatch(assetFile, assetVersion, RELEASE_MATCH);
+                                break;
+
+                            // There is currently a release-match - i.e. a full asset distribution zip
+                            //
+                            case HAS_UPDATE_MATCH:
+
+                                doReleaseMatch(assetFile, assetVersion, UPDATE_MATCH);
+                                break;
+
+                            // There is currently an orphan-match - i.e. an update match that doesn't have a
+                            // matching or installed full release.
+                            //
+                            case HAS_ORPHAN_MATCH:
+
+                                doReleaseMatch(assetFile, assetVersion, ORPHAN_MATCH);
+                                break;
+                        }
+                        break;
+
+                        // The asset file doesn't match the required version for the current tutorEngine
+                        //
+                    default:
+
+                        // Delete up and down versions -
+                        mAssetObject.deleteAsset(ASSET_TO_MATCH);
+                        break;
+                }
+            }
+        }
+    }
+
+
+    /**
+     * manage install sequencing -  asset_fullrelease / asset_incremental
+     *
+     *
+     * @param assetName
+     * @param assetFolder
+     */
+    public void updateAssetPackage(String assetName, String assetFolder) {
+
+        SharedPreferences prefs = RoboTutor.ACTIVITY.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        int assetFullOrdinal = prefs.getInt(assetName + TCONST.ASSET_RELEASE_VERSION, 0);
+        int assetIncrOrdinal = prefs.getInt(assetName + TCONST.ASSET_UPDATE_VERSION, 0);
+
+        // Build a constraint that limits us to looking for compatible ASSET_CODE_VERSION's i.e.
+        // the Robotutor_Version_Spec<ASSET_VERSION> == NamedAsset_Version_Spec<ASSET_CODE_VERSION>
+        // with full releases that are greater or match what we already have and
+        // have a greater or matching incremental release
+        //
+        ArrayList<Integer> constraint = new ArrayList<>();
+
+        constraint.add(0,(int)RoboTutor.VERSION_SPEC.get(TCONST.ASSET_VERSION));
+        constraint.add(1, assetFullOrdinal);
+        constraint.add(2, assetIncrOrdinal);
+
+        updateAssetPackage(assetName, constraint);
+
+        if (mAssetObject.queryMatch(HAS_ORPHAN_MATCH)) {
+
+        }
+        else if (mAssetObject.queryMatch(HAS_RELEASE_MATCH)) {
+            mAssetObject.unPackAssets(assetName, assetFolder, INDEX_RELEASE);
+
+            editor.putInt(assetName + TCONST.ASSET_RELEASE_VERSION, mAssetObject.getVersionField(INDEX_RELEASE, TCONST.ASSET_RELEASE_VERSION));
+            editor.putInt(assetName + TCONST.ASSET_UPDATE_VERSION , 0);
+            editor.apply();
+        }
+        else if (mAssetObject.queryMatch(HAS_UPDATE_MATCH)) {
+            mAssetObject.unPackAssets(assetName, assetFolder, INDEX_UPDATE);
+
+            editor.putInt(assetName + TCONST.ASSET_UPDATE_VERSION , mAssetObject.getVersionField(INDEX_UPDATE, TCONST.ASSET_UPDATE_VERSION));
+            editor.apply();
+        }
+    }
+
+
     public void extractAsset(String zipName, String targetFolder) throws IOException {
+
         String zipPath     = RoboTutor.APP_PRIVATE_FILES + "/" + zipName;
         String extractPath = RoboTutor.APP_PRIVATE_FILES + targetFolder;
 
@@ -200,7 +516,7 @@ public class CTutorAssetManager {
         try {
 
             Zip _zip = new Zip(zipFile);
-            _zip.unzip(extractPath);
+            _zip.extractAll(extractPath);
             _zip.close();
             file.delete();
 
@@ -208,4 +524,5 @@ public class CTutorAssetManager {
             Log.e(TAG, "ERROR: failed extraction" + zipName + " - reason: " + ie);
         }
     }
+
 }

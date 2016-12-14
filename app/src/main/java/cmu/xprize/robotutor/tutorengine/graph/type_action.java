@@ -163,7 +163,7 @@ public class type_action extends scene_node {
             if (cmd != null) {
                 switch (cmd) {
 
-                    // System level command to launch a new Tutor Instance.
+                    // System levelFolder command to launch a new Tutor Instance.
                     //
                     case TCONST.CMD_LAUNCH:
                         try {

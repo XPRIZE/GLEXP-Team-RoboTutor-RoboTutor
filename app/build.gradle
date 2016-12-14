@@ -40,7 +40,7 @@ android {
         }
         debug {
             buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, FALSE
-            buildConfigField BOOLEAN, NO_ASR_APPS, TRUE
+            buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_UNDEFINED
 
             debuggable true
@@ -67,15 +67,6 @@ android {
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
         }
     }
-
-    task hashTask(type: Exec) {
-
-        commandLine 'java', '-jar', 'filenamehasher.jar'
-//        workingDir "$projectDir"
-//        println 'do prebuild stuff:'
-    }
-
-    preBuild.dependsOn hashTask
 
     lintOptions {
         // set to true to turn off analysis progress reporting by lint
