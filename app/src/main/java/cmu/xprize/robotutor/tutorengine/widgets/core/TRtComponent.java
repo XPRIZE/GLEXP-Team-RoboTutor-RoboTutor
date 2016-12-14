@@ -20,6 +20,8 @@
 package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.IntegerRes;
 import android.util.AttributeSet;
 
 import org.json.JSONObject;
@@ -105,6 +107,8 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
 
 
     /**
+     * Note: We make a tacit assumption that SOURCEFILE (i.e. [file]) type descriptors have all their
+     * assets external - i.e. in the public sdcard/RoboTutor_Assets folder
      *
      * @param dataNameDescriptor
      */
@@ -112,9 +116,35 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
     public void setDataSource(String dataNameDescriptor) {
 
         try {
+            // Note that here the {file] type semantics is for an external file and [asset] is used
+            // for internal assets.
+            //
+            // TODO: work toward consistent [file] semantics as externally sourced files
+            //
             if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
-                String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
+                // The story index is appended as a int
+                String[] storyval   = dataNameDescriptor.split(":");
+                int      storyIndex = Integer.parseInt(storyval[1]);
+
+                String dataFile = storyval[0].substring(TCONST.SOURCEFILE.length()).toLowerCase();
+
+                DATASOURCEPATH = TCONST.ROBOTUTOR_ASSETS + "/" +  TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+
+                String jsonData = JSON_Helper.cacheData(DATASOURCEPATH + dataFile, TCONST.DEFINED);
+
+                // Load the datasource in the component module - i.e. the superclass
+                //
+                loadJSON(new JSONObject(jsonData), mTutor.getScope() );
+
+                configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
+                setStory(dataSource[storyIndex].storyName, TCONST.EXTERN);
+
+            }
+
+            else if (dataNameDescriptor.startsWith(TCONST.ASSETFILE)) {
+
+                String dataFile = dataNameDescriptor.substring(TCONST.ASSETFILE.length());
 
                 // Generate a langauage specific path to the data source -
                 // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
@@ -130,7 +160,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
                 loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 
                 configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
-                setStory(dataSource[0].story);
+                setStory(dataSource[0].storyName, TCONST.ASSETS);
 
             } else if (dataNameDescriptor.startsWith("db|")) {
             } else if (dataNameDescriptor.startsWith("{")) {
@@ -183,9 +213,9 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
      *
      * @param storyName
      */
-    public void setStory(String storyName) {
+    public void setStory(String storyName, String assetLocation) {
 
-        super.setStory(storyName);
+        super.setStory(storyName, assetLocation);
     }
 
 

@@ -28,11 +28,35 @@ import java.util.HashMap;
 
 public class TCONST {
 
+    // RoboTutor Version spec index meaning 0.1.2.3
+    // Given 4.23.2.3
+    // Major release 4 | Feature release 23 | Fix release 2 | compatible Asset Version 3
+    //
+    public static final int MAJOR_VERSION   = 0;
+    public static final int FEATURE_RELEASE = 1;
+    public static final int FIX_RELEASE     = 2;
+    public static final int ASSET_VERSION   = 3;
+
+
+    // Spec elements for asset zip files releases
+    // For assets to be compatible with Robotutor the ASSET_CODE_VERSION must match the ASSET_VERSION
+    //
+    public static final int ASSET_CODE_VERSION    = 0;
+    public static final int ASSET_RELEASE_VERSION = 1;
+    public static final int ASSET_UPDATE_VERSION  = 2;
+
+
+    // These represent the base name for assets delivered in Zip files and loaded
+    // through calls to updateZipAsset
+
+    // They will arrive in files named - RoboTutor_AssetA.0.1.0.zip
+    //
+    public static final String ROBOTUTOR_ASSET_PATTERN = "RTAsset_";
+
     public static final String COMMAND      = "COMMAND";
     public static final String MODULE       = "MODULE";
     public static final String NODE         = "NODE";
     public static final String CONDITION    = "CONDITION";
-
 
     public static final String NUMDATA_HEADER   = "{\n" + "\"dataSource\": ";
     public static final boolean ADD_FEATURE     = true;
@@ -189,7 +213,11 @@ public class TCONST {
     // Loader Constants
     static final public String TUTORROOT          = "tutors";
 
-    static final public String ALL_ASSETS         = "";
+    static final public String BASE_ASSETS        = "assets";
+    public static final String STORY_ASSETS       = "story";
+    static final public String EXTERNAL           = "external";
+    static final public String ROBOTUTOR_ASSETS   = "sdcard/RoboTutor_Assets/assets";
+
 
     static final public String LTK_PROJECT_ASSETS = "projects";
     static final public String LTK_GLYPH_ASSETS   = "glyphs";
@@ -381,9 +409,11 @@ public class TCONST {
     public static final int INSPEECH       = 1;
     public static final int SAYWORD        = 2;
 
-    public static final String STORYDATA   = "story_data.json";
+    public static final String STORYDATA   = "storydata.json";
     public static final String STORYINDEX  = "story_index.json";
     public static final String SOURCEFILE  = "[file]";
+    public static final String ASSETFILE   = "[asset]";
+
 
     public static final String TTS         = "TTS";
     public static final String ASR         = "ASR";
@@ -403,9 +433,10 @@ public class TCONST {
     public static final String FW_EOI      = "FW_EOI";
     public static final String FW_RESPONSE = "FW_RESPONSE";
 
-    public static final String WRITINGTUTOR_FOLDER = "/WritingTutor/";
-    public static final String ROBOTUTOR_FOLDER    = "/RoboTutor/";
-    public static final String GLYPHS_FOLDER       = "/glyphs/";
+    public static final String WRITINGTUTOR_FOLDER      = "/WritingTutor/";
+    public static final String ROBOTUTOR_FOLDER         = "/RoboTutor/";
+    public static final String ROBOTUTOR_ASSET_FOLDER   = "/RoboTutor_Assets/";
+    public static final String GLYPHS_FOLDER            = "/glyphs/";
 
 
     // Listener Control message types

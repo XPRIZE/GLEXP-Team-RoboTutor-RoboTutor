@@ -31,7 +31,10 @@ allprojects {
         rtTargetSdkVersion=22
 
         rtVersionCode=1
-        rtVersionName="0.10.3"
+
+        // Semantic versioning description:
+        // <Milestone release> <Feature Release> <Patch release> <Asset Compatibility ID>
+        rtVersionName="0.11.0.1"
     }
 }
 

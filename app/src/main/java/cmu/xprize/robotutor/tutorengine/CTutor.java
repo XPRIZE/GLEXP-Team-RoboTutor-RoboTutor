@@ -64,7 +64,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
     private boolean traceMode = false;
 
-    // This is the local tutor scope in which all top level objects and variables are defined
+    // This is the local tutor scope in which all top levelFolder objects and variables are defined
     // May have child scopes for local variables -
 
     private TScope                        mTutorScope;

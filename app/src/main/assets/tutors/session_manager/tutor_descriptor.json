@@ -1,10 +1,10 @@
 {
 //    "language":"LANG_SW",
 
-	//Tutor level data bindings   - HashMap<String, defdata_scene
+	//Tutor levelFolder data bindings   - HashMap<String, defdata_scene
 	"dataSource": {
 		"scene_bindings" : {
-			//Scene level data bindings  - databindings[]
+			//Scene levelFolder data bindings  - databindings[]
 			"session_manager": {
 				"type": "SCENEDATA_MAP",
 				"databindings": [

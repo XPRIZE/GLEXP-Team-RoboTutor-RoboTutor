@@ -70,8 +70,8 @@ public class CGlyph implements ILoadableObject, Cloneable {
     private CStrokeInfo _strokeInfo;
     private long                  _startTime;
     private long                  _lastTime;
-    private CStroke _currentStroke;
-    private CAffineXform _reBuildXform;
+    private CStroke               _currentStroke;
+    private CAffineXform          _reBuildXform;
     private CGlyphMetrics         _metrics         = new CGlyphMetrics();
     private boolean               _isDirty         = false;
 
