@@ -20,11 +20,14 @@
 package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.annotation.IntegerRes;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
@@ -40,19 +43,25 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.rt_component.CRt_Component;
 import cmu.xprize.rt_component.IRtComponent;
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.IBehaviorManager;
+import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
 
-public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRtComponent, IDataSink {
+public class TRtComponent extends CRt_Component implements IBehaviorManager, ITutorObjectImpl, Button.OnClickListener, IRtComponent, IDataSink, IEventSource {
 
     private CTutor           mTutor;
     private CObjectDelegate  mSceneObject;
     private CMediaManager    mMediaManager;
 
+    private HashMap<String, String> volatileMap = new HashMap<>();
+    private HashMap<String, String> stickyMap = new HashMap<>();
+
     private String           speakBehavior;
     private String           pageFlipBehavior;
+    private String           clickBehavior;
 
 
     static private String TAG = "TRtComponent";
@@ -104,6 +113,168 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
         mTutor.getScope().addUpdateVar(name() + varName, new TInteger(value));
 
     }
+
+
+    //************************************************************************
+    //************************************************************************
+    // IBehaviorManager Interface START
+
+    public void setVolatileBehavior(String event, String behavior) {
+
+        enableOnClickBehavior(event, behavior);
+
+        if (behavior.toUpperCase().equals(TCONST.NULL)) {
+
+            if (volatileMap.containsKey(event)) {
+                volatileMap.remove(event);
+            }
+        } else {
+            volatileMap.put(event, behavior);
+        }
+    }
+
+
+    public void setStickyBehavior(String event, String behavior) {
+
+        enableOnClickBehavior(event, behavior);
+
+        if (behavior.toUpperCase().equals(TCONST.NULL)) {
+
+            if (stickyMap.containsKey(event)) {
+                stickyMap.remove(event);
+            }
+        } else {
+            stickyMap.put(event, behavior);
+        }
+    }
+
+
+    // Execute script target if behavior is defined for this event
+    //
+    @Override
+    public boolean applyBehavior(String event) {
+
+        boolean result = false;
+
+        if(!(result = super.applyBehavior(event))) {
+
+            if (volatileMap.containsKey(event)) {
+                Log.d(TAG, "Processing WC_ApplyEvent: " + event);
+                applyBehaviorNode(volatileMap.get(event));
+
+                volatileMap.remove(event);
+
+                result = true;
+
+            } else if (stickyMap.containsKey(event)) {
+
+                applyBehaviorNode(stickyMap.get(event));
+
+                result = true;
+            }
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Apply Events in the Tutor Domain.
+     *
+     * @param nodeName
+     */
+    @Override
+    public void applyBehaviorNode(String nodeName) {
+        IScriptable2 obj = null;
+
+        if (nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
+
+            try {
+                obj = mTutor.getScope().mapSymbol(nodeName);
+
+                if (obj != null) {
+
+                    switch(obj.getType()) {
+
+                        case TCONST.SUBGRAPH:
+
+                            mTutor.getSceneGraph().post(this, TCONST.SUBGRAPH_CALL, nodeName);
+                            break;
+
+                        case TCONST.MODULE:
+
+                            // Disallow module "calls"
+                            Log.e(TAG, "MODULE Behaviors are not supported");
+                            break;
+
+                        default:
+                            obj.preEnter();
+                            obj.applyNode();
+                            break;
+                    }
+                }
+
+            } catch (Exception e) {
+                // TODO: Manage invalid Behavior
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    /**
+     * Do button like behavior defined for component itself - i.e. click anywhere
+     *
+     * @param v
+     */
+    @Override
+    public void onClick(View v) {
+
+        if(v == this) {
+
+            applyBehavior(TCONST.ON_CLICK);
+        }
+
+    }
+
+
+    private void enableOnClickBehavior(String event, String behavior) {
+
+        if(event.toUpperCase().equals(TCONST.ON_CLICK)) {
+
+            if (behavior.toUpperCase().equals(TCONST.NULL)) {
+                setOnClickListener(null);
+            } else {
+                setOnClickListener(this);
+            }
+        }
+    }
+
+    // IBehaviorManager Interface END
+    //************************************************************************
+    //************************************************************************
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // IEventSource Interface START
+
+
+    @Override
+    public String getEventSourceName() {
+        return name();
+    }
+
+    @Override
+    public String getEventSourceType() {
+        return "Reading_Component";
+    }
+
+
+    // IEventSource Interface END
+    //************************************************************************
+    //************************************************************************
 
 
     /**
@@ -317,10 +488,6 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
     }
 
 
-    public void setButtonBehavior(String command) {
-        mSceneObject.setButtonBehavior(command);
-    }
-
 
     @Override
     public void zoomInOut(Float scale, Long duration) {
@@ -413,29 +580,6 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
         mViewManager.continueListening();
     }
 
-
-    /**
-     *  Apply Events in the Tutor Domain.
-     *
-     * @param nodeName
-     */
-    @Override
-    protected void applyEventNode(String nodeName) {
-        IScriptable2 obj = null;
-
-        if(nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
-
-            try {
-                obj = mTutor.getScope().mapSymbol(nodeName);
-                obj.preEnter();
-                obj.applyNode();
-
-            } catch (Exception e) {
-                // TODO: Manage invalid Behavior
-                e.printStackTrace();
-            }
-        }
-    }
 
     // Scripting Interface  End
     //************************************************************************

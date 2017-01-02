@@ -244,6 +244,37 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
 
 
 
+    //************************************************************************
+    //************************************************************************
+    // IBehaviorManager Interface START
+
+    /**
+     * Manage component defined (i.e. specific) events
+     *
+     * @param event
+     * @return  true of event handled
+     */
+    public boolean applyBehavior(String event){
+
+        boolean result = false;
+        return result;
+    }
+
+    /**
+     * Overridden in TClass to fire graph behaviors
+     *
+     * @param nodeName
+     */
+    public void applyBehaviorNode(String nodeName) {
+    }
+
+
+    // IBehaviorManager Interface END
+    //************************************************************************
+    //************************************************************************
+
+
+
     //*************************************************
     //****** Activity state support START
 
@@ -399,6 +430,7 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     public void speakTargetSentence() {   // to speak the entire Target word sentence
 
     }
+
 
     /**
      */

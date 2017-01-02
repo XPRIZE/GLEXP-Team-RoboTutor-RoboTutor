@@ -28,6 +28,15 @@ import java.util.HashMap;
 
 public class TCONST {
 
+    // These features are based on the current tutor selection model
+    // When no tutor has been selected it should run the tutor select
+    // and when it finishes it should run the difficulty select until
+    // the user wants to select another tutor.
+    //
+
+    public static final String FTR_TUTOR_SELECT       = "FTR_TUTOR_SELECT";
+    public static final String FTR_DIFFICULTY_SELECT  = "FTR_DIFFICULTY_SELECT";
+
     // RoboTutor Version spec index meaning 0.1.2.3
     // Given 4.23.2.3
     // Major release 4 | Feature release 23 | Fix release 2 | compatible Asset Version 3
@@ -146,6 +155,13 @@ public class TCONST {
     public static final String RIGHTLANE           = "RIGHT";
 
     public static final String STORY_INTENT        = "story_reading";
+    public static final String ON_CLICK            = "ON_CLICK";
+
+    public static final String SKILL_WRITING    = "letters";
+    public static final String SKILL_READING    = "stories";
+    public static final String SKILL_MATH       = "numbers";
+    public static final String SKILL_SHAPES     = "shapes";
+    public static final String SKILL_UNSET      = "SKILL_UNSET";
 
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();

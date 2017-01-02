@@ -52,7 +52,8 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
     protected ArrayList<View>       buttonList;
 
     protected IButtonController     mButtonController;
-    protected boolean               mSelected = false;
+
+    static private boolean          SINGLE_SELECT = false;
 
     protected LocalBroadcastManager bManager;
 
@@ -90,7 +91,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
     }
 
 
-    public void setmButtonController(IButtonController controller) {
+    public void setButtonController(IButtonController controller) {
 
         mButtonController = controller;
     }
@@ -214,12 +215,12 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
     @Override
     public void onClick(View view) {
 
-        enableButtons(false);
+        if(SINGLE_SELECT)
+            enableButtons(false);
 
         // Support direct connection to button action manager
         //
-        if(!mSelected && (mButtonController != null)) {
-            mSelected = true;
+        if(mButtonController != null) {
             mButtonController.doButtonAction(buttonMap.get(view));
         }
 
@@ -233,8 +234,6 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
 
     public void enableButtons(boolean enable) {
-
-        mSelected = false;
 
         for(View view : buttonList) {
             view.setOnClickListener(enable? this:null);

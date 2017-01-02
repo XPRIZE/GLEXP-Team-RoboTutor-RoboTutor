@@ -1,6 +1,7 @@
 package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -14,8 +15,10 @@ import cmu.xprize.comp_ask.CAskElement;
 import cmu.xprize.comp_ask.CAsk_Data;
 import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.comp_session.CActivitySelector;
+import cmu.xprize.comp_session.CAt_Data;
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
@@ -34,6 +37,7 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.HAS_ORPHAN_MATCH;
 import static cmu.xprize.robotutor.tutorengine.util.CClassMap2.classMap;
 
 public class TActivitySelector extends CActivitySelector implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource {
@@ -44,6 +48,11 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
     private HashMap<String, String> volatileMap = new HashMap<>();
     private HashMap<String, String> stickyMap   = new HashMap<>();
+
+    private String rootSkillWrite   = null;
+    private String rootSkillRead    = null;
+    private String rootSkillMath    = null;
+    private String rootSkillShapes  = null;
 
     private ArrayList<String>       _FeatureSet = new ArrayList<>();
     private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
@@ -81,7 +90,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         SaskActivity = (TAskComponent)findViewById(R.id.SaskActivity);
 
-        SaskActivity.setmButtonController(this);
+        SaskActivity.setButtonController(this);
     }
 
     @Override
@@ -127,6 +136,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         if(_describeIndex < _activeLayout.items.length) {
 
             publishValue(AS_CONST.VAR_BUTTONID,     _activeLayout.items[_describeIndex].componentID);
+            publishValue(AS_CONST.VAR_BUT_BEHAVIOR, _activeLayout.items[_describeIndex].behavior);
             publishValue(AS_CONST.VAR_HELP_AUDIO,   _activeLayout.items[_describeIndex].help);
             publishValue(AS_CONST.VAR_PROMPT_AUDIO, _activeLayout.items[_describeIndex].prompt);
 
@@ -152,6 +162,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             if(element.componentID.equals(actionid)) {
 
                 publishValue(AS_CONST.VAR_BUTTONID,     element.componentID);
+                publishValue(AS_CONST.VAR_BUT_BEHAVIOR, element.behavior);
                 publishValue(AS_CONST.VAR_HELP_AUDIO,   element.help);
                 publishValue(AS_CONST.VAR_PROMPT_AUDIO, element.prompt);
 
@@ -167,11 +178,11 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         Log.d(TAG, "Button Selected: " + buttonid);
 
         switch(buttonid.toUpperCase()) {
-            case AS_CONST.BUTTON1:
+            case AS_CONST.SELECT_WRITING:
                 doLaunch(letters[0].intent, letters[0].intentdata, letters[0].datasource, letters[0].features);
                 break;
 
-            case AS_CONST.BUTTON2:
+            case AS_CONST.SELECT_STORIES:
 
                 // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
                 // reenable the ASK buttons if we don't execute the story_tutor
@@ -182,17 +193,45 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                     SaskActivity.enableButtons(true);
                 break;
 
-            case AS_CONST.BUTTON3:
+            case AS_CONST.SELECT_MATH:
                 doLaunch(numbers[0].intent, numbers[0].intentdata, numbers[0].datasource, numbers[0].features);
                 break;
 
-            case AS_CONST.BUTTON4:
+            case AS_CONST.SELECT_SHAPES:
                 doLaunch(shapes[0].intent, shapes[0].intentdata, shapes[0].datasource, shapes[0].features);
                 break;
 
-            case AS_CONST.BUTTON5:
+            case AS_CONST.SELECT_ROBOTUTOR:
                 doLaunch(letters[0].intent, letters[0].intentdata, letters[0].datasource, letters[0].features);
                 break;
+
+
+            //  Difficulty selection
+
+
+            case AS_CONST.SELECT_CONTINUE:
+                break;
+
+            case AS_CONST.SELECT_MAKE_HARDER:
+                break;
+
+            case AS_CONST.SELECT_MAKE_EASIER:
+                break;
+
+            case AS_CONST.SELECT_AUTO_DIFFICULTY:
+                break;
+
+            case AS_CONST.SELECT_REPEAT:
+                break;
+
+            case AS_CONST.SELECT_EXIT:
+                RoboTutor.TUTORSELECTED = false;
+
+                mTutor.post(TCONST.ENDTUTOR);
+                break;
+
+
+
         }
 
     }
@@ -207,6 +246,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
      */
     @Override
     public void doLaunch(String intent, String intentData, String dataSource, String features) {
+
+        RoboTutor.TUTORSELECTED = true;
 
         // update the response variable  "<Sresponse>.value"
 
@@ -554,6 +595,75 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         // instantiation of type_audio objects
         //
         JSON_Helper.parseSelf(jsonObj, this, classMap, scope);
+
+        for(CAt_Data transition : transitions) {
+
+            switch(transition.skill) {
+                case TCONST.SKILL_WRITING:
+                    if(rootSkillWrite == null) {
+                        rootSkillWrite = transition.tutor_id;
+                    }
+
+                    if(!writeMap.containsKey(transition.tutor_id)) {
+                        writeMap.put(transition.tutor_id, transition);
+                    }
+                    else {
+                        Log.d(TAG, "Skill Transitions: " + transition.skill + " - Duplicate key: " + transition.tutor_id);
+                    }
+                    break;
+
+                case TCONST.SKILL_READING:
+                    if(rootSkillRead == null) {
+                        rootSkillRead = transition.tutor_id;
+                    }
+
+                    if(!readMap.containsKey(transition.tutor_id)) {
+                        readMap.put(transition.tutor_id, transition);
+                    }
+                    else {
+                        Log.d(TAG, "Skill Transitions: " + transition.skill + " - Duplicate key: " + transition.tutor_id);
+                    }
+                    break;
+
+                case TCONST.SKILL_MATH:
+                    if(rootSkillMath == null) {
+                        rootSkillMath = transition.tutor_id;
+                    }
+
+                    if(!mathMap.containsKey(transition.tutor_id)) {
+                        mathMap.put(transition.tutor_id, transition);
+                    }
+                    else {
+                        Log.d(TAG, "Skill Transitions: " + transition.skill + " - Duplicate key: " + transition.tutor_id);
+                    }
+                    break;
+
+                case TCONST.SKILL_SHAPES:
+                    if(rootSkillShapes == null) {
+                        rootSkillShapes = transition.tutor_id;
+                    }
+
+                    if(!shapeMap.containsKey(transition.tutor_id)) {
+                        shapeMap.put(transition.tutor_id, transition);
+                    }
+                    else {
+                        Log.d(TAG, "Skill Transitions: " + transition.skill + " - Duplicate key: " + transition.tutor_id);
+                    }
+                    break;
+            }
+        }
+
+        SharedPreferences prefs = RoboTutor.ACTIVITY.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        String writingLevelVector = prefs.getString(TCONST.SKILL_WRITING, rootSkillWrite);
+        String readingLevelVector = prefs.getString(TCONST.SKILL_READING, rootSkillRead);
+        String mathLevelVector    = prefs.getString(TCONST.SKILL_MATH, rootSkillMath);
+        String shapeLevelVector   = prefs.getString(TCONST.SKILL_SHAPES, rootSkillShapes);
+
+
+//            editor.putInt(assetName + TCONST.ASSET_UPDATE_VERSION , mAssetObject.getVersionField(INDEX_UPDATE, TCONST.ASSET_UPDATE_VERSION));
+//            editor.apply();
     }
 
 }
