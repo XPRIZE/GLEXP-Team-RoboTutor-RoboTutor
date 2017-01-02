@@ -1,5 +1,5 @@
 {
-  "defTutor":"session_manager",
+  "defTutor":"activity_selector",
 
   //Engine levelFolder data bindings  - HashMap<String, defdata_tutor
 //  "defDataSources": {
@@ -25,7 +25,13 @@
 //    }
 //  },
 
-  "defFeatures":"",
+  // These features are based on the current tutor selection model
+  // When no tutor has been selected it should run the tutor select
+  // and when it finishes it should run the difficulty select until
+  // the user wants to select another tutor.
+  //
+  "defFeatures":"FTR_TUTOR_SELECT",
+  "defRunningFeatures":"FTR_DIFFICULTY_SELECT",
 
   // Set the default language for the tutors
   "language":"LANG_EN"

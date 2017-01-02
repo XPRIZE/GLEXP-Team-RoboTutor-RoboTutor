@@ -70,7 +70,7 @@
               "reuse": true,
               "tracks": [
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "{{activity_selector.promptAudio}}.mp3","soundpackage": "default","mode": "flow", "features": ""},
-                {"type": "COMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "BUTTON_EVENT:String|{{activity_selector.buttonid}}:String", "features":""}
+                {"type": "COMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "BUTTON_EVENT:String|{{activity_selector.buttonbehavior}}:String", "features":""}
               ],
               "preexit": [
               ],
@@ -92,7 +92,7 @@
           "maptype":"moduleMap",
           "mapname": "PAUSE_MODULE",
           "preenter": [
-            "SHOW_ACTIVITY_SELECTOR", "INIT_MODULE"
+            "INIT_MODULE"
           ],
           "preexit": [
           ],
@@ -132,6 +132,12 @@
           "preenter": [],
           "reuse": true,
           "tracks": [
+
+            // Conditionally load the layout
+            //
+            {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "ACTIVITY_SELECT:String",  "features":"FTR_TUTOR_SELECT"},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "DIFFICULTY_SELECT:String",  "features":"FTR_DIFFICULTY_SELECT"},
+
             // Input must be inhibited until all the behaviors are set
             //
             {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "DESCRIBE_BEHAVIOR:String|BUTTON_DESCRIPTION:String" ,"features":""},
@@ -144,11 +150,19 @@
 
             // Map the button events defined in the activity_selector dataSource to Behavior subgraphs
             //
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_READING:String|BUTTON_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_WRITING:String|BUTTON_BEHAVIOR:String" ,"features":""},
             {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_STORIES:String|BUTTON_BEHAVIOR:String" ,"features":""},
             {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_MATH:String|BUTTON_BEHAVIOR:String" ,"features":""},
             {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_SHAPES:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_ROBOTUTOR:String|BUTTON_BEHAVIOR:String" ,"features":""}
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_ROBOTUTOR:String|BUTTON_BEHAVIOR:String" ,"features":""},
+
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_CONTINUE:String|BUTTON_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_MAKE_HARDER:String|BUTTON_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_MAKE_EASIER:String|BUTTON_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_AUTO_DIFFICULTY:String|BUTTON_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_REPEAT:String|BUTTON_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_EXIT:String|BUTTON_BEHAVIOR:String" ,"features":""}
+
           ]
         }
 
@@ -162,8 +176,7 @@
 
         "LAUNCH_BEHAVIOR":{"type": "COMMAND", "cmd": "LAUNCH-TUTOR", "parms":"{{activity_selector.intent}}:String|{{activity_selector.intentData}}:String|{{activity_selector.dataSource}}:String|{{activity_selector.features}}:String" },
 
-        "SHOW_ACTIVITY_SELECTOR": {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "ACTIVITY_SELECT:String",  "features":""},
-        "CANCEL_POINT":           {"type": "COMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "CANCEL_POINTAT:String", "features":""},
+        "CANCEL_POINT":             {"type": "COMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "CANCEL_POINTAT:String", "features":""},
 
         "CANCEL_FEEDBACK": {"type": "COMMAND", "cmd": "CANCEL_NODE"},
         "GOTONEXTSCENE":   {"type": "COMMAND", "cmd": "NEXTSCENE"},

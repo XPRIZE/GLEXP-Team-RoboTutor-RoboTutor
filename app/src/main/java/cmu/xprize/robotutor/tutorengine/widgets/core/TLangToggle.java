@@ -78,6 +78,10 @@ public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.
         mLangState    = !mLangState;
 
         CTutorEngine.setDefaultLanguage(mLangState? TCONST.LANG_EN: TCONST.LANG_SW);
+
+        // We need to reload the session manager to reflect the new language specific datasource
+        //
+        CTutorEngine.destroyCurrentTutor();
     }
 
     //**********************************************************

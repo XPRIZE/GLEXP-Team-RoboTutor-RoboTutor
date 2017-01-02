@@ -9,15 +9,15 @@
       //
       "items":[
         {"datatype":"IMAGEBUTTON",
-          "resource":"button_select_letters",
+          "resource":"button_letters_select",
           "componentID":"Sbutton1",
-          "behavior":"SELECT_READING",
+          "behavior":"SELECT_WRITING",
           "prompt":"reading and writing",
           "help":"Tap here for reading and writing"
         },
 
         {"datatype":"IMAGEBUTTON",
-          "resource":"button_select_stories",
+          "resource":"button_stories_select",
           "componentID":"Sbutton2",
           "behavior":"SELECT_STORIES",
           "prompt":"stories",
@@ -25,7 +25,7 @@
         },
 
         {"datatype":"IMAGEBUTTON",
-          "resource":"button_select_math",
+          "resource":"button_math_select",
           "componentID":"Sbutton3",
           "behavior":"SELECT_MATH",
           "prompt":"numbers and math",
@@ -33,7 +33,7 @@
         },
 
         {"datatype":"IMAGEBUTTON",
-          "resource":"button_select_shapes",
+          "resource":"button_shapes_select",
           "componentID":"Sbutton4",
           "behavior":"SELECT_SHAPES",
           "prompt":"shapes",
@@ -41,14 +41,73 @@
         },
 
         {"datatype":"IMAGEBUTTON",
-          "resource":"button_select_robotutor",
+          "resource":"button_robotutor_select",
           "componentID":"Sbutton5",
           "behavior":"SELECT_ROBOTUTOR",
           "prompt":"Let RoboTutor decide",
           "help":"Tap here to let RoboTutor decide"
         }
       ]
+    },
+
+    {
+      "name":"DIFFICULTY_SELECT",
+      "layoutID":"ask_difficulty_selector",
+
+      // NOTE: define "novar" on audio assets to exclude them from instantiating scope levelFolder variables.
+      //
+      "items":[
+        {"datatype":"IMAGEBUTTON",
+          "resource":"button_okay_select",
+          "componentID":"Sbutton1",
+          "behavior":"SELECT_CONTINUE",
+          "prompt":"it was just right",
+          "help":"tap here if it was just right"
+        },
+
+        {"datatype":"IMAGEBUTTON",
+          "resource":"button_easy_select",
+          "componentID":"Sbutton2",
+          "behavior":"SELECT_MAKE_HARDER",
+          "prompt":"it was too easy",
+          "help":"Tap here if it was too easy and you want something harder"
+        },
+
+        {"datatype":"IMAGEBUTTON",
+          "resource":"button_hard_select",
+          "componentID":"Sbutton3",
+          "behavior":"SELECT_MAKE_EASIER",
+          "prompt":"it was too hard",
+          "help":"Tap here if it was too hard and you want something easier"
+        },
+
+        {"datatype":"IMAGEBUTTON",
+          "resource":"button_robotutor_select",
+          "componentID":"Sbutton4",
+          "behavior":"SELECT_AUTO_DIFFICULTY",
+          "prompt":"lets ask robotutor",
+          "help":"tap here to ask robotutor"
+        },
+
+        {"datatype":"IMAGEBUTTON",
+          "resource":"button_repeat_select",
+          "componentID":"Sbutton5",
+          "behavior":"SELECT_REPEAT",
+          "prompt":"lets do it again",
+          "help":"tap here to do the same thing again"
+        },
+
+        {"datatype":"IMAGEBUTTON",
+          "resource":"button_exit_select",
+          "componentID":"Sbutton6",
+          "behavior":"SELECT_EXIT",
+          "prompt":"I want to stop using RoboTutor",
+          "help":"tap here to stop using robotutor"
+        }
+
+      ]
     }
+
   ],
 
   "letters": [
@@ -348,6 +407,83 @@
     { 
       "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_shape_YN_RISE.json\"}]}}}",
       "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Shapes 2", "features":"FTR_SHAPES"}
+  ],
+
+
+  "transitions": [
+    {"skill":"letters","tutor_id":"Lowercase 2_bubble_pop","cell_row":1,"cell_column":1,"same":"Lowercase 2_bubble_pop","next":"Lowercase 3_bubble_pop","harder":"Lowercase 2R_bubble_pop","easier":"Lowercase 2_bubble_pop"},
+    {"skill":"letters","tutor_id":"Lowercase 3_bubble_pop","cell_row":1,"cell_column":2,"same":"Lowercase 3_bubble_pop","next":"Lowercase 4_bubble_pop","harder":"Lowercase 3R_bubble_pop","easier":"Lowercase 2_bubble_pop"},
+    {"skill":"letters","tutor_id":"Lowercase 4_bubble_pop","cell_row":1,"cell_column":3,"same":"Lowercase 4_bubble_pop","next":"Lowercase 5_bubble_pop","harder":"Lowercase 4R_bubble_pop","easier":"Lowercase 3_bubble_pop"},
+    {"skill":"letters","tutor_id":"Lowercase 5_bubble_pop","cell_row":1,"cell_column":4,"same":"Lowercase 5_bubble_pop","next":"Lowercase 6_bubble_pop","harder":"Lowercase 5R_bubble_pop","easier":"Lowercase 4_bubble_pop"},
+    {"skill":"letters","tutor_id":"Lowercase 6_bubble_pop","cell_row":1,"cell_column":5,"same":"Lowercase 6_bubble_pop","next":"Lowercase 1R_bubble_pop","harder":"Lowercase 6R_bubble_pop","easier":"Lowercase 5_bubble_pop"},
+    {"skill":"letters","tutor_id":"Lowercase 1R_bubble_pop","cell_row":2,"cell_column":1,"same":"Lowercase 1R_bubble_pop","next":"Lowercase 2R_bubble_pop","harder":"Uppercase 2_bubble_pop","easier":"Lowercase 2_bubble_pop"},
+    {"skill":"letters","tutor_id":"Lowercase 2R_bubble_pop","cell_row":2,"cell_column":2,"same":"Lowercase 2R_bubble_pop","next":"Lowercase 3R_bubble_pop","harder":"Uppercase 3_bubble_pop","easier":"Lowercase 2_bubble_pop"},
+    {"skill":"letters","tutor_id":"Lowercase 3R_bubble_pop","cell_row":2,"cell_column":3,"same":"Lowercase 3R_bubble_pop","next":"Lowercase 4R_bubble_pop","harder":"Uppercase 4_bubble_pop","easier":"Lowercase 3_bubble_pop"},
+    {"skill":"letters","tutor_id":"Lowercase 4R_bubble_pop","cell_row":2,"cell_column":4,"same":"Lowercase 4R_bubble_pop","next":"Lowercase 5R_bubble_pop","harder":"Uppercase 5_bubble_pop","easier":"Lowercase 4_bubble_pop"},
+    {"skill":"letters","tutor_id":"Lowercase 5R_bubble_pop","cell_row":2,"cell_column":5,"same":"Lowercase 5R_bubble_pop","next":"Lowercase 6R_bubble_pop","harder":"Uppercase 6_bubble_pop","easier":"Lowercase 5_bubble_pop"},
+    {"skill":"letters","tutor_id":"Lowercase 6R_bubble_pop","cell_row":2,"cell_column":6,"same":"Lowercase 6R_bubble_pop","next":"Uppercase 1_bubble_pop","harder":"Uppercase 6_bubble_pop","easier":"Lowercase 6_bubble_pop"},
+    {"skill":"letters","tutor_id":"Uppercase 1_bubble_pop","cell_row":3,"cell_column":1,"same":"Uppercase 1_bubble_pop","next":"Uppercase 2_bubble_pop","harder":"Uppercase 2R_bubble_pop","easier":"Lowercase 1R_bubble_pop"},
+    {"skill":"letters","tutor_id":"Uppercase 2_bubble_pop","cell_row":3,"cell_column":2,"same":"Uppercase 2_bubble_pop","next":"Uppercase 3_bubble_pop","harder":"Uppercase 3R_bubble_pop","easier":"Lowercase 1R_bubble_pop"},
+    {"skill":"letters","tutor_id":"Uppercase 3_bubble_pop","cell_row":3,"cell_column":3,"same":"Uppercase 3_bubble_pop","next":"Uppercase 4_bubble_pop","harder":"Uppercase 4R_bubble_pop","easier":"Lowercase 2R_bubble_pop"},
+    {"skill":"letters","tutor_id":"Uppercase 4_bubble_pop","cell_row":3,"cell_column":4,"same":"Uppercase 4_bubble_pop","next":"Uppercase 5_bubble_pop","harder":"Uppercase 5R_bubble_pop","easier":"Lowercase 3R_bubble_pop"},
+    {"skill":"letters","tutor_id":"Uppercase 5_bubble_pop","cell_row":3,"cell_column":5,"same":"Uppercase 5_bubble_pop","next":"Uppercase 6_bubble_pop","harder":"Uppercase 6R_bubble_pop","easier":"Lowercase 4R_bubble_pop"},
+    {"skill":"letters","tutor_id":"Uppercase 6_bubble_pop","cell_row":3,"cell_column":6,"same":"Uppercase 6_bubble_pop","next":"Uppercase 1R_bubble_pop","harder":"Uppercase 6R_bubble_pop","easier":"Lowercase 5R_bubble_pop"},
+    {"skill":"letters","tutor_id":"Uppercase 1R_bubble_pop","cell_row":4,"cell_column":1,"same":"Uppercase 1R_bubble_pop","next":"Uppercase 2R_bubble_pop","harder":"Mixed Case MC 2_bubble_pop","easier":"Uppercase 1_bubble_pop"},
+    {"skill":"letters","tutor_id":"Uppercase 2R_bubble_pop","cell_row":4,"cell_column":2,"same":"Uppercase 2R_bubble_pop","next":"Uppercase 3R_bubble_pop","harder":"Mixed Case Rise 1_bubble_pop","easier":"Uppercase 1_bubble_pop"},
+    {"skill":"letters","tutor_id":"Uppercase 3R_bubble_pop","cell_row":4,"cell_column":3,"same":"Uppercase 3R_bubble_pop","next":"Uppercase 4R_bubble_pop","harder":"Mixed Case Rise 2_bubble_pop","easier":"Uppercase 2_bubble_pop"},
+    {"skill":"letters","tutor_id":"Uppercase 4R_bubble_pop","cell_row":4,"cell_column":4,"same":"Uppercase 4R_bubble_pop","next":"Uppercase 5R_bubble_pop","harder":"Mixed Case Rise 2_bubble_pop","easier":"Uppercase 3_bubble_pop"},
+    {"skill":"letters","tutor_id":"Uppercase 5R_bubble_pop","cell_row":4,"cell_column":5,"same":"Uppercase 5R_bubble_pop","next":"Uppercase 6R_bubble_pop","harder":"Mixed Case Rise 2_bubble_pop","easier":"Uppercase 4_bubble_pop"},
+    {"skill":"letters","tutor_id":"Uppercase 6R_bubble_pop","cell_row":4,"cell_column":6,"same":"Uppercase 6R_bubble_pop","next":"Mixed Case MC 1_bubble_pop","harder":"Mixed Case Rise 2_bubble_pop","easier":"Uppercase 5_bubble_pop"},
+    {"skill":"letters","tutor_id":"Mixed Case MC 1_bubble_pop","cell_row":5,"cell_column":1,"same":"Mixed Case MC 1_bubble_pop","next":"Mixed Case MC 2_bubble_pop","harder":"Mixed Case MC 2a_bubble_pop","easier":"Uppercase 1R_bubble_pop"},
+    {"skill":"letters","tutor_id":"Mixed Case MC 2_bubble_pop","cell_row":5,"cell_column":2,"same":"Mixed Case MC 2_bubble_pop","next":"Mixed Case Rise 1_bubble_pop","harder":"Mixed Case Rise 1a_bubble_pop","easier":"Uppercase 1R_bubble_pop"},
+    {"skill":"letters","tutor_id":"Mixed Case Rise 1_bubble_pop","cell_row":5,"cell_column":3,"same":"Mixed Case Rise 1_bubble_pop","next":"Mixed Case Rise 2_bubble_pop","harder":"Mixed Case Rise 2a_bubble_pop","easier":"Uppercase 2R_bubble_pop"},
+    {"skill":"letters","tutor_id":"Mixed Case Rise 2_bubble_pop","cell_row":5,"cell_column":4,"same":"Mixed Case Rise 2_bubble_pop","next":"Mixed Case MC 1a_bubble_pop","harder":"Mixed Case Rise 2a_bubble_pop","easier":"Uppercase 3R_bubble_pop"},
+    {"skill":"letters","tutor_id":"Mixed Case MC 1a_bubble_pop","cell_row":6,"cell_column":1,"same":"Mixed Case MC 1a_bubble_pop","next":"Mixed Case MC 2a_bubble_pop","harder":"Akira Words_akira","easier":"Mixed Case MC 1_bubble_pop"},
+    {"skill":"letters","tutor_id":"Mixed Case MC 2a_bubble_pop","cell_row":6,"cell_column":2,"same":"Mixed Case MC 2a_bubble_pop","next":"Mixed Case Rise 1a_bubble_pop","harder":"Akira Words_akira","easier":"Mixed Case MC 1_bubble_pop"},
+    {"skill":"letters","tutor_id":"Mixed Case Rise 1a_bubble_pop","cell_row":6,"cell_column":3,"same":"Mixed Case Rise 1a_bubble_pop","next":"Mixed Case Rise 2a_bubble_pop","harder":"Akira Words_akira","easier":"Mixed Case MC 2_bubble_pop"},
+    {"skill":"letters","tutor_id":"Mixed Case Rise 2a_bubble_pop","cell_row":6,"cell_column":4,"same":"Mixed Case Rise 2a_bubble_pop","next":"Akira Words_akira","harder":"Akira Words_akira","easier":"Mixed Case Rise 1_bubble_pop"},
+    {"skill":"letters","tutor_id":"Akira Words_akira","cell_row":7,"cell_column":1,"same":"Akira Words_akira","next":"Lowercase 1_word_copy","harder":"Lowercase 2_word_copy","easier":"Mixed Case MC 1a_bubble_pop"},
+    {"skill":"letters","tutor_id":"Lowercase 1_word_copy","cell_row":8,"cell_column":1,"same":"Lowercase 1_word_copy","next":"Lowercase 2_word_copy","harder":"Dictation Lowercase 2_word_copy","easier":"Akira Words_akira"},
+    {"skill":"letters","tutor_id":"Lowercase 2_word_copy","cell_row":8,"cell_column":2,"same":"Lowercase 2_word_copy","next":"Uppercase 1_word_copy","harder":"Dictation Uppercase 1_word_copy","easier":"Akira Words_akira"},
+    {"skill":"letters","tutor_id":"Uppercase 1_word_copy","cell_row":8,"cell_column":3,"same":"Uppercase 1_word_copy","next":"Uppercase 2_word_copy","harder":"Dictation Uppercase 2_word_copy","easier":"Akira Words_akira"},
+    {"skill":"letters","tutor_id":"Uppercase 2_word_copy","cell_row":8,"cell_column":4,"same":"Uppercase 2_word_copy","next":"Dictation Lowercase 1_word_copy","harder":"Dictation Uppercase 2_word_copy","easier":"Akira Words_akira"},
+    {"skill":"letters","tutor_id":"Dictation Lowercase 1_word_copy","cell_row":9,"cell_column":1,"same":"Dictation Lowercase 1_word_copy","next":"Dictation Lowercase 2_word_copy","harder":"Word Copy 2_word_copy","easier":"Lowercase 1_word_copy"},
+    {"skill":"letters","tutor_id":"Dictation Lowercase 2_word_copy","cell_row":9,"cell_column":2,"same":"Dictation Lowercase 2_word_copy","next":"Dictation Uppercase 1_word_copy","harder":"Word Copy 3_word_copy","easier":"Lowercase 1_word_copy"},
+    {"skill":"letters","tutor_id":"Dictation Uppercase 1_word_copy","cell_row":9,"cell_column":3,"same":"Dictation Uppercase 1_word_copy","next":"Dictation Uppercase 2_word_copy","harder":"Word Copy 4_word_copy","easier":"Lowercase 2_word_copy"},
+    {"skill":"letters","tutor_id":"Dictation Uppercase 2_word_copy","cell_row":9,"cell_column":4,"same":"Dictation Uppercase 2_word_copy","next":"Word Copy 1_word_copy","harder":"Word Copy 4_word_copy","easier":"Uppercase 1_word_copy"},
+    {"skill":"letters","tutor_id":"Word Copy 1_word_copy","cell_row":10,"cell_column":1,"same":"Word Copy 1_word_copy","next":"Word Copy 2_word_copy","harder":"Word Copy 2_word_copy","easier":"Dictation Lowercase 1_word_copy"},
+    {"skill":"letters","tutor_id":"Word Copy 2_word_copy","cell_row":10,"cell_column":2,"same":"Word Copy 2_word_copy","next":"Word Copy 3_word_copy","harder":"Word Copy 3_word_copy","easier":"Dictation Lowercase 1_word_copy"},
+    {"skill":"letters","tutor_id":"Word Copy 3_word_copy","cell_row":10,"cell_column":3,"same":"Word Copy 3_word_copy","next":"Word Copy 4_word_copy","harder":"Word Copy 4_word_copy","easier":"Dictation Lowercase 2_word_copy"},
+    {"skill":"letters","tutor_id":"Word Copy 4_word_copy","cell_row":10,"cell_column":4,"same":"Word Copy 4_word_copy","next":"Word Copy 4_word_copy","harder":"Word Copy 4_word_copy","easier":"Dictation Uppercase 1_word_copy"},
+    {"skill":"stories","tutor_id":"Story Reading 1_story_reading","cell_row":1,"cell_column":1,"same":"Story Reading 1_story_reading","next":"Story Reading 2_story_reading","harder":"Story Reading 2_story_reading","easier":"Story Reading 1_story_reading"},
+    {"skill":"stories","tutor_id":"Story Reading 2_story_reading","cell_row":1,"cell_column":2,"same":"Story Reading 2_story_reading","next":"Story Reading 3_story_reading","harder":"Story Reading 3_story_reading","easier":"Story Reading 1_story_reading"},
+    {"skill":"stories","tutor_id":"Story Reading 3_story_reading","cell_row":1,"cell_column":3,"same":"Story Reading 3_story_reading","next":"Story Reading 3_story_reading","harder":"Story Reading 3_story_reading","easier":"Story Reading 2_story_reading"},
+    {"skill":"numbers","tutor_id":"Digit Copy 1_word_copy","cell_row":1,"cell_column":1,"same":"Akira Digit Sense_akira","next":"Akira Digit Sense_akira","harder":"Akira Digit Sense_akira","easier":"Numbers Pop1_bubble_pop"},
+    {"skill":"numbers","tutor_id":"Digit Copy 2_word_copy","cell_row":1,"cell_column":2,"same":"Digit Copy 1_word_copy","next":"Digit Copy 2_word_copy","harder":"Number -> Dot 2_bubble_pop","easier":"Digit Copy 1_word_copy"},
+    {"skill":"numbers","tutor_id":"Digit Dictation 1_word_copy","cell_row":1,"cell_column":3,"same":"Digit Copy 2_word_copy","next":"Digit Dictation 1_word_copy","harder":"Number -> Dot 3_bubble_pop","easier":"Digit Copy 1_word_copy"},
+    {"skill":"numbers","tutor_id":"Digit Dictation 2_word_copy","cell_row":1,"cell_column":4,"same":"Digit Dictation 1_word_copy","next":"Digit Dictation 2_word_copy","harder":"Number -> Dot 4_bubble_pop","easier":"Digit Copy 2_word_copy"},
+    {"skill":"numbers","tutor_id":"Number -> Dot 1_word_copy","cell_row":2,"cell_column":1,"same":"Digit Dictation 2_word_copy","next":"Number -> Dot 1_word_copy","harder":"Number -> Dot 5_bubble_pop","easier":"Digit Dictation 1_word_copy"},
+    {"skill":"numbers","tutor_id":"Number -> Dot 2_bubble_pop","cell_row":2,"cell_column":2,"same":"Number -> Dot 1_word_copy","next":"Number -> Dot 2_bubble_pop","harder":"Dot -> Number 2_bubble_pop","easier":"Digit Copy 1_word_copy"},
+    {"skill":"numbers","tutor_id":"Number -> Dot 3_bubble_pop","cell_row":2,"cell_column":3,"same":"Number -> Dot 2_bubble_pop","next":"Number -> Dot 3_bubble_pop","harder":"Dot -> Number 3_bubble_pop","easier":"Digit Copy 1_word_copy"},
+    {"skill":"numbers","tutor_id":"Number -> Dot 4_bubble_pop","cell_row":2,"cell_column":4,"same":"Number -> Dot 3_bubble_pop","next":"Number -> Dot 4_bubble_pop","harder":"Dot -> Number 4_bubble_pop","easier":"Digit Copy 2_word_copy"},
+    {"skill":"numbers","tutor_id":"Number -> Dot 5_bubble_pop","cell_row":2,"cell_column":5,"same":"Number -> Dot 4_bubble_pop","next":"Number -> Dot 5_bubble_pop","harder":"Dot -> Number 5_bubble_pop","easier":"Digit Dictation 1_word_copy"},
+    {"skill":"numbers","tutor_id":"Number -> Dot 6_bubble_pop","cell_row":2,"cell_column":6,"same":"Number -> Dot 5_bubble_pop","next":"Number -> Dot 6_bubble_pop","harder":"Dot -> Number 6_bubble_pop","easier":"Digit Dictation 2_word_copy"},
+    {"skill":"numbers","tutor_id":"Dot -> Number 1_bubble_pop","cell_row":3,"cell_column":1,"same":"Number -> Dot 6_bubble_pop","next":"Dot -> Number 1_bubble_pop","harder":"Dot -> Number 6_bubble_pop","easier":"Digit Dictation 2_word_copy"},
+    {"skill":"numbers","tutor_id":"Dot -> Number 2_bubble_pop","cell_row":3,"cell_column":2,"same":"Dot -> Number 1_bubble_pop","next":"Dot -> Number 2_bubble_pop","harder":"Numbers Pop2_bubble_pop","easier":"Number -> Dot 1_word_copy"},
+    {"skill":"numbers","tutor_id":"Dot -> Number 3_bubble_pop","cell_row":3,"cell_column":3,"same":"Dot -> Number 2_bubble_pop","next":"Dot -> Number 3_bubble_pop","harder":"Numbers Pop3_bubble_pop","easier":"Number -> Dot 1_word_copy"},
+    {"skill":"numbers","tutor_id":"Dot -> Number 4_bubble_pop","cell_row":3,"cell_column":4,"same":"Dot -> Number 3_bubble_pop","next":"Dot -> Number 4_bubble_pop","harder":"Numbers Pop4_bubble_pop","easier":"Dot -> Number 2_bubble_pop"},
+    {"skill":"numbers","tutor_id":"Dot -> Number 5_bubble_pop","cell_row":3,"cell_column":5,"same":"Dot -> Number 4_bubble_pop","next":"Dot -> Number 5_bubble_pop","harder":"Numbers Pop5_bubble_pop","easier":"Dot -> Number 3_bubble_pop"},
+    {"skill":"numbers","tutor_id":"Dot -> Number 6_bubble_pop","cell_row":3,"cell_column":6,"same":"Dot -> Number 5_bubble_pop","next":"Dot -> Number 6_bubble_pop","harder":"Numbers Pop6_bubble_pop","easier":"Dot -> Number 4_bubble_pop"},
+    {"skill":"numbers","tutor_id":"Numbers Pop1_bubble_pop","cell_row":4,"cell_column":1,"same":"Dot -> Number 6_bubble_pop","next":"Numbers Pop1_bubble_pop","harder":"Numbers Pop6_bubble_pop","easier":"Dot -> Number 5_bubble_pop"},
+    {"skill":"numbers","tutor_id":"Numbers Pop2_bubble_pop","cell_row":4,"cell_column":2,"same":"Numbers Pop1_bubble_pop","next":"Numbers Pop2_bubble_pop","harder":"Akira Digit Sense_akira","easier":"Dot -> Number 1_bubble_pop"},
+    {"skill":"numbers","tutor_id":"Numbers Pop3_bubble_pop","cell_row":4,"cell_column":3,"same":"Numbers Pop2_bubble_pop","next":"Numbers Pop3_bubble_pop","harder":"Akira Digit Sense_akira","easier":"Dot -> Number 1_bubble_pop"},
+    {"skill":"numbers","tutor_id":"Numbers Pop4_bubble_pop","cell_row":4,"cell_column":4,"same":"Numbers Pop3_bubble_pop","next":"Numbers Pop4_bubble_pop","harder":"Akira Digit Sense_akira","easier":"Dot -> Number 2_bubble_pop"},
+    {"skill":"numbers","tutor_id":"Numbers Pop5_bubble_pop","cell_row":4,"cell_column":5,"same":"Numbers Pop4_bubble_pop","next":"Numbers Pop5_bubble_pop","harder":"Akira Digit Sense_akira","easier":"Dot -> Number 3_bubble_pop"},
+    {"skill":"numbers","tutor_id":"Numbers Pop6_bubble_pop","cell_row":4,"cell_column":6,"same":"Numbers Pop5_bubble_pop","next":"Numbers Pop6_bubble_pop","harder":"Akira Digit Sense_akira","easier":"Dot -> Number 4_bubble_pop"},
+    {"skill":"numbers","tutor_id":"Akira Digit Sense_Image","cell_row":5,"cell_column":1,"same":"Akira Digit Sense_Image","next":"Akira Digit Sense_akira","harder":"Akira Digit Sense_akira","easier":"Numbers Pop1_bubble_pop"},
+    {"skill":"numbers","tutor_id":"Akira Digit Sense_akira","cell_row":5,"cell_column":2,"same":"Numbers Pop6_bubble_pop","next":"Numbers Pop6_bubble_pop","harder":"Akira Digit Sense_akira","easier":"Dot -> Number 5_bubble_pop"},
+    {"skill":"shapes","tutor_id":"Shapes 1_bubble_pop","cell_row":1,"cell_column":1,"same":"Shapes 1_bubble_pop","next":"Shapes 2_bubble_pop","harder":"Shapes 2_bubble_pop","easier":"Shapes 1_bubble_pop"},
+    {"skill":"shapes","tutor_id":"Shapes 2_bubble_pop","cell_row":1,"cell_column":2,"same":"Shapes 2_bubble_pop","next":"Shapes 2_bubble_pop","harder":"Shapes 2_bubble_pop","easier":"Shapes 1_bubble_pop"}
   ]
 
 

@@ -35,6 +35,8 @@ import cmu.xprize.comp_ask.ASK_CONST;
 import cmu.xprize.comp_ask.CAskComponent;
 
 import cmu.xprize.robotutor.RoboTutor;
+import cmu.xprize.robotutor.tutorengine.CMediaController;
+import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
@@ -58,6 +60,7 @@ public class TAskComponent extends CAskComponent implements IBehaviorManager, IT
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
+    private CMediaManager   mMediaManager;
 
     // json loadable
     public CAsk_Data dataSource;
@@ -129,6 +132,11 @@ public class TAskComponent extends CAskComponent implements IBehaviorManager, IT
     public void setTutor(CTutor tutor) {
         mTutor = tutor;
         mSceneObject.setTutor(tutor);
+
+        // The media manager is tutor specific so we have to use the tutor to access
+        // the correct instance for this component.
+        //
+        mMediaManager = CMediaController.getManagerInstance(mTutor);
     }
 
     @Override
@@ -178,30 +186,39 @@ public class TAskComponent extends CAskComponent implements IBehaviorManager, IT
 
 
     @Override
-    public void setDataSource(String dataSource) {
+    public void setDataSource(String dataNameDescriptor) {
 
         // TODO: globally make startWith type TCONST
         try {
-            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
-                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
+            if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
-                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataSource);
+                String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
+
+                // Generate a langauage specific path to the data source -
+                // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
+                // e.g. tutors/word_copy/assets/data/sw/
+                //
+                String dataPath = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS;
+                dataPath += "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+
+                String jsonData = JSON_Helper.cacheData(dataPath + dataFile);
 
                 // Load the datasource in the component module - i.e. the superclass
+                //
                 loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 
-            } else if (dataSource.startsWith("db|")) {
+            } else if (dataNameDescriptor.startsWith("db|")) {
 
 
-            } else if (dataSource.startsWith("{")) {
+            } else if (dataNameDescriptor.startsWith("{")) {
 
-                loadJSON(new JSONObject(dataSource), null);
+                loadJSON(new JSONObject(dataNameDescriptor), null);
 
             } else {
                 throw (new Exception("BadDataSource"));
             }
         } catch (Exception e) {
-            CErrorManager.logEvent(TAG, "Invalid Data Source - " + dataSource + " for : " + name() + " : ", e, false);
+            CErrorManager.logEvent(TAG, "Invalid Data Source - " + dataNameDescriptor + " for : " + name() + " : ", e, false);
         }
 
     }

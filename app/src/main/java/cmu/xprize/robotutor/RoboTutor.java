@@ -105,6 +105,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     private boolean             isReady       = false;
     private boolean             engineStarted = false;
+    static public boolean       TUTORSELECTED = false;
 
     // TODO: This is a temporary log update mechanism - see below
     //
@@ -581,6 +582,15 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         super.onSaveInstanceState(outState);
         logManager.postEvent(TAG, "onSaveInstanceState Robotutor");
+
+//        SharedPreferences prefs = RoboTutor.ACTIVITY.getPreferences(Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = prefs.edit();
+//
+//        int assetFullOrdinal = prefs.getInt(assetName + TCONST.ASSET_RELEASE_VERSION, 0);
+//        int assetIncrOrdinal = prefs.getInt(assetName + TCONST.ASSET_UPDATE_VERSION, 0);
+//
+//        editor.putInt(assetName + TCONST.ASSET_UPDATE_VERSION , mAssetObject.getVersionField(INDEX_UPDATE, TCONST.ASSET_UPDATE_VERSION));
+//        editor.apply();
     }
 
 

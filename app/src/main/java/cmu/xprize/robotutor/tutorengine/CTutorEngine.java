@@ -79,6 +79,7 @@ public class CTutorEngine implements ILoadableObject2 {
     static public String                         defTutor;
     static public HashMap<String, defdata_tutor> defDataSources;
     static public String                         defFeatures;
+    static public String                         defRunningFeatures;
     static public String                         language;                       // Accessed from a static context
 
 
@@ -207,7 +208,13 @@ public class CTutorEngine implements ILoadableObject2 {
 //        String datas = "{\"scene_bindings\" : {\"session_manager\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SsmComponent\",\"datasource\": \"[file]sm_data.json\"}]}}}";
 //        launch(defTutor, "native", datas, "" );
 
-        createTutor(defTutor, defFeatures);
+        // These features are based on the current tutor selection model
+        // When no tutor has been selected it should run the tutor select
+        // and when it finishes it should run the difficulty select until
+        // the user wants to select another tutor.
+        //
+
+        createTutor(defTutor, RoboTutor.TUTORSELECTED? defRunningFeatures:defFeatures);
         launchTutor(tutorBindings);
     }
 

@@ -37,6 +37,11 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     protected HashMap           queueMap     = new HashMap();
     protected HashMap           nameMap      = new HashMap();
 
+    protected HashMap           writeMap     = new HashMap();
+    protected HashMap           readMap      = new HashMap();
+    protected HashMap           mathMap      = new HashMap();
+    protected HashMap           shapeMap     = new HashMap();
+
     protected boolean           _qDisabled   = false;
 
     protected CAsk_Data         _activeLayout;
@@ -50,6 +55,7 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     public CAs_Data[]             stories;
     public CAs_Data[]             numbers;
     public CAs_Data[]             shapes;
+    public CAt_Data[]             transitions;
 
     final private String  TAG = "CActivitySelector";
 

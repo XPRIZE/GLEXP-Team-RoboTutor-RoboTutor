@@ -1046,7 +1046,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             mParent.onASREvent(TCONST.RECOGNITION_EVENT);
         }
         catch(Exception e) {
-            // TODO: This seem sto be because the activity is not destroyed and the ASR continues
+            // TODO: This seems to be because the activity is not destroyed and the ASR continues
             Log.d("ASR", "onUpdate Fault: " + e);
         }
     }
@@ -1055,7 +1055,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     /**
      * This is where incoming JSGF ASR data would be processed.
      *
-     *  TODO: check if it is possible for the hypothesis to chamge between last update and final hyp
+     *  TODO: check if it is possible for the hypothesis to change between last update and final hyp
      */
     @Override
     public void onUpdate(String[] heardWords, boolean finalResult) {
