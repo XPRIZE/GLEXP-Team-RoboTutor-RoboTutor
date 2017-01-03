@@ -293,13 +293,13 @@
   "stories": [
 
     { 
-      "datasource":"{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[file]story_1.json\"}]}}}",
+      "datasource":"{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[file]rtasset_stories_en_set1.json:0\"}]}}}",
       "intent": "story_reading", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Story Reading 1" },
     { 
-      "datasource":"{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[file]story_2.json\"}]}}}",
+      "datasource":"{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[file]rtasset_stories_en_set1.json:1\"}]}}}",
       "intent": "story_reading", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Story Reading 2" },
     { 
-      "datasource":"{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[file]story_3.json\"}]}}}",
+      "datasource":"{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[file]rtasset_stories_en_set1.json:2\"}]}}}",
       "intent": "story_reading", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Story Reading 3" }
   ],
 

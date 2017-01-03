@@ -661,7 +661,6 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         String mathLevelVector    = prefs.getString(TCONST.SKILL_MATH, rootSkillMath);
         String shapeLevelVector   = prefs.getString(TCONST.SKILL_SHAPES, rootSkillShapes);
 
-
 //            editor.putInt(assetName + TCONST.ASSET_UPDATE_VERSION , mAssetObject.getVersionField(INDEX_UPDATE, TCONST.ASSET_UPDATE_VERSION));
 //            editor.apply();
     }

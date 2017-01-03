@@ -279,7 +279,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
     /**
      * Note: We make a tacit assumption that SOURCEFILE (i.e. [file]) type descriptors have all their
-     * assets external - i.e. in the public sdcard/RoboTutor_Assets folder
+     * assets external - i.e. in the public sdcard/robotutor_assets folder
      *
      * @param dataNameDescriptor
      */
@@ -287,7 +287,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     public void setDataSource(String dataNameDescriptor) {
 
         try {
-            // Note that here the {file] type semantics is for an external file and [asset] is used
+            // Note that here the {file] type semantics is for an external file and [asset] may be used
             // for internal assets.
             //
             // TODO: work toward consistent [file] semantics as externally sourced files

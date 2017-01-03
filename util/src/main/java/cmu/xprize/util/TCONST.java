@@ -28,6 +28,8 @@ import java.util.HashMap;
 
 public class TCONST {
 
+//    sdcard/robotutor_assets/assets/audio/en/cmu/xprize/activity_selector/d39950ec96e6a5361508996ce7ae6444.mp3
+
     // These features are based on the current tutor selection model
     // When no tutor has been selected it should run the tutor select
     // and when it finishes it should run the difficulty select until
@@ -232,7 +234,7 @@ public class TCONST {
     static final public String BASE_ASSETS        = "assets";
     public static final String STORY_ASSETS       = "story";
     static final public String EXTERNAL           = "external";
-    static final public String ROBOTUTOR_ASSETS   = "sdcard/RoboTutor_Assets/assets";
+    static final public String ROBOTUTOR_ASSETS   = "sdcard/robotutor_assets/assets";
 
 
     static final public String LTK_PROJECT_ASSETS = "projects";
@@ -451,7 +453,7 @@ public class TCONST {
 
     public static final String WRITINGTUTOR_FOLDER      = "/WritingTutor/";
     public static final String ROBOTUTOR_FOLDER         = "/RoboTutor/";
-    public static final String ROBOTUTOR_ASSET_FOLDER   = "/RoboTutor_Assets/";
+    public static final String ROBOTUTOR_ASSET_FOLDER   = "/robotutor_assets/";
     public static final String GLYPHS_FOLDER            = "/glyphs/";
 
 
