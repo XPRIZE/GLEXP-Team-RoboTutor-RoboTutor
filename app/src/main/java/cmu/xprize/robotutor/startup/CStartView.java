@@ -26,7 +26,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -35,7 +34,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import cmu.xprize.comp_pointtap.CHandAnimation;
 import cmu.xprize.comp_pointtap.HA_CONST;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.util.CErrorManager;
@@ -93,12 +91,12 @@ public class CStartView extends FrameLayout {
 
         // Allow hits anywhere on screen
         //
-        setOnClickListener(new View.OnClickListener() {
+        setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 callback.onStartTutor();
             }
         });
-        start.setOnClickListener(new View.OnClickListener() {
+        start.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 callback.onStartTutor();
             }
