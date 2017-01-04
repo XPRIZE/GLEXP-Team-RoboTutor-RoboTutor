@@ -3,11 +3,13 @@ package cmu.xprize.robotutor.tutorengine.util;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 public class Zip {
 
@@ -25,8 +27,10 @@ public class Zip {
         _zipFile.close();
     }
 
-    public void unzip(String extractPath) throws IOException {
+    public void extractAll(String extractPath) throws IOException {
+
         File targetDir = new File(extractPath);
+
         if(!targetDir.exists() && !targetDir.mkdirs()){
             throw new IOException("Unable to create directory");
         }
@@ -34,16 +38,22 @@ public class Zip {
         if(!targetDir.isDirectory()){
             throw new IOException("Unable to extract to a non-directory");
         }
+
         Enumeration<? extends ZipEntry> zipEntries = _zipFile.entries();
 
         while(zipEntries.hasMoreElements()){
+
             ZipEntry zipEntry = zipEntries.nextElement();
+
             String path = extractPath + zipEntry.getName();
+
             if(zipEntry.isDirectory()){
-				/*File newDir = new File(path);
+
+				File newDir = new File(path);
+
 				if(!newDir.mkdirs()){
 					throw new IOException("Unable to extract the zip entry " + path);
-				}*/
+				}
             }
             else {
                 BufferedInputStream inputStream = new BufferedInputStream(_zipFile.getInputStream(zipEntry));
@@ -77,4 +87,5 @@ public class Zip {
             }
         }
     }
+
 }

@@ -103,6 +103,9 @@ public class BP_CONST {
     public static final String RESUME_ANIMATION   = "RESUME_ANIMATION";
     public static final int    MAX_ATTEMPT        = 3;
 
+    public static final String QUEST_VAR          = ".questValue";
+    public static final String ANSWER_VAR         = ".ansValue";
+
 
     static public HashMap<String, Integer> bubbleMap = new HashMap<String, Integer>();
 

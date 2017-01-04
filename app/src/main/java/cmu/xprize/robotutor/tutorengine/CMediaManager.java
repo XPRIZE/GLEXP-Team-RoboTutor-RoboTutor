@@ -24,6 +24,8 @@ import android.content.res.AssetManager;
 import android.media.MediaPlayer;
 import android.util.Log;
 
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -60,8 +62,9 @@ public class CMediaManager {
     private HashMap<String, type_handler>   mHandlerMap    = new HashMap<String, type_handler>();
     private HashMap<String, type_timeline>  mTimeLineMap   = new HashMap<String, type_timeline>();
 
-    private HashMap<CTutor, HashMap>        mMediaPackage  = new HashMap<>();
+    private HashMap<CTutor, HashMap>        mSoundPackageMap = new HashMap<>();
     private AssetManager                    mAssetManager;
+    static private int                      playerCount = 0;
 
     // Note that there is per tutor Language capability
     //
@@ -84,9 +87,7 @@ public class CMediaManager {
     public void restartMediaManager() {
 
         for(PlayerManager controller : mPlayerCache) {
-            if(controller.isPlaying()) {
-                controller.kill();
-            }
+           controller.kill();
         }
 
         Iterator<?> timerObjects = mTimerMap.entrySet().iterator();
@@ -122,13 +123,13 @@ public class CMediaManager {
         }
 
 
-        mPlayerCache = new ArrayList<PlayerManager>();
+        mPlayerCache   = new ArrayList<PlayerManager>();
         mTimerMap      = new HashMap<String, type_timer>();
         mHandlerMap    = new HashMap<String, type_handler>();
         mTimeLineMap   = new HashMap<String, type_timeline>();
 
-        mMediaPackage  = new HashMap<>();
-        mLangFtrMap    = new HashMap<CTutor, String>();
+        mSoundPackageMap = new HashMap<>();
+        mLangFtrMap      = new HashMap<CTutor, String>();
     }
 
 
@@ -164,16 +165,16 @@ public class CMediaManager {
         tTutor.updateLanguageFeature(langFtr);
     }
 
-    public void setMediaPackage(CTutor tTutor, HashMap soundMap) {
+    public void setSoundPackage(CTutor tTutor, HashMap soundMap) {
 
-        mMediaPackage.put(tTutor, soundMap);
+        mSoundPackageMap.put(tTutor, soundMap);
     }
 
 
-    public String mapMediaPackage(CTutor tTutor, String packageName, String langOverride) {
+    public String mapSoundPackage(CTutor tTutor, String packageName, String langOverride) {
 
         HashMap<String,CMediaPackage> soundMap;
-        CMediaPackage   mediaPack;
+        CMediaPackage   mediaPackage;
         String          autoLang;
         String          soundPackage;
 
@@ -185,11 +186,11 @@ public class CMediaManager {
         }
 
         try {
-            // If the tutor is configured for mediapackages in the tutor_descriptor
+            // If the tutor is configured for soundpackages in the tutor_descriptor
             // Old tutors may not contain soundMaps - these default to what they expect.
-            // non-soundMap tutors are deprecated.
+            // NOTE: non-soundMap tutors are deprecated.
             //
-            soundMap = mMediaPackage.get(tTutor);
+            soundMap = mSoundPackageMap.get(tTutor);
 
             if (soundMap != null) {
 
@@ -198,9 +199,9 @@ public class CMediaManager {
                 if (packageName == null)
                     packageName = TCONST.DEFAULT_SOUND_PACKAGE;
 
-                mediaPack = soundMap.get(packageName);
+                mediaPackage = soundMap.get(packageName);
 
-                switch (mediaPack.language) {
+                switch (mediaPackage.language) {
                     case TCONST.LANG_AUTO:
                         // Do nothing - Use the standard autoLang
                         break;
@@ -216,7 +217,7 @@ public class CMediaManager {
                         break;
                 }
 
-                soundPackage = autoLang + "/" + mediaPack.path;
+                soundPackage = autoLang + "/" + mediaPackage.path;
 
             } else {
                 soundPackage = autoLang;
@@ -227,6 +228,84 @@ public class CMediaManager {
         }
 
         return soundPackage;
+    }
+
+
+    public String mapPackagePath(CTutor tTutor, String packageName) {
+
+        HashMap<String,CMediaPackage> soundMap;
+        CMediaPackage   mediaPackage;
+        String          packagePath;
+
+        try {
+            // If the tutor is configured for soundpackages in the tutor_descriptor
+            // Old tutors may not contain soundMaps - these default to what they expect.
+            // NOTE: non-soundMap tutors are deprecated.
+            //
+            soundMap = mSoundPackageMap.get(tTutor);
+
+            if (soundMap != null) {
+
+                // If the user didn't define a sound package use the default
+                //
+                if (packageName == null)
+                    packageName = TCONST.DEFAULT_SOUND_PACKAGE;
+
+                mediaPackage = soundMap.get(packageName);
+
+                // Note that location and srcPath currently default to RoboTutor specific
+                // locations in public memory folders
+                //
+                packagePath = mediaPackage.srcpath;
+
+            } else {
+                packagePath = TCONST.BASE_ASSETS;
+            }
+        }
+        catch(Exception e) {
+            packagePath = TCONST.BASE_ASSETS;
+        }
+
+        return packagePath;
+    }
+
+
+    public String mapPackageLocation(CTutor tTutor, String packageName) {
+
+        HashMap<String,CMediaPackage> soundMap;
+        CMediaPackage   mediaPackage;
+        String          packageLocation;
+
+        try {
+            // If the tutor is configured for soundpackages in the tutor_descriptor
+            // Old tutors may not contain soundMaps - these default to what they expect.
+            // NOTE: non-soundMap tutors are deprecated.
+            //
+            soundMap = mSoundPackageMap.get(tTutor);
+
+            if (soundMap != null) {
+
+                // If the user didn't define a sound package use the default
+                //
+                if (packageName == null)
+                    packageName = TCONST.DEFAULT_SOUND_PACKAGE;
+
+                mediaPackage = soundMap.get(packageName);
+
+                // Note that location and srcPath currently default to RoboTutor specific
+                // locations in public memory folders
+                //
+                packageLocation = mediaPackage.location;
+
+            } else {
+                packageLocation = TCONST.EXTERNAL;
+            }
+        }
+        catch(Exception e) {
+            packageLocation = TCONST.EXTERNAL;
+        }
+
+        return packageLocation;
     }
 
 
@@ -342,7 +421,7 @@ public class CMediaManager {
     //*************  MediaPlayer Management START
 
 
-    public PlayerManager attachMediaPlayer(String dataSource, IMediaListener owner) {
+    public PlayerManager attachMediaPlayer(String dataSource, String location, IMediaListener owner) {
 
         PlayerManager manager = null;
 
@@ -388,8 +467,8 @@ public class CMediaManager {
 
                 manager.releasePlayer();
 
-                manager.attach(owner);               // Need to reattach to a new owner
-                manager.createPlayer(dataSource);    // Update the datasource
+                manager.attach(owner);                        // Need to reattach to a new owner
+                manager.createPlayer(dataSource, location);   // Update the datasource
             }
         }
 
@@ -397,9 +476,9 @@ public class CMediaManager {
         //
         if(manager == null) {
 
-            Log.i(TAG, "Creating new PlayerManager");
+            Log.i(TAG, "Creating new PlayerManager: " + mPlayerCache.size());
 
-            manager = new PlayerManager(owner, dataSource);
+            manager = new PlayerManager(owner, dataSource, location);
 
             mPlayerCache.add(manager);
         }
@@ -447,30 +526,48 @@ public class CMediaManager {
         private long         mSeekPoint     = 0;
 
 
-        final static public String TAG = "PlayerManager";
+        final static public String TAG = "CMediaManager";
 
 
-        protected PlayerManager(Object owner, String _dataSource) {
+        protected PlayerManager(Object owner, String _dataSource, String location) {
 
             mOwner      = (IMediaListener)owner;
             mDataSource = _dataSource;
 
-            createPlayer(mDataSource);
+            createPlayer(mDataSource, location);
         }
 
 
-        protected void createPlayer(String dataSource) {
+        protected void createPlayer(String dataSource, String location) {
 
             try {
                 mIsReady = false;
+
+                // Ensure the player is released
+                //
+                if(mPlayer != null) {
+                    releasePlayer();
+                }
+
+                playerCount++;
+                Log.d(TAG, "CREATE_PLAYER_MAMANGER: >> " + playerCount);
                 mPlayer  = new MediaPlayer();
 
-                // TODO: permit local file sources - see LoadTrack in type_timeline
-                AssetFileDescriptor soundData = mAssetManager.openFd(dataSource);
+                switch(location) {
 
-                mPlayer.setDataSource(soundData.getFileDescriptor(), soundData.getStartOffset(), soundData.getLength());
-                soundData.close();
+                    case TCONST.EXTERNAL:
+                        FileInputStream soundFile = new FileInputStream(dataSource);
 
+                        mPlayer.setDataSource(soundFile.getFD());
+                        break;
+
+                    default:
+                        AssetFileDescriptor soundData = mAssetManager.openFd(dataSource);
+
+                        mPlayer.setDataSource(soundData.getFileDescriptor(), soundData.getStartOffset(), soundData.getLength());
+                        soundData.close();
+                        break;
+                }
                 mPlayer.setOnPreparedListener(this);
                 mPlayer.setOnCompletionListener(this);
                 mPlayer.setLooping(mOwner.isLooping());
@@ -483,10 +580,14 @@ public class CMediaManager {
 
                 mPlayer.prepareAsync();
 
-                Log.d(TAG, "Audio Loading: " + dataSource);
+                Log.d(TAG, "Audio Loading: "  + mOwner.sourceName() + " => " + mOwner.resolvedName() );
 
             } catch (Exception e) {
-                Log.e(TAG, "Audio error: " + e);
+                Log.e(TAG, "Audio error: " + mOwner.sourceName() + " => " + mOwner.resolvedName() + " => " + e);
+
+                // Do the completion event to keep the tutor moving.
+                //
+                onCompletion(mPlayer);
             }
         }
 
@@ -494,13 +595,19 @@ public class CMediaManager {
         public void releasePlayer() {
 
             if(mPlayer != null) {
-                mPlayer.pause();
+
+                if(mPlaying) {
+                    mPlayer.pause();
+                }
                 mPlaying = false;
                 mIsAlive = true;
 
                 mPlayer.reset();
                 mPlayer.release();
                 mPlayer = null;
+
+                playerCount--;
+                Log.d(TAG, "DESTROY_PLAYER_MANAGER: >> " + playerCount);
 
                 mDataSource = "";
             }
@@ -592,16 +699,12 @@ public class CMediaManager {
             Log.d(TAG, "Kill MediaPlayer");
             mIsAlive = false;
 
-            // Note: using stop instead of pause seems to be preferable. pause seek combination
-            // seems to have a probability of brief restart
-            //
-            if(mPlaying) {
-                mPlayer.stop();
-            }
+            releasePlayer();
         }
 
 
         public void pause() {
+
             if(mPlaying) {
                 mPlayer.pause();
                 mMediaController.stopSpeaking();

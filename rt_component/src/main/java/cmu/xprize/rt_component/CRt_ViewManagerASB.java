@@ -28,13 +28,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -77,7 +77,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private int                     mEvenIndex;
     private int                     mCurrViewIndex;
 
-    // state for the current story - African Story Book
+    // state for the current storyName - African Story Book
 
     private String                  mCurrHighlight = "";
     private int                     mCurrPage;
@@ -85,12 +85,12 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private int                     mCurrPara;
     private int                     mCurrLine;
     private int                     mCurrWord;
-    private int                     mHearWord;                          // The expected location of mCurrWord in heardWords - see PLRT version of onUpdate below
+    private int                     mHeardWord;                          // The expected location of mCurrWord in heardWords - see PLRT version of onUpdate below
 
-    private String                  speakButtonEnable = "";
-    private String                  speakButtonShow   = "";
-    private String                  pageButtonEnable  = "";
-    private String                  pageButtonShow    = "";
+    private String                  speakButtonEnable = "DISABLE";
+    private String                  speakButtonShow   = "HIDE";
+    private String                  pageButtonEnable  = "DISABLE";
+    private String                  pageButtonShow    = "HIDE";
 
     private int                     mPageCount;
     private int                     mParaCount;
@@ -111,6 +111,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private String                  futureSentences        = "";
     private boolean                 showFutureContent      = true;
     private boolean                 listenFutureContent    = false;
+    private String                  assetLocation;
 
     private ArrayList<String>       wordsSpoken;
     private ArrayList<String>       futureSpoken;
@@ -157,24 +158,23 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     }
 
 
-
-
     /**
-     *   The startup sequence for a new story is:
+     *   The startup sequence for a new storyName is:
      *   Set - storyBooting flag to inhibit startListening so the script can complete whatever
      *   preparation is required before the listener starts.  Otherwise you get junk hypotheses.
      *
      *   Once the script has completed its introduction etc. it calls nextline to cause a line increment
-     *   which resets storyBooting and enables the listener for the first sentence in the story.
+     *   which resets storyBooting and enables the listener for the first sentence in the storyName.
      *
      * @param owner
      * @param assetPath
      */
-    public void initStory(IVManListener owner, String assetPath) {
+    public void initStory(IVManListener owner, String assetPath, String location) {
 
-        mOwner       = owner;
-        mAsset       = assetPath;
-        storyBooting = true;
+        mOwner        = owner;
+        mAsset        = assetPath;
+        storyBooting  = true;
+        assetLocation = location;
 
         mParent.setFeature(TCONST.FTR_STORY_STARTING, TCONST.ADD_FEATURE);
 
@@ -353,12 +353,23 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     private void configurePageImage() {
 
+        InputStream in;
+
         try {
-            InputStream in = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image);
+            if (assetLocation.equals(TCONST.EXTERN)) {
+
+                in = new FileInputStream(mAsset + data[mCurrPage].image);
+
+            } else {
+
+                in = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image);
+            }
 
             mPageImage.setImageBitmap(BitmapFactory.decodeStream(in));
 
         } catch (IOException e) {
+
+            mPageImage.setImageBitmap(null);
             e.printStackTrace();
         }
     }
@@ -531,7 +542,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         //
         UpdateDisplay();
 
-        // Once past the story initialization stage - Listen for the target word -
+        // Once past the storyName initialization stage - Listen for the target word -
         //
         if(!storyBooting)
             startListening();
@@ -585,7 +596,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     /**
      *  Configure for specific Page
-     *  Assumes current story
+     *  Assumes current storyName
      *
      * @param pageIndex
      */
@@ -751,7 +762,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     public void seekToWord(int wordIndex) {
 
         mCurrWord = wordIndex;
-        mHearWord = 0;
+        mHeardWord = 0;
 
         if(mCurrWord > mWordCount-1) mCurrWord = mWordCount-1;
         if(mCurrWord < TCONST.ZERO)  mCurrWord = TCONST.ZERO;
@@ -853,9 +864,9 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         if (mListener != null) {
 
             // reset the relative position of mCurrWord in the incoming PLRT heardWords array
-            mHearWord = 0;
+            mHeardWord = 0;
             mListener.reInitializeListener(true);
-            mListener.updateNextWordIndex(mHearWord);
+            mListener.updateNextWordIndex(mHeardWord);
 
             mListener.listenFor(wordsToListenFor.toArray(new String[wordsToListenFor.size()]), 0);
             mListener.setPauseListener(false);
@@ -1004,14 +1015,14 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             }
             Log.i("ASR", "New HypSet: " + logString);
 
-            while (mHearWord < heardWords.length) {
+            while (mHeardWord < heardWords.length) {
 
-                if (wordsToSpeak[mCurrWord].equals(heardWords[mHearWord].hypWord)) {
+                if (wordsToSpeak[mCurrWord].equals(heardWords[mHeardWord].hypWord)) {
 
                     nextWord();
-                    mHearWord++;
+                    mHeardWord++;
 
-                    mListener.updateNextWordIndex(mHearWord);
+                    mListener.updateNextWordIndex(mHeardWord);
 
                     Log.i("ASR", "RIGHT");
                     attemptNum = 0;
@@ -1035,7 +1046,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             mParent.onASREvent(TCONST.RECOGNITION_EVENT);
         }
         catch(Exception e) {
-            // TODO: This seem sto be because the activity is not destroyed and the ASR continues
+            // TODO: This seems to be because the activity is not destroyed and the ASR continues
             Log.d("ASR", "onUpdate Fault: " + e);
         }
     }
@@ -1044,7 +1055,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     /**
      * This is where incoming JSGF ASR data would be processed.
      *
-     *  TODO: check if it is possible for the hypothesis to chamge between last update and final hyp
+     *  TODO: check if it is possible for the hypothesis to change between last update and final hyp
      */
     @Override
     public void onUpdate(String[] heardWords, boolean finalResult) {

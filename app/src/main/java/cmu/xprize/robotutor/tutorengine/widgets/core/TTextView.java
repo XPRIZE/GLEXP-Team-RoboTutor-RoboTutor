@@ -181,6 +181,12 @@ public class TTextView extends TextView implements ITutorObjectImpl {
     // Tutor methods  Start
 
 
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
+
 
     //** Special Object methods for missing method parameter type combinations
 

@@ -105,7 +105,7 @@ public class scene_module extends scene_node implements ILoadableObject2 {
         resetNode();
 
         // TODO: At the moment this loop is used to allow Module callouts from timer events
-        // TODO: Make it so that timer events runin their own graph so this is not needed.
+        // TODO: Make it so that timer events run in their own graph so this is not needed.
         //
         do {
 
@@ -124,6 +124,20 @@ public class scene_module extends scene_node implements ILoadableObject2 {
         }while(_moduleState.equals(TCONST.DONE));
 
         return _moduleState;
+    }
+
+
+    /**
+     */
+    public String cancelNode() {
+
+        _ndx = 0;
+        _moduleState = TCONST.READY;
+
+        if(_nextAction != null)
+            _nextAction.cancelNode();
+
+        return TCONST.NONE;
     }
 
 
@@ -146,7 +160,7 @@ public class scene_module extends scene_node implements ILoadableObject2 {
         }
 
         if(result == null)
-            throw(new Exception("Symbol not found: " + symbolName));
+            throw(new Exception("Local Symbol not found: " + symbolName));
 
         return result;
     }

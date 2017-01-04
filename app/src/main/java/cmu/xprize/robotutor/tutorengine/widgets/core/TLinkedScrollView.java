@@ -45,24 +45,21 @@ public class TLinkedScrollView  extends CLinkedScrollView implements ITutorObjec
 
     public TLinkedScrollView(Context context) {
         super(context);
-        init(context, null);
     }
 
     public TLinkedScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context, attrs);
     }
 
     public TLinkedScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context, attrs);
     }
 
     public void init(Context context, AttributeSet attrs) {
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
 
-        setOnTouchListener(this);
+        super.init(context, attrs);
     }
 
     @Override
@@ -79,6 +76,10 @@ public class TLinkedScrollView  extends CLinkedScrollView implements ITutorObjec
     //************************************************************************
     // Tutor methods  Start
 
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
 
     /**
      * TODO: rewrite the LTK project format
@@ -204,49 +205,6 @@ public class TLinkedScrollView  extends CLinkedScrollView implements ITutorObjec
     @Override
     public void setAlpha(Float alpha) {
         mSceneObject.setAlpha(alpha);
-    }
-
-
-
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
-        // TODO: DBUG DEBUG DEBUG   START
-
-        int size = 1298;
-
-        final int specMode = MeasureSpec.getMode(widthMeasureSpec);
-        final int specSize = MeasureSpec.getSize(widthMeasureSpec);
-        final int result;
-        switch (specMode) {
-            case MeasureSpec.AT_MOST:
-                if (specSize < size) {
-                    result = specSize | MEASURED_STATE_TOO_SMALL;
-                } else {
-                    result = size;
-                }
-                break;
-            case MeasureSpec.EXACTLY:
-                result = specSize;
-                break;
-            case MeasureSpec.UNSPECIFIED:
-            default:
-                result = size;
-        }
-
-        // TODO: DBUG DEBUG DEBUG  END
-
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        Log.d(TAG, "width  : " + getMeasuredWidth());
-        Log.d(TAG, "height : " + getMeasuredHeight());
-
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b);
     }
 
 }

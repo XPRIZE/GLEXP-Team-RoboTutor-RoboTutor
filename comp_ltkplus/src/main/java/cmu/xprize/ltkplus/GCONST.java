@@ -22,6 +22,25 @@ public class GCONST {
     public static final float  CALIBRATED_WEIGHT  = 0f;
     public static final float  CALIBRATION_CONST  = 14.288889f;
 
+    public static final String X_CONSTR           = "X";
+    public static final String Y_CONSTR           = "Y";
+    public static final String W_CONSTR           = "W";
+    public static final String H_CONSTR           = "H";
+    public static final String A_CONSTR           = "A";
+
+    public static final String FTR_POSHORZ_VIOLATION = "FTR_POSHORZ_VIOLATION";
+    public static final String FTR_LEFT_VIOLATION    = "FTR_LEFT_VIOLATION";
+    public static final String FTR_RIGHT_VIOLATION   = "FTR_RIGHT_VIOLATION";
+    public static final String FTR_POSVERT_VIOLATION = "FTR_POSVERT_VIOLATION";
+    public static final String FTR_HIGH_VIOLATION    = "FTR_HIGH_VIOLATION";
+    public static final String FTR_LOW_VIOLATION     = "FTR_LOW_VIOLATION";
+
+    public static final String FTR_WIDTH_VIOLATION   = "FTR_WIDTH_VIOLATION";
+    public static final String FTR_WIDE_VIOLATION    = "FTR_WIDE_VIOLATION";
+    public static final String FTR_NARROW_VIOLATION  = "FTR_NARROW_VIOLATION";
+    public static final String FTR_HEIGHT_VIOLATION  = "FTR_HEIGHT_VIOLATION";
+    public static final String FTR_TALL_VIOLATION    = "FTR_TALL_VIOLATION";
+    public static final String FTR_SHORT_VIOLATION   = "FTR_SHORT_VIOLATION";
 
     static public HashMap<String, String> glyphMap = new HashMap<String, String>();
 
@@ -121,6 +140,17 @@ public class GCONST {
 
     // TODO: make getStroke weight scale sensitive
     //
+    public static final float    REPLAY_WEIGHT = 5f;
     public static final float    STROKE_WEIGHT = 45f;
 
+
+    // We are correcting for specific LipiTK named recognizer errors (i.e. the ALPHANUM recognizer) -
+    // Sometime it doesn't produce certain characters that you'd think it should due to training
+    // deficiencies - we enumaerate those characters here -
+    //
+    static public HashMap<String, Boolean> boostMap = new HashMap<String, Boolean>();
+
+    static {
+        boostMap.put("i", true);
+    }
 }

@@ -1,0 +1,16 @@
+{
+  "dataSource" : [
+    {"type" : "CAk_Data", "choices" : ["3", "7"], "answer" : "MID", "belowString" : "5"},
+    {"type" : "CAk_Data", "choices" : ["2", "4"], "answer" : "RIGHT", "belowString" : "5"},
+    {"type" : "CAk_Data", "choices" : ["6","8"], "answer" : "LEFT", "belowString" : "5"},
+    {"type" : "CAk_Data", "choices" : ["1", "3"], "answer" : "RIGHT", "belowString" : "5"},
+    {"type" : "CAk_Data", "choices" : ["6", "9"],"answer" : "LEFT", "belowString" : "3"},
+    {"type" : "CAk_Data", "choices" : ["1", "6"], "answer" : "MID", "belowString" : "3"},
+    {"type" : "CAk_Data", "choices" : ["0", "2"], "answer" : "RIGHT", "belowString" : "3"},
+    {"type" : "CAk_Data", "choices" : ["5", "8"], "answer" : "LEFT", "belowString" : "3"},
+    {"type" : "CAk_Data", "choices" : ["4", "7"], "answer" : "LEFT", "belowString" : "2"},
+    {"type" : "CAk_Data", "choices" : ["1", "4"], "answer" : "MID", "belowString" : "2"},
+    {"type" : "CAk_Data", "choices" : ["0", "1"], "answer" : "RIGHT", "belowString" : "2"},
+    {"type" : "CAk_Data", "choices" : ["1", "3"], "answer" : "MID", "belowString" : "2"}
+  ]
+}

@@ -65,10 +65,11 @@ public class CRecognizerPlus implements IGlyphSink {
     private boolean                _boostExpected     = true;
     private boolean                _boostUnExpected   = true;
     private boolean                _boostPunctuation  = false;
+    private boolean                _boostMissingSample= true;
 
     private boolean                _boostDigitClass   = false;
     private boolean                _boostAlphaClass   = false;
-    private boolean                _boostSampleClass  = false;
+    private boolean                _boostSampleClass  = true;
 
 
     private CLipiTKJNIInterface _recognizer;
@@ -178,73 +179,13 @@ public class CRecognizerPlus implements IGlyphSink {
 
 
     /**
-     * Remove any pending scenegraph commands.
-     *
-     */
-    public void flushQueue() {
-
-        _glyphQueue = new ConcurrentLinkedQueue();
-    }
-
-
-    /**
-     *
-     */
-    public class QueuedGlyph {
-
-        protected IGlyphSource _source;
-        protected CGlyph _glyph;
-
-        public QueuedGlyph(IGlyphSource source, CGlyph glyph) {
-
-            _source  = source;
-            _glyph   = glyph;
-        }
-    }
-
-
-    /**
-     * Add a glyph to the recognition queue
-     *
-     */
-    public void postToQueue(IGlyphSource source, CGlyph glyph) {
-
-        _glyphQueue.add(new QueuedGlyph(source, glyph));
-
-        // Try and recognize it if not already working on another one.
-        //
-        nextQueued();
-    }
-
-
-    private void nextQueued() {
-
-        synchronized (_isRecognizing) {
-
-            if(!_isRecognizing) {
-
-                _nextGlyph = (QueuedGlyph) _glyphQueue.poll();
-
-                if (_nextGlyph != null) {
-
-                    _isRecognizing = true;
-
-                    // Tasks can only run once so create a new one for each recognition task.
-                    _recTask = new RecognizerTask();
-                    _recTask.execute();
-                }
-            }
-        }
-    }
-
-
-    /**
      * The RecognizerThread provides a background thread on which to do the rocognition task
      * TODO: We may need a scrim on the UI thread depending on the observed performance
      */
     class RecognizerTask extends AsyncTask<Void, Void, String> {
 
         private long         LTKTimer;                  // Used for benchmarking
+        private long         LTKPlusTimer;              // Used for benchmarking
 
         RecognizerTask() {
         }
@@ -263,6 +204,7 @@ public class CRecognizerPlus implements IGlyphSink {
 
             _ltkCandidates = _recognizer.recognize(_recStrokes);
 
+            LTKPlusTimer = System.currentTimeMillis();
             Log.d("LTKPLUS", "Time in LTKProcessor: " + (System.currentTimeMillis() - LTKTimer));
 
             // generate the LTK project folder that contains the symbol to unicode mapping
@@ -291,17 +233,24 @@ public class CRecognizerPlus implements IGlyphSink {
 
             _recStrokes = null;
 
-            Log.d("LTKPLUS", "Time in LTK_PUS_Processor: " + (System.currentTimeMillis() - LTKTimer));
+            Log.d("LTKPLUS", "Time in LTK_PLUS_Processor: " + (System.currentTimeMillis() - LTKPlusTimer));
 
             synchronized (_isRecognizing) {
 
                 _isRecognizing = false;
 
-                _nextGlyph._source.recCallBack(_ltkCandidates, _ltkPlusCandidates, _sampleIndex);
+                // If the result is not valid - flush the queue
+                //
+                if(!_nextGlyph._source.recCallBack(_ltkCandidates, _ltkPlusCandidates, _sampleIndex)) {
+
+                    flushQueue();
+                }
 
                 // Check if any more recognizer requests are queued
                 //
-                nextQueued();
+                else {
+                    nextQueued();
+                }
             }
         }
 
@@ -339,6 +288,7 @@ public class CRecognizerPlus implements IGlyphSink {
         CRecResult[] insCandidates;
         boolean      hasCandidate = false;
         int          insertIndex  = -1;
+        int          lowestIndex  = 0;
 
         if(!force) {
             for (int i1 = 0; i1 < _ltkCandidates.length; i1++) {
@@ -358,17 +308,24 @@ public class CRecognizerPlus implements IGlyphSink {
             for(int i1 = 0; i1 < _ltkCandidates.length ; i1++) {
 
                 insCandidates[i1] = _ltkCandidates[i1];
+
+                // Keep track of the lowest LTK confidence
+                //
+                if(!_ltkCandidates[i1].isVirtual()) {
+                    lowestIndex = i1;
+                }
             }
 
             // Give it the same confidence as the second most likely
             // Handle special case where there is one or no candidates
+            // TODO: The value of 0.5f here is totally arbitrary - i.e. may not be rational
             //
             if(_ltkCandidates.length <= 1) {
                 insCandidates[insertIndex] = new CRecResult(newCandidate, 0.5f, true);
             }
             else {
 
-                insCandidates[insertIndex] = new CRecResult(newCandidate, _ltkCandidates[1].Confidence, true);
+                insCandidates[insertIndex] = new CRecResult(newCandidate, _ltkCandidates[lowestIndex].Confidence, true);
             }
             insCandidates[insertIndex].updateORConfidence(insCandidates[insertIndex].Confidence);
             insCandidates[insertIndex].setVisualRequest(true);
@@ -439,16 +396,17 @@ public class CRecognizerPlus implements IGlyphSink {
      */
     public int ltkPlusProcessor(IGlyphSource glyphSrc ) {
 
-        String      candidateLTK;
-        char        sampleChar;
-        char        ltkChar;
-        Rect        compCharBnds    = new Rect();
-        RectF       glyphVisualBnds;
-        int         sampleIndex     = GCONST.EXPECTED_NOT_FOUND;
-        boolean     forceProcessing = false;
-        boolean     sampDigit       = false;
-        boolean     sampUpper       = false;
-        boolean     sampAlpha       = false;
+        String          candidateLTK;
+        char            sampleChar;
+        CGlyphMetrics   metric;
+        char            ltkChar;
+        Rect            compCharBnds    = new Rect();
+        RectF           glyphVisualBnds;
+        int             sampleIndex     = GCONST.EXPECTED_NOT_FOUND;
+        boolean         forceProcessing = false;
+        boolean         sampDigit       = false;
+        boolean         sampUpper       = false;
+        boolean         sampAlpha       = false;
 
         _sampleExpected    = glyphSrc.getExpectedChar();
         _drawGlyph         = glyphSrc.getGlyph();
@@ -488,7 +446,11 @@ public class CRecognizerPlus implements IGlyphSink {
 
         // If the sample (i.e. expected character) is not amongst the LipiTK candidates then we add it.
         //
-        if(sampleIndex == GCONST.EXPECTED_NOT_FOUND) {
+        // We are correcting for specific LipiTK named recognizer errors (i.e. the ALPHANUM recognizer) -
+        // Sometime it doesn't produce certain characters that you'd think it should due to training
+        // deficiencies - we force add boostMap characters here -
+        //
+        if(sampleIndex == GCONST.EXPECTED_NOT_FOUND && (_boostMissingSample || GCONST.boostMap.containsKey(_sampleExpected))) {
 
             // Special processing = LTK essentially never recognizes a comma nor an apostrophe.
             // so to allow the system to recognize either and disambiguate the result we add
@@ -533,7 +495,12 @@ public class CRecognizerPlus implements IGlyphSink {
         // We always ensure the alternate case of the expected is present as we know that LTK is often wrong on case
         // differentiation and we want both case alternates of the expected char to be evaluated e.g. X and x
         //
-        forceProcessing |= ensureAlternateCase(_sampleExpected, sampleIndex);
+        if(sampleIndex >= 0)
+            forceProcessing |= ensureAlternateCase(_sampleExpected, sampleIndex);
+
+        // Generate the visual bounds for the glyph that was drawn
+        //
+        glyphVisualBnds = _drawGlyph.getGlyphViewBounds(_viewBnds, GCONST.STROKE_WEIGHT);
 
 
         // If the LTK candidate is not the sample char then do LTK+ post processing.
@@ -558,16 +525,13 @@ public class CRecognizerPlus implements IGlyphSink {
                 sampAlpha = Character.isLetterOrDigit(sampleChar);
             }
 
-            // Generate the visual bounds for the glyph that was drawn
-            glyphVisualBnds = _drawGlyph.getGlyphViewBounds(_viewBnds, GCONST.STROKE_WEIGHT);
-
             // Clone a prototype glyph for each LTK candidate
             //
             for(CRecResult candidate : _ltkCandidates) {
 
                 candidate.setGlyph(new CGlyph(mContext, _baseLine, _viewBnds, _dotSize));
 
-                CGlyphMetrics metric = candidate.getGlyph().getMetric();
+                metric = candidate.getGlyph().getMetric();
 
                 boolean isSample     = candidate.getIsExpected();
                 String  candChar     = candidate.getRecChar();
@@ -581,9 +545,11 @@ public class CRecognizerPlus implements IGlyphSink {
                 // Generate the dimensional metrics for the given candidate char
                 // Generate the visual comparison metric for the given char
                 //
-                metric.calcMetrics(_drawGlyph, glyphVisualBnds, candCharBnds, (sampleIndex != GCONST.EXPECT_NONE)? compCharBnds:candCharBnds , GCONST.STROKE_WEIGHT);
+                metric.calcMetrics(_drawGlyph, glyphVisualBnds, candCharBnds, _viewBnds, (sampleIndex != GCONST.EXPECT_NONE)? compCharBnds:candCharBnds , GCONST.STROKE_WEIGHT);
 
-                candidate.setVisualConfidence(metric.generateVisualMetric(_fontBnds, candChar, (sampleIndex != GCONST.EXPECT_NONE)? _sampleExpected:candChar, _drawGlyph, _Paint, GCONST.CALIBRATED_WEIGHT, TCONST.VOLATILE));
+                metric.generateVisualMetric(_fontBnds, candChar, (sampleIndex != GCONST.EXPECT_NONE)? _sampleExpected:candChar, _drawGlyph, _Paint, GCONST.CALIBRATED_WEIGHT, TCONST.VOLATILE);
+
+                candidate.setVisualConfidence(metric);
 
                 Log.d("Metrics Initial: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence())) ;
 
@@ -600,7 +566,7 @@ public class CRecognizerPlus implements IGlyphSink {
                 }
 
 
-                // Manage class boosts
+                // Manage class boosts - Digit and Alpha act as filters when you only want to consider those classes
                 //
                 if(_boostDigitClass) {
                     candidate.updateORConfidence((candDigit)? 1.0f:0.0f);
@@ -614,6 +580,8 @@ public class CRecognizerPlus implements IGlyphSink {
                     Log.d("Metrics Alpha Boost: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence())) ;
                 }
 
+                // If candidate is not same class as sample - reduce it's confidence
+                //
                 else if(_boostSampleClass && (candDigit != sampDigit)) {
                     candidate.updateORConfidence((isSample)? 0.75f:0.3f);
 
@@ -633,20 +601,23 @@ public class CRecognizerPlus implements IGlyphSink {
                 // Update the visual confidence
                 //
                 candidate.updateANDConfidence(candidate.getVisualConfidence(), (isSample)? 0.75f:0.5f);
-                Log.d("Metrics Visual: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence()) + "  Visual: " + String.format("%.3f", candidate.getVisualConfidence()));
+                Log.d("Metrics Visual Match: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence()) + "  Match: " + String.format("%.3f", candidate.getVisualConfidence()));
+
+                candidate.updateANDConfidence(candidate.getVisualErrorConfidence(), (isSample)? 0.75f:0.5f);
+                Log.d("Metrics Visual Error: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence()) + "  Error: " + String.format("%.3f", candidate.getVisualErrorConfidence()));
 
                 _ltkPlusCandidates[index++] = candidate;
             }
 
             // Sort the LTK+ array by Plus confidence levels
             //
-            int       count     = _ltkPlusCandidates.length;
-            boolean   needsSort = true;
+            int        count      = _ltkPlusCandidates.length;
+            boolean    sortResult = true;
             CRecResult temp;
 
-            while(needsSort) {
+            while(sortResult) {
 
-                needsSort = false;
+                sortResult = false;
                 for(int i1 = 1 ; i1 < count ; i1++) {
 
                     if (_ltkPlusCandidates[i1-1].getPlusConfidence() < _ltkPlusCandidates[i1].getPlusConfidence()) {
@@ -654,16 +625,38 @@ public class CRecognizerPlus implements IGlyphSink {
 
                         _ltkPlusCandidates[i1-1] = _ltkPlusCandidates[i1];
                         _ltkPlusCandidates[i1]   = temp;
-                        needsSort = true;
+                        sortResult = true;
                     }
                 }
                 count--;
             }
         }
-        // If the top LTK candidate is correct then just mirror the results
+
+        // If the top LTK candidate matches the expected char then just mirror the results
+        //
         else {
+            CRecResult candidate;
+
             _ltkPlusCandidates = _ltkCandidates;
-            _ltkPlusCandidates[0].setGlyph(_drawGlyph);
+
+            // calc metrics on the ltk candidate to provide the tutor with character quality data
+            //
+            candidate = _ltkCandidates[0];
+            candidate.setGlyph(_drawGlyph);
+
+            metric = candidate.getGlyph().getMetric();
+
+            String  candChar     = candidate.getRecChar();
+            Rect    candCharBnds = glyphSrc.getFontCharBounds( candChar);
+
+            // Generate the dimensional metrics for the given candidate char
+            // Generate the visual comparison metric for the given char
+            //
+            metric.calcMetrics(_drawGlyph, glyphVisualBnds, candCharBnds, _viewBnds, (sampleIndex != GCONST.EXPECT_NONE)? compCharBnds:candCharBnds , GCONST.STROKE_WEIGHT);
+
+            metric.generateVisualMetric(_fontBnds, candChar, (sampleIndex != GCONST.EXPECT_NONE)? _sampleExpected:candChar, _drawGlyph, _Paint, GCONST.CALIBRATED_WEIGHT, TCONST.VOLATILE);
+
+            candidate.setVisualConfidence(metric);
         }
 
         // If there is no valid sample in the recognition set then use the TLK candidate = i.e. elemenet 0
@@ -673,6 +666,90 @@ public class CRecognizerPlus implements IGlyphSink {
 
         return sampleIndex;
     }
+
+
+    //************************************************************************
+    //************************************************************************
+    // Component Message Queue  -- Start
+
+    /**
+     *
+     */
+    public class QueuedGlyph {
+
+        protected IGlyphSource _source;
+        protected CGlyph _glyph;
+
+        public QueuedGlyph(IGlyphSource source, CGlyph glyph) {
+
+            _source  = source;
+            _glyph   = glyph;
+        }
+    }
+
+
+    private void nextQueued() {
+
+        synchronized (_isRecognizing) {
+
+            if(!_isRecognizing) {
+
+                _nextGlyph = (QueuedGlyph) _glyphQueue.poll();
+
+                if (_nextGlyph != null) {
+
+                    _isRecognizing = true;
+
+                    // Tasks can only run once so create a new one for each recognition task.
+                    _recTask = new RecognizerTask();
+                    _recTask.execute();
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Remove any pending scenegraph commands.  And reset their glyph
+     *
+     */
+    public void flushQueue() {
+
+        QueuedGlyph  queueItem;
+        IGlyphSource source;
+
+        do {
+            queueItem = (QueuedGlyph) _glyphQueue.poll();
+
+            if(queueItem != null) {
+
+                source = queueItem._source;
+                source.erase();
+            }
+
+        } while(queueItem != null);
+    }
+
+
+    /**
+     * Add a glyph to the recognition queue
+     *
+     */
+    public void postToQueue(IGlyphSource source, CGlyph glyph) {
+
+        _glyphQueue.add(new QueuedGlyph(source, glyph));
+
+        // Try and recognize it if not already working on another one.
+        //
+        nextQueued();
+    }
+
+
+    // Component Message Queue  -- END
+    //************************************************************************
+    //************************************************************************
+
+
 }
 
 

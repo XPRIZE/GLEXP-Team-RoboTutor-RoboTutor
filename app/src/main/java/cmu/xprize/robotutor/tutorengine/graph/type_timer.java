@@ -10,7 +10,6 @@ import java.util.TimerTask;
 
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
-import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.IMediaListener;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
@@ -65,6 +64,16 @@ public class type_timer extends type_action implements IMediaListener {
     // we are starting it from scratch each time a global pause / play occurs.
     //
     private boolean mWasPlaying = false;
+
+    @Override
+    public String sourceName() {
+        return "type_timer";
+    }
+
+    @Override
+    public String resolvedName() {
+        return (id == null)? "":id;
+    }
 
     @Override
     public void globalPause() {
@@ -275,6 +284,6 @@ public class type_timer extends type_action implements IMediaListener {
         //
         id = scope.tutor().mTutorName + id;
 
-        mMediaManager = CMediaController.getInstance(scope.tutor());
+        mMediaManager = CMediaController.getManagerInstance(scope.tutor());
     }
 }

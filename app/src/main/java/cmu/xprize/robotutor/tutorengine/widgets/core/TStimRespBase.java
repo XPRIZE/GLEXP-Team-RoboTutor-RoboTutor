@@ -138,6 +138,13 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, ID
     // Tutor methods  Start
 
 
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
+
+
     /**
      *
      * @param dataPacket

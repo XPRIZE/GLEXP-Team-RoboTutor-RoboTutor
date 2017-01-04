@@ -1,0 +1,14 @@
+{
+  "dataSource" : [
+    {"type" : "CAk_Data", "choices" : ["gari", "hapa", "hiyo"], "answer" : "RIGHT", "belowString" : "audio"},
+    {"type" : "CAk_Data", "choices" : ["kutoa", "kwa", "mara"], "answer" : "LEFT", "belowString" : "audio"},
+    {"type" : "CAk_Data", "choices" : ["ndiyo", "Sawa", "vitu"], "answer" : "MID", "belowString" : "audio"},
+    {"type" : "CAk_Data", "choices" : ["vizuri", "kutoa", "hivyo"], "answer" : "MID", "belowString" : "audio"},
+    {"type" : "CAk_Data", "choices" : ["hii", "ndiyo", "andika"], "answer" : "RIGHT", "belowString" : "audio"},
+    {"type" : "CAk_Data", "choices" : ["kuazima", "mviringo", "kuzidisha"], "answer" : "MID", "belowString" : "audio"},
+    {"type" : "CAk_Data", "choices" : ["kuziongeza", "kujumlisha", "hivyo"], "answer" : "RIGHT", "belowString" : "audio"},
+    {"type" : "CAk_Data", "choices" : ["ndiyo", "mara", "gari"], "answer" : "MID", "belowString" : "audio"},
+    {"type" : "CAk_Data", "choices" : ["kwa", "kwa", "Sawa"], "answer" : "RIGHT", "belowString" : "audio"},
+    {"type" : "CAk_Data", "choices" : ["hiyo", "kutoa", "vizuri"], "answer" : "LEFT", "belowString" : "audio"}
+  ]
+}

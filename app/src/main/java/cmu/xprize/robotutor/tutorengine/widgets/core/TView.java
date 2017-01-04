@@ -20,6 +20,7 @@
 package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -65,6 +66,18 @@ public class TView extends View implements ITutorObjectImpl {
 
     public void setDataSource(String dataSource) {
 
+    }
+
+    public void setBackground(String color) {
+
+        setBackgroundColor(Color.parseColor(color));
+    }
+
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
     }
 
     @Override

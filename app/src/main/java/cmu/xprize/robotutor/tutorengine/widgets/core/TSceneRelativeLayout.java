@@ -76,6 +76,12 @@ public class TSceneRelativeLayout extends RelativeLayout implements ITutorSceneI
     // Tutor methods  Start
 
 
+    @Override
+    public void setVisibility(String visible) {
+
+        mTutorScene.setVisibility(visible);
+    }
+
 
     // Tutor methods  End
     //************************************************************************

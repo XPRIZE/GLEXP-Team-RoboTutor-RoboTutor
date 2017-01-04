@@ -1,26 +1,73 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '24.0.2'
+    compileSdkVersion rootProject.ext.rtCompileSdkVersion
+    buildToolsVersion rootProject.ext.rtBuildToolsVersion
 
     defaultConfig {
         applicationId "cmu.xprize.robotutor"
-        minSdkVersion 21
-
-        // Note that using taeget version 22 bypasses the new run-time permissions found
-        // in Marshmallow 23
-        //
-        targetSdkVersion 22
-        versionCode 1
-        versionName "0.5.0"
+        minSdkVersion rootProject.ext.rtMinSdkVersion
+        targetSdkVersion rootProject.ext.rtTargetSdkVersion
+        versionCode rootProject.ext.rtVersionCode
+        versionName rootProject.ext.rtVersionName
     }
     buildTypes {
+
+        // These custom buildFields are incorporated into the generated BuildConfig class
+        // and may be evaluated in Java code.
+        // e.g. String rtLanguage= BuildConfig.LANGUAGE_FEATURE_ID;
+        //
+        def BOOLEAN = "boolean"
+        def STRING = "String"
+        def TRUE = "true"
+        def FALSE = "false"
+
+        def LANGUAGE_FEATURE_ID = "LANGUAGE_FEATURE_ID"
+        def LANGUAGE_OVERRIDE = "LANGUAGE_OVERRIDE"
+        def LANGUAGE_SWAHILI = "\"LANG_SW\""
+        def LANGUAGE_ENGLISH = "\"LANG_EN\""
+        def LANGUAGE_UNDEFINED = "\"LANG_NULL\""
+
+        def NO_ASR_APPS = "NO_ASR_APPS"
+
         release {
+            buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, FALSE
+            buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
+            buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_UNDEFINED
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, FALSE
+            buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
+            buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_UNDEFINED
+
+            debuggable true
+        }
+
+        // These releases will remove the language selection toggle switch if present in the UI
+        // They also override the LANG_<ID> in the enginedescriptor to force a default language
+        //
+        release_sw {
+            buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, TRUE
+            buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
+            buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
+        }
+
+        release_sw_noasr {
+            buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, TRUE
+            buildConfigField BOOLEAN, NO_ASR_APPS, TRUE
+            buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
+        }
+
+        release_en {
+            buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, TRUE
+            buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
+            buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
+        }
     }
+
     lintOptions {
         // set to true to turn off analysis progress reporting by lint
         quiet true
@@ -32,7 +79,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.android.support:percent:24.2.0'
@@ -49,4 +96,7 @@ dependencies {
     compile project(':ak_component')
     compile project(':bp_component')
     compile project(':comp_writing')
+    compile project(':comp_pointtap')
+    compile project(path: ':comp_ask')
+    compile project(path: ':comp_session')
 }

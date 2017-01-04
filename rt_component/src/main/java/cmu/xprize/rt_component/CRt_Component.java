@@ -55,7 +55,6 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
 
     protected ListenerBase          mListener;
     protected TTSsynthesizer        mSynthesizer;
-    protected String                mLanguage;
 
     protected ICRt_ViewManager      mViewManager;                                   // Created in TRt_Component sub-class in the tutor domain
     protected String                mDataSource;
@@ -67,12 +66,12 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     private String                  completedSentences     = "";
 
     // state for the current sentence
-    private int                     currentIndex          = 0;                      // current sentence index in story, -1 if unset
+    private int                     currentIndex          = 0;                      // current sentence index in storyName, -1 if unset
     private int                     currIntervention      = TCONST.NOINTERVENTION;  //
     private int                     completeSentenceIndex = 0;
     private String                  sentenceWords[];                                // current sentence words to hear
     private int                     expectedWordIndex     = 0;                      // index of expected next word in sentence
-    private static int[]            creditLevel           = null;                   // per-word credit level according to current hyp
+    private static int[]            creditLevel           = null;                   // per-word credit levelFolder according to current hyp
 
     // Tutor scriptable ASR events
     private String                  _silenceEvent;          // Instant silence begins
@@ -176,11 +175,9 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
      *
      * @param language Feature string (e.g. LANG_EN)
      */
-    public void setLanguage(String language) {
+    public void configListenerLanguage(String language) {
 
-        mLanguage = TCONST.langMap.get(language);
-
-        // Configure the mListener for our story
+        // Configure the mListener for our storyName
         //
         mListener.setLanguage(language);
     }
@@ -244,6 +241,37 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
 
     //****** ViewManager Support - START
     //*************************************************
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // IBehaviorManager Interface START
+
+    /**
+     * Manage component defined (i.e. specific) events
+     *
+     * @param event
+     * @return  true of event handled
+     */
+    public boolean applyBehavior(String event){
+
+        boolean result = false;
+        return result;
+    }
+
+    /**
+     * Overridden in TClass to fire graph behaviors
+     *
+     * @param nodeName
+     */
+    public void applyBehaviorNode(String nodeName) {
+    }
+
+
+    // IBehaviorManager Interface END
+    //************************************************************************
+    //************************************************************************
 
 
 
@@ -403,6 +431,7 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
 
     }
 
+
     /**
      */
     public void speakTargetWord() {
@@ -525,58 +554,28 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
 
 
     /**
+     * TODO: this currently only supports extern assets - need to allow for internal assets
      *
-     * @param dataSource
-     */
-//    public void setDataSource(String dataSource, String tutorName) {
-//
-//        try {
-//            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
-//                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
-//
-//                DATASOURCEPATH = TCONST.TUTORROOT + "/" + tutorName + "/" + TCONST.TASSETS + "/" + mLanguage + "/";
-//
-//                String jsonData = JSON_Helper.cacheData(DATASOURCEPATH + dataSource);
-//                loadJSON(new JSONObject(jsonData), null);
-//
-//            } else if (dataSource.startsWith("db|")) {
-//
-//
-//            } else if (dataSource.startsWith("{")) {
-//
-//                loadJSON(new JSONObject(dataSource), null);
-//
-//            } else {
-//                throw (new Exception("BadDataSource"));
-//            }
-//        }
-//        catch (Exception e) {
-//            CErrorManager.logEvent(TAG, "Invalid Data Source for : " + tutorName, e, false);
-//        }
-//    }
-
-
-    /**
      * @param storyName
      */
-    public void setStory(String storyName) {
+    public void setStory(String storyName, String assetLocation) {
 
         for(int i1 = 0 ; i1 < dataSource.length ; i1++ ) {
 
-            if(storyName.equals(dataSource[i1].story)) {
+            if(storyName.equals(dataSource[i1].storyName)) {
 
-                // Generate a cached path to the story asset data
+                // Generate a cached path to the storyName asset data
                 //
-                EXTERNPATH =DATASOURCEPATH + dataSource[i1].folder + "/";
+                EXTERNPATH =DATASOURCEPATH + dataSource[i1].levelFolder + "/" + dataSource[i1].storyFolder + "/";
 
                 Class<?> storyClass = viewClassMap.get(dataSource[i1].viewtype);
 
                 try {
-                    // Generate the View manager for the story - specified in the data
+                    // Generate the View manager for the storyName - specified in the data
                     //
                     mViewManager = (ICRt_ViewManager)storyClass.getConstructor(new Class[]{CRt_Component.class, ListenerBase.class}).newInstance(this,mListener);
 
-                    String jsonData = JSON_Helper.cacheData(EXTERNPATH + TCONST.STORYDATA);
+                    String jsonData = JSON_Helper.cacheDataByName(EXTERNPATH + TCONST.STORYDATA);
 
                     mViewManager.loadJSON(new JSONObject(jsonData), null);
 
@@ -585,9 +584,9 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
                     CErrorManager.logEvent(TAG, "Story Parse Error: ", e, false);
                 }
 
-                // Configure the view manager for the first line of the story.
+                // Configure the view manager for the first line of the storyName.
                 //
-                mViewManager.initStory(this, EXTERNPATH);
+                mViewManager.initStory(this, EXTERNPATH, assetLocation);
 
                 // we're done
                 break;

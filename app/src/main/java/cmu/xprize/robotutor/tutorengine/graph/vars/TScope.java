@@ -253,7 +253,7 @@ public class TScope implements IScope2 {
                                         resultObj = mapSymbol(Symbol.toString());
 
                                         if (resultObj == null) {
-                                            CErrorManager.logEvent(TAG, "Symbol not found: <" + Symbol + "> in expression" + source, null, false);
+                                            CErrorManager.logEvent(TAG, "Parser Symbol not found: <" + Symbol + "> in expression" + source, null, false);
                                         }
 
                                         result.append(resultObj.toString());
@@ -339,9 +339,10 @@ public class TScope implements IScope2 {
                 //TODO : Manage symbol not found
                 // NOTE: this is not reliably being flushed to LogCat
                 //CErrorManager.logEvent(TAG, "Symbol not found : " + name + " Exception: " , e, false);
+                //System.out.printf( "TScope: Symbol not found : %s Exception:\n" , name);
 
                 // Don't exit
-                Log.e(TAG, "Symbol not found : " + name + " Exception: " + e);
+                Log.e(TAG, "Scope Symbol not found : " + name + " Exception: " + e);
             }
         }
 

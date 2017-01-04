@@ -48,6 +48,7 @@ public class type_action extends scene_node {
 
     public String          method;          // Invokes method with parms. using apply
     public String          parms;
+    public String          decodedParms;
 
     public String          features = "";   // default to no features
 
@@ -162,7 +163,7 @@ public class type_action extends scene_node {
             if (cmd != null) {
                 switch (cmd) {
 
-                    // System level command to launch a new Tutor Instance.
+                    // System levelFolder command to launch a new Tutor Instance.
                     //
                     case TCONST.CMD_LAUNCH:
                         try {
@@ -189,6 +190,12 @@ public class type_action extends scene_node {
                         _scope.tutor().mTutorGraph.post(this, TCONST.NEXTSCENE);
                         break;
 
+                    case TCONST.CANCEL_NODE:
+                    case TCONST.SUBGRAPH_RETURN_AND_GO:
+                    case TCONST.SUBGRAPH_RETURN_AND_WAIT:
+                        _scope.sceneGraph().post(this, cmd);
+                        break;
+
                     case TCONST.CMD_GOTO:
                         _scope.tutor().gotoNode(id);
                         break;
@@ -207,6 +214,10 @@ public class type_action extends scene_node {
 
                     case TCONST.CMD_WAIT:
                         returnState = TCONST.WAIT;
+                        break;
+
+                    case TCONST.CMD_DEBUG:
+                        Log.d(TAG, "Debug Hit");
                         break;
 
                     // By default try and find a matching actionMap object to execute.
@@ -290,9 +301,13 @@ public class type_action extends scene_node {
                         //
                         if (parms != null) {
 
+                            // Support templatized parameters
+                            //
+                            decodedParms = getScope().parseTemplate(parms);
+
                             // Break up the parms specification - "parms":"value:type|value:type..."
                             //
-                            List<String> parmList = Arrays.asList(parms.split("[:\\|]"));
+                            List<String> parmList = Arrays.asList(decodedParms.split("[:\\|]"));
 
                             // Create the arrays
                             pType = new Class[parmList.size() / 2];
@@ -330,10 +345,10 @@ public class type_action extends scene_node {
 
                         }
                         catch(InvocationTargetException e) {
-                            CErrorManager.logEvent(TAG, "Script internal ERROR: " + id + " - Apply Method: " + method + "   Parms: " + parms + " : ", e, false);
+                            CErrorManager.logEvent(TAG, "Script internal ERROR: " + id + " - Apply Method: " + method + "   Parms: " + decodedParms + " : ", e, false);
                         }
                         catch (Exception e) {
-                            CErrorManager.logEvent(TAG, "ERROR: " + id + " - Apply Method: " + method + "   Parms: " + parms + " : ", e, false);
+                            CErrorManager.logEvent(TAG, "ERROR: " + id + " - Apply Method: " + method + "   Parms: " + decodedParms + " : ", e, false);
                         }
                         break;
                 }

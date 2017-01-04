@@ -31,6 +31,8 @@ import org.json.JSONObject;
 
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
+import cmu.xprize.robotutor.tutorengine.CMediaController;
+import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
@@ -48,6 +50,7 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
 
     private CTutor               mTutor;
     private CObjectDelegate      mSceneObject;
+    private CMediaManager        mMediaManager;
     private TLangToggle          mLangButton;
     private String               mSymbol;
 
@@ -57,20 +60,20 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
 
     public TSmComponent(Context context) {
         super(context);
-        initT(context, null);
     }
 
     public TSmComponent(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initT(context, attrs);
     }
 
     public TSmComponent(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        initT(context, attrs);
     }
 
-    public void initT(Context context, AttributeSet attrs) {
+    @Override
+    public void init(Context context, AttributeSet attrs) {
+
+        super.init(context, attrs);
 
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
@@ -86,27 +89,43 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
     //**********************************************************
     //*****************  Tutor Interface
 
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
+
     /**
      *
-     * @param dataSource
+     * @param dataNameDescriptor
      */
     @Override
-    public void setDataSource(String dataSource) {
+    public void setDataSource(String dataNameDescriptor) {
 
         try {
-            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
-                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
+            if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
-                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataSource);
+                String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
+
+                // Generate a langauage specific path to the data source -
+                // i.e. tutors/session_manager/assets/data/<iana2_language_id>/
+                // e.g. tutors/session_manager/assets/data/sw/
+                //
+                String dataPath = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS;
+                dataPath += "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+
+                String jsonData = JSON_Helper.cacheData(dataPath + dataFile);
+
                 // Load the datasource in the component module - i.e. the superclass
-                loadJSON(new JSONObject(jsonData), null);
+                loadJSON(new JSONObject(jsonData), mTutor.getScope());
 
-            } else if (dataSource.startsWith("db|")) {
+            } else if (dataNameDescriptor.startsWith("db|")) {
 
 
-            } else if (dataSource.startsWith("{")) {
+            } else if (dataNameDescriptor.startsWith("{")) {
 
-                loadJSON(new JSONObject(dataSource), null);
+                loadJSON(new JSONObject(dataNameDescriptor), null);
 
             } else {
                 throw (new Exception("BadDataSource"));
@@ -128,14 +147,19 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
     @Override
     public void setTutorIntent(String intent, String intentData, String dataSource, String features) {
 
-        // update the response variable  "<Sresponse>.value"
+        // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
+        //
+        if(!(BuildConfig.NO_ASR_APPS && intent.equals(TCONST.STORY_INTENT))) {
 
-        mTutor.getScope().addUpdateVar(name() + ".intent", new TString(intent));
-        mTutor.getScope().addUpdateVar(name() + ".intentData", new TString(intentData));
-        mTutor.getScope().addUpdateVar(name() + ".dataSource", new TString(dataSource));
-        mTutor.getScope().addUpdateVar(name() + ".features", new TString(features));
+            // update the response variable  "<Sresponse>.value"
 
-        applyEventNode(mSymbol);
+            mTutor.getScope().addUpdateVar(name() + ".intent", new TString(intent));
+            mTutor.getScope().addUpdateVar(name() + ".intentData", new TString(intentData));
+            mTutor.getScope().addUpdateVar(name() + ".dataSource", new TString(dataSource));
+            mTutor.getScope().addUpdateVar(name() + ".features", new TString(features));
+
+            applyEventNode(mSymbol);
+        }
     }
 
 
@@ -186,6 +210,11 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
     public void setTutor(CTutor tutor) {
         mTutor = tutor;
         mSceneObject.setTutor(tutor);
+
+        // The media manager is tutor specific so we have to use the tutor to access
+        // the correct instance for this component.
+        //
+        mMediaManager = CMediaController.getManagerInstance(mTutor);
     }
 
     @Override
@@ -196,9 +225,10 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
         mLangButton = (TLangToggle)parent.findViewById(R.id.SlangToggle);
         mLangButton.setTransformationMethod(null);
 
-        // Hide th language toggle on the release builds
-        // TODO : ensure it is in place for trial releases
-        if(!BuildConfig.DEBUG) {
+        // Hide the language toggle on the release builds
+        // TODO : Use build Variant to ensure release configurations
+        //
+        if(BuildConfig.LANGUAGE_OVERRIDE) {
 
             View view = findViewById(R.id.SsmComponent);
             PercentRelativeLayout.LayoutParams params = (PercentRelativeLayout.LayoutParams) view.getLayoutParams();

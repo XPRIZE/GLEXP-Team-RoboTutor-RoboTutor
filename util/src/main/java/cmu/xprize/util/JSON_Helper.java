@@ -47,6 +47,7 @@ public class JSON_Helper {
     static public AssetManager           _assetManager;
     static public String                 _cacheSource;
     static public String                 _externFiles;
+    static final  boolean                DBG = false;
 
 
     static private final String TAG = "JSON_HELPER";
@@ -66,7 +67,18 @@ public class JSON_Helper {
         return _assetManager;
     }
 
+
     static public String cacheData(String fileName) {
+        return cacheData(fileName, _cacheSource);
+    }
+
+
+    static public String cacheDataByName(String fileName) {
+        return cacheData(fileName, TCONST.DEFINED);
+    }
+
+
+    static public String cacheData(String fileName, String localcacheSource) {
 
         InputStream in = null;
 
@@ -85,7 +97,7 @@ public class JSON_Helper {
                 // We can load from Android Assets or from an external file based on the
                 // CacheSource setting
                 //
-                switch(_cacheSource) {
+                switch(localcacheSource) {
                     case TCONST.ASSETS:
 
                         in = _assetManager.open(fileName);
@@ -112,8 +124,6 @@ public class JSON_Helper {
                     buffer.append(line);
                 }
                 in.close();
-
-                Log.d(TAG, "NOTICE: SceneDescr - Loaded.");
 
             } else {
                 Log.d(TAG, "ERROR: SceneDescr - Assets Unavailable.");
@@ -157,7 +167,9 @@ public class JSON_Helper {
         // function is constrained to specific object types -
         Field[] fields = tClass.getFields();
 
-        System.out.printf("fields:%d\n", fields.length);
+        if(DBG) {
+            System.out.printf("fields:%d\n", fields.length);
+        }
 
         // Iterate over all the fields in the object class to see which field have initializer
         // values in the JSON Image
@@ -269,13 +281,20 @@ public class JSON_Helper {
                         // Check for global type
 
                         Class<?> elemClass   = null;
+                        String   classType   = null;
                         boolean  globalType  = false;
                         boolean  isPrimitive = false;
 
                         if(nJsonObj.has("type")) {
-                            elemClass   = classMap.get(nJsonObj.getString("type"));
-                            isPrimitive = !elemClass.isPrimitive();
-                            globalType = true;
+                            try {
+                                classType = nJsonObj.getString("type");
+                                elemClass = classMap.get(classType);
+                                isPrimitive = !elemClass.isPrimitive();
+                                globalType = true;
+                            }
+                            catch (Exception e) {
+                                CErrorManager.logEvent(TAG, "ERROR: no ClassMap defined for: " + classType + "  >> ", e, true);
+                            }
                         }
 
                         while(keys.hasNext() ) {
@@ -344,7 +363,9 @@ public class JSON_Helper {
                                         //
                                         elemClass = classMap.get(mapElem.getString("type"));
 
-                                        System.out.printf("class type:%s\n", elemClass.getName());
+                                        if(DBG) {
+                                            System.out.printf("class type:%s\n", elemClass.getName());
+                                        }
                                         eObj = elemClass.newInstance();
 
                                         // First load the shared instance info in the map
@@ -356,9 +377,11 @@ public class JSON_Helper {
                                             if (!globalType)
                                                 elemClass = classMap.get(elem.getString("type"));
 
-                                            System.out.printf("class type:%s\n", elemClass.getName());
-
+                                            if(DBG) {
+                                                System.out.printf("class type:%s\n", elemClass.getName());
+                                            }
                                             eObj = elemClass.newInstance();
+
                                         } catch (Exception e) {
                                             CErrorManager.logEvent(TAG, "Check Syntax on Element: " + key + " : ", e, false);
                                         }
@@ -370,9 +393,10 @@ public class JSON_Helper {
 
                                     ((ILoadableObject) eObj).loadJSON(elem, scope);
 
-                                    // Initialize graph mode types
+                                    // Initialize graph mode types - define novar on data that shouldn't have a scope
+                                    // variable name - e.g. embedded audio in CAsk_data
                                     //
-                                    if (eObj instanceof IScriptable) {
+                                    if (eObj instanceof IScriptable && !elem.has("novar")) {
 
                                         // Associate the node with its Map name
                                         // This overrides any names assigned in the subtype spec
@@ -413,7 +437,9 @@ public class JSON_Helper {
                         // otherwise assume it is a discrete object of ILoadable type
                         else {
                             try {
-                                System.out.printf("class type:%s\n", fieldName);
+                                if(DBG) {
+                                    System.out.printf("class type:%s\n", fieldName);
+                                }
                                 field_obj = fieldClass.newInstance();
 
                                 nJsonObj = jsonObj.getJSONObject(fieldName);
@@ -459,7 +485,7 @@ public class JSON_Helper {
         try {
             for (int i = 0; i < nArr.length(); i++) {
                 try {
-                    Object eObj;
+                    Object eObj = null;
 
                     if (elemClass.isArray()) {
                         subArr = nArr.getJSONArray(i);
@@ -484,13 +510,22 @@ public class JSON_Helper {
                         if (nJsonObj.has("type")) {
                             Class<?> subClass = classMap.get(nJsonObj.getString("type"));
 
-                            System.out.printf("class type:%s\n", subClass.getName());
-                            eObj = subClass.newInstance();
+                            if(DBG) {
+                                System.out.printf("class type:%s\n", subClass.getName());
+                            }
+                            if(subClass == null) {
+                                Log.e(TAG, "ClassMap missing for:" + nJsonObj.getString("type"));
+                            }
+                            else {
+                                eObj = subClass.newInstance();
+                            }
                         }
 
                         // Otherwise use the array component type by default.
                         else {
-                            System.out.printf("class type:%s\n", elemClass.getName());
+                            if(DBG) {
+                                System.out.printf("class type:%s\n", elemClass.getName());
+                            }
                             eObj = elemClass.newInstance();
                         }
 

@@ -32,6 +32,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import cmu.xprize.util.CAnimatorUtil;
+import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.TCONST;
 
 public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMechanic {
@@ -79,38 +80,40 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
         boolean launched   = false;
         int     colorNdx;
 
-        // Find a bubble that is not currently on screen.
-        //
-        for(CBubble bubble : SBubbles) {
-            if(!bubble.getOnScreen()) {
-                nextBubble = bubble;
-                nextBubble.setOnScreen(true);
-                break;
-            }
-        }
+        if (SBubbles != null) {
 
-        // If there is a free bubble then set it up and launch it
-        //
-        if(nextBubble != null) {
-
-            launched = true;
-
-            do {
-                colorNdx = (int)(Math.random() * BP_CONST.bubbleColors.length);
-            }while(colorNdx == _prevColorNdx);
-
-            _prevColorNdx = colorNdx;
-
-            String correctVal = mComponent._stimulus_data[_currData.dataset[_currData.stimulus_index]];
-
-            nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
-            nextBubble.setScale(getRandInRange(_scaleRange));
-
-            // Cycle on the indexes to display
+            // Find a bubble that is not currently on screen.
             //
-            stimNdx =( stimNdx + 1) % _currData.dataset.length;
+            for (CBubble bubble : SBubbles) {
+                if (!bubble.getOnScreen()) {
+                    nextBubble = bubble;
+                    nextBubble.setOnScreen(true);
+                    break;
+                }
+            }
 
-            String stiumulusVal = mComponent._stimulus_data[_currData.dataset[stimNdx]];
+            // If there is a free bubble then set it up and launch it
+            //
+            if (nextBubble != null) {
+
+                launched = true;
+
+                do {
+                    colorNdx = (int) (Math.random() * BP_CONST.bubbleColors.length);
+                } while (colorNdx == _prevColorNdx);
+
+                _prevColorNdx = colorNdx;
+
+                String correctVal = mComponent._stimulus_data[_currData.dataset[_currData.stimulus_index]];
+
+                nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
+                nextBubble.setScale(getRandInRange(_scaleRange));
+
+                // Cycle on the indexes to display
+                //
+                stimNdx = (stimNdx + 1) % _currData.dataset.length;
+
+                String stiumulusVal = mComponent._stimulus_data[_currData.dataset[stimNdx]];
 
             float xRange[] = null;
             float xPos;
@@ -118,7 +121,7 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
             switch (mComponent.stimulus_type) {
 
-                case BP_CONST.REFERENCE:
+                    case BP_CONST.REFERENCE:
 
                     //Moved set color and scale here after text has been set
                     nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
@@ -133,7 +136,7 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                     timeOfFlight = (long) (_travelTime / nextBubble.getAssignedScale());
                     break;
 
-                case BP_CONST.TEXTDATA:
+                    case BP_CONST.TEXTDATA:
 
                     nextBubble.configData(stiumulusVal, correctVal);
                     nextBubble.setContents(0, stiumulusVal);
@@ -164,55 +167,56 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                 xPos = getRandInRange(xRange);
             } while (Math.abs(xPos - _prevXpos) < nextBubble.getWidth());
 
-            _prevXpos = xPos;
+                _prevXpos = xPos;
 
-            nextBubble.setPosition((int) xPos, mParent.getHeight());
-            nextBubble.setAlpha(1.0f);
+                nextBubble.setPosition((int) xPos, mParent.getHeight());
+                nextBubble.setAlpha(1.0f);
 
             PointF wayPoints[] = new PointF[1];
             PointF posFinal    = new PointF();
 
-            posFinal.x =  nextBubble.getX();
-            posFinal.y = -BP_CONST.BUBBLE_DESIGN_RADIUS * 2.5f * nextBubble.getAssignedScale();
+                posFinal.x = nextBubble.getX();
+                posFinal.y = -BP_CONST.BUBBLE_DESIGN_RADIUS * 2.5f * nextBubble.getAssignedScale();
 
-            wayPoints[0] = posFinal;
+                wayPoints[0] = posFinal;
 
-            Log.d(TAG, "Time of Flight: " + timeOfFlight);
-            Log.d(TAG, "Final YPos: " + posFinal.y);
+                Log.d(TAG, "Time of Flight: " + timeOfFlight);
+                Log.d(TAG, "Final YPos: " + posFinal.y);
 
-            Animator translator = CAnimatorUtil.configTranslate(nextBubble, timeOfFlight, 0, wayPoints);
+                Animator translator = CAnimatorUtil.configTranslate(nextBubble, timeOfFlight, 0, wayPoints);
 
-            translator.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationCancel(Animator arg0) {
-                    //Functionality here
-                }
+                translator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationCancel(Animator arg0) {
+                        //Functionality here
+                    }
 
-                @Override
-                public void onAnimationStart(Animator arg0) {
-                    //Functionality here
-                }
+                    @Override
+                    public void onAnimationStart(Animator arg0) {
+                        //Functionality here
+                    }
 
-                @Override
-                public void onAnimationEnd(Animator animation) {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
 
-                    CBubble bubble = translators.get(animation);
-                    translators.remove(animation);
+                        CBubble bubble = translators.get(animation);
+                        translators.remove(animation);
 
-                    bubble.setOnScreen(false);
-                }
+                        bubble.setOnScreen(false);
+                    }
 
-                @Override
-                public void onAnimationRepeat(Animator arg0) {
-                    //Functionality here
-                }
-            });
+                    @Override
+                    public void onAnimationRepeat(Animator arg0) {
+                        //Functionality here
+                    }
+                });
 
-            setupWiggle(nextBubble, 0);
-            nextBubble.setOnClickListener(CBp_Mechanic_RISE.this);
+                setupWiggle(nextBubble, 0);
+                nextBubble.setOnClickListener(CBp_Mechanic_RISE.this);
 
-            translators.put(translator, nextBubble);
-            translator.start();
+                translators.put(translator, nextBubble);
+                translator.start();
+            }
         }
 
         return launched;

@@ -56,20 +56,21 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
     private TextView                mPageText;
 
     // state for the current sentence
-    private int                     currentIndex           = -1;            // current sentence index in story, -1 if unset
+    private int                     currentIndex           = -1;            // current sentence index in storyName, -1 if unset
     private int                     storyPart              = 0;
     private boolean                 endOfStory             = false;
 
     private int                     completeSentenceIndex  = 0;
     private String                  sentenceWords[];                        // current sentence words to hear
     private int                     expectedWordIndex      = 0;             // index of expected next word in sentence
-    private static int[]            creditLevel = null;                     // per-word credit level according to current hyp
+    private static int[]            creditLevel = null;                     // per-word credit levelFolder according to current hyp
     private boolean                 changingSentence       = false;
 
     private ArrayList<String>       sentences              = null;          //list of sentences of the given passage
     private String                  currentSentence;                        //currently displayed sentence that need to be recognized
     private String                  completedSentencesFmtd = "";
     private String                  completedSentences     = "";
+    private String                  assetLocation;
 
     private IVManListener           _publishListener;
 
@@ -90,7 +91,7 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
 
 
     @Override
-    public void initStory(IVManListener owner, String assetPath) {
+    public void initStory(IVManListener owner, String assetPath, String location) {
 
     }
 
@@ -239,7 +240,7 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
 
 
     /**
-     * @param heardWords Update the sentence credit level with the credit level of the heard words
+     * @param heardWords Update the sentence credit levelFolder with the credit levelFolder of the heard words
      */
     private void updateSentence(ListenerBase.HeardWord[] heardWords) {
 
@@ -247,7 +248,7 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
 
         if (heardWords.length >= 1) {
 
-            // Reset partial credit level of sentence words
+            // Reset partial credit levelFolder of sentence words
             //
             for (int i = 0; i < creditLevel.length; i++) {
 
@@ -285,7 +286,7 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
 
 
     /**
-     * Update the displayed sentence based on the newly calculated credit level
+     * Update the displayed sentence based on the newly calculated credit levelFolder
      */
     private void UpdateSentenceDisplay() {
 
@@ -337,12 +338,12 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
      * Broadcast current target work position for persona eye tracking.
      *
      * Notes:
-     * XML story source text must be entered without extra space or linebreaks.
+     * XML storyName source text must be entered without extra space or linebreaks.
      *
-     *     <selectlevel level="1">
-     *          <story story="1">
+     *     <selectlevel levelFolder="1">
+     *          <storyName storyName="1">
      *              <part part="1">Uninterrupted text</part>
-     *          </story>
+     *          </storyName>
      *
      * @param text
      * @param words
@@ -480,7 +481,7 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
 //            mListener.deleteLogFiles();
 //
 //        mOwner = callback;
-//        switchSentence(currentIndex + 1);      // for now just loop around single story
+//        switchSentence(currentIndex + 1);      // for now just loop around single storyName
 //    }
 
 
@@ -493,7 +494,7 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
 
         boolean result = true;
 
-        // We've exhausted all the sentences in the story
+        // We've exhausted all the sentences in the storyName
         if (index == sentences.size()) {
 
             Log.d("ASR", "End of Story");

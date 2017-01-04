@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_scenes;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
@@ -48,7 +49,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.RoboTutor;
 
 /**
- * The tutor engine provides top-level control over the tutor lifecycle and can support multiple
+ * The tutor engine provides top-levelFolder control over the tutor lifecycle and can support multiple
  * simultaneous tutors.  On creation the tutor engine will instantiate and launch the DefTutor
  * specified in the TCONST.EDESC Json tutor engine specification file.
  *
@@ -78,10 +79,10 @@ public class CTutorEngine implements ILoadableObject2 {
     static public String                         defTutor;
     static public HashMap<String, defdata_tutor> defDataSources;
     static public String                         defFeatures;
+    static public String                         defRunningFeatures;
     static public String                         language;                       // Accessed from a static context
 
 
-    final static public  String CacheSource = TCONST.ASSETS;                // assets or extern
     final static private String TAG         = "CTutorEngine";
 
 
@@ -101,11 +102,6 @@ public class CTutorEngine implements ILoadableObject2 {
 
         Activity        = context;
         TutorLogManager = CLogManager.getInstance();
-
-        // TODO: is this initialization required?
-        // Initialize the JSON Helper statics - just throw away the object.
-        //
-        new JSON_Helper(Activity.getAssets(), CacheSource, RoboTutor.APP_PRIVATE_FILES);
 
         // Load the TCONST.EDESC and generate the root tutor
         //
@@ -134,8 +130,17 @@ public class CTutorEngine implements ILoadableObject2 {
      * at runtime.
      * @param newLang
      */
-    static public void changeDefaultLanguage(String newLang) {
+    static public void setDefaultLanguage(String newLang) {
         language = newLang;
+    }
+
+
+    /**
+     * This is primarily intended as a development API to allow updating the working language
+     * at runtime.
+     */
+    static public String getDefaultLanguage() {
+        return language;
     }
 
 
@@ -203,7 +208,13 @@ public class CTutorEngine implements ILoadableObject2 {
 //        String datas = "{\"scene_bindings\" : {\"session_manager\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SsmComponent\",\"datasource\": \"[file]sm_data.json\"}]}}}";
 //        launch(defTutor, "native", datas, "" );
 
-        createTutor(defTutor, defFeatures);
+        // These features are based on the current tutor selection model
+        // When no tutor has been selected it should run the tutor select
+        // and when it finishes it should run the difficulty select until
+        // the user wants to select another tutor.
+        //
+
+        createTutor(defTutor, RoboTutor.TUTORSELECTED? defRunningFeatures:defFeatures);
         launchTutor(tutorBindings);
     }
 
@@ -312,7 +323,7 @@ public class CTutorEngine implements ILoadableObject2 {
         Intent extIntent = new Intent();
         String extPackage;
 
-        // Allow the intent to override any engine level datasource defaults
+        // Allow the intent to override any engine levelFolder datasource defaults
         //
         if(!dataSourceJson.equals(TCONST.NO_DATASOURCE)) {
 
@@ -325,7 +336,7 @@ public class CTutorEngine implements ILoadableObject2 {
                 e.printStackTrace();
             }
         }
-        // If no datasource defined in the external launch request then try and find a engine level default
+        // If no datasource defined in the external launch request then try and find a engine levelFolder default
         //
         else {
             if(defDataSources != null) {
@@ -354,8 +365,8 @@ public class CTutorEngine implements ILoadableObject2 {
 
             default:
 
-                // This a special allowance for MARi which placed there activities in a different
-                // package from there app - so we check for intent of the form "<pkgPath>:<appPath>"
+                // This a special allowance for MARi which placed their activities in a different
+                // package from their app - so we check for intent of the form "<pkgPath>:<appPath>"
                 //
                 String[] intentParts = intent.split(":");
 
@@ -398,6 +409,13 @@ public class CTutorEngine implements ILoadableObject2 {
 
         try {
             loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.EDESC)), (IScope2)mRootScope);
+
+            // TODO : Use build Variant to ensure release configurations
+            //
+            if(BuildConfig.LANGUAGE_OVERRIDE) {
+                language = BuildConfig.LANGUAGE_FEATURE_ID;
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

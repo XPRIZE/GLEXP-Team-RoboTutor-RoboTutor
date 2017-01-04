@@ -40,11 +40,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CPreferenceCache;
+import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -63,7 +65,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
     private boolean traceMode = false;
 
-    // This is the local tutor scope in which all top level objects and variables are defined
+    // This is the local tutor scope in which all top levelFolder objects and variables are defined
     // May have child scopes for local variables -
 
     private TScope                        mTutorScope;
@@ -132,6 +134,8 @@ public class CTutor implements ILoadableObject2, IEventSource {
         mMediaManager.setLanguageFeature(this, tarLanguage);
 
         inflateTutor();
+
+        mTutorLogManager.postEvent(TAG, "Create Tutor: " + name);
     }
 
 
@@ -249,7 +253,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
             CMediaController.destroyMediaManager(CTutor.this);
 
-            // disable the input queue permenantly in prep for destruction
+            // disable the input queue permanently in prep for destruction
             // walks the queue chain to diaable the tutor and scene queues
             //
             mSceneGraph.terminateQueue();
@@ -290,6 +294,20 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
                         CTutorEngine.destroyCurrentTutor();
                         break;
+
+
+                    // This is how a tutor stops itself -
+                    // DestroyCurrentTutor should remove the tutor and manage the launch
+                    // of some sort of session manager of exit the app completely
+                    //
+                    case TCONST.FINISH:
+
+                        cleanUpTutor();
+
+                        CTutorEngine.destroyCurrentTutor();
+                        RoboTutor.ACTIVITY.finish();
+                        break;
+
                 }
             }
             catch(Exception e) {
@@ -486,6 +504,8 @@ public class CTutor implements ILoadableObject2, IEventSource {
         View tarScene;
         View subScene;
 
+        // Map the sceneid to it's named xml Layout resource.
+        //
         int id = mContext.getResources().getIdentifier(scenedata.id, "layout", mContext.getPackageName());
 
         LayoutInflater inflater = (LayoutInflater)mContext.getSystemService
@@ -711,8 +731,12 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
 
     // test possibly compound features
+    // TODO: Enhance with fsm
     //
     public boolean testFeatureSet(String featSet) {
+
+        boolean      result = false;
+
         List<String> disjFeat = Arrays.asList(featSet.split("\\|"));   // | Disjunctive features
         List<String> conjFeat;                                          // & Conjunctive features
 
@@ -726,16 +750,21 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         for (String dfeature : disjFeat)
         {
-            conjFeat = Arrays.asList(dfeature.split("\\&"));
+            conjFeat   = Arrays.asList(dfeature.split("\\&"));
+            result = true;
 
             // Check that all conjunctive features are set in fFeatures 
 
             for (String cfeature : conjFeat) {
-                if(testFeature(cfeature))
-                                return true;
+                if(!testFeature(cfeature))
+                    result = false;
             }
+
+            if(result)
+                        break;
         }
-        return false;
+
+        return result;
     }
 
 
@@ -792,7 +821,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         // push the soundMap into the MediaManager -
         //
-        mMediaManager.setMediaPackage(this, soundMap);
+        mMediaManager.setSoundPackage(this, soundMap);
 
         // Create a associative cache for the initialization data
         //

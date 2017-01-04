@@ -32,19 +32,35 @@ import cmu.xprize.util.TCONST;
 
 public class CGlyphMetrics {
 
-    private float PosVarV;
-    private float SizVarV;
-    private float PosVarH;
+    private float CGVarX;
+    private float CGVarY;
+    private float CGVarW;
+    private float CGVarH;
+
+    private boolean CG_isTooLeft;
+    private boolean CG_isTooHigh;
+    private boolean CG_isTooWide;
+    private boolean CG_isTooTall;
+
+    private float PosVarY;
     private float SizVarH;
+    private float PosVarX;
+    private float SizVarW;
     private float aspectPr;
     private float aspectGl;
     private float aspectVar;
 
-    private float visualMatch;
+    private float _visualMatch;
+    private float _visualError;
 
     private Bitmap                _bitmap;
     private CPixelArray           _pixels;
-    private int                   _charValue = 0;
+
+    private int                   _charValue   = 0;
+    private int                   _missValue   = 0;
+
+    private int                   _glyphExcess = 0;
+    private int                   _glyphTotal  = 0;
 
     private Paint                 mPaint;
     private Paint                 mPaintDBG;
@@ -68,13 +84,35 @@ public class CGlyphMetrics {
     }
 
 
-    public void calcMetrics(CGlyph currentGlyph, RectF glyphBnds, Rect protoBnds, Rect expectBnds, float STROKE_WEIGHT) {
+    public void calcMetrics(CGlyph currentGlyph, RectF glyphBnds, Rect protoBnds, Rect viewBnds, Rect expectBnds, float STROKE_WEIGHT) {
 
-        PosVarV = Math.abs(protoBnds.top - glyphBnds.top) / expectBnds.height();
-        PosVarH = Math.abs(protoBnds.left - glyphBnds.left) / expectBnds.width();
+        // Calc the center of gravity (center) of the glyph / prototype
 
-        SizVarV = Math.abs(protoBnds.height() - glyphBnds.height()) / expectBnds.height();
-        SizVarH = Math.abs(protoBnds.width() - glyphBnds.width()) / expectBnds.width();
+        float cgx = (glyphBnds.left + glyphBnds.right) / 2;
+        float cgy = (glyphBnds.bottom + glyphBnds.top) / 2;
+
+        float cgpx = (protoBnds.left + protoBnds.right) / 2;
+        float cgpy = (protoBnds.bottom + protoBnds.top) / 2;
+
+        // Calc the relative variance between the glyph and the proto CG as a percentage
+        // of the viewbox
+
+        CG_isTooLeft = cgx < cgpx;
+        CG_isTooHigh = cgy < cgpy;
+        CG_isTooWide = glyphBnds.width() > protoBnds.width();
+        CG_isTooTall = glyphBnds.height() > protoBnds.height();
+
+        CGVarX = Math.abs(cgx - cgpx) / viewBnds.width();
+        CGVarY = Math.abs(cgy - cgpy) / viewBnds.height();
+
+        CGVarW = Math.abs(protoBnds.width() - glyphBnds.width()) / viewBnds.width();
+        CGVarH = Math.abs(protoBnds.height() - glyphBnds.height()) / viewBnds.height();
+
+        PosVarY = Math.abs(protoBnds.top - glyphBnds.top) / expectBnds.height();
+        PosVarX = Math.abs(protoBnds.left - glyphBnds.left) / expectBnds.width();
+
+        SizVarH = Math.abs(protoBnds.height() - glyphBnds.height()) / expectBnds.height();
+        SizVarW = Math.abs(protoBnds.width() - glyphBnds.width()) / expectBnds.width();
 
         aspectPr = ((float) protoBnds.width() / (float) protoBnds.height());
         aspectGl = (glyphBnds.width() / glyphBnds.height());
@@ -90,19 +128,19 @@ public class CGlyphMetrics {
 
 
     public String getVerticalDeviation() {
-        return formatFloat(PosVarV);
+        return formatFloat(PosVarY);
     }
 
     public String getHorizontalDeviation() {
-        return formatFloat(PosVarH);
+        return formatFloat(PosVarX);
     }
 
     public String getHeightDeviation() {
-        return formatFloat(SizVarV);
+        return formatFloat(SizVarH);
     }
 
     public String getWidthDeviation() {
-        return formatFloat(SizVarH);
+        return formatFloat(SizVarW);
     }
 
     public String getAspectDeviation() {
@@ -110,30 +148,56 @@ public class CGlyphMetrics {
     }
 
     public String getVisualMetric() {
-        return formatFloat(visualMatch);
+        return formatFloat(_visualMatch);
+    }
+
+    public String getGlyphErrorMetric() {
+        return formatFloat(_visualError);
     }
 
     public void showDebugBounds(boolean showHide) { DBG = showHide; }
 
+    public boolean getIsLeft() { return CG_isTooLeft; }
+    public boolean getIsHigh() { return CG_isTooHigh; }
+    public boolean getIsWide() { return CG_isTooWide; }
+    public boolean getIsTall() { return CG_isTooTall; }
+
+    public float getDeltaCGY() {
+        return CGVarY;
+    }
+    public float getDeltaCGX() {
+        return CGVarX;
+    }
+    public float getDeltaCGH() {
+        return CGVarH;
+    }
+    public float getDeltaCGW() {
+        return CGVarW;
+    }
 
     public float getDeltaY() {
-        return PosVarV;
+        return PosVarY;
     }
     public float getDeltaX() {
-        return PosVarH;
+        return PosVarX;
     }
     public float getDeltaH() {
-        return SizVarV;
+        return SizVarH;
     }
     public float getDeltaW() {
-        return SizVarH;
+        return SizVarW;
     }
     public float getDeltaA() {
         return aspectVar;
     }
-    public float getVisualDelta() {
-        return visualMatch;
+
+    public float getVisualMatch() {
+        return _visualMatch;
     }
+    public float getVisualError() {
+        return _visualError;
+    }
+
 
 
     public Bitmap generateVisualComparison(Rect fontBounds, String charToCompare, CGlyph glyphToCompare, Paint mPaint, float strokeWeight, boolean isVolatile) {
@@ -156,7 +220,9 @@ public class CGlyphMetrics {
     public float generateVisualMetric(Rect fontBounds, String charToCompare, String expectedChar, CGlyph glyphToCompare, Paint mPaint, float strokeWeight, boolean isVolatile) {
 
         Rect charBnds = new Rect();
-        visualMatch   = 0;
+        _visualMatch = 0;
+
+        long _time = System.currentTimeMillis();
 
         // Setup the stroke weight -
         // The visual comparator was calibrated with a line weight of 45f so we scale that to whatever
@@ -212,6 +278,7 @@ public class CGlyphMetrics {
             // Draw the glyphToCompare overtop of the char and count the number of pixels not
             // obscured by the glyph - represents a metric of the correspondence between the two
             //
+            mPaint.setColor(TCONST.GLYPHCOLOR1);
             mPaint.setStyle(Paint.Style.STROKE);
             mPaint.setStrokeWidth(strokeWeight);
 
@@ -221,24 +288,32 @@ public class CGlyphMetrics {
 
             _pixels.getPixels();
 
-            int errValue    = 0;
-            int excessValue = 0;
-
-            errValue = _pixels.scanAndReplace(TCONST.FONTCOLOR1, TCONST.ERRORCOLOR1);
+            // Count the total pixels in the glyph image
+            // Replace Font pixels that are "missed" and return count
+            // Count glyph pixels outside the font iumage
+            //
+            _glyphTotal  = _pixels.scanNotColor(TCONST.FONTCOLOR1);
+            _missValue   = _pixels.scanAndReplace(TCONST.FONTCOLOR1, TCONST.ERRORCOLOR1);
+            _glyphExcess = _pixels.scanForColor(TCONST.GLYPHCOLOR1);
+//            _glyphExcess = _pixels.scanForColor(mPaint.getColor());
 
             // Calc the visual match metric -
             //
             // 0 = complete overlay - glyph may still have undesirable form but covers the char at least
             // 1 = no match
             //
-            visualMatch = (float) (_charValue - errValue - (excessValue / 2)) / (float) _charValue;
-            Log.d(TAG, "Char Error: " + visualMatch);
+            _visualMatch = (float) (_charValue - _missValue) / (float) _charValue;
+            _visualError = 1.0f - ((float) _glyphExcess / (float) _glyphTotal);
+
+//            Log.d(TAG, "Glyph Excess: " + _visualError);
 
             if (isVolatile)
                 _bitmap.recycle();
         }
 
-        return visualMatch;
+        Log.d("LTKPLUS", "Time in recognizer: " + (System.currentTimeMillis() - _time));
+
+        return _visualMatch;
     }
 
 }

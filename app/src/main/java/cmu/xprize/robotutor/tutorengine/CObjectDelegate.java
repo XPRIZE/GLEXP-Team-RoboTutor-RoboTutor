@@ -1,20 +1,15 @@
 package cmu.xprize.robotutor.tutorengine;
 
-import android.animation.Animator;
 import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
-
-import java.util.ArrayList;
 
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.util.CAnimatorUtil;
+import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.TCONST;
 
@@ -64,6 +59,30 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener, IE
             Log.w(TAG, "Warning: Unnamed Delegate" + e);
         }
 
+    }
+
+    @Override
+    public void setVisibility(String visible) {
+
+        int visibleFlag;
+
+        switch(visible) {
+
+            case TCONST.VISIBLE:
+                visibleFlag = View.VISIBLE;
+                break;
+
+            case TCONST.INVISIBLE:
+                visibleFlag = View.INVISIBLE;
+                break;
+
+            default:
+                visibleFlag = View.GONE;
+                break;
+
+        }
+
+        mOwnerView.setVisibility(visibleFlag);
     }
 
 

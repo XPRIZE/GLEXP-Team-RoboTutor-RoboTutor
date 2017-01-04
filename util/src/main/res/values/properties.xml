@@ -10,5 +10,11 @@
         <attr name="linked_views" format="string"/>
         <attr name="type_face" format="string"/>
         <attr name="border_width" format="float"/>
+
+        <attr name="show_tracker" format="boolean"/>
+
+        <attr name="state_highlight" format="boolean" />
+
     </declare-styleable>
+
 </resources>

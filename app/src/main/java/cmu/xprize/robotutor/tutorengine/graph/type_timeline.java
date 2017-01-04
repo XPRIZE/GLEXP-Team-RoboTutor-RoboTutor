@@ -98,6 +98,16 @@ public class type_timeline extends type_action implements IMediaListener {
     private boolean mWasPlaying = false;
 
     @Override
+    public String sourceName() {
+        return "type_timeline";
+    }
+
+    @Override
+    public String resolvedName() {
+        return "";
+    }
+
+    @Override
     public void globalPause() {
 
         globalStop();
@@ -894,7 +904,7 @@ public class type_timeline extends type_action implements IMediaListener {
             XmlPullParser xpparser = factory.newPullParser();
 
             try {
-                if (CTutorEngine.CacheSource.equals(TCONST.ASSETS)) {
+                if (RoboTutor.CacheSource.equals(TCONST.ASSETS)) {
 
                     in = _scope.tutor().openAsset(factoryPATH);
 
@@ -1031,7 +1041,7 @@ public class type_timeline extends type_action implements IMediaListener {
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(CTutorEngine.Activity);
 
-        mMediaManager = CMediaController.getInstance(scope.tutor());
+        mMediaManager = CMediaController.getManagerInstance(scope.tutor());
 
         // Tasks can only run once so create a new one for each recognition task.
         _loaderThread = new LoaderThread();

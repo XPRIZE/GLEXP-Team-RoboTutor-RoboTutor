@@ -24,7 +24,7 @@ import edu.cmu.xprize.listener.ListenerBase;
 
 public interface ICRt_ViewManager extends ILoadableObject {
 
-    public void initStory(IVManListener owner, String assetPath);
+    public void initStory(IVManListener owner, String assetPath, String assetLocation);
 
     public void onDestroy();
 
