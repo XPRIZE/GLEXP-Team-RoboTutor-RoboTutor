@@ -37,11 +37,6 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     protected HashMap           queueMap     = new HashMap();
     protected HashMap           nameMap      = new HashMap();
 
-    protected HashMap           writeMap     = new HashMap();
-    protected HashMap           readMap      = new HashMap();
-    protected HashMap           mathMap      = new HashMap();
-    protected HashMap           shapeMap     = new HashMap();
-
     protected boolean           _qDisabled   = false;
 
     protected CAsk_Data         _activeLayout;
@@ -50,12 +45,22 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     protected LocalBroadcastManager bManager;
 
     // json loadable
-    public CAsk_Data[]            dataSource;
-    public CAs_Data[]             letters;
-    public CAs_Data[]             stories;
-    public CAs_Data[]             numbers;
-    public CAs_Data[]             shapes;
-    public CAt_Data[]             transitions;
+    public CAsk_Data[]  dataSource;
+
+    public HashMap      writeInitiators;
+    public HashMap      storyInitiators;
+    public HashMap      mathInitiators;
+    public HashMap      shapeInitiators;
+
+    public HashMap      writeTransitions;
+    public HashMap      storyTransitions;
+    public HashMap      mathTransitions;
+    public HashMap      shapeTransitions;
+
+    public String       rootSkillWrite;
+    public String       rootSkillStories;
+    public String       rootSkillMath;
+    public String       rootSkillShapes;
 
     final private String  TAG = "CActivitySelector";
 

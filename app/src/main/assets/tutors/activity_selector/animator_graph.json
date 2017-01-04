@@ -123,6 +123,9 @@
           "reuse":true,
           "COMMENT": "Do Nothing",
           "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "What do you want to work on today.mp3","soundpackage": "default","mode": "stream", "features": "FTR_TUTOR_SELECT"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "what did you think of that.mp3","soundpackage": "default","mode": "stream", "features": "FTR_DIFFICULTY_SELECT"},
+
             {"type": "COMMAND", "cmd": "WAIT" }
           ]
         },
@@ -137,6 +140,7 @@
             //
             {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "ACTIVITY_SELECT:String",  "features":"FTR_TUTOR_SELECT"},
             {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "DIFFICULTY_SELECT:String",  "features":"FTR_DIFFICULTY_SELECT"},
+
 
             // Input must be inhibited until all the behaviors are set
             //

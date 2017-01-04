@@ -40,6 +40,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
@@ -293,6 +294,20 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
                         CTutorEngine.destroyCurrentTutor();
                         break;
+
+
+                    // This is how a tutor stops itself -
+                    // DestroyCurrentTutor should remove the tutor and manage the launch
+                    // of some sort of session manager of exit the app completely
+                    //
+                    case TCONST.FINISH:
+
+                        cleanUpTutor();
+
+                        CTutorEngine.destroyCurrentTutor();
+                        RoboTutor.ACTIVITY.finish();
+                        break;
+
                 }
             }
             catch(Exception e) {

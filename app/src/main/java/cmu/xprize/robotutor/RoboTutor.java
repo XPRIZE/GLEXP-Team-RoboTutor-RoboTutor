@@ -106,6 +106,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     private boolean             isReady       = false;
     private boolean             engineStarted = false;
     static public boolean       TUTORSELECTED = false;
+    static public boolean       STANDALONE    = false;
 
     // TODO: This is a temporary log update mechanism - see below
     //
@@ -377,11 +378,22 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 //
                 tutorEngine = CTutorEngine.getTutorEngine(RoboTutor.this);
 
-                // TODO: This is a temporary log update mechanism - see below
+                // If running without built-in home screen add a start screen
                 //
-                masterContainer.addAndShow(startView);
-                startView.startTapTutor();
-                setFullScreen();
+                if(STANDALONE) {
+
+                    // TODO: This is a temporary log update mechanism - see below
+                    //
+                    masterContainer.addAndShow(startView);
+                    startView.startTapTutor();
+                    setFullScreen();
+                }
+                // Otherwise go directly to the sessionManager
+                //
+                else {
+                    onStartTutor();
+                }
+
             }
             // Note that it is possible for the masterContainer to be recreated without the
             // engine begin destroyed so we must maintain sync here.

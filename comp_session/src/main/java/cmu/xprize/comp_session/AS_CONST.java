@@ -38,5 +38,6 @@ public class AS_CONST {
     public static final String SELECT_REPEAT          = "SELECT_REPEAT";
     public static final String SELECT_EXIT            = "SELECT_EXIT";
 
+    public static final String SELECT_NONE            = "SELECT_NONE";
 }
 

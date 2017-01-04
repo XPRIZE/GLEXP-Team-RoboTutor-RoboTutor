@@ -310,7 +310,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
                 configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
                 setStory(dataSource[storyIndex].storyName, TCONST.EXTERN);
-
             }
 
             else if (dataNameDescriptor.startsWith(TCONST.ASSETFILE)) {

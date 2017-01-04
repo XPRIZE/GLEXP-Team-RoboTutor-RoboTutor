@@ -160,10 +160,11 @@ public class TCONST {
     public static final String ON_CLICK            = "ON_CLICK";
 
     public static final String SKILL_WRITING    = "letters";
-    public static final String SKILL_READING    = "stories";
+    public static final String SKILL_STORIES    = "stories";
     public static final String SKILL_MATH       = "numbers";
     public static final String SKILL_SHAPES     = "shapes";
-    public static final String SKILL_UNSET      = "SKILL_UNSET";
+    public static final String FINISH           = "FINISH";
+    public static final String SKILL_SELECTED   = "SKILL_SELECTED";
 
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
