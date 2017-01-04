@@ -23,33 +23,42 @@
   "bgColors": ["#D9FFFF","#b9FFb9"],
 
   "dataSource": [
-//    {
-//      "type":"Sm_Class",
-//      "description":"Akira",
-//      //"background":"#D9FFFF",
-//      "data": [
-//        { "type":"Sm_Data", "datasource":"", "intent": "akira", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Akira"}
-//      ]
-//    },
-//
-//    {
-//      "type":"Sm_Class",
-//      "description":"add_subtract",
-//      //"background":"#D9FFFF",
-//      "data": [
-//        { "type":"Sm_Data", "datasource":"", "intent": "add_subtract", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Add/Subtract"}
-//      ]
-//    },
-//
+    {
+      "type":"Sm_Class",
+      "description":"Akira",
+      //"background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data", "datasource":"", "intent": "akira", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Akira"}
+      ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"add_subtract",
+      //"background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data", "datasource":"", "intent": "add_subtract", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Add/Subtract"}
+      ]
+    },
+
     {
       "type":"Sm_Class",
       "description":"numeric",
       //"background":"#D9FFFF",
       "data": [
-        { "type":"Sm_Data", "datasource":"", "intent": "digit_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy"},
-        { "type":"Sm_Data", "datasource":"", "intent": "digit_dictation", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Dictation"}
-//        { "type":"Sm_Data", "datasource":"", "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word Copy"}
-      ]
+          { "type":"Sm_Data",
+            "datasource":"{\"scene_bindings\" : {\"digit_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"Sstimulus\",\"datasource\": \"[file]dc_data.json\"}]}}}",
+            "intent": "digit_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Copy"},
+
+          { "type":"Sm_Data",
+            "datasource":"{\"scene_bindings\" : {\"digit_dictation\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"Sstimulus\",\"datasource\": \"[file]dd_data.json\"}]}}}",
+            "intent": "digit_dictation", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Digit Dictation"},
+
+          { "type":"Sm_Data",
+            "datasource":"",
+            //"datasource":"{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"Sstimulus\",\"datasource\": \"[file]wc_data.json\"}]}}}",
+            "intent": "word_copy", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word Copy"}
+        ]
     },
 
     {
@@ -57,8 +66,8 @@
       "description":"numeric",
       //"background":"#b9FFb9",
       "data": [
-        { "type":"Sm_Data", "datasource":"", "intent": "number_speaking", "intentdata":"native", "buttontype":"text" , "buttonvalue":"number speaking"}
-//        { "type":"Sm_Data", "datasource":"", "intent": "missing_number", "intentdata":"native", "buttontype":"text" , "buttonvalue":"missing number"}
+        { "type":"Sm_Data", "datasource":"", "intent": "number_speaking", "intentdata":"native", "buttontype":"text" , "buttonvalue":"number speaking"},
+        { "type":"Sm_Data", "datasource":"", "intent": "missing_number", "intentdata":"native", "buttontype":"text" , "buttonvalue":"missing number"}
       ]
     },
 
@@ -412,8 +421,30 @@
           "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_R_NY_RISE.json\"}]}}}",
           "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Mixed Case Rise"}
       ]
+    },
+
+    {
+      "type":"Sm_Class",
+      "description":"fluency_Mixed case - random",
+      //"background":"#D9FFFF",
+      "data": [
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_word_MC_1.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word MC 1", "features":"FTR_LETTERS:FTR_MIXEDCASE" },
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_word_MC_2.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word MC 2", "features":"FTR_LETTERS:FTR_MIXEDCASE" },
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_word_RISE_1.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word RISE 1", "features":"FTR_LETTERS:FTR_MIXEDCASE" },
+        { "type":"Sm_Data",
+          "datasource":"{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_word_RISE_2.json\"}]}}}",
+          "intent": "bubble_pop", "intentdata":"native", "buttontype":"text" , "buttonvalue":"Word RISE 2", "features":"FTR_LETTERS:FTR_MIXEDCASE" }
+
+      ]
     }
 
 
   ]
+
 }

@@ -26,6 +26,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.util.Log;
+import android.graphics.Paint;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -114,39 +115,65 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
                 String stiumulusVal = mComponent._stimulus_data[_currData.dataset[stimNdx]];
 
-                switch (mComponent.stimulus_type) {
+            float xRange[] = null;
+            float xPos;
+            long timeOfFlight = 0;
+
+            switch (mComponent.stimulus_type) {
 
                     case BP_CONST.REFERENCE:
 
-                        int[] shapeSet = BP_CONST.drawableMap.get(stiumulusVal);
+                    //Moved set color and scale here after text has been set
+                    nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
+                    nextBubble.setScale(getRandInRange(_scaleRange));
 
-                        nextBubble.configData(stiumulusVal, correctVal);
-                        nextBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
-                        break;
+
+                    int[] shapeSet = BP_CONST.drawableMap.get(stiumulusVal);
+
+                    nextBubble.configData(stiumulusVal, correctVal);
+                    nextBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
+                    xRange = new float[]{0, mParent.getWidth() - (BP_CONST.BUBBLE_DESIGN_RADIUS * nextBubble.getAssignedScale())};
+                    timeOfFlight = (long) (_travelTime / nextBubble.getAssignedScale());
+                    break;
 
                     case BP_CONST.TEXTDATA:
 
-                        nextBubble.configData(stiumulusVal, correctVal);
-                        nextBubble.setContents(0, stiumulusVal);
-                        break;
-                }
+                    nextBubble.configData(stiumulusVal, correctVal);
+                    nextBubble.setContents(0, stiumulusVal);
 
-                float xRange[] = new float[]{0, mParent.getWidth() - (BP_CONST.BUBBLE_DESIGN_RADIUS * nextBubble.getAssignedScale())};
-                float xPos;
+                    Paint paint = new Paint();
 
-                do {
-                    xPos = getRandInRange(xRange);
-                } while (Math.abs(xPos - _prevXpos) < nextBubble.getWidth());
+                    //Width of the string
+                    float width = paint.measureText(nextBubble.getTextView().getText().toString());
+
+                    //Converts width of string to width of bubble (since getWidth() doesn't calculate fast enough)
+                    float newWidth = width * (float) 6.75 + 150;
+
+                    xRange = new float[]{0, mParent.getWidth() - (newWidth * nextBubble.getAssignedScale())};
+                    timeOfFlight = (long) (_travelTime);
+
+                    //Moved set color and scale here after text has been set
+                    nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
+                    nextBubble.setScale(getRandInRange(_scaleRange));
+
+
+
+                    break;
+            }
+
+
+
+            do {
+                xPos = getRandInRange(xRange);
+            } while (Math.abs(xPos - _prevXpos) < nextBubble.getWidth());
 
                 _prevXpos = xPos;
 
                 nextBubble.setPosition((int) xPos, mParent.getHeight());
                 nextBubble.setAlpha(1.0f);
 
-                long timeOfFlight = (long) (_travelTime / nextBubble.getAssignedScale());
-
-                PointF wayPoints[] = new PointF[1];
-                PointF posFinal = new PointF();
+            PointF wayPoints[] = new PointF[1];
+            PointF posFinal    = new PointF();
 
                 posFinal.x = nextBubble.getX();
                 posFinal.y = -BP_CONST.BUBBLE_DESIGN_RADIUS * 2.5f * nextBubble.getAssignedScale();
@@ -223,6 +250,7 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                 if (!_isRunning && mInitialized) {
 
                     _isRunning = true;
+
                     mComponent.post(BP_CONST.SPAWN_BUBBLE);
                 }
                 break;
@@ -253,7 +281,6 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
             case BP_CONST.SPAWN_BUBBLE:
 
                 if(_isRunning) {
-
                     if (launchBubble()) {
 
                         int[] launchRange = {_travelTime / mComponent.countRange[BP_CONST.MAX], _travelTime / mComponent.countRange[BP_CONST.MIN]};
