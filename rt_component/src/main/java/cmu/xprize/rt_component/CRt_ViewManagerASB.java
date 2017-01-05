@@ -1013,7 +1013,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             for (int i = 0; i < heardWords.length; i++) {
                 logString += heardWords[i].hypWord.toLowerCase() + ":" + heardWords[i].iSentenceWord + " | ";
             }
-            Log.i("ASR", "New HypSet: " + logString);
+            Log.i("ASR", "Update New HypSet: " + logString);
 
             while (mHeardWord < heardWords.length) {
 

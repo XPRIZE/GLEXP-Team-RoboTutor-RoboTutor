@@ -365,7 +365,7 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
                 break;
 
             case TCONST.ERROR_EVENT:
-                Log.d("ASR", "RECOGNITION EVENT");
+                Log.d("ASR", "ERROR_EVENT");
                 applyEventNode(_onRecognitionError);
                 break;
 
