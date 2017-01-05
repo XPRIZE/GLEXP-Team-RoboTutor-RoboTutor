@@ -16,6 +16,7 @@ package cmu.xprize.comp_writing;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -65,6 +66,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private IGlyphController      mGlyphController;
     private CLinkedScrollView     mScrollView;
     private Boolean               _touchStarted = false;
+    private int[]                 _screenCoord = new int[2];
 
     private Paint                 mPaint;
     private Paint                 mPaintBG;
@@ -114,7 +116,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private int                   _glyphColor        = Color.BLACK;
     private int                   _boxColor          = WR_CONST.BOX_COLOR;
 
-    private boolean               mLogGlyphs = false;
+    private boolean               mLogGlyphs = true;
 
     private RecogDelay            _counter;
     private long                  _time;
@@ -269,6 +271,17 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         mScrollView = linkedScroll;
     }
 
+    private void broadcastLocation(String Action, PointF touchPt) {
+
+        getLocationOnScreen(_screenCoord);
+
+        // Let the persona know where to look
+        Intent msg = new Intent(Action);
+        msg.putExtra(TCONST.SCREENPOINT, new float[]{touchPt.x + _screenCoord[0], (float) touchPt.y + _screenCoord[1]});
+
+        bManager.sendBroadcast(msg);
+    }
+
     /**
      * Add Root vector to path
      *
@@ -306,11 +319,15 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             }
         }
 
+        PointF tPoint = new PointF(x, y);
+
         _drawGlyph.newStroke();
-        _drawGlyph.addPoint(new PointF(x, y));
+        _drawGlyph.addPoint(tPoint);
 
         mX = x;
         mY = y;
+
+        broadcastLocation(TCONST.LOOKAT, tPoint);
 
         invalidate();
     }
@@ -394,6 +411,8 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             mX = x;
             mY = y;
 
+            broadcastLocation(TCONST.LOOKAT, touchPt);
+
             // TODO: BUG - drawGlyph may be null ?????
             //
             _drawGlyph.addPoint(touchPt);
@@ -412,14 +431,16 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         _counter.start();
 
+        touchPt = new PointF(x, y);
+
         // Only add a new point to the glyph if it is outside the jitter tolerance
         if(testPointTolerance(x,y)) {
-
-            touchPt = new PointF(x, y);
 
             _drawGlyph.addPoint(touchPt);
             invalidate();
         }
+
+        broadcastLocation(TCONST.LOOKATEND, touchPt);
 
         _drawGlyph.endStroke();
     }
@@ -441,6 +462,9 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         switch (event.getAction()) {
 
             case MotionEvent.ACTION_DOWN:
+
+                mWritingComponent.applyBehavior(WR_CONST.WRITE_BEHAVIOR);
+
                 mScrollView.setEnableScrolling(mHasGlyph);
 
                 _prevTime = _time = System.nanoTime();

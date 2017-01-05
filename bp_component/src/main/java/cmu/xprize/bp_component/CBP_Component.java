@@ -376,7 +376,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
                 }
             }
             catch(Exception e) {
-                CErrorManager.logEvent(TAG, "Run Error:", e, false);
+                CErrorManager.logEvent(TAG, "Run Error: cmd:" + _command + " tar: " + _target + "  >", e, false);
             }
         }
     }

@@ -54,14 +54,14 @@ public class CPixelArray {
     }
 
 
-    public int scanForColor(int testColot) {
+    public int scanForColor(int testColor) {
 
         int count = 0;
         int size  = getSize();
 
         for (int i1 = 0; i1 < size ; i1++) {
 
-            if (_pixels[i1] == testColot) {
+            if (_pixels[i1] == testColor) {
 
                 count++;
             }
@@ -71,14 +71,14 @@ public class CPixelArray {
     }
 
 
-    public int scanNotColor(int testColot) {
+    public int scanNotColor(int testColor) {
 
         int count = 0;
         int size  = getSize();
 
         for (int i1 = 0; i1 < size ; i1++) {
 
-            if (_pixels[i1] != 0 && _pixels[i1] != testColot) {
+            if (_pixels[i1] != 0 && _pixels[i1] != testColor) {
 
                 count++;
             }
@@ -88,14 +88,14 @@ public class CPixelArray {
     }
 
 
-    public int scanAndReplace(int testColot, int replaceColor) {
+    public int scanAndReplace(int testColor, int replaceColor) {
 
         int errValue = 0;
         int size     = getSize();
 
         for (int i1 = 0; i1 < size ; i1++) {
 
-            if (_pixels[i1] == testColot) {
+            if (_pixels[i1] == testColor) {
 
                 _pixels[i1] =  replaceColor;
                 errValue++;

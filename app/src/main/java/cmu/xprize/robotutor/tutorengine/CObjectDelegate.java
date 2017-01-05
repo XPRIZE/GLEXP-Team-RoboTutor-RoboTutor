@@ -61,6 +61,30 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener, IE
 
     }
 
+    @Override
+    public void setVisibility(String visible) {
+
+        int visibleFlag;
+
+        switch(visible) {
+
+            case TCONST.VISIBLE:
+                visibleFlag = View.VISIBLE;
+                break;
+
+            case TCONST.INVISIBLE:
+                visibleFlag = View.INVISIBLE;
+                break;
+
+            default:
+                visibleFlag = View.GONE;
+                break;
+
+        }
+
+        mOwnerView.setVisibility(visibleFlag);
+    }
+
 
     @Override
     public String getEventSourceName() {

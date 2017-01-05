@@ -113,6 +113,30 @@ public class CSceneDelegate implements ITutorScene {
 
 
     @Override
+    public void setVisibility(String visible) {
+
+        int visibleFlag;
+
+        switch(visible) {
+
+            case TCONST.VISIBLE:
+                visibleFlag = View.VISIBLE;
+                break;
+
+            case TCONST.INVISIBLE:
+                visibleFlag = View.INVISIBLE;
+                break;
+
+            default:
+                visibleFlag = View.GONE;
+                break;
+
+        }
+
+        mOwnerViewGroup.setVisibility(visibleFlag);
+    }
+
+    @Override
     public void setName(String name) { mTutorId = name; }
 
     @Override

@@ -40,6 +40,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.robotutor.tutorengine.widgets.core.IDataSink;
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.CLogManager;
 import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.IScope;
@@ -99,6 +100,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
         mTutor          = tutor;
         mTutorName      = name;
         mTutorContainer = tutorContainer;
+        mLogManager     = CLogManager.getInstance();
 
         _sceneCurr = 0;
         _scenePrev = 0;
@@ -155,7 +157,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
                 if(scene.children != null) {
                     Iterator<?> tObjects = scene.children.entrySet().iterator();
 
-                    // Perform component level cleanup first
+                    // Perform component levelFolder cleanup first
                     //
                     while(tObjects.hasNext() ) {
                         Map.Entry entry = (Map.Entry) tObjects.next();
@@ -428,7 +430,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
 
             navigatedata[_scenePrev].instance.onExitScene();
 
-            // increment the current scene - this is feature reactive
+            // increment the current scene - this is Feature reactive
             sceneCurrINC();
 
             if (navigatedata[_sceneCurr].instance == null) {
@@ -484,11 +486,16 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
 
                 if(dataSink != null) {
 
+                    mLogManager.postEvent(TAG, "PreEnter DataSource: " + binding.datasource);
+
                     dataSink.setDataSource(binding.datasource);
 
                     // Add a feature to show the component has been initialized
                     //
                     mTutor.setAddFeature(TCONST.DATA_PREFIX + binding.name.toUpperCase());
+                }
+                else {
+                    Log.e(TAG, "Default Data Binding - View not found by name: " + binding.name);
                 }
             }
         }

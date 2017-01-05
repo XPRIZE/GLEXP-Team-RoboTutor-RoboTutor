@@ -5,7 +5,9 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.1'
+
+        classpath 'com.android.tools.build:gradle:2.2.2'
+
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -15,8 +17,31 @@ allprojects {
     repositories {
         jcenter()
     }
+
+    // Global variables common to all modules
+    // see: http://tools.android.com/tech-docs/new-build-system/tips
+    //
+    ext {
+        rtCompileSdkVersion=24          //Integer
+        rtBuildToolsVersion="24.0.2"    //String
+
+        rtMinSdkVersion=21
+
+        // Note that using target version 22 bypasses the new run-time permissions found
+        // in Marshmallow 23
+        //
+        rtTargetSdkVersion=22
+
+        rtVersionCode=1
+
+        // Semantic versioning description:
+        // <Milestone release> <Feature Release> <Patch release> <Asset Compatibility ID>
+        rtVersionName="0.14.0.1"
+    }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+

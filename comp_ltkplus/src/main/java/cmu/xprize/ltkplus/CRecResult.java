@@ -15,10 +15,11 @@ public class CRecResult {
     // These are non-JNI (i.e. not accessed from JNI)
     //
     private String   _recChar           = " ";
-    private float    _visualConfidence  = 0;
+    private float    _visualMatch       = 0;
+    private float    _visualError       = 0;
     private boolean  _requestVisual     = false;
     private float    _plusConfidence    = 1.0f;
-    private CGlyph _sampleGlyph       = null;
+    private CGlyph   _sampleGlyph       = null;
 
     private boolean  _isVirtual         = false;    // True if not added (created) by LTK but added externally
     private boolean  _isSample          = false;
@@ -59,11 +60,15 @@ public class CRecResult {
         return _recChar;
     }
 
-    public void setVisualConfidence(float confidence) {
-        _visualConfidence = confidence;
+    public void setVisualConfidence(CGlyphMetrics   metric) {
+        _visualMatch = metric.getVisualMatch();
+        _visualError = metric.getVisualError();
     }
     public float getVisualConfidence() {
-        return _visualConfidence;
+        return _visualMatch;
+    }
+    public float getVisualErrorConfidence() {
+        return _visualError;
     }
 
     public void setGlyph(CGlyph glyph) { _sampleGlyph = glyph; }

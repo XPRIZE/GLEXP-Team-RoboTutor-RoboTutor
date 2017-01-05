@@ -23,6 +23,9 @@ import android.media.MediaPlayer;
 
 public interface IMediaListener {
 
+    public String sourceName();
+    public String resolvedName();
+
     public void globalPause();
     public void globalPlay();
     public void globalStop();

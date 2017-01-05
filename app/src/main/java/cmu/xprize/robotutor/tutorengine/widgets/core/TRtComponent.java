@@ -21,8 +21,13 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
@@ -38,19 +43,25 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.rt_component.CRt_Component;
 import cmu.xprize.rt_component.IRtComponent;
 import cmu.xprize.util.CErrorManager;
+import cmu.xprize.util.IBehaviorManager;
+import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
 
-public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRtComponent, IDataSink {
+public class TRtComponent extends CRt_Component implements IBehaviorManager, ITutorObjectImpl, Button.OnClickListener, IRtComponent, IDataSink, IEventSource {
 
     private CTutor           mTutor;
     private CObjectDelegate  mSceneObject;
     private CMediaManager    mMediaManager;
 
+    private HashMap<String, String> volatileMap = new HashMap<>();
+    private HashMap<String, String> stickyMap = new HashMap<>();
+
     private String           speakBehavior;
     private String           pageFlipBehavior;
+    private String           clickBehavior;
 
 
     static private String TAG = "TRtComponent";
@@ -73,10 +84,6 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
 
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
-
-        // Default to English language stories
-        //
-        mLanguage = TCONST.langMap.get("LANG_EN");
 
         // Push the ASR listener reference into the super class in the Java domain
         //
@@ -108,28 +115,227 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
     }
 
 
+    //************************************************************************
+    //************************************************************************
+    // IBehaviorManager Interface START
+
+    public void setVolatileBehavior(String event, String behavior) {
+
+        enableOnClickBehavior(event, behavior);
+
+        if (behavior.toUpperCase().equals(TCONST.NULL)) {
+
+            if (volatileMap.containsKey(event)) {
+                volatileMap.remove(event);
+            }
+        } else {
+            volatileMap.put(event, behavior);
+        }
+    }
+
+
+    public void setStickyBehavior(String event, String behavior) {
+
+        enableOnClickBehavior(event, behavior);
+
+        if (behavior.toUpperCase().equals(TCONST.NULL)) {
+
+            if (stickyMap.containsKey(event)) {
+                stickyMap.remove(event);
+            }
+        } else {
+            stickyMap.put(event, behavior);
+        }
+    }
+
+
+    // Execute script target if behavior is defined for this event
+    //
+    @Override
+    public boolean applyBehavior(String event) {
+
+        boolean result = false;
+
+        if(!(result = super.applyBehavior(event))) {
+
+            if (volatileMap.containsKey(event)) {
+                Log.d(TAG, "Processing WC_ApplyEvent: " + event);
+                applyBehaviorNode(volatileMap.get(event));
+
+                volatileMap.remove(event);
+
+                result = true;
+
+            } else if (stickyMap.containsKey(event)) {
+
+                applyBehaviorNode(stickyMap.get(event));
+
+                result = true;
+            }
+        }
+
+        return result;
+    }
+
+
     /**
+     * Apply Events in the Tutor Domain.
      *
-     * @param dataSource
+     * @param nodeName
      */
     @Override
-    public void setDataSource(String dataSource) {
+    public void applyBehaviorNode(String nodeName) {
+        IScriptable2 obj = null;
+
+        if (nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
+
+            try {
+                obj = mTutor.getScope().mapSymbol(nodeName);
+
+                if (obj != null) {
+
+                    switch(obj.getType()) {
+
+                        case TCONST.SUBGRAPH:
+
+                            mTutor.getSceneGraph().post(this, TCONST.SUBGRAPH_CALL, nodeName);
+                            break;
+
+                        case TCONST.MODULE:
+
+                            // Disallow module "calls"
+                            Log.e(TAG, "MODULE Behaviors are not supported");
+                            break;
+
+                        default:
+                            obj.preEnter();
+                            obj.applyNode();
+                            break;
+                    }
+                }
+
+            } catch (Exception e) {
+                // TODO: Manage invalid Behavior
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    /**
+     * Do button like behavior defined for component itself - i.e. click anywhere
+     *
+     * @param v
+     */
+    @Override
+    public void onClick(View v) {
+
+        if(v == this) {
+
+            applyBehavior(TCONST.ON_CLICK);
+        }
+
+    }
+
+
+    private void enableOnClickBehavior(String event, String behavior) {
+
+        if(event.toUpperCase().equals(TCONST.ON_CLICK)) {
+
+            if (behavior.toUpperCase().equals(TCONST.NULL)) {
+                setOnClickListener(null);
+            } else {
+                setOnClickListener(this);
+            }
+        }
+    }
+
+    // IBehaviorManager Interface END
+    //************************************************************************
+    //************************************************************************
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // IEventSource Interface START
+
+
+    @Override
+    public String getEventSourceName() {
+        return name();
+    }
+
+    @Override
+    public String getEventSourceType() {
+        return "Reading_Component";
+    }
+
+
+    // IEventSource Interface END
+    //************************************************************************
+    //************************************************************************
+
+
+    /**
+     * Note: We make a tacit assumption that SOURCEFILE (i.e. [file]) type descriptors have all their
+     * assets external - i.e. in the public sdcard/robotutor_assets folder
+     *
+     * @param dataNameDescriptor
+     */
+    @Override
+    public void setDataSource(String dataNameDescriptor) {
 
         try {
-            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
-                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
+            // Note that here the {file] type semantics is for an external file and [asset] may be used
+            // for internal assets.
+            //
+            // TODO: work toward consistent [file] semantics as externally sourced files
+            //
+            if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
-                DATASOURCEPATH = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + mLanguage + "/";
+                // The story index is appended as a int
+                String[] storyval   = dataNameDescriptor.split(":");
+                int      storyIndex = Integer.parseInt(storyval[1]);
 
-                String jsonData = JSON_Helper.cacheData(DATASOURCEPATH + dataSource);
-                loadJSON(new JSONObject(jsonData), null);
+                String dataFile = storyval[0].substring(TCONST.SOURCEFILE.length()).toLowerCase();
 
-            } else if (dataSource.startsWith("db|")) {
+                DATASOURCEPATH = TCONST.ROBOTUTOR_ASSETS + "/" +  TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
 
+                String jsonData = JSON_Helper.cacheData(DATASOURCEPATH + dataFile, TCONST.DEFINED);
 
-            } else if (dataSource.startsWith("{")) {
+                // Load the datasource in the component module - i.e. the superclass
+                //
+                loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 
-                loadJSON(new JSONObject(dataSource), null);
+                configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
+                setStory(dataSource[storyIndex].storyName, TCONST.EXTERN);
+            }
+
+            else if (dataNameDescriptor.startsWith(TCONST.ASSETFILE)) {
+
+                String dataFile = dataNameDescriptor.substring(TCONST.ASSETFILE.length());
+
+                // Generate a langauage specific path to the data source -
+                // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
+                // e.g. tutors/word_copy/assets/data/sw/
+                //
+                DATASOURCEPATH = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS +
+                                 "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+
+                String jsonData = JSON_Helper.cacheData(DATASOURCEPATH + dataFile);
+
+                // Load the datasource in the component module - i.e. the superclass
+                //
+                loadJSON(new JSONObject(jsonData), mTutor.getScope() );
+
+                configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
+                setStory(dataSource[0].storyName, TCONST.ASSETS);
+
+            } else if (dataNameDescriptor.startsWith("db|")) {
+            } else if (dataNameDescriptor.startsWith("{")) {
+
+                loadJSON(new JSONObject(dataNameDescriptor), null);
 
             } else {
                 throw (new Exception("BadDataSource"));
@@ -164,18 +370,11 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
     //**********************************************************
     //*****************  Scripting Interface
 
-    /**
-     * @param language
-     */
+
     @Override
-    public void setLanguage(String language) {
+    public void setVisibility(String visible) {
 
-        super.setLanguage(language);
-
-        // At the moment
-        // The data source is the language specific story index file.
-        //
-        setDataSource( TCONST.SOURCEFILE + TCONST.STORYINDEX);
+        mSceneObject.setVisibility(visible);
     }
 
 
@@ -184,9 +383,9 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
      *
      * @param storyName
      */
-    public void setStory(String storyName) {
+    public void setStory(String storyName, String assetLocation) {
 
-        super.setStory(storyName);
+        super.setStory(storyName, assetLocation);
     }
 
 
@@ -288,10 +487,6 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
     }
 
 
-    public void setButtonBehavior(String command) {
-        mSceneObject.setButtonBehavior(command);
-    }
-
 
     @Override
     public void zoomInOut(Float scale, Long duration) {
@@ -385,29 +580,6 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
     }
 
 
-    /**
-     *  Apply Events in the Tutor Domain.
-     *
-     * @param nodeName
-     */
-    @Override
-    protected void applyEventNode(String nodeName) {
-        IScriptable2 obj = null;
-
-        if(nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
-
-            try {
-                obj = mTutor.getScope().mapSymbol(nodeName);
-                obj.preEnter();
-                obj.applyNode();
-
-            } catch (Exception e) {
-                // TODO: Manage invalid Behavior
-                e.printStackTrace();
-            }
-        }
-    }
-
     // Scripting Interface  End
     //************************************************************************
     //************************************************************************
@@ -441,7 +613,7 @@ public class TRtComponent extends CRt_Component implements ITutorObjectImpl, IRt
         // The media manager is tutor specific so we have to use the tutor to access
         // the correct instance for this component.
         //
-        mMediaManager = CMediaController.getInstance(mTutor);
+        mMediaManager = CMediaController.getManagerInstance(mTutor);
     }
 
     @Override

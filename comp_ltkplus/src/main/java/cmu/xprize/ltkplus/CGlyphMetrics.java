@@ -37,6 +37,11 @@ public class CGlyphMetrics {
     private float CGVarW;
     private float CGVarH;
 
+    private boolean CG_isTooLeft;
+    private boolean CG_isTooHigh;
+    private boolean CG_isTooWide;
+    private boolean CG_isTooTall;
+
     private float PosVarY;
     private float SizVarH;
     private float PosVarX;
@@ -46,7 +51,7 @@ public class CGlyphMetrics {
     private float aspectVar;
 
     private float _visualMatch;
-    private float _glyphError;
+    private float _visualError;
 
     private Bitmap                _bitmap;
     private CPixelArray           _pixels;
@@ -91,6 +96,11 @@ public class CGlyphMetrics {
 
         // Calc the relative variance between the glyph and the proto CG as a percentage
         // of the viewbox
+
+        CG_isTooLeft = cgx < cgpx;
+        CG_isTooHigh = cgy < cgpy;
+        CG_isTooWide = glyphBnds.width() > protoBnds.width();
+        CG_isTooTall = glyphBnds.height() > protoBnds.height();
 
         CGVarX = Math.abs(cgx - cgpx) / viewBnds.width();
         CGVarY = Math.abs(cgy - cgpy) / viewBnds.height();
@@ -142,11 +152,15 @@ public class CGlyphMetrics {
     }
 
     public String getGlyphErrorMetric() {
-        return formatFloat(_glyphError);
+        return formatFloat(_visualError);
     }
 
     public void showDebugBounds(boolean showHide) { DBG = showHide; }
 
+    public boolean getIsLeft() { return CG_isTooLeft; }
+    public boolean getIsHigh() { return CG_isTooHigh; }
+    public boolean getIsWide() { return CG_isTooWide; }
+    public boolean getIsTall() { return CG_isTooTall; }
 
     public float getDeltaCGY() {
         return CGVarY;
@@ -177,11 +191,11 @@ public class CGlyphMetrics {
         return aspectVar;
     }
 
-    public float getVisualDelta() {
+    public float getVisualMatch() {
         return _visualMatch;
     }
-    public float getErrorDelta() {
-        return _glyphError;
+    public float getVisualError() {
+        return _visualError;
     }
 
 
@@ -264,6 +278,7 @@ public class CGlyphMetrics {
             // Draw the glyphToCompare overtop of the char and count the number of pixels not
             // obscured by the glyph - represents a metric of the correspondence between the two
             //
+            mPaint.setColor(TCONST.GLYPHCOLOR1);
             mPaint.setStyle(Paint.Style.STROKE);
             mPaint.setStrokeWidth(strokeWeight);
 
@@ -279,7 +294,8 @@ public class CGlyphMetrics {
             //
             _glyphTotal  = _pixels.scanNotColor(TCONST.FONTCOLOR1);
             _missValue   = _pixels.scanAndReplace(TCONST.FONTCOLOR1, TCONST.ERRORCOLOR1);
-            _glyphExcess = _pixels.scanForColor(mPaint.getColor());
+            _glyphExcess = _pixels.scanForColor(TCONST.GLYPHCOLOR1);
+//            _glyphExcess = _pixels.scanForColor(mPaint.getColor());
 
             // Calc the visual match metric -
             //
@@ -287,9 +303,9 @@ public class CGlyphMetrics {
             // 1 = no match
             //
             _visualMatch = (float) (_charValue - _missValue) / (float) _charValue;
-            _glyphError  = (float) _glyphExcess / (float) _glyphTotal;
+            _visualError = 1.0f - ((float) _glyphExcess / (float) _glyphTotal);
 
-            Log.d(TAG, "Glyph Excess: " + _glyphError);
+//            Log.d(TAG, "Glyph Excess: " + _visualError);
 
             if (isVolatile)
                 _bitmap.recycle();

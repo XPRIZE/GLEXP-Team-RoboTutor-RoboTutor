@@ -51,9 +51,10 @@ public class CHandAnimation extends PercentRelativeLayout implements Animator.An
 
     private Context       mContext;
 
-    private final Handler mainHandler = new Handler(Looper.getMainLooper());
-    private HashMap       _queueMap   = new HashMap();
-    private boolean       _qDisabled  = false;
+    private final Handler mainHandler       = new Handler(Looper.getMainLooper());
+    private HashMap       _queueMap         = new HashMap();
+    private boolean       _qDisabled        = false;
+    private boolean       _cancelAnimation  = false;
 
     private FrameLayout   _rippleContainer;
     private CRipple[]     _ripples = new CRipple[HA_CONST.RIPPLE_COUNT];
@@ -134,6 +135,7 @@ public class CHandAnimation extends PercentRelativeLayout implements Animator.An
         filter.addAction(TCONST.POINT_AND_TAP);
         filter.addAction(TCONST.POINT_LIVE);
         filter.addAction(TCONST.POINT_FADE);
+        filter.addAction(TCONST.CANCEL_POINT);
 
         bReceiver = new ChangeReceiver();
 
@@ -161,6 +163,8 @@ public class CHandAnimation extends PercentRelativeLayout implements Animator.An
 
                 case TCONST.CANCEL_POINT:
 
+                    _cancelAnimation = true;
+
                     flushQueue();
 
                     if(_animation != null) {
@@ -171,6 +175,8 @@ public class CHandAnimation extends PercentRelativeLayout implements Animator.An
                     break;
 
                 case TCONST.POINT_AND_TAP:
+
+                    _cancelAnimation = false;
 
                     if(!_inAnimation) {
 
@@ -185,6 +191,8 @@ public class CHandAnimation extends PercentRelativeLayout implements Animator.An
                     break;
 
                 case TCONST.POINTAT:
+
+                    _cancelAnimation = false;
 
                     if(!_inAnimation) {
 
@@ -201,6 +209,8 @@ public class CHandAnimation extends PercentRelativeLayout implements Animator.An
 
                 case TCONST.POINT_LIVE:
 
+                    _cancelAnimation = false;
+
                     coord = intent.getFloatArrayExtra(TCONST.SCREENPOINT);
 
                     _hand.setAlpha(1.0f);
@@ -212,6 +222,8 @@ public class CHandAnimation extends PercentRelativeLayout implements Animator.An
 
 
                 case TCONST.POINT_FADE:
+
+                    _cancelAnimation = false;
 
                     if(!_inAnimation) {
 
@@ -409,7 +421,7 @@ public class CHandAnimation extends PercentRelativeLayout implements Animator.An
 
         _animatorNdx++;
 
-        if(_animatorNdx < _animatorSeq.length) {
+        if(!_cancelAnimation && (_animatorNdx < _animatorSeq.length)) {
 
             post(_animatorSeq[_animatorNdx], _animationPoint);
         }

@@ -16,12 +16,14 @@ public class WR_CONST {
 
     public static final String ON_ERROR                 = "ON_ERROR";
     public static final String ON_CHAR_ERROR            = "ON_CHAR_ERROR";
-    public static final String ON_GLYPH_ERROR           = "ON_GLYPH_ERROR";
+    public static final String ON_METRIC_ERROR          = "ON_METRIC_ERROR";
 
     public static final String ON_CORRECT               = "ON_CORRECT";
 
     public static final String ON_ERASE                 = "ON_ERASE";
+
     public static final String POINT_AT_ERASE_BUTTON    = "POINT_AT_ERASE_BUTTON";
+    public static final String POINT_AT_REPLAY_BUTTON   = "POINT_AT_REPLAY_BUTTON";
 
     public static final String FTR_ATTEMPT_1            = "FTR_ATTEMPT_1";
     public static final String FTR_ATTEMPT_2            = "FTR_ATTEMPT_2";
@@ -41,8 +43,6 @@ public class WR_CONST {
     public static final String REPLAY_DEFAULT           = "REPLAY_DEFAULT";
     public static final String RIPPLE_PROTO             = "RIPPLE_PROTO";
     public static final String ANIMATE_OVERLAY          = "ANIMATE_OVERLAY";
-    public static final String ERROR_METRIC             = "ERROR_METRIC";
-    public static final String ERROR_CHAR               = "ERROR_CHAR";
     public static final String FIELD_COMPLETE           = "FIELD_COMPLETE";
     public static final String ANIMATE_ALIGN            = "ANIMATE_ALIGN";
     public static final String HIGHLIGHT_NEXT           = "HIGHLIGHT_NEXT";
@@ -63,5 +63,11 @@ public class WR_CONST {
     public static final String FTR_INPUT_STALLED        = "FTR_INPUT_STALLED";
     public static final String FTR_HAD_ERRORS           = "FTR_HAD_ERRORS";
 
+    public static final String ERROR_METRIC             = "FTR_ERROR_METRIC";
+    public static final String ERROR_CHAR               = "FTR_ERROR_CHAR";
+
+    public static final String ON_REPLAY_COMMAND        = "ON_REPLAY_COMMAND";
+    public static final String WRITE_BEHAVIOR           = "WRITE_BEHAVIOR";
+    public static final String CANCEL_POINTAT           = "CANCEL_POINTAT";
 }
 

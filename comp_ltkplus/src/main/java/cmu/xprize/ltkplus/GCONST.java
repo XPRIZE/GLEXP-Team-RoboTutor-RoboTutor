@@ -28,6 +28,19 @@ public class GCONST {
     public static final String H_CONSTR           = "H";
     public static final String A_CONSTR           = "A";
 
+    public static final String FTR_POSHORZ_VIOLATION = "FTR_POSHORZ_VIOLATION";
+    public static final String FTR_LEFT_VIOLATION    = "FTR_LEFT_VIOLATION";
+    public static final String FTR_RIGHT_VIOLATION   = "FTR_RIGHT_VIOLATION";
+    public static final String FTR_POSVERT_VIOLATION = "FTR_POSVERT_VIOLATION";
+    public static final String FTR_HIGH_VIOLATION    = "FTR_HIGH_VIOLATION";
+    public static final String FTR_LOW_VIOLATION     = "FTR_LOW_VIOLATION";
+
+    public static final String FTR_WIDTH_VIOLATION   = "FTR_WIDTH_VIOLATION";
+    public static final String FTR_WIDE_VIOLATION    = "FTR_WIDE_VIOLATION";
+    public static final String FTR_NARROW_VIOLATION  = "FTR_NARROW_VIOLATION";
+    public static final String FTR_HEIGHT_VIOLATION  = "FTR_HEIGHT_VIOLATION";
+    public static final String FTR_TALL_VIOLATION    = "FTR_TALL_VIOLATION";
+    public static final String FTR_SHORT_VIOLATION   = "FTR_SHORT_VIOLATION";
 
     static public HashMap<String, String> glyphMap = new HashMap<String, String>();
 

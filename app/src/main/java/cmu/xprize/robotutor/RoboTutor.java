@@ -27,16 +27,21 @@ import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.ltkplus.IGlyphSink;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
+import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
 import cmu.xprize.util.CLoaderView;
 import cmu.xprize.util.CLogManager;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
@@ -53,6 +58,8 @@ import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutorAssetManager;
 import cmu.xprize.util.TTSsynthesizer;
 import edu.cmu.xprize.listener.ListenerBase;
+
+import static cmu.xprize.util.TCONST.ROBOTUTOR_ASSET_PATTERN;
 
 
 /**
@@ -80,6 +87,9 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     static public ITutorManager masterContainer;
     static public ILogManager   logManager;
 
+    static CTutorAssetManager   tutorAssetManager;
+    static public ArrayList     VERSION_SPEC;
+
     static public String        APP_PRIVATE_FILES;
     static public String        LOG_ID = "STARTUP";
 
@@ -87,16 +97,24 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     static public float         instanceDensity;
     static public float         densityRescale;
 
+    static public Activity      ACTIVITY;
+    static public String        PACKAGE_NAME;
+    static public boolean       DELETE_INSTALLED_ASSETS = false;
+
     final static public  String CacheSource = TCONST.ASSETS;                // assets or extern
 
     private boolean             isReady       = false;
     private boolean             engineStarted = false;
+    static public boolean       TUTORSELECTED = false;
+    static public boolean       STANDALONE    = false;
 
     // TODO: This is a temporary log update mechanism - see below
     //
     static private IGuidView    guidCallBack;
 
-    public final static String  LOG_PATH = Environment.getExternalStorageDirectory() + TCONST.ROBOTUTOR_FOLDER;
+    public final static String  LOG_PATH       = Environment.getExternalStorageDirectory() + TCONST.ROBOTUTOR_FOLDER;
+    public final static String  DOWNLOAD_PATH  = Environment.getExternalStorageDirectory() + File.separator + Environment.DIRECTORY_DOWNLOADS;
+    public final static String  EXT_ASSET_PATH = Environment.getExternalStorageDirectory() + File.separator + TCONST.ROBOTUTOR_ASSET_FOLDER;
 
     private final  String  TAG = "CRoboTutor";
 
@@ -108,10 +126,24 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         // Note = we don't want the system to try and recreate any of our views- always pass null
         super.onCreate(null);
 
+        PACKAGE_NAME = getApplicationContext().getPackageName();
+        ACTIVITY     = this;
+
+        System.out.println("External Download: " + DOWNLOAD_PATH);
+
         // Prep the CPreferenceCache
         // Update the globally accessible id object for this engine instance.
         //
         LOG_ID = CPreferenceCache.initLogPreference(this);
+
+        // RoboTutor Version spec - positional element meaning 0.1.2.3
+        // Given 4.23.2.3
+        // Major release 4 | Feature release 23 | Fix release 2 | compatible Asset Version 3
+        //
+        tutorAssetManager = new CTutorAssetManager(getApplicationContext());
+
+        VERSION_SPEC = CAssetObject.parseVersionSpec(BuildConfig.VERSION_NAME);
+
 
         // get the multiplier used for drawables at the current screen density and calc the
         // correction rescale factor for design scale
@@ -135,10 +167,9 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         APP_PRIVATE_FILES = getApplicationContext().getExternalFilesDir("").getPath();
 
-        // Initialize the JSON Helper statics - just throw away the object.
+        // Initialize the JSON Helper STATICS - just throw away the object.
         //
         new JSON_Helper(getAssets(), CacheSource, RoboTutor.APP_PRIVATE_FILES);
-
 
         // Initialize the media manager singleton - it needs access to the App assets.
         //
@@ -174,6 +205,20 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     }
 
 
+    public void reBoot() {
+
+        try {
+
+            Process proc = Runtime.getRuntime().exec(new String[] { "su", "-c", "reboot" });
+            proc.waitFor();
+
+        } catch (Exception ex) {
+
+            logManager.postEvent(TAG, "Could not reboot");
+        }
+
+    }
+
     private void setFullScreen() {
 
         ((View) masterContainer).setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
@@ -186,7 +231,30 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
 
     /**
-     * Moves new assets to an external folder so the Sphinx code can access it.
+     *
+     *
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+
+        boolean result = super.dispatchTouchEvent(event);
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                Log.d(TAG, "RT_HIT_SCREEN");
+                break;
+        }
+
+        // Manage system levelFolder timeout here
+
+        return result;
+    }
+
+
+    /**
+     * Moves new assets to an external storyFolder so the Sphinx code can access it.
      *
      */
     class tutorConfigTask extends AsyncTask<Void, Void, Boolean> {
@@ -200,7 +268,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
             boolean result = false;
 
-            CTutorAssetManager tutorAssetManager = new CTutorAssetManager(getApplicationContext());
 
             try {
                 // TODO: Don't do this in production
@@ -214,7 +281,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                     tutorAssetManager.installAssets(TCONST.LTK_PROJEXCTS);
                     logManager.postEvent(TAG, "INFO: LTK Projects installed:");
 
-                    // Note the Projects Zip file is anticipated to contain a folder called "projects"
+                    // Note the Projects Zip file is anticipated to contain a storyFolder called "projects"
                     // containing the ltk data - this is unpacked to RoboTutor.APP_PRIVATE_FILES + TCONST.LTK_DATA_FOLDER
                     //
                     tutorAssetManager.extractAsset(TCONST.LTK_PROJEXCTS, TCONST.LTK_DATA_FOLDER);
@@ -225,14 +292,17 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                     tutorAssetManager.installAssets(TCONST.LTK_GLYPHS);
                     logManager.postEvent(TAG, "INFO: LTK Glyphs installed:");
 
-                    // Note the Glyphs Zip file is anticipated to contain a folder called "glyphs"
+                    // Note the Glyphs Zip file is anticipated to contain a storyFolder called "glyphs"
                     // containing the ltk glyph data - this is unpacked to RoboTutor.APP_PRIVATE_FILES + TCONST.LTK_DATA_FOLDER
                     //
                     tutorAssetManager.extractAsset(TCONST.LTK_GLYPHS, TCONST.LTK_DATA_FOLDER);
                     logManager.postEvent(TAG, "INFO: LTK Glyphs extracted:");
                 }
 
-                // Create the one system level LTKPLUS recognizer
+                tutorAssetManager.updateAssetPackage(ROBOTUTOR_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH );
+
+
+                // Create the one system levelFolder LTKPLUS recognizer
                 //
                 LTKPlus = CRecognizerPlus.getInstance();
                 LTKPlus.initialize(getApplicationContext(), GCONST.ALPHABET);
@@ -308,11 +378,22 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 //
                 tutorEngine = CTutorEngine.getTutorEngine(RoboTutor.this);
 
-                // TODO: This is a temporary log update mechanism - see below
+                // If running without built-in home screen add a start screen
                 //
-                masterContainer.addAndShow(startView);
-                startView.startTapTutor();
-                setFullScreen();
+                if(STANDALONE) {
+
+                    // TODO: This is a temporary log update mechanism - see below
+                    //
+                    masterContainer.addAndShow(startView);
+                    startView.startTapTutor();
+                    setFullScreen();
+                }
+                // Otherwise go directly to the sessionManager
+                //
+                else {
+                    onStartTutor();
+                }
+
             }
             // Note that it is possible for the masterContainer to be recreated without the
             // engine begin destroyed so we must maintain sync here.
@@ -341,7 +422,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         tutorEngine.startSessionManager();
 
-        startView.flushQueue();
+        startView.stopTapTutor();
         masterContainer.removeView(startView);
         setFullScreen();
 
@@ -416,7 +497,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         // Create an inert listener for asset initialization only
         // Start the configListener async task to update the listener assets only if required.
-        // This moves the listener assets to a local folder where they are accessible by the
+        // This moves the listener assets to a local storyFolder where they are accessible by the
         // NDK code (PocketSphinx)
         //
         if(ASR == null) {
@@ -494,7 +575,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         super.onResume();
         logManager.postEvent(TAG, "Resuming Robotutor");
 
-        SharedPreferences prefs = getPreferences(0);
+        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
 
         String restoredText = prefs.getString("text", null);
 
@@ -513,6 +594,15 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         super.onSaveInstanceState(outState);
         logManager.postEvent(TAG, "onSaveInstanceState Robotutor");
+
+//        SharedPreferences prefs = RoboTutor.ACTIVITY.getPreferences(Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = prefs.edit();
+//
+//        int assetFullOrdinal = prefs.getInt(assetName + TCONST.ASSET_RELEASE_VERSION, 0);
+//        int assetIncrOrdinal = prefs.getInt(assetName + TCONST.ASSET_UPDATE_VERSION, 0);
+//
+//        editor.putInt(assetName + TCONST.ASSET_UPDATE_VERSION , mAssetObject.getVersionField(INDEX_UPDATE, TCONST.ASSET_UPDATE_VERSION));
+//        editor.apply();
     }
 
 

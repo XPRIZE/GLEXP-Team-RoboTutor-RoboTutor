@@ -61,6 +61,17 @@ public class CAnimatorUtil {
         return vAnimator;
     }
 
+    static public void zoomOut(View _tarView, float scale, long duration){
+        ArrayList<Animator> zoomColl = new ArrayList<Animator>();
+
+        AnimatorSet animation = new AnimatorSet();
+
+        zoomColl.add(createFloatAnimator(_tarView, "scaleX", duration, 0, 0, new AccelerateInterpolator(2.0f), _tarView.getScaleX(), scale, scale*_tarView.getScaleX()));
+        zoomColl.add(createFloatAnimator(_tarView, "scaleY", duration, 0, 0, new AccelerateInterpolator(2.0f), _tarView.getScaleY(), scale, scale*_tarView.getScaleX()));
+
+        animation.playTogether(zoomColl);
+        animation.start();
+    }
 
     static public void zoomInOut(View _tarView, float scale, long duration) {
 

@@ -78,11 +78,22 @@ public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.
         mLangState    = !mLangState;
 
         CTutorEngine.setDefaultLanguage(mLangState? TCONST.LANG_EN: TCONST.LANG_SW);
+
+        // We need to reload the session manager to reflect the new language specific datasource
+        //
+        CTutorEngine.destroyCurrentTutor();
     }
 
     //**********************************************************
     //**********************************************************
     //*****************  Common Tutor Object Methods
+
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
 
     @Override
     public void setName(String name) {
@@ -107,7 +118,7 @@ public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.
         // The media manager is tutor specific so we have to use the tutor to access
         // the correct instance for this component.
         //
-        mMediaManager = CMediaController.getInstance(mTutor);
+        mMediaManager = CMediaController.getManagerInstance(mTutor);
     }
 
     // Do deferred configuration - anything that cannot be done until after the

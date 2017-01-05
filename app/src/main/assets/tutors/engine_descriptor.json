@@ -1,16 +1,16 @@
 {
-  "defTutor":"session_manager",
+  "defTutor":"activity_selector",
 
-  //Engine level data bindings  - HashMap<String, defdata_tutor
+  //Engine levelFolder data bindings  - HashMap<String, defdata_tutor
 //  "defDataSources": {
 //
-//    //Tutor level data bindings   - HashMap<String, defdata_scene
+//    //Tutor levelFolder data bindings   - HashMap<String, defdata_scene
 //    "session_manager": {
 //      "type": "TUTORDATA_MAP",
 //
 //      "scene_bindings" : {
 //
-//        //Scene level data bindings  - databindings[]
+//        //Scene levelFolder data bindings  - databindings[]
 //        "session_manager": {
 //          "type": "SCENEDATA_MAP",
 //
@@ -25,7 +25,13 @@
 //    }
 //  },
 
-  "defFeatures":"",
+  // These features are based on the current tutor selection model
+  // When no tutor has been selected it should run the tutor select
+  // and when it finishes it should run the difficulty select until
+  // the user wants to select another tutor.
+  //
+  "defFeatures":"FTR_TUTOR_SELECT",
+  "defRunningFeatures":"FTR_DIFFICULTY_SELECT",
 
   // Set the default language for the tutors
   "language":"LANG_EN"

@@ -20,9 +20,13 @@
 package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import org.json.JSONObject;
@@ -67,6 +71,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     public List<IEventListener>     mListeners          = new ArrayList<IEventListener>();
     protected List<String>          mLinkedViews;
     protected boolean               mListenerConfigured = false;
+    private int[]                   _screenCoord        = new int[2];
 
     private HashMap<String, String> volatileMap = new HashMap<>();
     private HashMap<String, String> stickyMap = new HashMap<>();
@@ -119,6 +124,8 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         mGlyphList = (LinearLayout) findViewById(R.id.Sdrawn_glyphs);
         mGlyphList.setClipChildren(false);
 
+        mReplayButton = (ImageButton) findViewById(R.id.Sreplay);
+
 // TODO: DEBUG only
 //        mRecogList.setOnTouchListener(new RecogTouchListener());
 //        mGlyphList.setOnTouchListener(new drawnTouchListener());
@@ -154,11 +161,53 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     //***********************************************************
 
 
+    public class replayClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+
+            mReplayButton.setOnClickListener(null);
+
+            applyBehavior(WR_CONST.ON_REPLAY_COMMAND);
+
+            mReplayButton.setOnClickListener(new replayClickListener());
+        }
+    }
+
+    public void enableReplayButton(Boolean enable) {
+
+        mReplayButton.setOnClickListener(enable? new replayClickListener(): null);
+    }
+
+
+    @Override
+    public void pointAtReplayButton() {
+
+        broadcastLocation(TCONST.POINT_AND_TAP, mReplayButton);
+    }
+
+    private void broadcastLocation(String Action, View target) {
+
+        target.getLocationOnScreen(_screenCoord);
+
+        PointF centerPt = new PointF(_screenCoord[0] + (target.getWidth() / 2), _screenCoord[1] + (target.getHeight() / 2));
+        Intent msg = new Intent(Action);
+        msg.putExtra(TCONST.SCREENPOINT, new float[]{centerPt.x, (float) centerPt.y});
+
+        bManager.sendBroadcast(msg);
+    }
+
 
 
     //************************************************************************
     //************************************************************************
     // Tutor Scriptable methods  Start
+
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mTutorScene.setVisibility(visible);
+    }
 
 
     public void postEvent(String event) {
@@ -178,6 +227,8 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     public void pointAtEraseButton() {
         super.pointAtEraseButton();
     }
+
+    public void showReplayButton(Boolean show) { mReplayButton.setVisibility(show? VISIBLE:INVISIBLE); }
 
     public void highlightFields() {
         super.highlightFields();
@@ -306,7 +357,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     // publish component state data - START
 
     @Override
-    protected void publishState() {
+    public void publishState() {
 
         retractFeature(WR_CONST.ERROR_METRIC);
         retractFeature(WR_CONST.ERROR_CHAR);
@@ -615,7 +666,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         // The media manager is tutor specific so we have to use the tutor to access
         // the correct instance for this component.
         //
-        mMediaManager = CMediaController.getInstance(mTutor);
+        mMediaManager = CMediaController.getManagerInstance(mTutor);
     }
 
     @Override

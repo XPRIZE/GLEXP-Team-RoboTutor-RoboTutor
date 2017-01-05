@@ -100,6 +100,13 @@ public class TBanner extends CBanner implements ITutorObjectImpl, View.OnClickLi
     // Tutor methods  Start
 
 
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
+
+
     public void setVersionID(String versionID) {
         mVersion.setText(versionID);
     }

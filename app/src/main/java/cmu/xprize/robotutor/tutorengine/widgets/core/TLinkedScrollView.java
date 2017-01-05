@@ -76,6 +76,10 @@ public class TLinkedScrollView  extends CLinkedScrollView implements ITutorObjec
     //************************************************************************
     // Tutor methods  Start
 
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
 
     /**
      * TODO: rewrite the LTK project format

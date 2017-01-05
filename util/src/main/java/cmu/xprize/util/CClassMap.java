@@ -3,9 +3,6 @@ package cmu.xprize.util;
 import java.util.HashMap;
 
 
-/**
- * Created by Kevin on 2/29/2016.
- */
 public class CClassMap {
 
     static public HashMap<String, Class> classMap = new HashMap<String, Class>();

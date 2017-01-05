@@ -6,17 +6,24 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
 import org.json.JSONObject;
 
+import cmu.xprize.ak_component.CAkPlayer;
 import cmu.xprize.ak_component.CAkQuestionBoard;
 import cmu.xprize.ak_component.CAk_Component;
 import cmu.xprize.ak_component.CAk_Data;
+import cmu.xprize.robotutor.tutorengine.CMediaController;
+import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
@@ -24,6 +31,8 @@ import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.sb_component.CSb_Scoreboard;
 import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.CErrorManager;
@@ -37,8 +46,16 @@ import cmu.xprize.util.TCONST;
 
 public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDataSink {
 
-    private CTutor mTutor;
+    private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
+    private CMediaManager   mMediaManager;
+
+    private int         wrongTimes = 0;//record the successive wrong times of the player
+    private boolean     first1sign = true;
+    private boolean     first2sign = true;
+    private boolean     first3sign = true;
+
+    private PercentRelativeLayout curpercentLayout = (PercentRelativeLayout) getChildAt(0);
 
     static final String TAG = "TAkComponent";
 
@@ -54,6 +71,8 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         super(context, attrs, defStyleAttr);
     }
 
+
+
     @Override
     public void init(Context context, AttributeSet attrs) {
         super.init(context, attrs);
@@ -66,6 +85,13 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 //    **********************************************************
 //    **********************************************************
 //    *****************  Tutor Interface
+
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
 
     @Override
     public void UpdateValue(int value) {
@@ -88,7 +114,16 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     private void reset() {
 
         mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
+        mTutor.setDelFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
         mTutor.setDelFeature(TCONST.GENERIC_WRONG);
+        mTutor.setDelFeature(TCONST.PROMPT_1LEFT);
+        mTutor.setDelFeature(TCONST.PROMPT_1MID);
+        mTutor.setDelFeature(TCONST.PROMPT_1RIGHT);
+        mTutor.setDelFeature(TCONST.PROMPT_2LEFT);
+        mTutor.setDelFeature(TCONST.PROMPT_2MID);
+        mTutor.setDelFeature(TCONST.PROMPT_2RIGHT);
+        mTutor.setDelFeature(TCONST.PROMPT_3);
+        mTutor.setDelFeature(TCONST.PROMPT_3V);
     }
 
 
@@ -109,9 +144,9 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     /**
      *
-     * @param dataSource
+     * @param dataNameDescriptor
      */
-    public void setDataSource(String dataSource) {
+    public void setDataSource(String dataNameDescriptor) {
 
         // Ensure flags are reset so we don't trigger reset of the ALLCORRECCT flag
         // on the first pass.
@@ -124,19 +159,29 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
         // TODO: globally make startWith type TCONST
         try {
-            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
-                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
+            if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
-                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataSource);
+                String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
+
+                // Generate a langauage specific path to the data source -
+                // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
+                // e.g. tutors/word_copy/assets/data/sw/
+                //
+                String dataPath = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS;
+                dataPath += "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+
+                String jsonData = JSON_Helper.cacheData(dataPath + dataFile);
+
                 // Load the datasource in the component module - i.e. the superclass
-                loadJSON(new JSONObject(jsonData), null);
+                //
+                loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 
-            } else if (dataSource.startsWith("db|")) {
+            } else if (dataNameDescriptor.startsWith("db|")) {
 
 
-            } else if (dataSource.startsWith("{")) {
+            } else if (dataNameDescriptor.startsWith("{")) {
 
-                loadJSON(new JSONObject(dataSource), null);
+                loadJSON(new JSONObject(dataNameDescriptor), null);
 
             } else {
                 throw (new Exception("BadDataSource"));
@@ -167,6 +212,45 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     }
 
+    @Override
+    public void playAudio(CAk_Data data){
+
+        String answerString = "";
+
+        TScope scope = mTutor.getScope();
+
+        switch(data.answer)  {
+            case TCONST.LEFTLANE:
+                answerString = data.choices[0];
+                break;
+
+            case TCONST.CENTERLANE:
+                answerString = data.choices[1];
+                break;
+
+            case TCONST.RIGHTLANE:
+                if(data.choices.length > 2)
+                    answerString = data.choices[2];
+                else
+                    answerString = data.choices[1];
+                break;
+
+        }
+
+        Log.d("PlayAudio", answerString);
+
+        scope.addUpdateVar("TestAudio", new TString(answerString));
+        applyEventNode("PLAY_AUDIO");
+    }
+
+    public void instructAudio(String instruction){
+        TScope scope = mTutor.getScope();
+        Log.d("InstructAudio", instruction);
+        scope.addUpdateVar("audio", new TString(instruction));
+        applyEventNode("PAUSE");
+        applyEventNode("INSTRUCT_AUDIO");
+        applyEventNode("RESUME");
+    }
 
     public void enable(Boolean enable) {
     }
@@ -191,24 +275,36 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         }
     }
 
+
     public void postQuestionBoard() {
         final CAkQuestionBoard questionBoard = this.questionBoard; //new CAkQuestionBoard(mContext);
         final PercentRelativeLayout percentLayout = (PercentRelativeLayout) getChildAt(0);
 
-        int s = extraSpeed * 500;
+        int s = extraSpeed * 400;
 
         LayoutParams params = new LayoutParams(360, 80);
         params.addRule(CENTER_HORIZONTAL);
         percentLayout.addView(questionBoard, params);
         player.bringToFront();
         scoreboard.bringToFront();
+        questionBoard.bringToFront();
 
+        WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        AnimatorSet tmp;
+        if(size.x > 1400)
+            tmp = CAnimatorUtil.configZoomIn(questionBoard, 3500,
+                    0, new LinearInterpolator(), 4f);
+        else
+            tmp = CAnimatorUtil.configZoomIn(questionBoard, 3500,
+                    0, new LinearInterpolator(), 2f);
 
-        final AnimatorSet questionboardAnimator = CAnimatorUtil.configZoomIn(questionBoard, 3500,
-                0, new LinearInterpolator(), 4f);
+        final AnimatorSet questionboardAnimator = tmp;
         ongoingAnimator.add(questionboardAnimator);
         ValueAnimator questionboardTranslationAnimator = ObjectAnimator.ofFloat(questionBoard,
-                "y", getHeight() * 0.25f, getHeight() * 0.70f);
+                "y", getHeight() * 0.25f, getHeight() * 0.65f);
         questionboardAnimator.setDuration(5000-s);
         questionboardAnimator.setInterpolator(new LinearInterpolator());
 
@@ -217,6 +313,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         questionboardAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
+                questionBoard_exist = false;
                 super.onAnimationEnd(animation);
                 percentLayout.removeView(questionBoard);
                 applyEventNode("NEXT");
@@ -233,7 +330,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     }
 
     public void postFinishLine() {
-        int s = extraSpeed * 500;
+        int s = extraSpeed * 400;
         final PercentRelativeLayout percentLayout = (PercentRelativeLayout) getChildAt(0);
 
         final ImageView finishLine = new ImageView(mContext);
@@ -271,12 +368,127 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     public void judge(){
         reset();
+        switch(questionBoard.choices.length){
+            case 1:
+                if(first1sign) {
+                    mTutor.setAddFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
+                    first1sign = false;
+                }else
+                    judge_rightwrong();
+                break;
+            case 2:
+                if(first2sign){
+                    mTutor.setAddFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
+                    first2sign = false;
+                }else
+                    judge_rightwrong();
+                break;
+            case 3:
+                if(first3sign){
+                    mTutor.setAddFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
+                    first3sign = false;
+                }else
+                    judge_rightwrong();
+                break;
+        }
+    }
+
+    public void judge_rightwrong(){
         if(questionBoard.answerLane == player.lane){
             mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
+            wrongTimes = 0;
         }else {
-            mTutor.setAddFeature(TCONST.GENERIC_WRONG);
-
+            wrongTimes++;
+            if(wrongTimes != 2) {
+                mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+            }else{
+                mTutor.setAddFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
+                wrongTimes = 0;
+            }
         }
+    }
+
+    public void judge_instruct(){//judge the prompt type
+        reset();
+        switch(questionBoard.choices.length){
+            case 1:
+                if(questionBoard.answerLane == CAkPlayer.Lane.LEFT){
+                    mTutor.setAddFeature(TCONST.PROMPT_1LEFT);
+                }else if(questionBoard.answerLane == CAkPlayer.Lane.MID){
+                    mTutor.setAddFeature(TCONST.PROMPT_1MID);
+                }else if(questionBoard.answerLane == CAkPlayer.Lane.RIGHT){
+                    mTutor.setAddFeature(TCONST.PROMPT_1RIGHT);
+                }
+                break;
+            case 2:
+                if(questionBoard.answerLane == CAkPlayer.Lane.LEFT){
+                    mTutor.setAddFeature(TCONST.PROMPT_2LEFT);
+                }else if(questionBoard.answerLane == CAkPlayer.Lane.MID){
+                    mTutor.setAddFeature(TCONST.PROMPT_2MID);
+                }else if(questionBoard.answerLane == CAkPlayer.Lane.RIGHT){
+                    mTutor.setAddFeature(TCONST.PROMPT_2RIGHT);
+                }
+                break;
+            case 3:
+                if(dataSource[_dataIndex - 1].belowString.equals("audio")){//if it is an audio question
+                    //TScope scope = mTutor.getScope();
+                    //scope.addUpdateVar("TestAudio", new TString(getAboveString(dataSource[_dataIndex - 1])));
+                    mTutor.setAddFeature(TCONST.PROMPT_3V);
+                }else{
+                    mTutor.setAddFeature(TCONST.PROMPT_3);
+                }
+                break;
+        }
+    }
+
+    public void instruct_finger(){
+        teachFinger.bringToFront();
+        teachFinger.setPostion(questionBoard.answerLane);
+        teachFinger.setVisibility(VISIBLE);
+    }
+
+    public void indicateCarText(){
+        teachFinger.bringToFront();
+        teachFinger.setPostion(player.getLane());
+        teachFinger.setVisibility(VISIBLE);
+    }
+
+    public void indicate1SignText(){
+        teachFinger.bringToFront();
+        teachFinger.setPostion(CAkPlayer.Lane.SIGH1);
+        teachFinger.setVisibility(VISIBLE);
+    }
+
+    public void indicate2SignLeft(){
+        teachFinger.bringToFront();
+        teachFinger.setPostion(CAkPlayer.Lane.SIGH2L);
+        teachFinger.setVisibility(VISIBLE);
+    }
+
+    public void indicate2SignRight(){
+        teachFinger.bringToFront();
+        teachFinger.setPostion(CAkPlayer.Lane.SIGH2R);
+        teachFinger.setVisibility(VISIBLE);
+    }
+
+    public void indicate3Sign(){
+        teachFinger.bringToFront();
+        switch(questionBoard.answerLane){
+            case LEFT:
+                teachFinger.setPostion(CAkPlayer.Lane.SIGH3L);
+                break;
+            case MID:
+                teachFinger.setPostion(CAkPlayer.Lane.SIGH3M);
+                break;
+            case RIGHT:
+                teachFinger.setPostion(CAkPlayer.Lane.SIGH3R);
+                break;
+        }
+        teachFinger.setVisibility(VISIBLE);
+    }
+
+    public void hideFinger(){
+        teachFinger.setVisibility(INVISIBLE);
     }
 
     public void crash() {
@@ -289,51 +501,97 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
             animator.pause();
     }
 
+
     public void resume() {
         isRunning = true;
         for(Animator animator : ongoingAnimator)
             animator.resume();
     }
 
-    public void increaseScore() {
-        mask.setVisibility(VISIBLE);
-        Animator animator = scoreboard.reward(player.getX(), player.getY() - player.getHeight());
-        LayoutParams params =  (LayoutParams) getLayoutParams();
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                scoreboard.removeTextView();
-                scoreboard.increase();
-                player.score += 1;
+    public void prompt_pause(){
+        isRunning = false;
+        for(Animator animator : ongoingAnimator)
+            animator.pause();
+        LayoutParams params = new LayoutParams(360, 80);
+        params.addRule(CENTER_HORIZONTAL);
+        curpercentLayout.addView(questionBoard, params);
+    }
 
-                new AnimateScoreboard().execute(scoreboard);
-            }
-        });
-        animator.start();
+    public void prompt_resume(){
+        isRunning = true;
+        for(Animator animator : ongoingAnimator)
+            animator.resume();
+        teachFinger.setVisibility(INVISIBLE);
+        curpercentLayout.removeView(questionBoard);
+    }
+
+
+    public void increaseScore() {
+        if(extraSpeed != 0) {
+            mask.setVisibility(VISIBLE);
+            Animator animator = scoreboard.reward(player.getX() + player.carImage.getX(),
+                    player.getY(), "+" + extraSpeed);
+            LayoutParams params =  (LayoutParams) getLayoutParams();
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    scoreboard.removeTextView();
+                    scoreboard.increase(extraSpeed);
+                    player.score += extraSpeed;
+                    new AnimateScoreboard().execute(scoreboard);
+                }
+            });
+            animator.start();
+        }
+        else {
+            scoreboard.increase(extraSpeed);
+            new AnimateScoreboard().execute(scoreboard);
+        }
     }
 
     public void decreaseScore() {
-        mask.setVisibility(VISIBLE);
-        Animator animator = scoreboard.penalty(player.getX(), player.getY() - player.getHeight());
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                scoreboard.removeTextView();
-                scoreboard.decrease();
-                player.score -= 1;
-                new AnimateScoreboard().execute(scoreboard);
-            }
-        });
-        animator.start();
+        if(extraSpeed != 0) {
+            mask.setVisibility(VISIBLE);
+            Animator animator = scoreboard.reward(player.getX() + player.carImage.getX(),
+                    player.getY(), "-" + extraSpeed);
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    scoreboard.removeTextView();
+                    if (player.score <= extraSpeed) {
+                        scoreboard.decrease(player.score);
+                        player.score = 0;
+                    } else {
+                        scoreboard.decrease(extraSpeed);
+                        player.score -= extraSpeed;
+                    }
+                    new AnimateScoreboard().execute(scoreboard);
+                }
+            });
+            animator.start();
+        }else {
+            scoreboard.decrease(extraSpeed);
+            new AnimateScoreboard().execute(scoreboard);
+        }
     }
 
     private class AnimateScoreboard extends AsyncTask<CSb_Scoreboard, Integer, CSb_Scoreboard> {
         @Override
         protected CSb_Scoreboard doInBackground(CSb_Scoreboard... params) {
             CSb_Scoreboard scoreboard = params[0];
-            while(scoreboard.isAnimating);
+            synchronized (scoreboard.lock) {
+                while(!scoreboard.isAnimating){
+                    try {
+                        scoreboard.lock.wait();
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                scoreboard.isAnimating = false;
+            }
+
             return scoreboard;
         }
 
@@ -374,8 +632,14 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     @Override
     public void setTutor(CTutor tutor) {
+
         mTutor = tutor;
         mSceneObject.setTutor(tutor);
+
+        // The media manager is tutor specific so we have to use the tutor to access
+        // the correct instance for this component.
+        //
+        mMediaManager = CMediaController.getManagerInstance(mTutor);
     }
 
     @Override

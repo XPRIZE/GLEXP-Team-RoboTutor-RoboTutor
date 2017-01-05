@@ -31,6 +31,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import org.json.JSONObject;
@@ -55,6 +56,7 @@ import cmu.xprize.util.IEvent;
 import cmu.xprize.util.IEventDispatcher;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -67,7 +69,7 @@ import cmu.xprize.util.TCONST;
  *  settings will not work correctly.
  *
  */
-public class CWritingComponent extends PercentRelativeLayout implements IEventListener, IEventDispatcher, IWritingComponent, ILoadableObject {
+public class CWritingComponent extends PercentRelativeLayout implements IEventListener, IEventDispatcher, IWritingComponent, ILoadableObject, IPublisher {
 
     protected Context           mContext;
     protected char[]            mStimulusData;
@@ -76,6 +78,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected CLinkedScrollView mDrawnScroll;
     private   IGlyphController  mActiveController;
     private   int               mActiveIndex;
+
+    protected ImageButton       mReplayButton;
 
     protected LinearLayout      mRecogList;
     protected LinearLayout      mGlyphList;
@@ -114,9 +118,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected LocalBroadcastManager bManager;
 
     // json loadable
+    public boolean              random      = false;
     public String[]             dataSource;
 
-    final private String  TAG        = "CWritingController";
+    final private String  TAG        = "CWritingComponent";
 
 
 
@@ -320,11 +325,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         CRecResult          candidate      = _ltkPlusCandidates[0];
         CStimulusController stimController = (CStimulusController)mRecogList.getChildAt(mActiveIndex);
 
-        publishValue(WR_CONST.CANDIDATE_VAR, candidate.getRecChar().toUpperCase());
-        publishValue(WR_CONST.EXPECTED_VAR, mActiveController.getExpectedChar().toUpperCase());
+        publishValue(WR_CONST.CANDIDATE_VAR, candidate.getRecChar().toLowerCase());
+        publishValue(WR_CONST.EXPECTED_VAR, mActiveController.getExpectedChar().toLowerCase());
 
         _charValid   = stimController.testStimulus( candidate.getRecChar());
-        _metricValid = _metric.testConstraint(candidate.getGlyph());
+        _metricValid = _metric.testConstraint(candidate.getGlyph(), this);
         _isValid     = _charValid && _metricValid;
 
         // Update the controller feedback colors
@@ -336,6 +341,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         // in Immediate feedback mode
         //
         inhibitInput(mActiveController, !_isValid);
+
+        // Publish the state features.
+        //
+        publishState();
 
         // Fire the appropriate behavior
         //
@@ -353,10 +362,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 applyBehavior(WR_CONST.ON_ERROR);
 
-//                if (!_charValid)
-//                    applyBehavior(WR_CONST.ON_CHAR_ERROR);
-//                else if (!_metricValid)
-//                    applyBehavior(WR_CONST.ON_GLYPH_ERROR);
+                if (!_charValid)
+                    applyBehavior(WR_CONST.ON_CHAR_ERROR);
+                else if (!_metricValid)
+                    applyBehavior(WR_CONST.ON_METRIC_ERROR);
             }
             else {
                 updateStalledStatus();
@@ -711,17 +720,25 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     public void setDataSource(String[] dataSource) {
 
-        ArrayList<String> dataSet = new ArrayList<String>(Arrays.asList(dataSource));
 
-        // _data takes the form - ["92","3","146"]
-        //
-        _data = new ArrayList<String>();
+        if(random) {
 
-        for(int i1 = 0 ; i1 < 10 ; i1++) {
-            int randIndex =  (int) (Math.random() * dataSet.size());
+            ArrayList<String> dataSet = new ArrayList<String>(Arrays.asList(dataSource));
 
-            _data.add(dataSet.get(randIndex));
-            dataSet.remove(randIndex);
+            // _data takes the form - ["92","3","146"]
+            //
+            _data = new ArrayList<String>();
+
+            for (int i1 = 0; i1 < dataSet.size(); i1++) {
+                int randIndex = (int) (Math.random() * dataSet.size());
+
+                _data.add(dataSet.get(randIndex));
+                dataSet.remove(randIndex);
+            }
+        }
+        else {
+
+            _data = new ArrayList<String>(Arrays.asList(dataSource));
         }
 
         _dataIndex = 0;
@@ -864,10 +881,25 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
+    /**
+     * Overloaded in TClass
+     */
+    public void pointAtReplayButton() {
+    }
+
+
+    public void cancelPointAt() {
+
+        Intent msg = new Intent(TCONST.CANCEL_POINT);
+        bManager.sendBroadcast(msg);
+    }
+
+
     public void highlightFields() {
 
         post(TCONST.HIGHLIGHT, 500);
     }
+
 
     /**
      * See TClass subclass for implementation
@@ -875,6 +907,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
      */
     protected void callSubGgraph(String targetNode) {
     }
+
 
     // Tutor methods  End
     //************************************************************************
@@ -884,13 +917,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     //************************************************************************
     //************************************************************************
-    // publish component state data - START
+    // IPublisher - START
 
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
-    protected void publishState() {
+    public void publishState() {
     }
 
     // Must override in TClass
@@ -918,7 +951,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
-    // publish component state data - EBD
+    // IPublisher - EBD
     //************************************************************************
     //************************************************************************
 
@@ -1121,7 +1154,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     case WR_CONST.DEMO_PROTOGLYPH:
                     case WR_CONST.ANIMATE_PROTOGLYPH:
                     case WR_CONST.ANIMATE_OVERLAY:
-                    case WR_CONST.REPLAY_PROTOGLYPH:
                     case WR_CONST.ANIMATE_ALIGN:
 
                         mActiveController.post(_command);
@@ -1130,6 +1162,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     case WR_CONST.POINT_AT_ERASE_BUTTON:
 
                         pointAtEraseButton();
+                        break;
+
+                    case WR_CONST.POINT_AT_REPLAY_BUTTON:
+
+                        pointAtReplayButton();
+                        break;
+
+                    case WR_CONST.CANCEL_POINTAT:
+
+                        cancelPointAt();
                         break;
 
                     default:

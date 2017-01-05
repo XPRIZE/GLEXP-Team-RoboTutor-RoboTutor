@@ -105,6 +105,12 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl, ID
     //*****************  Tutor Interface
 
 
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
+
     /**
      *
      * @param dataSource

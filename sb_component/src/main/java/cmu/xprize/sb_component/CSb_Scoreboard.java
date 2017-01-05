@@ -9,16 +9,19 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PointF;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import cmu.xprize.util.CAnimatorUtil;
-import android.util.AttributeSet;
-import android.widget.ImageView;
 
 /**
  * Created by jacky on 2016/6/22.
@@ -33,7 +36,8 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
     private Paint mPaint;
     private int[] resoureImageIds;
     public boolean isAnimating;
-
+    private boolean isChanging;
+    final public Object lock = new Object();
 
     private boolean init = true;
 
@@ -116,13 +120,26 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
         canvas.drawLine(coinbags[showingCol].getX(), 0.82f * height,
                 coinbags[0].getX() + coinbags[0].getWidth(), 0.82f * height, mPaint);
         mPaint.setTextAlign(Paint.Align.CENTER);
-        mPaint.setTextSize(70);
-        for(int i = 0; i < showingCol+1; i++) {
-            //Prevent showing 2 digit at a column
-            canvas.drawText(String.valueOf(coinbags[i].getCoinNumber() > 9? 9 : coinbags[i].getCoinNumber()),
+
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        if(size.x > 1400)
+            mPaint.setTextSize(70);
+        else
+            mPaint.setTextSize(30);
+        boolean flag = false;
+        for(int i = mColNum - 1; i > 0; i--) {
+            if(coinbags[i].getCoinNumber() > 0) flag = true;
+            if(flag)
+                canvas.drawText(String.valueOf(coinbags[i].getCoinNumber() > 9? 9 : coinbags[i].getCoinNumber()),
                     coinbags[i].getX() + coinbags[i].getWidth() / 2,
                     0.9f * height, mPaint);
         }
+        canvas.drawText(String.valueOf(coinbags[0].getCoinNumber() > 9? 9 : coinbags[0].getCoinNumber()),
+                coinbags[0].getX() + coinbags[0].getWidth() / 2,
+                0.9f * height, mPaint);
 
     }
 
@@ -188,6 +205,7 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
                 largeCoin.setVisibility(INVISIBLE);
                 largeCoin.setScaleType(ImageView.ScaleType.FIT_XY);
 
+
                 int showingCol = getShowingCol();
                 for(int j = 0; j < mColNum; j++){
                     if(j <= showingCol) coinbags[j].setVisibility(VISIBLE);
@@ -206,66 +224,153 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
         }
     }
 
-    public void increase() {
-        mScore += 1;
-        isAnimating = true;
-        coinbags[0].increase();
-        if(coinbags[0].getCoinNumber() == 10) {
-            carryAnimation(0);
+    private void _increase(int col) {
+        synchronized (this) {
+            //mScore += (int)Math.pow(10, col);
+            if(coinbags[col].getVisibility() == INVISIBLE)
+                coinbags[col].setVisibility(VISIBLE);
+            coinbags[col].increase();
+            if (coinbags[col].getCoinNumber() == 10) {
+                carryAnimation(col);
+            } else {
+                isChanging = false;
+            }
         }
-        else isAnimating = false;
     }
 
-    public void decrease() {
-        if(mScore == 0) return;
-        isAnimating = true;
-        if(coinbags[0].getCoinNumber() > 0){
-            coinbags[0].decrease();
-            isAnimating = false;
+    public void increase(int amount) {
+        final int[] increaseAmount = new int[mColNum];
+        int i;
+        for(i = 0; i < mColNum && amount > 0; i++, amount /= 10) {
+            increaseAmount[i] = amount % 10;
         }
-        else {
-            for(int i = 1; i < mColNum; i++){
-                if(coinbags[i].getCoinNumber() > 0){
-                    borrowAnimation(i);
-                    break;
+
+        final int highestDigit = i;
+
+        final Handler uiHandler = new Handler(Looper.getMainLooper());
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (lock) {
+                    isAnimating = true;
+                    for (int i = 0; i < highestDigit; i++) {
+                        final int index = i;
+                        final Runnable increaseRunnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                _increase(index);
+                            }
+                        };
+
+                        for (int j = 0; j < increaseAmount[i]; j++) {
+                            isChanging = true;
+                            uiHandler.post(increaseRunnable);
+                            while (isChanging) {
+                                try {
+                                    Thread.sleep(100);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            mScore += (int) Math.pow(10, i);
+                        }
+
+                    }
+//                    isAnimating = false;
+                    lock.notify();
+
+                }
+            }
+        }).start();
+    }
+
+    public void _decrease(int col) {
+        synchronized (this) {
+            if (mScore == 0) return;
+            if (coinbags[col].getCoinNumber() > 0) {
+                coinbags[col].decrease();
+                boolean flag = false;
+                for(int i = mColNum - 1; i >= 0; i--){
+                    if(coinbags[i].getCoinNumber() > 0) flag = true;
+                    if(flag) coinbags[i].setVisibility(VISIBLE);
+                    else coinbags[i].setVisibility(INVISIBLE);
+                }
+                coinbags[0].setVisibility(VISIBLE);
+                isChanging = false;
+            } else {
+                for (int i = col; i < mColNum; i++) {
+                    if (coinbags[i].getCoinNumber() > 0) {
+                        borrowAnimation(i);
+                        break;
+                    }
                 }
             }
         }
-        mScore -= 1;
+        //mScore -= 1;
     }
 
-    public Animator reward(float x, float y) {
-        TextView textView = new TextView(context);
-        textView.setText("+1");
-        textView.setTextSize(20);
-        textView.setTextColor(Color.WHITE);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        addView(textView, params);
-        Animator rewardAnimator = CAnimatorUtil.configTranslate(textView,
-                1500, 0, new PointF(x, y), new PointF(
-                        coinbags[0].getX(),
-                        coinbags[0].getY() + coinbags[0].getHeight()));
-        return rewardAnimator;
+    public void decrease(int amount) {
+        final int[] decreaseAmount = new int[mColNum];
+        int i;
+        for(i = 0; i < mColNum && amount > 0; i++, amount /= 10) {
+            decreaseAmount[i] = amount % 10;
+        }
+
+        final int highestDigit = i;
+
+        final Handler uiHandler = new Handler(Looper.getMainLooper());
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (lock) {
+                    isAnimating = true;
+                    for (int i = 0; i < highestDigit; i++) {
+                        final int index = i;
+                        final Runnable decreaseRunnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                _decrease(index);
+                            }
+                        };
+
+                        for (int j = 0; j < decreaseAmount[i]; j++) {
+                            isChanging = true;
+                            uiHandler.post(decreaseRunnable);
+                            while (isChanging) {
+                                try {
+                                    Thread.sleep(100);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            mScore -= (int) Math.pow(10, i);
+                        }
+                    }
+//                    isAnimating = false;
+                    lock.notify();
+                }
+            }
+        }).start();
     }
 
-    public Animator penalty(float x, float y) {
+    public Animator reward(float x, float y, String str) {
         TextView textView = new TextView(context);
-        textView.setText("-1");
+        textView.setText(str);
         textView.setTextSize(30);
         textView.setTextColor(Color.WHITE);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         addView(textView, params);
-
         Animator rewardAnimator = CAnimatorUtil.configTranslate(textView,
                 1500, 0, new PointF(x, y), new PointF(
                         coinbags[0].getX() + coinbags[0].getWidth(),
                         coinbags[0].getY() + coinbags[0].getHeight()));
         return rewardAnimator;
     }
+
 
     public void removeTextView(){
         for(int i = 0; i < getChildCount(); i++) {
@@ -421,9 +526,17 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
                                 if(carryToBag.getCoinNumber() == 10)
                                     carryAnimation(index+1);
                                 else
-                                    isAnimating = false;
-                                int showingCol = getShowingCol();
-                                coinbags[showingCol].setVisibility(VISIBLE);
+                                    isChanging = false;
+//                                int showingCol = getShowingCol();
+//                                if(index+1 < mColNum)
+//                                    coinbags[index+1].setVisibility(VISIBLE);
+                                boolean flag = false;
+                                for(int i = mColNum - 1; i >= 0; i--){
+                                    if(coinbags[i].getCoinNumber() > 0) flag = true;
+                                    if(flag) coinbags[i].setVisibility(VISIBLE);
+                                    else coinbags[i].setVisibility(INVISIBLE);
+                                }
+                                coinbags[0].setVisibility(VISIBLE);
                             }
                         });
 
@@ -554,12 +667,15 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
                             borrowAnimation(index-1);
                         } else{
                             lendToBag.setCoinNumber(9);
-                            isAnimating = false;
+                            isChanging = false;
                         }
-                        int showingCol = getShowingCol();
-                        for(int i = 0; i < mColNum; i++){
-                            if(i > showingCol) coinbags[i].setVisibility(INVISIBLE);
+                        boolean flag = false;
+                        for(int i = mColNum - 1; i >= 0; i--){
+                            if(coinbags[i].getCoinNumber() > 0) flag = true;
+                            if(flag) coinbags[i].setVisibility(VISIBLE);
+                            else coinbags[i].setVisibility(INVISIBLE);
                         }
+                        coinbags[0].setVisibility(VISIBLE);
                     }
                 }, 2500);
 

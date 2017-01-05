@@ -143,6 +143,12 @@ public class TMasterAnimatorLayout extends ViewAnimator implements ITutorManager
     // Tutor methods  Start
 
 
+    @Override
+    public void setVisibility(String visible) {
+
+        mTutorScene.setVisibility(visible);
+    }
+
 
     // Tutor methods  End
     //************************************************************************

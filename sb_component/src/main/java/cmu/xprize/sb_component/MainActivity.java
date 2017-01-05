@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                scoreboard.increase();
+                scoreboard.increase(23);
 //                lollipop.animateToCircle();
             }
         });
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                scoreboard.decrease();
+                scoreboard.decrease(1);
 //                lollipop.animateToStick();
             }
         });

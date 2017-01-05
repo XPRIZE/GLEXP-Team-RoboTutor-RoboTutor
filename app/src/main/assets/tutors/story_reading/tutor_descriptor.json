@@ -1,5 +1,5 @@
 {
-  "language":"LANG_SW",
+//  "language":"LANG_SW",
 
   "scenedata": [
 	{
@@ -24,7 +24,8 @@
 		"tutor_effect":  {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/story_reading"},
 		"xprize_effect": {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/global"},
 		"default":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/story_reading"},
-		"xprize":        {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global"}
+		"xprize":        {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global"},
+		"words":         {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/words"}
 	},
 
 	"navigatorType":"SIMPLE_NAVIGATOR"

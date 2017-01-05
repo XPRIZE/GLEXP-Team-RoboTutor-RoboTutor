@@ -28,11 +28,46 @@ import java.util.HashMap;
 
 public class TCONST {
 
+//    sdcard/robotutor_assets/assets/audio/en/cmu/xprize/activity_selector/d39950ec96e6a5361508996ce7ae6444.mp3
+
+    // These features are based on the current tutor selection model
+    // When no tutor has been selected it should run the tutor select
+    // and when it finishes it should run the difficulty select until
+    // the user wants to select another tutor.
+    //
+
+    public static final String FTR_TUTOR_SELECT       = "FTR_TUTOR_SELECT";
+    public static final String FTR_DIFFICULTY_SELECT  = "FTR_DIFFICULTY_SELECT";
+
+    // RoboTutor Version spec index meaning 0.1.2.3
+    // Given 4.23.2.3
+    // Major release 4 | Feature release 23 | Fix release 2 | compatible Asset Version 3
+    //
+    public static final int MAJOR_VERSION   = 0;
+    public static final int FEATURE_RELEASE = 1;
+    public static final int FIX_RELEASE     = 2;
+    public static final int ASSET_VERSION   = 3;
+
+
+    // Spec elements for asset zip files releases
+    // For assets to be compatible with Robotutor the ASSET_CODE_VERSION must match the ASSET_VERSION
+    //
+    public static final int ASSET_CODE_VERSION    = 0;
+    public static final int ASSET_RELEASE_VERSION = 1;
+    public static final int ASSET_UPDATE_VERSION  = 2;
+
+
+    // These represent the base name for assets delivered in Zip files and loaded
+    // through calls to updateZipAsset
+
+    // They will arrive in files named - RoboTutor_AssetA.0.1.0.zip
+    //
+    public static final String ROBOTUTOR_ASSET_PATTERN = "RTAsset_";
+
     public static final String COMMAND      = "COMMAND";
     public static final String MODULE       = "MODULE";
     public static final String NODE         = "NODE";
     public static final String CONDITION    = "CONDITION";
-
 
     public static final String NUMDATA_HEADER   = "{\n" + "\"dataSource\": ";
     public static final boolean ADD_FEATURE     = true;
@@ -118,6 +153,7 @@ public class TCONST {
     public static final String POINT_LIVE          = "POINT_LIVE";
     public static final String POINT_FADE          = "POINT_FADE";
     public static final String CANCEL_POINT        = "CANCEL_POINT";
+    public static final String POINT_AT_BUTTON     = "POINT_AT_BUTTON";
 
     public static final String FEEDBACK_DELAYED    = "FEEDBACK_DELAYED";
     public static final String FEEDBACK_IMMEDIATE  = "FEEDBACK_IMMEDIATE";
@@ -127,6 +163,30 @@ public class TCONST {
 
     public static final float  TRACKER_WEIGHT      = 5f;
     public static final int    TRACKER_COLOR       = 0x11000088;
+
+    public static final String VISIBLE             = "VISIBLE";
+    public static final String INVISIBLE           = "INVISIBLE";
+    public static final String GONE                = "GONE";
+
+    public static final String ENGINEMESSAGE       = "EngineMessage: ";
+
+    public static final String ASK_SELECTION       = "ASK_SELECTION";
+    public static final String ASK_BUTTON_ID       = "ASK_BUTTON_ID";
+    public static final String CANCEL_POINTAT      = "CANCEL_POINTAT";
+
+    public static final String LEFTLANE            = "LEFT";
+    public static final String CENTERLANE          = "MID";
+    public static final String RIGHTLANE           = "RIGHT";
+
+    public static final String STORY_INTENT        = "story_reading";
+    public static final String ON_CLICK            = "ON_CLICK";
+
+    public static final String SKILL_WRITING    = "letters";
+    public static final String SKILL_STORIES    = "stories";
+    public static final String SKILL_MATH       = "numbers";
+    public static final String SKILL_SHAPES     = "shapes";
+    public static final String FINISH           = "FINISH";
+    public static final String SKILL_SELECTED   = "SKILL_SELECTED";
 
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
@@ -194,7 +254,11 @@ public class TCONST {
     // Loader Constants
     static final public String TUTORROOT          = "tutors";
 
-    static final public String ALL_ASSETS         = "";
+    static final public String BASE_ASSETS        = "assets";
+    public static final String STORY_ASSETS       = "story";
+    static final public String EXTERNAL           = "external";
+    static final public String ROBOTUTOR_ASSETS   = "sdcard/robotutor_assets/assets";
+
 
     static final public String LTK_PROJECT_ASSETS = "projects";
     static final public String LTK_GLYPH_ASSETS   = "glyphs";
@@ -234,6 +298,7 @@ public class TCONST {
     final static public String SIMPLENAV       = "SIMPLE_NAVIGATOR";
     final static public String GRAPHNAV        = "GRAPH_NAVIGATOR";
     public static final String NEXT_NODE       = "NEXT_NODE";
+    public static final String CANCEL_NODE     = "CANCEL_NODE";
     public static final String NEXT_TNODE      = "NEXT_TNODE";
     public static final String NEXTSCENE       = "NEXTSCENE";
     public static final String FIRST_SCENE     = "GOTO_FIRST_SCENE";
@@ -318,6 +383,7 @@ public class TCONST {
 
 
     // type_action - command types
+    public static final String CMD_DEBUG        = "DEBUG";
     public static final String CMD_WAIT         = "WAIT";
     public static final String CMD_GOTO         = "GOTONODE";
     public static final String CMD_NEXT         = "NEXT";
@@ -384,9 +450,11 @@ public class TCONST {
     public static final int INSPEECH       = 1;
     public static final int SAYWORD        = 2;
 
-    public static final String STORYDATA   = "story_data.json";
+    public static final String STORYDATA   = "storydata.json";
     public static final String STORYINDEX  = "story_index.json";
     public static final String SOURCEFILE  = "[file]";
+    public static final String ASSETFILE   = "[asset]";
+
 
     public static final String TTS         = "TTS";
     public static final String ASR         = "ASR";
@@ -406,9 +474,10 @@ public class TCONST {
     public static final String FW_EOI      = "FW_EOI";
     public static final String FW_RESPONSE = "FW_RESPONSE";
 
-    public static final String WRITINGTUTOR_FOLDER = "/WritingTutor/";
-    public static final String ROBOTUTOR_FOLDER    = "/RoboTutor/";
-    public static final String GLYPHS_FOLDER       = "/glyphs/";
+    public static final String WRITINGTUTOR_FOLDER      = "/WritingTutor/";
+    public static final String ROBOTUTOR_FOLDER         = "/RoboTutor/";
+    public static final String ROBOTUTOR_ASSET_FOLDER   = "/robotutor_assets/";
+    public static final String GLYPHS_FOLDER            = "/glyphs/";
 
 
     // Listener Control message types
@@ -454,6 +523,7 @@ public class TCONST {
     // Generic error codes
     public static final String GENERIC_RIGHT  = "FTR_RIGHT";
     public static final String GENERIC_WRONG  = "FTR_WRONG";
+    public static final String GENERIC_SUCCESSIVEWRONG = "FTR_SWRONG";
     public static final boolean TRUE_ERROR    = true;
     public static final boolean TRUE_NOERROR  = true;
     public static final boolean FALSE_NOERROR = false;
@@ -572,5 +642,15 @@ public class TCONST {
     public static final String RTC_VAR_INDEX      = ".wordindex";
     public static final String RTC_VAR_REMAINING  = ".remainingWords";
     public static final String RTC_VAR_SENTENCE   = ".sentence";
+
+    //Akira Game Prompt Situation
+    public static final String PROMPT_1LEFT = "PROMPT_1LEFT";
+    public static final String PROMPT_1MID = "PROMPT_1MID";
+    public static final String PROMPT_1RIGHT = "PROMPT_1RIGHT";
+    public static final String PROMPT_2LEFT = "PROMPT_2LEFT";
+    public static final String PROMPT_2MID = "PROMPT_2MID";
+    public static final String PROMPT_2RIGHT = "PROMPT_2RIGHT";
+    public static final String PROMPT_3 = "PROMPT_3";
+    public static final String PROMPT_3V = "PROMPT_3V";
 
 }

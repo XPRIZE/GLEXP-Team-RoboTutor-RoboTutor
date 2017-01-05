@@ -24,6 +24,9 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import java.util.HashMap;
+
+import cmu.xprize.comp_ask.CAsk_Data;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
@@ -35,6 +38,8 @@ import cmu.xprize.util.ILogManager;
 public class TSceneFrameLayout extends FrameLayout implements ITutorSceneImpl {
 
     private CSceneDelegate mTutorScene;
+
+    public HashMap<String, CAsk_Data>   datasource;
 
     final private String TAG = "CSceneFrameLayout";
 
@@ -66,15 +71,22 @@ public class TSceneFrameLayout extends FrameLayout implements ITutorSceneImpl {
 
 
 
-    public void setDataSource(String dataSource) {
-
-    }
-
 
     //************************************************************************
     //************************************************************************
     // Tutor methods  Start
 
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mTutorScene.setVisibility(visible);
+    }
+
+
+    public void setDataSource(String dataSource) {
+
+    }
 
 
     // Tutor methods  End

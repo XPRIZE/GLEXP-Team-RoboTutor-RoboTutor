@@ -24,6 +24,8 @@ import android.util.Log;
 import java.util.Arrays;
 import java.util.List;
 
+import cmu.xprize.util.IPublisher;
+
 public class CGlyphMetricConstraint {
 
     private float XConst;
@@ -81,14 +83,30 @@ public class CGlyphMetricConstraint {
         }
     }
 
-    public boolean testConstraint(CGlyph glyph) {
-        return testConstraint(glyph.getMetric());
+    public boolean testConstraint(CGlyph glyph, IPublisher pub) {
+        return testConstraint(glyph.getMetric(), pub);
     }
 
 
-    public boolean testConstraint(CGlyphMetrics metric) {
+    public boolean testConstraint(CGlyphMetrics metric, IPublisher pub) {
 
         boolean result = false;
+
+        pub.retractFeature(GCONST.FTR_POSHORZ_VIOLATION);
+        pub.retractFeature(GCONST.FTR_LEFT_VIOLATION   );
+        pub.retractFeature(GCONST.FTR_RIGHT_VIOLATION  );
+
+        pub.retractFeature(GCONST.FTR_POSVERT_VIOLATION);
+        pub.retractFeature(GCONST.FTR_HIGH_VIOLATION   );
+        pub.retractFeature(GCONST.FTR_LOW_VIOLATION    );
+
+        pub.retractFeature(GCONST.FTR_WIDTH_VIOLATION );
+        pub.retractFeature(GCONST.FTR_WIDE_VIOLATION  );
+        pub.retractFeature(GCONST.FTR_NARROW_VIOLATION);
+
+        pub.retractFeature(GCONST.FTR_HEIGHT_VIOLATION);
+        pub.retractFeature(GCONST.FTR_TALL_VIOLATION  );
+        pub.retractFeature(GCONST.FTR_SHORT_VIOLATION );
 
         // Check for any metric that violates the constraint - The CG? deltas are relative to the
         // size of the draw box.
@@ -96,18 +114,30 @@ public class CGlyphMetricConstraint {
         if(metric.getDeltaCGX() > XConst) {
             Log.d("Metrics", "X - Violation : " + (metric.getDeltaCGX()-XConst));
             result = true;
+
+            pub.publishFeature(GCONST.FTR_POSHORZ_VIOLATION);
+            pub.publishFeature(metric.getIsLeft()? GCONST.FTR_LEFT_VIOLATION:GCONST.FTR_RIGHT_VIOLATION);
         }
         if(metric.getDeltaCGY() > YConst) {
             Log.d("Metrics", "Y - Violation : " + (metric.getDeltaCGY()-YConst));
             result = true;
+
+            pub.publishFeature(GCONST.FTR_POSVERT_VIOLATION);
+            pub.publishFeature(metric.getIsHigh()? GCONST.FTR_HIGH_VIOLATION:GCONST.FTR_LOW_VIOLATION);
         }
         if(metric.getDeltaCGW() > WConst) {
             Log.d("Metrics", "W - Violation : " + (metric.getDeltaCGW()-WConst));
             result = true;
+
+            pub.publishFeature(GCONST.FTR_WIDTH_VIOLATION);
+            pub.publishFeature(metric.getIsWide()? GCONST.FTR_WIDE_VIOLATION:GCONST.FTR_NARROW_VIOLATION);
         }
         if(metric.getDeltaCGH() > HConst) {
             Log.d("Metrics", "H - Violation : " + (metric.getDeltaCGH()-HConst));
             result = true;
+
+            pub.publishFeature(GCONST.FTR_HEIGHT_VIOLATION);
+            pub.publishFeature(metric.getIsTall()? GCONST.FTR_TALL_VIOLATION:GCONST.FTR_SHORT_VIOLATION);
         }
         if(metric.getDeltaA() > aspRConst) {
             Log.d("Metrics", "Aspect - Violation : " + (metric.getDeltaA()-aspRConst));
@@ -116,8 +146,8 @@ public class CGlyphMetricConstraint {
 
         // TODO: These need to be normalized somehow before they can be used
         //
-//        result |= metric.getVisualDelta() > VisConst;
-//        result |= metric.getErrorDelta()  > ErrConst;
+//        result |= metric.getVisualMatch() > VisConst;
+//        result |= metric.getVisualError() > ErrConst;
 
         // Return true if nothing violates the constraint
         return !result;

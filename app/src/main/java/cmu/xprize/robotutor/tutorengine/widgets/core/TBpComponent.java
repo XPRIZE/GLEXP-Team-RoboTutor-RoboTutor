@@ -1,3 +1,22 @@
+//*********************************************************************************
+//
+//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
+//    Copyright(c) Kevin Willows All Rights Reserved
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+//*********************************************************************************
+
 package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
@@ -7,11 +26,13 @@ import android.util.Log;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.logging.LogManager;
 
 import cmu.xprize.bp_component.BP_CONST;
 import cmu.xprize.bp_component.CBP_Component;
 import cmu.xprize.bp_component.CBp_Data;
 import cmu.xprize.bp_component.CBubble;
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
@@ -35,10 +56,10 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
 
-    private CBubble _touchedBubble;
+    private CBubble         _touchedBubble;
 
     private HashMap<String, String> volatileMap = new HashMap<>();
-    private HashMap<String, String> stickyMap = new HashMap<>();
+    private HashMap<String, String> stickyMap   = new HashMap<>();
 
 
     static final String TAG = "TBpComponent";
@@ -57,21 +78,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     }
 
 
-    @Override
-    public void init(Context context, AttributeSet attrs) {
-
-        super.init(context, attrs);
-
-        mSceneObject = new CObjectDelegate(this);
-        mSceneObject.init(context, attrs);
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
 
     //***********************************************************
     // Event Listener/Dispatcher - Start
@@ -88,11 +94,16 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
 
 
-
-
     //**********************************************************
     //**********************************************************
     //*****************  Tutor Interface
+
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
 
 
     private void reset() {
@@ -344,6 +355,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                             break;
 
                         default:
+
                             obj.preEnter();
                             obj.applyNode();
                             break;
@@ -375,7 +387,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
     @Override
     public String getEventSourceType() {
-        return "BubblePop_Copmonent";
+        return "BubblePop_Component";
     }
 
 
@@ -396,14 +408,15 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         _touchedBubble = bubble;
 
-        TScope scope = mTutor.getScope();
-
+        TScope scope  = mTutor.getScope();
         String answer = bubble.getStimulus();
 
+        // Ensure letters are lowercase for mp3 matching
+        //
         if(answer.length() == 1)
-            answer = answer.toUpperCase();
+            answer = answer.toLowerCase();
 
-        scope.addUpdateVar(name() + ".ansValue", new TString(answer));
+        scope.addUpdateVar(name() + BP_CONST.ANSWER_VAR, new TString(answer));
 
         resetValid();
 
@@ -437,10 +450,12 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         String correctVal = _stimulus_data[data.dataset[data.stimulus_index]];
 
+        // Ensure letters are lowercase for mp3 matching
+        //
         if(correctVal.length() == 1)
-            correctVal = correctVal.toUpperCase();
+            correctVal = correctVal.toLowerCase();
 
-        scope.addUpdateVar(name() + ".questValue", new TString(correctVal));
+        scope.addUpdateVar(name() + BP_CONST.QUEST_VAR, new TString(correctVal));
 
         if (data.question_say) {
             mTutor.setAddFeature(TCONST.SAY_STIMULUS);
@@ -472,7 +487,35 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
     //**********************************************************
     //**********************************************************
-    //*****************  Common Tutor Object Methods
+    //*****************  ITutorObjectImpl Implementation
+
+    @Override
+    public void init(Context context, AttributeSet attrs) {
+
+        super.init(context, attrs);
+
+        mSceneObject = new CObjectDelegate(this);
+        mSceneObject.init(context, attrs);
+    }
+
+
+    @Override
+    public void onCreate() {
+
+        // Do deferred listeners configuration - this cannot be done until after the tutor is instantiated
+        //
+        if(!mListenerConfigured) {
+            for (String linkedView : mLinkedViews) {
+                addEventListener(linkedView);
+            }
+            mListenerConfigured = true;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
 
     @Override
@@ -494,19 +537,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     public void setTutor(CTutor tutor) {
         mTutor = tutor;
         mSceneObject.setTutor(tutor);
-    }
-
-    @Override
-    public void onCreate() {
-
-        // Do deferred listeners configuration - this cannot be done until after the tutor is instantiated
-        //
-        if(!mListenerConfigured) {
-            for (String linkedView : mLinkedViews) {
-                addEventListener(linkedView);
-            }
-            mListenerConfigured = true;
-        }
     }
 
     @Override

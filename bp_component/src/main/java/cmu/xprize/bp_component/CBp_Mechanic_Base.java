@@ -441,7 +441,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
                 AnimatorSet deflator           = new AnimatorSet();
                 ArrayList<Animator> animations = new ArrayList<Animator>();
-
                 for(int i1 = 0; i1 < SBubbles.length ; i1++) {
                     if(SBubbles[i1] != null)
                         animations.add(CAnimatorUtil.configZoomIn(SBubbles[i1], 600, 0, new AnticipateInterpolator(), 0f));
@@ -609,20 +608,35 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
         int stimCount = (data.rand_data)? data.rand_size:data.dataset.length;
         int setSize   = mComponent._stimulus_data.length;
 
+        mComponent.question_Index = (int) (Math.random() * setSize);
+
         // Constrain the presentation set size
         //
         if(stimCount > setSize)
             stimCount = setSize;
-
         // If the first element of the dataset is < 0 it indicates the number of random items
         // to add to the array
         //
         if(data.rand_data) {
 
             data.dataset = new int[stimCount];
+            HashMap<Integer, Boolean> dataAlreadyChosen = new HashMap<Integer, Boolean>();
+            dataAlreadyChosen.put(mComponent.question_Index, true);
 
             for(int i1 = 0 ; i1 < stimCount ; i1++) {
-                data.dataset[i1] = (int) (Math.random() * setSize);
+                int randomKey = (int) (Math.random() * setSize);
+                //Ensures no infinite loop
+                int checkToBreak = 0;
+                while(dataAlreadyChosen.containsKey(randomKey)) {
+                    randomKey = (randomKey + 1) % (setSize);
+                    checkToBreak++;
+
+                    if(checkToBreak == setSize) {
+                        break;
+                    }
+                }
+                data.dataset[i1] = randomKey;
+                dataAlreadyChosen.put(randomKey, true);
             }
         }
 
@@ -643,6 +657,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
             //
             mComponent.question_Index %= setSize;
         }
+
     }
 
 
