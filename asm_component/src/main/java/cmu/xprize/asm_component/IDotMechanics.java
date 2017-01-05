@@ -10,6 +10,8 @@ public interface IDotMechanics {
     void nextDigit();
     void handleClick();
     void correctOverheadText();
+    void highlightOverheadOrResult(String whichToHighlight);
+    int getCurRow();
     String getOperation();
 
 }

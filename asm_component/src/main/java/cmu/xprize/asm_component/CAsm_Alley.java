@@ -1,7 +1,9 @@
 package cmu.xprize.asm_component;
 
 import android.content.Context;
+import android.content.pm.InstrumentationInfo;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.LinearLayout;
 
 
@@ -16,6 +18,7 @@ public class CAsm_Alley extends LinearLayout {
     private int digitIndex;
     private int val;
     private int id;
+    private int numSlots;
 
     private String operation;
     private String image;
@@ -28,7 +31,6 @@ public class CAsm_Alley extends LinearLayout {
     static final String TAG = "CAsm_Alley";
 
     public CAsm_Alley(Context context) {
-
         super(context);
         init(context, null);
     }
@@ -37,7 +39,6 @@ public class CAsm_Alley extends LinearLayout {
         super(context, attrs);
         init(context, attrs);
     }
-
 
     public CAsm_Alley(Context context, AttributeSet attrs, int defStyle) {
 
@@ -53,21 +54,31 @@ public class CAsm_Alley extends LinearLayout {
     }
 
     public void update(int _val, String _image, int _id, String _operation, boolean _clickable,
-                       int numSlots) {
+                       int _numSlots) {
 
         this.id = _id;
         this.val = _val;
         this.operation = _operation;
         this.clickable = _clickable;
-        this.digitIndex = numSlots;
+        this.digitIndex = _numSlots;
+        this.numSlots = _numSlots;
         this.image = _image;
 
+        SdotBag.updateSize(operation.equals("x"));
         STextLayout.resetAllValues();
-        STextLayout.update(id, val, operation, numSlots);
+        if(operation.equals("x")) {
+            if(id != ASM_CONST.OPERATION_MULTI && id != ASM_CONST.REGULAR_MULTI)
+                STextLayout.resetAllBackground();
+            STextLayout.update(id, val, operation, numSlots);
+            SdotBag.setDrawBorder(false);
+        } else {
+            if (id != ASM_CONST.OPERATION && id != ASM_CONST.REGULAR)
+                STextLayout.resetAllBackground();
+            STextLayout.update(id, val, operation, numSlots);
 
-        SdotBag.setDrawBorder(id != ASM_CONST.ANIMATOR);
-
-
+            SdotBag.setDrawBorder(id != ASM_CONST.ANIMATOR1 && id != ASM_CONST.ANIMATOR2 && id != ASM_CONST.ANIMATOR3);
+        }
+        SdotBag.setVisibility(INVISIBLE);
     }
 
     private void createText() {
@@ -94,24 +105,38 @@ public class CAsm_Alley extends LinearLayout {
 
     public void nextDigit() {
 
-        Integer cols;
+        Integer cols = 0;
 
         digitIndex--;
+
         STextLayout.performNextDigit();
 
-        if (id == ASM_CONST.RESULT) {
-            cols = 0;
-        }
-        else {
-            cols = STextLayout.getDigit(digitIndex);
-            cols = (cols != null)?cols:0;
+        if (operation.equals("x")) {
+/*            if (id == ASM_CONST.RESULT_OR_ADD_MULTI_PART1)
+                cols = 0;
+            else {
+                cols = STextLayout.getDigit(digitIndex);
+                cols = (cols != null)?cols:0;
+            }*/
+        } else {
+            if (id == ASM_CONST.RESULT)
+                cols = 0;
+            else {
+                cols = STextLayout.getDigit(digitIndex);
+                cols = (cols != null)?cols:0;
+            }
         }
 
+        if(operation.equals("-")) {
+            removeView(SdotBag);
+            createDotBag();
+        }
         SdotBag.setRows(1);
         SdotBag.setCols(cols);
         SdotBag.setImage(image);
         SdotBag.setIsClickable(clickable);
-
+        SdotBag.resetOverflowNum();
+        SdotBag.setVisibility(INVISIBLE);
     }
 
     public Integer getNum() {return STextLayout.getNum();}

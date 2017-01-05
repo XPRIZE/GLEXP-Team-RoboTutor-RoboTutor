@@ -1,5 +1,6 @@
 package cmu.xprize.asm_component;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,6 +11,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 
 import cmu.xprize.util.CAnimatorUtil;
@@ -23,7 +25,7 @@ import cmu.xprize.util.TCONST;
 public class CAsm_Text extends TextView implements IEventListener {
 
     float scale = getResources().getDisplayMetrics().density;
-    final int textSize = (int)(ASM_CONST.textSize*scale);
+    int textSize = (int)(ASM_CONST.textSize*scale);
 
     public boolean isWritable = false;
     public boolean isClicked = false;
@@ -35,6 +37,12 @@ public class CAsm_Text extends TextView implements IEventListener {
 
         super(context);
         reset();
+    }
+
+    public CAsm_Text(Context context, boolean isMultiplication) {
+
+        super(context);
+        reset(isMultiplication);
     }
 
     public CAsm_Text(Context context, AttributeSet attrs) {
@@ -58,9 +66,11 @@ public class CAsm_Text extends TextView implements IEventListener {
         } else return false;
     }
 
-
     public void reset() {
+        reset(false);
+    }
 
+    public void reset(boolean isMultiplication) {
         isClicked = false;
 
         setStruck(false);
@@ -70,14 +80,13 @@ public class CAsm_Text extends TextView implements IEventListener {
 
         setTextColor(Color.BLACK);
         setGravity(Gravity.CENTER);
-        setTextSize(textSize);
+        if (!isMultiplication) setTextSize(textSize);
 
         setBackground(null);
         setTypeface(null);
         setSingleLine(true);
 
         setPaintFlags(0);
-
 
     }
 
@@ -86,6 +95,14 @@ public class CAsm_Text extends TextView implements IEventListener {
         setEnabled(true);
         setBackground(getResources().getDrawable(R.drawable.back));
         setWritable(true);
+
+    }
+
+    public void cancelResult(){
+
+        setEnabled(false);
+        setBackground(null);
+        setWritable(false);
 
     }
 
@@ -147,4 +164,20 @@ public class CAsm_Text extends TextView implements IEventListener {
 
     }
 
+    /* Adapted from Kevin's CAnimatorUtil. Using setTranslationX instead of setX. */
+    public void wiggle(long duration, int repetition, long delay, float magnitude) {
+
+        float currTranslation = getTranslationX();
+        float offset = magnitude*getWidth();
+        float[] pts = {currTranslation, offset + currTranslation, currTranslation,
+                currTranslation-offset, currTranslation};
+
+        ObjectAnimator anim = ObjectAnimator.ofFloat(this, "translationX", pts);
+        anim.setDuration(duration);
+        anim.setRepeatCount(repetition);
+        anim.setStartDelay(delay);
+        anim.setInterpolator(new LinearInterpolator());
+        anim.start();
+
+    }
 }

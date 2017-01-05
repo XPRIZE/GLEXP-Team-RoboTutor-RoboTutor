@@ -48,6 +48,8 @@ public class CAsm_DotBag extends TableLayout {
 
     private String imageName = "star"; // default
 
+    private int overflowNum = 0;
+
     private LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -74,7 +76,6 @@ public class CAsm_DotBag extends TableLayout {
         init();
 
     }
-
 
     private void init() {
 
@@ -141,19 +142,18 @@ public class CAsm_DotBag extends TableLayout {
             for (int i = 0; i < this.rows; i++) {
                 currTableRow = allTableRows.get(i);
 
-                for (int j = this.cols - 1; j >= _cols; j-- ) {
+                for (int j = currTableRow.getVirtualChildCount() - 1; j >= _cols; j-- ) {
                     currTableRow.removeViewAt(j);
                 }
-            }
-        }
 
-        else if (deltaCols > 0) {
+            }
+        } else {
             for (int i = 0; i < this.rows; i++) {
-                for (int j = origCols; j < _cols; j++ ) {
+                for(int j = 0; j < origCols; j++)
+                    getDot(i, j).setVisibility(View.VISIBLE);
+                for (int j = origCols; j < _cols; j++ )
                     addDot(i, j);
-                }
             }
-
         }
 
         this.cols = _cols;
@@ -218,18 +218,23 @@ public class CAsm_DotBag extends TableLayout {
         updateRows();
         updateCols();
         resetBounds();
-
         if (isAudible) {
             setChimeIndex(chimeIndex + 1);
-            currentChime = chimes[this.chimeIndex % chimes.length];
-        }
+            currentChime = chimes[this.chimeIndex];
 
+        }
 
         return dot;
     }
 
+    public void setHallowChime(){
+        if (isAudible) {
+            setChimeIndex(chimeIndex + 1);
+            currentChime = chimes[this.chimeIndex % chimes.length];
+        }
+    }
 
-    private void setZero() {
+    protected void setZero() {
 
         rows = 0;
         cols = 0;
@@ -241,7 +246,6 @@ public class CAsm_DotBag extends TableLayout {
         resetBounds();
 
     }
-
 
     private TableRow addRow(int index) {
 
@@ -427,6 +431,9 @@ public class CAsm_DotBag extends TableLayout {
     public int getSize() {return this.size; }
     public int getRows(){ return this.rows;}
     public int getCols(){ return this.cols;}
+    public boolean getDrawBorder() {
+        return drawBorder;
+    }
 
     public TableRow getRow(int index) {return allTableRows.get(index); }
 
@@ -445,6 +452,13 @@ public class CAsm_DotBag extends TableLayout {
         else {
             return false;
         }
+    }
+
+    public void updateSize(boolean isMultiplication) {
+        if (isMultiplication)
+            size = (int)(ASM_CONST.textBoxHeightMul * scale);
+        else
+            size = (int)(ASM_CONST.textBoxHeight * scale);
     }
 
     private void updateRows() {this.rows = allTableRows.size(); }
@@ -524,7 +538,33 @@ public class CAsm_DotBag extends TableLayout {
         }
     }
 
+    public void resetOverflowNum() {
+        this.overflowNum = 0;
+    }
 
+    public void addOverflowNum() {
+        this.overflowNum++;
+    }
 
+    public int getOverflowNum() {
+        return this.overflowNum;
+    }
 
+    public void setIsisAudible(boolean isAudible){
+        this.isAudible = isAudible;
+    }
+
+    public void copyFrom(CAsm_DotBag _dotBag) {
+        this.drawBorder = _dotBag.drawBorder;
+        this.imageName = _dotBag.imageName;
+        setRows(_dotBag.getRows());
+        setCols(_dotBag.getCols());
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (_dotBag.getDot(i, j) == null || _dotBag.getDot(i, j).getVisibility() == INVISIBLE)
+                    getDot(i, j).setVisibility(INVISIBLE);
+            }
+        }
+    }
 }
