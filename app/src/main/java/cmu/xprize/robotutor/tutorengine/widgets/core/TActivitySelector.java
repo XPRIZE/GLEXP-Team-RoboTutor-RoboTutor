@@ -224,6 +224,134 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         boolean     buttonFound = false;
 
+
+        // If it wasn't a Skill selection it must be a assessment (Difficulty) selector button
+        // Difficulty selection
+
+        if(RoboTutor.TUTORSELECTED) {
+
+            // Init the skill pointers
+            //
+            switch (activeSkill) {
+
+                case AS_CONST.SELECT_WRITING:
+
+                    activeTutor = writingTutorID;
+                    transitionMap = writeTransitions;
+                    break;
+
+                case AS_CONST.SELECT_STORIES:
+
+                    activeTutor = storiesTutorID;
+                    transitionMap = storyTransitions;
+                    break;
+
+                case AS_CONST.SELECT_MATH:
+
+                    activeTutor = mathTutorID;
+                    transitionMap = mathTransitions;
+                    break;
+
+                case AS_CONST.SELECT_SHAPES:
+
+                    activeTutor = shapesTutorID;
+                    transitionMap = shapeTransitions;
+                    break;
+
+            }
+
+            switch (buttonid.toUpperCase()) {
+
+                case AS_CONST.SELECT_CONTINUE:
+                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
+
+                    mTutor.post(TCONST.ENDTUTOR);
+                    RoboTutor.TUTORSELECTED = false;
+                    break;
+
+                case AS_CONST.SELECT_MAKE_HARDER:
+                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).harder;
+
+                    mTutor.post(TCONST.ENDTUTOR);
+                    RoboTutor.TUTORSELECTED = false;
+                    break;
+
+                case AS_CONST.SELECT_MAKE_EASIER:
+                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).easier;
+
+                    mTutor.post(TCONST.ENDTUTOR);
+                    RoboTutor.TUTORSELECTED = false;
+                    break;
+
+                case AS_CONST.SELECT_EXIT:
+                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id;
+
+                    mTutor.post(TCONST.FINISH);
+                    RoboTutor.TUTORSELECTED = false;
+                    break;
+
+                // If user selects "Let robotutor decide" then use student model to decide how to adjust the
+                // difficulty level.
+                // At the moment default to continue
+                //
+                case AS_CONST.SELECT_AUTO_DIFFICULTY:
+                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
+                    // just reselect the current skill and continue with next tutor
+                    // no skill selection phase
+                    buttonid = activeSkill;
+                    break;
+
+                case AS_CONST.SELECT_REPEAT:
+                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id;
+                    // just reselect the current skill and continue with next tutor
+                    // no skill selection phase
+                    buttonid = activeSkill;
+                    break;
+            }
+
+            // Update the active skill
+            //
+            switch (activeSkill) {
+
+                case AS_CONST.SELECT_WRITING:
+
+                    writingTutorID = nextTutor;
+                    break;
+
+                case AS_CONST.SELECT_STORIES:
+
+                    storiesTutorID = nextTutor;
+                    break;
+
+                case AS_CONST.SELECT_MATH:
+
+                    mathTutorID = nextTutor;
+                    break;
+
+                case AS_CONST.SELECT_SHAPES:
+
+                    shapesTutorID = nextTutor;
+                    break;
+            }
+
+            // Serialize the new state
+            //
+            SharedPreferences prefs = RoboTutor.ACTIVITY.getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+
+            editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE);
+
+            // only one will have been changed but update all
+            //
+            editor.putString(TCONST.SKILL_WRITING, writingTutorID);
+            editor.putString(TCONST.SKILL_STORIES, storiesTutorID);
+            editor.putString(TCONST.SKILL_MATH, mathTutorID);
+            editor.putString(TCONST.SKILL_SHAPES, shapesTutorID);
+
+            editor.apply();
+        }
+
+
         // If user selects "Let robotutor decide" then use student model to decide skill to work next
         // At the moment default to Stories
         //
@@ -305,129 +433,6 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             }
             else
                 SaskActivity.enableButtons(true);
-        }
-
-
-
-        // If it wasn't a Skill selection it must be a assessment (Difficulty) selector button
-        // Difficulty selection
-
-        else {
-
-            RoboTutor.TUTORSELECTED = false;
-
-            // If user selects "Let robotutor decide" then use student model to decide how to adjust the
-            // difficulty level.
-            // At the moment default to continue
-            //
-            if(buttonid.toUpperCase().equals(AS_CONST.SELECT_AUTO_DIFFICULTY)) {
-                buttonid = AS_CONST.SELECT_CONTINUE;
-            }
-
-            // Init the skill pointers
-            //
-            switch(activeSkill) {
-
-                case AS_CONST.SELECT_WRITING:
-
-                    activeTutor = writingTutorID;
-                    transitionMap = writeTransitions;
-                    break;
-
-                case AS_CONST.SELECT_STORIES:
-
-                    activeTutor = storiesTutorID;
-                    transitionMap = storyTransitions;
-                    break;
-
-                case AS_CONST.SELECT_MATH:
-
-                    activeTutor = mathTutorID;
-                    transitionMap = mathTransitions;
-                    break;
-
-                case AS_CONST.SELECT_SHAPES:
-
-                    activeTutor = shapesTutorID;
-                    transitionMap = shapeTransitions;
-                    break;
-
-            }
-
-
-            switch (buttonid.toUpperCase()) {
-
-                case AS_CONST.SELECT_CONTINUE:
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-
-                    mTutor.post(TCONST.ENDTUTOR);
-                    break;
-
-                case AS_CONST.SELECT_MAKE_HARDER:
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).harder;
-
-                    mTutor.post(TCONST.ENDTUTOR);
-                    break;
-
-                case AS_CONST.SELECT_MAKE_EASIER:
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).easier;
-
-                    mTutor.post(TCONST.ENDTUTOR);
-                    break;
-
-                case AS_CONST.SELECT_REPEAT:
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id;
-
-                    mTutor.post(TCONST.ENDTUTOR);
-                    break;
-
-                case AS_CONST.SELECT_EXIT:
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id;
-
-                    mTutor.post(TCONST.FINISH);
-                    break;
-            }
-
-            // Update the active skill
-            //
-            switch(activeSkill) {
-
-                case AS_CONST.SELECT_WRITING:
-
-                    writingTutorID = nextTutor;
-                    break;
-
-                case AS_CONST.SELECT_STORIES:
-
-                    storiesTutorID = nextTutor;
-                    break;
-
-                case AS_CONST.SELECT_MATH:
-
-                    mathTutorID = nextTutor;
-                    break;
-
-                case AS_CONST.SELECT_SHAPES:
-
-                    shapesTutorID = nextTutor;
-                    break;
-            }
-
-            // Serialize the new state
-            //
-            SharedPreferences prefs = RoboTutor.ACTIVITY.getPreferences(Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-
-            editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE);
-
-            // only one will have been changed but update all
-            //
-            editor.putString(TCONST.SKILL_WRITING, writingTutorID);
-            editor.putString(TCONST.SKILL_STORIES, storiesTutorID);
-            editor.putString(TCONST.SKILL_MATH, mathTutorID);
-            editor.putString(TCONST.SKILL_SHAPES, shapesTutorID);
-
-            editor.apply();
         }
     }
 
@@ -531,8 +536,6 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     // ITutorObject Implementation End
     //************************************************************************
     //************************************************************************
-
-
 
 
 
