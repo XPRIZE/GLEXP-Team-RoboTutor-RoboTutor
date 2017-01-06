@@ -50,22 +50,19 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
 
+import static cmu.xprize.util.TCONST.ASREventMap;
+
 public class TRtComponent extends CRt_Component implements IBehaviorManager, ITutorObjectImpl, Button.OnClickListener, IRtComponent, IDataSink, IEventSource {
 
-    private CTutor           mTutor;
-    private CObjectDelegate  mSceneObject;
-    private CMediaManager    mMediaManager;
+    private CTutor mTutor;
+    private CObjectDelegate mSceneObject;
+    private CMediaManager mMediaManager;
 
     private HashMap<String, String> volatileMap = new HashMap<>();
     private HashMap<String, String> stickyMap = new HashMap<>();
 
-    private String           speakBehavior;
-    private String           pageFlipBehavior;
-    private String           clickBehavior;
-
 
     static private String TAG = "TRtComponent";
-
 
 
     public TRtComponent(Context context) {
@@ -119,7 +116,10 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     //************************************************************************
     // IBehaviorManager Interface START
 
+
     public void setVolatileBehavior(String event, String behavior) {
+
+        Log.d("SET_BEHAVIOR", "Event: " + event + "  - behavior: " + behavior );
 
         enableOnClickBehavior(event, behavior);
 
@@ -130,6 +130,59 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
             }
         } else {
             volatileMap.put(event, behavior);
+        }
+
+        // Configure the ASR static events in the listener itself
+        //
+        Integer eventType = ASREventMap.get(event);
+
+        if(eventType != null) switch(eventType) {
+
+            case TCONST.SILENCE_EVENT:
+            case TCONST.SOUND_EVENT:
+            case TCONST.WORD_EVENT:
+
+                if (behavior.toUpperCase().equals(TCONST.NULL)) {
+
+                    mListener.resetStaticEvent(eventType);
+                } else {
+                    mListener.configStaticEvent(eventType);
+                }
+                break;
+        }
+    }
+
+
+    /** Special Behavior processing for timed ASR events which must be setup in the listener component
+     *
+     * @param event
+     * @param behavior
+     * @param timeout
+     */
+    public void setVolatileBehavior(String event, String behavior, int timeout) {
+
+        // Setup the behavior
+        //
+        setVolatileBehavior(event, behavior);
+
+        // Configure the ASR timed events in the listener itself
+        //
+        Integer eventType = ASREventMap.get(event);
+
+        if(eventType != null) switch (eventType) {
+
+            case TCONST.TIMEDSILENCE_EVENT:
+            case TCONST.TIMEDSOUND_EVENT:
+            case TCONST.TIMEDWORD_EVENT:
+
+                if (behavior.toUpperCase().equals(TCONST.NULL)) {
+
+                    mListener.resetTimedEvent(eventType);
+                }
+                else {
+                    mListener.configTimedEvent(eventType, timeout);
+                }
+                break;
         }
     }
 
@@ -145,6 +198,60 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
             }
         } else {
             stickyMap.put(event, behavior);
+        }
+
+        // Configure the ASR static events in the listener itself
+        //
+        Integer eventType = ASREventMap.get(event);
+
+        if(eventType != null) switch(eventType) {
+
+            case TCONST.SILENCE_EVENT:
+            case TCONST.SOUND_EVENT:
+            case TCONST.WORD_EVENT:
+
+                if (behavior.toUpperCase().equals(TCONST.NULL)) {
+
+                    mListener.resetStaticEvent(eventType);
+                }
+                else {
+                    mListener.configStaticEvent(eventType);
+                }
+                break;
+        }
+    }
+
+
+    /** Special Behavior processing for timed ASR events which must be setup in the listener component
+     *
+     * @param event
+     * @param behavior
+     * @param timeout
+     */
+    public void setStickyBehavior(String event, String behavior, int timeout) {
+
+        // Setup the behavior
+        //
+        setStickyBehavior(event, behavior);
+
+        // Configure the ASR timed events in the listener itself
+        //
+        Integer eventType = ASREventMap.get(event);
+
+        if(eventType != null) switch(eventType) {
+
+            case TCONST.TIMEDSILENCE_EVENT:
+            case TCONST.TIMEDSOUND_EVENT:
+            case TCONST.TIMEDWORD_EVENT:
+
+                if (behavior.toUpperCase().equals(TCONST.NULL)) {
+
+                    mListener.resetTimedEvent(eventType);
+                }
+                else {
+                    mListener.configTimedEvent(eventType, timeout);
+                }
+                break;
         }
     }
 
@@ -162,7 +269,10 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 Log.d(TAG, "Processing WC_ApplyEvent: " + event);
                 applyBehaviorNode(volatileMap.get(event));
 
-                volatileMap.remove(event);
+                // clear the volatile behavior after use and update the listener if the event is a
+                // listener event.
+                //
+                setVolatileBehavior(event, TCONST.NULL, 0);
 
                 result = true;
 
@@ -439,26 +549,16 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         super.setSpeakButton(command);
     }
 
-    public void setPageFlipBehavior(String command) {
-
-        pageFlipBehavior = command;
-    }
-
-    public void setSpeakBehavior(String command) {
-
-        speakBehavior = command;
-    }
-
 
     public void onButtonClick(String buttonName) {
 
         switch(buttonName) {
             case TCONST.PAGEFLIP_BUTTON:
-                applyEventNode(pageFlipBehavior);
+                applyBehavior(buttonName);
                 break;
 
             case TCONST.SPEAK_BUTTON:
-                applyEventNode(speakBehavior);
+                applyBehavior(buttonName);
                 break;
         }
     }
@@ -481,11 +581,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
         mTutor.setDelFeature(TCONST.GENERIC_WRONG);
     }
-
-    public void onRecognitionEvent(String symbol) {
-        super.onRecognitionEvent(symbol);
-    }
-
 
 
     @Override

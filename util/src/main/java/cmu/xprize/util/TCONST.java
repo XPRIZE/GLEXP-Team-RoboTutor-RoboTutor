@@ -446,6 +446,40 @@ public class TCONST {
     public static final int ALL_EVENTS         = 0xFFFFFFFF;
 
 
+    public static final String ASR_TIMED_START_EVENT  = "ASR_TIMED_START_EVENT";
+    public static final String ASR_RECOGNITION_EVENT  = "ASR_RECOGNITION_EVENT";
+    public static final String ASR_ERROR_EVENT        = "ASR_ERROR_EVENT";
+    public static final String ASR_SILENCE_EVENT      = "ASR_SILENCE_EVENT";
+    public static final String ASR_SOUND_EVENT        = "ASR_SOUND_EVENT";
+    public static final String ASR_WORD_EVENT         = "ASR_WORD_EVENT";
+    public static final String ASR_TIMEDSILENCE_EVENT = "ASR_TIMEDSILENCE_EVENT";
+    public static final String ASR_TIMEDSOUND_EVENT   = "ASR_TIMEDSOUND_EVENT";
+    public static final String ASR_TIMEDWORD_EVENT    = "ASR_TIMEDWORD_EVENT";
+
+    public static final String ASR_ALL_TIMED_EVENTS   = "ASR_ALL_TIMED_EVENTS";
+    public static final String ASR_ALL_STATIC_EVENTS  = "ASR_ALL_STATIC_EVENTS";
+    public static final String ASR_ALL_EVENTS         = "ASR_ALL_EVENTS";
+
+    // Map script event names to bitmap ASR Listener conatants.
+    //
+    static public HashMap<String, Integer> ASREventMap = new HashMap<String, Integer>();
+
+    static {
+        ASREventMap.put(ASR_SILENCE_EVENT, TCONST.SILENCE_EVENT);
+        ASREventMap.put(ASR_SOUND_EVENT, TCONST.SOUND_EVENT);
+        ASREventMap.put(ASR_WORD_EVENT, TCONST.WORD_EVENT);
+        ASREventMap.put(ASR_TIMEDSILENCE_EVENT, TCONST.TIMEDSILENCE_EVENT);
+        ASREventMap.put(ASR_TIMEDSOUND_EVENT, TCONST.TIMEDSOUND_EVENT);
+        ASREventMap.put(ASR_TIMEDWORD_EVENT, TCONST.TIMEDWORD_EVENT);
+        ASREventMap.put(ASR_TIMED_START_EVENT, TCONST.TIMEDSTART_EVENT);
+
+        ASREventMap.put(ASR_ALL_TIMED_EVENTS,TCONST.ALLTIMED_EVENTS);
+        ASREventMap.put(ASR_ALL_STATIC_EVENTS,TCONST.ALL_EVENTS);
+        ASREventMap.put(ASR_ALL_EVENTS,TCONST.ALL_EVENTS);
+    }
+
+
+
     public static final int NOINTERVENTION = 0;
     public static final int INSPEECH       = 1;
     public static final int SAYWORD        = 2;
@@ -615,8 +649,8 @@ public class TCONST {
 
     // READING Tutor State names  -- RTC Reading Tutor Component
 
-    public static final String PAGEFLIP_BUTTON = "PAGE_FLIP_BUTTON";
-    public static final String SPEAK_BUTTON    = "SPEAK_BUTTON";
+    public static final String PAGEFLIP_BUTTON = "PAGE_FLIP_CLICK";
+    public static final String SPEAK_BUTTON    = "SPEAK_CLICK";
 
     public static final String EMPTY = "";
 

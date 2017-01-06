@@ -21,6 +21,10 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+
+import java.util.HashMap;
 
 import cmu.xprize.nl_component.CNl_Component;
 import cmu.xprize.robotutor.R;
@@ -39,21 +43,28 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.robotutor.tutorengine.graph.vars.type_array;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.CEvent;
+import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEventListener;
+import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.ILogManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
 
+import static cmu.xprize.util.TCONST.ASREventMap;
+
 
 /**
  * Scriptable number listener component
  */
-public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IArraySource, IDataSink {
-
+public class TNlComponent extends CNl_Component implements IBehaviorManager, ITutorObjectImpl, IArraySource, IDataSink, IEventSource
+{
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
     private CMediaManager   mMediaManager;
+
+    private HashMap<String, String> volatileMap = new HashMap<>();
+    private HashMap<String, String> stickyMap = new HashMap<>();
 
     private String          debugHypSet;
 
@@ -465,20 +476,222 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
 
 
 
+    // Scripting Interface  End
+    //************************************************************************
+    //************************************************************************
+
+
+    //************************************************************************
+    //************************************************************************
+    // IBehaviorManager Interface START
+
+
+    public void setVolatileBehavior(String event, String behavior) {
+
+        enableOnClickBehavior(event, behavior);
+
+        if (behavior.toUpperCase().equals(TCONST.NULL)) {
+
+            if (volatileMap.containsKey(event)) {
+                volatileMap.remove(event);
+            }
+        } else {
+            volatileMap.put(event, behavior);
+        }
+
+        // Configure the ASR static events in the listener itself
+        //
+        int eventType = ASREventMap.get(event);
+
+        switch(eventType) {
+
+            case TCONST.SILENCE_EVENT:
+            case TCONST.SOUND_EVENT:
+            case TCONST.WORD_EVENT:
+
+                if (behavior.toUpperCase().equals(TCONST.NULL)) {
+
+                    mListener.resetStaticEvent(eventType);
+                }
+                else {
+                    mListener.configStaticEvent(eventType);
+                }
+                break;
+        }
+    }
+
+
+    /** Special Behavior processing for timed ASR events which must be setup in the listener component
+     *
+     * @param event
+     * @param behavior
+     * @param timeout
+     */
+    public void setVolatileBehavior(String event, String behavior, int timeout) {
+
+        // Setup the behavior
+        //
+        setVolatileBehavior(event, behavior);
+
+        // Configure the ASR timed events in the listener itself
+        //
+        int eventType = ASREventMap.get(event);
+
+        switch (eventType) {
+
+            case TCONST.TIMEDSILENCE_EVENT:
+            case TCONST.TIMEDSOUND_EVENT:
+            case TCONST.TIMEDWORD_EVENT:
+
+                if (behavior.toUpperCase().equals(TCONST.NULL)) {
+
+                    mListener.resetTimedEvent(eventType);
+                }
+                else {
+                    mListener.configTimedEvent(eventType, timeout);
+                }
+                break;
+        }
+    }
+
+
+    public void setStickyBehavior(String event, String behavior) {
+
+        enableOnClickBehavior(event, behavior);
+
+        if (behavior.toUpperCase().equals(TCONST.NULL)) {
+
+            if (stickyMap.containsKey(event)) {
+                stickyMap.remove(event);
+            }
+        } else {
+            stickyMap.put(event, behavior);
+        }
+
+        // Configure the ASR static events in the listener itself
+        //
+        int eventType = ASREventMap.get(event);
+
+        switch(eventType) {
+
+            case TCONST.SILENCE_EVENT:
+            case TCONST.SOUND_EVENT:
+            case TCONST.WORD_EVENT:
+
+                if (behavior.toUpperCase().equals(TCONST.NULL)) {
+
+                    mListener.resetStaticEvent(eventType);
+                }
+                else {
+                    mListener.configStaticEvent(eventType);
+                }
+                break;
+        }
+    }
+
+
+    /** Special Behavior processing for timed ASR events which must be setup in the listener component
+     *
+     * @param event
+     * @param behavior
+     * @param timeout
+     */
+    public void setStickyBehavior(String event, String behavior, int timeout) {
+
+        // Setup the behavior
+        //
+        setStickyBehavior(event, behavior);
+
+        // Configure the ASR timed events in the listener itself
+        //
+        int eventType = ASREventMap.get(event);
+
+        switch(eventType) {
+
+            case TCONST.TIMEDSILENCE_EVENT:
+            case TCONST.TIMEDSOUND_EVENT:
+            case TCONST.TIMEDWORD_EVENT:
+
+                if (behavior.toUpperCase().equals(TCONST.NULL)) {
+
+                    mListener.resetTimedEvent(eventType);
+                }
+                else {
+                    mListener.configTimedEvent(eventType, timeout);
+                }
+                break;
+        }
+
+    }
+
+
+    // Execute script target if behavior is defined for this event
+    //
+    @Override
+    public boolean applyBehavior(String event) {
+
+        boolean result = false;
+
+        if(!(result = super.applyBehavior(event))) {
+
+            if (volatileMap.containsKey(event)) {
+                Log.d(TAG, "Processing WC_ApplyEvent: " + event);
+                applyBehaviorNode(volatileMap.get(event));
+
+                // clear the volatile behavior after use and update the listener if the event is a
+                // listener event.
+                //
+                setVolatileBehavior(event, TCONST.NULL, 0);
+
+                result = true;
+
+            } else if (stickyMap.containsKey(event)) {
+
+                applyBehaviorNode(stickyMap.get(event));
+
+                result = true;
+            }
+        }
+
+        return result;
+    }
+
 
     /**
-     *  Apply Events in the Tutor Domain.
+     * Apply Events in the Tutor Domain.
      *
      * @param nodeName
      */
     @Override
-    public void applyEventNode(String nodeName) {
+    public void applyBehaviorNode(String nodeName) {
         IScriptable2 obj = null;
 
-        if(nodeName != null && !nodeName.equals("")) {
+        if (nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
+
             try {
                 obj = mTutor.getScope().mapSymbol(nodeName);
-                obj.applyNode();
+
+                if (obj != null) {
+
+                    switch(obj.getType()) {
+
+                        case TCONST.SUBGRAPH:
+
+                            mTutor.getSceneGraph().post(this, TCONST.SUBGRAPH_CALL, nodeName);
+                            break;
+
+                        case TCONST.MODULE:
+
+                            // Disallow module "calls"
+                            Log.e(TAG, "MODULE Behaviors are not supported");
+                            break;
+
+                        default:
+                            obj.preEnter();
+                            obj.applyNode();
+                            break;
+                    }
+                }
 
             } catch (Exception e) {
                 // TODO: Manage invalid Behavior
@@ -487,7 +700,58 @@ public class TNlComponent extends CNl_Component implements ITutorObjectImpl, IAr
         }
     }
 
-    // Scripting Interface  End
+
+    /**
+     * Do button like behavior defined for component itself - i.e. click anywhere
+     *
+     * @param v
+     */
+    @Override
+    public void onClick(View v) {
+
+        if(v == this) {
+
+            applyBehavior(TCONST.ON_CLICK);
+        }
+
+    }
+
+
+    private void enableOnClickBehavior(String event, String behavior) {
+
+        if(event.toUpperCase().equals(TCONST.ON_CLICK)) {
+
+            if (behavior.toUpperCase().equals(TCONST.NULL)) {
+                setOnClickListener(null);
+            } else {
+                setOnClickListener(this);
+            }
+        }
+    }
+
+    // IBehaviorManager Interface END
+    //************************************************************************
+    //************************************************************************
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // IEventSource Interface START
+
+
+    @Override
+    public String getEventSourceName() {
+        return name();
+    }
+
+    @Override
+    public String getEventSourceType() {
+        return "Reading_Component";
+    }
+
+
+    // IEventSource Interface END
     //************************************************************************
     //************************************************************************
 

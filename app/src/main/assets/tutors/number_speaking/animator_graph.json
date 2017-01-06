@@ -154,7 +154,7 @@
           "COMMENT": "Listening Module",
           "tracks": [
             {"type": "COMMAND", "id": "Sresponse", "method": "onStartTalking", "parms": "CANCEL_REMINDER:String"},
-            {"type": "COMMAND", "id":"Sresponse", "method":"configureTimedEvent", "parms": "WORD_TIMEOUT:String|HESITATION_WORD_TIMEOUT:String|5000:Integer", "features": "" },
+            {"type": "COMMAND", "id":"Sresponse", "method":"configureASRTimedEvent", "parms": "WORD_TIMEOUT:String|HESITATION_WORD_TIMEOUT:String|5000:Integer", "features": "" },
             // This would call the cancel reminder action below when the user starts writing
             {"type": "COMMAND", "id": "Sresponse", "method": "onRecognitionComplete", "parms": "NEXT:String"},
             // This would increment the animation_graph when it is in a wait state.  e.g if it is sitting at the end of a stream audio clip
@@ -336,11 +336,11 @@
 
         "GETNUMWORDS":{"type": "COMMAND", "id": "", "method": "", "parms": "", "features": ""},
 
-        "HESTITATION_TIMER": {"type": "COMMAND", "id":"Sresponse", "method":"configureTimedEvent", "parms": "START_TIMEOUT:String|HESITATION_START_TIMEOUT:String|5000:Integer", "features": "" },
-        "HESTITATION_RESET": {"type": "COMMAND", "id":"Sresponse", "method":"clearTimedEvent",     "parms": "START_TIMEOUT:String",                                       "features": "" },
+        "HESTITATION_TIMER": {"type": "COMMAND", "id":"Sresponse", "method":"configureASRTimedEvent", "parms": "START_TIMEOUT:String|HESITATION_START_TIMEOUT:String|5000:Integer", "features": "" },
+        "HESTITATION_RESET": {"type": "COMMAND", "id":"Sresponse", "method":"clearASRTimedEvent",     "parms": "START_TIMEOUT:String",                                       "features": "" },
 
-        "SET_WORD_EVENT":   {"type": "COMMAND", "id":"Sresponse", "method":"configureEvent", "parms": "WORD_EVENT:String|HESTITATION_RESET:String", "features": "" },
-        "RESET_WORD_EVENT": {"type": "COMMAND", "id":"Sresponse", "method":"clearEvent",     "parms": "WORD_EVENT:String",                          "features": "" },
+        "SET_WORD_EVENT":   {"type": "COMMAND", "id":"Sresponse", "method":"configureASREvent", "parms": "WORD_EVENT:String|HESTITATION_RESET:String", "features": "" },
+        "RESET_WORD_EVENT": {"type": "COMMAND", "id":"Sresponse", "method":"clearASREvent",     "parms": "WORD_EVENT:String",                          "features": "" },
 
         "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[7,1,25,123,2000]:String","features":""},
 

@@ -32,7 +32,6 @@ import java.util.Collections;
 import java.util.List;
 
 import cmu.xprize.fw_component.CStimRespBase;
-import cmu.xprize.util.CEventMap;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.util.Num2Word;
 import cmu.xprize.util.TCJSGF;
@@ -43,6 +42,8 @@ import edu.cmu.xprize.listener.IAsrEventListener;
 import edu.cmu.xprize.listener.ListenerBase;
 import edu.cmu.xprize.listener.ListenerJSGF;
 import edu.cmu.xprize.listener.ListenerPLRT;
+
+import static cmu.xprize.util.TCONST.ASREventMap;
 
 public class CNl_Component extends CStimRespBase implements IAsrEventListener, INl_Implementation {
 
@@ -248,65 +249,33 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener, I
     }
 
 
-    public void configureEvent(String eventString, String symbol) {
 
-        int eventType = CEventMap.eventMap.get(eventString);
+    //************************************************************************
+    //************************************************************************
+    // IBehaviorManager Interface START
 
-        switch(eventType) {
+    /**
+     * Overridden in TClass to fire graph behaviors
+     *
+     */
+    public boolean applyBehavior(String event){
 
-            case TCONST.SILENCE_EVENT:
-                _silenceEvent = symbol;
-                break;
-
-            case TCONST.SOUND_EVENT:
-                _soundEvent = symbol;
-                break;
-
-            case TCONST.WORD_EVENT:
-                _wordEvent = symbol;
-                break;
-        }
-        mListener.configStaticEvent(eventType);
+        boolean result = false;
+        return result;
     }
-    public void clearEvent(String eventString) {
 
-        int eventType = CEventMap.eventMap.get(eventString);
-
-        mListener.resetStaticEvent(eventType);
+    /**
+     * Overridden in TClass to fire graph behaviors
+     *
+     * @param nodeName
+     */
+    public void applyBehaviorNode(String nodeName) {
     }
 
 
-    public void configureTimedEvent(String eventString, String symbol, Integer timeOut) {
-
-        int eventType = CEventMap.eventMap.get(eventString);
-
-        switch(eventType) {
-
-            case TCONST.TIMEDSILENCE_EVENT:
-                _timedSilenceEvent = symbol;
-                break;
-
-            case TCONST.TIMEDSOUND_EVENT:
-                _timedSoundEvent = symbol;
-                break;
-
-            case TCONST.TIMEDWORD_EVENT:
-                _timedWordEvent = symbol;
-                break;
-
-            case TCONST.TIMEDSTART_EVENT:
-                _timedStartEvent = symbol;
-                break;
-        }
-        mListener.configTimedEvent(eventType, timeOut);
-    }
-    // TODO: Protect against exceptions if asked to get unknown key
-    public void clearTimedEvent(String eventString) {
-
-        int eventType = CEventMap.eventMap.get(eventString);
-
-        mListener.resetTimedEvent(eventType);
-    }
+    // IBehaviorManager Interface END
+    //************************************************************************
+    //************************************************************************
 
 
 
@@ -355,54 +324,48 @@ public class CNl_Component extends CStimRespBase implements IAsrEventListener, I
     @Override
     public void onASREvent(int eventType) {
 
+        // Here we have to convert from bitmapped event types to string types
+        //
         switch (eventType) {
 
             case TCONST.RECOGNITION_EVENT:
-                Log.d("ASR", "RECOGNITION EVENT");
-                applyEventNode(_onRecognition);
+                applyBehavior(TCONST.ASR_RECOGNITION_EVENT);
                 break;
 
             case TCONST.ERROR_EVENT:
-                Log.d("ASR", "RECOGNITION EVENT");
-                applyEventNode(_onRecognitionError);
+                applyBehavior(TCONST.ASR_ERROR_EVENT);
                 break;
 
             case TCONST.SILENCE_EVENT:
-                Log.d("ASR", "SILENCE EVENT");
-                applyEventNode(_silenceEvent);
+                applyBehavior(TCONST.ASR_SILENCE_EVENT);
                 break;
 
             case TCONST.SOUND_EVENT:
-                Log.d("ASR", "SOUND EVENT");
-                applyEventNode(_soundEvent);
+                applyBehavior(TCONST.ASR_SOUND_EVENT);
                 break;
 
             case TCONST.WORD_EVENT:
-                Log.d("ASR", "WORD EVENT");
-                applyEventNode(_wordEvent);
+                applyBehavior(TCONST.ASR_WORD_EVENT);
                 break;
 
             case TCONST.TIMEDSILENCE_EVENT:
-                Log.d("ASR","SILENCE TIMEOUT");
-                applyEventNode(_timedSilenceEvent);
+                applyBehavior(TCONST.ASR_TIMEDSILENCE_EVENT);
                 break;
 
             case TCONST.TIMEDSOUND_EVENT:
-                Log.d("ASR", "SOUND TIMEOUT");
-                applyEventNode(_timedSoundEvent);
+                applyBehavior(TCONST.ASR_TIMEDSOUND_EVENT);
                 break;
 
             case TCONST.TIMEDWORD_EVENT:
-                Log.d("ASR", "WORD TIMEOUT");
-                applyEventNode(_timedWordEvent);
+                applyBehavior(TCONST.ASR_TIMEDWORD_EVENT);
                 break;
 
             case TCONST.TIMEDSTART_EVENT:
-                Log.d("ASR", "START TIMEOUT");
-                applyEventNode(_timedStartEvent);
+                applyBehavior(TCONST.ASR_TIMED_START_EVENT);
                 break;
         }
     }
+
 
     //*********************  Speech Recognition Interface - End
     //****************************************************************************
