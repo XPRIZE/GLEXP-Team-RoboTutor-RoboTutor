@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cmu.xprize.util.CErrorManager;
-import cmu.xprize.util.CEventMap;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -43,6 +42,8 @@ import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.IAsrEventListener;
 import edu.cmu.xprize.listener.ListenerBase;
 import edu.cmu.xprize.listener.ListenerPLRT;
+
+import static cmu.xprize.util.TCONST.ASREventMap;
 
 
 /**
@@ -73,19 +74,9 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     private int                     expectedWordIndex     = 0;                      // index of expected next word in sentence
     private static int[]            creditLevel           = null;                   // per-word credit levelFolder according to current hyp
 
-    // Tutor scriptable ASR events
-    private String                  _silenceEvent;          // Instant silence begins
-    private String                  _soundEvent;            // Instant a sound is heard
-    private String                  _wordEvent;             // Instant a word is recognized
-    private String                  _timedSilenceEvent;     // Time since silence began
-    private String                  _timedSoundEvent;       // Time since noise began
-    private String                  _timedWordEvent;        // Time since last word recognized
-
     protected String                DATASOURCEPATH;
     protected String                EXTERNPATH;
 
-    protected String                _onRecognition;
-    protected String                _onRecognitionError;
     protected boolean               _scrollVertical = false;
 
 
@@ -249,10 +240,8 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     // IBehaviorManager Interface START
 
     /**
-     * Manage component defined (i.e. specific) events
+     * Overridden in TClass to fire graph behaviors
      *
-     * @param event
-     * @return  true of event handled
      */
     public boolean applyBehavior(String event){
 
@@ -357,46 +346,40 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     @Override
     public void onASREvent(int eventType) {
 
+        // Here we have to convert from bitmapped event types to string types
+        //
         switch (eventType) {
 
             case TCONST.RECOGNITION_EVENT:
-                Log.d("ASR", "RECOGNITION EVENT");
-                applyEventNode(_onRecognition);
+                applyBehavior(TCONST.ASR_RECOGNITION_EVENT);
                 break;
 
             case TCONST.ERROR_EVENT:
-                Log.d("ASR", "ERROR_EVENT");
-                applyEventNode(_onRecognitionError);
+                applyBehavior(TCONST.ASR_ERROR_EVENT);
                 break;
 
             case TCONST.SILENCE_EVENT:
-                Log.d("ASR", "SILENCE EVENT");
-                applyEventNode(_silenceEvent);
+                applyBehavior(TCONST.ASR_SILENCE_EVENT);
                 break;
 
             case TCONST.SOUND_EVENT:
-                Log.d("ASR", "SOUND EVENT");
-                applyEventNode(_soundEvent);
+                applyBehavior(TCONST.ASR_SOUND_EVENT);
                 break;
 
             case TCONST.WORD_EVENT:
-                Log.d("ASR", "WORD EVENT");
-                applyEventNode(_wordEvent);
+                applyBehavior(TCONST.ASR_WORD_EVENT);
                 break;
 
             case TCONST.TIMEDSILENCE_EVENT:
-                Log.d("ASR","SILENCE TIMEOUT");
-                applyEventNode(_timedSilenceEvent);
+                applyBehavior(TCONST.ASR_TIMEDSILENCE_EVENT);
                 break;
 
             case TCONST.TIMEDSOUND_EVENT:
-                Log.d("ASR", "SOUND TIMEOUT");
-                applyEventNode(_timedSoundEvent);
+                applyBehavior(TCONST.ASR_TIMEDSOUND_EVENT);
                 break;
 
             case TCONST.TIMEDWORD_EVENT:
-                Log.d("ASR", "WORD TIMEOUT");
-                applyEventNode(_timedWordEvent);
+                applyBehavior(TCONST.ASR_TIMEDWORD_EVENT);
                 break;
         }
     }
@@ -410,16 +393,6 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     //************************************************************************
     //************************************************************************
     // Tutor Scriptable methods  Start
-
-
-    public void onRecognitionEvent(String symbol) {
-        _onRecognition = symbol;
-    }
-
-
-    public void onRecognitionError(String symbol) {
-        _onRecognitionError = symbol;
-    }
 
 
     public void startStory() {
@@ -439,73 +412,10 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     }
 
 
-    public void configureEvent(String symbol, String eventString) {
-
-        int eventType = CEventMap.eventMap.get(eventString);
-
-        switch(eventType) {
-
-            case TCONST.SILENCE_EVENT:
-                _silenceEvent = symbol;
-                break;
-
-            case TCONST.SOUND_EVENT:
-                _soundEvent = symbol;
-                break;
-
-            case TCONST.WORD_EVENT:
-                _wordEvent = symbol;
-                break;
-        }
-        mListener.configStaticEvent(eventType);
-    }
-    public void clearEvent(String eventString) {
-
-        int eventType = CEventMap.eventMap.get(eventString);
-
-        mListener.resetStaticEvent(eventType);
-    }
-
-
-    public void configureEvent(String symbol, String eventString, int timeOut) {
-
-        int eventType = CEventMap.eventMap.get(eventString);
-
-        switch(eventType) {
-
-            case TCONST.TIMEDSILENCE_EVENT:
-                _timedSilenceEvent = symbol;
-                break;
-
-            case TCONST.TIMEDSOUND_EVENT:
-                _timedSoundEvent = symbol;
-                break;
-
-            case TCONST.TIMEDWORD_EVENT:
-                _timedWordEvent = symbol;
-                break;
-        }
-        mListener.configTimedEvent(eventType, timeOut);
-    }
-    public void clearTimedEvent(String eventString) {
-
-        int eventType = CEventMap.eventMap.get(eventString);
-
-        mListener.resetTimedEvent(eventType);
-    }
-
-
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
     public void onButtonClick(String buttonName) {
-    }
-
-
-    // Must override in TClass
-    // TClass domain where TScope lives providing access to tutor scriptables
-    //
-    protected void applyEventNode(String nodeName) {
     }
 
 
