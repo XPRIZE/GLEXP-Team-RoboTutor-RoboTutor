@@ -830,7 +830,9 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     private void startListening() {
 
-        // We allow the user to say any of the onscreen words but set the priority order of how we would like them matched
+        // We allow the user to say any of the onscreen words but set the priority order of how we
+        // would like them matched  Note that if the listener is not explicitly listening for a word
+        // it will just ignore it if spoken.
         //
         // for the current target word.
         // 1. Start with the target word on the target sentence
