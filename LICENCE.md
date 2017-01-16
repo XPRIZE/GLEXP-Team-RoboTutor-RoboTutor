@@ -4,6 +4,7 @@
 ### All files in this folder path are covered by the following license terms
 
 Copyright 2016 Jack Mostow
+
 Copyright 2016 Kevin Willows
 
 Licensed under the Apache License, Version 2.0 (the "License");
