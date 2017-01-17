@@ -1,9 +1,9 @@
 apply plugin: 'com.android.application'
 
 android {
+
     compileSdkVersion rootProject.ext.rtCompileSdkVersion
     buildToolsVersion rootProject.ext.rtBuildToolsVersion
-
     defaultConfig {
         applicationId "cmu.xprize.robotutor"
         minSdkVersion rootProject.ext.rtMinSdkVersion
@@ -67,7 +67,6 @@ android {
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
         }
     }
-
     lintOptions {
         // set to true to turn off analysis progress reporting by lint
         quiet true
@@ -99,4 +98,5 @@ dependencies {
     compile project(':comp_pointtap')
     compile project(path: ':comp_ask')
     compile project(path: ':comp_session')
+    compile project(path: ':comp_debug')
 }

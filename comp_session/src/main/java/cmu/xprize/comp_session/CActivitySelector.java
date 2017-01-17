@@ -18,7 +18,8 @@ import java.util.Map;
 
 import cmu.xprize.comp_ask.CAskComponent;
 import cmu.xprize.comp_ask.CAsk_Data;
-import cmu.xprize.comp_ask.IButtonController;
+import cmu.xprize.util.IButtonController;
+import cmu.xprize.comp_debug.CDebugComponent;
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.ILoadableObject;
@@ -32,6 +33,7 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     protected Context           mContext;
 
     protected CAskComponent     SaskActivity;
+    protected CDebugComponent SdebugActivity;
 
     protected final Handler     mainHandler  = new Handler(Looper.getMainLooper());
     protected HashMap           queueMap     = new HashMap();

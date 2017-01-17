@@ -120,6 +120,7 @@ public class JSON_Helper {
                 // Filter Comments out of the json source
                 //
                 while ((line = br.readLine()) != null) {
+
                     line = line.replaceFirst("//.*$","");
                     buffer.append(line);
                 }

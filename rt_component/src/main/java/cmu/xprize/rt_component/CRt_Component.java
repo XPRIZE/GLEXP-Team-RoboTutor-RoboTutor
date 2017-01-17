@@ -21,6 +21,8 @@ package cmu.xprize.rt_component;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +34,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
@@ -75,7 +79,12 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     private static int[]            creditLevel           = null;                   // per-word credit levelFolder according to current hyp
 
     protected String                DATASOURCEPATH;
-    protected String                EXTERNPATH;
+    protected String                STORYSOURCEPATH;
+    protected String                AUDIOSOURCEPATH;
+
+    private final Handler           mainHandler = new Handler(Looper.getMainLooper());
+    private HashMap                 queueMap    = new HashMap();
+    private boolean                 _qDisabled  = false;
 
     protected boolean               _scrollVertical = false;
 
@@ -195,8 +204,11 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
      * @param feature
      * @param fadd
      */
-    public void setFeature(String feature, boolean fadd) {
+    public void setFeature(String feature, boolean fadd) {}
+    public boolean testFeature(String feature) {
+        return false;
     }
+
 
     public int addPage(View newView) {
 
@@ -466,6 +478,35 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     /**
      * TODO: this currently only supports extern assets - need to allow for internal assets
      *
+     * @param EXTERNPATH
+     */
+    public void loadStory(String EXTERNPATH, String viewType, String assetLocation) {
+
+        Class<?> storyClass = viewClassMap.get(viewType);
+
+        try {
+            // Generate the View manager for the storyName - specified in the data
+            //
+            mViewManager = (ICRt_ViewManager)storyClass.getConstructor(new Class[]{CRt_Component.class, ListenerBase.class}).newInstance(this,mListener);
+
+            String jsonData = JSON_Helper.cacheDataByName(EXTERNPATH + TCONST.STORYDATA);
+
+            mViewManager.loadJSON(new JSONObject(jsonData), null);
+
+        } catch (Exception e) {
+            // TODO: Manage Exceptions
+            CErrorManager.logEvent(TAG, "Story Parse Error: ", e, false);
+        }
+
+        // Configure the view manager for the first line of the storyName.
+        //
+        mViewManager.initStory(this, EXTERNPATH, assetLocation);
+    }
+
+
+    /**
+     * TODO: this currently only supports extern assets - need to allow for internal assets
+     *
      * @param storyName
      */
     public void setStory(String storyName, String assetLocation) {
@@ -476,27 +517,9 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
 
                 // Generate a cached path to the storyName asset data
                 //
-                EXTERNPATH =DATASOURCEPATH + dataSource[i1].levelFolder + "/" + dataSource[i1].storyFolder + "/";
+                String EXTERNPATH =DATASOURCEPATH + dataSource[i1].levelFolder + "/" + dataSource[i1].storyFolder + "/";
 
-                Class<?> storyClass = viewClassMap.get(dataSource[i1].viewtype);
-
-                try {
-                    // Generate the View manager for the storyName - specified in the data
-                    //
-                    mViewManager = (ICRt_ViewManager)storyClass.getConstructor(new Class[]{CRt_Component.class, ListenerBase.class}).newInstance(this,mListener);
-
-                    String jsonData = JSON_Helper.cacheDataByName(EXTERNPATH + TCONST.STORYDATA);
-
-                    mViewManager.loadJSON(new JSONObject(jsonData), null);
-
-                } catch (Exception e) {
-                    // TODO: Manage Exceptions
-                    CErrorManager.logEvent(TAG, "Story Parse Error: ", e, false);
-                }
-
-                // Configure the view manager for the first line of the storyName.
-                //
-                mViewManager.initStory(this, EXTERNPATH, assetLocation);
+                loadStory(EXTERNPATH, dataSource[i1].viewtype, assetLocation);
 
                 // we're done
                 break;
@@ -526,6 +549,133 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     public boolean dataExhausted() {
         return mViewManager.endOfData();
     }
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // Component Message Queue  -- Start
+
+
+    public class Queue implements Runnable {
+
+        protected String _command;
+        protected Object _target;
+
+        public Queue(String command) {
+            _command = command;
+        }
+
+        public Queue(String command, Object target) {
+            _command = command;
+            _target  = target;
+        }
+
+
+        @Override
+        public void run() {
+
+            try {
+                queueMap.remove(this);
+
+                if(mViewManager != null) {
+                    mViewManager.execCommand(_command, _target);
+                }
+            }
+            catch(Exception e) {
+                CErrorManager.logEvent(TAG, "Run Error: cmd:" + _command + " tar: " + _target + "  >", e, false);
+            }
+        }
+    }
+
+
+    /**
+     *  Disable the input queues permenantly in prep for destruction
+     *  walks the queue chain to diaable scene queue
+     *
+     */
+    private void terminateQueue() {
+
+        // disable the input queue permenantly in prep for destruction
+        //
+        _qDisabled = true;
+        flushQueue();
+    }
+
+
+    /**
+     * Remove any pending scenegraph commands.
+     *
+     */
+    private void flushQueue() {
+
+        Iterator<?> tObjects = queueMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            mainHandler.removeCallbacks((Queue)(entry.getValue()));
+        }
+    }
+
+
+    /**
+     * Keep a mapping of pending messages so we can flush the queue if we want to terminate
+     * the tutor before it finishes naturally.
+     *
+     * @param qCommand
+     */
+    private void enQueue(Queue qCommand) {
+        enQueue(qCommand, 0L);
+    }
+    private void enQueue(Queue qCommand, Long delay) {
+
+        if(!_qDisabled) {
+            queueMap.put(qCommand, qCommand);
+
+            if(delay > 0L) {
+                mainHandler.postDelayed(qCommand, delay);
+            }
+            else {
+                mainHandler.post(qCommand);
+            }
+        }
+    }
+
+    /**
+     * Post a command to the tutorgraph queue
+     *
+     * @param command
+     */
+    public void post(String command) {
+        post(command, 0L);
+    }
+    public void post(String command, Long delay) {
+
+        enQueue(new Queue(command), delay);
+    }
+
+
+    /**
+     * Post a command and target to this scenegraph queue
+     *
+     * @param command
+     */
+    public void post(String command, Object target) {
+        post(command, target, 0L);
+    }
+    public void post(String command, Object target, Long delay) {
+
+        enQueue(new Queue(command, target), delay);
+    }
+
+
+
+
+    // Component Message Queue  -- End
+    //************************************************************************
+    //************************************************************************
+
 
 
 

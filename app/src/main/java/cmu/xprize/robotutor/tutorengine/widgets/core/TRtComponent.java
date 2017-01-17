@@ -31,6 +31,7 @@ import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
+import cmu.xprize.robotutor.tutorengine.CMediaPackage;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
@@ -51,6 +52,9 @@ import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
 
 import static cmu.xprize.util.TCONST.ASREventMap;
+import static cmu.xprize.util.TCONST.LANG_AUTO;
+import static cmu.xprize.util.TCONST.MEDIA_STORY;
+import static cmu.xprize.util.TCONST.STORYDATA;
 
 public class TRtComponent extends CRt_Component implements IBehaviorManager, ITutorObjectImpl, Button.OnClickListener, IRtComponent, IDataSink, IEventSource {
 
@@ -397,12 +401,49 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     public void setDataSource(String dataNameDescriptor) {
 
         try {
-            // Note that here the {file] type semantics is for an external file and [asset] may be used
+
+            // Note that here the {folder] load-type semantics is for a direct encoded link to an
+            // external storydata.json file location
+            //
+            // TODO: work toward consistent [file] semantics as externally sourced files
+            //
+            if (dataNameDescriptor.startsWith(TCONST.ENCODED_FOLDER)) {
+
+                // The story encoding includes a list of : delimited
+                String[] features = dataNameDescriptor.split(":");
+
+                for(String feature : features) {
+                    if(feature.startsWith("FTR")) {
+                        mTutor.setAddFeature(feature);
+                    }
+                }
+
+                String storyFolder = features[0].substring(TCONST.ENCODED_FOLDER.length()).toLowerCase();
+
+                String[] levelval   = storyFolder.split("_");
+
+                String levelFolder = levelval[0];
+
+                DATASOURCEPATH  = TCONST.ROBOTUTOR_ASSETS + "/" +  TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+                STORYSOURCEPATH = DATASOURCEPATH + levelFolder + "/" + storyFolder + "/";
+
+                // The audio for the story is in a  story specific folder -
+                // Create the story specific sound package and push it into the soundMap in the MediaManager
+                //
+                AUDIOSOURCEPATH = TCONST.STORY_PATH + levelFolder + "/" + storyFolder ;
+
+                configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
+                mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
+
+                loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
+            }
+
+            // Note that here the {file] load-type semantics is for an external file and [asset] may be used
             // for internal assets.
             //
             // TODO: work toward consistent [file] semantics as externally sourced files
             //
-            if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
+            else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
                 // The story index is appended as a int
                 String[] storyval   = dataNameDescriptor.split(":");
@@ -508,6 +549,13 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
             mTutor.setDelFeature(feature);
         }
 
+    }
+
+
+    @Override
+    public boolean testFeature(String feature) {
+
+        return mTutor.testFeature(feature);
     }
 
 

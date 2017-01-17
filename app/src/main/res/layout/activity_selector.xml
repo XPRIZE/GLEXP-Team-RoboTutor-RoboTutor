@@ -10,9 +10,18 @@
     <cmu.xprize.robotutor.tutorengine.widgets.core.TAskComponent
         android:id="@+id/SaskActivity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
     </cmu.xprize.robotutor.tutorengine.widgets.core.TAskComponent>
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TDebugComponent
+        android:id="@+id/SdebugActivity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+    </cmu.xprize.robotutor.tutorengine.widgets.core.TDebugComponent>
 
 
 </cmu.xprize.robotutor.tutorengine.widgets.core.TActivitySelector>

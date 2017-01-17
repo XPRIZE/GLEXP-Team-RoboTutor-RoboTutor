@@ -46,7 +46,7 @@
               "tracks": [
                 {"type": "COMMAND", "id": "activity_selector", "method": "postEvent", "parms": "POINT_AT_BUTTON:String|{{activity_selector.buttonid}}:String", "features":""},
                 {"type": "AUDIO", "command": "PLAY", "soundsource": "{{activity_selector.helpAudio}}.mp3","soundpackage": "default","mode": "flow", "features": ""},
-                {"type": "COMMAND", "id": "activity_selector", "method": "postNamed", "parms": "DESCRIBE_NEXT:String|DESCRIBE_NEXT:String|600:Long", "features":""}
+                {"type": "COMMAND", "id": "activity_selector", "method": "postNamed", "parms": "DESCRIBE_NEXT:String|DESCRIBE_NEXT:String|800:Long", "features":""}
               ],
               "preexit": [
                 "CANCEL_POINT"
@@ -123,8 +123,8 @@
           "reuse":true,
           "COMMENT": "Do Nothing",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "What do you want to work on today.mp3","soundpackage": "default","mode": "stream", "features": "FTR_TUTOR_SELECT"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "what did you think of that.mp3","soundpackage": "default","mode": "stream", "features": "FTR_DIFFICULTY_SELECT"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "What would you like to do.mp3","soundpackage": "default","mode": "stream", "features": "FTR_TUTOR_SELECT"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "what did you think of that.mp3","soundpackage": "default","mode": "stream", "features": "FTR_DIFFICULTY_ASSESS"},
 
             {"type": "COMMAND", "cmd": "WAIT" }
           ]
@@ -138,9 +138,9 @@
 
             // Conditionally load the layout
             //
-            {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "ACTIVITY_SELECT:String",  "features":"FTR_TUTOR_SELECT"},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "DIFFICULTY_SELECT:String",  "features":"FTR_DIFFICULTY_SELECT"},
-
+            {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "FTR_TUTOR_SELECT:String",  "features":"FTR_TUTOR_SELECT"},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "FTR_DIFFICULTY_ASSESS:String",  "features":"FTR_DIFFICULTY_ASSESS"},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "FTR_DEBUG_SELECT:String",  "features":"FTR_DEBUG_SELECT"},
 
             // Input must be inhibited until all the behaviors are set
             //
@@ -150,7 +150,8 @@
 
             {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "LAUNCH_EVENT:String|LAUNCH_BEHAVIOR:String" ,"features":""},
 
-            {"type": "COMMAND", "id": "activity_selector", "method": "postNamed",         "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|2000:Long", "features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "postNamed",         "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|2500:Long", "features":"LANG_EN"},
+            {"type": "COMMAND", "id": "activity_selector", "method": "postNamed",         "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|3000:Long", "features":"LANG_SW"},
 
             // Map the button events defined in the activity_selector dataSource to Behavior subgraphs
             //

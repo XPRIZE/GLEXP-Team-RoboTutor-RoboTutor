@@ -1,0 +1,23 @@
+{
+"version" : "2017-01-03 20:32:57",
+
+"stimulus_type" : "text_data",
+
+"stimulus_map" : {
+	"type":"STRING_ARRAY",
+	"LANG_SW" : ["siku","moja","sana","yake","wake","kuwa","kila","tena","hapo","kama","hadi","hiyo","mara","wote","nini","hata","mimi","huku","maji","zake","watu","mama","muda","kale","yule","naye","sasa","bila","vile","wewe","yote","hapa","yeye","wapi","kazi","pale","lake","baba","huyu","jina","wala","huyo","kitu","kula","bado","yako","wale","njaa","hebu","miti","basi","moto","mzee","hilo","nami","wako","nani","zote","gani","hivi","kuna","ombe","wazo","nguo","hili","huko","tatu","joto","giza"],
+	"LANG_EN" : ["away","blue","come","down","find","help","here","jump","look","make","play","said","came","four","good","have","into","like","must","ride","soon","that","they","this","want","well","went","what","will","with","from","give","just","know","live","once","open","over","some","stop","take","them","then","walk","were","when","been","best","both","call","cold","does","fast","five","gave","goes","made","many","pull","read","sing","tell","upon","very","wash","wish","work","your","done","draw","fall","full","grow","hold","hurt","keep","kind","long","much","nine","only","pick","show","warm"]
+	},
+
+  "question_count": 10,
+  "question_sequence": "random",
+
+  "dataSource" : [
+
+    {"type":"Bp_Data", "question_type": "multiple-choice", "question_say": true, "question_show": false,"rand_data":true, "rand_size":5, "rand_index": true, "stimulus_type": "text_data" }
+
+  ],
+
+  "view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"fixed", "colorbase":"#666666", "colors":[0xFFA3A300, 0xFF8C8C00, 0xFFD9D900, 0xFFB2B200]}
+
+}

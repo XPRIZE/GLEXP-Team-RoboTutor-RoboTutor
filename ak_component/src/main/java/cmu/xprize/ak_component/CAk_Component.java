@@ -3,11 +3,8 @@ package cmu.xprize.ak_component;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.media.AudioManager;
@@ -16,7 +13,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -102,7 +98,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
     //json loadable
     public    int          gameSpeed          ;
-    public    CAk_Data[]   dataSource         ;
+    public    CAk_Data[] datasource;
 
 
     protected List<Animator> ongoingAnimator;
@@ -260,14 +256,14 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     }
 
     public void setmDataSource(CAk_Data[] _dataSource) {
-        dataSource = _dataSource;
+        datasource = _dataSource;
         _dataIndex = 0;
     }
 
     public void next() {
         try {
-            if (dataSource != null) {
-                updateDataSet(dataSource[_dataIndex]);
+            if (datasource != null) {
+                updateDataSet(datasource[_dataIndex]);
                 _dataIndex++;
             } else {
                 CErrorManager.logEvent(TAG,  "Error no DataSource : ", null, false);
@@ -279,13 +275,15 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     }
 
     public boolean dataExhausted() {
-        return _dataIndex >= dataSource.length;
+        return _dataIndex >= datasource.length;
     }
 
     protected void updateDataSet(CAk_Data data) {
+
         boolean isAudio = isAudio(data);
         questionBoard = new CAkQuestionBoard(mContext, data.answerLane, data.choices);
         questionBoard_exist = true;
+
         if(isAudio){
             playAudio(data);
             player.setText("", "");

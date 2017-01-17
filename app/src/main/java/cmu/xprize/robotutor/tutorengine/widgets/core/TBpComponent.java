@@ -169,6 +169,13 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 // Load the datasource in the component module - i.e. the superclass
                 loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 
+                // TODO: address this in the future - This is a kludge so that all sequential
+                // sets are completed based on the size of the dataset not the question_count
+                //
+                if(question_sequence.equals(BP_CONST.SEQUENTIAL)) {
+                    question_count = _stimulus_data.length;
+                }
+
             } else if (dataSource.startsWith("db|")) {
 
 

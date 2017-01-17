@@ -1,8 +1,0 @@
-{
-"dataSource": [
-    {"type":"Asm_Data", "dataset":[1598,415,1183], "operation":"-", "image": "triangle"},
-    {"type":"Asm_Data", "dataset":[303,184,119], "operation":"-", "image": "circle"},
-    {"type":"Asm_Data", "dataset":[1653,5115,6768], "operation":"+", "image": "pentagon", "strategy" : "count_up"},
-    {"type":"Asm_Data", "dataset":[578,185,763], "operation":"+", "image": "hexagon", "strategy" : "count_from"}
-  ]
-}

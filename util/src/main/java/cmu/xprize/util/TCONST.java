@@ -37,9 +37,21 @@ public class TCONST {
     //
 
     public static final String FTR_TUTOR_SELECT       = "FTR_TUTOR_SELECT";
-    public static final String FTR_DIFFICULTY_SELECT  = "FTR_DIFFICULTY_SELECT";
+    public static final String FTR_DIFFICULTY_ASSESS  = "FTR_DIFFICULTY_ASSESS";
+    public static final String FTR_DEBUG_SELECT       = "FTR_DEBUG_SELECT";
+    public static final String FTR_DEBUG_LAUNCH       = "FTR_DEBUG_LAUNCH";
 
-    // RoboTutor Version spec index meaning 0.1.2.3
+    public static final String SKILL_WRITING    = "letters";
+    public static final String SKILL_STORIES    = "stories";
+    public static final String SKILL_MATH       = "numbers";
+    public static final String SKILL_SHAPES     = "shapes";
+    public static final String FINISH           = "FINISH";
+
+    public static final String SKILL_SELECTED   = "SKILL_SELECTED";
+    public static final String DEBUG_LAYOUT     = "DEBUG_LAYOUT";
+
+
+    // RoboTutor Version spec Index meaning 0.1.2.3
     // Given 4.23.2.3
     // Major release 4 | Feature release 23 | Fix release 2 | compatible Asset Version 3
     //
@@ -180,13 +192,15 @@ public class TCONST {
 
     public static final String STORY_INTENT        = "story_reading";
     public static final String ON_CLICK            = "ON_CLICK";
+    public static final String ENCODED_FOLDER      = "[encfolder]";
+    public static final String STORY_PATH          = "cmu/xprize/story_reading/";
 
-    public static final String SKILL_WRITING    = "letters";
-    public static final String SKILL_STORIES    = "stories";
-    public static final String SKILL_MATH       = "numbers";
-    public static final String SKILL_SHAPES     = "shapes";
-    public static final String FINISH           = "FINISH";
-    public static final String SKILL_SELECTED   = "SKILL_SELECTED";
+    public static final String FTR_USER_HEAR       = "FTR_USER_HEAR";
+    public static final String FTR_USER_READ       = "FTR_USER_READ";
+    public static final String NARRATE_STORY       = "NARRATE_STORY";
+    public static final String TRACK_NARRATION     = "TRACK_NARRATION";
+    public static final String START_NARRATION     = "START_NARRATION";
+    public static final String SPEAK_UTTERANCE     = "SPEAK_UTTERANCE";
 
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
@@ -240,6 +254,7 @@ public class TCONST {
     public static final String LANG_EFFECT = "LANG_EFFECT";
     public static final String LANG_EN     = "LANG_EN";
     public static final String LANG_SW     = "LANG_SW";
+    public static final String MEDIA_STORY = "story";
 
     // This maps features to 2 letter codes used to build filepaths.
     static {
@@ -676,6 +691,7 @@ public class TCONST {
     public static final String RTC_VAR_INDEX      = ".wordindex";
     public static final String RTC_VAR_REMAINING  = ".remainingWords";
     public static final String RTC_VAR_SENTENCE   = ".sentence";
+    public static final String RTC_VAR_UTTERANCE  = ".utterance";
 
     //Akira Game Prompt Situation
     public static final String PROMPT_1LEFT = "PROMPT_1LEFT";

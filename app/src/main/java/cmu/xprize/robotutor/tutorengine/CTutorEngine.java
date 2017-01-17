@@ -21,7 +21,6 @@ package cmu.xprize.robotutor.tutorengine;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.net.Uri;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -35,7 +34,6 @@ import java.util.Map;
 
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
-import cmu.xprize.robotutor.tutorengine.graph.defdata_scenes;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
@@ -78,8 +76,6 @@ public class CTutorEngine implements ILoadableObject2 {
     // json loadable
     static public String                         defTutor;
     static public HashMap<String, defdata_tutor> defDataSources;
-    static public String                         defFeatures;
-    static public String                         defRunningFeatures;
     static public String                         language;                       // Accessed from a static context
 
 
@@ -214,7 +210,7 @@ public class CTutorEngine implements ILoadableObject2 {
         // the user wants to select another tutor.
         //
 
-        createTutor(defTutor, RoboTutor.TUTORSELECTED? defRunningFeatures:defFeatures);
+        createTutor(defTutor, RoboTutor.SELECTOR_MODE);
         launchTutor(tutorBindings);
     }
 

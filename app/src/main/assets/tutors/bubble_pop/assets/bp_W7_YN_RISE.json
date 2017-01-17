@@ -1,0 +1,23 @@
+{
+"version" : "2017-01-03 20:45:10",
+
+"stimulus_type" : "text_data",
+
+"stimulus_map" : {
+	"type":"STRING_ARRAY",
+	"LANG_SW" : ["alikuwa","alisema","ilikuwa","chakula","wengine","akasema","kufanya","alijibu","baadaye","asubuhi","wanyama","kucheza","ulikuwa","familia","aliishi","aliwaza","sungura","alitaka","mvulana","alienda","tofauti","matunda","alianza","alipata","kutumia"],
+	"LANG_EN" : ["because"]
+	},
+
+  "question_count": 10,
+  "question_sequence": "random",
+
+  "dataSource" : [
+
+    {"type":"Bp_Data", "question_type": "rising", "question_say": true, "question_show": false,"rand_data":true, "rand_size":5, "rand_index": true, "stimulus_type": "text_data" }
+
+  ],
+
+  "view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"fixed", "colorbase":"#666666", "colors":[0xFFA3A300, 0xFF8C8C00, 0xFFD9D900, 0xFFB2B200]}
+
+}

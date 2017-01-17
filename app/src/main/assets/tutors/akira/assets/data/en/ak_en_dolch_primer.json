@@ -1,0 +1,635 @@
+
+{
+  "datasource" : [
+
+    {
+"type":"CAk_Data",
+"choices":["four", "ran", "this"],
+"random_value":"0.7666904346707188",
+"answer":"RIGHT",
+"target":"this",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["he", "too", "under"],
+"random_value":"0.24098075296821142",
+"answer":"LEFT",
+"target":"he",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["all", "did", "she"],
+"random_value":"0.9122352347823188",
+"answer":"RIGHT",
+"target":"she",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["she", "was", "will"],
+"random_value":"0.4421508465354804",
+"answer":"MID",
+"target":"was",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["did", "he", "white"],
+"random_value":"0.683189948725691",
+"answer":"RIGHT",
+"target":"white",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["into", "like", "on"],
+"random_value":"0.9352390495457119",
+"answer":"RIGHT",
+"target":"on",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["did", "good", "must"],
+"random_value":"0.07032051875285852",
+"answer":"LEFT",
+"target":"did",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["are", "ate", "new"],
+"random_value":"0.5650384151982502",
+"answer":"MID",
+"target":"ate",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["did", "too", "what"],
+"random_value":"0.9315893677357485",
+"answer":"RIGHT",
+"target":"what",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["am", "but", "now"],
+"random_value":"0.06880630279780021",
+"answer":"LEFT",
+"target":"am",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["brown", "eat", "with"],
+"random_value":"0.9495965791396764",
+"answer":"RIGHT",
+"target":"with",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["like", "ride", "there"],
+"random_value":"0.7584766808510541",
+"answer":"RIGHT",
+"target":"there",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["have", "she", "yes"],
+"random_value":"0.6529304903493547",
+"answer":"MID",
+"target":"she",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["out", "was", "white"],
+"random_value":"0.11956916201819588",
+"answer":"LEFT",
+"target":"out",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["came", "get", "like"],
+"random_value":"0.4846006263835361",
+"answer":"MID",
+"target":"get",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["good", "white", "yes"],
+"random_value":"0.9115049363221088",
+"answer":"RIGHT",
+"target":"yes",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["good", "must", "soon"],
+"random_value":"0.9881128743180194",
+"answer":"RIGHT",
+"target":"soon",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["but", "on", "will"],
+"random_value":"0.2534282060837636",
+"answer":"LEFT",
+"target":"but",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["he", "out", "under"],
+"random_value":"0.19092809240420172",
+"answer":"LEFT",
+"target":"he",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["into", "she", "yes"],
+"random_value":"0.9292516549390291",
+"answer":"RIGHT",
+"target":"yes",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["four", "saw", "so"],
+"random_value":"0.08867061705204715",
+"answer":"LEFT",
+"target":"four",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["are", "at", "good"],
+"random_value":"0.08357025411312492",
+"answer":"LEFT",
+"target":"are",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["do", "get", "like"],
+"random_value":"0.045095239807940314",
+"answer":"LEFT",
+"target":"do",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["ate", "black", "this"],
+"random_value":"0.7227626403074363",
+"answer":"RIGHT",
+"target":"this",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["did", "he", "under"],
+"random_value":"0.28649130210884965",
+"answer":"LEFT",
+"target":"did",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["have", "our", "please"],
+"random_value":"0.6436859300766941",
+"answer":"MID",
+"target":"our",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["be", "good", "too"],
+"random_value":"0.8705307737649705",
+"answer":"RIGHT",
+"target":"too",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["ran", "say", "well"],
+"random_value":"0.34677061377723756",
+"answer":"MID",
+"target":"say",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["at", "into", "out"],
+"random_value":"0.06522009714061404",
+"answer":"LEFT",
+"target":"at",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["new", "say", "there"],
+"random_value":"0.338007577078424",
+"answer":"MID",
+"target":"say",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["at", "do", "no"],
+"random_value":"0.6975414433493665",
+"answer":"RIGHT",
+"target":"no",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["brown", "four", "pretty"],
+"random_value":"0.06632459728636275",
+"answer":"LEFT",
+"target":"brown",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["at", "he", "soon"],
+"random_value":"0.7862442832312028",
+"answer":"RIGHT",
+"target":"soon",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["get", "new", "what"],
+"random_value":"0.7147747871603581",
+"answer":"RIGHT",
+"target":"what",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["ate", "saw", "with"],
+"random_value":"0.7145344193228841",
+"answer":"RIGHT",
+"target":"with",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["ride", "they", "yes"],
+"random_value":"0.19351262710384337",
+"answer":"LEFT",
+"target":"ride",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["they", "was", "will"],
+"random_value":"0.1337444355094288",
+"answer":"LEFT",
+"target":"they",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["must", "was", "white"],
+"random_value":"0.06436489155922541",
+"answer":"LEFT",
+"target":"must",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["but", "our", "saw"],
+"random_value":"0.5357290287834863",
+"answer":"MID",
+"target":"our",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["please", "saw", "there"],
+"random_value":"0.7695900115832593",
+"answer":"RIGHT",
+"target":"there",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["black", "on", "white"],
+"random_value":"0.483603272106129",
+"answer":"MID",
+"target":"on",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["out", "she", "under"],
+"random_value":"0.10253811544043767",
+"answer":"LEFT",
+"target":"out",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["no", "on", "this"],
+"random_value":"0.7695068631037202",
+"answer":"RIGHT",
+"target":"this",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["black", "they", "yes"],
+"random_value":"0.645925893118536",
+"answer":"MID",
+"target":"they",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["are", "he", "was"],
+"random_value":"0.614929657070832",
+"answer":"MID",
+"target":"he",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["good", "too", "under"],
+"random_value":"0.28542612985281846",
+"answer":"LEFT",
+"target":"good",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["but", "ride", "they"],
+"random_value":"0.8549266623844641",
+"answer":"RIGHT",
+"target":"they",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["black", "ride", "so"],
+"random_value":"0.28667258591081257",
+"answer":"LEFT",
+"target":"black",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["like", "want", "was"],
+"random_value":"0.6806379441922884",
+"answer":"RIGHT",
+"target":"was",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["pretty", "they", "this"],
+"random_value":"0.29344825660199697",
+"answer":"LEFT",
+"target":"pretty",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["am", "did", "so"],
+"random_value":"0.5670322185075211",
+"answer":"MID",
+"target":"did",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["eat", "no", "will"],
+"random_value":"0.24013314977300645",
+"answer":"LEFT",
+"target":"eat",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["all", "ate", "get"],
+"random_value":"0.39922190681027425",
+"answer":"MID",
+"target":"ate",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["eat", "please", "soon"],
+"random_value":"0.9764524064738791",
+"answer":"RIGHT",
+"target":"soon",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["am", "came", "new"],
+"random_value":"0.8884432109896496",
+"answer":"RIGHT",
+"target":"new",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["soon", "under", "was"],
+"random_value":"0.6137782266491821",
+"answer":"MID",
+"target":"under",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["are", "white", "will"],
+"random_value":"0.8592406686947128",
+"answer":"RIGHT",
+"target":"will",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["he", "ride", "under"],
+"random_value":"0.13695108344494467",
+"answer":"LEFT",
+"target":"he",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["pretty", "under", "with"],
+"random_value":"0.17618429118412016",
+"answer":"LEFT",
+"target":"pretty",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["soon", "want", "was"],
+"random_value":"0.9310022237999386",
+"answer":"RIGHT",
+"target":"was",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["saw", "soon", "this"],
+"random_value":"0.31899483065958584",
+"answer":"LEFT",
+"target":"saw",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["must", "she", "that"],
+"random_value":"0.9646239485262185",
+"answer":"RIGHT",
+"target":"that",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["get", "pretty", "that"],
+"random_value":"0.9988736538205982",
+"answer":"RIGHT",
+"target":"that",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["must", "she", "they"],
+"random_value":"0.813933020284337",
+"answer":"RIGHT",
+"target":"they",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["all", "our", "say"],
+"random_value":"0.24391118366635514",
+"answer":"LEFT",
+"target":"all",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["brown", "want", "with"],
+"random_value":"0.5874019866691921",
+"answer":"MID",
+"target":"want",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["saw", "too", "under"],
+"random_value":"0.3504871161193467",
+"answer":"MID",
+"target":"too",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["am", "was", "white"],
+"random_value":"0.395728513966993",
+"answer":"MID",
+"target":"was",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["on", "pretty", "will"],
+"random_value":"0.6561529716999763",
+"answer":"MID",
+"target":"pretty",
+"belowString":"audio",
+"grade":"primer"
+},
+{ 
+"type":"CAk_Data",
+"choices":["am", "ran", "she"],
+"random_value":"0.5039405436291737",
+"answer":"MID",
+"target":"ran",
+"belowString":"audio",
+"grade":"primer"
+}
+  ]}

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/SdebugContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#440000DD">
+
+    <LinearLayout
+        android:id="@+id/StitleBlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="50dp">
+    <TextView
+        android:id="@+id/SskillTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:textSize="30sp"
+        android:text="Skill:"/>
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/SdebugGrid"
+        android:layout_width="wrap_content"
+        app:layout_heightPercent="50%"
+        android:paddingLeft="50dp"
+        android:columnWidth="70dp"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:stretchMode="none"
+        android:background="#44DDDDDD"
+        android:layout_below="@+id/StitleBlock"
+        android:layout_alignParentStart="true" />
+
+
+    <LinearLayout
+        android:id="@+id/SfootBlock1a"
+        android:layout_below="@+id/SdebugGrid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="25dp"
+        android:paddingStart="50dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/debugcurrent">
+        </ImageView>
+
+        <TextView
+            android:id="@+id/ScurrentTutorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:text="Current Tutor: "/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/SfootBlock1"
+        android:layout_below="@+id/SfootBlock1a"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="25dp"
+        android:paddingStart="50dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/debugnext">
+        </ImageView>
+
+        <TextView
+            android:id="@+id/SnextTutorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:text="Next Tutor: "/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/SfootBlock2"
+        android:layout_below="@+id/SfootBlock1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="25dp"
+        android:paddingStart="50dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/debugharder">
+        </ImageView>
+
+        <TextView
+            android:id="@+id/SharderTutorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:text="Harder Tutor: "/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/SfootBlock3"
+        android:layout_below="@+id/SfootBlock2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="25dp"
+        android:paddingStart="50dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/debugeasier">
+        </ImageView>
+        <TextView
+            android:id="@+id/SeasierTutorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:text="Easier Tutor: "/>
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/SresetTutor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/SlaunchTutor"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/launchnormal"
+        android:backgroundTint="#888888"
+        android:layout_marginBottom="50dp"
+        android:layout_marginEnd="50dp"
+        android:scaleType="fitCenter"
+        android:padding="20dp"
+        android:textSize="23sp"
+        android:textColor="#FFFFFF"
+        android:text="Reset"/>
+
+    <Button
+        android:id="@+id/SlaunchTutor"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/launchnormal"
+        android:layout_marginBottom="50dp"
+        android:layout_marginEnd="50dp"
+        android:scaleType="fitCenter"
+        android:padding="20dp"
+        android:textSize="23sp"
+        android:textColor="#FFFFFF"
+        android:text="Lauch Tutor"/>
+
+
+</android.support.percent.PercentRelativeLayout>

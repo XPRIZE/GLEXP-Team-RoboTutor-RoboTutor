@@ -1,0 +1,23 @@
+{
+"version" : "2017-01-03 20:43:59",
+
+"stimulus_type" : "text_data",
+
+"stimulus_map" : {
+	"type":"STRING_ARRAY",
+	"LANG_SW" : ["kisha","mmoja","hivyo","chini","zaidi","yangu","baada","ndani","kubwa","sauti","wangu","mbali","usiku","kabla","akiwa","mrefu","nguvu","macho","mtoto","chake","wengi","kwani","jinsi","kuona","pekee","ndege","mdogo","rangi","mfupi","nyuma","jioni","hicho","nyasi","kwake","jambo","ndiyo","mengi","mbele","miguu","shule","mwake","wenye","tangu","ikiwa","mbuzi","wimbo","msitu","mtoni","kando"],
+	"LANG_EN" : ["funny","three","where","black","brown","there","under","white","after","again","could","every","round","thank","think","don't","first","found","green","right","sleep","their","these","those","which","would","write","about","bring","carry","clean","drink","eight","laugh","light","never","seven","shall","small","start","today"]
+	},
+
+  "question_count": 10,
+  "question_sequence": "random",
+
+  "dataSource" : [
+
+    {"type":"Bp_Data", "question_type": "rising", "question_say": true, "question_show": false,"rand_data":true, "rand_size":5, "rand_index": true, "stimulus_type": "text_data" }
+
+  ],
+
+  "view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"fixed", "colorbase":"#666666", "colors":[0xFFA3A300, 0xFF8C8C00, 0xFFD9D900, 0xFFB2B200]}
+
+}

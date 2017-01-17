@@ -36,6 +36,46 @@
           }
         },
 
+        "NARRATE_SENTENCE_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "rootnode": "NARRATE_SENTENCE_MODULE",
+
+          "nodeMap": {
+
+            "NARRATE_SENTENCE_MODULE": {
+              "type": "MODULE",
+              "COMMENT": "Speak the current word and continue to next.",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+                {"type": "COMMAND", "id": "SstoryReading", "method": "post", "parms": "START_NARRATION:String|1000:long" ,"features":""}
+              ],
+              "preexit": [],
+              "edges": []
+            }
+          }
+        },
+
+        "SPEAK_UTTERANCE_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "rootnode": "SPEAK_UTTERANCE_MODULE",
+
+          "nodeMap": {
+
+            "SPEAK_UTTERANCE_MODULE": {
+              "type": "MODULE",
+              "COMMENT": "Speak the current word and continue to next.",
+              "preenter": [],
+              "reuse": true,
+              "tracks": [
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.utterance}}.mp3","soundpackage": "story","mode": "flow", "features": ""}
+              ],
+              "preexit": [],
+              "edges": []
+            }
+          }
+        },
+
         "SPEAK_SENTENCE_BEHAVIOR": {
           "type": "SUBGRAPH",
           "rootnode": "SPEAK_SENTENCE_MODULE",
@@ -47,8 +87,7 @@
               "preenter": [],
               "reuse": true,
               "tracks": [
-                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.sentence}}.mp3","soundpackage": "words","mode": "flow", "features": ""},
-
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.sentence}}.mp3","soundpackage": "story","mode": "flow", "features": ""},
                 {"type": "COMMAND", "id": "SstoryReading", "method": "nextSentence" ,"features":""}
               ],
               "preexit": [
@@ -58,7 +97,6 @@
             }
           }
         }
-
       },
 
       "nodeMap": {
@@ -100,7 +138,7 @@
           "COMMENT": "",
           "maptype":"actionMap",
           "mapname":"START_STORY",
-          "preenter": [],
+          "preenter": ["SET_NARRATOR","SET_UTTERANCE"],
           "preexit": [],
           "edges": [
             {"constraint":"","edge":"LISTEN"}
@@ -120,6 +158,54 @@
             {"constraint":"FIRST_ATTEMPT","edge":"WRONG_1"},
             {"constraint":"SECOND_ATTEMPT","edge":"WRONG_2"},
             {"constraint":"","edge":"WRONG_3"}
+          ]
+        },
+
+        "NEXT_WORD_NODE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"moduleMap",
+          "mapname":"PREP_NEXT_WORD",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint":"","edge":"LISTEN"}
+          ]
+        },
+
+        "NEXT_LINE_NODE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname":"NEXT_LINE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint":"","edge":"LISTEN"}
+          ]
+        },
+
+        "NEXT_PARA_NODE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"actionMap",
+          "mapname":"NEXT_PARA",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint":"","edge":"LISTEN"}
+          ]
+        },
+
+        "NEXT_PAGE_NODE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"moduleMap",
+          "mapname":"PAGEFLIP",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint":"","edge":"LISTEN"}
           ]
         },
 
@@ -175,56 +261,6 @@
           ]
         },
 
-        "NEXT_WORD_NODE": {
-          "type": "NODE",
-          "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"moduleMap",
-          "mapname":"PREP_NEXT_WORD",
-          "preenter": [],
-          "preexit": [],
-          "edges": [
-            {"constraint":"","edge":"LISTEN"}
-          ]
-        },
-
-        "NEXT_LINE_NODE": {
-          "type": "NODE",
-          "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"actionMap",
-          "mapname":"NEXT_LINE",
-          "preenter": [],
-          "preexit": [],
-          "edges": [
-            {"constraint":"","edge":"LISTEN"}
-          ]
-        },
-
-        "NEXT_PARA_NODE": {
-          "type": "NODE",
-          "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"actionMap",
-          "mapname":"NEXT_PARA",
-          "preenter": [],
-          "preexit": [],
-          "edges": [
-            {"constraint":"","edge":"LISTEN"}
-          ]
-        },
-
-        // If you want it to automatically advance the page use - AUTO_PAGEFLIP
-        //
-        "NEXT_PAGE_NODE": {
-          "type": "NODE",
-          "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype":"moduleMap",
-          "mapname":"PAGEFLIP",
-          "preenter": [],
-          "preexit": [],
-          "edges": [
-            {"constraint":"","edge":"LISTEN"}
-          ]
-        },
-
         "NEXT_SCENE": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
@@ -245,8 +281,10 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please read the story aloud.mp3", "mode":"flow","features": "LANG_SW"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please read aloud.mp3", "mode":"flow","features": "LANG_EN"}
+            // Note that the sw actually says "please read the story aloud'
+            //
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please read aloud.mp3", "mode":"flow","features": "FTR_USER_READ"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets listen to a story.mp3", "mode":"flow","features": "FTR_USER_HEAR"}
           ]
         },
 
@@ -314,10 +352,10 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "id":"SstoryReading", "method":"setPageFlipButton",    "parms": "ENABLE:String",                   "features": "FTR_MANUAL" },
+            {"type": "COMMAND", "id":"SstoryReading", "method":"setPageFlipButton",    "parms": "ENABLE:String",                        "features":"FTR_MANUAL" },
             {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ON_PAGE_FLIP:String|NEXT_NODE:String" ,"features":"FTR_MANUAL"},
 
-            {"type": "COMMAND", "cmd": "WAIT",                                                                   "features": "FTR_MANUAL" },
+            {"type": "COMMAND", "cmd": "WAIT", "features": "FTR_MANUAL" },
 
             {"type": "COMMAND", "id":"SstoryReading", "method":"setPageFlipButton",   "parms": "DISABLE:String", "features": "FTR_MANUAL" },
             {"type": "COMMAND", "id":"SstoryReading", "method": "nextPage"                                     , "features":""}
@@ -397,6 +435,9 @@
         "SET_SPEAK_WORD":      {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "SPEAK_CLICK:String|SPEAK_WORD_BEHAVIOR:String" ,"features":""},
         "SET_SPEAK_SENTENCE":  {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "SPEAK_CLICK:String|SPEAK_SENTENCE_BEHAVIOR:String" ,"features":""},
         "RESET_SPEAK_ONCLICK": {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "SPEAK_CLICK:String|NULL:String" ,"features":""},
+
+        "SET_NARRATOR":        {"type": "COMMAND", "id":"SstoryReading", "method": "setStickyBehavior", "parms": "NARRATE_STORY:String|NARRATE_SENTENCE_BEHAVIOR:String" ,"features":""},
+        "SET_UTTERANCE":       {"type": "COMMAND", "id":"SstoryReading", "method": "setStickyBehavior", "parms": "SPEAK_UTTERANCE:String|SPEAK_UTTERANCE_BEHAVIOR:String" ,"features":""},
 
         "EMPTY_ACTION":    {"type": "COMMAND", "cmd": "NOOP" },
         "GOTONEXTSCENE":   {"type": "COMMAND", "cmd": "NEXTSCENE" },

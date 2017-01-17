@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--The order of these matters - the first matched gets drawn-->
+    <item
+        app:state_skillnext="true"
+        android:drawable="@drawable/debugnext"/>
+    <item
+        app:state_skillharder="true"
+        android:drawable="@drawable/debugharder"/>
+    <item
+        app:state_skilleasier="true"
+        android:drawable="@drawable/debugeasier"/>
+    <item
+        app:state_skillcurrent="true"
+        android:drawable="@drawable/debugcurrent"/>
+    <item
+        app:state_skillerror="true"
+        android:drawable="@drawable/debugerror"/>
+    <item
+        app:state_skillnull="true"
+        android:drawable="@drawable/debugnull"/>
+    <item
+        android:drawable="@drawable/debugnormal"/>
+
+</selector>

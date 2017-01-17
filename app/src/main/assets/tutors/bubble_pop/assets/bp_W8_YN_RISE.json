@@ -1,0 +1,23 @@
+{
+"version" : "2017-01-03 20:45:55",
+
+"stimulus_type" : "text_data",
+
+"stimulus_map" : {
+	"type":"STRING_ARRAY",
+	"LANG_SW" : ["nyumbani","walikuwa","mwingine","kulikuwa","marafiki","kijijini","msichana","aliuliza","palikuwa","nyingine","chochote","walienda","lilikuwa","alisikia","kukimbia","hatimaye"],
+	"LANG_EN" : ["together"]
+	},
+
+  "question_count": 10,
+  "question_sequence": "random",
+
+  "dataSource" : [
+
+    {"type":"Bp_Data", "question_type": "rising", "question_say": true, "question_show": false,"rand_data":true, "rand_size":5, "rand_index": true, "stimulus_type": "text_data" }
+
+  ],
+
+  "view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"fixed", "colorbase":"#666666", "colors":[0xFFA3A300, 0xFF8C8C00, 0xFFD9D900, 0xFFB2B200]}
+
+}

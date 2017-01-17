@@ -170,6 +170,21 @@ public class CMediaManager {
         mSoundPackageMap.put(tTutor, soundMap);
     }
 
+    /**
+     * Add named soundpackage to tutors soundMap
+     *
+     * @param tTutor
+     * @param packageName
+     * @param mediaPackage
+     */
+    public void addSoundPackage(CTutor tTutor, String packageName, CMediaPackage mediaPackage) {
+
+        HashMap<String,CMediaPackage> soundMap;
+
+        soundMap = mSoundPackageMap.get(tTutor);
+
+        soundMap.put(packageName, mediaPackage);
+    }
 
     public String mapSoundPackage(CTutor tTutor, String packageName, String langOverride) {
 
@@ -550,7 +565,7 @@ public class CMediaManager {
                 }
 
                 playerCount++;
-                Log.d(TAG, "CREATE_PLAYER_MAMANGER: >> " + playerCount);
+                Log.d(TAG, "CREATE_PLAYER_MANAGER: >> " + playerCount);
                 mPlayer  = new MediaPlayer();
 
                 switch(location) {

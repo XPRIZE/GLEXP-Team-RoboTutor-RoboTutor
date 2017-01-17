@@ -35,11 +35,19 @@ public class CMediaPackage implements ILoadableObject2 {
     // json loadable
     public String   language;
     public String   path;
-    public String   location = TCONST.EXTERNAL;                        // Either internal - external
+    public String   location = TCONST.EXTERNAL;          // Either internal - external
     public String   srcpath  = TCONST.ROBOTUTOR_ASSETS;  // Base path to resource
 
     static private final String TAG = "CMediaPackage";
 
+
+    public CMediaPackage() {
+    }
+
+    public CMediaPackage(String _language, String _path) {
+        language = _language;
+        path     = _path;
+    }
 
     @Override
     public void loadJSON(JSONObject jsonObj, IScope2 scope) {

@@ -25,7 +25,6 @@ import android.graphics.PointF;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -38,6 +37,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cmu.xprize.util.CClassMap;
+import cmu.xprize.util.IButtonController;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -51,7 +51,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
     protected HashMap<View,String>  buttonMap;
     protected ArrayList<View>       buttonList;
 
-    protected IButtonController     mButtonController;
+    protected IButtonController mButtonController;
 
     static private boolean          SINGLE_SELECT = false;
 

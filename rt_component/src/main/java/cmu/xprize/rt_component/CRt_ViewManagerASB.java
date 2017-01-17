@@ -1,6 +1,5 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
 //    Copyright(c) Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
@@ -102,8 +101,21 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private String                  wordsToDisplay[];                    // current sentence words to display - contain punctuation
     private String                  wordsToSpeak[];                      // current sentence words to hear
     private ArrayList<String>       wordsToListenFor;                    // current sentence words to build language model
+    private String                  hearRead;
 
+    private CASB_Narration[]        rawNarration;                        // The narration segmentation info for the active sentence
     private String                  rawSentence;                         //currently displayed sentence that need to be recognized
+    private CASB_Seg                narrationSegment;
+    private ArrayList<String>       spokenWords;
+    private int                     utteranceNdx;
+    private int                     segmentNdx;
+
+    private int                     numUtterance;
+    private CASB_Narration          currUtterance;
+    private CASB_Seg[]              segmentArray;
+    private int                     numSegments;
+    private int                     utterancePrev;
+    private int                     utteranceCurr;
 
     private String                  completedSentencesFmtd = "";
     private String                  completedSentences     = "";
@@ -198,6 +210,21 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             mParent.setFeature(TCONST.FTR_STORY_STARTING, TCONST.DEL_FEATURE);
 
             storyBooting = false;
+            speakOrListen();
+        }
+    }
+
+
+    public void speakOrListen() {
+
+        if(mParent.testFeature(TCONST.FTR_USER_HEAR)) {
+
+            hearRead = TCONST.FTR_USER_HEAR;
+            mParent.applyBehavior(TCONST.NARRATE_STORY);
+        }
+        if(mParent.testFeature(TCONST.FTR_USER_READ)) {
+
+            hearRead = TCONST.FTR_USER_READ;
             startListening();
         }
     }
@@ -393,8 +420,9 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         wordsSpoken            = new ArrayList<>();
         futureSpoken           = new ArrayList<>();
 
+        Log.d(TAG, "seekToStoryPosition: Page: " + currPage + " - Paragraph: " + currPara + " - line: " + currLine + " - word: " + currWord);
 
-        // Optimization - Skip If not seeking to the very first line
+        // Optimization - Skip If seeking to the very first line
         //
         // Otherwise create 2 things:
         //
@@ -407,9 +435,9 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             //
             for(int paraIndex = 0 ; paraIndex < currPara ; paraIndex++) {
 
-                for (String rawSentence : data[currPage].text[paraIndex]) {
+                for (CASB_Content rawContent : data[currPage].text[paraIndex]) {
 
-                    otherWordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+                    otherWordsToSpeak = rawContent.sentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
 
                     // Add the previous line to the list of spoken words used to build the
                     // language model - so it allows all on screen words to be spoken
@@ -417,7 +445,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                     for (String word : otherWordsToSpeak)
                         wordsSpoken.add(word);
 
-                    completedSentences += rawSentence;
+                    completedSentences += rawContent.sentence;
                 }
                 if(paraIndex < currPara)
                     completedSentences += "<br><br>";
@@ -427,7 +455,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             //
             for(int lineIndex = 0 ; lineIndex <  currLine ; lineIndex++) {
 
-                rawSentence = data[currPage].text[currPara][lineIndex];
+                rawSentence = data[currPage].text[currPara][lineIndex].sentence;
                 otherWordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
 
                 // Add the previous line to the list of spoken words used to build the
@@ -457,7 +485,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         mParaCount = data[currPage].text.length;
         mLineCount = data[currPage].text[currPara].length;
 
-        rawSentence = data[currPage].text[currPara][currLine];
+        rawNarration = data[currPage].text[currPara][currLine].narration;
+        rawSentence  = data[currPage].text[currPara][currLine].sentence;
 
         // Words that are used to build the display text - include punctuation etc.
         // But are in one-to-one correspondance with the wordsToSpeak
@@ -473,7 +502,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         mCurrWord  = currWord;
         mWordCount = wordsToSpeak.length;
-
 
         // If we are showing future content - i.e. we want the entire page to be visible but
         // only the "current" line highlighted.
@@ -492,7 +520,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             //
             for(int lineIndex = currLine+1 ; lineIndex <  mLineCount ; lineIndex++) {
 
-                rawSentence = data[currPage].text[currPara][lineIndex];
+                rawSentence = data[currPage].text[currPara][lineIndex].sentence;
                 otherWordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
 
                 // Add the previous line to the list of spoken words used to build the
@@ -512,9 +540,9 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 //
                 futureSentences += "<br><br>";
 
-                for (String rawSentence : data[currPage].text[paraIndex]) {
+                for (CASB_Content rawSentence : data[currPage].text[paraIndex]) {
 
-                    otherWordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+                    otherWordsToSpeak = rawSentence.sentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
 
                     // Add the previous line to the list of spoken words used to build the
                     // language model - so it allows all on screen words to be spoken
@@ -522,7 +550,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                     for (String word : otherWordsToSpeak)
                         futureSpoken.add(word);
 
-                    futureSentences += rawSentence;
+                    futureSentences += rawSentence.sentence;
                 }
             }
 
@@ -545,8 +573,106 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         // Once past the storyName initialization stage - Listen for the target word -
         //
         if(!storyBooting)
-            startListening();
+            speakOrListen();
 
+    }
+
+
+    private void initSegmentation(int _uttNdx, int _segNdx) {
+
+        utteranceNdx  = _uttNdx;
+        numUtterance  = rawNarration.length;
+        currUtterance = rawNarration[utteranceNdx];
+        segmentArray  = rawNarration[utteranceNdx].segmentation;
+
+        segmentNdx   = _segNdx;
+        numSegments  = segmentArray.length;
+
+        // Publish the current utterance within sentence
+        //
+        mParent.publishValue(TCONST.RTC_VAR_UTTERANCE,  currUtterance.utterances);
+
+        // Tell the script to speak the new uttereance
+        //
+        mParent.applyBehavior(TCONST.SPEAK_UTTERANCE);
+    }
+
+
+    private void trackNarration(boolean start) {
+
+        boolean endOfSentence = false;
+
+        if(start) {
+
+            mHeardWord = 0;
+            initSegmentation(0, 0);
+
+            spokenWords  = new ArrayList<String>();
+
+            narrationSegment = rawNarration[utteranceNdx].segmentation[segmentNdx];
+
+            utterancePrev = 0;
+            utteranceCurr = narrationSegment.start;
+        }
+        else {
+
+            // Special processing to account for apostrophes and hyphenated words
+            // Note the system listens for e.g. "WON'T" as [WON] [T] two words so if we feed it won't then it "won't" match :)
+            // and the narration will freeze
+            //
+            String[] splitWord = narrationSegment.word.toUpperCase().split("[\\-']");
+
+            for(String part : splitWord) {
+                spokenWords.add(part);
+            }
+
+            onUpdate(spokenWords.toArray(new String[spokenWords.size()]));
+
+            segmentNdx++;
+            if(segmentNdx >= numSegments) {
+
+                utteranceNdx++;
+                if(utteranceNdx < numUtterance) {
+                    initSegmentation(utteranceNdx, 0);
+                }
+                else {
+                    endOfSentence = true;
+                }
+            }
+
+            if(!endOfSentence)
+                narrationSegment = rawNarration[utteranceNdx].segmentation[segmentNdx];
+        }
+
+        if(!endOfSentence) {
+
+            utteranceCurr = narrationSegment.start;
+
+            mParent.post(TCONST.TRACK_NARRATION, new Long((utteranceCurr - utterancePrev) * 10));
+
+            utterancePrev = utteranceCurr;
+        }
+
+
+    }
+
+
+    public void execCommand(String command, Object target ) {
+
+        long    delay  = 0;
+
+        switch(command) {
+
+            case TCONST.START_NARRATION:
+
+                trackNarration(true);
+                break;
+
+            case TCONST.TRACK_NARRATION:
+
+                trackNarration(false);
+                break;
+        }
     }
 
 
@@ -739,7 +865,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         if(storyBooting) {
 
             storyBooting = false;
-            startListening();
+            speakOrListen();
         }
         else {
 
@@ -775,8 +901,9 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         // Start listening from the new position
         //
-        startListening();
+        speakOrListen();
     }
+
 
     @Override
     public void nextWord() {
@@ -825,7 +952,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      * current sentence and listens from there.
      */
     public void continueListening() {
-        startListening();
+        speakOrListen();
     }
 
     private void startListening() {
@@ -989,6 +1116,52 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         }
 
         return point;
+    }
+
+
+    /**
+     * This is where we process words being narrated
+     *
+     */
+    @Override
+    public void onUpdate(String[] heardWords) {
+
+        boolean result    = true;
+        String  logString = "";
+
+        for (int i = 0; i < heardWords.length; i++) {
+            logString += heardWords[i].toLowerCase() + " | ";
+        }
+        Log.i("ASR", "Update Words Spoken: " + logString);
+
+        while (mHeardWord < heardWords.length) {
+
+            if (wordsToSpeak[mCurrWord].equals(heardWords[mHeardWord])) {
+
+                nextWord();
+                mHeardWord++;
+
+                Log.i("ASR", "RIGHT");
+                attemptNum = 0;
+                result = true;
+
+            }
+            else {
+                Log.e(TAG, "Input Error in narrator no match found - mCurrWord ->" + wordsToSpeak[mCurrWord] + " -> heardWords: " + heardWords[mHeardWord]);
+
+                nextWord();
+                mHeardWord++;
+
+                attemptNum = 0;
+                result = true;
+            }
+        }
+
+        // Publish the outcome
+        mParent.publishValue(TCONST.RTC_VAR_ATTEMPT, attemptNum);
+        mParent.UpdateValue(result);
+
+        mParent.onASREvent(TCONST.RECOGNITION_EVENT);
     }
 
 

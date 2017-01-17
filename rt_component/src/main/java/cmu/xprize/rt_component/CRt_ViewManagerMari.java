@@ -188,6 +188,15 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
     }
 
 
+    public void execCommand(String command, Object target ) {
+
+        long    delay  = 0;
+
+        switch(command) {
+        }
+    }
+
+
     @Override
     public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult) {
 
@@ -469,6 +478,11 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
     @Override
     public boolean endOfData() {
         return endOfStory;
+    }
+
+    @Override
+    public void onUpdate(String[] heardWords) {
+
     }
 
 //    /**

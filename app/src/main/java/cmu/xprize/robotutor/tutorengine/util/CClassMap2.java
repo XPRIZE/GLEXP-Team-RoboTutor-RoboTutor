@@ -21,8 +21,8 @@ package cmu.xprize.robotutor.tutorengine.util;
 
 import java.util.HashMap;
 
-import cmu.xprize.comp_session.CAs_Data;
-import cmu.xprize.comp_session.CAt_Data;
+import cmu.xprize.util.CAs_Data;
+import cmu.xprize.util.CAt_Data;
 import cmu.xprize.robotutor.tutorengine.CMediaPackage;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_scenes;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;

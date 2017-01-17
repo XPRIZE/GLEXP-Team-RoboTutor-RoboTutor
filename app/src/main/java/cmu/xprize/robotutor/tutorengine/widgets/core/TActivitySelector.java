@@ -15,10 +15,11 @@ import java.util.Map;
 
 import cmu.xprize.comp_ask.CAskElement;
 import cmu.xprize.comp_ask.CAsk_Data;
+import cmu.xprize.comp_debug.CDebugComponent;
 import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.comp_session.CActivitySelector;
-import cmu.xprize.comp_session.CAs_Data;
-import cmu.xprize.comp_session.CAt_Data;
+import cmu.xprize.util.CAs_Data;
+import cmu.xprize.util.CAt_Data;
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.RoboTutor;
@@ -44,6 +45,7 @@ import static cmu.xprize.robotutor.tutorengine.util.CClassMap2.classMap;
 
 public class TActivitySelector extends CActivitySelector implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource {
 
+    private static final boolean    DEBUG_LANCHER = false;
     private CTutor                  mTutor;
     private CSceneDelegate          mTutorScene;
     private CMediaManager           mMediaManager;
@@ -103,9 +105,11 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        SaskActivity = (TAskComponent)findViewById(R.id.SaskActivity);
+        SaskActivity   = (TAskComponent)findViewById(R.id.SaskActivity);
+        SdebugActivity = (CDebugComponent)findViewById(R.id.SdebugActivity);
 
         SaskActivity.setButtonController(this);
+        SdebugActivity.setButtonController(this);
     }
 
     @Override
@@ -126,17 +130,63 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
     public void setLayout(String name) {
 
-        for(CAsk_Data layout : dataSource) {
+        if(name.equals(TCONST.FTR_DEBUG_SELECT)) {
 
-            if(layout.name.equals(name)) {
+            SaskActivity.setVisibility(GONE);
+            SdebugActivity.setVisibility(VISIBLE);
 
-                _activeLayout = layout;
+            // Init the skill pointers
+            //
+            switch (activeSkill) {
 
-                SaskActivity.setDataSource(layout);
-                break;
+                case AS_CONST.SELECT_WRITING:
+
+                    activeTutor = writingTutorID;
+                    transitionMap = writeTransitions;
+                    initiatorMap  = writeInitiators;
+                    break;
+
+                case AS_CONST.SELECT_STORIES:
+
+                    activeTutor = storiesTutorID;
+                    transitionMap = storyTransitions;
+                    initiatorMap  = storyInitiators;
+                    break;
+
+                case AS_CONST.SELECT_MATH:
+
+                    activeTutor = mathTutorID;
+                    transitionMap = mathTransitions;
+                    initiatorMap  = mathInitiators;
+                    break;
+
+                case AS_CONST.SELECT_SHAPES:
+
+                    activeTutor = shapesTutorID;
+                    transitionMap = shapeTransitions;
+                    initiatorMap  = shapeInitiators;
+                    break;
+
+            }
+
+            SdebugActivity.initGrid(activeSkill, activeTutor, transitionMap, initiatorMap);
+        }
+        else {
+
+            SaskActivity.setVisibility(VISIBLE);
+            SdebugActivity.setVisibility(GONE);
+
+            for (CAsk_Data layout : dataSource) {
+
+                if (layout.name.equals(name)) {
+
+                    _activeLayout = layout;
+
+                    SaskActivity.setDataSource(layout);
+                    break;
+                }
             }
         }
-
     }
 
 
@@ -211,6 +261,38 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     }
 
 
+    /** This allows us to update the current tutor for a given skill from the CDebugComponent
+     *
+      */
+    public void setDebugTutor(String debugTutor) {
+
+        // Update the active skill
+        //
+        switch (activeSkill) {
+
+            case AS_CONST.SELECT_WRITING:
+
+                writingTutorID = debugTutor;
+                break;
+
+            case AS_CONST.SELECT_STORIES:
+
+                storiesTutorID = debugTutor;
+                break;
+
+            case AS_CONST.SELECT_MATH:
+
+                mathTutorID = debugTutor;
+                break;
+
+            case AS_CONST.SELECT_SHAPES:
+
+                shapesTutorID = debugTutor;
+                break;
+        }
+    }
+
+
     /**
      * Button clicks may come from either the skill selector ASK component or the Difficulty
      * selector ASK component.
@@ -225,10 +307,45 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         boolean     buttonFound = false;
 
 
-        // If it wasn't a Skill selection it must be a assessment (Difficulty) selector button
-        // Difficulty selection
+        // If we are in debug mode then there is a third selection phase where we are presented
+        // the transition table for the active skill - The author can select a new target tutor
+        // from any of the transition entries.
+        //
+        if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_SELECT)) {
 
-        if(RoboTutor.TUTORSELECTED) {
+            // We pass the selected tutor from the debugcomponent in the buttonid
+            //
+            setDebugTutor(buttonid);
+
+            // just reselect the current skill and continue with next tutor
+            // no skill selection phase
+            buttonid = activeSkill;
+            RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_LAUNCH;
+
+            // Serialize the new state
+            //
+            SharedPreferences prefs = RoboTutor.ACTIVITY.getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+
+            editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE);
+
+            // only one will have been changed but update all
+            //
+            editor.putString(TCONST.SKILL_WRITING, writingTutorID);
+            editor.putString(TCONST.SKILL_STORIES, storiesTutorID);
+            editor.putString(TCONST.SKILL_MATH, mathTutorID);
+            editor.putString(TCONST.SKILL_SHAPES, shapesTutorID);
+
+            editor.apply();
+        }
+
+
+        // If we are in Assessment mode we have prompted the student to assess the difficulty of the
+        // tutor they have just completed.
+        // Difficulty selection
+        //
+
+        if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DIFFICULTY_ASSESS)) {
 
             // Init the skill pointers
             //
@@ -266,39 +383,42 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                     nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
 
                     mTutor.post(TCONST.ENDTUTOR);
-                    RoboTutor.TUTORSELECTED = false;
+                    RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
                     break;
 
                 case AS_CONST.SELECT_MAKE_HARDER:
                     nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).harder;
 
                     mTutor.post(TCONST.ENDTUTOR);
-                    RoboTutor.TUTORSELECTED = false;
+                    RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
                     break;
 
                 case AS_CONST.SELECT_MAKE_EASIER:
                     nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).easier;
 
                     mTutor.post(TCONST.ENDTUTOR);
-                    RoboTutor.TUTORSELECTED = false;
+                    RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
                     break;
 
                 case AS_CONST.SELECT_EXIT:
                     nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id;
 
                     mTutor.post(TCONST.FINISH);
-                    RoboTutor.TUTORSELECTED = false;
+                    RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
                     break;
 
                 // If user selects "Let robotutor decide" then use student model to decide how to adjust the
-                // difficulty level.
+                // difficulty level.  We also flip mode to tutor_select to skip the tutor select phase and
+                // let the model do the tutor selection.
                 // At the moment default to continue
                 //
                 case AS_CONST.SELECT_AUTO_DIFFICULTY:
                     nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
+
                     // just reselect the current skill and continue with next tutor
                     // no skill selection phase
                     buttonid = activeSkill;
+                    RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
                     break;
 
                 case AS_CONST.SELECT_REPEAT:
@@ -306,6 +426,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                     // just reselect the current skill and continue with next tutor
                     // no skill selection phase
                     buttonid = activeSkill;
+                    RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
                     break;
             }
 
@@ -352,87 +473,98 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         }
 
 
-        // If user selects "Let robotutor decide" then use student model to decide skill to work next
-        // At the moment default to Stories
-        //
-        if(buttonid.toUpperCase().equals(AS_CONST.SELECT_ROBOTUTOR)) {
-            buttonid = AS_CONST.SELECT_STORIES;
-        }
+        if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT) ||
+           RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_LAUNCH)) {
 
-        // First check if it is a skill selection button =
-        //
-        switch(buttonid.toUpperCase()) {
-
-            case AS_CONST.SELECT_WRITING:
-
-                activeSkill  = AS_CONST.SELECT_WRITING;
-                activeTutor  = writingTutorID;
-                initiatorMap = writeInitiators;
-                rootTutor    = rootSkillWrite;
-                buttonFound  = true;
-                break;
-
-            case AS_CONST.SELECT_STORIES:
-
-                activeSkill = AS_CONST.SELECT_STORIES;
-                activeTutor = storiesTutorID;
-                initiatorMap = storyInitiators;
-                rootTutor    = rootSkillStories;
-                buttonFound = true;
-
-                break;
-
-            case AS_CONST.SELECT_MATH:
-
-                activeSkill = AS_CONST.SELECT_MATH;
-                activeTutor = mathTutorID;
-                initiatorMap = mathInitiators;
-                rootTutor    = rootSkillMath;
-                buttonFound = true;
-                break;
-
-            case AS_CONST.SELECT_SHAPES:
-
-                activeSkill = AS_CONST.SELECT_SHAPES;
-                activeTutor = shapesTutorID;
-                initiatorMap = shapeInitiators;
-                rootTutor    = rootSkillShapes;
-                buttonFound = true;
-
-                break;
-
-        }
-
-        if(buttonFound) {
-
-            RoboTutor.TUTORSELECTED = true;
-
-            // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
-            // reenable the ASK buttons if we don't execute the story_tutor
+            // If user selects "Let robotutor decide" then use student model to decide skill to work next
+            // At the moment default to Stories
             //
-            if (!BuildConfig.NO_ASR_APPS || (initiatorMap != storyTransitions)) {
-
-                CAs_Data tutor = (CAs_Data) initiatorMap.get(activeTutor);
-
-                // This is just to make sure we go somewhere if there is a bad link - which
-                // there shuoldn't be :)
-                //
-                if(tutor == null) {
-                    tutor = (CAs_Data) initiatorMap.get(rootTutor);
-                }
-
-                doLaunch(tutor.intent, tutor.intentdata, tutor.datasource, tutor.features);
-
-                // Serialize the new state
-                //
-                SharedPreferences prefs = RoboTutor.ACTIVITY.getPreferences(Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit();
-
-                editor.putString(TCONST.SKILL_SELECTED, activeSkill);
-                editor.apply();
+            if (buttonid.toUpperCase().equals(AS_CONST.SELECT_ROBOTUTOR)) {
+                buttonid = AS_CONST.SELECT_STORIES;
             }
-            else
-                SaskActivity.enableButtons(true);
+
+            // First check if it is a skill selection button =
+            //
+            switch (buttonid.toUpperCase()) {
+
+                case AS_CONST.SELECT_WRITING:
+
+                    activeSkill = AS_CONST.SELECT_WRITING;
+                    activeTutor = writingTutorID;
+                    initiatorMap = writeInitiators;
+                    rootTutor = rootSkillWrite;
+                    buttonFound = true;
+                    break;
+
+                case AS_CONST.SELECT_STORIES:
+
+                    activeSkill = AS_CONST.SELECT_STORIES;
+                    activeTutor = storiesTutorID;
+                    initiatorMap = storyInitiators;
+                    rootTutor = rootSkillStories;
+                    buttonFound = true;
+
+                    break;
+
+                case AS_CONST.SELECT_MATH:
+
+                    activeSkill = AS_CONST.SELECT_MATH;
+                    activeTutor = mathTutorID;
+                    initiatorMap = mathInitiators;
+                    rootTutor = rootSkillMath;
+                    buttonFound = true;
+                    break;
+
+                case AS_CONST.SELECT_SHAPES:
+
+                    activeSkill = AS_CONST.SELECT_SHAPES;
+                    activeTutor = shapesTutorID;
+                    initiatorMap = shapeInitiators;
+                    rootTutor = rootSkillShapes;
+                    buttonFound = true;
+
+                    break;
+
+            }
+
+            if (buttonFound) {
+
+                // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
+                // reenable the ASK buttons if we don't execute the story_tutor
+                //
+                if (!BuildConfig.NO_ASR_APPS || (initiatorMap != storyTransitions)) {
+
+                    CAs_Data tutor = (CAs_Data) initiatorMap.get(activeTutor);
+
+                    // This is just to make sure we go somewhere if there is a bad link - which
+                    // there shuoldn't be :)
+                    //
+                    if (tutor == null) {
+                        tutor = (CAs_Data) initiatorMap.get(rootTutor);
+                    }
+
+                    // If we are using the edbug selector and it is not lauching a tutor then
+                    // switch to its view through a relaunch
+                    //
+                    if(DEBUG_LANCHER && RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT)) {
+
+                        mTutor.post(TCONST.ENDTUTOR);
+                        RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_SELECT;
+                    }
+                    else {
+                        doLaunch(tutor.intent, tutor.intentdata, tutor.datasource, tutor.features);
+                    }
+
+                    // Serialize the new state
+                    //
+                    SharedPreferences prefs = RoboTutor.ACTIVITY.getPreferences(Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+
+                    editor.putString(TCONST.SKILL_SELECTED, activeSkill);
+                    editor.apply();
+                } else
+                    SaskActivity.enableButtons(true);
+            }
         }
     }
 
@@ -447,7 +579,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     @Override
     public void doLaunch(String intent, String intentData, String dataSource, String features) {
 
-        RoboTutor.TUTORSELECTED = true;
+        RoboTutor.SELECTOR_MODE = TCONST.FTR_DIFFICULTY_ASSESS;
 
         // update the response variable  "<Sresponse>.value"
 
@@ -803,6 +935,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         activeSkill = prefs.getString(TCONST.SKILL_SELECTED, TCONST.SKILL_STORIES);
 
+        validateRootVectors();
+
         writingTutorID = prefs.getString(TCONST.SKILL_WRITING, rootSkillWrite);
         storiesTutorID = prefs.getString(TCONST.SKILL_STORIES, rootSkillStories);
         mathTutorID    = prefs.getString(TCONST.SKILL_MATH,    rootSkillMath);
@@ -864,6 +998,37 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     }
 
 
+    private void validateRootVectors() {
+
+        String outcome;
+
+        outcome = validateMap(writeTransitions, rootSkillWrite  );
+        if(!outcome.equals("")) {
+
+            Log.e(TAG, "Invalid - rootSkillWrite : nomatch");
+        }
+
+        outcome = validateMap(storyTransitions, rootSkillStories);
+        if(!outcome.equals("")) {
+
+            Log.e(TAG, "Invalid - rootSkillStories : nomatch");
+        }
+
+        outcome = validateMap(mathTransitions,  rootSkillMath   );
+        if(!outcome.equals("")) {
+
+            Log.e(TAG, "Invalid - rootSkillMath : nomatch");
+        }
+
+        outcome = validateMap(shapeTransitions, rootSkillShapes );
+        if(!outcome.equals("")) {
+
+            Log.e(TAG, "Invalid - rootSkillShapes : nomatch");
+        }
+
+    }
+
+
     private void validateTable(HashMap transMap, HashMap initMap, String transtype, String initType) {
 
         String outcome = "";
@@ -900,8 +1065,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         validateTable(writeTransitions, writeInitiators, "writeTransition: ", "writeInitiator: ");
         validateTable(storyTransitions, storyInitiators, "storyTransition: ", "storyInitiator: ");
-        validateTable(mathTransitions, mathInitiators, "mathTransition: ", "mathInitiator: ");
-        validateTable(shapeTransitions, shapeInitiators, "shapeTransition: ", "shapeInitiator: ");
+        validateTable(mathTransitions , mathInitiators , "mathTransition: ", "mathInitiator: ");
         validateTable(shapeTransitions, shapeInitiators, "shapeTransition: ", "shapeInitiator: ");
     }
 }

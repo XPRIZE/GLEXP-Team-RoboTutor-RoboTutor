@@ -1,0 +1,504 @@
+
+{
+  "datasource" : [
+  {
+  "type":"CAk_Data",
+  "choices":["au", "la", "si"],
+  "random_value":"0.6455922291107403",
+  "answer":"MID",
+  "target":"la",
+  "belowString":"audio",
+  "total_appearance":80,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["la", "ng", "tu"],
+  "random_value":"0.6222269280089316",
+  "answer":"MID",
+  "target":"ng",
+  "belowString":"audio",
+  "total_appearance":462,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["la", "ni", "wa"],
+  "random_value":"0.6548822779719553",
+  "answer":"MID",
+  "target":"ni",
+  "belowString":"audio",
+  "total_appearance":462,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["la", "ng", "ni"],
+  "random_value":"0.9641640027651228",
+  "answer":"RIGHT",
+  "target":"ni",
+  "belowString":"audio",
+  "total_appearance":462,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["na", "ng", "tu"],
+  "random_value":"0.8155906785424711",
+  "answer":"RIGHT",
+  "target":"tu",
+  "belowString":"audio",
+  "total_appearance":6138,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["wa", "ya", "za"],
+  "random_value":"0.39602648503708326",
+  "answer":"MID",
+  "target":"ya",
+  "belowString":"audio",
+  "total_appearance":1631,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["au", "tu", "wa"],
+  "random_value":"0.4814750091000227",
+  "answer":"MID",
+  "target":"tu",
+  "belowString":"audio",
+  "total_appearance":80,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["je", "ya", "za"],
+  "random_value":"0.22827887835752114",
+  "answer":"LEFT",
+  "target":"je",
+  "belowString":"audio",
+  "total_appearance":91,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["je", "ng", "tu"],
+  "random_value":"0.48199580189026503",
+  "answer":"MID",
+  "target":"ng",
+  "belowString":"audio",
+  "total_appearance":91,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["je", "wa", "za"],
+  "random_value":"0.2317812482191075",
+  "answer":"LEFT",
+  "target":"je",
+  "belowString":"audio",
+  "total_appearance":91,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["la", "tu", "wa"],
+  "random_value":"0.38308918511782697",
+  "answer":"MID",
+  "target":"tu",
+  "belowString":"audio",
+  "total_appearance":462,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["au", "si", "za"],
+  "random_value":"0.0910521029411369",
+  "answer":"LEFT",
+  "target":"au",
+  "belowString":"audio",
+  "total_appearance":80,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["je", "si", "tu"],
+  "random_value":"0.2915848282087453",
+  "answer":"LEFT",
+  "target":"je",
+  "belowString":"audio",
+  "total_appearance":91,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["au", "la", "na"],
+  "random_value":"0.8188987558883604",
+  "answer":"RIGHT",
+  "target":"na",
+  "belowString":"audio",
+  "total_appearance":80,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["la", "ni", "si"],
+  "random_value":"0.7047340578443688",
+  "answer":"RIGHT",
+  "target":"si",
+  "belowString":"audio",
+  "total_appearance":462,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["au", "na", "ya"],
+  "random_value":"0.9992356123395596",
+  "answer":"RIGHT",
+  "target":"ya",
+  "belowString":"audio",
+  "total_appearance":80,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["na", "ni", "wa"],
+  "random_value":"0.47371029059748193",
+  "answer":"MID",
+  "target":"ni",
+  "belowString":"audio",
+  "total_appearance":6138,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["je", "na", "za"],
+  "random_value":"0.8228159796659053",
+  "answer":"RIGHT",
+  "target":"za",
+  "belowString":"audio",
+  "total_appearance":91,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["na", "tu", "wa"],
+  "random_value":"0.020859899950083253",
+  "answer":"LEFT",
+  "target":"na",
+  "belowString":"audio",
+  "total_appearance":6138,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["na", "ng", "wa"],
+  "random_value":"0.6402598467099107",
+  "answer":"MID",
+  "target":"ng",
+  "belowString":"audio",
+  "total_appearance":6138,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["tu", "wa", "ya"],
+  "random_value":"0.40305868387507154",
+  "answer":"MID",
+  "target":"wa",
+  "belowString":"audio",
+  "total_appearance":198,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["na", "ni", "ya"],
+  "random_value":"0.198631718008436",
+  "answer":"LEFT",
+  "target":"na",
+  "belowString":"audio",
+  "total_appearance":6138,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["la", "na", "ya"],
+  "random_value":"0.23128287701987",
+  "answer":"LEFT",
+  "target":"la",
+  "belowString":"audio",
+  "total_appearance":462,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["ng", "si", "za"],
+  "random_value":"0.10731028775434037",
+  "answer":"LEFT",
+  "target":"ng",
+  "belowString":"audio",
+  "total_appearance":321,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["au", "si", "wa"],
+  "random_value":"0.40732834991750155",
+  "answer":"MID",
+  "target":"si",
+  "belowString":"audio",
+  "total_appearance":80,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["au", "na", "ng"],
+  "random_value":"0.22657445187361394",
+  "answer":"LEFT",
+  "target":"au",
+  "belowString":"audio",
+  "total_appearance":80,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["au", "wa", "za"],
+  "random_value":"0.29118139044491703",
+  "answer":"LEFT",
+  "target":"au",
+  "belowString":"audio",
+  "total_appearance":80,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["ng", "si", "tu"],
+  "random_value":"0.9757453035337341",
+  "answer":"RIGHT",
+  "target":"tu",
+  "belowString":"audio",
+  "total_appearance":321,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["ng", "ni", "si"],
+  "random_value":"0.9850453017140229",
+  "answer":"RIGHT",
+  "target":"si",
+  "belowString":"audio",
+  "total_appearance":321,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["au", "je", "ng"],
+  "random_value":"0.8813011784863669",
+  "answer":"RIGHT",
+  "target":"ng",
+  "belowString":"audio",
+  "total_appearance":80,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["na", "si", "tu"],
+  "random_value":"0.26172310790207526",
+  "answer":"LEFT",
+  "target":"na",
+  "belowString":"audio",
+  "total_appearance":6138,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["je", "na", "tu"],
+  "random_value":"0.7002865613440857",
+  "answer":"RIGHT",
+  "target":"tu",
+  "belowString":"audio",
+  "total_appearance":91,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["au", "ng", "tu"],
+  "random_value":"0.5578781604374555",
+  "answer":"MID",
+  "target":"ng",
+  "belowString":"audio",
+  "total_appearance":80,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["la", "na", "tu"],
+  "random_value":"0.7641976426953427",
+  "answer":"RIGHT",
+  "target":"tu",
+  "belowString":"audio",
+  "total_appearance":462,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["ng", "ni", "wa"],
+  "random_value":"0.5141076860149463",
+  "answer":"MID",
+  "target":"ni",
+  "belowString":"audio",
+  "total_appearance":321,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["je", "ni", "si"],
+  "random_value":"0.964613239247923",
+  "answer":"RIGHT",
+  "target":"si",
+  "belowString":"audio",
+  "total_appearance":91,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["au", "je", "si"],
+  "random_value":"0.18246221373087002",
+  "answer":"LEFT",
+  "target":"au",
+  "belowString":"audio",
+  "total_appearance":80,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["la", "ng", "za"],
+  "random_value":"0.41254763529873234",
+  "answer":"MID",
+  "target":"ng",
+  "belowString":"audio",
+  "total_appearance":462,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["je", "ni", "wa"],
+  "random_value":"0.17937094269261783",
+  "answer":"LEFT",
+  "target":"je",
+  "belowString":"audio",
+  "total_appearance":91,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["tu", "ya", "za"],
+  "random_value":"0.35139746903571994",
+  "answer":"MID",
+  "target":"ya",
+  "belowString":"audio",
+  "total_appearance":198,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["ni", "tu", "za"],
+  "random_value":"0.30533788847302823",
+  "answer":"LEFT",
+  "target":"ni",
+  "belowString":"audio",
+  "total_appearance":947,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["na", "ng", "si"],
+  "random_value":"0.6564522754926722",
+  "answer":"MID",
+  "target":"ng",
+  "belowString":"audio",
+  "total_appearance":6138,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["au", "wa", "ya"],
+  "random_value":"0.1741490002480792",
+  "answer":"LEFT",
+  "target":"au",
+  "belowString":"audio",
+  "total_appearance":80,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["si", "wa", "za"],
+  "random_value":"0.17984863573671192",
+  "answer":"LEFT",
+  "target":"si",
+  "belowString":"audio",
+  "total_appearance":103,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["au", "je", "za"],
+  "random_value":"0.3054351017861023",
+  "answer":"LEFT",
+  "target":"au",
+  "belowString":"audio",
+  "total_appearance":80,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["ng", "tu", "ya"],
+  "random_value":"0.6355247922572538",
+  "answer":"MID",
+  "target":"tu",
+  "belowString":"audio",
+  "total_appearance":321,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["ng", "wa", "ya"],
+  "random_value":"0.9324253480252115",
+  "answer":"RIGHT",
+  "target":"ya",
+  "belowString":"audio",
+  "total_appearance":321,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["na", "ng", "ni"],
+  "random_value":"0.37151754868358144",
+  "answer":"MID",
+  "target":"ng",
+  "belowString":"audio",
+  "total_appearance":6138,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["je", "na", "ni"],
+  "random_value":"0.6479666630252885",
+  "answer":"MID",
+  "target":"na",
+  "belowString":"audio",
+  "total_appearance":91,
+  "word_len":"2"
+  },
+  {
+  "type":"CAk_Data",
+  "choices":["au", "je", "wa"],
+  "random_value":"0.9986070869477531",
+  "answer":"RIGHT",
+  "target":"wa",
+  "belowString":"audio",
+  "total_appearance":80,
+  "word_len":"2"
+  }
+]}

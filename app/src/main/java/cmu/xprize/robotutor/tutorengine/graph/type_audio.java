@@ -53,6 +53,7 @@ public class type_audio extends type_action implements IMediaListener {
     private String mLocation;
 
     private boolean _useHashName = true;
+    private boolean _packageInit = false;
 
     // json loadable fields
     public String command;
@@ -188,6 +189,10 @@ public class type_audio extends type_action implements IMediaListener {
      */
     public void preLoad(IMediaListener owner) {
 
+        // Perform late binding to the sound package.
+        //
+        initSoundPackage();
+
         mPathResolved = getScope().parseTemplate(mSourcePath);
 
         Log.i(TAG, "Preloading audio: " + mPathResolved);
@@ -196,6 +201,7 @@ public class type_audio extends type_action implements IMediaListener {
 
         // Extract the path and name portions
         // NOTE: ASSUME mp3 - trim the mp3 - we just want the filename text to generate the Hash
+        // TODO: Don't assume mp3 or even an extension
         //
         String pathPart = mPathResolved.substring(0, endofPath);
         String namePart = mPathResolved.substring(endofPath, mPathResolved.length() - 4);
@@ -340,6 +346,42 @@ public class type_audio extends type_action implements IMediaListener {
             mPlayer.detach();
     }
 
+    /**
+     * Note that we do late binding to the soundpackage as some tutors update the package contents
+     * on load.  e.g. the story_reading tutor creates a custom "story" package that is based on the
+     * story folder location.
+     */
+    public void initSoundPackage() {
+
+        String langPath;
+        String assetPath;
+
+        if(!_packageInit) {
+
+            _packageInit = true;
+
+            // If we have set a language then update the sound source to point to the correct subdir
+            // If no language set then use whichever language is used in the Flash XML
+            // An audio source can force a language by setting "lang" to a known language Feature ID
+            // e.g. LANG_SW | LANG_EN | LANG_FR
+
+            mMediaManager = CMediaController.getManagerInstance(_scope.tutor());
+
+            langPath = mMediaManager.mapSoundPackage(_scope.tutor(), soundpackage, lang);
+
+            // Update the path to the sound source file
+            // #Mod Dec 13/16 - Moved audio/storyName assets to external storage
+            //
+            mSoundSource = TCONST.AUDIOPATH + "/" + langPath + "/" + soundsource;
+
+            assetPath = mMediaManager.mapPackagePath(_scope.tutor(), soundpackage);
+
+            mSourcePath = assetPath + "/" + mSoundSource;
+
+            mLocation = mMediaManager.mapPackageLocation(_scope.tutor(), soundpackage);
+        }
+    }
+
 
 
     // *** Serialization
@@ -349,33 +391,7 @@ public class type_audio extends type_action implements IMediaListener {
     @Override
     public void loadJSON(JSONObject jsonObj, IScope2 scope) {
 
-        String langPath;
-        String assetPath;
-
         super.loadJSON(jsonObj, scope);
-
-
-        // Custom post processing.
-
-        // If we have set a language then update the sound source to point to the correct subdir
-        // If no language set then use whichever language is used in the Flash XML
-        // An audio source can force a language by setting "lang" to a known language Feature ID
-        // e.g. LANG_SW | LANG_EN | LANG_FR
-
-        mMediaManager = CMediaController.getManagerInstance(_scope.tutor());
-
-        langPath = mMediaManager.mapSoundPackage(_scope.tutor(), soundpackage, lang);
-
-        // Update the path to the sound source file
-        // #Mod Dec 13/16 - Moved audio/storyName assets to external storage
-        //
-        mSoundSource = TCONST.AUDIOPATH + "/" + langPath + "/" + soundsource;
-
-        assetPath = mMediaManager.mapPackagePath(_scope.tutor(), soundpackage);
-
-        mSourcePath  =  assetPath + "/" + mSoundSource;
-
-        mLocation = mMediaManager.mapPackageLocation(_scope.tutor(), soundpackage);
     }
 
 }

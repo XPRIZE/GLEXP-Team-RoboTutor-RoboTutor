@@ -36,7 +36,7 @@ public class TScenePercentLayout extends PercentRelativeLayout implements ITutor
 
     private CSceneDelegate mTutorScene;
 
-    final private String TAG = "CSceneFrameLayout";
+    final private String TAG = "TScenePercentLayout";
 
 
     public TScenePercentLayout(Context context) {

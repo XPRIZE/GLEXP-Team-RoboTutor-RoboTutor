@@ -209,8 +209,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
             SfeedBack = (CBubbleStimulus) View.inflate(mContext, R.layout.bubble_stimulus, null);
 
-            // Set Color: pass in String e.g. "RED" - Cycle through the colors repetitively
-            //
             SfeedBack.setScale(0f);
             SfeedBack.setAlpha(1.0f);
 

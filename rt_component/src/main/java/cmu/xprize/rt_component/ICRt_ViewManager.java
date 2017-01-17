@@ -58,6 +58,8 @@ public interface ICRt_ViewManager extends ILoadableObject {
 
     public boolean endOfData();
 
+    public void onUpdate(String[] heardWords);
+
     public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult);
 
     public void onUpdate(String[] heardWords, boolean finalResult);
@@ -68,4 +70,6 @@ public interface ICRt_ViewManager extends ILoadableObject {
     public void setSpeakButton(String command);
 
     public void setPageFlipButton(String command);
+
+    public void execCommand(String _command, Object _target);
 }

@@ -1,0 +1,23 @@
+{
+"version" : "2017-01-03 20:31:45",
+
+"stimulus_type" : "text_data",
+
+"stimulus_map" : {
+	"type":"STRING_ARRAY",
+	"LANG_SW" : ["kwa","juu","cha","ili","huo","hii","pia","yao","mtu","wao","mti","mno","nje","ile","mwa","ule","leo","huu","hao","zao","jua","mto","vya"],
+	"LANG_EN" : ["and","big","can","for","not","one","red","run","see","the","two","you","all","are","ate","but","did","eat","get","new","now","our","out","ran","saw","say","she","too","was","who","yes","any","ask","fly","had","has","her","him","his","how","let","may","old","put","buy","its","off","sit","use","why","cut","far","got","hot","own","six","ten","try"]
+	},
+
+  "question_count": 10,
+  "question_sequence": "random",
+
+  "dataSource" : [
+
+    {"type":"Bp_Data", "question_type": "multiple-choice", "question_say": true, "question_show": false,"rand_data":true, "rand_size":5, "rand_index": true, "stimulus_type": "text_data" }
+
+  ],
+
+  "view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"fixed", "colorbase":"#666666", "colors":[0xFFA3A300, 0xFF8C8C00, 0xFFD9D900, 0xFFB2B200]}
+
+}

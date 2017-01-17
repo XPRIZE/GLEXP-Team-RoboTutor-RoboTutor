@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SkillState">
+        <attr name="state_skillnormal"  format="boolean"/>
+        <attr name="state_skillcurrent" format="boolean"/>
+        <attr name="state_skillnext"    format="boolean"/>
+        <attr name="state_skillharder"  format="boolean"/>
+        <attr name="state_skilleasier"  format="boolean"/>
+        <attr name="state_skillnull"    format="boolean"/>
+        <attr name="state_skillerror"   format="boolean"/>
+    </declare-styleable>
+</resources>

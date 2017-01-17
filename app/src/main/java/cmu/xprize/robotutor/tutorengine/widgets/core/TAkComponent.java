@@ -430,9 +430,9 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
                 }
                 break;
             case 3:
-                if(dataSource[_dataIndex - 1].belowString.equals("audio")){//if it is an audio question
+                if(datasource[_dataIndex - 1].belowString.equals("audio")){//if it is an audio question
                     //TScope scope = mTutor.getScope();
-                    //scope.addUpdateVar("TestAudio", new TString(getAboveString(dataSource[_dataIndex - 1])));
+                    //scope.addUpdateVar("TestAudio", new TString(getAboveString(datasource[_dataIndex - 1])));
                     mTutor.setAddFeature(TCONST.PROMPT_3V);
                 }else{
                     mTutor.setAddFeature(TCONST.PROMPT_3);

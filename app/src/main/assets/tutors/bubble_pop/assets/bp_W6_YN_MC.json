@@ -1,0 +1,23 @@
+{
+"version" : "2017-01-03 20:37:35",
+
+"stimulus_type" : "text_data",
+
+"stimulus_map" : {
+	"type":"STRING_ARRAY",
+	"LANG_SW" : ["lakini","wakati","katika","kwenda","kwenye","kutoka","kwamba","karibu","pamoja","zamani","sababu","mwenye","watoto","mkubwa","nyumba","mahali","kijiji","kwanza","kidogo","haraka","nyingi","wazazi","furaha","wawili","lazima","tayari","rafiki","upande","mamake","kusema","kuanza","hakuna","kuliko","njiani","mrembo","kulala","kurudi","yeyote","kupata","kabisa","changu","halafu","sehemu","hakuwa","mlango","safari","alijua","vizuri","kelele","aliona","ambayo","kijani","kuhusu"],
+	"LANG_EN" : ["little","yellow","please","pretty","giving","always","around","before","better","myself"]
+	},
+
+  "question_count": 10,
+  "question_sequence": "random",
+
+  "dataSource" : [
+
+    {"type":"Bp_Data", "question_type": "multiple-choice", "question_say": true, "question_show": false,"rand_data":true, "rand_size":5, "rand_index": true, "stimulus_type": "text_data" }
+
+  ],
+
+  "view_background" : {"style": "primitives", "kind": "squares", "layout": "grid", "colorchoice":"fixed", "colorbase":"#666666", "colors":[0xFFA3A300, 0xFF8C8C00, 0xFFD9D900, 0xFFB2B200]}
+
+}

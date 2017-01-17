@@ -1,0 +1,48 @@
+{"datasource" : [
+
+{"type":"CAk_Data",
+"level":"asm_3",
+"task":"Add 1",
+"ordered":"random",
+"operation":"+",
+"result":"1",
+"item_type":"1_sign",
+"dataset":"[0, 1, 1]",
+"choices":"[5]",
+"answer":"LEFT"},
+
+{"type":"CAk_Data",
+"level":"asm_3",
+"task":"Add 1",
+"ordered":"random",
+"operation":"+",
+"result":"3",
+"item_type":"1_sign",
+"dataset":"[2, 1, 3]",
+"choices":"[6]",
+"answer":"LEFT"},
+
+{"type":"CAk_Data",
+"level":"asm_3",
+"task":"Add 1",
+"ordered":"random",
+"operation":"+",
+"result":"7",
+"item_type":"1_sign",
+"dataset":"[6, 1, 7]",
+"choices":"[6]",
+"answer":"RIGHT"},
+
+{"type":"CAk_Data",
+"level":"asm_3",
+"task":"Add 1",
+"ordered":"random",
+"operation":"+",
+"result":"9",
+"item_type":"1_sign",
+"dataset":"[8, 1, 9]",
+"choices":"[4]",
+"answer":"RIGHT"},
+
+
+]}
