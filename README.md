@@ -26,7 +26,19 @@ RoboTutor uses a large volume of external assets at runtime.  To successfully ru
 
 
 
-## **Usage:**
+## **XPrize Submission:**
+
+The following repositories are part of the Team-Project-Listen RoboTutor entry:
+ * XPRIZE/GLEXP-Team-Project-Listen-RoboTutor
+ * XPRIZE/GLEXP-Team-Project-Listen-RTAsset_Publisher
+ * XPRIZE/GLEXP-Team-Project-Listen-RTHome_Screen
+ * XPRIZE/GLEXP-Team-Project-Listen-RTAsset_Manager
+ * XPRIZE/GLEXP-Team-Project-Listen-RTFace_Login
+
+<br>
+<br>
 
 
-<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />The RoboTutor Global Learing Xprize Submission</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+## **Usage**
+
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />The RoboTutor Global Learning Xprize Submission</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
