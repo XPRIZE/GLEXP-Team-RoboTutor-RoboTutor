@@ -184,7 +184,7 @@ public class CAssetObject {
     }
 
 
-    public ArrayList setConstraintByName(int type, String assetName) {
+    public ArrayList createConstraintByName(int type, String assetName) {
 
         String version;
 

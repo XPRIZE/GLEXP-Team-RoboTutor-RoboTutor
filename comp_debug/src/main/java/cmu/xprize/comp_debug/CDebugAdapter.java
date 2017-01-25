@@ -268,20 +268,14 @@ public class CDebugAdapter extends BaseAdapter {
 
     // create a new ImageView for each item referenced by the Adapter
     //
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int gridPosition, View convertView, ViewGroup parent) {
 
         CDebugButton tutorSelector;
-        String       buttonState = mapKeyState(position);
+        String       buttonState = mapKeyState(gridPosition);
 
-        Log.d(TAG, "GetView: " + position + " - convertible: " + convertView);
+        Log.d(TAG, "GetView: " + gridPosition + " - convertible: " + convertView);
 
-        if(buttonMap.containsKey(position)) {
-            tutorSelector = buttonMap.get(position);
-            tutorSelector.setState(buttonState);
-
-            Log.d(TAG, "found debug button");
-        }
-        else if (convertView == null) {
+        if (convertView == null) {
             tutorSelector = new CDebugButton(mContext);
             tutorSelector.setImageDrawable(mContext.getResources().getDrawable(R.drawable.debugbutton, null));
             tutorSelector.setState(buttonState);
@@ -293,6 +287,8 @@ public class CDebugAdapter extends BaseAdapter {
         else
         {
             tutorSelector = (CDebugButton) convertView;
+
+            buttonMap.remove(tutorSelector.getGridPosition());
             tutorSelector.setState(buttonState);
 
             Log.d(TAG, "reusing debug button");
@@ -300,8 +296,8 @@ public class CDebugAdapter extends BaseAdapter {
 
         // Keep track of the buttons so we can invalidate them if we change their state
         //
-        buttonMap.put(position, tutorSelector);
-        tutorSelector.setGridPosition(position);
+        buttonMap.put(gridPosition, tutorSelector);
+        tutorSelector.setGridPosition(gridPosition);
 
         if(buttonState.equals(STATE_NULL)) {
             tutorSelector.setEnabled(false);
@@ -322,7 +318,14 @@ public class CDebugAdapter extends BaseAdapter {
 
             Log.d(TAG, "Click on item: " + gridPosition);
 
-            updateCurrentTutorByIndex(gridPosition);
+            String tutorName = "";
+
+            tutorName = updateCurrentTutorByIndex(gridPosition);
+
+            if(!tutorName.equals("")) {
+                mLauncher.changeCurrentTutor(tutorName);
+            }
+
             }
         });
 
@@ -330,31 +333,42 @@ public class CDebugAdapter extends BaseAdapter {
     }
 
 
-    public void updateCurrentTutorByIndex(int gridPosition) {
+    public String updateCurrentTutorByIndex(int gridPosition) {
+
+        String currentTutorName = "";
 
         // If we are switching the "current" tutor selection update the button states
         //
         if(gridPosition != currentIndex) {
 
-            buttonMap.get(currentIndex).setState(STATE_NORMAL);
-            buttonMap.get(nextIndex   ).setState(STATE_NORMAL);
-            buttonMap.get(harderIndex ).setState(STATE_NORMAL);
-            buttonMap.get(easierIndex ).setState(STATE_NORMAL);
+            setButtonSafeState(currentIndex, STATE_NORMAL);
+            setButtonSafeState(nextIndex,    STATE_NORMAL);
+            setButtonSafeState(harderIndex,  STATE_NORMAL);
+            setButtonSafeState(easierIndex,  STATE_NORMAL);
 
             // Update the transitions based on the newly selected "current" tutor
             //
-            String currentTutorName = indexTransitionMap.get(gridPosition).tutor_id;
+            currentTutorName = indexTransitionMap.get(gridPosition).tutor_id;
 
             updateTransitionsByName(currentTutorName);
 
             udpateVectorIndices();
 
-            buttonMap.get(easierIndex ).setState(STATE_EASIER);
-            buttonMap.get(harderIndex ).setState(STATE_HARDER);
-            buttonMap.get(nextIndex   ).setState(STATE_NEXT);
-            buttonMap.get(currentIndex).setState(STATE_CURRENT);
+            setButtonSafeState(easierIndex,  STATE_EASIER);
+            setButtonSafeState(harderIndex,  STATE_HARDER);
+            setButtonSafeState(nextIndex,    STATE_NEXT);
+            setButtonSafeState(currentIndex, STATE_CURRENT);
+        }
 
-            mLauncher.changeCurrentTutor(currentTutorName);
+        return currentTutorName;
+    }
+
+
+    private void setButtonSafeState(int gridPosition, String newState) {
+
+        if(buttonMap.containsKey(gridPosition)) {
+
+            buttonMap.get(gridPosition).setState(newState);
         }
     }
 

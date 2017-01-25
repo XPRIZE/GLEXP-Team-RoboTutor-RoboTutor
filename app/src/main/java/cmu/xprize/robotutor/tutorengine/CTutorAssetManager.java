@@ -39,7 +39,6 @@ import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
 import cmu.xprize.robotutor.tutorengine.util.Zip;
 import cmu.xprize.util.TCONST;
 
-import static cmu.xprize.robotutor.tutorengine.CTutorEngine.getActivity;
 import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.ASSET_DOWNVERSION;
 import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.ASSET_FIRSTRELEASE;
 import static cmu.xprize.robotutor.tutorengine.util.CAssetObject.ASSET_UPVERSION;
@@ -402,9 +401,9 @@ public class CTutorAssetManager {
                 String srcPath = RoboTutor.DOWNLOAD_PATH + File.separator + objectname;
                 assetFile     = new File(srcPath);
 
-                // Extract the Foind assets version spec and assign a File object
+                // Extract the Found assets version spec and assign a File object
                 //
-                ArrayList assetVersion = mAssetObject.setConstraintByName(ASSET_TO_MATCH, objectname);
+                ArrayList assetVersion = mAssetObject.createConstraintByName(ASSET_TO_MATCH, objectname);
                 mAssetObject.setAssetFile(ASSET_TO_MATCH, assetFile);
 
                 // i.e. the app can't use an older asset version than it supports.

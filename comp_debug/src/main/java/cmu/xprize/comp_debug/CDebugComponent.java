@@ -103,7 +103,13 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
             public void onClick(View view) {
 
-                gridAdapter.updateCurrentTutorByIndex(transitionMap.get(initialTutor).gridIndex);
+                String tutorName = "";
+
+                tutorName = gridAdapter.updateCurrentTutorByIndex(transitionMap.get(initialTutor).gridIndex);
+
+                if(!tutorName.equals("")) {
+                    changeCurrentTutor(tutorName);
+                }
 
                 Log.d(TAG, "Click on reset: ");
             }
