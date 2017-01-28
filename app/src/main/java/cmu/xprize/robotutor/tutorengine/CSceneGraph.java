@@ -352,7 +352,12 @@ public class CSceneGraph  {
      */
     private void enQueue(Queue qCommand) {
 
-        Log.d(TAG, "Processing POST to SceneGraph: " + qCommand._command + " - from: " +  qCommand._source.getEventSourceName() + " - target: " + qCommand._target );
+        Log.d(TAG, "POSTING to SceneGraph: " + qCommand._command + " - from: " +  qCommand._source.getEventSourceName() + " - target: " + qCommand._target );
+
+        if(qCommand._source.getEventSourceName().equals("story_reading")) {
+            Log.d(TAG, "HERE");
+        }
+
 
         if(!mDisabled) {
             queueMap.put(qCommand, qCommand);

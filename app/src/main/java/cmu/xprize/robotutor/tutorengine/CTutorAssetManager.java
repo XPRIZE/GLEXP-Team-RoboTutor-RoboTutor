@@ -460,6 +460,7 @@ public class CTutorAssetManager {
     /**
      * manage install sequencing -  asset_fullrelease / asset_incremental
      *
+     *  See : /doc/Asset Manager Logic.vsdx
      *
      * @param assetName
      * @param assetFolder

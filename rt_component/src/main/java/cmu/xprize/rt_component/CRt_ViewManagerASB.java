@@ -106,6 +106,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private CASB_Narration[]        rawNarration;                        // The narration segmentation info for the active sentence
     private String                  rawSentence;                         //currently displayed sentence that need to be recognized
     private CASB_Seg                narrationSegment;
+    private String[]                splitSegment;
+    private int                     splitIndex = TCONST.INITSPLIT;
     private ArrayList<String>       spokenWords;
     private int                     utteranceNdx;
     private int                     segmentNdx;
@@ -402,6 +404,108 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     }
 
 
+    private String[] splitWordOnChar(String[] wordArray, String splitChar) {
+
+        ArrayList<String> wordList = new ArrayList<>();
+
+        for(String word : wordArray) {
+
+            String[] wordSplit = word.split(splitChar);
+
+            if(wordSplit.length > 1) {
+
+                for(int i1 = 0 ; i1 < wordSplit.length-1 ; i1++) {
+                    wordList.add(wordSplit[i1] + splitChar);
+                }
+                wordList.add(wordSplit[wordSplit.length-1]);
+            }
+            else {
+                wordList.add(wordSplit[0]);
+            }
+        }
+
+        return wordList.toArray(new String[wordList.size()]);
+    }
+
+
+    private String[] splitRawSentence(String rawSentence) {
+
+        String  sentenceWords[];
+
+        sentenceWords = rawSentence.trim().split("\\s+");
+
+        sentenceWords = stripLeadingTrailing(sentenceWords, "'");
+        sentenceWords = splitWordOnChar(sentenceWords, "-");
+        sentenceWords = splitWordOnChar(sentenceWords, "'");
+
+        return sentenceWords;
+    }
+
+
+    /**
+     * This cleans a raw sentence from the ASB.  This is very idiosyncratic to the ASB content.
+     * ASB contains some apostrophes used as single quotes that otherwise confuse the layout
+     *
+     * We also need to have true apostrophes and hyphenated words split to maintain alignment with
+     * the listener.  i.e the displayed words and spoken word arrays should be kept in alignment.
+     *
+     * @param rawSentence
+     * @return
+     */
+    private String processRawSentence(String rawSentence) {
+
+        String[]      sentenceWords;
+        StringBuilder sentence = new StringBuilder();
+
+        sentenceWords = splitRawSentence(rawSentence);
+
+        for(int i1 = 0 ; i1 < sentenceWords.length ; i1++) {
+
+            if(sentenceWords[i1].endsWith("'") || sentenceWords[i1].endsWith("-")) {
+                sentence.append(sentenceWords[i1]);
+            }
+            else{
+                sentence.append(sentenceWords[i1] + ((i1 < sentenceWords.length-1)? TCONST.WORD_SPACE: TCONST.NO_SPACE));
+            }
+        }
+
+        return sentence.toString();
+    }
+
+
+    private String stripLeadingTrailing(String sentence, String stripChar) {
+
+        if(sentence.startsWith(stripChar)) {
+            sentence = sentence.substring(1);
+        }
+        if(sentence.endsWith(stripChar)) {
+            sentence = sentence.substring(0, sentence.length()-1);
+        }
+
+        return sentence;
+    }
+
+
+    private String[] stripLeadingTrailing(String[] wordArray, String stripChar) {
+
+        ArrayList<String> wordList = new ArrayList<>();
+
+        for(String word : wordArray) {
+
+            if(word.startsWith(stripChar)) {
+                word = word.substring(1);
+            }
+            if(word.endsWith(stripChar)) {
+                word = word.substring(0, word.length()-1);
+            }
+
+            wordList.add(word);
+        }
+
+        return wordList.toArray(new String[wordList.size()]);
+    }
+
+
     /**
      * Reconfigure for a specific page / paragraph / line (seeks to)
      *
@@ -445,7 +549,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                     for (String word : otherWordsToSpeak)
                         wordsSpoken.add(word);
 
-                    completedSentences += rawContent.sentence;
+                    completedSentences += processRawSentence(rawContent.sentence) + TCONST.SENTENCE_SPACE;
                 }
                 if(paraIndex < currPara)
                     completedSentences += "<br><br>";
@@ -464,9 +568,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 for (String word : otherWordsToSpeak)
                     wordsSpoken.add(word);
 
-                completedSentences += rawSentence;
+                completedSentences += processRawSentence(rawSentence) + TCONST.SENTENCE_SPACE;
             }
 
+            // Note that we add a space after the sentence.
+            //
             completedSentencesFmtd = "<font color='#AAAAAA'>";
             completedSentencesFmtd += completedSentences;
             completedSentencesFmtd += "</font>";
@@ -488,12 +594,19 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         rawNarration = data[currPage].text[currPara][currLine].narration;
         rawSentence  = data[currPage].text[currPara][currLine].sentence;
 
+
         // Words that are used to build the display text - include punctuation etc.
-        // But are in one-to-one correspondance with the wordsToSpeak
-        // NOTE: wordsToSpeak is used in generating the active listening model
-        // so it must reflect the current sentence!
         //
-        wordsToDisplay = rawSentence.trim().split("\\s+");
+        // NOTE: wordsToSpeak is used in generating the active ASR listening model
+        // so it must reflect the current sentence without punctuation!
+        //
+        // To keep indices into wordsToSpeak in sync with wordsToDisplay we break the words to
+        // display if they contain apostrophes or hyphens into sub "words" - e.g. "thing's" -> "thing" "'s"
+        // these are reconstructed by the highlight logic without adding spaces which it otherwise inserts
+        // automatically.
+        //
+        wordsToDisplay = splitRawSentence(rawSentence);
+
 
         // TODO: strip word-final or -initial apostrophes as in James' or 'cause.
         // Currently assuming hyphenated expressions split into two Asr words.
@@ -529,7 +642,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 for (String word : otherWordsToSpeak)
                     futureSpoken.add(word);
 
-                futureSentences += rawSentence;
+                futureSentences += processRawSentence(rawSentence) + TCONST.SENTENCE_SPACE;
             }
 
             // First generate all completed paragraphs in their entirity
@@ -550,7 +663,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                     for (String word : otherWordsToSpeak)
                         futureSpoken.add(word);
 
-                    futureSentences += rawSentence.sentence;
+                    futureSentences += processRawSentence(rawSentence.sentence) + TCONST.SENTENCE_SPACE;
                 }
             }
 
@@ -605,6 +718,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         if(start) {
 
             mHeardWord = 0;
+            splitIndex = TCONST.INITSPLIT;
+
             initSegmentation(0, 0);
 
             spokenWords  = new ArrayList<String>();
@@ -616,32 +731,51 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         }
         else {
 
-            // Special processing to account for apostrophes and hyphenated words
-            // Note the system listens for e.g. "WON'T" as [WON] [T] two words so if we feed it won't then it "won't" match :)
-            // and the narration will freeze
+            // NOTE: The narration mode used the ASR logic to simplify operation.  In doing this
+            /// it uses the wordsToSpeak array to progressively highlight the on screen text.
             //
-            String[] splitWord = narrationSegment.word.toUpperCase().split("[\\-']");
+            // Special processing to account for apostrophes and hyphenated words
+            // Note the system listens for e.g. "WON'T" as [WON] [T] two words so if we provide "won't" then it "won't" match :)
+            // and the narration will freeze
+            // This is a kludge to account for the fact that segmentation data does not split words with
+            // hyphens or apostrophes into separate "words" the way the wordstospeak does.
+            // Without this the narration will get out of sync
+            //
+            if(splitIndex == TCONST.INITSPLIT) {
+                splitSegment = narrationSegment.word.toUpperCase().split("[\\-']");
 
-            for(String part : splitWord) {
-                spokenWords.add(part);
+                splitIndex = 0;
+                spokenWords.add(splitSegment[splitIndex++]);
+            }
+            else {
+                spokenWords.add(splitSegment[splitIndex++]);
             }
 
             onUpdate(spokenWords.toArray(new String[spokenWords.size()]));
 
-            segmentNdx++;
-            if(segmentNdx >= numSegments) {
+            // If the segment word is split due to apostrophes or hyphens then consume them
+            // before continuing to the next segment.
+            //
+            if(splitIndex >= splitSegment.length) {
 
-                utteranceNdx++;
-                if(utteranceNdx < numUtterance) {
-                    initSegmentation(utteranceNdx, 0);
+                splitIndex = TCONST.INITSPLIT;
+
+                segmentNdx++;
+                if (segmentNdx >= numSegments) {
+
+                    utteranceNdx++;
+                    if (utteranceNdx < numUtterance) {
+                        initSegmentation(utteranceNdx, 0);
+                    } else {
+                        endOfSentence = true;
+                    }
+
+                    mParent.applyBehavior(TCONST.UTTERANCE_COMPLETE_EVENT);
                 }
-                else {
-                    endOfSentence = true;
-                }
+
+                if (!endOfSentence)
+                    narrationSegment = rawNarration[utteranceNdx].segmentation[segmentNdx];
             }
-
-            if(!endOfSentence)
-                narrationSegment = rawNarration[utteranceNdx].segmentation[segmentNdx];
         }
 
         if(!endOfSentence) {
@@ -1042,7 +1176,12 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 styledWord = "<u>" + styledWord + "</u>";
             }
 
-            fmtSentence += styledWord + " ";
+            if(wordsToDisplay[i].endsWith("'") || wordsToDisplay[i].endsWith("-")) {
+                fmtSentence += styledWord;
+            }
+            else{
+                fmtSentence += styledWord + ((i < wordsToDisplay.length-1)? TCONST.WORD_SPACE: TCONST.NO_SPACE);
+            }
         }
 
         // Generate the text to be displayed
@@ -1050,7 +1189,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         String content = completedSentencesFmtd + fmtSentence;
 
         if(showFutureContent)
-            content += futureSentencesFmtd;
+            content += TCONST.SENTENCE_SPACE + futureSentencesFmtd;
 
         mPageText.setText(Html.fromHtml(content));
 
@@ -1112,7 +1251,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             }
 
         } catch (Exception e) {
-            Log.d(TAG, "getActiveTextPos: " + e.toString());
+            Log.d(TAG, "broadcastActiveTextPos: " + e.toString());
         }
 
         return point;
@@ -1160,8 +1299,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         // Publish the outcome
         mParent.publishValue(TCONST.RTC_VAR_ATTEMPT, attemptNum);
         mParent.UpdateValue(result);
-
-        mParent.onASREvent(TCONST.RECOGNITION_EVENT);
     }
 
 

@@ -201,6 +201,10 @@ public class TCONST {
     public static final String TRACK_NARRATION     = "TRACK_NARRATION";
     public static final String START_NARRATION     = "START_NARRATION";
     public static final String SPEAK_UTTERANCE     = "SPEAK_UTTERANCE";
+    public static final int    INITSPLIT           = -1;
+    public static final String SENTENCE_SPACE      = "  ";
+    public static final String WORD_SPACE          = " ";
+    public static final String NO_SPACE            = "";
 
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
@@ -461,15 +465,16 @@ public class TCONST {
     public static final int ALL_EVENTS         = 0xFFFFFFFF;
 
 
-    public static final String ASR_TIMED_START_EVENT  = "ASR_TIMED_START_EVENT";
-    public static final String ASR_RECOGNITION_EVENT  = "ASR_RECOGNITION_EVENT";
-    public static final String ASR_ERROR_EVENT        = "ASR_ERROR_EVENT";
-    public static final String ASR_SILENCE_EVENT      = "ASR_SILENCE_EVENT";
-    public static final String ASR_SOUND_EVENT        = "ASR_SOUND_EVENT";
-    public static final String ASR_WORD_EVENT         = "ASR_WORD_EVENT";
-    public static final String ASR_TIMEDSILENCE_EVENT = "ASR_TIMEDSILENCE_EVENT";
-    public static final String ASR_TIMEDSOUND_EVENT   = "ASR_TIMEDSOUND_EVENT";
-    public static final String ASR_TIMEDWORD_EVENT    = "ASR_TIMEDWORD_EVENT";
+    public static final String ASR_TIMED_START_EVENT    = "ASR_TIMED_START_EVENT";
+    public static final String ASR_RECOGNITION_EVENT    = "ASR_RECOGNITION_EVENT";
+    public static final String ASR_ERROR_EVENT          = "ASR_ERROR_EVENT";
+    public static final String ASR_SILENCE_EVENT        = "ASR_SILENCE_EVENT";
+    public static final String ASR_SOUND_EVENT          = "ASR_SOUND_EVENT";
+    public static final String ASR_WORD_EVENT           = "ASR_WORD_EVENT";
+    public static final String ASR_TIMEDSILENCE_EVENT   = "ASR_TIMEDSILENCE_EVENT";
+    public static final String ASR_TIMEDSOUND_EVENT     = "ASR_TIMEDSOUND_EVENT";
+    public static final String ASR_TIMEDWORD_EVENT      = "ASR_TIMEDWORD_EVENT";
+    public static final String UTTERANCE_COMPLETE_EVENT = "UTTERANCE_COMPLETE_EVENT";
 
     public static final String ASR_ALL_TIMED_EVENTS   = "ASR_ALL_TIMED_EVENTS";
     public static final String ASR_ALL_STATIC_EVENTS  = "ASR_ALL_STATIC_EVENTS";

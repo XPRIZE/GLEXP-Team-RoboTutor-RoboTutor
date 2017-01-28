@@ -148,7 +148,7 @@
         "LISTEN":{
           "COMMENT":"",
           "type":"node",
-          "preenter":["SET_HYPOTHESIS_BEHAVIOR","SET_ONCLICK_SPEAK_WORD","TIMER_HINT_WORD"],
+          "preenter":["SET_UTTERANCE_BEHAVIOR","SET_HYPOTHESIS_BEHAVIOR","SET_ONCLICK_SPEAK_WORD","TIMER_HINT_WORD"],
           "maptype":"moduleMap",
           "mapname": "LISTENING",
           "preexit" :["CLR_HYPOTHESIS_BEHAVIOR","CLR_ONCLICK","TIMER_CANCEL_HINT_WORD"],
@@ -405,7 +405,9 @@
         "SET_ONCLICK_SPEAK_WORD": {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ON_CLICK:String|SPEAK_WORD_BEHAVIOR:String" ,"features":""},
         "CLR_ONCLICK":            {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ON_CLICK:String|NULL:String" ,"features":""},
 
-        "SET_HYPOTHESIS_BEHAVIOR":   {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_RECOGNITION_EVENT:String|NEXT_NODE:String" ,"features":""},
+        "SET_UTTERANCE_BEHAVIOR":   {"type": "COMMAND", "id":"SstoryReading", "method": "setStickyBehavior", "parms": "UTTERANCE_COMPLETE_EVENT:String|NEXT_NODE:String" ,"features":""},
+
+        "SET_HYPOTHESIS_BEHAVIOR":  {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_RECOGNITION_EVENT:String|NEXT_NODE:String" ,"features":""},
         "CLR_HYPOTHESIS_BEHAVIOR":  {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_RECOGNITION_EVENT:String|NULL:String" ,"features":""},
 
         "HIGHLIGHT_ERROR": {"type": "COMMAND", "id": "SstoryReading", "method": "setHighLight", "parms": "red:String"},

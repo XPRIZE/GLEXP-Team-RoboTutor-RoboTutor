@@ -355,6 +355,8 @@ public class CAssetObject {
             _zip.extractAll(assetFolder);
             _zip.close();
 
+            // If we want ot purge installed asset zip files then do it here
+            //
             if(RoboTutor.DELETE_INSTALLED_ASSETS) {
                 getFile(type).delete();
             }

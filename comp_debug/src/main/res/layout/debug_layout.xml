@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         app:layout_heightPercent="50%"
         android:paddingLeft="50dp"
-        android:columnWidth="70dp"
+        android:columnWidth="20dp"
         android:verticalSpacing="10dp"
         android:horizontalSpacing="10dp"
         android:stretchMode="none"
@@ -37,7 +37,7 @@
 
 
     <LinearLayout
-        android:id="@+id/SfootBlock1a"
+        android:id="@+id/SfootBlock1"
         android:layout_below="@+id/SdebugGrid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,13 +58,13 @@
             android:paddingLeft="10dp"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:text="Current Tutor: "/>
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/SfootBlock1"
-        android:layout_below="@+id/SfootBlock1a"
+        android:id="@+id/SfootBlock2"
+        android:layout_below="@+id/SfootBlock1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -84,13 +84,13 @@
             android:paddingLeft="10dp"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:text="Next Tutor: "/>
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/SfootBlock2"
-        android:layout_below="@+id/SfootBlock1"
+        android:id="@+id/SfootBlock3"
+        android:layout_below="@+id/SfootBlock2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -110,13 +110,13 @@
             android:paddingLeft="10dp"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:text="Harder Tutor: "/>
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/SfootBlock3"
-        android:layout_below="@+id/SfootBlock2"
+        android:id="@+id/SfootBlock4"
+        android:layout_below="@+id/SfootBlock3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -135,7 +135,7 @@
             android:paddingLeft="10dp"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:text="Easier Tutor: "/>
     </LinearLayout>
 
@@ -169,7 +169,7 @@
         android:padding="20dp"
         android:textSize="23sp"
         android:textColor="#FFFFFF"
-        android:text="Lauch Tutor"/>
+        android:text="Launch Tutor"/>
 
 
 </android.support.percent.PercentRelativeLayout>

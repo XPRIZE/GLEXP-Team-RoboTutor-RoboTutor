@@ -410,7 +410,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                 // If user selects "Let robotutor decide" then use student model to decide how to adjust the
                 // difficulty level.  We also flip mode to tutor_select to skip the tutor select phase and
                 // let the model do the tutor selection.
-                // At the moment default to continue
+                // At the moment default to continue to "next" link
                 //
                 case AS_CONST.SELECT_AUTO_DIFFICULTY:
                     nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;

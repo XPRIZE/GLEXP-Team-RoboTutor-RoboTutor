@@ -358,6 +358,8 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     @Override
     public void onASREvent(int eventType) {
 
+        Log.d(TAG, "onASREvent: " +  eventType);
+
         // Here we have to convert from bitmapped event types to string types
         //
         switch (eventType) {

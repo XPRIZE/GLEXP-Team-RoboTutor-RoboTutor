@@ -201,4 +201,10 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
     }
 
 
+    @Override
+    public void invalidate() {
+        super.invalidate();
+    }
+
+
 }

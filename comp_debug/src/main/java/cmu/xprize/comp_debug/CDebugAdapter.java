@@ -275,14 +275,32 @@ public class CDebugAdapter extends BaseAdapter {
 
         Log.d(TAG, "GetView: " + gridPosition + " - convertible: " + convertView);
 
+        if((gridPosition == 0)) {
+
+            if(buttonMap.containsKey(0)) {
+
+                tutorSelector = buttonMap.get(0);
+
+                buttonMap.remove(tutorSelector);
+
+                Log.d(TAG, "GetView: Found 0-debug button: " + tutorSelector + " - convertible: " + convertView);
+
+                mLauncher.invalidate();
+            }
+            else {
+                Log.d(TAG, "GetView: No Map 0-debug button: " + " - convertible: " + convertView);
+            }
+        }
+
+
         if (convertView == null) {
             tutorSelector = new CDebugButton(mContext);
             tutorSelector.setImageDrawable(mContext.getResources().getDrawable(R.drawable.debugbutton, null));
             tutorSelector.setState(buttonState);
             tutorSelector.setBackgroundColor(0x00000000);
-            tutorSelector.setLayoutParams(new GridView.LayoutParams(125, 125));
+            tutorSelector.setLayoutParams(new GridView.LayoutParams(75, 75));
             tutorSelector.setScaleType(CDebugButton.ScaleType.FIT_CENTER);
-            tutorSelector.setPadding(8, 8, 8, 8);
+            tutorSelector.setPadding(12, 12, 12, 12);
         }
         else
         {
@@ -291,7 +309,7 @@ public class CDebugAdapter extends BaseAdapter {
             buttonMap.remove(tutorSelector.getGridPosition());
             tutorSelector.setState(buttonState);
 
-            Log.d(TAG, "reusing debug button");
+            Log.d(TAG, "GetView: reusing debug button");
         }
 
         // Keep track of the buttons so we can invalidate them if we change their state
@@ -305,6 +323,8 @@ public class CDebugAdapter extends BaseAdapter {
         else {
             tutorSelector.setEnabled(true);
         }
+
+        Log.d(TAG, "GetView: " + gridPosition + " - new buttonMap: " + tutorSelector);
 
         tutorSelector.setOnClickListener(new View.OnClickListener() {
 
