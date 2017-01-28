@@ -205,6 +205,7 @@ public class TCONST {
     public static final String SENTENCE_SPACE      = "  ";
     public static final String WORD_SPACE          = " ";
     public static final String NO_SPACE            = "";
+    public static final int    MAX_AKDATA          = 10;
 
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();

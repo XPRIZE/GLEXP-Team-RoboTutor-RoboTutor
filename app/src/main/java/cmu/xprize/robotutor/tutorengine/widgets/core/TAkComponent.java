@@ -142,6 +142,39 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
 
 
+    public void generateRandomData() {
+
+        int         dataCount = datasource.length;
+        int         setSize   = dataCount;
+        CAk_Data    temp;
+
+
+        try {
+            // Constrain the presentation set size to TCONST.MAX_AKDATA and
+            // randomize it from the entire population
+            //
+            if (dataCount > TCONST.MAX_AKDATA) {
+
+                for (int i1 = 0; i1 < TCONST.MAX_AKDATA; i1++) {
+
+                    int randomKey = (int) (Math.random() * setSize);
+
+                    Log.d(TAG, "Randomization: " + i1 + " -for- " + (i1+randomKey));
+
+                    temp = datasource[i1];
+                    datasource[i1] = datasource[i1+randomKey];
+                    datasource[randomKey] = temp;
+
+                    setSize--;
+                }
+            }
+        }
+        catch (Exception e) {
+            Log.d(TAG, "Randomization fault: " );
+        }
+    }
+
+
     /**
      *
      * @param dataNameDescriptor
@@ -176,6 +209,10 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
                 //
                 loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 
+                // If the dataset has more than TCONST.MAX_AKDATA points - randomize the presenation set
+                //
+                generateRandomData();
+
             } else if (dataNameDescriptor.startsWith("db|")) {
 
 
@@ -208,8 +245,6 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
             mTutor.setAddFeature(TCONST.FTR_EOD);
 
         super.next();
-
-
     }
 
     @Override

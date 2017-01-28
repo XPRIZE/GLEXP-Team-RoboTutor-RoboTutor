@@ -33,6 +33,7 @@ import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
+import cmu.xprize.util.TCONST;
 
 
 /**
@@ -98,7 +99,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
     //json loadable
     public    int          gameSpeed          ;
-    public    CAk_Data[] datasource;
+    public    CAk_Data[]   datasource;
 
 
     protected List<Animator> ongoingAnimator;
@@ -255,13 +256,11 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
     }
 
-    public void setmDataSource(CAk_Data[] _dataSource) {
-        datasource = _dataSource;
-        _dataIndex = 0;
-    }
 
     public void next() {
+
         try {
+
             if (datasource != null) {
                 updateDataSet(datasource[_dataIndex]);
                 _dataIndex++;
@@ -274,9 +273,11 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         }
     }
 
+
     public boolean dataExhausted() {
-        return _dataIndex >= datasource.length;
+        return _dataIndex >= TCONST.MAX_AKDATA;
     }
+
 
     protected void updateDataSet(CAk_Data data) {
 
