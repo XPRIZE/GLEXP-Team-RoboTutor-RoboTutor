@@ -77,11 +77,12 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
     private float                 mX, mY;
 
-    private CGlyph                _userGlyph  = null;
-    private CGlyph                _protoGlyph = null;
-    private CGlyph                _drawGlyph  = null;
-    private CGlyph                _animGlyph  = null;
-    private boolean               _isDrawing  = false;
+    private CGlyph                _userGlyph    = null;
+    private CGlyph                _protoGlyph   = null;
+    private CGlyph                _drawGlyph    = null;
+    private CGlyph                _animGlyph    = null;
+    private boolean               _isDrawing    = false;
+    private boolean               _restartGlyph = true;
 
     private boolean               _showSampleChar = false;
     private boolean               _showUserGlyph  = true;
@@ -310,9 +311,11 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         // We always add the next stoke start to the glyph set
 
-        if (_drawGlyph == null) {
-            _drawGlyph = new CGlyph(mContext, _baseLine, _viewBnds, _dotSize);
-            _isDrawing = true;
+        if (_restartGlyph) {
+
+            _drawGlyph    = new CGlyph(mContext, _baseLine, _viewBnds, _dotSize);
+            _restartGlyph = false;
+            _isDrawing    = true;
 
             if(_drawGlyph == null) {
                 Log.e(TAG, "_drawGlyph Creation Failed");
@@ -413,8 +416,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
             broadcastLocation(TCONST.LOOKAT, touchPt);
 
-            // TODO: BUG - drawGlyph may be null ?????
-            //
             _drawGlyph.addPoint(touchPt);
             invalidate();
         }
@@ -1171,7 +1172,15 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         _isDrawing  = false;
         _correct    = false;
 
-        _drawGlyph  = null;
+        // To simplify operation we don't want to leave _drawGlyph invalid as there
+        // may be async draw calls. But we want to know when it needs to be restarted
+        // in startTouch.
+        //
+        // As a this _drawGlyph will always be thrown away in startTouch to satisfy the restartGlyph
+        //
+        _drawGlyph    = new CGlyph(mContext, _baseLine, _viewBnds, _dotSize);
+        _restartGlyph = true;
+
         setHasGlyph(false);
         invalidate();
     }
