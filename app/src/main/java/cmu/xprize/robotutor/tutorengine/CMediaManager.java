@@ -510,8 +510,6 @@ public class CMediaManager {
      */
     public void  detachMediaPlayer(Object owner) {
 
-        PlayerManager controller = null;
-
         // First look for an unattached (cached) controller that uses this datasource and reuse it.
         //
         for(PlayerManager managerInstance : mPlayerCache) {

@@ -33,7 +33,7 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     protected Context           mContext;
 
     protected CAskComponent     SaskActivity;
-    protected CDebugComponent SdebugActivity;
+    protected CDebugComponent   SdebugActivity;
 
     protected final Handler     mainHandler  = new Handler(Looper.getMainLooper());
     protected HashMap           queueMap     = new HashMap();
@@ -110,7 +110,7 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     }
 
     @Override
-    public void doButtonAction(String actionid) {
+    public void doAskButtonAction(String actionid) {
     }
 
 

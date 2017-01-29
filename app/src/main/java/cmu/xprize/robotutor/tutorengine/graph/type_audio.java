@@ -285,8 +285,10 @@ public class type_audio extends type_action implements IMediaListener {
 
         stop();
 
-        mPlayer.detach();
-        mPlayer = null;
+        if(mPlayer != null) {
+            mPlayer.detach();
+            mPlayer = null;
+        }
 
         Log.i(TAG, "cancelNode - PlayerDetached");
 
