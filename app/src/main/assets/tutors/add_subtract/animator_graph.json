@@ -335,6 +335,7 @@
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Right.mp3", "soundpackage":"default", "volume": 1.0, "mode":"event", "features": ""}
           ]
         },
+
         // AUDIO filenames should not have spaces or hyphens.
         //
         "PLAYWRONG": {
@@ -342,16 +343,6 @@
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
-          ]
-        },
-        // this is an asynchronous timer driven node
-        "EVALUATEWHOLE": {
-          "type": "MODULE",
-          "reuse": true,
-          "COMMENT": "TBD",
-          "tracks": [
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "evaluateWhole"},
-            {"type": "COMMAND", "cmd": "NEXT"}
           ]
         },
 
@@ -389,20 +380,8 @@
           "COMMENT": "TBD",
           "tracks": [
           ]
-        },
-        "FINGERWRITING":{
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-            {"type": "COMMAND", "id": "SDigitWriter", "method": "onStartWriting", "parms": "CANCEL_REMINDER:String"},
-            // This would call the cancel reminder action below when the user starts writing
-            {"type": "COMMAND", "id": "Sresponse", "method": "onRecognitionComplete", "parms": "NEXT:String"},
-            // This would increment the animation_graph when it is in a wait state.  e.g if it is sitting at the end of a stream audio clip
-            {"type": "COMMAND", "cmd": "WAIT" }
-            //{"type": "COMMAND", "id": "Sresponse", "method": "show", "parms": "TRUE:Boolean","features":""}
-          ]
         }
+
       },
 
 
@@ -411,12 +390,6 @@
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
-
-        "CREATE_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "startdelay":"0", "period":"10000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"EVALUATEWHOLE", "features": "" },
-
-        "RESTART_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "action":"RESTART", "ontimer":"EVALUATEWHOLE", "features": "" },
-        "CANCEL_COMPLETION_TIMER": {"type": "TIMER", "id":"CompletionTimer", "action":"CANCEL", "features": "" },
-
 
 //        "SET_VISIBILITY":{"type": "COMMAND", "id": "SAddSubtract", "method": "setVisible", "parms":"false:bool", "features":""},
         "SET_DOTBAGS_VISIBLE": {"type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"true:bool"},
