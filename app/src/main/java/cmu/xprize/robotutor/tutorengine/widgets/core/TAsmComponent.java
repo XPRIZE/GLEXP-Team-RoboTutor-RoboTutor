@@ -292,7 +292,8 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
                     mTutor.getScope().addUpdateVar(name() + ".operand1", new TString(numbers[0] + ""));
                     break;
                 case "-" :
-                    mTutor.setAddFeature(TCONST.ASM_SUBTRACT);break;
+                    mTutor.setAddFeature(TCONST.ASM_SUBTRACT);
+                    break;
                 case "x" :
                     mTutor.setAddFeature(TCONST.ASM_MULTI);
                     mTutor.getScope().addUpdateVar(name() + ".operand1", new TString(numbers[0] + ""));
@@ -394,11 +395,14 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
     @Override
     public void onEvent(IEvent event) {
+
         mTutor.setDelFeature(TCONST.ASM_ALL_DOTS_DOWN);
+
         //mTutor.setDelFeature(TCONST.ASM_MULTI);
         super.onEvent(event);
+
         evaluateWhole();
-        if (curNode.equals(ASM_CONST.NODE_USERINPUT)) applyEventNode("NEXT");
+
         applyEventNode("NEXT");
     }
 
