@@ -46,6 +46,7 @@ import static cmu.xprize.robotutor.tutorengine.util.CClassMap2.classMap;
 public class TActivitySelector extends CActivitySelector implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource {
 
     private static final boolean    DEBUG_LANCHER = true;
+
     private CTutor                  mTutor;
     private CSceneDelegate          mTutorScene;
     private CMediaManager           mMediaManager;
@@ -57,6 +58,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     private String      activeTutor = "";
     private String      nextTutor   = "";
     private String      rootTutor;
+    private boolean     askButtonsEnabled = false;
 
     private HashMap<String, CAs_Data> initiatorMap;
     private HashMap<String, CAt_Data> transitionMap;
@@ -198,42 +200,57 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
     public void describeNext() {
 
-        if(_describeIndex < _activeLayout.items.length) {
+        // In debug selector mode - _activeLayout may be null
+        //
+        if(_activeLayout != null) {
 
-            publishValue(AS_CONST.VAR_BUTTONID,     _activeLayout.items[_describeIndex].componentID);
-            publishValue(AS_CONST.VAR_BUT_BEHAVIOR, _activeLayout.items[_describeIndex].behavior);
-            publishValue(AS_CONST.VAR_HELP_AUDIO,   _activeLayout.items[_describeIndex].help);
-            publishValue(AS_CONST.VAR_PROMPT_AUDIO, _activeLayout.items[_describeIndex].prompt);
+            if (_describeIndex < _activeLayout.items.length) {
 
-            applyBehavior(AS_CONST.DESCRIBE_BEHAVIOR);
+                publishValue(AS_CONST.VAR_BUTTONID, _activeLayout.items[_describeIndex].componentID);
+                publishValue(AS_CONST.VAR_BUT_BEHAVIOR, _activeLayout.items[_describeIndex].behavior);
+                publishValue(AS_CONST.VAR_HELP_AUDIO, _activeLayout.items[_describeIndex].help);
+                publishValue(AS_CONST.VAR_PROMPT_AUDIO, _activeLayout.items[_describeIndex].prompt);
 
-            _describeIndex++;
+                applyBehavior(AS_CONST.DESCRIBE_BEHAVIOR);
+
+                _describeIndex++;
+            } else {
+
+                applyBehavior(AS_CONST.DESCRIBE_COMPLETE);
+            }
         }
-        else {
-
-            applyBehavior(AS_CONST.DESCRIBE_COMPLETE);
-        }
-
     }
 
 
     @Override
-    public void doButtonAction(String actionid) {
+    public void doAskButtonAction(String actionid) {
 
-        applyBehavior(AS_CONST.SELECT_BEHAVIOR);
+        Log.d(TAG, "ASK Button : " + actionid);
 
-        for(CAskElement element : _activeLayout.items) {
+        if(askButtonsEnabled) {
 
-            if(element.componentID.equals(actionid)) {
+            askButtonsEnabled = false;
 
-                publishValue(AS_CONST.VAR_BUTTONID,     element.componentID);
-                publishValue(AS_CONST.VAR_BUT_BEHAVIOR, element.behavior);
-                publishValue(AS_CONST.VAR_HELP_AUDIO,   element.help);
-                publishValue(AS_CONST.VAR_PROMPT_AUDIO, element.prompt);
+            applyBehavior(AS_CONST.SELECT_BEHAVIOR);
 
-                applyBehavior(element.behavior);
+            for (CAskElement element : _activeLayout.items) {
+
+                if (element.componentID.equals(actionid)) {
+
+                    publishValue(AS_CONST.VAR_BUTTONID, element.componentID);
+                    publishValue(AS_CONST.VAR_BUT_BEHAVIOR, element.behavior);
+                    publishValue(AS_CONST.VAR_HELP_AUDIO, element.help);
+                    publishValue(AS_CONST.VAR_PROMPT_AUDIO, element.prompt);
+
+                    applyBehavior(element.behavior);
+                }
             }
         }
+    }
+
+    public void enableAskButtons(Boolean enable) {
+
+        askButtonsEnabled = true;
     }
 
 
@@ -739,10 +756,14 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         if (behavior.toUpperCase().equals(TCONST.NULL)) {
 
+            Log.d(TAG, "Clearing Event: " + event);
             if (stickyMap.containsKey(event)) {
                 stickyMap.remove(event);
             }
+
         } else {
+
+            Log.d(TAG, "Setting Event: " + event + " - behavior : " + behavior);
             stickyMap.put(event, behavior);
         }
     }

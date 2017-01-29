@@ -12,6 +12,29 @@
 
       "subgraphMap": {
 
+        "INTRO_STATEMENT_BEHAVIOR": {
+          "type": "SUBGRAPH",
+          "rootnode": "INTRO_STATEMENT_MODULE",
+
+          "nodeMap": {
+            "INTRO_STATEMENT_MODULE": {
+              "type":"MODULE",
+              "reuse":true,
+              "COMMENT": "Make intro statement",
+              "tracks": [
+                {"type": "COMMAND", "id": "activity_selector", "method": "enableAskButtons",  "parms": "TRUE:boolean", "features":""},
+
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "What would you like to do.mp3","soundpackage": "default","mode": "flow", "features": "FTR_TUTOR_SELECT"},
+                {"type": "AUDIO", "command": "PLAY", "soundsource": "what did you think of that.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DIFFICULTY_ASSESS"}
+              ],
+              "preexit": [
+              ],
+              "edges": [
+              ]
+            }
+          }
+        },
+
         "INPUT_HESITATION_FEEDBACK": {
           "type": "SUBGRAPH",
           "rootnode": "INPUT_HESITATION_MODULE",
@@ -123,9 +146,7 @@
           "reuse":true,
           "COMMENT": "Do Nothing",
           "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "What would you like to do.mp3","soundpackage": "default","mode": "stream", "features": "FTR_TUTOR_SELECT"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "what did you think of that.mp3","soundpackage": "default","mode": "stream", "features": "FTR_DIFFICULTY_ASSESS"},
-
+            {"type": "COMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "APPLY_BEHAVIOR:String|INTRO_STATEMENT_BEHAVIOR:String", "features":""},
             {"type": "COMMAND", "cmd": "WAIT" }
           ]
         },
