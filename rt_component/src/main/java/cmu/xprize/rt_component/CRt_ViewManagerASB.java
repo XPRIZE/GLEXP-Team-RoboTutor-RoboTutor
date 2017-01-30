@@ -701,9 +701,17 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         segmentNdx   = _segNdx;
         numSegments  = segmentArray.length;
 
+        // Clean the extension off the end - could be either wav/mp3
+        //
+        String filename = currUtterance.audio.toLowerCase();
+
+        if(filename.endsWith(".wav") || filename.endsWith(".mp3")) {
+            filename = filename.substring(0,filename.length()-4);
+        }
+
         // Publish the current utterance within sentence
         //
-        mParent.publishValue(TCONST.RTC_VAR_UTTERANCE,  currUtterance.utterances);
+        mParent.publishValue(TCONST.RTC_VAR_UTTERANCE,  filename);
 
         // Tell the script to speak the new uttereance
         //

@@ -341,7 +341,7 @@
             // NOTE: the button must be in a valid state before showing
             // TODO: put check in to catch invalid behaviors
 
-            {"type": "COMMAND", "id":"SstoryReading", "method":"setVolatileBehavior", "parms": "SPEAK_CLICK:String|SPEAK_WORD_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id":"SstoryReading", "method":"setVolatileBehavior", "parms": "SPEAK_CLICK:String|SPEAK_WORD_BEHAVIOR:String" ,"features":"FTR_USER_READ"},
             {"type": "COMMAND", "id":"SstoryReading", "method":"setSpeakButton",      "parms": "ENABLE:String",     "features": "" },
             {"type": "COMMAND", "id":"SstoryReading", "method":"setSpeakButton",      "parms": "SHOW:String",       "features": "" }
           ]
@@ -402,8 +402,8 @@
         "SET_WORD_EVENT":   {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_WORD_EVENT:String|HESTITATION_RESET:String" ,"features":""},
         "RESET_WORD_EVENT": {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_WORD_EVENT:String|NULL:String" ,"features":""},
 
-        "SET_ONCLICK_SPEAK_WORD": {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ON_CLICK:String|SPEAK_WORD_BEHAVIOR:String" ,"features":""},
-        "CLR_ONCLICK":            {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ON_CLICK:String|NULL:String" ,"features":""},
+        "SET_ONCLICK_SPEAK_WORD": {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ON_CLICK:String|SPEAK_WORD_BEHAVIOR:String" ,"features":"FTR_USER_READ"},
+        "CLR_ONCLICK":            {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ON_CLICK:String|NULL:String" ,"features":"FTR_USER_READ"},
 
         "SET_UTTERANCE_BEHAVIOR":   {"type": "COMMAND", "id":"SstoryReading", "method": "setStickyBehavior", "parms": "UTTERANCE_COMPLETE_EVENT:String|NEXT_NODE:String" ,"features":""},
 
@@ -434,7 +434,7 @@
         "SET_FLIP_NEXTPAGE":   {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "PAGE_FLIP_CLICK:String|NEXT_PAGE:String" ,"features":""},
         "RESET_FLIP_ONCLICK":  {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "PAGE_FLIP_CLICK:String|NULL:String" ,"features":""},
 
-        "SET_SPEAK_WORD":      {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "SPEAK_CLICK:String|SPEAK_WORD_BEHAVIOR:String" ,"features":""},
+        "SET_SPEAK_WORD":      {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "SPEAK_CLICK:String|SPEAK_WORD_BEHAVIOR:String" ,"features":"FTR_USER_READ"},
         "SET_SPEAK_SENTENCE":  {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "SPEAK_CLICK:String|SPEAK_SENTENCE_BEHAVIOR:String" ,"features":""},
         "RESET_SPEAK_ONCLICK": {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "SPEAK_CLICK:String|NULL:String" ,"features":""},
 
