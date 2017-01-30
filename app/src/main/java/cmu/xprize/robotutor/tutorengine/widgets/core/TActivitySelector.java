@@ -45,7 +45,7 @@ import static cmu.xprize.robotutor.tutorengine.util.CClassMap2.classMap;
 
 public class TActivitySelector extends CActivitySelector implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource {
 
-    private static final boolean    DEBUG_LANCHER = true;
+    private static final boolean    DEBUG_LANCHER = false;
 
     private CTutor                  mTutor;
     private CSceneDelegate          mTutorScene;
