@@ -2,21 +2,17 @@ package cmu.xprize.robotutor.tutorengine.util;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
-import cmu.xprize.robotutor.IAsyncBroadcaster;
 import cmu.xprize.util.TCONST;
 
 public class Zip {
@@ -25,8 +21,6 @@ public class Zip {
     private Context   mContext;
 
     private LocalBroadcastManager   bManager;
-    private IAsyncBroadcaster       aTask;
-
 
 
     public Zip(ZipFile zipFile, Context _context) {
@@ -52,18 +46,6 @@ public class Zip {
 
     public void close() throws IOException {
         _zipFile.close();
-    }
-
-
-    /**
-     * Associated the asset manaager with an async task if desired.  Used to provide progress
-     * during operations.
-     *
-     * @param _task
-     */
-    public void setAsyncTask(IAsyncBroadcaster _task) {
-
-        aTask = _task;
     }
 
 
@@ -102,14 +84,8 @@ public class Zip {
 
         Enumeration<? extends ZipEntry> zipEntries = _zipFile.entries();
 
-        if(aTask != null) {
-            aTask.broadCastProgress(TCONST.START_PROGRESSIVE_UPDATE, new Integer(_zipFile.size()).toString());
-            aTask.broadCastProgress(TCONST.PROGRESS_TITLE, TCONST.ASSET_UPDATE_MSG + extractName + TCONST.PLEASE_WAIT);
-        }
-        else {
-            broadcast(TCONST.START_PROGRESSIVE_UPDATE, new Integer(_zipFile.size()).toString());
-            broadcast(TCONST.PROGRESS_TITLE, TCONST.ASSET_UPDATE_MSG + extractName + TCONST.PLEASE_WAIT);
-        }
+        broadcast(TCONST.START_PROGRESSIVE_UPDATE, new Integer(_zipFile.size()).toString());
+        broadcast(TCONST.PROGRESS_TITLE, TCONST.ASSET_UPDATE_MSG + extractName + TCONST.PLEASE_WAIT);
 
         while(zipEntries.hasMoreElements()){
 
@@ -117,12 +93,7 @@ public class Zip {
 
             String path = extractPath + zipEntry.getName();
 
-            if(aTask != null) {
-                aTask.broadCastProgress(TCONST.UPDATE_PROGRESS, new Integer(++fileCnt).toString());
-            }
-            else {
-                broadcast(TCONST.UPDATE_PROGRESS, new Integer(++fileCnt).toString());
-            }
+            broadcast(TCONST.UPDATE_PROGRESS, new Integer(++fileCnt).toString());
 
             if(zipEntry.isDirectory()){
 
@@ -134,12 +105,7 @@ public class Zip {
             }
             else {
 
-                if(aTask != null) {
-                    aTask.broadCastProgress(TCONST.PROGRESS_MSG2, path);
-                }
-                else {
-                    broadcast(TCONST.PROGRESS_MSG2, path);
-                }
+                broadcast(TCONST.PROGRESS_MSG2, path);
 
                 BufferedInputStream inputStream = new BufferedInputStream(_zipFile.getInputStream(zipEntry));
 
