@@ -106,8 +106,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     final static public  String CacheSource = TCONST.ASSETS;                // assets or extern
 
-    private LocalBroadcastManager   bManager;
-
     private boolean                 isReady       = false;
     private boolean                 engineStarted = false;
     static public boolean           STANDALONE    = false;
@@ -184,9 +182,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         AssetManager mAssetManager = getApplicationContext().getAssets();
         mMediaController.setAssetManager(mAssetManager);
 
-        // Capture the local broadcast manager
-        bManager = LocalBroadcastManager.getInstance(getApplicationContext());
-
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // Create the start dialog
@@ -198,7 +193,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         // Show the Indeterminate loader
         //
         progressView = (CLoaderView)inflater.inflate(R.layout.progress_layout, null );
-        broadcast(TCONST.START_INDETERMINATE_UPDATE, "");
 
         masterContainer.addAndShow(progressView);
     }
@@ -268,18 +262,11 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
      * Moves new assets to an external storyFolder so the Sphinx code can access it.
      *
      */
-    class tutorConfigTask extends AsyncTask<Void, String, Boolean> implements IAsyncBroadcaster {
+    class tutorConfigTask extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected void onPreExecute() {
         }
-
-
-        public void broadCastProgress(String action, String parm) {
-
-            publishProgress(action , parm);
-        }
-
 
         @Override
         protected Boolean doInBackground(Void... unused) {
@@ -318,7 +305,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
                 // Find and install (move to ext_asset_path) any new or updated audio/story assets
                 //
-//                tutorAssetManager.setAsyncTask(this);
                 tutorAssetManager.updateAssetPackages(ROBOTUTOR_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH );
 
                 // Create the one system levelFolder LTKPLUS recognizer
@@ -337,38 +323,11 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         }
 
         @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-
-            broadcast(values[0], values[1]);
-        }
-
-        @Override
         protected void onPostExecute(Boolean result) {
             isReady = result;
 
             onServiceReady("ROOT", result ? 1 : 0);
         }
-    }
-
-
-    public void broadcast(String Action, String Msg) {
-
-        // Let the persona know where to look
-        Intent msg = new Intent(Action);
-        msg.putExtra(TCONST.TEXT_FIELD, Msg);
-
-        bManager.sendBroadcast(msg);
-    }
-
-
-    public void broadcast(String Action, int Msg) {
-
-        // Let the persona know where to look
-        Intent msg = new Intent(Action);
-        msg.putExtra(TCONST.INT_FIELD, Msg);
-
-        bManager.sendBroadcast(msg);
     }
 
 

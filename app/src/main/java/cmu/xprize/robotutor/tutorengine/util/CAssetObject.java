@@ -26,7 +26,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.zip.ZipFile;
 
-import cmu.xprize.robotutor.IAsyncBroadcaster;
 import cmu.xprize.robotutor.RoboTutor;
 
 import static cmu.xprize.robotutor.RoboTutor.logManager;
@@ -77,26 +76,12 @@ public class CAssetObject {
     private Object[] mConstraint;
     private int      mMatchSet = 0;
 
-    private IAsyncBroadcaster aTask = null;
-
     private final String TAG = "CAssetObject";
 
     public CAssetObject() {
 
         mFile       = new File[5];
         mConstraint = new Object[5];
-    }
-
-
-    /**
-     * Associated the asset manaager with an async task if desired.  Used to provide progress
-     * during operations.
-     *
-     * @param _task
-     */
-    public void setAsyncTask(IAsyncBroadcaster _task) {
-
-        aTask = _task;
     }
 
 
@@ -369,7 +354,6 @@ public class CAssetObject {
 
             Zip _zip = new Zip(zipFile, _context);
 
-            _zip.setAsyncTask(aTask);
             _zip.extractAll(assetName, assetFolder);
             _zip.close();
 

@@ -37,7 +37,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.ZipFile;
 
-import cmu.xprize.robotutor.IAsyncBroadcaster;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
 import cmu.xprize.robotutor.tutorengine.util.Zip;
@@ -69,8 +68,6 @@ public class CTutorAssetManager {
     private Context      mContext;
     private AssetManager mAssetManager;
     private CAssetObject mAssetObject;
-
-    private IAsyncBroadcaster   aTask = null;
 
     private final String TAG = "CTutorAssetManager";
 
@@ -134,17 +131,6 @@ public class CTutorAssetManager {
         return projects.exists();
     }
 
-
-    /**
-     * Associated the asset manaager with an async task if desired.  Used to provide progress
-     * during operations.
-     *
-     * @param _task
-     */
-    public void setAsyncTask(IAsyncBroadcaster _task) {
-
-        aTask = _task;
-    }
 
     private void copyFolderAsset(String inputPath, String []folderContents, String outputPath, Boolean recurse) {
 
@@ -407,7 +393,6 @@ public class CTutorAssetManager {
         // This is used in INDEX_INSTALLED comparisons in HAS_NOMATCH
         //
         mAssetObject = new CAssetObject();
-        mAssetObject.setAsyncTask(aTask);
         mAssetObject.addMatch(INDEX_INSTALLED, null, installConstraint, DEL_NO_MATCH);
 
         folderList = listFolder(RoboTutor.DOWNLOAD_PATH);
@@ -605,7 +590,6 @@ public class CTutorAssetManager {
 
             Zip _zip = new Zip(zipFile, mContext);
 
-            _zip.setAsyncTask(aTask);
             _zip.extractAll(zipName, extractPath);
             _zip.close();
             file.delete();
