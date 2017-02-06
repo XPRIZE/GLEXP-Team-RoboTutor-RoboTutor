@@ -9,16 +9,56 @@
     android:orientation="vertical"
     android:padding="10dp">
 
+    <TextView
+        android:id="@+id/SprogressTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_margin="20dp"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:visibility="invisible"/>
+
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/SprogressBarI"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:indeterminate="false"
+        android:visibility="visible"/>
+
+    <ProgressBar
+        android:id="@+id/SprogressBarD"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_gravity="center"
+        android:indeterminate="false"
+        android:visibility="gone"/>
 
     <TextView
+        android:id="@+id/SprogressMsg1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center" />
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:textSize="10sp"
+        android:textStyle="normal"
+        android:textColor="#FFFFFF"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/SprogressMsg2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:textSize="10sp"
+        android:textStyle="normal"
+        android:textColor="#FFFFFF"
+        android:visibility="invisible"/>
 
 </cmu.xprize.util.CLoaderView>

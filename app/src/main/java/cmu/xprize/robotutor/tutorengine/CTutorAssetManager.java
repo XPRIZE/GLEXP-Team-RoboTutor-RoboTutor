@@ -32,8 +32,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.zip.ZipFile;
 
+import cmu.xprize.robotutor.IAsyncBroadcaster;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
 import cmu.xprize.robotutor.tutorengine.util.Zip;
@@ -65,6 +69,8 @@ public class CTutorAssetManager {
     private Context      mContext;
     private AssetManager mAssetManager;
     private CAssetObject mAssetObject;
+
+    private IAsyncBroadcaster   aTask = null;
 
     private final String TAG = "CTutorAssetManager";
 
@@ -128,6 +134,17 @@ public class CTutorAssetManager {
         return projects.exists();
     }
 
+
+    /**
+     * Associated the asset manaager with an async task if desired.  Used to provide progress
+     * during operations.
+     *
+     * @param _task
+     */
+    public void setAsyncTask(IAsyncBroadcaster _task) {
+
+        aTask = _task;
+    }
 
     private void copyFolderAsset(String inputPath, String []folderContents, String outputPath, Boolean recurse) {
 
@@ -386,16 +403,19 @@ public class CTutorAssetManager {
         File      assetFile    = null;
         ArrayList foundRelease = null;
 
-        // We add a conveience node to the AssetObject with the installed version spec
+        // We add a convenience node to the AssetObject with the installed version spec
         // This is used in INDEX_INSTALLED comparisons in HAS_NOMATCH
         //
         mAssetObject = new CAssetObject();
+        mAssetObject.setAsyncTask(aTask);
         mAssetObject.addMatch(INDEX_INSTALLED, null, installConstraint, DEL_NO_MATCH);
 
         folderList = listFolder(RoboTutor.DOWNLOAD_PATH);
 
         for (String objectname : folderList) {
 
+            // Only process RTAsset_ files
+            //
             if (objectname.toLowerCase().startsWith(assetName)) {
 
                 String srcPath = RoboTutor.DOWNLOAD_PATH + File.separator + objectname;
@@ -406,7 +426,7 @@ public class CTutorAssetManager {
                 ArrayList assetVersion = mAssetObject.createConstraintByName(ASSET_TO_MATCH, objectname);
                 mAssetObject.setAssetFile(ASSET_TO_MATCH, assetFile);
 
-                // i.e. the app can't use an older asset version than it supports.
+                // i.e. the app can't use an older ot newer asset version than it supports.
                 //
                 switch (mAssetObject.testConstraint(TCONST.ASSET_CODE_VERSION, ASSET_TO_MATCH, INDEX_INSTALLED)) {
 
@@ -427,7 +447,8 @@ public class CTutorAssetManager {
                                 doReleaseMatch(assetFile, assetVersion, RELEASE_MATCH);
                                 break;
 
-                            // There is currently a release-match - i.e. a full asset distribution zip
+                            // There are currently release&update-matches -
+                            // i.e. a full asset distribution zip and matching update zip
                             //
                             case HAS_UPDATE_MATCH:
 
@@ -465,7 +486,7 @@ public class CTutorAssetManager {
      * @param assetName
      * @param assetFolder
      */
-    public void updateAssetPackage(String assetName, String assetFolder) {
+    private void updateAssetPackage(String assetName, String assetFolder) {
 
         SharedPreferences prefs = RoboTutor.ACTIVITY.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -486,21 +507,88 @@ public class CTutorAssetManager {
 
         updateAssetPackage(assetName, constraint);
 
+        // Orphan match is where we find an update that has not had the associated release
+        // installed yet.
+        //
         if (mAssetObject.queryMatch(HAS_ORPHAN_MATCH)) {
 
         }
-        else if (mAssetObject.queryMatch(HAS_RELEASE_MATCH)) {
-            mAssetObject.unPackAssets(assetName, assetFolder, INDEX_RELEASE);
+        else {
 
-            editor.putInt(assetName + TCONST.ASSET_RELEASE_VERSION, mAssetObject.getVersionField(INDEX_RELEASE, TCONST.ASSET_RELEASE_VERSION));
-            editor.putInt(assetName + TCONST.ASSET_UPDATE_VERSION , 0);
-            editor.apply();
+            if (mAssetObject.queryMatch(HAS_RELEASE_MATCH)) {
+
+                File releaseFile = mAssetObject.getFile(INDEX_RELEASE);
+
+                mAssetObject.unPackAssets(releaseFile.getName(), assetFolder, INDEX_RELEASE, mContext);
+
+                editor.putInt(assetName + TCONST.ASSET_RELEASE_VERSION, mAssetObject.getVersionField(INDEX_RELEASE, TCONST.ASSET_RELEASE_VERSION));
+                editor.putInt(assetName + TCONST.ASSET_UPDATE_VERSION , 0);
+                editor.apply();
+            }
+
+            if (mAssetObject.queryMatch(HAS_UPDATE_MATCH)) {
+
+                File updateFile = mAssetObject.getFile(INDEX_UPDATE);
+
+                mAssetObject.unPackAssets(updateFile.getName(), assetFolder, INDEX_UPDATE, mContext);
+
+                editor.putInt(assetName + TCONST.ASSET_UPDATE_VERSION , mAssetObject.getVersionField(INDEX_UPDATE, TCONST.ASSET_UPDATE_VERSION));
+                editor.apply();
+            }
         }
-        else if (mAssetObject.queryMatch(HAS_UPDATE_MATCH)) {
-            mAssetObject.unPackAssets(assetName, assetFolder, INDEX_UPDATE);
+    }
 
-            editor.putInt(assetName + TCONST.ASSET_UPDATE_VERSION , mAssetObject.getVersionField(INDEX_UPDATE, TCONST.ASSET_UPDATE_VERSION));
-            editor.apply();
+
+    /**
+     *  Search for all packages that start with <assetRoot>... and end with .<x...>.<x...>.<x...>.zip
+     *
+     *
+     * @param assetRoot
+     * @param assetFolder
+     */
+    public void updateAssetPackages(String assetRoot, String assetFolder) {
+
+        String                  assetName;
+        String[]                folderList = null;
+        HashMap<String,String>  dictionary = new HashMap<>();
+
+        SharedPreferences prefs = RoboTutor.ACTIVITY.getPreferences(Context.MODE_PRIVATE);
+
+        // Check the download folder for files that begin with the assetRoot prefix
+        // Keep a Map of Unique asset names. i.e. everything except the version/ext 1.2.3.zip
+        //
+        folderList = listFolder(RoboTutor.DOWNLOAD_PATH);
+
+        for (String objectname : folderList) {
+
+            // Only process RTAsset_ files
+            //
+            if (objectname.toLowerCase().startsWith(assetRoot)) {
+
+                int startVer = objectname.indexOf(".");
+                assetName = objectname.substring(0,startVer).toLowerCase();
+
+                if(!dictionary.containsKey(assetName)) {
+                    dictionary.put(assetName, assetName);
+                    Log.d(TAG, "Asset Found: " + assetName);
+                }
+            }
+        }
+
+
+        // Now look through the unique asset names found for the most recent release/update
+        // set available and install them
+        //
+        Iterator<?> tObjects = dictionary.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            assetName = (String)entry.getValue();
+
+            Log.d(TAG, "Asset Installing: " + assetName);
+            updateAssetPackage(assetName, assetFolder);
         }
     }
 
@@ -515,8 +603,10 @@ public class CTutorAssetManager {
 
         try {
 
-            Zip _zip = new Zip(zipFile);
-            _zip.extractAll(extractPath);
+            Zip _zip = new Zip(zipFile, mContext);
+
+            _zip.setAsyncTask(aTask);
+            _zip.extractAll(zipName, extractPath);
             _zip.close();
             file.delete();
 
