@@ -302,7 +302,6 @@ public class Persona extends View {
                     moveTouch(localPt);
                     endTouch(localPt);
                     break;
-
             }
         }
     }

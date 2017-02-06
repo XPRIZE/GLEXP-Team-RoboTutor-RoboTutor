@@ -22,11 +22,13 @@ package cmu.xprize.robotutor;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -90,6 +92,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     static CTutorAssetManager   tutorAssetManager;
     static public ArrayList     VERSION_SPEC;
 
+
     static public String        APP_PRIVATE_FILES;
     static public String        LOG_ID = "STARTUP";
 
@@ -103,10 +106,12 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     final static public  String CacheSource = TCONST.ASSETS;                // assets or extern
 
-    private boolean             isReady       = false;
-    private boolean             engineStarted = false;
-    static public boolean       STANDALONE    = false;
-    static public String        SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+    private LocalBroadcastManager   bManager;
+
+    private boolean                 isReady       = false;
+    private boolean                 engineStarted = false;
+    static public boolean           STANDALONE    = false;
+    static public String            SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
 //    static public String        SELECTOR_MODE = TCONST.FTR_DEBUG_SELECT;
 
 
@@ -179,6 +184,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         AssetManager mAssetManager = getApplicationContext().getAssets();
         mMediaController.setAssetManager(mAssetManager);
 
+        // Capture the local broadcast manager
+        bManager = LocalBroadcastManager.getInstance(getApplicationContext());
 
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -188,9 +195,11 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         startView = (CStartView)inflater.inflate(R.layout.start_layout, null );
         startView.setCallback(this);
 
-        // Show the loader
+        // Show the Indeterminate loader
         //
         progressView = (CLoaderView)inflater.inflate(R.layout.progress_layout, null );
+        broadcast(TCONST.START_INDETERMINATE_UPDATE, "");
+
         masterContainer.addAndShow(progressView);
     }
 
@@ -259,17 +268,23 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
      * Moves new assets to an external storyFolder so the Sphinx code can access it.
      *
      */
-    class tutorConfigTask extends AsyncTask<Void, Void, Boolean> {
+    class tutorConfigTask extends AsyncTask<Void, String, Boolean> implements IAsyncBroadcaster {
 
         @Override
         protected void onPreExecute() {
         }
 
+
+        public void broadCastProgress(String action, String parm) {
+
+            publishProgress(action , parm);
+        }
+
+
         @Override
         protected Boolean doInBackground(Void... unused) {
 
             boolean result = false;
-
 
             try {
                 // TODO: Don't do this in production
@@ -303,7 +318,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
                 // Find and install (move to ext_asset_path) any new or updated audio/story assets
                 //
-                tutorAssetManager.updateAssetPackage(ROBOTUTOR_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH );
+//                tutorAssetManager.setAsyncTask(this);
+                tutorAssetManager.updateAssetPackages(ROBOTUTOR_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH );
 
                 // Create the one system levelFolder LTKPLUS recognizer
                 //
@@ -321,11 +337,38 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         }
 
         @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+
+            broadcast(values[0], values[1]);
+        }
+
+        @Override
         protected void onPostExecute(Boolean result) {
             isReady = result;
 
             onServiceReady("ROOT", result ? 1 : 0);
         }
+    }
+
+
+    public void broadcast(String Action, String Msg) {
+
+        // Let the persona know where to look
+        Intent msg = new Intent(Action);
+        msg.putExtra(TCONST.TEXT_FIELD, Msg);
+
+        bManager.sendBroadcast(msg);
+    }
+
+
+    public void broadcast(String Action, int Msg) {
+
+        // Let the persona know where to look
+        Intent msg = new Intent(Action);
+        msg.putExtra(TCONST.INT_FIELD, Msg);
+
+        bManager.sendBroadcast(msg);
     }
 
 

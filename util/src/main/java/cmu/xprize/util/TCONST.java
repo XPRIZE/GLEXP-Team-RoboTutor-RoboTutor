@@ -52,8 +52,8 @@ public class TCONST {
 
 
     // RoboTutor Version spec Index meaning 0.1.2.3
-    // Given 4.23.2.3
-    // Major release 4 | Feature release 23 | Fix release 2 | compatible Asset Version 3
+    // Given 4.23.9.8
+    // Major release 4 | Feature release 23 | Fix release 9 | compatible Asset Version 8
     //
     public static final int MAJOR_VERSION   = 0;
     public static final int FEATURE_RELEASE = 1;
@@ -74,7 +74,7 @@ public class TCONST {
 
     // They will arrive in files named - RoboTutor_AssetA.0.1.0.zip
     //
-    public static final String ROBOTUTOR_ASSET_PATTERN = "RTAsset_";
+    public static final String ROBOTUTOR_ASSET_PATTERN = "rtasset_";
 
     public static final String COMMAND      = "COMMAND";
     public static final String MODULE       = "MODULE";
@@ -206,6 +206,17 @@ public class TCONST {
     public static final String WORD_SPACE          = " ";
     public static final String NO_SPACE            = "";
     public static final int    MAX_AKDATA          = 10;
+
+
+    public static final String START_PROGRESSIVE_UPDATE   = "START_PROGRESSIVE_UPDATE";
+    public static final String START_INDETERMINATE_UPDATE = "START_INDETERMINATE_UPDATE";
+    public static final String UPDATE_PROGRESS            = "UPDATE_PROGRESS";
+    public static final String PROGRESS_TITLE             = "PROGRESS_TITLE";
+    public static final String PROGRESS_MSG1              = "PROGRESS_MSG1";
+    public static final String PROGRESS_MSG2              = "PROGRESS_MSG2";
+    public static final String ASSET_UPDATE_MSG           = "Installing Assets: ";
+    public static final String INT_FIELD                  = "INT_FIELD";
+    public static final String PLEASE_WAIT                = " - Please Wait.";
 
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
