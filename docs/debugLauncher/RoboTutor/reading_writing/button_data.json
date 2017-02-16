@@ -1,0 +1,56 @@
+{
+	// Custom Writing Tutor Launchers
+	//
+	// Provide one button descritpion per row (button)
+	// Each button should reference a manually generated datasource in the
+	// related tutor subfolder.
+	//
+	// The Descriptors (tutorDesc) for tutor variants available are:
+	// 
+	//     add_subtract
+	//     akira
+	//     bubble_pop_LETTERS_MIXEDCASE
+	//     bubble_pop_LETTERS_LOWERCASE
+	//     bubble_pop_LETTERS_UPPERCASE
+	//     bubble_pop_WORDS
+	//     bubble_pop_NUMBERS
+	//     bubble_pop_SHAPES
+	//     word_copy_LETTERS_UPPERCASE
+	//     word_copy_LETTERS_UPPERCASE_DICTATION
+	//     word_copy_WORDS
+	//     word_copy_LETTERS_LOWERCASE
+	//     word_copy_LETTERS_LOWERCASE_DICTATION
+	//     word_copy_NUMBERS_DICTATION
+	//     word_copy_NUMBERS
+	//     story_reading_USER_HEAR
+	//     story_reading_USER_READ
+	//
+
+	"bgColors": ["#D9FFFF","#b9FFb9"],
+
+	"buttonDesc": [	
+		{
+			"description":"optional description goes here",
+			"button_text":"Button text goes here",
+		  
+			"tutorDesc": "akira", 
+			"tutorData": "[local_file]data.json"
+		},
+
+		{
+			"description":"optional description goes here",
+			"button_text":"Button text goes here",
+		  
+			"tutorDesc": "akira", 
+			"tutorData": "[local_file]data.json"
+		},
+
+		{
+			"description":"optional description goes here",
+			"button_text":"Button text goes here",
+		  
+			"tutorDesc": "akira", 
+			"tutorData": "[local_file]data.json"
+		}
+	]
+}

@@ -18,7 +18,7 @@ import cmu.xprize.comp_ask.CAsk_Data;
 import cmu.xprize.comp_debug.CDebugComponent;
 import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.comp_session.CActivitySelector;
-import cmu.xprize.util.CAs_Data;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.util.CAt_Data;
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
@@ -45,7 +45,7 @@ import static cmu.xprize.robotutor.tutorengine.util.CClassMap2.classMap;
 
 public class TActivitySelector extends CActivitySelector implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource {
 
-    private static final boolean    DEBUG_LANCHER = false;
+    private static final boolean    DEBUG_LANCHER = true;
 
     private CTutor                  mTutor;
     private CSceneDelegate          mTutorScene;
@@ -60,7 +60,6 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     private String      rootTutor;
     private boolean     askButtonsEnabled = false;
 
-    private HashMap<String, CAs_Data> initiatorMap;
     private HashMap<String, CAt_Data> transitionMap;
 
     private String      writingTutorID;
@@ -143,35 +142,31 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                 case AS_CONST.SELECT_WRITING:
 
-                    activeTutor = writingTutorID;
+                    activeTutor   = writingTutorID;
                     transitionMap = writeTransitions;
-                    initiatorMap  = writeInitiators;
                     break;
 
                 case AS_CONST.SELECT_STORIES:
 
-                    activeTutor = storiesTutorID;
+                    activeTutor   = storiesTutorID;
                     transitionMap = storyTransitions;
-                    initiatorMap  = storyInitiators;
                     break;
 
                 case AS_CONST.SELECT_MATH:
 
-                    activeTutor = mathTutorID;
+                    activeTutor   = mathTutorID;
                     transitionMap = mathTransitions;
-                    initiatorMap  = mathInitiators;
                     break;
 
                 case AS_CONST.SELECT_SHAPES:
 
-                    activeTutor = shapesTutorID;
+                    activeTutor   = shapesTutorID;
                     transitionMap = shapeTransitions;
-                    initiatorMap  = shapeInitiators;
                     break;
 
             }
 
-            SdebugActivity.initGrid(activeSkill, activeTutor, transitionMap, initiatorMap);
+            SdebugActivity.initGrid(activeSkill, activeTutor, transitionMap);
         }
         else {
 
@@ -251,30 +246,6 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     public void enableAskButtons(Boolean enable) {
 
         askButtonsEnabled = true;
-    }
-
-
-    /**
-     * This is a kludge at the moment to utilize the tutor initiators that exist already.
-     * TODO: make this process more sane.
-     *
-     * @param localArray
-     * @param tutor_id
-     * @return
-     */
-    public int decodeSkill(CAs_Data[] localArray, String tutor_id) {
-
-        int tutorVector = 0;
-
-        for(int i1 = 0 ; i1 < localArray.length ; i1++) {
-
-            if(localArray[i1].buttonvalue == tutor_id) {
-                tutorVector = i1;
-                break;
-            }
-        }
-
-        return tutorVector;
     }
 
 
@@ -506,39 +477,39 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                 case AS_CONST.SELECT_WRITING:
 
-                    activeSkill = AS_CONST.SELECT_WRITING;
-                    activeTutor = writingTutorID;
-                    initiatorMap = writeInitiators;
-                    rootTutor = rootSkillWrite;
-                    buttonFound = true;
+                    activeSkill   = AS_CONST.SELECT_WRITING;
+                    activeTutor   = writingTutorID;
+                    rootTutor     = rootSkillWrite;
+                    transitionMap = writeTransitions;
+                    buttonFound   = true;
                     break;
 
                 case AS_CONST.SELECT_STORIES:
 
-                    activeSkill = AS_CONST.SELECT_STORIES;
-                    activeTutor = storiesTutorID;
-                    initiatorMap = storyInitiators;
-                    rootTutor = rootSkillStories;
+                    activeSkill   = AS_CONST.SELECT_STORIES;
+                    activeTutor   = storiesTutorID;
+                    rootTutor     = rootSkillStories;
+                    transitionMap = storyTransitions;
                     buttonFound = true;
 
                     break;
 
                 case AS_CONST.SELECT_MATH:
 
-                    activeSkill = AS_CONST.SELECT_MATH;
-                    activeTutor = mathTutorID;
-                    initiatorMap = mathInitiators;
-                    rootTutor = rootSkillMath;
-                    buttonFound = true;
+                    activeSkill   = AS_CONST.SELECT_MATH;
+                    activeTutor   = mathTutorID;
+                    rootTutor     = rootSkillMath;
+                    transitionMap = mathTransitions;
+                    buttonFound   = true;
                     break;
 
                 case AS_CONST.SELECT_SHAPES:
 
-                    activeSkill = AS_CONST.SELECT_SHAPES;
-                    activeTutor = shapesTutorID;
-                    initiatorMap = shapeInitiators;
-                    rootTutor = rootSkillShapes;
-                    buttonFound = true;
+                    activeSkill   = AS_CONST.SELECT_SHAPES;
+                    activeTutor   = shapesTutorID;
+                    rootTutor     = rootSkillShapes;
+                    transitionMap = shapeTransitions;
+                    buttonFound   = true;
 
                     break;
 
@@ -549,15 +520,15 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                 // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
                 // reenable the ASK buttons if we don't execute the story_tutor
                 //
-                if (!BuildConfig.NO_ASR_APPS || (initiatorMap != storyTransitions)) {
+                if (!BuildConfig.NO_ASR_APPS || (transitionMap != storyTransitions)) {
 
-                    CAs_Data tutor = (CAs_Data) initiatorMap.get(activeTutor);
+                    CAt_Data tutor = (CAt_Data) transitionMap.get(activeTutor);
 
                     // This is just to make sure we go somewhere if there is a bad link - which
                     // there shuoldn't be :)
                     //
                     if (tutor == null) {
-                        tutor = (CAs_Data) initiatorMap.get(rootTutor);
+                        tutor = (CAt_Data) transitionMap.get(rootTutor);
                     }
 
                     // If we are using the edbug selector and it is not lauching a tutor then
@@ -569,7 +540,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                         RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_SELECT;
                     }
                     else {
-                        doLaunch(tutor.intent, tutor.intentdata, tutor.datasource, tutor.features);
+                        doLaunch(tutor.tutor_desc, TCONST.TUTOR_NATIVE, tutor.tutor_data);
                     }
 
                     // Serialize the new state
@@ -594,7 +565,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
      * @param intentData
      */
     @Override
-    public void doLaunch(String intent, String intentData, String dataSource, String features) {
+    public void doLaunch(String intent, String intentData, String dataSource) {
 
         RoboTutor.SELECTOR_MODE = TCONST.FTR_DIFFICULTY_ASSESS;
 
@@ -603,7 +574,6 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         mTutor.getScope().addUpdateVar(name() + ".intent", new TString(intent));
         mTutor.getScope().addUpdateVar(name() + ".intentData", new TString(intentData));
         mTutor.getScope().addUpdateVar(name() + ".dataSource", new TString(dataSource));
-        mTutor.getScope().addUpdateVar(name() + ".features", new TString(features));
 
         applyBehavior(AS_CONST.LAUNCH_EVENT);
     }
@@ -1050,7 +1020,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     }
 
 
-    private void validateTable(HashMap transMap, HashMap initMap, String transtype, String initType) {
+    private void validateTable(HashMap transMap, String transtype) {
 
         String outcome = "";
 
@@ -1070,13 +1040,13 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                 Log.e("Map Fault ", transtype + entry.getKey() + " - MISSING LINKS: " + outcome);
             }
 
-            // Validate there are initiators for all links
+            // Validate there is a Tutor Variant defined for the transition vector
             //
             outcome = "";
-            outcome = validateVectors(initMap, transition);
+            outcome = validateVector(CTutorEngine.tutorVariants, transition.tutor_desc, " - tutor_desc:");
 
             if(!outcome.equals("")) {
-                Log.e("Map Fault ", transtype + entry.getKey() + " - MISSING INITIATORS: " +  outcome);
+                Log.e("Map Fault ", transtype + entry.getKey() + " - MISSING VARIANT: " +  outcome);
             }
 
         }
@@ -1084,9 +1054,9 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
     private void validateTables() {
 
-        validateTable(writeTransitions, writeInitiators, "writeTransition: ", "writeInitiator: ");
-        validateTable(storyTransitions, storyInitiators, "storyTransition: ", "storyInitiator: ");
-        validateTable(mathTransitions , mathInitiators , "mathTransition: ", "mathInitiator: ");
-        validateTable(shapeTransitions, shapeInitiators, "shapeTransition: ", "shapeInitiator: ");
+        validateTable(writeTransitions,  "writeTransition: ");
+        validateTable(storyTransitions,  "storyTransition: ");
+        validateTable(mathTransitions ,  "mathTransition: ");
+        validateTable(shapeTransitions,  "shapeTransition: " );
     }
 }

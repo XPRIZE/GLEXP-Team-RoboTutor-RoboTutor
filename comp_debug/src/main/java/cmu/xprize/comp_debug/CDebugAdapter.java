@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import cmu.xprize.util.CAs_Data;
 import cmu.xprize.util.CAt_Data;
 
 import static cmu.xprize.comp_debug.CD_CONST.STATE_CURRENT;
@@ -45,7 +44,6 @@ public class CDebugAdapter extends BaseAdapter {
 
     private HashMap<String, CAt_Data>  transitionMap;
     private HashMap<Integer, CAt_Data> indexTransitionMap;
-    private HashMap<String, CAs_Data>  initiatorMap;
 
     private HashMap<Integer, CDebugButton> buttonMap;
 
@@ -62,14 +60,13 @@ public class CDebugAdapter extends BaseAdapter {
     static private String TAG = "CDebugAdapter";
 
     // Constructor
-    public CDebugAdapter(Context _context, String _activeTutor, HashMap _transitionMap, HashMap _initiatorMap, IDebugLauncher  _launcher) {
+    public CDebugAdapter(Context _context, String _activeTutor, HashMap _transitionMap, IDebugLauncher  _launcher) {
 
         mContext      = _context;
         mLauncher     = _launcher;
         initialTutor  = _activeTutor;
         currentTutor  = _activeTutor;
         transitionMap = _transitionMap;
-        initiatorMap  = _initiatorMap;
 
         buttonMap          = new HashMap();
         indexTransitionMap = new HashMap();

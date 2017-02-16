@@ -28,13 +28,19 @@ import android.view.ViewGroup;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
+import cmu.xprize.robotutor.tutorengine.graph.databinding;
+import cmu.xprize.robotutor.tutorengine.graph.defdata_scenes;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
+import cmu.xprize.robotutor.tutorengine.graph.defvar_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.robotutor.tutorengine.widgets.core.TSceneAnimatorLayout;
@@ -75,7 +81,8 @@ public class CTutorEngine implements ILoadableObject2 {
 
     // json loadable
     static public String                         defTutor;
-    static public HashMap<String, defdata_tutor> defDataSources;
+    static public HashMap<String, defvar_tutor>  tutorVariants;
+    static public HashMap<String, defdata_tutor> bindingPatterns;
     static public String                         language;                       // Accessed from a static context
 
 
@@ -196,8 +203,8 @@ public class CTutorEngine implements ILoadableObject2 {
 
         defdata_tutor tutorBindings = null;
 
-        if(defDataSources != null) {
-            tutorBindings = defDataSources.get(defTutor);
+        if(bindingPatterns != null) {
+            tutorBindings = bindingPatterns.get(defTutor);
         }
 
         // Sample: how to launch a tutor with a json datasource
@@ -305,55 +312,193 @@ public class CTutorEngine implements ILoadableObject2 {
     }
 
 
+    static private defdata_scenes parseSceneData(defdata_tutor dataPattern, String[] componentSet) {
+
+        defdata_scenes          sceneData = new defdata_scenes();
+        ArrayList<databinding>  bindings  = new ArrayList<>();
+
+        String compData   = null;
+        String compName   = null;
+
+        for(String component : componentSet) {
+
+            String[] dataSet = component.split(":");
+
+            if (dataSet.length == 1) {
+
+                compName = "*";
+                compData = dataSet[0];
+
+            } else {
+                compName = dataSet[0];
+                compData = dataSet[1];
+            }
+
+            bindings.add(new databinding(compName, compData));
+        }
+
+        sceneData.databindings = (databinding[]) bindings.toArray(new databinding[bindings.size()]);
+
+        return sceneData;
+    }
+
+
+    static private defdata_tutor parseDataSpec(String dataSpec) {
+
+        defdata_tutor   dataPattern = new defdata_tutor();
+        defdata_scenes  sceneData   = null;
+        String          sceneName   = null;
+
+        String[] sceneSet = dataSpec.split(";");
+
+        for(String scene : sceneSet) {
+
+            String[] sceneElements = scene.split("\\|");
+
+            // If there is only 1 element then there is only one scene and its name is implied
+            //
+            if(sceneElements.length == 1) {
+
+                sceneName = "*";
+                sceneData = parseSceneData(dataPattern, sceneElements);
+            }
+            else {
+                sceneName     = sceneElements[0];
+                sceneElements = Arrays.copyOfRange(sceneElements, 1, sceneElements.length);
+
+                sceneData = parseSceneData(dataPattern, sceneElements);
+            }
+
+            dataPattern.scene_bindings.put(sceneName, sceneData);
+        }
+
+        return dataPattern;
+    }
+
+
+    static private void  initComponentBindings(databinding[] targetbindings, databinding[] databindings) {
+
+        for(databinding binding : databindings) {
+
+            if(binding.name.equals("*")) {
+                if(targetbindings.length == 1) {
+                    targetbindings[0].datasource = binding.datasource;
+                }
+                else {
+                    Log.e(TAG, "ERROR: Incompatible datasource");
+                }
+            }
+            else {
+                for(databinding tbinding : targetbindings) {
+                    if(tbinding.name.equals(binding.name)) {
+                        tbinding.datasource = binding.datasource;
+                        break;
+                    }
+                }
+            }
+
+        }
+    }
+
+
+    static private void  initSceneBindings(defdata_tutor bindingPattern, String sceneName, databinding[] databindings) {
+
+        if(sceneName.equals("*")) {
+
+            if(bindingPattern.scene_bindings.size() == 1) {
+
+                Iterator<?> scenes = bindingPattern.scene_bindings.entrySet().iterator();
+                while(scenes.hasNext() ) {
+
+                    Map.Entry scene = (Map.Entry) scenes.next();
+
+                    databinding[] scenebindings = ((defdata_scenes)scene.getValue()).databindings;
+
+                    initComponentBindings(scenebindings, databindings);
+                }
+            }
+            else {
+                Log.e(TAG, "ERROR: Incompatible datasource");
+            }
+        }
+        else {
+            defdata_scenes compData = bindingPattern.scene_bindings.get(sceneName);
+
+            initComponentBindings(compData.databindings, databindings);
+        }
+
+    }
+
+
+    /**
+     * The data spec is encoded as:
+     *
+     *  <dataspec>...
+     *  <dataspec>  = scenename|<scenedata>...
+     *  <scenedata> = component:datasource
+     *
+     *  e.g.
+     *      tutor_scene1|sceme_compD:[dataencoding]datasource|sceme_compM:[dataencoding]datasource;
+     *      tutor_scene2|sceme_compQ:[dataencoding]datasource; ...
+     *
+     *
+     *
+     * @param bindingPattern
+     * @param dataSpec
+     */
+    static private void initializeBindingPattern(defdata_tutor bindingPattern, String dataSpec) {
+
+        defdata_tutor dataBindings = parseDataSpec(dataSpec);
+
+        Iterator<?> scenes = dataBindings.scene_bindings.entrySet().iterator();
+
+        while(scenes.hasNext() ) {
+
+            Map.Entry scene = (Map.Entry) scenes.next();
+
+            String sceneName           = (String)scene.getKey();
+            databinding[] databindings = ((defdata_scenes)scene.getValue()).databindings;
+
+            initSceneBindings(bindingPattern, sceneName, databindings);
+        }
+    }
+
+
     /**
      *  Scriptable Launch command
      *
-     * @param intent
-     * @param intentData
-     * @param features
+     * @param tutorVariant
+     * @param intentType
      */
-    static public void launch(String intent, String intentData, String dataSourceJson, String features ) {
-
-        defdata_tutor dynamicDataSource = null;
+    static public void launch(String intentType, String tutorVariant, String dataSource ) {
 
         Intent extIntent = new Intent();
         String extPackage;
 
-        // Allow the intent to override any engine levelFolder datasource defaults
+        defvar_tutor  tutorDescriptor = tutorVariants.get(tutorVariant);
+        defdata_tutor tutorBinding    = bindingPatterns.get(tutorDescriptor.tutorName);
+
+        // Initialize the tutorBinding from the dataSource spec - this transfers the
+        // datasource fields to the prototype tutorVariant bindingPattern which is then
+        // used to initialize the tutor itself.
         //
-        if(!dataSourceJson.equals(TCONST.NO_DATASOURCE)) {
+        initializeBindingPattern(tutorBinding, dataSource);
 
-            dynamicDataSource = new defdata_tutor();
-
-            try {
-                dynamicDataSource.loadJSON(new JSONObject(dataSourceJson), (IScope2)mRootScope);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        // If no datasource defined in the external launch request then try and find a engine levelFolder default
-        //
-        else {
-            if(defDataSources != null) {
-                dynamicDataSource = defDataSources.get(intent);
-            }
-        }
-
-        switch(intentData) {
+        switch(intentType) {
 
             // Create a native tutor with the given base features
             // These features are used to determine basic tutor functionality when
             // multiple tutors share a single scenegraph
             //
             case "native":
-                createTutor(intent, features);
-                launchTutor(dynamicDataSource);
+
+                createTutor(tutorDescriptor.tutorName, tutorDescriptor.features);
+                launchTutor(tutorBinding);
                 break;
 
             case "browser":
 
-                extIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("file:///" + intent));
+                extIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("file:///" + tutorVariant));
 
                 getActivity().startActivity(extIntent);
 
@@ -364,29 +509,28 @@ public class CTutorEngine implements ILoadableObject2 {
                 // This a special allowance for MARi which placed their activities in a different
                 // package from their app - so we check for intent of the form "<pkgPath>:<appPath>"
                 //
-                String[] intentParts = intent.split(":");
+                String[] intentParts = tutorVariant.split(":");
 
                 // If it is "<pkgPath>:<appPath>"
                 //
                 if(intentParts.length > 1) {
                     extPackage = intentParts[0];
-                    intent     = intentParts[1];
+                    tutorVariant     = intentParts[1];
                 }
                 // Otherwise we expect the activities to be right off the package.
                 //
                 else {
-                    extPackage = intent.substring(0, intent.lastIndexOf('.'));
+                    extPackage = tutorVariant.substring(0, tutorVariant.lastIndexOf('.'));
                 }
 
-                extIntent.setClassName(extPackage, intent);
-                extIntent.putExtra("intentdata", intentData);
-                extIntent.putExtra("features", features);
+                extIntent.setClassName(extPackage, tutorVariant);
+                extIntent.putExtra("intentdata", intentType);
 
                 try {
                     getActivity().startActivity(extIntent);
                 }
                 catch(Exception e) {
-                    Log.e(TAG, "Launch Error: " + e + " : " + intent);
+                    Log.e(TAG, "Launch Error: " + e + " : " + tutorVariant);
                 }
                 break;
         }

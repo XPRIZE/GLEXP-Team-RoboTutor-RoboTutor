@@ -25,4 +25,5 @@ package cmu.xprize.sm_component;
 public interface ILauncherButton {
 
     public void buildInterface(CSm_Data buttonData);
+    public void buildInterface(CSm_Launcher buttonData);
 }

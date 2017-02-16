@@ -53,8 +53,8 @@ import edu.cmu.xprize.listener.ListenerBase;
 
 import static cmu.xprize.util.TCONST.ASREventMap;
 import static cmu.xprize.util.TCONST.LANG_AUTO;
+import static cmu.xprize.util.TCONST.LOCAL_STORY_AUDIO;
 import static cmu.xprize.util.TCONST.MEDIA_STORY;
-import static cmu.xprize.util.TCONST.STORYDATA;
 
 public class TRtComponent extends CRt_Component implements IBehaviorManager, ITutorObjectImpl, Button.OnClickListener, IRtComponent, IDataSink, IEventSource {
 
@@ -407,18 +407,32 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
             //
             // TODO: work toward consistent [file] semantics as externally sourced files
             //
-            if (dataNameDescriptor.startsWith(TCONST.ENCODED_FOLDER)) {
+            if (dataNameDescriptor.startsWith(TCONST.LOCAL_FILE)) {
 
-                // The story encoding includes a list of : delimited
-                String[] features = dataNameDescriptor.split(":");
+                String storyFolder = dataNameDescriptor.substring(TCONST.LOCAL_FILE.length()).toLowerCase();
 
-                for(String feature : features) {
-                    if(feature.startsWith("FTR")) {
-                        mTutor.setAddFeature(feature);
-                    }
-                }
+                String[] levelval   = storyFolder.split("_");
 
-                String storyFolder = features[0].substring(TCONST.ENCODED_FOLDER.length()).toLowerCase();
+                String levelFolder = levelval[0];
+
+                DATASOURCEPATH  = TCONST.DOWNLOAD_RT_TUTOR + "/" +  TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+                STORYSOURCEPATH = DATASOURCEPATH + levelFolder + "/" + storyFolder + "/";
+
+                // The audio for the story is in a  story specific folder -
+                // Create the story specific sound package and push it into the soundMap in the MediaManager
+                //
+                AUDIOSOURCEPATH = TCONST.STORY_PATH + levelFolder + "/" + storyFolder ;
+
+                // NOTE: we override the CMediaPackage srcpath folder to point to the debug LOCAL_STORY_AUDIO - in Download
+                //
+                configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
+                mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH, LOCAL_STORY_AUDIO));
+
+                loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
+
+            } else if (dataNameDescriptor.startsWith(TCONST.ENCODED_FOLDER)) {
+
+                String storyFolder = dataNameDescriptor.substring(TCONST.ENCODED_FOLDER.length()).toLowerCase();
 
                 String[] levelval   = storyFolder.split("_");
 

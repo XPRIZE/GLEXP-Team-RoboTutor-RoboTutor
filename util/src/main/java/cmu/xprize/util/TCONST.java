@@ -195,6 +195,17 @@ public class TCONST {
     public static final String ENCODED_FOLDER      = "[encfolder]";
     public static final String STORY_PATH          = "cmu/xprize/story_reading/";
 
+    public static final String LOCAL_FILE          = "[local_file]";
+    public static final String DOWNLOAD_PATH       = "/sdcard/Download";
+    public static final String DOWNLOAD_RT_PATH    = "/sdcard/Download/RoboTutor";
+    public static final String DOWNLOAD_RT_TUTOR   = "/sdcard/Download/RoboTutor/assets";
+
+    public static final String ARITHMETIC_DATA     = "tutors/add_subtract";
+    public static final String AKIRA_DATA          = "tutors/akira";
+    public static final String BUBBLEPOP_DATA      = "tutors/bubble_pop";
+    public static final String STORY_DATA          = "tutors/story_reading";
+    public static final String WRITING_DATA        = "tutors/word_copy";
+
     public static final String FTR_USER_HEAR       = "FTR_USER_HEAR";
     public static final String FTR_USER_READ       = "FTR_USER_READ";
     public static final String NARRATE_STORY       = "NARRATE_STORY";
@@ -217,6 +228,8 @@ public class TCONST {
     public static final String ASSET_UPDATE_MSG           = "Installing Assets: ";
     public static final String INT_FIELD                  = "INT_FIELD";
     public static final String PLEASE_WAIT                = " - Please Wait.";
+
+    public static final String TUTOR_NATIVE               = "native";
 
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
@@ -289,7 +302,7 @@ public class TCONST {
     public static final String STORY_ASSETS       = "story";
     static final public String EXTERNAL           = "external";
     static final public String ROBOTUTOR_ASSETS   = "sdcard/robotutor_assets/assets";
-
+    static final public String LOCAL_STORY_AUDIO  = "sdcard/Download/RoboTutor/assets/story_reading";
 
     static final public String LTK_PROJECT_ASSETS = "projects";
     static final public String LTK_GLYPH_ASSETS   = "glyphs";

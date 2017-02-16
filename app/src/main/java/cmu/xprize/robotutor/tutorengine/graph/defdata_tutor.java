@@ -44,6 +44,10 @@ public class defdata_tutor implements ILoadableObject2 {
 
     public HashMap<String, defdata_scenes> scene_bindings;
 
+    public defdata_tutor() {
+        scene_bindings = new HashMap<>();
+    }
+
 
     // *** Serialization
 

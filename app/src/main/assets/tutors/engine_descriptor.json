@@ -1,31 +1,179 @@
 {
   "defTutor":"activity_selector",
 
-  //Engine levelFolder data bindings  - HashMap<String, defdata_tutor
-//  "defDataSources": {
-//
-//    //Tutor levelFolder data bindings   - HashMap<String, defdata_scene
-//    "session_manager": {
-//      "type": "TUTORDATA_MAP",
-//
-//      "scene_bindings" : {
-//
-//        //Scene levelFolder data bindings  - databindings[]
-//        "session_manager": {
-//          "type": "SCENEDATA_MAP",
-//
-//          "databindings": [
-//            {
-//              "name": "SsmComponent",
-//              "datasource": "[file]sm_data.json"
-//            }
-//          ]
-//        }
-//      }
-//    }
-//  },
-
   // Set the default language for the tutors
-  "language":"LANG_EN"
+  //
+  "language":"LANG_EN",
+
+
+  // This maps a "variant" i.e. arbitrary name to the tutor/featureset that define a
+  // path through the given tutors anumation_graph.
+  //
+  "tutorVariants": {
+    "add_subtract": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "add_subtract",
+      "features": ""
+    },
+    "akira": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "akira",
+      "features": ""
+    },
+    "bubble_pop_LETTERS_MIXEDCASE": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_LETTERS:FTR_MIXEDCASE"
+    },
+    "bubble_pop_LETTERS_LOWERCASE": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_LETTERS:FTR_LOWERCASE"
+    },
+    "bubble_pop_LETTERS_UPPERCASE": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_LETTERS:FTR_UPPERCASE"
+    },
+    "bubble_pop_WORDS": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_WORDS"
+    },
+    "bubble_pop_NUMBERS": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "bubble_pop_SHAPES": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_SHAPES"
+    },
+    "word_copy_LETTERS_UPPERCASE": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_LETTERS:FTR_UPPERCASE"
+    },
+    "word_copy_LETTERS_UPPERCASE_DICTATION": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_LETTERS:FTR_UPPERCASE:FTR_DICTATION"
+    },
+    "word_copy_WORDS": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_WORDS"
+    },
+    "word_copy_LETTERS_LOWERCASE": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_LETTERS:FTR_LOWERCASE"
+    },
+    "word_copy_LETTERS_LOWERCASE_DICTATION": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_LETTERS:FTR_LOWERCASE:FTR_DICTATION"
+    },
+    "word_copy_NUMBERS_DICTATION": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_NUMBERS:FTR_DICTATION"
+    },
+    "word_copy_NUMBERS": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_NUMBERS"
+    },
+    "story_reading_USER_HEAR": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_reading",
+      "features": "FTR_USER_HEAR"
+    },
+    "story_reading_USER_READ": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_reading",
+      "features": "FTR_USER_READ"
+    }
+  },
+
+  // Tutor binding patterns -
+  // These contain the prototype tutor/component bindings to datasources
+  // If there is a single binding then the datasource is pushed in as a simple string
+  // else it is pushed in with a prefixed component:datasource compound specification.
+  //
+  "bindingPatterns": {
+    "story_reading": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "story_reading": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SstoryReading",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
+    "akira": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "akira": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SAkira",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
+    "word_copy": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "word_copy": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "word_copy",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
+    "bubble_pop": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "bubble_pop": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SBubblePop",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
+    "add_subtract": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "add_subtract": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SAddSubtract",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    }
+  }
+
 }
 

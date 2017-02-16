@@ -47,6 +47,14 @@ public class databinding implements ILoadableObject2 {
     public String name;
     public String datasource;
 
+    public databinding() {}
+
+    public databinding(String _name, String _datasource) {
+
+        name       = _name;
+        datasource = _datasource;
+    }
+
 
 
     // *** Serialization

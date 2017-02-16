@@ -23,6 +23,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
@@ -30,6 +31,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import cmu.xprize.util.IButtonController;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -40,9 +42,11 @@ public class CSm_Component extends ScrollView implements ILoadableObject, ILaunc
     private Context                     mContext;
     private LinearLayout                mContainer;
     private ArrayList<CSm_RowContainer> mRows;
+    protected IButtonController         mButtonController;
 
     // json loadable
-    public CSm_Class[]      dataSource;
+    public CSm_Class[]      dataSource = null;
+    public CSm_Launcher[]   buttonDesc = null;
     public String[]         bgColors;
 
     static final String TAG = "CSm_Component";
@@ -53,15 +57,18 @@ public class CSm_Component extends ScrollView implements ILoadableObject, ILaunc
         init(context, null);
     }
 
+
     public CSm_Component(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
+
     public CSm_Component(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs);
     }
+
 
     public void init(Context context, AttributeSet attrs ) {
 
@@ -72,6 +79,17 @@ public class CSm_Component extends ScrollView implements ILoadableObject, ILaunc
         mContainer = (LinearLayout)findViewById(R.id.SclassContainer);
     }
 
+
+    public void setButtonController(IButtonController controller) {
+
+        mButtonController = controller;
+    }
+
+
+    public void launchTutor(String tutorDesc, String tutorNative, String tutorData) {
+
+        mButtonController.doLaunch(tutorDesc, tutorNative, tutorData);
+    }
 
     private void buildInterface() {
 
@@ -84,22 +102,47 @@ public class CSm_Component extends ScrollView implements ILoadableObject, ILaunc
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService
                 (Context.LAYOUT_INFLATER_SERVICE);
 
-        for (CSm_Class Row : dataSource) {
+        if(dataSource != null) {
+            for (CSm_Class Row : dataSource) {
 
-            Log.d(TAG, "Creating Sm Row : " + Row.description);
+                Log.d(TAG, "Creating Sm Row : " + Row.description);
 
-            CSm_RowContainer newRow = new CSm_RowContainer(mContext);
+                CSm_RowContainer newRow = new CSm_RowContainer(mContext);
 
-            if(bgColors.length > 0) {
-                defColor = bgColors[rowIndex];
+                if (bgColors.length > 0) {
+                    defColor = bgColors[rowIndex];
 
-                rowIndex = (rowIndex + 1) % bgColors.length;
+                    rowIndex = (rowIndex + 1) % bgColors.length;
+                }
+
+                newRow.buildInterface(Row, this, defColor);
+
+                mRows.add(newRow);
+                mContainer.addView(newRow);
             }
+        }
 
-            newRow.buildInterface(Row, this, defColor);
+        if(buttonDesc != null) {
+            for (CSm_Launcher Button : buttonDesc) {
 
-            mRows.add(newRow);
-            mContainer.addView(newRow);
+                Log.d(TAG, "Creating Button : " + Button.description);
+
+                ILauncherButton newButton = null;
+
+                if (bgColors.length > 0) {
+                    defColor = bgColors[rowIndex];
+
+                    rowIndex = (rowIndex + 1) % bgColors.length;
+                }
+
+                Log.d(TAG, "Creating Activity Button : " + Button.tutorDesc);
+
+                newButton = new CSm_Button(mContext, this);
+
+                newButton.buildInterface(Button);
+
+                mContainer.addView((View) newButton);
+            }
         }
 
         requestLayout();
@@ -119,11 +162,19 @@ public class CSm_Component extends ScrollView implements ILoadableObject, ILaunc
 
 
     /**
-     * This must be overridden in the tutor T subclass to initialize variables in the
-     * tutor scope.
      *
-     * @param symbol
+     * @param dataNameDescriptor
      */
+    public void setDataSource(String dataNameDescriptor) {
+    }
+
+
+        /**
+         * This must be overridden in the tutor T subclass to initialize variables in the
+         * tutor scope.
+         *
+         * @param symbol
+         */
     public void onTutorSelect(String symbol) {
     }
 

@@ -21,7 +21,7 @@ package cmu.xprize.robotutor.tutorengine.util;
 
 import java.util.HashMap;
 
-import cmu.xprize.util.CAs_Data;
+import cmu.xprize.robotutor.tutorengine.graph.defvar_tutor;
 import cmu.xprize.util.CAt_Data;
 import cmu.xprize.robotutor.tutorengine.CMediaPackage;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_scenes;
@@ -60,10 +60,11 @@ public class CClassMap2 {
         classMap.put("TTS", type_tts.class);
         classMap.put("AUDIO", type_audio.class);
         classMap.put("TIMER", type_handler.class);
-        classMap.put("INITIATOR", CAs_Data.class);
+
         classMap.put("TRANSITION", CAt_Data.class);
 
         classMap.put("TUTORDATA_MAP", defdata_tutor.class);
+        classMap.put("TUTORVAR_MAP", defvar_tutor.class);
         classMap.put("SCENEDATA_MAP", defdata_scenes.class);
 
         classMap.put("STRING_ARRAY", String[].class);

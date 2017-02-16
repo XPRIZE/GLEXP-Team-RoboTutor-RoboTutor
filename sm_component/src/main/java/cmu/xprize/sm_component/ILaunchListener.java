@@ -21,4 +21,6 @@ package cmu.xprize.sm_component;
 
 public interface ILaunchListener {
     public void setTutorIntent(String intent, String intentData, String dataSource, String features);
+
+    void launchTutor(String tutorDesc, String tutorNative, String tutorData);
 }

@@ -316,9 +316,9 @@ public class JSON_Helper {
 
                                 if(isPrimitive) {
                                     if (elemClass.isArray()) {
-
-                                        Log.d(TAG, "here");
-
+//
+//                                        Log.d(TAG, "here");
+//
                                         // TODO: This is an experimental implemenation to allow arrays on the right side of HashMaps.
                                         // TODO: Validate
                                         //

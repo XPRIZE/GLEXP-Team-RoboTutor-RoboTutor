@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 
-import cmu.xprize.util.CAs_Data;
+import cmu.xprize.sm_component.CSm_Component;
 import cmu.xprize.util.CAt_Data;
 import cmu.xprize.util.IButtonController;
 
@@ -34,6 +34,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
     private TextView SeasierTutorName;
 
     private Button   SlaunchTutor;
+    private Button   ScustomLaunch;
     private Button   SresetTutor;
 
     CAt_Data         currentTransition;
@@ -42,11 +43,12 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
     private String   initialSkill;
 
     private HashMap<String, CAt_Data>  transitionMap;
-    private HashMap<Integer, CAt_Data> indexTransitionMap;
-    private HashMap<String, CAs_Data>  initiatorMap;
 
     private GridView      gridView;
+    private CSm_Component customView;
     private CDebugAdapter gridAdapter;
+
+    private boolean       viewGrid = true;
 
     private static String TAG = "CDebugComponent";
 
@@ -72,7 +74,8 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
         mContext = context;
 
-        gridView = (GridView) findViewById(R.id.SdebugGrid);
+        gridView   = (GridView) findViewById(R.id.SdebugGrid);
+        customView = (CSm_Component) findViewById(R.id.SsmComponent);
 
         mContainer = (ViewGroup) findViewById(R.id.SdebugContainer);
 
@@ -82,8 +85,9 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         SharderTutorName  = (TextView) findViewById(R.id.SharderTutorName);
         SeasierTutorName  = (TextView) findViewById(R.id.SeasierTutorName);
 
-        SlaunchTutor = (Button) findViewById(R.id.SlaunchTutor);
-        SresetTutor  = (Button) findViewById(R.id.SresetTutor);
+        SlaunchTutor  = (Button) findViewById(R.id.SlaunchTutor);
+        ScustomLaunch = (Button) findViewById(R.id.ScustomButton);
+        SresetTutor   = (Button) findViewById(R.id.SresetTutor);
 
         SlaunchTutor.setOnClickListener(new View.OnClickListener() {
 
@@ -96,6 +100,18 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                 if(mButtonController != null) {
                     mButtonController.doButtonBehavior(currentTutor);
                 }
+            }
+        });
+
+        ScustomLaunch.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+
+                viewGrid = !viewGrid;
+
+                gridView.setVisibility(viewGrid? VISIBLE:GONE);
+                customView.setVisibility(viewGrid? GONE:VISIBLE);
+                Log.d(TAG, "Click on custom: ");
             }
         });
 
@@ -120,13 +136,19 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
     public void setButtonController(IButtonController controller) {
 
         mButtonController = controller;
+        customView.setButtonController(controller);
     }
 
 
+    public String getLanguage() {
+        return "implemented in T subclass";
+    }
+
     public void initDisplay() {
 
-        String text  = "Skill: Unknown";
-        int    color = 0;
+        String skillType = "";
+        String text      = "Skill: Unknown";
+        int    color     = 0;
 
         // Init the skill pointers
         //
@@ -135,43 +157,47 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
             case SELECT_WRITING:
                 color = 0x00DD00;
                 text  = "Skill: Reading & Writing";
+                skillType = "reading_writing";
                 break;
 
             case SELECT_STORIES:
                 color = 0xFFB000;
                 text  = "Skill: Stories";
+                skillType = "stories" + "/" + getLanguage();
                 break;
 
             case SELECT_MATH:
                 color = 0xFF0000;
                 text  = "Skill: Math";
+                skillType = "math";
                 break;
 
             case SELECT_SHAPES:
                 color = 0x2DA4FC;
                 text  = "Skill: Shapes";
+                skillType = "shapes";
                 break;
 
         }
 
+        customView.setDataSource("[local_file]" + skillType);
         mContainer.setBackgroundColor(color);
         SskillTitle.setText(text);
     }
 
 
-    public void initGrid(String _activeSkill, String _activeTutor, HashMap _transitionMap, HashMap _initiatorMap) {
+    public void initGrid(String _activeSkill, String _activeTutor, HashMap _transitionMap) {
 
         initialSkill  = _activeSkill;
         initialTutor  = _activeTutor;
         transitionMap = _transitionMap;
-        initiatorMap  = _initiatorMap;
 
         initDisplay();
 
         changeCurrentTutor(_activeTutor);
 
         gridView    = (GridView) findViewById(R.id.SdebugGrid);
-        gridAdapter = new CDebugAdapter(mContext, _activeTutor, _transitionMap, _initiatorMap, this);
+        gridAdapter = new CDebugAdapter(mContext, _activeTutor, _transitionMap, this);
 
         gridView.setNumColumns(gridAdapter.getGridColumnCount());
 

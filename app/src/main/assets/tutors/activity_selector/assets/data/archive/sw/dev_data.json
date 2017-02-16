@@ -1,0 +1,5594 @@
+{
+  "dataSource": [
+    {
+      "name": "FTR_TUTOR_SELECT",
+      "layoutID": "ask_activity_selector",
+
+
+      "items": [
+        {
+          "datatype": "IMAGEBUTTON",
+          "resource": "button_letters_select",
+          "componentID": "Sbutton1",
+          "behavior": "SELECT_WRITING",
+          "prompt": "reading and writing",
+          "help": "Tap here for reading and writing"
+        },
+        {
+          "datatype": "IMAGEBUTTON",
+          "resource": "button_stories_select",
+          "componentID": "Sbutton2",
+          "behavior": "SELECT_STORIES",
+          "prompt": "stories",
+          "help": "Tap here for a story"
+        },
+        {
+          "datatype": "IMAGEBUTTON",
+          "resource": "button_math_select",
+          "componentID": "Sbutton3",
+          "behavior": "SELECT_MATH",
+          "prompt": "numbers and math",
+          "help": "Tap here for numbers and math"
+        },
+        {
+          "datatype": "IMAGEBUTTON",
+          "resource": "button_shapes_select",
+          "componentID": "Sbutton4",
+          "behavior": "SELECT_SHAPES",
+          "prompt": "shapes",
+          "help": "Tap here to learn shapes"
+        },
+        {
+          "datatype": "IMAGEBUTTON",
+          "resource": "button_robotutor_select",
+          "componentID": "Sbutton5",
+          "behavior": "SELECT_ROBOTUTOR",
+          "prompt": "Let RoboTutor decide",
+          "help": "Tap here to let RoboTutor decide"
+        }
+      ]
+    },
+
+    {
+      "name": "FTR_DIFFICULTY_ASSESS",
+      "layoutID": "ask_difficulty_selector",
+
+      "items": [
+        {
+          "datatype": "IMAGEBUTTON",
+          "resource": "button_okay_select",
+          "componentID": "Sbutton1",
+          "behavior": "SELECT_CONTINUE",
+          "prompt": "it was just right",
+          "help": "tap here if it was just right"
+        },
+        {
+          "datatype": "IMAGEBUTTON",
+          "resource": "button_easy_select",
+          "componentID": "Sbutton2",
+          "behavior": "SELECT_MAKE_HARDER",
+          "prompt": "it was too easy",
+          "help": "Tap here if it was too easy and you want something harder"
+        },
+        {
+          "datatype": "IMAGEBUTTON",
+          "resource": "button_hard_select",
+          "componentID": "Sbutton3",
+          "behavior": "SELECT_MAKE_EASIER",
+          "prompt": "it was too hard",
+          "help": "Tap here if it was too hard and you want something easier"
+        },
+        {
+          "datatype": "IMAGEBUTTON",
+          "resource": "button_robotutor_select",
+          "componentID": "Sbutton4",
+          "behavior": "SELECT_AUTO_DIFFICULTY",
+          "prompt": "lets ask robotutor",
+          "help": "tap here to ask robotutor"
+        },
+        {
+          "datatype": "IMAGEBUTTON",
+          "resource": "button_repeat_select",
+          "componentID": "Sbutton5",
+          "behavior": "SELECT_REPEAT",
+          "prompt": "lets do it again",
+          "help": "tap here to do the same thing again"
+        },
+        {
+          "datatype": "IMAGEBUTTON",
+          "resource": "button_exit_select",
+          "componentID": "Sbutton6",
+          "behavior": "SELECT_EXIT",
+          "prompt": "I want to stop using RoboTutor",
+          "help": "tap here to stop using robotutor"
+        }
+      ]
+    }
+  ],
+
+  "rootSkillWrite": "Lowercase 2_bubble_pop",
+  "rootSkillStories": "1_1:a.HEAR",
+  "rootSkillMath": "Digit Copy 1_word_copy",
+  "rootSkillShapes": "Shapes 1_bubble_pop",
+
+  "writeInitiators": {
+    "Lowercase 1_word_copy": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]lowercase_level1_data.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Lowercase 1_word_copy",
+      "features": "FTR_LETTERS:FTR_LOWERCASE"
+    },
+    "Word Copy 1_word_copy": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]level1_data.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Word Copy 1_word_copy",
+      "features": "FTR_WORDS"
+    },
+    "Word Copy 2_word_copy": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]level2_data.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Word Copy 2_word_copy",
+      "features": "FTR_WORDS"
+    },
+    "Word Copy 3_word_copy": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]level3_data.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Word Copy 3_word_copy",
+      "features": "FTR_WORDS"
+    },
+    "Word Copy 4_word_copy": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]level4_data.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Word Copy 4_word_copy",
+      "features": "FTR_WORDS"
+    },
+    "Lowercase 2_word_copy": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]lowercase_level2_data.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Lowercase 2_word_copy",
+      "features": "FTR_LETTERS:FTR_LOWERCASE"
+    },
+    "Uppercase 1_word_copy": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]uppercase_level1_data.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Uppercase 1_word_copy",
+      "features": "FTR_LETTERS:FTR_UPPERCASE"
+    },
+    "Uppercase 2_word_copy": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]uppercase_level2_data.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Uppercase 2_word_copy",
+      "features": "FTR_LETTERS:FTR_UPPERCASE"
+    },
+    "Dictation Lowercase 1_word_copy": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]lowercase_level1_data.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Dictation Lowercase 1_word_copy",
+      "features": "FTR_LETTERS:FTR_LOWERCASE:FTR_DICTATION"
+    },
+    "Dictation Lowercase 2_word_copy": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]lowercase_level2_data.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Dictation Lowercase 2_word_copy",
+      "features": "FTR_LETTERS:FTR_LOWERCASE:FTR_DICTATION"
+    },
+    "Dictation Uppercase 1_word_copy": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]uppercase_level1_data.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Dictation Uppercase 1_word_copy",
+      "features": "FTR_LETTERS:FTR_UPPERCASE:FTR_DICTATION"
+    },
+    "Dictation Uppercase 2_word_copy": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]uppercase_level2_data.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Dictation Uppercase 2_word_copy",
+      "features": "FTR_LETTERS:FTR_UPPERCASE:FTR_DICTATION"
+    },
+    "Lowercase 1_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_YY_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Lowercase 1_bubble_pop",
+      "features": "FTR_LETTERS:FTR_LOWERCASE"
+    },
+    "Lowercase 2_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_YN_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Lowercase 2_bubble_pop",
+      "features": "FTR_LETTERS:FTR_LOWERCASE"
+    },
+    "Lowercase 3_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_NY_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Lowercase 3_bubble_pop",
+      "features": "FTR_LETTERS:FTR_LOWERCASE"
+    },
+    "Lowercase 4_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_YY_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Lowercase 4_bubble_pop",
+      "features": "FTR_LETTERS:FTR_LOWERCASE"
+    },
+    "Lowercase 5_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_YN_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Lowercase 5_bubble_pop",
+      "features": "FTR_LETTERS:FTR_LOWERCASE"
+    },
+    "Lowercase 6_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_NY_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Lowercase 6_bubble_pop",
+      "features": "FTR_LETTERS:FTR_LOWERCASE"
+    },
+    "Lowercase 1R_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_YY_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Lowercase 1R_bubble_pop",
+      "features": "FTR_LETTERS:FTR_LOWERCASE"
+    },
+    "Lowercase 2R_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_YN_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Lowercase 2R_bubble_pop",
+      "features": "FTR_LETTERS:FTR_LOWERCASE"
+    },
+    "Lowercase 3R_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_NY_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Lowercase 3R_bubble_pop",
+      "features": "FTR_LETTERS:FTR_LOWERCASE"
+    },
+    "Lowercase 4R_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_YY_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Lowercase 4R_bubble_pop",
+      "features": "FTR_LETTERS:FTR_LOWERCASE"
+    },
+    "Lowercase 5R_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_YN_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Lowercase 5R_bubble_pop",
+      "features": "FTR_LETTERS:FTR_LOWERCASE"
+    },
+    "Lowercase 6R_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_LC_R_NY_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Lowercase 6R_bubble_pop",
+      "features": "FTR_LETTERS:FTR_LOWERCASE"
+    },
+    "Uppercase 1_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_YY_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Uppercase 1_bubble_pop",
+      "features": "FTR_LETTERS:FTR_UPPERCASE"
+    },
+    "Uppercase 2_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_YN_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Uppercase 2_bubble_pop",
+      "features": "FTR_LETTERS:FTR_UPPERCASE"
+    },
+    "Uppercase 3_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_NY_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Uppercase 3_bubble_pop",
+      "features": "FTR_LETTERS:FTR_UPPERCASE"
+    },
+    "Uppercase 4_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_YY_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Uppercase 4_bubble_pop",
+      "features": "FTR_LETTERS:FTR_UPPERCASE"
+    },
+    "Uppercase 5_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_YN_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Uppercase 5_bubble_pop",
+      "features": "FTR_LETTERS:FTR_UPPERCASE"
+    },
+    "Uppercase 6_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_NY_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Uppercase 6_bubble_pop",
+      "features": "FTR_LETTERS:FTR_UPPERCASE"
+    },
+    "Uppercase 1R_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_YY_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Uppercase 1R_bubble_pop",
+      "features": "FTR_LETTERS:FTR_UPPERCASE"
+    },
+    "Uppercase 2R_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_YN_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Uppercase 2R_bubble_pop",
+      "features": "FTR_LETTERS:FTR_UPPERCASE"
+    },
+    "Uppercase 3R_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_NY_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Uppercase 3R_bubble_pop",
+      "features": "FTR_LETTERS:FTR_UPPERCASE"
+    },
+    "Uppercase 4R_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_YY_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Uppercase 4R_bubble_pop",
+      "features": "FTR_LETTERS:FTR_UPPERCASE"
+    },
+    "Uppercase 5R_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_YN_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Uppercase 5R_bubble_pop",
+      "features": "FTR_LETTERS:FTR_UPPERCASE"
+    },
+    "Uppercase 6R_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_UC_R_NY_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Uppercase 6R_bubble_pop",
+      "features": "FTR_LETTERS:FTR_UPPERCASE"
+    },
+    "Mixed Case MC 1_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_YY_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case MC 1_bubble_pop",
+      "features": "FTR_LETTERS:FTR_MIXEDCASE"
+    },
+    "Mixed Case MC 2_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_NY_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case MC 2_bubble_pop",
+      "features": "FTR_LETTERS:FTR_MIXEDCASE"
+    },
+    "Mixed Case Rise 1_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_YY_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case Rise 1_bubble_pop",
+      "features": "FTR_LETTERS:FTR_MIXEDCASE"
+    },
+    "Mixed Case Rise 2_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_NY_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case Rise 2_bubble_pop",
+      "features": "FTR_LETTERS:FTR_MIXEDCASE"
+    },
+    "Mixed Case MC 3_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_R_YY_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case MC 3_bubble_pop",
+      "features": "FTR_LETTERS:FTR_MIXEDCASE"
+    },
+    "Mixed Case MC 4_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_R_NY_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case MC 4_bubble_pop",
+      "features": "FTR_LETTERS:FTR_MIXEDCASE"
+    },
+    "Mixed Case Rise 3_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_R_YY_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case Rise 3_bubble_pop",
+      "features": "FTR_LETTERS:FTR_MIXEDCASE"
+    },
+    "Mixed Case Rise 4_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_MXC_R_NY_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case Rise 4_bubble_pop",
+      "features": "FTR_LETTERS:FTR_MIXEDCASE"
+    },
+
+    "Words_2_YN_MC_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_W2_YN_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case Rise 4_bubble_pop",
+      "features": "FTR_WORDS"
+    },
+
+    "Words_2_YN_RISE_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_W2_YN_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case Rise 4_bubble_pop",
+      "features": "FTR_WORDS"
+    },
+
+    "Words_3_YN_MC_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_W3_YN_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case Rise 4_bubble_pop",
+      "features": "FTR_WORDS"
+    },
+
+    "Words_3_YN_RISE_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_W3_YN_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case Rise 4_bubble_pop",
+      "features": "FTR_WORDS"
+    },
+
+    "Words_4_YN_MC_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_W4_YN_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case Rise 4_bubble_pop",
+      "features": "FTR_WORDS"
+    },
+
+    "Words_4_YN_RISE_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_W4_YN_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case Rise 4_bubble_pop",
+      "features": "FTR_WORDS"
+    },
+
+    "Words_5_YN_MC_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_W5_YN_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case Rise 4_bubble_pop",
+      "features": "FTR_WORDS"
+    },
+
+    "Words_5_YN_RISE_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_W5_YN_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case Rise 4_bubble_pop",
+      "features": "FTR_WORDS"
+    },
+
+    "Words_6_YN_MC_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_W6_YN_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case Rise 4_bubble_pop",
+      "features": "FTR_WORDS"
+    },
+
+    "Words_6_YN_RISE_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_W6_YN_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case Rise 4_bubble_pop",
+      "features": "FTR_WORDS"
+    },
+
+    "Words_7_YN_MC_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_W7_YN_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case Rise 4_bubble_pop",
+      "features": "FTR_WORDS"
+    },
+
+    "Words_7_YN_RISE_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_W7_YN_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case Rise 4_bubble_pop",
+      "features": "FTR_WORDS"
+    },
+
+    "Words_8_YN_MC_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_W8_YN_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case Rise 4_bubble_pop",
+      "features": "FTR_WORDS"
+    },
+
+    "Words_8_YN_RISE_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_W8_YN_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Mixed Case Rise 4_bubble_pop",
+      "features": "FTR_WORDS"
+    },
+
+
+    "copy_2_letter_Swahili": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]copy_2_letter_Swahili.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "copy_2_letter_Swahili",
+      "features": "FTR_WORDS"
+    },
+
+    "copy_3_letter_Swahili": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]copy_3_letter_Swahili.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "copy_3_letter_Swahili",
+      "features": "FTR_WORDS"
+    },
+
+    "copy_4_letter_Swahili": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]copy_4_letter_Swahili.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "copy_4_letter_Swahili",
+      "features": "FTR_WORDS"
+    },
+
+    "copy_5_letter_Swahili": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]copy_5_letter_Swahili.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "copy_5_letter_Swahili",
+      "features": "FTR_WORDS"
+    },
+
+    "copy_6_letter_Swahili": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]copy_6_letter_Swahili.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "copy_6_letter_Swahili",
+      "features": "FTR_WORDS"
+    },
+
+    "copy_7_letter_Swahili": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]copy_7_letter_Swahili.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "copy_7_letter_Swahili",
+      "features": "FTR_WORDS"
+    },
+
+    "copy_8_letter_Swahili": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]copy_8_letter_Swahili.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "copy_8_letter_Swahili",
+      "features": "FTR_WORDS"
+    },
+
+    "copy_9_letter_Swahili": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]copy_9_letter_Swahili.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "copy_9_letter_Swahili",
+      "features": "FTR_WORDS"
+    },
+
+    "ak_sw_2_letter": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_sw_2_letter.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_sw_2_letter",
+      "features": ""
+    },
+
+    "ak_sw_3_letter": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_sw_3_letter.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_sw_3_letter",
+      "features": ""
+    },
+
+    "ak_sw_4_letter": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_sw_4_letter.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_sw_4_letter",
+      "features": ""
+    },
+
+    "ak_sw_5_letter": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_sw_5_letter.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_sw_5_letter",
+      "features": ""
+    },
+
+    "ak_sw_6_letter": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_sw_6_letter.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_sw_6_letter",
+      "features": ""
+    },
+
+    "ak_sw_7_letter": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_sw_7_letter.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_sw_7_letter",
+      "features": ""
+    },
+
+    "ak_sw_8_letter": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_sw_8_letter.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_sw_8_letter",
+      "features": ""
+    },
+
+    "ak_sw_9_letter": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_sw_9_letter.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_sw_9_letter",
+      "features": ""
+    }
+  },
+
+  "storyInitiators": {
+    "1_1:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_1:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_1:a.HEAR"
+    },
+
+    "1_1:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_1:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_1:a.READ"
+    },
+
+    "1_2:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_2:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_2:a.HEAR"
+    },
+
+    "1_2:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_2:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_2:a.READ"
+    },
+
+    "1_3:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_3:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_3:a.HEAR"
+    },
+
+    "1_3:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_3:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_3:a.READ"
+    },
+
+    "1_4:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_4:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_4:a.HEAR"
+    },
+
+    "1_4:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_4:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_4:a.READ"
+    },
+
+    "1_5:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_5:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_5:a.HEAR"
+    },
+
+    "1_5:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_5:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_5:a.READ"
+    },
+
+    "1_6:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_6:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_6:a.HEAR"
+    },
+
+    "1_6:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_6:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_6:a.READ"
+    },
+
+    "1_7:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_7:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_7:a.HEAR"
+    },
+
+    "1_7:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_7:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_7:a.READ"
+    },
+
+    "1_8:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_8:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_8:a.HEAR"
+    },
+
+    "1_8:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_8:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_8:a.READ"
+    },
+
+    "1_9:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_9:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_9:a.HEAR"
+    },
+
+    "1_9:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_9:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_9:a.READ"
+    },
+
+    "1_10:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_10:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_10:a.HEAR"
+    },
+
+    "1_10:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]1_10:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "1_10:a.READ"
+    },
+
+    "2_1:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_1:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_1:a.HEAR"
+    },
+
+    "2_1:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_1:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_1:a.READ"
+    },
+
+    "2_2:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_2:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_2:a.HEAR"
+    },
+
+    "2_2:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_2:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_2:a.READ"
+    },
+
+    "2_3:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_3:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_3:a.HEAR"
+    },
+
+    "2_3:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_3:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_3:a.READ"
+    },
+
+    "2_4:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_4:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_4:a.HEAR"
+    },
+
+    "2_4:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_4:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_4:a.READ"
+    },
+
+    "2_5:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_5:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_5:a.HEAR"
+    },
+
+    "2_5:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_5:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_5:a.READ"
+    },
+
+    "2_6:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_6:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_6:a.HEAR"
+    },
+
+    "2_6:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_6:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_6:a.READ"
+    },
+
+    "2_7:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_7:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_7:a.HEAR"
+    },
+
+    "2_7:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_7:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_7:a.READ"
+    },
+
+    "2_8:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_8:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_8:a.HEAR"
+    },
+
+    "2_8:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_8:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_8:a.READ"
+    },
+
+    "2_9:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_9:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_9:a.HEAR"
+    },
+
+    "2_9:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_9:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_9:a.READ"
+    },
+
+    "2_10:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_10:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_10:a.HEAR"
+    },
+
+    "2_10:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_10:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_10:a.READ"
+    },
+
+    "2_11:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_11:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_11:a.HEAR"
+    },
+
+    "2_11:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_11:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_11:a.READ"
+    },
+
+    "2_12:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_12:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_12:a.HEAR"
+    },
+
+    "2_12:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_12:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_12:a.READ"
+    },
+
+    "2_13:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_13:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_13:a.HEAR"
+    },
+
+    "2_13:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_13:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_13:a.READ"
+    },
+
+    "2_14:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_14:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_14:a.HEAR"
+    },
+
+    "2_14:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_14:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_14:a.READ"
+    },
+
+    "2_15:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_15:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_15:a.HEAR"
+    },
+
+    "2_15:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_15:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_15:a.READ"
+    },
+
+    "2_16:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_16:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_16:a.HEAR"
+    },
+
+    "2_16:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_16:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_16:a.READ"
+    },
+
+    "2_17:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_17:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_17:a.HEAR"
+    },
+
+    "2_17:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]2_17:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "2_17:a.READ"
+    },
+
+    "3_1:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_1:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_1:a.HEAR"
+    },
+
+    "3_1:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_1:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_1:a.READ"
+    },
+
+    "3_2:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_2:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_2:a.HEAR"
+    },
+
+    "3_2:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_2:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_2:a.READ"
+    },
+
+    "3_3:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_3:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_3:a.HEAR"
+    },
+
+    "3_3:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_3:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_3:a.READ"
+    },
+
+    "3_4:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_4:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_4:a.HEAR"
+    },
+
+    "3_4:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_4:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_4:a.READ"
+    },
+
+    "3_5:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_5:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_5:a.HEAR"
+    },
+
+    "3_5:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_5:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_5:a.READ"
+    },
+
+    "3_6:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_6:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_6:a.HEAR"
+    },
+
+    "3_6:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_6:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_6:a.READ"
+    },
+
+    "3_7:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_7:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_7:a.HEAR"
+    },
+
+    "3_7:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_7:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_7:a.READ"
+    },
+
+    "3_8:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_8:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_8:a.HEAR"
+    },
+
+    "3_8:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_8:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_8:a.READ"
+    },
+
+    "3_9:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_9:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_9:a.HEAR"
+    },
+
+    "3_9:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_9:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_9:a.READ"
+    },
+
+    "3_10:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_10:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_10:a.HEAR"
+    },
+
+    "3_10:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_10:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_10:a.READ"
+    },
+
+    "3_11:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_11:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_11:a.HEAR"
+    },
+
+    "3_11:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_11:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_11:a.READ"
+    },
+
+    "3_12:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_12:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_12:a.HEAR"
+    },
+
+    "3_12:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_12:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_12:a.READ"
+    },
+
+    "3_13:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_13:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_13:a.HEAR"
+    },
+
+    "3_13:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_13:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_13:a.READ"
+    },
+
+    "3_14:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_14:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_14:a.HEAR"
+    },
+
+    "3_14:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_14:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_14:a.READ"
+    },
+
+    "3_15:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_15:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_15:a.HEAR"
+    },
+
+    "3_15:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]3_15:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "3_15:a.READ"
+    },
+
+    "4_1:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_1:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_1:a.HEAR"
+    },
+
+    "4_1:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_1:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_1:a.READ"
+    },
+
+    "4_2:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_2:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_2:a.HEAR"
+    },
+
+    "4_2:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_2:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_2:a.READ"
+    },
+
+    "4_3:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_3:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_3:a.HEAR"
+    },
+
+    "4_3:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_3:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_3:a.READ"
+    },
+
+    "4_4:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_4:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_4:a.HEAR"
+    },
+
+    "4_4:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_4:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_4:a.READ"
+    },
+
+    "4_5:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_5:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_5:a.HEAR"
+    },
+
+    "4_5:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_5:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_5:a.READ"
+    },
+
+    "4_6:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_6:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_6:a.HEAR"
+    },
+
+    "4_6:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_6:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_6:a.READ"
+    },
+
+    "4_7:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_7:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_7:a.HEAR"
+    },
+
+    "4_7:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_7:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_7:a.READ"
+    },
+
+    "4_8:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_8:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_8:a.HEAR"
+    },
+
+    "4_8:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_8:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_8:a.READ"
+    },
+
+    "4_9:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_9:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_9:a.HEAR"
+    },
+
+    "4_9:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_9:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_9:a.READ"
+    },
+
+    "4_10:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_10:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_10:a.HEAR"
+    },
+
+    "4_10:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_10:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_10:a.READ"
+    },
+
+    "4_11:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_11:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_11:a.HEAR"
+    },
+
+    "4_11:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]4_11:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "4_11:a.READ"
+    },
+
+    "5_1:a.HEAR": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]5_1:FTR_USER_HEAR\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "5_1:a.HEAR"
+    },
+
+    "5_1:a.READ": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"story_reading\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SstoryReading\",\"datasource\": \"[encfolder]5_1:FTR_USER_READ\"}]}}}",
+      "intent": "story_reading",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "5_1:a.READ"
+    }
+  },
+
+  "mathInitiators": {
+
+    "asm_1": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_1.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_1",
+      "features": ""
+    },
+
+    "asm_2": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_2.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_2",
+      "features": ""
+    },
+
+    "asm_3": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_3.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_3",
+      "features": ""
+    },
+
+    "asm_4": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_4.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_4",
+      "features": ""
+    },
+
+    "asm_5": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_5.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_5",
+      "features": ""
+    },
+
+    "asm_7": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_7.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_7",
+      "features": ""
+    },
+
+    "asm_8": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_8.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_8",
+      "features": ""
+    },
+
+    "asm_9": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_9.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_9",
+      "features": ""
+    },
+
+    "asm_10": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_10.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_10",
+      "features": ""
+    },
+
+    "asm_11": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_11.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_11",
+      "features": ""
+    },
+
+    "asm_12": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_12.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_12",
+      "features": ""
+    },
+
+    "asm_13": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_13.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_13",
+      "features": ""
+    },
+
+    "asm_14": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_14.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_14",
+      "features": ""
+    },
+
+    "asm_15": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_15.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_15",
+      "features": ""
+    },
+
+    "asm_16": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_16.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_16",
+      "features": ""
+    },
+
+    "asm_17": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_17.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_17",
+      "features": ""
+    },
+
+    "asm_18": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_18.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_18",
+      "features": ""
+    },
+
+    "asm_19": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_19.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_19",
+      "features": ""
+    },
+
+    "asm_20": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_20.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_20",
+      "features": ""
+    },
+
+    "asm_21": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_21.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_21",
+      "features": ""
+    },
+
+    "asm_22": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_22.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_22",
+      "features": ""
+    },
+
+    "asm_23": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_23.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_23",
+      "features": ""
+    },
+
+    "asm_24": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_24.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_24",
+      "features": ""
+    },
+
+    "asm_26": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"add_subtract\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAddSubtract\",\"datasource\": \"[file]asm_26.json\"}]}}}",
+      "intent": "add_subtract",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "asm_26",
+      "features": ""
+    },
+
+    "ak_asm_1_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_1_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_1_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_1_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_1_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_1_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_2_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_2_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_2_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_2_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_2_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_2_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_3_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_3_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_3_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_3_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_3_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_3_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_4_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_4_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_4_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_4_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_4_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_4_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_5_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_5_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_5_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_5_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_5_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_5_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_6_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_6_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_6_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_6_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_6_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_6_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_7_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_7_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_7_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_7_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_7_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_7_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_8_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_8_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_8_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_8_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_8_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_8_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_9_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_9_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_9_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_9_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_9_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_9_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_10_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_10_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_10_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_10_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_10_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_10_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_11_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_11_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_11_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_11_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_11_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_11_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_12_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_12_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_12_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_12_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_12_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_12_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_13_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_13_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_13_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_13_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_13_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_13_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_14_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_14_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_14_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_14_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_14_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_14_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_15_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_15_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_15_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_15_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_15_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_15_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_16_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_16_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_16_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_16_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_16_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_16_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_17_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_17_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_17_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_17_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_17_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_17_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_18_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_18_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_18_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_18_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_18_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_18_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_19_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_19_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_19_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_19_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_19_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_19_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_20_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_20_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_20_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_20_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_20_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_20_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_21_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_21_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_21_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_21_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_21_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_21_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_22_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_22_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_22_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_22_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_22_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_22_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_23_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_23_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_23_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_23_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_23_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_23_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_24_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_24_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_24_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_24_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_24_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_24_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_25_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_25_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_25_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_25_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_25_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_25_3_sign",
+      "features": ""
+    },
+
+    "ak_asm_26_1_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_26_1_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_26_1_sign",
+      "features": ""
+    },
+
+    "ak_asm_26_3_sign": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"akira\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SAkira\",\"datasource\": \"[file]ak_asm_26_3_sign.json\"}]}}}",
+      "intent": "akira",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "ak_asm_26_3_sign",
+      "features": ""
+    },
+
+    "Digit Copy 1_word_copy": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]digit_level1_data.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Digit Copy 1_word_copy",
+      "features": "FTR_NUMBERS"
+    },
+    "Digit Copy 2_word_copy": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]digit_level2_data.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Digit Copy 2_word_copy",
+      "features": "FTR_NUMBERS"
+    },
+    "Digit Dictation 1_word_copy": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]digit_level1_data.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Digit Dictation 1_word_copy",
+      "features": "FTR_NUMBERS:FTR_DICTATION"
+    },
+    "Digit Dictation 2_word_copy": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"word_copy\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"word_copy\",\"datasource\": \"[file]digit_level2_data.json\"}]}}}",
+      "intent": "word_copy",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Digit Dictation 2_word_copy",
+      "features": "FTR_NUMBERS:FTR_DICTATION"
+    },
+    "Number -> Dot 1_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_YY_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Number -> Dot 1_bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "Number -> Dot 2_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_YN_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Number -> Dot 2_bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "Number -> Dot 3_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_NY_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Number -> Dot 3_bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "Number -> Dot 4_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_YY_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Number -> Dot 4_bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "Number -> Dot 5_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_YN_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Number -> Dot 5_bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "Number -> Dot 6_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_N2S_NY_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Number -> Dot 6_bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "Dot -> Number 1_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_YY_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Dot -> Number 1_bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "Dot -> Number 2_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_YN_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Dot -> Number 2_bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "Dot -> Number 3_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_NY_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Dot -> Number 3_bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "Dot -> Number 4_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_YY_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Dot -> Number 4_bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "Dot -> Number 5_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_YN_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Dot -> Number 5_bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "Dot -> Number 6_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_S2N_NY_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Dot -> Number 6_bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "Numbers Pop1_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_YY_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Numbers Pop1_bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "Numbers Pop2_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_YN_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Numbers Pop2_bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "Numbers Pop3_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_NY_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Numbers Pop3_bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "Numbers Pop4_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_YY_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Numbers Pop4_bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "Numbers Pop5_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_YN_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Numbers Pop5_bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "Numbers Pop_bubble_pop6": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_num_NY_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Numbers Pop_bubble_pop6",
+      "features": "FTR_NUMBERS"
+    }
+  },
+
+
+  "shapeInitiators": {
+    "Shapes 1_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_shape_YN_MC.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Shapes 1_bubble_pop",
+      "features": "FTR_SHAPES"
+    },
+    "Shapes 2_bubble_pop": {
+      "type": "INITIATOR",
+      "datasource": "{\"scene_bindings\" : {\"bubble_pop\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SBubblePop\",\"datasource\": \"[file]bp_shape_YN_RISE.json\"}]}}}",
+      "intent": "bubble_pop",
+      "intentdata": "native",
+      "buttontype": "text",
+      "buttonvalue": "Shapes 2_bubble_pop",
+      "features": "FTR_SHAPES"
+    }
+  },
+
+
+  "writeTransitions": {
+
+    "Uppercase 1_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Uppercase 1_bubble_pop",
+      "cell_row": "1",
+      "cell_column": "1",
+      "same": "Uppercase 1_bubble_pop",
+      "next": "Uppercase 2_bubble_pop",
+      "harder": "Uppercase 2R_bubble_pop",
+      "easier": "Uppercase 1_bubble_pop"
+    },
+
+    "Uppercase 2_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Uppercase 2_bubble_pop",
+      "cell_row": "1",
+      "cell_column": "2",
+      "same": "Uppercase 2_bubble_pop",
+      "next": "Uppercase 1_word_copy",
+      "harder": "Uppercase 2_word_copy",
+      "easier": "Uppercase 1_bubble_pop"
+    },
+
+    "Uppercase 1_word_copy": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Uppercase 1_word_copy",
+      "cell_row": "1",
+      "cell_column": "3",
+      "same": "Uppercase 1_word_copy",
+      "next": "Uppercase 3_bubble_pop",
+      "harder": "Uppercase 3R_bubble_pop",
+      "easier": "Uppercase 2_bubble_pop"
+    },
+
+    "Uppercase 3_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Uppercase 3_bubble_pop",
+      "cell_row": "1",
+      "cell_column": "4",
+      "same": "Uppercase 3_bubble_pop",
+      "next": "Uppercase 4_bubble_pop",
+      "harder": "Uppercase 4R_bubble_pop",
+      "easier": "Uppercase 1_word_copy"
+    },
+
+    "Uppercase 4_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Uppercase 4_bubble_pop",
+      "cell_row": "1",
+      "cell_column": "5",
+      "same": "Uppercase 4_bubble_pop",
+      "next": "Dictation Uppercase 1_word_copy",
+      "harder": "Dictation Uppercase 2_word_copy",
+      "easier": "Uppercase 3_bubble_pop"
+    },
+
+    "Dictation Uppercase 1_word_copy": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Dictation Uppercase 1_word_copy",
+      "cell_row": "1",
+      "cell_column": "6",
+      "same": "Dictation Uppercase 1_word_copy",
+      "next": "Uppercase 1R_bubble_pop",
+      "harder": "Uppercase 1R_bubble_pop",
+      "easier": "Uppercase 4_bubble_pop"
+    },
+
+    "Uppercase 1R_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Uppercase 1R_bubble_pop",
+      "cell_row": "2",
+      "cell_column": "1",
+      "same": "Uppercase 1R_bubble_pop",
+      "next": "Uppercase 2R_bubble_pop",
+      "harder": "Uppercase 6_bubble_pop",
+      "easier": "Uppercase 1_bubble_pop"
+    },
+
+    "Uppercase 2R_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Uppercase 2R_bubble_pop",
+      "cell_row": "2",
+      "cell_column": "2",
+      "same": "Uppercase 2R_bubble_pop",
+      "next": "Uppercase 2_word_copy",
+      "harder": "Uppercase 5R_bubble_pop",
+      "easier": "Uppercase 1_bubble_pop"
+    },
+
+    "Uppercase 2_word_copy": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Uppercase 2_word_copy",
+      "cell_row": "2",
+      "cell_column": "3",
+      "same": "Uppercase 2_word_copy",
+      "next": "Uppercase 3R_bubble_pop",
+      "harder": "Uppercase 5R_bubble_pop",
+      "easier": "Uppercase 2_bubble_pop"
+    },
+
+    "Uppercase 3R_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Uppercase 3R_bubble_pop",
+      "cell_row": "2",
+      "cell_column": "4",
+      "same": "Uppercase 3R_bubble_pop",
+      "next": "Uppercase 4R_bubble_pop",
+      "harder": "Uppercase 6R_bubble_pop",
+      "easier": "Uppercase 1_word_copy"
+    },
+
+    "Uppercase 4R_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Uppercase 4R_bubble_pop",
+      "cell_row": "2",
+      "cell_column": "5",
+      "same": "Uppercase 4R_bubble_pop",
+      "next": "Dictation Uppercase 2_word_copy",
+      "harder": "Uppercase 5_bubble_pop",
+      "easier": "Uppercase 3_bubble_pop"
+    },
+
+    "Dictation Uppercase 2_word_copy": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Dictation Uppercase 2_word_copy",
+      "cell_row": "2",
+      "cell_column": "6",
+      "same": "Dictation Uppercase 2_word_copy",
+      "next": "Uppercase 5_bubble_pop",
+      "harder": "Uppercase 5_bubble_pop",
+      "easier": "Uppercase 4_bubble_pop"
+    },
+
+    "Uppercase 5_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Uppercase 5_bubble_pop",
+      "cell_row": "3",
+      "cell_column": "1",
+      "same": "Uppercase 5_bubble_pop",
+      "next": "Uppercase 6_bubble_pop",
+      "harder": "Lowercase 2_bubble_pop",
+      "easier": "Uppercase 1R_bubble_pop"
+    },
+
+    "Uppercase 6_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Uppercase 6_bubble_pop",
+      "cell_row": "3",
+      "cell_column": "2",
+      "same": "Uppercase 6_bubble_pop",
+      "next": "Uppercase 5R_bubble_pop",
+      "harder": "Lowercase 1_word_copy",
+      "easier": "Uppercase 1R_bubble_pop"
+    },
+
+    "Uppercase 5R_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Uppercase 5R_bubble_pop",
+      "cell_row": "3",
+      "cell_column": "4",
+      "same": "Uppercase 5R_bubble_pop",
+      "next": "Uppercase 6R_bubble_pop",
+      "harder": "Lowercase 4_bubble_pop",
+      "easier": "Uppercase 2_word_copy"
+    },
+
+    "Uppercase 6R_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Uppercase 6R_bubble_pop",
+      "cell_row": "3",
+      "cell_column": "5",
+      "same": "Uppercase 6R_bubble_pop",
+      "next": "Lowercase 1_bubble_pop",
+      "harder": "Dictation Lowercase 1_word_copy",
+      "easier": "Uppercase 3R_bubble_pop"
+    },
+
+    "Lowercase 1_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Lowercase 1_bubble_pop",
+      "cell_row": "4",
+      "cell_column": "1",
+      "same": "Lowercase 1_bubble_pop",
+      "next": "Lowercase 2_bubble_pop",
+      "harder": "Lowercase 2R_bubble_pop",
+      "easier": "Uppercase 5_bubble_pop"
+    },
+
+    "Lowercase 2_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Lowercase 2_bubble_pop",
+      "cell_row": "4",
+      "cell_column": "2",
+      "same": "Lowercase 2_bubble_pop",
+      "next": "Lowercase 1_word_copy",
+      "harder": "Lowercase 2_word_copy",
+      "easier": "Uppercase 5_bubble_pop"
+    },
+
+    "Lowercase 1_word_copy": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Lowercase 1_word_copy",
+      "cell_row": "4",
+      "cell_column": "3",
+      "same": "Lowercase 1_word_copy",
+      "next": "Lowercase 3_bubble_pop",
+      "harder": "Lowercase 3R_bubble_pop",
+      "easier": "Uppercase 6_bubble_pop"
+    },
+
+    "Lowercase 3_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Lowercase 3_bubble_pop",
+      "cell_row": "4",
+      "cell_column": "4",
+      "same": "Lowercase 3_bubble_pop",
+      "next": "Lowercase 4_bubble_pop",
+      "harder": "Lowercase 4R_bubble_pop",
+      "easier": "Uppercase 6_bubble_pop"
+    },
+
+    "Lowercase 4_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Lowercase 4_bubble_pop",
+      "cell_row": "4",
+      "cell_column": "5",
+      "same": "Lowercase 4_bubble_pop",
+      "next": "Dictation Lowercase 1_word_copy",
+      "harder": "Dictation Lowercase 2_word_copy",
+      "easier": "Uppercase 5R_bubble_pop"
+    },
+
+    "Dictation Lowercase 1_word_copy": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Dictation Lowercase 1_word_copy",
+      "cell_row": "4",
+      "cell_column": "6",
+      "same": "Dictation Lowercase 1_word_copy",
+      "next": "Lowercase 1R_bubble_pop",
+      "harder": "Lowercase 1R_bubble_pop",
+      "easier": "Uppercase 6R_bubble_pop"
+    },
+
+    "Lowercase 1R_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Lowercase 1R_bubble_pop",
+      "cell_row": "5",
+      "cell_column": "1",
+      "same": "Lowercase 1R_bubble_pop",
+      "next": "Lowercase 2R_bubble_pop",
+      "harder": "Lowercase 6_bubble_pop",
+      "easier": "Lowercase 1_bubble_pop"
+    },
+
+    "Lowercase 2R_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Lowercase 2R_bubble_pop",
+      "cell_row": "5",
+      "cell_column": "2",
+      "same": "Lowercase 2R_bubble_pop",
+      "next": "Lowercase 2_word_copy",
+      "harder": "Lowercase 5R_bubble_pop",
+      "easier": "Lowercase 1_bubble_pop"
+    },
+
+    "Lowercase 2_word_copy": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Lowercase 2_word_copy",
+      "cell_row": "5",
+      "cell_column": "3",
+      "same": "Lowercase 2_word_copy",
+      "next": "Lowercase 3R_bubble_pop",
+      "harder": "Lowercase 5R_bubble_pop",
+      "easier": "Lowercase 2_bubble_pop"
+    },
+
+    "Lowercase 3R_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Lowercase 3R_bubble_pop",
+      "cell_row": "5",
+      "cell_column": "4",
+      "same": "Lowercase 3R_bubble_pop",
+      "next": "Lowercase 4R_bubble_pop",
+      "harder": "Lowercase 6R_bubble_pop",
+      "easier": "Lowercase 1_word_copy"
+    },
+
+    "Lowercase 4R_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Lowercase 4R_bubble_pop",
+      "cell_row": "5",
+      "cell_column": "5",
+      "same": "Lowercase 4R_bubble_pop",
+      "next": "Dictation Lowercase 2_word_copy",
+      "harder": "Lowercase 5_bubble_pop",
+      "easier": "Lowercase 3_bubble_pop"
+    },
+
+    "Dictation Lowercase 2_word_copy": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Dictation Lowercase 2_word_copy",
+      "cell_row": "5",
+      "cell_column": "6",
+      "same": "Dictation Lowercase 2_word_copy",
+      "next": "Lowercase 5_bubble_pop",
+      "harder": "Lowercase 5_bubble_pop",
+      "easier": "Lowercase 4_bubble_pop"
+    },
+
+    "Lowercase 5_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Lowercase 5_bubble_pop",
+      "cell_row": "6",
+      "cell_column": "1",
+      "same": "Lowercase 5_bubble_pop",
+      "next": "Lowercase 6_bubble_pop",
+      "harder": "Mixed Case MC 2_bubble_pop",
+      "easier": "Lowercase 1R_bubble_pop"
+    },
+
+    "Lowercase 6_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Lowercase 6_bubble_pop",
+      "cell_row": "6",
+      "cell_column": "2",
+      "same": "Lowercase 6_bubble_pop",
+      "next": "Lowercase 5R_bubble_pop",
+      "harder": "Mixed Case MC 3_bubble_pop",
+      "easier": "Lowercase 1R_bubble_pop"
+    },
+
+    "Lowercase 5R_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Lowercase 5R_bubble_pop",
+      "cell_row": "6",
+      "cell_column": "4",
+      "same": "Lowercase 5R_bubble_pop",
+      "next": "Lowercase 6R_bubble_pop",
+      "harder": "Mixed Case MC 4_bubble_pop",
+      "easier": "Lowercase 2_word_copy"
+    },
+
+    "Lowercase 6R_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Lowercase 6R_bubble_pop",
+      "cell_row": "6",
+      "cell_column": "5",
+      "same": "Lowercase 6R_bubble_pop",
+      "next": "Mixed Case MC 1_bubble_pop",
+      "harder": "Mixed Case MC 1_bubble_pop",
+      "easier": "Lowercase 3R_bubble_pop"
+    },
+
+    "Mixed Case MC 1_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Mixed Case MC 1_bubble_pop",
+      "cell_row": "7",
+      "cell_column": "1",
+      "same": "Mixed Case MC 1_bubble_pop",
+      "next": "Mixed Case MC 2_bubble_pop",
+      "harder": "Mixed Case Rise 2_bubble_pop",
+      "easier": "Lowercase 5_bubble_pop"
+    },
+
+    "Mixed Case MC 2_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Mixed Case MC 2_bubble_pop",
+      "cell_row": "7",
+      "cell_column": "2",
+      "same": "Mixed Case MC 2_bubble_pop",
+      "next": "Mixed Case MC 3_bubble_pop",
+      "harder": "Mixed Case Rise 3_bubble_pop",
+      "easier": "Lowercase 5_bubble_pop"
+    },
+
+    "Mixed Case MC 3_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Mixed Case MC 3_bubble_pop",
+      "cell_row": "7",
+      "cell_column": "4",
+      "same": "Mixed Case MC 3_bubble_pop",
+      "next": "Mixed Case MC 4_bubble_pop",
+      "harder": "Mixed Case Rise 4_bubble_pop",
+      "easier": "Lowercase 6_bubble_pop"
+    },
+
+    "Mixed Case MC 4_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Mixed Case MC 4_bubble_pop",
+      "cell_row": "7",
+      "cell_column": "5",
+      "same": "Mixed Case MC 4_bubble_pop",
+      "next": "Mixed Case Rise 1_bubble_pop",
+      "harder": "Mixed Case Rise 1_bubble_pop",
+      "easier": "Lowercase 5R_bubble_pop"
+    },
+
+    "Mixed Case Rise 1_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Mixed Case Rise 1_bubble_pop",
+      "cell_row": "8",
+      "cell_column": "1",
+      "same": "Mixed Case Rise 1_bubble_pop",
+      "next": "Mixed Case Rise 2_bubble_pop",
+      "harder": "Words_2_YN_MC_bubble_pop",
+      "easier": "Mixed Case MC 1_bubble_pop"
+    },
+
+    "Mixed Case Rise 2_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Mixed Case Rise 2_bubble_pop",
+      "cell_row": "8",
+      "cell_column": "2",
+      "same": "Mixed Case Rise 2_bubble_pop",
+      "next": "Mixed Case Rise 3_bubble_pop",
+      "harder": "copy_2_letter_Swahili",
+      "easier": "Mixed Case MC 1_bubble_pop"
+    },
+
+    "Mixed Case Rise 3_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Mixed Case Rise 3_bubble_pop",
+      "cell_row": "8",
+      "cell_column": "4",
+      "same": "Mixed Case Rise 3_bubble_pop",
+      "next": "Mixed Case Rise 4_bubble_pop",
+      "harder": "ak_sw_2_letter",
+      "easier": "Mixed Case MC 2_bubble_pop"
+    },
+
+    "Mixed Case Rise 4_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Mixed Case Rise 4_bubble_pop",
+      "cell_row": "8",
+      "cell_column": "5",
+      "same": "Mixed Case Rise 4_bubble_pop",
+      "next": "Words_2_YN_MC_bubble_pop",
+      "harder": "copy_2_letter_Swahili",
+      "easier": "Mixed Case MC 3_bubble_pop"
+    },
+
+    "Words_2_YN_MC_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Words_2_YN_MC_bubble_pop",
+      "cell_row": "9",
+      "cell_column": "2",
+      "same": "Words_2_YN_MC_bubble_pop",
+      "next": "copy_2_letter_Swahili",
+      "harder": "copy_3_letter_Swahili",
+      "easier": "Mixed Case Rise 1_bubble_pop"
+    },
+
+    "copy_2_letter_Swahili": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "copy_2_letter_Swahili",
+      "cell_row": "9",
+      "cell_column": "3",
+      "same": "copy_2_letter_Swahili",
+      "next": "Words_2_YN_RISE_bubble_pop",
+      "harder": "Words_3_YN_RISE_bubble_pop",
+      "easier": "Mixed Case Rise 2_bubble_pop"
+    },
+
+    "Words_2_YN_RISE_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Words_2_YN_RISE_bubble_pop",
+      "cell_row": "9",
+      "cell_column": "4",
+      "same": "Words_2_YN_RISE_bubble_pop",
+      "next": "ak_sw_2_letter",
+      "harder": "ak_sw_3_letter",
+      "easier": "Mixed Case Rise 2_bubble_pop"
+    },
+
+    "ak_sw_2_letter": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "ak_sw_2_letter",
+      "cell_row": "9",
+      "cell_column": "5",
+      "same": "ak_sw_2_letter",
+      "next": "copy_2_letter_Swahili",
+      "harder": "copy_3_letter_Swahili",
+      "easier": "Mixed Case Rise 3_bubble_pop"
+    },
+
+    "copy_2_letter_Swahili": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "copy_2_letter_Swahili",
+      "cell_row": "9",
+      "cell_column": "6",
+      "same": "copy_2_letter_Swahili",
+      "next": "Words_3_YN_MC_bubble_pop",
+      "harder": "Words_3_YN_MC_bubble_pop",
+      "easier": "Mixed Case Rise 4_bubble_pop"
+    },
+
+    "Words_3_YN_MC_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Words_3_YN_MC_bubble_pop",
+      "cell_row": "10",
+      "cell_column": "2",
+      "same": "Words_3_YN_MC_bubble_pop",
+      "next": "copy_3_letter_Swahili",
+      "harder": "copy_4_letter_Swahili",
+      "easier": "ak_sw_2_letter"
+    },
+
+    "copy_3_letter_Swahili": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "copy_3_letter_Swahili",
+      "cell_row": "10",
+      "cell_column": "3",
+      "same": "copy_3_letter_Swahili",
+      "next": "Words_3_YN_RISE_bubble_pop",
+      "harder": "Words_4_YN_RISE_bubble_pop",
+      "easier": "Words_2_YN_MC_bubble_pop"
+    },
+
+    "Words_3_YN_RISE_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Words_3_YN_RISE_bubble_pop",
+      "cell_row": "10",
+      "cell_column": "4",
+      "same": "Words_3_YN_RISE_bubble_pop",
+      "next": "ak_sw_3_letter",
+      "harder": "ak_sw_4_letter",
+      "easier": "copy_2_letter_Swahili"
+    },
+
+    "ak_sw_3_letter": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "ak_sw_3_letter",
+      "cell_row": "10",
+      "cell_column": "5",
+      "same": "ak_sw_3_letter",
+      "next": "copy_3_letter_Swahili",
+      "harder": "copy_4_letter_Swahili",
+      "easier": "Words_2_YN_RISE_bubble_pop"
+    },
+
+    "copy_3_letter_Swahili": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "copy_3_letter_Swahili",
+      "cell_row": "10",
+      "cell_column": "6",
+      "same": "copy_3_letter_Swahili",
+      "next": "Words_4_YN_MC_bubble_pop",
+      "harder": "Words_4_YN_MC_bubble_pop",
+      "easier": "ak_sw_2_letter"
+    },
+
+    "Words_4_YN_MC_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Words_4_YN_MC_bubble_pop",
+      "cell_row": "11",
+      "cell_column": "2",
+      "same": "Words_4_YN_MC_bubble_pop",
+      "next": "copy_4_letter_Swahili",
+      "harder": "copy_5_letter_Swahili",
+      "easier": "ak_sw_3_letter"
+    },
+
+    "copy_4_letter_Swahili": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "copy_4_letter_Swahili",
+      "cell_row": "11",
+      "cell_column": "3",
+      "same": "copy_4_letter_Swahili",
+      "next": "Words_4_YN_RISE_bubble_pop",
+      "harder": "Words_5_YN_RISE_bubble_pop",
+      "easier": "Words_3_YN_MC_bubble_pop"
+    },
+
+    "Words_4_YN_RISE_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Words_4_YN_RISE_bubble_pop",
+      "cell_row": "11",
+      "cell_column": "4",
+      "same": "Words_4_YN_RISE_bubble_pop",
+      "next": "ak_sw_4_letter",
+      "harder": "ak_sw_5_letter",
+      "easier": "copy_3_letter_Swahili"
+    },
+
+    "ak_sw_4_letter": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "ak_sw_4_letter",
+      "cell_row": "11",
+      "cell_column": "5",
+      "same": "ak_sw_4_letter",
+      "next": "copy_4_letter_Swahili",
+      "harder": "copy_5_letter_Swahili",
+      "easier": "Words_3_YN_RISE_bubble_pop"
+    },
+
+    "copy_4_letter_Swahili": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "copy_4_letter_Swahili",
+      "cell_row": "11",
+      "cell_column": "6",
+      "same": "copy_4_letter_Swahili",
+      "next": "Words_5_YN_MC_bubble_pop",
+      "harder": "Words_5_YN_MC_bubble_pop",
+      "easier": "ak_sw_3_letter"
+    },
+
+    "Words_5_YN_MC_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Words_5_YN_MC_bubble_pop",
+      "cell_row": "12",
+      "cell_column": "2",
+      "same": "Words_5_YN_MC_bubble_pop",
+      "next": "copy_5_letter_Swahili",
+      "harder": "copy_6_letter_Swahili",
+      "easier": "ak_sw_4_letter"
+    },
+
+    "copy_5_letter_Swahili": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "copy_5_letter_Swahili",
+      "cell_row": "12",
+      "cell_column": "3",
+      "same": "copy_5_letter_Swahili",
+      "next": "Words_5_YN_RISE_bubble_pop",
+      "harder": "Words_6_YN_RISE_bubble_pop",
+      "easier": "Words_4_YN_MC_bubble_pop"
+    },
+
+    "Words_5_YN_RISE_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Words_5_YN_RISE_bubble_pop",
+      "cell_row": "12",
+      "cell_column": "4",
+      "same": "Words_5_YN_RISE_bubble_pop",
+      "next": "ak_sw_5_letter",
+      "harder": "ak_sw_6_letter",
+      "easier": "copy_4_letter_Swahili"
+    },
+
+    "ak_sw_5_letter": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "ak_sw_5_letter",
+      "cell_row": "12",
+      "cell_column": "5",
+      "same": "ak_sw_5_letter",
+      "next": "copy_5_letter_Swahili",
+      "harder": "copy_6_letter_Swahili",
+      "easier": "Words_4_YN_RISE_bubble_pop"
+    },
+
+    "copy_5_letter_Swahili": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "copy_5_letter_Swahili",
+      "cell_row": "12",
+      "cell_column": "6",
+      "same": "copy_5_letter_Swahili",
+      "next": "Words_6_YN_MC_bubble_pop",
+      "harder": "Words_6_YN_MC_bubble_pop",
+      "easier": "ak_sw_4_letter"
+    },
+
+    "Words_6_YN_MC_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Words_6_YN_MC_bubble_pop",
+      "cell_row": "13",
+      "cell_column": "2",
+      "same": "Words_6_YN_MC_bubble_pop",
+      "next": "copy_6_letter_Swahili",
+      "harder": "copy_7_letter_Swahili",
+      "easier": "ak_sw_5_letter"
+    },
+
+    "copy_6_letter_Swahili": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "copy_6_letter_Swahili",
+      "cell_row": "13",
+      "cell_column": "3",
+      "same": "copy_6_letter_Swahili",
+      "next": "Words_6_YN_RISE_bubble_pop",
+      "harder": "Words_7_YN_RISE_bubble_pop",
+      "easier": "Words_5_YN_MC_bubble_pop"
+    },
+
+    "Words_6_YN_RISE_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Words_6_YN_RISE_bubble_pop",
+      "cell_row": "13",
+      "cell_column": "4",
+      "same": "Words_6_YN_RISE_bubble_pop",
+      "next": "ak_sw_6_letter",
+      "harder": "ak_sw_7_letter",
+      "easier": "copy_5_letter_Swahili"
+    },
+
+    "ak_sw_6_letter": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "ak_sw_6_letter",
+      "cell_row": "13",
+      "cell_column": "5",
+      "same": "ak_sw_6_letter",
+      "next": "copy_6_letter_Swahili",
+      "harder": "copy_7_letter_Swahili",
+      "easier": "Words_5_YN_RISE_bubble_pop"
+    },
+
+    "copy_6_letter_Swahili": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "copy_6_letter_Swahili",
+      "cell_row": "13",
+      "cell_column": "6",
+      "same": "copy_6_letter_Swahili",
+      "next": "Words_7_YN_MC_bubble_pop",
+      "harder": "Words_7_YN_MC_bubble_pop",
+      "easier": "ak_sw_5_letter"
+    },
+
+    "Words_7_YN_MC_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Words_7_YN_MC_bubble_pop",
+      "cell_row": "14",
+      "cell_column": "2",
+      "same": "Words_7_YN_MC_bubble_pop",
+      "next": "copy_7_letter_Swahili",
+      "harder": "copy_8_letter_Swahili",
+      "easier": "ak_sw_6_letter"
+    },
+
+    "copy_7_letter_Swahili": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "copy_7_letter_Swahili",
+      "cell_row": "14",
+      "cell_column": "3",
+      "same": "copy_7_letter_Swahili",
+      "next": "Words_7_YN_RISE_bubble_pop",
+      "harder": "Words_8_YN_RISE_bubble_pop",
+      "easier": "Words_6_YN_MC_bubble_pop"
+    },
+
+    "Words_7_YN_RISE_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Words_7_YN_RISE_bubble_pop",
+      "cell_row": "14",
+      "cell_column": "4",
+      "same": "Words_7_YN_RISE_bubble_pop",
+      "next": "ak_sw_7_letter",
+      "harder": "ak_sw_8_letter",
+      "easier": "copy_6_letter_Swahili"
+    },
+
+    "ak_sw_7_letter": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "ak_sw_7_letter",
+      "cell_row": "14",
+      "cell_column": "5",
+      "same": "ak_sw_7_letter",
+      "next": "copy_7_letter_Swahili",
+      "harder": "copy_8_letter_Swahili",
+      "easier": "Words_6_YN_RISE_bubble_pop"
+    },
+
+    "copy_7_letter_Swahili": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "copy_7_letter_Swahili",
+      "cell_row": "14",
+      "cell_column": "6",
+      "same": "copy_7_letter_Swahili",
+      "next": "Words_8_YN_MC_bubble_pop",
+      "harder": "Words_8_YN_MC_bubble_pop",
+      "easier": "ak_sw_6_letter"
+    },
+
+    "Words_8_YN_MC_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Words_8_YN_MC_bubble_pop",
+      "cell_row": "15",
+      "cell_column": "2",
+      "same": "Words_8_YN_MC_bubble_pop",
+      "next": "copy_8_letter_Swahili",
+      "harder": "copy_9_letter_Swahili",
+      "easier": "ak_sw_7_letter"
+    },
+
+    "copy_8_letter_Swahili": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "copy_8_letter_Swahili",
+      "cell_row": "15",
+      "cell_column": "3",
+      "same": "copy_8_letter_Swahili",
+      "next": "Words_8_YN_RISE_bubble_pop",
+      "harder": "ak_sw_9_letter",
+      "easier": "Words_7_YN_MC_bubble_pop"
+    },
+
+    "Words_8_YN_RISE_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "Words_8_YN_RISE_bubble_pop",
+      "cell_row": "15",
+      "cell_column": "4",
+      "same": "Words_8_YN_RISE_bubble_pop",
+      "next": "ak_sw_8_letter",
+      "harder": "ak_sw_9_letter",
+      "easier": "copy_7_letter_Swahili"
+    },
+
+    "ak_sw_8_letter": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "ak_sw_8_letter",
+      "cell_row": "15",
+      "cell_column": "5",
+      "same": "ak_sw_8_letter",
+      "next": "copy_8_letter_Swahili",
+      "harder": "copy_9_letter_Swahili",
+      "easier": "Words_7_YN_RISE_bubble_pop"
+    },
+
+    "copy_8_letter_Swahili": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "copy_8_letter_Swahili",
+      "cell_row": "15",
+      "cell_column": "6",
+      "same": "copy_8_letter_Swahili",
+      "next": "copy_9_letter_Swahili",
+      "harder": "copy_9_letter_Swahili",
+      "easier": "ak_sw_7_letter"
+    },
+
+    "copy_9_letter_Swahili": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "copy_9_letter_Swahili",
+      "cell_row": "16",
+      "cell_column": "3",
+      "same": "copy_9_letter_Swahili",
+      "next": "ak_sw_9_letter",
+      "harder": "ak_sw_9_letter",
+      "easier": "Words_8_YN_MC_bubble_pop"
+    },
+
+    "ak_sw_9_letter": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "ak_sw_9_letter",
+      "cell_row": "16",
+      "cell_column": "5",
+      "same": "ak_sw_9_letter",
+      "next": "copy_9_letter_Swahili",
+      "harder": "copy_9_letter_Swahili",
+      "easier": "Words_8_YN_RISE_bubble_pop"
+    },
+
+    "copy_9_letter_Swahili": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "copy_9_letter_Swahili",
+      "cell_row": "16",
+      "cell_column": "6",
+      "same": "copy_9_letter_Swahili",
+      "next": "copy_9_letter_Swahili",
+      "harder": "copy_9_letter_Swahili",
+      "easier": "ak_sw_8_letter"
+    }
+  },
+
+  "storyTransitions": {
+
+    "1_1:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_1:a.HEAR",
+      "cell_row": "1",
+      "cell_column": "1",
+      "same": "1_1:a.HEAR",
+      "next": "1_1:a.READ",
+      "harder": "2_1:a.READ",
+      "easier": "1_1:a.HEAR"
+    },
+
+    "1_1:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_1:a.READ",
+      "cell_row": "1",
+      "cell_column": "2",
+      "same": "1_1:a.READ",
+      "next": "1_2:a.HEAR",
+      "harder": "2_2:a.HEAR",
+      "easier": "1_1:a.HEAR"
+    },
+
+    "1_2:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_2:a.HEAR",
+      "cell_row": "1",
+      "cell_column": "3",
+      "same": "1_2:a.HEAR",
+      "next": "1_2:a.READ",
+      "harder": "2_2:a.READ",
+      "easier": "1_1:a.READ"
+    },
+
+    "1_2:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_2:a.READ",
+      "cell_row": "1",
+      "cell_column": "4",
+      "same": "1_2:a.READ",
+      "next": "1_3:a.HEAR",
+      "harder": "2_3:a.HEAR",
+      "easier": "1_2:a.HEAR"
+    },
+
+    "1_3:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_3:a.HEAR",
+      "cell_row": "1",
+      "cell_column": "5",
+      "same": "1_3:a.HEAR",
+      "next": "1_3:a.READ",
+      "harder": "2_3:a.READ",
+      "easier": "1_2:a.READ"
+    },
+
+    "1_3:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_3:a.READ",
+      "cell_row": "1",
+      "cell_column": "6",
+      "same": "1_3:a.READ",
+      "next": "1_4:a.HEAR",
+      "harder": "2_4:a.HEAR",
+      "easier": "1_3:a.HEAR"
+    },
+
+    "1_4:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_4:a.HEAR",
+      "cell_row": "1",
+      "cell_column": "7",
+      "same": "1_4:a.HEAR",
+      "next": "1_4:a.READ",
+      "harder": "2_4:a.READ",
+      "easier": "1_3:a.READ"
+    },
+
+    "1_4:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_4:a.READ",
+      "cell_row": "1",
+      "cell_column": "8",
+      "same": "1_4:a.READ",
+      "next": "1_5:a.HEAR",
+      "harder": "2_5:a.HEAR",
+      "easier": "1_4:a.HEAR"
+    },
+
+    "1_5:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_5:a.HEAR",
+      "cell_row": "1",
+      "cell_column": "9",
+      "same": "1_5:a.HEAR",
+      "next": "1_5:a.READ",
+      "harder": "2_5:a.READ",
+      "easier": "1_4:a.READ"
+    },
+
+    "1_5:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_5:a.READ",
+      "cell_row": "1",
+      "cell_column": "10",
+      "same": "1_5:a.READ",
+      "next": "1_6:a.HEAR",
+      "harder": "2_6:a.HEAR",
+      "easier": "1_5:a.HEAR"
+    },
+
+    "1_6:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_6:a.HEAR",
+      "cell_row": "1",
+      "cell_column": "11",
+      "same": "1_6:a.HEAR",
+      "next": "1_6:a.READ",
+      "harder": "2_6:a.READ",
+      "easier": "1_5:a.READ"
+    },
+
+    "1_6:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_6:a.READ",
+      "cell_row": "1",
+      "cell_column": "12",
+      "same": "1_6:a.READ",
+      "next": "1_7:a.HEAR",
+      "harder": "2_7:a.HEAR",
+      "easier": "1_6:a.HEAR"
+    },
+
+    "1_7:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_7:a.HEAR",
+      "cell_row": "1",
+      "cell_column": "13",
+      "same": "1_7:a.HEAR",
+      "next": "1_7:a.READ",
+      "harder": "2_7:a.READ",
+      "easier": "1_6:a.READ"
+    },
+
+    "1_7:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_7:a.READ",
+      "cell_row": "1",
+      "cell_column": "14",
+      "same": "1_7:a.READ",
+      "next": "1_8:a.HEAR",
+      "harder": "2_8:a.HEAR",
+      "easier": "1_7:a.HEAR"
+    },
+
+    "1_8:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_8:a.HEAR",
+      "cell_row": "1",
+      "cell_column": "15",
+      "same": "1_8:a.HEAR",
+      "next": "1_8:a.READ",
+      "harder": "2_8:a.READ",
+      "easier": "1_7:a.READ"
+    },
+
+    "1_8:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_8:a.READ",
+      "cell_row": "1",
+      "cell_column": "16",
+      "same": "1_8:a.READ",
+      "next": "1_9:a.HEAR",
+      "harder": "2_9:a.HEAR",
+      "easier": "1_8:a.HEAR"
+    },
+
+    "1_9:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_9:a.HEAR",
+      "cell_row": "1",
+      "cell_column": "17",
+      "same": "1_9:a.HEAR",
+      "next": "1_9:a.READ",
+      "harder": "2_9:a.READ",
+      "easier": "1_8:a.READ"
+    },
+
+    "1_9:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_9:a.READ",
+      "cell_row": "1",
+      "cell_column": "18",
+      "same": "1_9:a.READ",
+      "next": "1_10:a.HEAR",
+      "harder": "2_10:a.HEAR",
+      "easier": "1_9:a.HEAR"
+    },
+
+    "1_10:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_10:a.HEAR",
+      "cell_row": "1",
+      "cell_column": "19",
+      "same": "1_10:a.HEAR",
+      "next": "1_10:a.READ",
+      "harder": "2_10:a.READ",
+      "easier": "1_9:a.READ"
+    },
+
+    "1_10:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "1_10:a.READ",
+      "cell_row": "1",
+      "cell_column": "20",
+      "same": "1_10:a.READ",
+      "next": "2_1:a.HEAR",
+      "harder": "2_11:a.HEAR",
+      "easier": "1_10:a.HEAR"
+    },
+
+    "2_1:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_1:a.HEAR",
+      "cell_row": "2",
+      "cell_column": "1",
+      "same": "2_1:a.HEAR",
+      "next": "2_1:a.READ",
+      "harder": "3_1:a.READ",
+      "easier": "1_1:a.HEAR"
+    },
+
+    "2_1:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_1:a.READ",
+      "cell_row": "2",
+      "cell_column": "2",
+      "same": "2_1:a.READ",
+      "next": "2_2:a.HEAR",
+      "harder": "3_2:a.HEAR",
+      "easier": "1_1:a.HEAR"
+    },
+
+    "2_2:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_2:a.HEAR",
+      "cell_row": "2",
+      "cell_column": "3",
+      "same": "2_2:a.HEAR",
+      "next": "2_2:a.READ",
+      "harder": "3_2:a.READ",
+      "easier": "1_1:a.READ"
+    },
+
+    "2_2:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_2:a.READ",
+      "cell_row": "2",
+      "cell_column": "4",
+      "same": "2_2:a.READ",
+      "next": "2_3:a.HEAR",
+      "harder": "3_3:a.HEAR",
+      "easier": "1_2:a.HEAR"
+    },
+
+    "2_3:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_3:a.HEAR",
+      "cell_row": "2",
+      "cell_column": "5",
+      "same": "2_3:a.HEAR",
+      "next": "2_3:a.READ",
+      "harder": "3_3:a.READ",
+      "easier": "1_2:a.READ"
+    },
+
+    "2_3:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_3:a.READ",
+      "cell_row": "2",
+      "cell_column": "6",
+      "same": "2_3:a.READ",
+      "next": "2_4:a.HEAR",
+      "harder": "3_4:a.HEAR",
+      "easier": "1_3:a.HEAR"
+    },
+
+    "2_4:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_4:a.HEAR",
+      "cell_row": "2",
+      "cell_column": "7",
+      "same": "2_4:a.HEAR",
+      "next": "2_4:a.READ",
+      "harder": "3_4:a.READ",
+      "easier": "1_3:a.READ"
+    },
+
+    "2_4:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_4:a.READ",
+      "cell_row": "2",
+      "cell_column": "8",
+      "same": "2_4:a.READ",
+      "next": "2_5:a.HEAR",
+      "harder": "3_5:a.HEAR",
+      "easier": "1_4:a.HEAR"
+    },
+
+    "2_5:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_5:a.HEAR",
+      "cell_row": "2",
+      "cell_column": "9",
+      "same": "2_5:a.HEAR",
+      "next": "2_5:a.READ",
+      "harder": "3_5:a.READ",
+      "easier": "1_4:a.READ"
+    },
+
+    "2_5:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_5:a.READ",
+      "cell_row": "2",
+      "cell_column": "10",
+      "same": "2_5:a.READ",
+      "next": "2_6:a.HEAR",
+      "harder": "3_6:a.HEAR",
+      "easier": "1_5:a.HEAR"
+    },
+
+    "2_6:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_6:a.HEAR",
+      "cell_row": "2",
+      "cell_column": "11",
+      "same": "2_6:a.HEAR",
+      "next": "2_6:a.READ",
+      "harder": "3_6:a.READ",
+      "easier": "1_5:a.READ"
+    },
+
+    "2_6:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_6:a.READ",
+      "cell_row": "2",
+      "cell_column": "12",
+      "same": "2_6:a.READ",
+      "next": "2_7:a.HEAR",
+      "harder": "3_7:a.HEAR",
+      "easier": "1_6:a.HEAR"
+    },
+
+    "2_7:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_7:a.HEAR",
+      "cell_row": "2",
+      "cell_column": "13",
+      "same": "2_7:a.HEAR",
+      "next": "2_7:a.READ",
+      "harder": "3_7:a.READ",
+      "easier": "1_6:a.READ"
+    },
+
+    "2_7:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_7:a.READ",
+      "cell_row": "2",
+      "cell_column": "14",
+      "same": "2_7:a.READ",
+      "next": "2_8:a.HEAR",
+      "harder": "3_8:a.HEAR",
+      "easier": "1_7:a.HEAR"
+    },
+
+    "2_8:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_8:a.HEAR",
+      "cell_row": "2",
+      "cell_column": "15",
+      "same": "2_8:a.HEAR",
+      "next": "2_8:a.READ",
+      "harder": "3_8:a.READ",
+      "easier": "1_7:a.READ"
+    },
+
+    "2_8:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_8:a.READ",
+      "cell_row": "2",
+      "cell_column": "16",
+      "same": "2_8:a.READ",
+      "next": "2_9:a.HEAR",
+      "harder": "3_9:a.HEAR",
+      "easier": "1_8:a.HEAR"
+    },
+
+    "2_9:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_9:a.HEAR",
+      "cell_row": "2",
+      "cell_column": "17",
+      "same": "2_9:a.HEAR",
+      "next": "2_9:a.READ",
+      "harder": "3_9:a.READ",
+      "easier": "1_8:a.READ"
+    },
+
+    "2_9:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_9:a.READ",
+      "cell_row": "2",
+      "cell_column": "18",
+      "same": "2_9:a.READ",
+      "next": "2_10:a.HEAR",
+      "harder": "3_10:a.HEAR",
+      "easier": "1_9:a.HEAR"
+    },
+
+    "2_10:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_10:a.HEAR",
+      "cell_row": "2",
+      "cell_column": "19",
+      "same": "2_10:a.HEAR",
+      "next": "2_10:a.READ",
+      "harder": "3_10:a.READ",
+      "easier": "1_9:a.READ"
+    },
+
+    "2_10:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_10:a.READ",
+      "cell_row": "2",
+      "cell_column": "20",
+      "same": "2_10:a.READ",
+      "next": "2_11:a.HEAR",
+      "harder": "3_11:a.HEAR",
+      "easier": "1_10:a.HEAR"
+    },
+
+    "2_11:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_11:a.HEAR",
+      "cell_row": "2",
+      "cell_column": "21",
+      "same": "2_11:a.HEAR",
+      "next": "2_11:a.READ",
+      "harder": "3_11:a.READ",
+      "easier": "1_10:a.READ"
+    },
+
+    "2_11:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_11:a.READ",
+      "cell_row": "2",
+      "cell_column": "22",
+      "same": "2_11:a.READ",
+      "next": "2_12:a.HEAR",
+      "harder": "3_12:a.HEAR",
+      "easier": "3_1:a.HEAR"
+    },
+
+    "2_12:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_12:a.HEAR",
+      "cell_row": "2",
+      "cell_column": "23",
+      "same": "2_12:a.HEAR",
+      "next": "2_12:a.READ",
+      "harder": "3_12:a.READ",
+      "easier": "3_1:a.HEAR"
+    },
+
+    "2_12:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_12:a.READ",
+      "cell_row": "2",
+      "cell_column": "24",
+      "same": "2_12:a.READ",
+      "next": "2_13:a.HEAR",
+      "harder": "3_13:a.HEAR",
+      "easier": "3_1:a.HEAR"
+    },
+
+    "2_13:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_13:a.HEAR",
+      "cell_row": "2",
+      "cell_column": "25",
+      "same": "2_13:a.HEAR",
+      "next": "2_13:a.READ",
+      "harder": "3_13:a.READ",
+      "easier": "3_1:a.HEAR"
+    },
+
+    "2_13:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_13:a.READ",
+      "cell_row": "2",
+      "cell_column": "26",
+      "same": "2_13:a.READ",
+      "next": "2_14:a.HEAR",
+      "harder": "3_14:a.HEAR",
+      "easier": "3_1:a.HEAR"
+    },
+
+    "2_14:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_14:a.HEAR",
+      "cell_row": "2",
+      "cell_column": "27",
+      "same": "2_14:a.HEAR",
+      "next": "2_14:a.READ",
+      "harder": "3_14:a.READ",
+      "easier": "3_1:a.HEAR"
+    },
+
+    "2_14:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_14:a.READ",
+      "cell_row": "2",
+      "cell_column": "28",
+      "same": "2_14:a.READ",
+      "next": "2_15:a.HEAR",
+      "harder": "3_15:a.HEAR",
+      "easier": "3_1:a.HEAR"
+    },
+
+    "2_15:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_15:a.HEAR",
+      "cell_row": "2",
+      "cell_column": "29",
+      "same": "2_15:a.HEAR",
+      "next": "2_15:a.READ",
+      "harder": "3_15:a.READ",
+      "easier": "3_1:a.HEAR"
+    },
+
+    "2_15:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_15:a.READ",
+      "cell_row": "2",
+      "cell_column": "30",
+      "same": "2_15:a.READ",
+      "next": "2_16:a.HEAR",
+      "harder": "3_1:a.HEAR",
+      "easier": "3_1:a.HEAR"
+    },
+
+    "2_16:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_16:a.HEAR",
+      "cell_row": "2",
+      "cell_column": "31",
+      "same": "2_16:a.HEAR",
+      "next": "2_16:a.READ",
+      "harder": "3_1:a.HEAR",
+      "easier": "3_1:a.HEAR"
+    },
+
+    "2_16:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_16:a.READ",
+      "cell_row": "2",
+      "cell_column": "32",
+      "same": "2_16:a.READ",
+      "next": "2_17:a.HEAR",
+      "harder": "3_1:a.HEAR",
+      "easier": "3_1:a.HEAR"
+    },
+
+    "2_17:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_17:a.HEAR",
+      "cell_row": "2",
+      "cell_column": "33",
+      "same": "2_17:a.HEAR",
+      "next": "2_17:a.READ",
+      "harder": "3_1:a.HEAR",
+      "easier": "3_1:a.HEAR"
+    },
+
+    "2_17:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "2_17:a.READ",
+      "cell_row": "2",
+      "cell_column": "34",
+      "same": "2_17:a.READ",
+      "next": "3_1:a.HEAR",
+      "harder": "3_1:a.HEAR",
+      "easier": "3_1:a.HEAR"
+    },
+
+    "3_1:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_1:a.HEAR",
+      "cell_row": "3",
+      "cell_column": "1",
+      "same": "3_1:a.HEAR",
+      "next": "3_1:a.READ",
+      "harder": "4_1:a.READ",
+      "easier": "2_1:a.HEAR"
+    },
+
+    "3_1:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_1:a.READ",
+      "cell_row": "3",
+      "cell_column": "2",
+      "same": "3_1:a.READ",
+      "next": "3_2:a.HEAR",
+      "harder": "4_2:a.HEAR",
+      "easier": "2_1:a.HEAR"
+    },
+
+    "3_2:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_2:a.HEAR",
+      "cell_row": "3",
+      "cell_column": "3",
+      "same": "3_2:a.HEAR",
+      "next": "3_2:a.READ",
+      "harder": "4_2:a.READ",
+      "easier": "2_1:a.READ"
+    },
+
+    "3_2:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_2:a.READ",
+      "cell_row": "3",
+      "cell_column": "4",
+      "same": "3_2:a.READ",
+      "next": "3_3:a.HEAR",
+      "harder": "4_3:a.HEAR",
+      "easier": "2_2:a.HEAR"
+    },
+
+    "3_3:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_3:a.HEAR",
+      "cell_row": "3",
+      "cell_column": "5",
+      "same": "3_3:a.HEAR",
+      "next": "3_3:a.READ",
+      "harder": "4_3:a.READ",
+      "easier": "2_2:a.READ"
+    },
+
+    "3_3:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_3:a.READ",
+      "cell_row": "3",
+      "cell_column": "6",
+      "same": "3_3:a.READ",
+      "next": "3_4:a.HEAR",
+      "harder": "4_4:a.HEAR",
+      "easier": "2_3:a.HEAR"
+    },
+
+    "3_4:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_4:a.HEAR",
+      "cell_row": "3",
+      "cell_column": "7",
+      "same": "3_4:a.HEAR",
+      "next": "3_4:a.READ",
+      "harder": "4_4:a.READ",
+      "easier": "2_3:a.READ"
+    },
+
+    "3_4:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_4:a.READ",
+      "cell_row": "3",
+      "cell_column": "8",
+      "same": "3_4:a.READ",
+      "next": "3_5:a.HEAR",
+      "harder": "4_5:a.HEAR",
+      "easier": "2_4:a.HEAR"
+    },
+
+    "3_5:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_5:a.HEAR",
+      "cell_row": "3",
+      "cell_column": "9",
+      "same": "3_5:a.HEAR",
+      "next": "3_5:a.READ",
+      "harder": "4_5:a.READ",
+      "easier": "2_4:a.READ"
+    },
+
+    "3_5:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_5:a.READ",
+      "cell_row": "3",
+      "cell_column": "10",
+      "same": "3_5:a.READ",
+      "next": "3_6:a.HEAR",
+      "harder": "4_6:a.HEAR",
+      "easier": "2_5:a.HEAR"
+    },
+
+    "3_6:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_6:a.HEAR",
+      "cell_row": "3",
+      "cell_column": "11",
+      "same": "3_6:a.HEAR",
+      "next": "3_6:a.READ",
+      "harder": "4_6:a.READ",
+      "easier": "2_5:a.READ"
+    },
+
+    "3_6:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_6:a.READ",
+      "cell_row": "3",
+      "cell_column": "12",
+      "same": "3_6:a.READ",
+      "next": "3_7:a.HEAR",
+      "harder": "4_7:a.HEAR",
+      "easier": "2_6:a.HEAR"
+    },
+
+    "3_7:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_7:a.HEAR",
+      "cell_row": "3",
+      "cell_column": "13",
+      "same": "3_7:a.HEAR",
+      "next": "3_7:a.READ",
+      "harder": "4_7:a.READ",
+      "easier": "2_6:a.READ"
+    },
+
+    "3_7:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_7:a.READ",
+      "cell_row": "3",
+      "cell_column": "14",
+      "same": "3_7:a.READ",
+      "next": "3_8:a.HEAR",
+      "harder": "4_8:a.HEAR",
+      "easier": "2_7:a.HEAR"
+    },
+
+    "3_8:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_8:a.HEAR",
+      "cell_row": "3",
+      "cell_column": "15",
+      "same": "3_8:a.HEAR",
+      "next": "3_8:a.READ",
+      "harder": "4_8:a.READ",
+      "easier": "2_7:a.READ"
+    },
+
+    "3_8:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_8:a.READ",
+      "cell_row": "3",
+      "cell_column": "16",
+      "same": "3_8:a.READ",
+      "next": "3_9:a.HEAR",
+      "harder": "4_9:a.HEAR",
+      "easier": "2_8:a.HEAR"
+    },
+
+    "3_9:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_9:a.HEAR",
+      "cell_row": "3",
+      "cell_column": "17",
+      "same": "3_9:a.HEAR",
+      "next": "3_9:a.READ",
+      "harder": "4_9:a.READ",
+      "easier": "2_8:a.READ"
+    },
+
+    "3_9:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_9:a.READ",
+      "cell_row": "3",
+      "cell_column": "18",
+      "same": "3_9:a.READ",
+      "next": "3_10:a.HEAR",
+      "harder": "4_10:a.HEAR",
+      "easier": "2_9:a.HEAR"
+    },
+
+    "3_10:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_10:a.HEAR",
+      "cell_row": "3",
+      "cell_column": "19",
+      "same": "3_10:a.HEAR",
+      "next": "3_10:a.READ",
+      "harder": "4_10:a.READ",
+      "easier": "2_9:a.READ"
+    },
+
+    "3_10:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_10:a.READ",
+      "cell_row": "3",
+      "cell_column": "20",
+      "same": "3_10:a.READ",
+      "next": "3_11:a.HEAR",
+      "harder": "4_11:a.HEAR",
+      "easier": "2_10:a.HEAR"
+    },
+
+    "3_11:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_11:a.HEAR",
+      "cell_row": "3",
+      "cell_column": "21",
+      "same": "3_11:a.HEAR",
+      "next": "3_11:a.READ",
+      "harder": "4_11:a.READ",
+      "easier": "2_10:a.READ"
+    },
+
+    "3_11:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_11:a.READ",
+      "cell_row": "3",
+      "cell_column": "22",
+      "same": "3_11:a.READ",
+      "next": "3_12:a.HEAR",
+      "harder": "4_1:a.HEAR",
+      "easier": "2_11:a.HEAR"
+    },
+
+    "3_12:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_12:a.HEAR",
+      "cell_row": "3",
+      "cell_column": "23",
+      "same": "3_12:a.HEAR",
+      "next": "3_12:a.READ",
+      "harder": "4_1:a.HEAR",
+      "easier": "2_11:a.READ"
+    },
+
+    "3_12:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_12:a.READ",
+      "cell_row": "3",
+      "cell_column": "24",
+      "same": "3_12:a.READ",
+      "next": "3_13:a.HEAR",
+      "harder": "4_1:a.HEAR",
+      "easier": "2_12:a.HEAR"
+    },
+
+    "3_13:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_13:a.HEAR",
+      "cell_row": "3",
+      "cell_column": "25",
+      "same": "3_13:a.HEAR",
+      "next": "3_13:a.READ",
+      "harder": "4_1:a.HEAR",
+      "easier": "2_12:a.READ"
+    },
+
+    "3_13:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_13:a.READ",
+      "cell_row": "3",
+      "cell_column": "26",
+      "same": "3_13:a.READ",
+      "next": "3_14:a.HEAR",
+      "harder": "4_1:a.HEAR",
+      "easier": "2_13:a.HEAR"
+    },
+
+    "3_14:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_14:a.HEAR",
+      "cell_row": "3",
+      "cell_column": "27",
+      "same": "3_14:a.HEAR",
+      "next": "3_14:a.READ",
+      "harder": "4_1:a.HEAR",
+      "easier": "2_13:a.READ"
+    },
+
+    "3_14:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_14:a.READ",
+      "cell_row": "3",
+      "cell_column": "28",
+      "same": "3_14:a.READ",
+      "next": "3_15:a.HEAR",
+      "harder": "4_1:a.HEAR",
+      "easier": "2_14:a.HEAR"
+    },
+
+    "3_15:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_15:a.HEAR",
+      "cell_row": "3",
+      "cell_column": "29",
+      "same": "3_15:a.HEAR",
+      "next": "3_15:a.READ",
+      "harder": "4_1:a.HEAR",
+      "easier": "2_14:a.READ"
+    },
+
+    "3_15:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "3_15:a.READ",
+      "cell_row": "3",
+      "cell_column": "30",
+      "same": "3_15:a.READ",
+      "next": "4_1:a.HEAR",
+      "harder": "4_1:a.HEAR",
+      "easier": "2_15:a.HEAR"
+    },
+
+    "4_1:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_1:a.HEAR",
+      "cell_row": "4",
+      "cell_column": "1",
+      "same": "4_1:a.HEAR",
+      "next": "4_1:a.READ",
+      "harder": "5_1:a.READ",
+      "easier": "3_1:a.HEAR"
+    },
+
+    "4_1:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_1:a.READ",
+      "cell_row": "4",
+      "cell_column": "2",
+      "same": "4_1:a.READ",
+      "next": "4_2:a.HEAR",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_1:a.HEAR"
+    },
+
+    "4_2:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_2:a.HEAR",
+      "cell_row": "4",
+      "cell_column": "3",
+      "same": "4_2:a.HEAR",
+      "next": "4_2:a.READ",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_1:a.READ"
+    },
+
+    "4_2:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_2:a.READ",
+      "cell_row": "4",
+      "cell_column": "4",
+      "same": "4_2:a.READ",
+      "next": "4_3:a.HEAR",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_2:a.HEAR"
+    },
+
+    "4_3:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_3:a.HEAR",
+      "cell_row": "4",
+      "cell_column": "5",
+      "same": "4_3:a.HEAR",
+      "next": "4_3:a.READ",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_2:a.READ"
+    },
+
+    "4_3:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_3:a.READ",
+      "cell_row": "4",
+      "cell_column": "6",
+      "same": "4_3:a.READ",
+      "next": "4_4:a.HEAR",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_3:a.HEAR"
+    },
+
+    "4_4:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_4:a.HEAR",
+      "cell_row": "4",
+      "cell_column": "7",
+      "same": "4_4:a.HEAR",
+      "next": "4_4:a.READ",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_3:a.READ"
+    },
+
+    "4_4:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_4:a.READ",
+      "cell_row": "4",
+      "cell_column": "8",
+      "same": "4_4:a.READ",
+      "next": "4_5:a.HEAR",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_4:a.HEAR"
+    },
+
+    "4_5:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_5:a.HEAR",
+      "cell_row": "4",
+      "cell_column": "9",
+      "same": "4_5:a.HEAR",
+      "next": "4_5:a.READ",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_4:a.READ"
+    },
+
+    "4_5:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_5:a.READ",
+      "cell_row": "4",
+      "cell_column": "10",
+      "same": "4_5:a.READ",
+      "next": "4_6:a.HEAR",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_5:a.HEAR"
+    },
+
+    "4_6:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_6:a.HEAR",
+      "cell_row": "4",
+      "cell_column": "11",
+      "same": "4_6:a.HEAR",
+      "next": "4_6:a.READ",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_5:a.READ"
+    },
+
+    "4_6:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_6:a.READ",
+      "cell_row": "4",
+      "cell_column": "12",
+      "same": "4_6:a.READ",
+      "next": "4_7:a.HEAR",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_6:a.HEAR"
+    },
+
+    "4_7:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_7:a.HEAR",
+      "cell_row": "4",
+      "cell_column": "13",
+      "same": "4_7:a.HEAR",
+      "next": "4_7:a.READ",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_6:a.READ"
+    },
+
+    "4_7:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_7:a.READ",
+      "cell_row": "4",
+      "cell_column": "14",
+      "same": "4_7:a.READ",
+      "next": "4_8:a.HEAR",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_7:a.HEAR"
+    },
+
+    "4_8:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_8:a.HEAR",
+      "cell_row": "4",
+      "cell_column": "15",
+      "same": "4_8:a.HEAR",
+      "next": "4_8:a.READ",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_7:a.READ"
+    },
+
+    "4_8:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_8:a.READ",
+      "cell_row": "4",
+      "cell_column": "16",
+      "same": "4_8:a.READ",
+      "next": "4_9:a.HEAR",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_8:a.HEAR"
+    },
+
+    "4_9:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_9:a.HEAR",
+      "cell_row": "4",
+      "cell_column": "17",
+      "same": "4_9:a.HEAR",
+      "next": "4_9:a.READ",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_8:a.READ"
+    },
+
+    "4_9:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_9:a.READ",
+      "cell_row": "4",
+      "cell_column": "18",
+      "same": "4_9:a.READ",
+      "next": "4_10:a.HEAR",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_9:a.HEAR"
+    },
+
+    "4_10:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_10:a.HEAR",
+      "cell_row": "4",
+      "cell_column": "19",
+      "same": "4_10:a.HEAR",
+      "next": "4_10:a.READ",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_9:a.READ"
+    },
+
+    "4_10:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_10:a.READ",
+      "cell_row": "4",
+      "cell_column": "20",
+      "same": "4_10:a.READ",
+      "next": "4_11:a.HEAR",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_10:a.HEAR"
+    },
+
+    "4_11:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_11:a.HEAR",
+      "cell_row": "4",
+      "cell_column": "21",
+      "same": "4_11:a.HEAR",
+      "next": "4_11:a.READ",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_10:a.READ"
+    },
+
+    "4_11:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "4_11:a.READ",
+      "cell_row": "4",
+      "cell_column": "22",
+      "same": "4_11:a.READ",
+      "next": "5_1:a.HEAR",
+      "harder": "5_1:a.HEAR",
+      "easier": "3_11:a.HEAR"
+    },
+
+    "5_1:a.HEAR": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "5_1:a.HEAR",
+      "cell_row": "5",
+      "cell_column": "1",
+      "same": "5_1:a.HEAR",
+      "next": "5_1:a.READ",
+      "harder": "5_1:a.READ",
+      "easier": "4_1:a.HEAR"
+    },
+
+    "5_1:a.READ": {
+      "type": "TRANSITION",
+      "skill": "stories",
+      "tutor_id": "5_1:a.READ",
+      "cell_row": "5",
+      "cell_column": "2",
+      "same": "5_1:a.READ",
+      "next": "5_1:a.HEAR",
+      "harder": "5_1:a.HEAR",
+      "easier": "4_1:a.HEAR"
+    }
+  },
+
+
+
+  "mathTransitions": {
+
+    "Numbers Pop1_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Numbers Pop1_bubble_pop",
+      "cell_row": "1",
+      "cell_column": "2",
+      "same": "Numbers Pop1_bubble_pop",
+      "next": "Numbers Pop4_bubble_pop",
+      "harder": "Numbers Pop5_bubble_pop",
+      "easier": "Digit Dictation 1_word_copy"
+    },
+
+    "Numbers Pop4_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Numbers Pop4_bubble_pop",
+      "cell_row": "1",
+      "cell_column": "3",
+      "same": "Numbers Pop4_bubble_pop",
+      "next": "Dot -> Number 1_bubble_pop",
+      "harder": "Dot -> Number 2_bubble_pop",
+      "easier": "Numbers Pop1_bubble_pop"
+    },
+
+    "Dot -> Number 1_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Dot -> Number 1_bubble_pop",
+      "cell_row": "1",
+      "cell_column": "4",
+      "same": "Dot -> Number 1_bubble_pop",
+      "next": "Dot -> Number 4_bubble_pop",
+      "harder": "Dot -> Number 5_bubble_pop",
+      "easier": "Numbers Pop4_bubble_pop"
+    },
+
+    "Dot -> Number 4_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Dot -> Number 4_bubble_pop",
+      "cell_row": "1",
+      "cell_column": "5",
+      "same": "Dot -> Number 4_bubble_pop",
+      "next": "Digit Copy 1_word_copy",
+      "harder": "Number -> Dot 2_bubble_pop",
+      "easier": "Dot -> Number 1_bubble_pop"
+    },
+
+    "Digit Copy 1_word_copy": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Digit Copy 1_word_copy",
+      "cell_row": "1",
+      "cell_column": "6",
+      "same": "Digit Copy 1_word_copy",
+      "next": "Number -> Dot 1_bubble_pop",
+      "harder": "Number -> Dot 2_bubble_pop",
+      "easier": "Dot -> Number 4_bubble_pop"
+    },
+
+    "Number -> Dot 1_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Number -> Dot 1_bubble_pop",
+      "cell_row": "1",
+      "cell_column": "7",
+      "same": "Number -> Dot 1_bubble_pop",
+      "next": "Number -> Dot 4_bubble_pop",
+      "harder": "Number -> Dot 5_bubble_pop",
+      "easier": "Digit Copy 1_word_copy"
+    },
+
+    "Number -> Dot 4_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Number -> Dot 4_bubble_pop",
+      "cell_row": "1",
+      "cell_column": "8",
+      "same": "Number -> Dot 4_bubble_pop",
+      "next": "Digit Dictation 1_word_copy",
+      "harder": "Numbers Pop2_bubble_pop",
+      "easier": "Number -> Dot 1_bubble_pop"
+    },
+
+    "Digit Dictation 1_word_copy": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Digit Dictation 1_word_copy",
+      "cell_row": "1",
+      "cell_column": "9",
+      "same": "Digit Dictation 1_word_copy",
+      "next": "Numbers Pop2_bubble_pop",
+      "harder": "Numbers Pop2_bubble_pop",
+      "easier": "Number -> Dot 4_bubble_pop"
+    },
+
+    "Numbers Pop2_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Numbers Pop2_bubble_pop",
+      "cell_row": "2",
+      "cell_column": "2",
+      "same": "Numbers Pop2_bubble_pop",
+      "next": "Numbers Pop5_bubble_pop",
+      "harder": "Numbers Pop_bubble_pop6",
+      "easier": "Digit Dictation 1_word_copy"
+    },
+
+    "Numbers Pop5_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Numbers Pop5_bubble_pop",
+      "cell_row": "2",
+      "cell_column": "3",
+      "same": "Numbers Pop5_bubble_pop",
+      "next": "Dot -> Number 2_bubble_pop",
+      "harder": "Dot -> Number 3_bubble_pop",
+      "easier": "Numbers Pop1_bubble_pop"
+    },
+
+    "Dot -> Number 2_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Dot -> Number 2_bubble_pop",
+      "cell_row": "2",
+      "cell_column": "4",
+      "same": "Dot -> Number 2_bubble_pop",
+      "next": "Dot -> Number 5_bubble_pop",
+      "harder": "Dot -> Number 6_bubble_pop",
+      "easier": "Numbers Pop4_bubble_pop"
+    },
+
+    "Dot -> Number 5_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Dot -> Number 5_bubble_pop",
+      "cell_row": "2",
+      "cell_column": "5",
+      "same": "Dot -> Number 5_bubble_pop",
+      "next": "Number -> Dot 2_bubble_pop",
+      "harder": "Digit Copy 2_word_copy",
+      "easier": "Dot -> Number 1_bubble_pop"
+    },
+
+    "Number -> Dot 2_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Number -> Dot 2_bubble_pop",
+      "cell_row": "2",
+      "cell_column": "7",
+      "same": "Number -> Dot 2_bubble_pop",
+      "next": "Number -> Dot 5_bubble_pop",
+      "harder": "Number -> Dot 6_bubble_pop",
+      "easier": "Digit Copy 1_word_copy"
+    },
+
+    "Number -> Dot 5_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Number -> Dot 5_bubble_pop",
+      "cell_row": "2",
+      "cell_column": "8",
+      "same": "Number -> Dot 5_bubble_pop",
+      "next": "Numbers Pop3_bubble_pop",
+      "harder": "Digit Dictation 2_word_copy",
+      "easier": "Number -> Dot 1_bubble_pop"
+    },
+
+    "Numbers Pop3_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Numbers Pop3_bubble_pop",
+      "cell_row": "3",
+      "cell_column": "2",
+      "same": "Numbers Pop3_bubble_pop",
+      "next": "Numbers Pop_bubble_pop6",
+      "harder": "asm_1",
+      "easier": "Number -> Dot 5_bubble_pop"
+    },
+
+    "Numbers Pop_bubble_pop6": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Numbers Pop_bubble_pop6",
+      "cell_row": "3",
+      "cell_column": "3",
+      "same": "Numbers Pop_bubble_pop6",
+      "next": "Dot -> Number 3_bubble_pop",
+      "harder": "asm_1",
+      "easier": "Numbers Pop2_bubble_pop"
+    },
+
+    "Dot -> Number 3_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Dot -> Number 3_bubble_pop",
+      "cell_row": "3",
+      "cell_column": "4",
+      "same": "Dot -> Number 3_bubble_pop",
+      "next": "Dot -> Number 6_bubble_pop",
+      "harder": "asm_1",
+      "easier": "Numbers Pop5_bubble_pop"
+    },
+
+    "Dot -> Number 6_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Dot -> Number 6_bubble_pop",
+      "cell_row": "3",
+      "cell_column": "5",
+      "same": "Dot -> Number 6_bubble_pop",
+      "next": "Digit Copy 2_word_copy",
+      "harder": "asm_1",
+      "easier": "Dot -> Number 2_bubble_pop"
+    },
+
+    "Digit Copy 2_word_copy": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Digit Copy 2_word_copy",
+      "cell_row": "3",
+      "cell_column": "6",
+      "same": "Digit Copy 2_word_copy",
+      "next": "Number -> Dot 3_bubble_pop",
+      "harder": "asm_1",
+      "easier": "Dot -> Number 5_bubble_pop"
+    },
+
+    "Number -> Dot 3_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Number -> Dot 3_bubble_pop",
+      "cell_row": "3",
+      "cell_column": "7",
+      "same": "Number -> Dot 3_bubble_pop",
+      "next": "Number -> Dot 6_bubble_pop",
+      "harder": "asm_1",
+      "easier": "Dot -> Number 5_bubble_pop"
+    },
+
+    "Number -> Dot 6_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Number -> Dot 6_bubble_pop",
+      "cell_row": "3",
+      "cell_column": "8",
+      "same": "Number -> Dot 6_bubble_pop",
+      "next": "Digit Dictation 2_word_copy",
+      "harder": "asm_1",
+      "easier": "Number -> Dot 2_bubble_pop"
+    },
+
+    "Digit Dictation 2_word_copy": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "Digit Dictation 2_word_copy",
+      "cell_row": "3",
+      "cell_column": "9",
+      "same": "Digit Dictation 2_word_copy",
+      "next": "asm_1",
+      "harder": "asm_1",
+      "easier": "Number -> Dot 5_bubble_pop"
+    },
+
+    "asm_1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_1",
+      "cell_row": "4",
+      "cell_column": "1",
+      "same": "asm_1",
+      "next": "asm_3",
+      "harder": "asm_3",
+      "easier": "Digit Dictation 2_word_copy"
+    },
+
+    "asm_3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_3",
+      "cell_row": "5",
+      "cell_column": "1",
+      "same": "asm_3",
+      "next": "asm_2",
+      "harder": "asm_2",
+      "easier": "asm_1"
+    },
+
+    "asm_2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_2",
+      "cell_row": "6",
+      "cell_column": "1",
+      "same": "asm_2",
+      "next": "asm_4",
+      "harder": "asm_4",
+      "easier": "asm_3"
+    },
+
+    "asm_4": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_4",
+      "cell_row": "7",
+      "cell_column": "1",
+      "same": "asm_4",
+      "next": "asm_5",
+      "harder": "asm_5",
+      "easier": "asm_2"
+    },
+
+    "asm_5": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_5",
+      "cell_row": "8",
+      "cell_column": "1",
+      "same": "asm_5",
+      "next": "asm_12",
+      "harder": "asm_12",
+      "easier": "asm_4"
+    },
+
+    "asm_12": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_12",
+      "cell_row": "9",
+      "cell_column": "1",
+      "same": "asm_12",
+      "next": "asm_11",
+      "harder": "asm_11",
+      "easier": "asm_5"
+    },
+
+    "asm_11": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_11",
+      "cell_row": "10",
+      "cell_column": "1",
+      "same": "asm_11",
+      "next": "asm_13",
+      "harder": "asm_13",
+      "easier": "asm_12"
+    },
+
+    "asm_13": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_13",
+      "cell_row": "11",
+      "cell_column": "1",
+      "same": "asm_13",
+      "next": "asm_14",
+      "harder": "asm_14",
+      "easier": "asm_11"
+    },
+
+    "asm_14": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_14",
+      "cell_row": "12",
+      "cell_column": "1",
+      "same": "asm_14",
+      "next": "asm_7",
+      "harder": "asm_7",
+      "easier": "asm_13"
+    },
+
+    "asm_7": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_7",
+      "cell_row": "13",
+      "cell_column": "1",
+      "same": "asm_7",
+      "next": "asm_10",
+      "harder": "asm_10",
+      "easier": "asm_14"
+    },
+
+    "asm_10": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_10",
+      "cell_row": "14",
+      "cell_column": "1",
+      "same": "asm_10",
+      "next": "asm_15",
+      "harder": "asm_15",
+      "easier": "asm_7"
+    },
+
+    "asm_15": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_15",
+      "cell_row": "15",
+      "cell_column": "1",
+      "same": "asm_15",
+      "next": "asm_8",
+      "harder": "asm_8",
+      "easier": "asm_10"
+    },
+
+    "asm_8": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_8",
+      "cell_row": "16",
+      "cell_column": "1",
+      "same": "asm_8",
+      "next": "asm_9",
+      "harder": "asm_9",
+      "easier": "asm_15"
+    },
+
+    "asm_9": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_9",
+      "cell_row": "17",
+      "cell_column": "1",
+      "same": "asm_9",
+      "next": "asm_16",
+      "harder": "asm_16",
+      "easier": "asm_8"
+    },
+
+    "asm_16": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_16",
+      "cell_row": "18",
+      "cell_column": "1",
+      "same": "asm_16",
+      "next": "asm_17",
+      "harder": "asm_17",
+      "easier": "asm_9"
+    },
+
+    "asm_17": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_17",
+      "cell_row": "19",
+      "cell_column": "1",
+      "same": "asm_17",
+      "next": "asm_20",
+      "harder": "asm_20",
+      "easier": "asm_16"
+    },
+
+    "asm_20": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_20",
+      "cell_row": "20",
+      "cell_column": "1",
+      "same": "asm_20",
+      "next": "asm_21",
+      "harder": "asm_21",
+      "easier": "asm_17"
+    },
+
+    "asm_21": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_21",
+      "cell_row": "21",
+      "cell_column": "1",
+      "same": "asm_21",
+      "next": "asm_18",
+      "harder": "asm_18",
+      "easier": "asm_20"
+    },
+
+    "asm_18": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_18",
+      "cell_row": "22",
+      "cell_column": "1",
+      "same": "asm_18",
+      "next": "asm_22",
+      "harder": "asm_22",
+      "easier": "asm_21"
+    },
+
+    "asm_22": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_22",
+      "cell_row": "23",
+      "cell_column": "1",
+      "same": "asm_22",
+      "next": "asm_19",
+      "harder": "asm_19",
+      "easier": "asm_18"
+    },
+
+    "asm_19": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_19",
+      "cell_row": "24",
+      "cell_column": "1",
+      "same": "asm_19",
+      "next": "asm_23",
+      "harder": "asm_23",
+      "easier": "asm_22"
+    },
+
+    "asm_23": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_23",
+      "cell_row": "25",
+      "cell_column": "1",
+      "same": "asm_23",
+      "next": "asm_24",
+      "harder": "asm_24",
+      "easier": "asm_19"
+    },
+
+    "asm_24": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_24",
+      "cell_row": "26",
+      "cell_column": "1",
+      "same": "asm_24",
+      "next": "asm_26",
+      "harder": "asm_26",
+      "easier": "asm_23"
+    },
+
+    "asm_26": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "asm_26",
+      "cell_row": "27",
+      "cell_column": "1",
+      "same": "asm_26",
+      "next": "asm_26",
+      "harder": "asm_26",
+      "easier": "asm_24"
+    }
+  },
+
+
+  "shapeTransitions": {
+    "Shapes 1_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "shapes",
+      "tutor_id": "Shapes 1_bubble_pop",
+      "cell_row": 1,
+      "cell_column": 1,
+      "same": "Shapes 1_bubble_pop",
+      "next": "Shapes 2_bubble_pop",
+      "harder": "Shapes 2_bubble_pop",
+      "easier": "Shapes 1_bubble_pop"
+    },
+    "Shapes 2_bubble_pop": {
+      "type": "TRANSITION",
+      "skill": "shapes",
+      "tutor_id": "Shapes 2_bubble_pop",
+      "cell_row": 1,
+      "cell_column": 2,
+      "same": "Shapes 2_bubble_pop",
+      "next": "Shapes 2_bubble_pop",
+      "harder": "Shapes 2_bubble_pop",
+      "easier": "Shapes 1_bubble_pop"
+    }
+  }
+
+}

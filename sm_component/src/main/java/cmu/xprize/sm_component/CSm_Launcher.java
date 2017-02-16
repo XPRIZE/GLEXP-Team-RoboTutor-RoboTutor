@@ -17,28 +17,27 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.util;
+package cmu.xprize.sm_component;
 
 import org.json.JSONObject;
 
-import cmu.xprize.util.CClassMap;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
 
-public class CAs_Data implements ILoadableObject {
+public class CSm_Launcher implements ILoadableObject {
 
     // json loadable
-    public String       intent;
-    public String       intentdata;
-    public String       datasource;
-    public String       buttontype;
-    public String       buttonvalue;
-    public String       features;
+    public String   description;
+    public String   button_text;
+    public String   tutorDesc;
+    public String   tutorData;
+
 
 
     //************ Serialization
+
 
 
     @Override

@@ -489,7 +489,21 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         retractFeature(TCONST.FWINCORRECT);
 
         try {
-            if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
+            if (dataNameDescriptor.startsWith(TCONST.LOCAL_FILE)) {
+
+                String dataFile = dataNameDescriptor.substring(TCONST.LOCAL_FILE.length());
+
+                // Generate a langauage specific path to the data source -
+                // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
+                // e.g. tutors/word_copy/assets/data/sw/
+                //
+                String dataPath = TCONST.DOWNLOAD_RT_TUTOR + "/" + mTutor.getTutorName() + "/";
+                dataPath +=  mMediaManager.getLanguageIANA_2(mTutor) + "/";
+
+                String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
+                loadJSON(new JSONObject(jsonData), null);
+
+            } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
                 String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
 

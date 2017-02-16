@@ -35,8 +35,8 @@ allprojects {
         rtVersionCode=1
 
         // Semantic versioning description:
-        // <Milestone release> <Feature Release> <Patch release> <Asset Compatibility ID>
-        rtVersionName="0.24.0.1"
+        // <Milestone release> <Feature Release> <Patch release> <Asset Compatibility INDEX>
+        rtVersionName="0.26.0.1"
     }
 }
 
