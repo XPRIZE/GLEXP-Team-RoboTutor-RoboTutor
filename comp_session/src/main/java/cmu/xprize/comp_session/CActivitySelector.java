@@ -49,20 +49,15 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     // json loadable
     public CAsk_Data[]  dataSource;
 
-    public HashMap      writeInitiators;
-    public HashMap      storyInitiators;
-    public HashMap      mathInitiators;
-    public HashMap      shapeInitiators;
+    public String       rootSkillWrite;
+    public String       rootSkillStories;
+    public String       rootSkillMath;
+    public String       rootSkillShapes;
 
     public HashMap      writeTransitions;
     public HashMap      storyTransitions;
     public HashMap      mathTransitions;
     public HashMap      shapeTransitions;
-
-    public String       rootSkillWrite;
-    public String       rootSkillStories;
-    public String       rootSkillMath;
-    public String       rootSkillShapes;
 
     final private String  TAG = "CActivitySelector";
 
@@ -125,7 +120,7 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
      * @param intent
      * @param intentData
      */
-    public void doLaunch(String intent, String intentData, String dataSource, String features) {
+    public void doLaunch(String intent, String intentData, String dataSource) {
     }
 
     //************************************************************************

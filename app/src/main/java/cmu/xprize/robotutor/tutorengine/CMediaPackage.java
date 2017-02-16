@@ -49,6 +49,12 @@ public class CMediaPackage implements ILoadableObject2 {
         path     = _path;
     }
 
+    public CMediaPackage(String _language, String _path, String _srcpath) {
+        language = _language;
+        path     = _path;
+        srcpath  = _srcpath;
+    }
+
     @Override
     public void loadJSON(JSONObject jsonObj, IScope2 scope) {
 

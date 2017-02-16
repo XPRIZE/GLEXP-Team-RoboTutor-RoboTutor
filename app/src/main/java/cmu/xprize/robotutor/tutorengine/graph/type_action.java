@@ -163,7 +163,7 @@ public class type_action extends scene_node {
             if (cmd != null) {
                 switch (cmd) {
 
-                    // System levelFolder command to launch a new Tutor Instance.
+                    // System Scope command to launch a new Tutor Instance.
                     //
                     case TCONST.CMD_LAUNCH:
                         try {
@@ -177,9 +177,8 @@ public class type_action extends scene_node {
                             String intent     = getScope().parseTemplate(parmList.get(0));
                             String intentData = getScope().parseTemplate(parmList.get(2));
                             String dataSource = getScope().parseTemplate(parmList.get(4));
-                            String features   = getScope().parseTemplate(parmList.get(6));
 
-                            CTutorEngine.launch(intent, intentData, dataSource, features);
+                            CTutorEngine.launch(intentData, intent, dataSource );
 
                         } catch (Exception e) {
                             CErrorManager.logEvent(TAG, "Launch Command Invalid: ", e, false);

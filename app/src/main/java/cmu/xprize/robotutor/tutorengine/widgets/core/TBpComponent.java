@@ -33,6 +33,8 @@ import cmu.xprize.bp_component.CBP_Component;
 import cmu.xprize.bp_component.CBp_Data;
 import cmu.xprize.bp_component.CBubble;
 import cmu.xprize.robotutor.RoboTutor;
+import cmu.xprize.robotutor.tutorengine.CMediaController;
+import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
@@ -55,6 +57,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
+    private CMediaManager   mMediaManager;
 
     private CBubble         _touchedBubble;
 
@@ -146,9 +149,9 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
 
     /**
-     * @param dataSource
+     * @param dataNameDescriptor
      */
-    public void setDataSource(String dataSource) {
+    public void setDataSource(String dataNameDescriptor) {
 
         // Ensure flags are reset so we don't trigger reset of the ALLCORRECCT flag
         // on the first pass.
@@ -161,10 +164,24 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         // TODO: globally make startWith type TCONST
         try {
-            if (dataSource.startsWith(TCONST.SOURCEFILE)) {
-                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
+            if (dataNameDescriptor.startsWith(TCONST.LOCAL_FILE)) {
 
-                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataSource);
+                String dataFile = dataNameDescriptor.substring(TCONST.LOCAL_FILE.length());
+
+                // Generate a langauage specific path to the data source -
+                // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
+                // e.g. tutors/word_copy/assets/data/sw/
+                //
+                String dataPath = TCONST.DOWNLOAD_RT_TUTOR + "/" + mTutor.getTutorName() + "/";
+
+                String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
+                loadJSON(new JSONObject(jsonData), mTutor.getScope());
+
+            } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
+
+                dataNameDescriptor = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
+
+                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataNameDescriptor);
 
                 // Load the datasource in the component module - i.e. the superclass
                 loadJSON(new JSONObject(jsonData), mTutor.getScope() );
@@ -176,18 +193,18 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                     question_count = _stimulus_data.length;
                 }
 
-            } else if (dataSource.startsWith("db|")) {
+            } else if (dataNameDescriptor.startsWith("db|")) {
 
 
-            } else if (dataSource.startsWith("{")) {
+            } else if (dataNameDescriptor.startsWith("{")) {
 
-                loadJSON(new JSONObject(dataSource), null);
+                loadJSON(new JSONObject(dataNameDescriptor), null);
 
             } else {
                 throw (new Exception("BadDataSource"));
             }
         } catch (Exception e) {
-            CErrorManager.logEvent(TAG, "Invalid Data Source - " + dataSource + " for : " + name() + " : ", e, false);
+            CErrorManager.logEvent(TAG, "Invalid Data Source - " + dataNameDescriptor + " for : " + name() + " : ", e, false);
         }
     }
 
@@ -544,6 +561,11 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     public void setTutor(CTutor tutor) {
         mTutor = tutor;
         mSceneObject.setTutor(tutor);
+
+        // The media manager is tutor specific so we have to use the tutor to access
+        // the correct instance for this component.
+        //
+        mMediaManager = CMediaController.getManagerInstance(mTutor);
     }
 
     @Override

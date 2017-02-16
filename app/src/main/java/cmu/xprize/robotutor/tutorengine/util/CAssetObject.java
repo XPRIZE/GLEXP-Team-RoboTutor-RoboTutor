@@ -299,6 +299,7 @@ public class CAssetObject {
         boolean result = true;
 
         // Check if the version spec element on the constrain exceeds tha asset
+        //
         if((int)appVersion.get(elementb) > (int)assetVersion.get(elementa)) {
             result = false;
         }

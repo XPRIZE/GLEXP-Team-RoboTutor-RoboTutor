@@ -22,23 +22,37 @@
         android:text="Skill:"/>
     </LinearLayout>
 
-    <GridView
-        android:id="@+id/SdebugGrid"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:id="@+id/SdebugSelector"
+        android:layout_width="match_parent"
         app:layout_heightPercent="50%"
-        android:paddingLeft="50dp"
-        android:columnWidth="20dp"
-        android:verticalSpacing="10dp"
-        android:horizontalSpacing="10dp"
-        android:stretchMode="none"
-        android:background="#44DDDDDD"
         android:layout_below="@+id/StitleBlock"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true" >
+
+        <GridView
+            android:id="@+id/SdebugGrid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="50dp"
+            android:columnWidth="20dp"
+            android:verticalSpacing="10dp"
+            android:horizontalSpacing="10dp"
+            android:stretchMode="none"
+            android:background="#44DDDDDD" />
+
+        <cmu.xprize.robotutor.tutorengine.widgets.core.TSmComponent
+            android:id="@+id/SsmComponent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#44DDDD00"
+            android:visibility="gone"/>
+
+    </FrameLayout>
 
 
     <LinearLayout
         android:id="@+id/SfootBlock1"
-        android:layout_below="@+id/SdebugGrid"
+        android:layout_below="@+id/SdebugSelector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -144,11 +158,11 @@
         android:id="@+id/SresetTutor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/SlaunchTutor"
+        android:layout_above="@+id/ScustomButton"
         android:layout_alignParentEnd="true"
         android:background="@drawable/launchnormal"
-        android:backgroundTint="#888888"
-        android:layout_marginBottom="50dp"
+        android:backgroundTint="#00F0FF"
+        android:layout_marginBottom="15dp"
         android:layout_marginEnd="50dp"
         android:scaleType="fitCenter"
         android:padding="20dp"
@@ -157,13 +171,29 @@
         android:text="Reset"/>
 
     <Button
+        android:id="@+id/ScustomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/SlaunchTutor"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/launchnormal"
+        android:backgroundTint="#DDDD00"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="50dp"
+        android:scaleType="fitCenter"
+        android:padding="20dp"
+        android:textSize="23sp"
+        android:textColor="#FFFFFF"
+        android:text="Custom"/>
+
+    <Button
         android:id="@+id/SlaunchTutor"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/launchnormal"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginEnd="50dp"
         android:scaleType="fitCenter"
         android:padding="20dp"

@@ -35,6 +35,8 @@ public class CAt_Data implements ILoadableObject {
     // json loadable
     public String       skill;
     public String       tutor_id;
+    public String       tutor_desc;
+    public String       tutor_data;
     public String       cell_row;
     public String       cell_column;
     public String       same;

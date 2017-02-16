@@ -26,6 +26,8 @@ import cmu.xprize.asm_component.CAsm_Data;
 import cmu.xprize.asm_component.CAsm_DotBag;
 import cmu.xprize.asm_component.CAsm_MechanicSubtract;
 import cmu.xprize.asm_component.CAsm_Text;
+import cmu.xprize.robotutor.tutorengine.CMediaController;
+import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
@@ -48,6 +50,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
     private CTutor           mTutor;
     private CObjectDelegate  mSceneObject;
+    private CMediaManager    mMediaManager;
 
     static final String TAG = "TAsmComponent";
 
@@ -218,9 +221,9 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
     /**
      *
-     * @param dataSource
+     * @param dataNameDescriptor
      */
-    public void setDataSource(String dataSource) {
+    public void setDataSource(String dataNameDescriptor) {
 
         // Ensure flags are reset so we don't trigger reset of the ALLCORRECCT flag
         // on the first pass.
@@ -233,22 +236,33 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
         // TODO: globally make startWith type TCONST
         try {
-            if (dataSource.equals(ASM_CONST.LOCAL_FILE)) {
-                String jsonData = JSON_Helper.cacheDataByName(ASM_CONST.LOCAL_FILE_PATH);
-                loadJSON(new JSONObject(jsonData), null);
-            } else if (dataSource.startsWith(TCONST.SOURCEFILE)) {
-                dataSource = dataSource.substring(TCONST.SOURCEFILE.length());
+            if (dataNameDescriptor.startsWith(TCONST.LOCAL_FILE)) {
 
-                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataSource);
+                String dataFile = dataNameDescriptor.substring(TCONST.LOCAL_FILE.length());
+
+                // Generate a langauage specific path to the data source -
+                // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
+                // e.g. tutors/word_copy/assets/data/sw/
+                //
+                String dataPath = TCONST.DOWNLOAD_RT_TUTOR + "/" + mTutor.getTutorName() + "/";
+
+                String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
+                loadJSON(new JSONObject(jsonData), null);
+
+            } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
+
+                dataNameDescriptor = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
+
+                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataNameDescriptor);
                 // Load the datasource in the component module - i.e. the superclass
                 loadJSON(new JSONObject(jsonData), null);
 
-            } else if (dataSource.startsWith("db|")) {
+            } else if (dataNameDescriptor.startsWith("db|")) {
 
 
-            } else if (dataSource.startsWith("{")) {
+            } else if (dataNameDescriptor.startsWith("{")) {
 
-                loadJSON(new JSONObject(dataSource), null);
+                loadJSON(new JSONObject(dataNameDescriptor), null);
 
             } else {
                 throw (new Exception("BadDataSource"));
@@ -354,6 +368,11 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     public void setTutor(CTutor tutor) {
         mTutor = tutor;
         mSceneObject.setTutor(tutor);
+
+        // The media manager is tutor specific so we have to use the tutor to access
+        // the correct instance for this component.
+        //
+        mMediaManager = CMediaController.getManagerInstance(mTutor);
     }
 
     @Override

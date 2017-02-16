@@ -21,6 +21,7 @@ package cmu.xprize.sm_component;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -28,8 +29,10 @@ public class CSm_ImageButton extends ImageButton implements ILauncherButton, Vie
 
     private Context                     mContext;
     private ILaunchListener             mComponent;
-    private CSm_Data                    mData;
+    private CSm_Data                    mData     = null;
+    private CSm_Launcher                mLauncher = null;
 
+    static private String TAG = "CSm_ImageButton";
 
     public CSm_ImageButton(Context context, ILaunchListener component) {
         super(context);
@@ -62,6 +65,14 @@ public class CSm_ImageButton extends ImageButton implements ILauncherButton, Vie
 
         setImageDrawable(mContext.getResources().getDrawable(id));
     }
+
+
+    public void buildInterface(CSm_Launcher buttonData) {
+
+        Log.d(TAG, "Unsupported Interface");
+    }
+
+
 
     /**
      * Tell the component to initialize the scope variables for the scripting engine.

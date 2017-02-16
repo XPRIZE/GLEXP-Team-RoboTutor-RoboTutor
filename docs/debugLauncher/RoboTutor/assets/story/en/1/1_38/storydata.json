@@ -1,0 +1,237 @@
+{
+  "author": "Frista and Fatima",
+  "data": [
+    {
+      "image": "a_cow_is_my_friend_1_page_2_image_0001.jpg",
+      "page": 2,
+      "text": [
+        [
+          {
+            "narration": [
+              {
+                "audio": "mother_cow_cow_i_like_you_cow.mp3",
+                "from": 19,
+                "segmentation": [
+                  {
+                    "end": 62,
+                    "start": 19,
+                    "word": "Mother"
+                  },
+                  {
+                    "end": 95,
+                    "start": 63,
+                    "word": "cow"
+                  },
+                  {
+                    "end": 123,
+                    "start": 96,
+                    "word": "cow"
+                  },
+                  {
+                    "end": 195,
+                    "start": 186,
+                    "word": "I"
+                  },
+                  {
+                    "end": 220,
+                    "start": 196,
+                    "word": "like"
+                  },
+                  {
+                    "end": 244,
+                    "start": 221,
+                    "word": "you"
+                  },
+                  {
+                    "end": 286,
+                    "start": 245,
+                    "word": "cow"
+                  }
+                ],
+                "until": 286,
+                "utterances": "Mother cow cow I like you cow"
+              }
+            ],
+            "sentence": "Mother cow cow, I like you cow."
+          }
+        ]
+      ]
+    },
+    {
+      "image": "a_cow_is_my_friend_1_page_3_image_0001.jpg",
+      "page": 3,
+      "text": [
+        [
+          {
+            "narration": [
+              {
+                "audio": "yesterday_you_gave_me_milk.mp3",
+                "from": 20,
+                "segmentation": [
+                  {
+                    "end": 78,
+                    "start": 20,
+                    "word": "Yesterday"
+                  },
+                  {
+                    "end": 114,
+                    "start": 79,
+                    "word": "you"
+                  },
+                  {
+                    "end": 147,
+                    "start": 115,
+                    "word": "gave"
+                  },
+                  {
+                    "end": 157,
+                    "start": 148,
+                    "word": "me"
+                  },
+                  {
+                    "end": 201,
+                    "start": 158,
+                    "word": "milk"
+                  }
+                ],
+                "until": 201,
+                "utterances": "Yesterday you gave me milk"
+              }
+            ],
+            "sentence": "Yesterday you gave me milk."
+          }
+        ]
+      ]
+    },
+    {
+      "image": null,
+      "page": 4,
+      "text": [
+        [
+          {
+            "narration": [
+              {
+                "audio": "my_father_buys_meat_every_saturday.mp3",
+                "from": 21,
+                "segmentation": [
+                  {
+                    "end": 34,
+                    "start": 21,
+                    "word": "My"
+                  },
+                  {
+                    "end": 80,
+                    "start": 35,
+                    "word": "father"
+                  },
+                  {
+                    "end": 120,
+                    "start": 81,
+                    "word": "buys"
+                  },
+                  {
+                    "end": 166,
+                    "start": 121,
+                    "word": "meat"
+                  },
+                  {
+                    "end": 199,
+                    "start": 167,
+                    "word": "every"
+                  },
+                  {
+                    "end": 265,
+                    "start": 200,
+                    "word": "Saturday"
+                  }
+                ],
+                "until": 265,
+                "utterances": "My father buys meat every Saturday"
+              }
+            ],
+            "sentence": "My father buys meat every Saturday."
+          }
+        ]
+      ]
+    },
+    {
+      "image": "a_cow_is_my_friend_1_page_5_image_0001.jpg",
+      "page": 5,
+      "text": [
+        [
+          {
+            "narration": [
+              {
+                "audio": "mummy_has_a_nice_bag_and_i_have_very_good_shoes.mp3",
+                "from": 20,
+                "segmentation": [
+                  {
+                    "end": 51,
+                    "start": 20,
+                    "word": "Mummy"
+                  },
+                  {
+                    "end": 88,
+                    "start": 52,
+                    "word": "has"
+                  },
+                  {
+                    "end": 91,
+                    "start": 89,
+                    "word": "a"
+                  },
+                  {
+                    "end": 127,
+                    "start": 92,
+                    "word": "nice"
+                  },
+                  {
+                    "end": 173,
+                    "start": 128,
+                    "word": "bag"
+                  },
+                  {
+                    "end": 214,
+                    "start": 195,
+                    "word": "and"
+                  },
+                  {
+                    "end": 236,
+                    "start": 215,
+                    "word": "I"
+                  },
+                  {
+                    "end": 265,
+                    "start": 237,
+                    "word": "have"
+                  },
+                  {
+                    "end": 305,
+                    "start": 266,
+                    "word": "very"
+                  },
+                  {
+                    "end": 336,
+                    "start": 306,
+                    "word": "good"
+                  },
+                  {
+                    "end": 376,
+                    "start": 337,
+                    "word": "shoes"
+                  }
+                ],
+                "until": 376,
+                "utterances": "Mummy has a nice bag and I have very good shoes"
+              }
+            ],
+            "sentence": "Mummy has a nice bag,and I have very good shoes."
+          }
+        ]
+      ]
+    }
+  ],
+  "level": "1",
+  "title": "A Cow is My Friend",
+  "titleimage": "a_cow_is_my_friend_1_page_01_image_0001.jpg"
+}

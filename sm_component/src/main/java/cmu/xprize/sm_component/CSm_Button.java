@@ -24,12 +24,14 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 
+import cmu.xprize.util.TCONST;
+
 public class CSm_Button extends Button implements ILauncherButton, View.OnClickListener {
 
     private Context                     mContext;
     private ILaunchListener             mComponent;
-    private CSm_Data                    mData;
-
+    private CSm_Data                    mData     = null;
+    private CSm_Launcher                mLauncher = null;
 
     public CSm_Button(Context context, ILaunchListener component) {
         super(context);
@@ -64,6 +66,18 @@ public class CSm_Button extends Button implements ILauncherButton, View.OnClickL
         setText(mData.buttonvalue);
     }
 
+
+    public void buildInterface(CSm_Launcher buttonData) {
+
+        mLauncher = buttonData;
+
+        // Otherwise it ends up forced to uppercase
+        setTransformationMethod(null);
+
+        setText(mLauncher.button_text);
+    }
+
+
     /**
      * Tell the component to initialize the scope variables for the scripting engine.
      * i.e. this is so you can launch a tutor from an animationGraph using scoped variables
@@ -75,9 +89,14 @@ public class CSm_Button extends Button implements ILauncherButton, View.OnClickL
     @Override
     public void onClick(View v) {
 
+        if(mLauncher != null) {
 
+            mComponent.launchTutor(mLauncher.tutorDesc, TCONST.TUTOR_NATIVE, mLauncher.tutorData);
+        }
+        else if(mData != null) {
 
-        mComponent.setTutorIntent(mData.intent, mData.intentdata, mData.datasource, mData.features);
+            mComponent.setTutorIntent(mData.intent, mData.intentdata, mData.datasource, mData.features);
+        }
 
 
     }

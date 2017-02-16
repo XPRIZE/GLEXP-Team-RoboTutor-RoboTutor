@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 
 import org.json.JSONObject;
 
+import cmu.xprize.asm_component.ASM_CONST;
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
@@ -104,7 +105,21 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
     public void setDataSource(String dataNameDescriptor) {
 
         try {
-            if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
+
+            if (dataNameDescriptor.startsWith(TCONST.LOCAL_FILE)) {
+
+                String dataRelPath = dataNameDescriptor.substring(TCONST.LOCAL_FILE.length());
+
+                // Generate a langauage specific path to the data source -
+                // i.e. sdcard/Download/RoboTutor/Math/en/button_data.json
+                //
+                String dataPath = TCONST.DOWNLOAD_RT_PATH + "/" +  dataRelPath + "/button_data.json";
+
+                String jsonData = JSON_Helper.cacheDataByName(dataPath);
+
+                loadJSON(new JSONObject(jsonData), null);
+            }
+            else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
                 String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
 
@@ -135,6 +150,7 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
             CErrorManager.logEvent(TAG, "Invalid Data Source for : " + name(), null, false);
         }
     }
+
 
 
     /**

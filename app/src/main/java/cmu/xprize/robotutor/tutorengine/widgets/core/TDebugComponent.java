@@ -4,16 +4,21 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 import cmu.xprize.comp_debug.CDebugComponent;
+import cmu.xprize.robotutor.tutorengine.CMediaController;
+import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.util.ILogManager;
+import cmu.xprize.util.TCONST;
 
 public class TDebugComponent extends CDebugComponent implements ITutorObjectImpl {
 
-    private CObjectDelegate mSceneObject;
+    private CTutor              mTutor;
+    private CObjectDelegate     mSceneObject;
+    private CMediaManager       mMediaManager;
 
 
     final private String TAG = "TDebugLayout";
@@ -57,6 +62,13 @@ public class TDebugComponent extends CDebugComponent implements ITutorObjectImpl
         mSceneObject.setVisibility(visible);
     }
 
+    @Override
+    public String getLanguage() {
+
+        return mMediaManager.getLanguageIANA_2(mTutor);
+    }
+
+
 
     // Tutor methods  End
     //************************************************************************
@@ -80,7 +92,13 @@ public class TDebugComponent extends CDebugComponent implements ITutorObjectImpl
 
     @Override
     public void setTutor(CTutor tutor) {
+        mTutor = tutor;
         mSceneObject.setTutor(tutor);
+
+        // The media manager is tutor specific so we have to use the tutor to access
+        // the correct instance for this component.
+        //
+        mMediaManager = CMediaController.getManagerInstance(mTutor);
     }
 
     @Override
