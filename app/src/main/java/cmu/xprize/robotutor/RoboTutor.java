@@ -22,13 +22,11 @@ package cmu.xprize.robotutor;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -45,14 +43,14 @@ import cmu.xprize.ltkplus.IGlyphSink;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
 import cmu.xprize.util.CLoaderView;
-import cmu.xprize.util.CLogManager;
+import cmu.xprize.comp_logging.CLogManager;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorManager;
 import cmu.xprize.robotutor.tutorengine.widgets.core.IGuidView;
-import cmu.xprize.util.CErrorManager;
-import cmu.xprize.util.CPreferenceCache;
+import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.comp_logging.CPreferenceCache;
 import cmu.xprize.robotutor.startup.CStartView;
-import cmu.xprize.util.ILogManager;
+import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.IReadyListener;
 import cmu.xprize.util.IRoboTutor;
 import cmu.xprize.util.JSON_Helper;
@@ -90,6 +88,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     static public ILogManager   logManager;
 
     static CTutorAssetManager   tutorAssetManager;
+    static public String        VERSION_RT;
     static public ArrayList     VERSION_SPEC;
 
 
@@ -147,7 +146,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         //
         tutorAssetManager = new CTutorAssetManager(getApplicationContext());
 
-        VERSION_SPEC = CAssetObject.parseVersionSpec(BuildConfig.VERSION_NAME);
+        VERSION_RT   = BuildConfig.VERSION_NAME;
+        VERSION_SPEC = CAssetObject.parseVersionSpec(VERSION_RT);
 
 
         // get the multiplier used for drawables at the current screen density and calc the

@@ -25,7 +25,7 @@ import android.util.Log;
 import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
-import cmu.xprize.util.CErrorManager;
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.TCONST;
 
 

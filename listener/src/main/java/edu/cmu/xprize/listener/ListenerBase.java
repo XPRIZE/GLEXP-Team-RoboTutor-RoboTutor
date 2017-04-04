@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import cmu.xprize.util.CErrorManager;
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.IReadyListener;
 import edu.cmu.pocketsphinx.LogMath;
 import edu.cmu.pocketsphinx.Segment;

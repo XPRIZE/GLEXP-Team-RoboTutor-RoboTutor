@@ -24,7 +24,6 @@ import android.content.res.AssetManager;
 import android.media.MediaPlayer;
 import android.util.Log;
 
-import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +33,7 @@ import java.util.Map;
 import cmu.xprize.robotutor.tutorengine.graph.type_handler;
 import cmu.xprize.robotutor.tutorengine.graph.type_timeline;
 import cmu.xprize.robotutor.tutorengine.graph.type_timer;
-import cmu.xprize.util.CErrorManager;
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.TCONST;
 
 

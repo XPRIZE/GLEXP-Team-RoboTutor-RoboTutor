@@ -17,9 +17,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 import cmu.xprize.fw_component.CStimResp;
-import cmu.xprize.util.CErrorManager;
-import cmu.xprize.util.ILogManager;
-import cmu.xprize.util.JSON_Helper;
+import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;

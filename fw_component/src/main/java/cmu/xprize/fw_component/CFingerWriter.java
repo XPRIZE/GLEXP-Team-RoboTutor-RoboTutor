@@ -50,7 +50,7 @@ import cmu.xprize.ltkplus.CLipiTKJNIInterface;
 import cmu.xprize.ltkplus.CRecResult;
 import cmu.xprize.ltkplus.CStroke;
 import cmu.xprize.ltkplus.CGlyph;
-import cmu.xprize.util.CErrorManager;
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.CEvent;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.util.IEventDispatcher;

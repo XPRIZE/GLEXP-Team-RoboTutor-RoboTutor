@@ -37,7 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import cmu.xprize.util.CClassMap;
-import cmu.xprize.util.CErrorManager;
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.CEvent;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.util.IEventDispatcher;

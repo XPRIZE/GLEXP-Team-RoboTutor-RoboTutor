@@ -11,8 +11,7 @@ import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.util.ILogManager;
-import cmu.xprize.util.TCONST;
+import cmu.xprize.comp_logging.ILogManager;
 
 public class TDebugComponent extends CDebugComponent implements ITutorObjectImpl {
 

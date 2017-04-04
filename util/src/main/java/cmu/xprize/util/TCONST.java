@@ -84,8 +84,6 @@ public class TCONST {
     public static final String NUMDATA_HEADER   = "{\n" + "\"dataSource\": ";
     public static final boolean ADD_FEATURE     = true;
     public static final boolean DEL_FEATURE     = false;
-    public static final int     GUID_LEN        = 5;
-    public static final String  GUID_UPDATE     = "GUIDUPDATE";
 
     public static final String  FTR_PLACE_      = "FTR_PLACE_";
     public static final String  _USED           = "_USED";
@@ -538,12 +536,6 @@ public class TCONST {
     public static final String TTS         = "TTS";
     public static final String ASR         = "ASR";
 
-    public static final String GLYPHLOG    = "glyphlog_";
-    public static final String DATASHOP    = "-DS";
-    public static final String JSONLOG     = ".json";
-    public static final boolean APPEND     = true;
-    public static final boolean REPLACE    = false;
-
     public static final String GLYPH_DATA  = "glyphdata";
 
 
@@ -566,11 +558,6 @@ public class TCONST {
     // TTS command constants
     public static final String SAY             = "SAY";
     public static final String SET_RATE        = "SET_RATE";
-
-
-    // Preference keys
-    public static final String ENGINE_INSTANCE = "RoboTutor";
-    public static final String CURRENT_TUTOR   = "tutor";
 
 
     // Number Listeneing Component

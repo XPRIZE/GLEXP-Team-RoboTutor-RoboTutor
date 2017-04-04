@@ -489,15 +489,28 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                 break;
 
             case MotionEvent.ACTION_MOVE:
+
                 _time = System.nanoTime();
-                moveTouch(x, y);
+
+                //#Mod305 Mar 9 2017 -
+                // Ensure glyph valid or this may cause issues - fixes #305
+                //
+                if(_drawGlyph != null) {
+                    moveTouch(x, y);
+                }
                 break;
 
             case MotionEvent.ACTION_UP:
                 mScrollView.setEnableScrolling(true);
 
                 _time = System.nanoTime();
-                endTouch(x, y);
+
+                //#Mod305 Mar 9 2017 -
+                // Ensure glyph valid or this may cause issues - fixes #305
+                //
+                if(_drawGlyph != null) {
+                    endTouch(x, y);
+                }
                 break;
         }
         delta = _time - _prevTime;
@@ -1181,6 +1194,11 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         _drawGlyph    = new CGlyph(mContext, _baseLine, _viewBnds, _dotSize);
         _restartGlyph = true;
 
+        //#Mod305 Mar 9 2017 -
+        // Ensure glyph internals are valid or this may cause issues - fixes #305
+        //
+        _drawGlyph.newStroke();
+
         setHasGlyph(false);
         invalidate();
     }
@@ -1230,7 +1248,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
 
     /**
-     * This is used in Immedaite feedback mode when a error occurs in another field.
+     * This is used in Immediate feedback mode when a error occurs in another field.
      * We inhibit further input and recognition on all other fields and reset the glyph state
      * on pending fields.
      */

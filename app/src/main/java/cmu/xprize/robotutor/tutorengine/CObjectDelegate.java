@@ -10,7 +10,7 @@ import android.widget.Button;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.IEventSource;
-import cmu.xprize.util.ILogManager;
+import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.TCONST;
 
 // This is just a convenience to simplify the syntax in type_action execution

@@ -22,16 +22,9 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import org.json.JSONObject;
 
-import java.util.HashMap;
-
-import cmu.xprize.comp_ask.ASK_CONST;
 import cmu.xprize.comp_ask.CAskComponent;
 
 import cmu.xprize.robotutor.RoboTutor;
@@ -43,14 +36,12 @@ import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.comp_ask.CAskElement;
 import cmu.xprize.comp_ask.CAsk_Data;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
-import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
-import cmu.xprize.util.CErrorManager;
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEventSource;
-import cmu.xprize.util.ILogManager;
+import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;

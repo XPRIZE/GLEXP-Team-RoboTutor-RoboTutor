@@ -23,5 +23,23 @@
 
     </cmu.xprize.robotutor.tutorengine.widgets.core.TDebugComponent>
 
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TTextView
+        android:id="@+id/StutorVersion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="30dp"
+        android:text="test"
+        android:textSize="35sp"
+        android:textColor="#000" />
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TLangToggle
+        android:id="@+id/SlangToggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textOff="Swahili"
+        android:textOn="English"/>
 
 </cmu.xprize.robotutor.tutorengine.widgets.core.TActivitySelector>

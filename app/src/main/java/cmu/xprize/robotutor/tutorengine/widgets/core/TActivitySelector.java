@@ -2,8 +2,11 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.percent.PercentLayoutHelper;
+import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 
 import org.json.JSONObject;
@@ -33,10 +36,10 @@ import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
-import cmu.xprize.util.CErrorManager;
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEventSource;
-import cmu.xprize.util.ILogManager;
+import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -45,11 +48,15 @@ import static cmu.xprize.robotutor.tutorengine.util.CClassMap2.classMap;
 
 public class TActivitySelector extends CActivitySelector implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource {
 
-    private static final boolean    DEBUG_LANCHER = true;
+    private static boolean          DEBUG_LANCHER = false;
+    public  static String           DEBUG_TUTORID = "";
 
     private CTutor                  mTutor;
     private CSceneDelegate          mTutorScene;
     private CMediaManager           mMediaManager;
+    private TLangToggle             mLangButton;
+
+    private TTextView               SversionText;
 
     private HashMap<String, String> volatileMap = new HashMap<>();
     private HashMap<String, String> stickyMap   = new HashMap<>();
@@ -108,18 +115,42 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         SaskActivity   = (TAskComponent)findViewById(R.id.SaskActivity);
         SdebugActivity = (CDebugComponent)findViewById(R.id.SdebugActivity);
+        SversionText   = (TTextView)findViewById(R.id.StutorVersion);
 
         SaskActivity.setButtonController(this);
         SdebugActivity.setButtonController(this);
+
+        SversionText.setText(RoboTutor.VERSION_RT);
     }
 
     @Override
     public void onCreate() {
 
+        // Set the debug launcher based on the variant built
+        //
+        if (BuildConfig.SHOW_DEBUGLAUNCHER) {
+            DEBUG_LANCHER = true;
+        }
+
+        mLangButton = (TLangToggle)findViewById(R.id.SlangToggle);
+        mLangButton.setTransformationMethod(null);
+
+        // Hide the language toggle on the release builds
+        // TODO : Use build Variant to ensure release configurations
+        //
+        if(!BuildConfig.LANGUAGE_SWITCH) {
+
+            mLangButton.setVisibility(INVISIBLE);
+            requestLayout();
+        }
     }
 
     @Override
     public void onDestroy() {
+
+        // Ensure the queue is teminated and flushed
+        //
+        super.onDestroy();
         mTutorScene.onDestroy();
     }
 
@@ -311,8 +342,10 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_LAUNCH;
 
             // Serialize the new state
+            // #Mod 329 language switch capability
             //
-            SharedPreferences prefs = RoboTutor.ACTIVITY.getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences prefs = RoboTutor.ACTIVITY.getSharedPreferences(mMediaManager.getLanguageFeature(mTutor), Context.MODE_PRIVATE);
+
             SharedPreferences.Editor editor = prefs.edit();
 
             editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE);
@@ -444,8 +477,9 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             }
 
             // Serialize the new state
+            // #Mod 329 language switch capability
             //
-            SharedPreferences prefs = RoboTutor.ACTIVITY.getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences prefs = RoboTutor.ACTIVITY.getSharedPreferences(mMediaManager.getLanguageFeature(mTutor), Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
 
             editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE);
@@ -531,7 +565,14 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                         tutor = (CAt_Data) transitionMap.get(rootTutor);
                     }
 
-                    // If we are using the edbug selector and it is not lauching a tutor then
+                    // #Mod 330 Show TutorID in Banner in debug builds
+                    // DEBUG_TUTORID is used to communicate the active tutor to the Banner in DEBUG mode
+                    //
+                    if (BuildConfig.SHOW_TUTORVERSION) {
+                        DEBUG_TUTORID = activeTutor;
+                    }
+
+                    // If we are using the debug selector and it is not lauching a tutor then
                     // switch to its view through a relaunch
                     //
                     if(DEBUG_LANCHER && RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT)) {
@@ -544,8 +585,9 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                     }
 
                     // Serialize the new state
+                    // #Mod 329 language switch capability
                     //
-                    SharedPreferences prefs = RoboTutor.ACTIVITY.getPreferences(Context.MODE_PRIVATE);
+                    SharedPreferences prefs = RoboTutor.ACTIVITY.getSharedPreferences(mMediaManager.getLanguageFeature(mTutor), Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
 
                     editor.putString(TCONST.SKILL_SELECTED, activeSkill);
@@ -914,14 +956,16 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         Log.d(TAG, "Loader iteration");
 
+
         // Note we load in the TClass as we need to use the tutor classMap to permit
         // instantiation of type_audio objects
         //
         JSON_Helper.parseSelf(jsonObj, this, classMap, scope);
 
         // de-serialize state
+        // #Mod 329 language switch capability
         //
-        SharedPreferences prefs = RoboTutor.ACTIVITY.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences prefs = RoboTutor.ACTIVITY.getSharedPreferences(mMediaManager.getLanguageFeature(mTutor), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
         activeSkill = prefs.getString(TCONST.SKILL_SELECTED, TCONST.SKILL_STORIES);

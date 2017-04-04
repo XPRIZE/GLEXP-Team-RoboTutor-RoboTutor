@@ -24,6 +24,7 @@
         import android.view.View;
         import android.widget.ToggleButton;
 
+        import cmu.xprize.robotutor.RoboTutor;
         import cmu.xprize.robotutor.tutorengine.CMediaController;
         import cmu.xprize.robotutor.tutorengine.CMediaManager;
         import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
@@ -32,7 +33,7 @@
         import cmu.xprize.robotutor.tutorengine.ITutorGraph;
         import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
         import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-        import cmu.xprize.util.ILogManager;
+        import cmu.xprize.comp_logging.ILogManager;
         import cmu.xprize.util.TCONST;
 
 public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.OnClickListener {
@@ -78,6 +79,12 @@ public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.
         mLangState    = !mLangState;
 
         CTutorEngine.setDefaultLanguage(mLangState? TCONST.LANG_EN: TCONST.LANG_SW);
+
+        // #Mod 329 language switch capability
+        // When switching languages it may occur on any Selector screens so we want to
+        // reload the tutor selector to ensure the internal state is consistent
+        //
+        RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
 
         // We need to reload the session manager to reflect the new language specific datasource
         //

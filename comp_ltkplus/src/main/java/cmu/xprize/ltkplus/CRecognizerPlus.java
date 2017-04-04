@@ -226,7 +226,6 @@ public class CRecognizerPlus implements IGlyphSink {
 
 
         /** OnPostExecute is guaranteed to run on the UI thread so we can update the view etc
-         // TODO: update this to do something useful
          */
         @Override
         protected void onPostExecute(String sResponse) {

@@ -21,23 +21,11 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
         import android.content.Context;
         import android.util.AttributeSet;
-        import android.util.Log;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.view.animation.Animation;
         import android.view.animation.AnimationUtils;
-        import android.widget.ViewAnimator;
-
-        import java.util.ArrayList;
 
         import cmu.xprize.robotutor.R;
         import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
-        import cmu.xprize.robotutor.tutorengine.CTutor;
-        import cmu.xprize.robotutor.tutorengine.ITutorGraph;
         import cmu.xprize.robotutor.tutorengine.ITutorManager;
-        import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-        import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
-        import cmu.xprize.util.ILogManager;
 
 public class TSceneAnimatorLayout extends TMasterAnimatorLayout implements ITutorManager {
 
