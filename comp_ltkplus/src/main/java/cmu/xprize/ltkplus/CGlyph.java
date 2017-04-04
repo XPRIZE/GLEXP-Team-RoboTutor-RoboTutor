@@ -21,7 +21,6 @@ package cmu.xprize.ltkplus;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -44,12 +43,13 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.TimeZone;
 
+import cmu.xprize.comp_logging.TLOG_CONST;
 import cmu.xprize.util.CClassMap;
-import cmu.xprize.util.CErrorManager;
-import cmu.xprize.util.CLogManager;
-import cmu.xprize.util.CPreferenceCache;
+import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.comp_logging.CLogManager;
+import cmu.xprize.comp_logging.CPreferenceCache;
 import cmu.xprize.util.ILoadableObject;
-import cmu.xprize.util.ILogManager;
+import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -67,7 +67,7 @@ public class CGlyph implements ILoadableObject, Cloneable {
     static public ILogManager     logManager;
 
     // volatile data
-    private CStrokeInfo _strokeInfo;
+    private CStrokeInfo           _strokeInfo;
     private long                  _startTime;
     private long                  _lastTime;
     private CStroke               _currentStroke;
@@ -171,6 +171,9 @@ public class CGlyph implements ILoadableObject, Cloneable {
 
     public void endStroke() {
 
+        // #Mod issue #305 - _strokeInfo null when user has finger resting on screen
+        // during recycle - see #Mod305 CGlyphInputContainer
+        //
         _strokeInfo.setDuration(_lastTime - _startTime);
     }
 
@@ -281,6 +284,9 @@ public class CGlyph implements ILoadableObject, Cloneable {
 
         _lastTime  =  System.currentTimeMillis();
 
+        // #MOD issue #305 - _currentStroke can be null just before recognizer called
+        // - see #Mod305 CGlyphInputContainer
+        //
         _currentStroke.addPoint(touchPt, _lastTime);
 
         addPointToStrokeBoundingBox(touchPt);
@@ -595,11 +601,11 @@ public class CGlyph implements ILoadableObject, Cloneable {
                 // Generate a tutor instance-unique id for the log name
                 // This won't change until the tutor changes
                 //
-                outPath += TCONST.GLYPHLOG + nameMap + TCONST.JSONLOG;
+                outPath += TLOG_CONST.GLYPHLOG + nameMap + TLOG_CONST.JSONLOG;
 
                 // Append Glyph Data to file
                 try {
-                    out = new FileWriter(outPath, TCONST.REPLACE);
+                    out = new FileWriter(outPath, TLOG_CONST.REPLACE);
 
                     // Throws if there is a JSON serializatin error
                     //
@@ -627,7 +633,7 @@ public class CGlyph implements ILoadableObject, Cloneable {
 
         // Throws if there is a JSON serializatin error
         //
-        logManager.postPacket(serializeGlyph(CPreferenceCache.getPrefID(TCONST.CURRENT_TUTOR), TAG, recog, constraint, stimChar, respChar));
+        logManager.postPacket(serializeGlyph(CPreferenceCache.getPrefID(TLOG_CONST.CURRENT_TUTOR), TAG, recog, constraint, stimChar, respChar));
     }
 
 
@@ -803,7 +809,7 @@ public class CGlyph implements ILoadableObject, Cloneable {
 
             if(nameMap != null) {
 
-                inPath += TCONST.GLYPHLOG + nameMap + TCONST.JSONLOG;
+                inPath += TLOG_CONST.GLYPHLOG + nameMap + TLOG_CONST.JSONLOG;
 
                 File inputFile = new File(inPath);
 

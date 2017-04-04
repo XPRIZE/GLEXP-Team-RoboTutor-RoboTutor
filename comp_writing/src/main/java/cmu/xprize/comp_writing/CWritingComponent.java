@@ -50,7 +50,7 @@ import cmu.xprize.ltkplus.CGlyphSet;
 import cmu.xprize.ltkplus.IGlyphSink;
 import cmu.xprize.ltkplus.CRecResult;
 import cmu.xprize.util.CClassMap;
-import cmu.xprize.util.CErrorManager;
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.CLinkedScrollView;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.util.IEventDispatcher;

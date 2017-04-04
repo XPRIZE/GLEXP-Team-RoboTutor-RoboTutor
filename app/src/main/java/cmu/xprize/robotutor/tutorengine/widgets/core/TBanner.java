@@ -25,13 +25,14 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import cmu.xprize.banner.CBanner;
+import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.util.ILogManager;
+import cmu.xprize.comp_logging.ILogManager;
 
 
 public class TBanner extends CBanner implements ITutorObjectImpl, View.OnClickListener {
@@ -39,6 +40,8 @@ public class TBanner extends CBanner implements ITutorObjectImpl, View.OnClickLi
     private CObjectDelegate mSceneObject;
     private TTextView       mVersion;
     private ImageButton     mBackButton;
+
+    private String          mTutor_Ver;
 
 
     public TBanner(Context context) {
@@ -108,7 +111,22 @@ public class TBanner extends CBanner implements ITutorObjectImpl, View.OnClickLi
 
 
     public void setVersionID(String versionID) {
-        mVersion.setText(versionID);
+
+        mTutor_Ver = "";
+
+        if (BuildConfig.SHOW_TUTORVERSION) {
+
+            // #Mod 330 Show TutorID in Banner in debug builds
+            //
+            mTutor_Ver = TActivitySelector.DEBUG_TUTORID + ".";
+
+            mTutor_Ver += versionID;
+
+            mVersion.setText(mTutor_Ver);
+        }
+        else {
+            mVersion.setVisibility(INVISIBLE);
+        }
     }
 
 

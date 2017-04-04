@@ -28,8 +28,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ViewAnimator;
 
-import java.util.ArrayList;
-
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
@@ -37,7 +35,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorManager;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
-import cmu.xprize.util.ILogManager;
+import cmu.xprize.comp_logging.ILogManager;
 
 public class TMasterAnimatorLayout extends ViewAnimator implements ITutorManager {
 

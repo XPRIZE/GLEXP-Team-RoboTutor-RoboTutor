@@ -13,8 +13,8 @@ import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
-import cmu.xprize.util.CErrorManager;
-import cmu.xprize.util.ILogManager;
+import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 

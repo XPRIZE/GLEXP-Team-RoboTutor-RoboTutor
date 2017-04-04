@@ -44,7 +44,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import cmu.xprize.util.CAnimatorUtil;
-import cmu.xprize.util.CErrorManager;
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.TCONST;
 
 public class CHandAnimation extends PercentRelativeLayout implements Animator.AnimatorListener {

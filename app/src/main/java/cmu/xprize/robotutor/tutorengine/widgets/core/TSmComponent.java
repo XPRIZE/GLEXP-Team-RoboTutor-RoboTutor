@@ -29,7 +29,6 @@ import android.view.ViewGroup;
 
 import org.json.JSONObject;
 
-import cmu.xprize.asm_component.ASM_CONST;
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
@@ -42,8 +41,8 @@ import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.sm_component.CSm_Component;
-import cmu.xprize.util.CErrorManager;
-import cmu.xprize.util.ILogManager;
+import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 

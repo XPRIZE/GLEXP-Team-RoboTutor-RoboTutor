@@ -35,7 +35,7 @@ import java.util.Map;
 import cmu.xprize.robotutor.tutorengine.graph.scene_graph;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
-import cmu.xprize.util.CErrorManager;
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;

@@ -22,7 +22,7 @@ package cmu.xprize.robotutor.tutorengine;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import cmu.xprize.util.ILogManager;
+import cmu.xprize.comp_logging.ILogManager;
 
 public interface ITutorObject {
 

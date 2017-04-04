@@ -20,7 +20,7 @@ import cmu.xprize.comp_ask.CAskComponent;
 import cmu.xprize.comp_ask.CAsk_Data;
 import cmu.xprize.util.IButtonController;
 import cmu.xprize.comp_debug.CDebugComponent;
-import cmu.xprize.util.CErrorManager;
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IPublisher;
@@ -85,6 +85,12 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
 
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(getContext());
+    }
+
+
+    public void onDestroy() {
+
+        terminateQueue();
     }
 
 

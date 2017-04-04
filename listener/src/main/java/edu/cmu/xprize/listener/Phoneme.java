@@ -48,7 +48,7 @@ Modifications to support multiple languages: Copyright(c) 2016  Kevin Willows
 import java.util.HashMap;
 import java.util.Locale;
 
-import cmu.xprize.util.CErrorManager;
+import cmu.xprize.comp_logging.CErrorManager;
 
 
 public class Phoneme {

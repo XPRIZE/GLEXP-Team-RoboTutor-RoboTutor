@@ -26,7 +26,7 @@ import java.util.HashMap;
 import cmu.xprize.robotutor.tutorengine.CSceneGraph;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
-import cmu.xprize.util.CErrorManager;
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.IScriptable;
 import cmu.xprize.util.TCONST;
 

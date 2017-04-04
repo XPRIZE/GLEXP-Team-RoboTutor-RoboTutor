@@ -41,7 +41,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import cmu.xprize.ltkplus.CGlyph;
-import cmu.xprize.util.CErrorManager;
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.CLinkedScrollView;
 import cmu.xprize.util.TCONST;
 

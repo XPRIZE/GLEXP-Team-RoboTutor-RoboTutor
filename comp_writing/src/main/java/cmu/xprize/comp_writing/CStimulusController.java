@@ -49,7 +49,7 @@ import java.util.List;
 import java.util.Map;
 
 import cmu.xprize.util.CClassMap;
-import cmu.xprize.util.CErrorManager;
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.CEvent;
 import cmu.xprize.util.CLinkedScrollView;
 import cmu.xprize.util.IEvent;

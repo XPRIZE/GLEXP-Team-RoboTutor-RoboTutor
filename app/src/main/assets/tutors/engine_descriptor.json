@@ -3,7 +3,7 @@
 
   // Set the default language for the tutors
   //
-  "language":"LANG_EN",
+  "language":"LANG_SW",
 
 
   // This maps a "variant" i.e. arbitrary name to the tutor/featureset that define a
@@ -138,7 +138,7 @@
           "type": "SCENEDATA_MAP",
           "databindings": [
             {
-              "name": "word_copy",
+              "name": "SWordCopy",
               "datasource": ""
             }
           ]

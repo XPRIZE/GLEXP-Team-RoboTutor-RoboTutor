@@ -32,7 +32,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import cmu.xprize.util.CAnimatorUtil;
-import cmu.xprize.util.CErrorManager;
 import cmu.xprize.util.TCONST;
 
 public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMechanic {
