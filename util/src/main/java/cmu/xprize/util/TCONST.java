@@ -206,6 +206,7 @@ public class TCONST {
 
     public static final String FTR_USER_HEAR       = "FTR_USER_HEAR";
     public static final String FTR_USER_READ       = "FTR_USER_READ";
+    public static final String FTR_USER_ECHO       = "FTR_USER_ECHO";
     public static final String NARRATE_STORY       = "NARRATE_STORY";
     public static final String TRACK_NARRATION     = "TRACK_NARRATION";
     public static final String START_NARRATION     = "START_NARRATION";
@@ -689,6 +690,7 @@ public class TCONST {
     public static final int INCR = 1;
     public static final int DECR = -1;
 
+    public static final String RTC_VAR_ECHOSTATE  = ".echoState";
     public static final String RTC_VAR_PAGESTATE  = ".pageState";
     public static final String RTC_VAR_PARASTATE  = ".paraState";
     public static final String RTC_VAR_LINESTATE  = ".lineState";

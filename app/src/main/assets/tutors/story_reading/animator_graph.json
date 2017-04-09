@@ -125,6 +125,7 @@
           "edges":
           [
             {"constraint":"STORY_STARTING","edge":"BEGIN_STORY"},
+            {"constraint":"ECHO_LINEMODE","edge":"ECHO_LINE_NODE"},
             {"constraint":"STORY_COMPLETE","edge":"NEXT_SCENE"},
             {"constraint":"PAGE_COMPLETE","edge":"NEXT_PAGE_NODE"},
             {"constraint":"PARAGRAPH_COMPLETE","edge":"NEXT_PARA_NODE"},
@@ -158,6 +159,18 @@
             {"constraint":"FIRST_ATTEMPT","edge":"WRONG_1"},
             {"constraint":"SECOND_ATTEMPT","edge":"WRONG_2"},
             {"constraint":"","edge":"WRONG_3"}
+          ]
+        },
+
+        "ECHO_LINE_NODE": {
+          "type": "NODE",
+          "COMMENT": "When in echo mode - we repeat the last line",
+          "maptype":"actionMap",
+          "mapname":"ECHO_LINE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint":"","edge":"LISTEN"}
           ]
         },
 
@@ -284,6 +297,7 @@
             // Note that the sw actually says "please read the story aloud'
             //
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Please read aloud.mp3", "mode":"flow","features": "FTR_USER_READ"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please read aloud.mp3", "mode":"flow","features": "FTR_USER_ECHO"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets listen to a story.mp3", "mode":"flow","features": "FTR_USER_HEAR"}
           ]
         },
@@ -414,6 +428,7 @@
         "CONTINUE":        {"type": "COMMAND", "id": "SstoryReading", "method": "continueListening"  ,"features":""},
 
         "NEXT_WORD":{"type": "COMMAND", "id": "SstoryReading", "method": "nextWord" ,"features":""},
+        "ECHO_LINE":{"type": "COMMAND", "id": "SstoryReading", "method": "echoLine" ,"features":""},
         "NEXT_LINE":{"type": "COMMAND", "id": "SstoryReading", "method": "nextLine" ,"features":""},
         "NEXT_PARA":{"type": "COMMAND", "id": "SstoryReading", "method": "nextPara" ,"features":""},
         "NEXT_PAGE":{"type": "COMMAND", "id": "SstoryReading", "method": "nextPage" ,"features":""},
@@ -495,6 +510,13 @@
         "LINE_COMPLETE": {
           "type": "CONDITION",
           "If": "{{SstoryReading.wordState}}=='LAST'",
+          "Then":"true",
+          "Else":"false"
+        },
+
+        "ECHO_LINEMODE": {
+          "type": "CONDITION",
+          "If": "{{SstoryReading.echoState}}=='TRUE'",
           "Then":"true",
           "Else":"false"
         },

@@ -44,6 +44,8 @@ public interface ICRt_ViewManager extends ILoadableObject {
 
     void seekToLine(int lineIndex);
 
+    void echoLine();
+
     void nextLine();
 
     void prevLine();
