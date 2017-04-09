@@ -102,6 +102,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private String                  wordsToSpeak[];                      // current sentence words to hear
     private ArrayList<String>       wordsToListenFor;                    // current sentence words to build language model
     private String                  hearRead;
+    private Boolean                 echo = false;
 
     private CASB_Narration[]        rawNarration;                        // The narration segmentation info for the active sentence
     private String                  rawSentence;                         //currently displayed sentence that need to be recognized
@@ -205,11 +206,23 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      */
     public void beginStory() {
 
-        // reset boot flag to
+        // reset boot flag to inhibit future calls
         //
         if(storyBooting) {
 
             mParent.setFeature(TCONST.FTR_STORY_STARTING, TCONST.DEL_FEATURE);
+
+            // Narration Mode (i.e. USER_HEAR) always narrates the story otherwise we
+            // start with USER_READ where the student reads aloud and if USER_ECHO
+            // is in effect we then toggle between READ and HEAR for each sentence.
+            //
+            if(mParent.testFeature(TCONST.FTR_USER_HEAR)) {
+
+                hearRead = TCONST.FTR_USER_HEAR;
+            }
+            else {
+                hearRead = TCONST.FTR_USER_READ;
+            }
 
             storyBooting = false;
             speakOrListen();
@@ -219,14 +232,12 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     public void speakOrListen() {
 
-        if(mParent.testFeature(TCONST.FTR_USER_HEAR)) {
+        if(hearRead.equals(TCONST.FTR_USER_HEAR)) {
 
-            hearRead = TCONST.FTR_USER_HEAR;
             mParent.applyBehavior(TCONST.NARRATE_STORY);
         }
-        if(mParent.testFeature(TCONST.FTR_USER_READ)) {
+        if(hearRead.equals(TCONST.FTR_USER_READ)) {
 
-            hearRead = TCONST.FTR_USER_READ;
             startListening();
         }
     }
@@ -739,7 +750,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         }
         else {
 
-            // NOTE: The narration mode used the ASR logic to simplify operation.  In doing this
+            // NOTE: The narration mode uses the ASR logic to simplify operation.  In doing this
             /// it uses the wordsToSpeak array to progressively highlight the on screen text.
             //
             // Special processing to account for apostrophes and hyphenated words
@@ -778,7 +789,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                         endOfSentence = true;
                     }
 
-                    mParent.applyBehavior(TCONST.UTTERANCE_COMPLETE_EVENT);
+//                    mParent.applyBehavior(TCONST.UTTERANCE_COMPLETE_EVENT);
                 }
 
                 if (!endOfSentence)
@@ -793,6 +804,9 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             mParent.post(TCONST.TRACK_NARRATION, new Long((utteranceCurr - utterancePrev) * 10));
 
             utterancePrev = utteranceCurr;
+        }
+        else {
+            mParent.applyBehavior(TCONST.UTTERANCE_COMPLETE_EVENT);
         }
 
 
@@ -826,11 +840,32 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         String cummulativeState = TCONST.RTC_CLEAR;
 
+        // ensure encho state has a valid value.
+        //
+        mParent.publishValue(TCONST.RTC_VAR_ECHOSTATE, TCONST.FALSE);
+
         // Set the scriptable flag indicating the current state.
         //
         if (mCurrWord >= mWordCount) {
-            cummulativeState = TCONST.RTC_LINECOMPLETE;
-            mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.LAST);
+
+            // In echo mode - After line has been echoed we switch to Read mode and
+            // read the next sentence.
+            //
+            if(mParent.testFeature(TCONST.FTR_USER_ECHO)) {
+
+                if(hearRead.equals(TCONST.FTR_USER_READ)) {
+                    mParent.publishValue(TCONST.RTC_VAR_ECHOSTATE, TCONST.TRUE);
+                    hearRead = TCONST.FTR_USER_HEAR;
+                    mListener.setPauseListener(true);
+                }
+                else {
+                    hearRead = TCONST.FTR_USER_READ;
+                }
+            }
+            else {
+                cummulativeState = TCONST.RTC_LINECOMPLETE;
+                mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.LAST);
+            }
         }
         else
             mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.NOT_LAST);
@@ -855,6 +890,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         }
         else
             mParent.publishValue(TCONST.RTC_VAR_PAGESTATE, TCONST.NOT_LAST);
+
 
         // Publish the cumulative state out to the scripting scope in the tutor
         //
@@ -1017,6 +1053,22 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             //
             seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
         }
+    }
+
+
+    /**
+     *  NOTE: we reset mCurrWord - last parm in seekToStoryPosition
+     *
+     */
+    public void echoLine() {
+
+        // reset the echo flag
+        //
+        mParent.publishValue(TCONST.RTC_VAR_ECHOSTATE, TCONST.FALSE);
+
+        // Update the state vars
+        //
+        seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
     }
 
 
@@ -1291,7 +1343,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 Log.i("ASR", "RIGHT");
                 attemptNum = 0;
                 result = true;
-
             }
             else {
                 Log.e(TAG, "Input Error in narrator no match found - mCurrWord ->" + wordsToSpeak[mCurrWord] + " -> heardWords: " + heardWords[mHeardWord]);
@@ -1347,8 +1398,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                     Log.i("ASR", "RIGHT");
                     attemptNum = 0;
                     result = true;
-
-                } else {
+                }
+                else {
 
                     mListener.setPauseListener(true);
 
