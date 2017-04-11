@@ -50,6 +50,7 @@ public class type_audio extends type_action implements IMediaListener {
     private String mSourcePath;
     private String mResolvedName;
     private String mPathResolved;
+    private String mRawName;
     private String mLocation;
 
     private boolean _useHashName = true;
@@ -204,7 +205,8 @@ public class type_audio extends type_action implements IMediaListener {
         // TODO: Don't assume mp3 or even an extension
         //
         String pathPart = mPathResolved.substring(0, endofPath);
-        String namePart = mPathResolved.substring(endofPath, mPathResolved.length() - 4);
+
+        mRawName = mPathResolved.substring(endofPath, mPathResolved.length() - 4);
 
         // Note we keep this decomposition to provide the resolved name for debug messages
         //
@@ -212,15 +214,15 @@ public class type_audio extends type_action implements IMediaListener {
 
             // Permit actual hash's in the script using the # prefix
             //
-            if (namePart.startsWith("#")) {
-                mResolvedName = namePart.substring(1);
+            if (mRawName.startsWith("#")) {
+                mResolvedName = mRawName.substring(1);
             }
             // Otherwise generate the hash from the text
             else {
-                mResolvedName = mFileNameHasher.generateHash(namePart);
+                mResolvedName = mFileNameHasher.generateHash(mRawName);
             }
         } else {
-            mResolvedName = namePart;
+            mResolvedName = mRawName;
         }
 
         // add the extension back on the generated filename hash
@@ -290,7 +292,7 @@ public class type_audio extends type_action implements IMediaListener {
             mPlayer = null;
         }
 
-        Log.i(TAG, "cancelNode - PlayerDetached");
+        Log.i(TAG, "cancelNode - PlayerDetached - " + mRawName);
 
         return TCONST.NONE;
     }
@@ -299,10 +301,10 @@ public class type_audio extends type_action implements IMediaListener {
     public void play() {
 
         if(mPlayer != null) {
-            Log.i(TAG, "play");
+            Log.d(TAG, "play - " + mRawName);
             mPlayer.play();
 
-            // AUDIOEVENT mode tracks are fire and forget - i.e. we discnnect from the player
+            // AUDIOEVENT mode tracks are fire and forget - i.e. we disconnect from the player
             // and let it continue to completion independently.
             //
             // This allows this Audio element to be reused immediately - So we can fire another
