@@ -31,7 +31,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import cmu.xprize.robotutor.tutorengine.graph.type_handler;
-import cmu.xprize.robotutor.tutorengine.graph.type_timeline;
+import cmu.xprize.robotutor.tutorengine.graph.type_timelineFL;
 import cmu.xprize.robotutor.tutorengine.graph.type_timer;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.TCONST;
@@ -59,7 +59,7 @@ public class CMediaManager {
     private ArrayList<PlayerManager>        mPlayerCache   = new ArrayList<PlayerManager>();
     private HashMap<String, type_timer>     mTimerMap      = new HashMap<String, type_timer>();
     private HashMap<String, type_handler>   mHandlerMap    = new HashMap<String, type_handler>();
-    private HashMap<String, type_timeline>  mTimeLineMap   = new HashMap<String, type_timeline>();
+    private HashMap<String, type_timelineFL>  mTimeLineMap   = new HashMap<String, type_timelineFL>();
 
     private HashMap<CTutor, HashMap>        mSoundPackageMap = new HashMap<>();
     private AssetManager                    mAssetManager;
@@ -116,7 +116,7 @@ public class CMediaManager {
         while(timelineObjects.hasNext() ) {
             Map.Entry entry = (Map.Entry) timelineObjects.next();
 
-            type_timeline timeline = ((type_timeline)(entry.getValue()));
+            type_timelineFL timeline = ((type_timelineFL)(entry.getValue()));
 
             timeline.globalPause();
         }
@@ -125,7 +125,7 @@ public class CMediaManager {
         mPlayerCache   = new ArrayList<PlayerManager>();
         mTimerMap      = new HashMap<String, type_timer>();
         mHandlerMap    = new HashMap<String, type_handler>();
-        mTimeLineMap   = new HashMap<String, type_timeline>();
+        mTimeLineMap   = new HashMap<String, type_timelineFL>();
 
         mSoundPackageMap = new HashMap<>();
         mLangFtrMap      = new HashMap<CTutor, String>();
@@ -401,7 +401,7 @@ public class CMediaManager {
     //********************************************************************
     //*************  Timeline Management START
 
-    public void createTimeLine(String key, type_timeline owner) {
+    public void createTimeLine(String key, type_timelineFL owner) {
 
         if(mTimeLineMap.containsKey(key)) {
             CErrorManager.logEvent(TAG,  "Duplicate Timer Name:" + key, new Exception("no-exception"), false);
@@ -410,12 +410,12 @@ public class CMediaManager {
     }
 
 
-    public type_timeline removeTimeLine(String key) {
+    public type_timelineFL removeTimeLine(String key) {
         return mTimeLineMap.remove(key);
     }
 
 
-    public type_timeline mapTimeLine(String key) {
+    public type_timelineFL mapTimeLine(String key) {
         return mTimeLineMap.get(key);
     }
 

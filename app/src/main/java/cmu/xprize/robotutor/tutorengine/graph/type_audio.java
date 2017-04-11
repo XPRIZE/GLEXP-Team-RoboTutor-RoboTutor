@@ -249,7 +249,7 @@ public class type_audio extends type_action implements IMediaListener {
         //
         if (testFeatures()) {
 
-            // Non type_timeline audio tracks are not preloaded. So do it inline. This just has a
+            // Non type_timelineFL audio tracks are not preloaded. So do it inline. This just has a
             // higher latency between the call and when the audio is actually ready to play.
             //
             if (!mPreLoaded) {
