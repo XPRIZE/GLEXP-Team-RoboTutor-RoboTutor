@@ -23,6 +23,11 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import cmu.xprize.robotutor.startup.CStartView;
 import cmu.xprize.util.IEventSource;
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
@@ -34,9 +39,13 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
 
-public class scene_node implements ILoadableObject2, IScriptable2, IEventSource {
+public class scene_node implements ILoadableObject2, IScriptable2, IEventSource, IGraphEventSink, IGraphEventSource
+{
 
     protected IScope2       _scope;
+
+    private HashMap<IGraphEventSink,IGraphEventSink> mListeners = new HashMap<>();
+
 
     // json loadable fields
     public String           parser;      // Used to distinguish different Flash content parsers
@@ -51,6 +60,7 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource 
 
     public graph_edge[]     edges;
 
+
     static private final String TAG = "scene_node";
 
 
@@ -62,12 +72,75 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource 
 
 
     protected IScope2 getScope() {
+
         if(_scope == null) {
             CErrorManager.logEvent(TAG, "Engine Error: Invalid Scope on Object: " + name, null, false);
         }
 
         return _scope;
     }
+
+
+
+    //************************************************
+    // IGrgaphEvent...  START
+    //
+
+    @Override
+    public boolean isGraphEventSource() {
+        return false;
+    }
+
+    @Override
+    public void addEventListener(String listener) {
+
+        try {
+            IGraphEventSink sink = (IGraphEventSink) _scope.mapSymbol(listener);
+
+            addEventListener(sink);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void addEventListener(IGraphEventSink listener) {
+
+        try {
+            mListeners.put(listener, listener);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void dispatchEvent(IGraphEvent event) {
+
+        Iterator<?> tObjects = mListeners.entrySet().iterator();
+
+        // We use a hashmap to ensure no duplicates - we only call onEvent once
+        // per listener instance
+        //
+        while(tObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            IGraphEventSink listener = (IGraphEventSink)entry.getValue();
+            listener.onEvent(event);
+        }
+    }
+
+    // Override to provid class specific functionality
+    //
+    @Override
+    public void onEvent(IGraphEvent eventObject) {
+    }
+
+    //
+    // IGrgaphEvent...  END
+    //************************************************
+
 
 
     // IScriptable2

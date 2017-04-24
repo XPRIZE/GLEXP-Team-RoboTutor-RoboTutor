@@ -19,6 +19,8 @@
 
 package cmu.xprize.robotutor.tutorengine.graph;
 
+import android.util.Log;
+
 import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
@@ -27,9 +29,12 @@ import cmu.xprize.util.TCONST;
 
 public class scene_module extends scene_node implements ILoadableObject2 {
 
-    private int               _ndx = 0;
-    private String            _moduleState;
-    type_action               _nextAction;
+    // Default to READY state so if it is first node next will return a valid
+    // node status
+    //
+    protected int               _ndx         = 0;
+    protected String            _moduleState = TCONST.READY;
+    protected type_action       _nextAction  = null;
 
     // json loadable fields
     public type_action[]      tracks;
@@ -99,6 +104,7 @@ public class scene_module extends scene_node implements ILoadableObject2 {
 
         String         features;
         boolean        featurePass = false;
+        boolean        validAction = false;
 
         // If the node is completed and reusable then reset
         //
@@ -108,13 +114,25 @@ public class scene_module extends scene_node implements ILoadableObject2 {
         // TODO: Make it so that timer events run in their own graph so this is not needed.
         //
         do {
+            validAction = false;
 
-            if(_ndx < tracks.length)
-            {
+            // Issue #58 - Make all actions feature reactive.
+            //
+            while(_ndx < tracks.length) {
+
                 _nextAction = tracks[_ndx];
-
                 _ndx++;
 
+                if(_nextAction.testFeatures()) {
+                    Log.d(TAG, "Processing action: " + _nextAction.name);
+                    validAction = true;
+                    break;
+                }
+            }
+
+            if(validAction)
+            {
+                _nextAction.preEnter();
                 _moduleState = _nextAction.applyNode();
             }
             else {

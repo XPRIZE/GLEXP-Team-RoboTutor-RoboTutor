@@ -1041,7 +1041,7 @@ public class type_timelineFL extends type_action implements IMediaListener {
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(CTutorEngine.Activity);
 
-        mMediaManager = CMediaController.getManagerInstance(scope.tutor());
+        mMediaManager = CMediaController.getManagerInstance(scope.tutorName());
 
         // Tasks can only run once so create a new one for each recognition task.
         _loaderThread = new LoaderThread();

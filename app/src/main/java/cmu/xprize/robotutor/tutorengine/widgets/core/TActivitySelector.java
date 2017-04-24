@@ -649,7 +649,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         // The media manager is tutor specific so we have to use the tutor to access
         // the correct instance for this component.
         //
-        mMediaManager = CMediaController.getManagerInstance(mTutor);
+        mMediaManager = CMediaController.getManagerInstance(mTutor.getTutorName());
     }
 
     @Override
@@ -832,6 +832,13 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                             // Disallow module "calls"
                             Log.e(TAG, "MODULE Behaviors are not supported");
+                            break;
+
+                        // Note that we should not preEnter queues - they may need to be cancelled
+                        // which is done internally.
+                        //
+                        case TCONST.QUEUE:
+                            obj.applyNode();
                             break;
 
                         default:

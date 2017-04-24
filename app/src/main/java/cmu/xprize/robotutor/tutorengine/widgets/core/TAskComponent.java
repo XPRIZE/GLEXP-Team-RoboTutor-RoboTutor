@@ -127,7 +127,7 @@ public class TAskComponent extends CAskComponent implements IBehaviorManager, IT
         // The media manager is tutor specific so we have to use the tutor to access
         // the correct instance for this component.
         //
-        mMediaManager = CMediaController.getManagerInstance(mTutor);
+        mMediaManager = CMediaController.getManagerInstance(mTutor.getTutorName());
     }
 
     @Override

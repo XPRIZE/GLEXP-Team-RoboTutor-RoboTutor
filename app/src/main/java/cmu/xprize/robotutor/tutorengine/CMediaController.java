@@ -16,7 +16,7 @@ import edu.cmu.xprize.listener.ListenerBase;
  */
 public class CMediaController implements IMediaController{
 
-    static private HashMap<CTutor, CMediaManager>  managerMap = new HashMap<>();
+    static private HashMap<String, CMediaManager>  managerMap = new HashMap<>();
 
     static private TTSsynthesizer TTS;
     static private ListenerBase   mListener;
@@ -34,7 +34,7 @@ public class CMediaController implements IMediaController{
     private CMediaController() {
     }
 
-    static public CMediaManager newMediaManager(CTutor parentTutor) {
+    static public CMediaManager newMediaManager(String parentTutor) {
 
         CMediaManager manager = new CMediaManager(ourInstance, mAssetManager);
 
@@ -44,7 +44,7 @@ public class CMediaController implements IMediaController{
     }
 
 
-    static public CMediaManager getManagerInstance(CTutor parentTutor) {
+    static public CMediaManager getManagerInstance(String parentTutor) {
 
         CMediaManager manager = managerMap.get(parentTutor);
 
@@ -52,7 +52,7 @@ public class CMediaController implements IMediaController{
     }
 
 
-    static public void destroyMediaManager(CTutor tutor) {
+    static public void destroyMediaManager(String tutor) {
 
         CMediaManager manager = managerMap.get(tutor);
 

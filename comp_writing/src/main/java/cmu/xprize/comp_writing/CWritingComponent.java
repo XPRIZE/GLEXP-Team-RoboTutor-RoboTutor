@@ -71,8 +71,9 @@ import cmu.xprize.util.TCONST;
  */
 public class CWritingComponent extends PercentRelativeLayout implements IEventListener, IEventDispatcher, IWritingComponent, ILoadableObject, IPublisher {
 
-    protected Context           mContext;
-    protected char[]            mStimulusData;
+    protected Context               mContext;
+    protected char[]                mStimulusData;
+    private   List<IEventListener>  mListeners = new ArrayList<IEventListener>();
 
     protected CLinkedScrollView mRecognizedScroll;
     protected CLinkedScrollView mDrawnScroll;

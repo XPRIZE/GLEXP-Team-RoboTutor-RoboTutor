@@ -78,6 +78,7 @@ public class TCONST {
 
     public static final String COMMAND      = "COMMAND";
     public static final String MODULE       = "MODULE";
+    public static final String QUEUE        = "QUEUE";
     public static final String NODE         = "NODE";
     public static final String CONDITION    = "CONDITION";
 
@@ -229,7 +230,10 @@ public class TCONST {
     public static final String PLEASE_WAIT                = " - Please Wait.";
 
     public static final String TUTOR_NATIVE               = "native";
+    public static final String TRACK_COMPLETE             = "TRACK_COMPLETE";
 
+    public static final String NEXT_PAGE                  = "NEXT_PAGE";
+    public static final String NEXT_SCENE                 = "NEXT_SCENE";
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
     //
@@ -389,6 +393,7 @@ public class TCONST {
     public static final String ENTER_SCENE     = "ENTER_SCENE";
 
     public static final String END_OF_GRAPH             = "END_OF_GRAPH";
+    public static final String APPLY_NODE               = "APPLY_NODE";
 
     public static final String APPLY_BEHAVIOR           = "APPLY_BEHAVIOR";
 

@@ -41,10 +41,10 @@ public class type_audio extends type_action implements IMediaListener {
     // NOTE: we run at a Flash default of 24fps - which is the units in which
     // index and duration are calibrated
 
-    private CFileNameHasher             mFileNameHasher;
-    private CMediaManager               mMediaManager;
-    private CMediaManager.PlayerManager mPlayer;
-    private boolean                     mPreLoaded = false;
+    protected CFileNameHasher             mFileNameHasher;
+    protected CMediaManager               mMediaManager;
+    protected CMediaManager.PlayerManager mPlayer;
+    protected boolean                     mPreLoaded = false;
 
     private String mSoundSource;
     private String mSourcePath;
@@ -270,8 +270,7 @@ public class type_audio extends type_action implements IMediaListener {
                 }
 
                 // TCONST.STREAMEVENT or TCONST.FLOWEVENT wait for completion
-                //
-                // TCONST.FLOWEVENT automatically advances
+                // TCONST.FLOWEVENT automatically advances on completion
                 else {
                     status = TCONST.WAIT;
                 }
@@ -285,9 +284,10 @@ public class type_audio extends type_action implements IMediaListener {
     @Override
     public String cancelNode() {
 
-        stop();
-
         if(mPlayer != null) {
+
+            stop();
+
             mPlayer.detach();
             mPlayer = null;
         }
@@ -369,7 +369,7 @@ public class type_audio extends type_action implements IMediaListener {
             // An audio source can force a language by setting "lang" to a known language Feature ID
             // e.g. LANG_SW | LANG_EN | LANG_FR
 
-            mMediaManager = CMediaController.getManagerInstance(_scope.tutor());
+            mMediaManager = CMediaController.getManagerInstance(_scope.tutorName());
 
             langPath = mMediaManager.mapSoundPackage(_scope.tutor(), soundpackage, lang);
 

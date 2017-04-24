@@ -61,13 +61,13 @@ public class CMediaManager {
     private HashMap<String, type_handler>   mHandlerMap    = new HashMap<String, type_handler>();
     private HashMap<String, type_timelineFL>  mTimeLineMap   = new HashMap<String, type_timelineFL>();
 
-    private HashMap<CTutor, HashMap>        mSoundPackageMap = new HashMap<>();
+    private HashMap<String, HashMap>        mSoundPackageMap = new HashMap<>();
     private AssetManager                    mAssetManager;
     static private int                      playerCount = 0;
 
     // Note that there is per tutor Language capability
     //
-    private HashMap<CTutor, String>  mLangFtrMap     = new HashMap<CTutor, String>();
+    private HashMap<String, String>  mLangFtrMap     = new HashMap<>();
 
     final static public String TAG = "CMediaManager";
 
@@ -128,7 +128,7 @@ public class CMediaManager {
         mTimeLineMap   = new HashMap<String, type_timelineFL>();
 
         mSoundPackageMap = new HashMap<>();
-        mLangFtrMap      = new HashMap<CTutor, String>();
+        mLangFtrMap      = new HashMap<String, String>();
     }
 
 
@@ -141,13 +141,13 @@ public class CMediaManager {
 
     public String getLanguageIANA_2(CTutor tTutor) {
 
-        return TCONST.langMap.get(mLangFtrMap.get(tTutor));
+        return TCONST.langMap.get(mLangFtrMap.get(tTutor.getTutorName()));
     }
 
     public String getLanguageFeature(CTutor tTutor) {
 
         try {
-            return mLangFtrMap.get(tTutor);
+            return mLangFtrMap.get(tTutor.getTutorName());
         }
         catch(Exception e) {
             Log.d(TAG, "Excep:"  + e);
@@ -159,14 +159,14 @@ public class CMediaManager {
 
     public void setLanguageFeature(CTutor tTutor, String langFtr) {
 
-        mLangFtrMap.put(tTutor, langFtr);
+        mLangFtrMap.put(tTutor.getTutorName(), langFtr);
 
         tTutor.updateLanguageFeature(langFtr);
     }
 
     public void setSoundPackage(CTutor tTutor, HashMap soundMap) {
 
-        mSoundPackageMap.put(tTutor, soundMap);
+        mSoundPackageMap.put(tTutor.getTutorName(), soundMap);
     }
 
     /**
@@ -180,7 +180,7 @@ public class CMediaManager {
 
         HashMap<String,CMediaPackage> soundMap;
 
-        soundMap = mSoundPackageMap.get(tTutor);
+        soundMap = mSoundPackageMap.get(tTutor.getTutorName());
 
         soundMap.put(packageName, mediaPackage);
     }
@@ -204,7 +204,7 @@ public class CMediaManager {
             // Old tutors may not contain soundMaps - these default to what they expect.
             // NOTE: non-soundMap tutors are deprecated.
             //
-            soundMap = mSoundPackageMap.get(tTutor);
+            soundMap = mSoundPackageMap.get(tTutor.getTutorName());
 
             if (soundMap != null) {
 
@@ -256,7 +256,7 @@ public class CMediaManager {
             // Old tutors may not contain soundMaps - these default to what they expect.
             // NOTE: non-soundMap tutors are deprecated.
             //
-            soundMap = mSoundPackageMap.get(tTutor);
+            soundMap = mSoundPackageMap.get(tTutor.getTutorName());
 
             if (soundMap != null) {
 
@@ -295,7 +295,7 @@ public class CMediaManager {
             // Old tutors may not contain soundMaps - these default to what they expect.
             // NOTE: non-soundMap tutors are deprecated.
             //
-            soundMap = mSoundPackageMap.get(tTutor);
+            soundMap = mSoundPackageMap.get(tTutor.getTutorName());
 
             if (soundMap != null) {
 
@@ -700,6 +700,17 @@ public class CMediaManager {
 
             pause();
             seek(0L);
+
+            //#Mod issue #335 - give the tracka chance to shutdown.  The audio runs in
+            // JNI code so this seems to allow it to shutdown and not restart if we are
+            // interrupting a clip with another clip.
+            //
+            try {
+                Thread.sleep(10);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
 

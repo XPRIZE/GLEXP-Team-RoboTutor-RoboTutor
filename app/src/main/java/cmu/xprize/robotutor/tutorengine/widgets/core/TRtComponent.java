@@ -123,7 +123,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
     public void setVolatileBehavior(String event, String behavior) {
 
-        Log.d("SET_BEHAVIOR", "Event: " + event + "  - behavior: " + behavior );
+        Log.d("SET_BEHAVIOR - Volatile", "Event: " + event + "  - behavior: " + behavior );
 
         enableOnClickBehavior(event, behavior);
 
@@ -192,6 +192,8 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
 
     public void setStickyBehavior(String event, String behavior) {
+
+        Log.d("SET_BEHAVIOR - Sticky", "Event: " + event + "  - behavior: " + behavior );
 
         enableOnClickBehavior(event, behavior);
 
@@ -321,6 +323,13 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                             Log.e(TAG, "MODULE Behaviors are not supported");
                             break;
 
+                        // Note that we should not preEnter queues - they may need to be cancelled
+                        // which is done internally.
+                        //
+                        case TCONST.QUEUE:
+                            obj.applyNode();
+                            break;
+
                         default:
                             obj.preEnter();
                             obj.applyNode();
@@ -349,6 +358,12 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
             applyBehavior(TCONST.ON_CLICK);
         }
 
+    }
+
+
+    @Override
+    public void nextScene() {
+        mTutor.mTutorGraph.post(this, TCONST.NEXTSCENE);
     }
 
 
@@ -776,7 +791,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         // The media manager is tutor specific so we have to use the tutor to access
         // the correct instance for this component.
         //
-        mMediaManager = CMediaController.getManagerInstance(mTutor);
+        mMediaManager = CMediaController.getManagerInstance(mTutor.getTutorName());
     }
 
     @Override

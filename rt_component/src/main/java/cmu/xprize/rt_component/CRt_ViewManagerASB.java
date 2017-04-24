@@ -824,6 +824,15 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 trackNarration(true);
                 break;
 
+            case TCONST.NEXT_PAGE:
+                nextPage();
+                break;
+
+            case TCONST.NEXT_SCENE:
+                mParent.nextScene();
+
+                break;
+
             case TCONST.TRACK_NARRATION:
 
                 trackNarration(false);
@@ -853,13 +862,21 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             //
             if(mParent.testFeature(TCONST.FTR_USER_ECHO)) {
 
+                // Read Mode - When user finishes reading switch to Narrate mode and
+                // narrate the same sentence - i.e. echo
+                //
                 if(hearRead.equals(TCONST.FTR_USER_READ)) {
                     mParent.publishValue(TCONST.RTC_VAR_ECHOSTATE, TCONST.TRUE);
                     hearRead = TCONST.FTR_USER_HEAR;
                     mListener.setPauseListener(true);
                 }
+                // Narrate mode - swithc back to READ and set line complete flags
+                //
                 else {
                     hearRead = TCONST.FTR_USER_READ;
+
+                    cummulativeState = TCONST.RTC_LINECOMPLETE;
+                    mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.LAST);
                 }
             }
             else {
@@ -1283,7 +1300,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         try {
             Layout layout = text.getLayout();
 
-            if(layout != null) {
+            if(layout != null && mCurrWord < words.length) {
 
                 // Point to the start of the Target sentence (mCurrLine)
                 charPos  = completedSentences.length();
