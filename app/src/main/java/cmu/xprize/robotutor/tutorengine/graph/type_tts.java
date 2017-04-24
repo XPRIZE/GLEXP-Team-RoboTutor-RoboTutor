@@ -125,7 +125,7 @@ public class type_tts extends type_action {
         //
         super.loadJSON(jsonObj, scope);
 
-        mMediaManager = CMediaController.getManagerInstance(scope.tutor());
+        mMediaManager = CMediaController.getManagerInstance(scope.tutorName());
         mSynthesizer  = CMediaController.getTTS();
 
         // Custom post processing.

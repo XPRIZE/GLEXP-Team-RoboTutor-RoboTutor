@@ -85,6 +85,11 @@
       "tutorName": "word_copy",
       "features": "FTR_NUMBERS"
     },
+    "story_reading_USER_ECHO": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_reading",
+      "features": "FTR_USER_ECHO"
+    },
     "story_reading_USER_HEAR": {
       "type": "TUTORVAR_MAP",
       "tutorName": "story_reading",
@@ -103,6 +108,7 @@
   // else it is pushed in with a prefixed component:datasource compound specification.
   //
   "bindingPatterns": {
+
     "story_reading": {
       "type": "TUTORDATA_MAP",
       "scene_bindings": {

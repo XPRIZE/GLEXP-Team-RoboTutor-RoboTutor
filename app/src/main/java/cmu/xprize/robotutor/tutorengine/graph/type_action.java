@@ -335,13 +335,21 @@ public class type_action extends scene_node {
                             // Find the target object by its id
                             // get the method on the target and apply it with the parameter array created above.
                             //
-                            Log.d(TAG, childMap.get(id).toString());
-                            childMap.get(id).getClass();
+                            if(childMap.containsKey(id)) {
+                                Log.d(TAG, childMap.get(id).toString());
+                                childMap.get(id).getClass();
 
-                            Method _method = childMap.get(id).getClass().getMethod(method, pType);
+                                Method _method = childMap.get(id).getClass().getMethod(method, pType);
 
-                            _method.invoke(childMap.get(id), iparms);
+                                _method.invoke(childMap.get(id), iparms);
+                            }
+                            // If it is not a display object then check for scope objects i.e. nodes
+                            //
+                            else {
+                                Method _method = getScope().mapSymbol(id).getClass().getMethod(method, pType);
 
+                                _method.invoke(getScope().mapSymbol(id), iparms);
+                            }
                         }
                         catch(InvocationTargetException e) {
                             CErrorManager.logEvent(TAG, "Script internal ERROR: " + id + " - Apply Method: " + method + "   Parms: " + decodedParms + " : ", e, false);

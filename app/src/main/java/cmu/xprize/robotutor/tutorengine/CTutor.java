@@ -120,7 +120,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
         mTutorLogManager = logManager;
 
         mAssetManager    = context.getAssets();
-        mMediaManager    = CMediaController.newMediaManager(this);
+        mMediaManager    = CMediaController.newMediaManager(mTutorName);
 
         setTutorFeatures(featSet);
 
@@ -251,7 +251,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         private void cleanUpTutor() {
 
-            CMediaController.destroyMediaManager(CTutor.this);
+            CMediaController.destroyMediaManager(mTutorName);
 
             // disable the input queue permanently in prep for destruction
             // walks the queue chain to diaable the tutor and scene queues

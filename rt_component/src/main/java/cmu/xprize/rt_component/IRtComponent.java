@@ -35,6 +35,8 @@ public interface IRtComponent {
 
     void seekToLine(int lineIndex);
 
+    void echoLine();
+
     void nextLine();
 
     void prevLine();

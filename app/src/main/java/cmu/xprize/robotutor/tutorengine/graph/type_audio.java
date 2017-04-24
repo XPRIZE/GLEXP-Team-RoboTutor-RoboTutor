@@ -41,15 +41,16 @@ public class type_audio extends type_action implements IMediaListener {
     // NOTE: we run at a Flash default of 24fps - which is the units in which
     // index and duration are calibrated
 
-    private CFileNameHasher             mFileNameHasher;
-    private CMediaManager               mMediaManager;
-    private CMediaManager.PlayerManager mPlayer;
-    private boolean                     mPreLoaded = false;
+    protected CFileNameHasher             mFileNameHasher;
+    protected CMediaManager               mMediaManager;
+    protected CMediaManager.PlayerManager mPlayer;
+    protected boolean                     mPreLoaded = false;
 
     private String mSoundSource;
     private String mSourcePath;
     private String mResolvedName;
     private String mPathResolved;
+    private String mRawName;
     private String mLocation;
 
     private boolean _useHashName = true;
@@ -204,7 +205,8 @@ public class type_audio extends type_action implements IMediaListener {
         // TODO: Don't assume mp3 or even an extension
         //
         String pathPart = mPathResolved.substring(0, endofPath);
-        String namePart = mPathResolved.substring(endofPath, mPathResolved.length() - 4);
+
+        mRawName = mPathResolved.substring(endofPath, mPathResolved.length() - 4);
 
         // Note we keep this decomposition to provide the resolved name for debug messages
         //
@@ -212,15 +214,15 @@ public class type_audio extends type_action implements IMediaListener {
 
             // Permit actual hash's in the script using the # prefix
             //
-            if (namePart.startsWith("#")) {
-                mResolvedName = namePart.substring(1);
+            if (mRawName.startsWith("#")) {
+                mResolvedName = mRawName.substring(1);
             }
             // Otherwise generate the hash from the text
             else {
-                mResolvedName = mFileNameHasher.generateHash(namePart);
+                mResolvedName = mFileNameHasher.generateHash(mRawName);
             }
         } else {
-            mResolvedName = namePart;
+            mResolvedName = mRawName;
         }
 
         // add the extension back on the generated filename hash
@@ -247,7 +249,7 @@ public class type_audio extends type_action implements IMediaListener {
         //
         if (testFeatures()) {
 
-            // Non type_timeline audio tracks are not preloaded. So do it inline. This just has a
+            // Non type_timelineFL audio tracks are not preloaded. So do it inline. This just has a
             // higher latency between the call and when the audio is actually ready to play.
             //
             if (!mPreLoaded) {
@@ -268,8 +270,7 @@ public class type_audio extends type_action implements IMediaListener {
                 }
 
                 // TCONST.STREAMEVENT or TCONST.FLOWEVENT wait for completion
-                //
-                // TCONST.FLOWEVENT automatically advances
+                // TCONST.FLOWEVENT automatically advances on completion
                 else {
                     status = TCONST.WAIT;
                 }
@@ -283,14 +284,15 @@ public class type_audio extends type_action implements IMediaListener {
     @Override
     public String cancelNode() {
 
-        stop();
-
         if(mPlayer != null) {
+
+            stop();
+
             mPlayer.detach();
             mPlayer = null;
         }
 
-        Log.i(TAG, "cancelNode - PlayerDetached");
+        Log.i(TAG, "cancelNode - PlayerDetached - " + mRawName);
 
         return TCONST.NONE;
     }
@@ -299,10 +301,10 @@ public class type_audio extends type_action implements IMediaListener {
     public void play() {
 
         if(mPlayer != null) {
-            Log.i(TAG, "play");
+            Log.d(TAG, "play - " + mRawName);
             mPlayer.play();
 
-            // AUDIOEVENT mode tracks are fire and forget - i.e. we discnnect from the player
+            // AUDIOEVENT mode tracks are fire and forget - i.e. we disconnect from the player
             // and let it continue to completion independently.
             //
             // This allows this Audio element to be reused immediately - So we can fire another
@@ -367,7 +369,7 @@ public class type_audio extends type_action implements IMediaListener {
             // An audio source can force a language by setting "lang" to a known language Feature ID
             // e.g. LANG_SW | LANG_EN | LANG_FR
 
-            mMediaManager = CMediaController.getManagerInstance(_scope.tutor());
+            mMediaManager = CMediaController.getManagerInstance(_scope.tutorName());
 
             langPath = mMediaManager.mapSoundPackage(_scope.tutor(), soundpackage, lang);
 

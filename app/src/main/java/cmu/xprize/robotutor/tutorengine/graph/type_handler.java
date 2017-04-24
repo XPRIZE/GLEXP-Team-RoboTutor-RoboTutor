@@ -305,7 +305,7 @@ public class type_handler extends type_action implements IMediaListener {
             //
             id = scope.tutor().mTutorName + id;
 
-            mMediaManager = CMediaController.getManagerInstance(scope.tutor());
+            mMediaManager = CMediaController.getManagerInstance(scope.tutorName());
 
         }
 }

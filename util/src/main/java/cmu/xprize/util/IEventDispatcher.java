@@ -24,9 +24,8 @@ import java.util.List;
 
 public interface IEventDispatcher {
 
-    public List<IEventListener> mListeners = new ArrayList<IEventListener>();
-
     public void addEventListener(String linkedView);
+
     public void dispatchEvent(IEvent event);
 
 }

@@ -169,6 +169,10 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     }
 
 
+    public void nextScene() {
+    }
+
+
     /**
      *
      * @param language Feature string (e.g. LANG_EN)

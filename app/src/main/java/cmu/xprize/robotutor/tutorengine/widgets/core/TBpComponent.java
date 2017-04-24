@@ -376,6 +376,13 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                             Log.e(TAG, "MODULE Behaviors are not supported");
                             break;
 
+                        // Note that we should not preEnter queues - they may need to be cancelled
+                        // which is done internally.
+                        //
+                        case TCONST.QUEUE:
+                            obj.applyNode();
+                            break;
+
                         default:
 
                             obj.preEnter();
@@ -563,7 +570,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         // The media manager is tutor specific so we have to use the tutor to access
         // the correct instance for this component.
         //
-        mMediaManager = CMediaController.getManagerInstance(mTutor);
+        mMediaManager = CMediaController.getManagerInstance(mTutor.getTutorName());
     }
 
     @Override

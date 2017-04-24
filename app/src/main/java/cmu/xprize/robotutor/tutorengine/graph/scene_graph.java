@@ -50,6 +50,7 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
     public HashMap choiceMap;
     public HashMap constraintMap;
     public HashMap subgraphMap;
+    public HashMap queueMap;
 
     static private final String TAG = "tutor_node";
 

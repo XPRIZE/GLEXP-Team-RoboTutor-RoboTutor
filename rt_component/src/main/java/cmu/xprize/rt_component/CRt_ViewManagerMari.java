@@ -148,6 +148,11 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
     }
 
     @Override
+    public void echoLine() {
+
+    }
+
+    @Override
     public void nextLine() {
 
     }
