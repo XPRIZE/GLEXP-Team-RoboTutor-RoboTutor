@@ -109,21 +109,21 @@ public class TCONST {
 
     public static final String ASM_DIGIT_OR_OVERHEAD_CORRECT   = "ASM_DIGIT_OR_OVERHEAD_CORRECT";
     public static final String ASM_DIGIT_OR_OVERHEAD_WRONG     = "ASM_DIGIT_OR_OVERHEAD_WRONG";
-    public static final String ASM_CLICK_ON_DOT                  = "ASM_CLICK_ON_DOT";
-    public static final String ASM_ALL_DOTS_DOWN                 = "ASM_ALL_DOTS_DOWN";
+    public static final String ASM_CLICK_ON_DOT                = "ASM_CLICK_ON_DOT";
+    public static final String ASM_ALL_DOTS_DOWN               = "ASM_ALL_DOTS_DOWN";
 
-    public static final String ASM_ADD                            = "ASM_ADD";
-    public static final String ASM_ADD_PROMPT                    = "ASM_ADD_PROMPT";
-    public static final String ASM_ADD_PROMPT_COUNT_FROM        = "ASM_ADD_PROMPT_COUNT_FROM";
+    public static final String ASM_ADD                         = "ASM_ADD";
+    public static final String ASM_ADD_PROMPT                  = "ASM_ADD_PROMPT";
+    public static final String ASM_ADD_PROMPT_COUNT_FROM       = "ASM_ADD_PROMPT_COUNT_FROM";
 
-    public static final String ASM_SUBTRACT                      = "ASM_SUBTRACT";
-    public static final String ASM_SUB_PROMPT                    = "ASM_SUB_PROMPT";
+    public static final String ASM_SUBTRACT                     = "ASM_SUBTRACT";
+    public static final String ASM_SUB_PROMPT                   = "ASM_SUB_PROMPT";
 
-    public static final String ASM_MULTI                          = "ASM_MULTI";
-    public static final String ASM_MULTI_PROMPT                  = "ASM_MULTI_PROMPT";
-    public static final String ASM_RA_START                      = "ASM_RA_START";
-    public static final String ASM_NEXT_NUMBER                   = "ASM_NEXT_NUMBER";
-    public static final String ASM_NEXT_RESULT                   = "ASM_NEXT_RESULT";
+    public static final String ASM_MULTI                        = "ASM_MULTI";
+    public static final String ASM_MULTI_PROMPT                 = "ASM_MULTI_PROMPT";
+    public static final String ASM_RA_START                     = "ASM_RA_START";
+    public static final String ASM_NEXT_NUMBER                  = "ASM_NEXT_NUMBER";
+    public static final String ASM_NEXT_RESULT                  = "ASM_NEXT_RESULT";
     public static final String ASM_RESULT_FIRST_TWO             = "ASM_RESULT_FIRST_TWO";
     public static final String ASM_RESULT_NEXT_OR_LAST          = "ASM_RESULT_NEXT_OR_LAST";
     public static final String ASM_REPEATED_ADD_DOWN            = "ASM_REPEATED_ADD_DOWN";
@@ -218,6 +218,7 @@ public class TCONST {
     public static final String NO_SPACE            = "";
     public static final int    MAX_AKDATA          = 10;
 
+    public static final String FTR_COMPLETE = "FTR_COMPLETE";
 
     public static final String START_PROGRESSIVE_UPDATE   = "START_PROGRESSIVE_UPDATE";
     public static final String START_INDETERMINATE_UPDATE = "START_INDETERMINATE_UPDATE";

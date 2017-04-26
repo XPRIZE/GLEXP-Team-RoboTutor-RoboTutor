@@ -90,8 +90,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected final Handler     mainHandler  = new Handler(Looper.getMainLooper());
     protected HashMap           queueMap     = new HashMap();
     protected HashMap           nameMap      = new HashMap();
-
     protected boolean           _qDisabled   = false;
+
     protected boolean           _alwaysTrack = true;
     protected int               _fieldIndex  = 0;
     protected String            _replayType;
@@ -233,8 +233,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mDrawnScroll.setLinkedScroll(mRecognizedScroll);
     }
 
+
     public void onDestroy() {
 
+        terminateQueue();
     }
 
 
@@ -1092,6 +1094,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
 
 
+        public String getCommand() {
+            return _command;
+        }
+
+
         @Override
         public void run() {
 
@@ -1214,6 +1221,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         while(tObjects.hasNext() ) {
             Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Log.d(TAG, "Post Cancelled on Flush: " + ((Queue)entry.getValue()).getCommand());
 
             mainHandler.removeCallbacks((Queue)(entry.getValue()));
         }

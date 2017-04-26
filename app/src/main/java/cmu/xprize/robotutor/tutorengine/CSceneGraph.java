@@ -60,7 +60,7 @@ public class CSceneGraph  {
     private boolean          mDisabled   = false;
 
     // State fields
-    private scene_graph              _graph;
+    private scene_graph              _sceneGraph;
     private HashMap<String, Integer> _pFeatures;
     private ArrayList<scene_graph>   _dataStack  = new ArrayList<>();
 
@@ -89,6 +89,9 @@ public class CSceneGraph  {
      */
     public void onDestroy() {
 
+        if(_sceneGraph != null) {
+            _sceneGraph.onDestroy();
+        }
     }
 
 
@@ -97,8 +100,8 @@ public class CSceneGraph  {
      */
     public void pushGraph() {
 
-        if(_graph != null) {
-            _dataStack.add(_graph);
+        if(_sceneGraph != null) {
+            _dataStack.add(_sceneGraph);
         }
     }
 
@@ -112,7 +115,7 @@ public class CSceneGraph  {
         int     popIndex = _dataStack.size()-1;
 
         if(popIndex >= 0) {
-            _graph = _dataStack.get(popIndex);
+            _sceneGraph = _dataStack.get(popIndex);
             _dataStack.remove(popIndex);
 
             popped = true;
@@ -169,9 +172,9 @@ public class CSceneGraph  {
                         mGraphName = _target;
 
                         try {
-                            _graph = (scene_graph) mScope.mapSymbol(mGraphName);
+                            _sceneGraph = (scene_graph) mScope.mapSymbol(mGraphName);
 
-                            Log.d(TAG, "Processing Enter Scene: " + _graph.name + " - mapType: " + _graph.type );
+                            Log.d(TAG, "Processing Enter Scene: " + _sceneGraph.name + " - mapType: " + _sceneGraph.type );
 
                         } catch (Exception e) {
 
@@ -188,7 +191,7 @@ public class CSceneGraph  {
                         //
                         if(_dataStack.size() > 0) {
 
-                            _graph.cancelNode();
+                            _sceneGraph.cancelNode();
                             popGraph();
                         }
 
@@ -199,14 +202,14 @@ public class CSceneGraph  {
                         pushGraph();
 
                         try {
-                            _graph = (scene_graph) mScope.mapSymbol(mGraphName);
-                            _graph.resetNode();
+                            _sceneGraph = (scene_graph) mScope.mapSymbol(mGraphName);
+                            _sceneGraph.resetNode();
 
-                            Log.d(TAG, "Processing call graph: " + _graph.name + " - mapType: " + _graph.type );
+                            Log.d(TAG, "Processing call graph: " + _sceneGraph.name + " - mapType: " + _sceneGraph.type );
 
                             // Seek the graph to the root node and execute it
                             //
-                            if(_graph != null) {
+                            if(_sceneGraph != null) {
                                 post(this, TCONST.NEXT_NODE);
                             }
 
@@ -232,7 +235,7 @@ public class CSceneGraph  {
 
                     case TCONST.NEXT_NODE:
 
-                        String sceneState = _graph.applyNode();
+                        String sceneState = _sceneGraph.applyNode();
 
                         switch (sceneState) {
 
@@ -263,7 +266,7 @@ public class CSceneGraph  {
 
                     case TCONST.CANCEL_NODE:
 
-                        switch (_graph.cancelNode()) {
+                        switch (_sceneGraph.cancelNode()) {
 
                             // TCONST.NEXTSCENE is used to end the current scene and step through to the
                             // next scene in the TutorGraph.
@@ -284,12 +287,12 @@ public class CSceneGraph  {
 
 
                     case TCONST.PLAY:
-                        _graph.play();
+                        _sceneGraph.play();
                         break;
 
 
                     case TCONST.STOP:
-                        _graph.stop();
+                        _sceneGraph.stop();
                         break;
 
 
@@ -303,7 +306,7 @@ public class CSceneGraph  {
                         break;
 
                     case TCONST.GOTO_NODE:
-                        _graph.gotoNode(_target);
+                        _sceneGraph.gotoNode(_target);
                         break;
                 }
             }

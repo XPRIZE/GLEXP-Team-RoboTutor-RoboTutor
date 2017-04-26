@@ -43,8 +43,8 @@ public class CAsm_MechanicBase implements IDotMechanics {
     protected void init(CAsm_Component mComponent) {
 
         this.mComponent = mComponent;
-        this.allAlleys = mComponent.allAlleys;
-        this.scale = mComponent.getResources().getDisplayMetrics().density;
+        this.allAlleys  = mComponent.allAlleys;
+        this.scale      = mComponent.getResources().getDisplayMetrics().density;
 
     }
 
@@ -97,38 +97,40 @@ public class CAsm_MechanicBase implements IDotMechanics {
      */
     public void handleClick() {
 
-        if (mComponent.getClickPaused()) {
-            return;
-        }
+        if(mComponent != null) {
 
-        CAsm_TextLayout clickedTextLayout = findClickedTextLayout();
-
-        if (clickedTextLayout == null) {
-            mComponent.exitWrite();
-            return;
-        }
-
-        CAsm_Text clickedText = clickedTextLayout.findClickedText();
-
-        if (clickedText != null) {
-            if (clickedText.isWritable) {
-                mComponent.delAddFeature(TCONST.ASM_CLICK_ON_DOT, "");
-                if (mComponent.overheadTextSupplement != null) {
-                    if ((clickedText.equals(mComponent.overheadText) || clickedText.equals(mComponent.overheadTextSupplement))
-                            && mComponent.overheadText.isWritable == true && mComponent.overheadTextSupplement.isWritable == true)
-                        mComponent.updateText(mComponent.overheadTextSupplement, mComponent.overheadText, clickedTextLayoutIndex < resultIndex && !mComponent.operation.equals("x"));
-                    else
-                        mComponent.updateText(null, clickedText, clickedTextLayoutIndex < resultIndex && !mComponent.operation.equals("x"));
-                } else
-                    mComponent.updateText(null, clickedText, clickedTextLayoutIndex < resultIndex && !mComponent.operation.equals("x"));
-            } else {
-                clickedTextLayout.setIsClicked(true);
-                clickedText.setIsClicked(true);
+            if (mComponent.getClickPaused()) {
+                return;
             }
-        } else {
-            mComponent.exitWrite();
-        }
 
+            CAsm_TextLayout clickedTextLayout = findClickedTextLayout();
+
+            if (clickedTextLayout == null) {
+                mComponent.exitWrite();
+                return;
+            }
+
+            CAsm_Text clickedText = clickedTextLayout.findClickedText();
+
+            if (clickedText != null) {
+                if (clickedText.isWritable) {
+                    mComponent.delAddFeature(TCONST.ASM_CLICK_ON_DOT, "");
+                    if (mComponent.overheadTextSupplement != null) {
+                        if ((clickedText.equals(mComponent.overheadText) || clickedText.equals(mComponent.overheadTextSupplement))
+                                && mComponent.overheadText.isWritable == true && mComponent.overheadTextSupplement.isWritable == true)
+                            mComponent.updateText(mComponent.overheadTextSupplement, mComponent.overheadText, clickedTextLayoutIndex < resultIndex && !mComponent.operation.equals("x"));
+                        else
+                            mComponent.updateText(null, clickedText, clickedTextLayoutIndex < resultIndex && !mComponent.operation.equals("x"));
+                    } else
+                        mComponent.updateText(null, clickedText, clickedTextLayoutIndex < resultIndex && !mComponent.operation.equals("x"));
+                } else {
+                    clickedTextLayout.setIsClicked(true);
+                    clickedText.setIsClicked(true);
+                }
+            } else {
+                mComponent.exitWrite();
+            }
+        }
     }
 
     public String getOperation() {return operation;}

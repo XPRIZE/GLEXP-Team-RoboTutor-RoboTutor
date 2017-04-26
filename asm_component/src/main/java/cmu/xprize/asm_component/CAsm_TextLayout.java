@@ -1,19 +1,12 @@
 package cmu.xprize.asm_component;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import cmu.xprize.util.CAnimatorUtil;
 
 /**
  * horizontal layout of edit texts to display numbers + operation. fixed number of slots for
@@ -108,7 +101,7 @@ public class CAsm_TextLayout extends LinearLayout {
                 setBackground(null);
             setTextForMultiplication();
         } else {
-            if (id == ASM_CONST.OPERATION)
+            if (id == ASM_CONST.OPERATOR_ROW)
                 setBackground(getResources().getDrawable(R.drawable.underline));
             else
                 setBackground(null);
@@ -149,7 +142,7 @@ public class CAsm_TextLayout extends LinearLayout {
 
         switch(id){
 
-            case ASM_CONST.REGULAR:
+            case ASM_CONST.OPERAND_ROW:
 
                 for (int i = 0; i < numSlots; i++) {
 
@@ -160,7 +153,7 @@ public class CAsm_TextLayout extends LinearLayout {
 
                 break;
 
-            case ASM_CONST.OPERATION:
+            case ASM_CONST.OPERATOR_ROW:
 
                 digits[0] = operation;
 
@@ -173,11 +166,11 @@ public class CAsm_TextLayout extends LinearLayout {
 
                 break;
 
-            case ASM_CONST.RESULT:
+            case ASM_CONST.RESULT_ROW:
 
                 break;
 
-            case ASM_CONST.OVERHEAD:
+            case ASM_CONST.CARRY_BRW:
 
                 break;
 
@@ -267,7 +260,7 @@ public class CAsm_TextLayout extends LinearLayout {
                 }
                 getTextLayout(digitIndex).getText(0).reset();
             }
-        } else if (id == ASM_CONST.RESULT) {
+        } else if (id == ASM_CONST.RESULT_ROW) {
             getTextLayout(digitIndex).getText(0).reset();
             curText.setResult();
         }
@@ -290,7 +283,7 @@ public class CAsm_TextLayout extends LinearLayout {
 
     public Integer getNum() {
 
-//        if (id != ASM_CONST.RESULT) {return value;}
+//        if (id != ASM_CONST.RESULT_ROW) {return value;}
 
         int j = 0;
         int digit;

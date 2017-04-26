@@ -4,13 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.graphics.Typeface;
-import android.os.Handler;
-import android.support.v4.view.MenuCompat;
 import android.view.View;
-import android.widget.TableRow;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cmu.xprize.util.TCONST;
 
@@ -42,8 +38,8 @@ public class CAsm_MechanicMultiply extends CAsm_MechanicBase implements IDotMech
     public void next() {
         super.next();
 
-        multiplicand = mComponent.numbers[0];
-        multiplier = mComponent.numbers[1];
+        multiplicand = mComponent.dataset[0];
+        multiplier = mComponent.dataset[1];
         indexOfNextNumber = 1;
 
         if (multiplicand > 0) {

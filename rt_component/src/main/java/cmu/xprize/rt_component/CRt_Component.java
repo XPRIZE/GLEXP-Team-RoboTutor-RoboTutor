@@ -138,6 +138,8 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
 
     public void onDestroy() {
 
+        terminateQueue();
+
         if(mListener != null) {
             mListener.stop();
             mListener = null;
@@ -575,6 +577,10 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
             _target  = target;
         }
 
+        public String getCommand() {
+            return _command;
+        }
+
 
         @Override
         public void run() {
@@ -617,6 +623,8 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
 
         while(tObjects.hasNext() ) {
             Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Log.d(TAG, "Post Cancelled on Flush: " + ((Queue)entry.getValue()).getCommand());
 
             mainHandler.removeCallbacks((Queue)(entry.getValue()));
         }

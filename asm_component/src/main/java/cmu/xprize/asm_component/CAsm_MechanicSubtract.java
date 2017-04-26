@@ -4,10 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
@@ -220,8 +217,9 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
             shrink.start();
         }
 
-        if (allDotsDown()) mComponent.delAddFeature("", TCONST.ASM_ALL_DOTS_DOWN);
-        mComponent.applyEventNode("NEXT");
+        if (allDotsDown()) {
+            mComponent.postEvent(ASM_CONST.SCAFFOLD_RESULT_BEHAVIOR);
+        }
     }
 
     public boolean allDotsDown() {

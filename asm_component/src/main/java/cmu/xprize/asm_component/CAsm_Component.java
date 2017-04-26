@@ -7,8 +7,10 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Gravity;
 import android.widget.LinearLayout;
@@ -16,8 +18,12 @@ import android.widget.LinearLayout;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
@@ -25,15 +31,20 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
 
-public class CAsm_Component extends LinearLayout implements ILoadableObject, IEventListener {
+public class CAsm_Component extends LinearLayout implements IBehaviorManager, ILoadableObject, IEventListener {
 
 
     private Context mContext;
 
-    protected String mDataSource;
-    private int _dataIndex;
+    protected final Handler     mainHandler  = new Handler(Looper.getMainLooper());
+    protected HashMap           queueMap     = new HashMap();
+    protected HashMap           nameMap      = new HashMap();
+    protected boolean           _qDisabled   = false;
 
-    protected int[] numbers;
+    protected String mDataSource;
+    private int      _dataIndex;
+
+    protected int[] dataset;
 
     //current digit
     protected int digitIndex;
@@ -41,37 +52,37 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
 
     //corValue is the correct result
     //corDigit is current correct digit
-    protected Integer corDigit;
-    protected Integer corValue;
-    protected String operation;
-    protected String curImage;
-    //used for addition
-    protected String curStrategy;
+    protected Integer   corDigit;
+    protected Integer   corValue;
+    protected String    operation;
+    protected String    curImage;
 
-    protected boolean dotbagsVisible = true;
+    //used for addition
+    protected String    curStrategy;
+    protected boolean   dotbagsVisible = true;
 
     //used to show:
     //carrying in addition
     //borrowing in subtraction
     //repeated addition in multiplication
-    protected Integer overheadVal = null;
+    protected Integer   overheadVal = null;
     protected CAsm_Text overheadText = null;
     protected CAsm_Text overheadTextSupplement = null;
-    protected int curOverheadCol = -1;
+    protected int       curOverheadCol = -1;
 
     //the number of Alleys
     protected int numAlleys = 0;
 
-    private float scale = getResources().getDisplayMetrics().density;
+    private float scale       = getResources().getDisplayMetrics().density;
     protected int alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
 
-    //if user is writing, stop the timer used to show dotbags
+    // If user is writing, stop the timer used to show dotbags
     //use TimeStamp to judge if it is the time to show the dotbags
     protected  boolean isWriting = false;
     protected boolean hasShown = false;
     protected long startTime;
 
-//    Arithmetic problems will start with the
+    // Arithmetic problems will start with the
     protected int               placeValIndex;
     protected String[]          chimes = ASM_CONST.CHIMES[placeValIndex];
     protected String[]          twoRowschimes = new String[20];
@@ -143,9 +154,25 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         //
         //Scontent = (CAsm_LetterBoxLayout) findViewById(R.id.Scontent);
         //Scontent.setOnClickListener(this);
-        mPopup = new CAsm_Popup(mContext);
+        mPopup           = new CAsm_Popup(mContext);
         mPopupSupplement = new CAsm_Popup(mContext);
     }
+
+
+    public void onDestroy() {
+
+        terminateQueue();
+
+        // Remove the write components if active
+        //
+        exitWrite();
+
+//        if(_mechanics != null) {
+//            _mechanics.onDestroy();
+//            _mechanics = null;
+//        }
+    }
+
 
     public void setDataSource(CAsm_Data[] _dataSource) {
 
@@ -153,62 +180,275 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         _dataIndex = 0;
     }
 
+
+    public boolean dataExhausted() {
+        return (_dataIndex >= dataSource.length);
+    }
+
+
+    public void next() {
+        isWriting = false;
+        hasShown = false;
+        curOverheadCol = -1;
+
+        try {
+            if (dataSource != null) {
+                updateDataSet(dataSource[_dataIndex]);
+
+                _dataIndex++;
+            } else {
+                CErrorManager.logEvent(TAG, "Error no DataSource : ", null, false);
+            }
+        } catch (Exception e) {
+            CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, false);
+        }
+
+        mechanics.next();
+    }
+
+
+    protected void updateDataSet(CAsm_Data data) {
+
+        // init the dataset
+        //
+        loadDataSet(data);
+
+        //set default strategy as "count_up" -
+        // TODO: this is currently not used in practice (i.e. never changed)
+        //
+        if (data.strategy.equals("")) {
+            curStrategy = ASM_CONST.STRATEGY_COUNT_UP;
+        }
+        else {
+            curStrategy = data.strategy;
+        }
+
+        numSlots   = CAsm_Util.maxDigits(dataset) + 1;
+        digitIndex = numSlots;
+
+        if (operation != null && operation.equals("x")) {
+            alleyMargin = (int) (ASM_CONST.alleyMarginMul * scale);
+            updateAllAlleyForMultiplication();
+        } else {
+            alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
+            updateAllAlleyForAddSubtract();
+        }
+
+        setMechanics();
+        setSound();
+    }
+
+
+    /**
+     * This is so we can load a default data set to drive the introduction audio
+     *
+     * @param data
+     */
+    protected void loadDataSet(CAsm_Data data) {
+
+        dataset   = data.dataset;
+        curImage  = data.image;
+        corValue  = dataset[dataset.length - 1];
+        operation = data.operation;
+    }
+
+
+    private void updateAllAlleyForAddSubtract() {
+        int     val, id;
+        boolean clickable = true;
+
+        updateAlley(0, 0, ASM_CONST.ANIMATOR3, operation, false); // animator alley
+        updateAlley(1, 0, ASM_CONST.ANIMATOR2, operation, false); // animator alley
+        updateAlley(2, 0, ASM_CONST.ANIMATOR1, operation, false); // animator alley
+        updateAlley(3, 0, ASM_CONST.CARRY_BRW, operation, true);  // carry/borrow alley
+
+        // update alleys
+        for (int i = 0; i < dataset.length; i++) {
+
+            val = dataset[i];
+
+            if (i == dataset.length - 2) {
+                id = ASM_CONST.OPERATOR_ROW;
+            }
+            else if (i == dataset.length - 1) {
+                id = ASM_CONST.RESULT_ROW;
+                val = 0;
+                clickable = false;
+            }
+            else {
+                id = ASM_CONST.OPERAND_ROW;
+            }
+
+            updateAlley(i + 4, val, id, operation, clickable);
+        }
+
+        // delete extra alleys
+        // TODO: Eliminate / Fix this delete code
+        int delta = numAlleys - (dataset.length + 4);
+
+        if (delta > 0) {
+            for (int i = 0; i < delta; i++) {
+                delAlley();
+            }
+        }
+    }
+
+    private void updateAllAlleyForMultiplication() {
+        numSlots += 2;
+
+        // update alleys
+        updateAlley(0, dataset[0], ASM_CONST.REGULAR_MULTI, operation, false);
+        updateAlley(1, dataset[1], ASM_CONST.OPERATION_MULTI, operation, false);
+        updateAlley(2, dataset[2], ASM_CONST.RESULT_OR_ADD_MULTI_PART1, operation, false);
+
+        //Spare space to show repeated addition
+        for (int i = 3; i < 17; i++)
+            updateAlley(i, 0, i+1, operation, false);
+
+        // delete extra alleys
+        int delta = numAlleys - (dataset.length + 14);
+
+        if (delta > 0) {
+            for (int i = 0; i < delta; i++) {
+                delAlley();
+            }
+        }
+    }
+
+
+    private void setSound() {
+
+        switch (operation) {
+            case "+":
+                //  result dotbag will be the only one playing sound
+                allAlleys.get(allAlleys.size() - 1).getDotBag().setIsAudible(true);
+                break;
+
+            case "-":
+                // minuend dotbag is the only one that plays
+                allAlleys.get(3).getDotBag().setIsAudible(true);
+                break;
+        }
+    }
+
+
+    private void setMechanics() {
+
+        if ((mechanics.getOperation()).equals(operation)) {
+            return; // no need to change mechanics
+        }
+
+        switch(operation) {
+
+            case "+":
+                mechanics = new CAsm_MechanicAdd(this);
+                break;
+            case "-":
+                mechanics = new CAsm_MechanicSubtract(this);
+                break;
+            case "x":
+                mechanics = new CAsm_MechanicMultiply(this);
+                break;
+        }
+    }
+
+
+    public void nextDigit() {
+
+        digitIndex--;
+        isWriting = false;
+        hasShown = false;
+        startTime = System.currentTimeMillis();
+
+        mechanics.nextDigit();
+
+        if(operation.equals("x")) {
+
+            corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots-2)[digitIndex]);
+            if(corDigit.equals(allAlleys.get(ASM_CONST.RESULT_OR_ADD_MULTI_PART1 - 1).getTextLayout().getDigit(digitIndex)))
+                nextDigit();
+        } else
+            corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[digitIndex]);
+    }
+
     public void setDotBagsVisible(Boolean _dotbagsVisible, int curDigitIndex) {
+
         if (!operation.equals("x"))
             setDotBagsVisible(_dotbagsVisible, curDigitIndex, 0);
     }
 
     public void setDotBagsVisible(Boolean _dotbagsVisible, int curDigitIndex, int startRow) {
-            if (curDigitIndex != digitIndex) return;
-            if (System.currentTimeMillis() - startTime < 3000 && _dotbagsVisible) return;
-            if (operation.equals("x") && !_dotbagsVisible) return;
 
-            if (_dotbagsVisible && !hasShown && !isWriting) {
-                if(curOverheadCol >= 0)
-                    if((allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(0).getText().equals("")
-                            || allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(0).getCurrentTextColor() == Color.RED) && curOverheadCol > 9) {
-                        mechanics.highlightOverheadOrResult(ASM_CONST.HIGHLIGHT_OVERHEAD);
-                        return;
-                    } else if(allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(1).getText().equals("")
-                            || allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(1).getCurrentTextColor() == Color.RED) {
-                        mechanics.highlightOverheadOrResult(ASM_CONST.HIGHLIGHT_OVERHEAD);
-                        return;
-                    } else
-                        curOverheadCol = -1;
+        if (curDigitIndex != digitIndex) return;
 
-                hasShown = true;
+        if (System.currentTimeMillis() - startTime < 3000 && _dotbagsVisible) return;
 
-                int delayTime = 0;
-                startRow = startRow >= 0? startRow : 0;
-                int lastRow = operation.equals("x") ? startRow + 3 : allAlleys.size();
-                for (int i = startRow; i < lastRow; i++) {
-                    final CAsm_Alley curAlley = allAlleys.get(i);
-                    final int _curDigitIndex = curDigitIndex;
-                    if (curAlley.getDotBag().getVisibility() != VISIBLE)
-                        delayTime = wiggleDigitAndDotbag(curAlley, delayTime, _curDigitIndex, startRow);
+        if (operation.equals("x") && !_dotbagsVisible) return;
+
+        if (_dotbagsVisible && !hasShown && !isWriting) {
+
+            if(curOverheadCol >= 0) {
+
+                if ((allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(0).getText().equals("")
+                        || allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(0).getCurrentTextColor() == Color.RED) && curOverheadCol > 9) {
+                    mechanics.highlightOverheadOrResult(ASM_CONST.HIGHLIGHT_OVERHEAD);
+                    return;
+                } else if (allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(1).getText().equals("")
+                        || allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(1).getCurrentTextColor() == Color.RED) {
+                    mechanics.highlightOverheadOrResult(ASM_CONST.HIGHLIGHT_OVERHEAD);
+                    return;
+                } else {
+                    curOverheadCol = -1;
                 }
+            }
 
-                if (!dotbagsVisible)
-                    mechanics.preClickSetup();
+            hasShown = true;
 
-            } else if(!_dotbagsVisible){
-                for (int alley = 0; alley < allAlleys.size(); alley++)
-                    allAlleys.get(alley).getDotBag().setVisibility(INVISIBLE);
-            } else
-                return;
+            int delayTime = 0;
 
-            dotbagsVisible = _dotbagsVisible;
+            startRow = startRow >= 0? startRow : 0;
+            int lastRow = operation.equals("x") ? startRow + 3 : allAlleys.size();
+
+            for (int i = startRow; i < lastRow; i++) {
+
+                final CAsm_Alley curAlley = allAlleys.get(i);
+                final int _curDigitIndex = curDigitIndex;
+
+                if (curAlley.getDotBag().getVisibility() != VISIBLE)
+                    delayTime = wiggleDigitAndDotbag(curAlley, delayTime, _curDigitIndex, startRow);
+            }
+
+            if (!dotbagsVisible)
+                mechanics.preClickSetup();
+
+        } else if(!_dotbagsVisible){
+            for (int alley = 0; alley < allAlleys.size(); alley++)
+                allAlleys.get(alley).getDotBag().setVisibility(INVISIBLE);
+        } else
+            return;
+
+        dotbagsVisible = _dotbagsVisible;
     }
 
+
     public void setDotBagsVisible(Boolean _dotbagsVisible) {
+
         setDotBagsVisible(_dotbagsVisible, digitIndex);
     }
 
+
     public int wiggleDigitAndDotbag(final CAsm_Alley curAlley, int delayTime, final int curDigitIndex, int startRow) {
+
         final CAsm_DotBag curDB = curAlley.getDotBag();
         final CAsm_TextLayout curTextLayout;
-        if (operation.equals("x")) curTextLayout = curAlley.getTextLayout().getTextLayout(numSlots-1);
-        else curTextLayout = curAlley.getTextLayout().getTextLayout(digitIndex);
+
+        if (operation.equals("x")) {
+            curTextLayout = curAlley.getTextLayout().getTextLayout(numSlots-1);
+        }
+        else {
+            curTextLayout = curAlley.getTextLayout().getTextLayout(digitIndex);
+        }
+
         CAsm_Text curText = curTextLayout.getText(1);
 
         if (!curText.getText().equals("") && !curText.getIsStruck()) {
@@ -216,7 +456,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
             Handler h = new Handler();
 
             //wiggle operator
-            if ((allAlleys.indexOf(curAlley) == ASM_CONST.OPERATION - 1 && !operation.equals("x"))) {
+            if ((allAlleys.indexOf(curAlley) == ASM_CONST.OPERATOR_ROW - 1 && !operation.equals("x"))) {
                 h.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -254,183 +494,23 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
         return delayTime;
     }
 
-    public void next() {
-        isWriting = false;
-        hasShown = false;
-        curOverheadCol = -1;
-
-        try {
-            if (dataSource != null) {
-                updateDataSet(dataSource[_dataIndex]);
-
-                _dataIndex++;
-            } else {
-                CErrorManager.logEvent(TAG, "Error no DataSource : ", null, false);
-            }
-        } catch (Exception e) {
-            CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, false);
-        }
-
-        mechanics.next();
-
-    }
-
-    public void nextDigit() {
-
-        digitIndex--;
-        isWriting = false;
-        hasShown = false;
-        startTime = System.currentTimeMillis();
-
-        mechanics.nextDigit();
-
-        if(operation.equals("x")) {
-            corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots-2)[digitIndex]);
-            if(corDigit.equals(allAlleys.get(ASM_CONST.RESULT_OR_ADD_MULTI_PART1 - 1).getTextLayout().getDigit(digitIndex)))
-                nextDigit();
-        } else
-            corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[digitIndex]);
-    }
-
-    public boolean dataExhausted() {
-        return (_dataIndex >= dataSource.length);
-    }
-
-    protected void updateDataSet(CAsm_Data data) {
-        // TODO: talk about whether this should be part of base mechanics
-        readInData(data);
-
-        numSlots = CAsm_Util.maxDigits(numbers) + 1;
-        digitIndex = numSlots;
-
-        if (operation != null && operation.equals("x")) {
-            alleyMargin = (int) (ASM_CONST.alleyMarginMul * scale);
-            updateAllAlleyForMultiplication();
-        } else {
-            alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
-            updateAllAlleyForAddSubtract();
-        }
-
-        setMechanics();
-        setSound();
-
-    }
-
-    private void updateAllAlleyForAddSubtract() {
-        int val, id;
-        boolean clickable = true;
-
-        updateAlley(0, 0, ASM_CONST.ANIMATOR3, operation, false); // animator alley
-        updateAlley(1, 0, ASM_CONST.ANIMATOR2, operation, false); // animator alley
-        updateAlley(2, 0, ASM_CONST.ANIMATOR1, operation, false); // animator alley
-        updateAlley(3, 0, ASM_CONST.OVERHEAD, operation, true); // carry/borrow alley
-
-        // update alleys
-        for (int i = 0; i < numbers.length; i++) {
-
-            val = numbers[i];
-
-            if (i == numbers.length - 2) {
-                id = ASM_CONST.OPERATION;
-            } else if (i == numbers.length - 1) {
-                id = ASM_CONST.RESULT;
-                val = 0;
-                clickable = false;
-            } else {
-                id = ASM_CONST.REGULAR;
-            }
-
-            updateAlley(i + 4, val, id, operation, clickable);
-        }
-
-        // delete extra alleys
-        int delta = numAlleys - (numbers.length + 4);
-
-        if (delta > 0) {
-            for (int i = 0; i < delta; i++) {
-                delAlley();
-            }
-        }
-    }
-
-    private void updateAllAlleyForMultiplication() {
-        numSlots += 2;
-
-        // update alleys
-        updateAlley(0, numbers[0], ASM_CONST.REGULAR_MULTI, operation, false);
-        updateAlley(1, numbers[1], ASM_CONST.OPERATION_MULTI, operation, false);
-        updateAlley(2, numbers[2], ASM_CONST.RESULT_OR_ADD_MULTI_PART1, operation, false);
-
-        //Spare space to show repeated addition
-        for (int i = 3; i < 17; i++)
-            updateAlley(i, 0, i+1, operation, false);
-
-        // delete extra alleys
-        int delta = numAlleys - (numbers.length + 14);
-
-        if (delta > 0) {
-            for (int i = 0; i < delta; i++) {
-                delAlley();
-            }
-        }
-    }
-
-    private void readInData(CAsm_Data data) {
-
-        numbers = data.dataset;
-        curImage = data.image;
-        corValue = numbers[numbers.length - 1];
-        operation = data.operation;
-
-        //set default strategy as "count_up"
-        if (data.strategy.equals("")) curStrategy = ASM_CONST.STRATEGY_COUNT_UP;
-        else curStrategy = data.strategy;
-
-    }
-
-    private void setSound() {
-        switch (operation) {
-            case "+":
-//                result dotbag will be the only one playing sound
-                allAlleys.get(allAlleys.size() - 1).getDotBag().setIsAudible(true);
-                break;
-            case "-":
-//                minuend dotbag is the only one that plays
-                allAlleys.get(3).getDotBag().setIsAudible(true);
-                break;
-        }
-    }
-
-    private void setMechanics() {
-
-        if ((mechanics.getOperation()).equals(operation)) {
-            return; // no need to change mechanics
-        }
-
-        switch(operation) {
-
-            case "+":
-                mechanics = new CAsm_MechanicAdd(this);
-                break;
-            case "-":
-                mechanics = new CAsm_MechanicSubtract(this);
-                break;
-            case "x":
-                mechanics = new CAsm_MechanicMultiply(this);
-                break;
-        }
-    }
 
     private void updateAlley(int index, int val, int id, String operation, boolean clickable) {
-        if (index + 1 > numAlleys)
-            addAlley(index, val, id, operation, clickable);
-        else {
-            CAsm_Alley currAlley = allAlleys.get(index);
-            currAlley.update(val, curImage, id, operation, clickable, numSlots);
+
+        CAsm_Alley currAlley;
+
+        if (index + 1 > numAlleys) {
+            currAlley = addAlley(index);
         }
+        else {
+            currAlley = allAlleys.get(index);
+        }
+
+        currAlley.update(val, curImage, id, operation, clickable, numSlots);
     }
 
-    private CAsm_Alley addAlley(int index, int val, int id, String operation, boolean clickable) {
+
+    private CAsm_Alley addAlley(int index ) {
 
         CAsm_Alley newAlley = new CAsm_Alley(mContext);
 
@@ -439,8 +519,6 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                 LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, 0, alleyMargin);
         newAlley.setLayoutParams(lp);
-
-        newAlley.update(val, curImage, id, operation, clickable, numSlots);
 
         //Scontent.addView(newAlley, index);
         addView(newAlley, index);
@@ -481,6 +559,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     public void resetPlaceValue() {
         placeValIndex = -1;
     }
+
 
     private void delAlley() {
 
@@ -683,11 +762,18 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     }
 
     public void updateText(CAsm_Text t1, CAsm_Text t2, boolean isClickingBorrowing) {
+
         isWriting = true;
+
         if (!mPopup.isActive && !mPopupSupplement.isActive) {
+
+            applyBehavior(ASM_CONST.START_WRITING_BEHAVIOR);
+
             ArrayList<IEventListener> listeners = new ArrayList<>();
+
             listeners.add(t2);
             listeners.add(this);
+
             mPopup.showAtLocation(this, Gravity.LEFT, 10, 10);
             mPopup.enable(true, listeners);
 
@@ -697,6 +783,7 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
                 mPopup.update(t2, 60, 0, 300, 300);
 
             mPopup.isActive = true;
+
 
             if (t1 != null) {
                 hasTwoPopup = true;
@@ -794,5 +881,265 @@ public class CAsm_Component extends LinearLayout implements ILoadableObject, IEv
     public void applyEventNode(String nodeName) {
 
     }
+
+
+    //************************************************************************
+    //************************************************************************
+    // Component Message Queue  -- Start
+
+
+    public class Queue implements Runnable {
+
+        protected String _name;
+        protected String _command;
+        protected String _target;
+        protected String _item;
+
+
+        public Queue(String name, String command) {
+
+            _name    = name;
+            _command = command;
+
+            if(name != null) {
+                Log.d(TAG, "Post Requested: " + name + " - Command: " + command);
+
+                nameMap.put(name, this);
+            }
+        }
+
+        public Queue(String name, String command, String target) {
+
+            this(name, command);
+            _target  = target;
+        }
+
+        public Queue(String name, String command, String target, String item) {
+
+            this(name, command, target);
+            _item    = item;
+        }
+
+
+        public String getCommand() {
+            return _command;
+        }
+
+
+        @Override
+        public void run() {
+
+            try {
+                if(_name != null) {
+                    nameMap.remove(_name);
+                }
+
+                queueMap.remove(this);
+
+                switch(_command) {
+
+                    case ASM_CONST.SHOW_SCAFFOLD_BEHAVIOR:
+                    case ASM_CONST.CHIME_FEEDBACK:
+                    case ASM_CONST.SCAFFOLD_RESULT_BEHAVIOR:
+                    case ASM_CONST.INPUT_BEHAVIOR:
+                    case ASM_CONST.NEXT_NODE:
+
+                        applyBehavior(_command);
+                        break;
+
+                    default:
+                        break;
+                }
+
+
+            }
+            catch(Exception e) {
+                CErrorManager.logEvent(TAG, "Run Error:", e, false);
+            }
+        }
+    }
+
+
+    /**
+     *  Disable the input queues permenantly in prep for destruction
+     *  walks the queue chain to diaable scene queue
+     *
+     */
+    private void terminateQueue() {
+
+        // disable the input queue permenantly in prep for destruction
+        //
+        _qDisabled = true;
+        flushQueue();
+    }
+
+
+    /**
+     * Remove any pending scenegraph commands.
+     *
+     */
+    private void flushQueue() {
+
+        Iterator<?> tObjects = queueMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Log.d(TAG, "Post Cancelled on Flush: " + ((Queue)entry.getValue()).getCommand());
+
+            mainHandler.removeCallbacks((Queue)(entry.getValue()));
+        }
+    }
+
+
+    /**
+     * Remove named posts
+     *
+     */
+    public void cancelPost(String name) {
+
+        Log.d(TAG, "Cancel Post Requested: " + name);
+
+        while(nameMap.containsKey(name)) {
+
+            Log.d(TAG, "Post Cancelled: " + name);
+
+            mainHandler.removeCallbacks((Queue) (nameMap.get(name)));
+            nameMap.remove(name);
+        }
+    }
+
+
+    /**
+     * Keep a mapping of pending messages so we can flush the queue if we want to terminate
+     * the tutor before it finishes naturally.
+     *
+     * @param qCommand
+     */
+    private void enQueue(Queue qCommand) {
+        enQueue(qCommand, 0);
+    }
+    private void enQueue(Queue qCommand, long delay) {
+
+        if(!_qDisabled) {
+            queueMap.put(qCommand, qCommand);
+
+            if(delay > 0) {
+                mainHandler.postDelayed(qCommand, delay);
+            }
+            else {
+                mainHandler.post(qCommand);
+            }
+        }
+    }
+
+    public void postNamed(String name, String command, String target) {
+        postNamed(name, command, target, 0L);
+    }
+
+    public void postNamed(String name, String command, String target, Long delay) {
+        enQueue(new Queue(name, command, target), delay);
+    }
+
+    public void postNamed(String name, String command) {
+        postNamed(name, command, 0L);
+    }
+    public void postNamed(String name, String command, Long delay) {
+        enQueue(new Queue(name, command), delay);
+    }
+
+
+    /**
+     * Post a command to the queue
+     *
+     * @param command
+     */
+    public void post(String command) {
+        post(command, 0);
+    }
+    public void post(String command, long delay) {
+
+        enQueue(new Queue(command, command), delay);
+    }
+
+
+    /**
+     * Post a command and target to this queue
+     *
+     * @param command
+     */
+    public void post(String command, String target) {
+        post(command, target, 0);
+    }
+    public void post(String command, String target, long delay) { enQueue(new Queue(null, command, target), delay); }
+
+
+    /**
+     * Post a command , target and item to this queue
+     *
+     * @param command
+     */
+    public void post(String command, String target, String item) {
+        post(command, target, item, 0);
+    }
+    public void post(String command, String target, String item, long delay) { enQueue(new Queue(null, command, target, item), delay); }
+
+
+    public void postEvent(String event) {
+
+        postEvent(event,0);
+    }
+
+    public void postEvent(String event, Integer delay) {
+
+        post(event, delay);
+    }
+
+    public void postEvent(String event, String param, Integer delay) {
+
+        post(event, param, delay);
+    }
+
+    public void postEvent(String event, String target) {
+
+        post(event, target);
+    }
+
+
+    // Component Message Queue  -- End
+    //************************************************************************
+    //************************************************************************
+
+
+    //************************************************************************
+    //************************************************************************
+    // IBehaviorManager Interface START
+
+
+    @Override
+    public void setVolatileBehavior(String event, String behavior) {
+
+    }
+
+    @Override
+    public void setStickyBehavior(String event, String behavior) {
+
+    }
+
+    @Override
+    public boolean applyBehavior(String event) {
+        return false;
+    }
+
+    @Override
+    public void applyBehaviorNode(String nodeName) {
+
+    }
+
+    // IBehaviorManager Interface END
+    //************************************************************************
+    //************************************************************************
+
+
 
 }
