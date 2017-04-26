@@ -364,6 +364,10 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
             _target  = target;
         }
 
+        public String getCommand() {
+            return _command;
+        }
+
 
         @Override
         public void run() {
@@ -406,6 +410,8 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
         while(tObjects.hasNext() ) {
             Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Log.d(TAG, "Post Cancelled on Flush: " + ((Queue)entry.getValue()).getCommand());
 
             mainHandler.removeCallbacks((Queue)(entry.getValue()));
         }

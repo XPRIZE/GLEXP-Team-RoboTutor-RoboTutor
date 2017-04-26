@@ -142,6 +142,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     @Override
     public void onDestroy() {
 
+        super.onDestroy();
     }
 
 

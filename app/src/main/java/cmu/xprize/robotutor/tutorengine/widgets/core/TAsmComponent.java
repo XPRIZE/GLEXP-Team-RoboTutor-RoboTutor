@@ -8,6 +8,7 @@ import android.util.Log;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cmu.xprize.asm_component.ASM_CONST;
@@ -26,18 +27,23 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.comp_logging.ILogManager;
+import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
 import static java.lang.Thread.sleep;
 
-public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, IDataSink {
+public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, IDataSink, IBehaviorManager, IEventSource {
 
     private CTutor           mTutor;
     private CObjectDelegate  mSceneObject;
     private CMediaManager    mMediaManager;
+
+    private HashMap<String, String> volatileMap = new HashMap<>();
+    private HashMap<String, String> stickyMap   = new HashMap<>();
 
     static final String TAG = "TAsmComponent";
 
@@ -82,10 +88,15 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
         boolean correct = isWholeCorrect();
 
+        // If the Problem is complete and correct then set FTR and continue
+        // otherwise evaluate the digit for errors
+        //
         if(correct) {
-            mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
-        } else
-            mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+            mTutor.setAddFeature(TCONST.FTR_COMPLETE);
+        }
+        else {
+            evaluateDigit();
+        }
     }
 
     public void evaluateDigit () {
@@ -150,6 +161,9 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     }
 
     public void reset() {
+
+        mTutor.setDelFeature(TCONST.FTR_COMPLETE);
+
         mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
         mTutor.setDelFeature(TCONST.GENERIC_WRONG);
 
@@ -258,20 +272,32 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         catch (Exception e) {
             CErrorManager.logEvent(TAG, "Invalid Data Source for : " + name(), e, false);
         }
+
+        // This is just to init the features set to drive the PLAY_INTRO audio selectively
+        //
+        if(dataSource != null) {
+            loadDataSet(dataSource[0]);
+            initOperationFTR();
+        }
     }
 
     @Override
     public void playChime() {
+
         TScope scope = mTutor.getScope();
+
         for (CAsm_Alley alley: allAlleys) {
+
             CAsm_DotBag dotBag = alley.getDotBag();
             if (dotBag.getIsAudible()) {
                 currentChime = dotBag.getCurrentChime();
             }
         }
+
         Log.d("PlayChime", currentChime);
         scope.addUpdateVar("TestChimes", new TString(currentChime));
-        applyEventNode("PLAY_CHIME");
+
+        postEvent(ASM_CONST.CHIME_FEEDBACK);
     }
 
     public void next() {
@@ -286,26 +312,37 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         resetPlaceValue();
 
         mTutor.getScope().addUpdateVar(name() + ".image", new TString(curImage));
+
+        // Permit changes to operation type within problem set/
+        //
+        initOperationFTR();
+
+        if (dataExhausted()) mTutor.setAddFeature(TCONST.FTR_EOI);
+
+        curFeatures.clear();
+    }
+
+
+    private void initOperationFTR() {
+
         if (operation != null) {
             switch (operation) {
                 case "+" :
                     mTutor.setAddFeature(TCONST.ASM_ADD);
-                    mTutor.getScope().addUpdateVar(name() + ".operand1", new TString(numbers[0] + ""));
+                    mTutor.getScope().addUpdateVar(name() + ".operand1", new TString(dataset[0] + ""));
                     break;
                 case "-" :
                     mTutor.setAddFeature(TCONST.ASM_SUBTRACT);
                     break;
                 case "x" :
                     mTutor.setAddFeature(TCONST.ASM_MULTI);
-                    mTutor.getScope().addUpdateVar(name() + ".operand1", new TString(numbers[0] + ""));
-                    mTutor.getScope().addUpdateVar(name() + ".operand2", new TString(numbers[1] + ""));
+                    mTutor.getScope().addUpdateVar(name() + ".operand1", new TString(dataset[0] + ""));
+                    mTutor.getScope().addUpdateVar(name() + ".operand2", new TString(dataset[1] + ""));
                     break;
             }
         }
-        if (dataExhausted()) mTutor.setAddFeature(TCONST.FTR_EOI);
-
-        curFeatures.clear();
     }
+
 
     public void nextDigit() {
 
@@ -326,14 +363,153 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     }
 
 
+    //************************************************************************
+    //************************************************************************
+    // IBehaviorManager Interface START
+
+    public void setVolatileBehavior(String event, String behavior) {
+
+        if (behavior.toUpperCase().equals(TCONST.NULL)) {
+
+            if (volatileMap.containsKey(event)) {
+                volatileMap.remove(event);
+            }
+        } else {
+            volatileMap.put(event, behavior);
+        }
+    }
+
+
+    public void setStickyBehavior(String event, String behavior) {
+
+        if (behavior.toUpperCase().equals(TCONST.NULL)) {
+
+            if (stickyMap.containsKey(event)) {
+                stickyMap.remove(event);
+            }
+        } else {
+            stickyMap.put(event, behavior);
+        }
+    }
+
+
+    // Execute script target if behavior is defined for this event
+    //
+    @Override
+    public boolean applyBehavior(String event) {
+
+        boolean result = false;
+
+        if(!(result = super.applyBehavior(event))) {
+
+            if (volatileMap.containsKey(event)) {
+                Log.d(TAG, "Processing WC_ApplyEvent: " + event);
+                applyBehaviorNode(volatileMap.get(event));
+
+                volatileMap.remove(event);
+
+                result = true;
+
+            } else if (stickyMap.containsKey(event)) {
+
+                applyBehaviorNode(stickyMap.get(event));
+
+                result = true;
+            }
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Apply Events in the Tutor Domain.
+     *
+     * @param nodeName
+     */
+    @Override
+    public void applyBehaviorNode(String nodeName) {
+        IScriptable2 obj = null;
+
+        if (nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
+
+            try {
+                obj = mTutor.getScope().mapSymbol(nodeName);
+
+                if (obj != null) {
+
+                    switch(obj.getType()) {
+
+                        case TCONST.SUBGRAPH:
+
+                            mTutor.getSceneGraph().post(this, TCONST.SUBGRAPH_CALL, nodeName);
+                            break;
+
+                        case TCONST.MODULE:
+
+                            // Disallow module "calls"
+                            Log.e(TAG, "MODULE Behaviors are not supported");
+                            break;
+
+                        // Note that we should not preEnter queues - they may need to be cancelled
+                        // which is done internally.
+                        //
+                        case TCONST.QUEUE:
+                            obj.applyNode();
+                            break;
+
+                        default:
+                            obj.preEnter();
+                            obj.applyNode();
+                            break;
+                    }
+                }
+
+            } catch (Exception e) {
+                // TODO: Manage invalid Behavior
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // IBehaviorManager Interface END
+    //************************************************************************
+    //************************************************************************
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // IEventSource Interface START
+
+
+    @Override
+    public String getEventSourceName() {
+        return name();
+    }
+
+    @Override
+    public String getEventSourceType() {
+        return "ASM_Component";
+    }
+
+
+    // IEventSource Interface END
+    //************************************************************************
+    //************************************************************************
+
+
+
 
     //**********************************************************
     //**********************************************************
     //*****************  Common Tutor Object Methods
 
+
     @Override
     public void onDestroy() {
 
+        super.onDestroy();
     }
 
     @Override
@@ -399,7 +575,12 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
     }
 
-    @Override
+
+    /**
+     * These events come from the FingerWriter Component which is connected in the Layout XML
+     *
+     * @param event
+     */    @Override
     public void onEvent(IEvent event) {
 
         mTutor.setDelFeature(TCONST.ASM_ALL_DOTS_DOWN);
@@ -409,7 +590,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
         evaluateWhole();
 
-        applyEventNode("NEXT");
+        postEvent(ASM_CONST.INPUT_BEHAVIOR);
     }
 
     public void applyEventNode(String nodeName) {
@@ -457,8 +638,10 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
             if (curNode.equals(ASM_CONST.NODE_ADD_PROMPT) || curNode.equals(ASM_CONST.NODE_SUB_PROMPT)) {
                 mTutor.setAddFeature(TCONST.ASM_CLICK_ON_DOT);
-                applyEventNode("NEXT");
-            }
+
+                // Apply the script defined behavior -
+                //
+                postEvent(ASM_CONST.SHOW_BAG_BEHAVIOR);            }
         }
     }
 

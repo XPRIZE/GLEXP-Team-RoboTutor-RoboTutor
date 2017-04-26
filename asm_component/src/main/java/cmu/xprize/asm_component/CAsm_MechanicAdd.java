@@ -3,6 +3,7 @@ package cmu.xprize.asm_component;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.util.Log;
 
 
 import java.util.ArrayList;
@@ -15,11 +16,13 @@ import cmu.xprize.util.TCONST;
  */
 public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics {
 
-    static final String TAG = "CAsm_MechanicAdd";
     public CAsm_MechanicAdd(CAsm_Component mComponent) {super.init(mComponent);}
 
     protected String operation = "+";
     private boolean firstRowHasDown = false;
+
+    static final String TAG = "CAsm_MechanicAdd";
+
 
     @Override
     public void next() {
@@ -101,19 +104,20 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
             mComponent.delAddFeature(TCONST.ASM_ADD_PROMPT_COUNT_FROM, "");
             mComponent.delAddFeature("", TCONST.ASM_CLICK_ON_DOT);
             //check the strategy of putting down
-            if (alleyNum == ASM_CONST.OPERATION - 1 && mComponent.curStrategy.equals(ASM_CONST.STRATEGY_COUNT_FROM) && !firstRowHasDown)
+            if (alleyNum == ASM_CONST.OPERATOR_ROW - 1 && mComponent.curStrategy.equals(ASM_CONST.STRATEGY_COUNT_FROM) && !firstRowHasDown)
                 return;
-            else if (alleyNum == ASM_CONST.REGULAR - 1 && mComponent.curStrategy.equals(ASM_CONST.STRATEGY_COUNT_FROM)) {
+            else if (alleyNum == ASM_CONST.OPERAND_ROW - 1 && mComponent.curStrategy.equals(ASM_CONST.STRATEGY_COUNT_FROM)) {
                 firstRowHasDown = true;
                 animateAddForCountFrom(clickedBag, alleyNum);
             } else
                 animateAdd(clickedDot, alleyNum);
 
             mComponent.playChime();
-            mComponent.applyEventNode("NEXT");
         }
 
-        if (allDotsDown()) mComponent.delAddFeature("", TCONST.ASM_ALL_DOTS_DOWN);
+        if (allDotsDown()) {
+            mComponent.postEvent(ASM_CONST.SCAFFOLD_RESULT_BEHAVIOR);
+        }
 
     }
 
@@ -145,11 +149,11 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         animSetXY.playTogether(animX, animY);
         animSetXY.setDuration(1000);
         animSetXY.addListener(new Animator.AnimatorListener() {
+
             @Override
             public void onAnimationStart(Animator animation) {
                 oldDot.setHollow(true);
                 setAllParentsClip(newDot, false);
-
             }
 
             @Override
@@ -246,14 +250,27 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         boolean allDotsDown = true;
 
         for (int i = 0; i < dotBag1.getRows(); i++)
-            for (int j = 0; j < dotBag1.getCols(); j++)
-                if (!dotBag1.getDot(i, j).getIsHollow())
-                    allDotsDown = false;
-
+        for (int j = 0; j < dotBag1.getCols(); j++) {
+            if (!dotBag1.getDot(i, j).getIsHollow()) {
+                Log.d(TAG, "ROW 1: col: " + j + "is Filled");
+                allDotsDown = false;
+            }
+            else {
+                Log.d(TAG, "ROW 1: col: " + j + "is Hollow");
+            }
+        }
         for (int i = 0; i < dotBag2.getRows(); i++)
-            for (int j = 0; j < dotBag2.getCols(); j++)
-                if (!dotBag2.getDot(i, j).getIsHollow())
-                    allDotsDown = false;
+        for (int j = 0; j < dotBag2.getCols(); j++) {
+            if (!dotBag2.getDot(i, j).getIsHollow()) {
+                Log.d(TAG, "ROW 2: col: " + j + "is Filled");
+                allDotsDown = false;
+            }
+            else {
+                Log.d(TAG, "ROW 2: col: " + j + "is Hollow");
+            }
+        }
+
+        Log.d(TAG, "All Done: " +  allDotsDown);
 
         return allDotsDown;
     }

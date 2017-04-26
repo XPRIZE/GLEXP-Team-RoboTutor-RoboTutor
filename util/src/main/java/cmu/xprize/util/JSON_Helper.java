@@ -412,9 +412,11 @@ public class JSON_Helper {
                                             scope.put(key, (IScriptable) eObj);
                                             Log.i(TAG, "Adding to scope: " + key);
                                         }
-                                    } else {
-                                        field_Map.put(key, eObj);
                                     }
+
+                                    // Add the entry to the HashMap
+                                    //
+                                    field_Map.put(key, eObj);
                                 }
                             }
                         }

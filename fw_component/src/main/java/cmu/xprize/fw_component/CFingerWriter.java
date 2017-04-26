@@ -597,7 +597,7 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
             Pattern pattern = Pattern.compile(_constraint);
 
             for (CRecResult result : _recResults) {
-                Log.e("jni", "ShapeID = " + result.Id + " Confidence = " + result.Confidence);
+//                Log.d("jni", "ShapeID = " + result.Id + " Confidence = " + result.Confidence);
             }
 
             _recStrokes = null;

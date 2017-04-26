@@ -152,6 +152,10 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         //
         super.onDestroy();
         mTutorScene.onDestroy();
+
+        // Allow the ask component to relesase drawable resources.
+        //
+        SaskActivity.onDestroy();
     }
 
     @Override

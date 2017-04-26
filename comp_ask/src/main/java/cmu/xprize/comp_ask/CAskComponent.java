@@ -51,6 +51,8 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
     protected HashMap<View,String>  buttonMap;
     protected ArrayList<View>       buttonList;
 
+    protected CAsk_Data             mDataSource;
+
     protected IButtonController     mButtonController;
 
     static private boolean          SINGLE_SELECT = false;
@@ -86,8 +88,13 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
     }
 
 
+    /**
+     * We must release drawable references to avoid memory leaks
+     *
+     */
     public void onDestroy() {
 
+        releaseReferences();
     }
 
 
@@ -157,6 +164,10 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
     public void setDataSource(CAsk_Data dataSource) {
 
+        // Keep track of the datasource so we can destroy the references when finished.
+        //
+        mDataSource = dataSource;
+
         int layoutID = getResources().getIdentifier(dataSource.layoutID, "layout", packageName);
 
         removeAllViews();
@@ -209,6 +220,33 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
         enableButtons(true);
         requestLayout();
+    }
+
+    private void releaseReferences() {
+
+        // Note that if you switch at very high speed it is possible to get here before the datasource exists.
+        //
+        if(mDataSource != null) {
+
+            for (CAskElement element : mDataSource.items) {
+
+                switch (element.datatype) {
+                    case ASK_CONST.IMAGE:
+                        ImageView iView = (ImageView) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+
+                        iView.setImageDrawable(null);
+                        break;
+
+                    case ASK_CONST.IMAGEBUTTON:
+                        int test = getResources().getIdentifier(element.componentID, "id", packageName);
+
+                        ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+
+                        ibView.setImageDrawable(null);
+                        break;
+                }
+            }
+        }
     }
 
 

@@ -27,19 +27,19 @@ public class ASM_CONST {
     public static final int ANIMATOR3    = 1;
     public static final int ANIMATOR2    = 2;
     public static final int ANIMATOR1    = 3;
-    public static final int OVERHEAD     = 4;
-    public static final int REGULAR      = 5;
-    public static final int OPERATION    = 6;
-    public static final int RESULT       = 7;
+    public static final int CARRY_BRW = 4;
+    public static final int OPERAND_ROW  = 5;
+    public static final int OPERATOR_ROW = 6;
+    public static final int RESULT_ROW   = 7;
 
     //for multiplication
     public static final int REGULAR_MULTI                  = 1;
     public static final int OPERATION_MULTI                = 2;
     public static final int RESULT_OR_ADD_MULTI_PART1     = 3;
 
-    public static final int alleyMargin  = 10;
+    public static final int alleyMargin     = 10;
     public static final int alleyMarginMul  = 3;
-    public static final int rightPadding = 15;
+    public static final int rightPadding    = 15;
 
     public static final int textSize     = 18;
 
@@ -68,6 +68,16 @@ public class ASM_CONST {
     //used to play the prompts in multiplication when showing repeated addition
     public static final String NUMBER_PREFIX = "Write the ";
     public static final Map<Integer, String> writeNextNumber = new HashMap<Integer, String>();
+
+
+    public static final String SHOW_BAG_BEHAVIOR        = "SHOW_BAG_BEHAVIOR";
+    public static final String ON_ANSWER_BEHAVIOR       = "ON_ANSWER_BEHAVIOR";
+    public static final String SCAFFOLD_RESULT_BEHAVIOR = "SCAFFOLD_RESULT_BEHAVIOR";
+    public static final String SHOW_SCAFFOLD_BEHAVIOR   = "SHOW_SCAFFOLD_BEHAVIOR";
+    public static final String CHIME_FEEDBACK           = "CHIME_FEEDBACK";
+    public static final String INPUT_BEHAVIOR           = "INPUT_BEHAVIOR";
+    public static final String START_WRITING_BEHAVIOR   = "START_WRITING_BEHAVIOR";
+    public static final String NEXT_NODE                = "NEXT_NODE";
 
     static {
         writeNextNumber.put(0, NUMBER_PREFIX + "last");

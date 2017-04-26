@@ -1,9 +1,7 @@
 package cmu.xprize.asm_component;
 
 import android.content.Context;
-import android.content.pm.InstrumentationInfo;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.LinearLayout;
 
 
@@ -13,7 +11,7 @@ import android.widget.LinearLayout;
 public class CAsm_Alley extends LinearLayout {
 
     private CAsm_TextLayout STextLayout;
-    private CAsm_DotBag SdotBag;
+    private CAsm_DotBag     SdotBag;
 
     private int digitIndex;
     private int val;
@@ -65,6 +63,8 @@ public class CAsm_Alley extends LinearLayout {
         this.image = _image;
 
         SdotBag.updateSize(operation.equals("x"));
+        SdotBag.setHollow(false);
+
         STextLayout.resetAllValues();
         if(operation.equals("x")) {
             if(id != ASM_CONST.OPERATION_MULTI && id != ASM_CONST.REGULAR_MULTI)
@@ -72,7 +72,7 @@ public class CAsm_Alley extends LinearLayout {
             STextLayout.update(id, val, operation, numSlots);
             SdotBag.setDrawBorder(false);
         } else {
-            if (id != ASM_CONST.OPERATION && id != ASM_CONST.REGULAR)
+            if (id != ASM_CONST.OPERATOR_ROW && id != ASM_CONST.OPERAND_ROW)
                 STextLayout.resetAllBackground();
             STextLayout.update(id, val, operation, numSlots);
 
@@ -119,7 +119,7 @@ public class CAsm_Alley extends LinearLayout {
                 cols = (cols != null)?cols:0;
             }*/
         } else {
-            if (id == ASM_CONST.RESULT)
+            if (id == ASM_CONST.RESULT_ROW)
                 cols = 0;
             else {
                 cols = STextLayout.getDigit(digitIndex);

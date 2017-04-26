@@ -23,6 +23,8 @@ package cmu.xprize.robotutor.tutorengine.graph;
 import android.util.Log;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.comp_logging.CErrorManager;
@@ -52,7 +54,7 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
     public HashMap subgraphMap;
     public HashMap queueMap;
 
-    static private final String TAG = "tutor_node";
+    static private final String TAG = "scene_graph";
 
 
     /**
@@ -60,6 +62,26 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
      */
     public scene_graph() {
         _currNode = this;
+    }
+
+
+    /**
+     * When scene is complete we need to ensure all the moduleQueues are shutdown so delayed
+     * actions do not occur after destruction.
+     */
+    public void onDestroy() {
+
+        // Walk the scene_graphqueues to teminate them gracefully
+        //
+        Iterator<?> tObjects = queueMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            scene_graphqueue sceneQueue = (scene_graphqueue)entry.getValue();
+
+            sceneQueue.cancelNode();
+        }
     }
 
 
@@ -121,6 +143,10 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
                     // which will drive a search for the next node
                     //
                     Log.d(TAG, "Processing Node: " + _currNode.name + " - start State: " + _nodeState + " - mapType: " + _currNode.maptype + " - mapName: " + _currNode.mapname);
+
+//                    if(_currNode.name.equals("INTRO_STATE")) {
+//                        Log.d(TAG, "Processing Node: " + _currNode.name);
+//                    }
 
                     _nodeState = _currNode.applyNode();
 

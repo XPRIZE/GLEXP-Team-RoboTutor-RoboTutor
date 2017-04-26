@@ -46,10 +46,15 @@ public class scene_graphqueue extends scene_module {
 
         // If queue is in progress cancel operations.
         //
+        Log.d(TAG, "Processing Terminate on: " + name );
+        terminateQueue();
+
+        // If there is an active node e.g. audioqueue - kill it off
+        //
         if(_nextAction != null) {
 
-            terminateQueue();
             _nextAction.cancelNode();
+            _nextAction = null;
         }
 
         return TCONST.NONE;
@@ -59,9 +64,9 @@ public class scene_graphqueue extends scene_module {
     @Override
     public String applyNode() {
 
-        post(TCONST.APPLY_NODE);
+        _qDisabled   = false;
 
-        _moduleState = TCONST.READY;
+        post(TCONST.APPLY_NODE);
 
         return _moduleState;
     }
@@ -130,9 +135,12 @@ public class scene_graphqueue extends scene_module {
 
                             terminateQueue();
                             _nextAction.cancelNode();
-                        }
 
-                        _qDisabled = false;
+                            // Restart queue
+                            //
+                            _qDisabled  = false;
+                            _nextAction = null;
+                        }
 
                         // If the node is completed and reusable then reset
                         //
@@ -189,7 +197,10 @@ public class scene_graphqueue extends scene_module {
                                 }
                             }
                             else {
+                                // RESET the nextAction so it will restart
+                                //
                                 preExit();
+                                _nextAction = null;
                             }
                         }
                         catch(Exception e) {
@@ -221,6 +232,7 @@ public class scene_graphqueue extends scene_module {
         // disable the input queue permenantly in prep for destruction
         //
         _qDisabled = true;
+
         flushQueue();
     }
 
@@ -234,7 +246,10 @@ public class scene_graphqueue extends scene_module {
         Iterator<?> tObjects = queueMap.entrySet().iterator();
 
         while(tObjects.hasNext() ) {
+
             Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Log.d(TAG, "Removing Post: " + entry.getKey());
 
             mainHandler.removeCallbacks((scene_graphqueue.Queue)(entry.getValue()));
         }

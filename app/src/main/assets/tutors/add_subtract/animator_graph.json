@@ -10,6 +10,134 @@
       "version": "1.0.0",
       "rootnode": "INTRO_STATE",
 
+      "queueMap": {
+
+        "CHIME_FEEDBACK": {
+          "type": "QUEUE",
+          "COMMENT": "Chime when user taps icons in ",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name":"Play Chimes:", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{TestChimes}}.mp3", "repeat":false, "volume": "0.7", "mode":"flow", "features": ""}
+          ],
+          "preexit": [
+          ],
+          "edges": [
+          ]
+        },
+
+        "MATH_SCAFFOLD_BEHAVIOR": {
+          "type": "QUEUE",
+          "COMMENT": "Chime when user taps icons in ",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name":"Show Scaffold:", "type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean"},
+
+            {"name":"Play Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tap on the.mp3",                    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD"},
+            {"name":"Play <shape>...",   "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.image}}.mp3",        "soundpackage":"shapes",  "volume": 1.0, "mode":"flow", "features": "ASM_ADD"},
+            {"name":"Play And Count...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "and count them one by one.mp3",     "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD"},
+
+            //******************
+
+            {"name":"Play Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tap on the.mp3",                     "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUB"},
+            {"name":"Play <shape>...",   "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.image}}.mp3",         "soundpackage":"shapes",  "volume": 1.0, "mode":"flow", "features": "ASM_SUB"},
+            {"name":"Play And Count...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "to take them away.mp3",              "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUB"}
+          ],
+          "preexit": [
+          ],
+          "edges": [
+          ]
+        },
+
+
+        "SCAFFOLD_RESULT_BEHAVIOR": {
+          "type": "QUEUE",
+          "COMMENT": "Chime when user taps icons in ",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "COMMAND", "id": "MATH_SCAFFOLD_BEHAVIOR", "method": "cancelNode", "parms": "",  "features":""},
+
+            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "How many things do you get.mp3",                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD"},
+            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "How many things are left.mp3",                  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUB"},
+
+            {"name":"", "type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_RESULT:String", "features": "" },
+
+            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tap here and please write your answer.mp3",    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+
+          ],
+          "preexit": [
+          ],
+          "edges": [
+          ]
+        },
+
+
+        "CANCEL_SCAFFOLD_BEHAVIORS": {
+          "type": "QUEUE",
+          "COMMENT": "Chime when user taps icons in ",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name":"CANCEL_SCAFFOLD_POST",     "type": "COMMAND", "id": "SAddSubtract", "method": "cancelPost", "parms": "SHOW_SCAFFOLD_BEHAVIOR:String",  "features":""},
+
+            {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "COMMAND", "id": "MATH_SCAFFOLD_BEHAVIOR",   "method": "cancelNode", "parms": "",  "features":""},
+            {"name":"CANCEL_SCAFFOLD_RESULT",   "type": "COMMAND", "id": "SCAFFOLD_RESULT_BEHAVIOR", "method": "cancelNode", "parms": "",  "features":""}
+          ],
+          "preexit": [
+          ],
+          "edges": [
+          ]
+        },
+
+
+
+        "MULTIPLY_PROMPT_BEHAVIOR": {
+          "type": "QUEUE",
+          "COMMENT": "Chime when user taps icons in ",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+
+            //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Multiplying.mp3",                         "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand1}}.mp3",     "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "times.mp3",                                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand2}}.mp3",       "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "means writing.mp3",                      "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand2}}.mp3",       "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand1}}.mp3",     "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "times.mp3",                                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+            //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "and adding them up.mp3",                 "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
+
+            // Note that this timer doesn't work for multiplication
+            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Let’s write.mp3",                    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
+            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand2}}.mp3",      "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
+            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand1}}.mp3",      "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
+            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "times one under the other.mp3",      "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
+
+            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.WriteNextNumber}}.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_NUMBER"},
+            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand2}}.mp3",         "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_NUMBER"},
+            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "here.mp3",                              "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_NUMBER"},
+
+            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.WriteNextResult}}.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_RESULT"},
+            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand2}}.mp3",         "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_RESULT"},
+            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "s and write their sum here.mp3",        "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RESULT_FIRST_TWO"},
+            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "and write the result here.mp3",         "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RESULT_NEXT_OR_LAST"},
+
+            {"name":"", "type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_OVERHEAD:String"},
+            {"name":"", "type": "COMMAND", "cmd": "WAIT"}
+          ],
+          "preexit": [
+          ],
+          "edges": [
+          ]
+        }
+
+      },
+
+
+
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
@@ -19,36 +147,38 @@
           "COMMENT": "Intro Clip",
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
-          "preenter":["SET_VERSION","SET_DATASOURCE"],
+          "preenter":["SET_VERSION","SET_DATASOURCE", "SET_SCAFFOLD_BEHAVIOR", "SET_SCAFFOLD_COMPLETE_BEHAVIOR", "SET_ON_ANSWER_BEHAVIOR", "SET_CHIME_BEHAVIOR", "SET_NEXT_BEHAVIOR"],
           "preexit" :[],
           "edges":
           [
-            {"constraint":"","edge": "PROBLEM"}
+            {"constraint":"","edge": "NEXTPROBLEM"}
           ]
         },
 
         // This initializes the dataset display and resets for a new set of attempts
         //
-        "PROBLEM":{
+        "NEXTPROBLEM":{
           "COMMENT":"This node presents the first problem.",
           "type":"node",
           "maptype":"moduleMap",
-          "mapname": "SHOWPROBLEM",
+          "mapname": "NEXT_PROBLEM",
           "preenter":[],
           "preexit" :[],
           "edges":
           [
+            {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
+            {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
             {"constraint":"","edge":"NEXTDIGIT"}
           ]
         },
 
         "NEXTDIGIT":{
-          "COMMENT":"This node presents the first digit.",
+          "COMMENT":"This node ",
           "type":"node",
           "maptype":"moduleMap",
-          "mapname": "SHOWDIGIT",
-          "preenter":["SET_DOTBAGS_INVISIBLE"],
-          "preexit" :["PROMPT_COL"],
+          "mapname": "NEXT_DIGIT",
+          "preenter":["POST_DELAYED_SCAFFOLD","SET_WRITE_BEHAVIOR"],
+          "preexit" :["HIGHLIGHT_COLUMN"],
           "edges":
           [
             {"constraint":"","edge":"USERINPUT"}
@@ -61,63 +191,33 @@
           "COMMENT":"When the user touches for the first time",
           "type":"node",
           "maptype":"moduleMap",
-          "mapname": "CLICKDOTS",
-          "preenter":[],
-          "preexit" :[],
+          "mapname": "WAIT_FOR_INPUT",
+          "preenter":["SET_INPUT_BEHAVIOR"],
+          "preexit" :["CANCEL_POST_DELAYED_SCAFFOLD", "CLR_INPUT_BEHAVIOR","CLR_WRITE_BEHAVIOR"],
           "edges":
           [
-            {"constraint":"ASM_ADD","edge":"ADD_PROMPT"},
-            {"constraint":"ASM_SUBTRACT","edge":"SUB_PROMPT"},
-            {"constraint":"ASM_MULTI","edge":"MULTI_PROMPT"}
-            //{"constraint":"", "edge":"REPEATED_ADD"}
+            {"constraint":"FTR_COMPLETE","edge":"PROBLEMCORRECT"},
+            {"constraint":"FTR_RIGHT","edge":"STEPCORRECT"},
+            {"constraint":"","edge":"STEPWRONG"}
           ]
         },
 
-        "ADD_PROMPT":{
-          "COMMENT":"When the user hesitates",
+        "PROBLEMCORRECT":{
+          "COMMENT":"When user inputs a correct answer...",
           "type":"node",
           "maptype":"moduleMap",
-          "mapname": "PROMPT_IN_ADD",
+          "mapname": "PLAYCOMPLETE",
           "preenter":[],
           "preexit" :[],
           "edges":
           [
-            {"constraint":"CLICK_ON_DOT","edge":"ADD_PROMPT"},
-            {"constraint":"FTR_RIGHT","edge":"WHOLECORRECT"},
-            {"constraint":"FTR_WRONG","edge":"WHOLEWRONG"}
+            {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
+            {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
+            {"constraint":"","edge":"NEXTPROBLEM"}
           ]
         },
 
-        "SUB_PROMPT":{
-          "COMMENT":"When the user hesitates",
-          "type":"node",
-          "maptype":"moduleMap",
-          "mapname": "PROMPT_IN_SUB",
-          "preenter":[],
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"CLICK_ON_DOT","edge":"SUB_PROMPT"},
-            {"constraint":"FTR_RIGHT","edge":"WHOLECORRECT"},
-            {"constraint":"FTR_WRONG","edge":"WHOLEWRONG"}
-          ]
-        },
-
-        "MULTI_PROMPT":{
-          "COMMENT":"When the user hesitates",
-          "type":"node",
-          "maptype":"moduleMap",
-          "mapname": "PROMPT_IN_MULTI",
-          "preenter":[],
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"FTR_RIGHT","edge":"WHOLECORRECT"},
-            {"constraint":"FTR_WRONG","edge":"WHOLEWRONG"}
-          ]
-        },
-
-        "WHOLECORRECT":{
+        "STEPCORRECT":{
           "COMMENT":"When user inputs a correct answer...",
           "type":"node",
           "maptype":"moduleMap",
@@ -126,23 +226,21 @@
           "preexit" :[],
           "edges":
           [
-            {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
-            {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
-            {"constraint":"","edge":"PROBLEM"}
+
+            {"constraint":"","edge":"NEXTDIGIT"}
           ]
         },
 
-        "WHOLEWRONG":{
+        "STEPWRONG":{
           "COMMENT":"When user inputs an incorrect answer...",
           "type":"node",
           "maptype":"moduleMap",
-          "mapname": "EVALUATEDIGIT",
+          "mapname": "PLAYWRONG",
           "preenter":[],
           "preexit" :[],
           "edges":
           [
-            {"constraint":"FTR_RIGHT","edge":"NEXTDIGIT"},
-            {"constraint":"FTR_WRONG","edge":"USERINPUT"}
+            {"constraint":"","edge":"USERINPUT"}
           ]
         },
 
@@ -183,6 +281,9 @@
         }
       },
 
+
+
+
       "moduleMap": {
         "COMMENT": "@@@@@  CModules  @@@@@",
         "PLAYINTRO": {
@@ -190,135 +291,37 @@
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
+            {"name":"Introduction Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3",       "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD"},
+            {"name":"Introduction Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets subtract some numbers now.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUBTRACT"},
+            {"name":"Introduction Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets multiply some numbers now.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"}
           ]
         },
 
-        "SHOWPROBLEM": {
+        "NEXT_PROBLEM": {
           "type": "MODULE",
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
             {"type": "COMMAND", "id": "SAddSubtract", "method": "next", "features": ""}
-/*            {"type": "AUDIO", "command": "PLAY", "soundsource": "Let's add some numbers now.mp3",        "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Let's subtract some numbers now.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUBTRACT"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Let's multiply some numbers now.mp3",          "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_MULTI"}
- */         ]
+          ]
         },
 
-        "SHOWDIGIT": {
+        "NEXT_DIGIT": {
           "type": "MODULE",
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "TIMER", "id":"RA_Timer", "action":"RESTART", "features": "" },
             {"type": "COMMAND", "id": "SAddSubtract", "method": "nextDigit", "features": ""}
           ]
         },
 
-        "PROMPT_COL": {
+        "HIGHLIGHT_COLUMN": {
           "type": "MODULE",
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
             {"type": "COMMAND", "id":"SAddSubtract", "method":"highlightCurrentColumn", "parms":"", "features":""}
 
-          ]
-        },
-
-        "CLICKDOTS": {
-          "type": "MODULE",
-          "reuse": true,
-          "COMMENT": "TBD",
-          "tracks": [
-            //Adding prompts in multiplication hasn't been done. If you continue to do it, the codes following could be reused.
-/*            {"type": "AUDIO", "command": "PLAY", "soundsource": "Multiplying.mp3",                         "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand1}}.mp3",     "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "times.mp3",                                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand2}}.mp3",       "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "means writing.mp3",                      "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand2}}.mp3",       "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand1}}.mp3",     "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "times.mp3",                                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "and adding them up.mp3",                 "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},*/
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "updateCurNode", "parms": "USERINPUT:String"},
-            // Note that this timer doesn't work for multiplication
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_OVERHEAD:String", "features": "ASM_SUBTRACT" },
-            {"type": "TIMER", "id":"HesitationTimer1", "startdelay":"0", "period":"3000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"SET_DOTBAGS_VISIBLE", "features": "" },
-            {"type": "TIMER", "id":"PROMPT_Timer", "startdelay":"0", "period":"3000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"NEXT", "features": "" },
-            {"type": "COMMAND", "cmd": "WAIT"}
-          ]
-        },
-
-        "PROMPT_IN_ADD": {
-          "type": "MODULE",
-          "reuse": true,
-          "COMMENT": "TBD",
-          "tracks": [
-            {"type": "TIMER", "id":"PROMPT_Timer", "action":"CANCEL", "features": "" },
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "updateCurNode", "parms": "ADD_PROMPT:String"},
-
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Tap on the.mp3",                         "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD_PROMPT"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.image}}.mp3",            "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD_PROMPT"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "and count them one by one.mp3",         "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD_PROMPT"},
-
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Tap on the.mp3",                         "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD_PROMPT_COUNT_FROM"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.image}}.mp3",            "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD_PROMPT_COUNT_FROM"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "and count up from.mp3",                  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD_PROMPT_COUNT_FROM"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand1}}.mp3",         "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_ADD_PROMPT_COUNT_FROM"},
-
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "How many things do you get.mp3",                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ALL_DOTS_DOWN"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Tap here and please write your answer.mp3",    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ALL_DOTS_DOWN"},
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_RESULT:String", "features": "ASM_ALL_DOTS_DOWN" },
-
-            {"type": "COMMAND", "cmd": "WAIT"}
-          ]
-        },
-
-        "PROMPT_IN_SUB": {
-          "type": "MODULE",
-          "reuse": true,
-          "COMMENT": "TBD",
-          "tracks": [
-            {"type": "TIMER", "id":"PROMPT_Timer", "action":"CANCEL", "features": "" },
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "updateCurNode", "parms": "SUB_PROMPT:String"},
-
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Tap on the.mp3",                      "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUB_PROMPT"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.image}}.mp3",        "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUB_PROMPT"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "to take them away.mp3",              "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUB_PROMPT"},
-
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "How many things are left.mp3",                   "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ALL_DOTS_DOWN"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Tap here and please write your answer.mp3",    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ALL_DOTS_DOWN"},
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_RESULT:String", "features": "ASM_ALL_DOTS_DOWN" },
-
-            {"type": "COMMAND", "cmd": "WAIT"}
-          ]
-        },
-
-        //Adding prompts in multiplication hasn't been done. If you continue to do it, the codes following could be reused.
-        "PROMPT_IN_MULTI": {
-          "type": "MODULE",
-          "reuse": true,
-          "COMMENT": "TBD",
-          "tracks": [
-            {"type": "TIMER", "id":"PROMPT_Timer", "action":"CANCEL", "features": "" },
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "updateCurNode", "parms": "MULTI_PROMPT:String"},
-
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Let’s write.mp3",                         "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand2}}.mp3",        "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand1}}.mp3",      "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "times one under the other.mp3",           "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
-
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.WriteNextNumber}}.mp3",    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_NUMBER"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand2}}.mp3",         "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_NUMBER"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "here.mp3",                                   "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_NUMBER"},
-
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.WriteNextResult}}.mp3",    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_RESULT"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand2}}.mp3",         "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_RESULT"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "s and write their sum here.mp3",            "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RESULT_FIRST_TWO"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "and write the result here.mp3",            "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RESULT_NEXT_OR_LAST"},
-
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_OVERHEAD:String"},
-            {"type": "COMMAND", "cmd": "WAIT"}
           ]
         },
 
@@ -336,6 +339,17 @@
           ]
         },
 
+        "PLAYCOMPLETE": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3", "soundpackage":"default", "volume": 1.0, "mode":"event", "features": ""},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "postEvent",  "parms": "NEXT_NODE:String|1000:Integer", "features":""},
+            {"type": "COMMAND", "cmd": "WAIT"}
+          ]
+        },
+
         // AUDIO filenames should not have spaces or hyphens.
         //
         "PLAYWRONG": {
@@ -343,26 +357,17 @@
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3",       "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_DIGIT_OR_OVERHEAD_WRONG"}
           ]
         },
 
-        "EVALUATEDIGIT": {
+        "WAIT_FOR_INPUT": {
           "type": "MODULE",
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "evaluateDigit"},
-
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3",                        "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_DIGIT_OR_OVERHEAD_CORRECT"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3",       "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_DIGIT_OR_OVERHEAD_WRONG"}
-
-            //Adding prompts in multiplication hasn't been done. If you continue to do it, the codes following could be reused.
-/*            {"type": "AUDIO", "command": "PLAY", "soundsource": "So what is.mp3",                          "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_REPEATED_ADD_DOWN"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand1}}.mp3",     "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_REPEATED_ADD_DOWN"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "times.mp3",                                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_REPEATED_ADD_DOWN"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand2}}.mp3",       "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_REPEATED_ADD_DOWN"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Copy your answer here.mp3",              "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_REPEATED_ADD_DOWN"},
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_RESULT:String", "features": "ASM_REPEATED_ADD_DOWN"}*/
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_OVERHEAD:String",               "features": "ASM_SUBTRACT" },
+            {"type": "COMMAND", "cmd": "WAIT"}
           ]
         },
 
@@ -381,7 +386,6 @@
           "tracks": [
           ]
         }
-
       },
 
 
@@ -391,37 +395,53 @@
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
 
-//        "SET_VISIBILITY":{"type": "COMMAND", "id": "SAddSubtract", "method": "setVisible", "parms":"false:bool", "features":""},
-        "SET_DOTBAGS_VISIBLE": {"type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"true:bool"},
-        "SET_DOTBAGS_INVISIBLE": {"type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"false:bool"},
-        //"CREATE_HESITATION_TIMER_SHOW_DOTBAG": {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "period":"3000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"SET_DOTBAGS_VISIBLE"},
+        "POST_DELAYED_SCAFFOLD"       : {"type": "COMMAND", "id": "SAddSubtract", "method": "postEvent",  "parms": "SHOW_SCAFFOLD_BEHAVIOR:String|3000:Integer", "features":""},
+        "CANCEL_POST_DELAYED_SCAFFOLD": {"type": "COMMAND", "id": "SAddSubtract", "method": "cancelPost", "parms": "SHOW_SCAFFOLD_BEHAVIOR:String",  "features":""},
+
+        "SHOW_SCAFFOLD": {"type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean"},
+        "HIDE_SCAFFOLD": {"type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"FALSE:Boolean"},
+
+        "SET_SCAFFOLD_BEHAVIOR":    {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "SHOW_SCAFFOLD_BEHAVIOR:String|MATH_SCAFFOLD_BEHAVIOR:String" ,"features":""},
+        "CLR_SCAFFOLD_BEHAVIOR":    {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "SHOW_SCAFFOLD_BEHAVIOR:String|NULL:String" ,"features":""},
+        "CANCEL_SCAFFOLD_BEHAVIOR": {"type": "COMMAND", "id": "SHOW_SCAFFOLD_BEHAVIOR", "method": "cancelNode", "parms": "",  "features":""},
+
+        "SET_SCAFFOLD_COMPLETE_BEHAVIOR": {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "SCAFFOLD_RESULT_BEHAVIOR:String|SCAFFOLD_RESULT_BEHAVIOR:String" ,"features":""},
+        "CLR_SCAFFOLD_COMPLETE_BEHAVIOR": {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "SCAFFOLD_RESULT_BEHAVIOR:String|NULL:String" ,"features":""},
+        "CANCEL_SCAFFOLD_RESULT": {"type": "COMMAND", "id": "SHOW_SCAFFOLD_BEHAVIOR", "method": "cancelNode", "parms": "",  "features":""},
+
+        "SET_WRITE_BEHAVIOR":    {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "START_WRITING_BEHAVIOR:String|CANCEL_SCAFFOLD_BEHAVIORS:String" ,"features":""},
+        "CLR_WRITE_BEHAVIOR":    {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "START_WRITING_BEHAVIOR:String|NULL:String" ,"features":""},
+
+
+        "SET_ON_ANSWER_BEHAVIOR": {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "ON_ANSWER_BEHAVIOR:String|NEXT:String" ,"features":""},
+        "CLR_ON_ANSWER_BEHAVIOR": {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "ON_ANSWER_BEHAVIOR:String|NULL:String" ,"features":""},
+
+        "SET_CHIME_BEHAVIOR": {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "CHIME_FEEDBACK:String|CHIME_FEEDBACK:String" ,"features":""},
+        "CLR_CHIME_BEHAVIOR": {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "CHIME_FEEDBACK:String|NULL:String" ,"features":""},
 
         "HIGHLIGHT_OVERHEAD": {"type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_OVERHEAD:String"},
-        "CREATE_HESITATION_TIMER_HIGHLIGHT_OVERHEAD": {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "period":"3000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HIGHLIGHT_OVERHEAD"},
 
-        //        {"type": "TIMER", "id":"HesitationTimer", "startdelay":"0", "action":"CREATEANDSTART", "repeat":"false", "period":"1000", "features":"", "onTimer":"SET_VISIBILITY"},
-
-        //"SET_DATASOURCE":{"type": "COMMAND", "id": "SAddSubtract", "method": "setDataSource", "parms": "[file]asm_data.json:String", "features":"!DATA_SADDSUBTRACT"},
         "SET_DATASOURCE":{"type": "COMMAND", "id": "SAddSubtract", "method": "setDataSource", "parms": "LOCAL_FILE:String", "features":"!DATA_SADDSUBTRACT"},
         "NEXT_DATASET":{"type": "COMMAND", "id": "SAddSubtract", "method": "next" ,"features":""},
+
+        "SET_INPUT_BEHAVIOR": {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "INPUT_BEHAVIOR:String|NEXT:String" ,"features":""},
+        "CLR_INPUT_BEHAVIOR": {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "INPUT_BEHAVIOR:String|NULL:String" ,"features":""},
+
+        "SET_NEXT_BEHAVIOR": {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "NEXT_NODE:String|NEXT:String" ,"features":""},
+        "CLR_NEXT_BEHAVIOR": {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "NEXT_NODE:String|NULL:String" ,"features":""},
 
         "RESET":{"type": "COMMAND", "id": "SAddSubtract", "method": "reset" ,"features":""},
 
         "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "NEXTSCENE" },
+
         "NEXT": {"type": "COMMAND", "cmd": "NEXT" },
         "PAUSE":{"type": "COMMAND", "cmd": "WAIT" },
 
         //FINGERWRITING ADDITIONS
-        "PLAY_CHIME": {"type": "AUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{TestChimes}}.mp3", "repeat":false, "volume": "0.7", "mode":"event", "features": ""},
-
         "FW_DISABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "FALSE:Boolean","features":""},
         //disable FingerWriting
         "FW_ENABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "TRUE:Boolean","features":""}
         //enable FingerWriting
-
-        //Visual cues
-        //"PROMPT_COL":{"type": "COMMAND","id":"SAddSubtract","method":"highlightCurrentColumn","parms":"","features":""}
-
       },
 
 
@@ -448,6 +468,11 @@
         "FTR_NOWORDS":{
           "type": "CONDITION",
           "test":"FTR_NOWORDS"
+        },
+
+        "FTR_COMPLETE":{
+          "type": "CONDITION",
+          "test":"FTR_COMPLETE"
         },
 
         "FTR_WORDS":{
