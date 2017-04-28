@@ -27,11 +27,12 @@ import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
 
-public class CAsm_Component extends LinearLayout implements IBehaviorManager, ILoadableObject, IEventListener {
+public class CAsm_Component extends LinearLayout implements IBehaviorManager, ILoadableObject, IEventListener, IPublisher {
 
 
     private Context mContext;
@@ -41,10 +42,10 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     protected HashMap           nameMap      = new HashMap();
     protected boolean           _qDisabled   = false;
 
-    protected String mDataSource;
-    private int      _dataIndex;
-
-    protected int[] dataset;
+    protected String            mDataSource;
+    protected int               _dataIndex;
+    protected boolean           _dataEOI   = false;
+    protected int[]             dataset;
 
     //current digit
     protected int digitIndex;
@@ -185,6 +186,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         dataSource = _dataSource;
         _dataIndex = 0;
     }
+
 
 
     public boolean dataExhausted() {
@@ -1022,6 +1024,15 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
                 switch(_command) {
 
+                    case ASM_CONST.MATH_INSTRUCTION_ADD_BEHAVIOR:
+                    case ASM_CONST.MATH_INSTRUCTION_ADD_0_BEHAVIOR:
+                    case ASM_CONST.MATH_INSTRUCTION_0_ADD_BEHAVIOR:
+                    case ASM_CONST.MATH_INSTRUCTION_SUB_BEHAVIOR:
+                    case ASM_CONST.MATH_INSTRUCTION_SUB_0_BEHAVIOR:
+
+                        applyBehaviorNode(_command);
+                        break;
+
                     case ASM_CONST.SHOW_SCAFFOLD_BEHAVIOR:
                     case ASM_CONST.CHIME_FEEDBACK:
                     case ASM_CONST.SCAFFOLD_RESULT_BEHAVIOR:
@@ -1193,6 +1204,49 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     // Component Message Queue  -- End
     //************************************************************************
     //************************************************************************
+
+
+    //************************************************************************
+    //************************************************************************
+    // IPublisher - START
+
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishState() {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishValue(String varName, String value) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishValue(String varName, int value) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void publishFeature(String feature) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public void retractFeature(String feature) {
+    }
+
+
+    // IPublisher - EBD
+    //************************************************************************
+    //************************************************************************
+
+
 
 
     //************************************************************************

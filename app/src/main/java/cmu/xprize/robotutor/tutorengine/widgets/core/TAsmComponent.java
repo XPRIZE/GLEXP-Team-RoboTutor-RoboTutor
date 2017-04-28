@@ -24,6 +24,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.comp_logging.CErrorManager;
@@ -42,13 +43,20 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     private CObjectDelegate  mSceneObject;
     private CMediaManager    mMediaManager;
 
+    private ArrayList<TAsmComponent.CDataSourceImg> _dataStack  = new ArrayList<>();
+
+    //used to store the current features about overhead
+    //
+    private List<String> curFeatures = new ArrayList<String>();
+
+    private ArrayList<String>       _FeatureSet = new ArrayList<>();
+    private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
+
     private HashMap<String, String> volatileMap = new HashMap<>();
     private HashMap<String, String> stickyMap   = new HashMap<>();
 
     static final String TAG = "TAsmComponent";
 
-    //used to store the current features about overhead
-    private List<String> curFeatures = new ArrayList<String>();
 
     public TAsmComponent(Context context) {
         super(context);
@@ -92,25 +100,26 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         // otherwise evaluate the digit for errors
         //
         if(correct) {
-            mTutor.setAddFeature(TCONST.FTR_COMPLETE);
+            publishFeature(TCONST.FTR_COMPLETE);
         }
         else {
             evaluateDigit();
         }
     }
 
+
     public void evaluateDigit () {
 
         reset();
-        mTutor.setDelFeature(TCONST.ASM_ADD_PROMPT);
-        mTutor.setDelFeature(TCONST.ASM_ADD_PROMPT_COUNT_FROM);
-        mTutor.setDelFeature(TCONST.ASM_SUB_PROMPT);
+        retractFeature(TCONST.ASM_ADD_PROMPT);
+        retractFeature(TCONST.ASM_ADD_PROMPT_COUNT_FROM);
+        retractFeature(TCONST.ASM_SUB_PROMPT);
 
         boolean correct = isDigitCorrect();
 
         if (correct) {
-            mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
-            mTutor.setAddFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
+            publishFeature(TCONST.GENERIC_RIGHT);
+            publishFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
 
             saveCurFeaturesAboutOverhead();
             delCurFeaturesAboutOverhead();
@@ -125,20 +134,22 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
                 }
             }, 3000);
 
-            mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+            publishFeature(TCONST.GENERIC_WRONG);
 
             if (resultCorrect == ASM_CONST.NOT_ALL_INPUT_RIGHT) {
-                mTutor.setAddFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
+                publishFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
                 resultCorrect = ASM_CONST.NO_INPUT;
             } else if (overheadCorrect == ASM_CONST.ALL_INPUT_RIGHT)
-                mTutor.setAddFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
+                publishFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
             else
-                mTutor.setAddFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
+                publishFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
         }
 
     }
 
+
     public void saveCurFeaturesAboutOverhead() {
+
         if (mTutor.testFeature(TCONST.ASM_RA_START)) curFeatures.add(TCONST.ASM_RA_START);
         if (mTutor.testFeature(TCONST.ASM_NEXT_NUMBER)) curFeatures.add(TCONST.ASM_NEXT_NUMBER);
         if (mTutor.testFeature(TCONST.ASM_NEXT_RESULT)) curFeatures.add(TCONST.ASM_NEXT_RESULT);
@@ -146,38 +157,40 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         if (mTutor.testFeature(TCONST.ASM_RESULT_NEXT_OR_LAST)) curFeatures.add(TCONST.ASM_RESULT_NEXT_OR_LAST);
     }
 
+
     public void delCurFeaturesAboutOverhead() {
-        mTutor.setDelFeature(TCONST.ASM_RA_START);
-        mTutor.setDelFeature(TCONST.ASM_NEXT_NUMBER);
-        mTutor.setDelFeature(TCONST.ASM_NEXT_RESULT);
-        mTutor.setDelFeature(TCONST.ASM_RESULT_FIRST_TWO);
-        mTutor.setDelFeature(TCONST.ASM_RESULT_NEXT_OR_LAST);
+
+        retractFeature(TCONST.ASM_RA_START);
+        retractFeature(TCONST.ASM_NEXT_NUMBER);
+        retractFeature(TCONST.ASM_NEXT_RESULT);
+        retractFeature(TCONST.ASM_RESULT_FIRST_TWO);
+        retractFeature(TCONST.ASM_RESULT_NEXT_OR_LAST);
     }
 
     public void retrieveCurFeaturesAboutOverhead() {
         for (int i = 0; i < curFeatures.size(); i++) {
-            mTutor.setAddFeature(curFeatures.get(i));
+            publishFeature(curFeatures.get(i));
         }
     }
 
     public void reset() {
 
-        mTutor.setDelFeature(TCONST.FTR_COMPLETE);
+        retractFeature(TCONST.FTR_COMPLETE);
 
-        mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
-        mTutor.setDelFeature(TCONST.GENERIC_WRONG);
+        retractFeature(TCONST.GENERIC_RIGHT);
+        retractFeature(TCONST.GENERIC_WRONG);
 
-        mTutor.setDelFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
-        mTutor.setDelFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
+        retractFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
+        retractFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
 
-        mTutor.setDelFeature(TCONST.ASM_ALL_DOTS_DOWN);
+        retractFeature(TCONST.ASM_ALL_DOTS_DOWN);
     }
 
     public void resetAll() {
-        mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
-        mTutor.setDelFeature(TCONST.GENERIC_WRONG);
-        mTutor.setDelFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
-        mTutor.setDelFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
+        retractFeature(TCONST.GENERIC_RIGHT);
+        retractFeature(TCONST.GENERIC_WRONG);
+        retractFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
+        retractFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
 
         resetAllAboutAdd();
         resetAllAboutSub();
@@ -185,26 +198,26 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     }
 
     public void resetAllAboutAdd() {
-        mTutor.setDelFeature(TCONST.ASM_ADD);
-        mTutor.setDelFeature(TCONST.ASM_ADD_PROMPT);
-        mTutor.setDelFeature(TCONST.ASM_ADD_PROMPT_COUNT_FROM);
-        mTutor.setDelFeature(TCONST.ASM_ALL_DOTS_DOWN);
+        retractFeature(TCONST.ASM_ADD);
+        retractFeature(TCONST.ASM_ADD_PROMPT);
+        retractFeature(TCONST.ASM_ADD_PROMPT_COUNT_FROM);
+        retractFeature(TCONST.ASM_ALL_DOTS_DOWN);
     }
 
     public void resetAllAboutSub() {
-        mTutor.setDelFeature(TCONST.ASM_SUB);
-        mTutor.setDelFeature(TCONST.ASM_SUB_PROMPT);
+        retractFeature(TCONST.ASM_SUB);
+        retractFeature(TCONST.ASM_SUB_PROMPT);
     }
 
     public void resetAllAboutMulti() {
-        mTutor.setDelFeature(TCONST.ASM_MULTI);
-        mTutor.setDelFeature(TCONST.ASM_MULTI_PROMPT);
-        mTutor.setDelFeature(TCONST.ASM_RA_START);
-        mTutor.setDelFeature(TCONST.ASM_NEXT_NUMBER);
-        mTutor.setDelFeature(TCONST.ASM_NEXT_RESULT);
-        mTutor.setDelFeature(TCONST.ASM_RESULT_FIRST_TWO);
-        mTutor.setDelFeature(TCONST.ASM_RESULT_NEXT_OR_LAST);
-        mTutor.setDelFeature(TCONST.ASM_REPEATED_ADD_DOWN);
+        retractFeature(TCONST.ASM_MULTI);
+        retractFeature(TCONST.ASM_MULTI_PROMPT);
+        retractFeature(TCONST.ASM_RA_START);
+        retractFeature(TCONST.ASM_NEXT_NUMBER);
+        retractFeature(TCONST.ASM_NEXT_RESULT);
+        retractFeature(TCONST.ASM_RESULT_FIRST_TWO);
+        retractFeature(TCONST.ASM_RESULT_NEXT_OR_LAST);
+        retractFeature(TCONST.ASM_REPEATED_ADD_DOWN);
     }
 
     /**
@@ -220,6 +233,11 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         super.updateDataSet(data);
     }
 
+
+    //************************************************************************
+    //************************************************************************
+    // DataSink Implementation Start
+
     /**
      *
      * @param dataNameDescriptor
@@ -233,7 +251,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
         // We make the assumption that all are correct until proven wrong
         //
-        mTutor.setAddFeature(TCONST.ALL_CORRECT);
+        publishFeature(TCONST.ALL_CORRECT);
 
         // TODO: globally make startWith type TCONST
         try {
@@ -281,6 +299,195 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         }
     }
 
+
+    public void next() {
+
+        // If wrong reset ALLCORRECT
+        //
+        if (mTutor.testFeatureSet(TCONST.GENERIC_WRONG))
+                            retractFeature(TCONST.ALL_CORRECT);
+        resetAll();
+
+        super.next();
+        resetPlaceValue();
+
+        mTutor.getScope().addUpdateVar(name() + ".image", new TString(curImage));
+
+        // Permit changes to operation type within problem set/
+        //
+        initOperationFTR();
+
+        if (dataExhausted()) publishFeature(TCONST.FTR_EOI);
+
+        curFeatures.clear();
+    }
+
+
+    /**
+     *
+     * @param dataPacket
+     */
+    public void pushDataSource(String dataPacket) {
+
+        if(dataSource != null) {
+            _dataStack.add(new TAsmComponent.CDataSourceImg());
+        }
+
+        setDataSource(dataPacket);
+    }
+
+
+    /**
+     *
+     */
+    public void popDataSource() {
+
+        int popIndex = _dataStack.size()-1;
+
+        retractAllFeatures();
+
+        if(popIndex >= 0) {
+            TAsmComponent.CDataSourceImg popped = _dataStack.get(popIndex);
+            popped.restoreDataSource();
+            _dataStack.remove(popIndex);
+        }
+    }
+
+
+    /**
+     * This is used to push pop a datasource at run time - i.e. it allows you to switch datasources
+     * on the fly.
+     */
+    class CDataSourceImg {
+
+        private int  _wrongStore   = 0;
+        private int  _correctStore = 0;
+
+        private HashMap<String,Boolean> _FeatureStore;
+
+        protected int           _dataIndexStore;
+        protected boolean       _dataEOIStore;
+
+        CAsm_Data[]             _dataSourceStore;
+
+
+        public CDataSourceImg() {
+
+            _dataIndexStore  = _dataIndex;
+            _dataEOIStore    = _dataEOI;
+
+            _FeatureStore    = _FeatureMap;
+            _dataSourceStore = dataSource;
+
+            for(String feature : _FeatureSet) {
+                mTutor.setDelFeature(feature);
+            }
+
+        }
+
+        public void restoreDataSource() {
+
+            dataSource = _dataSourceStore;
+            _dataIndex = _dataIndexStore;
+            _dataEOI   = _dataEOIStore;
+
+            _FeatureMap= _FeatureStore;
+
+            for(String feature : _FeatureSet) {
+                if(_FeatureMap.get(feature)) {
+                    mTutor.setAddFeature(feature);
+                }
+                else {
+                    mTutor.setDelFeature(feature);
+                }
+            }
+        }
+    }
+
+    // DataSink IMplementation End
+    //************************************************************************
+    //************************************************************************
+
+
+    //************************************************************************
+    //************************************************************************
+    // publish component state data - START
+
+    @Override
+    public void publishState() {
+    }
+
+    @Override
+    public void publishValue(String varName, String value) {
+
+        // update the response variable  "<ComponentName>.<varName>"
+        mTutor.getScope().addUpdateVar(name() + varName, new TString(value));
+
+    }
+
+    @Override
+    public void publishValue(String varName, int value) {
+
+        // update the response variable  "<ComponentName>.<varName>"
+        mTutor.getScope().addUpdateVar(name() + varName, new TInteger(value));
+
+    }
+
+    @Override
+    public void publishFeature(String feature) {
+
+        trackFeatures(feature);
+
+        _FeatureMap.put(feature, true);
+        mTutor.setAddFeature(feature);
+    }
+
+    /**
+     * Note that we may retract features before they're published to add them to the
+     * FeatureSet that should be pushed/popped when using pushDataSource
+     * e.g. we want EOD to track even if it has never been set
+     *
+     * @param feature
+     */
+    @Override
+    public void retractFeature(String feature) {
+
+        trackFeatures(feature);
+
+        _FeatureMap.put(feature, false);
+        mTutor.setDelFeature(feature);
+    }
+
+    /**
+     * _FeatureSet keeps track of used features
+     *
+     * @param feature
+     */
+    private void trackFeatures(String feature) {
+
+        if(_FeatureSet.indexOf(feature) == -1)
+        {
+            _FeatureSet.add(feature);
+        }
+    }
+
+    private void retractAllFeatures() {
+
+        for(String feature: _FeatureSet) {
+            mTutor.setDelFeature(feature);
+        }
+
+        _FeatureSet = new ArrayList<>();
+        _FeatureMap = new HashMap<>();
+    }
+
+    // publish component state data - EBD
+    //************************************************************************
+    //************************************************************************
+
+
+
+
     @Override
     public void playChime() {
 
@@ -301,42 +508,19 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     }
 
 
-    public void next() {
-
-        // If wrong reset ALLCORRECT
-        if (mTutor.testFeatureSet(TCONST.GENERIC_WRONG))
-            mTutor.setDelFeature(TCONST.ALL_CORRECT);
-
-        resetAll();
-
-        super.next();
-        resetPlaceValue();
-
-        mTutor.getScope().addUpdateVar(name() + ".image", new TString(curImage));
-
-        // Permit changes to operation type within problem set/
-        //
-        initOperationFTR();
-
-        if (dataExhausted()) mTutor.setAddFeature(TCONST.FTR_EOI);
-
-        curFeatures.clear();
-    }
-
-
     private void initOperationFTR() {
 
         if (operation != null) {
             switch (operation) {
                 case "+" :
-                    mTutor.setAddFeature(TCONST.ASM_ADD);
+                    publishFeature(TCONST.ASM_ADD);
                     mTutor.getScope().addUpdateVar(name() + ".operand1", new TString(dataset[0] + ""));
                     break;
                 case "-" :
-                    mTutor.setAddFeature(TCONST.ASM_SUB);
+                    publishFeature(TCONST.ASM_SUB);
                     break;
                 case "x" :
-                    mTutor.setAddFeature(TCONST.ASM_MULTI);
+                    publishFeature(TCONST.ASM_MULTI);
                     mTutor.getScope().addUpdateVar(name() + ".operand1", new TString(dataset[0] + ""));
                     mTutor.getScope().addUpdateVar(name() + ".operand2", new TString(dataset[1] + ""));
                     break;
@@ -584,9 +768,9 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
      */    @Override
     public void onEvent(IEvent event) {
 
-        mTutor.setDelFeature(TCONST.ASM_ALL_DOTS_DOWN);
+        retractFeature(TCONST.ASM_ALL_DOTS_DOWN);
 
-        //mTutor.setDelFeature(TCONST.ASM_MULTI);
+        //retractFeature(TCONST.ASM_MULTI);
         super.onEvent(event);
 
         evaluateWhole();
@@ -622,8 +806,8 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     }
 
     public void delAddFeature(String delFeature, String addFeature) {
-        mTutor.setDelFeature(delFeature);
-        mTutor.setAddFeature(addFeature);
+        retractFeature(delFeature);
+        publishFeature(addFeature);
     }
 
     public void setDotBagsVisible(Boolean _dotbagsVisible, int curDigitIndex, int startRow) {
@@ -632,13 +816,13 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
         if (oldState == false && hasShown == true) {
             if (curStrategy.equals(ASM_CONST.STRATEGY_COUNT_FROM))
-                mTutor.setAddFeature(TCONST.ASM_ADD_PROMPT_COUNT_FROM);
+                publishFeature(TCONST.ASM_ADD_PROMPT_COUNT_FROM);
             else
-                mTutor.setAddFeature(TCONST.ASM_ADD_PROMPT);
-            mTutor.setAddFeature(TCONST.ASM_SUB_PROMPT);
+                publishFeature(TCONST.ASM_ADD_PROMPT);
+            publishFeature(TCONST.ASM_SUB_PROMPT);
 
             if (curNode.equals(ASM_CONST.NODE_ADD_PROMPT) || curNode.equals(ASM_CONST.NODE_SUB_PROMPT)) {
-                mTutor.setAddFeature(TCONST.ASM_CLICK_ON_DOT);
+                publishFeature(TCONST.ASM_CLICK_ON_DOT);
 
                 // Apply the script defined behavior -
                 //
