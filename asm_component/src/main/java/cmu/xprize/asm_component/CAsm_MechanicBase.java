@@ -48,9 +48,11 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     }
 
+
     public void next(){
         reset();
     }
+
 
     public void nextDigit(){
 
@@ -65,8 +67,8 @@ public class CAsm_MechanicBase implements IDotMechanics {
         resultIndex = allAlleys.size()-1;
 
         highlightDigits();
-
     }
+
 
     public void highlightDigits() {
 
@@ -197,7 +199,9 @@ public class CAsm_MechanicBase implements IDotMechanics {
     }
 
     public void highlightOverheadOrResult(String whichToHighlight) {
+
         if (whichToHighlight.equals(ASM_CONST.HIGHLIGHT_RESULT)) {
+
             mComponent.highlightText(allAlleys.get(resultIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1));
             mComponent.delAddFeature(TCONST.ASM_ALL_DOTS_DOWN, "");
         }

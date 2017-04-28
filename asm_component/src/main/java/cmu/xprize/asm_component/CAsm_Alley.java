@@ -66,12 +66,14 @@ public class CAsm_Alley extends LinearLayout {
         SdotBag.setHollow(false);
 
         STextLayout.resetAllValues();
+
         if(operation.equals("x")) {
             if(id != ASM_CONST.OPERATION_MULTI && id != ASM_CONST.REGULAR_MULTI)
                 STextLayout.resetAllBackground();
             STextLayout.update(id, val, operation, numSlots);
             SdotBag.setDrawBorder(false);
-        } else {
+        }
+        else {
             if (id != ASM_CONST.OPERATOR_ROW && id != ASM_CONST.OPERAND_ROW)
                 STextLayout.resetAllBackground();
             STextLayout.update(id, val, operation, numSlots);

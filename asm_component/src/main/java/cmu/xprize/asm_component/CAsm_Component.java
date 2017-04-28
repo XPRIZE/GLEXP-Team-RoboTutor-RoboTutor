@@ -50,14 +50,18 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     protected int digitIndex;
     protected int numSlots;
 
-    //corValue is the correct result
-    //corDigit is current correct digit
+    //corValue is the correct result e.g. 302
+    //corDigit is current correct digit  e.g. 3 (third digit)
+    //
     protected Integer   corDigit;
     protected Integer   corValue;
     protected String    operation;
     protected String    curImage;
 
+    protected ArrayList<String[]> problemDigits;
+
     //used for addition
+    //
     protected String    curStrategy;
     protected boolean   dotbagsVisible = true;
 
@@ -78,11 +82,13 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
     // If user is writing, stop the timer used to show dotbags
     //use TimeStamp to judge if it is the time to show the dotbags
+    //
     protected  boolean isWriting = false;
-    protected boolean hasShown = false;
-    protected long startTime;
+    protected boolean  hasShown = false;
+    protected long     startTime;
 
     // Arithmetic problems will start with the
+    //
     protected int               placeValIndex;
     protected String[]          chimes = ASM_CONST.CHIMES[placeValIndex];
     protected String[]          twoRowschimes = new String[20];
@@ -236,6 +242,19 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
         setMechanics();
         setSound();
+
+        // Extract an easily accessible set of problem digits.
+        // Each element in problemDigits is an array of digits representing
+        // the place values of the given operand.
+        // NOTE: -1 we don't include the "answer" which is the last element in the
+        // dataset.
+        //
+        problemDigits = new ArrayList<>();
+
+        for(int opIndex = 0 ; opIndex < dataset.length-1 ; opIndex++) {
+
+            problemDigits.add(opIndex, CAsm_Util.intToDigits(dataset[opIndex], numSlots));
+        }
     }
 
 
@@ -357,7 +376,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
         digitIndex--;
         isWriting = false;
-        hasShown = false;
+        hasShown  = false;
         startTime = System.currentTimeMillis();
 
         mechanics.nextDigit();
@@ -367,15 +386,80 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots-2)[digitIndex]);
             if(corDigit.equals(allAlleys.get(ASM_CONST.RESULT_OR_ADD_MULTI_PART1 - 1).getTextLayout().getDigit(digitIndex)))
                 nextDigit();
-        } else
+        } else {
             corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[digitIndex]);
+
+            // Setup the Zero features used for the MATH_SCAFFOLD_BEHAVIOR Prompts
+            //
+            clearZeroFeatures();
+            setZeroFeatures();
+        }
     }
+
+
+    /**
+     *  Reset the MATH_SCAFFOLD_BEHAVIOR prompt features
+     *
+     */
+    private void clearZeroFeatures() {
+
+        delAddFeature(ASM_CONST.FTR_NO_ZEROS, null);
+        delAddFeature(ASM_CONST.FTR_OP_ZERO, null);
+        delAddFeature(ASM_CONST.FTR_ZERO_OP, null);
+        delAddFeature(ASM_CONST.FTR_ALL_ZEROS, null);
+    }
+
+
+    /**
+     * Determine whether there are zero valued operands to inform the MATH_SCAFFOLD_BEHAVIOR
+     * feedback.
+     *
+     */
+    private void setZeroFeatures() {
+
+        int zeroCnt     = 0;
+        int operandPosn = 0;
+        int zeroPosn    = 0;
+
+        // scan the current placevalue (i.e. digitIndex) of the operands for zeros
+        //
+        for(String[] placeValues : problemDigits) {
+
+            if(placeValues[digitIndex].equals("0")) {
+                zeroCnt++;
+                zeroPosn = operandPosn;
+            }
+            operandPosn++;
+        }
+
+        if(zeroCnt == problemDigits.size()) {
+            delAddFeature(null, ASM_CONST.FTR_ALL_ZEROS);
+        }
+        else if(zeroCnt == 0) {
+            delAddFeature(null, ASM_CONST.FTR_NO_ZEROS);
+        }
+        else if(zeroPosn > 0) {
+            delAddFeature(null, ASM_CONST.FTR_OP_ZERO);
+        }
+        else {
+            delAddFeature(null, ASM_CONST.FTR_ZERO_OP);
+        }
+    }
+
+
+
+    public void setDotBagsVisible(Boolean _dotbagsVisible) {
+
+        setDotBagsVisible(_dotbagsVisible, digitIndex);
+    }
+
 
     public void setDotBagsVisible(Boolean _dotbagsVisible, int curDigitIndex) {
 
         if (!operation.equals("x"))
             setDotBagsVisible(_dotbagsVisible, curDigitIndex, 0);
     }
+
 
     public void setDotBagsVisible(Boolean _dotbagsVisible, int curDigitIndex, int startRow) {
 
@@ -428,12 +512,6 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             return;
 
         dotbagsVisible = _dotbagsVisible;
-    }
-
-
-    public void setDotBagsVisible(Boolean _dotbagsVisible) {
-
-        setDotBagsVisible(_dotbagsVisible, digitIndex);
     }
 
 
@@ -698,7 +776,9 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             }, 1500);
     }
 
+
     public boolean getClickPaused() {return clickPaused;}
+
 
     public void highlightText(final CAsm_Text t) {
         //Useful to highlight individual Text-fields to call importance to them.
@@ -751,6 +831,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         v.start();
     }
 
+
     public void highlightCurrentColumn() {
         //Highlights user's active column.
         for (CAsm_Alley alley: allAlleys) {
@@ -760,6 +841,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             } catch (NullPointerException e) { continue;}
         }
     }
+
 
     public void updateText(CAsm_Text t1, CAsm_Text t2, boolean isClickingBorrowing) {
 
@@ -807,6 +889,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         }
     }
 
+
     public void exitWrite() {
 
         mPopup.isActive = false;
@@ -817,23 +900,21 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         mPopupSupplement.enable(false,null);
         mPopupSupplement.dismiss();
 
-        resetHesitationTimer(3000);
+        restartHesitationTimer(3000);
     }
 
-    public void resetHesitationTimer(int delayTime) {
+
+    public void restartHesitationTimer(int delayTime) {
+
         if(isWriting && !hasShown) {
+
             startTime = System.currentTimeMillis();
             isWriting = false;
 
-            Handler h = new Handler();
-            h.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    setDotBagsVisible(true, digitIndex, mechanics.getCurRow()-2);
-                }
-            }, delayTime);
+            postEvent(ASM_CONST.SHOW_SCAFFOLD_BEHAVIOR, delayTime);
         }
     }
+
 
     public void onEvent(IEvent event) {
 
@@ -850,6 +931,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
     }
 
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         final int action = MotionEventCompat.getActionMasked(event);
@@ -858,6 +940,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         }
         return true;
     }
+
 
     /**
      * Load the data source
@@ -871,6 +954,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         _dataIndex = 0;
 
     }
+
 
     public void addMapToTutor(String key, String value) {
     }

@@ -192,7 +192,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     }
 
     public void resetAllAboutSub() {
-        mTutor.setDelFeature(TCONST.ASM_SUBTRACT);
+        mTutor.setDelFeature(TCONST.ASM_SUB);
         mTutor.setDelFeature(TCONST.ASM_SUB_PROMPT);
     }
 
@@ -300,6 +300,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         postEvent(ASM_CONST.CHIME_FEEDBACK);
     }
 
+
     public void next() {
 
         // If wrong reset ALLCORRECT
@@ -332,7 +333,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
                     mTutor.getScope().addUpdateVar(name() + ".operand1", new TString(dataset[0] + ""));
                     break;
                 case "-" :
-                    mTutor.setAddFeature(TCONST.ASM_SUBTRACT);
+                    mTutor.setAddFeature(TCONST.ASM_SUB);
                     break;
                 case "x" :
                     mTutor.setAddFeature(TCONST.ASM_MULTI);

@@ -116,7 +116,7 @@ public class TCONST {
     public static final String ASM_ADD_PROMPT                  = "ASM_ADD_PROMPT";
     public static final String ASM_ADD_PROMPT_COUNT_FROM       = "ASM_ADD_PROMPT_COUNT_FROM";
 
-    public static final String ASM_SUBTRACT                     = "ASM_SUBTRACT";
+    public static final String ASM_SUB                          = "ASM_SUB";
     public static final String ASM_SUB_PROMPT                   = "ASM_SUB_PROMPT";
 
     public static final String ASM_MULTI                        = "ASM_MULTI";
