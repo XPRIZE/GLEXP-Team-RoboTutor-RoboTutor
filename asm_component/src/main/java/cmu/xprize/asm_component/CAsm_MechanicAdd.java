@@ -36,13 +36,13 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         super.nextDigit();
 
         CAsm_TextLayout currLayout;
-        Integer currValue;
-        int totalValue = 0;
+        Integer         currValue;
+        int             totalValue = 0;
 
         for (CAsm_Alley alley: allAlleys) {
             if (allAlleys.indexOf(alley) == overheadIndex) {
                 CAsm_Text cur = alley.getTextLayout().getTextLayout(mComponent.digitIndex).getText(1);
-                if (cur.getText().equals("") && cur.isWritable == true) {
+                if (cur.getText().equals("1") || cur.isWritable == true) {
                     cur.cancelResult();
                     cur.setText("1");
                     alley.getDotBag().setRows(1);
@@ -50,8 +50,17 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
                     alley.getDotBag().setImage(mComponent.curImage);
                     alley.getDotBag().setIsClickable(true);
                     alley.getDotBag().resetOverflowNum();
+                    alley.getDotBag().setDrawBorder(true);
+                }
+                else {
+                    alley.getDotBag().setCols(0);
+                    alley.getDotBag().setDrawBorder(false);
                 }
             }
+
+            // Ensure the hollow is reset
+            //
+            alley.getDotBag().setHollow(false);
 
             currLayout = alley.getTextLayout();
             currValue = currLayout.getDigit(mComponent.digitIndex);
@@ -59,19 +68,36 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
             if (currValue != null) {
                 totalValue += currValue;
             }
-
         }
 
         if (totalValue > 10) { // need to carry
             mComponent.overheadVal = (totalValue - (totalValue % 10))/10;
             mComponent.overheadText = setCarryText();
         }
-
     }
 
 
     @Override
     public void preClickSetup() {
+
+        // only show dotbags that are being operated on
+
+        CAsm_DotBag currBag;
+
+        for (int i = 0; i < allAlleys.size(); i++) {
+
+            currBag = allAlleys.get(i).getDotBag();
+
+            if(i != overheadIndex) {
+
+                if (i != firstBagIndex && i != secondBagIndex) {
+                    currBag.setCols(0);
+                    currBag.setDrawBorder(false);
+                } else {
+                    currBag.setDrawBorder(true);
+                }
+            }
+        }
     }
 
 

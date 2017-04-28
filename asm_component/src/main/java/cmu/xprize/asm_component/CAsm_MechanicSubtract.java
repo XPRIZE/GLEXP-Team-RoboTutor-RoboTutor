@@ -457,13 +457,17 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
     @Override
     public void highlightOverheadOrResult(String whichToHighlight) {
+
         super.highlightOverheadOrResult(whichToHighlight);
+
         if (whichToHighlight.equals(ASM_CONST.HIGHLIGHT_OVERHEAD)) {
+
             if (digitBorrowingCol == 0 && digitBorrowingIndex == 0 || mComponent.digitIndex < digitBorrowingIndex)
                 return;
 
             CAsm_TextLayout borrowableTextLayout = allAlleys.get(digitBorrowingCol).getTextLayout();
             CAsm_Text borrowableText = borrowableTextLayout.getTextLayout(digitBorrowingIndex).getText(1);
+
             if (!borrowableText.getIsStruck()) mComponent.highlightText(borrowableText);
 
             if (!isBorrowedValue && digitBorrowingCol != firstBagIndex) {

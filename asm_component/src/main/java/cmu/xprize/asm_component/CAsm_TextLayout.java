@@ -101,10 +101,13 @@ public class CAsm_TextLayout extends LinearLayout {
                 setBackground(null);
             setTextForMultiplication();
         } else {
+            // TODO: this will be a memory leak - must release the drawables explicitly
+            //
             if (id == ASM_CONST.OPERATOR_ROW)
-                setBackground(getResources().getDrawable(R.drawable.underline));
+                setBackground(getResources().getDrawable(R.drawable.underline, null));
             else
                 setBackground(null);
+
             setTextForAddSubtract();
         }
 

@@ -32,17 +32,28 @@
           "preenter": [],
           "reuse": true,
           "tracks": [
-            {"name":"Show Scaffold:", "type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean"},
+            {"name":"Show Scaffold:", "type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean", "features": "FTR_NO_ZEROS"},
 
-            {"name":"Play Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tap on the.mp3",                    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD"},
-            {"name":"Play <shape>...",   "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.image}}.mp3",        "soundpackage":"shapes",  "volume": 1.0, "mode":"flow", "features": "ASM_ADD"},
-            {"name":"Play And Count...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "and count them one by one.mp3",     "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD"},
+            {"name":"Play Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tap on the.mp3",                    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD&FTR_NO_ZEROS"},
+            {"name":"Play <shape>...",   "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.image}}.mp3",        "soundpackage":"shapes",  "volume": 1.0, "mode":"flow", "features": "ASM_ADD&FTR_NO_ZEROS"},
+            {"name":"Play And Count...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "and count them one by one.mp3",     "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD&FTR_NO_ZEROS"},
 
             //******************
 
-            {"name":"Play Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tap on the.mp3",                     "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUB"},
-            {"name":"Play <shape>...",   "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.image}}.mp3",         "soundpackage":"shapes",  "volume": 1.0, "mode":"flow", "features": "ASM_SUB"},
-            {"name":"Play And Count...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "to take them away.mp3",              "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUB"}
+            {"name":"Play Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tap on the.mp3",                     "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUB&FTR_NO_ZEROS"},
+            {"name":"Play <shape>...",   "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.image}}.mp3",         "soundpackage":"shapes",  "volume": 1.0, "mode":"flow", "features": "ASM_SUB&FTR_NO_ZEROS"},
+            {"name":"Play And Count...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "to take them away.mp3",              "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUB&FTR_NO_ZEROS"},
+
+            //******************
+
+            {"name":"Adding zero...",         "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Remember that any number plus 0 is just the number.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD&FTR_OP_ZERO"},
+            {"name":"Adding to zero...",      "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Remember that 0 plus any number is just the number.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD&FTR_ZERO_OP"},
+            {"name":"Adding zero to zero...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Remember that 0 plus 0 is 0.mp3",                         "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD&FTR_ALL_ZEROS"},
+
+            //******************
+
+            {"name":"Subtract zero from...",    "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Remember that any number minus 0 is just the number.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUB&FTR_OP_ZERO"},
+            {"name":"Subtract zero to zero...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Remember that 0 minus 0 is 0.mp3",                         "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUB&FTR_ALL_ZEROS"}
           ],
           "preexit": [
           ],
@@ -111,7 +122,7 @@
             //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "and adding them up.mp3",                 "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
 
             // Note that this timer doesn't work for multiplication
-            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Let’s write.mp3",                    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
+            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Lets write.mp3",                    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
             {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand2}}.mp3",      "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
             {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand1}}.mp3",      "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
             {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "times one under the other.mp3",      "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
@@ -166,8 +177,6 @@
           "preexit" :[],
           "edges":
           [
-            {"constraint":"COND_PASS1","edge":"EXITCLIP1"},
-            {"constraint":"COND_PASS2","edge":"EXITCLIP2"},
             {"constraint":"","edge":"NEXTDIGIT"}
           ]
         },
@@ -292,7 +301,7 @@
           "COMMENT": "TBD",
           "tracks": [
             {"name":"Introduction Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3",       "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD"},
-            {"name":"Introduction Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets subtract some numbers now.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUBTRACT"},
+            {"name":"Introduction Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets subtract some numbers now.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUB"},
             {"name":"Introduction Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets multiply some numbers now.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"}
           ]
         },
@@ -366,7 +375,7 @@
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_OVERHEAD:String",               "features": "ASM_SUBTRACT" },
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_OVERHEAD:String",               "features": "ASM_SUB" },
             {"type": "COMMAND", "cmd": "WAIT"}
           ]
         },
@@ -515,9 +524,9 @@
           "test": "ASM_ADD"
         },
 
-        "ASM_SUBTRACT": {
+        "ASM_SUB": {
           "type": "CONDITION",
-          "test": "ASM_SUBTRACT"
+          "test": "ASM_SUB"
         },
 
         "ASM_MULTI": {

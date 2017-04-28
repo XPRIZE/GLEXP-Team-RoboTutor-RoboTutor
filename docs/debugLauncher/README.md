@@ -1,4 +1,4 @@
-To prepare a device for custom debugging you should create the required debugging launchers in within the RoboTutor folder as described therein.
+To prepare a device for custom debugging you should create the required debugging launchers within the RoboTutor folder as described therein.
 
 Once ready you can push the RoboTutor folder to the target device using ADB:
 

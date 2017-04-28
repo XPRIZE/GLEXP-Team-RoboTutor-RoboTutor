@@ -41,7 +41,7 @@ public class ASM_CONST {
     public static final int alleyMarginMul  = 3;
     public static final int rightPadding    = 15;
 
-    public static final int textSize     = 18;
+    public static final int textSize     = 18;  // 18
 
     public static final int textBoxWidth = 30;
     public static final int textBoxHeight= 50;
@@ -78,6 +78,11 @@ public class ASM_CONST {
     public static final String INPUT_BEHAVIOR           = "INPUT_BEHAVIOR";
     public static final String START_WRITING_BEHAVIOR   = "START_WRITING_BEHAVIOR";
     public static final String NEXT_NODE                = "NEXT_NODE";
+
+    public static final String FTR_NO_ZEROS             = "FTR_NO_ZEROS";
+    public static final String FTR_OP_ZERO              = "FTR_OP_ZERO";
+    public static final String FTR_ZERO_OP              = "FTR_ZERO_OP";
+    public static final String FTR_ALL_ZEROS            = "FTR_ALL_ZEROS";
 
     static {
         writeNextNumber.put(0, NUMBER_PREFIX + "last");
