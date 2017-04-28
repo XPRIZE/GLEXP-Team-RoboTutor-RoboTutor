@@ -10,16 +10,44 @@
   // path through the given tutors anumation_graph.
   //
   "tutorVariants": {
+
     "add_subtract": {
       "type": "TUTORVAR_MAP",
       "tutorName": "add_subtract",
       "features": ""
     },
+    "add_subtract_demo_add": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "add_subtract",
+      "features": "FTR_DEMO_ADD"
+    },
+    "add_subtract_demo_add0": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "add_subtract",
+      "features": "FTR_DEMO_ZERO_ADD"
+    },
+    "add_subtract_demo_0add": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "add_subtract",
+      "features": "FTR_DEMO_ADD_ZERO"
+    },
+    "add_subtract_demo_sub": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "add_subtract",
+      "features": "FTR_DEMO_SUB"
+    },
+    "add_subtract_demo_sub0": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "add_subtract",
+      "features": "FTR_DEMO_SUB_ZERO"
+    },
+
     "akira": {
       "type": "TUTORVAR_MAP",
       "tutorName": "akira",
       "features": ""
     },
+
     "bubble_pop_LETTERS_MIXEDCASE": {
       "type": "TUTORVAR_MAP",
       "tutorName": "bubble_pop",

@@ -78,12 +78,12 @@ android {
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
         }
 
-        release_sw_noasr {
+        release_sw_xprize {
             buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, TRUE
-            buildConfigField BOOLEAN, SHOW_TUTORVERSION, TRUE
+            buildConfigField BOOLEAN, SHOW_TUTORVERSION, FALSE
             buildConfigField BOOLEAN, SHOW_DEBUGLAUNCHER, FALSE
             buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
-            buildConfigField BOOLEAN, NO_ASR_APPS, TRUE
+            buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
         }
 
@@ -94,6 +94,24 @@ android {
             buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
+        }
+
+        release_en_xprize {
+            buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, TRUE
+            buildConfigField BOOLEAN, SHOW_TUTORVERSION, FALSE
+            buildConfigField BOOLEAN, SHOW_DEBUGLAUNCHER, FALSE
+            buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
+            buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
+            buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
+        }
+
+        release_sw_noasr {
+            buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, TRUE
+            buildConfigField BOOLEAN, SHOW_TUTORVERSION, TRUE
+            buildConfigField BOOLEAN, SHOW_DEBUGLAUNCHER, FALSE
+            buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
+            buildConfigField BOOLEAN, NO_ASR_APPS, TRUE
+            buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
         }
     }
     lintOptions {

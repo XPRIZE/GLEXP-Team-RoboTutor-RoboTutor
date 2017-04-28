@@ -190,8 +190,12 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
 
         for(graph_edge edge : edges) {
 
+            Log.d(TAG, "Edge Testing: " + edge.constraint );
+
             if(edge.testConstraint())
             {
+                Log.d(TAG, "Edge Passed Following->: " + edge.edge );
+
                 node = edge.followEdge();
 
                 if(node != null)

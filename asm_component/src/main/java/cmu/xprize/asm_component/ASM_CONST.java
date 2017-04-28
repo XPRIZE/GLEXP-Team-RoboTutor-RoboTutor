@@ -84,6 +84,13 @@ public class ASM_CONST {
     public static final String FTR_ZERO_OP              = "FTR_ZERO_OP";
     public static final String FTR_ALL_ZEROS            = "FTR_ALL_ZEROS";
 
+    public static final String MATH_INSTRUCTION_ADD_BEHAVIOR    = "MATH_INSTRUCTION_ADD_BEHAVIOR";
+    public static final String MATH_INSTRUCTION_ADD_0_BEHAVIOR  = "MATH_INSTRUCTION_ADD_0_BEHAVIOR";
+    public static final String MATH_INSTRUCTION_0_ADD_BEHAVIOR  = "MATH_INSTRUCTION_0_ADD_BEHAVIOR";
+    public static final String MATH_INSTRUCTION_SUB_BEHAVIOR    = "MATH_INSTRUCTION_SUB_BEHAVIOR";
+    public static final String MATH_INSTRUCTION_SUB_0_BEHAVIOR  = "MATH_INSTRUCTION_SUB_0_BEHAVIOR";
+
+
     static {
         writeNextNumber.put(0, NUMBER_PREFIX + "last");
         writeNextNumber.put(1, NUMBER_PREFIX + "first");

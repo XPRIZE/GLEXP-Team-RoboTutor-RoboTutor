@@ -8,7 +8,7 @@
       "title": "Add/Subtract tutor",
       "COMMENT": "This tutor is designed for the Add/Subtract tutor.",
       "version": "1.0.0",
-      "rootnode": "INTRO_STATE",
+      "rootnode": "DEMO_SELECT",
 
       "queueMap": {
 
@@ -62,6 +62,118 @@
         },
 
 
+        "MATH_INSTRUCTION_ADD_BEHAVIOR": {
+          "type": "QUEUE",
+          "COMMENT": "",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+
+            {"name":"Introduction Audio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3",            "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"name":"This is ...",        "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "This is called a plus sign.mp3",           "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+
+            {"name":"Show Scaffold:",     "type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean", "features": ""},
+
+            {"name":"Adding 3 + 2...",    "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Adding 3 things plus 2 things means--.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Lets tap on the three things to add them to the two things.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+          ],
+          "preexit": [
+          ],
+          "edges": [
+          ]
+        },
+
+
+        "MATH_INSTRUCTION_ADD_0_BEHAVIOR": {
+          "type": "QUEUE",
+          "COMMENT": "",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+
+            {"name":"Introduction Audio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3",            "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"name":"Play Tap...",        "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "What about adding something plus 0.mp3",   "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+
+            {"name":"Show Scaffold:",     "type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean", "features": ""},
+
+            {"name":"Adding 3 + 2...",    "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Adding 3 things plus 0 things means--.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Let's tap on the 3 things.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+          ],
+          "preexit": [
+          ],
+          "edges": [
+          ]
+        },
+
+        "MATH_INSTRUCTION_0_ADD_BEHAVIOR": {
+          "type": "QUEUE",
+          "COMMENT": "",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+
+            {"name":"Introduction Audio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3",            "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"name":"Play Tap...",        "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "What about adding 0 plus something.mp3",   "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+
+            {"name":"Show Scaffold:",     "type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean", "features": ""},
+
+            {"name":"Adding 3 + 2...",    "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Adding 0 things plus 3 things means--.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Let's tap on the 3 things.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+          ],
+          "preexit": [
+          ],
+          "edges": [
+          ]
+        },
+
+
+        "MATH_INSTRUCTION_SUB_BEHAVIOR": {
+          "type": "QUEUE",
+          "COMMENT": "",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+
+            {"name":"Introduction Audio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Lets subtract some numbers now.mp3",       "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"name":"Play Tap...",        "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "This is called a minus sign.mp3",           "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+
+            {"name":"Show Scaffold:",     "type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean", "features": ""},
+
+            {"name":"Adding 3 + 2...",    "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Subtracting 3 things minus 2 things means--.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Lets tap on the two things and see how many are left.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+          ],
+          "preexit": [
+          ],
+          "edges": [
+          ]
+        },
+
+
+        "MATH_INSTRUCTION_SUB_0_BEHAVIOR": {
+          "type": "QUEUE",
+          "COMMENT": "",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+
+            {"name":"Introduction Audio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Lets subtract some numbers now.mp3",            "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"name":"Play Tap...",        "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "What about subtracting something minus 0.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+
+            {"name":"Show Scaffold:",     "type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean", "features": ""},
+
+            {"name":"Adding 3 + 2...",    "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Subtracting 3 things minus 0 things means--.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+
+            {"name":"", "type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_RESULT:String", "features": "" },
+
+            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tap here and please write your answer.mp3",    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+          ],
+          "preexit": [
+          ],
+          "edges": [
+          ]
+        },
+
+
         "SCAFFOLD_RESULT_BEHAVIOR": {
           "type": "QUEUE",
           "COMMENT": "Chime when user taps icons in ",
@@ -69,6 +181,12 @@
           "reuse": true,
           "tracks": [
             {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "COMMAND", "id": "MATH_SCAFFOLD_BEHAVIOR", "method": "cancelNode", "parms": "",  "features":""},
+
+            {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "COMMAND", "id": "MATH_INSTRUCTION_ADD_BEHAVIOR",   "method": "cancelNode", "parms": "",  "features":""},
+            {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "COMMAND", "id": "MATH_INSTRUCTION_ADD_0_BEHAVIOR", "method": "cancelNode", "parms": "",  "features":""},
+            {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "COMMAND", "id": "MATH_INSTRUCTION_0_ADD_BEHAVIOR", "method": "cancelNode", "parms": "",  "features":""},
+            {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "COMMAND", "id": "MATH_INSTRUCTION_SUB_BEHAVIOR",   "method": "cancelNode", "parms": "",  "features":""},
+            {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "COMMAND", "id": "MATH_INSTRUCTION_SUB_0_BEHAVIOR", "method": "cancelNode", "parms": "",  "features":""},
 
             {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "How many things do you get.mp3",                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD"},
             {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "How many things are left.mp3",                  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUB"},
@@ -100,58 +218,41 @@
           ],
           "edges": [
           ]
-        },
-
-
-
-        "MULTIPLY_PROMPT_BEHAVIOR": {
-          "type": "QUEUE",
-          "COMMENT": "Chime when user taps icons in ",
-          "preenter": [],
-          "reuse": true,
-          "tracks": [
-
-            //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Multiplying.mp3",                         "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand1}}.mp3",     "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "times.mp3",                                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand2}}.mp3",       "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "means writing.mp3",                      "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand2}}.mp3",       "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand1}}.mp3",     "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "times.mp3",                                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-            //                {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "and adding them up.mp3",                 "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_MULTI"},
-
-            // Note that this timer doesn't work for multiplication
-            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Lets write.mp3",                    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
-            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand2}}.mp3",      "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
-            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand1}}.mp3",      "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
-            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "times one under the other.mp3",      "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RA_START"},
-
-            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.WriteNextNumber}}.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_NUMBER"},
-            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand2}}.mp3",         "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_NUMBER"},
-            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "here.mp3",                              "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_NUMBER"},
-
-            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.WriteNextResult}}.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_RESULT"},
-            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SAddSubtract.operand2}}.mp3",         "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "ASM_NEXT_RESULT"},
-            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "s and write their sum here.mp3",        "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RESULT_FIRST_TWO"},
-            {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "and write the result here.mp3",         "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_RESULT_NEXT_OR_LAST"},
-
-            {"name":"", "type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_OVERHEAD:String"},
-            {"name":"", "type": "COMMAND", "cmd": "WAIT"}
-          ],
-          "preexit": [
-          ],
-          "edges": [
-          ]
         }
-
       },
-
 
 
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        "DEMO_SELECT": {
+          "type": "NODE",
+          "COMMENT": "Branching Node",
+          "maptype":"moduleMap",
+          "mapname": "EMPTY_MODULE",
+          "preenter":[],
+          "preexit" :[],
+          "edges": [
+            {"constraint": "FTR_DEMO", "edge": "DEMO_STATE"},
+            {"constraint": "",         "edge": "INTRO_STATE"}
+          ]
+        },
+
+        "DEMO_STATE": {
+          "type": "NODE",
+          "COMMENT": "Interaction Demo",
+          "maptype":"moduleMap",
+          "mapname":"DEMO_MODULE",
+          "preenter":["SET_VERSION","SET_DEMOSOURCE", "SET_SCAFFOLD_COMPLETE_BEHAVIOR", "SET_ON_ANSWER_BEHAVIOR", "SET_CHIME_BEHAVIOR", "SET_NEXT_BEHAVIOR"],
+          "preexit" :[],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "NEXTPROBLEM"
+            }
+          ]
+        },
 
         "INTRO_STATE": {
           "type": "NODE",
@@ -205,9 +306,23 @@
           "preexit" :["CANCEL_POST_DELAYED_SCAFFOLD", "CLR_INPUT_BEHAVIOR","CLR_WRITE_BEHAVIOR"],
           "edges":
           [
-            {"constraint":"FTR_COMPLETE","edge":"PROBLEMCORRECT"},
-            {"constraint":"FTR_RIGHT","edge":"STEPCORRECT"},
-            {"constraint":"","edge":"STEPWRONG"}
+            {"constraint":"FTR_DEMO_COMPLETE","edge":"DEMOCORRECT"},
+            {"constraint":"FTR_COMPLETE"     ,"edge":"PROBLEMCORRECT"},
+            {"constraint":"FTR_RIGHT"        ,"edge":"STEPCORRECT"},
+            {"constraint":""                 ,"edge":"STEPWRONG"}
+          ]
+        },
+
+        "DEMOCORRECT":{
+          "COMMENT":"When user inputs a correct answer...",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "DEMOCOMPLETE",
+          "preenter":["RETRACT_DEMO"],
+          "preexit" :["SET_SCAFFOLD_BEHAVIOR"],
+          "edges":
+          [
+            {"constraint":"","edge":"NEXTPROBLEM"}
           ]
         },
 
@@ -295,6 +410,35 @@
 
       "moduleMap": {
         "COMMENT": "@@@@@  CModules  @@@@@",
+
+        "SET_DEMOSOURCE": {
+          "type":"MODULE",
+          "reuse":true,
+          "COMMENT": "Initialize the data source - ",
+          "tracks": [
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]asm_demo_add.json:String",   "features":"FTR_DEMO_ADD"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]asm_demo_0add.json:String",  "features":"FTR_DEMO_ZERO_ADD"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]asm_demo_add0.json:String",  "features":"FTR_DEMO_ADD_ZERO"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]asm_demo_sub.json:String",   "features":"FTR_DEMO_SUB"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]asm_demo_sub0.json:String",  "features":"FTR_DEMO_SUB_ZERO"},
+            {"type": "COMMAND", "cmd":"FEATURE-ADD", "value": "FTR_DEMO", "features":""}
+          ]
+        },
+
+        "DEMO_MODULE": {
+          "type":"MODULE",
+          "reuse":true,
+          "COMMENT": "Initialize the data source - ",
+
+          "tracks": [
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "postEvent",  "parms": "MATH_INSTRUCTION_ADD_BEHAVIOR:String",   "features":"FTR_DEMO_ADD"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "postEvent",  "parms": "MATH_INSTRUCTION_ADD_0_BEHAVIOR:String", "features":"FTR_DEMO_ZERO_ADD"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "postEvent",  "parms": "MATH_INSTRUCTION_0_ADD_BEHAVIOR:String", "features":"FTR_DEMO_ADD_ZERO"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "postEvent",  "parms": "MATH_INSTRUCTION_SUB_BEHAVIOR:String",   "features":"FTR_DEMO_SUB"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "postEvent",  "parms": "MATH_INSTRUCTION_SUB_0_BEHAVIOR:String", "features":"FTR_DEMO_SUB_ZERO"}
+          ]
+        },
+
         "PLAYINTRO": {
           "type": "MODULE",
           "reuse": true,
@@ -353,9 +497,39 @@
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
+
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3", "soundpackage":"default", "volume": 1.0, "mode":"event", "features": ""},
+
             {"type": "COMMAND", "id": "SAddSubtract", "method": "postEvent",  "parms": "NEXT_NODE:String|1000:Integer", "features":""},
             {"type": "COMMAND", "cmd": "WAIT"}
+          ]
+        },
+
+        "DEMOCOMPLETE": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "So 3 plus 2 is 5.mp3",                               "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_DEMO_ADD"},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "So 0 plus 3 is 3.mp3",                                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_DEMO_ADD_ZERO"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "In fact 0 plus any number is just the number.mp3",    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_DEMO_ADD_ZERO"},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "So 3 plus 0 is 3.mp3",                                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_DEMO_ZERO_ADD"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "In fact any number plus 0 is just the number.mp3",    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_DEMO_ZERO_ADD"},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "So 3 minus 2 is 1.mp3",                               "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_DEMO_SUB"},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "So 3 minus 0 is 3.mp3",                               "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_DEMO_SUB_ZERO"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "In fact any number minus 0 is just the number.mp3",   "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_DEMO_SUB_ZERO"},
+
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "popDataSource", "features":""},
+
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "postEvent",  "parms": "NEXT_NODE:String|1000:Integer", "features":""},
+            {"type": "COMMAND", "cmd": "WAIT"},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now you try it.mp3",   "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+
           ]
         },
 
@@ -394,7 +568,17 @@
           "COMMENT": "TBD",
           "tracks": [
           ]
+        },
+
+        "EMPTY_MODULE":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+          ]
         }
+
+
       },
 
 
@@ -439,12 +623,14 @@
         "SET_NEXT_BEHAVIOR": {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "NEXT_NODE:String|NEXT:String" ,"features":""},
         "CLR_NEXT_BEHAVIOR": {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "NEXT_NODE:String|NULL:String" ,"features":""},
 
+        "RETRACT_DEMO": {"type": "COMMAND", "cmd":"FEATURE-DEL", "value": "FTR_DEMO", "features":""},
+
         "RESET":{"type": "COMMAND", "id": "SAddSubtract", "method": "reset" ,"features":""},
 
         "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "NEXTSCENE" },
 
-        "NEXT": {"type": "COMMAND", "cmd": "NEXT" },
-        "PAUSE":{"type": "COMMAND", "cmd": "WAIT" },
+        "NEXT":      {"type": "COMMAND", "cmd": "NEXT" },
+        "PAUSE":     {"type": "COMMAND", "cmd": "WAIT" },
 
         //FINGERWRITING ADDITIONS
         "FW_DISABLE":{"type": "COMMAND", "id": "SfingerWriter", "method": "enable", "parms": "FALSE:Boolean","features":""},
@@ -477,6 +663,16 @@
         "FTR_NOWORDS":{
           "type": "CONDITION",
           "test":"FTR_NOWORDS"
+        },
+
+        "FTR_DEMO":{
+          "type": "CONDITION",
+          "test":"FTR_DEMO_ADD|FTR_DEMO_ZERO_ADD|FTR_DEMO_ADD_ZERO|FTR_DEMO_SUB|FTR_DEMO_SUB_ZERO"
+        },
+
+        "FTR_DEMO_COMPLETE":{
+          "type": "CONDITION",
+          "test":"FTR_COMPLETE&FTR_DEMO"
         },
 
         "FTR_COMPLETE":{
