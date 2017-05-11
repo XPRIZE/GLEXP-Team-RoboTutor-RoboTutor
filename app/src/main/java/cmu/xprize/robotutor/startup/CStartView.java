@@ -26,6 +26,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -39,6 +40,8 @@ import cmu.xprize.robotutor.R;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.IRoboTutor;
 import cmu.xprize.util.TCONST;
+
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 
 public class CStartView extends FrameLayout {
@@ -93,11 +96,15 @@ public class CStartView extends FrameLayout {
         //
         setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
+                Log.v(QGRAPH_MSG, "event.click: " + " CStartView: background onStartTutor");
+
                 callback.onStartTutor();
             }
         });
         start.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
+                Log.v(QGRAPH_MSG, "event.click: " + " CStartView: button onStartTutor");
+
                 callback.onStartTutor();
             }
         });

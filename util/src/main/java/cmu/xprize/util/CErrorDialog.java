@@ -23,11 +23,14 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
 import cmu.xprize.common.R;
+
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 public class CErrorDialog implements View.OnClickListener {
 
@@ -62,6 +65,8 @@ public class CErrorDialog implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        Log.v(QGRAPH_MSG, "event.click: " + " CErrorDialog:exit");
+
         System.exit(1);
     }
 }

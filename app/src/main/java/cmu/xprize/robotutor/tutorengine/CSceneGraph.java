@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.graph.scene_graph;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
@@ -40,6 +41,8 @@ import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
+
+import static cmu.xprize.util.TCONST.GRAPH_MSG;
 
 
 /**
@@ -50,6 +53,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 public class CSceneGraph  {
 
     private TScope           mScope;
+    protected String        _logType = GRAPH_MSG;
 
     protected CTutor         mTutor;
     private String           mGraphName;
@@ -164,7 +168,7 @@ public class CSceneGraph  {
             try {
                 queueMap.remove(this);
 
-                Log.d(TAG, "Processing event: " + _command + " From: " + _source.getEventSourceName() + " TYPE: " + _source.getEventSourceType() + " Target: " + _target);
+                RoboTutor.logManager.postEvent_I(_logType, "target:node.scenegraph.run,command:" + _command + ",from:" + _source.getEventSourceName() + ",type:" + _source.getEventSourceType() + ",target:" + _target);
 
                 switch (_command) {
                     case TCONST.ENTER_SCENE:
@@ -174,11 +178,11 @@ public class CSceneGraph  {
                         try {
                             _sceneGraph = (scene_graph) mScope.mapSymbol(mGraphName);
 
-                            Log.d(TAG, "Processing Enter Scene: " + _sceneGraph.name + " - mapType: " + _sceneGraph.type );
+                            RoboTutor.logManager.postEvent_I(_logType, "target:node.scenegraph,action:run,event:enterscene,name:" + _sceneGraph.name + ",maptype:" + _sceneGraph.type );
 
                         } catch (Exception e) {
 
-                            CErrorManager.logEvent(TAG, "Scene not found for SceneGraph", e, false);
+                            CErrorManager.logEvent(_logType, "target:node.scenegraph,action:run,error:" + "Scene not found for SceneGraph,exception:", e, false);
                         }
                         break;
 
@@ -205,7 +209,7 @@ public class CSceneGraph  {
                             _sceneGraph = (scene_graph) mScope.mapSymbol(mGraphName);
                             _sceneGraph.resetNode();
 
-                            Log.d(TAG, "Processing call graph: " + _sceneGraph.name + " - mapType: " + _sceneGraph.type );
+                            RoboTutor.logManager.postEvent_I(_logType, "target:node.scenegraph,action:run,event:callgraph,name:" + _sceneGraph.name + ",mapType:" + _sceneGraph.type );
 
                             // Seek the graph to the root node and execute it
                             //
@@ -215,7 +219,7 @@ public class CSceneGraph  {
 
                         } catch (Exception e) {
 
-                            CErrorManager.logEvent(TAG, "subgraph not found", e, false);
+                            CErrorManager.logEvent(_logType, "target:node.scenegraph,action:run,event:callgraph,ERROR:subgraph not found,exception:", e, false);
                         }
                         break;
 
@@ -311,7 +315,7 @@ public class CSceneGraph  {
                 }
             }
             catch(Exception e) {
-                CErrorManager.logEvent(TAG, "Run Error:", e, false);
+                CErrorManager.logEvent(_logType, "target:node.scenegraph,action:run,event:ERROR,exception:", e, false);
             }
         }
     }
@@ -355,12 +359,7 @@ public class CSceneGraph  {
      */
     private void enQueue(Queue qCommand) {
 
-        Log.d(TAG, "POSTING to SceneGraph: " + qCommand._command + " - from: " +  qCommand._source.getEventSourceName() + " - target: " + qCommand._target );
-
-        if(qCommand._source.getEventSourceName().equals("story_reading")) {
-            Log.d(TAG, "HERE");
-        }
-
+        RoboTutor.logManager.postEvent_I(_logType, "target:node.scenegraph,action:enqueue,command:" + qCommand._command + ",from:" +  qCommand._source.getEventSourceName() + ",target:" + qCommand._target );
 
         if(!mDisabled) {
             queueMap.put(qCommand, qCommand);
@@ -433,7 +432,7 @@ public class CSceneGraph  {
 
         } catch (JSONException e) {
 
-            CErrorManager.logEvent(TAG, "JSON FORMAT ERROR: " + TCONST.AGDESC + " : ", e, false);
+            CErrorManager.logEvent(_logType, "target:node.scenegraph,action:loadjsongraphfactory,error:JSON FORMAT ERROR,filename:" + TCONST.AGDESC + ",exception:", e, false);
         }
     }
 

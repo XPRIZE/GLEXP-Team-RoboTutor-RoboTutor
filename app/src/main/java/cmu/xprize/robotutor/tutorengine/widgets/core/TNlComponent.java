@@ -28,6 +28,7 @@ import java.util.HashMap;
 
 import cmu.xprize.nl_component.CNl_Component;
 import cmu.xprize.robotutor.R;
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
@@ -52,6 +53,7 @@ import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
 
 import static cmu.xprize.util.TCONST.ASREventMap;
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 
 /**
@@ -204,14 +206,14 @@ public class TNlComponent extends CNl_Component implements IBehaviorManager, ITu
     private void clearPlaceValueFeatures() {
 
         for(int i1 = 4 ; i1 >= 1 ; i1--) {
-            mTutor.setDelFeature(TCONST.FTR_PLACE_ + i1 + TCONST._USED);
-            mTutor.setDelFeature(TCONST.FTR_P + i1 + TCONST._1WORDS);
-            mTutor.setDelFeature(TCONST.FTR_P + i1 + TCONST._2WORDS);
-            mTutor.setDelFeature(TCONST.FTR_P + i1 + TCONST._3WORDS);
+            mTutor.delFeature(TCONST.FTR_PLACE_ + i1 + TCONST._USED);
+            mTutor.delFeature(TCONST.FTR_P + i1 + TCONST._1WORDS);
+            mTutor.delFeature(TCONST.FTR_P + i1 + TCONST._2WORDS);
+            mTutor.delFeature(TCONST.FTR_P + i1 + TCONST._3WORDS);
 
-            mTutor.setDelFeature(TCONST.FTR_D + i1 + TCONST._1WORDS);
-            mTutor.setDelFeature(TCONST.FTR_D + i1 + TCONST._2WORDS);
-            mTutor.setDelFeature(TCONST.FTR_D + i1 + TCONST._3WORDS);
+            mTutor.delFeature(TCONST.FTR_D + i1 + TCONST._1WORDS);
+            mTutor.delFeature(TCONST.FTR_D + i1 + TCONST._2WORDS);
+            mTutor.delFeature(TCONST.FTR_D + i1 + TCONST._3WORDS);
         }
     }
 
@@ -222,26 +224,26 @@ public class TNlComponent extends CNl_Component implements IBehaviorManager, ITu
 
         for(int i1 = 4 ; i1 >= 1 ; i1--) {
             if(mInputProcessor.isPlaceValueUsed(i1)) {
-                mTutor.setAddFeature(TCONST.FTR_PLACE_ + i1 + TCONST._USED);
+                mTutor.addFeature(TCONST.FTR_PLACE_ + i1 + TCONST._USED);
 
                 int wordCnt = mInputProcessor.wordsInPlaceValue(i1);
 
                 if(wordCnt >=1)
-                    mTutor.setAddFeature(TCONST.FTR_P + i1 + TCONST._1WORDS);
+                    mTutor.addFeature(TCONST.FTR_P + i1 + TCONST._1WORDS);
                 if(wordCnt >=2)
-                    mTutor.setAddFeature(TCONST.FTR_P + i1 + TCONST._2WORDS);
+                    mTutor.addFeature(TCONST.FTR_P + i1 + TCONST._2WORDS);
                 if(wordCnt >=3)
-                    mTutor.setAddFeature(TCONST.FTR_P + i1 + TCONST._3WORDS);
+                    mTutor.addFeature(TCONST.FTR_P + i1 + TCONST._3WORDS);
 
 
                 wordCnt = mInputProcessor.wordsInDigitValue(i1);
 
                 if(wordCnt >=1)
-                    mTutor.setAddFeature(TCONST.FTR_D + i1 + TCONST._1WORDS);
+                    mTutor.addFeature(TCONST.FTR_D + i1 + TCONST._1WORDS);
                 if(wordCnt >=2)
-                    mTutor.setAddFeature(TCONST.FTR_D + i1 + TCONST._2WORDS);
+                    mTutor.addFeature(TCONST.FTR_D + i1 + TCONST._2WORDS);
                 if(wordCnt >=3)
-                    mTutor.setAddFeature(TCONST.FTR_D + i1 + TCONST._3WORDS);
+                    mTutor.addFeature(TCONST.FTR_D + i1 + TCONST._3WORDS);
 
             }
         }
@@ -354,9 +356,9 @@ public class TNlComponent extends CNl_Component implements IBehaviorManager, ITu
         // Assume all correct unless proven otherwise
         // But clear result flags to start
         //
-        mTutor.setAddFeature(TCONST.ALL_CORRECT);
-        mTutor.setDelFeature(TCONST.FWCORRECT);
-        mTutor.setDelFeature(TCONST.FWINCORRECT);
+        mTutor.addFeature(TCONST.ALL_CORRECT);
+        mTutor.delFeature(TCONST.FWCORRECT);
+        mTutor.delFeature(TCONST.FWINCORRECT);
 
 
         try {
@@ -418,7 +420,7 @@ public class TNlComponent extends CNl_Component implements IBehaviorManager, ITu
         // Kill the recognizer thread and set the End Of Data flag
         //
         if(dataExhausted()) {
-            mTutor.setAddFeature(TCONST.FTR_EOD);
+            mTutor.addFeature(TCONST.FTR_EOD);
         }
     }
 
@@ -435,8 +437,8 @@ public class TNlComponent extends CNl_Component implements IBehaviorManager, ITu
 
     public void reset() {
 
-        mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
-        mTutor.setDelFeature(TCONST.GENERIC_WRONG);
+        mTutor.delFeature(TCONST.GENERIC_RIGHT);
+        mTutor.delFeature(TCONST.GENERIC_WRONG);
 
     }
 
@@ -445,11 +447,11 @@ public class TNlComponent extends CNl_Component implements IBehaviorManager, ITu
     public void updateOutcomeState(boolean error) {
 
         if(error == TCONST.TRUE_ERROR) {
-            mTutor.setAddFeature(TCONST.GENERIC_WRONG);
-            mTutor.setDelFeature(TCONST.ALL_CORRECT);
+            mTutor.addFeature(TCONST.GENERIC_WRONG);
+            mTutor.delFeature(TCONST.ALL_CORRECT);
         }
         else
-            mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
+            mTutor.addFeature(TCONST.GENERIC_RIGHT);
     }
 
 
@@ -635,7 +637,8 @@ public class TNlComponent extends CNl_Component implements IBehaviorManager, ITu
         if(!(result = super.applyBehavior(event))) {
 
             if (volatileMap.containsKey(event)) {
-                Log.d(TAG, "Processing WC_ApplyEvent: " + event);
+
+                RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:volatile,behavior:" + event);
                 applyBehaviorNode(volatileMap.get(event));
 
                 // clear the volatile behavior after use and update the listener if the event is a
@@ -647,6 +650,7 @@ public class TNlComponent extends CNl_Component implements IBehaviorManager, ITu
 
             } else if (stickyMap.containsKey(event)) {
 
+                RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:sticky,behavior:" + event);
                 applyBehaviorNode(stickyMap.get(event));
 
                 result = true;
@@ -673,6 +677,8 @@ public class TNlComponent extends CNl_Component implements IBehaviorManager, ITu
 
                 if (obj != null) {
 
+                    RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehaviornode,type:" + obj.getType() + ",behavior:" + nodeName);
+
                     switch(obj.getType()) {
 
                         case TCONST.SUBGRAPH:
@@ -681,19 +687,20 @@ public class TNlComponent extends CNl_Component implements IBehaviorManager, ITu
                             break;
 
                         case TCONST.MODULE:
-
                             // Disallow module "calls"
-                            Log.e(TAG, "MODULE Behaviors are not supported");
+                            RoboTutor.logManager.postEvent_E(QGRAPH_MSG, "target:" + TAG + ",action:applybehaviornode,type:modulecall,behavior:" + nodeName +  ",ERROR:MODULE Behaviors are not supported");
                             break;
 
                         // Note that we should not preEnter queues - they may need to be cancelled
                         // which is done internally.
                         //
                         case TCONST.QUEUE:
+
                             obj.applyNode();
                             break;
 
                         default:
+
                             obj.preEnter();
                             obj.applyNode();
                             break;
@@ -717,6 +724,7 @@ public class TNlComponent extends CNl_Component implements IBehaviorManager, ITu
     public void onClick(View v) {
 
         if(v == this) {
+            Log.v(QGRAPH_MSG, "event.click: " + " TNlComponent: onClick");
 
             applyBehavior(TCONST.ON_CLICK);
         }

@@ -25,12 +25,18 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import cmu.xprize.bp_component.BP_CONST;
 import cmu.xprize.bp_component.CBP_Component;
 import cmu.xprize.bp_component.CBp_Data;
 import cmu.xprize.bp_component.CBubble;
+import cmu.xprize.comp_logging.ITutorLogger;
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
@@ -40,6 +46,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.comp_logging.CErrorManager;
@@ -47,11 +54,15 @@ import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.IEventSource;
 import cmu.xprize.comp_logging.ILogManager;
+import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-public class TBpComponent extends CBP_Component implements IBehaviorManager, ITutorObjectImpl, IDataSink, IEventSource {
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
+
+public class TBpComponent extends CBP_Component implements IBehaviorManager, ITutorObjectImpl, IDataSink, IEventSource, IPublisher, ITutorLogger {
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
@@ -62,8 +73,12 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     private HashMap<String, String> volatileMap = new HashMap<>();
     private HashMap<String, String> stickyMap   = new HashMap<>();
 
+    private HashMap<String,String>  _StringVar  = new HashMap<>();
+    private HashMap<String,Integer> _IntegerVar = new HashMap<>();
+    private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
 
     static final String TAG = "TBpComponent";
+
 
 
     public TBpComponent(Context context) {
@@ -116,17 +131,17 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
     private void resetValid() {
 
-        mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
-        mTutor.setDelFeature(TCONST.GENERIC_WRONG);
-        mTutor.setDelFeature(TCONST.LAST_ATTEMPT);
+        retractFeature(TCONST.GENERIC_RIGHT);
+        retractFeature(TCONST.GENERIC_WRONG);
+        retractFeature(TCONST.LAST_ATTEMPT);
 
     }
 
 
     private void resetState() {
 
-        mTutor.setDelFeature(TCONST.SAY_STIMULUS);
-        mTutor.setDelFeature(TCONST.SHOW_STIMULUS);
+        retractFeature(TCONST.SAY_STIMULUS);
+        retractFeature(TCONST.SHOW_STIMULUS);
     }
 
 
@@ -158,7 +173,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         // We make the assumption that all are correct until proven wrong
         //
-        mTutor.setAddFeature(TCONST.ALL_CORRECT);
+        publishFeature(TCONST.ALL_CORRECT);
 
         // TODO: globally make startWith type TCONST
         try {
@@ -213,7 +228,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         //
         if (mTutor.testFeatureSet(TCONST.GENERIC_WRONG)) {
 
-            mTutor.setDelFeature(TCONST.ALL_CORRECT);
+            retractFeature(TCONST.ALL_CORRECT);
         }
 
         reset();
@@ -221,7 +236,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         super.next();
 
         if (dataExhausted()) {
-            mTutor.setAddFeature(TCONST.FTR_EOD);
+            publishFeature(TCONST.FTR_EOD);
             Log.d("BPOP", "Data Exhausted ");
         }
     }
@@ -330,7 +345,8 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         boolean result = false;
 
         if (volatileMap.containsKey(event)) {
-            Log.d(TAG, "Processing BP_ApplyEvent: " + event);
+
+            RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:volatile,behavior:" + event);
             applyBehaviorNode(volatileMap.get(event));
 
             volatileMap.remove(event);
@@ -338,6 +354,8 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             result = true;
 
         } else if (stickyMap.containsKey(event)) {
+
+            RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:sticky,behavior:" + event);
             applyBehaviorNode(stickyMap.get(event));
 
             result = true;
@@ -363,6 +381,8 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
                 if (obj != null) {
 
+                    RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehaviornode,type:" + obj.getType() + ",behavior:" + nodeName);
+
                     switch(obj.getType()) {
 
                         case TCONST.SUBGRAPH:
@@ -373,13 +393,14 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                         case TCONST.MODULE:
 
                             // Disallow module "calls"
-                            Log.e(TAG, "MODULE Behaviors are not supported");
+                            RoboTutor.logManager.postEvent_E(QGRAPH_MSG, "target:" + TAG + ",action:applybehaviornode,type:modulecall,behavior:" + nodeName +  ",ERROR:MODULE Behaviors are not supported");
                             break;
 
                         // Note that we should not preEnter queues - they may need to be cancelled
                         // which is done internally.
                         //
                         case TCONST.QUEUE:
+
                             obj.applyNode();
                             break;
 
@@ -404,6 +425,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     //************************************************************************
 
 
+
     //************************************************************************
     //************************************************************************
     // IEventSource Interface START
@@ -425,9 +447,77 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     //************************************************************************
 
 
+
+    //***********************************************************
+    // ITutorLogger - Start
+
+    private void extractHashContents(StringBuilder builder, HashMap map) {
+
+        Iterator<?> tObjects = map.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+
+            builder.append(',');
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            String key   = entry.getKey().toString();
+            String value = "#" + entry.getValue().toString();
+
+            builder.append(key);
+            builder.append(value);
+        }
+    }
+
+    private void extractFeatureContents(StringBuilder builder, HashMap map) {
+
+        StringBuilder featureset = new StringBuilder();
+
+        Iterator<?> tObjects = map.entrySet().iterator();
+
+        // Scan to build a list of active features
+        //
+        while(tObjects.hasNext() ) {
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Boolean value = (Boolean) entry.getValue();
+
+            if(value) {
+                featureset.append(entry.getKey().toString() + ";");
+            }
+        }
+
+        // If there are active features then trim the last ',' and add the
+        // comma delimited list as the "$features" object.
+        //
+        if(featureset.length() != 0) {
+            featureset.deleteCharAt(featureset.length()-1);
+
+            builder.append(",$features#" + featureset.toString());
+        }
+    }
+
+    @Override
+    public void logState(String logData) {
+
+        StringBuilder builder = new StringBuilder();
+
+        extractHashContents(builder, _StringVar);
+        extractHashContents(builder, _IntegerVar);
+        extractFeatureContents(builder, _FeatureMap);
+
+        RoboTutor.logManager.postTutorState(TUTOR_STATE_MSG, "target#word_copy," + logData + builder.toString());
+    }
+
+    // ITutorLogger - End
+    //***********************************************************
+
+
+
     //************************************************************************
     //************************************************************************
-    // publish component state data - START
+    // IPublish component state data - START
 
     /**
      * Publish the Stimulus value as Scope variables for script access
@@ -445,21 +535,21 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         if(answer.length() == 1)
             answer = answer.toLowerCase();
 
-        scope.addUpdateVar(name() + BP_CONST.ANSWER_VAR, new TString(answer));
+        publishValue(BP_CONST.ANSWER_VAR, answer);
 
         resetValid();
 
         if (bubble.isCorrect()) {
-            mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
+            publishFeature(TCONST.GENERIC_RIGHT);
             Log.d("BPOP", "Correct" );
             correct_Count++;
         } else {
-            mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+            publishFeature(TCONST.GENERIC_WRONG);
             Log.d("BPOP", "Wrong" );
             attempt_count--;
 
             if(attempt_count <= 0) {
-                mTutor.setAddFeature(TCONST.LAST_ATTEMPT);
+                publishFeature(TCONST.LAST_ATTEMPT);
 
                 Log.d("BPOP", "Publish Last Attempt" );
             }
@@ -469,7 +559,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         Log.d("BPOP", "Publish attempt Count: " + attempt_count);
 
     }
-
 
     protected void publishQuestionState(CBp_Data data) {
 
@@ -484,36 +573,140 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         if(correctVal.length() == 1)
             correctVal = correctVal.toLowerCase();
 
-        scope.addUpdateVar(name() + BP_CONST.QUEST_VAR, new TString(correctVal));
+        publishValue(BP_CONST.QUEST_VAR, correctVal);
 
         if (data.question_say) {
-            mTutor.setAddFeature(TCONST.SAY_STIMULUS);
+            publishFeature(TCONST.SAY_STIMULUS);
         }
 
         if (data.question_show) {
-            mTutor.setAddFeature(TCONST.SHOW_STIMULUS);
+            publishFeature(TCONST.SHOW_STIMULUS);
+        }
+    }
+    
+    @Override
+    public void publishState() {
+    }
+
+    @Override
+    public void publishValue(String varName, String value) {
+
+        _StringVar.put(varName,value);
+
+        // update the response variable  "<ComponentName>.<varName>"
+        mTutor.getScope().addUpdateVar(name() + varName, new TString(value));
+
+    }
+
+    @Override
+    public void publishValue(String varName, int value) {
+
+        _IntegerVar.put(varName,value);
+
+        // update the response variable  "<ComponentName>.<varName>"
+        mTutor.getScope().addUpdateVar(name() + varName, new TInteger(value));
+
+    }
+
+    @Override
+    public void publishFeatureSet(String featureSet) {
+
+        // Add new features - no duplicates
+        List<String> featArray = Arrays.asList(featureSet.split(","));
+
+        for(String feature : featArray) {
+
+            _FeatureMap.put(feature, true);
+            publishFeature(feature);
         }
     }
 
+    @Override
+    public void retractFeatureSet(String featureSet) {
 
-    // Must override in TClass
-    // TClass domain where TScope lives providing access to tutor scriptables
-    //
-    public void publishValue(String varName, String value) {
+        // Add new features - no duplicates
+        List<String> featArray = Arrays.asList(featureSet.split(","));
+
+        for(String feature : featArray) {
+
+            _FeatureMap.put(feature, false);
+            retractFeature(feature);
+        }
     }
 
-    // Must override in TClass
-    // TClass domain where TScope lives providing access to tutor scriptables
-    //
-    public void publishValue(String varName, int value) {
+    @Override
+    public void publishFeature(String feature) {
+
+        _FeatureMap.put(feature, true);
+        mTutor.addFeature(feature);
     }
 
+    /**
+     * Note that we may retract features before they're published to add them to the
+     * FeatureSet that should be pushed/popped when using pushDataSource
+     * e.g. we want EOD to track even if it has never been set
+     *
+     * @param feature
+     */
+    @Override
+    public void retractFeature(String feature) {
 
-    // publish component state data - EBD
+        _FeatureMap.put(feature, false);
+        mTutor.delFeature(feature);
+    }
+
+    /**
+     *
+     * @param featureMap
+     */
+    @Override
+    public void publishFeatureMap(HashMap featureMap) {
+
+        Iterator<?> tObjects = featureMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Boolean active = (Boolean)entry.getValue();
+
+            if(active) {
+                String feature = (String)entry.getKey();
+
+                mTutor.addFeature(feature);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param featureMap
+     */
+    @Override
+    public void retractFeatureMap(HashMap featureMap) {
+
+        Iterator<?> tObjects = featureMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Boolean active = (Boolean)entry.getValue();
+
+            if(active) {
+                String feature = (String)entry.getKey();
+
+                mTutor.delFeature(feature);
+            }
+        }
+    }
+
+    // IPublish component state data - EBD
     //************************************************************************
     //************************************************************************
-
-
+    
+    
+    
     //**********************************************************
     //**********************************************************
     //*****************  ITutorObjectImpl Implementation
@@ -610,7 +803,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
-        Log.d(TAG, "Loader iteration");
+        // Log.d(TAG, "Loader iteration");
         super.loadJSON(jsonObj, (IScope2) scope);
 
         // Map the language specific data source

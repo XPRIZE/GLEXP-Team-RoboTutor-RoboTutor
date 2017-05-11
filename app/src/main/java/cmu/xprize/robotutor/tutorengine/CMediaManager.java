@@ -36,6 +36,8 @@ import cmu.xprize.robotutor.tutorengine.graph.type_timer;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.GRAPH_MSG;
+
 
 /**
  * The MediaManager is a per tutor media repository - when a tutor is shut down it's
@@ -150,7 +152,7 @@ public class CMediaManager {
             return mLangFtrMap.get(tTutor.getTutorName());
         }
         catch(Exception e) {
-            Log.d(TAG, "Excep:"  + e);
+            Log.e(TAG, "Excep:"  + e);
 
             return("LANG_SW");
 
@@ -185,6 +187,8 @@ public class CMediaManager {
         soundMap.put(packageName, mediaPackage);
     }
 
+    // TODO: When starting debugging with the screen off - one of these may be null
+    //
     public String mapSoundPackage(CTutor tTutor, String packageName, String langOverride) {
 
         HashMap<String,CMediaPackage> soundMap;
@@ -444,7 +448,7 @@ public class CMediaManager {
         for(PlayerManager playerInstance : mPlayerCache) {
 
             if(!playerInstance.isAttached() && playerInstance.compareSource(dataSource)) {
-                Log.i(TAG, "Attach to existing PlayerManager");
+                Log.v(GRAPH_MSG, "CMediaManager.playermanager.attachexisting:");
 
                 manager = playerInstance;
                 manager.attach(owner);
@@ -477,7 +481,7 @@ public class CMediaManager {
             //
             if(manager != null) {
 
-                Log.i(TAG, "Re-purpose an existing PlayerManager");
+                Log.v(GRAPH_MSG, "CMediaManager.playermanager.repurpose:");
 
                 manager.releasePlayer();
 
@@ -490,7 +494,7 @@ public class CMediaManager {
         //
         if(manager == null) {
 
-            Log.i(TAG, "Creating new PlayerManager: " + mPlayerCache.size());
+            Log.v(GRAPH_MSG, "CMediaManager.playermanager.create:"  + mPlayerCache.size());
 
             manager = new PlayerManager(owner, dataSource, location);
 
@@ -562,7 +566,7 @@ public class CMediaManager {
                 }
 
                 playerCount++;
-                Log.d(TAG, "CREATE_PLAYER_MANAGER: >> " + playerCount);
+                Log.v(GRAPH_MSG, "CMediaManager.mediaplayer.create:" + playerCount);
                 mPlayer  = new MediaPlayer();
 
                 switch(location) {
@@ -592,10 +596,10 @@ public class CMediaManager {
 
                 mPlayer.prepareAsync();
 
-                Log.d(TAG, "Audio Loading: "  + mOwner.sourceName() + " => " + mOwner.resolvedName() );
+                Log.v(GRAPH_MSG, "CMediaManager.mediaplayer.loading:" + mOwner.sourceName() + " => " + mOwner.resolvedName() );
 
             } catch (Exception e) {
-                Log.e(TAG, "Audio error: " + mOwner.sourceName() + " => " + mOwner.resolvedName() + " => " + e);
+                Log.e(GRAPH_MSG, "CMediaManager.mediaplayer.ERROR: " + mOwner.sourceName() + " => " + mOwner.resolvedName() + " => " + e);
 
                 // Do the completion event to keep the tutor moving.
                 //
@@ -619,7 +623,7 @@ public class CMediaManager {
                 mPlayer = null;
 
                 playerCount--;
-                Log.d(TAG, "DESTROY_PLAYER_MANAGER: >> " + playerCount);
+                Log.v(GRAPH_MSG, "CMediaManager.playermanager.destroy:"  + playerCount);
 
                 mDataSource = "";
             }
@@ -636,7 +640,7 @@ public class CMediaManager {
          */
         public void detach() {
 
-            Log.d(TAG, "detach MediaPlayer");
+            Log.v(GRAPH_MSG, "CMediaManager.playermanager.detach");
 
             stop();
             mOwner = null;
@@ -682,7 +686,7 @@ public class CMediaManager {
                     // TODO: this will need a tweak for background music etc.
                     mMediaController.startSpeaking();
 
-                    Log.d(TAG, "PLAY " + mDataSource);
+                    Log.v(GRAPH_MSG, "CMediaManager.playermanager.play: " + mDataSource);
                     mPlayer.start();
 
                     mPlaying       = true;
@@ -696,7 +700,7 @@ public class CMediaManager {
 
         public void stop() {
 
-            Log.d(TAG, "stop MediaPlayer");
+            Log.v(GRAPH_MSG, "CMediaManager.playermanager.stop: " + mDataSource);
 
             pause();
             seek(0L);
@@ -719,7 +723,8 @@ public class CMediaManager {
          */
         public void kill() {
 
-            Log.d(TAG, "Kill MediaPlayer");
+            Log.v(GRAPH_MSG, "CMediaManager.playermanager.kill: " + mDataSource);
+
             mIsAlive = false;
 
             releasePlayer();

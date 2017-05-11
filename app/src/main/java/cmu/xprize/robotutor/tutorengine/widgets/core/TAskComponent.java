@@ -286,7 +286,7 @@ public class TAskComponent extends CAskComponent implements IBehaviorManager, IT
     @Override
     public void loadJSON(JSONObject jsonData, IScope scope) {
 
-        Log.d(TAG, "Loader iteration");
+        // Log.d(TAG, "Loader iteration");
         super.loadJSON(jsonData, (IScope2) scope);
 
     }

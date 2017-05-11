@@ -49,7 +49,7 @@ public class tutor_view implements ILoadableObject2 {
 
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
-        Log.d(TAG, "Loader iteration");
+        // Log.d(TAG, "Loader iteration");
         loadJSON(jsonObj, (IScope2) scope);
     }
 }

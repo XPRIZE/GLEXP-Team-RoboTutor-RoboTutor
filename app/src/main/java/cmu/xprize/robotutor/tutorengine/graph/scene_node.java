@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.startup.CStartView;
 import cmu.xprize.util.IEventSource;
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
@@ -39,10 +40,13 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
 
+import static cmu.xprize.util.TCONST.GRAPH_MSG;
+
 public class scene_node implements ILoadableObject2, IScriptable2, IEventSource, IGraphEventSink, IGraphEventSource
 {
 
     protected IScope2       _scope;
+    protected String        _logType;
 
     private HashMap<IGraphEventSink,IGraphEventSink> mListeners = new HashMap<>();
 
@@ -68,6 +72,8 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
      * Simple Constructor
      */
     public scene_node() {
+
+        _logType = GRAPH_MSG;
     }
 
 
@@ -190,11 +196,11 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
 
         for(graph_edge edge : edges) {
 
-            Log.d(TAG, "Edge Testing: " + edge.constraint );
+            RoboTutor.logManager.postEvent_I(_logType, "target:node.edge,action:test,name:" + edge.constraint );
 
             if(edge.testConstraint())
             {
-                Log.d(TAG, "Edge Passed Following->: " + edge.edge );
+                RoboTutor.logManager.postEvent_I(_logType, "target:node.edge,action:taken,name:" + edge.edge );
 
                 node = edge.followEdge();
 
@@ -224,9 +230,7 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
     {
         if(preenter != null)
         {
-            Log.d(TAG, "Processing Node: " + name + " PreEnter");
-
-            applyCommandSet(preenter);
+            applyCommandSet("target:node.preenter: ", preenter);
         }
     }
 
@@ -238,29 +242,32 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
     {
         if(preexit != null)
         {
-            Log.d(TAG, "Processing Node: " + name + " PreExit");
-
-            applyCommandSet(preexit);
+            applyCommandSet("target:node,action:preexit", preexit);
         }
     }
 
 
     // preenter / preexit action resolution.
     //
-    private void applyCommandSet(String[] commandSet) {
+    private void applyCommandSet(String tag, String[] commandSet) {
 
-        for (String nodeName : commandSet) {
+        if(commandSet.length > 0) {
 
-            try {
-                IScriptable2 node = (IScriptable2)getScope().mapSymbol(nodeName);
+            RoboTutor.logManager.postEvent_D(_logType, tag + ",event:start,name:" + name);
 
-                Log.d(TAG, "Processing Command: " + node.getName() + " - type: " + node.getType());
+            for (String nodeName : commandSet) {
 
-                node.applyNode();
+                try {
+                    IScriptable2 node = (IScriptable2) getScope().mapSymbol(nodeName);
 
-            } catch (Exception e) {
-                CErrorManager.logEvent(TAG, "ERROR: PRE-POST Symbol Not found:" + nodeName + " : ", e, false);
+                    node.applyNode();
+
+                } catch (Exception e) {
+                    CErrorManager.logEvent(TAG, "Script Internal ERROR: ENTER-EXIT Symbol Not found:" + nodeName + " : ", e, false);
+                }
             }
+
+            RoboTutor.logManager.postEvent_D(_logType, tag + ",event:end,name:" + name);
         }
     }
 
@@ -390,7 +397,7 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
 
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
-        Log.d(TAG, "Loader iteration");
+        // Log.d(TAG, "Loader iteration");
         loadJSON(jsonObj, (IScope2) scope);
     }
 

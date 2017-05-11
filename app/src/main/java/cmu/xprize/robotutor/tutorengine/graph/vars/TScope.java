@@ -30,6 +30,8 @@ import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.IScriptable;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.GRAPH_MSG;
+
 
 public class TScope implements IScope2 {
 
@@ -281,7 +283,7 @@ public class TScope implements IScope2 {
                                     // switch back to parsing string
                                     _i1++;
                                     state = TCONST.PARSESTATE;
-                                    Log.i(TAG, "Symbol Found: " + Symbol);
+                                    Log.v(GRAPH_MSG, "tscope.parseTemplate: Symbol Found: " + Symbol);
                                 }
                                 break;
 
@@ -289,7 +291,7 @@ public class TScope implements IScope2 {
 
                             default:
                                 // TODO: Manage Syntax Errors
-                                CErrorManager.logEvent(TAG, "Missing '}}' in expression: " + source, null, false);
+                                CErrorManager.logEvent(GRAPH_MSG, "Missing '}}' in expression: " + source, null, false);
 
                         }
                         break;
@@ -302,7 +304,7 @@ public class TScope implements IScope2 {
         }
         catch(Exception e) {
             // TODO: Manage Syntax Errors
-            CErrorManager.logEvent(TAG, "Invalid Expression: " + source, e, false);
+            CErrorManager.logEvent(GRAPH_MSG, "tscope.parseTemplate: Invalid Expression: " + source, e, false);
         }
 
         return result.toString();

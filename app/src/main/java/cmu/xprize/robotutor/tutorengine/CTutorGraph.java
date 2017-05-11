@@ -49,6 +49,8 @@ import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
+import static cmu.xprize.util.TCONST.GRAPH_MSG;
+
 
 public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.AnimationListener, IEventSource {
 
@@ -486,13 +488,14 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
 
                 if(dataSink != null) {
 
-                    mLogManager.postEvent(TAG, "PreEnter DataSource: " + binding.datasource);
+                    mLogManager.postEvent_I(GRAPH_MSG, "target:ctutorgraph,action:preenterscene,setdatasource:" + binding.datasource);
 
                     dataSink.setDataSource(binding.datasource);
 
-                    // Add a feature to show the component has been initialized
+                    // Add a feature to show the component has been initialized with a datasource
+                    // to inhibit the default graph datasource.
                     //
-                    mTutor.setAddFeature(TCONST.DATA_PREFIX + binding.name.toUpperCase());
+                    mTutor.addFeature(TCONST.DATA_PREFIX + binding.name.toUpperCase());
                 }
                 else {
                     Log.e(TAG, "Default Data Binding - View not found by name: " + binding.name);
@@ -590,7 +593,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
 
-        Log.d(TAG, "Loader iteration");
+        // Log.d(TAG, "Loader iteration");
         loadJSON(jsonObj, (IScope2) scope);
     }
 

@@ -312,7 +312,10 @@ public class JSON_Helper {
 
                             // Throw away comment fields
                             if(!key.equals("COMMENT") && !key.equals("type")) {
-                                Log.d(TAG, "Inflating Object: " + key);
+
+                                if(DBG) {
+                                    Log.d(TAG, "Inflating Object: " + key);
+                                }
 
                                 JSONObject elem = null;
 
@@ -410,7 +413,9 @@ public class JSON_Helper {
 
                                         if (scope != null) {
                                             scope.put(key, (IScriptable) eObj);
-                                            Log.i(TAG, "Adding to scope: " + key);
+                                            if(DBG) {
+                                                Log.i(TAG, "Adding to scope: " + key);
+                                            }
                                         }
                                     }
 

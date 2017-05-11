@@ -18,13 +18,31 @@
           "preenter": [],
           "reuse": true,
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#prompt,value#SPEAK_WORD_BEHAVIOR:String", "features":""},
+
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.currentWord}}.mp3","soundpackage": "words","mode": "flow", "features": ""},
-            {"type": "COMMAND", "id": "SstoryReading", "method": "nextWord" ,"features":""}
+            {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "nextWord" ,"features":""}
           ],
           "preexit": [
             "SET_ONCLICK_SPEAK_WORD","RETURN_AND_GO","WAIT"
           ],
           "edges": [
+          ]
+        },
+
+        "CONFIG_SPEAK_BUTTON":{
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#behavior,value#CONFIG_SPEAK_BUTTON:String", "features":""},
+
+            // NOTE: the button must be in a valid state before showing
+            // TODO: put check in to catch invalid behaviors
+
+            {"type": "QUEUEDCOMMAND", "id":"SstoryReading", "method":"setStickyBehavior", "parms": "SPEAK_CLICK:String|SPEAK_WORD_BEHAVIOR:String" ,"features":""},
+            {"type": "QUEUEDCOMMAND", "id":"SstoryReading", "method":"setSpeakButton",    "parms": "ENABLE:String",     "features": "" },
+            {"type": "QUEUEDCOMMAND", "id":"SstoryReading", "method":"setSpeakButton",    "parms": "SHOW:String",       "features": "" }
           ]
         },
 
@@ -34,7 +52,9 @@
           "preenter": [],
           "reuse": true,
           "tracks": [
-            {"type": "COMMAND", "id": "SstoryReading", "method": "post", "parms": "START_NARRATION:String|1000:long" ,"features":""}
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#behavior,value#NARRATE_SENTENCE_BEHAVIOR:String", "features":""},
+
+            {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "post", "parms": "START_NARRATION:String|1000:long" ,"features":""}
           ],
           "preexit": [],
           "edges": []
@@ -46,6 +66,8 @@
           "preenter": [],
           "reuse": true,
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#behavior,value#SPEAK_UTTERANCE_BEHAVIOR:String", "features":""},
+
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.utterance}}.mp3","soundpackage": "story","mode": "flow", "features": ""}
           ],
           "preexit": [],
@@ -58,8 +80,10 @@
           "preenter": [],
           "reuse": true,
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#behavior,value#SPEAK_SENTENCE_BEHAVIOR:String", "features":""},
+
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.sentence}}.mp3","soundpackage": "story","mode": "flow", "features": ""},
-            {"type": "COMMAND", "id": "SstoryReading", "method": "nextSentence" ,"features":""}
+            {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "nextSentence" ,"features":""}
           ],
           "preexit": [
           ],
@@ -264,6 +288,8 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""},
+
             // Note that the sw actually says "please read the story aloud'
             //
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Please read aloud.mp3", "mode":"flow","features": "FTR_USER_READ"},
@@ -277,6 +303,8 @@
           "reuse":true,
           "COMMENT": "Listening Module",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#LISTENING:String", "features":""},
+
             {"type": "COMMAND", "cmd": "WAIT" }
           ]
         },
@@ -286,6 +314,8 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#PLAYCORRECT:String", "features":""}
+
           ]
         },
 
@@ -294,6 +324,8 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#CHECK_COMPLETE:String", "features":""},
+
             {"type": "COMMAND", "id":"SstoryReading", "method":"setSpeakButton",        "parms": "HIDE:String",    "features": "" }
           ]
         },
@@ -303,6 +335,7 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#NULL_MODULE:String", "features":""}
           ]
         },
 
@@ -311,23 +344,10 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#PREP_NEXT_WORD:String", "features":""},
+
             {"type": "COMMAND", "id":"SstoryReading", "method":"setSpeakButton",        "parms": "HIDE:String",    "features": "" },
             {"type": "COMMAND", "id":"SstoryReading", "method":"setPageFlipButton",     "parms": "DISABLE:String", "features": "FTR_MANUAL" }
-          ]
-        },
-
-
-        "CONFIG_SPEAK_BUTTON":{
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "TBD",
-          "tracks": [
-            // NOTE: the button must be in a valid state before showing
-            // TODO: put check in to catch invalid behaviors
-
-            {"type": "COMMAND", "id":"SstoryReading", "method":"setStickyBehavior", "parms": "SPEAK_CLICK:String|SPEAK_WORD_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id":"SstoryReading", "method":"setSpeakButton",    "parms": "ENABLE:String",     "features": "" },
-            {"type": "COMMAND", "id":"SstoryReading", "method":"setSpeakButton",    "parms": "SHOW:String",       "features": "" }
           ]
         },
 
@@ -336,6 +356,8 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#PAGEFLIP:String", "features":""},
+
             {"type": "COMMAND", "id":"SstoryReading", "method":"setPageFlipButton",    "parms": "ENABLE:String",                        "features":"FTR_MANUAL" },
             {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ON_PAGE_FLIP:String|NEXT_NODE:String" ,"features":"FTR_MANUAL"},
 
@@ -353,6 +375,8 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#SCENEFLIP:String", "features":""},
+
             {"name":"ENABLE_PAGEFLIP",   "type": "COMMAND", "id":"SstoryReading", "method":"setPageFlipButton",    "parms": "ENABLE:String",                   "features": "FTR_MANUAL" },
             {"name":"SET_FLIP_BEHAVIOR", "type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ON_PAGE_FLIP:String|NEXT_NODE:String" ,"features":"FTR_MANUAL"},
 
@@ -372,6 +396,8 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#PLAYWRONG:String", "features":""},
+
             {"type": "COMMAND", "id": "SstoryReading", "method": "setHighLight", "parms": "red:String"},
             {"type": "COMMAND", "id": "SstoryReading", "method": "continueListening"  ,"features":""}
           ]

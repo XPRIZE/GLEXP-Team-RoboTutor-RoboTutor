@@ -102,9 +102,6 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     // TODO: wrap in LetterBox
     //protected CAsm_LetterBoxLayout Scontent;
 
-    // json loadable
-    public CAsm_Data[] dataSource;
-
     //Writing
     protected CAsm_Popup mPopup;
     protected CAsm_Popup mPopupSupplement;
@@ -114,6 +111,11 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     protected int overheadCorrect = ASM_CONST.NO_INPUT;
     protected int resultCorrect = ASM_CONST.NO_INPUT;
     protected String curNode = "";
+
+    // json loadable
+    public String      bootFeatures = "";
+    public CAsm_Data[] dataSource;
+
 
     static final String TAG = "CAsm_Component";
 
@@ -944,20 +946,6 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     }
 
 
-    /**
-     * Load the data source
-     *
-     * @param jsonData
-     */
-    @Override
-    public void loadJSON(JSONObject jsonData, IScope scope) {
-
-        JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
-        _dataIndex = 0;
-
-    }
-
-
     public void addMapToTutor(String key, String value) {
     }
 
@@ -1214,31 +1202,64 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
+    @Override
     public void publishState() {
     }
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
+    @Override
     public void publishValue(String varName, String value) {
     }
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
+    @Override
     public void publishValue(String varName, int value) {
     }
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
+    @Override
+    public void publishFeatureSet(String feature) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    @Override
+    public void retractFeatureSet(String feature) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    @Override
     public void publishFeature(String feature) {
     }
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
+    @Override
     public void retractFeature(String feature) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    @Override
+    public void publishFeatureMap(HashMap featureMap) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    @Override
+    public void retractFeatureMap(HashMap featureMap) {
     }
 
 
@@ -1279,5 +1300,22 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     //************************************************************************
 
 
+
+
+    // *** Serialization
+
+
+    /**
+     * Load the data source
+     *
+     * @param jsonData
+     */
+    @Override
+    public void loadJSON(JSONObject jsonData, IScope scope) {
+
+        JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
+        _dataIndex = 0;
+
+    }
 
 }

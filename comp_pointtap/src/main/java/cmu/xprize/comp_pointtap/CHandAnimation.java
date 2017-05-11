@@ -157,7 +157,7 @@ public class CHandAnimation extends PercentRelativeLayout implements Animator.An
             float[] coord;
             View    target;
 
-            Log.d("Indicate", "Broadcast recieved: ");
+//            Log.d("Indicate", "Broadcast recieved: ");
 
             switch(intent.getAction()) {
 

@@ -47,6 +47,8 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
 
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+
 
 /**
  * This view manager provides student UX for the African Story Book format used
@@ -345,12 +347,16 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         mPageFlip.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Log.v(QGRAPH_MSG, "event.click: " + " CRt_ViewManagerASB: PAGEFLIP");
+
                 mParent.onButtonClick(TCONST.PAGEFLIP_BUTTON);
             }
         });
 
         mSay.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Log.v(QGRAPH_MSG, "event.click: " + " CRt_ViewManagerASB:onButtonClick SPEAKBUTTON");
+
                 mParent.onButtonClick(TCONST.SPEAK_BUTTON);
             }
         });

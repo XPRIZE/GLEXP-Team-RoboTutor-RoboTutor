@@ -23,12 +23,22 @@
 	//     word_copy_NUMBERS_DICTATION
 	//     word_copy_NUMBERS
 	//     story_reading_USER_HEAR
+	//     story_reading_USER_ECHO
 	//     story_reading_USER_READ
 	//
 
 	"bgColors": ["#D9FFFF","#b9FFb9"],
 
 	"buttonDesc": [	
+	
+		{
+			"description":"test sentence copying",
+			"button_text":"test sentence copying",
+		  
+			"tutorDesc": "word_copy_WORDS", 
+			"tutorData": "[local_file]testsentence.json"
+		},
+		
 		{
 			"description":"optional description goes here",
 			"button_text":"Button text goes here",

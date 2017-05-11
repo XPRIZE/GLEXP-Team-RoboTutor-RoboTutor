@@ -22,7 +22,8 @@ package cmu.xprize.robotutor.tutorengine.util;
 import java.util.HashMap;
 
 import cmu.xprize.robotutor.tutorengine.graph.defvar_tutor;
-import cmu.xprize.robotutor.tutorengine.graph.scene_graphqueue;
+import cmu.xprize.robotutor.tutorengine.graph.scene_queuedgraph;
+import cmu.xprize.robotutor.tutorengine.graph.type_queuedaction;
 import cmu.xprize.robotutor.tutorengine.graph.type_timelineFL;
 import cmu.xprize.util.CAt_Data;
 import cmu.xprize.robotutor.tutorengine.CMediaPackage;
@@ -56,14 +57,16 @@ public class CClassMap2 {
         classMap.put("SUBGRAPH", scene_graph.class);
         classMap.put("NODE", scene_node.class);
         classMap.put("MODULE", scene_module.class);
-        classMap.put("QUEUE", scene_graphqueue.class);
-        classMap.put("QUEUEDAUDIO", type_queuedaudio.class);
         classMap.put("TIMELINE", type_timelineFL.class);
         classMap.put("COMMAND", type_action.class);
         classMap.put("CONDITION", type_cond.class);
         classMap.put("TTS", type_tts.class);
         classMap.put("AUDIO", type_audio.class);
         classMap.put("TIMER", type_handler.class);
+
+        classMap.put("QUEUE", scene_queuedgraph.class);
+        classMap.put("QUEUEDAUDIO", type_queuedaudio.class);
+        classMap.put("QUEUEDCOMMAND", type_queuedaction.class);
 
         classMap.put("TRANSITION", CAt_Data.class);
 

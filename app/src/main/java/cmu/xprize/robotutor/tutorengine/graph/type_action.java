@@ -24,18 +24,19 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.TCONST;
+
 
 
 public class type_action extends scene_node {
@@ -124,7 +125,7 @@ public class type_action extends scene_node {
 
         // It's important to be < not <= because if we have 0 prob we never want it to fire.
 
-        Log.d(TAG, "PFeature: " + ((rand < Float.parseFloat(_prob[iter]))? "passed":"failed"));
+        Log.i(_logType, "PFeature: " + ((rand < Float.parseFloat(_prob[iter]))? "passed":"failed"));
         return (rand < Float.parseFloat(_prob[iter]));
     }
 
@@ -199,14 +200,6 @@ public class type_action extends scene_node {
                         _scope.tutor().gotoNode(id);
                         break;
 
-                    case TCONST.CMD_SET_FEATURE:
-                        _scope.tutor().setAddFeature(value);
-                        break;
-
-                    case TCONST.CMD_DEL_FEATURE:
-                        _scope.tutor().setDelFeature(value);
-                        break;
-
                     case TCONST.CMD_NEXT:
                         _scope.tutor().eventNext();
                         break;
@@ -232,15 +225,15 @@ public class type_action extends scene_node {
 
                                 switch(obj.getType()) {
                                     case TCONST.MODULE:
-                                        Log.e(TAG, "Attempt to call Module: " + cmd + " : Modules may not be called.");
+                                        Log.e(_logType, "Attempt to call Module: " + cmd + " : Modules may not be called.");
                                         break;
 
                                     case TCONST.NODE:
-                                        Log.e(TAG, "Attempt to call Node: " + cmd + " : Nodes may not be called.");
+                                        Log.e(_logType, "Attempt to call Node: " + cmd + " : Nodes may not be called.");
                                         break;
 
                                     case TCONST.CONDITION:
-                                        Log.e(TAG, "Attempt to call Condition: " + cmd + " : Conditions may not be called.");
+                                        Log.e(_logType, "Attempt to call Condition: " + cmd + " : Conditions may not be called.");
                                         break;
 
                                     default:
@@ -326,7 +319,7 @@ public class type_action extends scene_node {
 
                                 } catch (Exception e) {
                                     // TODO: Update this exception -  it is actually an invalid parm type error
-                                    CErrorManager.logEvent(TAG, "ERROR: " + id + " - Method: <" + method + "> Not Found: ", e, false);
+                                    CErrorManager.logEvent(TAG, "Script internal ERROR: " + id + " method: <" + method + "> Not Found: ", e, false);
                                 }
                             }
                         }
@@ -336,26 +329,51 @@ public class type_action extends scene_node {
                             // get the method on the target and apply it with the parameter array created above.
                             //
                             if(childMap.containsKey(id)) {
-                                Log.d(TAG, childMap.get(id).toString());
+                                //Log.d(TAG, childMap.get(id).toString());
                                 childMap.get(id).getClass();
 
                                 Method _method = childMap.get(id).getClass().getMethod(method, pType);
 
                                 _method.invoke(childMap.get(id), iparms);
+
+                                if(!method.equals(TCONST.LOGSTATE)) {
+
+                                    if (parms != null) {
+                                        // Note the logging parser expects comma delimiters
+                                        //
+                                        decodedParms = decodedParms.replaceAll("\\|", ",");
+                                        RoboTutor.logManager.postEvent_I(_logType, "target:node.action,view:" + id + ",method:" + method + "," + decodedParms);
+                                    }
+                                    else {
+                                        RoboTutor.logManager.postEvent_I(_logType, "target:node.action,view:" + id + ",method:" + method );
+                                    }
+
+                                }
                             }
+
                             // If it is not a display object then check for scope objects i.e. nodes
                             //
                             else {
                                 Method _method = getScope().mapSymbol(id).getClass().getMethod(method, pType);
 
                                 _method.invoke(getScope().mapSymbol(id), iparms);
+
+                                if(!method.equals(TCONST.LOGSTATE)) {
+                                    if (parms != null) {
+                                        // Note the logging parser expects comma delimiters
+                                        //
+                                        decodedParms = decodedParms.replaceAll("\\|", ",");
+                                        RoboTutor.logManager.postEvent_I(_logType, "target:node.action,scopevar:" + id + ",method:" + method + "," + decodedParms);
+                                    }
+                                    else {
+                                        RoboTutor.logManager.postEvent_I(_logType, "target:node.action,scopevar:" + id + ",method:" + method);
+                                    }
+                                }
+
                             }
                         }
-                        catch(InvocationTargetException e) {
-                            CErrorManager.logEvent(TAG, "Script internal ERROR: " + id + " - Apply Method: " + method + "   Parms: " + decodedParms + " : ", e, false);
-                        }
                         catch (Exception e) {
-                            CErrorManager.logEvent(TAG, "ERROR: " + id + " - Apply Method: " + method + "   Parms: " + decodedParms + " : ", e, false);
+                            CErrorManager.logEvent(_logType, "target:node.action,error:Script internal ERROR,name:" + id + ",method:" + method + ",parms:" + decodedParms + ",exception:", e, false);
                         }
                         break;
                 }

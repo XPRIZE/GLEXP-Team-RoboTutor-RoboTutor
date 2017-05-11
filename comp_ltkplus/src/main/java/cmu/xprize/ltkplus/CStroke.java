@@ -29,6 +29,8 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import static cmu.xprize.util.TCONST.GRAPH_MSG;
+
 
 /**
  *
@@ -227,7 +229,7 @@ public class CStroke {
 
         replayPath.moveTo(lPoint.x, lPoint.y);
 
-        Log.i(TAG, "Next Point: " + 0 + " : " + xForm.getOrigX() + " : " + xForm.getOrigX());
+        Log.v(GRAPH_MSG, "CStroke:initReplayPath: " + 0 + " : " + xForm.getOrigX() + " : " + xForm.getOrigX());
 
         oldIndex = 1;
 
@@ -242,8 +244,8 @@ public class CStroke {
             nPoint.x = (int)((_points.get(i1).getX() * xForm.getScaleX()) + xForm.getOffsetX());
             nPoint.y = (int)((_points.get(i1).getY() * xForm.getScaleY()) + xForm.getOffsetY());
 
-            Log.i(TAG, "Next Point: " + i1 + " : " + nPoint.x + " : " + nPoint.y );
-            Log.i(TAG, "Last Point: " + i1 + " : " + lPoint.x + " : " + lPoint.y );
+            Log.v(GRAPH_MSG, "CStroke:next: " + i1 + " : " + nPoint.x + " : " + nPoint.y );
+            Log.v(GRAPH_MSG, "CStroke:last: " + i1 + " : " + lPoint.x + " : " + lPoint.y );
 
             replayPath.quadTo(lPoint.x, lPoint.y, (nPoint.x + lPoint.x) / 2, (nPoint.y + lPoint.y) / 2);
 
@@ -279,7 +281,7 @@ public class CStroke {
         for (int i1 = 0 ; i1 < _points.size() ; i1++)
         {
 
-            Log.i(TAG, "Normal Point: " + (long)(_points.get(i1).getX() - normalX) + " : " + (long)(_points.get(i1).getY() - normalY) + " delta : " + (long)(_points.get(i1).getTime() - cTime));
+            Log.v(GRAPH_MSG, "CStroke:normalizeStroke: " + (long)(_points.get(i1).getX() - normalX) + " : " + (long)(_points.get(i1).getY() - normalY) + " delta : " + (long)(_points.get(i1).getTime() - cTime));
 
             long pTime =  _points.get(i1).getTime();
 

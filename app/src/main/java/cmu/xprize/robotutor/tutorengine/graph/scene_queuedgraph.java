@@ -12,23 +12,29 @@ import java.util.Iterator;
 import java.util.Map;
 
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
-public class scene_graphqueue extends scene_module {
+
+public class scene_queuedgraph extends scene_module {
 
 
     private final Handler   mainHandler = new Handler(Looper.getMainLooper());
     private HashMap         queueMap    = new HashMap();
     private boolean         _qDisabled  = false;
 
-    static final String TAG = "scene_graphqueue";
+    static final String TAG = "scene_queuedgraph";
 
 
     /**
      */
-    public scene_graphqueue() {
+    public scene_queuedgraph() {
+        super();
+
+        _logType = QGRAPH_MSG;
     }
 
 
@@ -46,7 +52,7 @@ public class scene_graphqueue extends scene_module {
 
         // If queue is in progress cancel operations.
         //
-        Log.d(TAG, "Processing Terminate on: " + name );
+        RoboTutor.logManager.postEvent_I(_logType, "target:node.queuedgraph,action:cancelnode,name:" + name );
         terminateQueue();
 
         // If there is an active node e.g. audioqueue - kill it off
@@ -85,7 +91,7 @@ public class scene_graphqueue extends scene_module {
 
             case TCONST.TRACK_COMPLETE:
 
-                Log.d(TAG, "Processing QEvent on: " +name + " :event -  " + TCONST.TRACK_COMPLETE);
+                RoboTutor.logManager.postEvent_V(_logType, "target:node.queuedgraph,action:post-next_node,event:trackcomplete,name:" + name );
                 post(TCONST.NEXT_NODE);
                 break;
         }
@@ -123,8 +129,6 @@ public class scene_graphqueue extends scene_module {
             try {
                 queueMap.remove(this);
 
-                Log.d(TAG, "Processing run: " + _command + " on: " + name + " Target: " + _target);
-
                 switch (_command) {
 
                     case TCONST.APPLY_NODE:
@@ -132,6 +136,8 @@ public class scene_graphqueue extends scene_module {
                         // If queue is in progress cancel operations.
                         //
                         if(_nextAction != null) {
+
+                            Log.d(_logType, "target:node.queuedgraph,action:interrupt.inprogress,name:" + name );
 
                             terminateQueue();
                             _nextAction.cancelNode();
@@ -141,6 +147,8 @@ public class scene_graphqueue extends scene_module {
                             _qDisabled  = false;
                             _nextAction = null;
                         }
+
+                        Log.d(_logType, "target:node.queuedgraph,action:apply.root,name:" + name );
 
                         // If the node is completed and reusable then reset
                         //
@@ -167,12 +175,7 @@ public class scene_graphqueue extends scene_module {
                                 _nextAction = tracks[_ndx];
                                 _ndx++;
 
-//                                if(_nextAction.name.equals("WAIT on Error")) {
-//                                    Log.d(TAG, "We are here");
-//                                }
-
                                 if(_nextAction.testFeatures()) {
-                                    Log.d(TAG, "Processing action: " + _nextAction.name);
                                     validAction = true;
                                     break;
                                 }
@@ -180,8 +183,12 @@ public class scene_graphqueue extends scene_module {
 
                             if(validAction) {
 
+                                RoboTutor.logManager.postEvent_I(_logType, "target:node.queuedgraph,name:" + _nextAction.name + ",startstate:" + _moduleState + ",maptype:" + _nextAction.maptype + ",mapname:" + _nextAction.mapname);
+
                                 _nextAction.preEnter();
                                 _moduleState = _nextAction.applyNode();
+
+                                RoboTutor.logManager.postEvent_I(_logType, "target:node.queuedgraph,name:" + _nextAction.name + ",endstate:" + _moduleState);
 
                                 switch (_moduleState) {
 
@@ -204,7 +211,7 @@ public class scene_graphqueue extends scene_module {
                             }
                         }
                         catch(Exception e) {
-                            CErrorManager.logEvent(TAG,"modqueue apply failed: ", e, false);
+                            CErrorManager.logEvent(_logType,"target:node.queuedgraph: apply failed: ", e, false);
                         }
                         break;
 
@@ -216,7 +223,7 @@ public class scene_graphqueue extends scene_module {
                 }
             }
             catch(Exception e) {
-                CErrorManager.logEvent(TAG, "Run Error:", e, false);
+                CErrorManager.logEvent(_logType, "target:node.queuedgraph: Run Error:", e, false);
             }
         }
     }
@@ -233,6 +240,7 @@ public class scene_graphqueue extends scene_module {
         //
         _qDisabled = true;
 
+        RoboTutor.logManager.postEvent_V(_logType, "target:node.queuedgraph,action:terminatequeue,name:" + name);
         flushQueue();
     }
 
@@ -249,9 +257,9 @@ public class scene_graphqueue extends scene_module {
 
             Map.Entry entry = (Map.Entry) tObjects.next();
 
-            Log.d(TAG, "Removing Post: " + entry.getKey());
+            RoboTutor.logManager.postEvent_V(_logType, "target:node.queuedgraph,action:removepost,name:" + entry.getKey());
 
-            mainHandler.removeCallbacks((scene_graphqueue.Queue)(entry.getValue()));
+            mainHandler.removeCallbacks((scene_queuedgraph.Queue)(entry.getValue()));
         }
     }
 
@@ -262,10 +270,10 @@ public class scene_graphqueue extends scene_module {
      *
      * @param qCommand
      */
-    private void enQueue(scene_graphqueue.Queue qCommand) {
+    private void enQueue(scene_queuedgraph.Queue qCommand) {
         enQueue(qCommand, 0);
     }
-    private void enQueue(scene_graphqueue.Queue qCommand, long delay) {
+    private void enQueue(scene_queuedgraph.Queue qCommand, long delay) {
 
         if(!_qDisabled) {
             queueMap.put(qCommand, qCommand);
@@ -289,7 +297,7 @@ public class scene_graphqueue extends scene_module {
     }
     public void post(String command, long delay) {
 
-        enQueue(new scene_graphqueue.Queue(command), delay);
+        enQueue(new scene_queuedgraph.Queue(command), delay);
     }
 
 
@@ -303,7 +311,7 @@ public class scene_graphqueue extends scene_module {
     }
     public void post(String command, Object target, long delay) {
 
-        enQueue(new scene_graphqueue.Queue(command, target), delay);
+        enQueue(new scene_queuedgraph.Queue(command, target), delay);
     }
 
 

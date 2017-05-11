@@ -13,6 +13,8 @@ import cmu.xprize.util.IEventSource;
 import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+
 // This is just a convenience to simplify the syntax in type_action execution
 
 public class CObjectDelegate implements ITutorObject, Button.OnClickListener, IEventSource {
@@ -179,18 +181,26 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener, IE
             switch (mClickBehavior) {
 
                 case TCONST.NEXTSCENE:
+                    Log.v(QGRAPH_MSG, "event.click: " + " CObjectDelegate: TCONST.NEXTSCENE");
+
                     mTutor.mTutorGraph.post(this, TCONST.NEXTSCENE);
                     break;
 
                 case TCONST.NEXT_NODE:
+                    Log.v(QGRAPH_MSG, "event.click: " + " CObjectDelegate: TCONST.NEXT_NODE");
+
                     mTutor.mSceneGraph.post(this, TCONST.NEXT_NODE);
                     break;
 
                 case TCONST.STOP:
+                    Log.v(QGRAPH_MSG, "event.click: " + " CObjectDelegate: TCONST.STOP");
+
                     mTutor.mSceneGraph.post(this, TCONST.STOP);
                     break;
 
                 default:
+                    Log.v(QGRAPH_MSG, "event.click: " + " CObjectDelegate: applyNode");
+
                     try {
                         obj = mTutor.getScope().mapSymbol(mClickBehavior);
                         obj.applyNode();

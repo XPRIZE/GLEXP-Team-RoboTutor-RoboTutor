@@ -23,6 +23,7 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
@@ -32,6 +33,8 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TFloat;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
 
+
+// TODO: enhance logging
 
 public class type_cond extends type_action implements ILoadableObject2 {
 
@@ -344,7 +347,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                                 resultObj = new TString(Symbol.toString());
 
                                 state = TCONST.BUILDEXPR;
-                                Log.i(TAG, "String Literal Found: " + Symbol);
+                                Log.d(_logType, "String Literal Found: " + Symbol);
                                 break;
 
                             default:
@@ -382,7 +385,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                             }
 
                             state = TCONST.BUILDEXPR;
-                            Log.i(TAG, "Literal Found: " + Symbol);
+                            Log.d(_logType, "Literal Found: " + Symbol);
                         }
                         break;
 
@@ -482,7 +485,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                         }
 
                         state = TCONST.BUILDEXPR;
-                        Log.i(TAG, "Symbol Found: " + Symbol);
+                        Log.d(_logType, "Symbol Found: " + Symbol);
                         break;
 
 
@@ -509,7 +512,7 @@ public class type_cond extends type_action implements ILoadableObject2 {
                         // expression.
 
                         if (binaryOp != TCONST.NOOP) {
-                            Log.i(TAG, "Evaluating RHS: " + RHS.getType());
+                            Log.d(_logType, "Evaluating RHS: " + RHS.getType());
 
                             // Evaluate the result and assign it to LHS to allow chaining.
                             // i.e. A && B && C  - we evaluate left to right i.e. after
@@ -553,8 +556,8 @@ public class type_cond extends type_action implements ILoadableObject2 {
                             binaryOp = TCONST.NOOP;
                         }
                         else {
-                            Log.i(TAG, "LHS Type : " + LHS.getType());
-                            Log.i(TAG, "LHS Value: " + result);
+                            Log.d(_logType, "LHS Type : " + LHS.getType());
+                            Log.d(_logType, "LHS Value: " + result);
                         }
 
                         // Check for end of input - otherwise reset state
@@ -582,7 +585,11 @@ public class type_cond extends type_action implements ILoadableObject2 {
         try {
             result = (boolean) LHS.evaluate(LNegate);
 
-            Log.i(TAG, "(sub)Expression evaluates: " + result + "  :  " + code);
+            // Only record the final result not the subexpressions.
+            //
+            if(nest == 0) {
+                RoboTutor.logManager.postEvent_V(_logType, "target:node.type_cond.iff,comment:(sub)Expression evaluates to,result:" + result + ",code: " + code);
+            }
 
         } catch (Exception e) {
 

@@ -20,6 +20,7 @@ import static cmu.xprize.comp_debug.CD_CONST.SELECT_MATH;
 import static cmu.xprize.comp_debug.CD_CONST.SELECT_SHAPES;
 import static cmu.xprize.comp_debug.CD_CONST.SELECT_STORIES;
 import static cmu.xprize.comp_debug.CD_CONST.SELECT_WRITING;
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 public class CDebugComponent extends PercentRelativeLayout implements IDebugLauncher {
 
@@ -93,7 +94,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
             public void onClick(View view) {
 
-                Log.d(TAG, "Click on launch: ");
+                Log.v(QGRAPH_MSG, "event.click: " + " CDebugComponent:Click on launch");
 
                 // Support direct connection to button action manager
                 //
@@ -107,17 +108,20 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
             public void onClick(View view) {
 
+                Log.v(QGRAPH_MSG, "event.click: " + " CDebugComponent:Click on custom");
+
                 viewGrid = !viewGrid;
 
                 gridView.setVisibility(viewGrid? VISIBLE:GONE);
                 customView.setVisibility(viewGrid? GONE:VISIBLE);
-                Log.d(TAG, "Click on custom: ");
             }
         });
 
         SresetTutor.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
+
+                Log.v(QGRAPH_MSG, "event.click: " + " CDebugComponent:Click on reset");
 
                 String tutorName = "";
 
@@ -126,8 +130,6 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                 if(!tutorName.equals("")) {
                     changeCurrentTutor(tutorName);
                 }
-
-                Log.d(TAG, "Click on reset: ");
             }
         });
     }

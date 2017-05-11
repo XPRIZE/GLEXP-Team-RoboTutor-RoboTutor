@@ -345,6 +345,8 @@
         "INTRO_STATE_TRACK": {
           "type": "MODULE",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#INTRO_STATE_TRACK:String", "features":""},
+
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Racecar v3-2.mp3", "soundpackage":"tutor_effect", "repeat": true, "volume": 0.30, "mode":"event", "features": ""}
           ]
         },
@@ -354,6 +356,8 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#PLAYCORRECT:String", "features":""},
+
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Correct v1.mp3", "soundpackage":"tutor_effect", "volume": 0.10, "mode":"event", "features": ""},
             {"type": "COMMAND", "id": "SAkira", "method": "increaseScore", "parms": "", "features":""},
             {"type": "COMMAND", "cmd": "WAIT"}
@@ -365,6 +369,8 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#PLAYPROMPT:String", "features":""},
+
             {"type": "COMMAND", "id": "SAkira", "method": "judge_instruct", "parms": "", "features":""}
           ]
         },
@@ -374,6 +380,8 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#INSTRUCT_1L:String", "features":""},
+
             {"type": "COMMAND", "id": "SAkira", "method": "indicateCarText", "parms": "", "features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "this is.mp3","soundpackage":"default" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": ""},
             {"type": "COMMAND", "id": "SAkira", "method": "hideFinger", "parms": "", "features":""},
@@ -391,6 +399,8 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#INSTRUCT_1M:String", "features":""},
+
             {"type": "COMMAND", "id": "SAkira", "method": "indicateCarText", "parms": "", "features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "this is.mp3","soundpackage":"default" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": ""},
             {"type": "COMMAND", "id": "SAkira", "method": "hideFinger", "parms": "", "features":""},
@@ -408,6 +418,8 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#INSTRUCT_1R:String", "features":""},
+
             {"type": "COMMAND", "id": "SAkira", "method": "indicateCarText", "parms": "", "features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "this is.mp3","soundpackage":"default" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": ""},
             {"type": "COMMAND", "id": "SAkira", "method": "hideFinger", "parms": "", "features":""},
@@ -425,6 +437,8 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#INSTRUCT_2L:String", "features":""},
+
             {"type": "COMMAND", "id": "SAkira", "method": "indicateCarText", "parms": "", "features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "this is.mp3","soundpackage":"default" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": ""},
             {"type": "COMMAND", "id": "SAkira", "method": "hideFinger", "parms": "", "features":""},
@@ -442,6 +456,8 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#INSTRUCT_2M:String", "features":""},
+
             {"type": "COMMAND", "id": "SAkira", "method": "indicateCarText", "parms": "", "features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "this is.mp3","soundpackage":"default" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": ""},
             {"type": "COMMAND", "id": "SAkira", "method": "hideFinger", "parms": "", "features":""},
@@ -463,6 +479,8 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#INSTRUCT_2R:String", "features":""},
+
             {"type": "COMMAND", "id": "SAkira", "method": "indicateCarText", "parms": "", "features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "this is.mp3","soundpackage":"default" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": ""},
             {"type": "COMMAND", "id": "SAkira", "method": "hideFinger", "parms": "", "features":""},
@@ -480,6 +498,8 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#INSTRUCT_3:String", "features":""},
+
             {"type": "COMMAND", "id": "SAkira", "method": "indicateCarText", "parms": "", "features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "this is.mp3","soundpackage":"default" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": ""},
             {"type": "COMMAND", "id": "SAkira", "method": "hideFinger", "parms": "", "features":""},
@@ -497,9 +517,11 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#INSTRUCT_3V:String", "features":""},
+
             {"type": "AUDIO", "command": "PLAY", "soundsource": "This says.mp3","soundpackage":"default" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": ""},
             {"type": "COMMAND", "id": "SAkira", "method": "indicate3Sign", "parms": "", "features":""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{TestAudio}}.mp3","soundpackage":"xprize_words" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio}}.mp3","soundpackage":"xprize_words" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": ""},
             {"type": "COMMAND", "id": "SAkira", "method": "hideFinger", "parms": "", "features":""},
             {"type": "COMMAND", "id": "SAkira", "method": "instruct_finger", "parms": "", "features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "so tap here.mp3","soundpackage":"default" ,"repeat":false, "volume": "20.0", "mode":"flow", "features": ""}
@@ -511,6 +533,8 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#PLAYWRONG:String", "features":""},
+
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Incorrect v1.mp3", "soundpackage":"tutor_effect", "volume": 0.10, "mode":"event", "features": ""},
             {"type": "COMMAND", "id": "SAkira", "method": "crash", "parms": "", "features":""},
             {"type": "COMMAND", "id": "SAkira", "method": "decreaseScore", "parms": "", "features":""},
@@ -523,6 +547,8 @@
           "reuse":true,
           "COMMENT": "",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#POST_QUESTION:String", "features":""},
+
             {"type": "COMMAND", "id": "SAkira", "method": "postQuestionBoard", "parms": "","features":""},
             {"type": "COMMAND", "cmd": "WAIT"}
           ]
@@ -533,6 +559,8 @@
           "reuse":true,
           "COMMENT": "",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#USER_ANSWER:String", "features":""},
+
             {"type": "COMMAND", "id": "SAkira", "method": "judge", "parms": "","features":""}
             ]
         },
@@ -540,6 +568,8 @@
         "POST_FINISHLINE": {
           "type": "MODULE",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#POST_FINISHLINE:String", "features":""},
+
             {"type": "COMMAND", "id": "SAkira", "method": "postFinishLine" ,"features":""},
             {"type": "COMMAND", "cmd": "WAIT"}
           ]
@@ -564,8 +594,8 @@
 
         "NEXT": {"type": "COMMAND", "cmd": "NEXT"  },
 
-        "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{TestAudio}}.mp3","soundpackage":"xprize_words" ,"repeat":false, "volume": "0.7", "mode":"event", "features": ""},
-        "INSTRUCT_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{audio}}.mp3","soundpackage":"default" ,"repeat":false, "volume": "0.7", "mode":"event", "features": ""},
+        "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio}}.mp3","soundpackage":"xprize_words" ,"repeat":false, "volume": "0.7", "mode":"event", "features": ""},
+        "INSTRUCT_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.audio}}.mp3","soundpackage":"default" ,"repeat":false, "volume": "0.7", "mode":"event", "features": ""},
         "WAIT":{"type": "COMMAND", "cmd": "WAIT"},
 
         "PAUSE":{

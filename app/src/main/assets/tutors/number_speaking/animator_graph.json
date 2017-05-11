@@ -153,7 +153,6 @@
           "reuse":true,
           "COMMENT": "Listening Module",
           "tracks": [
-            {"type": "COMMAND", "id": "Sresponse", "method": "onStartTalking", "parms": "CANCEL_REMINDER:String"},
             {"type": "COMMAND", "id":"Sresponse", "method":"configureASRTimedEvent", "parms": "WORD_TIMEOUT:String|HESITATION_WORD_TIMEOUT:String|5000:Integer", "features": "" },
             // This would call the cancel reminder action below when the user starts writing
             {"type": "COMMAND", "id": "Sresponse", "method": "onRecognitionComplete", "parms": "NEXT:String"},
@@ -343,12 +342,6 @@
         "RESET_WORD_EVENT": {"type": "COMMAND", "id":"Sresponse", "method":"clearASREvent",     "parms": "WORD_EVENT:String",                          "features": "" },
 
         "SET_DATASOURCE":{"type": "COMMAND", "id": "Sstimulus", "method": "setDataSource", "parms": "[7,1,25,123,2000]:String","features":""},
-
-        "REMINDER_TIMER": {"type": "TIMER", "id":"ReminderTimer", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"HESITATION_TRACK", "features": "" },
-
-        "CANCEL_REMINDER": {"type": "TIMER", "id":"ReminderTimer", "action":"CANCEL", "features": "" },
-
-        "HESITATION_TRACK": {"type": "COMMAND", "id": "Sstimulus", "features": ""},
 
         "GB_DISABLE":{"type": "COMMAND", "id": "SgoButton", "method": "enable", "parms": "FALSE:Boolean","features":""},
 

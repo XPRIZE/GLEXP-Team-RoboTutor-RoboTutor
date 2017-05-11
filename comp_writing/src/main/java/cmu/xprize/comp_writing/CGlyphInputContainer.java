@@ -49,6 +49,8 @@ import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.CLinkedScrollView;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.GRAPH_MSG;
+
 
 public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchListener, IGlyphReplayListener {
 
@@ -318,7 +320,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             _isDrawing    = true;
 
             if(_drawGlyph == null) {
-                Log.e(TAG, "_drawGlyph Creation Failed");
+                Log.e(GRAPH_MSG, "CGlyphInputContainer.startTouch: _drawGlyph Creation Failed");
             }
         }
 
@@ -515,7 +517,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         }
         delta = _time - _prevTime;
 
-        Log.i(TAG, "Touch Time: " + _time + "  :  " + delta);
+        Log.v(GRAPH_MSG, "CGlyphInputContainer.onTouch: Touch Time: " + _time + "  :  " + delta);
 
         return result;
     }
@@ -636,7 +638,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             //
             _dotSize = _viewBnds.width() / TCONST.DOT_SIZE;
 
-            Log.d(TAG, "Height: " + getHeight() + "  Width: " + getWidth());
+            Log.v(GRAPH_MSG, "CGlyphInputContainer.onLayout: Height: " + getHeight() + "  Width: " + getWidth());
 
             rebuildProtoType(TCONST.VIEW_SCALED, _viewBnds);
 
@@ -1085,7 +1087,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         rebuildGlyph();
         invalidate();
 
-        Log.d(TAG, "DebugBounds: " + DBG);
+        Log.v(GRAPH_MSG, "CGlyphInputContainer.toggleDebugBounds: " + DBG);
 
         return DBG;
     }
@@ -1258,7 +1260,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         if(_inhibit) {
 
-            Log.d("INHIBIT", "muting: " + _sampleExpected);
+            Log.v(GRAPH_MSG, "CGlyphInputContainer.ihibitInput: mute " + _sampleExpected);
 
             if(_counter != null)
                 _counter.cancel();
@@ -1274,7 +1276,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             if(!mHasGlyph)
                this.setOnTouchListener(this);
 
-            Log.d("INHIBIT", "UN-muting: " + _sampleExpected);
+            Log.v(GRAPH_MSG, "CGlyphInputContainer.inhibitInput: UN-mute: " + _sampleExpected);
         }
     }
 
@@ -1305,7 +1307,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         @Override
         public void onTick(long millisUntilFinished) {
-            Log.i(TAG, "Tick Done");
         }
 
     }
@@ -1348,7 +1349,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             }
 
             setHasGlyph(true);
-            Log.i(TAG, "Recognition Done");
+            Log.v(GRAPH_MSG, "CGlyphInputContainer: post pending rRecognition Done");
 
             _recognizer.postToQueue(CGlyphInputContainer.this, _drawGlyph);
 
@@ -1405,6 +1406,8 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         boolean isValid;
 
+        // Update the DEBUG component subclass glyph statistics - not used in normal code.
+        //
         mWritingComponent.updateGlyphStats(_ltkPlusCandidates, _ltkCandidates, _ltkCandidates[sampleIndex].getGlyph().getMetric(), _ltkCandidates[0].getGlyph().getMetric());
 
         // Update the final result

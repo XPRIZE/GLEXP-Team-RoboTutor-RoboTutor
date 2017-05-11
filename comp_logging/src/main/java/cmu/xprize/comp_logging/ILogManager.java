@@ -5,11 +5,21 @@ public interface ILogManager {
     public void startLogging(String logPath);
     public void stopLogging();
 
-    public void postSystemEvent(String Tag, String Msg);
-    public void postSystemTimeStamp(String Tag);
+    public void postTutorState(String Tag, String Msg);
 
-    public void postEvent(String Tag, String Msg);
-    public void postTimeStamp(String Tag);
+    public void postEvent_V(String Tag, String Msg);
+
+    public void postEvent_D(String Tag, String Msg);
+
+    public void postEvent_I(String Tag, String Msg);
+
+    public void postEvent_W(String Tag, String Msg);
+
+    public void postEvent_E(String Tag, String Msg);
+
+    public void postEvent_A(String Tag, String Msg);
+
+    public void postDateTimeStamp(String Tag, String Msg);
 
     public void post(String command);
 

@@ -18,10 +18,20 @@ import android.widget.ImageView;
 
 import org.json.JSONObject;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import cmu.xprize.ak_component.AKCONST;
 import cmu.xprize.ak_component.CAkPlayer;
 import cmu.xprize.ak_component.CAkQuestionBoard;
 import cmu.xprize.ak_component.CAk_Component;
 import cmu.xprize.ak_component.CAk_Data;
+import cmu.xprize.bp_component.CClassMap;
+import cmu.xprize.comp_logging.ITutorLogger;
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
@@ -37,14 +47,19 @@ import cmu.xprize.sb_component.CSb_Scoreboard;
 import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.ILogManager;
+import cmu.xprize.util.CEvent;
+import cmu.xprize.util.IPublisher;
+import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
+
+import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
 /**
  * Created by jacky on 2016/7/6.
  */
 
-public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDataSink {
+public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDataSink, IPublisher, ITutorLogger {
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
@@ -57,8 +72,14 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     private PercentRelativeLayout curpercentLayout = (PercentRelativeLayout) getChildAt(0);
 
+    private HashMap<String,String>  _StringVar  = new HashMap<>();
+    private HashMap<String,Integer> _IntegerVar = new HashMap<>();
+    private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
+    
     static final String TAG = "TAkComponent";
 
+    
+    
     public TAkComponent(Context context) {
         super(context);
     }
@@ -70,8 +91,6 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     public TAkComponent(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
-
-
 
     @Override
     public void init(Context context, AttributeSet attrs) {
@@ -98,32 +117,32 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
         // update the Scope response variable  "<varname>.value"
         //
-        mTutor.getScope().addUpdateVar(name() + ".value", new TInteger(value));
+        publishValue(AKCONST.VAR_VALUE, value);
 
         boolean correct = true;
 
         reset();
 
         if(correct)
-            mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
+            publishFeature(TCONST.GENERIC_RIGHT);
         else
-            mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+            publishFeature(TCONST.GENERIC_WRONG);
     }
 
 
     private void reset() {
 
-        mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
-        mTutor.setDelFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
-        mTutor.setDelFeature(TCONST.GENERIC_WRONG);
-        mTutor.setDelFeature(TCONST.PROMPT_1LEFT);
-        mTutor.setDelFeature(TCONST.PROMPT_1MID);
-        mTutor.setDelFeature(TCONST.PROMPT_1RIGHT);
-        mTutor.setDelFeature(TCONST.PROMPT_2LEFT);
-        mTutor.setDelFeature(TCONST.PROMPT_2MID);
-        mTutor.setDelFeature(TCONST.PROMPT_2RIGHT);
-        mTutor.setDelFeature(TCONST.PROMPT_3);
-        mTutor.setDelFeature(TCONST.PROMPT_3V);
+        retractFeature(TCONST.GENERIC_RIGHT);
+        retractFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
+        retractFeature(TCONST.GENERIC_WRONG);
+        retractFeature(TCONST.PROMPT_1LEFT);
+        retractFeature(TCONST.PROMPT_1MID);
+        retractFeature(TCONST.PROMPT_1RIGHT);
+        retractFeature(TCONST.PROMPT_2LEFT);
+        retractFeature(TCONST.PROMPT_2MID);
+        retractFeature(TCONST.PROMPT_2RIGHT);
+        retractFeature(TCONST.PROMPT_3);
+        retractFeature(TCONST.PROMPT_3V);
     }
 
 
@@ -188,7 +207,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
         // We make the assumption that all are correct until proven wrong
         //
-        mTutor.setAddFeature(TCONST.ALL_CORRECT);
+        publishFeature(TCONST.ALL_CORRECT);
 
         // TODO: globally make startWith type TCONST
         try {
@@ -250,13 +269,13 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         //
         if(mTutor.testFeatureSet(TCONST.GENERIC_WRONG)) {
 
-            mTutor.setDelFeature(TCONST.ALL_CORRECT);
+            retractFeature(TCONST.ALL_CORRECT);
         }
 
         reset();
 
         if(dataExhausted())
-            mTutor.setAddFeature(TCONST.FTR_EOD);
+            publishFeature(TCONST.FTR_EOD);
 
         super.next();
     }
@@ -288,14 +307,17 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
         Log.d("PlayAudio", answerString);
 
-        scope.addUpdateVar("TestAudio", new TString(answerString));
+        publishValue(AKCONST.TESTAUDIO, answerString);
         applyEventNode("PLAY_AUDIO");
     }
 
     public void instructAudio(String instruction){
+        
         TScope scope = mTutor.getScope();
         Log.d("InstructAudio", instruction);
-        scope.addUpdateVar("audio", new TString(instruction));
+        
+        publishValue(AKCONST.VAR_AUDIO, instruction);
+        
         applyEventNode("PAUSE");
         applyEventNode("INSTRUCT_AUDIO");
         applyEventNode("RESUME");
@@ -420,21 +442,21 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         switch(questionBoard.choices.length){
             case 1:
                 if(first1sign) {
-                    mTutor.setAddFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
+                    publishFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
                     first1sign = false;
                 }else
                     judge_rightwrong();
                 break;
             case 2:
                 if(first2sign){
-                    mTutor.setAddFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
+                    publishFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
                     first2sign = false;
                 }else
                     judge_rightwrong();
                 break;
             case 3:
                 if(first3sign){
-                    mTutor.setAddFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
+                    publishFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
                     first3sign = false;
                 }else
                     judge_rightwrong();
@@ -444,14 +466,14 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     public void judge_rightwrong(){
         if(questionBoard.answerLane == player.lane){
-            mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
+            publishFeature(TCONST.GENERIC_RIGHT);
             wrongTimes = 0;
         }else {
             wrongTimes++;
             if(wrongTimes != 2) {
-                mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+                publishFeature(TCONST.GENERIC_WRONG);
             }else{
-                mTutor.setAddFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
+                publishFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
                 wrongTimes = 0;
             }
         }
@@ -462,29 +484,29 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         switch(questionBoard.choices.length){
             case 1:
                 if(questionBoard.answerLane == CAkPlayer.Lane.LEFT){
-                    mTutor.setAddFeature(TCONST.PROMPT_1LEFT);
+                    publishFeature(TCONST.PROMPT_1LEFT);
                 }else if(questionBoard.answerLane == CAkPlayer.Lane.MID){
-                    mTutor.setAddFeature(TCONST.PROMPT_1MID);
+                    publishFeature(TCONST.PROMPT_1MID);
                 }else if(questionBoard.answerLane == CAkPlayer.Lane.RIGHT){
-                    mTutor.setAddFeature(TCONST.PROMPT_1RIGHT);
+                    publishFeature(TCONST.PROMPT_1RIGHT);
                 }
                 break;
             case 2:
                 if(questionBoard.answerLane == CAkPlayer.Lane.LEFT){
-                    mTutor.setAddFeature(TCONST.PROMPT_2LEFT);
+                    publishFeature(TCONST.PROMPT_2LEFT);
                 }else if(questionBoard.answerLane == CAkPlayer.Lane.MID){
-                    mTutor.setAddFeature(TCONST.PROMPT_2MID);
+                    publishFeature(TCONST.PROMPT_2MID);
                 }else if(questionBoard.answerLane == CAkPlayer.Lane.RIGHT){
-                    mTutor.setAddFeature(TCONST.PROMPT_2RIGHT);
+                    publishFeature(TCONST.PROMPT_2RIGHT);
                 }
                 break;
             case 3:
                 if(datasource[_dataIndex - 1].belowString.equals("audio")){//if it is an audio question
                     //TScope scope = mTutor.getScope();
                     //scope.addUpdateVar("TestAudio", new TString(getAboveString(datasource[_dataIndex - 1])));
-                    mTutor.setAddFeature(TCONST.PROMPT_3V);
+                    publishFeature(TCONST.PROMPT_3V);
                 }else{
-                    mTutor.setAddFeature(TCONST.PROMPT_3);
+                    publishFeature(TCONST.PROMPT_3);
                 }
                 break;
         }
@@ -725,4 +747,215 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     }
 
+
+
+    //***********************************************************
+    // ITutorLogger - Start
+
+    private void extractHashContents(StringBuilder builder, HashMap map) {
+
+        Iterator<?> tObjects = map.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+
+            builder.append(',');
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            String key   = entry.getKey().toString();
+            String value = "#" + entry.getValue().toString();
+
+            builder.append(key);
+            builder.append(value);
+        }
+    }
+
+    private void extractFeatureContents(StringBuilder builder, HashMap map) {
+
+        StringBuilder featureset = new StringBuilder();
+
+        Iterator<?> tObjects = map.entrySet().iterator();
+
+        // Scan to build a list of active features
+        //
+        while(tObjects.hasNext() ) {
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Boolean value = (Boolean) entry.getValue();
+
+            if(value) {
+                featureset.append(entry.getKey().toString() + ";");
+            }
+        }
+
+        // If there are active features then trim the last ',' and add the
+        // comma delimited list as the "$features" object.
+        //
+        if(featureset.length() != 0) {
+            featureset.deleteCharAt(featureset.length()-1);
+
+            builder.append(",$features#" + featureset.toString());
+        }
+    }
+
+    @Override
+    public void logState(String logData) {
+
+        StringBuilder builder = new StringBuilder();
+
+        extractHashContents(builder, _StringVar);
+        extractHashContents(builder, _IntegerVar);
+        extractFeatureContents(builder, _FeatureMap);
+
+        RoboTutor.logManager.postTutorState(TUTOR_STATE_MSG, "target#word_copy," + logData + builder.toString());
+    }
+
+    // ITutorLogger - End
+    //***********************************************************
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // publish component state data - START
+
+    @Override
+    public void publishState() {
+    }
+
+    @Override
+    public void publishValue(String varName, String value) {
+
+        _StringVar.put(varName,value);
+
+        // update the response variable  "<ComponentName>.<varName>"
+        mTutor.getScope().addUpdateVar(name() + varName, new TString(value));
+
+    }
+
+    @Override
+    public void publishValue(String varName, int value) {
+
+        _IntegerVar.put(varName,value);
+
+        // update the response variable  "<ComponentName>.<varName>"
+        mTutor.getScope().addUpdateVar(name() + varName, new TInteger(value));
+
+    }
+
+    @Override
+    public void publishFeatureSet(String featureSet) {
+
+        // Add new features - no duplicates
+        List<String> featArray = Arrays.asList(featureSet.split(","));
+
+        for(String feature : featArray) {
+
+            _FeatureMap.put(feature, true);
+            publishFeature(feature);
+        }
+    }
+
+    @Override
+    public void retractFeatureSet(String featureSet) {
+
+        // Add new features - no duplicates
+        List<String> featArray = Arrays.asList(featureSet.split(","));
+
+        for(String feature : featArray) {
+
+            _FeatureMap.put(feature, false);
+            retractFeature(feature);
+        }
+    }
+
+    @Override
+    public void publishFeature(String feature) {
+
+        _FeatureMap.put(feature, true);
+        mTutor.addFeature(feature);
+    }
+
+    /**
+     * Note that we may retract features before they're published to add them to the
+     * FeatureSet that should be pushed/popped when using pushDataSource
+     * e.g. we want EOD to track even if it has never been set
+     *
+     * @param feature
+     */
+    @Override
+    public void retractFeature(String feature) {
+
+        _FeatureMap.put(feature, false);
+        mTutor.delFeature(feature);
+    }
+
+    /**
+     *
+     * @param featureMap
+     */
+    @Override
+    public void publishFeatureMap(HashMap featureMap) {
+
+        Iterator<?> tObjects = featureMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Boolean active = (Boolean)entry.getValue();
+
+            if(active) {
+                String feature = (String)entry.getKey();
+
+                mTutor.addFeature(feature);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param featureMap
+     */
+    @Override
+    public void retractFeatureMap(HashMap featureMap) {
+
+        Iterator<?> tObjects = featureMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Boolean active = (Boolean)entry.getValue();
+
+            if(active) {
+                String feature = (String)entry.getKey();
+
+                mTutor.delFeature(feature);
+            }
+        }
+    }
+
+    // publish component state data - EBD
+    //************************************************************************
+    //************************************************************************
+
+
+
+
+    //************ Serialization
+
+
+
+    /**
+     * Load the data source
+     *
+     * @param jsonData
+     */
+    @Override
+    public void loadJSON(JSONObject jsonData, IScope scope) {
+
+        super.loadJSON(jsonData, scope);
+    }
 }

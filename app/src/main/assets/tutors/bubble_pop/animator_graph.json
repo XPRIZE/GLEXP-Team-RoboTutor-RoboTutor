@@ -157,6 +157,8 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBubblePop", "method": "logState", "parms": "type#node,value#INTROSTATE:String", "features":""},
+
             {"type": "AUDIO", "command": "PLAY", "soundsource": "gamesound.mp3", "soundpackage":"tutor_effect", "repeat":true, "volume": 0.10, "mode":"event", "features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Please tap on it.mp3", "soundpackage":"default", "volume": 0.7, "mode":"flow", "features": ""}
           ]
@@ -169,6 +171,8 @@
           "type": "MODULE",
           "reuse":true,
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBubblePop", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
+
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"event", "features": "FTR_SAY&FTR_WORDS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": "FTR_SAY&FTR_NUMBERS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"letters", "volume": 1.0, "mode":"event", "features": "FTR_SAY&FTR_LETTERS"},
@@ -188,6 +192,8 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBubblePop", "method": "logState", "parms": "type#node,value#USERINPUT:String", "features":""},
+
             {"type": "COMMAND", "id": "SBubblePop", "method": "enableTouchEvents", "parms": "" ,"features":""},
             {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "BUBBLE_TOUCH_EVENT:String|NEXTNODE:String" ,"features":""},
             {"type": "COMMAND", "cmd": "WAIT"  }
@@ -200,6 +206,8 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBubblePop", "method": "logState", "parms": "type#node,value#PLAYCORRECT:String", "features":""},
+
             {"type": "AUDIO", "command": "PLAY", "soundsource": "popSound.mp3",  "soundpackage":"tutor_effect", "volume": 0.20, "mode":"event", "features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"event", "features": "FTR_WORDS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": "FTR_NUMBERS"},
@@ -225,6 +233,8 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBubblePop", "method": "logState", "parms": "type#node,value#PLAYWRONG:String", "features":""},
+
             {"type": "AUDIO", "command": "PLAY", "soundsource": "wrong.mp3", "soundpackage":"tutor_effect", "volume": 0.05, "mode":"event", "features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"event", "features": "FTR_WORDS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": "FTR_NUMBERS"},
@@ -250,6 +260,7 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBubblePop", "method": "logState", "parms": "type#node,value#PLAYWRONG_PAUSE:String", "features":""},
 
             {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "PAUSE_ANIMATION:String" ,"features":""},
 
@@ -288,6 +299,7 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBubblePop", "method": "logState", "parms": "type#node,value#EMPTYMODULE:String", "features":""}
           ]
         },
 
@@ -296,6 +308,8 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBubblePop", "method": "logState", "parms": "type#node,value#FINALSCORE:String", "features":""},
+
             {"type": "AUDIO", "command": "PLAY", "soundsource": "scorecard.mp3", "soundpackage":"tutor_effect", "volume": 1.00, "mode":"event", "features": ""},
 
             {"type": "TIMER", "id":"showScoreTimer", "startdelay":"0", "period":"4000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"NEXTNODE", "features": "" },

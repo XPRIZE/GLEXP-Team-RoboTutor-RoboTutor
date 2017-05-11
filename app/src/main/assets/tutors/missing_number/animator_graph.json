@@ -241,9 +241,9 @@
           "reuse":true,
           "COMMENT": "",
           "tracks": [
-            {"type": "COMMAND", "cmd": "FEATURE-DEL", "value":"FTR_ATTEMPT_1" },
-            {"type": "COMMAND", "cmd": "FEATURE-DEL", "value":"FTR_ATTEMPT_2" },
-            {"type": "COMMAND", "cmd": "FEATURE-DEL", "value":"FTR_ATTEMPT_3" }
+            {"type": "COMMAND", "id":"SMissingNumber",  "method": "retractFeature", "parms": "FTR_ATTEMPT_1:String"},
+            {"type": "COMMAND", "id":"SMissingNumber",  "method": "retractFeature", "parms": "FTR_ATTEMPT_2:String"},
+            {"type": "COMMAND", "id":"SMissingNumber",  "method": "retractFeature", "parms": "FTR_ATTEMPT_2:String"}
           ]
         },
 
@@ -281,7 +281,7 @@
           "COMMENT": "TBD",
           "tracks": [
             {"type": "AUDIO", "command": "PLAY", "soundsource": "this_answer_is_not_pattern.mp3", "mode":"flow","features": ""},
-            {"type": "COMMAND", "cmd": "FEATURE-ADD", "value":"FTR_ATTEMPT_2" }
+            {"type": "COMMAND", "id":"SMissingNumber",  "method": "publishFeature", "parms": "FTR_ATTEMPT_2:String"}
           ]
         },
 
@@ -294,7 +294,7 @@
           "COMMENT": "TBD",
           "tracks": [
             {"type": "COMMAND", "id":"SMissingNumber",  "method": "setButtonBehavior", "parms": "PLAYCOUNTSHAPES:String"},
-            {"type": "COMMAND", "cmd": "FEATURE-ADD", "value":"FTR_ATTEMPT_3" }
+            {"type": "COMMAND", "id":"SMissingNumber",  "method": "publishFeature", "parms": "FTR_ATTEMPT_3:String"}
           ]
         },
 
@@ -434,7 +434,8 @@
           "COMMENT": "TBD",
           "tracks": [
             //{"type": "AUDIO", "command": "PLAY", "sound_source": "here.mp3", "mode":"flow", "features": ""},
-            {"type": "COMMAND", "cmd": "FEATURE-ADD", "value":"FTR_ATTEMPT_1" },
+            {"type": "COMMAND", "id":"SMissingNumber",  "method": "publishFeature", "parms": "FTR_ATTEMPT_1:String"},
+
             {"type": "TIMER",   "id":"HesitationTimer", "action":"CANCEL", "features": "" },
             //{"type": "COMMAND", "id":"SMissingNumber",  "method": "setButtonBehavior", "parms": "RESTART_COMPLETION_TIMER:String"},
             {"type": "TIMER",   "id":"CompletionTimer3", "startdelay":"0", "period":"6000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"PLAY_DONEBUTTON_PROMPT", "features": "" },
@@ -447,7 +448,7 @@
           "reuse":true,
           "COMMENT": "TBD",
           "tracks": [
-            {"type": "COMMAND", "cmd": "FEATURE-ADD", "value":"FTR_ATTEMPT_1" },
+            {"type": "COMMAND", "id":"SMissingNumber",  "method": "publishFeature", "parms": "FTR_ATTEMPT_1:String"},
             {"type": "TIMER",   "id":"CompletionTimer1", "action":"CANCEL", "features": "" }
             //{"type": "COMMAND", "id":"SMissingNumber",  "method": "setButtonBehavior", "parms": "RESTART_COMPLETION_TIMER:String"},
           ]
