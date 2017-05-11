@@ -56,6 +56,8 @@ import cmu.xprize.robotutor.tutorengine.graph.scene_initializer;
 import cmu.xprize.robotutor.tutorengine.graph.type_action;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
+import static cmu.xprize.util.TCONST.GRAPH_MSG;
+
 
 /**
  *  Each Tutor instance is represented by a CTutor
@@ -135,7 +137,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         inflateTutor();
 
-        mTutorLogManager.postEvent(TAG, "Create Tutor: " + name);
+        mTutorLogManager.postEvent_I(GRAPH_MSG, "target:ctutor,action:create,tutorname:" + name);
     }
 
 
@@ -337,12 +339,17 @@ public class CTutor implements ILoadableObject2, IEventSource {
      */
     private void flushQueue() {
 
-        Iterator<?> tObjects = queueMap.entrySet().iterator();
+        try {
+            Iterator<?> tObjects = queueMap.entrySet().iterator();
 
-        while(tObjects.hasNext() ) {
-            Map.Entry entry = (Map.Entry) tObjects.next();
+            while (tObjects.hasNext()) {
+                Map.Entry entry = (Map.Entry) tObjects.next();
 
-            mainHandler.removeCallbacks((Queue)(entry.getValue()));
+                mainHandler.removeCallbacks((Queue) (entry.getValue()));
+            }
+        }
+        catch(Exception e) {
+            Log.d(TAG, "flushQueue Error: " + e);
         }
 
     }
@@ -444,9 +451,9 @@ public class CTutor implements ILoadableObject2, IEventSource {
     public void updateLanguageFeature(String langFtr) {
 
         // Remove any active language - Only want one language feature active
-        setDelFeature(mMediaManager.getLanguageFeature(this));
+        delFeature(mMediaManager.getLanguageFeature(this));
 
-        setAddFeature(langFtr);
+        addFeature(langFtr);
     }
 
     public String getLanguageFeature() {
@@ -558,7 +565,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
             }
         }
         catch(Exception e) {
-            Log.d(TAG, "automation Error: " + e);
+            Log.d(TAG, "automateScene Error: " + e);
         }
     }
 
@@ -690,7 +697,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
     // udpate the working feature set for this instance
     //
-    public void setAddFeature(String feature)
+    public void addFeature(String feature)
     {
         // Add new features - no duplicates
 
@@ -703,7 +710,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
     // udpate the working feature set for this instance
     //
-    public void setDelFeature(String feature) {
+    public void delFeature(String feature) {
         int fIndex;
 
         // remove features - no duplicates
@@ -831,7 +838,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
     }
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
-        Log.d(TAG, "Loader iteration");
+        // Log.d(TAG, "Loader iteration");
         loadJSON(jsonObj, (IScope2) scope);
     }
 

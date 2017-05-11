@@ -2,23 +2,22 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.percent.PercentLayoutHelper;
-import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import cmu.xprize.comp_ask.CAskElement;
 import cmu.xprize.comp_ask.CAsk_Data;
 import cmu.xprize.comp_debug.CDebugComponent;
+import cmu.xprize.comp_logging.CLogManager;
 import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.comp_session.CActivitySelector;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
@@ -40,13 +39,19 @@ import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEventSource;
 import cmu.xprize.comp_logging.ILogManager;
+import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.comp_session.AS_CONST.LAUNCH_EVENT;
+import static cmu.xprize.comp_session.AS_CONST.VAR_DATASOURCE;
+import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
+import static cmu.xprize.comp_session.AS_CONST.VAR_INTENTDATA;
 import static cmu.xprize.robotutor.tutorengine.util.CClassMap2.classMap;
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
-public class TActivitySelector extends CActivitySelector implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource {
+public class TActivitySelector extends CActivitySelector implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource, IPublisher {
 
     private static boolean          DEBUG_LANCHER = false;
     public  static String           DEBUG_TUTORID = "";
@@ -79,7 +84,6 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     private CAt_Data    mathVector    = null;
     private CAt_Data    shapesVector  = null;
 
-    private ArrayList<String>       _FeatureSet = new ArrayList<>();
     private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
 
 
@@ -576,8 +580,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                         DEBUG_TUTORID = activeTutor;
                     }
 
-                    // If we are using the debug selector and it is not lauching a tutor then
-                    // switch to its view through a relaunch
+                    // If we are using the debug selector and mode is not launching a tutor then
+                    // switch to debug view
                     //
                     if(DEBUG_LANCHER && RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT)) {
 
@@ -585,6 +589,10 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                         RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_SELECT;
                     }
                     else {
+                        // Update the tutor id shown in the log stream
+                        //
+                        CLogManager.setTutor(activeTutor);
+
                         doLaunch(tutor.tutor_desc, TCONST.TUTOR_NATIVE, tutor.tutor_data);
                     }
 
@@ -617,11 +625,11 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         // update the response variable  "<Sresponse>.value"
 
-        mTutor.getScope().addUpdateVar(name() + ".intent", new TString(intent));
-        mTutor.getScope().addUpdateVar(name() + ".intentData", new TString(intentData));
-        mTutor.getScope().addUpdateVar(name() + ".dataSource", new TString(dataSource));
+        publishValue(VAR_INTENT, intent);
+        publishValue(VAR_INTENTDATA, intentData);
+        publishValue(VAR_DATASOURCE, dataSource);
 
-        applyBehavior(AS_CONST.LAUNCH_EVENT);
+        applyBehavior(LAUNCH_EVENT);
     }
 
 
@@ -792,7 +800,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         boolean result = false;
 
         if (volatileMap.containsKey(event)) {
-            Log.d(TAG, "Processing BP_ApplyEvent: " + event);
+
+            RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:volatile,behavior:" + event);
             applyBehaviorNode(volatileMap.get(event));
 
             volatileMap.remove(event);
@@ -800,6 +809,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             result = true;
 
         } else if (stickyMap.containsKey(event)) {
+
+            RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:sticky,behavior:" + event);
             applyBehaviorNode(stickyMap.get(event));
 
             result = true;
@@ -825,6 +836,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                 if (obj != null) {
 
+                    RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehaviornode,type:" + obj.getType() + ",behavior:" + nodeName);
+
                     switch(obj.getType()) {
 
                         case TCONST.SUBGRAPH:
@@ -835,13 +848,14 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                         case TCONST.MODULE:
 
                             // Disallow module "calls"
-                            Log.e(TAG, "MODULE Behaviors are not supported");
+                            RoboTutor.logManager.postEvent_E(QGRAPH_MSG, "target:" + TAG + ",action:applybehaviornode,type:modulecall,behavior:" + nodeName +  ",ERROR:MODULE Behaviors are not supported");
                             break;
 
                         // Note that we should not preEnter queues - they may need to be cancelled
                         // which is done internally.
                         //
                         case TCONST.QUEUE:
+
                             obj.applyNode();
                             break;
 
@@ -890,7 +904,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
     //************************************************************************
     //************************************************************************
-    // publish component state data - START
+    // IPublish component state data - START
 
     @Override
     public void publishState() {
@@ -913,12 +927,34 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     }
 
     @Override
+    public void publishFeatureSet(String featureSet) {
+
+        // Add new features - no duplicates
+        List<String> featArray = Arrays.asList(featureSet.split(","));
+
+        for(String feature : featArray) {
+
+            publishFeature(feature);
+        }
+    }
+
+    @Override
+    public void retractFeatureSet(String featureSet) {
+
+        // Add new features - no duplicates
+        List<String> featArray = Arrays.asList(featureSet.split(","));
+
+        for(String feature : featArray) {
+
+            retractFeature(feature);
+        }
+    }
+
+    @Override
     public void publishFeature(String feature) {
 
-        trackFeatures(feature);
-
         _FeatureMap.put(feature, true);
-        mTutor.setAddFeature(feature);
+        mTutor.addFeature(feature);
     }
 
     /**
@@ -931,26 +967,57 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     @Override
     public void retractFeature(String feature) {
 
-        trackFeatures(feature);
-
         _FeatureMap.put(feature, false);
-        mTutor.setDelFeature(feature);
+        mTutor.delFeature(feature);
     }
 
     /**
-     * _FeatureSet keeps track of used features
      *
-     * @param feature
+     * @param featureMap
      */
-    private void trackFeatures(String feature) {
+    @Override
+    public void publishFeatureMap(HashMap featureMap) {
 
-        if(_FeatureSet.indexOf(feature) == -1)
-        {
-            _FeatureSet.add(feature);
+        Iterator<?> tObjects = featureMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Boolean active = (Boolean)entry.getValue();
+
+            if(active) {
+                String feature = (String)entry.getKey();
+
+                mTutor.addFeature(feature);
+            }
         }
     }
 
-    // publish component state data - EBD
+    /**
+     *
+     * @param featureMap
+     */
+    @Override
+    public void retractFeatureMap(HashMap featureMap) {
+
+        Iterator<?> tObjects = featureMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Boolean active = (Boolean)entry.getValue();
+
+            if(active) {
+                String feature = (String)entry.getKey();
+
+                mTutor.delFeature(feature);
+            }
+        }
+    }
+
+    // IPublish component state data - EBD
     //************************************************************************
     //************************************************************************
 
@@ -966,7 +1033,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
 
-        Log.d(TAG, "Loader iteration");
+        // Log.d(TAG, "Loader iteration");
 
 
         // Note we load in the TClass as we need to use the tutor classMap to permit

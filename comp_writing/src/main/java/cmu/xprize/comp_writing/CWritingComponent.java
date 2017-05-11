@@ -43,6 +43,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.ltkplus.CGlyphMetricConstraint;
 import cmu.xprize.ltkplus.CGlyphMetrics;
 import cmu.xprize.ltkplus.CRecognizerPlus;
@@ -61,6 +62,9 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.EMPTY;
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+
 
 /**
  * TODO: document your custom view class.
@@ -69,7 +73,7 @@ import cmu.xprize.util.TCONST;
  *  settings will not work correctly.
  *
  */
-public class CWritingComponent extends PercentRelativeLayout implements IEventListener, IEventDispatcher, IWritingComponent, ILoadableObject, IPublisher {
+public class CWritingComponent extends PercentRelativeLayout implements IEventListener, IEventDispatcher, IWritingComponent, ILoadableObject, IPublisher, ITutorLogger {
 
     protected Context               mContext;
     protected char[]                mStimulusData;
@@ -119,7 +123,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected LocalBroadcastManager bManager;
 
     // json loadable
-    public boolean              random      = false;
+    public String               bootFeatures = EMPTY;
+    public boolean              random       = false;
     public String[]             dataSource;
 
     final private String  TAG        = "CWritingComponent";
@@ -919,50 +924,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     //************************************************************************
 
 
-
-    //************************************************************************
-    //************************************************************************
-    // IPublisher - START
-
-
-    // Must override in TClass
-    // TClass domain where TScope lives providing access to tutor scriptables
-    //
-    public void publishState() {
-    }
-
-    // Must override in TClass
-    // TClass domain where TScope lives providing access to tutor scriptables
-    //
-    public void publishValue(String varName, String value) {
-    }
-
-    // Must override in TClass
-    // TClass domain where TScope lives providing access to tutor scriptables
-    //
-    public void publishValue(String varName, int value) {
-    }
-
-    // Must override in TClass
-    // TClass domain where TScope lives providing access to tutor scriptables
-    //
-    public void publishFeature(String feature) {
-    }
-
-    // Must override in TClass
-    // TClass domain where TScope lives providing access to tutor scriptables
-    //
-    public void retractFeature(String feature) {
-    }
-
-
-    // IPublisher - EBD
-    //************************************************************************
-    //************************************************************************
-
-
-
-
     //***********************************************************
     // Event Listener/Dispatcher - Start
 
@@ -1131,7 +1092,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                     case WR_CONST.INHIBIT_OTHERS:
 
-                        inhibitInput(mActiveController, true);
+                        if(mActiveController != null)
+                            inhibitInput(mActiveController, true);
                         break;
 
                     case WR_CONST.CLEAR_ATTEMPT:
@@ -1166,7 +1128,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     case WR_CONST.ANIMATE_OVERLAY:
                     case WR_CONST.ANIMATE_ALIGN:
 
-                        mActiveController.post(_command);
+                        if(mActiveController != null)
+                            mActiveController.post(_command);
                         break;
 
                     case WR_CONST.POINT_AT_ERASE_BUTTON:
@@ -1322,6 +1285,85 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     // Component Message Queue  -- End
     //************************************************************************
     //************************************************************************
+
+    //************************************************************************
+    //************************************************************************
+    // IPublisher - START
+
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    @Override
+    public void publishState() {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    @Override
+    public void publishValue(String varName, String value) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    @Override
+    public void publishValue(String varName, int value) {
+    }
+
+    @Override
+    public void publishFeatureSet(String featureset) {
+
+    }
+
+    @Override
+    public void retractFeatureSet(String featureset) {
+
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    @Override
+    public void publishFeature(String feature) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    @Override
+    public void retractFeature(String feature) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    @Override
+    public void publishFeatureMap(HashMap featureMap) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    @Override
+    public void retractFeatureMap(HashMap featureMap) {
+    }
+
+    // IPublisher - EBD
+    //************************************************************************
+    //************************************************************************
+
+
+    //***********************************************************
+    // ITutorLogger - Start
+
+    @Override
+    public void logState(String logData) {
+    }
+
+    // ITutorLogger - End
+    //***********************************************************
 
 
 

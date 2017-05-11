@@ -36,6 +36,12 @@ import java.util.HashMap;
 
 public class CLogManager implements ILogManager {
 
+    private static final int OBJ_PART       = 0;
+    private static final int VAL_PART       = 1;
+    private static final String LOG_VERSION = "1.0.0";
+
+    private static String currenttutor = "<undefined>";
+
     private LogThread      logThread;                   // background thread handling log data
     private String         log_Path;
     private boolean        isLogging = false;
@@ -52,6 +58,7 @@ public class CLogManager implements ILogManager {
 
     // Datashop specific
 
+    private boolean                    loggingDS = false;
     private File                       logDSFile;
     private FileOutputStream           logDSStream;
     private java.nio.channels.FileLock logDSLock;
@@ -83,7 +90,6 @@ public class CLogManager implements ILogManager {
 
         isLogging = true;
         mDisabled = false;
-        Log.d(TAG, "Startup");
 
         logThread = new LogThread(TAG);
         logThread.start();
@@ -92,7 +98,7 @@ public class CLogManager implements ILogManager {
             logHandler = new Handler(logThread.getLooper());
         }
         catch(Exception e) {
-            Log.d(TAG, "Handler Create Failed:" + e);
+            Log.e(TAG, "Handler Create Failed:" + e);
         }
 
         lockLog();
@@ -107,7 +113,7 @@ public class CLogManager implements ILogManager {
     public void stopLogging() {
 
         if(isLogging) {
-            Log.d(TAG, "Shutdown begun");
+            Log.i(TAG, "Shutdown begun");
 
             isLogging = false;
             mDisabled = true;
@@ -119,13 +125,18 @@ public class CLogManager implements ILogManager {
                 logThread.getLooper().quitSafely();
 
                 logThread.join();            // waits until it finishes
-                Log.d(TAG, "Shutdown complete");
+                Log.i(TAG, "Shutdown complete");
 
             } catch (InterruptedException e) {
             }
 
             releaseLog();
         }
+    }
+
+
+    public static void setTutor(String tutorid) {
+        currenttutor = tutorid;
     }
 
 
@@ -152,15 +163,47 @@ public class CLogManager implements ILogManager {
     public class Queue implements Runnable {
 
         protected String dataPacket;
-        protected String target = CPreferenceCache.getPrefID(TLOG_CONST.ENGINE_INSTANCE) + TLOG_CONST.JSONLOG;
+        protected String unEncodedPacket;
+        protected String statePacket;
 
         public Queue(String packet) {
-            dataPacket = packet;
+
+            dataPacket      = packet;
+            unEncodedPacket = null;
         }
 
-        public Queue(String _packet, String _target) {
-            dataPacket = _packet;
-            target     = _target;
+        public Queue(String _packet, String _target, String _state) {
+            dataPacket      = _packet;
+            unEncodedPacket = _target;
+            statePacket     = _state;
+        }
+
+        // we can accept data with various object/value encodings (i.e. different delimiters)
+        //
+        private String parseData(String dataPacket, String delimiter) {
+
+            String encodedPacket = "{";
+
+            String[] objvalPairs = dataPacket.split(",");
+
+            for(int pair = 0 ; pair < objvalPairs.length ; pair++) {
+
+                String[] objval = objvalPairs[pair].split(delimiter);
+
+                if(objval.length > 1) {
+                    encodedPacket = encodedPacket + "\"" + objval[OBJ_PART] + "\":\"" + objval[VAL_PART] + "\"";
+                }
+                else {
+                    encodedPacket = encodedPacket + "\"" + objval[OBJ_PART] + "\":\"" + "<empty>" + "\"";
+                }
+
+                if(pair < objvalPairs.length -1) {
+                    encodedPacket = encodedPacket + ",";
+                }
+            }
+            encodedPacket = encodedPacket + "}";
+
+            return encodedPacket;
         }
 
         @Override
@@ -169,7 +212,32 @@ public class CLogManager implements ILogManager {
             try {
                 queueMap.remove(this);
 
-                writePacketToLog(dataPacket, target);
+                // Don't do this JSON encoding on the UI Thread -
+                // if unEncodedPacket is not null then the packet is incomplete and unEncodedPacket
+                // contains a String containing a comma delimited set of obj:value pairs
+                //
+                // For statePackets
+                // e.g. "myobj1|itsvalue,myobj2|itsvalue"
+                //
+                // For unEncodedPacket
+                // e.g. "myobj1:itsvalue,myobj2:itsvalue"
+                //
+                // These need to be encoded into a JSON data subobject.
+                //
+                if(statePacket != null) {
+
+                    String encodedJSONPacket = parseData(statePacket, "#");
+
+                    dataPacket = dataPacket + "\"data\":" + encodedJSONPacket + "},\n";
+                }
+                else if(unEncodedPacket != null) {
+
+                    String encodedJSONPacket = parseData(unEncodedPacket, ":");
+
+                    dataPacket = dataPacket + "\"data\":" + encodedJSONPacket + "},\n";
+                }
+
+                writePacketToLog(dataPacket);
 
             } catch (Exception e) {
                 CErrorManager.logEvent(TAG, "Write Error:", e, false);
@@ -179,8 +247,8 @@ public class CLogManager implements ILogManager {
 
 
     /**
-     * We use file locks to keep the logs around until we are finished.  The XPrize initiative used a
-     * Google Drive Sync utility that required locking the files so they weren't deleted while in
+     * We use file locks to keep the logs around until we are finished.  The RoboTutor XPrize initiative
+     * used a Google Drive-Sync utility App that required locking the files so they weren't deleted while in
      * use.  So this is not a requirement otherwise.
      *
      */
@@ -224,32 +292,34 @@ public class CLogManager implements ILogManager {
                 logWriterValid = true;
 
                 // Begin the root JSON element
-                postPacket("{");
+                postPacket("{\"RT_log_version\":\"" + LOG_VERSION + "\",\"RT_log_data\":[");
 
             } catch (Exception e) {
-                Log.d(TAG, "lockLog Failed: " + e);
+                Log.e(TAG, "lockLog Failed: " + e);
             }
 
 
             //**** DATASHOP
 
-            // Generate a tutor instance-unique id for DataShop
-            //
-            outDSPath += dsPath;
+            if(loggingDS) {
 
-            logDSFile = new File(outDSPath);
+                // Generate a tutor instance-unique id for DataShop
+                //
+                outDSPath += dsPath;
 
-            try {
-                logDSStream = new FileOutputStream(logDSFile);
-                logDSLock   = logDSStream.getChannel().lock();
-                logDSWriter = new FileWriter(outDSPath, TLOG_CONST.APPEND);
+                logDSFile = new File(outDSPath);
 
-                logDSWriterValid = true;
+                try {
+                    logDSStream = new FileOutputStream(logDSFile);
+                    logDSLock = logDSStream.getChannel().lock();
+                    logDSWriter = new FileWriter(outDSPath, TLOG_CONST.APPEND);
 
-            } catch (Exception e) {
-                Log.d(TAG, "DataShop lockLog Failed: " + e);
+                    logDSWriterValid = true;
+
+                } catch (Exception e) {
+                    Log.e(TAG, "DataShop lockLog Failed: " + e);
+                }
             }
-
         }
     }
 
@@ -260,7 +330,8 @@ public class CLogManager implements ILogManager {
             if(logWriterValid) {
 
                 // Terminate the root JSON element
-                postPacket("}");
+                //
+                writePacketToLog("{\"end\":\"end\"}]}");
 
                 logWriterValid = false;
 
@@ -272,36 +343,35 @@ public class CLogManager implements ILogManager {
             }
         }
         catch(Exception e) {
-            Log.d(TAG, "releaseLog Failed: " + e);
+            Log.e(TAG, "releaseLog Failed: " + e);
         }
 
         //**** DATASHOP
 
-        try {
-            if(logDSWriterValid) {
+        if(loggingDS) {
+            try {
+                if (logDSWriterValid) {
 
-                logDSWriterValid = false;
+                    logDSWriterValid = false;
 
-                logDSWriter.flush();
-                logDSWriter.close();
+                    logDSWriter.flush();
+                    logDSWriter.close();
 
-                logDSLock.release();
-                logDSStream.close();
+                    logDSLock.release();
+                    logDSStream.close();
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "releaseLog Failed: " + e);
             }
         }
-        catch(Exception e) {
-            Log.d(TAG, "releaseLog Failed: " + e);
-        }
-
     }
-
 
 
     /**
      * Note that this is currently XPrize log specific.
      * TODO: make general Purpose
      */
-    private void writePacketToLog(String jsonPacket, String path) {
+    private void writePacketToLog(String jsonPacket) {
 
         // Append Glyph Data to file
         try {
@@ -333,6 +403,7 @@ public class CLogManager implements ILogManager {
         }
     }
 
+
     /**
      * Post a command to this scenegraph queue
      *
@@ -349,69 +420,75 @@ public class CLogManager implements ILogManager {
      *
      * @param command
      */
-    public void postTo(String command, String target) {
+    private void postUnencoded(String command, String target, String state) {
 
-        enQueue(new Queue(command, target));
+        enQueue(new Queue(command, target, state));
     }
 
 
     @Override
-    public void postSystemEvent(String Tag, String Msg) {
+    public void postTutorState(String Tag, String Msg) {
+        Log.i(Tag, postEvent_BASE("TUTORSTATE", Tag, Msg));
+    }
+
+    @Override
+    public void postEvent_V(String Tag, String Msg) {
+        Log.v(Tag, postEvent_BASE("VERBOSE", Tag, Msg));
+    }
+    @Override
+    public void postEvent_D(String Tag, String Msg) {
+        Log.d(Tag, postEvent_BASE("DEBUG", Tag, Msg));
+    }
+    @Override
+    public void postEvent_I(String Tag, String Msg) {
+        Log.i(Tag, postEvent_BASE("INFO", Tag, Msg));
+    }
+    @Override
+    public void postEvent_W(String Tag, String Msg) {
+        Log.w(Tag, postEvent_BASE("WARN", Tag, Msg));
+    }
+    @Override
+    public void postEvent_E(String Tag, String Msg) {
+        Log.e(Tag, postEvent_BASE("ERROR", Tag, Msg));
+    }
+    @Override
+    public void postEvent_A(String Tag, String Msg) {
+        Log.wtf(Tag, postEvent_BASE("ASSERT", Tag, Msg));
+    }
+
+    // Note that we leave the Msg JSON encoding to the Log thread where it can be processed off the
+    // UI thread.
+    //
+    private String postEvent_BASE(String classification, String Tag, String Msg) {
 
         String packet;
 
-        // Emit to LogCat
+        packet = "{" +
+                "\"type\":\"LOG_DATA\"," +
+                "\"tutor\":\"" + currenttutor + "\"," +
+                "\"class\":\"" + classification + "\"," +
+                "\"tag\":\""   + Tag + "\"," +
+                "\"time\":\""  + System.currentTimeMillis() + "\",";
+
+        // Note that tutor state is encoded with | object|value delimiters while
+        // Regular messages are delimited with : object:value delimiters.
         //
-        Log.i(TAG, Msg);
+        switch(classification) {
+            case "TUTORSTATE":
+                postUnencoded(packet, null, Msg);
+                break;
 
-        packet = "{" +
-                "\"type\":\"Event\"," +
-                "\"time\":\"" + System.currentTimeMillis() + "\"," +
-                "\"tag\":\"" + Tag + "\"," +
-                "\"msg\":\"" + Msg + "\"," +
-                "},\n";
+            default:
+                postUnencoded(packet, Msg, null);
+                break;
+        }
 
-        postTo(packet, TLOG_CONST.ENGINE_INSTANCE + TLOG_CONST.JSONLOG);
+        return Msg;
     }
 
 
     @Override
-    public void postSystemTimeStamp(String Tag) {
-
-        String packet;
-
-        packet = "{" +
-                "\"type\":\"TimeStamp\"," +
-                "\"time\":\"" + System.currentTimeMillis() + "\"," +
-                "\"tag\":\"" + Tag + "\"," +
-                "},\n";
-
-        postTo(packet, TLOG_CONST.ENGINE_INSTANCE + TLOG_CONST.JSONLOG);
-    }
-
-
-    @Override
-    public void postEvent(String Tag, String Msg) {
-
-        String packet;
-
-        // Emit to LogCat
-        //
-        Log.i(TAG, Msg);
-
-        packet = "{" +
-                "\"type\":\"Event\"," +
-                "\"time\":\"" + System.currentTimeMillis() + "\"," +
-                "\"tag\":\"" + Tag + "\"," +
-                "\"msg\":\"" + Msg + "\"," +
-                "},\n";
-
-        post(packet);
-    }
-
-
-    @Override
-    public void postTimeStamp(String Tag) {
+    public void postDateTimeStamp(String Tag, String Msg) {
 
         String packet;
 
@@ -421,13 +498,17 @@ public class CLogManager implements ILogManager {
         String formattedDate = df.format(Calendar.getInstance().getTime());
 
         packet = "{" +
+                "\"class\":\"VERBOSE\"," +
+                "\"tag\":\"" + Tag + "\"," +
                 "\"type\":\"TimeStamp\"," +
                 "\"datetime\":\"" + formattedDate + "\"," +
-                "\"time\":\"" + System.currentTimeMillis() + "\"," +
-                "\"tag\":\"" + Tag + "\"," +
-                "},\n";
+                "\"time\":\"" + System.currentTimeMillis() + "\",";
 
-        post(packet);
+        postUnencoded(packet, Msg, null);
+
+        // Emit to logcat as info class message
+        //
+        Log.i(Tag, packet + Msg);
     }
 
 
@@ -437,10 +518,11 @@ public class CLogManager implements ILogManager {
         String packet;
 
         packet = "{" +
+                "\"class\":\"ERROR\"," +
+                "\"tag\":\"" + Tag + "\"," +
                 "\"type\":\"Error\"," +
                 "\"time\":\"" + System.currentTimeMillis() + "\"," +
-                "\"tag\":\"" + Tag + "\"," +
-                "\"msg\":\"" + Msg + "\"," +
+                "\"msg\":\"" + Msg + "\"" +
                 "},\n";
 
         post(packet);
@@ -453,11 +535,12 @@ public class CLogManager implements ILogManager {
         String packet;
 
         packet = "{" +
-                "\"type\":\"Error\"," +
-                "\"time\":\"" + System.currentTimeMillis() + "\"," +
+                "\"class\":\"ERROR\"," +
                 "\"tag\":\"" + Tag + "\"," +
+                "\"type\":\"Exception\"," +
+                "\"time\":\"" + System.currentTimeMillis() + "\"," +
                 "\"msg\":\"" + Msg + "\"," +
-                "\"exception\":\"" + e.toString() + "\"," +
+                "\"exception\":\"" + e.toString() + "\"" +
                 "},\n";
 
         post(packet);

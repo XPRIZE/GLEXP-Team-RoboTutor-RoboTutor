@@ -21,6 +21,7 @@ package cmu.xprize.comp_writing;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,6 +35,8 @@ import java.util.Map;
 import cmu.xprize.ltkplus.CGlyphMetrics;
 import cmu.xprize.ltkplus.CRecResult;
 import cmu.xprize.comp_logging.CErrorManager;
+
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 
 /**
@@ -141,9 +144,13 @@ public class CWritingDevComponent extends CWritingComponent {
                 CGlyphController comp = (CGlyphController) mGlyphList.getChildAt(i1);
 
                 if(comp.toggleSampleChar()) {
+                    Log.v(QGRAPH_MSG, "event.click: " + " Hide Sample");
+
                     mShowSample.setText("Hide Sample");
                 }
                 else {
+                    Log.v(QGRAPH_MSG, "event.click: " + " Show Sample");
+
                     mShowSample.setText("Show Sample");
                 }
             }
@@ -163,9 +170,13 @@ public class CWritingDevComponent extends CWritingComponent {
             }
 
             if(result) {
+                Log.v(QGRAPH_MSG, "event.click: " + " Show User Glyph");
+
                 mShowPrototype.setText("Show User Glyph");
             }
             else {
+                Log.v(QGRAPH_MSG, "event.click: " + " Show Prototype");
+
                 mShowPrototype.setText("Show Prototype");
             }
 
@@ -186,9 +197,13 @@ public class CWritingDevComponent extends CWritingComponent {
             }
 
             if(result) {
+                Log.v(QGRAPH_MSG, "event.click: " + " CWritingDevComponent:Hide Bounds");
+
                 mShowBounds.setText("Hide Bounds");
             }
             else {
+                Log.v(QGRAPH_MSG, "event.click: " + " CWritingDevComponent:Show Bounds");
+
                 mShowBounds.setText("Show Bounds");
             }
 
@@ -202,6 +217,8 @@ public class CWritingDevComponent extends CWritingComponent {
 
             // An item was selected. You can retrieve the selected item using
             String fontSelection = (String)parent.getItemAtPosition(pos);
+
+            Log.v(QGRAPH_MSG, "event.click: " + " CWritingDevComponent:select Font");
 
             for(int i1 = 0 ; i1 < mStimulusData.length ; i1++) {
 
@@ -222,9 +239,13 @@ public class CWritingDevComponent extends CWritingComponent {
         public void onClick(View v) {
 
             if(_recognizer.toggleExpectedBoost()) {
+                Log.v(QGRAPH_MSG, "event.click: " + " CWritingDevComponent:Boost Expected : YES");
+
                 mBoostSample.setText("Boost Expected : YES");
             }
             else {
+                Log.v(QGRAPH_MSG, "event.click: " + " CWritingDevComponent:Boost Expected : YES");
+
                 mBoostSample.setText("Boost Expected : NO ");
             }
 
@@ -237,9 +258,13 @@ public class CWritingDevComponent extends CWritingComponent {
         public void onClick(View v) {
 
             if(_recognizer.togglePunctBoost()) {
+                Log.v(QGRAPH_MSG, "event.click: " + " CWritingDevComponent:Boost Punctuation : YES");
+
                 mBoostPunct.setText("Boost Punctuation : YES");
             }
             else {
+                Log.v(QGRAPH_MSG, "event.click: " + " CWritingDevComponent:Boost Punctuation : NO");
+
                 mBoostPunct.setText("Boost Punctuation : NO ");
             }
 

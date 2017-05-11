@@ -348,7 +348,7 @@ public class CAssetObject {
 
         String asset = getName(type);
 
-        logManager.postEvent(TAG, "Updating Asset: " + assetName + " -> Version: " + getVersionString(type));
+        logManager.postEvent_V(TAG, "Updating Asset: " + assetName + " -> Version: " + getVersionString(type));
 
         try {
             ZipFile zipFile = new ZipFile(getFile(type));
@@ -368,7 +368,7 @@ public class CAssetObject {
 
         } catch (Exception e) {
 
-            logManager.postEvent(TAG, "Asset Unpack Failed: " + e);
+            logManager.postEvent_V(TAG, "Asset Unpack Failed: " + e);
         }
 
         return success;

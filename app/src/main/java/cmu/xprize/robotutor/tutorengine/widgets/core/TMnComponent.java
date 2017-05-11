@@ -66,16 +66,16 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl, ID
         reset();
 
         if(correct)
-            mTutor.setAddFeature(TCONST.GENERIC_RIGHT);
+            mTutor.addFeature(TCONST.GENERIC_RIGHT);
         else
-            mTutor.setAddFeature(TCONST.GENERIC_WRONG);
+            mTutor.addFeature(TCONST.GENERIC_WRONG);
     }
 
 
     private void reset() {
 
-        mTutor.setDelFeature(TCONST.GENERIC_RIGHT);
-        mTutor.setDelFeature(TCONST.GENERIC_WRONG);
+        mTutor.delFeature(TCONST.GENERIC_RIGHT);
+        mTutor.delFeature(TCONST.GENERIC_WRONG);
     }
 
 
@@ -124,7 +124,7 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl, ID
 
         // We make the assumption that all are correct until proven wrong
         //
-        mTutor.setAddFeature(TCONST.ALL_CORRECT);
+        mTutor.addFeature(TCONST.ALL_CORRECT);
 
         // TODO: globally make startWith type TCONST
         try {
@@ -158,7 +158,7 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl, ID
         //
         if(mTutor.testFeatureSet(TCONST.GENERIC_WRONG)) {
 
-            mTutor.setDelFeature(TCONST.ALL_CORRECT);
+            mTutor.delFeature(TCONST.ALL_CORRECT);
         }
 
         reset();
@@ -166,7 +166,7 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl, ID
         super.next();
 
         if(dataExhausted())
-            mTutor.setAddFeature(TCONST.FTR_EOI);
+            mTutor.addFeature(TCONST.FTR_EOI);
     }
 
 

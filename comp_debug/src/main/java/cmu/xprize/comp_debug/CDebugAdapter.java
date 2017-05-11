@@ -20,6 +20,7 @@ import static cmu.xprize.comp_debug.CD_CONST.STATE_HARDER;
 import static cmu.xprize.comp_debug.CD_CONST.STATE_NEXT;
 import static cmu.xprize.comp_debug.CD_CONST.STATE_NORMAL;
 import static cmu.xprize.comp_debug.CD_CONST.STATE_NULL;
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 
 public class CDebugAdapter extends BaseAdapter {
@@ -198,7 +199,7 @@ public class CDebugAdapter extends BaseAdapter {
             found = indexTransitionMap.get(position);
         }
 
-        Log.d(TAG, "position: " + position + " - object: " + found);
+//        Log.d(TAG, "position: " + position + " - object: " + found);
 
         return found;
     }
@@ -221,7 +222,7 @@ public class CDebugAdapter extends BaseAdapter {
         //
         row = position / gridViewCols;
 
-        Log.d(TAG, "position: " + position + " - on row: " + row);
+//        Log.d(TAG, "position: " + position + " - on row: " + row);
 
         return row;
     }
@@ -257,7 +258,7 @@ public class CDebugAdapter extends BaseAdapter {
             buttonState = STATE_NULL;
         }
 
-        Log.d(TAG, "Mapped KeyState: " + position + " - in State: " + buttonState);
+//        Log.d(TAG, "Mapped KeyState: " + position + " - in State: " + buttonState);
 
         return buttonState;
     }
@@ -270,7 +271,7 @@ public class CDebugAdapter extends BaseAdapter {
         CDebugButton tutorSelector;
         String       buttonState = mapKeyState(gridPosition);
 
-        Log.d(TAG, "GetView: " + gridPosition + " - convertible: " + convertView);
+//        Log.d(TAG, "GetView: " + gridPosition + " - convertible: " + convertView);
 
         if((gridPosition == 0)) {
 
@@ -321,7 +322,7 @@ public class CDebugAdapter extends BaseAdapter {
             tutorSelector.setEnabled(true);
         }
 
-        Log.d(TAG, "GetView: " + gridPosition + " - new buttonMap: " + tutorSelector);
+        Log.v(TAG, "GetView: " + gridPosition + " - new buttonMap: " + tutorSelector);
 
         tutorSelector.setOnClickListener(new View.OnClickListener() {
 
@@ -333,7 +334,7 @@ public class CDebugAdapter extends BaseAdapter {
             tutorSelector = (CDebugButton)view;
             gridPosition  = tutorSelector.getGridPosition();
 
-            Log.d(TAG, "Click on item: " + gridPosition);
+            Log.v(QGRAPH_MSG, "event.click: " + " CDebugAdapter:Click on item: " + gridPosition);
 
             String tutorName = "";
 

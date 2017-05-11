@@ -24,10 +24,13 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import cmu.xprize.util.TCONST;
+
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 public class CStimResp extends LinearLayout implements View.OnClickListener, ITextSink {
 
@@ -284,6 +287,9 @@ public class CStimResp extends LinearLayout implements View.OnClickListener, ITe
 
         // Only response type views react to taps
         if(mIsResponse) {
+
+            Log.v(QGRAPH_MSG, "event.click: " + " CStimResp:edit action");
+
             if(mFocus != newFocus) {
                 if(mFocus != null)
                     mFocus.setFocus(false);

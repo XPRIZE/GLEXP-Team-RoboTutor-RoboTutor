@@ -27,10 +27,17 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 
+import cmu.xprize.comp_logging.CLogManager;
+import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.CPixelArray;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.ltkplus.GCONST.NO_LOG;
+import static cmu.xprize.util.TCONST.GRAPH_MSG;
+
 public class CGlyphMetrics {
+
+    static public ILogManager logManager;
 
     private float CGVarX;
     private float CGVarY;
@@ -72,6 +79,8 @@ public class CGlyphMetrics {
 
     public CGlyphMetrics() {
 
+        logManager = CLogManager.getInstance();
+
         // Create a paint object to deine the line parameters
         mPaint = new Paint();
 
@@ -84,7 +93,7 @@ public class CGlyphMetrics {
     }
 
 
-    public void calcMetrics(CGlyph currentGlyph, RectF glyphBnds, Rect protoBnds, Rect viewBnds, Rect expectBnds, float STROKE_WEIGHT) {
+    public void calcMetrics(String  expectedChar, String  charToCompare, CGlyph currentGlyph, RectF glyphBnds, Rect protoBnds, Rect viewBnds, Rect expectBnds, float STROKE_WEIGHT) {
 
         // Calc the center of gravity (center) of the glyph / prototype
 
@@ -118,6 +127,8 @@ public class CGlyphMetrics {
         aspectGl = (glyphBnds.width() / glyphBnds.height());
 
         aspectVar = Math.abs(aspectPr - aspectGl);
+
+        logManager.postEvent_D(GRAPH_MSG, "target:CGlyphMetrics,action:calcmetrics,expected:" + expectedChar + ",comparewith:" + charToCompare + ",var_x:" + PosVarX + ",var_y:" + PosVarY + ",var_w:" + SizVarW + ",var_h:" + SizVarH + ",var_a:" + aspectVar );
     }
 
 
@@ -312,6 +323,8 @@ public class CGlyphMetrics {
         }
 
         Log.d("LTKPLUS", "Time in recognizer: " + (System.currentTimeMillis() - _time));
+
+        logManager.postEvent_D(GRAPH_MSG, "target:CGlyphMetrics,action:generatevisualmetric,expected:" + expectedChar + ",comparewith:" + charToCompare + ",visualmatch:" + _visualMatch + ",visualerror:" + _visualError);
 
         return _visualMatch;
     }

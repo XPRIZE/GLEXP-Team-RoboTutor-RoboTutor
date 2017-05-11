@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -34,6 +35,8 @@ import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
+
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 
 /**
@@ -175,16 +178,21 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
                     onSpeedChange(speed);
                     if(extraSpeed>speed)     //slow down the speed
                     {
+                        Log.v(QGRAPH_MSG, "event.click: " + "reduce speed");
+
                         soundPool.play(slowdown, 0.1f, 0.1f, 1, 0, 1.0f);
                         System.out.println("slow down");
                         //soundPool.play(carscreechMedia, 0.1f, 0.1f, 1, 0, 1.0f);
                     }
                     else if(extraSpeed<speed)  //increase the speed
                     {
+                        Log.v(QGRAPH_MSG, "event.click: " + "increase speed");
+
                         soundPool.play(speedup, 0.1f, 0.1f, 1, 0, 1.0f);
                         System.out.println("speed up");
                         //soundPool.play(carscreechMedia, 0.1f, 0.1f, 1, 0, 1.0f);
                     }
+
                     extraSpeed = speed;
                     for(Button b : speedometerButton)
                         b.getBackground().clearColorFilter();

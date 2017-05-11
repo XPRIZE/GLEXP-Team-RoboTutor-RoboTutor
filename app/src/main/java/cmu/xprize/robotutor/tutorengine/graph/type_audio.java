@@ -23,12 +23,14 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.IMediaListener;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.util.CFileNameHasher;
 import cmu.xprize.util.TCONST;
+
 
 
 /**
@@ -116,7 +118,7 @@ public class type_audio extends type_action implements IMediaListener {
             if (mWasPlaying) {
                 mWasPlaying = false;
 
-                Log.i(TAG, "global play");
+                RoboTutor.logManager.postEvent_D(_logType, "target:node.audio,action:globalplay,name:"+mRawName);
                 mPlayer.play();
             }
         }
@@ -129,6 +131,7 @@ public class type_audio extends type_action implements IMediaListener {
             if (mPlayer.isPlaying()) {
                 mWasPlaying = true;
 
+                RoboTutor.logManager.postEvent_D(_logType, "target:node.audio,action:globalstop,name:"+mRawName);
                 mPlayer.releasePlayer();
             }
         }
@@ -164,8 +167,11 @@ public class type_audio extends type_action implements IMediaListener {
             // Flows automatically emit a NEXT_NODE event to scenegraph.
             //
             if (mode.equals(TCONST.AUDIOFLOW)) {
-                Log.d(TAG, "Processing: Audio Flow");
+                RoboTutor.logManager.postEvent_I(_logType, "target:node.audio,event:oncompletion,type:flow,emit:eventNext,name:"+mRawName);
                 _scope.tutor().eventNext();
+            }
+            else {
+                RoboTutor.logManager.postEvent_I(_logType, "target:node.audio,event:oncompletion,type:stream,name:"+mRawName);
             }
         }
         // If this is an AUDIOEVENT type then the mPlayer was released already but we need
@@ -196,7 +202,7 @@ public class type_audio extends type_action implements IMediaListener {
 
         mPathResolved = getScope().parseTemplate(mSourcePath);
 
-        Log.i(TAG, "Preloading audio: " + mPathResolved);
+        RoboTutor.logManager.postEvent_D(_logType, "target:node.audio,action:preload,name:" + mPathResolved);
 
         int endofPath = mPathResolved.lastIndexOf("/") + 1;
 
@@ -292,7 +298,7 @@ public class type_audio extends type_action implements IMediaListener {
             mPlayer = null;
         }
 
-        Log.i(TAG, "cancelNode - PlayerDetached - " + mRawName);
+        RoboTutor.logManager.postEvent_D(_logType, "target:node.audio,action:cancelnode,name:" + mRawName);
 
         return TCONST.NONE;
     }
@@ -301,7 +307,7 @@ public class type_audio extends type_action implements IMediaListener {
     public void play() {
 
         if(mPlayer != null) {
-            Log.d(TAG, "play - " + mRawName);
+            RoboTutor.logManager.postEvent_I(_logType, "target:node.audio,action:play,name:" + mRawName);
             mPlayer.play();
 
             // AUDIOEVENT mode tracks are fire and forget - i.e. we disconnect from the player
@@ -311,6 +317,8 @@ public class type_audio extends type_action implements IMediaListener {
             // instance of the sound while the other is still playing.
             //
             if(mode == TCONST.AUDIOEVENT) {
+                RoboTutor.logManager.postEvent_I(_logType, "target:node.audio,type:event,action:complete,name:" + mRawName);
+
                 mPlayer = null;
             }
         }

@@ -41,6 +41,7 @@ public class GCONST {
     public static final String FTR_HEIGHT_VIOLATION  = "FTR_HEIGHT_VIOLATION";
     public static final String FTR_TALL_VIOLATION    = "FTR_TALL_VIOLATION";
     public static final String FTR_SHORT_VIOLATION   = "FTR_SHORT_VIOLATION";
+    public static final String NO_LOG                = "<no_log>";
 
     static public HashMap<String, String> glyphMap = new HashMap<String, String>();
 

@@ -32,12 +32,17 @@ import android.widget.LinearLayout;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.comp_writing.CWritingComponent;
 import cmu.xprize.comp_writing.WR_CONST;
 import cmu.xprize.ltkplus.CRecognizerPlus;
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
@@ -46,7 +51,6 @@ import cmu.xprize.util.IEventSource;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
-import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
@@ -58,11 +62,16 @@ import cmu.xprize.util.IEventListener;
 import cmu.xprize.comp_logging.ILogManager;
 
 import cmu.xprize.robotutor.R;
+import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-public class TWritingComponent extends CWritingComponent implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource {
+import static cmu.xprize.util.TCONST.EMPTY;
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
+
+public class TWritingComponent extends CWritingComponent implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource, IPublisher, ITutorLogger {
 
     private CTutor                  mTutor;
     private CSceneDelegate          mTutorScene;
@@ -81,7 +90,8 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     private ArrayList<CDataSourceImg> _dataStack  = new ArrayList<>();
 
-    private ArrayList<String>       _FeatureSet = new ArrayList<>();
+    private HashMap<String,String>  _StringVar  = new HashMap<>();
+    private HashMap<String,Integer> _IntegerVar = new HashMap<>();
     private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
 
     private static final String  TAG = "TWritingComponent";
@@ -121,7 +131,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         mRecogList        = (LinearLayout) findViewById(R.id.SstimulusList);
 
         mDrawnScroll = (CLinkedScrollView) findViewById(R.id.SfingerWriter);
-        mGlyphList = (LinearLayout) findViewById(R.id.Sdrawn_glyphs);
+        mGlyphList   = (LinearLayout) findViewById(R.id.Sdrawn_glyphs);
         mGlyphList.setClipChildren(false);
 
         mReplayButton = (ImageButton) findViewById(R.id.Sreplay);
@@ -157,14 +167,82 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     public void onEvent(IEvent event) {
     }
 
-
     // Event Listener/Dispatcher - End
     //***********************************************************
+
+
+    //***********************************************************
+    // ITutorLogger - Start
+
+    private void extractHashContents(StringBuilder builder, HashMap map) {
+
+        Iterator<?> tObjects = map.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+
+            builder.append(',');
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            String key   = entry.getKey().toString();
+            String value = "#" + entry.getValue().toString();
+
+            builder.append(key);
+            builder.append(value);
+        }
+    }
+
+    private void extractFeatureContents(StringBuilder builder, HashMap map) {
+
+        StringBuilder featureset = new StringBuilder();
+
+        Iterator<?> tObjects = map.entrySet().iterator();
+
+        // Scan to build a list of active features
+        //
+        while(tObjects.hasNext() ) {
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Boolean value = (Boolean) entry.getValue();
+
+            if(value) {
+                featureset.append(entry.getKey().toString() + ";");
+            }
+        }
+
+        // If there are active features then trim the last ',' and add the
+        // comma delimited list as the "$features" object.
+        //
+        if(featureset.length() != 0) {
+            featureset.deleteCharAt(featureset.length()-1);
+
+            builder.append(",$features#" + featureset.toString());
+        }
+    }
+
+    @Override
+    public void logState(String logData) {
+
+        StringBuilder builder = new StringBuilder();
+
+        extractHashContents(builder, _StringVar);
+        extractHashContents(builder, _IntegerVar);
+        extractFeatureContents(builder, _FeatureMap);
+
+        RoboTutor.logManager.postTutorState(TUTOR_STATE_MSG, "target#word_copy," + logData + builder.toString());
+    }
+
+    // ITutorLogger - End
+    //***********************************************************
+
 
 
     public class replayClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+
+            Log.v(QGRAPH_MSG, "event.click: " + " replay");
 
             mReplayButton.setOnClickListener(null);
 
@@ -173,6 +251,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
             mReplayButton.setOnClickListener(new replayClickListener());
         }
     }
+
 
     public void enableReplayButton(Boolean enable) {
 
@@ -185,6 +264,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
         broadcastLocation(TCONST.POINT_AND_TAP, mReplayButton);
     }
+
 
     private void broadcastLocation(String Action, View target) {
 
@@ -203,13 +283,11 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     //************************************************************************
     // Tutor Scriptable methods  Start
 
-
     @Override
     public void setVisibility(String visible) {
 
         mTutorScene.setVisibility(visible);
     }
-
 
     public void postEvent(String event) {
         postEvent(event,0);
@@ -239,7 +317,6 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     // TODO: Should renanme this to "enable"
     public void inhibitInput(Boolean inhibit) { super.inhibitInput(inhibit); }
-
 
     // Tutor methods  End
     //************************************************************************
@@ -286,7 +363,8 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         if(!(result = super.applyBehavior(event))) {
 
             if (volatileMap.containsKey(event)) {
-                Log.d(TAG, "Processing Volatile ApplyEvent: " + event);
+
+                RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:volatile,behavior:" + event);
                 applyBehaviorNode(volatileMap.get(event));
 
                 volatileMap.remove(event);
@@ -295,7 +373,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
             } else if (stickyMap.containsKey(event)) {
 
-                Log.d(TAG, "Processing Sticky ApplyEvent: " + event);
+                RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:sticky,behavior:" + event);
                 applyBehaviorNode(stickyMap.get(event));
 
                 result = true;
@@ -322,6 +400,8 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
                 if (obj != null) {
 
+                    RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehaviornode,type:" + obj.getType() + ",behavior:" + nodeName);
+
                     switch(obj.getType()) {
 
                         case TCONST.SUBGRAPH:
@@ -332,17 +412,19 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                         case TCONST.MODULE:
 
                             // Disallow module "calls"
-                            Log.e(TAG, "MODULE Behaviors are not supported");
+                            RoboTutor.logManager.postEvent_E(QGRAPH_MSG, "target:" + TAG + ",action:applybehaviornode,type:modulecall,behavior:" + nodeName +  ",ERROR:MODULE Behaviors are not supported");
                             break;
 
                         // Note that we should not preEnter queues - they may need to be cancelled
                         // which is done internally.
                         //
                         case TCONST.QUEUE:
+
                             obj.applyNode();
                             break;
 
                         default:
+
                             obj.preEnter();
                             obj.applyNode();
                             break;
@@ -393,6 +475,8 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     @Override
     public void publishValue(String varName, String value) {
 
+        _StringVar.put(varName,value);
+        
         // update the response variable  "<ComponentName>.<varName>"
         mTutor.getScope().addUpdateVar(name() + varName, new TString(value));
 
@@ -401,18 +485,42 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     @Override
     public void publishValue(String varName, int value) {
 
+        _IntegerVar.put(varName,value);
+        
         // update the response variable  "<ComponentName>.<varName>"
         mTutor.getScope().addUpdateVar(name() + varName, new TInteger(value));
 
     }
 
     @Override
+    public void publishFeatureSet(String featureSet) {
+
+        // Add new features - no duplicates
+        List<String> featArray = Arrays.asList(featureSet.split(","));
+
+        for(String feature : featArray) {
+
+            publishFeature(feature);
+        }
+    }
+
+    @Override
+    public void retractFeatureSet(String featureSet) {
+
+        // Add new features - no duplicates
+        List<String> featArray = Arrays.asList(featureSet.split(","));
+
+        for(String feature : featArray) {
+
+            retractFeature(feature);
+        }
+    }
+
+    @Override
     public void publishFeature(String feature) {
 
-        trackFeatures(feature);
-
         _FeatureMap.put(feature, true);
-        mTutor.setAddFeature(feature);
+        mTutor.addFeature(feature);
     }
 
     /**
@@ -425,22 +533,55 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     @Override
     public void retractFeature(String feature) {
 
-        trackFeatures(feature);
-
         _FeatureMap.put(feature, false);
-        mTutor.setDelFeature(feature);
+        mTutor.delFeature(feature);
     }
 
-    /**
-     * _FeatureSet keeps track of used features
-     *
-     * @param feature
-     */
-    private void trackFeatures(String feature) {
 
-        if(_FeatureSet.indexOf(feature) == -1)
-        {
-            _FeatureSet.add(feature);
+    /**
+     *
+     * @param featureMap
+     */
+    @Override
+    public void publishFeatureMap(HashMap featureMap) {
+
+        Iterator<?> tObjects = featureMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Boolean active = (Boolean)entry.getValue();
+
+            if(active) {
+                String feature = (String)entry.getKey();
+
+                mTutor.addFeature(feature);
+            }
+        }
+    }
+
+
+    /**
+     *
+     * @param featureMap
+     */
+    @Override
+    public void retractFeatureMap(HashMap featureMap) {
+
+        Iterator<?> tObjects = featureMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Boolean active = (Boolean)entry.getValue();
+
+            if(active) {
+                String feature = (String)entry.getKey();
+
+                mTutor.delFeature(feature);
+            }
         }
     }
 
@@ -449,10 +590,10 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     //************************************************************************
 
 
+
     //************************************************************************
     //************************************************************************
     // DataSink Implementation Start
-
 
     /**
      *
@@ -512,6 +653,10 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                 String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
                 loadJSON(new JSONObject(jsonData), null);
 
+                // Pass the loaded json dataSource array
+                //
+                setDataSource(dataSource);
+
             } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
                 String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
@@ -570,7 +715,8 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         if(dataExhausted()) {
 
             // set the script 'Feature'
-            mTutor.setAddFeature(TCONST.FTR_EOI);
+            //
+            publishFeature(TCONST.FTR_EOI);
         }
     }
 
@@ -601,16 +747,17 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
             _dataIndexStore  = _dataIndex;
             _dataEOIStore    = _dataEOI;
 
-            _FeatureStore    = _FeatureMap;
+            _FeatureStore    = new HashMap<>(_FeatureMap);
             _dataSourceStore = dataSource;
 
-            for(String feature : _FeatureSet) {
-                mTutor.setDelFeature(feature);
-            }
-
+            retractFeatureMap(_FeatureMap);
         }
 
         public void restoreDataSource() {
+
+            // Retract the active feature set
+            //
+            retractFeatureMap(_FeatureMap);
 
             _correct = _correctStore;
             _wrong   = _wrongStore;
@@ -622,27 +769,21 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
             _FeatureMap= _FeatureStore;
             dataSource = _dataSourceStore;
 
-            for(String feature : _FeatureSet) {
-                if(_FeatureMap.get(feature)) {
-                    mTutor.setAddFeature(feature);
-                }
-                else {
-                    mTutor.setDelFeature(feature);
-                }
-            }
+            // publish the popped feature set
+            //
+            publishFeatureMap(_FeatureMap);
         }
     }
-
 
     // DataSink IMplementation End
     //************************************************************************
     //************************************************************************
 
 
+
     //************************************************************************
     //************************************************************************
     // IEventSource Interface START
-
 
     @Override
     public String getEventSourceName() {
@@ -654,11 +795,9 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         return "Writing_Component";
     }
 
-
     // IEventSource Interface END
     //************************************************************************
     //************************************************************************
-
 
 
 
@@ -744,11 +883,21 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     // *** Serialization
 
 
+
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
-        Log.d(TAG, "Loader iteration");
-        super.loadJSON(jsonObj, (IScope2) scope);
 
+        bootFeatures = EMPTY;
+
+        // Log.d(TAG, "Loader iteration");
+        super.loadJSON(jsonObj, scope);
+
+        // Apply any features defined directly in the datasource itself - e.g. demo related features
+        //
+        if(!bootFeatures.equals(EMPTY)) {
+
+            publishFeatureSet(bootFeatures);
+        }
     }
 
 }

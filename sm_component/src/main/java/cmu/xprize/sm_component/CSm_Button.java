@@ -21,10 +21,13 @@ package cmu.xprize.sm_component;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import cmu.xprize.util.TCONST;
+
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 public class CSm_Button extends Button implements ILauncherButton, View.OnClickListener {
 
@@ -90,10 +93,12 @@ public class CSm_Button extends Button implements ILauncherButton, View.OnClickL
     public void onClick(View v) {
 
         if(mLauncher != null) {
+            Log.v(QGRAPH_MSG, "event.click: " + " CSm_Button:launch tutor");
 
             mComponent.launchTutor(mLauncher.tutorDesc, TCONST.TUTOR_NATIVE, mLauncher.tutorData);
         }
         else if(mData != null) {
+            Log.v(QGRAPH_MSG, "event.click: " + " CSm_Button:setTutorIntent");
 
             mComponent.setTutorIntent(mData.intent, mData.intentdata, mData.datasource, mData.features);
         }

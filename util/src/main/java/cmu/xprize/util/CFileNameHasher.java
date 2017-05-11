@@ -1,8 +1,13 @@
 package cmu.xprize.util;
 
+import android.util.Log;
+
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import static cmu.xprize.util.TCONST.GRAPH_MSG;
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 /**
  * Created by kevin on 11/7/2016.
@@ -30,13 +35,11 @@ public class CFileNameHasher {
     public String generateHash(String filename) {
 
         String          hashName;
+        String          prunedName;
 
-        System.out.println("filename   :" + filename);
+        prunedName = filename.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
 
-        hashName = filename.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
-        System.out.println("prunedname :" + hashName);
-
-        byte[] nameBytes = hashName.getBytes( Charset.forName("UTF-8" ));
+        byte[] nameBytes = prunedName.getBytes( Charset.forName("UTF-8" ));
 
         nameBytes = md.digest(nameBytes);
 
@@ -45,7 +48,7 @@ public class CFileNameHasher {
             sb.append(Integer.toString((nameBytes[i] & 0xff) + 0x100, 16).substring(1));
         }
 
-        System.out.println("hashname :" + sb.toString());
+        Log.v(GRAPH_MSG, "target:CFileNameHasher,action:generatehash,filename:" + filename + " prunedname:" + prunedName + " hashname:" + sb.toString());
 
         return sb.toString();
     }

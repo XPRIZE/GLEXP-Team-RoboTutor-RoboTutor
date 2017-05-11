@@ -107,13 +107,13 @@ public class CTutorAssetManager {
 
             copyFolderAsset(baseAsset, files, outPath, true);
 
-            Log.d(TAG, "NOTICE: Assets installed.");
+            Log.v(TAG, "NOTICE: Assets installed.");
 
         } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            Log.d(TAG, "ERROR: External Assets READONLY.");
+            Log.e(TAG, "ERROR: External Assets READONLY.");
 
         } else {
-            Log.d(TAG, "ERROR: External Assets OTHER.");
+            Log.e(TAG, "ERROR: External Assets OTHER.");
         }
     }
 
@@ -226,16 +226,16 @@ public class CTutorAssetManager {
         File[] listOfFiles = folder.listFiles();
         String[] names = new String[listOfFiles.length];
 
-        System.out.println("Listing storyFolder: " + path);
+        Log.v(TAG, "Listing storyFolder: " + path);
 
         for (File fileObj : listOfFiles) {
 
             names[i1++] = fileObj.getName();
 
             if (fileObj.isFile()) {
-                System.out.println("File " + fileObj.getName());
+                Log.v(TAG, "File " + fileObj.getName());
             } else if (fileObj.isDirectory()) {
-                System.out.println("Folder " + fileObj.getName());
+                Log.v(TAG, "Folder " + fileObj.getName());
             }
         }
 
@@ -555,7 +555,7 @@ public class CTutorAssetManager {
 
                 if(!dictionary.containsKey(assetName)) {
                     dictionary.put(assetName, assetName);
-                    Log.d(TAG, "Asset Found: " + assetName);
+                    Log.v(TAG, "Asset Found: " + assetName);
                 }
             }
         }
@@ -572,7 +572,7 @@ public class CTutorAssetManager {
 
             assetName = (String)entry.getValue();
 
-            Log.d(TAG, "Asset Installing: " + assetName);
+            Log.v(TAG, "Asset Installing: " + assetName);
             updateAssetPackage(assetName, assetFolder);
         }
     }

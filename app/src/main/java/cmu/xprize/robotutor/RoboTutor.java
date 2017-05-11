@@ -59,6 +59,7 @@ import cmu.xprize.robotutor.tutorengine.CTutorAssetManager;
 import cmu.xprize.util.TTSsynthesizer;
 import edu.cmu.xprize.listener.ListenerBase;
 
+import static cmu.xprize.util.TCONST.GRAPH_MSG;
 import static cmu.xprize.util.TCONST.ROBOTUTOR_ASSET_PATTERN;
 
 
@@ -128,12 +129,11 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     protected void onCreate(Bundle savedInstanceState) {
 
         // Note = we don't want the system to try and recreate any of our views- always pass null
+        //
         super.onCreate(null);
 
         PACKAGE_NAME = getApplicationContext().getPackageName();
         ACTIVITY     = this;
-
-        System.out.println("External Download: " + DOWNLOAD_PATH);
 
         // Prep the CPreferenceCache
         // Update the globally accessible id object for this engine instance.
@@ -161,8 +161,10 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         CErrorManager.setLogManager(logManager);
 
         // TODO : implement time stamps
-        logManager.postTimeStamp("Session Start");
-        logManager.postEvent(TAG, "onCreate: ");
+        logManager.postDateTimeStamp(GRAPH_MSG, "RoboTutor:SessionStart");
+        logManager.postEvent_I(GRAPH_MSG, "EngineVersion:" + VERSION_RT);
+
+        Log.v(TAG, "External_Download:" + DOWNLOAD_PATH);
 
         // Get the primary container for tutors
         setContentView(R.layout.robo_tutor);
@@ -206,7 +208,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     @Override
     protected void onRestoreInstanceState(Bundle bundle) {
         //super.onRestoreInstanceState(bundle);
-        logManager.postEvent(TAG, "onRestoreInstanceState" + bundle);
+        logManager.postEvent_V(TAG, "RoboTutor:onRestoreInstanceState");
     }
 
 
@@ -219,7 +221,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         } catch (Exception ex) {
 
-            logManager.postEvent(TAG, "Could not reboot");
+            logManager.postEvent_V(TAG, "RoboTutor:Could not reboot");
         }
 
     }
@@ -278,29 +280,29 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 // At the moment we always reinstall the tutor spec data - for development
                 if(CacheSource.equals(TCONST.EXTERN)) {
                     tutorAssetManager.installAssets(TCONST.TUTORROOT);
-                    logManager.postEvent(TAG, "INFO: Tutor Assets installed:");
+                    logManager.postEvent_V(TAG, "INFO:Tutor Assets installed");
                 }
 
                 if(!tutorAssetManager.fileCheck(TCONST.LTK_PROJECT_ASSETS)) {
                     tutorAssetManager.installAssets(TCONST.LTK_PROJEXCTS);
-                    logManager.postEvent(TAG, "INFO: LTK Projects installed:");
+                    logManager.postEvent_V(TAG, "INFO:LTK Projects installed");
 
                     // Note the Projects Zip file is anticipated to contain a storyFolder called "projects"
                     // containing the ltk data - this is unpacked to RoboTutor.APP_PRIVATE_FILES + TCONST.LTK_DATA_FOLDER
                     //
                     tutorAssetManager.extractAsset(TCONST.LTK_PROJEXCTS, TCONST.LTK_DATA_FOLDER);
-                    logManager.postEvent(TAG, "INFO: LTK Projects extracted:");
+                    logManager.postEvent_V(TAG, "INFO:LTK Projects extracted");
                 }
 
                 if(!tutorAssetManager.fileCheck(TCONST.LTK_GLYPH_ASSETS)) {
                     tutorAssetManager.installAssets(TCONST.LTK_GLYPHS);
-                    logManager.postEvent(TAG, "INFO: LTK Glyphs installed:");
+                    logManager.postEvent_V(TAG, "INFO:LTK Glyphs installed");
 
                     // Note the Glyphs Zip file is anticipated to contain a storyFolder called "glyphs"
                     // containing the ltk glyph data - this is unpacked to RoboTutor.APP_PRIVATE_FILES + TCONST.LTK_DATA_FOLDER
                     //
                     tutorAssetManager.extractAsset(TCONST.LTK_GLYPHS, TCONST.LTK_DATA_FOLDER);
-                    logManager.postEvent(TAG, "INFO: LTK Glyphs extracted:");
+                    logManager.postEvent_V(TAG, "INFO:LTK Glyphs extracted");
                 }
 
                 // Find and install (move to ext_asset_path) any new or updated audio/story assets
@@ -338,13 +340,13 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     @Override
     public void onServiceReady(String serviceName, int status) {
 
-        logManager.postEvent(TAG, "onServiceReady: " + serviceName + " : is : " + status);
+        logManager.postEvent_V(TAG, "onServiceReady:" + serviceName + "status:" + status);
 
         // As the services come online push a global reference to CTutor
         //
         switch(serviceName) {
             case TCONST.TTS:
-                logManager.postEvent(TAG, "Attaching to Flite");
+                logManager.postEvent_V(TAG, "flite:attaching");
 
                 mMediaController.setTTS(TTS);
                 break;
@@ -370,7 +372,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
             if(!engineStarted) {
                 engineStarted = true;
 
-                logManager.postEvent(TAG, "Starting TutorEngine");
+                logManager.postEvent_V(TAG, "TutorEngine:Starting");
 
                 // Delete the asset loader utility ASR object
                 ASR = null;
@@ -403,7 +405,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
             // Note that it is possible for the masterContainer to be recreated without the
             // engine begin destroyed so we must maintain sync here.
             else {
-                logManager.postEvent(TAG, "Restarting TutorEngine");
+                logManager.postEvent_V(TAG, "TutorEngine:Restarting");
             }
         }
     }
@@ -421,9 +423,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     //
     public void onStartTutor() {
 
-        logManager.postEvent(TAG, "Updated Logging GUID: " + LOG_ID);
+        logManager.postEvent_V(TAG, "LOG_GUID:" + LOG_ID );
         LOG_ID = CPreferenceCache.initLogPreference(this);
-        logManager.startLogging(LOG_PATH);
 
         tutorEngine.startSessionManager();
 
@@ -442,8 +443,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
      */
     @Override
     public void onBackPressed() {
-        logManager.postEvent(TAG, "onBackPressed");
-        logManager.stopLogging();
+        logManager.postEvent_V(TAG, "RoboTuTor:onBackPressed");
 
         tutorEngine.killActiveTutor();
 
@@ -476,7 +476,9 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     protected void onStart() {
 
         super.onStart();
-        logManager.postEvent(TAG, "onStart Robotutor: On-Screen");
+
+        // On-Screen
+        logManager.postEvent_V(TAG, "Robotutor:onStart");
 
         // We only want to run the engine start sequence once per onStart call
         //
@@ -487,14 +489,14 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         int memAvail       = am.getMemoryClass();
 
-        logManager.postEvent(TAG, "Available Memory: " + memAvail);
+        logManager.postEvent_V(TAG, "AvailableMemory:" + memAvail);
 
         // Create the common TTS service
         // Async
         //
         if(TTS == null) {
 
-            logManager.postEvent(TAG, "Creating New TTS");
+            logManager.postEvent_V(TAG, "Creating:TTS");
 
             TTS = new TTSsynthesizer(this);
             TTS.initializeTTS(this);
@@ -507,7 +509,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         //
         if(ASR == null) {
 
-            logManager.postEvent(TAG, "Creating New ASR");
+            logManager.postEvent_V(TAG, "Creating:ASR");
 
             ASR = new ListenerBase("configassets");
             ASR.configListener(this);
@@ -525,7 +527,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     @Override
     protected void onRestart() {
         super.onRestart();
-        logManager.postEvent(TAG, "onRestart Robotutor");
+        logManager.postEvent_V(TAG, "RoboTutor:onRestart");
     }
 
 
@@ -534,8 +536,10 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
      */
     @Override
     protected void onStop() {
+
         super.onStop();
-        logManager.postEvent(TAG, "onStop Robotutor: Off-Screen");
+        // Off-Screen
+        logManager.postEvent_V(TAG, "Robotutor:onStop");
 
         // Need to do this before releasing TTS
         //
@@ -543,7 +547,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         if(TTS != null && TTS.isReady()) {
 
-            logManager.postEvent(TAG, "Releasing Flite");
+            logManager.postEvent_V(TAG, "flite:release");
 
             // TODO: This seems to cause a Flite internal problem???
             TTS.shutDown();
@@ -565,7 +569,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     protected void onPause() {
 
         super.onPause();
-        logManager.postEvent(TAG, "onPause Robotutor");
+        logManager.postEvent_V(TAG, "RoboTutor:onPause");
 
         SharedPreferences.Editor prefs = getPreferences(Context.MODE_PRIVATE).edit();
     }
@@ -578,7 +582,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     protected void onResume() {
 
         super.onResume();
-        logManager.postEvent(TAG, "Resuming Robotutor");
+        logManager.postEvent_V(TAG, "Robotutor:onResume");
 
         SharedPreferences prefs = getPreferences(MODE_PRIVATE);
 
@@ -598,7 +602,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     protected void onSaveInstanceState (Bundle outState) {
 
         super.onSaveInstanceState(outState);
-        logManager.postEvent(TAG, "onSaveInstanceState Robotutor");
+        logManager.postEvent_V(TAG, "Robotutor:onSaveInstanceState");
 
 //        SharedPreferences prefs = RoboTutor.ACTIVITY.getPreferences(Context.MODE_PRIVATE);
 //        SharedPreferences.Editor editor = prefs.edit();
@@ -614,18 +618,20 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     @Override
     protected void onDestroy() {
 
-        logManager.postEvent(TAG, "onDestroy Glyph_Recognizer: isfinishing - " + isFinishing());
+        logManager.postEvent_V(TAG, "RoboTutor:onDestroy");
+
+        Log.v(TAG, "isfinishing:" + isFinishing());
 
         super.onDestroy();
 
         if(TTS != null) {
-            logManager.postEvent(TAG, "Releasing Flite");
+            logManager.postEvent_V(TAG, "flite:release");
 
             TTS.shutDown();
             TTS = null;
         }
 
-        logManager.postTimeStamp("Session End");
+        logManager.postDateTimeStamp(GRAPH_MSG, "RoboTutor:SessionEnd");
         logManager.stopLogging();
     }
 

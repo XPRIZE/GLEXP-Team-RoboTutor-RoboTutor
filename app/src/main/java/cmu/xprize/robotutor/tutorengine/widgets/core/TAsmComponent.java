@@ -8,14 +8,19 @@ import android.util.Log;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import cmu.xprize.asm_component.ASM_CONST;
 import cmu.xprize.asm_component.CAsm_Alley;
 import cmu.xprize.asm_component.CAsm_Component;
 import cmu.xprize.asm_component.CAsm_Data;
 import cmu.xprize.asm_component.CAsm_DotBag;
+import cmu.xprize.comp_logging.ITutorLogger;
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
@@ -23,6 +28,7 @@ import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
@@ -32,12 +38,16 @@ import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.IEventSource;
+import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.EMPTY;
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 import static java.lang.Thread.sleep;
 
-public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, IDataSink, IBehaviorManager, IEventSource {
+public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, IDataSink, IBehaviorManager, IEventSource, ITutorLogger {
 
     private CTutor           mTutor;
     private CObjectDelegate  mSceneObject;
@@ -49,13 +59,16 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     //
     private List<String> curFeatures = new ArrayList<String>();
 
-    private ArrayList<String>       _FeatureSet = new ArrayList<>();
-    private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
-
     private HashMap<String, String> volatileMap = new HashMap<>();
     private HashMap<String, String> stickyMap   = new HashMap<>();
 
+    private HashMap<String,String>  _StringVar  = new HashMap<>();
+    private HashMap<String,Integer> _IntegerVar = new HashMap<>();
+    private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
+
+
     static final String TAG = "TAsmComponent";
+
 
 
     public TAsmComponent(Context context) {
@@ -317,7 +330,8 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         //
         initOperationFTR();
 
-        if (dataExhausted()) publishFeature(TCONST.FTR_EOI);
+        if (dataExhausted())
+            publishFeature(TCONST.FTR_EOI);
 
         curFeatures.clear();
     }
@@ -343,8 +357,6 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     public void popDataSource() {
 
         int popIndex = _dataStack.size()-1;
-
-        retractAllFeatures();
 
         if(popIndex >= 0) {
             TAsmComponent.CDataSourceImg popped = _dataStack.get(popIndex);
@@ -376,31 +388,26 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
             _dataIndexStore  = _dataIndex;
             _dataEOIStore    = _dataEOI;
 
-            _FeatureStore    = _FeatureMap;
+            _FeatureStore    = new HashMap<>(_FeatureMap);
             _dataSourceStore = dataSource;
 
-            for(String feature : _FeatureSet) {
-                mTutor.setDelFeature(feature);
-            }
-
+            retractFeatureMap(_FeatureMap);
         }
 
         public void restoreDataSource() {
 
-            dataSource = _dataSourceStore;
-            _dataIndex = _dataIndexStore;
-            _dataEOI   = _dataEOIStore;
+            // Retract the active feature set
+            //
+            retractFeatureMap(_FeatureMap);
 
-            _FeatureMap= _FeatureStore;
+            dataSource  = _dataSourceStore;
+            _dataIndex  = _dataIndexStore;
+            _dataEOI    = _dataEOIStore;
+            _FeatureMap = _FeatureStore;
 
-            for(String feature : _FeatureSet) {
-                if(_FeatureMap.get(feature)) {
-                    mTutor.setAddFeature(feature);
-                }
-                else {
-                    mTutor.setDelFeature(feature);
-                }
-            }
+            // publish the popped feature set
+            //
+            publishFeatureMap(_FeatureMap);
         }
     }
 
@@ -420,6 +427,8 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     @Override
     public void publishValue(String varName, String value) {
 
+        _StringVar.put(varName,value);
+
         // update the response variable  "<ComponentName>.<varName>"
         mTutor.getScope().addUpdateVar(name() + varName, new TString(value));
 
@@ -428,18 +437,42 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     @Override
     public void publishValue(String varName, int value) {
 
+        _IntegerVar.put(varName,value);
+
         // update the response variable  "<ComponentName>.<varName>"
         mTutor.getScope().addUpdateVar(name() + varName, new TInteger(value));
 
     }
 
     @Override
+    public void publishFeatureSet(String featureSet) {
+
+        // Add new features - no duplicates
+        List<String> featArray = Arrays.asList(featureSet.split(","));
+
+        for(String feature : featArray) {
+
+            publishFeature(feature);
+        }
+    }
+
+    @Override
+    public void retractFeatureSet(String featureSet) {
+
+        // Add new features - no duplicates
+        List<String> featArray = Arrays.asList(featureSet.split(","));
+
+        for(String feature : featArray) {
+
+            retractFeature(feature);
+        }
+    }
+
+    @Override
     public void publishFeature(String feature) {
 
-        trackFeatures(feature);
-
         _FeatureMap.put(feature, true);
-        mTutor.setAddFeature(feature);
+        mTutor.addFeature(feature);
     }
 
     /**
@@ -452,38 +485,131 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     @Override
     public void retractFeature(String feature) {
 
-        trackFeatures(feature);
-
         _FeatureMap.put(feature, false);
-        mTutor.setDelFeature(feature);
+        mTutor.delFeature(feature);
     }
 
     /**
-     * _FeatureSet keeps track of used features
      *
-     * @param feature
+     * @param featureMap
      */
-    private void trackFeatures(String feature) {
+    @Override
+    public void publishFeatureMap(HashMap featureMap) {
 
-        if(_FeatureSet.indexOf(feature) == -1)
-        {
-            _FeatureSet.add(feature);
+        Iterator<?> tObjects = featureMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Boolean active = (Boolean)entry.getValue();
+
+            if(active) {
+                String feature = (String)entry.getKey();
+
+                mTutor.addFeature(feature);
+            }
         }
     }
 
-    private void retractAllFeatures() {
 
-        for(String feature: _FeatureSet) {
-            mTutor.setDelFeature(feature);
+    /**
+     *
+     * @param featureMap
+     */
+    @Override
+    public void retractFeatureMap(HashMap featureMap) {
+
+        Iterator<?> tObjects = featureMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Boolean active = (Boolean)entry.getValue();
+
+            if(active) {
+                String feature = (String)entry.getKey();
+
+                mTutor.delFeature(feature);
+            }
         }
-
-        _FeatureSet = new ArrayList<>();
-        _FeatureMap = new HashMap<>();
     }
+
+
 
     // publish component state data - EBD
     //************************************************************************
     //************************************************************************
+
+
+
+    //***********************************************************
+    // ITutorLogger - Start
+
+    private void extractHashContents(StringBuilder builder, HashMap map) {
+
+        Iterator<?> tObjects = map.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+
+            builder.append(',');
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            String key   = entry.getKey().toString();
+            String value = "#" + entry.getValue().toString();
+
+            builder.append(key);
+            builder.append(value);
+        }
+    }
+
+    private void extractFeatureContents(StringBuilder builder, HashMap map) {
+
+        StringBuilder featureset = new StringBuilder();
+
+        Iterator<?> tObjects = map.entrySet().iterator();
+
+        // Scan to build a list of active features
+        //
+        while(tObjects.hasNext() ) {
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Boolean value = (Boolean) entry.getValue();
+
+            if(value) {
+                featureset.append(entry.getKey().toString() + ";");
+            }
+        }
+
+        // If there are active features then trim the last ',' and add the
+        // comma delimited list as the "$features" object.
+        //
+        if(featureset.length() != 0) {
+            featureset.deleteCharAt(featureset.length()-1);
+
+            builder.append(",$features#" + featureset.toString());
+        }
+    }
+
+    @Override
+    public void logState(String logData) {
+
+        StringBuilder builder = new StringBuilder();
+
+        extractHashContents(builder, _StringVar);
+        extractHashContents(builder, _IntegerVar);
+        extractFeatureContents(builder, _FeatureMap);
+
+        RoboTutor.logManager.postTutorState(TUTOR_STATE_MSG, "target#word_copy," + logData + builder.toString());
+    }
+
+    // ITutorLogger - End
+    //***********************************************************
+
+
 
 
 
@@ -588,7 +714,8 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         if(!(result = super.applyBehavior(event))) {
 
             if (volatileMap.containsKey(event)) {
-                Log.d(TAG, "Processing WC_ApplyEvent: " + event);
+
+                RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:volatile,behavior:" + event);
                 applyBehaviorNode(volatileMap.get(event));
 
                 volatileMap.remove(event);
@@ -597,6 +724,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
             } else if (stickyMap.containsKey(event)) {
 
+                RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:sticky,behavior:" + event);
                 applyBehaviorNode(stickyMap.get(event));
 
                 result = true;
@@ -623,6 +751,8 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
                 if (obj != null) {
 
+                    RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehaviornode,type:" + obj.getType() + ",behavior:" + nodeName);
+
                     switch(obj.getType()) {
 
                         case TCONST.SUBGRAPH:
@@ -633,17 +763,19 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
                         case TCONST.MODULE:
 
                             // Disallow module "calls"
-                            Log.e(TAG, "MODULE Behaviors are not supported");
+                            RoboTutor.logManager.postEvent_E(QGRAPH_MSG, "target:" + TAG + ",action:applybehaviornode,type:modulecall,behavior:" + nodeName +  ",ERROR:MODULE Behaviors are not supported");
                             break;
 
                         // Note that we should not preEnter queues - they may need to be cancelled
                         // which is done internally.
                         //
                         case TCONST.QUEUE:
+
                             obj.applyNode();
                             break;
 
                         default:
+
                             obj.preEnter();
                             obj.applyNode();
                             break;
@@ -832,6 +964,35 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
     public void updateCurNode(String curNode) {
         this.curNode = curNode;
+    }
+
+
+
+
+
+    // *** Serialization
+
+
+
+    /**
+     * Load the data source
+     *
+     * @param jsonObj
+     */
+    @Override
+    public void loadJSON(JSONObject jsonObj, IScope scope) {
+
+        bootFeatures = EMPTY;
+
+        // Log.d(TAG, "Loader iteration");
+        super.loadJSON(jsonObj, (IScope2) scope);
+
+        // Apply any features defined directly in the datasource itself - e.g. demo related features
+        //
+        if(!bootFeatures.equals(EMPTY)) {
+
+            publishFeatureSet(bootFeatures);
+        }
     }
 
 }

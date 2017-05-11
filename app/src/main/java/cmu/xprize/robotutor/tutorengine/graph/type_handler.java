@@ -25,12 +25,14 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.IMediaListener;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.util.TCONST;
+
 
 /**
  * This is a "timer" implementation using handlers instead of Timers.  Using Handlers
@@ -161,7 +163,7 @@ public class type_handler extends type_action implements IMediaListener {
                             break;
 
                         default:
-                            Log.i(TAG, "Timer: " + id + " - call on uninitialized timer");
+                            RoboTutor.logManager.postEvent_D(_logType, "node.handler.applynode:id:" + id + ",error:call on uninitialized timer");
 
                             break;
                     }
@@ -229,29 +231,39 @@ public class type_handler extends type_action implements IMediaListener {
                     IScriptable2 obj = null;
 
                     try {
+                        RoboTutor.logManager.postEvent_I(_logType, "target:node.handler,name:" + name + ",event:timeout" + "run_method:" + ontimer);
+
                         // Recover the node to be executed when the timer expires
                         // and apply it.
                         //
                         obj = _scope.mapSymbol(ontimer);
                         obj.applyNode();
 
-                        if(repeat)
+                        if(repeat) {
+                            RoboTutor.logManager.postEvent_I(_logType, "target:node.handler.repeat,name:" + name );
+
                             _handler.postDelayed(_frameTask, period);
+                        }
 
                         else {
+                            RoboTutor.logManager.postEvent_I(_logType, "target:node.handler.destroy,name:" + name );
+
                             _frameTask = null;
                             destroyTimer();
                         }
 
                     } catch (Exception e) {
+                        RoboTutor.logManager.postEvent_I(_logType, "target:node.handler,name:" + name + "event:timeout failed");
+
                         // TODO: Manage invalid Timer Behavior
                         e.printStackTrace();
                     }
                 }
             };
 
-            _playing = true;
+            RoboTutor.logManager.postEvent_I(_logType, "target:node.handler.start,name:" + name + ",timeout:" + period);
 
+            _playing = true;
             _handler.postDelayed(_frameTask, period);
         }
 
@@ -261,7 +273,7 @@ public class type_handler extends type_action implements IMediaListener {
 
             if(_playing) {
 
-                Log.i(TAG, "Killing Handler: " + name);
+                RoboTutor.logManager.postEvent_I(_logType, "target:node.handler.stop,name:" + name);
 
                 if (_frameTask != null)
                     _handler.removeCallbacks(_frameTask);

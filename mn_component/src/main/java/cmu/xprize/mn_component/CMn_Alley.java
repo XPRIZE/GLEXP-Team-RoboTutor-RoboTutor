@@ -21,6 +21,7 @@ package cmu.xprize.mn_component;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,8 @@ import java.util.List;
 import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.TCONST;
 import cmu.xprize.util.View_Helper;
+
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 public class CMn_Alley extends android.support.percent.PercentRelativeLayout {
 
@@ -89,6 +92,8 @@ public class CMn_Alley extends android.support.percent.PercentRelativeLayout {
         Splus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (mCurValue < mMaxValue) {
+                    Log.v(QGRAPH_MSG, "event.click: " + " CMn_Alley:Splus-clicked");
+
                     updateValue(mCurValue + 1, true);
                     _owner.performClick();
                 }
@@ -98,6 +103,8 @@ public class CMn_Alley extends android.support.percent.PercentRelativeLayout {
         Sminus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (mCurValue > 0) {
+                    Log.v(QGRAPH_MSG, "event.click: " + " CMn_Alley:Sminus-clicked");
+
                     updateValue(mCurValue - 1, true);
                     _owner.performClick();
                 }

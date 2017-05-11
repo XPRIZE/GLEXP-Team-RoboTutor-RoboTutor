@@ -411,31 +411,60 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
+    @Override
     public void publishState() {
     }
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
+    @Override
     public void publishValue(String varName, String value) {
     }
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
+    @Override
     public void publishValue(String varName, int value) {
+    }
+
+    @Override
+    public void publishFeatureSet(String featureset) {
+
+    }
+
+    @Override
+    public void retractFeatureSet(String featureset) {
+
     }
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
+    @Override
     public void publishFeature(String feature) {
     }
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
+    @Override
     public void retractFeature(String feature) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    @Override
+    public void publishFeatureMap(HashMap featureMap) {
+    }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    @Override
+    public void retractFeatureMap(HashMap featureMap) {
     }
 
 

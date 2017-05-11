@@ -694,7 +694,9 @@ public class CGlyph implements ILoadableObject, Cloneable {
 
         Log.i(TAG, "GlyphData" + writer.toString());
 
-        return outString.toString();
+        // return packet with comma delimiter
+        //
+        return outString.toString() + ",";
     }
 
     public void writeStrokeInfo(JsonWriter writer, ArrayList<CStrokeInfo> strokes) throws IOException {

@@ -8,11 +8,6 @@ public class AS_CONST {
 
     public static final String CANCEL_DESCRIBE  = "CANCEL_DESCRIBE";
 
-    public static final String VAR_BUTTONID     = ".buttonid";
-    public static final String VAR_BUT_BEHAVIOR = ".buttonbehavior";
-    public static final String VAR_HELP_AUDIO   = ".helpAudio";
-    public static final String VAR_PROMPT_AUDIO = ".promptAudio";
-
     public static final String DESCRIBE_BEHAVIOR = "DESCRIBE_BEHAVIOR";
     public static final String SELECT_BEHAVIOR   = "SELECT_BEHAVIOR";
     public static final String DESCRIBE_COMPLETE = "DESCRIBE_COMPLETE";
@@ -39,5 +34,14 @@ public class AS_CONST {
     public static final String SELECT_EXIT            = "SELECT_EXIT";
 
     public static final String SELECT_NONE            = "SELECT_NONE";
+
+    public static final String VAR_BUTTONID         = ".buttonid";
+    public static final String VAR_BUT_BEHAVIOR     = ".buttonbehavior";
+    public static final String VAR_HELP_AUDIO       = ".helpAudio";
+    public static final String VAR_PROMPT_AUDIO     = ".promptAudio";
+
+    public static final String VAR_INTENT           = ".intent";
+    public static final String VAR_INTENTDATA       = ".intentData";
+    public static final String VAR_DATASOURCE       = ".dataSource";
 }
 

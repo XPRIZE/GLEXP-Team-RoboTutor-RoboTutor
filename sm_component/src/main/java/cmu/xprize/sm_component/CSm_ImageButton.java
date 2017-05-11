@@ -25,6 +25,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+
 public class CSm_ImageButton extends ImageButton implements ILauncherButton, View.OnClickListener {
 
     private Context                     mContext;
@@ -84,6 +86,9 @@ public class CSm_ImageButton extends ImageButton implements ILauncherButton, Vie
      */
     @Override
     public void onClick(View v) {
+
+        Log.v(QGRAPH_MSG, "event.click: " + " CSm_ImageButton:launch tutor");
+
         mComponent.setTutorIntent(mData.intent, mData.intentdata, mData.datasource, mData.features);
     }
 

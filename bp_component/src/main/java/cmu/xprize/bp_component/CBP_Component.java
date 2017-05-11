@@ -522,6 +522,4 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
             dispatchEvent(new CEvent(TCONST.SET_BANNER_COLOR, TCONST.VALUE , banner_color));
         }
     }
-
-
 }

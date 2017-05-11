@@ -28,7 +28,12 @@ import android.util.Log;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import cmu.xprize.comp_logging.CLogManager;
+import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.TCONST;
+
+import static cmu.xprize.util.TCONST.GRAPH_MSG;
+import static cmu.xprize.util.TCONST.LTKPLUS_MSG;
 
 
 // TODO: Convert to singleton
@@ -38,6 +43,7 @@ public class CRecognizerPlus implements IGlyphSink {
     private static CRecognizerPlus ourInstance = new CRecognizerPlus();
 
     private Context                mContext;
+    static public ILogManager      logManager;
 
     private CGlyphSet              _glyphSet;
     private ConcurrentLinkedQueue  _glyphQueue = new ConcurrentLinkedQueue();
@@ -78,6 +84,8 @@ public class CRecognizerPlus implements IGlyphSink {
 
 
     private CRecognizerPlus() {
+
+        logManager = CLogManager.getInstance();
     }
 
     public void initialize(Context context, String alphabet) {
@@ -202,24 +210,43 @@ public class CRecognizerPlus implements IGlyphSink {
         @Override
         protected String doInBackground(Void... unsued) {
 
+            String logMsg;
+
             _ltkCandidates = _recognizer.recognize(_recStrokes);
 
             LTKPlusTimer = System.currentTimeMillis();
-            Log.d("LTKPLUS", "Time in LTKProcessor: " + (System.currentTimeMillis() - LTKTimer));
+            Log.d(LTKPLUS_MSG, "processing.time.lipitk: " + (System.currentTimeMillis() - LTKTimer));
 
             // generate the LTK project folder that contains the symbol to unicode mapping
             //
             String configFileDirectory = _recognizer.getLipiDirectory() + "/projects/alphanumeric/config/";
 //            String configFileDirectory = _recognizer.getLipiDirectory() + "/projects/demonumerals/config/";
 
+            logMsg = "";
             for (int i = 0; i < _ltkCandidates.length; i++) {
 
                 _ltkCandidates[i].setRecChar(_recognizer.getSymbolName(_ltkCandidates[i].Id, configFileDirectory));
 
-                Log.d("LTK", "Char = " + _ltkCandidates[i].getRecChar() + " Confidence = " + _ltkCandidates[i].Confidence + "  - ShapeID = " + _ltkCandidates[i].Id);
+//                Log.d(LTKPLUS_MSG, "result.lipitk: Char = " + _ltkCandidates[i].getRecChar() + " Confidence = " + _ltkCandidates[i].Confidence + "  - ShapeID = " + _ltkCandidates[i].Id);
+
+                logMsg = logMsg + ",confidence_" + _ltkCandidates[i].getRecChar() + ":" + _ltkCandidates[i].Confidence;
             }
+            logManager.postEvent_D(GRAPH_MSG, "target:CRecognizer,type:lipiTK" + logMsg);
+
+
 
             _sampleIndex = ltkPlusProcessor(_nextGlyph._source );
+
+            logMsg = "";
+            for (int i = 0; i < _ltkPlusCandidates.length; i++) {
+
+                _ltkPlusCandidates[i].setRecChar(_recognizer.getSymbolName(_ltkPlusCandidates[i].Id, configFileDirectory));
+
+//                Log.d(LTKPLUS_MSG, "result.ltkplus: Char = " + _ltkPlusCandidates[i].getRecChar() + " Confidence = " + _ltkPlusCandidates[i].Confidence + "  - ShapeID = " + _ltkPlusCandidates[i].Id);
+
+                logMsg = logMsg + ",confidence_" + _ltkPlusCandidates[i].getRecChar() + ":" + _ltkPlusCandidates[i].Confidence;
+            }
+            logManager.postEvent_D(GRAPH_MSG, "target:CRecognizer,type:LTKPlus" + logMsg);
 
             return null;
         }
@@ -232,13 +259,13 @@ public class CRecognizerPlus implements IGlyphSink {
 
             _recStrokes = null;
 
-            Log.d("LTKPLUS", "Time in LTK_PLUS_Processor: " + (System.currentTimeMillis() - LTKPlusTimer));
+            Log.d(LTKPLUS_MSG, "processing.time.ltkplus: " + (System.currentTimeMillis() - LTKPlusTimer));
 
             synchronized (_isRecognizing) {
 
                 _isRecognizing = false;
 
-                // If the result is not valid - flush the queue
+                // If the result is not valid - flush the queue - this implements Immediate Feedback
                 //
                 if(!_nextGlyph._source.recCallBack(_ltkCandidates, _ltkPlusCandidates, _sampleIndex)) {
 
@@ -415,7 +442,8 @@ public class CRecognizerPlus implements IGlyphSink {
         _dotSize           = glyphSrc.getDotSize();
         _Paint             = glyphSrc.getPaint();
 
-        // Filter invalid character expecations.
+        // Setup case where we haven't provided an expected character. i.e. freeform input.
+        // Filter invalid character expectations.
         //
         if(_sampleExpected == null || _sampleExpected == "") {
             _sampleExpected = " ";
@@ -447,7 +475,7 @@ public class CRecognizerPlus implements IGlyphSink {
         //
         // We are correcting for specific LipiTK named recognizer errors (i.e. the ALPHANUM recognizer) -
         // Sometime it doesn't produce certain characters that you'd think it should due to training
-        // deficiencies - we force add boostMap characters here -
+        // deficiencies - we force-add boostMap characters here -
         //
         if(sampleIndex == GCONST.EXPECTED_NOT_FOUND && (_boostMissingSample || GCONST.boostMap.containsKey(_sampleExpected))) {
 
@@ -504,8 +532,8 @@ public class CRecognizerPlus implements IGlyphSink {
 
         // If the LTK candidate is not the sample char then do LTK+ post processing.
         // If we added alternate cases or virtual cases then forceprocessing
-        // If we want to boost extemporaneous input (boostUnExpected) then force processing i.e. boost
-        // other than the lipiTK output based on topological metrics from LTK+
+        // If we want to boost extemporaneous input (boostUnExpected) then force processing
+        // i.e. boost other than the lipiTK output based on topological metrics from LTK+
         //
         if(sampleIndex > 0 || forceProcessing || _boostUnExpected) {
 
@@ -541,16 +569,16 @@ public class CRecognizerPlus implements IGlyphSink {
                 boolean candAlpha = Character.isLetterOrDigit(candChar.charAt(0));
 
 
-                // Generate the dimensional metrics for the given candidate char
-                // Generate the visual comparison metric for the given char
+                // Generate the dimensional metrics for the given candidate glyph
+                // Generate the visual comparison metric for the given glyph
                 //
-                metric.calcMetrics(_drawGlyph, glyphVisualBnds, candCharBnds, _viewBnds, (sampleIndex != GCONST.EXPECT_NONE)? compCharBnds:candCharBnds , GCONST.STROKE_WEIGHT);
+                metric.calcMetrics(_sampleExpected, candChar, _drawGlyph, glyphVisualBnds, candCharBnds, _viewBnds, (sampleIndex != GCONST.EXPECT_NONE)? compCharBnds:candCharBnds , GCONST.STROKE_WEIGHT);
 
                 metric.generateVisualMetric(_fontBnds, candChar, (sampleIndex != GCONST.EXPECT_NONE)? _sampleExpected:candChar, _drawGlyph, _Paint, GCONST.CALIBRATED_WEIGHT, TCONST.VOLATILE);
 
                 candidate.setVisualConfidence(metric);
 
-                Log.d("Metrics Initial: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence())) ;
+                Log.v(LTKPLUS_MSG, "metric.initial: " + candChar + ":" + String.format("%.3f", candidate.getPlusConfidence())) ;
 
                 //*************************************************************************
                 // NOTE: in all of these the (isSample)? 0.5f:0.5f) the absolute values are not important but only
@@ -561,7 +589,7 @@ public class CRecognizerPlus implements IGlyphSink {
                 if((sampleIndex != GCONST.EXPECT_NONE) && (candAlpha != sampAlpha)) {
 
                     candidate.updateORConfidence((isSample)? 0.7f:0.5f);
-                    Log.d("Metrics punct MM: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence())) ;
+                    Log.v(LTKPLUS_MSG, "metrics.punct: " +  candChar + ":" + String.format("%.3f", candidate.getPlusConfidence())) ;
                 }
 
 
@@ -570,13 +598,13 @@ public class CRecognizerPlus implements IGlyphSink {
                 if(_boostDigitClass) {
                     candidate.updateORConfidence((candDigit)? 1.0f:0.0f);
 
-                    Log.d("Metrics Digit Boost: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence())) ;
+                    Log.v(LTKPLUS_MSG, "metrics.digitboost: " + candChar + ":" + String.format("%.3f", candidate.getPlusConfidence())) ;
                 }
 
                 else if(_boostAlphaClass) {
                     candidate.updateORConfidence((candAlpha)? 1.0f:0.0f);
 
-                    Log.d("Metrics Alpha Boost: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence())) ;
+                    Log.v(LTKPLUS_MSG, "metrics.alphaboost: " + candChar + ":" + String.format("%.3f", candidate.getPlusConfidence())) ;
                 }
 
                 // If candidate is not same class as sample - reduce it's confidence
@@ -584,26 +612,26 @@ public class CRecognizerPlus implements IGlyphSink {
                 else if(_boostSampleClass && (candDigit != sampDigit)) {
                     candidate.updateORConfidence((isSample)? 0.75f:0.3f);
 
-                    Log.d("Metrics Class Boost: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence())) ;
+                    Log.v(LTKPLUS_MSG, "metrics.classboost: " + candChar + ":" + String.format("%.3f", candidate.getPlusConfidence())) ;
                 }
 
 
                 candidate.updateANDConfidence(1.0f - metric.getDeltaA(), (isSample)? 0.5f:0.4f);
-                Log.d("Metrics Aspect: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence()) + "  Aspect: " + String.format("%.3f", metric.getDeltaA()));
+                Log.v(LTKPLUS_MSG, "metrics.aspect: " + candChar + ":" + String.format("%.3f", candidate.getPlusConfidence()) + "  Aspect: " + String.format("%.3f", metric.getDeltaA()));
 
                 candidate.updateANDConfidence(1.0f - metric.getDeltaH(), (isSample)? 0.6f:0.5f);
-                Log.d("Metrics Height: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence()) + "  DeltaH: " + String.format("%.3f", metric.getDeltaH()));
+                Log.v(LTKPLUS_MSG, "metrics.height: " + candChar + ":" + String.format("%.3f", candidate.getPlusConfidence()) + "  DeltaH: " + String.format("%.3f", metric.getDeltaH()));
 
                 candidate.updateANDConfidence(1.0f - metric.getDeltaY(), (isSample)? 0.6f:0.5f);
-                Log.d("Metrics Vertical: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence()) + "  DeltaY: " + String.format("%.3f", metric.getDeltaY()));
+                Log.v(LTKPLUS_MSG, "metrics.vertical: " + candChar + ":" + String.format("%.3f", candidate.getPlusConfidence()) + "  DeltaY: " + String.format("%.3f", metric.getDeltaY()));
 
                 // Update the visual confidence
                 //
                 candidate.updateANDConfidence(candidate.getVisualConfidence(), (isSample)? 0.75f:0.5f);
-                Log.d("Metrics Visual Match: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence()) + "  Match: " + String.format("%.3f", candidate.getVisualConfidence()));
+                Log.v(LTKPLUS_MSG, "metrics.visual: " + candChar + ":" + String.format("%.3f", candidate.getPlusConfidence()) + "  Match: " + String.format("%.3f", candidate.getVisualConfidence()));
 
                 candidate.updateANDConfidence(candidate.getVisualErrorConfidence(), (isSample)? 0.75f:0.5f);
-                Log.d("Metrics Visual Error: ", candChar + ":" + String.format("%.3f", candidate.getPlusConfidence()) + "  Error: " + String.format("%.3f", candidate.getVisualErrorConfidence()));
+                Log.d(LTKPLUS_MSG, "metrics.visual.error: " + candChar + ":" + String.format("%.3f", candidate.getPlusConfidence()) + "  Error: " + String.format("%.3f", candidate.getVisualErrorConfidence()));
 
                 _ltkPlusCandidates[index++] = candidate;
             }
@@ -651,7 +679,7 @@ public class CRecognizerPlus implements IGlyphSink {
             // Generate the dimensional metrics for the given candidate char
             // Generate the visual comparison metric for the given char
             //
-            metric.calcMetrics(_drawGlyph, glyphVisualBnds, candCharBnds, _viewBnds, (sampleIndex != GCONST.EXPECT_NONE)? compCharBnds:candCharBnds , GCONST.STROKE_WEIGHT);
+            metric.calcMetrics(_sampleExpected, candChar, _drawGlyph, glyphVisualBnds, candCharBnds, _viewBnds, (sampleIndex != GCONST.EXPECT_NONE)? compCharBnds:candCharBnds , GCONST.STROKE_WEIGHT);
 
             metric.generateVisualMetric(_fontBnds, candChar, (sampleIndex != GCONST.EXPECT_NONE)? _sampleExpected:candChar, _drawGlyph, _Paint, GCONST.CALIBRATED_WEIGHT, TCONST.VOLATILE);
 

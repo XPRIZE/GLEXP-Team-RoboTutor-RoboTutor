@@ -10,6 +10,8 @@ import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.GRAPH_MSG;
+
 /**
  * This View is purpose built to diplay the current app build version name from the Gradle app script
  *
@@ -35,8 +37,5 @@ public class TVersionView extends TTextView {
         String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
 
         setText(rtVersion);
-
-        RoboTutor.logManager.postEvent(TCONST.ENGINEMESSAGE, rtVersion + " : " + currentDateTimeString);
-
     }
 }

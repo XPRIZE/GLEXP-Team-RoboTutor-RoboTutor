@@ -3,11 +3,21 @@ package cmu.xprize.robotutor.tutorengine.graph;
 
 import android.util.Log;
 
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+
 public class type_queuedaudio extends type_audio {
 
+
+
+    public type_queuedaudio() {
+        super();
+
+        _logType = QGRAPH_MSG;
+    }
 
     //*******************************************************
     //**  IMediaListener Start
@@ -17,6 +27,8 @@ public class type_queuedaudio extends type_audio {
      */
     @Override
     public void onCompletion(CMediaManager.PlayerManager playerManager) {
+
+        RoboTutor.logManager.postEvent_D(_logType, "target:node.queuedaudio,event:oncompletion");
 
         // If not an AUDIOEVENT then we disconnect the player to allow reuse
         //
@@ -32,7 +44,8 @@ public class type_queuedaudio extends type_audio {
             // Flows automatically emit a NEXT_NODE event to scenegraph.
             //
             if (mode.equals(TCONST.AUDIOFLOW)) {
-                Log.d(TAG, "Processing: Audio Flow");
+
+                RoboTutor.logManager.postEvent_D(_logType, "target:node.queuedaudio:emit.flow");
                 dispatchEvent(new CGraphEvent(TCONST.TRACK_COMPLETE, "na", "na"));
             }
         }

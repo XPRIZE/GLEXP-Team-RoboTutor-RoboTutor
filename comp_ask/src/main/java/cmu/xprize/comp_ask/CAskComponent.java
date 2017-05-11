@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.graphics.PointF;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -42,6 +43,8 @@ import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
+
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 
 public class CAskComponent extends FrameLayout implements ILoadableObject, View.OnClickListener  {
@@ -252,6 +255,8 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
     @Override
     public void onClick(View view) {
+
+        Log.v(QGRAPH_MSG, "event.click: " + " CAskComponent: button selected");
 
         if(SINGLE_SELECT)
             enableButtons(false);

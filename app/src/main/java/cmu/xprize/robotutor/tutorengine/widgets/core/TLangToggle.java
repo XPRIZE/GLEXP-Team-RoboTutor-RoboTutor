@@ -21,6 +21,7 @@
 
         import android.content.Context;
         import android.util.AttributeSet;
+        import android.util.Log;
         import android.view.View;
         import android.widget.ToggleButton;
 
@@ -35,6 +36,8 @@
         import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
         import cmu.xprize.comp_logging.ILogManager;
         import cmu.xprize.util.TCONST;
+
+        import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.OnClickListener {
 
@@ -77,6 +80,8 @@ public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.
     @Override
     public void onClick(View v) {
         mLangState    = !mLangState;
+
+        Log.v(QGRAPH_MSG, "event.click: " + " TLangToggle: " + mLangState);
 
         CTutorEngine.setDefaultLanguage(mLangState? TCONST.LANG_EN: TCONST.LANG_SW);
 

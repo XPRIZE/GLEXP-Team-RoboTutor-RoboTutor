@@ -277,8 +277,7 @@ public class ListenerAssets {
                     || !(new File(externalDir, path).exists()))
                 newItems.add(path);
             else
-                Log.i(TAG,
-                        String.format("Skipping asset %s: checksums are equal", path));
+                Log.v(TAG, String.format("Skipping asset %s: checksums are equal", path));
 
         }
 
@@ -287,13 +286,13 @@ public class ListenerAssets {
 
         for (String path : newItems) {
             File file = copy(path);
-            Log.i(TAG, String.format("Copying asset %s to %s", path, file));
+            Log.v(TAG, String.format("Copying asset %s to %s", path, file));
         }
 
         for (String path : unusedItems) {
             File file = new File(externalDir, path);
             file.delete();
-            Log.i(TAG, String.format("Removing asset %s", file));
+            Log.v(TAG, String.format("Removing asset %s", file));
         }
 
         updateItemList(items);

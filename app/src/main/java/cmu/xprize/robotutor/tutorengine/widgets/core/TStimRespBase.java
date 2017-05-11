@@ -15,7 +15,6 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -105,15 +104,15 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, ID
             mTutor.getScope().addUpdateVar(name() + ".valueUC", new TString(mValue.toUpperCase()));
 
             if (newChar.equals("???")) {
-                mTutor.setAddFeature(TCONST.FWUNKNOWN);
+                mTutor.addFeature(TCONST.FWUNKNOWN);
                 _wrong++;
             } else {
 
                 if (mValue.equals(mStimulusString)) {
-                    mTutor.setAddFeature(TCONST.FWCORRECT);
+                    mTutor.addFeature(TCONST.FWCORRECT);
                     _correct++;
                 } else {
-                    mTutor.setAddFeature(TCONST.FWINCORRECT);
+                    mTutor.addFeature(TCONST.FWINCORRECT);
                     _wrong++;
                 }
 
@@ -121,7 +120,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, ID
                 //
                 if (_dataEOI) {
                     if (_wrong == 0)
-                        mTutor.setAddFeature(TCONST.ALL_CORRECT);
+                        mTutor.addFeature(TCONST.ALL_CORRECT);
                 }
             }
 
@@ -154,9 +153,9 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, ID
         _correct = 0;
         _wrong   = 0;
 
-        mTutor.setDelFeature(TCONST.ALL_CORRECT);
-        mTutor.setDelFeature(TCONST.FWCORRECT);
-        mTutor.setDelFeature(TCONST.FWINCORRECT);
+        mTutor.delFeature(TCONST.ALL_CORRECT);
+        mTutor.delFeature(TCONST.FWCORRECT);
+        mTutor.delFeature(TCONST.FWINCORRECT);
 
         try {
             if (dataPacket.startsWith(TCONST.SOURCEFILE)) {
@@ -195,9 +194,9 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, ID
 
     public void next() {
 
-        mTutor.setDelFeature(TCONST.ALL_CORRECT);
-        mTutor.setDelFeature(TCONST.FWCORRECT);
-        mTutor.setDelFeature(TCONST.FWINCORRECT);
+        mTutor.delFeature(TCONST.ALL_CORRECT);
+        mTutor.delFeature(TCONST.FWCORRECT);
+        mTutor.delFeature(TCONST.FWINCORRECT);
 
         super.next();
 
@@ -209,7 +208,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, ID
         if(dataExhausted()) {
 
             // set the script 'Feature'
-            mTutor.setAddFeature(TCONST.FTR_EOI);
+            mTutor.addFeature(TCONST.FTR_EOI);
 
             // For stimulus controls broadcast the change so the response knows
             // Let interested listeners know the stimulus has been exhausted
@@ -368,7 +367,7 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, ID
 
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
-        Log.d(TAG, "Loader iteration");
+        // Log.d(TAG, "Loader iteration");
         super.loadJSON(jsonObj, (IScope2) scope);
 
     }

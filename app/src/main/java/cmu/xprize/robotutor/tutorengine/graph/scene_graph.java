@@ -26,9 +26,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import cmu.xprize.comp_logging.CLogManager;
+import cmu.xprize.comp_logging.ILogManager;
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.TCONST;
+
 
 
 /**
@@ -37,9 +41,8 @@ import cmu.xprize.util.TCONST;
 public class scene_graph extends scene_node implements ILoadableObject2 {
 
     // State fields
-    private scene_node _currNode;
-    private String     _nodeState;
-
+    private scene_node        _currNode;
+    private String            _nodeState;
 
     // json loadable fields
     public String  version;
@@ -61,7 +64,7 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
      * The tutor_node for
      */
     public scene_graph() {
-        _currNode = this;
+        _currNode  = this;
     }
 
 
@@ -73,14 +76,17 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
 
         // Walk the scene_graphqueues to teminate them gracefully
         //
-        Iterator<?> tObjects = queueMap.entrySet().iterator();
+        if (queueMap != null) {
 
-        while(tObjects.hasNext() ) {
-            Map.Entry entry = (Map.Entry) tObjects.next();
+            Iterator<?> tObjects = queueMap.entrySet().iterator();
 
-            scene_graphqueue sceneQueue = (scene_graphqueue)entry.getValue();
+            while (tObjects.hasNext()) {
+                Map.Entry entry = (Map.Entry) tObjects.next();
 
-            sceneQueue.cancelNode();
+                scene_queuedgraph sceneQueue = (scene_queuedgraph) entry.getValue();
+
+                sceneQueue.cancelNode();
+            }
         }
     }
 
@@ -123,7 +129,7 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
                     _currNode = _currNode.nextNode();
 
                     if (_currNode == null) {
-                        Log.d(TAG, "Processing END Node: ");
+                        RoboTutor.logManager.postEvent_I(_logType, "target:node.scenegraph.applyNode,event:END_OF_GRAPH");
 
                         _nodeState = TCONST.END_OF_GRAPH;
                         break;
@@ -142,7 +148,7 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
                     // A result of TCONST.NONE indicated the complex source node is exhausted.
                     // which will drive a search for the next node
                     //
-                    Log.d(TAG, "Processing Node: " + _currNode.name + " - start State: " + _nodeState + " - mapType: " + _currNode.maptype + " - mapName: " + _currNode.mapname);
+                    RoboTutor.logManager.postEvent_I(_logType, "target:node.scenegraph.applyNode,name:" + _currNode.name + ",start State:" + _nodeState + ",mapType:" + _currNode.maptype + ",mapName:" + _currNode.mapname);
 
 //                    if(_currNode.name.equals("INTRO_STATE")) {
 //                        Log.d(TAG, "Processing Node: " + _currNode.name);
@@ -150,7 +156,7 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
 
                     _nodeState = _currNode.applyNode();
 
-                    Log.d(TAG, "Processing Node: " + _currNode.name + " - end State: " + _nodeState);
+                    RoboTutor.logManager.postEvent_I(_logType, "target:node.scenegraph.applyNode,name:" + _currNode.name + ",end State:" + _nodeState);
 
                     break;
             }
@@ -174,7 +180,7 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
             _currNode = _currNode.nextNode();
 
             if (_currNode == null) {
-                Log.d(TAG, "Processing END Node: ");
+                RoboTutor.logManager.postEvent_I(TAG, "target:node.scenegraph: Processing END Node: ");
 
                 _nodeState = TCONST.END_OF_GRAPH;
             }
@@ -188,11 +194,11 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
             // which will drive a search for the next node
             //
             else {
-                Log.d(TAG, "Processing Node: " + _currNode.name + " - start State: " + _nodeState + " - mapType: " + _currNode.maptype + " - mapName: " + _currNode.mapname);
+                RoboTutor.logManager.postEvent_I(_logType, "target:node.scenegraph,name:" + _currNode.name + ",start State:" + _nodeState + ",mapType:" + _currNode.maptype + ",mapName:" + _currNode.mapname);
 
                 _nodeState = _currNode.applyNode();
 
-                Log.d(TAG, "Processing Node: " + _currNode.name + " - end State: " + _nodeState);
+                RoboTutor.logManager.postEvent_I(_logType, "target:node.scenegraph,name:" + _currNode.name + ",end State:" + _nodeState);
             }
         }
 
@@ -208,19 +214,19 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
             _currNode = (scene_node) getScope().mapSymbol(rootnode);
         }
         catch(Exception e) {
-            CErrorManager.logEvent(TAG,"Root Node not found", e, false);
+            CErrorManager.logEvent(_logType,"target:node.scenegraph,event:Root Node not found", e, false);
         }
 
         if(_currNode != null) {
 
-            Log.d(TAG, "Processing RootNode: " + _currNode.name + " - start State: " + _nodeState + " - mapType: " + _currNode.maptype + " - mapName: " + _currNode.mapname);
+            RoboTutor.logManager.postEvent_I(_logType, "target:node.root,name:" + _currNode.name + ",start State:" + _nodeState + ",mapType:" + _currNode.maptype + ",mapName:" + _currNode.mapname);
 
             // TODO: Check if preenter is used - I think we only want this for scene preenter/exit
             _currNode.preEnter();
             result = TCONST.READY;
         }
         else {
-            Log.d(TAG, "No Root Node for Scene");
+            RoboTutor.logManager.postEvent_I(_logType, "target:node.scenegraph,event:No Root Node for Scene");
             result = TCONST.NEXTSCENE;
         }
 

@@ -2,8 +2,11 @@ package cmu.xprize.sb_component;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 // TODO: remove
 public class MainActivity extends AppCompatActivity {
@@ -31,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.v(QGRAPH_MSG, "event.click: " + " MainActivity:scoreboard.decrease");
+
                 scoreboard.decrease(1);
 //                lollipop.animateToStick();
             }

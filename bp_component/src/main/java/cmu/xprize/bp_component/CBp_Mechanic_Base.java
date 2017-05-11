@@ -42,6 +42,8 @@ import java.util.HashMap;
 import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+
 public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener, View.OnClickListener {
 
     protected Context                     mContext;
@@ -504,6 +506,8 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
     @Override
     public void onClick(View view) {
+
+        Log.v(QGRAPH_MSG, "event.click: " + " CBp_Mechanic_Base: bubble touch");
 
         CBubble bubble = (CBubble)view;
 

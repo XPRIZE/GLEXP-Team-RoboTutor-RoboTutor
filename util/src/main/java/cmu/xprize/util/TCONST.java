@@ -179,8 +179,6 @@ public class TCONST {
     public static final String INVISIBLE           = "INVISIBLE";
     public static final String GONE                = "GONE";
 
-    public static final String ENGINEMESSAGE       = "EngineMessage: ";
-
     public static final String ASK_SELECTION       = "ASK_SELECTION";
     public static final String ASK_BUTTON_ID       = "ASK_BUTTON_ID";
     public static final String CANCEL_POINTAT      = "CANCEL_POINTAT";
@@ -235,6 +233,14 @@ public class TCONST {
 
     public static final String NEXT_PAGE                  = "NEXT_PAGE";
     public static final String NEXT_SCENE                 = "NEXT_SCENE";
+
+    // Core log message types - anumation scenegraph and queued scenegraph
+    //
+    public static final String TUTOR_STATE_MSG            = "TSTag";
+    public static final String GRAPH_MSG                  = "RTag";
+    public static final String QGRAPH_MSG                 = "RQTag";
+    public static final String LTKPLUS_MSG                = "RLTag";
+    public static final String LOGSTATE                   = "logState";
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
     //
@@ -353,7 +359,6 @@ public class TCONST {
     public static final String REC_GLYPH       = "REC_GLYPH";
 
 
-
     // CActionTrack track types
     // Note these must case-match the layer names in the Flash
     // timeline specification from which CActionTrack is derived
@@ -437,8 +442,6 @@ public class TCONST {
     public static final String CMD_GOTO         = "GOTONODE";
     public static final String CMD_NEXT         = "NEXT";
     public static final String CMD_LAUNCH       = "LAUNCH-TUTOR";
-    public static final String CMD_SET_FEATURE  = "FEATURE-ADD";
-    public static final String CMD_DEL_FEATURE  = "FEATURE-DEL";
 
 
     // Intrinsic types
@@ -543,7 +546,7 @@ public class TCONST {
     public static final String TTS         = "TTS";
     public static final String ASR         = "ASR";
 
-    public static final String GLYPH_DATA  = "glyphdata";
+    public static final String GLYPH_DATA  = "GLYPH_DATA";
 
 
     // LTK messaging constants

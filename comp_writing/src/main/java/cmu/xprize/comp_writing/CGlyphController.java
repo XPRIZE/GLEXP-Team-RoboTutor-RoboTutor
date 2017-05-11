@@ -45,6 +45,8 @@ import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.CLinkedScrollView;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+
 
 /**
  */
@@ -193,6 +195,8 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     public class insLSpaceClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            Log.v(QGRAPH_MSG, "event.click: " + " CGlyphController:insLSpaceClickListener");
+
             mWritingComponent.addItemAt(mThis, 1);
         }
     }
@@ -200,6 +204,8 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     public class insRSpaceClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            Log.v(QGRAPH_MSG, "event.click: " + " CGlyphController:insRSpaceClickListener");
+
             mWritingComponent.addItemAt(mThis, 0);
         }
     }
@@ -208,6 +214,8 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     public class delSpaceClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            Log.v(QGRAPH_MSG, "event.click: " + " CGlyphController:deleteItem");
+
             mWritingComponent.deleteItem(mThis);
         }
     }
@@ -216,6 +224,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     public class eraseGlyphClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            Log.v(QGRAPH_MSG, "event.click: " + " CGlyphController:eraseGlyph");
 
             eraseGlyph();
             resetState();
@@ -247,6 +256,8 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     public class glyphReplayListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            Log.v(QGRAPH_MSG, "event.click: " + " CGlyphController:replayGlyph(WR_CONST.REPLAY_DEFAULT");
+
             mGlyphInput.replayGlyph(WR_CONST.REPLAY_DEFAULT);
         }
     }
@@ -254,6 +265,8 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     public class glyphMorphListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            Log.v(QGRAPH_MSG, "event.click: " + " CGlyphController:animateOverlay");
+
             mGlyphInput.animateOverlay();
         }
     }
@@ -261,6 +274,8 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     public class glyphFlashListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            Log.v(QGRAPH_MSG, "event.click: " + " CGlyphController:flashOverlay");
+
             mGlyphInput.flashOverlay();
         }
     }
@@ -294,6 +309,8 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     public class glyphSaveListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            Log.v(QGRAPH_MSG, "event.click: " + " CGlyphController:saveGlyphAsPrototype");
+
             mGlyphInput.saveGlyphAsPrototype();
         }
     }

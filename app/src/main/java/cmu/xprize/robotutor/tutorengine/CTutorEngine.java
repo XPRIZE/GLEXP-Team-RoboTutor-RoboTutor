@@ -216,6 +216,10 @@ public class CTutorEngine implements ILoadableObject2 {
         // the user wants to select another tutor.
         //
 
+        // Update the tutor id shown in the log stream
+        //
+        CLogManager.setTutor(defTutor);
+
         createTutor(defTutor, RoboTutor.SELECTOR_MODE);
         launchTutor(tutorBindings);
     }
@@ -573,7 +577,7 @@ public class CTutorEngine implements ILoadableObject2 {
     }
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
-        Log.d(TAG, "Loader iteration");
+        // Log.d(TAG, "Loader iteration");
         loadJSON(jsonObj, (IScope2) scope);
     }
 

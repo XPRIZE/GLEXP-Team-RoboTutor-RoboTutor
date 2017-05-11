@@ -23,9 +23,11 @@ import android.util.Log;
 
 import java.util.HashMap;
 
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.util.TCONST;
+
 
 public class scene_module extends scene_node implements ILoadableObject2 {
 
@@ -110,6 +112,8 @@ public class scene_module extends scene_node implements ILoadableObject2 {
         //
         resetNode();
 
+        RoboTutor.logManager.postEvent_I(_logType, "target:node.module,name:" + name + ",event:start,modulestate:" + _moduleState);
+
         // TODO: At the moment this loop is used to allow Module callouts from timer events
         // TODO: Make it so that timer events run in their own graph so this is not needed.
         //
@@ -124,7 +128,6 @@ public class scene_module extends scene_node implements ILoadableObject2 {
                 _ndx++;
 
                 if(_nextAction.testFeatures()) {
-                    Log.d(TAG, "Processing action: " + _nextAction.name);
                     validAction = true;
                     break;
                 }
@@ -140,6 +143,8 @@ public class scene_module extends scene_node implements ILoadableObject2 {
             }
 
         }while(_moduleState.equals(TCONST.DONE));
+
+        RoboTutor.logManager.postEvent_I(_logType, "target:node.module,name:" + name + ",event:end,modulestate:" + _moduleState);
 
         return _moduleState;
     }

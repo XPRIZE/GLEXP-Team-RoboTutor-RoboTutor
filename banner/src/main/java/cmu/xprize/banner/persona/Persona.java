@@ -46,6 +46,8 @@ import java.util.TimerTask;
 import cmu.xprize.banner.R;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+
 /**
  *
  */
@@ -115,6 +117,8 @@ public class Persona extends View {
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.v(QGRAPH_MSG, "event.click: " + " Persona: on touch");
+
                 //startBlink();
             }
         });
@@ -268,7 +272,7 @@ public class Persona extends View {
     class ChangeReceiver extends BroadcastReceiver {
         public void onReceive (Context context, Intent intent) {
 
-            Log.d("Persona", "Broadcast recieved: ");
+//            Log.d("Persona", "Broadcast recieved: ");
 
             float[] point = intent.getFloatArrayExtra(TCONST.SCREENPOINT);
 
