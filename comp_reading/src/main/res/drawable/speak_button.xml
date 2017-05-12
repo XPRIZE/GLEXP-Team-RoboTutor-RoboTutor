@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--The order of these matters - the first matched gets drawn-->
+    <!--See: https://developer.android.com/guide/topics/resources/drawable-resource.html#StateList-->
+
+    <item
+        android:state_enabled="false"
+        android:drawable="@drawable/speak_disabled"/>
+    <item
+        android:state_pressed="true"
+        android:drawable="@drawable/speak_pressed"/>
+    <item
+        android:drawable="@drawable/speak_normal"/>
+
+</selector>
