@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<persona xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <eye>
+        <eccen>1.2</eccen>
+        <height>1</height>
+        <pupildia>1</pupildia>
+    </eye>
+
+    <pupilarydist>2.5</pupilarydist>
+
+    <eyecolor>
+        <eyecolor>#FFFFFF</eyecolor>
+        <eyestrokecolor>#000000</eyestrokecolor>
+        <eyestrokewidth>3</eyestrokewidth>
+
+        <pupilcolor>#000000</pupilcolor>
+        <pupilstrokecolor>#000000</pupilstrokecolor>
+        <pupilstrokewidth>0</pupilstrokewidth>
+    </eyecolor>
+
+    <canwatch>true</canwatch>
+    <canblink>true</canblink>
+    <canpoke>true</canpoke>
+    <canstare>true</canstare>
+
+    <blinkperiod>9000</blinkperiod>
+    <blinkvar>5500</blinkvar>
+    <blinkdbl>.1</blinkdbl>
+
+</persona>

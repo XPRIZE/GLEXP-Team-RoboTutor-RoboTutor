@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<cmu.xprize.bp_component.CBubbleStimulus
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:clipChildren="false"
+    android:padding="15dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/SIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/SText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="64sp"
+        android:text="6"
+        android:textColor="#FFFFFF" />
+
+</cmu.xprize.bp_component.CBubbleStimulus>

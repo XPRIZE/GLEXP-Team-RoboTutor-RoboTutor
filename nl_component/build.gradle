@@ -33,7 +33,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile project(':util')
-    compile project(':listener')
+    compile project(':comp_listener')
     compile project(':fw_component')
     compile project(':comp_logging')
 }

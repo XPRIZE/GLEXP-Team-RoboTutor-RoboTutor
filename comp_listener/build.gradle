@@ -1,0 +1,43 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.rtCompileSdkVersion
+    buildToolsVersion rootProject.ext.rtBuildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.rtMinSdkVersion
+        targetSdkVersion rootProject.ext.rtTargetSdkVersion
+        versionCode rootProject.ext.rtVersionCode
+        versionName rootProject.ext.rtVersionName
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            jni.srcDirs = []
+        }
+    }
+
+    lintOptions {
+        // set to true to turn off analysis progress reporting by lint
+        quiet true
+        // if true, stop the gradle build if errors are found
+        abortOnError false
+        // if true, only report errors
+        ignoreWarnings true
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile project(':util')
+    compile files('libs/pocketsphinx-android-5prealpha-nolib.jar')
+    compile project(':comp_logging')
+}
