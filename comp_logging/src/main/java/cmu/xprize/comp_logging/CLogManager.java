@@ -38,7 +38,9 @@ public class CLogManager implements ILogManager {
 
     private static final int OBJ_PART       = 0;
     private static final int VAL_PART       = 1;
-    private static final String LOG_VERSION = "1.0.0";
+
+    //private static final String LOG_VERSION = "1.0.0";    // initial release
+    private static final String LOG_VERSION = "1.0.1";      // Updated LTKPlus to use LTKPLUS tag
 
     private static String currenttutor = "<undefined>";
 

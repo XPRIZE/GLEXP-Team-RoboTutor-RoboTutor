@@ -34,6 +34,7 @@ import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.ltkplus.GCONST.NO_LOG;
 import static cmu.xprize.util.TCONST.GRAPH_MSG;
+import static cmu.xprize.util.TCONST.LTKPLUS_MSG;
 
 public class CGlyphMetrics {
 
@@ -128,7 +129,7 @@ public class CGlyphMetrics {
 
         aspectVar = Math.abs(aspectPr - aspectGl);
 
-        logManager.postEvent_D(GRAPH_MSG, "target:CGlyphMetrics,action:calcmetrics,expected:" + expectedChar + ",comparewith:" + charToCompare + ",var_x:" + PosVarX + ",var_y:" + PosVarY + ",var_w:" + SizVarW + ",var_h:" + SizVarH + ",var_a:" + aspectVar );
+        logManager.postEvent_D(LTKPLUS_MSG, "target:CGlyphMetrics,action:calcmetrics,expected:" + expectedChar + ",comparewith:" + charToCompare + ",var_x:" + PosVarX + ",var_y:" + PosVarY + ",var_w:" + SizVarW + ",var_h:" + SizVarH + ",var_a:" + aspectVar );
     }
 
 
@@ -324,7 +325,7 @@ public class CGlyphMetrics {
 
         Log.d("LTKPLUS", "Time in recognizer: " + (System.currentTimeMillis() - _time));
 
-        logManager.postEvent_D(GRAPH_MSG, "target:CGlyphMetrics,action:generatevisualmetric,expected:" + expectedChar + ",comparewith:" + charToCompare + ",visualmatch:" + _visualMatch + ",visualerror:" + _visualError);
+        logManager.postEvent_D(LTKPLUS_MSG, "target:CGlyphMetrics,action:generatevisualmetric,expected:" + expectedChar + ",comparewith:" + charToCompare + ",visualmatch:" + _visualMatch + ",visualerror:" + _visualError);
 
         return _visualMatch;
     }

@@ -231,7 +231,7 @@ public class CRecognizerPlus implements IGlyphSink {
 
                 logMsg = logMsg + ",confidence_" + _ltkCandidates[i].getRecChar() + ":" + _ltkCandidates[i].Confidence;
             }
-            logManager.postEvent_D(GRAPH_MSG, "target:CRecognizer,type:lipiTK" + logMsg);
+            logManager.postEvent_D(LTKPLUS_MSG, "target:CRecognizer,type:lipiTK" + logMsg);
 
 
 
@@ -246,7 +246,7 @@ public class CRecognizerPlus implements IGlyphSink {
 
                 logMsg = logMsg + ",confidence_" + _ltkPlusCandidates[i].getRecChar() + ":" + _ltkPlusCandidates[i].Confidence;
             }
-            logManager.postEvent_D(GRAPH_MSG, "target:CRecognizer,type:LTKPlus" + logMsg);
+            logManager.postEvent_D(LTKPLUS_MSG, "target:CRecognizer,type:LTKPlus" + logMsg);
 
             return null;
         }
