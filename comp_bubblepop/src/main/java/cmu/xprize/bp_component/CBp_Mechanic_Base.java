@@ -37,7 +37,9 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.TCONST;
@@ -185,7 +187,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
             case BP_CONST.REFERENCE:
 
-                int[] shapeSet = BP_CONST.drawableMap.get(mComponent._stimulus_data[data.dataset[data.stimulus_index]]);
+                int[] shapeSet = BP_CONST.drawableMap.get(data.stimulus);
 
                 Drawable qDrawable = mParent.getResources().getDrawable(shapeSet[0], null);
 
@@ -193,7 +195,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 break;
 
             case BP_CONST.TEXTDATA:
-                SbubbleStumulus.setContents(0, mComponent._stimulus_data[data.dataset[data.stimulus_index]]);
+                SbubbleStumulus.setContents(0, data.stimulus);
                 break;
         }
 
@@ -607,59 +609,48 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
     public void generateRandomData(CBp_Data data) {
 
-        int stimCount = (data.rand_data)? data.rand_size:data.dataset.length;
-        int setSize   = mComponent._stimulus_data.length;
+        int respSize;       // response set size - # to select from
+        int ansIndex;
 
-        mComponent.question_Index = (int) (Math.random() * setSize);
+        if(data.gen_question) {
 
-        // Constrain the presentation set size
-        //
-        if(stimCount > setSize)
-            stimCount = setSize;
-        // If the first element of the dataset is < 0 it indicates the number of random items
-        // to add to the array
-        //
-        if(data.rand_data) {
-
-            data.dataset = new int[stimCount];
-            HashMap<Integer, Boolean> dataAlreadyChosen = new HashMap<Integer, Boolean>();
-            dataAlreadyChosen.put(mComponent.question_Index, true);
-
-            for(int i1 = 0 ; i1 < stimCount ; i1++) {
-                int randomKey = (int) (Math.random() * setSize);
-                //Ensures no infinite loop
-                int checkToBreak = 0;
-                while(dataAlreadyChosen.containsKey(randomKey)) {
-                    randomKey = (randomKey + 1) % (setSize);
-                    checkToBreak++;
-
-                    if(checkToBreak == setSize) {
-                        break;
-                    }
-                }
-                data.dataset[i1] = randomKey;
-                dataAlreadyChosen.put(randomKey, true);
+            if(data.respCountExact > 0) {
+                respSize = data.respCountExact;
             }
-        }
+            else {
+                respSize = getRandInRange(data.respCountRange);
+            }
 
-        // If requested (by -ve entry) - select which bubble is correct at random
-        //
-        if(data.rand_index)
-            data.stimulus_index = (int) (Math.random() * data.dataset.length);
-
-        // If we are using sequential presentations then we substitute the
-        // current correct index in the "correct" i.e. stimulus bubble. To
-        // ensure there is at least one correct answer.
-        //
-        if(mComponent.question_sequence.equals(BP_CONST.SEQUENTIAL)) {
-
-            data.dataset[data.stimulus_index] = mComponent.question_Index++;
-
-            // cycle on the _stimulus_data
+            // Get the number of response samples available.
             //
-            mComponent.question_Index %= setSize;
-        }
+            int setSize = mComponent.wrk_responseSet.size();
 
+            // Constrain the presentation set size - in case there is an error
+            // in the problem generator.
+            //
+            if(respSize > setSize)
+                respSize = setSize;
+
+            // If requested, select which bubble is correct at random
+            // within the response set
+            //
+            if(data.answer_index < 0)
+                ansIndex = (int) (Math.random() * respSize);
+            else
+                ansIndex = data.answer_index;
+
+            //***** Select the question from the stimulus set
+            // This populates the stimulus and answer fields of "data"
+            //
+            mComponent.selectQuestion(data);
+
+            //***** Select respSize items from the response set
+            // This populates the response fields of "data" with a selection from the
+            // generator sets and ensures the answer is in the result set at the specified
+            // ansIndex location.
+            //
+            mComponent.selectRandResponse(data, respSize, ansIndex);
+        }
     }
 
 

@@ -12,7 +12,7 @@
 
   "dataSource" : [
 
-    {"type":"Bp_Data", "question_type": "multiple-choice", "question_say": false, "question_show": false, "rand_data":true, "rand_size":5, "rand_index": true, "stimulus_type": "text_data" }
+    {"type":"Bp_Data", "question_type": "multiple-choice", "question_say": false, "question_show": false, "rand_data":true, "rand_size":true, "rand_index": true, "stimulus_type": "text_data" }
 
   ],
 

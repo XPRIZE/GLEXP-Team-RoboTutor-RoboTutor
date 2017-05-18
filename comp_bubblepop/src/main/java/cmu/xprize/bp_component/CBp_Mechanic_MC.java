@@ -331,19 +331,17 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
         CBubble newBubble;
 
-        // Check if the dataset needs to be generated
+        // Check if the response_set needs to be generated
         //
         generateRandomData(data);
 
         // Start the bubbles with a random color and cycle the colors
         int    colorNdx   = (int)(Math.random() * BP_CONST.bubbleColors.length);
-        String correctVal = mComponent._stimulus_data[data.dataset[data.stimulus_index]];
+        String correctVal = data.answer;
 
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        SBubbles = new CBubble[data.dataset.length];
-
-
+        SBubbles = new CBubble[data.response_set.length];
 
         for (int i1 = 0; i1 < SBubbles.length; i1++) {
 
@@ -353,9 +351,9 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
             // Set Color: pass in String e.g. "RED" - Cycle through the colors repetitively
             //
-            if(data.stimulus_type.equals(TCONST.AUDIO_REF)) {
-                newBubble.setFeedbackColor(bubbleColor);
-            }
+//            if(data.stimulus_type.equals(TCONST.AUDIO_REF)) {
+//                newBubble.setFeedbackColor(bubbleColor);
+//            }
 
 
             colorNdx = (colorNdx + 1) % BP_CONST.bubbleColors.length;
@@ -368,16 +366,17 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
             mParent.addView(newBubble, layoutParams);
 
-            String stiumulusVal = mComponent._stimulus_data[data.dataset[i1]];
+            String responseVal = data.response_set[i1];
+            String responseTyp = data.responsetype_set[i1];
 
-            switch (mComponent.stimulus_type) {
+            switch (responseTyp) {
 
                 case BP_CONST.REFERENCE:
 
                     try {
-                        int[] shapeSet = BP_CONST.drawableMap.get(stiumulusVal);
+                        int[] shapeSet = BP_CONST.drawableMap.get(responseVal);
 
-                        newBubble.configData(stiumulusVal, correctVal);
+                        newBubble.configData(responseVal, correctVal);
                         newBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
 
                         //Moved set color to here to so that text would be known when setting the color(generating  bubble)
@@ -385,14 +384,14 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
                     }
                     catch(Exception e) {
-                        Log.e(TAG, "Invalid Datatset: " + stiumulusVal);
+                        Log.e(TAG, "Invalid Datatset: " + responseVal);
                     }
                     break;
 
                 case BP_CONST.TEXTDATA:
 
-                    newBubble.configData(stiumulusVal, correctVal);
-                    newBubble.setContents(0, stiumulusVal);
+                    newBubble.configData(responseVal, correctVal);
+                    newBubble.setContents(0, responseVal);
 
                     //Moved set color to here too so that text would be known when setting the color(generating  bubble)
                     newBubble.setColor(bubbleColor);
@@ -415,7 +414,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
         if(_angleRange != null)
             _angle = getRandInRange(_angleRange);
 
-        _angleInc   = (float)((2 * Math.PI) / data.dataset.length);
+        _angleInc   = (float)((2 * Math.PI) / data.response_set.length);
 
 
         //Finds maximum number of rows in the screen that can fit a bubble

@@ -39,15 +39,6 @@ public class CBpBackground extends View implements ILoadableObject {
     private Paint mPaint;
     private Rect  mViewRegion = new Rect();
 
-    // json loadable
-    public String          style;
-    public String          kind;
-    public String          layout;
-    public int             layoutcount;
-    public String          colorbase;
-    public String          colorchoice;
-    public int[]           colors;
-
     private int   rows;
     private int   cols;
     private int   dim;
@@ -59,6 +50,14 @@ public class CBpBackground extends View implements ILoadableObject {
     private float fRows;
     private float fCols;
 
+    // json loadable
+    public String          style;
+    public String          kind;
+    public String          layout;
+    public int             layoutcount;
+    public String          colorbase;
+    public String          colorchoice;
+    public int[]           colors;
 
     static final String TAG = "CBpBackground";
 
@@ -187,7 +186,7 @@ public class CBpBackground extends View implements ILoadableObject {
 
                 bgPrimitives = new IPrimitive[layoutcount];
 
-
+                // TODO: Complete implementation
 
                 break;
         }

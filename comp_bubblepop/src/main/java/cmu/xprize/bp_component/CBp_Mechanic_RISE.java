@@ -73,6 +73,113 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
     }
 
 
+    public void execCommand(String command, Object target ) {
+
+        CBubble bubble;
+        long    delay = 0;
+
+        super.execCommand(command, target);
+
+        switch(command) {
+
+            case BP_CONST.SHOW_BUBBLES:
+
+                if (!_isRunning && mInitialized) {
+
+                    _isRunning = true;
+
+                    mComponent.post(BP_CONST.SPAWN_BUBBLE);
+                }
+                break;
+
+            case BP_CONST.PAUSE_ANIMATION:
+
+                if (_isRunning) {
+                    for(Animator animation : translators.keySet()) {
+                        animation.pause();
+                    }
+
+                    _isRunning = false;
+                }
+                break;
+
+            case BP_CONST.RESUME_ANIMATION:
+
+                if (!_isRunning) {
+                    for(Animator animation : translators.keySet()) {
+                        animation.resume();
+                    }
+
+                    _isRunning = true;
+                    mComponent.post(BP_CONST.SPAWN_BUBBLE);
+                }
+                break;
+
+            case BP_CONST.SPAWN_BUBBLE:
+
+                if(_isRunning) {
+                    if (launchBubble()) {
+
+                        int[] launchRange = {_travelTime / _currData.respCountRange[BP_CONST.MAX], _travelTime / _currData.respCountRange[BP_CONST.MIN]};
+
+                        delay = getRandInRange(launchRange);
+
+                        mComponent.post(BP_CONST.SPAWN_BUBBLE, delay);
+                    } else {
+                        mComponent.post(BP_CONST.SPAWN_BUBBLE);
+                    }
+                }
+                break;
+
+            case BP_CONST.POP_BUBBLE:
+
+                bubble = (CBubble)target;
+                delay  = bubble.pop();
+
+                // stop listening to the bubble
+                bubble.setOnClickListener(null);
+
+                broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(bubble.getCenterPosition()));
+
+                mComponent.post(BP_CONST.REPLACE_BUBBLE, bubble, delay);
+                break;
+
+        }
+    }
+
+
+    @Override
+    public void populateView(CBp_Data data) {
+
+        CBubble newBubble;
+
+        // Check if the response_set needs to be generated
+        //
+        generateRandomData(data);
+
+        _currData = data;
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        SBubbles = new CBubble[_currData.respCountRange[BP_CONST.MAX]];
+
+        for (int i1 = 0; i1 < _currData.respCountRange[BP_CONST.MAX]; i1++) {
+
+            newBubble = (CBubble) View.inflate(mContext, R.layout.bubble_view, null);
+            newBubble.setAlpha(0);
+
+            SBubbles[i1] = newBubble;
+
+            mParent.addView(newBubble, layoutParams);
+        }
+        mInitialized = true;
+
+    }
+
+
+    @Override
+    public void doLayout(int width, int height, CBp_Data data) {}
+
+
     private boolean launchBubble() {
 
         CBubble nextBubble = null;
@@ -103,76 +210,72 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
                 _prevColorNdx = colorNdx;
 
-                String correctVal = mComponent._stimulus_data[_currData.dataset[_currData.stimulus_index]];
+                String correctVal = _currData.answer;
 
                 nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
                 nextBubble.setScale(getRandInRange(_scaleRange));
 
                 // Cycle on the indexes to display
                 //
-                stimNdx = (stimNdx + 1) % _currData.dataset.length;
+                stimNdx = (stimNdx + 1) % _currData.response_set.length;
 
-                String stiumulusVal = mComponent._stimulus_data[_currData.dataset[stimNdx]];
+                String responseVal = _currData.response_set[stimNdx];
+                String responseTyp = _currData.responsetype_set[stimNdx];
 
-            float xRange[] = null;
-            float xPos;
-            long timeOfFlight = 0;
+                float xRange[] = null;
+                float xPos;
+                long timeOfFlight = 0;
 
-            switch (mComponent.stimulus_type) {
+                switch (responseTyp) {
 
                     case BP_CONST.REFERENCE:
 
-                    //Moved set color and scale here after text has been set
-                    nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
-                    nextBubble.setScale(getRandInRange(_scaleRange));
+                        //Moved set color and scale here after text has been set
+                        nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
+                        nextBubble.setScale(getRandInRange(_scaleRange));
 
+                        int[] shapeSet = BP_CONST.drawableMap.get(responseVal);
 
-                    int[] shapeSet = BP_CONST.drawableMap.get(stiumulusVal);
-
-                    nextBubble.configData(stiumulusVal, correctVal);
-                    nextBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
-                    xRange = new float[]{0, mParent.getWidth() - (BP_CONST.BUBBLE_DESIGN_RADIUS * nextBubble.getAssignedScale())};
-                    timeOfFlight = (long) (_travelTime / nextBubble.getAssignedScale());
-                    break;
+                        nextBubble.configData(responseVal, correctVal);
+                        nextBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
+                        xRange = new float[]{0, mParent.getWidth() - (BP_CONST.BUBBLE_DESIGN_RADIUS * nextBubble.getAssignedScale())};
+                        timeOfFlight = (long) (_travelTime / nextBubble.getAssignedScale());
+                        break;
 
                     case BP_CONST.TEXTDATA:
 
-                    nextBubble.configData(stiumulusVal, correctVal);
-                    nextBubble.setContents(0, stiumulusVal);
+                        nextBubble.configData(responseVal, correctVal);
+                        nextBubble.setContents(0, responseVal);
 
-                    Paint paint = new Paint();
+                        Paint paint = new Paint();
 
-                    //Width of the string
-                    float width = paint.measureText(nextBubble.getTextView().getText().toString());
+                        //Width of the string
+                        float width = paint.measureText(nextBubble.getTextView().getText().toString());
 
-                    //Converts width of string to width of bubble (since getWidth() doesn't calculate fast enough)
-                    float newWidth = width * (float) 6.75 + 150;
+                        //Converts width of string to width of bubble (since getWidth() doesn't calculate fast enough)
+                        float newWidth = width * (float) 6.75 + 150;
 
-                    xRange = new float[]{0, mParent.getWidth() - (newWidth * nextBubble.getAssignedScale())};
-                    timeOfFlight = (long) (_travelTime);
+                        xRange = new float[]{0, mParent.getWidth() - (newWidth * nextBubble.getAssignedScale())};
+                        timeOfFlight = (long) (_travelTime);
 
-                    //Moved set color and scale here after text has been set
-                    nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
-                    nextBubble.setScale(getRandInRange(_scaleRange));
+                        //Moved set color and scale here after text has been set
+                        nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
+                        nextBubble.setScale(getRandInRange(_scaleRange));
 
+                        break;
+                }
 
-
-                    break;
-            }
-
-
-
-            do {
-                xPos = getRandInRange(xRange);
-            } while (Math.abs(xPos - _prevXpos) < nextBubble.getWidth());
+                do {
+                    xPos = getRandInRange(xRange);
+                } while (Math.abs(xPos - _prevXpos) < nextBubble.getWidth());
 
                 _prevXpos = xPos;
 
                 nextBubble.setPosition((int) xPos, mParent.getHeight());
                 nextBubble.setAlpha(1.0f);
 
-            PointF wayPoints[] = new PointF[1];
-            PointF posFinal    = new PointF();
+                PointF wayPoints[] = new PointF[1];
+                PointF posFinal    = new PointF();
 
                 posFinal.x = nextBubble.getX();
                 posFinal.y = -BP_CONST.BUBBLE_DESIGN_RADIUS * 2.5f * nextBubble.getAssignedScale();
@@ -225,121 +328,12 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
     protected void setupWiggle(View target, long delay) {
 
         float[] wayPoints   = new float[]{target.getScaleY() * BP_CONST.STRETCH_MIN,
-                                          target.getScaleY() * BP_CONST.STRETCH_MAX,
-                                          target.getScaleY() * BP_CONST.STRETCH_MIN};
+                target.getScaleY() * BP_CONST.STRETCH_MAX,
+                target.getScaleY() * BP_CONST.STRETCH_MIN};
 
         AnimatorSet stretch = CAnimatorUtil.configStretch(target, "vertical", 2100, ValueAnimator.INFINITE, delay, wayPoints );
 
         stretch.start();
     }
-
-
-
-    public void execCommand(String command, Object target ) {
-
-        CBubble bubble;
-        long    delay = 0;
-
-        super.execCommand(command, target);
-
-        switch(command) {
-
-            case BP_CONST.SHOW_BUBBLES:
-
-                if (!_isRunning && mInitialized) {
-
-                    _isRunning = true;
-
-                    mComponent.post(BP_CONST.SPAWN_BUBBLE);
-                }
-                break;
-
-            case BP_CONST.PAUSE_ANIMATION:
-
-                if (_isRunning) {
-                    for(Animator animation : translators.keySet()) {
-                        animation.pause();
-                    }
-
-                    _isRunning = false;
-                }
-                break;
-
-            case BP_CONST.RESUME_ANIMATION:
-
-                if (!_isRunning) {
-                    for(Animator animation : translators.keySet()) {
-                        animation.resume();
-                    }
-
-                    _isRunning = true;
-                    mComponent.post(BP_CONST.SPAWN_BUBBLE);
-                }
-                break;
-
-            case BP_CONST.SPAWN_BUBBLE:
-
-                if(_isRunning) {
-                    if (launchBubble()) {
-
-                        int[] launchRange = {_travelTime / mComponent.countRange[BP_CONST.MAX], _travelTime / mComponent.countRange[BP_CONST.MIN]};
-
-                        delay = getRandInRange(launchRange);
-
-                        mComponent.post(BP_CONST.SPAWN_BUBBLE, delay);
-                    } else {
-                        mComponent.post(BP_CONST.SPAWN_BUBBLE);
-                    }
-                }
-                break;
-
-            case BP_CONST.POP_BUBBLE:
-
-                bubble = (CBubble)target;
-                delay  = bubble.pop();
-
-                // stop listening to the bubble
-                bubble.setOnClickListener(null);
-
-                broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(bubble.getCenterPosition()));
-
-                mComponent.post(BP_CONST.REPLACE_BUBBLE, bubble, delay);
-                break;
-
-        }
-    }
-
-
-    @Override
-    public void populateView(CBp_Data data) {
-
-        CBubble newBubble;
-
-        // Check if the dataset needs to be generated
-        //
-        generateRandomData(data);
-
-        _currData = data;
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        SBubbles = new CBubble[mComponent.countRange[BP_CONST.MAX]];
-
-        for (int i1 = 0; i1 < mComponent.countRange[BP_CONST.MAX]; i1++) {
-
-            newBubble = (CBubble) View.inflate(mContext, R.layout.bubble_view, null);
-            newBubble.setAlpha(0);
-
-            SBubbles[i1] = newBubble;
-
-            mParent.addView(newBubble, layoutParams);
-        }
-        mInitialized = true;
-
-    }
-
-
-    @Override
-    public void doLayout(int width, int height, CBp_Data data) {}
-
 
 }
