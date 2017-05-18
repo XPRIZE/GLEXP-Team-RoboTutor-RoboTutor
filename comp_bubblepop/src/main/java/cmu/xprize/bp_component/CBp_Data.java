@@ -29,22 +29,34 @@ import cmu.xprize.util.JSON_Helper;
 public class CBp_Data implements ILoadableObject {
 
     // json loadable
-    public String        question_type    = "MC";
-    public boolean       question_say     = false;
-    public boolean       question_show    = false;
+    public String        question_type    = "MC";           // MC (MultipleChoice) or RISEing bubbles
+    public boolean       question_say     = false;          // Narrate stimulus (question) value
+    public boolean       question_show    = false;          // show stimulus (question)
 
-    public String        stimulus_type    = "reference";
-    public int           stimulus_index   = -1;
+    public boolean       gen_question     = true;           // Are questions generated or pre-defined
+    public int           answer_index     = -1;             // Where answer is placed in response_set (neg -> random)
 
-    public int[]         dataset          = null;
+    public String[]      response_set     = null;           // Values for this iteration
+    public String[]      responsetype_set = null;           // types for mixed response sets
+    public String[][]    response_script  = null;           // List of uttereances describing the individual responses
 
-    public boolean       rand_data        = true;
-    public int           rand_size        = 5;
-    public boolean       rand_index       = true;
+    public int           respCountExact   = 0;              // Number of bubbles to present 0 == gen # in CountRange
+    public int[]         respCountRange   = {5,5};          // Number of bubbles to present in response set
+
+    public String        stimulus         = null;           // question value
+    public String        stimulus_type    = null;           // question type - reference / text_data
+    public String []     stimulus_script  = null;           // List of uttereances describing the question
+
+    public String        answer;                            // must match unique value in response set
+    public String        answer_type      = null;           // answer type - reference / text_data
+    public String []     answer_script    = null;           // List of uttereances describing the answer
+
+
 
 
 
     //************ Serialization
+
 
 
 

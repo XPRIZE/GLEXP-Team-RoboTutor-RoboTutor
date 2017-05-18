@@ -64,13 +64,12 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
     protected String                mDataSource;
 
     protected CBp_Data              _currData;
-    protected String[]              _stimulus_data;
+    public    int                   question_Index;
     private   int                   _dataIndex = 0;
 
     protected IBubbleMechanic       _mechanics;
 
     private   boolean               correct = false;
-    public    int                   question_Index;
     public int                      attempt_count;
     protected int                   correct_Count;
 
@@ -78,20 +77,51 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
     private HashMap                 queueMap    = new HashMap();
     private boolean                 _qDisabled  = false;
 
+    // Working data sets
+    public ArrayList<String>        wrk_responseSet = null;             // set of response tems
+    public ArrayList<String>        wrk_respTypeSet = null;             // text/reference - for mixed response sets
+    public ArrayList<String[]>      wrk_response_script = null;         // List of uttereances describing each potential response
+
+    public ArrayList<String>        wrk_answerSet       = null;         // Answer for each stimulus (question)
+    public ArrayList<String>        wrk_answerTypeSet   = null;         // text/reference - for mixed stimulus items
+    public ArrayList<String[]>      wrk_answer_script   = null;         // List of uttereances describing each answer
+
+    public ArrayList<String>        wrk_stimulusSet     = null;         // set of stimulus items (questions)
+    public ArrayList<String>        wrk_stimTypeSet     = null;         // text/reference - for mixed stimulus items
+    public ArrayList<String[]>      wrk_stimulus_script = null;         // List of uttereances describing each question
+
+
+
+    // Note: Having independent response sets and answer sets means that the response sets are not limited to the
+    //       set of answers to questions.
+    //
 
     // json loadable
-    public String                   stimulus_type;
-    public HashMap<String,String[]> stimulus_map;
+    public String                   gen_responsetype    = null;         // global text/reference - if all response items are same type
+    public String[]                 gen_responseSet     = null;         // set of response tems
+    public String[]                 gen_respTypeSet     = null;         // text/reference - for mixed response sets
+    public String[][]               gen_response_script = null;         // List of uttereances describing each potential response
 
-    public int                      question_count;
-    public String                   question_sequence;
+    public String                   gen_answertype      = null;         // global text/reference - if all question are same type
+    public String[]                 gen_answerSet       = null;         // Answer for each stimulus (question)
+    public String[]                 gen_answerTypeSet   = null;         // text/reference - for mixed stimulus items
+    public String[][]               gen_answer_script   = null;         // List of uttereances describing each answer
 
-    public int[]                    countRange     = {4, 4};
+    public String                   gen_stimulustype    = null;         // global text/reference - if all question are same type
+    public String[]                 gen_stimulusSet     = null;         // set of stimulus items (questions)
+    public String[]                 gen_stimTypeSet     = null;         // text/reference - for mixed stimulus items
+    public String[][]               gen_stimulus_script = null;         // List of uttereances describing each question
 
-    public CBp_Data[]               dataSource;
+    public int                      question_count      = 10;           // by default limit to 10 questions.
+    public String                   question_sequence   = "SEQUENTIAL"; // question order - random / sequential (i.e. in stimulusSet order)
 
-    public CBpBackground            view_background;
-    public String                   banner_color;
+    public boolean                  question_replacement= false;        // Whether to allow questions to appear more than once when random order
+    public boolean                  response_replacement= false;        // Whether to allow response sets to include duplicates (and duplicate correct ans)
+
+    public CBp_Data[]               dataSource          = null;         // Question specific datasource
+
+    public CBpBackground            view_background     = null;         // Set specific background
+    public String                   banner_color        = null;         // Set specific banner color
 
 
     static final String TAG = "CBP_Component";
@@ -189,11 +219,62 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
     }
 
 
+    private String[] populateArray(String source, int size) {
+
+        String[] target = new String[size];
+
+        for(int i1 = 0 ; i1 < size ; i1++) {
+            target[i1] = source;
+        }
+
+        return target;
+    }
+
+
+    /**
+     * These are convenience operations so the datasource doesn't need redundant info
+     * in its encoded JSON form.
+     */
+    public void preProcessDataSource() {
+
+        // gen_xxx...type values are used whrn the type is consistent throughout
+        // so we populate the xxx...typeSet array with this value.
+        //
+        if(gen_responsetype != null)
+            gen_respTypeSet = populateArray(gen_responsetype, gen_responseSet.length);
+
+        if(gen_answertype != null)
+            gen_answerTypeSet = populateArray(gen_answertype, gen_answerSet.length);
+
+        if(gen_stimulustype != null)
+            gen_stimTypeSet = populateArray(gen_stimulustype, gen_stimulusSet.length);
+
+        // Once per problem set we init these arraylists.
+        // populate the working ArrayList so we can easily delete elements on demand
+        // TODO: update jSONHelper to support ArrayList serialization if possible.
+        //
+        wrk_answerSet       = new ArrayList<String>(Arrays.asList(gen_answerSet));
+        wrk_answerTypeSet   = new ArrayList<String>(Arrays.asList(gen_answerTypeSet));
+        if(gen_answer_script != null)
+            wrk_answer_script   = new ArrayList<String[]>(Arrays.asList(gen_answer_script));
+
+        wrk_stimulusSet     = new ArrayList<String>(Arrays.asList(gen_stimulusSet));
+        wrk_stimTypeSet     = new ArrayList<String>(Arrays.asList(gen_stimTypeSet));
+        if(gen_stimulus_script != null)
+            wrk_stimulus_script = new ArrayList<String[]>(Arrays.asList(gen_stimulus_script));
+
+        // Preprocess the response set data so the size is available for the randomizer
+        //
+        preProcessQuestion();
+    }
+
+
     public void next() {
 
         try {
 
             if (dataSource != null) {
+
                 updateDataSet(dataSource[_dataIndex]);
 
                 // We cycle through the dataSource question types iteratively
@@ -233,7 +314,9 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         }
 
         switch(data.question_type) {
+
             case "multiple-choice":
+
                 _mechanics = new CBp_Mechanic_MC(mContext, this);
                 break;
 
@@ -246,6 +329,134 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         _mechanics.populateView(_currData);
 
         requestLayout();
+    }
+
+
+    protected void selectQuestion(CBp_Data data) {
+
+        //***** Select the question from the stimulus set
+        //
+        // Get the number of questions available.
+        //
+        int questionCount = wrk_stimulusSet.size();
+
+        // If we are using sequential presentations then we substitute the
+        // current correct index in the "correct" i.e. stimulus bubble. To
+        // ensure there is at least one correct answer.
+        //
+        if(question_sequence.equals(BP_CONST.SEQUENTIAL)) {
+
+            // cycle on the wrk_responseSet
+            //
+           question_Index %= questionCount;
+        }
+        else {
+
+            question_Index = (int) (Math.random() * questionCount);
+        }
+
+        data.stimulus        = wrk_stimulusSet.get(question_Index);
+        data.stimulus_type   = wrk_stimTypeSet.get(question_Index);
+        if(wrk_stimulus_script != null)
+            data.stimulus_script = wrk_stimulus_script.get(question_Index);
+
+        data.answer        = wrk_answerSet.get(question_Index);
+        data.answer_type   = wrk_answerTypeSet.get(question_Index);
+        if(wrk_answer_script != null)
+            data.answer_script = wrk_answer_script.get(question_Index);
+
+        // If not using replacement on random selection - i.e. if questions may NOT be repeated
+        // then remove the question/answer entry
+        //
+        if(!question_replacement && !question_sequence.equals(BP_CONST.SEQUENTIAL)) {
+
+            wrk_stimulusSet.remove(question_Index);
+            wrk_stimTypeSet.remove(question_Index);
+            if(wrk_stimulus_script != null)
+                wrk_stimulus_script.remove(question_Index);
+
+            wrk_answerSet.remove(question_Index);
+            wrk_answerTypeSet.remove(question_Index);
+            if(wrk_answer_script != null)
+                wrk_answer_script.remove(question_Index);
+        }
+    }
+
+
+    /**
+     */
+    private void preProcessQuestion() {
+
+        // For each question we repopulate these arraylists
+        // populate the working ArrayList so we can easily delete elements on demand
+        //
+        wrk_responseSet     = new ArrayList<String>(Arrays.asList(gen_responseSet));
+        wrk_respTypeSet     = new ArrayList<String>(Arrays.asList(gen_respTypeSet));
+        if(gen_response_script != null)
+            wrk_response_script = new ArrayList<String[]>(Arrays.asList(gen_response_script));
+    }
+
+
+    protected void selectRandResponse(CBp_Data data, int count, int ansIndex) {
+
+        //***** build a presentation set from the response sample set
+        //
+        preProcessQuestion();
+
+        // First find the actual answer in the response set and trim it out
+        // to avoid duplicate answer items in the respsonse set
+        //
+        String question = data.answer;
+        String questype = data.answer_type;
+
+        for(int i1 = 0 ; i1 < wrk_responseSet.size() ; i1++) {
+
+            if(wrk_responseSet.get(i1).equals(question) &&
+               wrk_respTypeSet.get(i1).equals(questype)) {
+
+                wrk_responseSet.remove(i1);
+                wrk_respTypeSet.remove(i1);
+                if(wrk_response_script != null)
+                    wrk_response_script.remove(i1);
+                break;
+            }
+        }
+
+        // Reset the presenation / response set
+        data.response_set     = new String[count];
+        data.responsetype_set = new String[count];
+        if(data.response_script != null)
+            data.response_script  = new String[count][];
+
+        // Build a presentation set from the responseset samples
+        //
+        for (int i1 = 0; i1 < count ; i1++) {
+
+            int randIndex = (int) (Math.random() * wrk_responseSet.size());
+
+            data.response_set[i1]     = wrk_responseSet.get(randIndex);
+            data.responsetype_set[i1] = wrk_respTypeSet.get(randIndex);
+            if(wrk_response_script != null)
+                data.response_script[i1]  = wrk_response_script.get(randIndex);
+
+            // If not using replacement - i.e. if responses may NOT be repeated then remove
+            // the response entry
+            //
+            if(!response_replacement) {
+
+                wrk_responseSet.remove(randIndex);
+                wrk_respTypeSet.remove(randIndex);
+                if(wrk_response_script != null)
+                    wrk_response_script.remove(randIndex);
+            }
+        }
+
+        // Place the answer at the requested location in the presentation array
+        //
+        data.response_set[ansIndex]     = data.stimulus;
+        data.responsetype_set[ansIndex] = data.stimulus_type;
+        if(data.response_script != null)
+            data.response_script[ansIndex]  = data.stimulus_script;
     }
 
 
@@ -467,8 +678,6 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
         enQueue(new Queue(command, target), delay);
     }
-
-
 
 
     // Component Message Queue  -- End

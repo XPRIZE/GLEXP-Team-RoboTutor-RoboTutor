@@ -166,12 +166,12 @@ public class CBubble extends FrameLayout {
 
     }
 
-    public void setFeedbackColor(String color) {
-        mColor = color;
-
-        mAudio.setImageResource(BP_CONST.audioBubbleMap.get(mColor));
-    }
-
+//    public void setFeedbackColor(String color) {
+//        mColor = color;
+//
+//        mAudio.setImageResource(BP_CONST.audioBubbleMap.get(mColor));
+//    }
+//
 
     public String getColor() {
         return mColor;

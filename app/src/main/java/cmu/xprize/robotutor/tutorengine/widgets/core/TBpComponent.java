@@ -192,19 +192,23 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
             } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
-                dataNameDescriptor = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
+                String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
 
-                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataNameDescriptor);
+                // Generate a langauage specific path to the data source -
+                // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
+                // e.g. tutors/word_copy/assets/data/sw/
+                //
+                String dataPath = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS;
+                dataPath += "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+
+                String jsonData = JSON_Helper.cacheData(dataPath + dataFile);
 
                 // Load the datasource in the component module - i.e. the superclass
                 loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 
-                // TODO: address this in the future - This is a kludge so that all sequential
-                // sets are completed based on the size of the dataset not the question_count
+                // preprocess the datasource e.g. populate instance arrays with general types
                 //
-                if(question_sequence.equals(BP_CONST.SEQUENTIAL)) {
-                    question_count = _stimulus_data.length;
-                }
+                preProcessDataSource();
 
             } else if (dataNameDescriptor.startsWith("db|")) {
 
@@ -566,12 +570,11 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         resetState();
 
-        String correctVal = _stimulus_data[data.dataset[data.stimulus_index]];
+        String correctVal = data.answer;
 
         // Ensure letters are lowercase for mp3 matching
         //
-        if(correctVal.length() == 1)
-            correctVal = correctVal.toLowerCase();
+        correctVal = correctVal.toLowerCase();
 
         publishValue(BP_CONST.QUEST_VAR, correctVal);
 
@@ -803,11 +806,8 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
+
         // Log.d(TAG, "Loader iteration");
         super.loadJSON(jsonObj, (IScope2) scope);
-
-        // Map the language specific data source
-        //
-        _stimulus_data = stimulus_map.get(((IScope2) scope).tutor().getLanguageFeature());
     }
 }

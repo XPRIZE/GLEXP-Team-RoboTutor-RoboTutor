@@ -1,0 +1,84 @@
+{
+  "gen_responsetype": "text_data",
+  "gen_responseSet": [
+    "above",
+    "accept",
+    "added",
+    "race",
+    "reasonable",
+    "received",
+    "rectangle",
+    "remind",
+    "screamed",
+    "scrubbed",
+    "semicircle",
+    "settled",
+    "trousers",
+    "umbrella",
+    "unquiet"
+  ],
+  "gen_answertype": "text_data",
+  "gen_answerSet": [
+    "above",
+    "accept",
+    "added",
+    "race",
+    "reasonable",
+    "received",
+    "rectangle",
+    "remind",
+    "screamed",
+    "scrubbed",
+    "semicircle",
+    "settled",
+    "trousers",
+    "umbrella",
+    "unquiet"
+  ],
+  "gen_stimulustype": "text_data",
+  "gen_stimulusSet": [
+    "above",
+    "accept",
+    "added",
+    "race",
+    "reasonable",
+    "received",
+    "rectangle",
+    "remind",
+    "screamed",
+    "scrubbed",
+    "semicircle",
+    "settled",
+    "trousers",
+    "umbrella",
+    "unquiet"
+  ],
+  "question_count": 10,
+  "question_sequence": "SEQUENTIAL",
+  "question_replacement": false,
+  "response_replacement": false,
+  "dataSource": [
+    {
+      "question_type": "rising",
+      "question_say": false,
+      "question_show": true,
+      "gen_question": true,
+      "respCountExact": 5,
+      "answer_index": -1
+    }
+  ],
+  "view_background": {
+    "style": "primitives",
+    "kind": "squares",
+    "layout": "grid",
+    "layoutcount": 0,
+    "colorbase": "#666666",
+    "colorchoice": "fixed",
+    "colors": [
+      -6053120,
+      -7566336,
+      -2500352,
+      -5066240
+    ]
+  }
+}
