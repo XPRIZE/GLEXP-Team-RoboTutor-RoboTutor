@@ -20,21 +20,21 @@
           "maptype":"moduleMap",
           "mapname": "INTRO_STATE_TRACK",
           "preenter": ["SET_DATASOURCE"],
-          "preexit": ["NEXT_DATASET"
-          ],
+          "preexit": [],
           "edges": [
             {
               "constraint": "",
-              "edge": "POST_QUESTIONBOARD"
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
 
-        "POST_QUESTIONBOARD" : {
+        "UPDATE_STIMULUS" : {
           "type" : "NODE",
           "COMMENT" : "",
           "maptype": "moduleMap",
           "mapname" : "POST_QUESTION",
+          "preenter": ["NEXT_DATASET"],
           "preexit" : [],
           "edges" : [
             {
@@ -75,7 +75,7 @@
           "maptype":"moduleMap",
           "mapname": "PLAYCORRECT",
           "preenter": ["PAUSE"],
-          "preexit": ["RESUME", "NEXT_DATASET"],
+          "preexit": ["RESUME"],
           "edges": [
             {
               "constraint": "FTR_EOD",
@@ -84,7 +84,7 @@
 
             {
               "constraint": "",
-              "edge": "POST_QUESTIONBOARD"
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
@@ -95,7 +95,7 @@
           "maptype":"moduleMap",
           "mapname": "PLAYWRONG",
           "preenter": ["PAUSE"],
-          "preexit": ["RESUME", "NEXT_DATASET"],
+          "preexit": ["RESUME"],
           "edges": [
             {
               "constraint": "FTR_EOD",
@@ -104,7 +104,7 @@
 
             {
               "constraint": "",
-              "edge": "POST_QUESTIONBOARD"
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
@@ -158,7 +158,7 @@
           "maptype": "moduleMap",
           "mapname": "INSTRUCT_1L",
           "preenter": ["PROMPTPAUSE"],
-          "preexit": ["PROMPTRESUME", "NEXT_DATASET"],
+          "preexit": ["PROMPTRESUME"],
           "edges": [
             {
               "constraint": "FTR_EOD",
@@ -167,7 +167,7 @@
 
             {
               "constraint": "",
-              "edge": "POST_QUESTIONBOARD"
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
@@ -178,7 +178,7 @@
           "maptype": "moduleMap",
           "mapname": "INSTRUCT_1M",
           "preenter": ["PROMPTPAUSE"],
-          "preexit": ["PROMPTRESUME", "NEXT_DATASET"],
+          "preexit": ["PROMPTRESUME"],
           "edges": [
             {
               "constraint": "FTR_EOD",
@@ -187,7 +187,7 @@
 
             {
               "constraint": "",
-              "edge": "POST_QUESTIONBOARD"
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
@@ -198,7 +198,7 @@
           "maptype": "moduleMap",
           "mapname": "INSTRUCT_1R",
           "preenter": ["PROMPTPAUSE"],
-          "preexit": ["PROMPTRESUME", "NEXT_DATASET"],
+          "preexit": ["PROMPTRESUME"],
           "edges": [
             {
               "constraint": "FTR_EOD",
@@ -207,7 +207,7 @@
 
             {
               "constraint": "",
-              "edge": "POST_QUESTIONBOARD"
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
@@ -218,7 +218,7 @@
           "maptype": "moduleMap",
           "mapname": "INSTRUCT_2L",
           "preenter": ["PROMPTPAUSE"],
-          "preexit": ["PROMPTRESUME", "NEXT_DATASET"],
+          "preexit": ["PROMPTRESUME"],
           "edges": [
             {
               "constraint": "FTR_EOD",
@@ -227,7 +227,7 @@
 
             {
               "constraint": "",
-              "edge": "POST_QUESTIONBOARD"
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
@@ -238,7 +238,7 @@
           "maptype": "moduleMap",
           "mapname": "INSTRUCT_2M",
           "preenter": ["PROMPTPAUSE"],
-          "preexit": ["PROMPTRESUME", "NEXT_DATASET"],
+          "preexit": ["PROMPTRESUME"],
           "edges": [
             {
               "constraint": "FTR_EOD",
@@ -247,7 +247,7 @@
 
             {
               "constraint": "",
-              "edge": "POST_QUESTIONBOARD"
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
@@ -258,7 +258,7 @@
           "maptype": "moduleMap",
           "mapname": "INSTRUCT_2R",
           "preenter": ["PROMPTPAUSE"],
-          "preexit": ["PROMPTRESUME", "NEXT_DATASET"],
+          "preexit": ["PROMPTRESUME"],
           "edges": [
             {
               "constraint": "FTR_EOD",
@@ -267,7 +267,7 @@
 
             {
               "constraint": "",
-              "edge": "POST_QUESTIONBOARD"
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
@@ -278,7 +278,7 @@
           "maptype": "moduleMap",
           "mapname": "INSTRUCT_3",
           "preenter": ["PROMPTPAUSE"],
-          "preexit": ["PROMPTRESUME", "NEXT_DATASET"],
+          "preexit": ["PROMPTRESUME"],
           "edges": [
             {
               "constraint": "FTR_EOD",
@@ -287,7 +287,7 @@
 
             {
               "constraint": "",
-              "edge": "POST_QUESTIONBOARD"
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
@@ -298,7 +298,7 @@
           "maptype": "moduleMap",
           "mapname": "INSTRUCT_3V",
           "preenter": ["PROMPTPAUSE"],
-          "preexit": ["PROMPTRESUME", "NEXT_DATASET"],
+          "preexit": ["PROMPTRESUME"],
           "edges": [
             {
               "constraint": "FTR_EOD",
@@ -306,7 +306,7 @@
             },
             {
               "constraint": "",
-              "edge": "POST_QUESTIONBOARD"
+              "edge": "UPDATE_STIMULUS"
             }
           ]
         },
