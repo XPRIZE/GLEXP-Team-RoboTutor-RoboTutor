@@ -66,7 +66,7 @@ public class ListenerPLRT extends ListenerBase {
     private long        sentenceStartTime;           // time in ms since epoch
     private long        sentenceStartSamples;        // sample counter at sentence start, for adjusting frame numbers
     private final int   SAMPLES_PER_FRAME = 160;     // number of samples in a centisecond frame at 16000 samples/sec
-    private boolean     useTruncations = false;      // Flag whether or not to use truncations.
+    private boolean     useTruncations = true;       // Flag whether or not to use truncations.
     private boolean     speaking = false;            // speaking state. [currently unused]
 
     /**
@@ -257,17 +257,29 @@ public class ListenerPLRT extends ListenerBase {
     // Language model generation
     // ------------------------------------------------
 
-    // generate the language model for given asr words
+    /** generate the language model for given asr words
+     *
+     * @param wordsToHear
+     * @param startWord
+     * @return
+     */
     private FsgModel generateLM(String[] wordsToHear, int startWord) {
+
         // ensure all sentence words in dictionary
+        //
         HashSet<String> wordSet = new HashSet<>(Arrays.asList(wordsToHear));
+
         for (String word : wordSet) {
+
             if (recognizer.decoder.lookupWord(word) == null) {    // word not in dictionary
 
                 // Synthesize a pronunciation using English rule-based synthesizer
+                //
                 String phonemes = Phoneme.toPhoneme(word).trim();
+
                 if (phonemes.isEmpty())
                     continue;
+
                 Log.i("generateLM", "addWord " + word + " pronunciation " + phonemes);
                 recognizer.decoder.addWord(word, phonemes, 1); // more efficient to pass 1 (true) on last word only?
             }
@@ -279,8 +291,10 @@ public class ListenerPLRT extends ListenerBase {
         }
 
         // have to write to a temporary file to create LM
+        //
         String filename = "lm/fsg.txt";
         File fsgFile = new File(modelsDir, filename);
+
         try {
             FileWriter fw = new FileWriter(fsgFile.getPath(), false);    // false to overwrite rather than append to existing file
             bw = new BufferedWriter(fw);
