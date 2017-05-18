@@ -274,10 +274,10 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
         reset();
 
+        super.next();
+
         if(dataExhausted())
             publishFeature(TCONST.FTR_EOD);
-
-        super.next();
     }
 
     @Override
