@@ -113,6 +113,10 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     public void doAskButtonAction(String actionid) {
     }
 
+    @Override
+    public void doDebugLaunchAction(String debugTutor) {
+
+    }
 
     public void doButtonBehavior(String buttonid) {
     }

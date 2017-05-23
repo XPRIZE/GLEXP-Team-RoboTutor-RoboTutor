@@ -25,6 +25,7 @@ public class AS_CONST {
     public static final String SELECT_MATH       = "SELECT_MATH";
     public static final String SELECT_SHAPES     = "SELECT_SHAPES";
     public static final String SELECT_ROBOTUTOR  = "SELECT_ROBOTUTOR";
+    public static final String SELECT_DEBUGLAUNCH= "SELECT_DEBUGLAUNCH";
 
     public static final String SELECT_CONTINUE        = "SELECT_CONTINUE";
     public static final String SELECT_MAKE_HARDER     = "SELECT_MAKE_HARDER";

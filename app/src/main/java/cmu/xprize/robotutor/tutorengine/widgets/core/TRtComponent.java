@@ -451,7 +451,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         extractHashContents(builder, _IntegerVar);
         extractFeatureContents(builder, _FeatureMap);
 
-        RoboTutor.logManager.postTutorState(TUTOR_STATE_MSG, "target#word_copy," + logData + builder.toString());
+        RoboTutor.logManager.postTutorState(TUTOR_STATE_MSG, "target#reading_tutor," + logData + builder.toString());
     }
 
     // ITutorLogger - End

@@ -431,11 +431,11 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "logState", "parms": "type#node,value#SET_DEMOSOURCE:String", "features":""},
 
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]asm_demo_add.json:String",   "features":"FTR_DEMO_ADD"},
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]asm_demo_0add.json:String",  "features":"FTR_DEMO_ZERO_ADD"},
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]asm_demo_add0.json:String",  "features":"FTR_DEMO_ADD_ZERO"},
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]asm_demo_sub.json:String",   "features":"FTR_DEMO_SUB"},
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]asm_demo_sub0.json:String",  "features":"FTR_DEMO_SUB_ZERO"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]math.demo_add.json:String",   "features":"FTR_DEMO_ADD"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]math.demo_0add.json:String",  "features":"FTR_DEMO_ZERO_ADD"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]math.demo_add0.json:String",  "features":"FTR_DEMO_ADD_ZERO"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]math.demo_sub.json:String",   "features":"FTR_DEMO_SUB"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]math.demo_sub0.json:String",  "features":"FTR_DEMO_SUB_ZERO"},
             {"type": "COMMAND", "id": "SAddSubtract", "method": "publishFeature", "parms": "FTR_DEMO:String", "features":""}
           ]
         },

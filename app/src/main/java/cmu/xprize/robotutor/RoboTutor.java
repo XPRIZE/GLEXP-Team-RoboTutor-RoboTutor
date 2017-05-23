@@ -60,6 +60,7 @@ import cmu.xprize.util.TTSsynthesizer;
 import edu.cmu.xprize.listener.ListenerBase;
 
 import static cmu.xprize.util.TCONST.GRAPH_MSG;
+import static cmu.xprize.util.TCONST.LOGSTATE;
 import static cmu.xprize.util.TCONST.ROBOTUTOR_ASSET_PATTERN;
 
 
@@ -249,8 +250,17 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         boolean result = super.dispatchTouchEvent(event);
 
         switch (event.getAction()) {
+
+            case MotionEvent.ACTION_UP:
+                logManager.postEvent_V(TAG, "RT_SCREEN_RELEASE: X:" + event.getX() + "  Y:" + event.getY());
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                logManager.postEvent_V(TAG, "RT_SCREEN_MOVE X:" + event.getX() + "  Y:" + event.getY());
+                break;
+
             case MotionEvent.ACTION_DOWN:
-                Log.d(TAG, "RT_HIT_SCREEN");
+                logManager.postEvent_V(TAG, "RT_SCREEN_TOUCH X:" + event.getX() + "  Y:" + event.getY());
                 break;
         }
 
