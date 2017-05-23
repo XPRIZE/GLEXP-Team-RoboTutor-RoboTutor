@@ -78,7 +78,12 @@ public class CTutorEngine implements ILoadableObject2 {
     // "language":"LANG_EN", spec in the TCONST.EDESC replacing EN with
     // the desired language id
 
+    // must match incoming json data
+    //
+    private String                          EXPECTED_VERSION = "1.0";
+
     // json loadable
+    static public String                         descr_version;                 //
     static public String                         defTutor;
     static public HashMap<String, defvar_tutor>  tutorVariants;
     static public HashMap<String, defdata_tutor> bindingPatterns;

@@ -18,6 +18,8 @@
           "COMMENT": "Make intro statement",
           "preenter": [],
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "logState", "parms": "type#behavior,value#INTRO_STATEMENT_BEHAVIOR:String", "features":""},
+
             {"name":"ENABLE_ASK", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "enableAskButtons",  "parms": "TRUE:boolean", "features":""},
 
             {"name":"INTRO PROMPT", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "What would you like to do.mp3","soundpackage": "default","mode": "flow", "features": "FTR_TUTOR_SELECT"},
@@ -38,6 +40,8 @@
           "preenter": [],
           "reuse": true,
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "logState", "parms": "type#feedback,value#INPUT_HESITATION_FEEDBACK:String", "features":""},
+
             {"name":"RIPPLE_DESCRIBE", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "postEvent", "parms": "RIPPLE_DESCRIBE:String", "features":""}
           ],
           "preexit": [
@@ -52,12 +56,30 @@
           "preenter": [],
           "reuse": true,
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "logState", "parms": "type#behavior,value#BUTTON_DESCRIPTION:String", "features":""},
+
             {"name":"POINT AT BUTTON", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "postEvent", "parms": "POINT_AT_BUTTON:String|{{activity_selector.buttonid}}:String", "features":""},
             {"name":"AUDIO - BUTTON DESCRIPTION", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{activity_selector.helpAudio}}.mp3","soundpackage": "default","mode": "flow", "features": ""},
             {"name":"DESCRIBE NEXT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "postNamed", "parms": "DESCRIBE_NEXT:String|DESCRIBE_NEXT:String|800:Long", "features":""}
           ],
           "preexit": [
             "CANCEL_POINT"
+          ],
+          "edges": [
+          ]
+        },
+
+        "DEBUG_BUTTON_BEHAVIOR": {
+          "type": "QUEUE",
+          "COMMENT": "User selected Math Activity",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name":"DEBUG_BUTTON EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "BUTTON_EVENT:String|{{activity_selector.buttonbehavior}}:String", "features":""},
+
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "logState", "parms": "type#behavior,value#DEBUG_BUTTON_BEHAVIOR:String", "features":""}
+          ],
+          "preexit": [
           ],
           "edges": [
           ]
@@ -70,7 +92,9 @@
           "reuse": true,
           "tracks": [
             {"name":"AUDIO BUTTON SELECTED", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{activity_selector.promptAudio}}.mp3","soundpackage": "default","mode": "flow", "features": ""},
-            {"name":"BUTTON ACTION EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "BUTTON_EVENT:String|{{activity_selector.buttonbehavior}}:String", "features":""}
+            {"name":"BUTTON ACTION EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "BUTTON_EVENT:String|{{activity_selector.buttonbehavior}}:String", "features":""},
+
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "logState", "parms": "type#behavior,value#BUTTON_BEHAVIOR:String", "features":""}
           ],
           "preexit": [
           ],
@@ -121,6 +145,8 @@
           "reuse":true,
           "COMMENT": "Do Nothing",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "logState", "parms": "type#node,value#PAUSE_MODULE:String", "features":""},
+
             {"type": "COMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "APPLY_BEHAVIOR:String|INTRO_STATEMENT_BEHAVIOR:String", "features":""},
             {"type": "COMMAND", "cmd": "WAIT" }
           ]
@@ -131,6 +157,7 @@
           "preenter": [],
           "reuse": true,
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "logState", "parms": "type#node,value#INIT_MODULE:String", "features":""},
 
             // Conditionally load the layout
             //
@@ -159,8 +186,9 @@
             {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_MAKE_EASIER:String|BUTTON_BEHAVIOR:String" ,"features":""},
             {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_AUTO_DIFFICULTY:String|BUTTON_BEHAVIOR:String" ,"features":""},
             {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_REPEAT:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_EXIT:String|BUTTON_BEHAVIOR:String" ,"features":""}
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_EXIT:String|BUTTON_BEHAVIOR:String" ,"features":""},
 
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_DEBUGLAUNCH:String|DEBUG_BUTTON_BEHAVIOR:String" ,"features":""}
           ]
         }
 

@@ -46,7 +46,9 @@ public class TCONST {
     public static final String SKILL_MATH       = "numbers";
     public static final String SKILL_SHAPES     = "shapes";
     public static final String FINISH           = "FINISH";
+    public static final String SELECTOR_MODE    = "SELECTOR_MODE";
 
+    public static final String TUTOR_SELECTED   = "TUTOR_SELECTED";
     public static final String SKILL_SELECTED   = "SKILL_SELECTED";
     public static final String DEBUG_LAYOUT     = "DEBUG_LAYOUT";
 

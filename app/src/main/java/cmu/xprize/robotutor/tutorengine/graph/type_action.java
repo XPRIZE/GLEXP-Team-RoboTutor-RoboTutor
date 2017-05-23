@@ -299,13 +299,20 @@ public class type_action extends scene_node {
 
                             // Break up the parms specification - "parms":"value:type|value:type..."
                             //
-                            List<String> parmList = Arrays.asList(decodedParms.split("[:\\|]"));
+                            List<String> parmList = Arrays.asList(parms.split("[:\\|]"));
 
                             // Create the arrays
                             pType = new Class[parmList.size() / 2];
                             iparms = new Object[parmList.size() / 2];
 
                             for (int i1 = 1, i2 = 0; i1 < parmList.size(); i1 += 2, i2++) {
+
+                                // Support templatized parameters
+                                // decode the template - this must go here so variables may have embedded colons
+                                // which are used in the tutor descriptors in the session Manager button
+                                // messages
+                                //
+                                parmList.set(i1-1, getScope().parseTemplate(parmList.get(i1-1)));
 
                                 // Force lowercase on classname (type) and translate to Class object
                                 //

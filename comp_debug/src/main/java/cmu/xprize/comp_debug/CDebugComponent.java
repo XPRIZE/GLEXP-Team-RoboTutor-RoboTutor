@@ -99,7 +99,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                 // Support direct connection to button action manager
                 //
                 if(mButtonController != null) {
-                    mButtonController.doButtonBehavior(currentTutor);
+                    mButtonController.doDebugLaunchAction(currentTutor);
                 }
             }
         });
