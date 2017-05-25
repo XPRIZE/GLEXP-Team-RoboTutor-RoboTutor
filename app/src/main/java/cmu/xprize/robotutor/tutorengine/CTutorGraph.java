@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.graph.databinding;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
@@ -268,7 +269,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
      */
     private void enQueue(Queue qCommand) {
 
-        Log.d(TAG, "Processing POST to TutorGraph: " + qCommand._command + " - from: " +  qCommand._source.getEventSourceName());
+        RoboTutor.logManager.postEvent_V(TAG, "Processing POST to TutorGraph: " + qCommand._command + " - from: " +  qCommand._source.getEventSourceName());
 
         if(!mDisabled) {
             queueMap.put(qCommand, qCommand);
