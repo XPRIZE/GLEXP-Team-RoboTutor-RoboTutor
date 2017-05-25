@@ -2,12 +2,18 @@
     This folder contains the "tutor" assets for RoboTutor:
     --------------------------------------------------------
 
-    There are currently 3 folders:
+    There are currently 5 folders:
 
      -- lib                 (contains JAVA libs to support RTAssetManager.jar)
      -- tutor_xmatrices     (contains the transition matrices and associated support files)
      -- tutors              (contains the individual tutor structural files and data sources)
 
+	 -- main				(These 2 folders contain source set for the projecct)
+	 -- verify				(Verify should contain a copy of EXTERNAL asset data)
+	 
+	 NOTE: verify is not part of the project GIT image.  If must be maintained from the RTAssetPublisher.
+	 
+	 
     (folder) tutor_matrices:
     -------------------------
     The CSV files found in this folder contain a grid array of tutorid encoding that are processed
@@ -118,5 +124,4 @@
         a. the datasource descriptor must be in the following format <parent>_<childid>
 
     5. The comment is discarded in the encfolder encoding.
-
 
