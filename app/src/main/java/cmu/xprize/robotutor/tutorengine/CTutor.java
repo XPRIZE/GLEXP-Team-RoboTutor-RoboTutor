@@ -363,7 +363,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
      */
     private void enQueue(Queue qCommand) {
 
-        Log.d(TAG, "Processing POST to tutorGraph: " + qCommand._command );
+        RoboTutor.logManager.postEvent_V(TAG, "Processing POST to tutorGraph: " + qCommand._command );
 
         if(!mDisabled) {
             queueMap.put(qCommand, qCommand);

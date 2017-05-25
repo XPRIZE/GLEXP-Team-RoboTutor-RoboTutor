@@ -1,23 +1,23 @@
 
-    This folder contains the "tutor" assets for RoboTutor:
-    --------------------------------------------------------
+    This folder contains the sourcesets for the RoboTutor Android Studio Project:
+    --------------------------------------------------------------------------------
 
     There are currently 5 folders:
+
+	 -- main				(These 2 folders contain source sets for the project)
+	 -- verify				(Verify should contain a copy of EXTERNAL asset data) i.e. from RTAssetPublisher
 
      -- lib                 (contains JAVA libs to support RTAssetManager.jar)
      -- tutor_xmatrices     (contains the transition matrices and associated support files)
      -- tutors              (contains the individual tutor structural files and data sources)
-
-	 -- main				(These 2 folders contain source set for the projecct)
-	 -- verify				(Verify should contain a copy of EXTERNAL asset data)
 	 
 	 NOTE: verify is not part of the project GIT image.  If must be maintained from the RTAssetPublisher.
 	 
 	 
     (folder) tutor_matrices:
     -------------------------
-    The CSV files found in this folder contain a grid array of tutorid encoding that are processed
-    by "Build_Tutor_Transitions.bat" to generate the Activity_Selectors data source.
+    The CSV files found in this folder contain a grid array of tutor descriptors that are processed
+    by "Build_Tutor_Transitions.bat" to generate the Activity_Selectors data source. i.e. dev_data.json
 
     Matrix encoding:
     -----------------

@@ -27,12 +27,15 @@ import android.widget.ImageButton;
 import cmu.xprize.banner.CBanner;
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.comp_logging.ILogManager;
+
+import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
 
 public class TBanner extends CBanner implements ITutorObjectImpl, View.OnClickListener {
@@ -43,6 +46,8 @@ public class TBanner extends CBanner implements ITutorObjectImpl, View.OnClickLi
 
     private String          mTutor_Ver;
 
+
+    private String TAG = "TBanner";
 
     public TBanner(Context context) {
         super(context);
@@ -80,6 +85,8 @@ public class TBanner extends CBanner implements ITutorObjectImpl, View.OnClickLi
      */
     @Override
     public void onClick(View v) {
+
+        RoboTutor.logManager.postEvent_I(TUTOR_STATE_MSG, "BACKBUTTON:PRESSED");
 
         mBackButton.setOnClickListener(null);
         mSceneObject.endTutor();
