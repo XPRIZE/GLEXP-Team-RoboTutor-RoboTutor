@@ -92,8 +92,8 @@ public class BP_CONST {
     public static final String BUBBLE_POPPED      = "BUBBLE_POPPED";
     public static final String BUBBLE_WIGGLED     = "BUBBLE_WIGGLED";
     public static final String BUBBLES_CLEARED    = "BUBBLES_CLEARED";
-    public static final String RANDOM             = "random";
-    public static final String SEQUENTIAL         = "sequential";
+    public static final String RANDOM             = "RANDOM";
+    public static final String SEQUENTIAL         = "SEQUENTIAL";
     public static final int    FEEDBACK_SIZE      = 300;
     public static final String SHOW_FEEDBACK      = "SHOW_FEEDBACK";
     public static final String FEEDBACK_SHOWN     = "FEEDBACK_SHOWN";
