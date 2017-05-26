@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cmu.xprize.comp_writing.CGlyphController
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:adjustViewBounds="true"
+    android:background="@null">
+
+    <ImageButton
+        android:id="@+id/delete_glyph"
+        android:src="@drawable/delete_space_button"
+        app:layout_aspectRatio="100%"
+        app:layout_heightPercent="13%"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:layout_centerHorizontal="true"
+        android:alpha="0.15"
+        android:background="@null"/>
+
+    <!-- NOTE: aspect here is just a reminder that this object has it aspect set programmatically-->
+    <FrameLayout
+        android:id="@+id/drawn_container"
+        app:layout_heightPercent="100%"
+        app:layout_aspectRatio = "100%"
+        android:background="@null">
+
+        <cmu.xprize.comp_writing.CGlyphInputContainer
+            android:id="@+id/drawn_box"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            app:strokeweight = "5"
+            android:background="@null" />
+
+        <cmu.xprize.comp_writing.CGlyphReplayContainer
+            android:id="@+id/replay_box"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"/>
+    </FrameLayout>
+
+    <ImageButton
+        android:id="@+id/delete_space"
+        android:src="@drawable/delete_space_button"
+        app:layout_aspectRatio="100%"
+        app:layout_heightPercent="13%"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:layout_below="@id/drawn_container"
+        android:layout_centerHorizontal="true"
+        android:alpha="0.15"
+        android:background="@null"/>
+
+    <ImageButton
+        android:id="@+id/glyph_playback"
+        android:src="@drawable/delete_glyph_button"
+        app:layout_aspectRatio="100%"
+        app:layout_heightPercent="13%"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:layout_below="@id/drawn_container"
+        android:layout_alignParentStart="true"
+        android:alpha="0.15"
+        android:background="@null"/>
+
+    <ImageButton
+        android:id="@+id/insert_space_right"
+        android:src="@drawable/insert_right_button"
+        app:layout_aspectRatio="100%"
+        app:layout_heightPercent="10%"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:layout_below="@id/drawn_container"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp"
+        android:alpha="0.15"
+        android:background="@null"/>
+
+    <ImageButton
+        android:id="@+id/insert_space_left"
+        android:src="@drawable/insert_left_button"
+        app:layout_aspectRatio="100%"
+        app:layout_heightPercent="10%"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:layout_below="@id/drawn_container"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
+        android:alpha="0.15"
+        android:background="@null"/>
+
+
+
+
+    <ImageButton
+        android:id="@+id/glyph_align"
+        android:src="@drawable/delete_glyph_button"
+        app:layout_aspectRatio="100%"
+        app:layout_heightPercent="13%"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:layout_below="@id/drawn_container"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:alpha="0.15"
+        android:background="@null"/>
+
+    <ImageButton
+        android:id="@+id/glyph_flash"
+        android:src="@drawable/delete_glyph_button"
+        app:layout_aspectRatio="100%"
+        app:layout_heightPercent="13%"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:layout_below="@id/drawn_container"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"
+        android:alpha="0.15"
+        android:background="@null"/>
+
+    <Button
+        android:id="@+id/Ssave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/glyph_align"
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        android:background="#FF0000BB"
+        android:textColor="#FFFFFFFF"
+        android:textSize="24sp"
+        android:text="Save"/>
+
+
+
+</cmu.xprize.comp_writing.CGlyphController>

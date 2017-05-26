@@ -104,7 +104,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         init(context);
     }
 
-    private void init(Context context) {
+    protected void init(Context context) {
 
        mThis    = this;
        mContext = context;
@@ -313,6 +313,15 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
 
             mGlyphInput.saveGlyphAsPrototype();
         }
+    }
+
+
+    /**
+     * @param drawBase
+     */
+    public void showBaseLine(boolean drawBase) {
+
+        mGlyphInput.setDrawBaseline(drawBase);
     }
 
 

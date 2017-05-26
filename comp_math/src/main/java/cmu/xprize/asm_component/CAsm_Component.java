@@ -669,10 +669,19 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
     }
 
+
+    public Integer getCorrectDigit() {
+        return corDigit;
+    }
+
+    public Integer getCorrectCarryBrw() {
+        return overheadVal;
+    }
+
     public boolean isDigitCorrect() {
 
         overheadCorrect = ASM_CONST.NO_INPUT;
-        resultCorrect = ASM_CONST.NO_INPUT;
+        resultCorrect   = ASM_CONST.NO_INPUT;
         boolean isOverheadCorrect, bottomCorrect;
 
         CAsm_TextLayout textLayout;
@@ -863,13 +872,20 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             mPopup.showAtLocation(this, Gravity.LEFT, 10, 10);
             mPopup.enable(true, listeners);
 
-            if(isClickingBorrowing)
+            if(isClickingBorrowing) {
                 mPopup.update(t2, 120, -300, 300, 300);
-            else
+
+                mPopup.setExpectedDigit(getCorrectCarryBrw().toString());
+                Log.d(TAG, "Correct Carry Digit: " + getCorrectCarryBrw().toString());
+            }
+            else {
                 mPopup.update(t2, 60, 0, 300, 300);
 
-            mPopup.isActive = true;
+                mPopup.setExpectedDigit(getCorrectDigit().toString());
+                Log.d(TAG, "Correct Answer Digit: " + getCorrectDigit().toString());
+            }
 
+            mPopup.isActive = true;
 
             if (t1 != null) {
                 hasTwoPopup = true;
