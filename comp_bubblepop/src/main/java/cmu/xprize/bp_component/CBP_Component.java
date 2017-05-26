@@ -235,7 +235,13 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
      * These are convenience operations so the datasource doesn't need redundant info
      * in its encoded JSON form.
      */
-    public void preProcessDataSource() {
+    protected void preProcessDataSource() {
+
+        // If question count is 0 - show all item in the stimulus set
+        //
+        if(question_count == 0) {
+            question_count = gen_stimulusSet.length;
+        }
 
         // gen_xxx...type values are used whrn the type is consistent throughout
         // so we populate the xxx...typeSet array with this value.
@@ -255,11 +261,14 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         //
         wrk_answerSet       = new ArrayList<String>(Arrays.asList(gen_answerSet));
         wrk_answerTypeSet   = new ArrayList<String>(Arrays.asList(gen_answerTypeSet));
+
         if(gen_answer_script != null)
             wrk_answer_script   = new ArrayList<String[]>(Arrays.asList(gen_answer_script));
 
+
         wrk_stimulusSet     = new ArrayList<String>(Arrays.asList(gen_stimulusSet));
         wrk_stimTypeSet     = new ArrayList<String>(Arrays.asList(gen_stimTypeSet));
+
         if(gen_stimulus_script != null)
             wrk_stimulus_script = new ArrayList<String[]>(Arrays.asList(gen_stimulus_script));
 
@@ -283,8 +292,10 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
                 _dataIndex %= dataSource.length;
 
                 // Count down the number of questions requested
+                // Increment question (stimulus index) for non-random sequences
                 //
                 question_count--;
+                question_Index++;
                 attempt_count = BP_CONST.MAX_ATTEMPT;
 
                 Log.d("BPOP", "question Count: " + question_count);
@@ -344,15 +355,15 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         // current correct index in the "correct" i.e. stimulus bubble. To
         // ensure there is at least one correct answer.
         //
-        if(question_sequence.equals(BP_CONST.SEQUENTIAL)) {
+        if(question_sequence.toUpperCase().equals(BP_CONST.SEQUENTIAL)) {
 
-            // cycle on the wrk_responseSet
+            // cycle on the wrk_stimulusSet
             //
            question_Index %= questionCount;
         }
         else {
 
-            question_Index = (int) (Math.random() * questionCount);
+           question_Index = (int) (Math.random() * questionCount);
         }
 
         data.stimulus        = wrk_stimulusSet.get(question_Index);
@@ -368,7 +379,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         // If not using replacement on random selection - i.e. if questions may NOT be repeated
         // then remove the question/answer entry
         //
-        if(!question_replacement && !question_sequence.equals(BP_CONST.SEQUENTIAL)) {
+        if(!question_replacement && !question_sequence.toUpperCase().equals(BP_CONST.SEQUENTIAL)) {
 
             wrk_stimulusSet.remove(question_Index);
             wrk_stimTypeSet.remove(question_Index);
@@ -392,6 +403,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         //
         wrk_responseSet     = new ArrayList<String>(Arrays.asList(gen_responseSet));
         wrk_respTypeSet     = new ArrayList<String>(Arrays.asList(gen_respTypeSet));
+
         if(gen_response_script != null)
             wrk_response_script = new ArrayList<String[]>(Arrays.asList(gen_response_script));
     }
