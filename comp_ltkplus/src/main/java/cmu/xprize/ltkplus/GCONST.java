@@ -11,6 +11,7 @@ public class GCONST {
 
     public static final String BOOST_ALPHA    = "Boost Alphabetic";
     public static final String BOOST_DIGIT    = "Boost Digits";
+    public static final String FORCE_DIGIT    = "Force Digits";
     public static final String BOOST_EXCLASS  = "Boost Expected Class";
     public static final String RECORD_VERSION = "1.0.0";
     public static final String VERSION_0      = "0";            // Used in RoboTutor.0.4.1 and earlier

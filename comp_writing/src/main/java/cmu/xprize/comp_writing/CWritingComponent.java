@@ -347,6 +347,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         // Depending upon the result we allow the controller to disable other fields if it is working
         // in Immediate feedback mode
+        // TODO: check if we need to constrain this to immediate feedback mode
         //
         inhibitInput(mActiveController, !_isValid);
 

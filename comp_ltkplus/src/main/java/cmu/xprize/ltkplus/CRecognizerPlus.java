@@ -26,6 +26,8 @@ import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import cmu.xprize.comp_logging.CLogManager;
@@ -77,6 +79,8 @@ public class CRecognizerPlus implements IGlyphSink {
     private boolean                _boostAlphaClass   = false;
     private boolean                _boostSampleClass  = true;
 
+    private boolean                _boostDigitForce   = false;
+
 
     private CLipiTKJNIInterface _recognizer;
 
@@ -100,8 +104,6 @@ public class CRecognizerPlus implements IGlyphSink {
 
         try {
             _recognizer = new CLipiTKJNIInterface(path, "SHAPEREC_ALPHANUM");
-            //   _recognizer = new LipiTKJNIInterface(path, "SHAPEREC_NUMERALS");
-
             _recognizer.initialize();
         }
         catch(Exception e)
@@ -167,17 +169,25 @@ public class CRecognizerPlus implements IGlyphSink {
 
     public void setClassBoost(String classID) {
 
-        _boostAlphaClass = false;
-        _boostDigitClass = false;
+        _boostAlphaClass  = false;
+        _boostDigitClass  = false;
+        _boostDigitForce  = false;
         _boostSampleClass = false;
 
         switch(classID) {
             case GCONST.BOOST_ALPHA:
                 _boostAlphaClass = true;
                 break;
+
             case GCONST.BOOST_DIGIT:
                 _boostDigitClass = true;
                 break;
+
+            case GCONST.FORCE_DIGIT:
+                _boostDigitClass = true;
+                _boostDigitForce = true;
+                break;
+
             case GCONST.BOOST_EXCLASS:
                 _boostSampleClass = true;
                 break;
@@ -225,6 +235,8 @@ public class CRecognizerPlus implements IGlyphSink {
             logMsg = "";
             for (int i = 0; i < _ltkCandidates.length; i++) {
 
+                // We need to convert the id to a char as lipiTK doens't report the character only the symbol ID
+                //
                 _ltkCandidates[i].setRecChar(_recognizer.getSymbolName(_ltkCandidates[i].Id, configFileDirectory));
 
 //                Log.d(LTKPLUS_MSG, "result.lipitk: Char = " + _ltkCandidates[i].getRecChar() + " Confidence = " + _ltkCandidates[i].Confidence + "  - ShapeID = " + _ltkCandidates[i].Id);
@@ -239,8 +251,6 @@ public class CRecognizerPlus implements IGlyphSink {
 
             logMsg = "";
             for (int i = 0; i < _ltkPlusCandidates.length; i++) {
-
-                _ltkPlusCandidates[i].setRecChar(_recognizer.getSymbolName(_ltkPlusCandidates[i].Id, configFileDirectory));
 
 //                Log.d(LTKPLUS_MSG, "result.ltkplus: Char = " + _ltkPlusCandidates[i].getRecChar() + " Confidence = " + _ltkPlusCandidates[i].Confidence + "  - ShapeID = " + _ltkPlusCandidates[i].Id);
 
@@ -307,6 +317,20 @@ public class CRecognizerPlus implements IGlyphSink {
     //**********************************************************************************
     //**********************************************************************************
     // LTK+ processor
+
+
+    private int ensureCandidates(String newCandidate, boolean force) {
+
+        int lastInsertIndex  = -1;
+
+        for(int i1 = 0 ; i1 < newCandidate.length() ; i1++) {
+
+            String candidate = newCandidate.substring(i1, i1+1);
+            lastInsertIndex  = ensureCandidate( candidate, force);
+        }
+
+        return lastInsertIndex;
+    }
 
 
     private int ensureCandidate(String newCandidate, boolean force) {
@@ -420,7 +444,7 @@ public class CRecognizerPlus implements IGlyphSink {
     /**
      *
      */
-    public int ltkPlusProcessor(IGlyphSource glyphSrc ) {
+    private int ltkPlusProcessor(IGlyphSource glyphSrc ) {
 
         String          candidateLTK;
         char            sampleChar;
@@ -494,6 +518,39 @@ public class CRecognizerPlus implements IGlyphSink {
 
             }
             sampleIndex = addVirutalCandidate(_sampleExpected);
+        }
+
+        // If boosting digits for extemporaneous input add all digits
+        // so they are always considered.
+        //
+        if(_boostDigitClass) {
+
+            // First prune out non-digit candidates if forcing numeric
+            //
+            if(_boostDigitForce) {
+                String candChar;
+                ArrayList<CRecResult> ltkList = new ArrayList<>(Arrays.asList(_ltkCandidates));
+
+                for (int i1 = 0; i1 < ltkList.size(); ) {
+
+                    CRecResult candidate = ltkList.get(i1);
+
+                    candChar = candidate.getRecChar();
+
+                    if (!Character.isDigit(candChar.charAt(0))) {
+
+                        ltkList.remove(i1);
+                    } else {
+                        i1++;
+                    }
+                }
+
+                _ltkCandidates = ltkList.toArray(new CRecResult[ltkList.size()]);
+            }
+
+            // Then ensure all the digits are considered.
+            //
+            ensureCandidates("0123456789", GCONST.NOFORCE);
         }
 
         // If boosting punctuation for extemporaneous input add relevant punctuation
@@ -740,7 +797,7 @@ public class CRecognizerPlus implements IGlyphSink {
      * Remove any pending scenegraph commands.  And reset their glyph
      *
      */
-    public void flushQueue() {
+    private void flushQueue() {
 
         QueuedGlyph  queueItem;
         IGlyphSource source;

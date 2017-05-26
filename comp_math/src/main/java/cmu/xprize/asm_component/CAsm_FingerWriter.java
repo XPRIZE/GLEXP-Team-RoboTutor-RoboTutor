@@ -10,47 +10,37 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import cmu.xprize.comp_writing.CGlyphController;
 import cmu.xprize.fw_component.CFingerWriter;
 import cmu.xprize.util.IEventListener;
 
-public class CAsm_FingerWriter extends CFingerWriter {
+public class CAsm_FingerWriter extends CGlyphController {
 
     public CAsm_FingerWriter(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     public CAsm_FingerWriter(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
     public CAsm_FingerWriter(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
+        init(context);
     }
 
-    private void init() {
-        this.setRecognizer("EN_STD_NUM");
-        this.mListenerConfigured = true;
-    }
 
     public void enable(boolean _enable, ArrayList<IEventListener> listeners) {
 
-        if (listeners != null) {
-            AddEventListeners(listeners);
-        } else { //Disabling the fingerwriter
-            mListeners.removeAll(mListeners);
-        }
-        this.enableFW(_enable);
-    }
+//        if (listeners != null) {
+//            AddEventListeners(listeners);
+//        } else { //Disabling the fingerwriter
+//            mListeners.removeAll(mListeners);
+//        }
 
-    private void AddEventListeners(ArrayList<IEventListener> listeners) {
-
-        for (IEventListener listener: listeners) {
-            this.mListeners.add(listener);
-            Log.v("mListeners",Integer.toString(mListeners.size()));
-        }
+        inhibitInput(!_enable);
     }
 
 }

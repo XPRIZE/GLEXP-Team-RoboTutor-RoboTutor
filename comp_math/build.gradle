@@ -35,4 +35,5 @@ dependencies {
     compile project(path: ':util')
     compile project(path: ':fw_component')
     compile project(':comp_logging')
+    compile project(path: ':comp_writing')
 }

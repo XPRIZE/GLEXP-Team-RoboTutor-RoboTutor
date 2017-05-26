@@ -32,7 +32,6 @@ public interface IGlyphSink {
     public boolean togglePunctBoost();
     public void    setClassBoost(String classID);
 
-    public int ltkPlusProcessor(IGlyphSource glyphSrc );
     public CGlyphSet getGlyphPrototypes();
     public void postToQueue(IGlyphSource source, CGlyph glyph);
 
