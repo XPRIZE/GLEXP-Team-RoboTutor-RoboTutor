@@ -28,9 +28,12 @@ import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.IMediaListener;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.util.CEvent;
 import cmu.xprize.util.CFileNameHasher;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.AUDIO_EVENT;
+import static cmu.xprize.util.TCONST.TYPE_AUDIO;
 
 
 /**
@@ -39,6 +42,8 @@ import cmu.xprize.util.TCONST;
  * where we can cache players across tutors as well as play/pause etc globally
  */
 public class type_audio extends type_action implements IMediaListener {
+
+    protected static final String NOOP = "NOOP";
 
     // NOTE: we run at a Flash default of 24fps - which is the units in which
     // index and duration are calibrated
@@ -63,6 +68,9 @@ public class type_audio extends type_action implements IMediaListener {
     public String lang;
     public String soundsource;
     public String soundpackage;
+
+    public String listeners  = "";
+    public String oncomplete = NOOP;
 
     public boolean  repeat = false;
     public float    volume = -1f;
@@ -152,6 +160,15 @@ public class type_audio extends type_action implements IMediaListener {
      */
     @Override
     public void onCompletion(CMediaManager.PlayerManager playerManager) {
+
+        // Support emitting events if components need state info from the audio
+        //
+        if(!oncomplete.equals(NOOP)) {
+
+            CEvent event = new CEvent(TYPE_AUDIO, AUDIO_EVENT, oncomplete);
+
+            dispatchEvent(event);
+        }
 
         // If not an AUDIOEVENT then we disconnect the player to allow reuse
         //
@@ -262,6 +279,18 @@ public class type_audio extends type_action implements IMediaListener {
                 preLoad(this);
             }
             mPreLoaded = false;
+
+            // Support having components listen for audio events.
+            //
+            if(!listeners.equals("")) {
+
+                String[] compNames = listeners.split(",");
+
+                for(String name : compNames) {
+
+                    addViewListener(name);
+                }
+            }
 
             // play on creation if command indicates
             if (command.equals(TCONST.PLAY)) {

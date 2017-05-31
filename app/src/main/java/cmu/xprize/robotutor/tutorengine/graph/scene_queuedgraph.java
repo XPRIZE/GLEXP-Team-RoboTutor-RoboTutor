@@ -14,9 +14,12 @@ import java.util.Map;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.util.IEvent;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.AUDIO_EVENT;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+import static cmu.xprize.util.TCONST.TYPE_AUDIO;
 
 
 public class scene_queuedgraph extends scene_module {
@@ -79,26 +82,42 @@ public class scene_queuedgraph extends scene_module {
 
 
     //************************************************
-    // IGrgaphEvent...  START
+    // IEvent...  START
     //
 
     // Override to provid class specific functionality
     //
     @Override
-    public void onEvent(IGraphEvent eventObject) {
+    public void onEvent(IEvent eventObject) {
 
-        switch(eventObject.getType()) {
+        try {
+            switch (eventObject.getType()) {
 
-            case TCONST.TRACK_COMPLETE:
+                case TYPE_AUDIO:
 
-                RoboTutor.logManager.postEvent_V(_logType, "target:node.queuedgraph,action:post-next_node,event:trackcomplete,name:" + name );
-                post(TCONST.NEXT_NODE);
-                break;
+                    switch ((String) eventObject.getString(AUDIO_EVENT)) {
+
+                        case TCONST.TRACK_COMPLETE:
+                            RoboTutor.logManager.postEvent_V(_logType, "target:node.queuedgraph,action:post-next_node,event:trackcomplete,name:" + name);
+                            post(TCONST.NEXT_NODE);
+                            break;
+
+                        default:
+                            break;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        catch(Exception ex) {
+            Log.e(_logType, "ERROR:node.queuedgraph,action:onevent,name:" + name );
         }
     }
 
     //
-    // IGrgaphEvent...  END
+    // IEvent...  END
     //************************************************
 
 
@@ -208,6 +227,8 @@ public class scene_queuedgraph extends scene_module {
                                 //
                                 preExit();
                                 _nextAction = null;
+
+                                RoboTutor.logManager.postEvent_I(_logType, "target:node.queuedgraph,END_GRAPH:COMPLETE");
                             }
                         }
                         catch(Exception e) {

@@ -5,9 +5,13 @@ import android.util.Log;
 
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
+import cmu.xprize.util.CEvent;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.AUDIO_EVENT;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+import static cmu.xprize.util.TCONST.TRACK_COMPLETE;
+import static cmu.xprize.util.TCONST.TYPE_AUDIO;
 
 public class type_queuedaudio extends type_audio {
 
@@ -30,6 +34,15 @@ public class type_queuedaudio extends type_audio {
 
         RoboTutor.logManager.postEvent_D(_logType, "target:node.queuedaudio,event:oncompletion");
 
+        // Support emitting events if components need state info from the audio
+        //
+        if(!oncomplete.equals(NOOP)) {
+
+            CEvent event = new CEvent(TYPE_AUDIO, AUDIO_EVENT, oncomplete);
+
+            dispatchEvent(event);
+        }
+
         // If not an AUDIOEVENT then we disconnect the player to allow reuse
         //
         if (!mode.equals(TCONST.AUDIOEVENT)) {
@@ -46,7 +59,10 @@ public class type_queuedaudio extends type_audio {
             if (mode.equals(TCONST.AUDIOFLOW)) {
 
                 RoboTutor.logManager.postEvent_D(_logType, "target:node.queuedaudio:emit.flow");
-                dispatchEvent(new CGraphEvent(TCONST.TRACK_COMPLETE, "na", "na"));
+
+                CEvent event = new CEvent(TYPE_AUDIO, AUDIO_EVENT, TRACK_COMPLETE);
+
+                dispatchEvent(event);
             }
         }
         // If this is an AUDIOEVENT type then the mPlayer was released already but we need

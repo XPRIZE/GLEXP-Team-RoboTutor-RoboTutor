@@ -128,7 +128,17 @@ public class CAsm_Popup extends PopupWindow implements IWritingComponent, IEvent
 
 
     @Override
+    public boolean isGraphEventSource() {
+        return false;
+    }
+
+    @Override
     public void addEventListener(String linkedView) {
+
+    }
+
+    @Override
+    public void addEventListener(IEventListener listener) {
 
     }
 

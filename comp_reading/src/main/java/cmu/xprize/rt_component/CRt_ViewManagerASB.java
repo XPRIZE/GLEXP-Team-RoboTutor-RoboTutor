@@ -111,6 +111,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private CASB_Seg                narrationSegment;
     private String[]                splitSegment;
     private int                     splitIndex = TCONST.INITSPLIT;
+    private boolean                 endOfSentence = false;
     private ArrayList<String>       spokenWords;
     private int                     utteranceNdx;
     private int                     segmentNdx;
@@ -715,8 +716,9 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         currUtterance = rawNarration[utteranceNdx];
         segmentArray  = rawNarration[utteranceNdx].segmentation;
 
-        segmentNdx   = _segNdx;
-        numSegments  = segmentArray.length;
+        segmentNdx    = _segNdx;
+        numSegments   = segmentArray.length;
+        utterancePrev = 0;
 
         // Clean the extension off the end - could be either wav/mp3
         //
@@ -730,34 +732,39 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         //
         mParent.publishValue(TCONST.RTC_VAR_UTTERANCE,  filename);
 
+        // NOTE: Due to inconsistencies in the segmentation data, you cannot depend on it
+        // having precise timing information.  As a result the segment may timeout before the
+        // audio has completed. To avoid this we use oncomplete in type_audio to push an
+        // TRACK_SEGMENT back to this components queue.
         // Tell the script to speak the new uttereance
         //
-        mParent.applyBehavior(TCONST.SPEAK_UTTERANCE);
+        //        mParent.applyBehavior(TCONST.SPEAK_UTTERANCE);
     }
 
 
     private void trackNarration(boolean start) {
 
-        boolean endOfSentence = false;
-
         if(start) {
 
-            mHeardWord = 0;
-            splitIndex = TCONST.INITSPLIT;
+            mHeardWord    = 0;
+            splitIndex    = TCONST.INITSPLIT;
+            endOfSentence = false;
 
             initSegmentation(0, 0);
 
-            spokenWords  = new ArrayList<String>();
+            spokenWords   = new ArrayList<String>();
 
-            narrationSegment = rawNarration[utteranceNdx].segmentation[segmentNdx];
+            // Tell the script to speak the new uttereance
+            //
+            mParent.applyBehavior(TCONST.SPEAK_UTTERANCE);
 
-            utterancePrev = 0;
-            utteranceCurr = narrationSegment.start;
+            postDelayedTracker();
         }
         else {
 
             // NOTE: The narration mode uses the ASR logic to simplify operation.  In doing this
-            /// it uses the wordsToSpeak array to progressively highlight the on screen text.
+            /// it uses the wordsToSpeak array to progressively highlight the on screen text based
+            /// on the timing found in the segmentation data.
             //
             // Special processing to account for apostrophes and hyphenated words
             // Note the system listens for e.g. "WON'T" as [WON] [T] two words so if we provide "won't" then it "won't" match :)
@@ -766,56 +773,93 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             // hyphens or apostrophes into separate "words" the way the wordstospeak does.
             // Without this the narration will get out of sync
             //
-            if(splitIndex == TCONST.INITSPLIT) {
+            if (splitIndex == TCONST.INITSPLIT) {
                 splitSegment = narrationSegment.word.toUpperCase().split("[\\-']");
 
                 splitIndex = 0;
                 spokenWords.add(splitSegment[splitIndex++]);
-            }
-            else {
+            } else {
                 spokenWords.add(splitSegment[splitIndex++]);
             }
 
+            // Update the display
+            //
             onUpdate(spokenWords.toArray(new String[spokenWords.size()]));
 
-            // If the segment word is split due to apostrophes or hyphens then consume them
-            // before continuing to the next segment.
+            // If the segment word is complete continue to the next segment - note that this is
+            // generally the case.  Words are not usually split by pubctuation
             //
-            if(splitIndex >= splitSegment.length) {
+            if (splitIndex >= splitSegment.length) {
 
                 splitIndex = TCONST.INITSPLIT;
 
+                // sentences are built from an array of utterances which are build from an array
+                // of segments (i.e. timed words)
+                //
+                // Note the last segment is not timed.  It is driven by the TRACK_COMPLETE event
+                // from the audio mp3 playing.  This is required as the segmentation data is not
+                // sufficiently accurate to ensure we don't interrupt a playing utterance.
+                //
                 segmentNdx++;
                 if (segmentNdx >= numSegments) {
 
+                    // If we haven't consumed all the utterances (i.e "narrations") in the
+                    // sentence prep the next
+                    //
+                    // NOTE: Prep the state and wait for the TRACK_COMPLETE event to invoke
+                    // trackSegment to continue or terminate
+                    //
                     utteranceNdx++;
                     if (utteranceNdx < numUtterance) {
+
                         initSegmentation(utteranceNdx, 0);
+
                     } else {
+
                         endOfSentence = true;
                     }
-
-//                    mParent.applyBehavior(TCONST.UTTERANCE_COMPLETE_EVENT);
                 }
-
-                if (!endOfSentence)
-                    narrationSegment = rawNarration[utteranceNdx].segmentation[segmentNdx];
+                // All the segments except the last one are timed based on the segmentation data.
+                // i.e. the audio plays and this highlights words based on prerecorded durations.
+                //
+                else {
+                    postDelayedTracker();
+                }
+            }
+            // If the segment word is split due to apostrophes or hyphens then consume them
+            // before continuing to the next segment.
+            //
+            else {
+                mParent.post(TCONST.TRACK_NARRATION, 0);
             }
         }
+    }
+
+
+    private void postDelayedTracker() {
+
+        narrationSegment = rawNarration[utteranceNdx].segmentation[segmentNdx];
+
+        utteranceCurr = narrationSegment.start;
+
+        mParent.post(TCONST.TRACK_NARRATION, new Long((utteranceCurr - utterancePrev) * 10));
+
+        utterancePrev = utteranceCurr;
+    }
+
+
+    private void trackSegment() {
 
         if(!endOfSentence) {
 
-            utteranceCurr = narrationSegment.start;
-
-            mParent.post(TCONST.TRACK_NARRATION, new Long((utteranceCurr - utterancePrev) * 10));
-
-            utterancePrev = utteranceCurr;
+            // Tell the script to speak the new uttereance
+            //
+            mParent.applyBehavior(TCONST.SPEAK_UTTERANCE);
+            postDelayedTracker();
         }
         else {
             mParent.applyBehavior(TCONST.UTTERANCE_COMPLETE_EVENT);
         }
-
-
     }
 
 
@@ -843,6 +887,19 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
                 trackNarration(false);
                 break;
+
+            case TCONST.TRACK_SEGMENT:
+
+                trackSegment();
+                break;
+
+
+
+            case TCONST.UTTERANCE_COMPLETE_EVENT:
+
+                mParent.applyBehavior(TCONST.UTTERANCE_COMPLETE_EVENT);
+                break;
+
         }
     }
 
@@ -1275,6 +1332,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             content += TCONST.SENTENCE_SPACE + futureSentencesFmtd;
 
         mPageText.setText(Html.fromHtml(content));
+
+        Log.d(TAG, "Story Sentence Text: " + content);
 
         broadcastActiveTextPos(mPageText, wordsToDisplay);
 

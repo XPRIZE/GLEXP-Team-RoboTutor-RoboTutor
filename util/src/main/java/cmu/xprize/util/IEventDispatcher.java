@@ -24,7 +24,10 @@ import java.util.List;
 
 public interface IEventDispatcher {
 
-    public void addEventListener(String linkedView);
+    public boolean isGraphEventSource();
+
+    public void addEventListener(String listener);
+    public void addEventListener(IEventListener listener);
 
     public void dispatchEvent(IEvent event);
 
