@@ -337,7 +337,7 @@ public class type_action extends scene_node {
                             //
                             if(childMap.containsKey(id)) {
                                 //Log.d(TAG, childMap.get(id).toString());
-                                childMap.get(id).getClass();
+                                // childMap.get(id).getClass();
 
                                 Method _method = childMap.get(id).getClass().getMethod(method, pType);
 

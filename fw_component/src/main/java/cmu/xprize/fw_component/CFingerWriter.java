@@ -219,12 +219,22 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
     //***********************************************************
     // Event Listener/Dispatcher - Start
 
+    @Override
+    public boolean isGraphEventSource() {
+        return false;
+    }
+
     /**
      * Must be Overridden to access mTutor
      * @param linkedView
      */
     @Override
     public void addEventListener(String linkedView) {
+    }
+
+    @Override
+    public void addEventListener(IEventListener listener) {
+
     }
 
     @Override

@@ -68,7 +68,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#behavior,value#SPEAK_UTTERANCE_BEHAVIOR:String", "features":""},
 
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.utterance}}.mp3","soundpackage": "story","mode": "flow", "features": ""}
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.utterance}}.mp3", "listeners":"SstoryReading", "oncomplete":"TRACK_SEGMENT" , "soundpackage": "story", "mode": "flow", "features": ""}
           ],
           "preexit": [],
           "edges": []
@@ -82,7 +82,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#behavior,value#SPEAK_SENTENCE_BEHAVIOR:String", "features":""},
 
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.sentence}}.mp3","soundpackage": "story","mode": "flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.sentence}}.mp3", "listeners":"SstoryReading", "oncomplete":"TRACK_SEGMENT", "soundpackage": "story", "mode": "flow", "features": ""},
             {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "nextSentence" ,"features":""}
           ],
           "preexit": [
@@ -365,8 +365,8 @@
 
             {"type": "COMMAND", "id":"SstoryReading", "method":"setPageFlipButton",   "parms": "DISABLE:String", "features": "FTR_MANUAL" },
 
-            {"type": "COMMAND", "id": "SstoryReading", "method": "post", "parms": "NEXT_PAGE:String|1500:long" ,"features":"!FTR_MANUAL"},
-            {"type": "COMMAND", "id": "SstoryReading", "method": "post", "parms": "NEXT_PAGE:String"           ,"features": "FTR_MANUAL"}
+            {"type": "COMMAND", "id": "SstoryReading", "method": "post", "parms": "NEXT_PAGE:String|500:long" ,"features":"!FTR_MANUAL"},
+            {"type": "COMMAND", "id": "SstoryReading", "method": "post", "parms": "NEXT_PAGE:String"          ,"features": "FTR_MANUAL"}
           ]
         },
 

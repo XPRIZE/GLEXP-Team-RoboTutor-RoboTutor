@@ -929,12 +929,22 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     // Event Listener/Dispatcher - Start
 
 
+    @Override
+    public boolean isGraphEventSource() {
+        return false;
+    }
+
     /**
      * Must be Overridden in app module to access tutor engine
      * @param linkedView
      */
     @Override
     public void addEventListener(String linkedView) {
+    }
+
+    @Override
+    public void addEventListener(IEventListener listener) {
+
     }
 
     @Override

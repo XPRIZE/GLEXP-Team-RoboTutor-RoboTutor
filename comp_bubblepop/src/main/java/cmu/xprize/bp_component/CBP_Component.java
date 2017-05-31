@@ -703,7 +703,17 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
 
     @Override
+    public boolean isGraphEventSource() {
+        return false;
+    }
+
+    @Override
     public void addEventListener(String linkedView) {
+
+    }
+
+    @Override
+    public void addEventListener(IEventListener listener) {
 
     }
 

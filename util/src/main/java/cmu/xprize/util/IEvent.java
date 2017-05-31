@@ -20,6 +20,7 @@
 package cmu.xprize.util;
 
 public interface IEvent {
+
     public String getType();
     public Object getString(String key);
 }

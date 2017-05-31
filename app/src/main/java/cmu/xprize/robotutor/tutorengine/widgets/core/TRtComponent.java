@@ -66,6 +66,7 @@ import static cmu.xprize.util.TCONST.LANG_AUTO;
 import static cmu.xprize.util.TCONST.LOCAL_STORY_AUDIO;
 import static cmu.xprize.util.TCONST.MEDIA_STORY;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+import static cmu.xprize.util.TCONST.SPEAK_UTTERANCE;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
 public class TRtComponent extends CRt_Component implements IBehaviorManager, ITutorObjectImpl, Button.OnClickListener, IRtComponent, IDataSink, IEventSource, IPublisher, ITutorLogger {
@@ -268,7 +269,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     public boolean applyBehavior(String event) {
 
         boolean result = false;
-
+        
         if(!(result = super.applyBehavior(event))) {
 
             if (volatileMap.containsKey(event)) {

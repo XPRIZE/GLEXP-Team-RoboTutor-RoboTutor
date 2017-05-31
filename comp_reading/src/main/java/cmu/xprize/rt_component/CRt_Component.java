@@ -38,6 +38,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -47,11 +49,15 @@ import edu.cmu.xprize.listener.IAsrEventListener;
 import edu.cmu.xprize.listener.ListenerBase;
 import edu.cmu.xprize.listener.ListenerPLRT;
 
+import static cmu.xprize.util.TCONST.AUDIO_EVENT;
+import static cmu.xprize.util.TCONST.TRACK_COMPLETE;
+import static cmu.xprize.util.TCONST.TYPE_AUDIO;
+
 
 /**
  *  The Reading Tutor Component
  */
-public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEventListener, ILoadableObject {
+public class CRt_Component extends ViewAnimator implements IEventListener, IVManListener, IAsrEventListener, ILoadableObject {
 
     private Context                 mContext;
     private String                  word;
@@ -556,6 +562,44 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
         return mViewManager.endOfData();
     }
 
+
+
+    //************************************************************************
+    //************************************************************************
+    // IEventListener  -- Start
+
+
+    @Override
+    public void onEvent(IEvent eventObject) {
+
+
+        // We expect AUDIO_EVENTS from the narration type_audio nodes to let us know when
+        // they are complete with an UTTERANCE_COMPLETE_EVENT
+        //
+        if(mViewManager != null) {
+            try {
+                switch (eventObject.getType()) {
+
+                    case TYPE_AUDIO:
+
+                        // We expect AUDIO_EVENTS from the narration type_audio nodes to let us know when
+                        // they are complete with an UTTERANCE_COMPLETE_EVENT
+                        //
+                        mViewManager.execCommand((String) eventObject.getString(AUDIO_EVENT), null);
+                        break;
+
+                    default:
+                        break;
+                }
+            } catch (Exception ex) {
+                Log.e(TAG, "ERROR:node.queuedgraph,action:onevent");
+            }
+        }
+    }
+
+    // IEventListener  -- End
+    //************************************************************************
+    //************************************************************************
 
 
     //************************************************************************

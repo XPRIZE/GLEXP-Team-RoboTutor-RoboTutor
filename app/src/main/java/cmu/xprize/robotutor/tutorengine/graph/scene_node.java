@@ -29,6 +29,9 @@ import java.util.Map;
 
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.startup.CStartView;
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventDispatcher;
+import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.IEventSource;
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
@@ -42,14 +45,13 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TBoolean;
 
 import static cmu.xprize.util.TCONST.GRAPH_MSG;
 
-public class scene_node implements ILoadableObject2, IScriptable2, IEventSource, IGraphEventSink, IGraphEventSource
+public class scene_node implements ILoadableObject2, IScriptable2, IEventSource, IEventListener, IEventDispatcher
 {
 
     protected IScope2       _scope;
     protected String        _logType;
 
-    private HashMap<IGraphEventSink,IGraphEventSink> mListeners = new HashMap<>();
-
+    private HashMap<IEventListener,IEventListener> mListeners = new HashMap<>();
 
     // json loadable fields
     public String           parser;      // Used to distinguish different Flash content parsers
@@ -89,7 +91,7 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
 
 
     //************************************************
-    // IGrgaphEvent...  START
+    // IEvent...  START
     //
 
     @Override
@@ -97,11 +99,31 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
         return false;
     }
 
+
+//    @Override
+    public void addViewListener(String listener) {
+
+        try {
+
+            Map childMap    = _scope.tutorGraph().getChildMap();
+
+            if(childMap.containsKey(listener)) {
+
+                IEventListener sink = (IEventListener)childMap.get(listener);
+
+                addEventListener(sink);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void addEventListener(String listener) {
 
         try {
-            IGraphEventSink sink = (IGraphEventSink) _scope.mapSymbol(listener);
+            IEventListener sink = (IEventListener) _scope.mapSymbol(listener);
 
             addEventListener(sink);
 
@@ -111,7 +133,7 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
     }
 
     @Override
-    public void addEventListener(IGraphEventSink listener) {
+    public void addEventListener(IEventListener listener) {
 
         try {
             mListeners.put(listener, listener);
@@ -122,7 +144,7 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
     }
 
     @Override
-    public void dispatchEvent(IGraphEvent event) {
+    public void dispatchEvent(IEvent event) {
 
         Iterator<?> tObjects = mListeners.entrySet().iterator();
 
@@ -132,7 +154,7 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
         while(tObjects.hasNext() ) {
             Map.Entry entry = (Map.Entry) tObjects.next();
 
-            IGraphEventSink listener = (IGraphEventSink)entry.getValue();
+            IEventListener listener = (IEventListener)entry.getValue();
             listener.onEvent(event);
         }
     }
@@ -140,11 +162,11 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
     // Override to provid class specific functionality
     //
     @Override
-    public void onEvent(IGraphEvent eventObject) {
+    public void onEvent(IEvent eventObject) {
     }
 
     //
-    // IGrgaphEvent...  END
+    // IEvent...  END
     //************************************************
 
 
