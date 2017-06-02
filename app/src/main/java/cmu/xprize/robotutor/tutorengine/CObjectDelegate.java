@@ -203,8 +203,10 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener, IE
 
                     try {
                         obj = mTutor.getScope().mapSymbol(mClickBehavior);
-                        obj.applyNode();
 
+                        if(obj.testFeatures()) {
+                            obj.applyNode();
+                        }
                     } catch (Exception e) {
                         // TODO: Manage invalid Button Behavior
                         e.printStackTrace();

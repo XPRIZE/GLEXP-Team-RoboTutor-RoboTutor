@@ -725,7 +725,6 @@ public class type_timelineFL extends type_action implements IMediaListener {
                    _scriptState.equals(TCONST.WAIT)) {
 
                 _scriptState = mScript.applyNode();
-
             };
 
             mScript.resetNode();

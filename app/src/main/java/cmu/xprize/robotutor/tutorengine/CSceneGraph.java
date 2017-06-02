@@ -239,7 +239,14 @@ public class CSceneGraph  {
 
                     case TCONST.NEXT_NODE:
 
-                        String sceneState = _sceneGraph.applyNode();
+                        String sceneState;
+
+                        if(_sceneGraph.testFeatures()) {
+                            sceneState = _sceneGraph.applyNode();
+                        }
+                        else {
+                            sceneState = TCONST.DONE;
+                        }
 
                         switch (sceneState) {
 

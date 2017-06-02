@@ -375,13 +375,16 @@ public class CMediaManager {
     public void createHandler(String key, type_handler owner) {
 
         if(mHandlerMap.containsKey(key)) {
-            CErrorManager.logEvent(TAG,  "Duplicate Handler Name:" + key, new Exception("no-exception"), false);
+            CErrorManager.logEvent(TAG,  "Duplicate Handler Name: " + key, new Exception("no-exception"), false);
         }
         mHandlerMap.put(key, owner);
     }
 
 
     public type_handler removeHandler(String key) {
+
+        Log.d(TAG, "Removing Handler Name: " + key);
+
         return mHandlerMap.remove(key);
     }
 

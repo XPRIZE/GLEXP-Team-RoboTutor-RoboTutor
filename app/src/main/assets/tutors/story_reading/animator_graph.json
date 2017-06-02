@@ -15,19 +15,17 @@
         "SPEAK_WORD_BEHAVIOR": {
           "type": "QUEUE",
           "COMMENT": "Speak the current word and continue to next.",
-          "preenter": [],
+          "preenter": ["CLR_ONCLICK","TIMER_CANCEL_HINT_WORD"],
           "reuse": true,
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#prompt,value#SPEAK_WORD_BEHAVIOR:String", "features":""},
 
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.currentWord}}.mp3","soundpackage": "words","mode": "flow", "features": ""},
-            {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "nextWord" ,"features":""}
+            {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "post", "parms": "NEXT_WORD:String" ,"features":""}
+
           ],
-          "preexit": [
-            "SET_ONCLICK_SPEAK_WORD","RETURN_AND_GO","WAIT"
-          ],
-          "edges": [
-          ]
+          "preexit": [],
+          "edges": []
         },
 
         "CONFIG_SPEAK_BUTTON":{
@@ -85,10 +83,8 @@
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.sentence}}.mp3", "listeners":"SstoryReading", "oncomplete":"TRACK_SEGMENT", "soundpackage": "story", "mode": "flow", "features": ""},
             {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "nextSentence" ,"features":""}
           ],
-          "preexit": [
-          ],
-          "edges": [
-          ]
+          "preexit": [],
+          "edges": []
         }
 
       },
@@ -150,9 +146,33 @@
           "edges":
           [
             {"constraint":"FTR_RIGHT","edge":"CORRECT"},
-            {"constraint":"FIRST_ATTEMPT","edge":"WRONG_1"},
-            {"constraint":"SECOND_ATTEMPT","edge":"WRONG_2"},
-            {"constraint":"","edge":"WRONG_3"}
+            {"constraint":"","edge":"WRONG"}
+          ]
+        },
+
+        "CORRECT":{
+          "COMMENT":"When user inputs a correct answer...",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "PLAYCORRECT",
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"NEXT_STEP"}
+          ]
+        },
+
+        "WRONG":{
+          "COMMENT":"When user says an incorrect word...",
+          "type":"node",
+          "maptype":"moduleMap",
+          "preenter":[],
+          "mapname": "PLAYWRONG",
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"LISTEN"}
           ]
         },
 
@@ -212,58 +232,6 @@
           "preenter": [],
           "preexit": [],
           "edges": [
-            {"constraint":"","edge":"LISTEN"}
-          ]
-        },
-
-        "CORRECT":{
-          "COMMENT":"When user inputs a correct answer...",
-          "type":"node",
-          "maptype":"moduleMap",
-          "mapname": "PLAYCORRECT",
-          "preenter":[],
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"","edge":"NEXT_STEP"}
-          ]
-        },
-
-        "WRONG_1":{
-          "COMMENT":"When user says an incorrect word...",
-          "type":"node",
-          "maptype":"moduleMap",
-          "preenter":[],
-          "mapname": "PLAYWRONG",
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"","edge":"LISTEN"}
-          ]
-        },
-
-        "WRONG_2":{
-          "COMMENT":"When user says an incorrect word...",
-          "type":"node",
-          "maptype":"moduleMap",
-          "preenter":["SPEAK_BUTTON_ENABLE","SPEAK_BUTTON_SHOW","SET_SPEAK_WORD"],
-          "mapname": "PLAYWRONG",
-          "preexit" :[],
-          "edges":
-          [
-            {"constraint":"","edge":"LISTEN"}
-          ]
-        },
-
-        "WRONG_3":{
-          "COMMENT":"When user says an incorrect word...",
-          "type":"node",
-          "maptype":"moduleMap",
-          "preenter":[],
-          "mapname": "PLAYWRONG",
-          "preexit" :[],
-          "edges":
-          [
             {"constraint":"","edge":"LISTEN"}
           ]
         },
@@ -418,9 +386,6 @@
         "SET_WORD_EVENT":   {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_WORD_EVENT:String|HESTITATION_RESET:String" ,"features":""},
         "RESET_WORD_EVENT": {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_WORD_EVENT:String|NULL:String" ,"features":""},
 
-        "SET_ONCLICK_SPEAK_WORD": {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ON_CLICK:String|SPEAK_WORD_BEHAVIOR:String" ,"features":"FTR_USER_READ"},
-        "CLR_ONCLICK":            {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ON_CLICK:String|NULL:String" ,"features":"FTR_USER_READ"},
-
         "SET_UTTERANCE_BEHAVIOR":   {"type": "COMMAND", "id":"SstoryReading", "method": "setStickyBehavior", "parms": "UTTERANCE_COMPLETE_EVENT:String|NEXT_NODE:String" ,"features":""},
 
         "SET_HYPOTHESIS_BEHAVIOR":  {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_RECOGNITION_EVENT:String|NEXT_NODE:String" ,"features":""},
@@ -435,8 +400,14 @@
         "NEXT_PARA":{"type": "COMMAND", "id": "SstoryReading", "method": "nextPara" ,"features":""},
         "NEXT_PAGE":{"type": "COMMAND", "id": "SstoryReading", "method": "nextPage" ,"features":""},
 
-        "TIMER_HINT_WORD":        {"type": "TIMER", "id":"HintWordTimer", "startdelay":"0", "period":"3500", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"CONFIG_SPEAK_BUTTON", "features": "FTR_MANUAL" },
-        "TIMER_CANCEL_HINT_WORD": {"type": "TIMER", "id":"HintWordTimer", "action":"CANCEL", "features": "FTR_MANUAL" },
+        "SET_ONCLICK_SPEAK_WORD": {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ON_CLICK:String|SPEAK_WORD_BEHAVIOR:String" ,"features":"FTR_USER_READ|FTR_USER_READING"},
+        "CLR_ONCLICK":            {"type": "COMMAND", "id":"SstoryReading", "method": "setVolatileBehavior", "parms": "ON_CLICK:String|NULL:String" ,"features":""},
+
+        "TIMER_HINT_WORD":        {"type": "TIMER", "id":"HintWordTimer", "startdelay":"0", "period":"3000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"SPEAK_WORD_BEHAVIOR", "features": "FTR_USER_READ|FTR_USER_READING" },
+        "TIMER_CANCEL_HINT_WORD": {"type": "TIMER", "id":"HintWordTimer", "action":"CANCEL", "features": "" },
+
+        //        "TIMER_HINT_WORD":        {"type": "TIMER", "id":"HintWordTimer", "startdelay":"0", "period":"3500", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"CONFIG_SPEAK_BUTTON", "features": "FTR_MANUAL" },
+//        "TIMER_CANCEL_HINT_WORD": {"type": "TIMER", "id":"HintWordTimer", "action":"CANCEL", "features": "FTR_MANUAL" },
 
         "FLIP_BUTTON_ENABLE":  {"type": "COMMAND", "id":"SstoryReading", "method":"setPageFlipButton",     "parms": "ENABLE:String", "features": "" },
         "FLIP_BUTTON_DISABLE": {"type": "COMMAND", "id":"SstoryReading", "method":"setPageFlipButton",     "parms": "DISABLE:String", "features": "" },

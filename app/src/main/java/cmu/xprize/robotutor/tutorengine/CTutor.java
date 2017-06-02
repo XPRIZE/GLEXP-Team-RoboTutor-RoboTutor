@@ -620,6 +620,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
         if(createCmds != null) {
 
             for (type_action cmd : createCmds) {
+
                 cmd.applyNode();
             }
         }

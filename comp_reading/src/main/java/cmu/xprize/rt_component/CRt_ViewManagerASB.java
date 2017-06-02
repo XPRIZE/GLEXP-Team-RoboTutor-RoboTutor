@@ -47,6 +47,8 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
 
+import static cmu.xprize.util.TCONST.FTR_USER_READ;
+import static cmu.xprize.util.TCONST.FTR_USER_READING;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 
@@ -207,7 +209,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      *  NOTE: we reset mCurrWord - last parm in seekToStoryPosition
      *
      */
-    public void beginStory() {
+    public void startStory() {
 
         // reset boot flag to inhibit future calls
         //
@@ -224,7 +226,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 hearRead = TCONST.FTR_USER_HEAR;
             }
             else {
-                hearRead = TCONST.FTR_USER_READ;
+                hearRead = FTR_USER_READ;
+                mParent.publishFeature(FTR_USER_READING);
             }
 
             storyBooting = false;
@@ -239,7 +242,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
             mParent.applyBehavior(TCONST.NARRATE_STORY);
         }
-        if(hearRead.equals(TCONST.FTR_USER_READ)) {
+        if(hearRead.equals(FTR_USER_READ)) {
 
             startListening();
         }
@@ -455,6 +458,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         sentenceWords = stripLeadingTrailing(sentenceWords, "'");
         sentenceWords = splitWordOnChar(sentenceWords, "-");
         sentenceWords = splitWordOnChar(sentenceWords, "'");
+        sentenceWords = splitWordOnChar(sentenceWords, ",");
 
         return sentenceWords;
     }
@@ -778,8 +782,15 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
                 splitIndex = 0;
                 spokenWords.add(splitSegment[splitIndex++]);
-            } else {
+
+            }
+            else if(splitIndex < splitSegment.length){
+
                 spokenWords.add(splitSegment[splitIndex++]);
+            }
+            else {
+
+                Log.d(TAG, "HERE");
             }
 
             // Update the display
@@ -874,13 +885,16 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 trackNarration(true);
                 break;
 
+            case TCONST.NEXT_WORD:
+                generateVirtualASRWord();
+                break;
+
             case TCONST.NEXT_PAGE:
                 nextPage();
                 break;
 
             case TCONST.NEXT_SCENE:
                 mParent.nextScene();
-
                 break;
 
             case TCONST.TRACK_NARRATION:
@@ -893,6 +907,10 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 trackSegment();
                 break;
 
+            case TCONST.NEXT_NODE:
+
+                mParent.nextNode();
+                break;
 
 
             case TCONST.UTTERANCE_COMPLETE_EVENT:
@@ -928,15 +946,24 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 // Read Mode - When user finishes reading switch to Narrate mode and
                 // narrate the same sentence - i.e. echo
                 //
-                if(hearRead.equals(TCONST.FTR_USER_READ)) {
+                if(hearRead.equals(FTR_USER_READ)) {
+
                     mParent.publishValue(TCONST.RTC_VAR_ECHOSTATE, TCONST.TRUE);
+
                     hearRead = TCONST.FTR_USER_HEAR;
+                    mParent.retractFeature(FTR_USER_READING);
+
+                    Log.d("ISREADING", "NO");
+
                     mListener.setPauseListener(true);
                 }
                 // Narrate mode - swithc back to READ and set line complete flags
                 //
                 else {
-                    hearRead = TCONST.FTR_USER_READ;
+                    hearRead = FTR_USER_READ;
+                    mParent.publishFeature(FTR_USER_READING);
+
+                    Log.d("ISREADING", "YES");
 
                     cummulativeState = TCONST.RTC_LINECOMPLETE;
                     mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.LAST);
@@ -1229,6 +1256,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         speakOrListen();
     }
 
+
     private void startListening() {
 
         // We allow the user to say any of the onscreen words but set the priority order of how we
@@ -1464,7 +1492,12 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         try {
             for (int i = 0; i < heardWords.length; i++) {
-                logString += heardWords[i].hypWord.toLowerCase() + ":" + heardWords[i].iSentenceWord + " | ";
+                if(heardWords[i] != null) {
+                    logString += heardWords[i].hypWord.toLowerCase() + ":" + heardWords[i].iSentenceWord + " | ";
+                }
+                else {
+                    logString += "VIRTUAL | ";
+                }
             }
             Log.i("ASR", "Update New HypSet: " + logString);
 
@@ -1502,6 +1535,21 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             // TODO: This seems to be because the activity is not destroyed and the ASR continues
             Log.d("ASR", "onUpdate Fault: " + e);
         }
+    }
+
+
+    public void generateVirtualASRWord() {
+
+        mListener.setPauseListener(true);
+
+        ListenerBase.HeardWord words[] = new ListenerBase.HeardWord[mHeardWord+1];
+
+        words[mHeardWord] = new ListenerBase.HeardWord(wordsToSpeak[mCurrWord]);
+
+        onUpdate(words, false);
+
+        mListener.setPauseListener(false);
+//        startListening();
     }
 
 

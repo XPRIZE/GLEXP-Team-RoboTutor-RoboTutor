@@ -948,13 +948,17 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                         //
                         case TCONST.QUEUE:
 
-                            obj.applyNode();
+                            if(obj.testFeatures()) {
+                                obj.applyNode();
+                            }
                             break;
 
                         default:
 
-                            obj.preEnter();
-                            obj.applyNode();
+                            if(obj.testFeatures()) {
+                                obj.preEnter();
+                                obj.applyNode();
+                            }
                             break;
                     }
                 }

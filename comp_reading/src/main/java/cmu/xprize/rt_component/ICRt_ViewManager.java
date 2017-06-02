@@ -28,7 +28,7 @@ public interface ICRt_ViewManager extends ILoadableObject {
 
     public void onDestroy();
 
-    void beginStory();
+    void startStory();
 
     void seekToPage(int pageIndex);
 

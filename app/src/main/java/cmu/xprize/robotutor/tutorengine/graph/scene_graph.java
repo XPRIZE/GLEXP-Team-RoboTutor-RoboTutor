@@ -150,11 +150,12 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
                     //
                     RoboTutor.logManager.postEvent_I(_logType, "target:node.scenegraph.applyNode,name:" + _currNode.name + ",start State:" + _nodeState + ",mapType:" + _currNode.maptype + ",mapName:" + _currNode.mapname);
 
-//                    if(_currNode.name.equals("INTRO_STATE")) {
-//                        Log.d(TAG, "Processing Node: " + _currNode.name);
-//                    }
-
-                    _nodeState = _currNode.applyNode();
+                    if(_currNode.testFeatures()) {
+                        _nodeState = _currNode.applyNode();
+                    }
+                    else {
+                        _nodeState = TCONST.DONE;
+                    }
 
                     RoboTutor.logManager.postEvent_I(_logType, "target:node.scenegraph.applyNode,name:" + _currNode.name + ",end State:" + _nodeState);
 
@@ -196,8 +197,12 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
             else {
                 RoboTutor.logManager.postEvent_I(_logType, "target:node.scenegraph,name:" + _currNode.name + ",start State:" + _nodeState + ",mapType:" + _currNode.maptype + ",mapName:" + _currNode.mapname);
 
-                _nodeState = _currNode.applyNode();
-
+                if(_currNode.testFeatures()) {
+                    _nodeState = _currNode.applyNode();
+                }
+                else {
+                    _nodeState = TCONST.DONE;
+                }
                 RoboTutor.logManager.postEvent_I(_logType, "target:node.scenegraph,name:" + _currNode.name + ",end State:" + _nodeState);
             }
         }
@@ -266,10 +271,18 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
             e.printStackTrace();
         }
 
-        // Apply the node and continue
-        _currNode.preEnter();
+        if(_currNode.testFeatures()) {
 
-        return _currNode.applyNode();
+            // Apply the node and continue
+            _currNode.preEnter();
+
+            _nodeState = _currNode.applyNode();
+        }
+        else {
+            _nodeState = TCONST.DONE;
+        }
+
+        return _nodeState;
     }
 
 }

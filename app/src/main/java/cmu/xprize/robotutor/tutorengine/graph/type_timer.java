@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.IMediaListener;
@@ -131,42 +132,42 @@ public class type_timer extends type_action implements IMediaListener {
 
         type_timer obj = null;
 
-        // If the feature test passes then fire the event.
-        // Otherwise set flag to indicate event was completed/skipped in this case
-        // Issue #58 - Make all actions feature reactive.
+        // Non reference nodes create the actual java timer and own it.
+        // Note that it is expected that the timer will be CREATED before any other
+        // nodes access it.
+        // However if a call is made against a uninitialized timer it will simply be
+        // ignored.
         //
-        if(testFeatures()) {
+        if (!mMediaManager.hasTimer(id)) {
 
-            // Non reference nodes create the actual java timer and own it.
-            // Note that it is expected that the timer will be CREATED before any other
-            // nodes access it.
-            // However if a call is made against a uninitialized timer it will simply be
-            // ignored.
-            //
-            if (!mMediaManager.hasTimer(id)) {
+            switch (action) {
+                case TCONST.CREATEANDSTART:
+                    _timerCmd = TCONST.START;
 
-                switch (action) {
-                    case TCONST.CREATEANDSTART:
-                        _timerCmd = TCONST.START;
+                case TCONST.CREATE:
+                    createTimer();
+                    break;
 
-                    case TCONST.CREATE:
-                        createTimer();
-                        break;
+                default:
+                    Log.i(TAG, "Timer: " + id + " - call on uninitialized timer");
 
-                    default:
-                        Log.i(TAG, "Timer: " + id + " - call on uninitialized timer");
-
-                        break;
-                }
+                    break;
             }
+        }
 
-            // Reference nodes get a reference to the owner timer through the MediaManager
-            // and perform their action on the timer by updating the owners "action" and
-            // calling appyNode to execute on the actual timer.
-            //
-            if (_reference) {
+        // Reference nodes get a reference to the owner timer through the MediaManager
+        // and perform their action on the timer by updating the owners "action" and
+        // calling appyNode to execute on the actual timer.
+        //
+        if (_reference) {
 
-                try {
+            try {
+                // Note - we testFeatures on "this" reference-node not the handler owner-node which may have
+                // different priviledges.  i.e we may not want to create a handler but always cancel it if the
+                // feature set changes in mid-count.
+                //
+                if(testFeatures()) {
+
                     obj = (type_timer) mMediaManager.mapTimer(id);
 
                     // Apply the reference action to the actual timer
@@ -174,32 +175,36 @@ public class type_timer extends type_action implements IMediaListener {
                         obj._timerCmd = action;
                         obj.applyNode();
                     }
+                    else {
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+                        RoboTutor.logManager.postEvent_D(_logType, "node.timer.applynode:id:" + id + ",error:call on uninitialized timer reference");
+                    }
                 }
-            } else switch (_timerCmd) {
 
-                case TCONST.START:
-                    startTimer();
-                    break;
-
-                case TCONST.RESET:
-                    stopTimer();
-                    createTimer();
-                    break;
-
-                case TCONST.RESTART:
-                    stopTimer();
-                    createTimer();
-                    startTimer();
-                    break;
-
-                case TCONST.STOP:
-                case TCONST.CANCEL:
-                    stopTimer();
-                    break;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+        } else switch (_timerCmd) {
+
+            case TCONST.START:
+                startTimer();
+                break;
+
+            case TCONST.RESET:
+                stopTimer();
+                createTimer();
+                break;
+
+            case TCONST.RESTART:
+                stopTimer();
+                createTimer();
+                startTimer();
+                break;
+
+            case TCONST.STOP:
+            case TCONST.CANCEL:
+                stopTimer();
+                break;
         }
 
         return TCONST.DONE;
@@ -228,7 +233,9 @@ public class type_timer extends type_action implements IMediaListener {
                     // and apply it.
                     //
                     obj = _scope.mapSymbol(ontimer);
-                    obj.applyNode();
+                    if(obj != null && obj.testFeatures()) {
+                        obj.applyNode();
+                    }
 
                 } catch (Exception e) {
                     // TODO: Manage invalid Timer Behavior

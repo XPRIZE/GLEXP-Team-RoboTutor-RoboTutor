@@ -192,7 +192,10 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
         if(nodeName != null && !nodeName.equals("")) {
             try {
                 obj = mTutor.getScope().mapSymbol(nodeName);
-                obj.applyNode();
+
+                if(obj.testFeatures()) {
+                    obj.applyNode();
+                }
 
             } catch (Exception e) {
                 // TODO: Manage invalid Behavior

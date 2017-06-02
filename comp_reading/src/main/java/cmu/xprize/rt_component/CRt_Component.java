@@ -41,6 +41,7 @@ import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TTSsynthesizer;
@@ -50,14 +51,13 @@ import edu.cmu.xprize.listener.ListenerBase;
 import edu.cmu.xprize.listener.ListenerPLRT;
 
 import static cmu.xprize.util.TCONST.AUDIO_EVENT;
-import static cmu.xprize.util.TCONST.TRACK_COMPLETE;
 import static cmu.xprize.util.TCONST.TYPE_AUDIO;
 
 
 /**
  *  The Reading Tutor Component
  */
-public class CRt_Component extends ViewAnimator implements IEventListener, IVManListener, IAsrEventListener, ILoadableObject {
+public class CRt_Component extends ViewAnimator implements IEventListener, IVManListener, IAsrEventListener, ILoadableObject, IPublisher {
 
     private Context                 mContext;
     private String                  word;
@@ -180,6 +180,9 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     public void nextScene() {
     }
 
+    public void nextNode() {
+
+    }
 
     /**
      *
@@ -420,7 +423,7 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
 
 
     public void startStory() {
-        mViewManager.beginStory();
+        mViewManager.startStory();
     }
 
 
@@ -443,6 +446,16 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     }
 
 
+
+    //************************************************************************
+    //************************************************************************
+    // IPublisher - START
+
+    @Override
+    public void publishState() {
+
+    }
+
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
@@ -454,6 +467,40 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     //
     public void publishValue(String varName, int value) {
     }
+
+    @Override
+    public void publishFeatureSet(String featureset) {
+
+    }
+
+    @Override
+    public void retractFeatureSet(String featureset) {
+
+    }
+
+    @Override
+    public void publishFeature(String feature) {
+
+    }
+
+    @Override
+    public void retractFeature(String feature) {
+
+    }
+
+    @Override
+    public void publishFeatureMap(HashMap featureMap) {
+
+    }
+
+    @Override
+    public void retractFeatureMap(HashMap featureMap) {
+
+    }
+
+    // IPublisher - END
+    //************************************************************************
+    //************************************************************************
 
 
     // Must override in TClass

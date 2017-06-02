@@ -85,7 +85,7 @@ public class ListenerPLRT extends ListenerBase {
      */
     public void listenFor(String[] wordsToHear, int startWord) {
 
-        Log.d("ASR", "ListenFor: " + TextUtils.join(" ", wordsToHear));
+        Log.d("STABLE", "ListenFor: " + TextUtils.join(" ", wordsToHear));
 
         // try to build the language model. Note this updates dictionary attached to decoder
         FsgModel fsg = generateLM(wordsToHear, startWord);
