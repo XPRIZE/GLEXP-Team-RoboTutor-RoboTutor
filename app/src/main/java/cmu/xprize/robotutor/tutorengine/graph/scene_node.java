@@ -89,8 +89,15 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
     }
 
 
+    // non-action nodes are not feature reactive.  Always return true
+    //
+    public boolean testFeatures() {
 
-    //************************************************
+        return true;
+    }
+
+
+        //************************************************
     // IEvent...  START
     //
 
@@ -282,8 +289,9 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
                 try {
                     IScriptable2 node = (IScriptable2) getScope().mapSymbol(nodeName);
 
-                    node.applyNode();
-
+                    if(node.testFeatures()) {
+                        node.applyNode();
+                    }
                 } catch (Exception e) {
                     CErrorManager.logEvent(TAG, "Script Internal ERROR: ENTER-EXIT Symbol Not found:" + nodeName + " : ", e, false);
                 }

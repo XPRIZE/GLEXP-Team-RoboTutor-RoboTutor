@@ -34,6 +34,7 @@ public interface IScriptable {
 
     public Object evaluate(boolean neg);
     public void preEnter();
+    public boolean testFeatures();
     public String applyNode();
 }
 

@@ -771,13 +771,17 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
                         //
                         case TCONST.QUEUE:
 
-                            obj.applyNode();
+                            if(obj.testFeatures()) {
+                                obj.applyNode();
+                            }
                             break;
 
                         default:
 
-                            obj.preEnter();
-                            obj.applyNode();
+                            if(obj.testFeatures()) {
+                                obj.preEnter();
+                                obj.applyNode();
+                            }
                             break;
                     }
                 }
@@ -916,7 +920,10 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         if(nodeName != null && !nodeName.equals("")) {
             try {
                 obj = mTutor.getScope().mapSymbol(nodeName);
-                obj.applyNode();
+
+                if(obj.testFeatures()) {
+                    obj.applyNode();
+                }
 
             } catch (Exception e) {
                 // TODO: Manage invalid Behavior

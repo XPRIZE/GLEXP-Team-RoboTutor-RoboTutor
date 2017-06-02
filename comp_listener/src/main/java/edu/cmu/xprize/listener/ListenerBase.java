@@ -499,7 +499,7 @@ public class ListenerBase {
          */
         public int latency;
 
-        protected HeardWord(String asrWord) {
+        public HeardWord(String asrWord) {
             hypWord = asrWordText(asrWord);            // strip any pronunciation tags
             iSentenceWord = -1;
             matchLevel = MATCH_UNKNOWN;

@@ -136,7 +136,13 @@ public class scene_module extends scene_node implements ILoadableObject2 {
             if(validAction)
             {
                 _nextAction.preEnter();
-                _moduleState = _nextAction.applyNode();
+
+                if(_nextAction.testFeatures()) {
+                    _moduleState = _nextAction.applyNode();
+                }
+                else {
+                    _moduleState = TCONST.DONE;
+                }
             }
             else {
                 _moduleState = TCONST.NONE;

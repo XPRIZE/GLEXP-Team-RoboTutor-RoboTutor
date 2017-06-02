@@ -121,7 +121,7 @@ public class SpeechRecognizer {
 
     private Long            stableHypTime = 0L;
     private String          publishType   = TCONST.STABLE_HYPOTHESES;
-    //private String          publishType   = TCONST.RAW_HYPOTHESES;
+//    private String          publishType   = TCONST.RAW_HYPOTHESES;
 
 
     protected SpeechRecognizer(Config config) {
@@ -716,6 +716,9 @@ public class SpeechRecognizer {
         // get the array of hypothesis words
         //
         hypString = hypothesis.getHypstr();
+
+        Log.d("STABLE", "HYP LIST: " + hypString);
+
         String[] asrWords = hypString.split("\\s+");
 
 
@@ -728,7 +731,7 @@ public class SpeechRecognizer {
 
             for (int i1 = prevAsrWords.length; i1 < asrWords.length; i1++) {
                 wordLastChanged.add(currTime);
-                //Log.d("STABLE", "Word Start: " + asrWords[i1]);
+                Log.d("STABLE", "Word Start: " + asrWords[i1]);
             }
         }
 
@@ -747,7 +750,7 @@ public class SpeechRecognizer {
             //
             if (!asrWords[i1].equals(prevAsrWords[i1])) {
                 wordLastChanged.set(i1, currTime);
-                //Log.d("STABLE", "Word Changed: " + asrWords[i1] + " : " + prevAsrWords[i1]);
+                Log.d("STABLE", "Word Changed: " + asrWords[i1] + " : " + prevAsrWords[i1]);
                 break;
             }
 
@@ -764,18 +767,18 @@ public class SpeechRecognizer {
                     newStableHyp = true;
 
                     resultSet.add(asrWords[i1]);
-                    //Log.d("STABLE", "New word: " + asrWords[i1]);
+                    Log.d("STABLE", "New word: " + asrWords[i1]);
                 }
                 // Don't look past the last word that hasn't passed its test
                 // i.e. we process stable words sequentially - this could be made
                 // optional if you want to have a look ahead.
                 //
                 else if (wordLastChanged.get(i1) != Long.MAX_VALUE) {
-                    //Log.d("STABLE", "unstable word: " + asrWords[i1]);
+                    Log.d("STABLE", "unstable word: " + asrWords[i1]);
                     break;
                 } else {
                     resultSet.add(asrWords[i1]);
-                    //Log.d("STABLE", "old word: " + asrWords[i1]);
+                    Log.d("STABLE", "old word: " + asrWords[i1]);
                 }
             }
         }
@@ -793,7 +796,7 @@ public class SpeechRecognizer {
             eventManager.updateStartTime(TCONST.TIMEDWORD_EVENT,
                     TCONST.TIMEDSILENCE_EVENT | TCONST.TIMEDSOUND_EVENT);
 
-            //Log.d("STABLE", "Processing Hypothesis" + TextUtils.join(" ", resultSet));
+            Log.d("STABLE", "Processing Hypothesis" + TextUtils.join(" ", resultSet));
 
             // If there is a new Hypothesis then process it in the subclass of ListenerBase
             try {
@@ -963,7 +966,8 @@ public class SpeechRecognizer {
 
         @Override
         protected void execute(ITutorListener listener) {
-            Log.d("ASR", "In Result Thread");
+
+            Log.d("ASR", "Handle Recognizer ResultEvent");
 
             switch(resultType) {
                 case TCONST.FINAL_HYPOTHESIS:

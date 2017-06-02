@@ -204,9 +204,13 @@ public class scene_queuedgraph extends scene_module {
 
                                 RoboTutor.logManager.postEvent_I(_logType, "target:node.queuedgraph,name:" + _nextAction.name + ",startstate:" + _moduleState + ",maptype:" + _nextAction.maptype + ",mapname:" + _nextAction.mapname);
 
-                                _nextAction.preEnter();
-                                _moduleState = _nextAction.applyNode();
-
+                                if(_nextAction.testFeatures()) {
+                                    _nextAction.preEnter();
+                                    _moduleState = _nextAction.applyNode();
+                                }
+                                else {
+                                    _moduleState = TCONST.DONE;
+                                }
                                 RoboTutor.logManager.postEvent_I(_logType, "target:node.queuedgraph,name:" + _nextAction.name + ",endstate:" + _moduleState);
 
                                 switch (_moduleState) {

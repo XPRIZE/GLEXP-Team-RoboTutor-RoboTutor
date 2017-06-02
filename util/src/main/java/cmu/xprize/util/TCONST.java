@@ -208,6 +208,8 @@ public class TCONST {
     public static final String FTR_USER_HEAR       = "FTR_USER_HEAR";
     public static final String FTR_USER_READ       = "FTR_USER_READ";
     public static final String FTR_USER_ECHO       = "FTR_USER_ECHO";
+    public static final String FTR_USER_READING    = "FTR_USER_READING";
+
     public static final String NARRATE_STORY       = "NARRATE_STORY";
     public static final String TRACK_NARRATION     = "TRACK_NARRATION";
     public static final String START_NARRATION     = "START_NARRATION";
@@ -235,6 +237,8 @@ public class TCONST {
 
     public static final String NEXT_PAGE                  = "NEXT_PAGE";
     public static final String NEXT_SCENE                 = "NEXT_SCENE";
+    public static final String NEXT_WORD                  = "NEXT_WORD";
+
 
     // Core log message types - anumation scenegraph and queued scenegraph
     //

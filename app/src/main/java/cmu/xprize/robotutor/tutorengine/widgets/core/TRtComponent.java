@@ -333,13 +333,17 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                         //
                         case TCONST.QUEUE:
 
-                            obj.applyNode();
+                            if(obj.testFeatures()) {
+                                obj.applyNode();
+                            }
                             break;
 
                         default:
 
-                            obj.preEnter();
-                            obj.applyNode();
+                            if(obj.testFeatures()) {
+                                obj.preEnter();
+                                obj.applyNode();
+                            }
                             break;
                     }
                 }
@@ -372,6 +376,12 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     @Override
     public void nextScene() {
         mTutor.mTutorGraph.post(this, TCONST.NEXTSCENE);
+    }
+
+
+    @Override
+    public void nextNode() {
+        mTutor.mSceneGraph.post(this, TCONST.NEXT_NODE);
     }
 
 
@@ -623,7 +633,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
     //************************************************************************
     //************************************************************************
-    // publish component state data - START
+    // IPublisher - START
 
     @Override
     public void publishState() {
