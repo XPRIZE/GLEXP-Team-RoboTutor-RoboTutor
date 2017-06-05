@@ -133,6 +133,20 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         //
         super.onCreate(null);
 
+
+        // Catch all errors and cause a clean exit -
+        // TODO: this doesn't work as expected
+        //
+//        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+//
+//            @Override
+//            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
+//
+//                System.exit(2);
+//            }
+//        });
+
+
         PACKAGE_NAME = getApplicationContext().getPackageName();
         ACTIVITY     = this;
 
