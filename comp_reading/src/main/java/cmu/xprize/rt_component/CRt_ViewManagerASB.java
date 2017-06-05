@@ -912,10 +912,10 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 mParent.nextNode();
                 break;
 
-
+            case TCONST.SPEAK_EVENT:
             case TCONST.UTTERANCE_COMPLETE_EVENT:
 
-                mParent.applyBehavior(TCONST.UTTERANCE_COMPLETE_EVENT);
+                mParent.applyBehavior(command);
                 break;
 
         }
@@ -1499,7 +1499,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                     logString += "VIRTUAL | ";
                 }
             }
-            Log.i("ASR", "Update New HypSet: " + logString);
 
             while (mHeardWord < heardWords.length) {
 
@@ -1524,6 +1523,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                     break;
                 }
             }
+
+            Log.i("ASR", "Update New HypSet: " + logString + " - Attempt: " + attemptNum);
 
             // Publish the outcome
             mParent.publishValue(TCONST.RTC_VAR_ATTEMPT, attemptNum);
