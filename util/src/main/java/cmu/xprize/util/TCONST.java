@@ -214,6 +214,8 @@ public class TCONST {
     public static final String TRACK_NARRATION     = "TRACK_NARRATION";
     public static final String START_NARRATION     = "START_NARRATION";
     public static final String SPEAK_UTTERANCE     = "SPEAK_UTTERANCE";
+    public static final String SPEAK_EVENT         = "SPEAK_EVENT";
+
     public static final int    INITSPLIT           = -1;
     public static final String SENTENCE_SPACE      = "  ";
     public static final String WORD_SPACE          = " ";
