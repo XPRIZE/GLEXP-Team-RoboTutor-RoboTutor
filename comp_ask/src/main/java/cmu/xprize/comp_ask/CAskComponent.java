@@ -25,6 +25,7 @@ import android.graphics.PointF;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -44,10 +45,11 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.GRAPH_MSG;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 
-public class CAskComponent extends FrameLayout implements ILoadableObject, View.OnClickListener  {
+public class CAskComponent extends FrameLayout implements ILoadableObject, View.OnTouchListener {
 
     protected Context               mContext;
     protected String                packageName;
@@ -58,7 +60,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
     protected IButtonController     mButtonController;
 
-    static private boolean          SINGLE_SELECT = false;
+    static private boolean          SINGLE_SELECT = true;
 
     protected LocalBroadcastManager bManager;
 
@@ -253,8 +255,22 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
     }
 
 
-    @Override
-    public void onClick(View view) {
+
+    public void enableButtons(boolean enable) {
+
+        for(View view : buttonList) {
+            view.setOnTouchListener(enable? this:null);
+            view.setClickable(enable);
+        }
+    }
+
+
+
+    /**
+     *
+     * @param view
+     */
+    private void startTouch(View view) {
 
         Log.v(QGRAPH_MSG, "event.click: " + " CAskComponent: button selected");
 
@@ -276,17 +292,68 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
     }
 
 
-    public void enableButtons(boolean enable) {
-
-        for(View view : buttonList) {
-            view.setOnClickListener(enable? this:null);
-            view.setClickable(enable);
-
-        }
+    /**
+     * Update the glyph path if motion is greater than tolerance - remove jitter
+     *
+     * @param x
+     * @param y
+     */
+    private void moveTouch(float x, float y) {
     }
 
 
+    /**
+     * End the current glyph path
+     * TODO: Manage debouncing
+     *
+     */
+    private void endTouch(float x, float y) {
+    }
+
+
+    public boolean onTouch(View view, MotionEvent event) {
+        PointF     p;
+        boolean    result = false;
+        long       delta;
+        final int  action = event.getAction();
+
+        // inhibit input while the recognizer is thinking
+        //
+        result = true;
+
+        float x = event.getX();
+        float y = event.getY();
+
+        switch (event.getAction()) {
+
+            case MotionEvent.ACTION_DOWN:
+
+                startTouch(view);
+                view.setPressed(true);
+
+                result = true;
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+
+                result = true;
+                break;
+
+            case MotionEvent.ACTION_UP:
+                result = true;
+                break;
+        }
+
+        return result;
+    }
+
+
+
+
+
     //************ Serialization
+
+
 
 
 

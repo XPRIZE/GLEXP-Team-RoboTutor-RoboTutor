@@ -109,18 +109,24 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
         bManager.sendBroadcast(msg);
     }
 
-    @Override
-    public void doAskButtonAction(String actionid) {
-    }
+
+
+    //************************************************************************
+    //************************************************************************
+    // IButtonController Interface START
 
     @Override
     public void doDebugLaunchAction(String debugTutor) {
 
     }
 
+    @Override
     public void doButtonBehavior(String buttonid) {
     }
 
+    @Override
+    public void doAskButtonAction(String actionid) {
+    }
 
     /**
      * The session manager set the \<varname\>.intent and intentData scoped variables
@@ -131,6 +137,12 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
      */
     public void doLaunch(String intent, String intentData, String dataSource) {
     }
+
+    // IButtonController Interface END
+    //************************************************************************
+    //************************************************************************
+
+
 
     //************************************************************************
     //************************************************************************

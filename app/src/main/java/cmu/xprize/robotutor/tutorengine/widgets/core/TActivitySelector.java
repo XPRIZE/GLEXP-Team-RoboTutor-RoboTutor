@@ -230,11 +230,18 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     }
 
 
+    public void enableAskButtons(Boolean enable) {
+
+        askButtonsEnabled = true;
+    }
+
+
     public void rippleDescribe() {
         _describeIndex = 0;
 
         describeNext();
     }
+
 
     public void describeNext() {
 
@@ -259,6 +266,11 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         }
     }
 
+
+
+    //************************************************************************
+    //************************************************************************
+    // IButtonController Interface START
 
     @Override
     public void doAskButtonAction(String actionid) {
@@ -286,15 +298,10 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         }
     }
 
-    public void enableAskButtons(Boolean enable) {
-
-        askButtonsEnabled = true;
-    }
-
-
     /** This allows us to update the current tutor for a given skill from the CDebugComponent
      *
       */
+    @Override
     public void doDebugLaunchAction(String debugTutor) {
 
         publishValue(AS_CONST.VAR_BUT_BEHAVIOR, debugTutor);
@@ -636,6 +643,34 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     }
 
 
+    /**
+     * The session manager set the \<varname\>.intent and intentData scoped variables
+     * for use by the scriptable Launch command. see type_action
+     *
+     * @param intent
+     * @param intentData
+     */
+    @Override
+    public void doLaunch(String intent, String intentData, String dataSource) {
+
+        RoboTutor.SELECTOR_MODE = TCONST.FTR_DIFFICULTY_ASSESS;
+
+        // update the response variable  "<Sresponse>.value"
+
+        publishValue(VAR_INTENT, intent);
+        publishValue(VAR_INTENTDATA, intentData);
+        publishValue(VAR_DATASOURCE, dataSource);
+
+        applyBehavior(LAUNCH_EVENT);
+    }
+
+
+    // IButtonController Interface END
+    //************************************************************************
+    //************************************************************************
+
+
+
     //***********************************************************
     // ITutorLogger - Start
 
@@ -702,27 +737,6 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     //***********************************************************
 
 
-
-    /**
-     * The session manager set the \<varname\>.intent and intentData scoped variables
-     * for use by the scriptable Launch command. see type_action
-     *
-     * @param intent
-     * @param intentData
-     */
-    @Override
-    public void doLaunch(String intent, String intentData, String dataSource) {
-
-        RoboTutor.SELECTOR_MODE = TCONST.FTR_DIFFICULTY_ASSESS;
-
-        // update the response variable  "<Sresponse>.value"
-
-        publishValue(VAR_INTENT, intent);
-        publishValue(VAR_INTENTDATA, intentData);
-        publishValue(VAR_DATASOURCE, dataSource);
-
-        applyBehavior(LAUNCH_EVENT);
-    }
 
 
     //************************************************************************

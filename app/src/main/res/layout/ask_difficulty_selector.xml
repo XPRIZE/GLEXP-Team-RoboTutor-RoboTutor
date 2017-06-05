@@ -12,9 +12,9 @@
         android:id="@+id/Sbutton1"
         android:layout_width="match_parent"
         android:scaleType="fitCenter"
-        android:padding="0dp"
+        android:padding="10dp"
         app:layout_heightPercent="33%"
-        app:layout_widthPercent="33%"
+        app:layout_widthPercent="50%"
         android:background="@null"
         />
 
@@ -23,9 +23,9 @@
         android:layout_below="@id/Sbutton1"
         android:scaleType="fitCenter"
         android:layout_width="match_parent"
-        android:padding="0dp"
+        android:padding="10dp"
         app:layout_heightPercent="33%"
-        app:layout_widthPercent="33%"
+        app:layout_widthPercent="50%"
         android:background="@null"/>
 
     <ImageButton
@@ -33,43 +33,30 @@
         android:layout_below="@id/Sbutton2"
         android:scaleType="fitCenter"
         android:layout_width="match_parent"
-        android:padding="0dp"
+        android:padding="10dp"
         app:layout_heightPercent="33%"
-        app:layout_widthPercent="33%"
+        app:layout_widthPercent="50%"
         android:background="@null"/>
 
     <ImageButton
         android:id="@+id/Sbutton4"
-        android:layout_toRightOf="@id/Sbutton2"
-        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/Sbutton1"
         android:scaleType="fitCenter"
         android:layout_width="match_parent"
-        android:padding="0dp"
+        android:padding="10dp"
         app:layout_heightPercent="50%"
-        app:layout_widthPercent="33%"
+        app:layout_widthPercent="50%"
         android:background="@null"/>
 
     <ImageButton
         android:id="@+id/Sbutton5"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@id/Sbutton4"
+        android:layout_toRightOf="@id/Sbutton1"
+        android:layout_below="@id/Sbutton4"
         android:scaleType="fitCenter"
         android:layout_width="match_parent"
-        android:padding="0dp"
+        android:padding="10dp"
         app:layout_heightPercent="50%"
-        app:layout_widthPercent="33%"
-        android:layout_centerVertical="true"
-        android:background="@null"/>
-
-    <ImageButton
-        android:id="@+id/Sbutton6"
-        android:layout_toRightOf="@id/Sbutton4"
-        android:layout_below="@id/Sbutton5"
-        android:scaleType="fitCenter"
-        android:layout_width="match_parent"
-        android:padding="0dp"
-        app:layout_heightPercent="50%"
-        app:layout_widthPercent="33%"
+        app:layout_widthPercent="50%"
         android:layout_centerVertical="true"
         android:background="@null"/>
 
