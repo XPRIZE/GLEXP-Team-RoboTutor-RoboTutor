@@ -1500,7 +1500,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 }
             }
 
-            while (mHeardWord < heardWords.length) {
+            while ((mCurrWord  < wordsToSpeak.length) &&
+                   (mHeardWord < heardWords.length)) {
 
                 if (wordsToSpeak[mCurrWord].equals(heardWords[mHeardWord].hypWord)) {
 
@@ -1533,8 +1534,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             mParent.onASREvent(TCONST.RECOGNITION_EVENT);
         }
         catch(Exception e) {
-            // TODO: This seems to be because the activity is not destroyed and the ASR continues
-            Log.d("ASR", "onUpdate Fault: " + e);
+
+            Log.e("ASR", "onUpdate Fault: " + e);
         }
     }
 
