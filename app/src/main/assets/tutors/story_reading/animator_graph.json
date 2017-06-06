@@ -15,7 +15,7 @@
         "SPEAK_WORD_BEHAVIOR": {
           "type": "QUEUE",
           "COMMENT": "Speak the current word and continue to next.",
-          "preenter": ["CLR_ONCLICK","TIMER_CANCEL_HINT_WORD"],
+          "preenter": ["CLR_ONCLICK","TIMER_CANCEL_HINT_BUTTON"],
           "reuse": true,
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#prompt,value#SPEAK_WORD_BEHAVIOR:String", "features":""},
@@ -139,14 +139,14 @@
         "LISTEN":{
           "COMMENT":"",
           "type":"node",
-          "preenter":["SET_UTTERANCE_BEHAVIOR","SET_HYPOTHESIS_BEHAVIOR","SET_ONCLICK_SPEAK_WORD","TIMER_HINT_WORD"],
+          "preenter":["SET_UTTERANCE_BEHAVIOR","SET_HYPOTHESIS_BEHAVIOR","SET_ONCLICK_SPEAK_WORD","TIMER_HINT_BUTTON"],
           "maptype":"moduleMap",
           "mapname": "LISTENING",
-          "preexit" :["CLR_HYPOTHESIS_BEHAVIOR","CLR_ONCLICK","TIMER_CANCEL_HINT_WORD"],
+          "preexit" :["CLR_HYPOTHESIS_BEHAVIOR","CLR_ONCLICK","TIMER_CANCEL_HINT_BUTTON"],
           "edges":
           [
             {"constraint":"FTR_RIGHT","edge":"CORRECT"},
-            {"constraint":"SECOND_ATTEMPT","edge":"WRONG_2"},
+            {"constraint":"SECOND_ERROR","edge":"WRONG_2"},
             {"constraint":"","edge":"WRONG"}
           ]
         },
@@ -431,8 +431,8 @@
         "TIMER_HINT_WORD":        {"type": "TIMER", "id":"HintWordTimer", "startdelay":"0", "period":"3000", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"SPEAK_WORD_BEHAVIOR", "features": "FTR_USER_READ|FTR_USER_READING" },
         "TIMER_CANCEL_HINT_WORD": {"type": "TIMER", "id":"HintWordTimer", "action":"CANCEL", "features": "" },
 
-        //        "TIMER_HINT_WORD":        {"type": "TIMER", "id":"HintWordTimer", "startdelay":"0", "period":"3500", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"CONFIG_SPEAK_BUTTON", "features": "FTR_MANUAL" },
-//        "TIMER_CANCEL_HINT_WORD": {"type": "TIMER", "id":"HintWordTimer", "action":"CANCEL", "features": "FTR_MANUAL" },
+        "TIMER_HINT_BUTTON":        {"type": "TIMER", "id":"HintWordTimer", "startdelay":"0", "period":"3500", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"CONFIG_SPEAK_BUTTON", "features": "FTR_USER_READ|FTR_USER_READING" },
+        "TIMER_CANCEL_HINT_BUTTON": {"type": "TIMER", "id":"HintWordTimer", "action":"CANCEL", "features": "" },
 
         "FLIP_BUTTON_ENABLE":  {"type": "COMMAND", "id":"SstoryReading", "method":"setPageFlipButton",     "parms": "ENABLE:String", "features": "" },
         "FLIP_BUTTON_DISABLE": {"type": "COMMAND", "id":"SstoryReading", "method":"setPageFlipButton",     "parms": "DISABLE:String", "features": "" },
@@ -471,14 +471,14 @@
 
         "COMMENT": "@@@@@  CConstraints @@@@@ ",
 
-        "SECOND_ATTEMPT": {
+        "FIRST_ERROR": {
           "type": "CONDITION",
           "If": "{{SstoryReading.attempt}}==1",
           "Then":"true",
           "Else":"false"
         },
 
-        "THIRD_ATTEMPT": {
+        "SECOND_ERROR": {
           "type": "CONDITION",
           "If": "{{SstoryReading.attempt}}==2",
           "Then":"true",
