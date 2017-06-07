@@ -76,7 +76,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         mContext = context;
 
         gridView   = (GridView) findViewById(R.id.SdebugGrid);
-        customView = (CSm_Component) findViewById(R.id.SsmComponent);
+        customView = (CSm_Component) findViewById(R.id.SdbgComponent);
 
         mContainer = (ViewGroup) findViewById(R.id.SdebugContainer);
 

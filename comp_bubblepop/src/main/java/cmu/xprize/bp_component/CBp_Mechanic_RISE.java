@@ -204,120 +204,127 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
                 launched = true;
 
-                do {
-                    colorNdx = (int) (Math.random() * BP_CONST.bubbleColors.length);
-                } while (colorNdx == _prevColorNdx);
+                try {
 
-                _prevColorNdx = colorNdx;
+                    do {
+                        colorNdx = (int) (Math.random() * BP_CONST.bubbleColors.length);
+                    } while (colorNdx == _prevColorNdx);
 
-                String correctVal = _currData.answer;
+                    _prevColorNdx = colorNdx;
 
-                nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
-                nextBubble.setScale(getRandInRange(_scaleRange));
+                    String correctVal = _currData.answer;
 
-                // Cycle on the indexes to display
-                //
-                stimNdx = (stimNdx + 1) % _currData.response_set.length;
+                    nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
+                    nextBubble.setScale(getRandInRange(_scaleRange));
 
-                String responseVal = _currData.response_set[stimNdx];
-                String responseTyp = _currData.responsetype_set[stimNdx];
+                    // Cycle on the indexes to display
+                    //
+                    stimNdx = (stimNdx + 1) % _currData.response_set.length;
 
-                float xRange[] = null;
-                float xPos;
-                long timeOfFlight = 0;
+                    String responseVal = _currData.response_set[stimNdx];
+                    String responseTyp = _currData.responsetype_set[stimNdx];
 
-                switch (responseTyp) {
+                    float xRange[] = null;
+                    float xPos;
+                    long timeOfFlight = 0;
 
-                    case BP_CONST.REFERENCE:
+                    switch (responseTyp) {
 
-                        //Moved set color and scale here after text has been set
-                        nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
-                        nextBubble.setScale(getRandInRange(_scaleRange));
+                        case BP_CONST.REFERENCE:
 
-                        int[] shapeSet = BP_CONST.drawableMap.get(responseVal);
+                            //Moved set color and scale here after text has been set
+                            nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
+                            nextBubble.setScale(getRandInRange(_scaleRange));
 
-                        nextBubble.configData(responseVal, correctVal);
-                        nextBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
-                        xRange = new float[]{0, mParent.getWidth() - (BP_CONST.BUBBLE_DESIGN_RADIUS * nextBubble.getAssignedScale())};
-                        timeOfFlight = (long) (_travelTime / nextBubble.getAssignedScale());
-                        break;
+                            int[] shapeSet = BP_CONST.drawableMap.get(responseVal);
 
-                    case BP_CONST.TEXTDATA:
+                            nextBubble.configData(responseVal, correctVal);
+                            nextBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
+                            xRange = new float[]{0, mParent.getWidth() - (BP_CONST.BUBBLE_DESIGN_RADIUS * nextBubble.getAssignedScale())};
+                            timeOfFlight = (long) (_travelTime / nextBubble.getAssignedScale());
+                            break;
 
-                        nextBubble.configData(responseVal, correctVal);
-                        nextBubble.setContents(0, responseVal);
+                        case BP_CONST.TEXTDATA:
 
-                        Paint paint = new Paint();
+                            nextBubble.configData(responseVal, correctVal);
+                            nextBubble.setContents(0, responseVal);
 
-                        //Width of the string
-                        float width = paint.measureText(nextBubble.getTextView().getText().toString());
+                            Paint paint = new Paint();
 
-                        //Converts width of string to width of bubble (since getWidth() doesn't calculate fast enough)
-                        float newWidth = width * (float) 6.75 + 150;
+                            //Width of the string
+                            float width = paint.measureText(nextBubble.getTextView().getText().toString());
 
-                        xRange = new float[]{0, mParent.getWidth() - (newWidth * nextBubble.getAssignedScale())};
-                        timeOfFlight = (long) (_travelTime);
+                            //Converts width of string to width of bubble (since getWidth() doesn't calculate fast enough)
+                            float newWidth = width * (float) 6.75 + 150;
 
-                        //Moved set color and scale here after text has been set
-                        nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
-                        nextBubble.setScale(getRandInRange(_scaleRange));
+                            xRange = new float[]{0, mParent.getWidth() - (newWidth * nextBubble.getAssignedScale())};
+                            timeOfFlight = (long) (_travelTime);
 
-                        break;
+                            //Moved set color and scale here after text has been set
+                            nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
+                            nextBubble.setScale(getRandInRange(_scaleRange));
+
+                            break;
+                    }
+
+                    do {
+                        xPos = getRandInRange(xRange);
+                    } while (Math.abs(xPos - _prevXpos) < nextBubble.getWidth());
+
+                    _prevXpos = xPos;
+
+                    nextBubble.setPosition((int) xPos, mParent.getHeight());
+                    nextBubble.setAlpha(1.0f);
+
+                    PointF wayPoints[] = new PointF[1];
+                    PointF posFinal = new PointF();
+
+                    posFinal.x = nextBubble.getX();
+                    posFinal.y = -BP_CONST.BUBBLE_DESIGN_RADIUS * 2.5f * nextBubble.getAssignedScale();
+
+                    wayPoints[0] = posFinal;
+
+                    Log.d(TAG, "Time of Flight: " + timeOfFlight);
+                    Log.d(TAG, "Final YPos: " + posFinal.y);
+
+                    Animator translator = CAnimatorUtil.configTranslate(nextBubble, timeOfFlight, 0, wayPoints);
+
+                    translator.addListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationCancel(Animator arg0) {
+                            //Functionality here
+                        }
+
+                        @Override
+                        public void onAnimationStart(Animator arg0) {
+                            //Functionality here
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+
+                            CBubble bubble = translators.get(animation);
+                            translators.remove(animation);
+
+                            bubble.setOnScreen(false);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator arg0) {
+                            //Functionality here
+                        }
+                    });
+
+                    setupWiggle(nextBubble, 0);
+                    nextBubble.setOnClickListener(CBp_Mechanic_RISE.this);
+
+                    translators.put(translator, nextBubble);
+                    translator.start();
                 }
+                catch(Exception ex) {
 
-                do {
-                    xPos = getRandInRange(xRange);
-                } while (Math.abs(xPos - _prevXpos) < nextBubble.getWidth());
-
-                _prevXpos = xPos;
-
-                nextBubble.setPosition((int) xPos, mParent.getHeight());
-                nextBubble.setAlpha(1.0f);
-
-                PointF wayPoints[] = new PointF[1];
-                PointF posFinal    = new PointF();
-
-                posFinal.x = nextBubble.getX();
-                posFinal.y = -BP_CONST.BUBBLE_DESIGN_RADIUS * 2.5f * nextBubble.getAssignedScale();
-
-                wayPoints[0] = posFinal;
-
-                Log.d(TAG, "Time of Flight: " + timeOfFlight);
-                Log.d(TAG, "Final YPos: " + posFinal.y);
-
-                Animator translator = CAnimatorUtil.configTranslate(nextBubble, timeOfFlight, 0, wayPoints);
-
-                translator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationCancel(Animator arg0) {
-                        //Functionality here
-                    }
-
-                    @Override
-                    public void onAnimationStart(Animator arg0) {
-                        //Functionality here
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-
-                        CBubble bubble = translators.get(animation);
-                        translators.remove(animation);
-
-                        bubble.setOnScreen(false);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator arg0) {
-                        //Functionality here
-                    }
-                });
-
-                setupWiggle(nextBubble, 0);
-                nextBubble.setOnClickListener(CBp_Mechanic_RISE.this);
-
-                translators.put(translator, nextBubble);
-                translator.start();
+                    Log.e(TAG, "Error : " + ex);
+                }
             }
         }
 

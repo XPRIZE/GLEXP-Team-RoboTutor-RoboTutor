@@ -57,11 +57,6 @@ public class TButton extends Button implements ITutorObjectImpl {
         mSceneObject.init(context, attrs);
     }
 
-    @Override
-    public void onDestroy() {
-        mSceneObject.onDestroy();
-    }
-
 
 
     public void setDataSource(String dataSource) {
@@ -73,13 +68,6 @@ public class TButton extends Button implements ITutorObjectImpl {
     //************************************************************************
     // Tutor methods  Start
 
-
-
-    @Override
-    public void setVisibility(String visible) {
-
-        mSceneObject.setVisibility(visible);
-    }
 
     //** Special Object methods for missing method parameter type combinations -
     //   e.g. This is the simplest way instead of using CharSequence
@@ -101,6 +89,10 @@ public class TButton extends Button implements ITutorObjectImpl {
     //************************************************************************
 
 
+
+    //************************************************************************
+    //************************************************************************
+    // ITutorObjectImpl  Start
 
     @Override
     public void setName(String name) {
@@ -124,6 +116,17 @@ public class TButton extends Button implements ITutorObjectImpl {
 
     @Override
     public void onCreate() {}
+
+    @Override
+    public void onDestroy() {
+        mSceneObject.onDestroy();
+    }
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
 
     @Override
     public void setNavigator(ITutorGraph navigator) {
@@ -154,5 +157,9 @@ public class TButton extends Button implements ITutorObjectImpl {
     public void setAlpha(Float alpha) {
         mSceneObject.setAlpha(alpha);
     }
+
+    // ITutorObjectImpl  End
+    //************************************************************************
+    //************************************************************************
 
 }

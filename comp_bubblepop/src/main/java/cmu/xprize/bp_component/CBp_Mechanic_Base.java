@@ -621,6 +621,10 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 respSize = getRandInRange(data.respCountRange);
             }
 
+            //***** build a presentation set from the response sample set
+            //
+            mComponent.preProcessQuestion();
+
             // Get the number of response samples available.
             //
             int setSize = mComponent.wrk_responseSet.size();
