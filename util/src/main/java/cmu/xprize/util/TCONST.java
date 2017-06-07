@@ -254,18 +254,6 @@ public class TCONST {
     public static final String TYPE_AUDIO                 = "type_audio";
     public static final String TRACK_SEGMENT              = "TRACK_SEGMENT";
 
-    public static final String MASK_SHOWHIDE              = "MASK_SHOWHIDE";
-    public static final String MASK_ADDEXCL               = "MASK_ADDEXCL";
-    public static final String MASK_CLREXCL               = "MASK_CLREXCL";
-    public static final String MASK_SETCOLOR              = "MASK_SETCOLOR";
-    public static final String MASK_SETALPHA              = "MASK_SETALPHA";
-    public static final String MASK_TYPE                  = "MASK_TYPE";
-    public static final String MASK_X                     = "MASK_X";
-    public static final String MASK_Y                     = "MASK_Y";
-    public static final String MASK_R                     = "MASK_R";
-    public static final String MASK_COLOR                 = "MASK_COLOR";
-    public static final String MASK_ALPHA                 = "MASK_ALPHA";
-
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
     //
     // This is used to map "states" to colors

@@ -24,6 +24,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.FrameLayout;
@@ -77,6 +78,9 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
     private HashMap                 queueMap    = new HashMap();
     private boolean                 _qDisabled  = false;
 
+    protected LocalBroadcastManager   bManager;
+
+
     // Working data sets
     public ArrayList<String>        wrk_responseSet = null;             // set of response tems
     public ArrayList<String>        wrk_respTypeSet = null;             // text/reference - for mixed response sets
@@ -89,7 +93,6 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
     public ArrayList<String>        wrk_stimulusSet     = null;         // set of stimulus items (questions)
     public ArrayList<String>        wrk_stimTypeSet     = null;         // text/reference - for mixed stimulus items
     public ArrayList<String[]>      wrk_stimulus_script = null;         // List of uttereances describing each question
-
 
 
     // Note: Having independent response sets and answer sets means that the response sets are not limited to the
@@ -122,6 +125,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
     public CBpBackground            view_background     = null;         // Set specific background
     public String                   banner_color        = null;         // Set specific banner color
+    public int                      mask_alpha          = 205;          // Mask alpha
 
 
     static final String TAG = "CBP_Component";
@@ -178,6 +182,10 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         // Get the letterboxed game container
         //
         Scontent = (CBP_LetterBoxLayout) findViewById(R.id.Scontent);
+
+        // Capture the local broadcast manager
+        //
+        bManager = LocalBroadcastManager.getInstance(mContext);
 
         // Allow onDraw to be called to start animations
         //

@@ -20,6 +20,8 @@
 package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.util.Log;
 
@@ -35,6 +37,7 @@ import cmu.xprize.bp_component.BP_CONST;
 import cmu.xprize.bp_component.CBP_Component;
 import cmu.xprize.bp_component.CBp_Data;
 import cmu.xprize.bp_component.CBubble;
+import cmu.xprize.comp_clickmask.CM_CONST;
 import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
@@ -59,6 +62,16 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.comp_clickmask.CM_CONST.EXCLUDE_CIRCLE;
+import static cmu.xprize.comp_clickmask.CM_CONST.MASK_ADDEXCL;
+import static cmu.xprize.comp_clickmask.CM_CONST.MASK_ALPHA;
+import static cmu.xprize.comp_clickmask.CM_CONST.MASK_CLREXCL;
+import static cmu.xprize.comp_clickmask.CM_CONST.MASK_R;
+import static cmu.xprize.comp_clickmask.CM_CONST.MASK_SETALPHA;
+import static cmu.xprize.comp_clickmask.CM_CONST.MASK_SHOWHIDE;
+import static cmu.xprize.comp_clickmask.CM_CONST.MASK_TYPE;
+import static cmu.xprize.comp_clickmask.CM_CONST.MASK_X;
+import static cmu.xprize.comp_clickmask.CM_CONST.MASK_Y;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
@@ -255,6 +268,71 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     }
 
 
+    /**
+     * Broadcast bubble exclusion and mask the screen during feedback
+     *
+     */
+    public void maskBubble() {
+
+        int[]   screenCoord = new int[2];
+        PointF  centerPoint = _touchedBubble.getCenterPosition();
+
+        getLocationOnScreen(screenCoord);
+
+        PointF centerPt = new PointF(screenCoord[0] + centerPoint.x, screenCoord[1] + centerPoint.y);
+
+        PointF center = Scontent.localToGlobal(centerPt);
+
+
+        // Add an exclusion around the bubble the (incorrect) user tapped
+        //
+        Intent msg = new Intent(MASK_ADDEXCL);
+
+        msg.putExtra(MASK_TYPE, EXCLUDE_CIRCLE);
+        msg.putExtra(MASK_X, (int)center.x);
+        msg.putExtra(MASK_Y, (int)center.y);
+        msg.putExtra(MASK_R, (int)(_touchedBubble.getScaledWidth()/2.0 * 1.15));
+
+        bManager.sendBroadcast(msg);
+
+
+        // Set the mask transparency
+        //
+        msg = new Intent(MASK_SETALPHA);
+        msg.putExtra(MASK_ALPHA, mask_alpha);
+
+        bManager.sendBroadcast(msg);
+
+
+        // Show the mask while the feedback is in progress
+        //
+        msg = new Intent(MASK_SHOWHIDE);
+        msg.putExtra(MASK_SHOWHIDE, true);
+
+        bManager.sendBroadcast(msg);
+    }
+
+
+    /**
+     * Clear the feedback mask
+     */
+    public void clearMask() {
+
+        Intent msg = new Intent(MASK_CLREXCL);
+        bManager.sendBroadcast(msg);
+
+        // Hide the mask
+        //
+        msg = new Intent(MASK_SHOWHIDE);
+        msg.putExtra(MASK_SHOWHIDE, false);
+
+        bManager.sendBroadcast(msg);
+    }
+
+
+
+
+
     //**********************************************************
     //**********************************************************
     //*****************  Scripting Interface
@@ -265,11 +343,23 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         switch (event) {
 
             case BP_CONST.PAUSE_ANIMATION:
+
                 post(BP_CONST.PAUSE_ANIMATION);
                 break;
 
             case BP_CONST.RESUME_ANIMATION:
+
                 post(BP_CONST.RESUME_ANIMATION);
+                break;
+
+            case BP_CONST.SHOW_MASK:
+
+                maskBubble();
+                break;
+
+            case BP_CONST.HIDE_MASK:
+
+                clearMask();
                 break;
 
             case BP_CONST.SHOW_SCORE:
