@@ -106,6 +106,9 @@ public class BP_CONST {
     public static final String QUEST_VAR          = ".questValue";
     public static final String ANSWER_VAR         = ".ansValue";
 
+    public static final String SHOW_MASK          = "SHOW_MASK";
+    public static final String HIDE_MASK          = "HIDE_MASK";
+
 
     static public HashMap<String, Integer> bubbleMap = new HashMap<String, Integer>();
 

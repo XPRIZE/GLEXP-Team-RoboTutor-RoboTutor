@@ -14,6 +14,8 @@
 package cmu.xprize.comp_clickmask;
 
 
+import android.graphics.PointF;
+
 public interface IMaskOwner {
 
     public void setMasked(boolean _mask);

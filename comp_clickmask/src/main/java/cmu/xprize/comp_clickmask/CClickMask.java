@@ -53,6 +53,7 @@ public class CClickMask extends View implements View.OnTouchListener {
     private Path                  mask;
     private RectF                 border   = new RectF();
     private ArrayList<CExclusion> exclusions;
+    private int[]                 _screenCoord = new int[2];
 
     private LocalBroadcastManager bManager;
     private ChangeReceiver        bReceiver;
@@ -60,17 +61,14 @@ public class CClickMask extends View implements View.OnTouchListener {
 
     public CClickMask(Context context) {
         super(context);
-        init(context, null);
     }
 
     public CClickMask(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init(context, attrs);
     }
 
     public CClickMask(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context, attrs);
     }
 
     protected void init(Context context, AttributeSet attrs) {
@@ -87,10 +85,10 @@ public class CClickMask extends View implements View.OnTouchListener {
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(getContext());
 
-        IntentFilter filter = new IntentFilter(TCONST.MASK_SHOWHIDE);
-        filter.addAction(TCONST.MASK_ADDEXCL);
-        filter.addAction(TCONST.MASK_CLREXCL);
-        filter.addAction(TCONST.MASK_SETALPHA);
+        IntentFilter filter = new IntentFilter(MASK_SHOWHIDE);
+        filter.addAction(MASK_ADDEXCL);
+        filter.addAction(MASK_CLREXCL);
+        filter.addAction(MASK_SETALPHA);
 
         bReceiver = new ChangeReceiver();
 
@@ -115,6 +113,9 @@ public class CClickMask extends View implements View.OnTouchListener {
 
     public void setMaskAlpha(int _alpha) {
 
+        if(_alpha > 255) _alpha = 255;
+        if(_alpha < 0)   _alpha = 0;
+
         mPaint.setAlpha(_alpha);
     }
 
@@ -135,43 +136,48 @@ public class CClickMask extends View implements View.OnTouchListener {
 
         public void onReceive (Context context, Intent intent) {
 
-            float[] point = intent.getFloatArrayExtra(TCONST.SCREENPOINT);
-
             switch(intent.getAction()) {
-                case TCONST.MASK_SHOWHIDE:
-                    Boolean showmask = intent.getBooleanExtra(TCONST.MASK_SHOWHIDE, false);
+                case MASK_SHOWHIDE:
+                    Boolean showmask = intent.getBooleanExtra(MASK_SHOWHIDE, false);
 
                     showHide(showmask);
                     break;
 
-                case TCONST.MASK_ADDEXCL:
-                    String exclusiontype = intent.getStringExtra(TCONST.MASK_TYPE);
+                case MASK_ADDEXCL:
+                    String exclusiontype = intent.getStringExtra(MASK_TYPE);
 
                     switch(exclusiontype) {
                         case EXCLUDE_CIRCLE:
-                            int exclusionx = intent.getIntExtra(TCONST.MASK_X, 0);
-                            int exclusiony = intent.getIntExtra(TCONST.MASK_Y, 0);
-                            int exclusionr = intent.getIntExtra(TCONST.MASK_R, 0);
+                            int exclusionx = intent.getIntExtra(MASK_X, 0);
+                            int exclusiony = intent.getIntExtra(MASK_Y, 0);
+                            int exclusionr = intent.getIntExtra(MASK_R, 0);
+
+                            // Translate to local coordinate space - i.e. relative to view
+                            //
+                            getLocationOnScreen(_screenCoord);
+
+                            exclusionx -= _screenCoord[0];
+                            exclusiony -= _screenCoord[1];
 
                             addExclusion(new CExclusion(exclusiontype, exclusionx, exclusiony, exclusionr));
                             break;
                     }
                     break;
 
-                case TCONST.MASK_CLREXCL:
+                case MASK_CLREXCL:
                     clearExclusions();
                     break;
 
-                case TCONST.MASK_SETCOLOR:
-                    int maskColor = intent.getIntExtra(TCONST.MASK_COLOR, 0);
+                case MASK_SETCOLOR:
+                    int maskColor = intent.getIntExtra(MASK_COLOR, 0);
 
                     setMaskColor(maskColor);
                     break;
 
-                case TCONST.MASK_SETALPHA:
-                    int maskAlpha = intent.getIntExtra(TCONST.MASK_ALPHA, 128);
+                case MASK_SETALPHA:
+                    int maskAlpha = intent.getIntExtra(MASK_ALPHA, 128);
 
-                    setMaskColor(maskAlpha);
+                    setMaskAlpha(maskAlpha);
                     break;
             }
         }
