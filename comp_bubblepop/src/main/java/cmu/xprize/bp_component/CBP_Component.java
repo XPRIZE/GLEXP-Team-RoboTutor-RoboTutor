@@ -395,8 +395,9 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
 
     /**
+     *
      */
-    private void preProcessQuestion() {
+    protected void preProcessQuestion() {
 
         // For each question we repopulate these arraylists
         // populate the working ArrayList so we can easily delete elements on demand
@@ -410,10 +411,6 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
 
     protected void selectRandResponse(CBp_Data data, int count, int ansIndex) {
-
-        //***** build a presentation set from the response sample set
-        //
-        preProcessQuestion();
 
         // First find the actual answer in the response set and trim it out
         // to avoid duplicate answer items in the respsonse set
@@ -435,6 +432,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         }
 
         // Reset the presenation / response set
+        //
         data.response_set     = new String[count];
         data.responsetype_set = new String[count];
         if(data.response_script != null)
@@ -442,33 +440,43 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
         // Build a presentation set from the responseset samples
         //
+
         for (int i1 = 0; i1 < count ; i1++) {
 
-            int randIndex = (int) (Math.random() * wrk_responseSet.size());
-
-            data.response_set[i1]     = wrk_responseSet.get(randIndex);
-            data.responsetype_set[i1] = wrk_respTypeSet.get(randIndex);
-            if(wrk_response_script != null)
-                data.response_script[i1]  = wrk_response_script.get(randIndex);
-
-            // If not using replacement - i.e. if responses may NOT be repeated then remove
-            // the response entry
+            // Place the answer at the requested location in the presentation array
             //
-            if(!response_replacement) {
+            if(i1 == ansIndex) {
 
-                wrk_responseSet.remove(randIndex);
-                wrk_respTypeSet.remove(randIndex);
-                if(wrk_response_script != null)
-                    wrk_response_script.remove(randIndex);
+                data.response_set[ansIndex]     = data.stimulus;
+                data.responsetype_set[ansIndex] = data.stimulus_type;
+                if(data.response_script != null)
+                    data.response_script[ansIndex]  = data.stimulus_script;
+            }
+
+            // Otherwise place a random choice from the responseSet with or without
+            // replacement
+            //
+            else {
+
+                int randIndex = (int) (Math.random() * wrk_responseSet.size());
+
+                data.response_set[i1] = wrk_responseSet.get(randIndex);
+                data.responsetype_set[i1] = wrk_respTypeSet.get(randIndex);
+                if (wrk_response_script != null)
+                    data.response_script[i1] = wrk_response_script.get(randIndex);
+
+                // If not using replacement - i.e. if responses may NOT be repeated then remove
+                // the response entry
+                //
+                if (!response_replacement) {
+
+                    wrk_responseSet.remove(randIndex);
+                    wrk_respTypeSet.remove(randIndex);
+                    if (wrk_response_script != null)
+                        wrk_response_script.remove(randIndex);
+                }
             }
         }
-
-        // Place the answer at the requested location in the presentation array
-        //
-        data.response_set[ansIndex]     = data.stimulus;
-        data.responsetype_set[ansIndex] = data.stimulus_type;
-        if(data.response_script != null)
-            data.response_script[ansIndex]  = data.stimulus_script;
     }
 
 

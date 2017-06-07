@@ -21,8 +21,7 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener, IE
 
     private View                mOwnerView;
 
-    private String              mTutorId;
-    private String              mInstanceId;
+    private String              mInstanceId = null;
     private Context             mContext;
 
     protected ITutorSceneImpl   mParent;
@@ -52,14 +51,6 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener, IE
 //        System.out.println(context.getResources().getResourceName(mOwnerView.getId()));
 //        System.out.println(context.getResources().getResourcePackageName(mOwnerView.getId()));
 //        System.out.println(context.getResources().getResourceTypeName(mOwnerView.getId()));
-
-        // Load attributes
-        try {
-            mTutorId = context.getResources().getResourceEntryName(mOwnerView.getId());
-        }
-        catch(Exception e) {
-            Log.w(TAG, "Warning: Unnamed Delegate" + e);
-        }
 
     }
 
@@ -119,9 +110,23 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener, IE
 
     // Tutor Object Methods
     @Override
-    public void   setName(String name) { mTutorId = name; }
+    public void   setName(String name) { mInstanceId = name; }
     @Override
-    public String name() { return mTutorId; }
+    public String name() {
+
+        // Some dynamically created objects won't have a name on creation (they aren't loaded from XML)
+        // so we get their names on first request.
+        //
+        try {
+            if(mInstanceId == null) {
+                mInstanceId = mContext.getResources().getResourceEntryName(mOwnerView.getId());
+            }
+        }
+        catch(Exception e) {
+            Log.w(TAG, "Warning: Unnamed Delegate" + e);
+        }
+        return mInstanceId;
+    }
 
     @Override
     public void setParent(ITutorSceneImpl parent) { mParent = parent; }

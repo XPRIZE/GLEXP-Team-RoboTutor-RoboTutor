@@ -211,10 +211,6 @@ public class CTutorEngine implements ILoadableObject2 {
             tutorBindings = bindingPatterns.get(defTutor);
         }
 
-        // Sample: how to launch a tutor with a json datasource
-//        String datas = "{\"scene_bindings\" : {\"session_manager\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SsmComponent\",\"datasource\": \"[file]sm_data.json\"}]}}}";
-//        launch(defTutor, "native", datas, "" );
-
         // These features are based on the current tutor selection model
         // When no tutor has been selected it should run the tutor select
         // and when it finishes it should run the difficulty select until
