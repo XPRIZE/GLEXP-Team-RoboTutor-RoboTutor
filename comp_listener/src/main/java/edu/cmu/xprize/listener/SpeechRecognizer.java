@@ -471,6 +471,7 @@ public class SpeechRecognizer {
                     // We always start the thread in the paused state
                     //
                     if (isPausedRecognizer) {
+
                         try {
                             recorder.stop();
                             isRecording = false;

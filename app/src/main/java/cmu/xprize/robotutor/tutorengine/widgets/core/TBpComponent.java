@@ -65,6 +65,7 @@ import cmu.xprize.util.TCONST;
 import static cmu.xprize.comp_clickmask.CM_CONST.EXCLUDE_CIRCLE;
 import static cmu.xprize.comp_clickmask.CM_CONST.MASK_ADDEXCL;
 import static cmu.xprize.comp_clickmask.CM_CONST.MASK_ALPHA;
+import static cmu.xprize.comp_clickmask.CM_CONST.MASK_ANIMATE;
 import static cmu.xprize.comp_clickmask.CM_CONST.MASK_CLREXCL;
 import static cmu.xprize.comp_clickmask.CM_CONST.MASK_R;
 import static cmu.xprize.comp_clickmask.CM_CONST.MASK_SETALPHA;
@@ -72,8 +73,10 @@ import static cmu.xprize.comp_clickmask.CM_CONST.MASK_SHOWHIDE;
 import static cmu.xprize.comp_clickmask.CM_CONST.MASK_TYPE;
 import static cmu.xprize.comp_clickmask.CM_CONST.MASK_X;
 import static cmu.xprize.comp_clickmask.CM_CONST.MASK_Y;
+import static cmu.xprize.util.TCONST.INVISIBLE;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
+import static cmu.xprize.util.TCONST.VISIBLE;
 
 public class TBpComponent extends CBP_Component implements IBehaviorManager, ITutorObjectImpl, IDataSink, IEventSource, IPublisher, ITutorLogger {
 
@@ -307,7 +310,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         // Show the mask while the feedback is in progress
         //
         msg = new Intent(MASK_SHOWHIDE);
-        msg.putExtra(MASK_SHOWHIDE, true);
+        msg.putExtra(MASK_SHOWHIDE, VISIBLE);
 
         bManager.sendBroadcast(msg);
     }
@@ -324,7 +327,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         // Hide the mask
         //
         msg = new Intent(MASK_SHOWHIDE);
-        msg.putExtra(MASK_SHOWHIDE, false);
+        msg.putExtra(MASK_SHOWHIDE, INVISIBLE);
 
         bManager.sendBroadcast(msg);
     }

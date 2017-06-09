@@ -4,15 +4,19 @@ import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import org.json.JSONObject;
@@ -23,6 +27,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.util.IEventListener;
@@ -30,6 +35,7 @@ import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
+import cmu.xprize.util.TCONST;
 
 
 public class CAsm_Component extends LinearLayout implements IBehaviorManager, ILoadableObject, IEventListener, IPublisher {
@@ -46,6 +52,9 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     protected int               _dataIndex;
     protected boolean           _dataEOI   = false;
     protected int[]             dataset;
+
+    private int[]                 _screenCoord = new int[2];
+    private LocalBroadcastManager bManager;
 
     //current digit
     protected int digitIndex;
@@ -163,8 +172,13 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         //
         //Scontent = (CAsm_LetterBoxLayout) findViewById(R.id.Scontent);
         //Scontent.setOnClickListener(this);
+
         mPopup           = new CAsm_Popup(mContext);
         mPopupSupplement = new CAsm_Popup(mContext);
+
+        // Capture the local broadcast manager
+        //
+        bManager = LocalBroadcastManager.getInstance(getContext());
     }
 
 
@@ -454,6 +468,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
     public void setDotBagsVisible(Boolean _dotbagsVisible) {
 
+      //  zoomOperator();
         setDotBagsVisible(_dotbagsVisible, digitIndex);
     }
 
@@ -516,6 +531,58 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             return;
 
         dotbagsVisible = _dotbagsVisible;
+    }
+
+
+    /**
+     * TODO: Generalize
+     */
+    public void zoomOperator() {
+
+        Handler           h = new Handler();
+        final CAsm_Alley  opAlley = allAlleys.get(ASM_CONST.OPERATOR_ROW - 1);
+
+        pointAtOperator();
+
+        //wiggle operator
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                CAnimatorUtil.zoomInOut(opAlley.getTextLayout().getTextLayout(0).getText(1), 2.5f, 1500L);
+            }
+        }, 20);
+    }
+
+
+    /**
+     * TODO: Generalize
+     */
+    public void pointAtOperator() {
+
+        CAsm_Alley  opAlley  = allAlleys.get(ASM_CONST.OPERATOR_ROW - 1);
+        View        operator = opAlley.getTextLayout().getTextLayout(0).getText(1);
+
+        operator.getLocationOnScreen(_screenCoord);
+
+        PointF targetPoint = new PointF(_screenCoord[0] + operator.getWidth(), _screenCoord[1] + operator.getHeight());
+
+        // Let the persona know where to look
+        Intent msg = new Intent(TCONST.POINTAT);
+        msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
+
+        bManager.sendBroadcast(msg);
+    }
+
+
+    protected void broadcastLocation(String Action, PointF touchPt) {
+
+        getLocationOnScreen(_screenCoord);
+
+        // Let the persona know where to look
+        Intent msg = new Intent(Action);
+        msg.putExtra(TCONST.SCREENPOINT, new float[]{touchPt.x + _screenCoord[0], (float) touchPt.y + _screenCoord[1]});
+
+        bManager.sendBroadcast(msg);
     }
 
 
@@ -873,13 +940,13 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             mPopup.enable(true, listeners);
 
             if(isClickingBorrowing) {
-                mPopup.update(t2, 120, -300, 300, 300);
+                mPopup.update(t2, 120, -500, 500, 500);
 
                 mPopup.setExpectedDigit(getCorrectCarryBrw().toString());
                 Log.d(TAG, "Correct Carry Digit: " + getCorrectCarryBrw().toString());
             }
             else {
-                mPopup.update(t2, 60, 0, 300, 300);
+                mPopup.update(t2, 60, 20, 500, 500);
 
                 mPopup.setExpectedDigit(getCorrectDigit().toString());
                 Log.d(TAG, "Correct Answer Digit: " + getCorrectDigit().toString());
@@ -897,11 +964,11 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
                 mPopupSupplement.enable(true, listeners);
 
                 if (isClickingBorrowing) {
-                    mPopup.update(t2, 420, -300, 300, 300);
-                    mPopupSupplement.update(t2, 120, -300, 300, 300);
+                    mPopup.update(t2, 920, -500, 500, 500);
+                    mPopupSupplement.update(t2, 120, -500, 500, 500);
                 } else {
-                    mPopup.update(t2, 360, 0, 300, 300);
-                    mPopupSupplement.update(t2, 60, 0, 300, 300);
+                    mPopup.update(t2, 560, 0, 500, 500);
+                    mPopupSupplement.update(t2, 60, 20, 500, 500);
                 }
 
                 mPopupSupplement.isActive = true;

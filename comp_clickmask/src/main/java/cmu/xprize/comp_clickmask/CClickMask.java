@@ -13,6 +13,8 @@
 
 package cmu.xprize.comp_clickmask;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +26,7 @@ import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
@@ -32,13 +35,17 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+import cmu.xprize.comp_logging.CLogManager;
+import cmu.xprize.comp_logging.ILogManager;
+import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.CDisplayMetrics;
 import cmu.xprize.util.TCONST;
 
+import static android.view.View.GONE;
 import static cmu.xprize.comp_clickmask.CM_CONST.*;
 
 
-public class CClickMask extends View implements View.OnTouchListener {
+public class CClickMask extends View implements Animator.AnimatorListener {
 
 
     public Context                mContext;
@@ -54,9 +61,14 @@ public class CClickMask extends View implements View.OnTouchListener {
     private RectF                 border   = new RectF();
     private ArrayList<CExclusion> exclusions;
     private int[]                 _screenCoord = new int[2];
+    private boolean               deferredHide = false;
 
     private LocalBroadcastManager bManager;
     private ChangeReceiver        bReceiver;
+
+    public ILogManager            logManager;
+
+    private final  String  TAG = "CClickMask";
 
 
     public CClickMask(Context context) {
@@ -89,8 +101,11 @@ public class CClickMask extends View implements View.OnTouchListener {
         filter.addAction(MASK_ADDEXCL);
         filter.addAction(MASK_CLREXCL);
         filter.addAction(MASK_SETALPHA);
+        filter.addAction(MASK_ANIMATE);
 
         bReceiver = new ChangeReceiver();
+
+        logManager = CLogManager.getInstance();
 
         bManager.registerReceiver(bReceiver, filter);
     }
@@ -100,10 +115,12 @@ public class CClickMask extends View implements View.OnTouchListener {
         mOwner = _owner;
     }
 
-    public void showHide(boolean _show) {
+
+    public void showHide(int _show) {
 
         mOwner.setMasked(_show);
     }
+
 
     public void setMaskColor(int newColor) {
 
@@ -132,17 +149,101 @@ public class CClickMask extends View implements View.OnTouchListener {
     }
 
 
+    @Override
+    public void setVisibility(int visibility) {
+
+        switch(visibility) {
+
+            case VISIBLE:
+                deferredHide = false;
+                setAlpha(0);
+                super.setVisibility(visibility);
+                break;
+
+            case INVISIBLE:
+                deferredHide = true;
+                break;
+
+            case GONE:
+                super.setVisibility(visibility);
+                break;
+        }
+    }
+
+
+
+    //************************************************************************
+    //************************************************************************
+    // AnimatorListener  Start
+
+
+    @Override
+    public void onAnimationStart(Animator animator) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animator animator) {
+
+        if(deferredHide)
+            super.setVisibility(INVISIBLE);
+    }
+
+    @Override
+    public void onAnimationCancel(Animator animator) {
+
+        if(deferredHide)
+            super.setVisibility(INVISIBLE);
+    }
+
+    @Override
+    public void onAnimationRepeat(Animator animator) {
+
+    }
+
+    // AnimatorListener  End
+    //************************************************************************
+    //************************************************************************
+
+
+
     class ChangeReceiver extends BroadcastReceiver {
 
         public void onReceive (Context context, Intent intent) {
 
             switch(intent.getAction()) {
+
                 case MASK_SHOWHIDE:
-                    Boolean showmask = intent.getBooleanExtra(MASK_SHOWHIDE, false);
+
+                    int showmask = intent.getIntExtra(MASK_SHOWHIDE, GONE);
 
                     showHide(showmask);
+
+                    // Animate the mask
+                    //
+                    Intent msg = new Intent(MASK_ANIMATE);
+
+                    bManager.sendBroadcast(msg);
+
                     break;
 
+                case MASK_ANIMATE:
+
+                    Animator fader;
+
+                    if(deferredHide) {
+                        fader = CAnimatorUtil.configFadeOut(CClickMask.this, CM_CONST.FADE_TIME);
+                    }
+                    else {
+                        fader = CAnimatorUtil.configFadeIn(CClickMask.this, CM_CONST.FADE_TIME);
+                    }
+                    fader.start();
+
+                    break;
+
+                // NOTE: Must invalidate when changing exclusions so that onDraw is called before
+                //       animation to refresh the animation cache.
+                //
                 case MASK_ADDEXCL:
                     String exclusiontype = intent.getStringExtra(MASK_TYPE);
 
@@ -160,12 +261,14 @@ public class CClickMask extends View implements View.OnTouchListener {
                             exclusiony -= _screenCoord[1];
 
                             addExclusion(new CExclusion(exclusiontype, exclusionx, exclusiony, exclusionr));
+                            invalidate();
                             break;
                     }
                     break;
 
                 case MASK_CLREXCL:
                     clearExclusions();
+                    invalidate();
                     break;
 
                 case MASK_SETCOLOR:
@@ -209,10 +312,4 @@ public class CClickMask extends View implements View.OnTouchListener {
         canvas.drawPath(mask, mPaint);
     }
 
-
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-
-        return false;
-    }
 }

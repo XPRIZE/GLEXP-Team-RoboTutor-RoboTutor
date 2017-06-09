@@ -289,10 +289,12 @@
             {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "BUBBLES_CLEARED:String|NEXTNODE:String" ,"features":"FTR_LASTATTEMPT"},
             {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "CLEAR_CONTENT:String" ,"features":"FTR_LASTATTEMPT"},
             {"type": "COMMAND", "cmd": "WAIT" ,"features":"FTR_LASTATTEMPT" },
-            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "HIDE_MASK:String" ,"features":"FTR_LASTATTEMPT"},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "HIDE_MASK:String" ,"features":"FTR_LASTATTEMPT"}
 
-            {"type": "TIMER", "id":"nextDelayTimer", "startdelay":"0", "period":"750", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"NEXTNODE", "features": "" },
-            {"type": "COMMAND", "cmd": "WAIT"  }
+            // TODO: is this delay required   removed in 45.1
+            //
+//            {"type": "TIMER", "id":"nextDelayTimer", "startdelay":"0", "period":"50", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"NEXTNODE", "features": "" },
+//            {"type": "COMMAND", "cmd": "WAIT"  }
           ]
         },
 

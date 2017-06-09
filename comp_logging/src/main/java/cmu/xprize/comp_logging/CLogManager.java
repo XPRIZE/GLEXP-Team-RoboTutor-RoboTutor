@@ -27,6 +27,7 @@ import android.util.Log;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.RandomAccessFile;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -42,7 +43,9 @@ public class CLogManager implements ILogManager {
     //private static final String LOG_VERSION = "1.0.0";    // initial release
     private static final String LOG_VERSION = "1.0.1";      // Updated LTKPlus to use LTKPLUS tag
 
-    private static String currenttutor = "<undefined>";
+    private static String currenttutor      = "<undefined>";
+    private String TERMINATING_PACKET       = "{\"end\":\"end\"}]}";
+    private byte[] TERMINATE_BYTES          = TERMINATING_PACKET.getBytes();
 
     private LogThread      logThread;                   // background thread handling log data
     private String         log_Path;
@@ -55,7 +58,11 @@ public class CLogManager implements ILogManager {
     private File                       logFile;
     private FileOutputStream           logStream;
     private java.nio.channels.FileLock logLock;
+
     private FileWriter                 logWriter;
+    private RandomAccessFile           seekableLogWriter;
+    private boolean                    seekable = true;
+
     private boolean                    logWriterValid = false;
 
     // Datashop specific
@@ -289,7 +296,13 @@ public class CLogManager implements ILogManager {
             try {
                 logStream = new FileOutputStream(logFile);
                 logLock   = logStream.getChannel().lock();
-                logWriter = new FileWriter(outPath, TLOG_CONST.APPEND);
+
+                if(seekable) {
+                    seekableLogWriter = new RandomAccessFile(outPath, "rwd");
+                }
+                else {
+                    logWriter = new FileWriter(outPath, TLOG_CONST.APPEND);
+                }
 
                 logWriterValid = true;
 
@@ -331,14 +344,21 @@ public class CLogManager implements ILogManager {
         try {
             if(logWriterValid) {
 
-                // Terminate the root JSON element
-                //
-                writePacketToLog("{\"end\":\"end\"}]}");
+                if(seekable) {
+                    logWriterValid = false;
 
-                logWriterValid = false;
+                    seekableLogWriter.close();
+                }
+                else {
+                    // Terminate the root JSON element
+                    //
+                    writePacketToLog(TERMINATING_PACKET);
 
-                logWriter.flush();
-                logWriter.close();
+                    logWriterValid = false;
+
+                    logWriter.flush();
+                    logWriter.close();
+                }
 
                 logLock.release();
                 logStream.close();
@@ -380,8 +400,21 @@ public class CLogManager implements ILogManager {
             // Throws if there is a JSON serializatin error
             //
             if(logWriterValid) {
-                logWriter.write(jsonPacket);
-                logWriter.flush();
+
+                if(seekable) {
+
+                    if(seekableLogWriter.length() > TERMINATE_BYTES.length) {
+                        seekableLogWriter.seek(seekableLogWriter.length() - TERMINATE_BYTES.length);
+                    }
+
+                    seekableLogWriter.writeBytes(jsonPacket);
+
+                    seekableLogWriter.writeBytes(TERMINATING_PACKET);
+                }
+                else {
+                    logWriter.write(jsonPacket);
+                    logWriter.flush();
+                }
             }
         }
         catch(Exception e) {

@@ -82,6 +82,8 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
 
     // Working data sets
+    //
+
     public ArrayList<String>        wrk_responseSet = null;             // set of response tems
     public ArrayList<String>        wrk_respTypeSet = null;             // text/reference - for mixed response sets
     public ArrayList<String[]>      wrk_response_script = null;         // List of uttereances describing each potential response
