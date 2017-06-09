@@ -75,10 +75,11 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "logState", "parms": "type#feedback,value#MATH_INSTRUCTION_ADD_BEHAVIOR:String", "features":""},
 
             {"name":"Introduction Audio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3",            "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+
+            {"name":"Zoom Operator:",     "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "zoomOperator",  "features": ""},
             {"name":"This is ...",        "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "This is called a plus sign.mp3",           "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
 
             {"name":"Show Scaffold:",     "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean", "features": ""},
-
             {"name":"Adding 3 + 2...",    "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Adding 3 things plus 2 things means--.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
             {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Lets tap on the three things to add them to the two things.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
           ],

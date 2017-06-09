@@ -16,6 +16,7 @@ package cmu.xprize.comp_clickmask;
 
 public class CM_CONST {
 
+    public static final String MASK_ANIMATE               = "MASK_ANIMATE";
     public static final String MASK_SHOWHIDE              = "MASK_SHOWHIDE";
     public static final String MASK_ADDEXCL               = "MASK_ADDEXCL";
     public static final String MASK_CLREXCL               = "MASK_CLREXCL";
@@ -28,5 +29,6 @@ public class CM_CONST {
     public static final String MASK_COLOR                 = "MASK_COLOR";
     public static final String MASK_ALPHA                 = "MASK_ALPHA";
 
-    public static final String EXCLUDE_CIRCLE = "EXCLUDE_CIRCLE";
+    public static final String EXCLUDE_CIRCLE             = "EXCLUDE_CIRCLE";
+    public static final long FADE_TIME                    = 200;
 }

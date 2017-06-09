@@ -26,8 +26,6 @@ import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import cmu.xprize.comp_clickmask.CClickMask;
-import cmu.xprize.comp_clickmask.CExclusion;
 import cmu.xprize.comp_clickmask.IMaskOwner;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
@@ -45,7 +43,7 @@ public class TScenePercentLayout extends PercentRelativeLayout implements ITutor
     private Context        mContext;
     private CSceneDelegate mTutorScene;
     private TClickMask     mMask;
-    private boolean        isMasked = true;
+    private int            mMaskState = GONE;
 
     final private String TAG = "TScenePercentLayout";
 
@@ -90,7 +88,7 @@ public class TScenePercentLayout extends PercentRelativeLayout implements ITutor
         mMask.setLayoutParams(lp);
 
         addView(mMask);
-        setMasked(false);
+        setMasked(GONE);
 
         bringChildToFront(mMask);
     }
@@ -106,20 +104,20 @@ public class TScenePercentLayout extends PercentRelativeLayout implements ITutor
      *
      * @param _mask
      */
-    public void setMasked(boolean _mask) {
+    public void setMasked(int _mask) {
 
-        mMask.setVisibility(_mask? VISIBLE:INVISIBLE);
+        mMask.setVisibility(_mask);
 
-        if(_mask)
+        if(_mask == VISIBLE)
             bringChildToFront(mMask);
 
-        isMasked = _mask;
+        mMaskState = _mask;
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
 
-        if (isMasked) {
+        if (mMaskState == VISIBLE) {
             return true;
         } else {
             return false;
