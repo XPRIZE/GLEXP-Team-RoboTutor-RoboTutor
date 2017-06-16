@@ -81,7 +81,7 @@
 
             {"name":"Show Scaffold:",     "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean", "features": ""},
             {"name":"Adding 3 + 2...",    "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Adding 3 things plus 2 things means--.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
-            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Lets tap on the three things to add them to the two things.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap on the three things to add them to the two things.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
           ],
           "preexit": [],
           "edges": [
@@ -103,7 +103,7 @@
             {"name":"Show Scaffold:",     "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean", "features": ""},
 
             {"name":"Adding 3 + 2...",    "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Adding 3 things plus 0 things means--.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
-            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Let's tap on the 3 things.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap on the 3 things.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
           ],
           "preexit": [],
           "edges": [
@@ -124,7 +124,7 @@
             {"name":"Show Scaffold:",     "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean", "features": ""},
 
             {"name":"Adding 3 + 2...",    "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Adding 0 things plus 3 things means--.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
-            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Let's tap on the 3 things.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap on the 3 things.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
           ],
           "preexit": [],
           "edges": [
@@ -146,7 +146,7 @@
             {"name":"Show Scaffold:",     "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean", "features": ""},
 
             {"name":"Adding 3 + 2...",    "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Subtracting 3 things minus 2 things means--.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
-            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Lets tap on the two things and see how many are left.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap on the two things and see how many are left.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
           ],
           "preexit": [],
           "edges": [
@@ -579,6 +579,10 @@
           "COMMENT": "TBD",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "logState", "parms": "type#node,value#DEMOCOMPLETE:String", "features":""},
+
+            // Pace the problem highlight / wiggle based on the language
+            {"name":"Show Scaffold:",     "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "animateTutorial", "parms": "600:Integer", "features": "LANG_EN"},
+            {"name":"Show Scaffold:",     "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "animateTutorial", "parms": "1200:Integer", "features": "LANG_SW"},
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "So 3 plus 2 is 5.mp3",                               "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_DEMO_ADD"},
 
