@@ -490,39 +490,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
         if (_dotbagsVisible && !hasShown && !isWriting) {
 
-            if(curOverheadCol >= 0) {
-
-                if ((allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(0).getText().equals("")
-                        || allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(0).getCurrentTextColor() == Color.RED) && curOverheadCol > 9) {
-                    mechanics.highlightOverheadOrResult(ASM_CONST.HIGHLIGHT_OVERHEAD);
-                    return;
-                } else if (allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(1).getText().equals("")
-                        || allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(1).getCurrentTextColor() == Color.RED) {
-                    mechanics.highlightOverheadOrResult(ASM_CONST.HIGHLIGHT_OVERHEAD);
-                    return;
-                } else {
-                    curOverheadCol = -1;
-                }
-            }
-
-            hasShown = true;
-
-            int delayTime = 0;
-
-            startRow = startRow >= 0? startRow : 0;
-            int lastRow = operation.equals("x") ? startRow + 3 : allAlleys.size();
-
-            for (int i = startRow; i < lastRow; i++) {
-
-                final CAsm_Alley curAlley = allAlleys.get(i);
-                final int _curDigitIndex = curDigitIndex;
-
-                if (curAlley.getDotBag().getVisibility() != VISIBLE)
-                    delayTime = wiggleDigitAndDotbag(curAlley, delayTime, _curDigitIndex, startRow);
-            }
-
-            if (!dotbagsVisible)
-                mechanics.preClickSetup();
+            animateTutorial(curDigitIndex, startRow, 1000);
 
         } else if(!_dotbagsVisible){
             for (int alley = 0; alley < allAlleys.size(); alley++)
@@ -532,6 +500,49 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
         dotbagsVisible = _dotbagsVisible;
     }
+
+    public void animateTutorial(Integer pace) {
+        animateTutorial(digitIndex, digitIndex, pace);
+    }
+
+
+    public void animateTutorial(int curDigitIndex, int startRow, int pace) {
+
+        if(curOverheadCol >= 0) {
+
+            if ((allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(0).getText().equals("")
+                    || allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(0).getCurrentTextColor() == Color.RED) && curOverheadCol > 9) {
+                mechanics.highlightOverheadOrResult(ASM_CONST.HIGHLIGHT_OVERHEAD);
+                return;
+            } else if (allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(1).getText().equals("")
+                    || allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(1).getCurrentTextColor() == Color.RED) {
+                mechanics.highlightOverheadOrResult(ASM_CONST.HIGHLIGHT_OVERHEAD);
+                return;
+            } else {
+                curOverheadCol = -1;
+            }
+        }
+
+        hasShown = true;
+
+        int delayTime = 0;
+
+        startRow = startRow >= 0? startRow : 0;
+        int lastRow = operation.equals("x") ? startRow + 3 : allAlleys.size();
+
+        for (int i = startRow; i < lastRow; i++) {
+
+            final CAsm_Alley curAlley = allAlleys.get(i);
+            final int _curDigitIndex = curDigitIndex;
+
+                delayTime = wiggleDigitAndDotbag(curAlley, delayTime, _curDigitIndex, startRow, pace);
+        }
+
+        if (!dotbagsVisible)
+            mechanics.preClickSetup();
+    }
+
+
 
 
     /**
@@ -586,7 +597,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     }
 
 
-    public int wiggleDigitAndDotbag(final CAsm_Alley curAlley, int delayTime, final int curDigitIndex, int startRow) {
+    public int wiggleDigitAndDotbag(final CAsm_Alley curAlley, int delayTime, final int curDigitIndex, int startRow, int pace) {
 
         final CAsm_DotBag curDB = curAlley.getDotBag();
         final CAsm_TextLayout curTextLayout;
@@ -613,7 +624,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
                         curAlley.getTextLayout().getTextLayout(0).getText(1).wiggle(300, 1, 0, .5f);
                     }
                 }, delayTime);
-                delayTime += 1000;
+                delayTime += pace;
             } else if (allAlleys.indexOf(curAlley) == startRow + 1 && operation.equals("x")) {
                 h.postDelayed(new Runnable() {
                     @Override
@@ -622,7 +633,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
                         curAlley.getTextLayout().getTextLayout(numSlots - 1).getText(0).wiggle(300, 1, 0, .3f);
                     }
                 }, delayTime);
-                delayTime += 1000;
+                delayTime += pace;
             }
 
             h.postDelayed(new Runnable() {
@@ -636,7 +647,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
                     curTextLayout.getText(1).wiggle(300, 1, 0, .3f);
                 }
             }, delayTime);
-            delayTime += 1000;
+            delayTime += pace;
         } else if (!curText.getIsStruck())
             curDB.setVisibility(VISIBLE);
 
