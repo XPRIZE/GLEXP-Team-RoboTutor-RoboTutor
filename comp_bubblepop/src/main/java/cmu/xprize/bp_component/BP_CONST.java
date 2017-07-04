@@ -1,7 +1,6 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -92,8 +91,8 @@ public class BP_CONST {
     public static final String BUBBLE_POPPED      = "BUBBLE_POPPED";
     public static final String BUBBLE_WIGGLED     = "BUBBLE_WIGGLED";
     public static final String BUBBLES_CLEARED    = "BUBBLES_CLEARED";
-    public static final String RANDOM             = "random";
-    public static final String SEQUENTIAL         = "sequential";
+    public static final String RANDOM             = "RANDOM";
+    public static final String SEQUENTIAL         = "SEQUENTIAL";
     public static final int    FEEDBACK_SIZE      = 300;
     public static final String SHOW_FEEDBACK      = "SHOW_FEEDBACK";
     public static final String FEEDBACK_SHOWN     = "FEEDBACK_SHOWN";
@@ -105,6 +104,9 @@ public class BP_CONST {
 
     public static final String QUEST_VAR          = ".questValue";
     public static final String ANSWER_VAR         = ".ansValue";
+
+    public static final String SHOW_MASK          = "SHOW_MASK";
+    public static final String HIDE_MASK          = "HIDE_MASK";
 
 
     static public HashMap<String, Integer> bubbleMap = new HashMap<String, Integer>();

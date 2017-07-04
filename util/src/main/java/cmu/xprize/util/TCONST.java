@@ -1,7 +1,6 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -46,7 +45,9 @@ public class TCONST {
     public static final String SKILL_MATH       = "numbers";
     public static final String SKILL_SHAPES     = "shapes";
     public static final String FINISH           = "FINISH";
+    public static final String SELECTOR_MODE    = "SELECTOR_MODE";
 
+    public static final String TUTOR_SELECTED   = "TUTOR_SELECTED";
     public static final String SKILL_SELECTED   = "SKILL_SELECTED";
     public static final String DEBUG_LAYOUT     = "DEBUG_LAYOUT";
 
@@ -206,10 +207,14 @@ public class TCONST {
     public static final String FTR_USER_HEAR       = "FTR_USER_HEAR";
     public static final String FTR_USER_READ       = "FTR_USER_READ";
     public static final String FTR_USER_ECHO       = "FTR_USER_ECHO";
+    public static final String FTR_USER_READING    = "FTR_USER_READING";
+
     public static final String NARRATE_STORY       = "NARRATE_STORY";
     public static final String TRACK_NARRATION     = "TRACK_NARRATION";
     public static final String START_NARRATION     = "START_NARRATION";
     public static final String SPEAK_UTTERANCE     = "SPEAK_UTTERANCE";
+    public static final String SPEAK_EVENT         = "SPEAK_EVENT";
+
     public static final int    INITSPLIT           = -1;
     public static final String SENTENCE_SPACE      = "  ";
     public static final String WORD_SPACE          = " ";
@@ -233,6 +238,8 @@ public class TCONST {
 
     public static final String NEXT_PAGE                  = "NEXT_PAGE";
     public static final String NEXT_SCENE                 = "NEXT_SCENE";
+    public static final String NEXT_WORD                  = "NEXT_WORD";
+
 
     // Core log message types - anumation scenegraph and queued scenegraph
     //
@@ -241,6 +248,10 @@ public class TCONST {
     public static final String QGRAPH_MSG                 = "RQTag";
     public static final String LTKPLUS_MSG                = "RLTag";
     public static final String LOGSTATE                   = "logState";
+
+    public static final String AUDIO_EVENT                = "AUDIO_EVENT";
+    public static final String TYPE_AUDIO                 = "type_audio";
+    public static final String TRACK_SEGMENT              = "TRACK_SEGMENT";
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
     //

@@ -75,15 +75,15 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "logState", "parms": "type#feedback,value#MATH_INSTRUCTION_ADD_BEHAVIOR:String", "features":""},
 
             {"name":"Introduction Audio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3",            "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+
+            {"name":"Zoom Operator:",     "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "zoomOperator",  "features": ""},
             {"name":"This is ...",        "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "This is called a plus sign.mp3",           "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
 
             {"name":"Show Scaffold:",     "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean", "features": ""},
-
             {"name":"Adding 3 + 2...",    "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Adding 3 things plus 2 things means--.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
-            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Lets tap on the three things to add them to the two things.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap on the three things to add them to the two things.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
           ],
-          "preexit": [
-          ],
+          "preexit": [],
           "edges": [
           ]
         },
@@ -103,10 +103,9 @@
             {"name":"Show Scaffold:",     "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean", "features": ""},
 
             {"name":"Adding 3 + 2...",    "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Adding 3 things plus 0 things means--.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
-            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Let's tap on the 3 things.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap on the 3 things.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
           ],
-          "preexit": [
-          ],
+          "preexit": [],
           "edges": [
           ]
         },
@@ -125,10 +124,9 @@
             {"name":"Show Scaffold:",     "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean", "features": ""},
 
             {"name":"Adding 3 + 2...",    "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Adding 0 things plus 3 things means--.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
-            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Let's tap on the 3 things.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap on the 3 things.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
           ],
-          "preexit": [
-          ],
+          "preexit": [],
           "edges": [
           ]
         },
@@ -148,10 +146,9 @@
             {"name":"Show Scaffold:",     "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean", "features": ""},
 
             {"name":"Adding 3 + 2...",    "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Subtracting 3 things minus 2 things means--.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
-            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Lets tap on the two things and see how many are left.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+            {"name":"Let's Tap...",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap on the two things and see how many are left.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
           ],
-          "preexit": [
-          ],
+          "preexit": [],
           "edges": [
           ]
         },
@@ -176,8 +173,7 @@
 
             {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tap here and please write your answer.mp3",    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
           ],
-          "preexit": [
-          ],
+          "preexit": [],
           "edges": [
           ]
         },
@@ -206,6 +202,51 @@
 
             {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tap here and please write your answer.mp3",    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
 
+          ],
+          "preexit": [],
+          "edges": []
+        },
+
+
+        "CANCEL_FEEDBACK_BEHAVIORS": {
+          "type": "QUEUE",
+          "COMMENT": "Chime when user taps icons in ",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "logState", "parms": "type#feedback,value#CANCEL_FEEDBACK_BEHAVIORS:String", "features":""},
+
+            {"name":"CANCEL_SCAFFOLD_POST",     "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "cancelPost", "parms": "SHOW_SCAFFOLD_BEHAVIOR:String",  "features":""},
+
+            {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "QUEUEDCOMMAND", "id": "MATH_SCAFFOLD_BEHAVIOR",   "method": "cancelNode", "parms": "",  "features":""},
+            {"name":"CANCEL_SCAFFOLD_RESULT",   "type": "QUEUEDCOMMAND", "id": "SCAFFOLD_RESULT_BEHAVIOR", "method": "cancelNode", "parms": "",  "features":""},
+
+            {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "QUEUEDCOMMAND", "id": "MATH_INSTRUCTION_ADD_BEHAVIOR",   "method": "cancelNode", "parms": "",  "features":""},
+            {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "QUEUEDCOMMAND", "id": "MATH_INSTRUCTION_ADD_0_BEHAVIOR", "method": "cancelNode", "parms": "",  "features":""},
+            {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "QUEUEDCOMMAND", "id": "MATH_INSTRUCTION_0_ADD_BEHAVIOR", "method": "cancelNode", "parms": "",  "features":""},
+            {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "QUEUEDCOMMAND", "id": "MATH_INSTRUCTION_SUB_BEHAVIOR",   "method": "cancelNode", "parms": "",  "features":""},
+            {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "QUEUEDCOMMAND", "id": "MATH_INSTRUCTION_SUB_0_BEHAVIOR", "method": "cancelNode", "parms": "",  "features":""}
+          ],
+          "preexit": [
+          ],
+          "edges": [
+          ]
+        },
+
+
+        "CANCEL_DEMO_BEHAVIORS": {
+          "type": "QUEUE",
+          "COMMENT": "Chime when user taps icons in ",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "logState", "parms": "type#feedback,value#CANCEL_DEMO_BEHAVIORS:String", "features":""},
+
+            {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "QUEUEDCOMMAND", "id": "MATH_INSTRUCTION_ADD_BEHAVIOR",   "method": "cancelNode", "parms": "",  "features":""},
+            {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "QUEUEDCOMMAND", "id": "MATH_INSTRUCTION_ADD_0_BEHAVIOR", "method": "cancelNode", "parms": "",  "features":""},
+            {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "QUEUEDCOMMAND", "id": "MATH_INSTRUCTION_0_ADD_BEHAVIOR", "method": "cancelNode", "parms": "",  "features":""},
+            {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "QUEUEDCOMMAND", "id": "MATH_INSTRUCTION_SUB_BEHAVIOR",   "method": "cancelNode", "parms": "",  "features":""},
+            {"name":"CANCEL_SCAFFOLD_BEHAVIOR", "type": "QUEUEDCOMMAND", "id": "MATH_INSTRUCTION_SUB_0_BEHAVIOR", "method": "cancelNode", "parms": "",  "features":""}
           ],
           "preexit": [
           ],
@@ -431,11 +472,11 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "logState", "parms": "type#node,value#SET_DEMOSOURCE:String", "features":""},
 
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]asm_demo_add.json:String",   "features":"FTR_DEMO_ADD"},
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]asm_demo_0add.json:String",  "features":"FTR_DEMO_ZERO_ADD"},
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]asm_demo_add0.json:String",  "features":"FTR_DEMO_ADD_ZERO"},
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]asm_demo_sub.json:String",   "features":"FTR_DEMO_SUB"},
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]asm_demo_sub0.json:String",  "features":"FTR_DEMO_SUB_ZERO"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]math.demo_add.json:String",   "features":"FTR_DEMO_ADD"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]math.demo_0add.json:String",  "features":"FTR_DEMO_ZERO_ADD"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]math.demo_add0.json:String",  "features":"FTR_DEMO_ADD_ZERO"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]math.demo_sub.json:String",   "features":"FTR_DEMO_SUB"},
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "pushDataSource", "parms": "[file]math.demo_sub0.json:String",  "features":"FTR_DEMO_SUB_ZERO"},
             {"type": "COMMAND", "id": "SAddSubtract", "method": "publishFeature", "parms": "FTR_DEMO:String", "features":""}
           ]
         },
@@ -539,6 +580,10 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "logState", "parms": "type#node,value#DEMOCOMPLETE:String", "features":""},
 
+            // Pace the problem highlight / wiggle based on the language
+            {"name":"Show Scaffold:",     "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "animateTutorial", "parms": "600:Integer", "features": "LANG_EN"},
+            {"name":"Show Scaffold:",     "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "animateTutorial", "parms": "1200:Integer", "features": "LANG_SW"},
+
             {"type": "AUDIO", "command": "PLAY", "soundsource": "So 3 plus 2 is 5.mp3",                               "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_DEMO_ADD"},
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "So 0 plus 3 is 3.mp3",                                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_DEMO_ADD_ZERO"},
@@ -624,7 +669,7 @@
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
 
-        "POST_DELAYED_SCAFFOLD"       : {"type": "COMMAND", "id": "SAddSubtract", "method": "postEvent",  "parms": "SHOW_SCAFFOLD_BEHAVIOR:String|3000:Integer", "features":""},
+        "POST_DELAYED_SCAFFOLD"       : {"type": "COMMAND", "id": "SAddSubtract", "method": "postEvent",  "parms": "SHOW_SCAFFOLD_BEHAVIOR:String|3000:Integer", "features":"!FTR_DEMO"},
         "CANCEL_POST_DELAYED_SCAFFOLD": {"type": "COMMAND", "id": "SAddSubtract", "method": "cancelPost", "parms": "SHOW_SCAFFOLD_BEHAVIOR:String",  "features":""},
 
         "SHOW_SCAFFOLD": {"type": "COMMAND", "id": "SAddSubtract", "method": "setDotBagsVisible", "parms":"TRUE:Boolean"},
@@ -640,7 +685,6 @@
 
         "SET_WRITE_BEHAVIOR":    {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "START_WRITING_BEHAVIOR:String|CANCEL_SCAFFOLD_BEHAVIORS:String" ,"features":""},
         "CLR_WRITE_BEHAVIOR":    {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "START_WRITING_BEHAVIOR:String|NULL:String" ,"features":""},
-
 
         "SET_ON_ANSWER_BEHAVIOR": {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "ON_ANSWER_BEHAVIOR:String|NEXT:String" ,"features":""},
         "CLR_ON_ANSWER_BEHAVIOR": {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "ON_ANSWER_BEHAVIOR:String|NULL:String" ,"features":""},

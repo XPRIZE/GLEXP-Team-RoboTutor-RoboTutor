@@ -1,7 +1,6 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -196,6 +195,15 @@ public class CBubble extends FrameLayout {
         setScaleY(mScale);
     }
 
+    public float getScaledWidth() {
+        return getWidth() * mScale;
+    }
+
+    public float getScaledHeight() {
+        return getHeight() * mScale;
+    }
+
+
     @Override
     public void setScaleX(float newScale) {
         super.setScaleX(newScale *  mScaleCorrection);
@@ -276,8 +284,14 @@ public class CBubble extends FrameLayout {
     public PointF getCenterPosition() {
         PointF nPosition = new PointF();
 
-        nPosition.x = getX() + (getWidth() / 2);
-        nPosition.y = getY() + (getHeight() / 2);
+        nPosition.x = getX();
+        nPosition.y = getY();
+
+        float w = (getWidth() / 2);
+        float h = (getHeight() / 2);
+
+        nPosition.x += w;
+        nPosition.y += h;
 
         return nPosition;
     }

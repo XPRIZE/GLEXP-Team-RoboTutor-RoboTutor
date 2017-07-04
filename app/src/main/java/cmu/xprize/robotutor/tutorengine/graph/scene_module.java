@@ -1,7 +1,6 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -136,7 +135,13 @@ public class scene_module extends scene_node implements ILoadableObject2 {
             if(validAction)
             {
                 _nextAction.preEnter();
-                _moduleState = _nextAction.applyNode();
+
+                if(_nextAction.testFeatures()) {
+                    _moduleState = _nextAction.applyNode();
+                }
+                else {
+                    _moduleState = TCONST.DONE;
+                }
             }
             else {
                 _moduleState = TCONST.NONE;

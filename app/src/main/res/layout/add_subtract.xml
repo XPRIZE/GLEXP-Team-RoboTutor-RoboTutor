@@ -30,6 +30,15 @@
         app:layout_marginRightPercent="0%"
         app:layout_marginLeftPercent="5%" />
 
+    
+    <cmu.xprize.robotutor.tutorengine.widgets.core.THandAnimation
+        android:id="@+id/ShandAnimator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        app:scale_factor="0.3"
+        android:background="@null"/>
+
 </cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>
 
 

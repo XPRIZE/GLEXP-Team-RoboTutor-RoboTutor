@@ -1,5 +1,5 @@
 /**
- Copyright 2015 Kevin Willows
+ Copyright(c) 2015-2017 Kevin Willows
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -358,6 +358,16 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
 
     /**
+     * Whether or not to draw the glyph baseline.
+     *
+     * @param drawBase
+     */
+    public void setDrawBaseline(boolean drawBase) {
+        _drawBase = drawBase;
+    }
+
+
+    /**
      * Flag to indicate the last glyph in the input string - used to limit the baseline length
      *
      * @param isLast
@@ -468,7 +478,8 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
                 mWritingComponent.applyBehavior(WR_CONST.WRITE_BEHAVIOR);
 
-                mScrollView.setEnableScrolling(mHasGlyph);
+                if(mScrollView != null)
+                    mScrollView.setEnableScrolling(mHasGlyph);
 
                 _prevTime = _time = System.nanoTime();
 
@@ -503,7 +514,9 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                 break;
 
             case MotionEvent.ACTION_UP:
-                mScrollView.setEnableScrolling(true);
+
+                if(mScrollView != null)
+                    mScrollView.setEnableScrolling(true);
 
                 _time = System.nanoTime();
 

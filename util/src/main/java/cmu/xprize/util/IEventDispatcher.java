@@ -1,7 +1,6 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -24,7 +23,10 @@ import java.util.List;
 
 public interface IEventDispatcher {
 
-    public void addEventListener(String linkedView);
+    public boolean isGraphEventSource();
+
+    public void addEventListener(String listener);
+    public void addEventListener(IEventListener listener);
 
     public void dispatchEvent(IEvent event);
 

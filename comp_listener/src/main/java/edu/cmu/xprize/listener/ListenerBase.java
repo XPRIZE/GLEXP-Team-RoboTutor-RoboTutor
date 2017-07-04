@@ -1,7 +1,7 @@
 //*********************************************************************************
 //
 //    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -499,7 +499,7 @@ public class ListenerBase {
          */
         public int latency;
 
-        protected HeardWord(String asrWord) {
+        public HeardWord(String asrWord) {
             hypWord = asrWordText(asrWord);            // strip any pronunciation tags
             iSentenceWord = -1;
             matchLevel = MATCH_UNKNOWN;

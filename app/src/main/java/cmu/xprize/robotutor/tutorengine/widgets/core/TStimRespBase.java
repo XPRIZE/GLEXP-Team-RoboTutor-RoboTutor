@@ -1,5 +1,5 @@
 /**
- Copyright 2015 Kevin Willows
+ Copyright(c) 2015-2017 Kevin Willows
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -273,7 +273,10 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, ID
         if(nodeName != null && !nodeName.equals("")) {
             try {
                 obj = mTutor.getScope().mapSymbol(nodeName);
-                obj.applyNode();
+
+                if(obj.testFeatures()) {
+                    obj.applyNode();
+                }
 
             } catch (Exception e) {
                 // TODO: Manage invalid Behavior

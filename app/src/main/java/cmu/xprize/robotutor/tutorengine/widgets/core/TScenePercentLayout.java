@@ -1,7 +1,6 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -22,8 +21,12 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 import android.content.Context;
 import 	android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
+import cmu.xprize.comp_clickmask.IMaskOwner;
+import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
@@ -32,9 +35,14 @@ import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.comp_logging.ILogManager;
 
 
-public class TScenePercentLayout extends PercentRelativeLayout implements ITutorSceneImpl {
+public class TScenePercentLayout extends PercentRelativeLayout implements ITutorSceneImpl, IMaskOwner {
 
+    private static final int SMASK = 1;
+
+    private Context        mContext;
     private CSceneDelegate mTutorScene;
+    private TClickMask     mMask;
+    private int            mMaskState = GONE;
 
     final private String TAG = "TScenePercentLayout";
 
@@ -56,8 +64,32 @@ public class TScenePercentLayout extends PercentRelativeLayout implements ITutor
 
     @Override
     public void init(Context context, AttributeSet attrs) {
+
+        mContext = context;
+
         mTutorScene = new CSceneDelegate(this);
         mTutorScene.init(context, attrs);
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+
+        mMask = new TClickMask(mContext);
+        mMask.setId(R.id.Smask);
+        mMask.setBackground(null);
+        mMask.setOwner(this);
+
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.MATCH_PARENT);
+
+        mMask.setLayoutParams(lp);
+
+        addView(mMask);
+        setMasked(GONE);
+
+        bringChildToFront(mMask);
     }
 
     @Override
@@ -65,6 +97,31 @@ public class TScenePercentLayout extends PercentRelativeLayout implements ITutor
         mTutorScene.onDestroy();
     }
 
+
+    /**
+     * Control the visibility of the feedback mask
+     *
+     * @param _mask
+     */
+    public void setMasked(int _mask) {
+
+        mMask.setVisibility(_mask);
+
+        if(_mask == VISIBLE)
+            bringChildToFront(mMask);
+
+        mMaskState = _mask;
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+
+        if (mMaskState == VISIBLE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
     public void setDataSource(String dataSource) {

@@ -18,6 +18,7 @@ import cmu.xprize.comp_ask.CAskElement;
 import cmu.xprize.comp_ask.CAsk_Data;
 import cmu.xprize.comp_debug.CDebugComponent;
 import cmu.xprize.comp_logging.CLogManager;
+import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.comp_session.CActivitySelector;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
@@ -50,8 +51,9 @@ import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENTDATA;
 import static cmu.xprize.robotutor.tutorengine.util.CClassMap2.classMap;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
-public class TActivitySelector extends CActivitySelector implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource, IPublisher {
+public class TActivitySelector extends CActivitySelector implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource, IPublisher, ITutorLogger {
 
     private static boolean          DEBUG_LANCHER = false;
     public  static String           DEBUG_TUTORID = "";
@@ -84,6 +86,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     private CAt_Data    mathVector    = null;
     private CAt_Data    shapesVector  = null;
 
+    private HashMap<String,String>  _StringVar  = new HashMap<>();
+    private HashMap<String,Integer> _IntegerVar = new HashMap<>();
     private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
 
 
@@ -226,11 +230,18 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     }
 
 
+    public void enableAskButtons(Boolean enable) {
+
+        askButtonsEnabled = true;
+    }
+
+
     public void rippleDescribe() {
         _describeIndex = 0;
 
         describeNext();
     }
+
 
     public void describeNext() {
 
@@ -255,6 +266,11 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         }
     }
 
+
+
+    //************************************************************************
+    //************************************************************************
+    // IButtonController Interface START
 
     @Override
     public void doAskButtonAction(String actionid) {
@@ -282,41 +298,15 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         }
     }
 
-    public void enableAskButtons(Boolean enable) {
-
-        askButtonsEnabled = true;
-    }
-
-
     /** This allows us to update the current tutor for a given skill from the CDebugComponent
      *
       */
-    public void setDebugTutor(String debugTutor) {
+    @Override
+    public void doDebugLaunchAction(String debugTutor) {
 
-        // Update the active skill
-        //
-        switch (activeSkill) {
+        publishValue(AS_CONST.VAR_BUT_BEHAVIOR, debugTutor);
 
-            case AS_CONST.SELECT_WRITING:
-
-                writingTutorID = debugTutor;
-                break;
-
-            case AS_CONST.SELECT_STORIES:
-
-                storiesTutorID = debugTutor;
-                break;
-
-            case AS_CONST.SELECT_MATH:
-
-                mathTutorID = debugTutor;
-                break;
-
-            case AS_CONST.SELECT_SHAPES:
-
-                shapesTutorID = debugTutor;
-                break;
-        }
+        applyBehavior(AS_CONST.SELECT_DEBUGLAUNCH);
     }
 
 
@@ -340,9 +330,30 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         //
         if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_SELECT)) {
 
-            // We pass the selected tutor from the debugcomponent in the buttonid
+            // Update the active skill
             //
-            setDebugTutor(buttonid);
+            switch (activeSkill) {
+
+                case AS_CONST.SELECT_WRITING:
+
+                    writingTutorID = buttonid;
+                    break;
+
+                case AS_CONST.SELECT_STORIES:
+
+                    storiesTutorID = buttonid;
+                    break;
+
+                case AS_CONST.SELECT_MATH:
+
+                    mathTutorID = buttonid;
+                    break;
+
+                case AS_CONST.SELECT_SHAPES:
+
+                    shapesTutorID = buttonid;
+                    break;
+            }
 
             // just reselect the current skill and continue with next tutor
             // no skill selection phase
@@ -364,6 +375,13 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             editor.putString(TCONST.SKILL_STORIES, storiesTutorID);
             editor.putString(TCONST.SKILL_MATH, mathTutorID);
             editor.putString(TCONST.SKILL_SHAPES, shapesTutorID);
+
+            publishValue(TCONST.SKILL_SELECTED, activeSkill);
+            publishValue(TCONST.SKILL_WRITING, writingTutorID);
+            publishValue(TCONST.SKILL_STORIES, storiesTutorID);
+            publishValue(TCONST.SKILL_MATH, mathTutorID);
+            publishValue(TCONST.SKILL_SHAPES, shapesTutorID);
+            publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE);
 
             editor.apply();
         }
@@ -500,6 +518,13 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             editor.putString(TCONST.SKILL_SHAPES, shapesTutorID);
 
             editor.apply();
+
+            publishValue(TCONST.SKILL_SELECTED, nextTutor);
+            publishValue(TCONST.SKILL_WRITING, writingTutorID);
+            publishValue(TCONST.SKILL_STORIES, storiesTutorID);
+            publishValue(TCONST.SKILL_MATH, mathTutorID);
+            publishValue(TCONST.SKILL_SHAPES, shapesTutorID);
+            publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE);
         }
 
 
@@ -555,6 +580,13 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                     break;
 
+            }
+
+            if (buttonFound) {
+
+                publishValue(TCONST.SKILL_SELECTED, activeSkill);
+                publishValue(TCONST.TUTOR_SELECTED, activeTutor);
+                publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE);
             }
 
             if (buttonFound) {
@@ -631,6 +663,80 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         applyBehavior(LAUNCH_EVENT);
     }
+
+
+    // IButtonController Interface END
+    //************************************************************************
+    //************************************************************************
+
+
+
+    //***********************************************************
+    // ITutorLogger - Start
+
+    private void extractHashContents(StringBuilder builder, HashMap map) {
+
+        Iterator<?> tObjects = map.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+
+            builder.append(',');
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            String key   = entry.getKey().toString();
+            String value = "#" + entry.getValue().toString();
+
+            builder.append(key);
+            builder.append(value);
+        }
+    }
+
+    private void extractFeatureContents(StringBuilder builder, HashMap map) {
+
+        StringBuilder featureset = new StringBuilder();
+
+        Iterator<?> tObjects = map.entrySet().iterator();
+
+        // Scan to build a list of active features
+        //
+        while(tObjects.hasNext() ) {
+
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            Boolean value = (Boolean) entry.getValue();
+
+            if(value) {
+                featureset.append(entry.getKey().toString() + ";");
+            }
+        }
+
+        // If there are active features then trim the last ',' and add the
+        // comma delimited list as the "$features" object.
+        //
+        if(featureset.length() != 0) {
+            featureset.deleteCharAt(featureset.length()-1);
+
+            builder.append(",$features#" + featureset.toString());
+        }
+    }
+
+    @Override
+    public void logState(String logData) {
+
+        StringBuilder builder = new StringBuilder();
+
+        extractHashContents(builder, _StringVar);
+        extractHashContents(builder, _IntegerVar);
+        extractFeatureContents(builder, _FeatureMap);
+
+        RoboTutor.logManager.postTutorState(TUTOR_STATE_MSG, "target#activity_selector," + logData + builder.toString());
+    }
+
+    // ITutorLogger - End
+    //***********************************************************
+
+
 
 
     //************************************************************************
@@ -856,13 +962,17 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                         //
                         case TCONST.QUEUE:
 
-                            obj.applyNode();
+                            if(obj.testFeatures()) {
+                                obj.applyNode();
+                            }
                             break;
 
                         default:
 
-                            obj.preEnter();
-                            obj.applyNode();
+                            if(obj.testFeatures()) {
+                                obj.preEnter();
+                                obj.applyNode();
+                            }
                             break;
                     }
                 }
@@ -913,6 +1023,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     @Override
     public void publishValue(String varName, String value) {
 
+        _StringVar.put(varName,value);
+
         // update the response variable  "<ComponentName>.<varName>"
         mTutor.getScope().addUpdateVar(name() + varName, new TString(value));
 
@@ -920,6 +1032,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
     @Override
     public void publishValue(String varName, int value) {
+
+        _IntegerVar.put(varName,value);
 
         // update the response variable  "<ComponentName>.<varName>"
         mTutor.getScope().addUpdateVar(name() + varName, new TInteger(value));

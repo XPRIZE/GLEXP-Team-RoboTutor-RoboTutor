@@ -1,7 +1,6 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -363,7 +362,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
      */
     private void enQueue(Queue qCommand) {
 
-        Log.d(TAG, "Processing POST to tutorGraph: " + qCommand._command );
+        RoboTutor.logManager.postEvent_V(TAG, "Processing POST to tutorGraph: " + qCommand._command );
 
         if(!mDisabled) {
             queueMap.put(qCommand, qCommand);
@@ -620,7 +619,11 @@ public class CTutor implements ILoadableObject2, IEventSource {
         if(createCmds != null) {
 
             for (type_action cmd : createCmds) {
-                cmd.applyNode();
+
+                if(cmd.testFeatures()) {
+                    cmd.applyNode();
+                }
+
             }
         }
     }

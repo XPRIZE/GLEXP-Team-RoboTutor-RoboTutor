@@ -2,7 +2,18 @@
 **/repo*
 **/build
 **/captures
+**/keystore
+
+# The tutor audio data is now externalized and is managed by the 
+# RTAssetPackager
+
 /app/src/main/assets/tutors/trackdata/LIBRARY/audio/*
+
+# We keep a copy of the live story data to support the RTAssetMAnager 
+# building the transitions and checking the datasource validity
+# however the canonical data is in the RTAssetPublisher
+
+/app/src/verify/assets/tutors/*
 
 # External Assets
 /app/audio_assets/*

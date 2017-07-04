@@ -1,0 +1,87 @@
+{
+  "gen_responsetype": "reference",
+  "gen_responseSet": [
+    "arrow",
+    "circle",
+    "diamond",
+    "heart",
+    "hexagon",
+    "line",
+    "octagon",
+    "oval",
+    "pentagon",
+    "rectangle",
+    "ring",
+    "semicircle",
+    "square",
+    "star",
+    "trapezoid",
+    "triangle"
+  ],
+  "gen_answertype": "reference",
+  "gen_answerSet": [
+    "arrow",
+    "circle",
+    "diamond",
+    "heart",
+    "hexagon",
+    "line",
+    "octagon",
+    "oval",
+    "pentagon",
+    "rectangle",
+    "ring",
+    "semicircle",
+    "square",
+    "star",
+    "trapezoid",
+    "triangle"
+  ],
+  "gen_stimulustype": "reference",
+  "gen_stimulusSet": [
+    "arrow",
+    "circle",
+    "diamond",
+    "heart",
+    "hexagon",
+    "line",
+    "octagon",
+    "oval",
+    "pentagon",
+    "rectangle",
+    "ring",
+    "semicircle",
+    "square",
+    "star",
+    "trapezoid",
+    "triangle"
+  ],
+  "question_count": 0,
+  "question_sequence": "SEQUENTIAL",
+  "question_replacement": false,
+  "response_replacement": false,
+  "dataSource": [
+    {
+      "question_type": "rising",
+      "question_say": true,
+      "question_show": false,
+      "gen_question": true,
+      "respCountExact": 15,
+      "answer_index": -1
+    }
+  ],
+  "view_background": {
+    "style": "primitives",
+    "kind": "squares",
+    "layout": "grid",
+    "layoutcount": 0,
+    "colorbase": "#666666",
+    "colorchoice": "fixed",
+    "colors": [
+      -14001522,
+      -14926753,
+      -12679468,
+      -13406803
+    ]
+  }
+}

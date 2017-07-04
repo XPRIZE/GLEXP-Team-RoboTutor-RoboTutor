@@ -1,7 +1,6 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -57,11 +56,6 @@ public class TButton extends Button implements ITutorObjectImpl {
         mSceneObject.init(context, attrs);
     }
 
-    @Override
-    public void onDestroy() {
-        mSceneObject.onDestroy();
-    }
-
 
 
     public void setDataSource(String dataSource) {
@@ -73,13 +67,6 @@ public class TButton extends Button implements ITutorObjectImpl {
     //************************************************************************
     // Tutor methods  Start
 
-
-
-    @Override
-    public void setVisibility(String visible) {
-
-        mSceneObject.setVisibility(visible);
-    }
 
     //** Special Object methods for missing method parameter type combinations -
     //   e.g. This is the simplest way instead of using CharSequence
@@ -101,6 +88,10 @@ public class TButton extends Button implements ITutorObjectImpl {
     //************************************************************************
 
 
+
+    //************************************************************************
+    //************************************************************************
+    // ITutorObjectImpl  Start
 
     @Override
     public void setName(String name) {
@@ -124,6 +115,17 @@ public class TButton extends Button implements ITutorObjectImpl {
 
     @Override
     public void onCreate() {}
+
+    @Override
+    public void onDestroy() {
+        mSceneObject.onDestroy();
+    }
+
+    @Override
+    public void setVisibility(String visible) {
+
+        mSceneObject.setVisibility(visible);
+    }
 
     @Override
     public void setNavigator(ITutorGraph navigator) {
@@ -154,5 +156,9 @@ public class TButton extends Button implements ITutorObjectImpl {
     public void setAlpha(Float alpha) {
         mSceneObject.setAlpha(alpha);
     }
+
+    // ITutorObjectImpl  End
+    //************************************************************************
+    //************************************************************************
 
 }

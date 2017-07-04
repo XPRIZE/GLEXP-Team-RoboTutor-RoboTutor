@@ -1,7 +1,6 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -141,41 +140,48 @@ public class type_handler extends type_action implements IMediaListener {
 
             type_handler obj = null;
 
-            // If the feature test passes then fire the event.
-            // Otherwise set flag to indicate event was completed/skipped in this case
-            // Issue #58 - Make all actions feature reactive.
+            // Non reference nodes create the actual java timer and own it.
+            // Note that it is expected that the timer will be CREATED before any other
+            // nodes access it.  However if a call is made against a uninitialized timer
+            // it will simply be ignored.
             //
-            if(testFeatures()) {
+            if (!mMediaManager.hasHandler(id)) {
 
-                // Non reference nodes create the actual java timer and own it.
-                // Note that it is expected that the timer will be CREATED before any other
-                // nodes access it.  However if a call is made against a uninitialized timer
-                // it will simply be ignored.
-                //
-                if (!mMediaManager.hasHandler(id)) {
+                Log.d("ISREADING", "id: " + id + " - action: " + action );
 
-                    switch (action) {
-                        case TCONST.CREATEANDSTART:
-                            _timerCmd = TCONST.START;
+                switch (action) {
+                    case TCONST.CREATEANDSTART:
 
-                        case TCONST.CREATE:
-                            createHandler();
-                            break;
+                        _timerCmd = TCONST.START;
+                        // Fall through
 
-                        default:
-                            RoboTutor.logManager.postEvent_D(_logType, "node.handler.applynode:id:" + id + ",error:call on uninitialized timer");
+                    case TCONST.CREATE:
 
-                            break;
-                    }
+                        createHandler();
+                        break;
+
+                    default:
+                        RoboTutor.logManager.postEvent_D(_logType, "node.handler.applynode:id:" + id + ",error:call on uninitialized handler");
+
+                        break;
                 }
+            }
 
-                // Reference nodes get a reference to the owner timer through the MediaManager
-                // and perform their action on the timer by updating the owners "action" and
-                // calling appyNode to execute on the actual timer.
-                //
-                if (_reference) {
+            // Reference nodes get a reference to the owner timer through the MediaManager
+            // and perform their action on the timer by updating the owners "action" and
+            // calling appyNode to execute on the actual timer.
+            //
+            if (_reference) {
 
-                    try {
+                Log.d("ISREADING", "id: " + id + " is reference ");
+
+                try {
+                    // Note - we testFeatures on "this" reference-node not the handler owner-node which may have
+                    // different priviledges.  i.e we may not want to create a handler but always cancel it if the
+                    // feature set changes in mid-count.
+                    //
+                    if(testFeatures()) {
+
                         obj = (type_handler) mMediaManager.mapHandler(id);
 
                         // Apply the reference action to the actual timer
@@ -183,11 +189,20 @@ public class type_handler extends type_action implements IMediaListener {
                             obj._timerCmd = action;
                             obj.applyNode();
                         }
+                        else {
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                            RoboTutor.logManager.postEvent_D(_logType, "node.handler.applynode:id:" + id + ",error:call on uninitialized handler reference");
+                        }
                     }
-                } else switch (_timerCmd) {
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+
+                Log.d("ISREADING", "id: " + id + " timerCmd: " + _timerCmd);
+
+                switch (_timerCmd) {
 
                     case TCONST.START:
                         startTimer();
@@ -219,7 +234,11 @@ public class type_handler extends type_action implements IMediaListener {
             _handler = new Handler(Looper.getMainLooper());
             _reference = false;
 
+            Log.d("ISREADING", "created id: " + id  );
+
             mMediaManager.createHandler(id, this);
+
+            Log.d("ISREADING", "IS_valid id: " + mMediaManager.hasHandler(id));
         }
 
 
@@ -237,7 +256,10 @@ public class type_handler extends type_action implements IMediaListener {
                         // and apply it.
                         //
                         obj = _scope.mapSymbol(ontimer);
-                        obj.applyNode();
+
+                        if(obj != null && obj.testFeatures()) {
+                            obj.applyNode();
+                        }
 
                         if(repeat) {
                             RoboTutor.logManager.postEvent_I(_logType, "target:node.handler.repeat,name:" + name );
@@ -246,7 +268,6 @@ public class type_handler extends type_action implements IMediaListener {
                         }
 
                         else {
-                            RoboTutor.logManager.postEvent_I(_logType, "target:node.handler.destroy,name:" + name );
 
                             _frameTask = null;
                             destroyTimer();
@@ -290,9 +311,15 @@ public class type_handler extends type_action implements IMediaListener {
 
             if(_playing) {
 
+                RoboTutor.logManager.postEvent_I(_logType, "target:node.handler.destroy,name:" + name);
+
                 stopTimer();
 
                 mMediaManager.removeHandler(id);
+            }
+            else {
+
+                RoboTutor.logManager.postEvent_I(_logType, "target:node.handler.destroy,state:not_playing,name:" + name);
             }
         }
 

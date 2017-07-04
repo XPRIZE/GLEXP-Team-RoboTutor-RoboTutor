@@ -1,7 +1,6 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -38,7 +37,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TTSsynthesizer;
@@ -47,11 +49,14 @@ import edu.cmu.xprize.listener.IAsrEventListener;
 import edu.cmu.xprize.listener.ListenerBase;
 import edu.cmu.xprize.listener.ListenerPLRT;
 
+import static cmu.xprize.util.TCONST.AUDIO_EVENT;
+import static cmu.xprize.util.TCONST.TYPE_AUDIO;
+
 
 /**
  *  The Reading Tutor Component
  */
-public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEventListener, ILoadableObject {
+public class CRt_Component extends ViewAnimator implements IEventListener, IVManListener, IAsrEventListener, ILoadableObject, IPublisher {
 
     private Context                 mContext;
     private String                  word;
@@ -174,6 +179,9 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     public void nextScene() {
     }
 
+    public void nextNode() {
+
+    }
 
     /**
      *
@@ -414,7 +422,7 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
 
 
     public void startStory() {
-        mViewManager.beginStory();
+        mViewManager.startStory();
     }
 
 
@@ -437,6 +445,16 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     }
 
 
+
+    //************************************************************************
+    //************************************************************************
+    // IPublisher - START
+
+    @Override
+    public void publishState() {
+
+    }
+
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
@@ -448,6 +466,40 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
     //
     public void publishValue(String varName, int value) {
     }
+
+    @Override
+    public void publishFeatureSet(String featureset) {
+
+    }
+
+    @Override
+    public void retractFeatureSet(String featureset) {
+
+    }
+
+    @Override
+    public void publishFeature(String feature) {
+
+    }
+
+    @Override
+    public void retractFeature(String feature) {
+
+    }
+
+    @Override
+    public void publishFeatureMap(HashMap featureMap) {
+
+    }
+
+    @Override
+    public void retractFeatureMap(HashMap featureMap) {
+
+    }
+
+    // IPublisher - END
+    //************************************************************************
+    //************************************************************************
 
 
     // Must override in TClass
@@ -556,6 +608,44 @@ public class CRt_Component extends ViewAnimator implements IVManListener, IAsrEv
         return mViewManager.endOfData();
     }
 
+
+
+    //************************************************************************
+    //************************************************************************
+    // IEventListener  -- Start
+
+
+    @Override
+    public void onEvent(IEvent eventObject) {
+
+
+        // We expect AUDIO_EVENTS from the narration type_audio nodes to let us know when
+        // they are complete with an UTTERANCE_COMPLETE_EVENT
+        //
+        if(mViewManager != null) {
+            try {
+                switch (eventObject.getType()) {
+
+                    case TYPE_AUDIO:
+
+                        // We expect AUDIO_EVENTS from the narration type_audio nodes to let us know when
+                        // they are complete with an UTTERANCE_COMPLETE_EVENT
+                        //
+                        mViewManager.execCommand((String) eventObject.getString(AUDIO_EVENT), null);
+                        break;
+
+                    default:
+                        break;
+                }
+            } catch (Exception ex) {
+                Log.e(TAG, "ERROR:node.queuedgraph,action:onevent");
+            }
+        }
+    }
+
+    // IEventListener  -- End
+    //************************************************************************
+    //************************************************************************
 
 
     //************************************************************************

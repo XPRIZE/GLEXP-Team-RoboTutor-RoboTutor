@@ -263,6 +263,7 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBubblePop", "method": "logState", "parms": "type#node,value#PLAYWRONG_PAUSE:String", "features":""},
 
             {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "PAUSE_ANIMATION:String" ,"features":""},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "SHOW_MASK:String" ,"features":""},
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "wrong.mp3", "soundpackage":"tutor_effect", "volume": 0.05, "mode":"event", "features": ""},
 
@@ -282,14 +283,18 @@
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"letters", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_LETTERS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"shapes", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_SHAPES"},
 
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "HIDE_MASK:String" ,"features":"!FTR_LASTATTEMPT"},
             {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "RESUME_ANIMATION:String" ,"features":"!FTR_LASTATTEMPT"},
 
             {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "BUBBLES_CLEARED:String|NEXTNODE:String" ,"features":"FTR_LASTATTEMPT"},
             {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "CLEAR_CONTENT:String" ,"features":"FTR_LASTATTEMPT"},
             {"type": "COMMAND", "cmd": "WAIT" ,"features":"FTR_LASTATTEMPT" },
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "HIDE_MASK:String" ,"features":"FTR_LASTATTEMPT"}
 
-            {"type": "TIMER", "id":"nextDelayTimer", "startdelay":"0", "period":"750", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"NEXTNODE", "features": "" },
-            {"type": "COMMAND", "cmd": "WAIT"  }
+            // TODO: is this delay required   removed in 45.1
+            //
+//            {"type": "TIMER", "id":"nextDelayTimer", "startdelay":"0", "period":"50", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"NEXTNODE", "features": "" },
+//            {"type": "COMMAND", "cmd": "WAIT"  }
           ]
         },
 

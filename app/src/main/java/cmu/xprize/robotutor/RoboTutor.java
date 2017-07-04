@@ -1,7 +1,6 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -33,6 +32,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,6 +42,7 @@ import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.ltkplus.IGlyphSink;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
+import cmu.xprize.util.CDisplayMetrics;
 import cmu.xprize.util.CLoaderView;
 import cmu.xprize.comp_logging.CLogManager;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
@@ -92,13 +93,10 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     static public String        VERSION_RT;
     static public ArrayList     VERSION_SPEC;
 
+    static public CDisplayMetrics displayMetrics;
 
     static public String        APP_PRIVATE_FILES;
     static public String        LOG_ID = "STARTUP";
-
-    static public float         designDensity   = 2.0f;
-    static public float         instanceDensity;
-    static public float         densityRescale;
 
     static public Activity      ACTIVITY;
     static public String        PACKAGE_NAME;
@@ -132,6 +130,20 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         //
         super.onCreate(null);
 
+
+        // Catch all errors and cause a clean exit -
+        // TODO: this doesn't work as expected
+        //
+//        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+//
+//            @Override
+//            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
+//
+//                System.exit(2);
+//            }
+//        });
+
+
         PACKAGE_NAME = getApplicationContext().getPackageName();
         ACTIVITY     = this;
 
@@ -149,13 +161,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         VERSION_RT   = BuildConfig.VERSION_NAME;
         VERSION_SPEC = CAssetObject.parseVersionSpec(VERSION_RT);
 
-
-        // get the multiplier used for drawables at the current screen density and calc the
-        // correction rescale factor for design scale
-        //
-        instanceDensity = getResources().getDisplayMetrics().density;
-        densityRescale  = designDensity / instanceDensity;
-
         logManager = CLogManager.getInstance();
         logManager.startLogging(LOG_PATH);
         CErrorManager.setLogManager(logManager);
@@ -167,10 +172,19 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         Log.v(TAG, "External_Download:" + DOWNLOAD_PATH);
 
         // Get the primary container for tutors
+        //
         setContentView(R.layout.robo_tutor);
         masterContainer = (ITutorManager)findViewById(R.id.master_container);
 
+        // Set fullscreen and then get the screen metrics
+        //
         setFullScreen();
+
+        // get the multiplier used for drawables at the current screen density and calc the
+        // correction rescale factor for design scale
+        // This initializes the static object
+        //
+        displayMetrics = CDisplayMetrics.getInstance(this);
 
         APP_PRIVATE_FILES = getApplicationContext().getExternalFilesDir("").getPath();
 
@@ -249,8 +263,17 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         boolean result = super.dispatchTouchEvent(event);
 
         switch (event.getAction()) {
+
+            case MotionEvent.ACTION_UP:
+                logManager.postEvent_V(TAG, "RT_SCREEN_RELEASE: X:" + event.getX() + "  Y:" + event.getY());
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                logManager.postEvent_V(TAG, "RT_SCREEN_MOVE X:" + event.getX() + "  Y:" + event.getY());
+                break;
+
             case MotionEvent.ACTION_DOWN:
-                Log.d(TAG, "RT_HIT_SCREEN");
+                logManager.postEvent_V(TAG, "RT_SCREEN_TOUCH X:" + event.getX() + "  Y:" + event.getY());
                 break;
         }
 

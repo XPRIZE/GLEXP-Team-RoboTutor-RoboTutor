@@ -1,7 +1,6 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -66,6 +65,7 @@ import static cmu.xprize.util.TCONST.LANG_AUTO;
 import static cmu.xprize.util.TCONST.LOCAL_STORY_AUDIO;
 import static cmu.xprize.util.TCONST.MEDIA_STORY;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+import static cmu.xprize.util.TCONST.SPEAK_UTTERANCE;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
 public class TRtComponent extends CRt_Component implements IBehaviorManager, ITutorObjectImpl, Button.OnClickListener, IRtComponent, IDataSink, IEventSource, IPublisher, ITutorLogger {
@@ -268,7 +268,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     public boolean applyBehavior(String event) {
 
         boolean result = false;
-
+        
         if(!(result = super.applyBehavior(event))) {
 
             if (volatileMap.containsKey(event)) {
@@ -332,13 +332,17 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                         //
                         case TCONST.QUEUE:
 
-                            obj.applyNode();
+                            if(obj.testFeatures()) {
+                                obj.applyNode();
+                            }
                             break;
 
                         default:
 
-                            obj.preEnter();
-                            obj.applyNode();
+                            if(obj.testFeatures()) {
+                                obj.preEnter();
+                                obj.applyNode();
+                            }
                             break;
                     }
                 }
@@ -371,6 +375,12 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     @Override
     public void nextScene() {
         mTutor.mTutorGraph.post(this, TCONST.NEXTSCENE);
+    }
+
+
+    @Override
+    public void nextNode() {
+        mTutor.mSceneGraph.post(this, TCONST.NEXT_NODE);
     }
 
 
@@ -451,7 +461,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         extractHashContents(builder, _IntegerVar);
         extractFeatureContents(builder, _FeatureMap);
 
-        RoboTutor.logManager.postTutorState(TUTOR_STATE_MSG, "target#word_copy," + logData + builder.toString());
+        RoboTutor.logManager.postTutorState(TUTOR_STATE_MSG, "target#reading_tutor," + logData + builder.toString());
     }
 
     // ITutorLogger - End
@@ -622,7 +632,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
     //************************************************************************
     //************************************************************************
-    // publish component state data - START
+    // IPublisher - START
 
     @Override
     public void publishState() {

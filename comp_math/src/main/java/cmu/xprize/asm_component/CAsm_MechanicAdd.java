@@ -90,7 +90,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
             if(i != overheadIndex) {
 
-                if (i != firstBagIndex && i != secondBagIndex) {
+                if (i != firstBagIndex && i != secondBagIndex && i != resultIndex) {
                     currBag.setCols(0);
                     currBag.setDrawBorder(false);
                 } else {

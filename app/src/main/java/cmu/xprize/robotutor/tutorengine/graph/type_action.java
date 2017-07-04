@@ -1,7 +1,6 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -79,7 +78,7 @@ public class type_action extends scene_node {
     final static public String TAG = "type_action";
 
 
-
+    @Override
     public boolean testFeatures() {
 
         boolean        featurePass = false;
@@ -155,228 +154,233 @@ public class type_action extends scene_node {
         String  returnState = TCONST.DONE;
         Map     childMap    = _scope.tutorGraph().getChildMap();
 
-        // If the feature test passes then fire the event.
-        // Otherwise set flag to indicate event was completed/skipped in this case
-        // Issue #58 - Make all actions feature reactive.
-        //
-        if(testFeatures()) {
+        if (cmd != null) {
+            switch (cmd) {
 
-            if (cmd != null) {
-                switch (cmd) {
-
-                    // System Scope command to launch a new Tutor Instance.
-                    //
-                    case TCONST.CMD_LAUNCH:
-                        try {
-                            // We demand a parm list of the form intent:String|intentdata:String
-                            //
-                            List<String> parmList = Arrays.asList(parms.split("[:\\|]"));
-
-                            // Resolve any variables in the parameters.
-                            // Session manager uses TScope variables to store intents
-                            //
-                            String intent     = getScope().parseTemplate(parmList.get(0));
-                            String intentData = getScope().parseTemplate(parmList.get(2));
-                            String dataSource = getScope().parseTemplate(parmList.get(4));
-
-                            CTutorEngine.launch(intentData, intent, dataSource );
-
-                        } catch (Exception e) {
-                            CErrorManager.logEvent(TAG, "Launch Command Invalid: ", e, false);
-                        }
-                        break;
-
-                    case TCONST.NEXTSCENE:
-                        _scope.tutor().mTutorGraph.post(this, TCONST.NEXTSCENE);
-                        break;
-
-                    case TCONST.CANCEL_NODE:
-                    case TCONST.SUBGRAPH_RETURN_AND_GO:
-                    case TCONST.SUBGRAPH_RETURN_AND_WAIT:
-                        _scope.sceneGraph().post(this, cmd);
-                        break;
-
-                    case TCONST.CMD_GOTO:
-                        _scope.tutor().gotoNode(id);
-                        break;
-
-                    case TCONST.CMD_NEXT:
-                        _scope.tutor().eventNext();
-                        break;
-
-                    case TCONST.CMD_WAIT:
-                        returnState = TCONST.WAIT;
-                        break;
-
-                    case TCONST.CMD_DEBUG:
-                        Log.d(TAG, "Debug Hit");
-                        break;
-
-                    // By default try and find a matching actionMap object to execute.
-                    // Note that you may not call a Module in this way.
-                    //
-                    default:
-                        IScriptable2 obj = null;
-
-                        try {
-                            obj = _scope.mapSymbol(cmd);
-
-                            if(obj != null) {
-
-                                switch(obj.getType()) {
-                                    case TCONST.MODULE:
-                                        Log.e(_logType, "Attempt to call Module: " + cmd + " : Modules may not be called.");
-                                        break;
-
-                                    case TCONST.NODE:
-                                        Log.e(_logType, "Attempt to call Node: " + cmd + " : Nodes may not be called.");
-                                        break;
-
-                                    case TCONST.CONDITION:
-                                        Log.e(_logType, "Attempt to call Condition: " + cmd + " : Conditions may not be called.");
-                                        break;
-
-                                    default:
-                                        returnState = obj.applyNode();
-                                        break;
-                                }
-                            }
-
-                        } catch (Exception e) {
-
-                            // TODO: Manage invalid Behavior
-                            e.printStackTrace();
-                        }
-
-                        break;
-                }
-            } else if (method != null && !method.equals("")) {
-
-                switch (method) {
-                    case "=":
-                        try {
-                            getScope().mapSymbol(id).set(value);
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        break;
-
-                    case "+":
-                        try {
-                            getScope().mapSymbol(id).add(value);
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        break;
-
-                    case "-":
-                        try {
-                            getScope().mapSymbol(id).subtract(value);
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        break;
-
-                    default:
-                        // The parameters come in - Name:Class|Name:Class...
-                        // So in the split array the odd elements are parameter values and the
-                        // even elements are the associated base-Class(type).
-
-                        Class[] pType = null;
-                        Object[] iparms = null;
-
-                        // TODO: Fixup support for , delimited parm lists
-                        // TODO: This will require FSM or REGEX processing to allow : and | in strings.
+                // System Scope command to launch a new Tutor Instance.
+                //
+                case TCONST.CMD_LAUNCH:
+                    try {
+                        // We demand a parm list of the form intent:String|intentdata:String
                         //
-                        if (parms != null) {
+                        List<String> parmList = Arrays.asList(parms.split("[:\\|]"));
+
+                        // Resolve any variables in the parameters.
+                        // Session manager uses TScope variables to store intents
+                        //
+                        String intent     = getScope().parseTemplate(parmList.get(0));
+                        String intentData = getScope().parseTemplate(parmList.get(2));
+                        String dataSource = getScope().parseTemplate(parmList.get(4));
+
+                        CTutorEngine.launch(intentData, intent, dataSource );
+
+                    } catch (Exception e) {
+                        CErrorManager.logEvent(TAG, "Launch Command Invalid: ", e, false);
+                    }
+                    break;
+
+                case TCONST.NEXTSCENE:
+                    _scope.tutor().mTutorGraph.post(this, TCONST.NEXTSCENE);
+                    break;
+
+                case TCONST.CANCEL_NODE:
+                case TCONST.SUBGRAPH_RETURN_AND_GO:
+                case TCONST.SUBGRAPH_RETURN_AND_WAIT:
+                    _scope.sceneGraph().post(this, cmd);
+                    break;
+
+                case TCONST.CMD_GOTO:
+                    _scope.tutor().gotoNode(id);
+                    break;
+
+                case TCONST.CMD_NEXT:
+                    _scope.tutor().eventNext();
+                    break;
+
+                case TCONST.CMD_WAIT:
+                    returnState = TCONST.WAIT;
+                    break;
+
+                case TCONST.CMD_DEBUG:
+                    Log.d(TAG, "Debug Hit");
+                    break;
+
+                // By default try and find a matching actionMap object to execute.
+                // Note that you may not call a Module in this way.
+                //
+                default:
+                    IScriptable2 obj = null;
+
+                    try {
+                        obj = _scope.mapSymbol(cmd);
+
+                        if(obj != null) {
+
+                            switch(obj.getType()) {
+                                case TCONST.MODULE:
+                                    Log.e(_logType, "Attempt to call Module: " + cmd + " : Modules may not be called.");
+                                    break;
+
+                                case TCONST.NODE:
+                                    Log.e(_logType, "Attempt to call Node: " + cmd + " : Nodes may not be called.");
+                                    break;
+
+                                case TCONST.CONDITION:
+                                    Log.e(_logType, "Attempt to call Condition: " + cmd + " : Conditions may not be called.");
+                                    break;
+
+                                default:
+                                    if(obj.testFeatures()) {
+                                        returnState = obj.applyNode();
+                                    }
+                                    else {
+                                        returnState = TCONST.DONE;
+                                    }
+                                    break;
+                            }
+                        }
+
+                    } catch (Exception e) {
+
+                        // TODO: Manage invalid Behavior
+                        e.printStackTrace();
+                    }
+
+                    break;
+            }
+        } else if (method != null && !method.equals("")) {
+
+            switch (method) {
+                case "=":
+                    try {
+                        getScope().mapSymbol(id).set(value);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+
+                case "+":
+                    try {
+                        getScope().mapSymbol(id).add(value);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+
+                case "-":
+                    try {
+                        getScope().mapSymbol(id).subtract(value);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+
+                default:
+                    // The parameters come in - Name:Class|Name:Class...
+                    // So in the split array the odd elements are parameter values and the
+                    // even elements are the associated base-Class(type).
+
+                    Class[] pType = null;
+                    Object[] iparms = null;
+
+                    // TODO: Fixup support for , delimited parm lists
+                    // TODO: This will require FSM or REGEX processing to allow : and | in strings.
+                    //
+                    if (parms != null) {
+
+                        // Support templatized parameters
+                        //
+                        decodedParms = getScope().parseTemplate(parms);
+
+                        // Break up the parms specification - "parms":"value:type|value:type..."
+                        //
+                        List<String> parmList = Arrays.asList(parms.split("[:\\|]"));
+
+                        // Create the arrays
+                        pType = new Class[parmList.size() / 2];
+                        iparms = new Object[parmList.size() / 2];
+
+                        for (int i1 = 1, i2 = 0; i1 < parmList.size(); i1 += 2, i2++) {
 
                             // Support templatized parameters
+                            // decode the template - this must go here so variables may have embedded colons
+                            // which are used in the tutor descriptors in the session Manager button
+                            // messages
                             //
-                            decodedParms = getScope().parseTemplate(parms);
+                            parmList.set(i1-1, getScope().parseTemplate(parmList.get(i1-1)));
 
-                            // Break up the parms specification - "parms":"value:type|value:type..."
+                            // Force lowercase on classname (type) and translate to Class object
                             //
-                            List<String> parmList = Arrays.asList(decodedParms.split("[:\\|]"));
+                            parmList.set(i1, parmList.get(i1).toLowerCase());
+                            pType[i2] = classMap.get(parmList.get(i1));
 
-                            // Create the arrays
-                            pType = new Class[parmList.size() / 2];
-                            iparms = new Object[parmList.size() / 2];
+                            // Generate the actual parameter object to pass to the method
+                            //
+                            try {
+                                iparms[i2] = pType[i2].getConstructor(new Class[]{String.class}).newInstance(parmList.get(i1 - 1));
 
-                            for (int i1 = 1, i2 = 0; i1 < parmList.size(); i1 += 2, i2++) {
-
-                                // Force lowercase on classname (type) and translate to Class object
-                                //
-                                parmList.set(i1, parmList.get(i1).toLowerCase());
-                                pType[i2] = classMap.get(parmList.get(i1));
-
-                                // Generate the actual parameter object to pass to the method
-                                //
-                                try {
-                                    iparms[i2] = pType[i2].getConstructor(new Class[]{String.class}).newInstance(parmList.get(i1 - 1));
-
-                                } catch (Exception e) {
-                                    // TODO: Update this exception -  it is actually an invalid parm type error
-                                    CErrorManager.logEvent(TAG, "Script internal ERROR: " + id + " method: <" + method + "> Not Found: ", e, false);
-                                }
+                            } catch (Exception e) {
+                                // TODO: Update this exception -  it is actually an invalid parm type error
+                                CErrorManager.logEvent(TAG, "Script internal ERROR: " + id + " method: <" + method + "> Not Found: ", e, false);
                             }
                         }
+                    }
 
-                        try {
-                            // Find the target object by its id
-                            // get the method on the target and apply it with the parameter array created above.
-                            //
-                            if(childMap.containsKey(id)) {
-                                //Log.d(TAG, childMap.get(id).toString());
-                                childMap.get(id).getClass();
+                    try {
+                        // Find the target object by its id
+                        // get the method on the target and apply it with the parameter array created above.
+                        //
+                        if(childMap.containsKey(id)) {
+                            //Log.d(TAG, childMap.get(id).toString());
+                            // childMap.get(id).getClass();
 
-                                Method _method = childMap.get(id).getClass().getMethod(method, pType);
+                            Method _method = childMap.get(id).getClass().getMethod(method, pType);
 
-                                _method.invoke(childMap.get(id), iparms);
+                            _method.invoke(childMap.get(id), iparms);
 
-                                if(!method.equals(TCONST.LOGSTATE)) {
+                            if(!method.equals(TCONST.LOGSTATE)) {
 
-                                    if (parms != null) {
-                                        // Note the logging parser expects comma delimiters
-                                        //
-                                        decodedParms = decodedParms.replaceAll("\\|", ",");
-                                        RoboTutor.logManager.postEvent_I(_logType, "target:node.action,view:" + id + ",method:" + method + "," + decodedParms);
-                                    }
-                                    else {
-                                        RoboTutor.logManager.postEvent_I(_logType, "target:node.action,view:" + id + ",method:" + method );
-                                    }
-
+                                if (parms != null) {
+                                    // Note the logging parser expects comma delimiters
+                                    //
+                                    decodedParms = decodedParms.replaceAll("\\|", ",");
+                                    RoboTutor.logManager.postEvent_I(_logType, "target:node.action,view:" + id + ",method:" + method + "," + decodedParms);
                                 }
-                            }
-
-                            // If it is not a display object then check for scope objects i.e. nodes
-                            //
-                            else {
-                                Method _method = getScope().mapSymbol(id).getClass().getMethod(method, pType);
-
-                                _method.invoke(getScope().mapSymbol(id), iparms);
-
-                                if(!method.equals(TCONST.LOGSTATE)) {
-                                    if (parms != null) {
-                                        // Note the logging parser expects comma delimiters
-                                        //
-                                        decodedParms = decodedParms.replaceAll("\\|", ",");
-                                        RoboTutor.logManager.postEvent_I(_logType, "target:node.action,scopevar:" + id + ",method:" + method + "," + decodedParms);
-                                    }
-                                    else {
-                                        RoboTutor.logManager.postEvent_I(_logType, "target:node.action,scopevar:" + id + ",method:" + method);
-                                    }
+                                else {
+                                    RoboTutor.logManager.postEvent_I(_logType, "target:node.action,view:" + id + ",method:" + method );
                                 }
 
                             }
                         }
-                        catch (Exception e) {
-                            CErrorManager.logEvent(_logType, "target:node.action,error:Script internal ERROR,name:" + id + ",method:" + method + ",parms:" + decodedParms + ",exception:", e, false);
+
+                        // If it is not a display object then check for scope objects i.e. nodes
+                        //
+                        else {
+                            Method _method = getScope().mapSymbol(id).getClass().getMethod(method, pType);
+
+                            _method.invoke(getScope().mapSymbol(id), iparms);
+
+                            if(!method.equals(TCONST.LOGSTATE)) {
+                                if (parms != null) {
+                                    // Note the logging parser expects comma delimiters
+                                    //
+                                    decodedParms = decodedParms.replaceAll("\\|", ",");
+                                    RoboTutor.logManager.postEvent_I(_logType, "target:node.action,scopevar:" + id + ",method:" + method + "," + decodedParms);
+                                }
+                                else {
+                                    RoboTutor.logManager.postEvent_I(_logType, "target:node.action,scopevar:" + id + ",method:" + method);
+                                }
+                            }
+
                         }
-                        break;
-                }
+                    }
+                    catch (Exception e) {
+                        CErrorManager.logEvent(_logType, "target:node.action,error:Script internal ERROR,name:" + id + ",method:" + method + ",parms:" + decodedParms + ",exception:", e, false);
+                    }
+                    break;
             }
         }
 

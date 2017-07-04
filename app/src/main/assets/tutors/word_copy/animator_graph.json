@@ -465,10 +465,10 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "logState", "parms": "type#node,value#SET_DEMOSOURCE:String", "features":""},
 
-            {"name":"pushDataSource - [file]demo_WRD",    "type": "COMMAND", "id": "SWordCopy", "method": "pushDataSource", "parms": "[file]demo_WRD.json:String"      ,"features":"FTR_DEMO_WRD"},
-            {"name":"pushDataSource - [file]demo_LTR_LC", "type": "COMMAND", "id": "SWordCopy", "method": "pushDataSource", "parms": "[file]demo_LTR_LC.json:String"   ,"features":"FTR_DEMO_LTR_LC"},
-            {"name":"pushDataSource - [file]demo_LTR_UC", "type": "COMMAND", "id": "SWordCopy", "method": "pushDataSource", "parms": "[file]demo_LTR_UC.json:String"   ,"features":"FTR_DEMO_LTR_UC"},
-            {"name":"pushDataSource - [file]demo_NUM",    "type": "COMMAND", "id": "SWordCopy", "method": "pushDataSource", "parms": "[file]demo_NUM.json:String"      ,"features":"FTR_DEMO_NUM"},
+            {"name":"pushDataSource - [file]write.demo_wrd",    "type": "COMMAND", "id": "SWordCopy", "method": "pushDataSource", "parms": "[file]write.demo_wrd.json:String"      ,"features":"FTR_DEMO_WRD"},
+            {"name":"pushDataSource - [file]write.demo_ltr_lc", "type": "COMMAND", "id": "SWordCopy", "method": "pushDataSource", "parms": "[file]write.demo_ltr_lc.json:String"   ,"features":"FTR_DEMO_LTR_LC"},
+            {"name":"pushDataSource - [file]write.demo_ltr_uc", "type": "COMMAND", "id": "SWordCopy", "method": "pushDataSource", "parms": "[file]write.demo_ltr_uc.json:String"   ,"features":"FTR_DEMO_LTR_UC"},
+            {"name":"pushDataSource - [file]write.demo_num",    "type": "COMMAND", "id": "SWordCopy", "method": "pushDataSource", "parms": "[file]write.demo_num.json:String"      ,"features":"FTR_DEMO_NUM"},
 
             {"name":"PUBLISH - FTR_DEMO",             "type": "COMMAND", "id": "SWordCopy", "method": "publishFeature", "parms": "FTR_DEMO:String", "features":""}
           ]

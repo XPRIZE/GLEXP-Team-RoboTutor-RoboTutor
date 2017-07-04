@@ -1,7 +1,6 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -250,12 +249,22 @@ public class CStimulusController extends LinearLayout implements IEventListener,
     //***********************************************************
     // Event Listener/Dispatcher - Start
 
+    @Override
+    public boolean isGraphEventSource() {
+        return false;
+    }
+
     /**
      * Must be Overridden in app module to access tutor engine
      * @param linkedView
      */
     @Override
     public void addEventListener(String linkedView) {
+    }
+
+    @Override
+    public void addEventListener(IEventListener listener) {
+
     }
 
     @Override

@@ -1,7 +1,6 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -24,6 +23,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.FrameLayout;
@@ -77,7 +77,12 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
     private HashMap                 queueMap    = new HashMap();
     private boolean                 _qDisabled  = false;
 
+    protected LocalBroadcastManager   bManager;
+
+
     // Working data sets
+    //
+
     public ArrayList<String>        wrk_responseSet = null;             // set of response tems
     public ArrayList<String>        wrk_respTypeSet = null;             // text/reference - for mixed response sets
     public ArrayList<String[]>      wrk_response_script = null;         // List of uttereances describing each potential response
@@ -89,7 +94,6 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
     public ArrayList<String>        wrk_stimulusSet     = null;         // set of stimulus items (questions)
     public ArrayList<String>        wrk_stimTypeSet     = null;         // text/reference - for mixed stimulus items
     public ArrayList<String[]>      wrk_stimulus_script = null;         // List of uttereances describing each question
-
 
 
     // Note: Having independent response sets and answer sets means that the response sets are not limited to the
@@ -122,6 +126,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
     public CBpBackground            view_background     = null;         // Set specific background
     public String                   banner_color        = null;         // Set specific banner color
+    public int                      mask_alpha          = 205;          // Mask alpha
 
 
     static final String TAG = "CBP_Component";
@@ -179,6 +184,10 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         //
         Scontent = (CBP_LetterBoxLayout) findViewById(R.id.Scontent);
 
+        // Capture the local broadcast manager
+        //
+        bManager = LocalBroadcastManager.getInstance(mContext);
+
         // Allow onDraw to be called to start animations
         //
         setWillNotDraw(false);
@@ -235,7 +244,13 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
      * These are convenience operations so the datasource doesn't need redundant info
      * in its encoded JSON form.
      */
-    public void preProcessDataSource() {
+    protected void preProcessDataSource() {
+
+        // If question count is 0 - show all item in the stimulus set
+        //
+        if(question_count == 0) {
+            question_count = gen_stimulusSet.length;
+        }
 
         // gen_xxx...type values are used whrn the type is consistent throughout
         // so we populate the xxx...typeSet array with this value.
@@ -255,11 +270,14 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         //
         wrk_answerSet       = new ArrayList<String>(Arrays.asList(gen_answerSet));
         wrk_answerTypeSet   = new ArrayList<String>(Arrays.asList(gen_answerTypeSet));
+
         if(gen_answer_script != null)
             wrk_answer_script   = new ArrayList<String[]>(Arrays.asList(gen_answer_script));
 
+
         wrk_stimulusSet     = new ArrayList<String>(Arrays.asList(gen_stimulusSet));
         wrk_stimTypeSet     = new ArrayList<String>(Arrays.asList(gen_stimTypeSet));
+
         if(gen_stimulus_script != null)
             wrk_stimulus_script = new ArrayList<String[]>(Arrays.asList(gen_stimulus_script));
 
@@ -283,8 +301,10 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
                 _dataIndex %= dataSource.length;
 
                 // Count down the number of questions requested
+                // Increment question (stimulus index) for non-random sequences
                 //
                 question_count--;
+                question_Index++;
                 attempt_count = BP_CONST.MAX_ATTEMPT;
 
                 Log.d("BPOP", "question Count: " + question_count);
@@ -344,15 +364,15 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         // current correct index in the "correct" i.e. stimulus bubble. To
         // ensure there is at least one correct answer.
         //
-        if(question_sequence.equals(BP_CONST.SEQUENTIAL)) {
+        if(question_sequence.toUpperCase().equals(BP_CONST.SEQUENTIAL)) {
 
-            // cycle on the wrk_responseSet
+            // cycle on the wrk_stimulusSet
             //
            question_Index %= questionCount;
         }
         else {
 
-            question_Index = (int) (Math.random() * questionCount);
+           question_Index = (int) (Math.random() * questionCount);
         }
 
         data.stimulus        = wrk_stimulusSet.get(question_Index);
@@ -368,7 +388,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         // If not using replacement on random selection - i.e. if questions may NOT be repeated
         // then remove the question/answer entry
         //
-        if(!question_replacement && !question_sequence.equals(BP_CONST.SEQUENTIAL)) {
+        if(!question_replacement && !question_sequence.toUpperCase().equals(BP_CONST.SEQUENTIAL)) {
 
             wrk_stimulusSet.remove(question_Index);
             wrk_stimTypeSet.remove(question_Index);
@@ -384,24 +404,22 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
 
     /**
+     *
      */
-    private void preProcessQuestion() {
+    protected void preProcessQuestion() {
 
         // For each question we repopulate these arraylists
         // populate the working ArrayList so we can easily delete elements on demand
         //
         wrk_responseSet     = new ArrayList<String>(Arrays.asList(gen_responseSet));
         wrk_respTypeSet     = new ArrayList<String>(Arrays.asList(gen_respTypeSet));
+
         if(gen_response_script != null)
             wrk_response_script = new ArrayList<String[]>(Arrays.asList(gen_response_script));
     }
 
 
     protected void selectRandResponse(CBp_Data data, int count, int ansIndex) {
-
-        //***** build a presentation set from the response sample set
-        //
-        preProcessQuestion();
 
         // First find the actual answer in the response set and trim it out
         // to avoid duplicate answer items in the respsonse set
@@ -423,6 +441,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         }
 
         // Reset the presenation / response set
+        //
         data.response_set     = new String[count];
         data.responsetype_set = new String[count];
         if(data.response_script != null)
@@ -430,33 +449,43 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
         // Build a presentation set from the responseset samples
         //
+
         for (int i1 = 0; i1 < count ; i1++) {
 
-            int randIndex = (int) (Math.random() * wrk_responseSet.size());
-
-            data.response_set[i1]     = wrk_responseSet.get(randIndex);
-            data.responsetype_set[i1] = wrk_respTypeSet.get(randIndex);
-            if(wrk_response_script != null)
-                data.response_script[i1]  = wrk_response_script.get(randIndex);
-
-            // If not using replacement - i.e. if responses may NOT be repeated then remove
-            // the response entry
+            // Place the answer at the requested location in the presentation array
             //
-            if(!response_replacement) {
+            if(i1 == ansIndex) {
 
-                wrk_responseSet.remove(randIndex);
-                wrk_respTypeSet.remove(randIndex);
-                if(wrk_response_script != null)
-                    wrk_response_script.remove(randIndex);
+                data.response_set[ansIndex]     = data.stimulus;
+                data.responsetype_set[ansIndex] = data.stimulus_type;
+                if(data.response_script != null)
+                    data.response_script[ansIndex]  = data.stimulus_script;
+            }
+
+            // Otherwise place a random choice from the responseSet with or without
+            // replacement
+            //
+            else {
+
+                int randIndex = (int) (Math.random() * wrk_responseSet.size());
+
+                data.response_set[i1] = wrk_responseSet.get(randIndex);
+                data.responsetype_set[i1] = wrk_respTypeSet.get(randIndex);
+                if (wrk_response_script != null)
+                    data.response_script[i1] = wrk_response_script.get(randIndex);
+
+                // If not using replacement - i.e. if responses may NOT be repeated then remove
+                // the response entry
+                //
+                if (!response_replacement) {
+
+                    wrk_responseSet.remove(randIndex);
+                    wrk_respTypeSet.remove(randIndex);
+                    if (wrk_response_script != null)
+                        wrk_response_script.remove(randIndex);
+                }
             }
         }
-
-        // Place the answer at the requested location in the presentation array
-        //
-        data.response_set[ansIndex]     = data.stimulus;
-        data.responsetype_set[ansIndex] = data.stimulus_type;
-        if(data.response_script != null)
-            data.response_script[ansIndex]  = data.stimulus_script;
     }
 
 
@@ -691,7 +720,17 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
 
     @Override
+    public boolean isGraphEventSource() {
+        return false;
+    }
+
+    @Override
     public void addEventListener(String linkedView) {
+
+    }
+
+    @Override
+    public void addEventListener(IEventListener listener) {
 
     }
 

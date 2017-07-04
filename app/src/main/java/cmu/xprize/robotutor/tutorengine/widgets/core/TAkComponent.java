@@ -337,7 +337,10 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         if(nodeName != null && !nodeName.equals("")) {
             try {
                 obj = mTutor.getScope().mapSymbol(nodeName);
-                obj.applyNode();
+
+                if(obj.testFeatures()) {
+                    obj.applyNode();
+                }
 
             } catch (Exception e) {
                 // TODO: Manage invalid Behavior
@@ -808,7 +811,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         extractHashContents(builder, _IntegerVar);
         extractFeatureContents(builder, _FeatureMap);
 
-        RoboTutor.logManager.postTutorState(TUTOR_STATE_MSG, "target#word_copy," + logData + builder.toString());
+        RoboTutor.logManager.postTutorState(TUTOR_STATE_MSG, "target#akira," + logData + builder.toString());
     }
 
     // ITutorLogger - End

@@ -1,7 +1,6 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -78,7 +77,12 @@ public class CTutorEngine implements ILoadableObject2 {
     // "language":"LANG_EN", spec in the TCONST.EDESC replacing EN with
     // the desired language id
 
+    // must match incoming json data
+    //
+    private String                          EXPECTED_VERSION = "1.0";
+
     // json loadable
+    static public String                         descr_version;                 //
     static public String                         defTutor;
     static public HashMap<String, defvar_tutor>  tutorVariants;
     static public HashMap<String, defdata_tutor> bindingPatterns;
@@ -205,10 +209,6 @@ public class CTutorEngine implements ILoadableObject2 {
         if(bindingPatterns != null) {
             tutorBindings = bindingPatterns.get(defTutor);
         }
-
-        // Sample: how to launch a tutor with a json datasource
-//        String datas = "{\"scene_bindings\" : {\"session_manager\": {\"type\": \"SCENEDATA_MAP\", \"databindings\": [{\"name\": \"SsmComponent\",\"datasource\": \"[file]sm_data.json\"}]}}}";
-//        launch(defTutor, "native", datas, "" );
 
         // These features are based on the current tutor selection model
         // When no tutor has been selected it should run the tutor select

@@ -1,7 +1,6 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -420,13 +419,17 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                         //
                         case TCONST.QUEUE:
 
-                            obj.applyNode();
+                            if(obj.testFeatures()) {
+                                obj.applyNode();
+                            }
                             break;
 
                         default:
 
-                            obj.preEnter();
-                            obj.applyNode();
+                            if(obj.testFeatures()) {
+                                obj.preEnter();
+                                obj.applyNode();
+                            }
                             break;
                     }
                 }

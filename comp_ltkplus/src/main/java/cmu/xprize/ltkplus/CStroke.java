@@ -1,7 +1,6 @@
 //*********************************************************************************
 //
-//    Copyright(c) 2016 Carnegie Mellon University. All Rights Reserved.
-//    Copyright(c) Kevin Willows All Rights Reserved
+//    Copyright(c) 2016-2017  Kevin Willows All Rights Reserved
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -156,23 +155,27 @@ public class CStroke {
     // Adds the given point to this getStroke
     public void addPoint(PointF point, long time) {
 
-        // Add Root node
+        //#Mod #383 Jun 4 2017 - limit arraylist size for JNI
         //
-        if(_points.isEmpty()) {
+        if(_points.size() < 250) {
 
-            _canvasPath.moveTo(point.x, point.y);
-            _canvasPoint = new PointF(point.x, point.y);
+            // Add Root node
+            //
+            if (_points.isEmpty()) {
+
+                _canvasPath.moveTo(point.x, point.y);
+                _canvasPoint = new PointF(point.x, point.y);
+            } else {
+                _canvasPath.quadTo(_X, _Y, (point.x + _X) / 2, (point.y + _Y) / 2);
+            }
+
+            _X = point.x;
+            _Y = point.y;
+
+            _points.add(new StrokePoint(point, time));
+
+            addPointToBoundingBox(point);
         }
-        else {
-            _canvasPath.quadTo(_X, _Y, (point.x + _X) / 2, (point.y + _Y) / 2);
-        }
-
-        _X = point.x;
-        _Y = point.y;
-
-        _points.add(new StrokePoint(point, time));
-
-        addPointToBoundingBox(point);
     }
 
 
