@@ -252,7 +252,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
             question_count = gen_stimulusSet.length;
         }
 
-        // gen_xxx...type values are used whrn the type is consistent throughout
+        // gen_xxx...type values are used when the type is consistent throughout
         // so we populate the xxx...typeSet array with this value.
         //
         if(gen_responsetype != null)
@@ -333,13 +333,16 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
             _mechanics = null;
         }
 
-        switch(data.question_type) {
+        switch(data.question_type.toLowerCase()) {
 
+            case "mc":
+            case "multiplechoice":
             case "multiple-choice":
 
                 _mechanics = new CBp_Mechanic_MC(mContext, this);
                 break;
 
+            case "rise":
             case "rising":
 
                 _mechanics = new CBp_Mechanic_RISE(mContext, this);
