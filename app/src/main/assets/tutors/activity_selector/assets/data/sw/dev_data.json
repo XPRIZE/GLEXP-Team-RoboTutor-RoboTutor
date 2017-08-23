@@ -89,6 +89,14 @@
           "behavior": "SELECT_REPEAT",
           "prompt": "lets do it again",
           "help": "tap here to do the same thing again"
+        },
+        {
+          "datatype": "IMAGEBUTTON",
+          "resource": "button_exit_select",
+          "componentID": "Sbutton6",
+          "behavior": "SELECT_EXIT",
+          "prompt": "I want to stop using RoboTutor",
+          "help": "tap here to stop using robotutor"
         }
       ]
     }
