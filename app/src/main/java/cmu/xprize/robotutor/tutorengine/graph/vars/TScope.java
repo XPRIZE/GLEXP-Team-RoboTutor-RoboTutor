@@ -328,7 +328,7 @@ public class TScope implements IScope2 {
                 } while (tarObject == null);
 
                 while (tarObject.getType() == TCONST.TREFERENCE) do {
-                    tarObject = currScope.map.get(tarObject.getValue());
+                    tarObject = currScope.map.get(tarObject.getValue()); // ISSUE 119
 
                     if (tarObject == null)
                         currScope = currScope.getParentScope();
