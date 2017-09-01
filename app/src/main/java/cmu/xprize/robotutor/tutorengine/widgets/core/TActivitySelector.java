@@ -254,7 +254,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                 publishValue(AS_CONST.VAR_BUTTONID, _activeLayout.items[_describeIndex].componentID);
                 publishValue(AS_CONST.VAR_BUT_BEHAVIOR, _activeLayout.items[_describeIndex].behavior);
                 publishValue(AS_CONST.VAR_HELP_AUDIO, _activeLayout.items[_describeIndex].help);
-                publishValue(AS_CONST.VAR_PROMPT_AUDIO, _activeLayout.items[_describeIndex].prompt); // ISSUE 119
+                publishValue(AS_CONST.VAR_PROMPT_AUDIO, _activeLayout.items[_describeIndex].prompt);
 
                 applyBehavior(AS_CONST.DESCRIBE_BEHAVIOR);
 
@@ -290,7 +290,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                     publishValue(AS_CONST.VAR_BUTTONID, element.componentID);
                     publishValue(AS_CONST.VAR_BUT_BEHAVIOR, element.behavior);
                     publishValue(AS_CONST.VAR_HELP_AUDIO, element.help);
-                    publishValue(AS_CONST.VAR_PROMPT_AUDIO, element.prompt); // ISSUE 119 choose between many?
+                    publishValue(AS_CONST.VAR_PROMPT_AUDIO, element.prompt);
 
                     applyBehavior(element.behavior);
                 }
