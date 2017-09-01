@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
@@ -220,7 +221,17 @@ public class CTutorEngine implements ILoadableObject2 {
         //
         CLogManager.setTutor(defTutor);
 
-        createTutor(defTutor, RoboTutor.SELECTOR_MODE);
+        String featureString = RoboTutor.SELECTOR_MODE;
+
+        if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DIFFICULTY_ASSESS)) {
+            // generate a random number to choose which goodbye sound clip to use
+            // IMPROVE ISSUE 119 better way to do this
+            // see app/src/main/assets/tutors/activity_selector/animator_graph.json "GOODBYE_BUTTON_BEHAVIOR"
+            int goodbyeId = (new Random()).nextInt(TCONST.NUM_GOODBYE_SOUND_CLIPS) + 1;
+            featureString += ":" + TCONST.FTR_GOODBYE + "_" + goodbyeId;
+        }
+
+        createTutor(defTutor, featureString);
         launchTutor(tutorBindings);
     }
 

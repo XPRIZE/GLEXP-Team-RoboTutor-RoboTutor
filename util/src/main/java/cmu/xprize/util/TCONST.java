@@ -40,6 +40,9 @@ public class TCONST {
     public static final String FTR_DEBUG_SELECT       = "FTR_DEBUG_SELECT";
     public static final String FTR_DEBUG_LAUNCH       = "FTR_DEBUG_LAUNCH";
 
+    public static final String FTR_GOODBYE = "GOODBYE";
+    public static final int NUM_GOODBYE_SOUND_CLIPS = 3;
+
     public static final String SKILL_WRITING    = "letters";
     public static final String SKILL_STORIES    = "stories";
     public static final String SKILL_MATH       = "numbers";
