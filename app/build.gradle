@@ -140,6 +140,7 @@ android {
         }
     }
 
+    // define apk naming behavior
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             def project = "robotutor"
