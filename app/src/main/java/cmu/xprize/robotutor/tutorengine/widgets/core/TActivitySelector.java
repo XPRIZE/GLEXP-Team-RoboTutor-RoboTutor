@@ -424,6 +424,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
             }
 
+            // This switch statement only includes buttons from Difficulty Assessment screen
             switch (buttonid.toUpperCase()) {
 
                 case AS_CONST.SELECT_CONTINUE:
