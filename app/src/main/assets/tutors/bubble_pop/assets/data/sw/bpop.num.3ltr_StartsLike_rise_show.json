@@ -1,0 +1,133 @@
+{
+  "question_replacement" : false,
+  "response_replacement" : false,
+  "gen_responsetype" : "text_data",
+  "question_count" : 10,
+  "banner_color" : "#000066",
+  "gen_answerSet" : [ ],
+  "gen_responseSet" : [ ],
+  "gen_answertype" : "text_data",
+  "gen_stimulusSet" : [ ],
+  "gen_stimulustype" : "text_data",
+  "question_sequence" : "sequential",
+  "dataSource" : [ {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "huu",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "huo",
+    "response_set" : [ "aha", "mie", "jua", "kua", "huu" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "cha",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "che",
+    "response_set" : [ "mme", "vya", "ale", "cha", "mno" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "ile",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "ila",
+    "response_set" : [ "mje", "chi", "iko", "ile", "iwe" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "ata",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "ati",
+    "response_set" : [ "mje", "ata", "che", "ama", "uko" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "ati",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "ata",
+    "response_set" : [ "ati", "hii", "mie", "yao", "ili" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "chu",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "chi",
+    "response_set" : [ "puu", "chu", "vya", "poo", "ewe" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "pua",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "puu",
+    "response_set" : [ "mke", "taa", "huo", "pua", "ile" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "hai",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "hao",
+    "response_set" : [ "wee", "aha", "hai", "umo", "ara" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "ili",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "ila",
+    "response_set" : [ "ewe", "fee", "saa", "mko", "ili" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "amu",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "ama",
+    "response_set" : [ "mie", "hao", "fee", "amu", "mji" ],
+    "gen_question" : false
+  } ],
+  "view_background" : {
+    "layout" : "grid",
+    "kind" : "squares",
+    "layoutcount" : 0,
+    "style" : "primitives",
+    "colorchoice" : "fixed",
+    "colorbase" : "#666666",
+    "colors" : [ -6053120, -7566336, -2500352, -5066240 ]
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "datasource" : [ {
+    "item_counter" : 1,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "ana",
+    "item_type" : "3_sign",
+    "choices" : [ "juu", "daa", "ale" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 2,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "huu",
+    "item_type" : "3_sign",
+    "choices" : [ "huo", "pia", "ovu" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 3,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "hao",
+    "item_type" : "3_sign",
+    "choices" : [ "kua", "hai", "chi" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 4,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "amu",
+    "item_type" : "3_sign",
+    "choices" : [ "kiu", "ale", "paa" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 5,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "uje",
+    "item_type" : "3_sign",
+    "choices" : [ "uji", "yle", "ila" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 6,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "jua",
+    "item_type" : "3_sign",
+    "choices" : [ "juu", "nio", "nne" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 7,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "hai",
+    "item_type" : "3_sign",
+    "choices" : [ "hao", "amu", "cha" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 8,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "aaa",
+    "item_type" : "3_sign",
+    "choices" : [ "hai", "aha", "oka" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 9,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "ile",
+    "item_type" : "3_sign",
+    "choices" : [ "ala", "nzi", "iko" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 10,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "ewe",
+    "item_type" : "3_sign",
+    "choices" : [ "kaa", "eti", "umo" ],
+    "type" : "CAk_Data"
+  } ]
+}

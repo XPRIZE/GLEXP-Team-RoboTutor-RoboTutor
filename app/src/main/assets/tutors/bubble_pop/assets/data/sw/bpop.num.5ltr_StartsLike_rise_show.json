@@ -1,0 +1,133 @@
+{
+  "question_replacement" : false,
+  "response_replacement" : false,
+  "gen_responsetype" : "text_data",
+  "question_count" : 10,
+  "banner_color" : "#000066",
+  "gen_answerSet" : [ ],
+  "gen_responseSet" : [ ],
+  "gen_answertype" : "text_data",
+  "gen_stimulusSet" : [ ],
+  "gen_stimulustype" : "text_data",
+  "question_sequence" : "sequential",
+  "dataSource" : [ {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "mtemi",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "mtego",
+    "response_set" : [ "rangi", "mtemi", "maoni", "nafuu", "mpigo" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "bunzi",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "bundi",
+    "response_set" : [ "punde", "wajue", "upara", "vigae", "bunzi" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "kingo",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "kindi",
+    "response_set" : [ "pangu", "mmoja", "chaka", "kingo", "kifua" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "nyuma",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "nyuki",
+    "response_set" : [ "jinsi", "mcaho", "mingi", "nenda", "nyuma" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "mwana",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "mwaka",
+    "response_set" : [ "awali", "tabia", "mzima", "ngapi", "mwana" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "mamao",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "mamia",
+    "response_set" : [ "mbivu", "kiota", "malea", "densi", "mamao" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "njano",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "njama",
+    "response_set" : [ "kuoga", "chini", "usemi", "mzazi", "njano" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "mungo",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "mungu",
+    "response_set" : [ "mungo", "mkeka", "mkate", "ukali", "utamu" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "motio",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "motto",
+    "response_set" : [ "motio", "kiatu", "minne", "kimya", "potea" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "vikuu",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "vikki",
+    "response_set" : [ "vikuu", "ghali", "ekeno", "aimbe", "mzito" ],
+    "gen_question" : false
+  } ],
+  "view_background" : {
+    "layout" : "grid",
+    "kind" : "squares",
+    "layoutcount" : 0,
+    "style" : "primitives",
+    "colorchoice" : "fixed",
+    "colorbase" : "#666666",
+    "colors" : [ -6053120, -7566336, -2500352, -5066240 ]
+  }
+}

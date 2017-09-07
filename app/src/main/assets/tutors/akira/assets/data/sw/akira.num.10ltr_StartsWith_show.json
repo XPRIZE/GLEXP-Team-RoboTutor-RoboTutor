@@ -1,0 +1,83 @@
+{
+  "datasource" : [ {
+    "item_counter" : 1,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "tulikwenda",
+    "item_type" : "3_sign",
+    "choices" : [ "tutatembea", "amechelewa", "wamezaliwa" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 2,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "alijifunza",
+    "item_type" : "3_sign",
+    "choices" : [ "hawakuwahi", "niliwapata", "alipouliza" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 3,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "usimwambie",
+    "item_type" : "3_sign",
+    "choices" : [ "uliangusha", "mlichonipa", "watazamaji" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 4,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "tutengenze",
+    "item_type" : "3_sign",
+    "choices" : [ "tulikuonya", "barabarani", "kandokando" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 5,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "amefunikwa",
+    "item_type" : "3_sign",
+    "choices" : [ "niachiliwe", "tutengenze", "amechelewa" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 6,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "alishindwa",
+    "item_type" : "3_sign",
+    "choices" : [ "walizokuwa", "wakapuruka", "alikimbaia" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 7,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "vilipokuwa",
+    "item_type" : "3_sign",
+    "choices" : [ "vikarefuka", "nilikipata", "barabarani" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 8,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "ukapendeza",
+    "item_type" : "3_sign",
+    "choices" : [ "alikirusha", "unapoliona", "nastaajabu" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 9,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "tutengenze",
+    "item_type" : "3_sign",
+    "choices" : [ "tunamtunza", "nisaidieni", "aliangukia" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 10,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "alichosoma",
+    "item_type" : "3_sign",
+    "choices" : [ "alimwalika", "unaendelea", "hungemwona" ],
+    "type" : "CAk_Data"
+  } ]
+}

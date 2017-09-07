@@ -1,0 +1,83 @@
+{
+  "datasource" : [ {
+    "item_counter" : 1,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "kupokea",
+    "item_type" : "3_sign",
+    "choices" : [ "akillia", "kumwaga", "ukilala" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 2,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "endelea",
+    "item_type" : "3_sign",
+    "choices" : [ "akilala", "mwaliko", "unaijua" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 3,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "mwakili",
+    "item_type" : "3_sign",
+    "choices" : [ "zimeiva", "ametimu", "akadeli" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 4,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "akaosha",
+    "item_type" : "3_sign",
+    "choices" : [ "anaruka", "jingine", "ameisha" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 5,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "inahusu",
+    "item_type" : "3_sign",
+    "choices" : [ "aliuona", "ilihusu", "akaimba" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 6,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "wenyeji",
+    "item_type" : "3_sign",
+    "choices" : [ "ahitaji", "jambazi", "jingine" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 7,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "akasoma",
+    "item_type" : "3_sign",
+    "choices" : [ "kufaulu", "akasema", "uogelee" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 8,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "mikubwa",
+    "item_type" : "3_sign",
+    "choices" : [ "kufuata", "wakubwa", "ameketi" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 9,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "akivuka",
+    "item_type" : "3_sign",
+    "choices" : [ "mitungi", "alipata", "ukatoka" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 10,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "anapika",
+    "item_type" : "3_sign",
+    "choices" : [ "masikio", "kualika", "tutamla" ],
+    "type" : "CAk_Data"
+  } ]
+}

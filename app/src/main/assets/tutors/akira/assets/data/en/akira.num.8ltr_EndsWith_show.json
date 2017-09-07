@@ -1,0 +1,83 @@
+{
+  "datasource" : [ {
+    "item_counter" : 1,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "waliitwa",
+    "item_type" : "3_sign",
+    "choices" : [ "ilipatwa", "takataka", "waliunda" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 2,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "alipanda",
+    "item_type" : "3_sign",
+    "choices" : [ "akaingia", "achukuwe", "utatenda" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 3,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "alimtaka",
+    "item_type" : "3_sign",
+    "choices" : [ "amechoka", "makaburi", "ninaimba" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 4,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "magazeti",
+    "item_type" : "3_sign",
+    "choices" : [ "anawaaga", "samawati", "wakaweza" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 5,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "ulisikia",
+    "item_type" : "3_sign",
+    "choices" : [ "kumpatia", "kimeisha", "tunaishi" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 6,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "hakukata",
+    "item_type" : "3_sign",
+    "choices" : [ "wasiliue", "kukipata", "alitokwa" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 7,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "alifunga",
+    "item_type" : "3_sign",
+    "choices" : [ "kuchonga", "hawawezi", "anakohoa" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 8,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "wemekosa",
+    "item_type" : "3_sign",
+    "choices" : [ "wanaketi", "aliigusa", "kutokana" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 9,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "mwelekeo",
+    "item_type" : "3_sign",
+    "choices" : [ "wataweza", "vibonyeo", "iliishia" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 10,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "wakaamua",
+    "item_type" : "3_sign",
+    "choices" : [ "akacheza", "akilalia", "mwanamke" ],
+    "type" : "CAk_Data"
+  } ]
+}

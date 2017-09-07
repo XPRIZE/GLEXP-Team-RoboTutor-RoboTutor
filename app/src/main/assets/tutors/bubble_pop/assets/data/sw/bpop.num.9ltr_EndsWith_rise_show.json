@@ -1,0 +1,133 @@
+{
+  "question_replacement" : false,
+  "response_replacement" : false,
+  "gen_responsetype" : "text_data",
+  "question_count" : 10,
+  "banner_color" : "#000066",
+  "gen_answerSet" : [ ],
+  "gen_responseSet" : [ ],
+  "gen_answertype" : "text_data",
+  "gen_stimulusSet" : [ ],
+  "gen_stimulustype" : "text_data",
+  "question_sequence" : "sequential",
+  "dataSource" : [ {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "wakiongea",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "lilipotea",
+    "response_set" : [ "alitamani", "kukilinda", "mwembamba", "ikavutika", "wakiongea" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "wanatumai",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "asiyemtii",
+    "response_set" : [ "niligeuka", "kuwatunza", "akamfikia", "walifagia", "wanatumai" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "hakumpata",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "alimfuata",
+    "response_set" : [ "liliwaona", "hakumpata", "utakibeba", "nilimwona", "aliongeza" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "iliraruka",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "tukishika",
+    "response_set" : [ "anafanana", "ulipoenda", "kumwambia", "iliraruka", "aliirarua" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "anafurahi",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "walimsihi",
+    "response_set" : [ "asisubiri", "alijivuta", "kumsaidia", "anafurahi", "akielekea" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "akielezea",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "akimmezea",
+    "response_set" : [ "akielezea", "wakashuka", "anusurike", "liligeuka", "hangeweza" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "wakicheza",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "kingeweza",
+    "response_set" : [ "wakicheza", "nikampita", "alipokosa", "ungependa", "akiwasili" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "alifunika",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "anawaweka",
+    "response_set" : [ "alimlisha", "nilipoina", "almuuliza", "kufikiria", "alifunika" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "ukakatika",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "kufanyika",
+    "response_set" : [ "dirishani", "alizibeba", "ukakatika", "elunyikho", "nimepotea" ],
+    "gen_question" : false
+  }, {
+    "question_say" : false,
+    "question_show" : true,
+    "answer_type" : "text_data",
+    "answer" : "aliniziba",
+    "question_type" : "rising",
+    "stimulus_type" : "text_data",
+    "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
+    "stimulus" : "wamembeba",
+    "response_set" : [ "kuteketea", "nitafanya", "mnakimbia", "kuniambia", "aliniziba" ],
+    "gen_question" : false
+  } ],
+  "view_background" : {
+    "layout" : "grid",
+    "kind" : "squares",
+    "layoutcount" : 0,
+    "style" : "primitives",
+    "colorchoice" : "fixed",
+    "colorbase" : "#666666",
+    "colors" : [ -6053120, -7566336, -2500352, -5066240 ]
+  }
+}

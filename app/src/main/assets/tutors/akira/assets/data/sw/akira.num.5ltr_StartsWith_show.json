@@ -1,0 +1,83 @@
+{
+  "datasource" : [ {
+    "item_counter" : 1,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "ujibu",
+    "item_type" : "3_sign",
+    "choices" : [ "mkite", "urudi", "nivae" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 2,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "mbona",
+    "item_type" : "3_sign",
+    "choices" : [ "mboga", "uzito", "nenda" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 3,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "akafa",
+    "item_type" : "3_sign",
+    "choices" : [ "madoa", "mkosi", "asiye" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 4,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "doria",
+    "item_type" : "3_sign",
+    "choices" : [ "ndevu", "donda", "peace" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 5,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "puani",
+    "item_type" : "3_sign",
+    "choices" : [ "punda", "sivyo", "madoa" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 6,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "makuu",
+    "item_type" : "3_sign",
+    "choices" : [ "maana", "motio", "nafuu" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 7,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "tokea",
+    "item_type" : "3_sign",
+    "choices" : [ "tonge", "nyame", "vikuu" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 8,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "vyenu",
+    "item_type" : "3_sign",
+    "choices" : [ "vyema", "randa", "pengo" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 9,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "sioni",
+    "item_type" : "3_sign",
+    "choices" : [ "nyayo", "msimu", "siafu" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 10,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "hamna",
+    "item_type" : "3_sign",
+    "choices" : [ "hatua", "dhidi", "mcaho" ],
+    "type" : "CAk_Data"
+  } ]
+}

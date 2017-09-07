@@ -1,0 +1,83 @@
+{
+  "datasource" : [ {
+    "item_counter" : 1,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "tule",
+    "item_type" : "3_sign",
+    "choices" : [ "naro", "bibi", "pole" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 2,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "mkia",
+    "item_type" : "3_sign",
+    "choices" : [ "lori", "basi", "inia" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 3,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "keji",
+    "item_type" : "3_sign",
+    "choices" : [ "taji", "kovu", "kuni" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 4,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "biwi",
+    "item_type" : "3_sign",
+    "choices" : [ "tawi", "ujao", "lami" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 5,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "tuko",
+    "item_type" : "3_sign",
+    "choices" : [ "kuna", "hapa", "koko" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 6,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "kapu",
+    "item_type" : "3_sign",
+    "choices" : [ "nzee", "supu", "papa" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 7,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "mlio",
+    "item_type" : "3_sign",
+    "choices" : [ "pake", "ndio", "kima" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 8,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "mbao",
+    "item_type" : "3_sign",
+    "choices" : [ "rope", "mwao", "siku" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 9,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "lake",
+    "item_type" : "3_sign",
+    "choices" : [ "yote", "wake", "tamu" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 10,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "nanu",
+    "item_type" : "3_sign",
+    "choices" : [ "begi", "zenu", "hasa" ],
+    "type" : "CAk_Data"
+  } ]
+}

@@ -1,0 +1,83 @@
+{
+  "datasource" : [ {
+    "item_counter" : 1,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "saba",
+    "item_type" : "3_sign",
+    "choices" : [ "tamu", "dada", "beba" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 2,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "wali",
+    "item_type" : "3_sign",
+    "choices" : [ "hali", "tope", "ubao" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 3,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "kote",
+    "item_type" : "3_sign",
+    "choices" : [ "mbwo", "mate", "waua" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 4,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "mimi",
+    "item_type" : "3_sign",
+    "choices" : [ "ulio", "soma", "lami" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 5,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "aina",
+    "item_type" : "3_sign",
+    "choices" : [ "wima", "bali", "nina" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 6,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "kuja",
+    "item_type" : "3_sign",
+    "choices" : [ "hadi", "dogo", "taja" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 7,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "nili",
+    "item_type" : "3_sign",
+    "choices" : [ "sita", "meli", "zama" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 8,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "naye",
+    "item_type" : "3_sign",
+    "choices" : [ "bado", "yeye", "viti" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 9,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "baki",
+    "item_type" : "3_sign",
+    "choices" : [ "woga", "opio", "hiki" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 10,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "mwao",
+    "item_type" : "3_sign",
+    "choices" : [ "ukoo", "nono", "mama" ],
+    "type" : "CAk_Data"
+  } ]
+}
