@@ -10,7 +10,28 @@ android {
         targetSdkVersion rootProject.ext.rtTargetSdkVersion
         versionCode rootProject.ext.rtVersionCode
         versionName rootProject.ext.rtVersionName
+        // default is signed by the Android default key
     }
+
+    // Create a variable called keystorePropertiesFile, and initialize it to your
+    // keystore.properties file, in the rootProject folder.
+    def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+    // Initialize a new Properties() object called keystoreProperties
+    def keystoreProperties = new Properties()
+
+    // Load your keystore.properties file into the keystoreProperties object.
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+    signingConfigs {
+        android {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+
     buildTypes {
 
         // These custom buildFields are incorporated into the generated BuildConfig class
@@ -76,6 +97,8 @@ android {
             buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
+
+            signingConfig signingConfigs.android
         }
 
         release_sw_xprize {
@@ -85,6 +108,8 @@ android {
             buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
+            
+            signingConfig signingConfigs.android
         }
 
         release_en {
@@ -94,6 +119,8 @@ android {
             buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
+
+            signingConfig signingConfigs.android
         }
 
         release_en_xprize {
@@ -103,6 +130,8 @@ android {
             buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
+
+            signingConfig signingConfigs.android
         }
 
         release_sw_noasr {
@@ -114,6 +143,20 @@ android {
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
         }
     }
+
+    // define apk naming behavior
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def project = "robotutor"
+            def SEP = "."
+            def buildType = variant.variantData.variantConfiguration.buildType.name
+            def version = variant.versionName
+
+            def newApkName = project + SEP + buildType + SEP + version + ".apk"
+            output.outputFile = new File(output.outputFile.parent, newApkName)
+        }
+    }
+
     lintOptions {
         // set to true to turn off analysis progress reporting by lint
         quiet true
