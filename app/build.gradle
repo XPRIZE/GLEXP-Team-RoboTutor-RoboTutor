@@ -119,6 +119,8 @@ android {
             buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
+
+            signingConfig signingConfigs.android
         }
 
         release_en_xprize {
@@ -128,6 +130,8 @@ android {
             buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
+
+            signingConfig signingConfigs.android
         }
 
         release_sw_noasr {
