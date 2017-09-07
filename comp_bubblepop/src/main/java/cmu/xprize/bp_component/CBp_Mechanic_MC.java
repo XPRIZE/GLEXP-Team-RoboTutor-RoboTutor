@@ -61,9 +61,6 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
     static final String TAG = "CBp_Mechanic_MC";
 
-    private boolean        isWord = false;
-
-
     public CBp_Mechanic_MC(Context context, CBP_Component parent ) {
         super.init(context, parent);
     }
@@ -394,9 +391,6 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
                     //Moved set color to here too so that text would be known when setting the color(generating  bubble)
                     newBubble.setColor(bubbleColor);
-                    if(newBubble.getTextView().getText().length() > 1) {
-                        isWord = true;
-                    }
                     break;
             }
         }
@@ -415,16 +409,6 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
         _angleInc   = (float)((2 * Math.PI) / data.response_set.length);
 
-
-        //Finds maximum number of rows in the screen that can fit a bubble
-        float rangeYPosition = (mParent.getHeight()) - maxBubbleHeight;
-
-        int rangeYRows = (int) (rangeYPosition / maxBubbleHeight);
-
-        int[] rowsTaken = new int[rangeYRows];
-
-
-
         for(int i1 = 0; i1 < SBubbles.length ; i1++) {
 
             // This is the scale the bubble will expand too.
@@ -433,33 +417,27 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
             Paint paint = new Paint();
 
-            //Width of the string
-            float widthString = paint.measureText(SBubbles[i1].getTextView().getText().toString());
+            String text = SBubbles[i1].getTextView().getText().toString();
+            String singleLine = text;
 
-            //Converts width of string to width of bubble (since getWidth() doesn't calculate fast enough)
-            float newWidth = widthString * (float) 6.75 + 150;
+            //Calculate approximations of height and width of bubble instantenously so that calculations for
+            //arranging the bubble can be done
+            int bubbleHeight = BP_CONST.BUBBLE_DESIGN_RADIUS;
+            int bubbleWidth = BP_CONST.BUBBLE_DESIGN_RADIUS;
 
-            float[] _range = calcVectorRange(_angle, newWidth * SBubbles[i1].getAssignedScale() );
+            //If multilple lines, change bubble hight
+            if(text.matches(".*\n.*")) {
+                int index = text.indexOf("\n");
+                singleLine = text.substring(0, index);
+            }
 
-            SBubbles[i1].setRange(_range);
+            int numChar = singleLine.length();
+            bubbleWidth = bubbleWidth - 30 * numChar;
 
-            int yRow = -1;
+            float[] _widthRange = calcVectorRange(_angle, bubbleWidth * SBubbles[i1].getAssignedScale());
+            float[] _heightRange = calcVectorRange(_angle, bubbleHeight * SBubbles[i1].getAssignedScale());
 
-            do {
-                //Randomly chooses a row to have the bubble
-                yRow = (int)(Math.random() * rangeYRows);
-
-            } while(rowsTaken[yRow] == 2);
-
-            rowsTaken[yRow] = rowsTaken[yRow] + 1;
-
-            //Either going to be 0 or 1
-            int xPosition = rowsTaken[yRow] - 1;
-
-            //Finds the height corresponding to the row randomly selected
-            float yHeight = yRow * maxBubbleHeight + maxBubbleHeight/2;
-
-            SBubbles[i1].setVectorPosition(_viewCenter, getRandInRange(_range), _angle, yHeight, xPosition, isWord, newWidth);
+            SBubbles[i1].setVectorPosition(_viewCenter, getRandInRange(_widthRange), getRandInRange(_heightRange), _angle);
             _angle += _angleInc;
         }
 

@@ -1,0 +1,211 @@
+{
+  "datasource" : [ {
+    "item_counter" : 1,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "1\n+5",
+    "item_type" : "3_sign",
+    "choices" : [ "2", "6", "9" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 2,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "1\n+4",
+    "item_type" : "3_sign",
+    "choices" : [ "5", "7", "8" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 3,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "4\n-2",
+    "item_type" : "3_sign",
+    "choices" : [ "2", "3", "5" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 4,
+    "answer" : "RIGHT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "17\n-0",
+    "item_type" : "3_sign",
+    "choices" : [ "8", "9", "17" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 5,
+    "answer" : "RIGHT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "93\n-8",
+    "item_type" : "3_sign",
+    "choices" : [ "48", "78", "85" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 6,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "9\n+3",
+    "item_type" : "3_sign",
+    "choices" : [ "6", "12", "14" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 7,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "2\n+0",
+    "item_type" : "3_sign",
+    "choices" : [ "2", "5", "7" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 8,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "9\n+5",
+    "item_type" : "3_sign",
+    "choices" : [ "5", "14", "18" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 9,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "16\n-10",
+    "item_type" : "3_sign",
+    "choices" : [ "6", "7", "14" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 10,
+    "answer" : "RIGHT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "16\n-9",
+    "item_type" : "3_sign",
+    "choices" : [ "1", "2", "7" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 11,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "91\n-49",
+    "item_type" : "3_sign",
+    "choices" : [ "32", "42", "43" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 12,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "14\n+18",
+    "item_type" : "3_sign",
+    "choices" : [ "23", "32", "35" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 13,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "10\n+1",
+    "item_type" : "3_sign",
+    "choices" : [ "11", "14", "16" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 14,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "15\n+48",
+    "item_type" : "3_sign",
+    "choices" : [ "52", "63", "99" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 15,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "725\n-550",
+    "item_type" : "3_sign",
+    "choices" : [ "175", "317", "716" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 16,
+    "answer" : "RIGHT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "658\n+167",
+    "item_type" : "3_sign",
+    "choices" : [ "29", "416", "825" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 17,
+    "answer" : "RIGHT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "0\n+6",
+    "item_type" : "3_sign",
+    "choices" : [ "2", "5", "6" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 18,
+    "answer" : "RIGHT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "7\n-0",
+    "item_type" : "3_sign",
+    "choices" : [ "2", "5", "7" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 19,
+    "answer" : "RIGHT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "6\n+1",
+    "item_type" : "3_sign",
+    "choices" : [ "4", "5", "7" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 20,
+    "answer" : "RIGHT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "9\n+1",
+    "item_type" : "3_sign",
+    "choices" : [ "2", "7", "10" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 21,
+    "answer" : "RIGHT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "8\n-1",
+    "item_type" : "3_sign",
+    "choices" : [ "4", "5", "7" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 22,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "4\n-1",
+    "item_type" : "3_sign",
+    "choices" : [ "0", "3", "7" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 23,
+    "answer" : "RIGHT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "90\n+10",
+    "item_type" : "3_sign",
+    "choices" : [ "40", "50", "100" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 24,
+    "answer" : "RIGHT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "500\n+100",
+    "item_type" : "3_sign",
+    "choices" : [ "100", "300", "600" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 25,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "10\n+30",
+    "item_type" : "3_sign",
+    "choices" : [ "40", "80", "90" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 26,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "400\n-300",
+    "item_type" : "3_sign",
+    "choices" : [ "100", "600", "1000" ],
+    "type" : "CAk_Data"
+  } ]
+}

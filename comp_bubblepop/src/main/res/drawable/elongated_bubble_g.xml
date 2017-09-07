@@ -5,16 +5,17 @@
     <solid android:color="#45E52E" />
 
     <corners
-        android:bottomLeftRadius="50dp"
-        android:bottomRightRadius="50dp"
-        android:topLeftRadius="50dp"
-        android:topRightRadius="50dp" />
+        android:bottomLeftRadius="100dp"
+        android:bottomRightRadius="100dp"
+        android:topLeftRadius="100dp"
+        android:topRightRadius="100dp" />
 
     <padding
-        android:bottom="20dip"
+        android:bottom="50dip"
         android:left="50dip"
         android:right="50dip"
-        android:top="20dip" />
+        android:top="50dip" />
+
 
 
 </shape>
