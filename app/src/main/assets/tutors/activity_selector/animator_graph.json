@@ -111,8 +111,14 @@
             {"name":"AUDIO BUTTON SELECTED", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{activity_selector.promptAudio}}.mp3","soundpackage": "default","mode": "flow", "features": ""},
 
             {"name":"SAY GOODBYE", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Goodbye.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DIFFICULTY_ASSESS&GOODBYE_1"},
-            {"name":"SAY GOODBYE", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "See you soon.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DIFFICULTY_ASSESS&GOODBYE_2"},
-            {"name":"SAY GOODBYE", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "See you next time.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DIFFICULTY_ASSESS&GOODBYE_3"},
+            {"name":"SAY GOODBYE", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Thank you for using RoboTutor.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DIFFICULTY_ASSESS&GOODBYE_2"},
+            {"name":"SAY GOODBYE", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "See you soon.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DIFFICULTY_ASSESS&GOODBYE_3"},
+            {"name":"SAY GOODBYE", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "I hope you had as much fun as I did.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DIFFICULTY_ASSESS&GOODBYE_4"},
+            {"name":"SAY GOODBYE", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "See you next time.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DIFFICULTY_ASSESS&GOODBYE_5"},
+            {"name":"SAY GOODBYE", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Think how much you learned today.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DIFFICULTY_ASSESS&GOODBYE_6"},
+            {"name":"SAY GOODBYE", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Think about what you learned today.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DIFFICULTY_ASSESS&GOODBYE_7"},
+            {"name":"SAY GOODBYE", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tell your friends and family what you learned today.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DIFFICULTY_ASSESS&GOODBYE_8"},
+            {"name":"SAY GOODBYE", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Can you teach your friends what you learned today.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DIFFICULTY_ASSESS&GOODBYE_9"},
 
             {"name":"BUTTON ACTION EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "BUTTON_EVENT:String|{{activity_selector.buttonbehavior}}:String", "features":""},
 

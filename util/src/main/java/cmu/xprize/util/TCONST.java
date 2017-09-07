@@ -41,7 +41,8 @@ public class TCONST {
     public static final String FTR_DEBUG_LAUNCH       = "FTR_DEBUG_LAUNCH";
 
     public static final String FTR_GOODBYE = "GOODBYE";
-    public static final int NUM_GOODBYE_SOUND_CLIPS = 3;
+    public static final int NUM_GOODBYE_SOUND_CLIPS = 9;    // make sure this matches the number of sound clips in
+                                                            // the "EXIT_BUTTON_BEHAVIOR" object in activity_selector/animator_graph.json
 
     public static final String SKILL_WRITING    = "letters";
     public static final String SKILL_STORIES    = "stories";
