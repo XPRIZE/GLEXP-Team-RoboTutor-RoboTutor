@@ -33,7 +33,6 @@ import cmu.xprize.comp_logging.CLogManager;
 import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.TCONST;
 
-import static cmu.xprize.util.TCONST.GRAPH_MSG;
 import static cmu.xprize.util.TCONST.LTKPLUS_MSG;
 
 
@@ -189,6 +188,10 @@ public class CRecognizerPlus implements IGlyphSink {
 
             case GCONST.BOOST_EXCLASS:
                 _boostSampleClass = true;
+                break;
+
+            case GCONST.NO_BOOST:
+                // DO NOTHING
                 break;
         }
     }
