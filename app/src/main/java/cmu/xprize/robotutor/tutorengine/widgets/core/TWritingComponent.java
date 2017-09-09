@@ -41,6 +41,7 @@ import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.comp_writing.CWritingComponent;
 import cmu.xprize.comp_writing.WR_CONST;
 import cmu.xprize.ltkplus.CRecognizerPlus;
+import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
@@ -125,6 +126,8 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         //
         _recognizer = CRecognizerPlus.getInstance();
         _glyphSet   = _recognizer.getGlyphPrototypes(); //new GlyphSet(TCONST.ALPHABET);
+
+        _recognizer.setClassBoost(GCONST.NO_BOOST); // reset boost which may have been set from Asm
 
         mRecognizedScroll = (CLinkedScrollView) findViewById(R.id.Sstimulus);
         mRecogList        = (LinearLayout) findViewById(R.id.SstimulusList);
