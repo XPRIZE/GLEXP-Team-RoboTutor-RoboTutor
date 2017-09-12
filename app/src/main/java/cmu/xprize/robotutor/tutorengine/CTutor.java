@@ -242,6 +242,36 @@ public class CTutor implements ILoadableObject2, IEventSource {
     }
 
 
+    /**
+     * for tracking student score within an activity
+     * REVIEW build into existing architecture more fluidly
+     */
+    private int score = 0;
+    private int attempts = 0;
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getAttempts() {
+        return attempts;
+    }
+
+    public void countCorrect() {
+        score++;
+        attempts++;
+    }
+
+    public void countIncorrect() {
+        attempts++;
+    }
+
+    public void resetScore() {
+        score = 0;
+        attempts = 0;
+    }
+
+
     public class Queue implements Runnable {
 
         protected final String _command;

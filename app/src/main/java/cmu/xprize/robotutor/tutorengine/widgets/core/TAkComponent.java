@@ -467,10 +467,13 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         }
     }
 
+    // XXX judge correctness for Akira
     public void judge_rightwrong(){
         if(questionBoard.answerLane == player.lane){
             publishFeature(TCONST.GENERIC_RIGHT);
             wrongTimes = 0;
+
+            mTutor.countCorrect();
         }else {
             wrongTimes++;
             if(wrongTimes != 2) {
@@ -479,6 +482,8 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
                 publishFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
                 wrongTimes = 0;
             }
+
+            mTutor.countIncorrect();
         }
     }
 

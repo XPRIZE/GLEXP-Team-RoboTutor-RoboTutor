@@ -36,7 +36,7 @@ import cmu.xprize.bp_component.BP_CONST;
 import cmu.xprize.bp_component.CBP_Component;
 import cmu.xprize.bp_component.CBp_Data;
 import cmu.xprize.bp_component.CBubble;
-import cmu.xprize.comp_clickmask.CM_CONST;
+
 import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
@@ -64,7 +64,6 @@ import cmu.xprize.util.TCONST;
 import static cmu.xprize.comp_clickmask.CM_CONST.EXCLUDE_CIRCLE;
 import static cmu.xprize.comp_clickmask.CM_CONST.MASK_ADDEXCL;
 import static cmu.xprize.comp_clickmask.CM_CONST.MASK_ALPHA;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_ANIMATE;
 import static cmu.xprize.comp_clickmask.CM_CONST.MASK_CLREXCL;
 import static cmu.xprize.comp_clickmask.CM_CONST.MASK_R;
 import static cmu.xprize.comp_clickmask.CM_CONST.MASK_SETALPHA;
@@ -72,10 +71,8 @@ import static cmu.xprize.comp_clickmask.CM_CONST.MASK_SHOWHIDE;
 import static cmu.xprize.comp_clickmask.CM_CONST.MASK_TYPE;
 import static cmu.xprize.comp_clickmask.CM_CONST.MASK_X;
 import static cmu.xprize.comp_clickmask.CM_CONST.MASK_Y;
-import static cmu.xprize.util.TCONST.INVISIBLE;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
-import static cmu.xprize.util.TCONST.VISIBLE;
 
 public class TBpComponent extends CBP_Component implements IBehaviorManager, ITutorObjectImpl, IDataSink, IEventSource, IPublisher, ITutorLogger {
 
@@ -639,14 +636,31 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         resetValid();
 
+        // XXX compare contents of scope in both locations
+        TScope thisScope = mTutor.getScope(); // remove
+        TScope parentScope = mTutor.getScope().getParentScope(); // remove
+        TScope root = mTutor.getScope().root(); // remove
+
         if (bubble.isCorrect()) {
             publishFeature(TCONST.GENERIC_RIGHT);
             Log.d("BPOP", "Correct" );
+
+
+            // XXX this is where correct count is incremented for Bubble Pop
             correct_Count++;
+
+            mTutor.countCorrect();
+
+            Log.d("PERFORMANCE", "marking correct answer");
+
         } else {
             publishFeature(TCONST.GENERIC_WRONG);
             Log.d("BPOP", "Wrong" );
             attempt_count--;
+
+
+            Log.d("PERFORMANCE", "marking incorrect answer");
+            mTutor.countIncorrect();
 
             if(attempt_count <= 0) {
                 publishFeature(TCONST.LAST_ATTEMPT);
