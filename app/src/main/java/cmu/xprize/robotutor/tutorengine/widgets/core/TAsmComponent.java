@@ -134,6 +134,8 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
             publishFeature(TCONST.GENERIC_RIGHT);
             publishFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
 
+            mTutor.countCorrect(); // XXX test this
+
             saveCurFeaturesAboutOverhead();
             delCurFeaturesAboutOverhead();
         } else {
@@ -148,6 +150,8 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
             }, 3000);
 
             publishFeature(TCONST.GENERIC_WRONG);
+
+            mTutor.countIncorrect(); // XXX test this
 
             if (resultCorrect == ASM_CONST.NOT_ALL_INPUT_RIGHT) {
                 publishFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);

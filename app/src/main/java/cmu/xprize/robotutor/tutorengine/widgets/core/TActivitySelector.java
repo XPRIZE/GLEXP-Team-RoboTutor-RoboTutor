@@ -22,6 +22,7 @@ import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.comp_session.CActivitySelector;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.util.CAt_Data;
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
@@ -50,6 +51,7 @@ import static cmu.xprize.comp_session.AS_CONST.VAR_DATASOURCE;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENTDATA;
 import static cmu.xprize.robotutor.tutorengine.util.CClassMap2.classMap;
+import static cmu.xprize.util.TCONST.PERFORMANCE_TAG;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
@@ -424,32 +426,84 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
             }
 
-            // This switch statement only includes buttons from Difficulty Assessment screen
+            // XXX REVIEW improve implementation
+            TScope root = mTutor.getScope().root();
+            String childScope = null;
+            Boolean usePerformance = false; // usePerformance will only be true if performance metrics (correct, incorrect)
+                                            // are tracked for that activity
+
+            if(activeTutor.startsWith("bpop")) {
+                childScope = "bubble_pop";
+                usePerformance = true;
+            } else if (activeTutor.startsWith("akira")) {
+                childScope = "akira";
+                usePerformance = true;
+            } else if (activeTutor.startsWith("math")) {
+                childScope = "math";
+                usePerformance = true;
+            }
+
+            if(usePerformance) {
+                TScope lastScope = root.getChildScope(childScope);
+                CTutor lastTutor;
+                if(lastScope != null) {
+                    lastTutor = lastScope.tutor();
+
+                    int correct = lastTutor.getScore();
+                    int attempts = lastTutor.getAttempts();
+                    double percent = 0;
+                    if (attempts > 0) {// don't divide by zero
+                        percent = correct / (double) attempts;
+                    }
+                    Log.i(PERFORMANCE_TAG, "performance = " + correct + " / " + attempts);
+
+                    Log.i(PERFORMANCE_TAG, "activeTutor: " + activeTutor);
+                    Log.i(PERFORMANCE_TAG, "nextTutor: " + nextTutor);
+
+
+                    if (percent >= TCONST.HIGH_PERFORMANCE_THRESHOLD) {
+                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).harder;
+                    } else if (percent >= TCONST.MID_PERFORMANCE_THRESHOLD || attempts < TCONST.MIN_ATTEMPTS_TO_GRADE) {
+                        // if user just quits...
+                        // note that as long as the student does "MIN_ATTEMPTS_TO_GRADE",
+                        // their percentage will be graded the same as if they had completed the entire activity
+                        // REVIEW what is the proper number?
+                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
+                    } else {
+                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).easier;
+                    }
+
+                } else {
+                    usePerformance = false;
+                }
+
+            }
+
             switch (buttonid.toUpperCase()) {
 
                 case AS_CONST.SELECT_CONTINUE:
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
+                    nextTutor = usePerformance ? nextTutor : ((CAt_Data) transitionMap.get(activeTutor)).next;
 
                     mTutor.post(TCONST.ENDTUTOR);
                     RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
                     break;
 
                 case AS_CONST.SELECT_MAKE_HARDER:
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).harder;
+                    nextTutor = usePerformance ? nextTutor : ((CAt_Data) transitionMap.get(activeTutor)).harder;
 
                     mTutor.post(TCONST.ENDTUTOR);
                     RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
                     break;
 
                 case AS_CONST.SELECT_MAKE_EASIER:
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).easier;
+                    nextTutor = usePerformance ? nextTutor : ((CAt_Data) transitionMap.get(activeTutor)).easier;
 
                     mTutor.post(TCONST.ENDTUTOR);
                     RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
                     break;
 
                 case AS_CONST.SELECT_EXIT:
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id;
+                    nextTutor = usePerformance ? nextTutor : ((CAt_Data) transitionMap.get(activeTutor)).tutor_id;
 
                     mTutor.post(TCONST.FINISH);
                     RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
@@ -461,7 +515,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                 // At the moment default to continue to "next" link
                 //
                 case AS_CONST.SELECT_AUTO_DIFFICULTY:
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
+                    nextTutor = usePerformance ? nextTutor : ((CAt_Data) transitionMap.get(activeTutor)).next;
 
                     // just reselect the current skill and continue with next tutor
                     // no skill selection phase
@@ -470,7 +524,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                     break;
 
                 case AS_CONST.SELECT_REPEAT:
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id;
+                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id; // if the select "repeat", then it will be the same tutor
                     // just reselect the current skill and continue with next tutor
                     // no skill selection phase
                     buttonid = activeSkill;

@@ -66,6 +66,23 @@ public class TScope implements IScope2 {
                 rootScope = this;
     }
 
+    /**
+     * This method is designed to give the "Activity_selector" tutor access to the score counted by the game tutors,
+     * which is used for performance based promotion.
+     * REVIEW there may be a better way to do this
+     * @param name
+     * @return
+     */
+    public TScope getChildScope(String name) {
+
+        TScope child = scopes.get(name);
+
+        if(child != null) {
+            return child;
+        } else {
+            return null;
+        }
+    }
 
     @Override
     public CTutor tutor() {
