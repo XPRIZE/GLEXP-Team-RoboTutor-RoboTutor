@@ -432,7 +432,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             Boolean usePerformance = false; // usePerformance will only be true if performance metrics (correct, incorrect)
                                             // are tracked for that activity
 
-            if(activeTutor.startsWith("bpop")) { // XXX TEST review possible activity names
+            if(activeTutor.startsWith("bpop")) {
                 childScope = "bubble_pop";
                 usePerformance = true;
             } else if (activeTutor.startsWith("akira")) {
@@ -444,9 +444,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             }
 
             if(usePerformance) {
-                // XXX
                 TScope lastScope = root.getChildScope(childScope);
-                CTutor lastTutor = null;
+                CTutor lastTutor;
                 if(lastScope != null) {
                     lastTutor = lastScope.tutor();
 
