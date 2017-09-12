@@ -525,7 +525,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                     break;
 
                 case AS_CONST.SELECT_REPEAT:
-                    nextTutor = usePerformance ? nextTutor : ((CAt_Data) transitionMap.get(activeTutor)).tutor_id;
+                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id; // if the select "repeat", then it will be the same tutor
                     // just reselect the current skill and continue with next tutor
                     // no skill selection phase
                     buttonid = activeSkill;
