@@ -43,6 +43,7 @@ import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -52,6 +53,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.robotutor.tutorengine.util.PerformanceLogItem;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.IEventSource;
@@ -672,6 +674,53 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         Log.d("BPOP", "Publish correct Count: " + correct_Count);
         Log.d("BPOP", "Publish attempt Count: " + attempt_count);
 
+        logPerformance(bubble);
+
+    }
+
+    private void logPerformance(CBubble bubble) {
+        // XXX_LL Begin changes
+
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        String problemName = "BPOP_" + _currData.answer + "_";
+        for(int i = 0; i < _currData.response_set.length-1; i++) {
+            problemName += _currData.response_set[i] + "-";
+        }
+        problemName += _currData.response_set[_currData.response_set.length-1] + "";
+
+        String promptType = "";
+        if (_currData.question_say) promptType += "say";
+        if (_currData.question_show) promptType += ((promptType.length() > 0) ? "+" : "") + "show";
+
+        event.setUserId(null);
+        event.setGameId("bubble_pop");
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(mTutor.getTutorName());
+        event.setProblemName(problemName);
+        event.setProblemNumber(null);
+        event.setTotalSubsteps(1);
+        event.setSubstepNumber(1);
+        event.setSubstepProblem(1);
+        event.setAttemptNumber(1);
+        event.setExpectedAnswer(_currData.answer);
+
+        StringBuilder distractors = new StringBuilder();
+        for(int i = 0; i < _currData.response_set.length; i++) {
+            if(!_currData.response_set[i].equals(_currData.answer))
+                distractors.append(_currData.response_set[i]+"+");
+        }
+        event.setDistractors(distractors.toString().substring(0, distractors.toString().length() - 1));
+
+        event.setUserResponse(bubble.getStimulus());
+        event.setCorrectness(bubble.isCorrect() ? "TRUE" : "FALSE");
+        event.setScaffolding(null);
+        event.setPromptType(promptType);
+        event.setFeedbackType(null);
+
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.logManager.postEvent_I(TCONST.PERFORMANCE_TAG, event.toString());
     }
 
     protected void publishQuestionState(CBp_Data data) {
