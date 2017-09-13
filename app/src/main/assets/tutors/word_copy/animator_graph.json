@@ -257,7 +257,7 @@
           "mapname": "DEMO_SELECT_MODULE",
 
 //          Use this to enable metric constraints on glyphs
-          "preenter":["SET_VERSION","SET_DATASOURCE","SET_CONSTRAINT2"],
+          "preenter":["SET_VERSION","SET_DATASOURCE","SET_CONSTRAINT3"],
           "preexit" :[],
           "edges": [
             {"constraint": "FTR_DEMO", "edge": "DEMO_INIT"},
