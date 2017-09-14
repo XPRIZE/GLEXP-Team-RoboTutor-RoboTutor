@@ -32,12 +32,14 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
@@ -96,6 +98,8 @@ public class CTutor implements ILoadableObject2, IEventSource {
     private HashMap                      queueMap    = new HashMap();
     private boolean                      mDisabled   = false;
 
+    private UUID uuid;
+
     // json loadable
     public scene_initializer[]              scenedata;
     public defdata_tutor                    dataSource = null;
@@ -122,6 +126,8 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         mAssetManager    = context.getAssets();
         mMediaManager    = CMediaController.newMediaManager(mTutorName);
+
+        uuid = UUID.randomUUID();
 
         setTutorFeatures(featSet);
 
@@ -269,6 +275,10 @@ public class CTutor implements ILoadableObject2, IEventSource {
     public void resetScore() {
         score = 0;
         attempts = 0;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 
 

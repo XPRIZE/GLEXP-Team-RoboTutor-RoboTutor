@@ -1,8 +1,6 @@
-package cmu.xprize.robotutor.tutorengine.util;
+package cmu.xprize.comp_logging;
 
 import java.lang.reflect.Field;
-
-import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 
 /**
  * Created by kevindeland on 9/13/17.
@@ -17,12 +15,14 @@ public class PerformanceLogItem {
     private String language;
     private String tutorName;
     private String problemName;
-    private String problemNumber;
+    private int problemNumber;
+    private String taskName;
 
     private int totalSubsteps;
     private int substepNumber;
     private int substepProblem;
     private int attemptNumber;
+    private String knowledgeComponent;
 
     private String expectedAnswer;
     private String userResponse;
@@ -33,31 +33,37 @@ public class PerformanceLogItem {
     private String promptType;
     private String feedbackType;
 
+    // iterative way to print fields in the desired order
+    private static final String[] orderedFieldsToPrint =
+            {"userId", "sessionId", "gameId", "tutorName", "problemName", "problemNumber", "taskName",
+                    "knowledgeComponent", "expectedAnswer", "userResponse", "correctness", "timestamp"};
+
+
 
     public PerformanceLogItem() {
 
     }
-
 
     public String toString() {
         StringBuilder msg = new StringBuilder();
 
         String SEP = ",";
 
-        Field[] fields = this.getClass().getDeclaredFields();
-
-        for ( Field field : fields) {
-
+        for (String fieldName : orderedFieldsToPrint) {
             try {
-                msg.append(field.getName());
+                Field field = this.getClass().getDeclaredField(fieldName);
+                msg.append(fieldName);
                 msg.append(":");
                 msg.append(field.get(this));
-                msg.append(',');
+                msg.append(",");
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
             } catch (IllegalAccessException e) {
-                // do nothing
+                e.printStackTrace();
             }
 
         }
+
         String result = msg.toString();
         return result.substring(0, result.length() - 1); // don't forget to slice off that last comma
     }
@@ -110,11 +116,11 @@ public class PerformanceLogItem {
         this.problemName = problemName;
     }
 
-    public String getProblemNumber() {
+    public int getProblemNumber() {
         return problemNumber;
     }
 
-    public void setProblemNumber(String problemNumber) {
+    public void setProblemNumber(int problemNumber) {
         this.problemNumber = problemNumber;
     }
 
@@ -212,5 +218,13 @@ public class PerformanceLogItem {
 
     public void setDistractors(String distractors) {
         this.distractors = distractors;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    public void setKnowledgeComponent(String knowledgeComponent) {
+        this.knowledgeComponent = knowledgeComponent;
     }
 }

@@ -25,6 +25,7 @@ import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -34,6 +35,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.comp_logging.ILogManager;
@@ -107,17 +109,69 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
         reset();
 
-        boolean correct = isWholeCorrect();
+        boolean wholeCorrect = isWholeCorrect();
+
+        // double digit answers will always be "incorrect"
+        Integer studentWholeAnswer = allAlleys.get(numAlleys - 1).getNum();
+        Integer studentMostRecentDigit = Integer.parseInt(studentWholeAnswer.toString().substring(0,1)); // hacky way to get first digit
+        Integer digit = corDigit;
+        Integer value = corValue;
+
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        event.setUserId(null);
+        event.setSessionId(null);
+        event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(mTutor.getTutorName());
+        event.setKnowledgeComponent(task);
+        event.setTaskName(level);
+        event.setProblemName(generateProblemName());
+        event.setProblemNumber(_dataIndex);
+        event.setSubstepNumber(1);
+        event.setAttemptNumber(-1); // YYY todo
+        event.setExpectedAnswer(corDigit.toString());
+        event.setUserResponse(studentMostRecentDigit.toString());
+        event.setCorrectness(corDigit.equals(studentMostRecentDigit) ? "CORRECT" : "INCORRECT"); // YYY todo
+
+        event.setTimestamp(System.currentTimeMillis());
+
+
+        Log.i(TCONST.PERFORMANCE_TAG, event.toString());
+
+
 
         // If the Problem is complete and correct then set FTR and continue
         // otherwise evaluate the digit for errors
         //
-        if(correct) {
+        if(wholeCorrect) {
             publishFeature(TCONST.FTR_COMPLETE);
         }
         else {
             evaluateDigit();
         }
+    }
+
+    /**
+     * Generate a name for the problem. In this case, the problem name will look something like "3+2=5"
+     *
+     * @return
+     */
+    private String generateProblemName() {
+        StringBuilder problemName = new StringBuilder();
+
+        try {
+            int currentProblemIndex = _dataIndex - 1;
+            problemName.append(dataSource[currentProblemIndex].dataset[0]);
+            problemName.append(dataSource[currentProblemIndex].operation);
+            problemName.append(dataSource[currentProblemIndex].dataset[1]);
+            problemName.append("=");
+            problemName.append(dataSource[currentProblemIndex].dataset[2]);
+        } catch (Exception e){
+           problemName = new StringBuilder("error_generating_problem_name");
+        }
+
+        return problemName.toString();
     }
 
 
@@ -161,6 +215,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
             else
                 publishFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
         }
+
 
     }
 

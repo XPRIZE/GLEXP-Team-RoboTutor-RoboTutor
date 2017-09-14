@@ -28,10 +28,13 @@ import cmu.xprize.util.JSON_Helper;
 public class CAsm_Data implements ILoadableObject{
 
     // json loadable
+    public String        level;
+    public String        task;
     public int[]         dataset;
     public String        operation;
     public String        image;
     public String        strategy = "";
+    // YYY check that all math_*.json files have level and task
 
 
     //************ Serialization

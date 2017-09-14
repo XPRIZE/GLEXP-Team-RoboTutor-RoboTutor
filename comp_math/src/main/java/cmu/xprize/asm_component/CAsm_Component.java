@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEvent;
@@ -59,6 +60,10 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     //current digit
     protected int digitIndex;
     protected int numSlots;
+
+    // task-level info
+    protected String task;
+    protected String level;
 
     //corValue is the correct result e.g. 302
     //corDigit is current correct digit  e.g. 3 (third digit)
@@ -287,6 +292,8 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         curImage  = data.image;
         corValue  = dataset[dataset.length - 1];
         operation = data.operation;
+        level     = data.level;
+        task      = data.task;
     }
 
 
@@ -735,13 +742,20 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
     }
 
+    /**
+     * Compares the digit written in the box to the Whole expected answer. Note that this will only ever
+     * return true for answers with 1 digit. For >1 digit numbers, "corValue" will always be >1 digit,
+     * but ans will always be one digit.
+     * @return
+     */
     public boolean isWholeCorrect() {
 
         int ans;
         if (operation.equals("x"))
             ans = allAlleys.get(ASM_CONST.RESULT_OR_ADD_MULTI_PART1 - 1).getNum();
-        else
+        else {
             ans = allAlleys.get(numAlleys - 1).getNum();
+        }
 
         return corValue.equals(ans);
 
@@ -775,6 +789,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         // first check bottom answer
         bottomCorrect = corDigit.equals(textLayout.getDigit(digitIndex));
 
+        // YYY what is this mess
         if (!bottomCorrect && textLayout.getDigit(digitIndex) != null) {
             wrongDigit(textLayout.getTextLayout(digitIndex).getText(1));
             if (!(operation.equals("x") && resultCorrect == ASM_CONST.ALL_INPUT_RIGHT))
