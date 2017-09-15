@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -35,7 +36,9 @@ import android.view.WindowManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.GCONST;
@@ -116,6 +119,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     static private IGuidView    guidCallBack;
 
     public final static String  LOG_PATH       = Environment.getExternalStorageDirectory() + TCONST.ROBOTUTOR_FOLDER;
+    public final static String  INIT_TIME      = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+    public final static String  LOG_FILENAME   = "RoboTutor" + "_" + BuildConfig.BUILD_TYPE + "." + BuildConfig.VERSION_NAME + "_" + INIT_TIME + "_" + Build.SERIAL;
     public final static String  DOWNLOAD_PATH  = Environment.getExternalStorageDirectory() + File.separator + Environment.DIRECTORY_DOWNLOADS;
     public final static String  EXT_ASSET_PATH = Environment.getExternalStorageDirectory() + File.separator + TCONST.ROBOTUTOR_ASSET_FOLDER;
 
@@ -162,7 +167,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         VERSION_SPEC = CAssetObject.parseVersionSpec(VERSION_RT);
 
         logManager = CLogManager.getInstance();
-        logManager.startLogging(LOG_PATH);
+        logManager.startLogging(LOG_PATH, LOG_FILENAME);
         CErrorManager.setLogManager(logManager);
 
         // TODO : implement time stamps

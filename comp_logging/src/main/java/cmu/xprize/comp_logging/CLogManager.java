@@ -48,6 +48,7 @@ public class CLogManager implements ILogManager {
 
     private LogThread      logThread;                   // background thread handling log data
     private String         log_Path;
+    private String         log_Filename;
     private boolean        isLogging = false;
 
     private Handler logHandler;
@@ -88,9 +89,11 @@ public class CLogManager implements ILogManager {
     }
 
 
-    public void startLogging(String logPath) {
+    public void startLogging(String logPath, String logFilename) {
 
         log_Path = logPath;
+        log_Filename = logFilename;
+
 
         // Restart the log if necessary
         //
@@ -268,8 +271,12 @@ public class CLogManager implements ILogManager {
             releaseLog();
         }
 
-        String path   = CPreferenceCache.getPrefID(TLOG_CONST.ENGINE_INSTANCE) + TLOG_CONST.JSONLOG;
-        String dsPath = CPreferenceCache.getPrefID(TLOG_CONST.ENGINE_INSTANCE) + TLOG_CONST.DATASHOP + TLOG_CONST.JSONLOG;
+
+        // ZZZ debug here
+        // String oldPath   = CPreferenceCache.getPrefID(TLOG_CONST.ENGINE_INSTANCE) + TLOG_CONST.JSONLOG;
+        String newPath = log_Filename + TLOG_CONST.JSONLOG;
+        // String oldDsPath = CPreferenceCache.getPrefID(TLOG_CONST.ENGINE_INSTANCE) + TLOG_CONST.DATASHOP + TLOG_CONST.JSONLOG;
+        String newDsPath = log_Filename + TLOG_CONST.DATASHOP + TLOG_CONST.JSONLOG;
 
         String state = Environment.getExternalStorageState();
 
@@ -288,7 +295,7 @@ public class CLogManager implements ILogManager {
 
             // Generate a tutor instance-unique id for the log name
             //
-            outPath += path;
+            outPath += newPath;
 
             logFile = new File(outPath);
 
@@ -319,7 +326,7 @@ public class CLogManager implements ILogManager {
 
                 // Generate a tutor instance-unique id for DataShop
                 //
-                outDSPath += dsPath;
+                outDSPath += newDsPath;
 
                 logDSFile = new File(outDSPath);
 
