@@ -16,13 +16,13 @@ public class PerformanceLogItem {
     private String tutorName;
     private String problemName;
     private int problemNumber;
-    private String taskName;
+    private String levelName;
 
     private int totalSubsteps;
     private int substepNumber;
     private int substepProblem;
     private int attemptNumber;
-    private String knowledgeComponent;
+    private String taskName;
 
     private String expectedAnswer;
     private String userResponse;
@@ -35,8 +35,8 @@ public class PerformanceLogItem {
 
     // iterative way to print fields in the desired order
     private static final String[] orderedFieldsToPrint =
-            {"userId", "sessionId", "gameId", "tutorName", "problemName", "problemNumber", "taskName",
-                    "knowledgeComponent", "expectedAnswer", "userResponse", "correctness", "timestamp"};
+            {"userId", "sessionId", "gameId", "tutorName", "levelName", "taskName", "problemNumber", "problemName", "substepNumber",
+                    "expectedAnswer", "userResponse", "correctness", "timestamp"};
 
 
 
@@ -220,11 +220,11 @@ public class PerformanceLogItem {
         this.distractors = distractors;
     }
 
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
+    public void setLevelName(String levelName) {
+        this.levelName = levelName;
     }
 
-    public void setKnowledgeComponent(String knowledgeComponent) {
-        this.knowledgeComponent = knowledgeComponent;
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
     }
 }

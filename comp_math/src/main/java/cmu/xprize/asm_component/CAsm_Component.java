@@ -789,8 +789,9 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         // first check bottom answer
         bottomCorrect = corDigit.equals(textLayout.getDigit(digitIndex));
 
-        // YYY what is this mess
+        // if the bottom was not correct, and the bottom was not null
         if (!bottomCorrect && textLayout.getDigit(digitIndex) != null) {
+            // then
             wrongDigit(textLayout.getTextLayout(digitIndex).getText(1));
             if (!(operation.equals("x") && resultCorrect == ASM_CONST.ALL_INPUT_RIGHT))
                 resultCorrect = ASM_CONST.NOT_ALL_INPUT_RIGHT;

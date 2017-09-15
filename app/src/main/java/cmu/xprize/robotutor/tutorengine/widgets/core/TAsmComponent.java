@@ -110,35 +110,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         reset();
 
         boolean wholeCorrect = isWholeCorrect();
-
-        // double digit answers will always be "incorrect"
-        Integer studentWholeAnswer = allAlleys.get(numAlleys - 1).getNum();
-        Integer studentMostRecentDigit = Integer.parseInt(studentWholeAnswer.toString().substring(0,1)); // hacky way to get first digit
-        Integer digit = corDigit;
-        Integer value = corValue;
-
-        PerformanceLogItem event = new PerformanceLogItem();
-
-        event.setUserId(null);
-        event.setSessionId(null);
-        event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
-        event.setLanguage(CTutorEngine.language);
-        event.setTutorName(mTutor.getTutorName());
-        event.setKnowledgeComponent(task);
-        event.setTaskName(level);
-        event.setProblemName(generateProblemName());
-        event.setProblemNumber(_dataIndex);
-        event.setSubstepNumber(1);
-        event.setAttemptNumber(-1); // YYY todo
-        event.setExpectedAnswer(corDigit.toString());
-        event.setUserResponse(studentMostRecentDigit.toString());
-        event.setCorrectness(corDigit.equals(studentMostRecentDigit) ? "CORRECT" : "INCORRECT"); // YYY todo
-
-        event.setTimestamp(System.currentTimeMillis());
-
-
-        Log.i(TCONST.PERFORMANCE_TAG, event.toString());
-
+        logStudentPerformance();
 
 
         // If the Problem is complete and correct then set FTR and continue
@@ -150,6 +122,44 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         else {
             evaluateDigit();
         }
+    }
+
+    /**
+     * This logs the student's response and judges it correct or incorrect
+     */
+    private void logStudentPerformance() {
+
+        // double digit answers will always be "incorrect"
+        Integer studentWholeAnswer = allAlleys.get(numAlleys - 1).getNum();
+        Integer studentMostRecentDigit = Integer.parseInt(studentWholeAnswer.toString().substring(0,1)); // hacky way to get first digit
+
+        // this is a special case when the solution is a 3-digit number with a 0 in the middle i.e. "509".
+        // after the second step, studentWholeAnswer will be read as "9", even if the student has written "09"
+        int expectedNumDigitsInStudentAnswer = corValue.toString().length() - digitIndex + 1;
+        if (studentWholeAnswer.toString().length() < expectedNumDigitsInStudentAnswer) { // 1 < 2
+            studentMostRecentDigit = 0;
+        }
+
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        event.setUserId(null);
+        event.setSessionId(null);
+        event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(mTutor.getTutorName());
+        event.setLevelName(level);
+        event.setTaskName(task);
+        event.setProblemName(generateProblemName());
+        event.setProblemNumber(_dataIndex);
+        event.setSubstepNumber(expectedNumDigitsInStudentAnswer); // 1=ones, 2=tens, 3=hundreds
+        event.setAttemptNumber(-1); // YYY todo
+        event.setExpectedAnswer(corDigit.toString());
+        event.setUserResponse(studentMostRecentDigit.toString());
+        event.setCorrectness(studentMostRecentDigit.equals(corDigit) ? "CORRECT" : "INCORRECT"); // YYY todo
+
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.logManager.postEvent_I(TCONST.PERFORMANCE_TAG, event.toString());
     }
 
     /**
