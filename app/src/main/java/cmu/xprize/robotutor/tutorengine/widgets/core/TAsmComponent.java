@@ -155,7 +155,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         event.setAttemptNumber(-1); // this can be inferred in the data
         event.setExpectedAnswer(corDigit.toString());
         event.setUserResponse(studentMostRecentDigit.toString());
-        event.setCorrectness(studentMostRecentDigit.equals(corDigit) ? "CORRECT" : "INCORRECT");
+        event.setCorrectness(studentMostRecentDigit.equals(corDigit) ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
 
         event.setTimestamp(System.currentTimeMillis());
 

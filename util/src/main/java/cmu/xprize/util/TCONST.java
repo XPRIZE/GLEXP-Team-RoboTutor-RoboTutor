@@ -489,6 +489,9 @@ public class TCONST {
     public static final String FTR_EOD      = "FTR_EOD";
     public static final String ALL_CORRECT  = "ALL_CORRECT";
 
+    public static final String LOG_CORRECT = "CORRECT";
+    public static final String LOG_INCORRECT = "INCORRECT";
+
     public static final String FALSE        = "FALSE";
     public static final String TRUE         = "TRUE";
     public static final String OVALICON     = "OVALICON";

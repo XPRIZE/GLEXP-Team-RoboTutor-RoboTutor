@@ -31,11 +31,13 @@ import cmu.xprize.ak_component.CAk_Component;
 import cmu.xprize.ak_component.CAk_Data;
 import cmu.xprize.bp_component.CClassMap;
 import cmu.xprize.comp_logging.ITutorLogger;
+import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -485,6 +487,81 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
             mTutor.countIncorrect();
         }
+
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        event.setUserId(null);
+        event.setSessionId(null);
+        event.setGameId(mTutor.getUuid().toString());  // a new tutor is generated for each game, so this will be unique
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(mTutor.getTutorName());
+        event.setLevelName(level);
+        event.setTaskName(task);
+        event.setProblemName(generateProblemName());
+        event.setProblemNumber(_dataIndex);
+        event.setSubstepNumber(1); // always 1 for Akira
+        event.setAttemptNumber(1); // always 1 for Akira
+        event.setExpectedAnswer(questionBoard.answerLane.toString());
+        event.setUserResponse(player.lane.toString());
+        event.setCorrectness(questionBoard.answerLane == player.lane ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.logManager.postEvent_I(TCONST.PERFORMANCE_TAG, event.toString());
+    }
+
+
+    /**
+     * Generate a name for the problem. In this case, the problem name will look something like
+     * 200_100_300 or BELOW_ABOVE1_ABOVE2
+     * if the below number is represented by o's (see akira_2_2.json), it will look like
+     * o6_1_7
+     *
+     * @return
+     */
+    public String generateProblemName() {
+
+        StringBuilder nameBuilder;
+        try {
+            nameBuilder = new StringBuilder();
+            CAk_Data currentProblem = datasource[_dataIndex - 1];
+
+
+            // belowString can be one of two formats: an integer, or a collection of o's that represent a quantity
+            // the purpose of these conditionals is to distinguish between the two
+
+            if(currentProblem.belowString.matches("\\d+")) {
+                nameBuilder.append(currentProblem.belowString);
+            } else if (currentProblem.belowString.contains("o")) {
+                int quantity = countCharOccurrences(currentProblem.belowString, 'o');
+                nameBuilder.append("o");
+                nameBuilder.append(quantity);
+            }
+            nameBuilder.append("_");
+
+            for (String choice : currentProblem.choices) {
+                nameBuilder.append(choice);
+                nameBuilder.append("_");
+            }
+
+            nameBuilder.deleteCharAt(nameBuilder.length() - 1);
+
+        } catch(Exception e) {
+            nameBuilder = new StringBuilder("error_generating_problem_name");
+        }
+
+        return nameBuilder.toString();
+    }
+
+    private int countCharOccurrences(String str, char c) {
+
+        int count = 0;
+        for (int i=0; i < str.length(); i++) {
+            if(str.charAt(i) == c) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public void judge_instruct(){//judge the prompt type

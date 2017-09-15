@@ -19,6 +19,9 @@ public class CAk_Data implements ILoadableObject{
     public CAkPlayer.Lane   answerLane      = null;
     public String           aboveString     = "";
     public String           belowString     = "";
+
+    public String           level;
+    public String           task;
 //    public int[] dataset = null;
 
 

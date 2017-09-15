@@ -111,6 +111,9 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     public int errornum=0;
     public boolean questionBoard_exist;
 
+    // task-level info
+    protected String level;
+    protected String task;
 
 
     public CAk_Component(Context context) {
@@ -292,6 +295,10 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         boolean isAudio = isAudio(data);
         questionBoard = new CAkQuestionBoard(mContext, data.answerLane, data.choices);
         questionBoard_exist = true;
+
+        // task-level info
+        level = data.level;
+        task = data.task;
 
         if(isAudio){
             playAudio(data);

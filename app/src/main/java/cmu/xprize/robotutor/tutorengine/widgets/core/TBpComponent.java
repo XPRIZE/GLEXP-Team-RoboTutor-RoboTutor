@@ -715,7 +715,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         event.setDistractors(distractors.toString().substring(0, distractors.toString().length() - 1));
 
         event.setUserResponse(bubble.getStimulus());
-        event.setCorrectness(bubble.isCorrect() ? "TRUE" : "FALSE");
+        event.setCorrectness(bubble.isCorrect() ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
         event.setScaffolding(null);
         event.setPromptType(promptType);
         event.setFeedbackType(null);
