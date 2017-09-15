@@ -34,7 +34,6 @@ public class CAsm_Data implements ILoadableObject{
     public String        operation;
     public String        image;
     public String        strategy = "";
-    // YYY check that all math_*.json files have level and task
 
 
     //************ Serialization

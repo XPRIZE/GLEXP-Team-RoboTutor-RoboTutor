@@ -152,10 +152,10 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         event.setProblemName(generateProblemName());
         event.setProblemNumber(_dataIndex);
         event.setSubstepNumber(expectedNumDigitsInStudentAnswer); // 1=ones, 2=tens, 3=hundreds
-        event.setAttemptNumber(-1); // YYY todo
+        event.setAttemptNumber(-1); // this can be inferred in the data
         event.setExpectedAnswer(corDigit.toString());
         event.setUserResponse(studentMostRecentDigit.toString());
-        event.setCorrectness(studentMostRecentDigit.equals(corDigit) ? "CORRECT" : "INCORRECT"); // YYY todo
+        event.setCorrectness(studentMostRecentDigit.equals(corDigit) ? "CORRECT" : "INCORRECT");
 
         event.setTimestamp(System.currentTimeMillis());
 
