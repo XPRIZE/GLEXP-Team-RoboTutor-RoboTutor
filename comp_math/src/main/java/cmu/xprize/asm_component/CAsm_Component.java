@@ -25,10 +25,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.util.CAnimatorUtil;
+import cmu.xprize.util.CAt_Data;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.util.IEventListener;
@@ -128,6 +130,8 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
     // json loadable
     public String      bootFeatures = "";
+    public boolean     random; // YYY test me
+    public int         questionCount;
     public CAsm_Data[] dataSource;
 
 
@@ -209,9 +213,12 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     }
 
 
-
+    /**
+     * if using random selection, go until we've exceeded the question count
+     * if going through list, just go until we've reached the end
+     */
     public boolean dataExhausted() {
-        return (_dataIndex >= dataSource.length);
+        return (random ? _dataIndex >= questionCount : _dataIndex >= dataSource.length);
     }
 
 
@@ -220,11 +227,34 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         hasShown = false;
         curOverheadCol = -1;
 
+        /*String rand = random ? "TRUE" : "FALSE"; */
+
         try {
             if (dataSource != null) {
-                updateDataSet(dataSource[_dataIndex]);
 
-                _dataIndex++;
+                // YYY random
+                if(!random) {
+                    updateDataSet(dataSource[_dataIndex]);
+                } else {
+                    // with no replacement?
+                    int nextIndex = (new Random()).nextInt(dataSource.length);
+                    updateDataSet(dataSource[nextIndex]);
+
+                    boolean replace = true;
+                    if(!replace) {
+                        ArrayList<CAsm_Data> newDataSource = new ArrayList<>();
+
+                        for (int i=0; i < dataSource.length; i++) {
+                            if(i != nextIndex) {
+                                newDataSource.add(dataSource[i]);
+                            }
+                        }
+
+                        dataSource = (CAsm_Data[]) newDataSource.toArray(); // YYY test me
+                    }
+                }
+
+                _dataIndex++; // YYY maybe here?
             } else {
                 CErrorManager.logEvent(TAG, "Error no DataSource : ", null, false);
             }
