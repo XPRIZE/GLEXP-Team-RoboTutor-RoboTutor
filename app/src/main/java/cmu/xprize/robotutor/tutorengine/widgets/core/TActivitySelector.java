@@ -425,13 +425,14 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                     break;
 
             }
+            // XXX we must REVIEW the strategy... possibly make it so all tutors get NEXT, except those using performance
 
             // XXX REVIEW improve implementation
-            TScope root = mTutor.getScope().root();
-            String childScope = null;
+
             Boolean usePerformance = false; // usePerformance will only be true if performance metrics (correct, incorrect)
                                             // are tracked for that activity
 
+            String childScope = null;
             if(activeTutor.startsWith("bpop")) {
                 childScope = "bubble_pop";
                 usePerformance = true;
@@ -444,7 +445,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             }
 
             if(usePerformance) {
-                TScope lastScope = root.getChildScope(childScope);
+                TScope lastScope = TScope.root().getChildScope(childScope);
                 CTutor lastTutor;
                 if(lastScope != null) {
                     lastTutor = lastScope.tutor();
@@ -474,36 +475,58 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                     }
 
                 } else {
-                    usePerformance = false;
+                    usePerformance = false; // in case of unexpected error
                 }
 
+            } else {
+                nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
             }
 
             switch (buttonid.toUpperCase()) {
 
                 case AS_CONST.SELECT_CONTINUE:
-                    nextTutor = usePerformance ? nextTutor : ((CAt_Data) transitionMap.get(activeTutor)).next;
+                    if(!usePerformance) {
+                        if(TCONST.OVERRIDE_SELF_ASSESSMENT) {
+                            nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
+                        } else {
+                            nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
+                        }
+                    }
 
                     mTutor.post(TCONST.ENDTUTOR);
                     RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
                     break;
 
                 case AS_CONST.SELECT_MAKE_HARDER:
-                    nextTutor = usePerformance ? nextTutor : ((CAt_Data) transitionMap.get(activeTutor)).harder;
+                    if(!usePerformance) {
+                        if(TCONST.OVERRIDE_SELF_ASSESSMENT) {
+                            nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
+                        } else {
+                            nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).harder;
+                        }
+                    }
 
                     mTutor.post(TCONST.ENDTUTOR);
                     RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
                     break;
 
                 case AS_CONST.SELECT_MAKE_EASIER:
-                    nextTutor = usePerformance ? nextTutor : ((CAt_Data) transitionMap.get(activeTutor)).easier;
+                    if(!usePerformance) {
+                        if(TCONST.OVERRIDE_SELF_ASSESSMENT) {
+                            nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
+                        } else {
+                            nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).easier;
+                        }
+                    }
 
                     mTutor.post(TCONST.ENDTUTOR);
                     RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
                     break;
 
                 case AS_CONST.SELECT_EXIT:
-                    nextTutor = usePerformance ? nextTutor : ((CAt_Data) transitionMap.get(activeTutor)).tutor_id;
+                    if(!usePerformance) {
+                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id;
+                    }
 
                     mTutor.post(TCONST.FINISH);
                     RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
@@ -515,7 +538,9 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                 // At the moment default to continue to "next" link
                 //
                 case AS_CONST.SELECT_AUTO_DIFFICULTY:
-                    nextTutor = usePerformance ? nextTutor : ((CAt_Data) transitionMap.get(activeTutor)).next;
+                    if(!usePerformance) {
+                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
+                    }
 
                     // just reselect the current skill and continue with next tutor
                     // no skill selection phase
@@ -524,6 +549,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                     break;
 
                 case AS_CONST.SELECT_REPEAT:
+                    // do this regardless of performance
                     nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id; // if the select "repeat", then it will be the same tutor
                     // just reselect the current skill and continue with next tutor
                     // no skill selection phase
