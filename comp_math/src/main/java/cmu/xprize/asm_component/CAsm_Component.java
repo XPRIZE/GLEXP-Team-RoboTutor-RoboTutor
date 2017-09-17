@@ -404,7 +404,12 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         hasShown  = false;
         startTime = System.currentTimeMillis();
 
-        mechanics.nextDigit();
+        try {
+            mechanics.nextDigit(); // REVIEW throws exception
+        } catch (Exception e) {
+            // REVIEW do nothing... this just prevents "corDigit" from be skipped over below, causing issue #139
+    }
+
 
         if(operation.equals("x")) {
 
@@ -787,7 +792,8 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         if(operation.equals("x")) checkOtherBottomCorrect(textLayout);
 
         // first check bottom answer
-        bottomCorrect = corDigit.equals(textLayout.getDigit(digitIndex));
+        int writtenDigit = textLayout.getDigit(digitIndex);
+        bottomCorrect = corDigit.equals(writtenDigit);
 
         // if the bottom was not correct, and the bottom was not null
         if (!bottomCorrect && textLayout.getDigit(digitIndex) != null) {

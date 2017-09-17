@@ -74,7 +74,7 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         super.nextDigit();
 
         int minuend = allAlleys.get(minuendIndex).getCurrentDigit();
-        int subtrahend = allAlleys.get(secondBagIndex).getCurrentDigit();
+        int subtrahend = allAlleys.get(secondBagIndex).getCurrentDigit(); // REVIEW... throws exception
 
         if (minuend - subtrahend < 0 && !hasBorrowed) {
             hasBorrowed = true;
