@@ -323,71 +323,14 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         Log.d(TAG, "Button Selected: " + buttonid);
 
-        boolean     buttonFound = false;
-
 
         // If we are in debug mode then there is a third selection phase where we are presented
         // the transition table for the active skill - The author can select a new target tutor
         // from any of the transition entries.
         //
         if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_SELECT)) {
-
-            // Update the active skill
-            //
-            switch (activeSkill) {
-
-                case AS_CONST.SELECT_WRITING:
-
-                    writingTutorID = buttonid;
-                    break;
-
-                case AS_CONST.SELECT_STORIES:
-
-                    storiesTutorID = buttonid;
-                    break;
-
-                case AS_CONST.SELECT_MATH:
-
-                    mathTutorID = buttonid;
-                    break;
-
-                case AS_CONST.SELECT_SHAPES:
-
-                    shapesTutorID = buttonid;
-                    break;
-            }
-
-            // just reselect the current skill and continue with next tutor
-            // no skill selection phase
-            buttonid = activeSkill;
-            RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_LAUNCH;
-
-            // Serialize the new state
-            // #Mod 329 language switch capability
-            //
-            SharedPreferences prefs = RoboTutor.ACTIVITY.getSharedPreferences(mMediaManager.getLanguageFeature(mTutor), Context.MODE_PRIVATE);
-
-            SharedPreferences.Editor editor = prefs.edit();
-
-            editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE);
-
-            // only one will have been changed but update all
-            //
-            editor.putString(TCONST.SKILL_WRITING, writingTutorID);
-            editor.putString(TCONST.SKILL_STORIES, storiesTutorID);
-            editor.putString(TCONST.SKILL_MATH, mathTutorID);
-            editor.putString(TCONST.SKILL_SHAPES, shapesTutorID);
-
-            publishValue(TCONST.SKILL_SELECTED, activeSkill);
-            publishValue(TCONST.SKILL_WRITING, writingTutorID);
-            publishValue(TCONST.SKILL_STORIES, storiesTutorID);
-            publishValue(TCONST.SKILL_MATH, mathTutorID);
-            publishValue(TCONST.SKILL_SHAPES, shapesTutorID);
-            publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE);
-
-            editor.apply();
+            buttonid = processDebugSelectMode(buttonid);
         }
-
 
         // If we are in Assessment mode we have prompted the student to assess the difficulty of the
         // tutor they have just completed.
@@ -395,332 +338,432 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         //
 
         if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DIFFICULTY_ASSESS)) {
+            buttonid = processDifficultyAssessMode(buttonid);
 
-            // Init the skill pointers
+        }
+
+        // If on the Tutor Select (home) screen, or we have triggered a launch from the debug screen,
+        // RoboTutor will go into an activity.
+        if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT) ||
+           RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_LAUNCH)) {
+            processTutorSelectMode(buttonid);
+
+        }
+    }
+
+    /**
+     * Method for processing button press on the TUTOR_SELECT (home) screen
+     * @param buttonid
+     */
+    private void processTutorSelectMode(String buttonid) {
+        boolean     buttonFound = false;
+
+        // If user selects "Let robotutor decide" then use student model to decide skill to work next
+        // At the moment default to Stories
+        //
+        if (buttonid.toUpperCase().equals(AS_CONST.SELECT_ROBOTUTOR)) {
+            buttonid = AS_CONST.SELECT_STORIES;
+        }
+
+        // First check if it is a skill selection button =
+        //
+        switch (buttonid.toUpperCase()) {
+
+            case AS_CONST.SELECT_WRITING:
+
+                activeSkill   = AS_CONST.SELECT_WRITING;
+                activeTutor   = writingTutorID;
+                rootTutor     = rootSkillWrite;
+                transitionMap = writeTransitions;
+                buttonFound   = true;
+                break;
+
+            case AS_CONST.SELECT_STORIES:
+
+                activeSkill   = AS_CONST.SELECT_STORIES;
+                activeTutor   = storiesTutorID;
+                rootTutor     = rootSkillStories;
+                transitionMap = storyTransitions;
+                buttonFound = true;
+
+                break;
+
+            case AS_CONST.SELECT_MATH:
+
+                activeSkill   = AS_CONST.SELECT_MATH;
+                activeTutor   = mathTutorID;
+                rootTutor     = rootSkillMath;
+                transitionMap = mathTransitions;
+                buttonFound   = true;
+                break;
+
+            case AS_CONST.SELECT_SHAPES:
+
+                activeSkill   = AS_CONST.SELECT_SHAPES;
+                activeTutor   = shapesTutorID;
+                rootTutor     = rootSkillShapes;
+                transitionMap = shapeTransitions;
+                buttonFound   = true;
+
+                break;
+
+        }
+
+        if (buttonFound) {
+
+            publishValue(TCONST.SKILL_SELECTED, activeSkill);
+            publishValue(TCONST.TUTOR_SELECTED, activeTutor);
+            publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE);
+        }
+
+        if (buttonFound) {
+
+            // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
+            // reenable the ASK buttons if we don't execute the story_tutor
             //
-            switch (activeSkill) {
+            if (!BuildConfig.NO_ASR_APPS || (transitionMap != storyTransitions)) {
 
-                case AS_CONST.SELECT_WRITING:
+                CAt_Data tutor = (CAt_Data) transitionMap.get(activeTutor);
 
-                    activeTutor = writingTutorID;
-                    transitionMap = writeTransitions;
-                    break;
+                // This is just to make sure we go somewhere if there is a bad link - which
+                // there shuoldn't be :)
+                //
+                if (tutor == null) {
+                    tutor = (CAt_Data) transitionMap.get(rootTutor);
+                }
 
-                case AS_CONST.SELECT_STORIES:
+                // #Mod 330 Show TutorID in Banner in debug builds
+                // DEBUG_TUTORID is used to communicate the active tutor to the Banner in DEBUG mode
+                //
+                if (BuildConfig.SHOW_TUTORVERSION) {
+                    DEBUG_TUTORID = activeTutor;
+                }
 
-                    activeTutor = storiesTutorID;
-                    transitionMap = storyTransitions;
-                    break;
+                // If we are using the debug selector and mode is not launching a tutor then
+                // switch to debug view
+                //
+                if(DEBUG_LANCHER && RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT)) {
 
-                case AS_CONST.SELECT_MATH:
+                    mTutor.post(TCONST.ENDTUTOR);
+                    RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_SELECT;
+                }
+                else {
+                    // Update the tutor id shown in the log stream
+                    //
+                    CLogManager.setTutor(activeTutor);
 
-                    activeTutor = mathTutorID;
-                    transitionMap = mathTransitions;
-                    break;
+                    doLaunch(tutor.tutor_desc, TCONST.TUTOR_NATIVE, tutor.tutor_data);
+                }
 
-                case AS_CONST.SELECT_SHAPES:
+                // Serialize the new state
+                // #Mod 329 language switch capability
+                //
+                SharedPreferences prefs = RoboTutor.ACTIVITY.getSharedPreferences(mMediaManager.getLanguageFeature(mTutor), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
 
-                    activeTutor = shapesTutorID;
-                    transitionMap = shapeTransitions;
-                    break;
+                editor.putString(TCONST.SKILL_SELECTED, activeSkill);
+                editor.apply();
+            } else
+                SaskActivity.enableButtons(true);
+        }
+    }
 
-            }
-            // XXX we must REVIEW the strategy... possibly make it so all tutors get NEXT, except those using performance
+    /**
+     * Method for processing button press on the DIFFICULTY_ASSESS screen
+     * @param buttonid
+     * @return new buttonid, to be used for next screen
+     */
+    private String processDifficultyAssessMode(String buttonid) {
+        // Init the skill pointers
+        //
+        switch (activeSkill) {
 
-            // XXX REVIEW improve implementation
+            case AS_CONST.SELECT_WRITING:
 
-            Boolean usePerformance = false; // usePerformance will only be true if performance metrics (correct, incorrect)
-                                            // are tracked for that activity
+                activeTutor = writingTutorID;
+                transitionMap = writeTransitions;
+                break;
 
-            String childScope = null;
-            if(activeTutor.startsWith("bpop")) {
-                childScope = "bubble_pop";
-                usePerformance = true;
-            } else if (activeTutor.startsWith("akira")) {
-                childScope = "akira";
-                usePerformance = true;
-            } else if (activeTutor.startsWith("math")) {
-                childScope = "math";
-                usePerformance = true;
-            }
+            case AS_CONST.SELECT_STORIES:
 
-            if(usePerformance) {
-                TScope lastScope = TScope.root().getChildScope(childScope);
-                CTutor lastTutor;
-                if(lastScope != null) {
-                    lastTutor = lastScope.tutor();
+                activeTutor = storiesTutorID;
+                transitionMap = storyTransitions;
+                break;
 
-                    int correct = lastTutor.getScore();
-                    int attempts = lastTutor.getAttempts();
-                    double percent = 0;
-                    if (attempts > 0) {// don't divide by zero
-                        percent = correct / (double) attempts;
+            case AS_CONST.SELECT_MATH:
+
+                activeTutor = mathTutorID;
+                transitionMap = mathTransitions;
+                break;
+
+            case AS_CONST.SELECT_SHAPES:
+
+                activeTutor = shapesTutorID;
+                transitionMap = shapeTransitions;
+                break;
+
+        }
+
+        boolean usePerformance = false;
+        if(TCONST.CONSIDER_STUDENT_PERFORMANCE) {
+            // returns true if performance-measuring is implemented for the current activity
+            usePerformance = assessStudentPerformance();
+        }
+
+        switch (buttonid.toUpperCase()) {
+
+            case AS_CONST.SELECT_CONTINUE:
+                if(!usePerformance) {
+                    if(TCONST.OVERRIDE_SELF_ASSESSMENT) {
+                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
+                    } else {
+                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
                     }
-                    Log.i(PERFORMANCE_TAG, "performance = " + correct + " / " + attempts);
+                }
 
-                    Log.i(PERFORMANCE_TAG, "activeTutor: " + activeTutor);
-                    Log.i(PERFORMANCE_TAG, "nextTutor: " + nextTutor);
+                mTutor.post(TCONST.ENDTUTOR);
+                RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+                break;
 
-
-                    if (percent >= TCONST.HIGH_PERFORMANCE_THRESHOLD) {
+            case AS_CONST.SELECT_MAKE_HARDER:
+                if(!usePerformance) {
+                    if(TCONST.OVERRIDE_SELF_ASSESSMENT) {
+                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
+                    } else {
                         nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).harder;
-                    } else if (percent >= TCONST.MID_PERFORMANCE_THRESHOLD || attempts < TCONST.MIN_ATTEMPTS_TO_GRADE) {
-                        // if user just quits...
-                        // note that as long as the student does "MIN_ATTEMPTS_TO_GRADE",
-                        // their percentage will be graded the same as if they had completed the entire activity
-                        // REVIEW what is the proper number?
+                    }
+                }
+
+                mTutor.post(TCONST.ENDTUTOR);
+                RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+                break;
+
+            case AS_CONST.SELECT_MAKE_EASIER:
+                if(!usePerformance) {
+                    if(TCONST.OVERRIDE_SELF_ASSESSMENT) {
                         nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
                     } else {
                         nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).easier;
                     }
+                }
 
+                mTutor.post(TCONST.ENDTUTOR);
+                RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+                break;
+
+            case AS_CONST.SELECT_EXIT:
+                if(!usePerformance) {
+                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id;
+                }
+
+                mTutor.post(TCONST.FINISH);
+                RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+                break;
+
+            // If user selects "Let robotutor decide" then use student model to decide how to adjust the
+            // difficulty level.  We also flip mode to tutor_select to skip the tutor select phase and
+            // let the model do the tutor selection.
+            // At the moment default to continue to "next" link
+            //
+            case AS_CONST.SELECT_AUTO_DIFFICULTY:
+                if(!usePerformance) {
+                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
+                }
+
+                // just reselect the current skill and continue with next tutor
+                // no skill selection phase
+                buttonid = activeSkill;
+                RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+                break;
+
+            case AS_CONST.SELECT_REPEAT:
+                // do this regardless of performance
+                nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id; // if the select "repeat", then it will be the same tutor
+                // just reselect the current skill and continue with next tutor
+                // no skill selection phase
+                buttonid = activeSkill;
+                RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+                break;
+        }
+
+        // Update the active skill
+        //
+        switch (activeSkill) {
+
+            case AS_CONST.SELECT_WRITING:
+
+                writingTutorID = nextTutor;
+                break;
+
+            case AS_CONST.SELECT_STORIES:
+
+                storiesTutorID = nextTutor;
+                break;
+
+            case AS_CONST.SELECT_MATH:
+
+                mathTutorID = nextTutor;
+                break;
+
+            case AS_CONST.SELECT_SHAPES:
+
+                shapesTutorID = nextTutor;
+                break;
+        }
+
+        // Serialize the new state
+        // #Mod 329 language switch capability
+        //
+        SharedPreferences prefs = RoboTutor.ACTIVITY.getSharedPreferences(mMediaManager.getLanguageFeature(mTutor), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE);
+
+        // only one will have been changed but update all
+        //
+        editor.putString(TCONST.SKILL_WRITING, writingTutorID);
+        editor.putString(TCONST.SKILL_STORIES, storiesTutorID);
+        editor.putString(TCONST.SKILL_MATH, mathTutorID);
+        editor.putString(TCONST.SKILL_SHAPES, shapesTutorID);
+
+        editor.apply();
+
+        publishValue(TCONST.SKILL_SELECTED, nextTutor);
+        publishValue(TCONST.SKILL_WRITING, writingTutorID);
+        publishValue(TCONST.SKILL_STORIES, storiesTutorID);
+        publishValue(TCONST.SKILL_MATH, mathTutorID);
+        publishValue(TCONST.SKILL_SHAPES, shapesTutorID);
+        publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE);
+
+        return buttonid;
+    }
+
+    /**
+     * Method for processing button press on the DEBUG_SELECT screen
+     * @param buttonid
+     * @return new button id, to be selected for the DEBUG_LAUNCH screen
+     */
+    private String processDebugSelectMode(String buttonid) {
+        // Update the active skill
+        //
+        switch (activeSkill) {
+
+            case AS_CONST.SELECT_WRITING:
+
+                writingTutorID = buttonid;
+                break;
+
+            case AS_CONST.SELECT_STORIES:
+
+                storiesTutorID = buttonid;
+                break;
+
+            case AS_CONST.SELECT_MATH:
+
+                mathTutorID = buttonid;
+                break;
+
+            case AS_CONST.SELECT_SHAPES:
+
+                shapesTutorID = buttonid;
+                break;
+        }
+
+        // just reselect the current skill and continue with next tutor
+        // no skill selection phase
+        buttonid = activeSkill;
+        RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_LAUNCH;
+
+        // Serialize the new state
+        // #Mod 329 language switch capability
+        //
+        SharedPreferences prefs = RoboTutor.ACTIVITY.getSharedPreferences(mMediaManager.getLanguageFeature(mTutor), Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE);
+
+        // only one will have been changed but update all
+        //
+        editor.putString(TCONST.SKILL_WRITING, writingTutorID);
+        editor.putString(TCONST.SKILL_STORIES, storiesTutorID);
+        editor.putString(TCONST.SKILL_MATH, mathTutorID);
+        editor.putString(TCONST.SKILL_SHAPES, shapesTutorID);
+
+        publishValue(TCONST.SKILL_SELECTED, activeSkill);
+        publishValue(TCONST.SKILL_WRITING, writingTutorID);
+        publishValue(TCONST.SKILL_STORIES, storiesTutorID);
+        publishValue(TCONST.SKILL_MATH, mathTutorID);
+        publishValue(TCONST.SKILL_SHAPES, shapesTutorID);
+        publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE);
+
+        editor.apply();
+
+        return buttonid;
+    }
+
+    /**
+     * Checks if the last finished activity can be graded based on performance.
+     * If so, updates the "nextTutor" based on student performance and returns true.
+     * Otherwise, returns false.
+     *
+     * @return
+     */
+    private boolean assessStudentPerformance() {
+
+        boolean usePerformance = false; // usePerformance will only be true if performance metrics (correct, incorrect)
+        // are tracked for that activity
+
+        String childScope = null;
+        if(activeTutor.startsWith("bpop")) {
+            childScope = "bubble_pop";
+            usePerformance = true;
+        } else if (activeTutor.startsWith("akira")) {
+            childScope = "akira";
+            usePerformance = true;
+        } else if (activeTutor.startsWith("math")) {
+            childScope = "math";
+            usePerformance = true;
+        }
+
+        if(usePerformance) {
+            TScope lastScope = TScope.root().getChildScope(childScope);
+            CTutor lastTutor;
+            if(lastScope != null) {
+                lastTutor = lastScope.tutor();
+
+                int correct = lastTutor.getScore();
+                int attempts = lastTutor.getAttempts();
+                double percent = 0;
+                if (attempts > 0) {// don't divide by zero
+                    percent = correct / (double) attempts;
+                }
+                Log.i(PERFORMANCE_TAG, "performance = " + correct + " / " + attempts);
+
+                Log.i(PERFORMANCE_TAG, "activeTutor: " + activeTutor);
+                Log.i(PERFORMANCE_TAG, "nextTutor: " + nextTutor);
+
+
+                if (percent >= TCONST.HIGH_PERFORMANCE_THRESHOLD) {
+                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).harder;
+                } else if (percent >= TCONST.MID_PERFORMANCE_THRESHOLD || attempts < TCONST.MIN_ATTEMPTS_TO_GRADE) {
+                    // if user just quits...
+                    // note that as long as the student does "MIN_ATTEMPTS_TO_GRADE",
+                    // their percentage will be graded the same as if they had completed the entire activity
+                    // REVIEW what is the proper number?
+                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
                 } else {
-                    usePerformance = false; // in case of unexpected error
+                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).easier;
                 }
 
             } else {
-                nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
+                usePerformance = false; // in case of unexpected error
             }
 
-            switch (buttonid.toUpperCase()) {
-
-                case AS_CONST.SELECT_CONTINUE:
-                    if(!usePerformance) {
-                        if(TCONST.OVERRIDE_SELF_ASSESSMENT) {
-                            nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-                        } else {
-                            nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-                        }
-                    }
-
-                    mTutor.post(TCONST.ENDTUTOR);
-                    RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
-                    break;
-
-                case AS_CONST.SELECT_MAKE_HARDER:
-                    if(!usePerformance) {
-                        if(TCONST.OVERRIDE_SELF_ASSESSMENT) {
-                            nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-                        } else {
-                            nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).harder;
-                        }
-                    }
-
-                    mTutor.post(TCONST.ENDTUTOR);
-                    RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
-                    break;
-
-                case AS_CONST.SELECT_MAKE_EASIER:
-                    if(!usePerformance) {
-                        if(TCONST.OVERRIDE_SELF_ASSESSMENT) {
-                            nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-                        } else {
-                            nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).easier;
-                        }
-                    }
-
-                    mTutor.post(TCONST.ENDTUTOR);
-                    RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
-                    break;
-
-                case AS_CONST.SELECT_EXIT:
-                    if(!usePerformance) {
-                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id;
-                    }
-
-                    mTutor.post(TCONST.FINISH);
-                    RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
-                    break;
-
-                // If user selects "Let robotutor decide" then use student model to decide how to adjust the
-                // difficulty level.  We also flip mode to tutor_select to skip the tutor select phase and
-                // let the model do the tutor selection.
-                // At the moment default to continue to "next" link
-                //
-                case AS_CONST.SELECT_AUTO_DIFFICULTY:
-                    if(!usePerformance) {
-                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-                    }
-
-                    // just reselect the current skill and continue with next tutor
-                    // no skill selection phase
-                    buttonid = activeSkill;
-                    RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
-                    break;
-
-                case AS_CONST.SELECT_REPEAT:
-                    // do this regardless of performance
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id; // if the select "repeat", then it will be the same tutor
-                    // just reselect the current skill and continue with next tutor
-                    // no skill selection phase
-                    buttonid = activeSkill;
-                    RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
-                    break;
-            }
-
-            // Update the active skill
-            //
-            switch (activeSkill) {
-
-                case AS_CONST.SELECT_WRITING:
-
-                    writingTutorID = nextTutor;
-                    break;
-
-                case AS_CONST.SELECT_STORIES:
-
-                    storiesTutorID = nextTutor;
-                    break;
-
-                case AS_CONST.SELECT_MATH:
-
-                    mathTutorID = nextTutor;
-                    break;
-
-                case AS_CONST.SELECT_SHAPES:
-
-                    shapesTutorID = nextTutor;
-                    break;
-            }
-
-            // Serialize the new state
-            // #Mod 329 language switch capability
-            //
-            SharedPreferences prefs = RoboTutor.ACTIVITY.getSharedPreferences(mMediaManager.getLanguageFeature(mTutor), Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-
-            editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE);
-
-            // only one will have been changed but update all
-            //
-            editor.putString(TCONST.SKILL_WRITING, writingTutorID);
-            editor.putString(TCONST.SKILL_STORIES, storiesTutorID);
-            editor.putString(TCONST.SKILL_MATH, mathTutorID);
-            editor.putString(TCONST.SKILL_SHAPES, shapesTutorID);
-
-            editor.apply();
-
-            publishValue(TCONST.SKILL_SELECTED, nextTutor);
-            publishValue(TCONST.SKILL_WRITING, writingTutorID);
-            publishValue(TCONST.SKILL_STORIES, storiesTutorID);
-            publishValue(TCONST.SKILL_MATH, mathTutorID);
-            publishValue(TCONST.SKILL_SHAPES, shapesTutorID);
-            publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE);
+        } else {
+            nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
         }
-
-
-        if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT) ||
-           RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_LAUNCH)) {
-
-            // If user selects "Let robotutor decide" then use student model to decide skill to work next
-            // At the moment default to Stories
-            //
-            if (buttonid.toUpperCase().equals(AS_CONST.SELECT_ROBOTUTOR)) {
-                buttonid = AS_CONST.SELECT_STORIES;
-            }
-
-            // First check if it is a skill selection button =
-            //
-            switch (buttonid.toUpperCase()) {
-
-                case AS_CONST.SELECT_WRITING:
-
-                    activeSkill   = AS_CONST.SELECT_WRITING;
-                    activeTutor   = writingTutorID;
-                    rootTutor     = rootSkillWrite;
-                    transitionMap = writeTransitions;
-                    buttonFound   = true;
-                    break;
-
-                case AS_CONST.SELECT_STORIES:
-
-                    activeSkill   = AS_CONST.SELECT_STORIES;
-                    activeTutor   = storiesTutorID;
-                    rootTutor     = rootSkillStories;
-                    transitionMap = storyTransitions;
-                    buttonFound = true;
-
-                    break;
-
-                case AS_CONST.SELECT_MATH:
-
-                    activeSkill   = AS_CONST.SELECT_MATH;
-                    activeTutor   = mathTutorID;
-                    rootTutor     = rootSkillMath;
-                    transitionMap = mathTransitions;
-                    buttonFound   = true;
-                    break;
-
-                case AS_CONST.SELECT_SHAPES:
-
-                    activeSkill   = AS_CONST.SELECT_SHAPES;
-                    activeTutor   = shapesTutorID;
-                    rootTutor     = rootSkillShapes;
-                    transitionMap = shapeTransitions;
-                    buttonFound   = true;
-
-                    break;
-
-            }
-
-            if (buttonFound) {
-
-                publishValue(TCONST.SKILL_SELECTED, activeSkill);
-                publishValue(TCONST.TUTOR_SELECTED, activeTutor);
-                publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE);
-            }
-
-            if (buttonFound) {
-
-                // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
-                // reenable the ASK buttons if we don't execute the story_tutor
-                //
-                if (!BuildConfig.NO_ASR_APPS || (transitionMap != storyTransitions)) {
-
-                    CAt_Data tutor = (CAt_Data) transitionMap.get(activeTutor);
-
-                    // This is just to make sure we go somewhere if there is a bad link - which
-                    // there shuoldn't be :)
-                    //
-                    if (tutor == null) {
-                        tutor = (CAt_Data) transitionMap.get(rootTutor);
-                    }
-
-                    // #Mod 330 Show TutorID in Banner in debug builds
-                    // DEBUG_TUTORID is used to communicate the active tutor to the Banner in DEBUG mode
-                    //
-                    if (BuildConfig.SHOW_TUTORVERSION) {
-                        DEBUG_TUTORID = activeTutor;
-                    }
-
-                    // If we are using the debug selector and mode is not launching a tutor then
-                    // switch to debug view
-                    //
-                    if(DEBUG_LANCHER && RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT)) {
-
-                        mTutor.post(TCONST.ENDTUTOR);
-                        RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_SELECT;
-                    }
-                    else {
-                        // Update the tutor id shown in the log stream
-                        //
-                        CLogManager.setTutor(activeTutor);
-
-                        doLaunch(tutor.tutor_desc, TCONST.TUTOR_NATIVE, tutor.tutor_data);
-                    }
-
-                    // Serialize the new state
-                    // #Mod 329 language switch capability
-                    //
-                    SharedPreferences prefs = RoboTutor.ACTIVITY.getSharedPreferences(mMediaManager.getLanguageFeature(mTutor), Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = prefs.edit();
-
-                    editor.putString(TCONST.SKILL_SELECTED, activeSkill);
-                    editor.apply();
-                } else
-                    SaskActivity.enableButtons(true);
-            }
-        }
+        return usePerformance;
     }
 
 
