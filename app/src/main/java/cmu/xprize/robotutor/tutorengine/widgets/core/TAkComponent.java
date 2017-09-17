@@ -469,13 +469,14 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         }
     }
 
-    // XXX judge correctness for Akira
     public void judge_rightwrong(){
-        if(questionBoard.answerLane == player.lane){
+
+        boolean lastResponseWasCorrect = questionBoard.answerLane == player.lane;
+
+        if(lastResponseWasCorrect){
             publishFeature(TCONST.GENERIC_RIGHT);
             wrongTimes = 0;
 
-            mTutor.countCorrect();
         }else {
             wrongTimes++;
             if(wrongTimes != 2) {
@@ -485,6 +486,24 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
                 wrongTimes = 0;
             }
 
+        }
+
+        trackAndLogPerformance(lastResponseWasCorrect);
+
+    }
+
+    /**
+     *
+     * This method is to separate correctness-checking which informs game behavior from
+     * tracking performance for Activity Selection and for Logging.
+     *
+     * @param lastResponseWasCorrect
+     */
+    private void trackAndLogPerformance(boolean lastResponseWasCorrect) {
+
+        if(lastResponseWasCorrect) {
+            mTutor.countCorrect();;
+        } else {
             mTutor.countIncorrect();
         }
 
@@ -503,7 +522,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         event.setAttemptNumber(1); // always 1 for Akira
         event.setExpectedAnswer(questionBoard.answerLane.toString());
         event.setUserResponse(player.lane.toString());
-        event.setCorrectness(questionBoard.answerLane == player.lane ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+        event.setCorrectness(lastResponseWasCorrect ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
 
         event.setTimestamp(System.currentTimeMillis());
 

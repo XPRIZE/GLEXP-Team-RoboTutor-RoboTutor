@@ -746,7 +746,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                 if (percent >= TCONST.HIGH_PERFORMANCE_THRESHOLD) {
                     nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).harder;
-                } else if (percent >= TCONST.MID_PERFORMANCE_THRESHOLD || attempts < TCONST.MIN_ATTEMPTS_TO_GRADE) {
+                } else if (percent >= TCONST.MID_PERFORMANCE_THRESHOLD) {
                     // if user just quits...
                     // note that as long as the student does "MIN_ATTEMPTS_TO_GRADE",
                     // their percentage will be graded the same as if they had completed the entire activity
@@ -754,6 +754,13 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                     nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
                 } else {
                     nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).easier;
+                }
+
+                // if player doesn't acheive a minimum number of attempts, don't use performance data
+                int attemptsExpected = TCONST.MIN_ATTEMPTS_TO_GRADE;
+                if (attempts < attemptsExpected) {
+                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
+                    usePerformance = false;
                 }
 
             } else {

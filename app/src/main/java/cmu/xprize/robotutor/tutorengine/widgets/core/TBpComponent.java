@@ -638,31 +638,16 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         resetValid();
 
-        // XXX compare contents of scope in both locations
-        TScope thisScope = mTutor.getScope(); // remove
-        TScope parentScope = mTutor.getScope().getParentScope(); // remove
-        TScope root = mTutor.getScope().root(); // remove
-
         if (bubble.isCorrect()) {
             publishFeature(TCONST.GENERIC_RIGHT);
             Log.d("BPOP", "Correct" );
 
-
-            // XXX this is where correct count is incremented for Bubble Pop
             correct_Count++;
-
-            mTutor.countCorrect();
-
-            Log.d("PERFORMANCE", "marking correct answer");
 
         } else {
             publishFeature(TCONST.GENERIC_WRONG);
             Log.d("BPOP", "Wrong" );
             attempt_count--;
-
-
-            Log.d("PERFORMANCE", "marking incorrect answer");
-            mTutor.countIncorrect();
 
             if(attempt_count <= 0) {
                 publishFeature(TCONST.LAST_ATTEMPT);
@@ -674,12 +659,22 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         Log.d("BPOP", "Publish correct Count: " + correct_Count);
         Log.d("BPOP", "Publish attempt Count: " + attempt_count);
 
-        logPerformance(bubble);
+        trackAndLogPerformance(bubble);
 
     }
 
-    private void logPerformance(CBubble bubble) {
+    /**
+     * This method is to separate correctness-checking which informs game behavior from
+     * tracking performance for Activity Selection and for Logging.
+     */
+    private void trackAndLogPerformance(CBubble bubble) {
         // XXX_LL Begin changes
+
+        if (bubble.isCorrect()) {
+            mTutor.countCorrect();
+        } else {
+            mTutor.countIncorrect();
+        }
 
         PerformanceLogItem event = new PerformanceLogItem();
 

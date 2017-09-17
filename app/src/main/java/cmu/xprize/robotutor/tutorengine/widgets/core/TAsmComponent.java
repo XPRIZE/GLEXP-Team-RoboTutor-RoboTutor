@@ -110,7 +110,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         reset();
 
         boolean wholeCorrect = isWholeCorrect();
-        logStudentPerformance();
+        trackAndLogPerformance();
 
 
         // If the Problem is complete and correct then set FTR and continue
@@ -125,9 +125,10 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     }
 
     /**
-     * This logs the student's response and judges it correct or incorrect
+     * This method is to separate correctness-checking which informs game behavior from
+     * tracking performance for Activity Selection and for Logging.
      */
-    private void logStudentPerformance() {
+    private void trackAndLogPerformance() {
 
         // double digit answers will always be "incorrect"
         Integer studentWholeAnswer = allAlleys.get(numAlleys - 1).getNum();
@@ -138,6 +139,14 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         int expectedNumDigitsInStudentAnswer = corValue.toString().length() - digitIndex + 1;
         if (studentWholeAnswer.toString().length() < expectedNumDigitsInStudentAnswer) { // 1 < 2
             studentMostRecentDigit = 0;
+        }
+
+        boolean responseWasCorrect = studentMostRecentDigit.equals(corDigit);
+
+        if(responseWasCorrect) {
+            mTutor.countCorrect();
+        } else {
+            mTutor.countIncorrect();
         }
 
         PerformanceLogItem event = new PerformanceLogItem();
@@ -155,7 +164,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         event.setAttemptNumber(-1); // this can be inferred in the data
         event.setExpectedAnswer(corDigit.toString());
         event.setUserResponse(studentMostRecentDigit.toString());
-        event.setCorrectness(studentMostRecentDigit.equals(corDigit) ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+        event.setCorrectness(responseWasCorrect ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
 
         event.setTimestamp(System.currentTimeMillis());
 
@@ -198,8 +207,6 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
             publishFeature(TCONST.GENERIC_RIGHT);
             publishFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
 
-            mTutor.countCorrect(); // XXX test this
-
             saveCurFeaturesAboutOverhead();
             delCurFeaturesAboutOverhead();
         } else {
@@ -214,8 +221,6 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
             }, 3000);
 
             publishFeature(TCONST.GENERIC_WRONG);
-
-            mTutor.countIncorrect(); // XXX test this
 
             if (resultCorrect == ASM_CONST.NOT_ALL_INPUT_RIGHT) {
                 publishFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);

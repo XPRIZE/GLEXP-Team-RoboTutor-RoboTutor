@@ -263,7 +263,7 @@ public class TCONST {
     public static final boolean OVERRIDE_SELF_ASSESSMENT        = false;
     public static final double HIGH_PERFORMANCE_THRESHOLD       = 0.9; // percent to be upgraded a level
     public static final double MID_PERFORMANCE_THRESHOLD        = 0.5; // percent to pass
-    public static final int MIN_ATTEMPTS_TO_GRADE               = 1;   // minimum number of attempts to be graded
+    public static final int MIN_ATTEMPTS_TO_GRADE               = 5;   // minimum number of attempts to be graded
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
     //
