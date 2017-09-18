@@ -26,6 +26,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.SpannableStringBuilder;
@@ -34,7 +35,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
@@ -63,7 +64,7 @@ import cmu.xprize.util.TCONST;
 /**
  */
 @RemoteViews.RemoteView
-public class CStimulusController extends LinearLayout implements IEventListener, IEventDispatcher, ILoadableObject {
+public class CStimulusController extends RelativeLayout implements IEventListener, IEventDispatcher, ILoadableObject {
 
     private Context  mContext;
 
@@ -89,6 +90,7 @@ public class CStimulusController extends LinearLayout implements IEventListener,
     private Typeface        _fontFace;
     private TextView        mRecogChar;
     private ImageView       mUnderline;
+    private GradientDrawable    mUnderlineDrawable;
 
     private int             mTextColor;
     public  String          mValue;
@@ -166,6 +168,7 @@ public class CStimulusController extends LinearLayout implements IEventListener,
 
         mRecogChar = (TextView)findViewById(R.id.recog_char);
         mUnderline = (ImageView)findViewById(R.id.recog_box);
+        mUnderlineDrawable = (GradientDrawable) mUnderline.getDrawable();
 
         // Font Face selection
         selectFont(TCONST.GRUNDSCHRIFT);
@@ -211,14 +214,14 @@ public class CStimulusController extends LinearLayout implements IEventListener,
         int charColor;
         int borderColor = TCONST.colorMap.get(TCONST.COLORNONE);
 
-        mUnderline.setVisibility(View.INVISIBLE);
-
         if(!match) {
             charColor = TCONST.colorMap.get(TCONST.COLORERROR);
             mUnderline.setVisibility(View.VISIBLE);
+            mUnderlineDrawable.setStroke(TCONST.STROKE_STIM_UNDERLINE, charColor);
         }
         else {
             charColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
+            mUnderline.setVisibility(View.INVISIBLE);
         }
 
         mRecogChar.setTextColor(charColor);
@@ -238,8 +241,9 @@ public class CStimulusController extends LinearLayout implements IEventListener,
         int charColor   = TCONST.colorMap.get(TCONST.COLORNORMAL);
         int borderColor = TCONST.colorMap.get(TCONST.COLORNONE);
 
-        mUnderline.setVisibility(View.INVISIBLE);
         mRecogChar.setTextColor(charColor);
+        mUnderline.setVisibility(View.VISIBLE);
+        mUnderlineDrawable.setStroke(TCONST.STROKE_STIM_UNDERLINE, charColor);
         _Paint.setColor(borderColor);
 
         invalidate();
@@ -510,6 +514,7 @@ public class CStimulusController extends LinearLayout implements IEventListener,
 
         try {
             mRecogChar.setTextColor(TCONST.colorMap.get(Color));
+            mUnderlineDrawable.setStroke(5, TCONST.colorMap.get(Color));
         }
         catch(Exception e) {
             CErrorManager.logEvent(TAG, "Invalid Color Name: "  + Color + " : ", e, false);
@@ -634,14 +639,18 @@ public class CStimulusController extends LinearLayout implements IEventListener,
 
                     case TCONST.HIGHLIGHT:
 
+                        mUnderline.setVisibility(View.VISIBLE);
                         mRecogChar.setTextColor(WR_CONST.HLCOLOR);
+                        mUnderlineDrawable.setStroke(5, WR_CONST.HLCOLOR);
                         invalidate();
                         post(TCONST.SHOW_NORMAL, WR_CONST.HIGHLIGHT_TIME);
                         break;
 
                     case TCONST.SHOW_NORMAL:
 
-                        mRecogChar.setTextColor(WR_CONST.NORMALCOLOR);
+                        mUnderline.setVisibility(View.VISIBLE);
+                        mRecogChar.setTextColor(TCONST.colorMap.get(TCONST.COLORNORMAL));
+                        mUnderlineDrawable.setStroke(5, TCONST.colorMap.get(TCONST.COLORNORMAL));
                         invalidate();
                         break;
                 }

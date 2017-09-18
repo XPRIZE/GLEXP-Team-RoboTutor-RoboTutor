@@ -7,22 +7,27 @@
     android:orientation="vertical"
     android:gravity="center"
     android:paddingLeft="3dp"
-    android:paddingRight="3dp">
-
-    <TextView
-        android:id="@+id/recog_char"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="50sp"
-        android:background="@null"
-        android:text=""/>
+    android:paddingRight="3dp"
+    android:background="@null">
 
     <ImageView
         android:id="@+id/recog_box"
+        android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:visibility="invisible"
+        android:visibility="visible"
+        android:background="@null"
+        android:layout_marginTop="55dp"
         android:src="@drawable/recog_box" />
+
+    <TextView
+        android:id="@+id/recog_char"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="60sp"
+        android:background="@null"
+        android:text=""/>
 
 
 </cmu.xprize.comp_writing.CStimulusController>

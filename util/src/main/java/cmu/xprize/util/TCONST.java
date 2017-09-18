@@ -286,6 +286,8 @@ public class TCONST {
     public static final String COLORNORMAL         = "normal";
     public static final String COLORNONE           = "none";
 
+    public static final int STROKE_STIM_UNDERLINE  = 5;
+
 
     static public HashMap<String, String> fontMap = new HashMap<String, String>();
 

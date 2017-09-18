@@ -5,13 +5,13 @@ android:shape="line">
 
 <size
     android:width="45dp"
-    android:height="45dp"/>
+    android:height="10dp"/>
 
 <solid
     android:color="#FFFF0000" />
 
 <stroke
-    android:color="#FFFF0000"
-    android:width="5dp"/>
+    android:color="#FF000000"
+    android:width="5px"/>
 
 </shape>
