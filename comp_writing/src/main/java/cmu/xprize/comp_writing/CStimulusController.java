@@ -514,7 +514,7 @@ public class CStimulusController extends RelativeLayout implements IEventListene
 
         try {
             mRecogChar.setTextColor(TCONST.colorMap.get(Color));
-            mUnderlineDrawable.setStroke(5, TCONST.colorMap.get(Color));
+            mUnderlineDrawable.setStroke(TCONST.STROKE_STIM_UNDERLINE, TCONST.colorMap.get(Color));
         }
         catch(Exception e) {
             CErrorManager.logEvent(TAG, "Invalid Color Name: "  + Color + " : ", e, false);
@@ -641,7 +641,7 @@ public class CStimulusController extends RelativeLayout implements IEventListene
 
                         mUnderline.setVisibility(View.VISIBLE);
                         mRecogChar.setTextColor(WR_CONST.HLCOLOR);
-                        mUnderlineDrawable.setStroke(5, WR_CONST.HLCOLOR);
+                        mUnderlineDrawable.setStroke(TCONST.STROKE_STIM_UNDERLINE, WR_CONST.HLCOLOR);
                         invalidate();
                         post(TCONST.SHOW_NORMAL, WR_CONST.HIGHLIGHT_TIME);
                         break;
@@ -650,7 +650,7 @@ public class CStimulusController extends RelativeLayout implements IEventListene
 
                         mUnderline.setVisibility(View.VISIBLE);
                         mRecogChar.setTextColor(TCONST.colorMap.get(TCONST.COLORNORMAL));
-                        mUnderlineDrawable.setStroke(5, TCONST.colorMap.get(TCONST.COLORNORMAL));
+                        mUnderlineDrawable.setStroke(TCONST.STROKE_STIM_UNDERLINE, TCONST.colorMap.get(TCONST.COLORNORMAL));
                         invalidate();
                         break;
                 }
