@@ -19,7 +19,7 @@
           "COMMENT": "Intro Clip",
           "maptype":"moduleMap",
           "mapname": "INTRO_STATE_TRACK",
-          "preenter": ["SET_DATASOURCE"],
+          "preenter": ["SET_VERSION", "SET_DATASOURCE"],
           "preexit": [],
           "edges": [
             {
@@ -581,6 +581,7 @@
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
 
+        "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
 
         "USERINPUT_TRACK":  {"type": "COMMAND", "cmd": ""  },
 

@@ -126,7 +126,8 @@ public class TBanner extends CBanner implements ITutorObjectImpl, View.OnClickLi
             //
             mTutor_Ver = TActivitySelector.DEBUG_TUTORID + ".";
 
-            mTutor_Ver += versionID;
+            //mTutor_Ver += versionID; // not sure why this versionID was used, as it seems to have no significance
+            mTutor_Ver += "v" + BuildConfig.VERSION_NAME;
 
             mVersion.setText(mTutor_Ver);
         }
