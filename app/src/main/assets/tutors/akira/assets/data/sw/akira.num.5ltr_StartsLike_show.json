@@ -1,0 +1,83 @@
+{
+  "datasource" : [ {
+    "item_counter" : 1,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "jingi",
+    "item_type" : "3_sign",
+    "choices" : [ "jinsi", "padre", "pande" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 2,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "mwaka",
+    "item_type" : "3_sign",
+    "choices" : [ "mingi", "mwake", "mbavu" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 3,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "nyika",
+    "item_type" : "3_sign",
+    "choices" : [ "ncede", "mkuyu", "nyigu" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 4,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "kumpa",
+    "item_type" : "3_sign",
+    "choices" : [ "atabo", "kumbe", "mbili" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 5,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "njama",
+    "item_type" : "3_sign",
+    "choices" : [ "wazee", "njano", "maana" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 6,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "wangu",
+    "item_type" : "3_sign",
+    "choices" : [ "wanao", "mtamu", "umeme" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 7,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "nyuso",
+    "item_type" : "3_sign",
+    "choices" : [ "mtini", "miale", "nyuma" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 8,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "mtego",
+    "item_type" : "3_sign",
+    "choices" : [ "vyatu", "ngapi", "mtemi" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 9,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "shaka",
+    "item_type" : "3_sign",
+    "choices" : [ "kuita", "ngome", "shada" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 10,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "akate",
+    "item_type" : "3_sign",
+    "choices" : [ "kwenu", "akala", "ghali" ],
+    "type" : "CAk_Data"
+  } ]
+}

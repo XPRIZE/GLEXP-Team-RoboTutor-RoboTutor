@@ -1,0 +1,83 @@
+{
+  "datasource" : [ {
+    "item_counter" : 1,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "wali",
+    "item_type" : "3_sign",
+    "choices" : [ "papo", "watu", "mbio" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 2,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "moto",
+    "item_type" : "3_sign",
+    "choices" : [ "babu", "peke", "moja" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 3,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "vipi",
+    "item_type" : "3_sign",
+    "choices" : [ "vita", "inia", "nipe" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 4,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "tele",
+    "item_type" : "3_sign",
+    "choices" : [ "temu", "siyo", "vuta" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 5,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "kipi",
+    "item_type" : "3_sign",
+    "choices" : [ "kike", "dawa", "hali" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 6,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "simu",
+    "item_type" : "3_sign",
+    "choices" : [ "kifo", "wizi", "siyo" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 7,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "waua",
+    "item_type" : "3_sign",
+    "choices" : [ "wazo", "mama", "vile" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 8,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "dari",
+    "item_type" : "3_sign",
+    "choices" : [ "wawe", "pema", "dada" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 9,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "goso",
+    "item_type" : "3_sign",
+    "choices" : [ "tatu", "goli", "haha" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 10,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "aone",
+    "item_type" : "3_sign",
+    "choices" : [ "zote", "afya", "kete" ],
+    "type" : "CAk_Data"
+  } ]
+}

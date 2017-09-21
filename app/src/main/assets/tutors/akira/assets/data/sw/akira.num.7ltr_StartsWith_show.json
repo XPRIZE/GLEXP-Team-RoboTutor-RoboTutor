@@ -1,0 +1,83 @@
+{
+  "datasource" : [ {
+    "item_counter" : 1,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "michafu",
+    "item_type" : "3_sign",
+    "choices" : [ "akafoka", "migongo", "mkutano" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 2,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "huchoma",
+    "item_type" : "3_sign",
+    "choices" : [ "mabonde", "hufuata", "dhoruba" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 3,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "akasema",
+    "item_type" : "3_sign",
+    "choices" : [ "anapita", "haongei", "hufuata" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 4,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "mzaliwa",
+    "item_type" : "3_sign",
+    "choices" : [ "mzabibu", "shabaha", "unataka" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 5,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "alikula",
+    "item_type" : "3_sign",
+    "choices" : [ "yameiva", "akinywa", "umeenda" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 6,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "anaanza",
+    "item_type" : "3_sign",
+    "choices" : [ "ikipiga", "akitela", "mbuyuni" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 7,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "kakangu",
+    "item_type" : "3_sign",
+    "choices" : [ "limejaa", "anaenda", "kahawia" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 8,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "akienda",
+    "item_type" : "3_sign",
+    "choices" : [ "ametimu", "kisanaa", "kukataa" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 9,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "alihepa",
+    "item_type" : "3_sign",
+    "choices" : [ "kutisha", "alipata", "yakhupa" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 10,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "hataiba",
+    "item_type" : "3_sign",
+    "choices" : [ "mawingu", "hakutoa", "mombasa" ],
+    "type" : "CAk_Data"
+  } ]
+}

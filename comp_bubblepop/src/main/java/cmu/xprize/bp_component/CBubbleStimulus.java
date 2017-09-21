@@ -19,7 +19,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -148,6 +151,12 @@ public class CBubbleStimulus extends FrameLayout {
         else {
             mText.setText(text);
             mText.setVisibility(View.VISIBLE);
+
+            //Use monospace if text contains number to ensure text is properly aligned
+            if(text.matches(".*\n+.*")) {
+                mText.setTypeface(Typeface.MONOSPACE);
+                mText.setGravity(Gravity.RIGHT);
+            }
         }
 
         invalidate();

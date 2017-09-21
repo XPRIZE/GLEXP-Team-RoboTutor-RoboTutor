@@ -1,0 +1,83 @@
+{
+  "datasource" : [ {
+    "item_counter" : 1,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "ilififia",
+    "item_type" : "3_sign",
+    "choices" : [ "aliingia", "wamekuja", "ipikwayo" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 2,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "alingoja",
+    "item_type" : "3_sign",
+    "choices" : [ "kinywaji", "alipinga", "barabara" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 3,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "kuchomwa",
+    "item_type" : "3_sign",
+    "choices" : [ "zilikiwa", "nyekundu", "kuyaonja" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 4,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "machache",
+    "item_type" : "3_sign",
+    "choices" : [ "majivuno", "ulisikia", "angekula" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 5,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "aliyejua",
+    "item_type" : "3_sign",
+    "choices" : [ "vinywaji", "ametulia", "kusaidia" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 6,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "nyekundi",
+    "item_type" : "3_sign",
+    "choices" : [ "nyekundu", "kulialia", "kukipata" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 7,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "kuchomwa",
+    "item_type" : "3_sign",
+    "choices" : [ "palikuwa", "kulipiza", "hakuwapo" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 8,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "walibeba",
+    "item_type" : "3_sign",
+    "choices" : [ "kuchomwa", "waliamua", "atuvushe" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 9,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "amepakwa",
+    "item_type" : "3_sign",
+    "choices" : [ "akibugia", "sifahamu", "kufanywa" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 10,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "mitihani",
+    "item_type" : "3_sign",
+    "choices" : [ "milimani", "wakahofu", "sikuwahi" ],
+    "type" : "CAk_Data"
+  } ]
+}

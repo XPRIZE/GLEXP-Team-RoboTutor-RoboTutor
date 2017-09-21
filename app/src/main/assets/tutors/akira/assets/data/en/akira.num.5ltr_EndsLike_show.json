@@ -1,0 +1,83 @@
+{
+  "datasource" : [ {
+    "item_counter" : 1,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "mrija",
+    "item_type" : "3_sign",
+    "choices" : [ "ukija", "chuma", "akafa" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 2,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "uzito",
+    "item_type" : "3_sign",
+    "choices" : [ "pingu", "mlafi", "mzito" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 3,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "jimbi",
+    "item_type" : "3_sign",
+    "choices" : [ "tabia", "wenye", "mumbi" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 4,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "mzuri",
+    "item_type" : "3_sign",
+    "choices" : [ "jeuri", "mimea", "asile" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 5,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "jumbe",
+    "item_type" : "3_sign",
+    "choices" : [ "jipya", "aimbe", "amwoe" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 6,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "ngoma",
+    "item_type" : "3_sign",
+    "choices" : [ "ukoma", "ndiye", "kubwa" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 7,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "kwere",
+    "item_type" : "3_sign",
+    "choices" : [ "vikuu", "lenye", "shere" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 8,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "kundi",
+    "item_type" : "3_sign",
+    "choices" : [ "wefwe", "kindi", "akina" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 9,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "jeupe",
+    "item_type" : "3_sign",
+    "choices" : [ "meupe", "ngiri", "nyuki" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 10,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "ndovu",
+    "item_type" : "3_sign",
+    "choices" : [ "mwovu", "okota", "akiru" ],
+    "type" : "CAk_Data"
+  } ]
+}

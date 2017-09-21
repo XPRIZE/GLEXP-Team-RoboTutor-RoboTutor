@@ -1,0 +1,83 @@
+{
+  "datasource" : [ {
+    "item_counter" : 1,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "nilimjibu",
+    "item_type" : "3_sign",
+    "choices" : [ "aliyejibu", "kukopesha", "hazijaiva" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 2,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "wanaogopa",
+    "item_type" : "3_sign",
+    "choices" : [ "kumuogopa", "akatazama", "walifagia" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 3,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "ameitumia",
+    "item_type" : "3_sign",
+    "choices" : [ "yalirejea", "nakupenda", "walipoona" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 4,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "kuzifikia",
+    "item_type" : "3_sign",
+    "choices" : [ "kuunguzwa", "atafikiri", "kumchotea" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 5,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "wakafanya",
+    "item_type" : "3_sign",
+    "choices" : [ "tulifanya", "chembamba", "kukaribia" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 6,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "waliofika",
+    "item_type" : "3_sign",
+    "choices" : [ "nimechoka", "nitarejea", "ningeweza" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 7,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "kumtungia",
+    "item_type" : "3_sign",
+    "choices" : [ "hakumpata", "liligeuka", "kumwimbia" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 8,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "kujikinga",
+    "item_type" : "3_sign",
+    "choices" : [ "wakapanga", "tunaamini", "alisombwa" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 9,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "angefanya",
+    "item_type" : "3_sign",
+    "choices" : [ "wakicheza", "wakifanya", "wanatumai" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 10,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "nilimwona",
+    "item_type" : "3_sign",
+    "choices" : [ "alifurahi", "tutaliona", "wamevunja" ],
+    "type" : "CAk_Data"
+  } ]
+}

@@ -1,0 +1,83 @@
+{
+  "datasource" : [ {
+    "item_counter" : 1,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "huu",
+    "item_type" : "3_sign",
+    "choices" : [ "nta", "huo", "daa" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 2,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "zaa",
+    "item_type" : "3_sign",
+    "choices" : [ "daa", "zao", "moo" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 3,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "yao",
+    "item_type" : "3_sign",
+    "choices" : [ "pia", "yai", "hii" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 4,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "ama",
+    "item_type" : "3_sign",
+    "choices" : [ "ona", "amu", "kiu" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 5,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "umo",
+    "item_type" : "3_sign",
+    "choices" : [ "uma", "nae", "ala" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 6,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "mle",
+    "item_type" : "3_sign",
+    "choices" : [ "mlo", "ipi", "eti" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 7,
+    "answer" : null,
+    "level" : "ak_eq_3_sign",
+    "belowString" : "nio",
+    "item_type" : "3_sign",
+    "choices" : [ "nia", "nao", "mle" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 8,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "cha",
+    "item_type" : "3_sign",
+    "choices" : [ "ana", "ndi", "chu" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 9,
+    "answer" : "LEFT",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "kwa",
+    "item_type" : "3_sign",
+    "choices" : [ "uko", "kwi", "mtu" ],
+    "type" : "CAk_Data"
+  }, {
+    "item_counter" : 10,
+    "answer" : "MID",
+    "level" : "ak_eq_3_sign",
+    "belowString" : "mle",
+    "item_type" : "3_sign",
+    "choices" : [ "cio", "hao", "mlo" ],
+    "type" : "CAk_Data"
+  } ]
+}
