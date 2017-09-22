@@ -272,7 +272,6 @@ public class CLogManager implements ILogManager {
         }
 
 
-        // ZZZ debug here
         // String oldPath   = CPreferenceCache.getPrefID(TLOG_CONST.ENGINE_INSTANCE) + TLOG_CONST.JSONLOG;
         String newPath = log_Filename + TLOG_CONST.JSONLOG;
         // String oldDsPath = CPreferenceCache.getPrefID(TLOG_CONST.ENGINE_INSTANCE) + TLOG_CONST.DATASHOP + TLOG_CONST.JSONLOG;

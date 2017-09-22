@@ -509,8 +509,8 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
         PerformanceLogItem event = new PerformanceLogItem();
 
-        event.setUserId(null);
-        event.setSessionId(null);
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
         event.setGameId(mTutor.getUuid().toString());  // a new tutor is generated for each game, so this will be unique
         event.setLanguage(CTutorEngine.language);
         event.setTutorName(mTutor.getTutorName());

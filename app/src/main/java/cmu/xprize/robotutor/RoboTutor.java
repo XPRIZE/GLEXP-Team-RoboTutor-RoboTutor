@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 
 import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.GCONST;
@@ -104,6 +105,9 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     static public Activity      ACTIVITY;
     static public String        PACKAGE_NAME;
     static public boolean       DELETE_INSTALLED_ASSETS = false;
+
+    static public String        STUDENT_ID; // received from FaceLogin
+    static public String        SESSION_ID; // received from FaceLogin
 
     final static public  String CacheSource = TCONST.ASSETS;                // assets or extern
 
@@ -216,6 +220,49 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         progressView = (CLoaderView)inflater.inflate(R.layout.progress_layout, null );
 
         masterContainer.addAndShow(progressView);
+    }
+
+    /**
+     * This file gets the Extras that are passed from FaceLogin and uses them to set the uniqueIDs,
+     * SessionID and StudentID
+     *
+     */
+    private void setUniqueIdentifiers() {
+        String BUNDLE_TAG = "BUNDLE";
+
+        Log.i(BUNDLE_TAG, "starting!");
+
+
+        if(getIntent() != null && getIntent().getExtras() != null) {
+
+            for (String key : getIntent().getExtras().keySet()) {
+                Log.i(BUNDLE_TAG, "INTENT_KEY_FOUND: " + key + " -- " + getIntent().getExtras().get(key));
+            }
+
+            STUDENT_ID = getIntent().getExtras().getString(TCONST.STUDENT_ID_VAR);
+
+            if(STUDENT_ID != null) {
+                Log.i(BUNDLE_TAG, "studentId passed! " + STUDENT_ID);
+            } else {
+                Log.w(BUNDLE_TAG, "no studentId passed!");
+                STUDENT_ID = TCONST.DEFAULT_STUDENT_ID;
+            }
+
+            SESSION_ID = getIntent().getExtras().getString(TCONST.SESSION_ID_VAR);
+
+
+        } else {
+            Log.w(BUNDLE_TAG, "no extras passed!");
+            STUDENT_ID = TCONST.DEFAULT_STUDENT_ID;
+        }
+
+        // ZZZ remove before committing
+        /*boolean TESTING;
+        if(TESTING = false) {
+            STUDENT_ID = "STUDENT_" + (new Random()).nextInt(3);
+        }
+
+        Log.d(TAG, "STUDENT_ID = " + STUDENT_ID);*/
     }
 
 
@@ -507,6 +554,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         // On-Screen
         logManager.postEvent_V(TAG, "Robotutor:onStart");
+
+        setUniqueIdentifiers();
 
         // We only want to run the engine start sequence once per onStart call
         //
