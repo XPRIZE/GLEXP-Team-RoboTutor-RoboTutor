@@ -266,6 +266,10 @@ public class TCONST {
     public static final int MIN_ATTEMPTS_TO_GRADE               = 5;   // minimum number of attempts to be graded
     public static final String BUBBLEPOP_MATH_EXPRESSION = "BPOP_MATH_EXPR";
 
+    public static final String DEFAULT_STUDENT_ID = "DEBUG";
+    public static final String STUDENT_ID_VAR = "studentId";
+    public static final String SESSION_ID_VAR = "sessionId";
+
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
     //
     // This is used to map "states" to colors

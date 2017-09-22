@@ -695,8 +695,8 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         if (_currData.question_say) promptType += "say";
         if (_currData.question_show) promptType += ((promptType.length() > 0) ? "+" : "") + "show";
 
-        event.setUserId(null);      // YYY get userId from FaceLogin
-        event.setSessionId(null);      // YYY get sessionId
+        event.setUserId(RoboTutor.STUDENT_ID);      // YYY get userId from FaceLogin
+        event.setSessionId(RoboTutor.SESSION_ID);      // YYY get sessionId
         event.setGameId(mTutor.getUuid().toString());
         event.setLanguage(CTutorEngine.language);
         event.setTutorName(mTutor.getTutorName());
