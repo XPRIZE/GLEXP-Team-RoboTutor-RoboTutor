@@ -458,7 +458,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                 // Serialize the new state
                 // #Mod 329 language switch capability
                 //
-                SharedPreferences prefs = RoboTutor.ACTIVITY.getSharedPreferences(mMediaManager.getLanguageFeature(mTutor), Context.MODE_PRIVATE);
+                SharedPreferences prefs = getStudentSharedPreferences();
                 SharedPreferences.Editor editor = prefs.edit();
 
                 editor.putString(TCONST.SKILL_SELECTED, activeSkill);
@@ -614,7 +614,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         // Serialize the new state
         // #Mod 329 language switch capability
         //
-        SharedPreferences prefs = RoboTutor.ACTIVITY.getSharedPreferences(mMediaManager.getLanguageFeature(mTutor), Context.MODE_PRIVATE);
+        SharedPreferences prefs = getStudentSharedPreferences();
         SharedPreferences.Editor editor = prefs.edit();
 
         editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE);
@@ -677,7 +677,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         // Serialize the new state
         // #Mod 329 language switch capability
         //
-        SharedPreferences prefs = RoboTutor.ACTIVITY.getSharedPreferences(mMediaManager.getLanguageFeature(mTutor), Context.MODE_PRIVATE);
+        SharedPreferences prefs = getStudentSharedPreferences();
 
         SharedPreferences.Editor editor = prefs.edit();
 
@@ -700,6 +700,17 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         editor.apply();
 
         return buttonid;
+    }
+
+    private SharedPreferences getStudentSharedPreferences() {
+        String prefsName = "";
+        if(RoboTutor.STUDENT_ID != null) {
+            prefsName += RoboTutor.STUDENT_ID + "_";
+        }
+        prefsName += mMediaManager.getLanguageFeature(mTutor);
+
+        RoboTutor.logManager.postEvent_I(TAG, "Getting SharedPreferences: " + prefsName);
+        return RoboTutor.ACTIVITY.getSharedPreferences(prefsName, Context.MODE_PRIVATE);
     }
 
     /**
@@ -1289,8 +1300,14 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         // de-serialize state
         // #Mod 329 language switch capability
         //
-        SharedPreferences prefs = RoboTutor.ACTIVITY.getSharedPreferences(mMediaManager.getLanguageFeature(mTutor), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
+        SharedPreferences prefs = getStudentSharedPreferences();
+
+        if(prefs.getAll().entrySet().isEmpty())
+            RoboTutor.logManager.postEvent_W(TAG, "SharedPreferences is empty");
+
+        for (Map.Entry<String, ?> entry : prefs.getAll().entrySet()) {
+            RoboTutor.logManager.postEvent_D(TAG, "SharedPreferences: " + entry.getKey() + " -- " + entry.getValue().toString());
+        }
 
         activeSkill = prefs.getString(TCONST.SKILL_SELECTED, TCONST.SKILL_STORIES);
 
