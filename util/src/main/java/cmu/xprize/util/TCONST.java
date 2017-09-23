@@ -270,9 +270,6 @@ public class TCONST {
     public static final String STUDENT_ID_VAR = "studentId";
     public static final String SESSION_ID_VAR = "sessionId";
 
-    public static final String DEFAULT_STUDENT_ID = "DEBUG";
-    public static final String STUDENT_ID_VAR = "studentId";
-    public static final String SESSION_ID_VAR = "sessionId";
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
     //
