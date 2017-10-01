@@ -654,6 +654,9 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             publishValue(BP_CONST.ANSWER_VAR_TWO, operation);
             publishValue(BP_CONST.ANSWER_VAR_THREE, secondNum);
 
+            Log.d("DEREK_TAM", firstNum);
+            Log.d("DEREK_TAM", operation);
+            Log.d("DEREK_TAM", secondNum);
         }
 
         else {
@@ -752,7 +755,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         resetState();
 
-        String correctVal = data.answer;
+        String correctVal = data.stimulus;
 
         // Ensure letters are lowercase for mp3 matching
         //
