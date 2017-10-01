@@ -310,16 +310,12 @@ public class CBubble extends FrameLayout {
     }
 
     public void setVectorPosition(Point relOrigin, float vecWidthDist, float vecHeightDist, float angle) {
-//        Log.d("Derek", getTextView().getText().toString());
-//        Log.d("Derek", "Center " + relOrigin + " Width Range: " + vecWidthDist + " Height Range: " + vecHeightDist + " Angle: " + angle);
-//        Log.d("Derek", "Width: " + getWidth() + " Height: " + getHeight());
         mAngle    = angle;
 
         float xOrigin = relOrigin.x;
         float yOrigin = relOrigin.y;
         mPosition.x = ((float) (xOrigin + vecWidthDist * Math.cos(mAngle)) - (getWidth() / 2));
         mPosition.y = ((float) (yOrigin + (vecHeightDist * Math.sin(mAngle))) - (getHeight() / 2));
-        Log.d("Derek", "X Position " + mPosition.x + " Y Position " + mPosition.y);
 
         setX(mPosition.x);
         setY(mPosition.y);

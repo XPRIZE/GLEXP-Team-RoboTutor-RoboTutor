@@ -170,7 +170,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         // Let the compoenent process the new data set
         //
         super.updateDataSet(data);
-
         publishQuestionState(data);
     }
 
@@ -634,7 +633,32 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         if(answer.length() == 1)
             answer = answer.toLowerCase();
 
-        publishValue(BP_CONST.ANSWER_VAR, answer);
+
+        Log.d("DEREK_TAM", answer);
+
+        if(answer.contains("\n")) {
+
+            int index = answer.indexOf("\n");
+            String firstNum = answer.substring(0, index);
+            String operation = answer.substring(index + 1, index + 2);
+            String secondNum = answer.substring(index+2);
+
+            publishValue(BP_CONST.ANSWER_VAR, firstNum);
+
+            if(operation.equals("+")) {
+                publishValue(BP_CONST.ANSWER_VAR_TWO, "plus");
+            }
+            else {
+                publishValue(BP_CONST.ANSWER_VAR_TWO, "minus");
+            }
+
+            publishValue(BP_CONST.ANSWER_VAR_THREE, secondNum);
+
+        }
+
+        else {
+            publishValue(BP_CONST.ANSWER_VAR, answer);
+        }
 
         resetValid();
 
@@ -732,7 +756,32 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         //
         correctVal = correctVal.toLowerCase();
 
-        publishValue(BP_CONST.QUEST_VAR, correctVal);
+//        if(correctVal.contains("\n")) {
+//
+//            int index = correctVal.indexOf("\n");
+//            String firstNum = correctVal.substring(0, index);
+//            String operation = correctVal.substring(index + 1, index + 2);
+//            String secondNum = correctVal.substring(index+2);
+//
+//            publishValue(BP_CONST.QUEST_VAR, firstNum);
+//
+//            if(operation.equals("+")) {
+//                publishValue(BP_CONST.QUEST_VAR_TWO, "plus");
+//            }
+//            else {
+//                publishValue(BP_CONST.QUEST_VAR_TWO, "minus");
+//            }
+//
+//            publishValue(BP_CONST.QUEST_VAR_THREE, secondNum);
+//
+//        }
+//
+//        else {
+            publishValue(BP_CONST.QUEST_VAR, correctVal);
+//        }
+
+        Log.d("DEREK_TAM", correctVal);
+
 
         if (data.question_say) {
             publishFeature(TCONST.SAY_STIMULUS);

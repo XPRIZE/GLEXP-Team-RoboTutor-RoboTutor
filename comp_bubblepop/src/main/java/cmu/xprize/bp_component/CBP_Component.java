@@ -332,7 +332,6 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
             _mechanics.onDestroy();
             _mechanics = null;
         }
-
         switch(data.question_type.toLowerCase()) {
 
             case "mc":
