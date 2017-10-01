@@ -173,6 +173,8 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBubblePop", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
 
+            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "STIMULUS_SHOWN:String|NEXTNODE:String" ,"features":"FTR_SHOW"},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_STIMULUS:String"                  ,"features":"FTR_SHOW"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"event", "features": "FTR_SAY&FTR_WORDS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_NUMBERS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueTwo}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_NUMBERS"},
@@ -180,8 +182,7 @@
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"shapes", "volume": 1.0, "mode":"event", "features": "FTR_SAY&FTR_SHAPES"},
 
             // If we are showing it we have to wait for the animation to complete before continuing
-            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "STIMULUS_SHOWN:String|NEXTNODE:String" ,"features":"FTR_SHOW"},
-            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_STIMULUS:String"                  ,"features":"FTR_SHOW"},
+
             {"type": "COMMAND", "cmd": "WAIT", "features":"FTR_SHOW"  },
 
             {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_BUBBLES:String"              ,"features":""}
@@ -210,15 +211,17 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBubblePop", "method": "logState", "parms": "type#node,value#PLAYCORRECT:String", "features":""},
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "popSound.mp3",  "soundpackage":"tutor_effect", "volume": 0.20, "mode":"event", "features": ""},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "BUBBLE_POPPED:String|NEXTNODE:String" ,"features":""},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "POP_BUBBLE:String" ,"features":""},
+
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"event", "features": "FTR_WORDS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": "FTR_NUMBERS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueTwo}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": "FTR_NUMBERS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueThree}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": "FTR_NUMBERS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_NUMBERS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueTwo}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_NUMBERS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueThree}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_NUMBERS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"letters", "volume": 1.0, "mode":"event", "features": "FTR_LETTERS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"shapes", "volume": 1.0, "mode":"event", "features": "FTR_SHAPES"},
 
-            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "BUBBLE_POPPED:String|NEXTNODE:String" ,"features":""},
-            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "POP_BUBBLE:String" ,"features":""},
+
             {"type": "COMMAND", "cmd": "WAIT"  },
 
             {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "BUBBLES_CLEARED:String|NEXTNODE:String" ,"features":""},
