@@ -1428,15 +1428,6 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         validateTable(writeTransitions,  "writeTransition: ");
         validateTable(storyTransitions,  "storyTransition: ");
         validateTable(mathTransitions ,  "mathTransition: ");
-
-        Object[] keySet = mathTransitions.keySet().toArray();
-
-        for(int i = 0; i <keySet.length; i++) {
-            if(keySet[i].equals("bpop.ex.mc_show_0")) {
-                Log.d("DEREK_TAM", "KEY FOUND" + keySet[i].toString());
-            }
-        }
-
         validateTable(shapeTransitions,  "shapeTransition: " );
     }
 }

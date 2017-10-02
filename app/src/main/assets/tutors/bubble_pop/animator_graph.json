@@ -218,8 +218,9 @@
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"event", "features": "FTR_WORDS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_NUMBERS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueTwo}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_NUMBERS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueThree}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": "FTR_NUMBERS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"expressions", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueTwo}}.mp3",  "soundpackage":"expressions", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueThree}}.mp3",  "soundpackage":"expressions", "volume": 1.0, "mode":"event", "features": "FTR_EXPRESSIONS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"letters", "volume": 1.0, "mode":"event", "features": "FTR_LETTERS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"shapes", "volume": 1.0, "mode":"event", "features": "FTR_SHAPES"},
 
