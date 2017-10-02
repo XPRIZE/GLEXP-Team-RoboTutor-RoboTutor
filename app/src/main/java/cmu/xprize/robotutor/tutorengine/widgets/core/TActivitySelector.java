@@ -1348,11 +1348,14 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         String outcome;
 
         result = result + validateVector(map, object.tutor_id, " - tutor_id:");
-        result = result + validateVector(map, object.easier, " - easier:");
-        result = result + validateVector(map, object.harder, " - harder:");
-        result = result + validateVector(map, object.same, " - same:");
-        result = result + validateVector(map, object.next, " - next:");
 
+        result = result + validateVector(map, object.easier, " - easier:");
+
+        result = result + validateVector(map, object.harder, " - harder:");
+
+        result = result + validateVector(map, object.same, " - same:");
+
+        result = result + validateVector(map, object.next, " - next:");
         return result;
     }
 
@@ -1425,6 +1428,15 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         validateTable(writeTransitions,  "writeTransition: ");
         validateTable(storyTransitions,  "storyTransition: ");
         validateTable(mathTransitions ,  "mathTransition: ");
+
+        Object[] keySet = mathTransitions.keySet().toArray();
+
+        for(int i = 0; i <keySet.length; i++) {
+            if(keySet[i].equals("bpop.ex.mc_show_0")) {
+                Log.d("DEREK_TAM", "KEY FOUND" + keySet[i].toString());
+            }
+        }
+
         validateTable(shapeTransitions,  "shapeTransition: " );
     }
 }

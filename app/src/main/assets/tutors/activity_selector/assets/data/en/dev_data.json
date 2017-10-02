@@ -5947,10 +5947,10 @@
       "harder": "bpop.num:n2s_show_mc",
       "easier": "bpop.num:s2n_say_show_rise"
     },
-    "bpop.num.mc_show_0" : {
+    "bpop.ex.mc_show_0" : {
       "next" : "bpop.num.rise_show_0",
-      "tutor_id" : "bpop.num.mc_show_0",
-      "same" : "bpop.num.mc_show_0",
+      "tutor_id" : "bpop.ex.mc_show_0",
+      "same" : "bpop.ex.mc_show_0",
       "cell_column" : "11",
       "tutor_desc" : "bpop.num",
       "skill" : "numbers",
@@ -5958,7 +5958,7 @@
       "type" : "TRANSITION",
       "harder" : "bpop.num.rise_show_0",
       "cell_row" : "1",
-      "tutor_data" : "[file]bpop.num.mc_show_0.json"
+      "tutor_data" : "[file]bpop.ex.mc_show_0.json"
     },
     "bpop.num.rise_show_0" : {
       "next" : "bpop.num.mc_show_1",

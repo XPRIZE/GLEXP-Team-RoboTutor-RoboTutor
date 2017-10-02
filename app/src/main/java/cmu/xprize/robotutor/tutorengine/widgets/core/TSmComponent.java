@@ -127,7 +127,7 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
                 //
                 String dataPath = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS;
                 dataPath += "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
-
+                Log.d("DEREK_TAM", "Data Path: " + dataPath);
                 String jsonData = JSON_Helper.cacheData(dataPath + dataFile);
 
                 // Load the datasource in the component module - i.e. the superclass
