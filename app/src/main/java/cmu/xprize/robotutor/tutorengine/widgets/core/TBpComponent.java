@@ -634,8 +634,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             answer = answer.toLowerCase();
         }
 
-        Log.d("DEREK_TAM", "ENTER ANSWER");
-        Log.d("DEREK_TAM", answer);
         if(answer.contains("\n")) {
 
             int index = answer.indexOf("\n");
@@ -647,16 +645,13 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 operation = "plus";
             }
             else {
+                Log.d("DEREK_TAM", "Operation is minus");
                 operation = "minus";
             }
 
             publishValue(BP_CONST.ANSWER_VAR, firstNum);
             publishValue(BP_CONST.ANSWER_VAR_TWO, operation);
             publishValue(BP_CONST.ANSWER_VAR_THREE, secondNum);
-
-            Log.d("DEREK_TAM", firstNum);
-            Log.d("DEREK_TAM", operation);
-            Log.d("DEREK_TAM", secondNum);
         }
 
         else {
@@ -760,9 +755,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         // Ensure letters are lowercase for mp3 matching
         //
         correctVal = correctVal.toLowerCase();
-
-        Log.d("DEREK_TAM", "ENTER QUESTION");
-        Log.d("DEREK_TAM", correctVal);
 
         if(correctVal.contains("\n")) {
 
