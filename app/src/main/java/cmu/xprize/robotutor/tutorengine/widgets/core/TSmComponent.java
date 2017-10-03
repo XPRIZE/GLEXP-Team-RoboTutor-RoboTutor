@@ -106,17 +106,13 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
         try {
 
             if (dataNameDescriptor.startsWith(TCONST.LOCAL_FILE)) {
-                Log.d("DEREK_TAM", "LOCAL FILE");
                 String dataRelPath = dataNameDescriptor.substring(TCONST.LOCAL_FILE.length());
-                Log.d("DEREK_TAM", "Relative Path: " + dataRelPath);
 
                 // Generate a langauage specific path to the data source -
                 // i.e. sdcard/Download/RoboTutor/Math/en/button_data.json
                 //
                 String dataPath = TCONST.DOWNLOAD_RT_PATH + "/" +  dataRelPath + "/button_data.json";
-                Log.d("DEREK_TAM", "Data Path: " + dataPath);
                 String jsonData = JSON_Helper.cacheDataByName(dataPath);
-                Log.d("DEREK_TAM", "JSON DATA: " + jsonData);
 
                 loadJSON(new JSONObject(jsonData), null);
             }
