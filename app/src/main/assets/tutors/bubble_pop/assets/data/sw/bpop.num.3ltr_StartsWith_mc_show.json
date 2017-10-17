@@ -11,7 +11,7 @@
   "gen_stimulustype" : "text_data",
   "question_sequence" : "sequential",
   "dataSource" : [ {
-    "question_say" : false,
+    "question_say" : true,
     "question_show" : true,
     "answer_type" : "text_data",
     "answer" : "kuu",
@@ -20,9 +20,12 @@
     "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
     "stimulus" : "kua",
     "response_set" : [ "mna", "uuu", "ale", "kuu", "pua" ],
-    "gen_question" : false
+    "gen_question" : false,
+    "comp_pos" : "Starts",
+    "comp_len": "With",
+    "bp_type": "phonemic"
   }, {
-    "question_say" : false,
+    "question_say" : true,
     "question_show" : true,
     "answer_type" : "text_data",
     "answer" : "aaa",
@@ -31,9 +34,11 @@
     "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
     "stimulus" : "ara",
     "response_set" : [ "kua", "kuu", "aaa", "yle", "hao" ],
-    "gen_question" : false
+    "gen_question" : false,
+    "comp_pos" : "Starts",
+    "comp_len": "With"
   }, {
-    "question_say" : false,
+    "question_say" : true,
     "question_show" : true,
     "answer_type" : "text_data",
     "answer" : "puu",
@@ -42,9 +47,10 @@
     "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
     "stimulus" : "pua",
     "response_set" : [ "puu", "poo", "ama", "mje", "ipi" ],
-    "gen_question" : false
+    "gen_question" : false,    "comp_pos" : "Starts",
+    "comp_len": "With"
   }, {
-    "question_say" : false,
+    "question_say" : true,
     "question_show" : true,
     "answer_type" : "text_data",
     "answer" : "ovu",
@@ -53,9 +59,11 @@
     "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
     "stimulus" : "ona",
     "response_set" : [ "uko", "ati", "ara", "amu", "ovu" ],
-    "gen_question" : false
+    "gen_question" : false,
+    "comp_pos" : "Starts",
+    "comp_len": "With"
   }, {
-    "question_say" : false,
+    "question_say" : true,
     "question_show" : true,
     "answer_type" : "text_data",
     "answer" : "ona",
@@ -64,9 +72,11 @@
     "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
     "stimulus" : "oka",
     "response_set" : [ "ngo", "yao", "nae", "ona", "mbe" ],
-    "gen_question" : false
+    "gen_question" : false,
+    "comp_pos" : "Starts",
+    "comp_len": "With"
   }, {
-    "question_say" : false,
+    "question_say" : true,
     "question_show" : true,
     "answer_type" : "text_data",
     "answer" : "uji",
@@ -75,9 +85,11 @@
     "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
     "stimulus" : "uwe",
     "response_set" : [ "ewe", "uji", "ile", "nje", "aai" ],
-    "gen_question" : false
+    "gen_question" : false,
+    "comp_pos" : "Starts",
+    "comp_len": "With"
   }, {
-    "question_say" : false,
+    "question_say" : true,
     "question_show" : true,
     "answer_type" : "text_data",
     "answer" : "jua",
@@ -86,9 +98,11 @@
     "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
     "stimulus" : "juu",
     "response_set" : [ "ona", "kwi", "the", "jua", "ana" ],
-    "gen_question" : false
+    "gen_question" : false,
+    "comp_pos" : "Starts",
+    "comp_len": "With"
   }, {
-    "question_say" : false,
+    "question_say" : true,
     "question_show" : true,
     "answer_type" : "text_data",
     "answer" : "ovu",
@@ -97,9 +111,11 @@
     "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
     "stimulus" : "oka",
     "response_set" : [ "ovu", "cha", "bao", "fee", "koo" ],
-    "gen_question" : false
+    "gen_question" : false,
+    "comp_pos" : "Starts",
+    "comp_len": "With"
   }, {
-    "question_say" : false,
+    "question_say" : true,
     "question_show" : true,
     "answer_type" : "text_data",
     "answer" : "nae",
@@ -108,9 +124,11 @@
     "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
     "stimulus" : "nao",
     "response_set" : [ "mwa", "mtu", "mke", "nae", "zao" ],
-    "gen_question" : false
+    "gen_question" : false,
+    "comp_pos" : "Starts",
+    "comp_len": "With"
   }, {
-    "question_say" : false,
+    "question_say" : true,
     "question_show" : true,
     "answer_type" : "text_data",
     "answer" : "taa",
@@ -119,7 +137,9 @@
     "responsetype_set" : [ "text_data", "text_data", "text_data", "text_data", "text_data" ],
     "stimulus" : "tai",
     "response_set" : [ "kiu", "mko", "taa", "huu", "hai" ],
-    "gen_question" : false
+    "gen_question" : false,
+    "comp_pos" : "Starts",
+    "comp_len": "With"
   } ],
   "view_background" : {
     "layout" : "grid",

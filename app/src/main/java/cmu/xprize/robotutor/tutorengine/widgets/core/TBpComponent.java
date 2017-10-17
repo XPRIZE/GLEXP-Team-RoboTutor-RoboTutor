@@ -751,12 +751,31 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         resetState();
 
         String correctVal = data.stimulus;
+        String comp_pos = data.comp_pos;
+        String comp_len = data.comp_len;
 
         // Ensure letters are lowercase for mp3 matching
         //
         correctVal = correctVal.toLowerCase();
+        if(comp_pos != null && comp_len != null) {
+            if(comp_pos == "Starts") {
+                comp_pos = "kuanza";
+            }
+            else {
+                comp_pos = "mwishoni";
+            }
+            if(comp_len== "With") {
+                comp_len = "na";
+            }
+            else {
+                comp_len = "kama";
+            }
+            publishValue(BP_CONST.QUEST_VAR, comp_pos);
+            publishValue(BP_CONST.QUEST_VAR_TWO, comp_len);
+            publishValue(BP_CONST.QUEST_VAR_THREE, correctVal);
+        }
 
-        if(correctVal.contains("\n")) {
+        else if(correctVal.contains("\n")) {
 
             int index = correctVal.indexOf("\n");
             String firstNum = correctVal.substring(0, index);

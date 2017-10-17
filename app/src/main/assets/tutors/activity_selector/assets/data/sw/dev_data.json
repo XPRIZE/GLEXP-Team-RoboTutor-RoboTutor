@@ -717,12 +717,12 @@
       "harder": "akira:4chr",
       "easier": "bpop.wrd:2chr_say_mc"
     },
-    "bpop.wrd.3ltr_StartsWith_mc_show" : {
+    "bpop.phon.3ltr_StartsWith_mc_show" : {
       "next" : "bpop.num.3ltr_StartsWith_rise_show",
-      "tutor_id" : "bpop.wrd.3ltr_StartsWith_mc_show",
-      "same" : "bpop.wrd.3ltr_StartsWith_mc_show",
+      "tutor_id" : "bpop.phon.3ltr_StartsWith_mc_show",
+      "same" : "bpop.phon.3ltr_StartsWith_mc_show",
       "cell_column" : "8",
-      "tutor_desc" : "bpop.wrd",
+      "tutor_desc" : "bpop.phon",
       "skill" : "letters",
       "easier" : "bpop.wrd:3chr_say_rise",
       "type" : "TRANSITION",
