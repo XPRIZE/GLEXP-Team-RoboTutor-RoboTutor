@@ -59,6 +59,7 @@ import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
+import android.util.Log;
 
 
 /**
@@ -113,9 +114,6 @@ public class CStimulusController extends RelativeLayout implements IEventListene
 
 
     static public String TAG = "CStimulusContainer";
-
-
-
 
     public CStimulusController(Context context) {
         super(context);

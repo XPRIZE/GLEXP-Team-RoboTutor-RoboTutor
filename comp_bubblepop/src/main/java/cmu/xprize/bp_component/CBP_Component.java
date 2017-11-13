@@ -128,6 +128,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
     public String                   banner_color        = null;         // Set specific banner color
     public int                      mask_alpha          = 205;          // Mask alpha
 
+    public String                   problem_type     = "normal";
 
     static final String TAG = "CBP_Component";
 
@@ -338,7 +339,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
             case "multiplechoice":
             case "multiple-choice":
 
-                _mechanics = new CBp_Mechanic_MC(mContext, this);
+                _mechanics = new CBp_Mechanic_MC(mContext, this, problem_type);
                 break;
 
             case "rise":

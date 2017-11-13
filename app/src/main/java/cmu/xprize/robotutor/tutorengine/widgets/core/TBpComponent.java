@@ -645,7 +645,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 operation = "plus";
             }
             else {
-                Log.d("DEREK_TAM", "Operation is minus");
                 operation = "minus";
             }
 
@@ -799,6 +798,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             publishValue(BP_CONST.QUEST_VAR, correctVal);
             publishValue(BP_CONST.QUEST_VAR_TWO, "TRASH");
             publishValue(BP_CONST.QUEST_VAR_THREE, "TRASH");
+            Log.d("DEREK", "HERE");
         }
 
         if (data.question_say) {

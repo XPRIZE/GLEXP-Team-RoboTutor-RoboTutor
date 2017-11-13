@@ -61,8 +61,11 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
     static final String TAG = "CBp_Mechanic_MC";
 
-    public CBp_Mechanic_MC(Context context, CBP_Component parent ) {
-        super.init(context, parent);
+    private String          mProblemType;
+
+    public CBp_Mechanic_MC(Context context, CBP_Component parent, String problem_type) {
+        super.init(context, parent, problem_type);
+        mProblemType = problem_type;
     }
 
     @Override
@@ -386,7 +389,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
                 case BP_CONST.TEXTDATA:
 
-                    newBubble.configData(responseVal, correctVal);
+                    newBubble.configData(responseVal, correctVal, mProblemType);
                     newBubble.setContents(0, responseVal);
 
                     //Moved set color to here too so that text would be known when setting the color(generating  bubble)

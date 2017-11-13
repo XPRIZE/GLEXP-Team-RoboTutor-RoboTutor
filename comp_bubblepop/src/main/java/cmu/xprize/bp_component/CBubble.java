@@ -63,6 +63,8 @@ public class CBubble extends FrameLayout {
     private ImageView         bubblepop = null;
     private AnimationDrawable popping   = null;
 
+    private String            mProblemType;
+
 
     public CBubble(Context context) {
         super(context);
@@ -111,6 +113,11 @@ public class CBubble extends FrameLayout {
         }
     }
 
+    public void configData(String stimulusVal, String correctVal, String problemType) {
+        mCorrectVal = correctVal;
+        mStimulusVal = stimulusVal;
+        mProblemType = problemType;
+    }
 
     public void configData(String stimulusVal, String correctVal) {
 
@@ -148,22 +155,27 @@ public class CBubble extends FrameLayout {
 
     public void setColor(String color) {
         mColor = color;
-
-        //Specifically for words/letters case on the length
-        if(mText.getText() != null && mText.getText().length() > 0) {
-            //Draw different types of bubble depending on if there is one letter or anything else
-            if(mText.getText().length() == 1) {
-                setBackgroundResource(BP_CONST.bubbleMap.get(mColor));
-            }
-
-            else {
-                setBackgroundResource(BP_CONST.elongatedBubbleMap.get(mColor));
-            }
+        if(mProblemType.equals("wrd") || mProblemType.equals("n2e")) {
+            setBackgroundResource(BP_CONST.elongatedBubbleMap.get(mColor));
         }
         else {
             setBackgroundResource(BP_CONST.bubbleMap.get(mColor));
-
         }
+        //Specifically for words/letters case on the length
+//        if(mText.getText() != null && mText.getText().length() > 0) {
+//            //Draw different types of bubble depending on if there is one letter or anything else
+//            if(mText.getText().length() == 1) {
+//                setBackgroundResource(BP_CONST.bubbleMap.get(mColor));
+//            }
+//
+//            else {
+//                setBackgroundResource(BP_CONST.elongatedBubbleMap.get(mColor));
+//            }
+//        }
+//        else {
+//            setBackgroundResource(BP_CONST.bubbleMap.get(mColor));
+//
+//        }
 
     }
 
@@ -347,7 +359,6 @@ public class CBubble extends FrameLayout {
             if(text.matches(".*\n+.*")) {
                 mText.setTypeface(Typeface.MONOSPACE);
                 mText.setGravity(Gravity.RIGHT);
-                mText.setTextSize(40);
             }
         }
 

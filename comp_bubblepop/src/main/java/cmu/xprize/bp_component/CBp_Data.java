@@ -50,10 +50,8 @@ public class CBp_Data implements ILoadableObject {
     public String        answer_type      = null;           // answer type - reference / text_data
     public String []     answer_script    = null;           // List of uttereances describing the answer
 
-
     public String        comp_pos         = null;
     public String        comp_len         = null;
-
 
     //************ Serialization
 

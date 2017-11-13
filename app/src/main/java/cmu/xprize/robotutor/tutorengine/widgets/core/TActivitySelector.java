@@ -188,7 +188,6 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                 case AS_CONST.SELECT_WRITING:
 
                     activeTutor   = writingTutorID;
-                    Log.d("DEREK_TAM", activeTutor);
                     transitionMap = writeTransitions;
                     break;
 

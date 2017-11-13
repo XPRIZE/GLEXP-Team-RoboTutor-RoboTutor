@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.util.TypedValue;
 
 public class CBubbleStimulus extends FrameLayout {
 
@@ -42,8 +43,6 @@ public class CBubbleStimulus extends FrameLayout {
     public String   mColorbase = "#000000";
 
     private Rect    mViewRegion = new Rect();
-
-
 
     static final String TAG = "CStimulus";
 
@@ -93,7 +92,6 @@ public class CBubbleStimulus extends FrameLayout {
 
         mIcon = (ImageView) findViewById(R.id.SIcon);
         mText = (TextView) findViewById(R.id.SText);
-
         setScale(1.0f);
     }
 
@@ -151,7 +149,6 @@ public class CBubbleStimulus extends FrameLayout {
         else {
             mText.setText(text);
             mText.setVisibility(View.VISIBLE);
-
             //Use monospace if text contains number to ensure text is properly aligned
             if(text.matches(".*\n+.*")) {
                 mText.setTypeface(Typeface.MONOSPACE);
@@ -160,6 +157,10 @@ public class CBubbleStimulus extends FrameLayout {
         }
 
         invalidate();
+    }
+
+    public void changeTextSize() {
+        mText.setTextSize(100);
     }
 
 
@@ -177,7 +178,6 @@ public class CBubbleStimulus extends FrameLayout {
         mPaint.setColor(Color.parseColor("#AAAAAAAA"));
         mPaint.setStyle(Paint.Style.FILL);
         canvas.drawRoundRect(bounds, 30f, 30f, mPaint);
-
         mPaint.setColor(Color.parseColor("#AA000000"));
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(2.0f);

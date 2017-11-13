@@ -44,6 +44,7 @@ import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+import static cmu.xprize.util.TCONST.SPEAK_BUTTON;
 
 public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener, View.OnClickListener {
 
@@ -75,15 +76,27 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
     private LocalBroadcastManager         bManager;
 
+    private String          mProblemType;
 
     static final String TAG = "CBp_Mechanic_Base";
-
 
 
     protected void init(Context context, CBP_Component parent) {
 
         mContext   = context;
         mComponent = parent;
+        mParent    = parent.getContainer();
+
+        // Capture the local broadcast manager
+        bManager = LocalBroadcastManager.getInstance(mContext);
+        mParent.setOnTouchListener(this);
+    }
+
+    protected void init(Context context, CBP_Component parent, String problem_type) {
+
+        mContext   = context;
+        mComponent = parent;
+        mProblemType = problem_type;
         mParent    = parent.getContainer();
 
         // Capture the local broadcast manager
@@ -174,7 +187,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
     private void showStimulus(CBp_Data data) {
 
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
         SbubbleStumulus = (CBubbleStimulus) View.inflate(mContext, R.layout.bubble_stimulus, null);
 
         // Set Color: pass in String e.g. "RED" - Cycle through the colors repetitively
@@ -209,7 +221,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
         if(SfeedBack == null) {
 
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(BP_CONST.FEEDBACK_SIZE, BP_CONST.FEEDBACK_SIZE);
-
             SfeedBack = (CBubbleStimulus) View.inflate(mContext, R.layout.bubble_stimulus, null);
 
             SfeedBack.setScale(0f);
@@ -361,8 +372,15 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
                 broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(new PointF(mParent.getWidth() / 2, mParent.getHeight() / 2)));
 
-                SbubbleStumulus.setX((mParent.getWidth() - SbubbleStumulus.getWidth()) / 2);
-                SbubbleStumulus.setY((mParent.getHeight() - SbubbleStumulus.getHeight()) / 2);
+                float height = SbubbleStumulus.getHeight();
+                float width = SbubbleStumulus.getWidth();
+                if(mProblemType.equals("e2n")) {
+                    height = 562;
+                    width = 300;
+                }
+
+                SbubbleStumulus.setX((mParent.getWidth() - width) / 2);
+                SbubbleStumulus.setY((mParent.getHeight() - height) / 2);
 
                 inflator = CAnimatorUtil.configZoomIn(SbubbleStumulus, 600, 0, new BounceInterpolator(), 0f, 3.0f);
 
@@ -379,7 +397,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-
                         mComponent.post(BP_CONST.MOVE_STIMULUS, 400);
                     }
 
@@ -397,7 +414,11 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
                 float[] scale = new float[]{(BP_CONST.MARGIN_BOTTOM * .9f) / SbubbleStumulus.getHeight()};
 
-                float height       = SbubbleStumulus.getHeight();
+                height       = SbubbleStumulus.getHeight();
+                if(mProblemType.equals("e2n")) {
+                    height = 562;
+                }
+
                 float scaledHeight = height * scale[0];
 
                 PointF wayPoints[] = new PointF[1];
@@ -405,11 +426,14 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
                 posFinal.x = SbubbleStumulus.getX();
                 posFinal.y = mParent.getHeight() - (scaledHeight + ((height - scaledHeight) / 2) + BP_CONST.STIM_PAD_BOTTOM);
-
                 wayPoints[0] = posFinal;
 
                 AnimatorSet inflatorSet = CAnimatorUtil.configZoomIn(SbubbleStumulus, 300, 0, new LinearInterpolator(), scale);
                 Animator    translator = CAnimatorUtil.configTranslate(SbubbleStumulus, 300, 0, wayPoints);
+
+                if(mProblemType.equals("e2n")) {
+                    SbubbleStumulus.changeTextSize();
+                }
 
                 inflatorSet.addListener(new Animator.AnimatorListener() {
                     @Override
@@ -424,7 +448,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-
                         mComponent.applyBehavior(BP_CONST.STIMULUS_SHOWN);
                     }
 
