@@ -103,7 +103,7 @@ public class CBubbleStimulus extends FrameLayout {
         setScaleX(mScale);
         setScaleY(mScale);
     }
-
+ // AMMACHI
 
     @Override
     public void setScaleX(float newScale) {
