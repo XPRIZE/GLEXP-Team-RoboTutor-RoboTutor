@@ -184,6 +184,12 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         //
         reset();
 
+        if (dataNameDescriptor.startsWith("[file]bpop.num.mc_show_") ||
+                dataNameDescriptor.startsWith("[file]bpop.num.rise_show_")
+                ) {
+            publishFeature(TCONST.BUBBLEPOP_MATH_EXPRESSION);
+        }
+
         // We make the assumption that all are correct until proven wrong
         //
         publishFeature(TCONST.ALL_CORRECT);
