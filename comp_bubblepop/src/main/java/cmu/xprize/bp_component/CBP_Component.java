@@ -770,7 +770,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         bringChildToFront(Scontent);
 
         if(banner_color != null) {
-            // dispatchEvent(new CEvent(TCONST.SET_BANNER_COLOR, TCONST.VALUE , banner_color));
+             dispatchEvent(new CEvent(TCONST.SET_BANNER_COLOR, TCONST.VALUE , banner_color));
 
         }
     }

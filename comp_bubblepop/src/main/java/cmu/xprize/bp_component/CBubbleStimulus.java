@@ -153,16 +153,19 @@ public class CBubbleStimulus extends FrameLayout {
             if(text.matches(".*\n+.*")) {
                 mText.setTypeface(Typeface.MONOSPACE);
                 mText.setGravity(Gravity.RIGHT);
+//                mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 300);
             }
+//            else{
+//                mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 128);
+//            }
         }
 
         invalidate();
     }
 
-    public void changeTextSize() {
-        mText.setTextSize(100);
+    public void changeTextSize(float size) {
+        mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
     }
-
 
     @Override
     public void onDraw(Canvas canvas) {

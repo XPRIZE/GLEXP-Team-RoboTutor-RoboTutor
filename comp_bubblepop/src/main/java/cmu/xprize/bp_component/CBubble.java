@@ -37,6 +37,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.util.TypedValue;
 
 public class CBubble extends FrameLayout {
 
@@ -161,22 +162,6 @@ public class CBubble extends FrameLayout {
         else {
             setBackgroundResource(BP_CONST.bubbleMap.get(mColor));
         }
-        //Specifically for words/letters case on the length
-//        if(mText.getText() != null && mText.getText().length() > 0) {
-//            //Draw different types of bubble depending on if there is one letter or anything else
-//            if(mText.getText().length() == 1) {
-//                setBackgroundResource(BP_CONST.bubbleMap.get(mColor));
-//            }
-//
-//            else {
-//                setBackgroundResource(BP_CONST.elongatedBubbleMap.get(mColor));
-//            }
-//        }
-//        else {
-//            setBackgroundResource(BP_CONST.bubbleMap.get(mColor));
-//
-//        }
-
     }
 
 //    public void setFeedbackColor(String color) {
@@ -359,6 +344,10 @@ public class CBubble extends FrameLayout {
             if(text.matches(".*\n+.*")) {
                 mText.setTypeface(Typeface.MONOSPACE);
                 mText.setGravity(Gravity.RIGHT);
+                mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 128);
+            }
+            else {
+                mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 128);
             }
         }
 

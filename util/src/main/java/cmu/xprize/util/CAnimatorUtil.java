@@ -30,6 +30,8 @@ import android.view.animation.BaseInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
+import android.util.Log;
+import java.util.Arrays;
 
 import java.util.ArrayList;
 
@@ -48,9 +50,7 @@ public class CAnimatorUtil {
     static private Animator createFloatAnimator(View _tarView, String prop, long duration, int repeat, int mode, TimeInterpolator interpolator, long delay, float... endPts) {
 
         ValueAnimator vAnimator = null;
-
         vAnimator = ObjectAnimator.ofFloat(_tarView, prop, endPts).setDuration(duration);
-
         vAnimator.setInterpolator(interpolator);
 
         vAnimator.setRepeatCount(repeat);
@@ -235,7 +235,6 @@ public class CAnimatorUtil {
     static public AnimatorSet configZoomIn(View _tarView, long duration, long delay, TimeInterpolator interpolator, float... absScales) {
 
         ArrayList<Animator> zoomAnimators = new ArrayList<Animator>();
-
         AnimatorSet animation = new AnimatorSet();
 
         zoomAnimators.add(createFloatAnimator(_tarView, "scaleX", duration, 0, 0, interpolator, delay, absScales));
@@ -259,7 +258,8 @@ public class CAnimatorUtil {
         }
 
         AnimatorSet animation = new AnimatorSet();
-
+        Log.d("TOMBRADY", "X: " + Arrays.toString(wayPointsX));
+        Log.d("TOMBRADY", "Y: " + Arrays.toString(wayPointsY));
         moveAnimators.add(createFloatAnimator(_tarView, "x", duration, 0, 0, new LinearInterpolator(), delay, wayPointsX));
         moveAnimators.add(createFloatAnimator(_tarView, "y", duration, 0, 0, new LinearInterpolator(), delay, wayPointsY));
 

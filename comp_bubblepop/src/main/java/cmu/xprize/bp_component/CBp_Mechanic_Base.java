@@ -27,6 +27,7 @@ import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnticipateInterpolator;
@@ -45,6 +46,7 @@ import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.SPEAK_BUTTON;
+import static cmu.xprize.util.TCONST.SUBGRAPH;
 
 public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener, View.OnClickListener {
 
@@ -188,7 +190,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         SbubbleStumulus = (CBubbleStimulus) View.inflate(mContext, R.layout.bubble_stimulus, null);
-
         // Set Color: pass in String e.g. "RED" - Cycle through the colors repetitively
         //
         SbubbleStumulus.setScale(0);
@@ -375,14 +376,15 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 float height = SbubbleStumulus.getHeight();
                 float width = SbubbleStumulus.getWidth();
                 if(mProblemType.equals("e2n")) {
-                    height = 562;
-                    width = 300;
+                    height = 521;
+                    width = 314;
                 }
-
                 SbubbleStumulus.setX((mParent.getWidth() - width) / 2);
                 SbubbleStumulus.setY((mParent.getHeight() - height) / 2);
 
                 inflator = CAnimatorUtil.configZoomIn(SbubbleStumulus, 600, 0, new BounceInterpolator(), 0f, 3.0f);
+
+                Log.d("TOMBRADY", "Bubble Stimulus - Height: " + SbubbleStumulus.getHeight() + " Width: " + SbubbleStumulus.getWidth());
 
                 inflator.addListener(new Animator.AnimatorListener() {
                     @Override
@@ -412,17 +414,19 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
             case BP_CONST.MOVE_STIMULUS:
 
-                float[] scale = new float[]{(BP_CONST.MARGIN_BOTTOM * .9f) / SbubbleStumulus.getHeight()};
-
                 height       = SbubbleStumulus.getHeight();
                 if(mProblemType.equals("e2n")) {
-                    height = 562;
+                    height = 521;
+                    SbubbleStumulus.changeTextSize(200);
                 }
+
+                float[] scale = new float[]{(BP_CONST.MARGIN_BOTTOM * .9f) / SbubbleStumulus.getHeight()};
 
                 float scaledHeight = height * scale[0];
 
                 PointF wayPoints[] = new PointF[1];
                 PointF posFinal    = new PointF();
+
 
                 posFinal.x = SbubbleStumulus.getX();
                 posFinal.y = mParent.getHeight() - (scaledHeight + ((height - scaledHeight) / 2) + BP_CONST.STIM_PAD_BOTTOM);
@@ -431,9 +435,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 AnimatorSet inflatorSet = CAnimatorUtil.configZoomIn(SbubbleStumulus, 300, 0, new LinearInterpolator(), scale);
                 Animator    translator = CAnimatorUtil.configTranslate(SbubbleStumulus, 300, 0, wayPoints);
 
-                if(mProblemType.equals("e2n")) {
-                    SbubbleStumulus.changeTextSize();
-                }
 
                 inflatorSet.addListener(new Animator.AnimatorListener() {
                     @Override
@@ -449,6 +450,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         mComponent.applyBehavior(BP_CONST.STIMULUS_SHOWN);
+                        Log.d("TOMBRADY", "End Bubble Stimulus - Height: " + SbubbleStumulus.getHeight() + " Width: " + SbubbleStumulus.getWidth());
                     }
 
                     @Override
