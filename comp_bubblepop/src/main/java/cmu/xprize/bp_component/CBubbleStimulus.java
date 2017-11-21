@@ -137,7 +137,7 @@ public class CBubbleStimulus extends FrameLayout {
         return getWidth() * mScale;
     }
 
-    public void setContents(int resID, String text) {
+    public void setContents(int resID, String text, boolean isFeedback) {
 
         mIcon.setVisibility(View.INVISIBLE);
         mText.setVisibility(View.INVISIBLE);
@@ -150,14 +150,16 @@ public class CBubbleStimulus extends FrameLayout {
             mText.setText(text);
             mText.setVisibility(View.VISIBLE);
             //Use monospace if text contains number to ensure text is properly aligned
-            if(text.matches(".*\n+.*")) {
-                mText.setTypeface(Typeface.MONOSPACE);
-                mText.setGravity(Gravity.RIGHT);
-//                mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 300);
+            if(!isFeedback) {
+                if(text.matches(".*\n+.*")) {
+                    mText.setTypeface(Typeface.MONOSPACE);
+                    mText.setGravity(Gravity.RIGHT);
+                    mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 164);
+                }
+                else{
+                    mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 300);
+                }
             }
-//            else{
-//                mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 128);
-//            }
         }
 
         invalidate();

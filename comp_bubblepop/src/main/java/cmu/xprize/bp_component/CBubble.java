@@ -156,7 +156,7 @@ public class CBubble extends FrameLayout {
 
     public void setColor(String color) {
         mColor = color;
-        if(mProblemType.equals("wrd") || mProblemType.equals("n2e")) {
+        if(mProblemType != null && mProblemType.equals("wrd")) {
             setBackgroundResource(BP_CONST.elongatedBubbleMap.get(mColor));
         }
         else {
@@ -344,7 +344,7 @@ public class CBubble extends FrameLayout {
             if(text.matches(".*\n+.*")) {
                 mText.setTypeface(Typeface.MONOSPACE);
                 mText.setGravity(Gravity.RIGHT);
-                mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 128);
+                mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 80);
             }
             else {
                 mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 128);

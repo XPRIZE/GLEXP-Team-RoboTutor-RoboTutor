@@ -188,7 +188,6 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
                         delay += BP_CONST.INFLATE_DELAY;
                     }
-                    Log.d("TOMBRADY", "Bubble Text Size: " + Float.toString(SBubbles[0].getTextView().getTextSize()));
 
                 }
                 break;
