@@ -258,8 +258,6 @@ public class CAnimatorUtil {
         }
 
         AnimatorSet animation = new AnimatorSet();
-        Log.d("TOMBRADY", "X: " + Arrays.toString(wayPointsX));
-        Log.d("TOMBRADY", "Y: " + Arrays.toString(wayPointsY));
         moveAnimators.add(createFloatAnimator(_tarView, "x", duration, 0, 0, new LinearInterpolator(), delay, wayPointsX));
         moveAnimators.add(createFloatAnimator(_tarView, "y", duration, 0, 0, new LinearInterpolator(), delay, wayPointsY));
 

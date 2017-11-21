@@ -382,7 +382,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 SbubbleStumulus.setX((mParent.getWidth() - width) / 2);
                 SbubbleStumulus.setY((mParent.getHeight() - height) / 2);
 
-                inflator = CAnimatorUtil.configZoomIn(SbubbleStumulus, 600, 0, new BounceInterpolator(), 0f, 3.0f);
+                inflator = CAnimatorUtil.configZoomIn(SbubbleStumulus, 600, 0, new BounceInterpolator(), 0f, 1.0f);
 
                 Log.d("TOMBRADY", "Bubble Stimulus - Height: " + SbubbleStumulus.getHeight() + " Width: " + SbubbleStumulus.getWidth());
 
@@ -427,7 +427,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 PointF wayPoints[] = new PointF[1];
                 PointF posFinal    = new PointF();
 
-
                 posFinal.x = SbubbleStumulus.getX();
                 posFinal.y = mParent.getHeight() - (scaledHeight + ((height - scaledHeight) / 2) + BP_CONST.STIM_PAD_BOTTOM);
                 wayPoints[0] = posFinal;
@@ -461,6 +460,10 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
                 inflatorSet.start();
                 translator.start();
+                if(mProblemType.equals("e2n")) {
+                    height = 521;
+                    SbubbleStumulus.changeTextSize(200);
+                }
                 break;
 
             case BP_CONST.CLEAR_CONTENT:
