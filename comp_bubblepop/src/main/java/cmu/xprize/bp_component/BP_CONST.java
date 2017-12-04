@@ -111,8 +111,10 @@ public class BP_CONST {
     public static final String QUEST_VAR_THREE    = ".questValueThree";
     public static final String ANSWER_VAR_THREE   = ".ansValueThree";
 
-    public static final String SHOW_MASK          = "SHOW_MASK";
+    public static final String SHOW_BUBBLE_MASK          = "SHOW_BUBBLE_MASK";
     public static final String HIDE_MASK          = "HIDE_MASK";
+
+    public static final String SHOW_STIMULUS_MASK          = "SHOW_STIMULUS_MASK";
 
 
     static public HashMap<String, Integer> bubbleMap = new HashMap<String, Integer>();

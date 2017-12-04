@@ -277,7 +277,7 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBubblePop", "method": "logState", "parms": "type#node,value#PLAYWRONG_PAUSE:String", "features":""},
 
             {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "PAUSE_ANIMATION:String" ,"features":""},
-            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "SHOW_MASK:String" ,"features":""},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "SHOW_BUBBLE_MASK:String" ,"features":""},
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "wrong.mp3", "soundpackage":"tutor_effect", "volume": 0.05, "mode":"event", "features": ""},
 
@@ -298,7 +298,12 @@
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3",  "soundpackage":"writing", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&BPOP_MATH_EXPR"},
 
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "HIDE_MASK:String" ,"features":"!FTR_LASTATTEMPT"},
+
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Please tap.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&!BPOP_MATH_EXPR"},
+
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "SHOW_STIMULUS_MASK:String" ,"features":""},
+
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_WORDS&!BPOP_MATH_EXPR"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_PHONEMICS&!BPOP_MATH_EXPR"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueTwo}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_PHONEMICS&!BPOP_MATH_EXPR"},
@@ -320,8 +325,8 @@
 
             // TODO: is this delay required   removed in 45.1
             //
-//            {"type": "TIMER", "id":"nextDelayTimer", "startdelay":"0", "period":"50", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"NEXTNODE", "features": "" },
-//            {"type": "COMMAND", "cmd": "WAIT"  }
+            //            {"type": "TIMER", "id":"nextDelayTimer", "startdelay":"0", "period":"50", "repeat":"false", "action":"CREATEANDSTART", "ontimer":"NEXTNODE", "features": "" },
+            //            {"type": "COMMAND", "cmd": "WAIT"  }
           ]
         },
 
@@ -364,7 +369,7 @@
 
 
 
-//        "SET_SHOW":{"type": "COMMAND", "id": "SBubblePop", "method": "setEventBehavior" ,"features":""},
+        //        "SET_SHOW":{"type": "COMMAND", "id": "SBubblePop", "method": "setEventBehavior" ,"features":""},
 
         "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"  },
 

@@ -420,6 +420,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 posFinal.x = SbubbleStumulus.getX();
                 posFinal.y = mParent.getHeight() - (scaledHeight + ((height - scaledHeight) / 2) + BP_CONST.STIM_PAD_BOTTOM);
                 wayPoints[0] = posFinal;
+                SbubbleStumulus.setCenterPoint(new PointF(SbubbleStumulus.getX(), mParent.getHeight() - (height / 2)));
 
                 AnimatorSet inflatorSet = CAnimatorUtil.configZoomIn(SbubbleStumulus, 300, 0, new LinearInterpolator(), scale);
                 Animator    translator = CAnimatorUtil.configTranslate(SbubbleStumulus, 300, 0, wayPoints);
@@ -529,7 +530,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
             _enableTouchEvent = false;
 
-            mComponent.publishState(bubble);
+            mComponent.publishState(bubble, SbubbleStumulus);
             mComponent.applyBehavior(BP_CONST.BUBBLE_TOUCH_EVENT);
         }
     }

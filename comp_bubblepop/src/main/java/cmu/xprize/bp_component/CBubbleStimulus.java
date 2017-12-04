@@ -28,6 +28,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.util.TypedValue;
+import android.graphics.Point;
+import android.graphics.PointF;
+import android.graphics.Rect;
+import android.graphics.RectF;
 
 public class CBubbleStimulus extends FrameLayout {
 
@@ -43,6 +47,8 @@ public class CBubbleStimulus extends FrameLayout {
     public String   mColorbase = "#000000";
 
     private Rect    mViewRegion = new Rect();
+
+    private PointF  centerPoint = new PointF();
 
     static final String TAG = "CStimulus";
 
@@ -165,10 +171,6 @@ public class CBubbleStimulus extends FrameLayout {
         invalidate();
     }
 
-    public void changeTextSize(float size) {
-        mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
-    }
-
     @Override
     public void onDraw(Canvas canvas) {
 
@@ -188,5 +190,17 @@ public class CBubbleStimulus extends FrameLayout {
         mPaint.setStrokeWidth(2.0f);
         canvas.drawRoundRect(bounds, 30f, 30f, mPaint);
     }
+
+    public RectF getRectBound() {
+        RectF bounds = new RectF(centerPoint.x, centerPoint.y,
+                centerPoint.x + mViewRegion.right, centerPoint.y + mViewRegion.bottom);
+        return bounds;
+    }
+
+    public void setCenterPoint(PointF centerPoint) {
+        this.centerPoint = centerPoint;
+    }
+
+
 
 }

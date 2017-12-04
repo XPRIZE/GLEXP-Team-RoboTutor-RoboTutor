@@ -429,7 +429,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
             int bubbleHeight = BP_CONST.BUBBLE_DESIGN_RADIUS;
             int bubbleWidth = BP_CONST.BUBBLE_DESIGN_RADIUS;
 
-            //If multilple lines, change bubble hight
+            //If multiple lines, change what one line is
             if(text.matches(".*\n.*")) {
                 int index = text.indexOf("\n");
                 singleLine = text.substring(0, index);
@@ -439,7 +439,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
             bubbleWidth = bubbleWidth - 30 * numChar;
 
             float[] _widthRange = calcVectorRange(_angle, bubbleWidth * SBubbles[i1].getAssignedScale());
-            float[] _heightRange = calcVectorRange(_angle, bubbleHeight * SBubbles[i1].getAssignedScale());
+            float[] _heightRange = calcVectorRange(_angle,  bubbleHeight * SBubbles[i1].getAssignedScale());
 
             SBubbles[i1].setVectorPosition(_viewCenter, getRandInRange(_widthRange), getRandInRange(_heightRange), _angle);
             _angle += _angleInc;

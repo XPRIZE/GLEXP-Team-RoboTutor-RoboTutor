@@ -41,6 +41,8 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
     private int             _prevColorNdx  = 0;
     private float           _prevXpos      = 0;
 
+    static final int      MAX_BUBBLE_WIDTH = 600;
+
     static final String TAG = "CBp_Mechanic_RISE";
 
 
@@ -249,14 +251,9 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                             nextBubble.setContents(0, responseVal);
 
                             Paint paint = new Paint();
-
-                            //Width of the string
-                            float width = paint.measureText(nextBubble.getTextView().getText().toString());
-
-                            //Converts width of string to width of bubble (since getWidth() doesn't calculate fast enough)
-                            float newWidth = width * (float) 6.75 + 150;
-
-                            xRange = new float[]{0, mParent.getWidth() - (newWidth * nextBubble.getAssignedScale())};
+                            //Should subtract nextBubble.getMeasuredWidth() * nextBubble.getAssignedScale() but
+                            //width doesn't load quick enough first bubbles, so use 600 instead as upper bound
+                            xRange = new float[]{0, mParent.getWidth() - MAX_BUBBLE_WIDTH};
                             timeOfFlight = (long) (_travelTime);
 
                             //Moved set color and scale here after text has been set
@@ -269,7 +266,6 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                     do {
                         xPos = getRandInRange(xRange);
                     } while (Math.abs(xPos - _prevXpos) < nextBubble.getWidth());
-
                     _prevXpos = xPos;
 
                     nextBubble.setPosition((int) xPos, mParent.getHeight());

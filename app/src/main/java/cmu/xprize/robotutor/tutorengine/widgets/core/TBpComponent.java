@@ -36,7 +36,9 @@ import cmu.xprize.bp_component.BP_CONST;
 import cmu.xprize.bp_component.CBP_Component;
 import cmu.xprize.bp_component.CBp_Data;
 import cmu.xprize.bp_component.CBubble;
-
+import android.graphics.Rect;
+import android.graphics.RectF;
+import cmu.xprize.bp_component.CBubbleStimulus;
 import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
@@ -63,16 +65,7 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-import static cmu.xprize.comp_clickmask.CM_CONST.EXCLUDE_CIRCLE;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_ADDEXCL;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_ALPHA;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_CLREXCL;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_R;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_SETALPHA;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_SHOWHIDE;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_TYPE;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_X;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_Y;
+import static cmu.xprize.comp_clickmask.CM_CONST.*;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
@@ -83,6 +76,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     private CMediaManager   mMediaManager;
 
     private CBubble         _touchedBubble;
+    private CBubbleStimulus _bubbleStimulus;
 
     private HashMap<String, String> volatileMap = new HashMap<>();
     private HashMap<String, String> stickyMap   = new HashMap<>();
@@ -318,6 +312,39 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         bManager.sendBroadcast(msg);
     }
 
+    public void maskStimulus() {
+        RectF  boundRect = _bubbleStimulus.getRectBound();
+
+        // Add an exclusion around the bubble the (incorrect) user tapped
+        //
+        Intent msg = new Intent(MASK_ADDEXCL);
+
+        msg.putExtra(MASK_TYPE, EXCLUDE_SQUARE);
+        msg.putExtra(MASK_BOTTOM, (int) boundRect.bottom);
+        msg.putExtra(MASK_TOP, (int) boundRect.top);
+        msg.putExtra(MASK_LEFT, (int) boundRect.left);
+        msg.putExtra(MASK_RIGHT, (int) boundRect.right);
+
+        bManager.sendBroadcast(msg);
+
+        // Set the mask transparency
+        //
+        msg = new Intent(MASK_SETALPHA);
+        msg.putExtra(MASK_ALPHA, mask_alpha);
+
+        bManager.sendBroadcast(msg);
+
+
+        // Show the mask while the feedback is in progress
+        //
+        msg = new Intent(MASK_SHOWHIDE);
+        msg.putExtra(MASK_SHOWHIDE, VISIBLE);
+
+        bManager.sendBroadcast(msg);
+
+
+    }
+
 
     /**
      * Clear the feedback mask
@@ -334,10 +361,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         bManager.sendBroadcast(msg);
     }
-
-
-
-
 
     //**********************************************************
     //**********************************************************
@@ -358,7 +381,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 post(BP_CONST.RESUME_ANIMATION);
                 break;
 
-            case BP_CONST.SHOW_MASK:
+            case BP_CONST.SHOW_BUBBLE_MASK:
 
                 maskBubble();
                 break;
@@ -366,6 +389,11 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             case BP_CONST.HIDE_MASK:
 
                 clearMask();
+                break;
+
+            case BP_CONST.SHOW_STIMULUS_MASK:
+
+                maskStimulus();
                 break;
 
             case BP_CONST.SHOW_SCORE:
@@ -627,9 +655,10 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
      * Publish the Stimulus value as Scope variables for script access
      */
     @Override
-    protected void publishState(CBubble bubble) {
+    protected void publishState(CBubble bubble, CBubbleStimulus bubbleStimulus) {
 
         _touchedBubble = bubble;
+        _bubbleStimulus = bubbleStimulus;
 
         TScope scope  = mTutor.getScope();
         String answer = bubble.getStimulus();
@@ -804,7 +833,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             publishValue(BP_CONST.QUEST_VAR, correctVal);
             publishValue(BP_CONST.QUEST_VAR_TWO, "TRASH");
             publishValue(BP_CONST.QUEST_VAR_THREE, "TRASH");
-            Log.d("DEREK", "HERE");
         }
 
         if (data.question_say) {

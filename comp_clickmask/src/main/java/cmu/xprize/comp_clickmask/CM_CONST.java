@@ -28,7 +28,13 @@ public class CM_CONST {
     public static final String MASK_R                     = "MASK_R";
     public static final String MASK_COLOR                 = "MASK_COLOR";
     public static final String MASK_ALPHA                 = "MASK_ALPHA";
+    public static final String MASK_BOTTOM                = "MASK_BOTTOM";
+    public static final String MASK_TOP                   = "MASK_TOP";
+    public static final String MASK_RIGHT                 = "MASK_RIGHT";
+    public static final String MASK_LEFT                  = "MASK_LEFT";
 
     public static final String EXCLUDE_CIRCLE             = "EXCLUDE_CIRCLE";
+    public static final String EXCLUDE_SQUARE             = "EXCLUDE_SQUARE";
+
     public static final long FADE_TIME                    = 200;
 }

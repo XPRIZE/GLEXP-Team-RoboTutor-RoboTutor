@@ -55,9 +55,6 @@ public class CBp_Data implements ILoadableObject {
 
     //************ Serialization
 
-
-
-
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
 
