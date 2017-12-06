@@ -85,6 +85,8 @@ android {
             buildConfigField BOOLEAN, LANGUAGE_SWITCH, TRUE
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_UNDEFINED
+
+            signingConfig signingConfigs.android
         }
 
         // These releases will remove the language selection toggle switch if present in the UI
