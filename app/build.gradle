@@ -13,24 +13,24 @@ android {
         // default is signed by the Android default key
     }
 
-//    // Create a variable called keystorePropertiesFile, and initialize it to your
-//    // keystore.properties file, in the rootProject folder.
-//    def keystorePropertiesFile = rootProject.file("keystore.properties")
-//
-//    // Initialize a new Properties() object called keystoreProperties
-//    def keystoreProperties = new Properties()
-//
-//    // Load your keystore.properties file into the keystoreProperties object.
-//    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-//
-//    signingConfigs {
-//        android {
-//            keyAlias keystoreProperties['keyAlias']
-//            keyPassword keystoreProperties['keyPassword']
-//            storeFile file(keystoreProperties['storeFile'])
-//            storePassword keystoreProperties['storePassword']
-//        }
-//    }
+    // Create a variable called keystorePropertiesFile, and initialize it to your
+    // keystore.properties file, in the rootProject folder.
+    def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+    // Initialize a new Properties() object called keystoreProperties
+    def keystoreProperties = new Properties()
+
+    // Load your keystore.properties file into the keystoreProperties object.
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+    signingConfigs {
+        android {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
 
     buildTypes {
 
@@ -98,7 +98,7 @@ android {
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
 
-//            signingConfig signingConfigs.android
+            signingConfig signingConfigs.android
         }
 
         release_sw_xprize {
@@ -109,7 +109,7 @@ android {
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
             
-//            signingConfig signingConfigs.android
+            signingConfig signingConfigs.android
         }
 
         release_en {
@@ -120,7 +120,7 @@ android {
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
 
-//            signingConfig signingConfigs.android
+            signingConfig signingConfigs.android
         }
 
         release_en_xprize {
@@ -131,7 +131,7 @@ android {
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
 
-//            signingConfig signingConfigs.android
+            signingConfig signingConfigs.android
         }
 
         release_sw_noasr {
