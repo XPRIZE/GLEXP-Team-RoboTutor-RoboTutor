@@ -20,9 +20,6 @@ package cmu.xprize.util;
 
 // global tutor constants
 
-import android.content.Context;
-
-import java.io.File;
 import java.util.HashMap;
 
 public class TCONST {

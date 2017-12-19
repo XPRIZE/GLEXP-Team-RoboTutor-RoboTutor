@@ -255,14 +255,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
             Log.w(BUNDLE_TAG, "no extras passed!");
             STUDENT_ID = TCONST.DEFAULT_STUDENT_ID;
         }
-
-        // ZZZ remove before committing
-        /*boolean TESTING;
-        if(TESTING = false) {
-            STUDENT_ID = "STUDENT_" + (new Random()).nextInt(3);
-        }
-
-        Log.d(TAG, "STUDENT_ID = " + STUDENT_ID);*/
     }
 
 

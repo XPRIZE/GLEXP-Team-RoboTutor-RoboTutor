@@ -2,8 +2,11 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.SurfaceView;
+import android.view.View;
 import android.view.ViewGroup;
 
 import org.json.JSONObject;
@@ -91,6 +94,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     private HashMap<String,String>  _StringVar  = new HashMap<>();
     private HashMap<String,Integer> _IntegerVar = new HashMap<>();
     private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
+
+    CAt_Data tutorToLaunch;
 
 
     final private String  TAG = "TActivitySelector";
@@ -416,6 +421,9 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE);
         }
 
+        // check SharedPreferences
+        final SharedPreferences prefs = getStudentSharedPreferences();
+
         if (buttonFound) {
 
             // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
@@ -423,13 +431,13 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             //
             if (!BuildConfig.NO_ASR_APPS || (transitionMap != storyTransitions)) {
 
-                CAt_Data tutor = (CAt_Data) transitionMap.get(activeTutor);
+                tutorToLaunch = (CAt_Data) transitionMap.get(activeTutor);
 
                 // This is just to make sure we go somewhere if there is a bad link - which
                 // there shuoldn't be :)
                 //
-                if (tutor == null) {
-                    tutor = (CAt_Data) transitionMap.get(rootTutor);
+                if (tutorToLaunch == null) {
+                    tutorToLaunch = (CAt_Data) transitionMap.get(rootTutor);
                 }
 
                 // #Mod 330 Show TutorID in Banner in debug builds
@@ -449,23 +457,109 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                 }
                 else {
                     // Update the tutor id shown in the log stream
-                    //
-                    CLogManager.setTutor(activeTutor);
 
-                    doLaunch(tutor.tutor_desc, TCONST.TUTOR_NATIVE, tutor.tutor_data);
+                    if(BuildConfig.SHOW_DEMO_VIDS) {
+
+                        // deals with format of tutor names....
+                        // math:10, read.echo:1, read.hear:2, bpop.ltr.uc:2, etc
+                        String whichActivityIsNext = activeTutor.substring(0, activeTutor.indexOf(':'));
+                        int periodIndex = whichActivityIsNext.indexOf('.');
+                        if(periodIndex > 0) {
+                            whichActivityIsNext = whichActivityIsNext.substring(0, periodIndex);
+                        }
+                        final String activityPreferenceKey = whichActivityIsNext + "_TIMES_PLAYED";
+
+                        // bpop, write, akira, story, math, etc
+                        final int timesPlayedActivity = prefs.getInt(activityPreferenceKey, 0); // i = default value
+                        boolean playDemoVid = timesPlayedActivity < 1; // only play video once
+
+                        Integer videoId = getTutorInstructionalVideo(whichActivityIsNext);
+
+                        if(playDemoVid && videoId != null) {
+
+                            final SurfaceView fullscreenView = (SurfaceView) findViewById(R.id.SvideoSurface);
+                            fullscreenView.setVisibility(View.VISIBLE);
+                            final TLangToggle langToggle = (TLangToggle) findViewById(R.id.SlangToggle);
+                            langToggle.setVisibility(View.INVISIBLE); // prevent from changing language
+
+                            MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), videoId);
+                            mediaPlayer.setDisplay(fullscreenView.getHolder());
+                            mediaPlayer.start();
+
+                            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                @Override
+                                public void onCompletion(MediaPlayer mediaPlayer) {
+                                    mediaPlayer.release();
+                                    fullscreenView.setVisibility(View.INVISIBLE);
+                                    langToggle.setVisibility(View.VISIBLE); // prevent from changing language
+
+                                    SharedPreferences.Editor editor = prefs.edit();
+                                    editor.putInt(activityPreferenceKey, timesPlayedActivity + 1); // increment to let them know we watched the video
+                                    editor.apply();
+
+
+                                    CLogManager.setTutor(activeTutor);
+
+                                    doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data);
+                                }
+                            });
+                        } else {
+
+                            CLogManager.setTutor(activeTutor);
+
+                            doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data);
+
+                        }
+                    } else {
+
+                        CLogManager.setTutor(activeTutor);
+
+                        doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data);
+                    }
+
+
+
                 }
+
+                SharedPreferences.Editor editor = prefs.edit();
 
                 // Serialize the new state
                 // #Mod 329 language switch capability
                 //
-                SharedPreferences prefs = getStudentSharedPreferences();
-                SharedPreferences.Editor editor = prefs.edit();
-
                 editor.putString(TCONST.SKILL_SELECTED, activeSkill);
                 editor.apply();
+
             } else
                 SaskActivity.enableButtons(true);
         }
+    }
+
+
+    /**
+     * Gets the video resource to play based on tutor.
+     *
+     * @param tutor
+     * @return
+     */
+    private Integer getTutorInstructionalVideo(String tutor) {
+
+        // note that this was initially done w/ a "substring" check, but each tutor has a different
+        // naming format e.g. math:10 vs. story.hear:1 vs. story.echo:1
+        if (activeTutor.startsWith("bpop")) {
+            return R.raw.bubblepop_demo;
+        } else if (activeTutor.startsWith("akira")) {
+            return R.raw.akira_demo;
+
+        } else if (activeTutor.startsWith("math")) {
+            return R.raw.asm_demo;
+        } else if (activeTutor.startsWith("write")) {
+            return R.raw.write_demo;
+        } else if (activeTutor.startsWith("story")) {
+            return R.raw.reading_demo;
+        } else {
+            return null;
+        }
+
     }
 
     /**
@@ -702,7 +796,11 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         return buttonid;
     }
 
+    /**
+     * gets the stored data for each student based on STUDENT_ID.
+     */
     private SharedPreferences getStudentSharedPreferences() {
+        // each ID name is composed of the STUDENT_ID plus the language i.e. EN or SW
         String prefsName = "";
         if(RoboTutor.STUDENT_ID != null) {
             prefsName += RoboTutor.STUDENT_ID + "_";
