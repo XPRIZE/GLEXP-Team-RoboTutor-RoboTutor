@@ -762,4 +762,8 @@ public class TCONST {
     public static final String PROMPT_3 = "PROMPT_3";
     public static final String PROMPT_3V = "PROMPT_3V";
 
+
+    // Counting
+    public static final String COUNTING_DEBUG_LOG = "COUNTING_DEBUG_LOG";
+
 }

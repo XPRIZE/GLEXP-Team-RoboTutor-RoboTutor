@@ -684,7 +684,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         PerformanceLogItem event = new PerformanceLogItem();
 
-        // YYY possibly use dataSource instead of _currData
         String problemName = "BPOP_" + _currData.answer + "_";
         for(int i = 0; i < _currData.response_set.length-1; i++) {
             problemName += _currData.response_set[i] + "-";
@@ -695,8 +694,8 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         if (_currData.question_say) promptType += "say";
         if (_currData.question_show) promptType += ((promptType.length() > 0) ? "+" : "") + "show";
 
-        event.setUserId(RoboTutor.STUDENT_ID);      // YYY get userId from FaceLogin
-        event.setSessionId(RoboTutor.SESSION_ID);      // YYY get sessionId
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
         event.setGameId(mTutor.getUuid().toString());
         event.setLanguage(CTutorEngine.language);
         event.setTutorName(mTutor.getTutorName());

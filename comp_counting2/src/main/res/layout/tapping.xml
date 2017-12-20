@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/Scontent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    >
+
+    <cmu.xprize.comp_counting2.CCountX_SurfaceView
+        android:id="@+id/imageSurface"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/counterText"
+        android:layout_width="200sp"
+        android:layout_height="200sp"
+        android:text=""
+        android:textSize="100sp"
+        android:textColor="@android:color/white"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/holo_purple"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

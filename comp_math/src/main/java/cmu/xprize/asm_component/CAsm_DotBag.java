@@ -87,6 +87,11 @@ public class CAsm_DotBag extends TableLayout {
 
     }
 
+    /**
+     * Sets the number of rows in the dotbag.
+     *
+     * @param _rows
+     */
     public void setRows(int _rows) {
 
         TableRow currTableRow;
@@ -163,6 +168,11 @@ public class CAsm_DotBag extends TableLayout {
 
     }
 
+    /**
+     * Sets the image used for dots, then updates every dot with the new image.
+     *
+     * @param _imageName
+     */
     public void setImage(String _imageName) {
 
         TableRow currTableRow;
@@ -202,19 +212,31 @@ public class CAsm_DotBag extends TableLayout {
     }
 
 
+    /**
+     * Add a dot at the specified row, col
+     *
+     * @param row
+     * @param col
+     * @return
+     */
     public CAsm_Dot addDot(int row, int col) {
 
+        // add a row until you have enough
         while (allTableRows.size() < row + 1) {
             addRow(allTableRows.size());
         }
+        // get the row in which to place the dot
         TableRow tableRow = allTableRows.get(row);
 
+        // initialize a new dot
         CAsm_Dot dot = new CAsm_Dot(context);
         dot.setParams(isClickable, imageName, row, col);
         dot.setLayoutParams(new TableRow.LayoutParams(size, size));
 
+        // add the dot to the table
         tableRow.addView(dot, col);
 
+        // updates
         updateRows();
         updateCols();
         resetBounds();
@@ -234,6 +256,9 @@ public class CAsm_DotBag extends TableLayout {
         }
     }
 
+    /**
+     * Resets number of dots to zero, and adjusts size accordingly.
+     */
     protected void setZero() {
 
         rows = 0;
@@ -303,6 +328,11 @@ public class CAsm_DotBag extends TableLayout {
         return false;
     }
 
+    /**
+     * Finds which dot was recently cicked by iterating through each dot and checking "isClicked" variable.
+     *
+     * @return
+     */
     public CAsm_Dot findClickedDot() {
 
         TableRow currTableRow;
@@ -373,6 +403,9 @@ public class CAsm_DotBag extends TableLayout {
 
     }
 
+    /**
+     * Adjusts the size of the DotBag to hold all dots
+     */
     private void resetBounds() {
 
         int rowsToUse = (rows == 0)?1:rows; // to enable drawing of zero dotbag
@@ -381,6 +414,11 @@ public class CAsm_DotBag extends TableLayout {
 
     }
 
+    /**
+     * Sets "isClickable" var of DotBag and all of its Dot children to _isClickable.
+     *
+     * @param _isClickable
+     */
     public void setIsClickable(boolean _isClickable) {
 
         TableRow currTableRow;
@@ -397,6 +435,11 @@ public class CAsm_DotBag extends TableLayout {
         }
     }
 
+    /**
+     * Changes hollowness of DotBag and all of its Dot children.
+     *
+     * @param _isHollow
+     */
     public void setHollow(boolean _isHollow) {
 
         TableRow currTableRow;

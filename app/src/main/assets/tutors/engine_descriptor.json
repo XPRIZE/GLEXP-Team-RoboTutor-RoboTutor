@@ -20,6 +20,16 @@
   //
   "tutorVariants": {
 
+    "countingx": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "countingx",
+      "features": ""
+    },
+    "counting": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "counting",
+      "features": ""
+    },
     "math": {
       "type": "TUTORVAR_MAP",
       "tutorName": "add_subtract",
@@ -119,6 +129,34 @@
   //
   "bindingPatterns": {
 
+    "countingx": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "countingx": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SCountingX",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
+    "counting": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "counting": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SCounting",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
     "story_reading": {
       "type": "TUTORDATA_MAP",
       "scene_bindings": {
