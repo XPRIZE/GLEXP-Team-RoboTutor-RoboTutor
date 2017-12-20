@@ -460,13 +460,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                     if(BuildConfig.SHOW_DEMO_VIDS) {
 
-                        // deals with format of tutor names....
-                        // math:10, read.echo:1, read.hear:2, bpop.ltr.uc:2, etc
-                        String whichActivityIsNext = activeTutor.substring(0, activeTutor.indexOf(':'));
-                        int periodIndex = whichActivityIsNext.indexOf('.');
-                        if(periodIndex > 0) {
-                            whichActivityIsNext = whichActivityIsNext.substring(0, periodIndex);
-                        }
+
+                        String whichActivityIsNext = parseActiveTutorForTutorName(activeTutor);
                         final String activityPreferenceKey = whichActivityIsNext + "_TIMES_PLAYED";
 
                         // bpop, write, akira, story, math, etc
@@ -532,6 +527,31 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             } else
                 SaskActivity.enableButtons(true);
         }
+    }
+
+    /**
+     * Parses tutor for its core tutor name
+     * e.g. bpop.num:s2n_say_show_mc --> bpop
+     * akira:10_2 --> akira
+     *
+     * @param tutor
+     * @return
+     */
+    private String parseActiveTutorForTutorName(String tutor) {
+
+        // deals with format of tutor names....
+        // math:10, read.echo:1, read.hear:2, bpop.ltr.uc:2, etc
+        String whichActivityIsNext = tutor;
+        int colonIndex = tutor.indexOf(':');
+        if(colonIndex > 0) {
+            whichActivityIsNext = tutor.substring(0, colonIndex);
+        }
+        int periodIndex = whichActivityIsNext.indexOf('.');
+        if(periodIndex > 0) {
+            whichActivityIsNext = whichActivityIsNext.substring(0, periodIndex);
+        }
+
+        return whichActivityIsNext;
     }
 
 
