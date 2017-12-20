@@ -37,6 +37,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.util.TypedValue;
 
 public class CBubble extends FrameLayout {
 
@@ -62,6 +63,8 @@ public class CBubble extends FrameLayout {
 
     private ImageView         bubblepop = null;
     private AnimationDrawable popping   = null;
+
+    private String            mProblemType;
 
 
     public CBubble(Context context) {
@@ -111,6 +114,11 @@ public class CBubble extends FrameLayout {
         }
     }
 
+    public void configData(String stimulusVal, String correctVal, String problemType) {
+        mCorrectVal = correctVal;
+        mStimulusVal = stimulusVal;
+        mProblemType = problemType;
+    }
 
     public void configData(String stimulusVal, String correctVal) {
 
@@ -148,23 +156,12 @@ public class CBubble extends FrameLayout {
 
     public void setColor(String color) {
         mColor = color;
-
-        //Specifically for words/letters case on the length
-        if(mText.getText() != null && mText.getText().length() > 0) {
-            //Draw different types of bubble depending on if there is one letter or anything else
-            if(mText.getText().length() == 1) {
-                setBackgroundResource(BP_CONST.bubbleMap.get(mColor));
-            }
-
-            else {
-                setBackgroundResource(BP_CONST.elongatedBubbleMap.get(mColor));
-            }
+        if(mProblemType != null && mProblemType.equals("wrd")) {
+            setBackgroundResource(BP_CONST.elongatedBubbleMap.get(mColor));
         }
         else {
             setBackgroundResource(BP_CONST.bubbleMap.get(mColor));
-
         }
-
     }
 
 //    public void setFeedbackColor(String color) {
@@ -310,16 +307,12 @@ public class CBubble extends FrameLayout {
     }
 
     public void setVectorPosition(Point relOrigin, float vecWidthDist, float vecHeightDist, float angle) {
-//        Log.d("Derek", getTextView().getText().toString());
-//        Log.d("Derek", "Center " + relOrigin + " Width Range: " + vecWidthDist + " Height Range: " + vecHeightDist + " Angle: " + angle);
-//        Log.d("Derek", "Width: " + getWidth() + " Height: " + getHeight());
         mAngle    = angle;
 
         float xOrigin = relOrigin.x;
         float yOrigin = relOrigin.y;
         mPosition.x = ((float) (xOrigin + vecWidthDist * Math.cos(mAngle)) - (getWidth() / 2));
         mPosition.y = ((float) (yOrigin + (vecHeightDist * Math.sin(mAngle))) - (getHeight() / 2));
-        Log.d("Derek", "X Position " + mPosition.x + " Y Position " + mPosition.y);
 
         setX(mPosition.x);
         setY(mPosition.y);
@@ -351,7 +344,10 @@ public class CBubble extends FrameLayout {
             if(text.matches(".*\n+.*")) {
                 mText.setTypeface(Typeface.MONOSPACE);
                 mText.setGravity(Gravity.RIGHT);
-                mText.setTextSize(40);
+                mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 80);
+            }
+            else {
+                mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 128);
             }
         }
 

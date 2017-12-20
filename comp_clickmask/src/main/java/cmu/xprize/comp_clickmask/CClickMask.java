@@ -32,6 +32,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -263,6 +264,16 @@ public class CClickMask extends View implements Animator.AnimatorListener {
                             addExclusion(new CExclusion(exclusiontype, exclusionx, exclusiony, exclusionr));
                             invalidate();
                             break;
+                        case EXCLUDE_SQUARE:
+                            int exclusion_bottom = intent.getIntExtra(MASK_BOTTOM, 0);
+                            int exclusion_top = intent.getIntExtra(MASK_TOP, 0);
+                            int exclusion_right = intent.getIntExtra(MASK_RIGHT, 0);
+                            int exclusion_left = intent.getIntExtra(MASK_LEFT, 0);
+
+                            addExclusion(new CExclusion(exclusiontype, exclusion_left, exclusion_top, exclusion_right, exclusion_bottom, 5, 5));
+                            invalidate();
+                            break;
+
                     }
                     break;
 
@@ -305,6 +316,10 @@ public class CClickMask extends View implements Animator.AnimatorListener {
                 switch (exclude.type) {
                     case EXCLUDE_CIRCLE:
                         mask.addCircle(exclude.x, exclude.y, exclude.radius, Path.Direction.CCW);
+                        break;
+                    case EXCLUDE_SQUARE:
+                        mask.addRoundRect(exclude.left, exclude.top, exclude.right, exclude.bottom, 30f, 30f, Path.Direction.CCW);
+                        break;
                 }
             }
         }

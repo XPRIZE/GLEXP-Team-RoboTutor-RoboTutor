@@ -1463,11 +1463,14 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         String outcome;
 
         result = result + validateVector(map, object.tutor_id, " - tutor_id:");
-        result = result + validateVector(map, object.easier, " - easier:");
-        result = result + validateVector(map, object.harder, " - harder:");
-        result = result + validateVector(map, object.same, " - same:");
-        result = result + validateVector(map, object.next, " - next:");
 
+        result = result + validateVector(map, object.easier, " - easier:");
+
+        result = result + validateVector(map, object.harder, " - harder:");
+
+        result = result + validateVector(map, object.same, " - same:");
+
+        result = result + validateVector(map, object.next, " - next:");
         return result;
     }
 

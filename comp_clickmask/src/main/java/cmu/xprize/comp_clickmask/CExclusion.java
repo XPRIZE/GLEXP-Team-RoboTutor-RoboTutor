@@ -22,6 +22,12 @@ public class CExclusion {
     public int      y;
     public int      radius;
 
+    public int      left;
+    public int      top;
+    public int      right;
+    public int      bottom;
+    public float    rx;
+    public float    ry;
 
     public CExclusion() {}
 
@@ -31,6 +37,16 @@ public class CExclusion {
         x      = _x;
         y      = _y;
         radius = _radius;
+    }
+
+    public CExclusion(String _type, int _left, int _top, int _right, int _bottom, float _rx, float _ry) {
+        type   = _type;
+        left   = _left;
+        top    = _top;
+        right  = _right;
+        bottom = _bottom;
+        rx     = _rx;
+        ry     = _ry;
     }
 
 }

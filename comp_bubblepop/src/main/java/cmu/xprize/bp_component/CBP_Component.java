@@ -128,6 +128,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
     public String                   banner_color        = null;         // Set specific banner color
     public int                      mask_alpha          = 205;          // Mask alpha
 
+    public String                   problem_type     = "normal";
 
     static final String TAG = "CBP_Component";
 
@@ -332,14 +333,13 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
             _mechanics.onDestroy();
             _mechanics = null;
         }
-
         switch(data.question_type.toLowerCase()) {
 
             case "mc":
             case "multiplechoice":
             case "multiple-choice":
 
-                _mechanics = new CBp_Mechanic_MC(mContext, this);
+                _mechanics = new CBp_Mechanic_MC(mContext, this, problem_type);
                 break;
 
             case "rise":
@@ -565,7 +565,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
-    protected void publishState(CBubble bubble) {
+    protected void publishState(CBubble bubble, CBubbleStimulus bubbleStimulus) {
 
     }
 
@@ -770,7 +770,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         bringChildToFront(Scontent);
 
         if(banner_color != null) {
-            // dispatchEvent(new CEvent(TCONST.SET_BANNER_COLOR, TCONST.VALUE , banner_color));
+             dispatchEvent(new CEvent(TCONST.SET_BANNER_COLOR, TCONST.VALUE , banner_color));
 
         }
     }

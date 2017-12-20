@@ -27,6 +27,11 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.util.TypedValue;
+import android.graphics.Point;
+import android.graphics.PointF;
+import android.graphics.Rect;
+import android.graphics.RectF;
 
 public class CBubbleStimulus extends FrameLayout {
 
@@ -43,7 +48,7 @@ public class CBubbleStimulus extends FrameLayout {
 
     private Rect    mViewRegion = new Rect();
 
-
+    private PointF  centerPoint = new PointF();
 
     static final String TAG = "CStimulus";
 
@@ -93,7 +98,6 @@ public class CBubbleStimulus extends FrameLayout {
 
         mIcon = (ImageView) findViewById(R.id.SIcon);
         mText = (TextView) findViewById(R.id.SText);
-
         setScale(1.0f);
     }
 
@@ -105,7 +109,7 @@ public class CBubbleStimulus extends FrameLayout {
         setScaleX(mScale);
         setScaleY(mScale);
     }
-
+ // AMMACHI
 
     @Override
     public void setScaleX(float newScale) {
@@ -139,7 +143,7 @@ public class CBubbleStimulus extends FrameLayout {
         return getWidth() * mScale;
     }
 
-    public void setContents(int resID, String text) {
+    public void setContents(int resID, String text, boolean isFeedback) {
 
         mIcon.setVisibility(View.INVISIBLE);
         mText.setVisibility(View.INVISIBLE);
@@ -151,17 +155,21 @@ public class CBubbleStimulus extends FrameLayout {
         else {
             mText.setText(text);
             mText.setVisibility(View.VISIBLE);
-
             //Use monospace if text contains number to ensure text is properly aligned
-            if(text.matches(".*\n+.*")) {
-                mText.setTypeface(Typeface.MONOSPACE);
-                mText.setGravity(Gravity.RIGHT);
+            if(!isFeedback) {
+                if(text.matches(".*\n+.*")) {
+                    mText.setTypeface(Typeface.MONOSPACE);
+                    mText.setGravity(Gravity.RIGHT);
+                    mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 164);
+                }
+                else{
+                    mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 300);
+                }
             }
         }
 
         invalidate();
     }
-
 
     @Override
     public void onDraw(Canvas canvas) {
@@ -177,11 +185,22 @@ public class CBubbleStimulus extends FrameLayout {
         mPaint.setColor(Color.parseColor("#AAAAAAAA"));
         mPaint.setStyle(Paint.Style.FILL);
         canvas.drawRoundRect(bounds, 30f, 30f, mPaint);
-
         mPaint.setColor(Color.parseColor("#AA000000"));
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(2.0f);
         canvas.drawRoundRect(bounds, 30f, 30f, mPaint);
     }
+
+    public RectF getRectBound() {
+        RectF bounds = new RectF(centerPoint.x, centerPoint.y,
+                centerPoint.x + mViewRegion.right, centerPoint.y + mViewRegion.bottom);
+        return bounds;
+    }
+
+    public void setCenterPoint(PointF centerPoint) {
+        this.centerPoint = centerPoint;
+    }
+
+
 
 }
