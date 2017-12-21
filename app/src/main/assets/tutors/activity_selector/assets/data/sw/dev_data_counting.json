@@ -418,15 +418,15 @@
       "harder": "bpop.ltr.mix:show_mc",
       "easier": "write.ltr.lc.dic:level2"
     },
-    "story.read::letters_alphabet_song": {
+    "bpop.ltr.uc:say_mc": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "story.read::letters_alphabet_song",
-      "tutor_desc": "story.hear",
-      "tutor_data": "[encfolder]letters_alphabet_song",
+      "tutor_id": "bpop.ltr.uc:say_mc",
+      "tutor_desc": "bpop.ltr.uc",
+      "tutor_data": "[file]bpop.ltr.uc_say_mc.json",
       "cell_row": "1",
       "cell_column": "2",
-      "same": "story.read::letters_alphabet_song",
+      "same": "bpop.ltr.uc:say_mc",
       "next": "write.ltr.uc:level1",
       "harder": "write.ltr.uc:level2",
       "easier": "bpop.ltr.uc:say_show_mc"

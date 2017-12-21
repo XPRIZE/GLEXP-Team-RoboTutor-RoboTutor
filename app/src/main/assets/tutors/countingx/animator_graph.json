@@ -116,9 +116,9 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""},
 
-            {"name": "Introduction Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""},
+            {"name": "Introduction Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets count.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""},
             {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "pointAtCenterOfActivity", "parms": "", "features":""},
-            {"name": "RoboFinger Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets tap on the 3 things.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""}
+            {"name": "RoboFinger Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Please tap here.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""}
 
 
             ]
@@ -130,7 +130,9 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
 
-            {"name": "Update Stimulus", "type": "AUDIO", "command": "PLAY", "soundsource": "How many things are there.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""}
+            {"name": "Update Stimulus", "type": "AUDIO", "command": "PLAY", "soundsource": "Please tap inside the box.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""},
+            {"name": "Update Stimulus", "type": "AUDIO", "command": "PLAY", "soundsource": "until you find.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""},
+            {"name": "Update Stimulus", "type": "AUDIO", "command": "PLAY", "soundsource": "this number.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""}
           ]
         },
 
@@ -152,7 +154,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE:String", "features":""},
 
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
           ]
         },
 

@@ -21,7 +21,7 @@
 	// path     - the resource path relative to assets/tutors/trackdata/LIBRARY/audio/<language>
 
 	"soundMap" : {
-		"default": {"type": "SOUNDMAP", "language": "LANG_AUTO", "path": "cmu/xprize/arithmetic"},
+		"default": {"type": "SOUNDMAP", "language": "LANG_AUTO", "path": "cmu/xprize/counting"},
 		"numbers": {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/numbers"},
 		"chimes":  {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "chimes"}
 	},

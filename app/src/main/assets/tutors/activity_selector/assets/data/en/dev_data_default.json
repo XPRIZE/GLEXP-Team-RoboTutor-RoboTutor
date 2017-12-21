@@ -4062,15 +4062,15 @@
     }
   },
   "mathTransitions": {
-    "countingx:1": {
+    "akira:10_2": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "countingx:1",
-      "tutor_desc": "countingx",
-      "tutor_data": "[file]countingx_1.json",
+      "tutor_id": "akira:10_2",
+      "tutor_desc": "akira",
+      "tutor_data": "[file]akira_10_2.json",
       "cell_row": "24",
       "cell_column": "2",
-      "same": "countingx:1",
+      "same": "akira:10_2",
       "next": "math:18",
       "harder": "math:18",
       "easier": "math:21"
@@ -4253,7 +4253,7 @@
       "cell_row": "24",
       "cell_column": "1",
       "same": "story.read::1_7",
-      "next": "countingx:1",
+      "next": "akira:10_2",
       "harder": "akira:11_1",
       "easier": "math:21"
     },
@@ -4553,7 +4553,7 @@
       "cell_column": "1",
       "same": "math:21",
       "next": "story.read::1_7",
-      "harder": "countingx:1",
+      "harder": "akira:10_2",
       "easier": "math:20"
     },
     "math:22": {
@@ -5894,7 +5894,7 @@
       "same": "math:18",
       "next": "akira:11_1",
       "harder": "akira:12_2",
-      "easier": "countingx:1"
+      "easier": "akira:10_2"
     },
     "math:19": {
       "type": "TRANSITION",
