@@ -74,7 +74,7 @@ android {
             buildConfigField BOOLEAN, LANGUAGE_SWITCH, TRUE
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_UNDEFINED
-            buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
+            buildConfigField BOOLEAN, SHOW_DEMO_VIDS, FALSE
 
             debuggable true
         }
