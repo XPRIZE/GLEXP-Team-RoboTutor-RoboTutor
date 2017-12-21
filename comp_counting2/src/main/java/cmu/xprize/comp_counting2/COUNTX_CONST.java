@@ -15,7 +15,7 @@ public class COUNTX_CONST {
     public static final int BOX_MARGIN = 100;
     public static final float BOX_BOUNDARY_STROKE_WIDTH = 10.0f;
 
-    public static final boolean USE_JAIL_BARS = false;
+    public static final boolean USE_JAIL_BARS = true;
 
     // actions
     public static final String PLAY_CHIME = "PLAY_CHIME";
