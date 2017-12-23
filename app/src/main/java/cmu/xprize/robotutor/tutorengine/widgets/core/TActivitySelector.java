@@ -566,16 +566,16 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         // note that this was initially done w/ a "substring" check, but each tutor has a different
         // naming format e.g. math:10 vs. story.hear:1 vs. story.echo:1
         if (activeTutor.startsWith("bpop")) {
-            return R.raw.bubblepop_demo;
+            return R.raw.bpop_demo1;
         } else if (activeTutor.startsWith("akira")) {
-            return R.raw.akira_demo;
+            return R.raw.akira_demo1;
 
         } else if (activeTutor.startsWith("math")) {
-            return R.raw.asm_demo;
+            return R.raw.asm_demo1;
         } else if (activeTutor.startsWith("write")) {
-            return R.raw.write_demo;
+            return R.raw.write_demo1;
         } else if (activeTutor.startsWith("story")) {
-            return R.raw.reading_demo;
+            return R.raw.read_demo1;
         } else {
             return null;
         }
