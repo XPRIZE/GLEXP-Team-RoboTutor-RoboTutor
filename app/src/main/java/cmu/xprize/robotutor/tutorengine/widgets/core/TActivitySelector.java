@@ -574,7 +574,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             return R.raw.asm_demo1;
         } else if (activeTutor.startsWith("write")) {
             return R.raw.write_demo1;
-        } else if (activeTutor.startsWith("story")) {
+        } else if (activeTutor.startsWith("story.read") || activeTutor.startsWith("story.echo")) {
             return R.raw.read_demo1;
         } else {
             return null;
