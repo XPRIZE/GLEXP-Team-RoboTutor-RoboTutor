@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -468,23 +469,45 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                         final int timesPlayedActivity = prefs.getInt(activityPreferenceKey, 0); // i = default value
                         boolean playDemoVid = timesPlayedActivity < 1; // only play video once
 
-                        Integer videoId = getTutorInstructionalVideo(whichActivityIsNext);
+                        String pathToFile = getTutorInstructionalVideoPath(whichActivityIsNext);
 
-                        if(playDemoVid && videoId != null) {
+                        if(playDemoVid && pathToFile != null) {
 
+                            // load SurfaceView to hold the video
                             final SurfaceView fullscreenView = (SurfaceView) findViewById(R.id.SvideoSurface);
                             fullscreenView.setVisibility(View.VISIBLE);
                             final TLangToggle langToggle = (TLangToggle) findViewById(R.id.SlangToggle);
-                            langToggle.setVisibility(View.INVISIBLE); // prevent from changing language
+                            langToggle.setVisibility(View.INVISIBLE); // prevent user from changing language
 
-                            MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), videoId);
-                            mediaPlayer.setDisplay(fullscreenView.getHolder());
-                            mediaPlayer.start();
+                            // Here is where we will play the video
+                            final MediaPlayer mp = new MediaPlayer();
 
-                            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            try {
+                                // TODO fix this exception handling
+                                mp.setDataSource(pathToFile);
+                                mp.setDisplay(fullscreenView.getHolder());
+                                mp.prepare();
+
+                                mp.start();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+
+                                // if an error occurs with media player, we don't want to freeze the app completely
+                                CLogManager.setTutor(activeTutor);
+
+                                doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data);
+                            }
+
+
+
+                            //MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), videoId);
+                            //mediaPlayer.setDisplay(fullscreenView.getHolder());
+                            //mediaPlayer.start();
+
+                            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                                 @Override
                                 public void onCompletion(MediaPlayer mediaPlayer) {
-                                    mediaPlayer.release();
+                                    mp.release();
                                     fullscreenView.setVisibility(View.INVISIBLE);
                                     langToggle.setVisibility(View.VISIBLE); // prevent from changing language
 
@@ -561,24 +584,27 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
      * @param tutor
      * @return
      */
-    private Integer getTutorInstructionalVideo(String tutor) {
+    private String getTutorInstructionalVideoPath(String tutor) {
+
+        String PATH_TO_FILE = TCONST.ROBOTUTOR_ASSETS + "/" + "video" + "/";
 
         // note that this was initially done w/ a "substring" check, but each tutor has a different
         // naming format e.g. math:10 vs. story.hear:1 vs. story.echo:1
         if (activeTutor.startsWith("bpop")) {
-            return R.raw.bpop_demo1;
+            PATH_TO_FILE += "bpop_demo.mp4";
         } else if (activeTutor.startsWith("akira")) {
-            return R.raw.akira_demo1;
-
+            PATH_TO_FILE += "akira_demo.mp4";
         } else if (activeTutor.startsWith("math")) {
-            return R.raw.asm_demo1;
+            PATH_TO_FILE += "asm_demo.mp4";
         } else if (activeTutor.startsWith("write")) {
-            return R.raw.write_demo1;
+            PATH_TO_FILE += "write_demo.mp4";
         } else if (activeTutor.startsWith("story.read") || activeTutor.startsWith("story.echo")) {
-            return R.raw.read_demo1;
+            PATH_TO_FILE += "read_demo.mp4";
         } else {
             return null;
         }
+
+        return PATH_TO_FILE;
 
     }
 
