@@ -3,8 +3,10 @@
 
   "dataSource": [
 
-    {"type":"CountX_Data", "level":"countx_1", "task":"Count to 10", "layout":"default", "dataset":[0, 5]},
-    {"type":"CountX_Data", "level":"countx_1", "task":"Count to 10", "layout":"default", "dataset":[0, 10]}
+    {"type":"CountX_Data", "level":"countx_1", "task":"Count to 10", "layout":"default", "dataset":[0, 3]},
+    {"type":"CountX_Data", "level":"countx_1", "task":"Count to 10", "layout":"default", "dataset":[0, 3]},
+    {"type":"CountX_Data", "level":"countx_1", "task":"Count to 10", "layout":"default", "dataset":[0, 3]},
+    {"type":"CountX_Data", "level":"countx_1", "task":"Count to 10", "layout":"default", "dataset":[0, 3]}
 
   ]
 
