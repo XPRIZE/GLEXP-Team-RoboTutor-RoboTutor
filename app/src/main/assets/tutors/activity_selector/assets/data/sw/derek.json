@@ -1,6 +1,6 @@
-{
+
   "bpop.ex:e2n_minus_1D_1D_multiple-choice_say": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 15,
 "easier": "bpop.ex:e2n_minus_1D_1D_multiple-choice_show",
 "harder": "bpop.ex:e2n_minus_1D_1D_rising_say_show",
@@ -13,7 +13,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_minus_1D_1D_multiple-choice_say_show": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 13,
 "easier": "bpop.ex:n2e_plus_1D_1D_rising_say",
 "harder": "bpop.ex:e2n_minus_1D_1D_multiple-choice_show",
@@ -26,7 +26,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_minus_1D_1D_multiple-choice_show": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 14,
 "easier": "bpop.ex:e2n_minus_1D_1D_multiple-choice_say_show",
 "harder": "bpop.ex:e2n_minus_1D_1D_multiple-choice_say",
@@ -39,7 +39,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_minus_1D_1D_rising_say": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 18,
 "easier": "bpop.ex:e2n_minus_1D_1D_rising_show",
 "harder": "bpop.ex:n2e_minus_1D_1D_multiple-choice_say_show",
@@ -52,7 +52,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_minus_1D_1D_rising_say_show": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 16,
 "easier": "bpop.ex:e2n_minus_1D_1D_multiple-choice_say",
 "harder": "bpop.ex:e2n_minus_1D_1D_rising_show",
@@ -65,7 +65,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_minus_1D_1D_rising_show": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 17,
 "easier": "bpop.ex:e2n_minus_1D_1D_rising_say_show",
 "harder": "bpop.ex:e2n_minus_1D_1D_rising_say",
@@ -78,7 +78,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_minus_1D_2D_multiple-choice_say": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 19,
 "easier": "bpop.ex:e2n_minus_1D_2D_multiple-choice_show",
 "harder": "bpop.ex:e2n_minus_1D_2D_rising_say_show",
@@ -91,7 +91,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_minus_1D_2D_multiple-choice_say_show": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 17,
 "easier": "bpop.ex:n2e_plus_1D_2D_rising_say",
 "harder": "bpop.ex:e2n_minus_1D_2D_multiple-choice_show",
@@ -104,7 +104,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_minus_1D_2D_multiple-choice_show": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 18,
 "easier": "bpop.ex:e2n_minus_1D_2D_multiple-choice_say_show",
 "harder": "bpop.ex:e2n_minus_1D_2D_multiple-choice_say",
@@ -117,7 +117,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_minus_1D_2D_rising_say": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 2,
 "easier": "bpop.ex:e2n_minus_1D_2D_rising_show",
 "harder": "bpop.ex:n2e_minus_1D_2D_multiple-choice_say_show",
@@ -130,7 +130,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_minus_1D_2D_rising_say_show": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 20,
 "easier": "bpop.ex:e2n_minus_1D_2D_multiple-choice_say",
 "harder": "bpop.ex:e2n_minus_1D_2D_rising_show",
@@ -143,7 +143,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_minus_1D_2D_rising_show": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 1,
 "easier": "bpop.ex:e2n_minus_1D_2D_rising_say_show",
 "harder": "bpop.ex:e2n_minus_1D_2D_rising_say",
@@ -156,7 +156,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_minus_2D_2D_multiple-choice_say": {
-"cell_column": 13,
+"cell_column": 15,
 "cell_row": 3,
 "easier": "bpop.ex:e2n_minus_2D_2D_multiple-choice_show",
 "harder": "bpop.ex:e2n_minus_2D_2D_rising_say_show",
@@ -169,7 +169,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_minus_2D_2D_multiple-choice_say_show": {
-"cell_column": 13,
+"cell_column": 15,
 "cell_row": 1,
 "easier": "bpop.ex:n2e_plus_2D_2D_rising_say",
 "harder": "bpop.ex:e2n_minus_2D_2D_multiple-choice_show",
@@ -182,7 +182,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_minus_2D_2D_multiple-choice_show": {
-"cell_column": 13,
+"cell_column": 15,
 "cell_row": 2,
 "easier": "bpop.ex:e2n_minus_2D_2D_multiple-choice_say_show",
 "harder": "bpop.ex:e2n_minus_2D_2D_multiple-choice_say",
@@ -195,7 +195,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_minus_2D_2D_rising_say": {
-"cell_column": 13,
+"cell_column": 15,
 "cell_row": 6,
 "easier": "bpop.ex:e2n_minus_2D_2D_rising_show",
 "harder": "bpop.ex:n2e_minus_2D_2D_multiple-choice_say_show",
@@ -208,7 +208,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_minus_2D_2D_rising_say_show": {
-"cell_column": 13,
+"cell_column": 15,
 "cell_row": 4,
 "easier": "bpop.ex:e2n_minus_2D_2D_multiple-choice_say",
 "harder": "bpop.ex:e2n_minus_2D_2D_rising_show",
@@ -221,7 +221,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_minus_2D_2D_rising_show": {
-"cell_column": 13,
+"cell_column": 15,
 "cell_row": 5,
 "easier": "bpop.ex:e2n_minus_2D_2D_rising_say_show",
 "harder": "bpop.ex:e2n_minus_2D_2D_rising_say",
@@ -234,7 +234,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_plus_1D_1D_multiple-choice_say": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 3,
 "easier": "bpop.ex:e2n_plus_1D_1D_multiple-choice_show",
 "harder": "bpop.ex:e2n_plus_1D_1D_rising_say_show",
@@ -247,7 +247,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_plus_1D_1D_multiple-choice_say_show": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 1,
 "easier": "bpop.num:s2n_say_rise",
 "harder": "bpop.ex:e2n_plus_1D_1D_multiple-choice_show",
@@ -260,7 +260,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_plus_1D_1D_multiple-choice_show": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 2,
 "easier": "bpop.ex:e2n_plus_1D_1D_multiple-choice_say_show",
 "harder": "bpop.ex:e2n_plus_1D_1D_multiple-choice_say",
@@ -273,7 +273,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_plus_1D_1D_rising_say": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 6,
 "easier": "bpop.ex:e2n_plus_1D_1D_rising_show",
 "harder": "bpop.ex:n2e_plus_1D_1D_multiple-choice_say_show",
@@ -286,7 +286,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_plus_1D_1D_rising_say_show": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 4,
 "easier": "bpop.ex:e2n_plus_1D_1D_multiple-choice_say",
 "harder": "bpop.ex:e2n_plus_1D_1D_rising_show",
@@ -299,7 +299,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_plus_1D_1D_rising_show": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 5,
 "easier": "bpop.ex:e2n_plus_1D_1D_rising_say_show",
 "harder": "bpop.ex:e2n_plus_1D_1D_rising_say",
@@ -312,7 +312,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_plus_1D_2D_multiple-choice_say": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 7,
 "easier": "bpop.ex:e2n_plus_1D_2D_multiple-choice_show",
 "harder": "bpop.ex:e2n_plus_1D_2D_rising_say_show",
@@ -325,7 +325,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_plus_1D_2D_multiple-choice_say_show": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 5,
 "easier": "bpop.ex:n2e_minus_1D_1D_rising_say",
 "harder": "bpop.ex:e2n_plus_1D_2D_multiple-choice_show",
@@ -338,7 +338,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_plus_1D_2D_multiple-choice_show": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 6,
 "easier": "bpop.ex:e2n_plus_1D_2D_multiple-choice_say_show",
 "harder": "bpop.ex:e2n_plus_1D_2D_multiple-choice_say",
@@ -351,7 +351,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_plus_1D_2D_rising_say": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 10,
 "easier": "bpop.ex:e2n_plus_1D_2D_rising_show",
 "harder": "bpop.ex:n2e_plus_1D_2D_multiple-choice_say_show",
@@ -364,7 +364,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_plus_1D_2D_rising_say_show": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 8,
 "easier": "bpop.ex:e2n_plus_1D_2D_multiple-choice_say",
 "harder": "bpop.ex:e2n_plus_1D_2D_rising_show",
@@ -377,7 +377,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_plus_1D_2D_rising_show": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 9,
 "easier": "bpop.ex:e2n_plus_1D_2D_rising_say_show",
 "harder": "bpop.ex:e2n_plus_1D_2D_rising_say",
@@ -390,7 +390,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_plus_2D_2D_multiple-choice_say": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 11,
 "easier": "bpop.ex:e2n_plus_2D_2D_multiple-choice_show",
 "harder": "bpop.ex:e2n_plus_2D_2D_rising_say_show",
@@ -403,7 +403,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_plus_2D_2D_multiple-choice_say_show": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 9,
 "easier": "bpop.ex:n2e_minus_1D_2D_rising_say",
 "harder": "bpop.ex:e2n_plus_2D_2D_multiple-choice_show",
@@ -416,7 +416,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_plus_2D_2D_multiple-choice_show": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 10,
 "easier": "bpop.ex:e2n_plus_2D_2D_multiple-choice_say_show",
 "harder": "bpop.ex:e2n_plus_2D_2D_multiple-choice_say",
@@ -429,7 +429,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_plus_2D_2D_rising_say": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 14,
 "easier": "bpop.ex:e2n_plus_2D_2D_rising_show",
 "harder": "bpop.ex:n2e_plus_2D_2D_multiple-choice_say_show",
@@ -442,7 +442,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_plus_2D_2D_rising_say_show": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 12,
 "easier": "bpop.ex:e2n_plus_2D_2D_multiple-choice_say",
 "harder": "bpop.ex:e2n_plus_2D_2D_rising_show",
@@ -455,7 +455,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:e2n_plus_2D_2D_rising_show": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 13,
 "easier": "bpop.ex:e2n_plus_2D_2D_rising_say_show",
 "harder": "bpop.ex:e2n_plus_2D_2D_rising_say",
@@ -468,7 +468,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_minus_1D_1D_multiple-choice_say": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 1,
 "easier": "bpop.ex:n2e_minus_1D_1D_multiple-choice_show",
 "harder": "bpop.ex:n2e_minus_1D_1D_rising_say_show",
@@ -481,7 +481,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_minus_1D_1D_multiple-choice_say_show": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 19,
 "easier": "bpop.ex:e2n_minus_1D_1D_rising_say",
 "harder": "bpop.ex:n2e_minus_1D_1D_multiple-choice_show",
@@ -494,7 +494,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_minus_1D_1D_multiple-choice_show": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 20,
 "easier": "bpop.ex:n2e_minus_1D_1D_multiple-choice_say_show",
 "harder": "bpop.ex:n2e_minus_1D_1D_multiple-choice_say",
@@ -507,7 +507,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_minus_1D_1D_rising_say": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 4,
 "easier": "bpop.ex:n2e_minus_1D_1D_rising_show",
 "harder": "bpop.ex:e2n_plus_1D_2D_multiple-choice_say_show",
@@ -520,7 +520,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_minus_1D_1D_rising_say_show": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 2,
 "easier": "bpop.ex:n2e_minus_1D_1D_multiple-choice_say",
 "harder": "bpop.ex:n2e_minus_1D_1D_rising_show",
@@ -533,7 +533,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_minus_1D_1D_rising_show": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 3,
 "easier": "bpop.ex:n2e_minus_1D_1D_rising_say_show",
 "harder": "bpop.ex:n2e_minus_1D_1D_rising_say",
@@ -546,7 +546,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_minus_1D_2D_multiple-choice_say": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 5,
 "easier": "bpop.ex:n2e_minus_1D_2D_multiple-choice_show",
 "harder": "bpop.ex:n2e_minus_1D_2D_rising_say_show",
@@ -559,7 +559,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_minus_1D_2D_multiple-choice_say_show": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 3,
 "easier": "bpop.ex:e2n_minus_1D_2D_rising_say",
 "harder": "bpop.ex:n2e_minus_1D_2D_multiple-choice_show",
@@ -572,7 +572,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_minus_1D_2D_multiple-choice_show": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 4,
 "easier": "bpop.ex:n2e_minus_1D_2D_multiple-choice_say_show",
 "harder": "bpop.ex:n2e_minus_1D_2D_multiple-choice_say",
@@ -585,7 +585,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_minus_1D_2D_rising_say": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 8,
 "easier": "bpop.ex:n2e_minus_1D_2D_rising_show",
 "harder": "bpop.ex:e2n_plus_2D_2D_multiple-choice_say_show",
@@ -598,7 +598,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_minus_1D_2D_rising_say_show": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 6,
 "easier": "bpop.ex:n2e_minus_1D_2D_multiple-choice_say",
 "harder": "bpop.ex:n2e_minus_1D_2D_rising_show",
@@ -611,7 +611,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_minus_1D_2D_rising_show": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 7,
 "easier": "bpop.ex:n2e_minus_1D_2D_rising_say_show",
 "harder": "bpop.ex:n2e_minus_1D_2D_rising_say",
@@ -624,7 +624,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_minus_2D_2D_multiple-choice_say": {
-"cell_column": 13,
+"cell_column": 15,
 "cell_row": 9,
 "easier": "bpop.ex:n2e_minus_2D_2D_multiple-choice_show",
 "harder": "bpop.ex:n2e_minus_2D_2D_rising_say_show",
@@ -637,7 +637,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_minus_2D_2D_multiple-choice_say_show": {
-"cell_column": 13,
+"cell_column": 15,
 "cell_row": 7,
 "easier": "bpop.ex:e2n_minus_2D_2D_rising_say",
 "harder": "bpop.ex:n2e_minus_2D_2D_multiple-choice_show",
@@ -650,7 +650,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_minus_2D_2D_multiple-choice_show": {
-"cell_column": 13,
+"cell_column": 15,
 "cell_row": 8,
 "easier": "bpop.ex:n2e_minus_2D_2D_multiple-choice_say_show",
 "harder": "bpop.ex:n2e_minus_2D_2D_multiple-choice_say",
@@ -663,7 +663,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_minus_2D_2D_rising_say": {
-"cell_column": 13,
+"cell_column": 15,
 "cell_row": 12,
 "easier": "bpop.ex:n2e_minus_2D_2D_rising_show",
 "harder": "akira:1_1",
@@ -676,7 +676,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_minus_2D_2D_rising_say_show": {
-"cell_column": 13,
+"cell_column": 15,
 "cell_row": 10,
 "easier": "bpop.ex:n2e_minus_2D_2D_multiple-choice_say",
 "harder": "bpop.ex:n2e_minus_2D_2D_rising_show",
@@ -689,7 +689,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_minus_2D_2D_rising_show": {
-"cell_column": 13,
+"cell_column": 15,
 "cell_row": 11,
 "easier": "bpop.ex:n2e_minus_2D_2D_rising_say_show",
 "harder": "bpop.ex:n2e_minus_2D_2D_rising_say",
@@ -702,7 +702,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_plus_1D_1D_multiple-choice_say": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 9,
 "easier": "bpop.ex:n2e_plus_1D_1D_multiple-choice_show",
 "harder": "bpop.ex:n2e_plus_1D_1D_rising_say_show",
@@ -715,7 +715,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_plus_1D_1D_multiple-choice_say_show": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 7,
 "easier": "bpop.ex:e2n_plus_1D_1D_rising_say",
 "harder": "bpop.ex:n2e_plus_1D_1D_multiple-choice_show",
@@ -728,7 +728,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_plus_1D_1D_multiple-choice_show": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 8,
 "easier": "bpop.ex:n2e_plus_1D_1D_multiple-choice_say_show",
 "harder": "bpop.ex:n2e_plus_1D_1D_multiple-choice_say",
@@ -741,7 +741,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_plus_1D_1D_rising_say": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 12,
 "easier": "bpop.ex:n2e_plus_1D_1D_rising_show",
 "harder": "bpop.ex:e2n_minus_1D_1D_multiple-choice_say_show",
@@ -754,7 +754,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_plus_1D_1D_rising_say_show": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 10,
 "easier": "bpop.ex:n2e_plus_1D_1D_multiple-choice_say",
 "harder": "bpop.ex:n2e_plus_1D_1D_rising_show",
@@ -767,7 +767,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_plus_1D_1D_rising_show": {
-"cell_column": 10,
+"cell_column": 12,
 "cell_row": 11,
 "easier": "bpop.ex:n2e_plus_1D_1D_rising_say_show",
 "harder": "bpop.ex:n2e_plus_1D_1D_rising_say",
@@ -780,7 +780,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_plus_1D_2D_multiple-choice_say": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 13,
 "easier": "bpop.ex:n2e_plus_1D_2D_multiple-choice_show",
 "harder": "bpop.ex:n2e_plus_1D_2D_rising_say_show",
@@ -793,7 +793,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_plus_1D_2D_multiple-choice_say_show": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 11,
 "easier": "bpop.ex:e2n_plus_1D_2D_rising_say",
 "harder": "bpop.ex:n2e_plus_1D_2D_multiple-choice_show",
@@ -806,7 +806,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_plus_1D_2D_multiple-choice_show": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 12,
 "easier": "bpop.ex:n2e_plus_1D_2D_multiple-choice_say_show",
 "harder": "bpop.ex:n2e_plus_1D_2D_multiple-choice_say",
@@ -819,7 +819,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_plus_1D_2D_rising_say": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 16,
 "easier": "bpop.ex:n2e_plus_1D_2D_rising_show",
 "harder": "bpop.ex:e2n_minus_1D_2D_multiple-choice_say_show",
@@ -832,7 +832,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_plus_1D_2D_rising_say_show": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 14,
 "easier": "bpop.ex:n2e_plus_1D_2D_multiple-choice_say",
 "harder": "bpop.ex:n2e_plus_1D_2D_rising_show",
@@ -845,7 +845,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_plus_1D_2D_rising_show": {
-"cell_column": 11,
+"cell_column": 13,
 "cell_row": 15,
 "easier": "bpop.ex:n2e_plus_1D_2D_rising_say_show",
 "harder": "bpop.ex:n2e_plus_1D_2D_rising_say",
@@ -858,7 +858,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_plus_2D_2D_multiple-choice_say": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 17,
 "easier": "bpop.ex:n2e_plus_2D_2D_multiple-choice_show",
 "harder": "bpop.ex:n2e_plus_2D_2D_rising_say_show",
@@ -871,7 +871,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_plus_2D_2D_multiple-choice_say_show": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 15,
 "easier": "bpop.ex:e2n_plus_2D_2D_rising_say",
 "harder": "bpop.ex:n2e_plus_2D_2D_multiple-choice_show",
@@ -884,7 +884,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_plus_2D_2D_multiple-choice_show": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 16,
 "easier": "bpop.ex:n2e_plus_2D_2D_multiple-choice_say_show",
 "harder": "bpop.ex:n2e_plus_2D_2D_multiple-choice_say",
@@ -897,7 +897,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_plus_2D_2D_rising_say": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 20,
 "easier": "bpop.ex:n2e_plus_2D_2D_rising_show",
 "harder": "bpop.ex:e2n_minus_2D_2D_multiple-choice_say_show",
@@ -910,7 +910,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_plus_2D_2D_rising_say_show": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 18,
 "easier": "bpop.ex:n2e_plus_2D_2D_multiple-choice_say",
 "harder": "bpop.ex:n2e_plus_2D_2D_rising_show",
@@ -923,7 +923,7 @@
 "type": "TRANSITION"
 },
 "bpop.ex:n2e_plus_2D_2D_rising_show": {
-"cell_column": 12,
+"cell_column": 14,
 "cell_row": 19,
 "easier": "bpop.ex:n2e_plus_2D_2D_rising_say_show",
 "harder": "bpop.ex:n2e_plus_2D_2D_rising_say",
@@ -934,5 +934,4 @@
 "tutor_desc": "bpop.ex",
 "tutor_id": "bpop.ex:n2e_plus_2D_2D_rising_show",
 "type": "TRANSITION"
-}
 }
