@@ -105,7 +105,7 @@ public class CAsm_Alley extends LinearLayout {
 
     }
 
-    public void nextDigit() {
+    public void     nextDigit() {
 
         Integer cols = 0;
 

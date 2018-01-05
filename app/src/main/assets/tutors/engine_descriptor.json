@@ -20,6 +20,16 @@
   //
   "tutorVariants": {
 
+    "countingx": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "countingx",
+      "features": ""
+    },
+    "counting": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "counting",
+      "features": ""
+    },
     "math": {
       "type": "TUTORVAR_MAP",
       "tutorName": "add_subtract",
@@ -50,6 +60,11 @@
       "tutorName": "bubble_pop",
       "features": "FTR_WORDS"
     },
+    "bpop.phon": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_PHONEMICS"
+    },
     "bpop.num": {
       "type": "TUTORVAR_MAP",
       "tutorName": "bubble_pop",
@@ -58,7 +73,12 @@
     "bpop.shp": {
       "type": "TUTORVAR_MAP",
       "tutorName": "bubble_pop",
-      "features": "FTR_SHAPES"
+      "features": "SHAPES"
+    },
+    "bpop.ex": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_EXPRESSIONS"
     },
     "write.ltr.uc": {
       "type": "TUTORVAR_MAP",
@@ -119,6 +139,34 @@
   //
   "bindingPatterns": {
 
+    "countingx": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "countingx": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SCountingX",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
+    "counting": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "counting": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SCounting",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
     "story_reading": {
       "type": "TUTORDATA_MAP",
       "scene_bindings": {

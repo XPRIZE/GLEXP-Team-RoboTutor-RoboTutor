@@ -25,6 +25,7 @@ import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -105,14 +106,12 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
         try {
 
             if (dataNameDescriptor.startsWith(TCONST.LOCAL_FILE)) {
-
                 String dataRelPath = dataNameDescriptor.substring(TCONST.LOCAL_FILE.length());
 
                 // Generate a langauage specific path to the data source -
                 // i.e. sdcard/Download/RoboTutor/Math/en/button_data.json
                 //
                 String dataPath = TCONST.DOWNLOAD_RT_PATH + "/" +  dataRelPath + "/button_data.json";
-
                 String jsonData = JSON_Helper.cacheDataByName(dataPath);
 
                 loadJSON(new JSONObject(jsonData), null);
@@ -127,7 +126,6 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
                 //
                 String dataPath = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS;
                 dataPath += "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
-
                 String jsonData = JSON_Helper.cacheData(dataPath + dataFile);
 
                 // Load the datasource in the component module - i.e. the superclass

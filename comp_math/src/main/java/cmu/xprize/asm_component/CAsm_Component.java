@@ -130,7 +130,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
     // json loadable
     public String      bootFeatures = "";
-    public boolean     random; // YYY test me
+    public boolean     random;
     public int         questionCount;
     public CAsm_Data[] dataSource;
 
@@ -232,7 +232,6 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         try {
             if (dataSource != null) {
 
-                // YYY random
                 if(!random) {
                     updateDataSet(dataSource[_dataIndex]);
                 } else {
@@ -250,11 +249,11 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
                             }
                         }
 
-                        dataSource = (CAsm_Data[]) newDataSource.toArray(); // YYY test me
+                        dataSource = (CAsm_Data[]) newDataSource.toArray();
                     }
                 }
 
-                _dataIndex++; // YYY maybe here?
+                _dataIndex++;
             } else {
                 CErrorManager.logEvent(TAG, "Error no DataSource : ", null, false);
             }

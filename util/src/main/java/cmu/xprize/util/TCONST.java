@@ -20,9 +20,6 @@ package cmu.xprize.util;
 
 // global tutor constants
 
-import android.content.Context;
-
-import java.io.File;
 import java.util.HashMap;
 
 public class TCONST {
@@ -264,10 +261,12 @@ public class TCONST {
     public static final double HIGH_PERFORMANCE_THRESHOLD       = 0.9; // percent to be upgraded a level
     public static final double MID_PERFORMANCE_THRESHOLD        = 0.5; // percent to pass
     public static final int MIN_ATTEMPTS_TO_GRADE               = 5;   // minimum number of attempts to be graded
+    public static final String BUBBLEPOP_MATH_EXPRESSION = "BPOP_MATH_EXPR";
 
     public static final String DEFAULT_STUDENT_ID = "DEBUG";
     public static final String STUDENT_ID_VAR = "studentId";
     public static final String SESSION_ID_VAR = "sessionId";
+
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
     //
@@ -762,5 +761,9 @@ public class TCONST {
     public static final String PROMPT_2RIGHT = "PROMPT_2RIGHT";
     public static final String PROMPT_3 = "PROMPT_3";
     public static final String PROMPT_3V = "PROMPT_3V";
+
+
+    // Counting
+    public static final String COUNTING_DEBUG_LOG = "COUNTING_DEBUG_LOG";
 
 }

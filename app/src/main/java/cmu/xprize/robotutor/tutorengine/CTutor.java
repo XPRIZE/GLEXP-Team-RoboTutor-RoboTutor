@@ -552,6 +552,9 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         // Map the sceneid to it's named xml Layout resource.
         //
+        String packageName = mContext.getPackageName();
+        String sceneId = scenedata.id;
+
         int id = mContext.getResources().getIdentifier(scenedata.id, "layout", mContext.getPackageName());
 
         LayoutInflater inflater = (LayoutInflater)mContext.getSystemService

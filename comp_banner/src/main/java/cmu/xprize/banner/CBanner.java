@@ -103,7 +103,6 @@ public class CBanner extends PercentRelativeLayout implements IEventListener {
             // Message from Stimiulus variant to share state with response variant
             //
             case TCONST.SET_BANNER_COLOR:
-
                 mColor = Color.parseColor((String)event.getString(TCONST.VALUE));
                 break;
         }

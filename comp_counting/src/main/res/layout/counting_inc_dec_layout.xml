@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/Scontent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    >
+
+    <TextView
+        android:text="921"
+        android:textSize="40sp"
+        android:textAlignment="center"
+        android:id="@+id/SGoalText"
+        app:layout_widthPercent="10%"
+        app:layout_heightPercent="10%"
+        android:layout_centerHorizontal="true"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        android:background="@android:color/holo_blue_light"
+        android:visibility="invisible"
+        />
+
+
+    <TableLayout
+        android:id="@+id/STable"
+        android:scaleType="fitCenter"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/SGoalText"
+        app:layout_heightPercent="60%"
+        app:layout_widthPercent="80%"
+        android:visibility="invisible">
+
+        <TableRow
+            android:id="@+id/SRowHuns">
+
+            <TextView
+                android:id="@+id/STextHuns"
+                android:text="900"
+                android:textSize="40sp"
+                android:textAlignment="viewEnd"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:padding="0dp"
+                android:scaleType="fitCenter"
+                android:background="@android:color/holo_blue_light"
+                />
+
+            <cmu.xprize.comp_counting.CCount_Decrement
+                android:id="@+id/SDecHuns"
+                android:src="@drawable/dec_100"
+                android:layout_weight="2"
+                app:layout_heightPercent="10%"
+                android:layout_width="0dp"
+                android:padding="0dp" />
+
+            <cmu.xprize.comp_counting.CCount_Increment
+                android:id="@+id/SIncHuns"
+                android:src="@drawable/inc_100"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:padding="0dp"
+                android:scaleType="fitCenter" />
+
+            <Button
+                android:id="@+id/SDotBagHuns"
+                android:text="DOTS GO HERE"
+                android:layout_weight="7"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:padding="0dp"
+                android:scaleType="fitCenter" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/SRowTens">
+
+            <TextView
+                android:text="20"
+                android:textSize="40sp"
+                android:textAlignment="viewEnd"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:padding="0dp"
+                android:scaleType="fitCenter"
+                android:background="@android:color/holo_blue_light"
+                />
+
+            <cmu.xprize.comp_counting.CCount_Decrement
+                android:src="@drawable/dec_10"
+                android:layout_weight="2"
+                app:layout_heightPercent="10%"
+                android:layout_width="0dp"
+                android:padding="0dp"
+                />
+            <cmu.xprize.comp_counting.CCount_Increment
+                android:src="@drawable/inc_10"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:padding="0dp"
+                android:scaleType="fitCenter"
+                />
+
+            <Button
+                android:text="DOTS GO HERE"
+                android:layout_weight="7"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:padding="0dp"
+                android:scaleType="fitCenter"
+                />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/SRowOnes">
+
+            <TextView
+                android:id="@+id/STextOnes"
+                android:text="1"
+                android:textSize="40sp"
+                android:textAlignment="viewEnd"
+                app:layout_heightPercent="10%"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:padding="0dp"
+                android:scaleType="fitCenter"
+                android:background="@android:color/holo_blue_light"
+                />
+
+            <cmu.xprize.comp_counting.CCount_Decrement
+                android:id="@+id/SDecOnes"
+                android:src="@drawable/dec_1"
+                android:layout_weight="2"
+                app:layout_heightPercent="10%"
+                android:layout_width="0dp"
+                android:padding="0dp"
+                />
+            <cmu.xprize.comp_counting.CCount_Increment
+                android:id="@+id/SIncOnes"
+                android:src="@drawable/inc_1"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:padding="0dp"
+                android:scaleType="fitCenter"
+                />
+
+            <RelativeLayout
+                android:id="@+id/SDotBagOnes"
+
+                android:layout_weight="7"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:padding="0dp"
+                android:scaleType="fitCenter"
+                />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/SRowLine">
+            <ImageView
+                android:src="@drawable/line"
+                android:layout_height="wrap_content"
+                app:layout_widthPercent="10%"/>
+        </TableRow>
+
+
+        <TableRow
+            android:id="@+id/SRowSum">
+            <TextView
+                android:id="@+id/STextSum"
+                android:text="921"
+                android:textSize="40sp"
+                android:textAlignment="viewEnd"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:padding="0dp"
+                android:scaleType="fitCenter"
+                android:background="@android:color/holo_blue_light"
+                />
+
+            <ImageView
+
+                android:layout_weight="2"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:padding="0dp"
+                android:visibility="invisible"
+                />
+            <ImageView
+
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:padding="0dp"
+                android:scaleType="fitCenter"
+                android:visibility="invisible"
+                />
+
+            <Button
+                android:text="DOTS GO HERE"
+                android:layout_weight="7"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:padding="0dp"
+                android:scaleType="fitCenter"
+                android:visibility="invisible"
+                />
+        </TableRow>
+
+    </TableLayout>
+
+
+    <TextView
+        android:text="0"
+        android:textSize="40sp"
+        android:textAlignment="center"
+        android:id="@+id/SCurrentNumberText"
+        app:layout_widthPercent="10%"
+        app:layout_heightPercent="10%"
+        android:layout_below="@+id/STable"
+        android:layout_centerHorizontal="true"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        android:background="@android:color/holo_blue_light"
+        android:visibility="invisible"
+        />
+
+</android.support.percent.PercentRelativeLayout>

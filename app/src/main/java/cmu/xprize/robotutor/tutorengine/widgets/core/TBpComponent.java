@@ -36,7 +36,9 @@ import cmu.xprize.bp_component.BP_CONST;
 import cmu.xprize.bp_component.CBP_Component;
 import cmu.xprize.bp_component.CBp_Data;
 import cmu.xprize.bp_component.CBubble;
-
+import android.graphics.Rect;
+import android.graphics.RectF;
+import cmu.xprize.bp_component.CBubbleStimulus;
 import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
@@ -63,16 +65,7 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-import static cmu.xprize.comp_clickmask.CM_CONST.EXCLUDE_CIRCLE;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_ADDEXCL;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_ALPHA;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_CLREXCL;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_R;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_SETALPHA;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_SHOWHIDE;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_TYPE;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_X;
-import static cmu.xprize.comp_clickmask.CM_CONST.MASK_Y;
+import static cmu.xprize.comp_clickmask.CM_CONST.*;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
@@ -83,6 +76,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     private CMediaManager   mMediaManager;
 
     private CBubble         _touchedBubble;
+    private CBubbleStimulus _bubbleStimulus;
 
     private HashMap<String, String> volatileMap = new HashMap<>();
     private HashMap<String, String> stickyMap   = new HashMap<>();
@@ -170,7 +164,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         // Let the compoenent process the new data set
         //
         super.updateDataSet(data);
-
         publishQuestionState(data);
     }
 
@@ -184,6 +177,12 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         // on the first pass.
         //
         reset();
+
+        if (dataNameDescriptor.startsWith("[file]bpop.num.mc_show_") ||
+                dataNameDescriptor.startsWith("[file]bpop.num.rise_show_")
+                ) {
+            publishFeature(TCONST.BUBBLEPOP_MATH_EXPRESSION);
+        }
 
         // We make the assumption that all are correct until proven wrong
         //
@@ -313,6 +312,39 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         bManager.sendBroadcast(msg);
     }
 
+    public void maskStimulus() {
+        RectF  boundRect = _bubbleStimulus.getRectBound();
+
+        // Add an exclusion around the bubble the (incorrect) user tapped
+        //
+        Intent msg = new Intent(MASK_ADDEXCL);
+
+        msg.putExtra(MASK_TYPE, EXCLUDE_SQUARE);
+        msg.putExtra(MASK_BOTTOM, (int) boundRect.bottom);
+        msg.putExtra(MASK_TOP, (int) boundRect.top);
+        msg.putExtra(MASK_LEFT, (int) boundRect.left);
+        msg.putExtra(MASK_RIGHT, (int) boundRect.right);
+
+        bManager.sendBroadcast(msg);
+
+        // Set the mask transparency
+        //
+        msg = new Intent(MASK_SETALPHA);
+        msg.putExtra(MASK_ALPHA, mask_alpha);
+
+        bManager.sendBroadcast(msg);
+
+
+        // Show the mask while the feedback is in progress
+        //
+        msg = new Intent(MASK_SHOWHIDE);
+        msg.putExtra(MASK_SHOWHIDE, VISIBLE);
+
+        bManager.sendBroadcast(msg);
+
+
+    }
+
 
     /**
      * Clear the feedback mask
@@ -329,10 +361,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         bManager.sendBroadcast(msg);
     }
-
-
-
-
 
     //**********************************************************
     //**********************************************************
@@ -353,7 +381,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 post(BP_CONST.RESUME_ANIMATION);
                 break;
 
-            case BP_CONST.SHOW_MASK:
+            case BP_CONST.SHOW_BUBBLE_MASK:
 
                 maskBubble();
                 break;
@@ -361,6 +389,11 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             case BP_CONST.HIDE_MASK:
 
                 clearMask();
+                break;
+
+            case BP_CONST.SHOW_STIMULUS_MASK:
+
+                maskStimulus();
                 break;
 
             case BP_CONST.SHOW_SCORE:
@@ -622,19 +655,44 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
      * Publish the Stimulus value as Scope variables for script access
      */
     @Override
-    protected void publishState(CBubble bubble) {
+    protected void publishState(CBubble bubble, CBubbleStimulus bubbleStimulus) {
 
         _touchedBubble = bubble;
+        _bubbleStimulus = bubbleStimulus;
 
         TScope scope  = mTutor.getScope();
         String answer = bubble.getStimulus();
 
         // Ensure letters are lowercase for mp3 matching
         //
-        if(answer.length() == 1)
+        if(answer.length() == 1) {
             answer = answer.toLowerCase();
+        }
 
-        publishValue(BP_CONST.ANSWER_VAR, answer);
+        if(answer.contains("\n")) {
+
+            int index = answer.indexOf("\n");
+            String firstNum = answer.substring(0, index);
+            String operation = answer.substring(index + 1, index + 2);
+            String secondNum = answer.substring(index+2);
+
+            if(operation.equals("+")) {
+                operation = "plus";
+            }
+            else {
+                operation = "minus";
+            }
+
+            publishValue(BP_CONST.ANSWER_VAR, firstNum);
+            publishValue(BP_CONST.ANSWER_VAR_TWO, operation);
+            publishValue(BP_CONST.ANSWER_VAR_THREE, secondNum);
+        }
+
+        else {
+            publishValue(BP_CONST.ANSWER_VAR, answer);
+            publishValue(BP_CONST.ANSWER_VAR_TWO, "TRASH");
+            publishValue(BP_CONST.ANSWER_VAR_THREE, "TRASH");
+        }
 
         resetValid();
 
@@ -678,7 +736,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         PerformanceLogItem event = new PerformanceLogItem();
 
-        // YYY possibly use dataSource instead of _currData
         String problemName = "BPOP_" + _currData.answer + "_";
         for(int i = 0; i < _currData.response_set.length-1; i++) {
             problemName += _currData.response_set[i] + "-";
@@ -689,8 +746,8 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         if (_currData.question_say) promptType += "say";
         if (_currData.question_show) promptType += ((promptType.length() > 0) ? "+" : "") + "show";
 
-        event.setUserId(RoboTutor.STUDENT_ID);      // YYY get userId from FaceLogin
-        event.setSessionId(RoboTutor.SESSION_ID);      // YYY get sessionId
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
         event.setGameId(mTutor.getUuid().toString());
         event.setLanguage(CTutorEngine.language);
         event.setTutorName(mTutor.getTutorName());
@@ -726,13 +783,56 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         resetState();
 
-        String correctVal = data.answer;
+        String correctVal = data.stimulus;
+        String comp_pos = data.comp_pos;
+        String comp_len = data.comp_len;
 
         // Ensure letters are lowercase for mp3 matching
         //
         correctVal = correctVal.toLowerCase();
+        if(comp_pos != null && comp_len != null) {
+            if(comp_pos == "Starts") {
+                comp_pos = "kuanza";
+            }
+            else {
+                comp_pos = "mwishoni";
+            }
+            if(comp_len== "With") {
+                comp_len = "na";
+            }
+            else {
+                comp_len = "kama";
+            }
+            publishValue(BP_CONST.QUEST_VAR, comp_pos);
+            publishValue(BP_CONST.QUEST_VAR_TWO, comp_len);
+            publishValue(BP_CONST.QUEST_VAR_THREE, correctVal);
+        }
 
-        publishValue(BP_CONST.QUEST_VAR, correctVal);
+        else if(correctVal.contains("\n")) {
+
+            int index = correctVal.indexOf("\n");
+            String firstNum = correctVal.substring(0, index);
+            String operation = correctVal.substring(index + 1, index + 2);
+            String secondNum = correctVal.substring(index+2);
+
+            if(operation.equals("+")) {
+                operation = "plus";
+            }
+            else {
+                operation = "minus";
+            }
+
+            publishValue(BP_CONST.QUEST_VAR, firstNum);
+            publishValue(BP_CONST.QUEST_VAR_TWO, operation);
+            publishValue(BP_CONST.QUEST_VAR_THREE, secondNum);
+
+        }
+
+        else {
+            publishValue(BP_CONST.QUEST_VAR, correctVal);
+            publishValue(BP_CONST.QUEST_VAR_TWO, "TRASH");
+            publishValue(BP_CONST.QUEST_VAR_THREE, "TRASH");
+        }
 
         if (data.question_say) {
             publishFeature(TCONST.SAY_STIMULUS);

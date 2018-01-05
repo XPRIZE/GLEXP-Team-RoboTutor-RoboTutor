@@ -25,16 +25,19 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.util.TypedValue;
 
 public class CBubble extends FrameLayout {
 
@@ -60,6 +63,8 @@ public class CBubble extends FrameLayout {
 
     private ImageView         bubblepop = null;
     private AnimationDrawable popping   = null;
+
+    private String            mProblemType;
 
 
     public CBubble(Context context) {
@@ -109,6 +114,11 @@ public class CBubble extends FrameLayout {
         }
     }
 
+    public void configData(String stimulusVal, String correctVal, String problemType) {
+        mCorrectVal = correctVal;
+        mStimulusVal = stimulusVal;
+        mProblemType = problemType;
+    }
 
     public void configData(String stimulusVal, String correctVal) {
 
@@ -146,23 +156,12 @@ public class CBubble extends FrameLayout {
 
     public void setColor(String color) {
         mColor = color;
-
-        //Specifically for words/letters case on the length
-        if(mText.getText() != null && mText.getText().length() > 0) {
-            //Draw different types of bubble depending on if there is one character or many
-            if(mText.getText().length() == 1) {
-                setBackgroundResource(BP_CONST.bubbleMap.get(mColor));
-            }
-
-            else {
-                setBackgroundResource(BP_CONST.elongatedBubbleMap.get(mColor));
-            }
+        if(mProblemType != null && mProblemType.equals("wrd")) {
+            setBackgroundResource(BP_CONST.elongatedBubbleMap.get(mColor));
         }
         else {
             setBackgroundResource(BP_CONST.bubbleMap.get(mColor));
-
         }
-
     }
 
 //    public void setFeedbackColor(String color) {
@@ -307,47 +306,21 @@ public class CBubble extends FrameLayout {
         super.getHitRect(outRect);
     }
 
-    public void setVectorPosition(Point relOrigin, float vecDist, float angle, float yHeight, int xPosition, boolean isWord, float widthBubble) {
-
-        mDistance = vecDist;
+    public void setVectorPosition(Point relOrigin, float vecWidthDist, float vecHeightDist, float angle) {
         mAngle    = angle;
 
-        if(isWord) {
-            float xOrigin = relOrigin.x;
-
-            //Choose a random position in the first half of row (subtracts width of bubble to ensure bubble with fit
-            //in half
-            if(xPosition == 0) {
-                float endX = xOrigin - widthBubble;
-                float result = (float) Math.random() * (endX);
-                xOrigin = result;
-            }
-            //Choose a random position in the first half of row (subtracts width of bubble to ensure bubble with fit
-            //in half
-            //xPosition == 1
-            else {
-                float endX = 2 * xOrigin - widthBubble;
-                float result = (float) Math.random() * (endX - xOrigin) + xOrigin;
-                xOrigin =result;
-            }
-            mPosition.x = xOrigin;
-            mPosition.y = yHeight;
-        }
-        else {
-            float xOrigin = relOrigin.x;
-            mPosition.x = ((float) (xOrigin + mDistance * Math.cos(mAngle)) - (getWidth()));
-            mPosition.y = ((float) (relOrigin.y - (mDistance * Math.sin(mAngle))) - (getHeight() / 2));
-        }
-
-
+        float xOrigin = relOrigin.x;
+        float yOrigin = relOrigin.y;
+        mPosition.x = ((float) (xOrigin + vecWidthDist * Math.cos(mAngle)) - (getWidth() / 2));
+        mPosition.y = ((float) (yOrigin + (vecHeightDist * Math.sin(mAngle))) - (getHeight() / 2));
 
         setX(mPosition.x);
         setY(mPosition.y);
 
-        float lowerX = mPosition.x - (getWidth() / 2);
-        float higherX = mPosition.x + (getWidth() / 2);
-        float lowerY = mPosition.y - (getHeight() / 2);
-        float higherY = mPosition.y + (getHeight() / 2);
+//        float lowerX = mPosition.x - (getWidth() / 2);
+//        float higherX = mPosition.x + (getWidth() / 2);
+//        float lowerY = mPosition.y - (getHeight() / 2);
+//        float higherY = mPosition.y + (getHeight() / 2);
 
     }
 
@@ -366,6 +339,16 @@ public class CBubble extends FrameLayout {
         else {
             mText.setText(text);
             mText.setVisibility(View.VISIBLE);
+
+            //If bubble contains equation, change font size, ensure monospace font, and align to the right
+            if(text.matches(".*\n+.*")) {
+                mText.setTypeface(Typeface.MONOSPACE);
+                mText.setGravity(Gravity.RIGHT);
+                mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 80);
+            }
+            else {
+                mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 128);
+            }
         }
 
         invalidate();

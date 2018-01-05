@@ -1,0 +1,203 @@
+{
+  "animatorMap": {
+    "COMMENT": "Animation Graph for the Counting Games",
+
+    "counting": {
+
+      "type": "ANIMATOR",
+      "title": "Counting Games",
+      "COMMENT": "This is where you describe your tutor",
+      "version": "1.0.0",
+      "rootnode": "INTRO_STATE",
+
+      "nodeMap": {
+
+        "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        "INTRO_STATE": {
+          "type": "NODE",
+          "COMMENT": "Intro Clip - we only ever visit this node once",
+          "maptype":"moduleMap",
+          "mapname": "PLAYINTRO",
+          "preenter": ["SET_VERSION", "SET_DATASOURCE"],
+          "preexit": [],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "UPDATE_STIMULUS"
+            }
+          ]
+        },
+
+        "UPDATE_STIMULUS": {
+          "type": "NODE",
+          "COMMENT": "We may say or show the stimulus at this point",
+          "maptype":"moduleMap",
+          "mapname": "UPDATESTIMULUS",
+          "preenter": ["NEXT_DATASET"],
+          "preexit": [],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "USER_INPUT"
+            }
+          ]
+        },
+
+
+        "USER_INPUT": {
+          "COMMENT":"Wait for the user to touch",
+          "type": "node",
+          "maptype":"moduleMap",
+          "mapname": "USERINPUT",
+          "preenter": [],
+          "preexit": [],
+          "edges":
+                  [
+                    {"constraint": "FTR_EOD", "edge": "NEXT_SCENE"},
+                    {"constraint": "", "edge":"UPDATE_STIMULUS"}
+
+                  ]
+        },
+
+        "PROBLEMCORRECT": {
+          "COMMENT": "When user inputs a correct answer...",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "PLAYCOMPLETE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+          ]
+        },
+
+        "NEXT_SCENE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene",
+          "maptype": "actionMap",
+          "mapname": "NEXTSCENE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+
+          ]
+        }
+
+      },
+
+      "moduleMap": {
+
+        "COMMENT": "@@@@@  CModules  @@@@@",
+
+        "PLAYINTRO": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCounting", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""},
+
+            {"name": "Introduction Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""}
+
+            ]
+        },
+
+        "UPDATESTIMULUS": {
+          "type": "MODULE",
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCounting", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
+
+            {"name": "POINTING TEST", "type": "QUEUEDCOMMAND", "id": "SCounting", "method": "pointAtSomething", "parms": "", "features":""},
+            {"name": "Update Stimulus", "type": "AUDIO", "command": "PLAY", "soundsource": "How many things are there.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""}
+          ]
+        },
+
+        "NEXTPROBLEM": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCounting", "method": "logState", "parms": "type#node,value#NEXT_PROBLEM:String", "features":""},
+
+            {"type": "COMMAND", "id": "SCounting", "method": "next", "features": ""}
+          ]
+        },
+
+        "PLAYCOMPLETE": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCounting", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE:String", "features":""},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3", "soundpackage":"default", "volume": 1.0, "mode":"event", "features": ""},
+
+            {"type": "COMMAND", "cmd": "WAIT"}
+          ]
+        },
+
+        "PLAYWRONG": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCounting", "method": "logState", "parms": "type#node,value#PLAYWRONG:String", "features":""},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3",       "soundpackage":"default", "volume": 1.0, "mode":"event", "features": "ASM_DIGIT_OR_OVERHEAD_WRONG"}
+          ]
+        },
+
+        "EMPTYMODULE": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCounting", "method": "logState", "parms": "type#node,value#EMPTYMODULE:String", "features":""}
+          ]
+        },
+
+        "USERINPUT": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCounting", "method": "logState", "parms": "type#node,value#WAIT_FOR_INPUT:String", "features":""},
+
+            {"type": "COMMAND", "id": "SCounting", "method": "setVolatileBehavior", "parms": "TRIANGLE_TOUCH_EVENT:String|NEXTNODE:String", "features": ""},
+
+            {"type": "COMMAND", "cmd": "WAIT"}
+          ]
+        }
+
+      },
+
+      "actionMap": {
+
+        "COMMENT": "@@@@@  CActions @@@@@ ",
+
+        "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "SCounting", "method": "setDataSource", "parms": "LOCAL_FILE:String","features":"!DATA_COUNTING"},
+
+        "ADD_DOT": {"type": "COMMAND", "id": "SCounting", "method": "addDots", "parms": "", "features": ""},
+        "ADD_TRIANGLE": {"type": "COMMAND", "id": "SCounting", "method": "addTriangle", "parms": "", "features": ""},
+
+        "NEXT_DATASET": {"type": "COMMAND", "id": "SCounting", "method": "next", "features": ""},
+        "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"},
+
+        "NEXTSCENE": {"type":"COMMAND", "cmd": "NEXTSCENE"}
+
+      },
+
+      "constraintMap": {
+
+        "COMMENT": "@@@@@  CConstraints @@@@@ ",
+
+        "FTR_EOD": {
+          "type": "CONDITION",
+          "test": "FTR_EOD"
+        }
+
+      }
+    }
+  }
+}
