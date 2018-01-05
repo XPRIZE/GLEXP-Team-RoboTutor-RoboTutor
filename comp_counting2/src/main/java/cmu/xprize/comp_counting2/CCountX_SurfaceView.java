@@ -177,7 +177,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
             }
 
             if(!tappable && COUNTX_CONST.USE_JAIL_BARS) {
-                drawJailBars(canvas);
+                drawDiagonalBars(canvas);
             }
 
             drawBorderRectangles(canvas);
@@ -230,6 +230,34 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         for (float x = left; x <= right; x += barSpacing) {
             canvas.drawLine(x, up, x, down, jailBars);
         }
+    }
+
+    /**
+     * a display mechanism sends diagonal bars over the tapping area
+     *
+     * @param canvas
+     */
+    private void drawDiagonalBars(Canvas canvas) {
+
+        int margin = COUNTX_CONST.BOX_MARGIN;
+        float left = margin;
+        float right = canvas.getWidth() - margin;
+        float up = margin;
+        float down = canvas.getHeight() - margin;
+
+        float barSpacing = 50;
+
+        Paint jailBars = new Paint();
+        jailBars.setStyle(Paint.Style.STROKE);
+        jailBars.setStrokeWidth(COUNTX_CONST.BOX_BOUNDARY_STROKE_WIDTH);
+        jailBars.setARGB(128, 128, 128, 128);
+
+        // just pretend we're drawing inside a really big box, then later draw over those lines
+        for (float y = up; y <= down * 3; y += barSpacing) {
+            float x = y;
+            canvas.drawLine(left, y, x, up, jailBars);
+        }
+
     }
 
     /**
