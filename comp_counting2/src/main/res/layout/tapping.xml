@@ -13,15 +13,29 @@
         android:layout_height="match_parent" />
 
     <TextView
-        android:id="@+id/counterText"
-        android:layout_width="200sp"
-        android:layout_height="200sp"
+        android:id="@+id/stimulusText"
+        android:layout_width="100sp"
+        android:layout_height="100sp"
         android:text=""
-        android:textSize="100sp"
-        android:textColor="@android:color/white"
+        android:textSize="60sp"
+        android:textColor="@android:color/holo_blue_dark"
+        android:gravity="center"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:background="@android:color/holo_purple"
+        android:layout_centerInParent="true"
+        android:background="@drawable/stimulus_back"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/counterText"
+        android:layout_width="100sp"
+        android:layout_height="100sp"
+        android:text=""
+        android:textSize="60sp"
+        android:textColor="@android:color/holo_purple"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:background="@drawable/counter_back"
         android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

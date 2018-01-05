@@ -43,6 +43,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     private RelativeLayout Scontent;
     private CCountX_SurfaceView surfaceView;
     private TextView counterText;
+    private TextView stimulusText;
 
     // DataSource Variables
     protected int _dataIndex = 0;
@@ -105,7 +106,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         surfaceView = (CCountX_SurfaceView) findViewById(R.id.imageSurface);
         surfaceView.setComponent(this);
         counterText = (TextView) findViewById(R.id.counterText);
-
+        stimulusText = (TextView) findViewById(R.id.stimulusText);
 
         bManager = LocalBroadcastManager.getInstance(getContext());
 
@@ -120,6 +121,9 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
                 _dataIndex++;
                 numDotsCounted = 0;
+
+                // reset target text
+                stimulusText.setText("");
             }
         } catch (Exception e) {
             CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, false);
@@ -201,6 +205,30 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
 
         bManager.sendBroadcast(msg);
+    }
+
+    /**
+     * Update stimulus and point to it
+     */
+    public void updateAndIndicateStimulus() {
+        Log.d(TCONST.COUNTING_DEBUG_LOG, "indicating stimulus");
+
+        // update target text
+        String stimulus = String.valueOf(countTarget);
+        stimulusText.setText(stimulus);
+
+        // point to it using RoboFinger
+
+        int[] screenCoord = new int[2];
+        stimulusText.getLocationOnScreen(screenCoord);
+
+        PointF targetPoint = new PointF(screenCoord[0] + stimulusText.getWidth()/2,
+                screenCoord[1] + stimulusText.getHeight()/2);
+        Intent msg = new Intent(TCONST.POINTAT);
+        msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
+
+        bManager.sendBroadcast(msg);
+
     }
 
     /**
