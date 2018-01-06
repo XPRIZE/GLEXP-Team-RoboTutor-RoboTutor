@@ -338,14 +338,12 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
             case "mc":
             case "multiplechoice":
             case "multiple-choice":
-
                 _mechanics = new CBp_Mechanic_MC(mContext, this, problem_type);
                 break;
 
             case "rise":
             case "rising":
-
-                _mechanics = new CBp_Mechanic_RISE(mContext, this);
+                _mechanics = new CBp_Mechanic_RISE(mContext, this, problem_type);
                 break;
         }
 
@@ -770,7 +768,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         bringChildToFront(Scontent);
 
         if(banner_color != null) {
-             dispatchEvent(new CEvent(TCONST.SET_BANNER_COLOR, TCONST.VALUE , banner_color));
+//             dispatchEvent(new CEvent(TCONST.SET_BANNER_COLOR, TCONST.VALUE , banner_color));
 
         }
     }

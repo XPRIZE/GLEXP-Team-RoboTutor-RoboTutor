@@ -1015,6 +1015,58 @@
       "next": "bpop.ltr.mix:rnd_show_mc",
       "harder": "bpop.ltr.mix:rnd_show_rise",
       "easier": "bpop.ltr.lc:show_rise"
+    },
+    "bpop.phon.3ltr_startswith_say_show_mc": {
+      "cell_column": 7,
+      "cell_row": 1,
+      "easier": "bpop.ltr.mix:rnd_say_show_mc",
+      "harder": "bpop.ltr.mix:rnd_say_show_mc",
+      "next": "bpop.ltr.mix:rnd_say_show_mc",
+      "same": "bpop.phon.3ltr_startswith_say_show_mc",
+      "skill": "number",
+      "tutor_data": "[file]bpop.phon.3ltr_startswith_say_show_mc.json",
+      "tutor_desc": "bpop.phon",
+      "tutor_id": "bpop.phon.3ltr_startswith_say_show_mc",
+      "type": "TRANSITION"
+    },
+    "bpop.phon.3ltr_endslike_say_show_mc": {
+      "cell_column": 7,
+      "cell_row": 2,
+      "easier": "bpop.ltr.mix:rnd_say_show_mc",
+      "harder": "bpop.ltr.mix:rnd_say_show_mc",
+      "next": "bpop.ltr.mix:rnd_say_show_mc",
+      "same": "bpop.phon.3ltr_endslike_say_show_mc",
+      "skill": "number",
+      "tutor_data": "[file]bpop.phon.3ltr_endslike_say_show_mc.json",
+      "tutor_desc": "bpop.phon",
+      "tutor_id": "bpop.phon.3ltr_endslike_say_show_mc",
+      "type": "TRANSITION"
+    },
+    "bpop.phon.10ltr_startswith_say_show_mc": {
+      "cell_column": 7,
+      "cell_row": 3,
+      "easier": "bpop.ltr.mix:rnd_say_show_mc",
+      "harder": "bpop.ltr.mix:rnd_say_show_mc",
+      "next": "bpop.ltr.mix:rnd_say_show_mc",
+      "same": "bpop.phon.10ltr_startswith_say_show_mc",
+      "skill": "number",
+      "tutor_data": "[file]bpop.phon.10ltr_startswith_say_show_mc.json",
+      "tutor_desc": "bpop.phon",
+      "tutor_id": "bpop.phon.10ltr_startswith_say_show_mc",
+      "type": "TRANSITION"
+    },
+    "bpop.phon.10ltr_endslike_say_show_mc": {
+      "cell_column": 7,
+      "cell_row": 4,
+      "easier": "bpop.ltr.mix:rnd_say_show_mc",
+      "harder": "bpop.ltr.mix:rnd_say_show_mc",
+      "next": "bpop.ltr.mix:rnd_say_show_mc",
+      "same": "bpop.phon.10ltr_endslike_say_show_mc",
+      "skill": "number",
+      "tutor_data": "[file]bpop.phon.10ltr_endslike_say_show_mc.json",
+      "tutor_desc": "bpop.phon",
+      "tutor_id": "bpop.phon.10ltr_endslike_say_show_mc",
+      "type": "TRANSITION"
     }
   },
   "storyTransitions": {

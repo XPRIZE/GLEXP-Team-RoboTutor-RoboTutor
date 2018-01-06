@@ -785,28 +785,35 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         resetState();
 
         String correctVal = data.stimulus;
-        String comp_pos = data.comp_pos;
-        String comp_len = data.comp_len;
+        String comp_start_end = data.comp_start_end;
+        String comp_with_like = data.comp_with_like;
+        String phonemic_matching = "";
 
         // Ensure letters are lowercase for mp3 matching
         //
         correctVal = correctVal.toLowerCase();
-        if(comp_pos != null && comp_len != null) {
-            if(comp_pos == "Starts") {
-                comp_pos = "kuanza";
+
+        if(comp_start_end != null && comp_with_like != null) {
+            switch(comp_start_end) {
+                case "Starts" : switch(comp_with_like) {
+                    case "With" :
+                        phonemic_matching = "Neno gani huanza na";
+                        break;
+                    case "Like" :
+                        phonemic_matching = "Neno gani linaanza kama";
+                        break;
+                }
+                case "Ends" : switch(comp_with_like) {
+                    case "With" :
+                        phonemic_matching = "Neno gani kuishia na";
+                        break;
+                    case "Like" :
+                        phonemic_matching = "Neno gani linaisha kama";
+                        break;
+                }
             }
-            else {
-                comp_pos = "mwishoni";
-            }
-            if(comp_len== "With") {
-                comp_len = "na";
-            }
-            else {
-                comp_len = "kama";
-            }
-            publishValue(BP_CONST.QUEST_VAR, comp_pos);
-            publishValue(BP_CONST.QUEST_VAR_TWO, comp_len);
-            publishValue(BP_CONST.QUEST_VAR_THREE, correctVal);
+            publishValue(BP_CONST.QUEST_VAR, phonemic_matching);
+            publishValue(BP_CONST.QUEST_VAR_TWO, correctVal);
         }
 
         else if(correctVal.contains("\n")) {

@@ -172,25 +172,28 @@
           "reuse":true,
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBubblePop", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
-            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "STIMULUS_SHOWN:String|NEXTNODE:String" ,"features":"FTR_SHOW"},
-            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_STIMULUS:String"                  ,"features":"FTR_SHOW"},
 
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_PHONEMICS"},
+
+            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "STIMULUS_SHOWN:String|NEXTNODE:String" , "features":"FTR_SHOW"},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_STIMULUS:String"                  ,  "features":"FTR_SHOW"},
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"event", "features": "FTR_SAY&FTR_WORDS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_PHONEMICS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueTwo}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_PHONEMICS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueThree}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_PHONEMICS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_NUMBERS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": "FTR_SAY&FTR_NUMBERS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"letters", "volume": 1.0, "mode":"event", "features": "FTR_SAY&FTR_LETTERS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"shapes", "volume": 1.0, "mode":"event", "features": "FTR_SAY&FTR_SHAPES"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_EXPRESSIONS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueTwo}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_EXPRESSIONS"},
-            {"type": "COMMAND", "cmd": "WAIT", "features":"FTR_SHOW"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueThree}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_EXPRESSIONS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueTwo}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_PHONEMICS"},
+
+
+            {"type": "COMMAND", "cmd": "WAIT", "features":"FTR_SHOW"},
 
             // If we are showing it we have to wait for the animation to complete before continuing
 
             {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_BUBBLES:String"              ,"features":""}
+
           ]
         },
 
@@ -305,9 +308,8 @@
             {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "SHOW_STIMULUS_MASK:String" ,"features":""},
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_WORDS&!BPOP_MATH_EXPR"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_PHONEMICS&!BPOP_MATH_EXPR"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_PHONEMICS&!BPOP_MATH_EXPR"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueTwo}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_PHONEMICS&!BPOP_MATH_EXPR"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueThree}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_PHONEMICS&!BPOP_MATH_EXPR"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_NUMBERS&!BPOP_MATH_EXPR&!BPOP_MATH_EXPR"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_EXPRESSIONS&!BPOP_MATH_EXPR"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueTwo}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_EXPRESSIONS&!BPOP_MATH_EXPR"},
