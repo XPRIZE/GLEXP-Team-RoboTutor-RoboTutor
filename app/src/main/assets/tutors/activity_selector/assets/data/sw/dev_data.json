@@ -101,7 +101,7 @@
       ]
     }
   ],
-  "rootSkillWrite": "bpop.ltr.lc:say_mc",
+  "rootSkillWrite": "story.hear::letters_alphabet_song",
   "rootSkillStories": "story.hear::1_1",
   "rootSkillMath": "story.hear::numbers_counting_song",
   "rootSkillShapes": "bpop.shp:say_mc",
@@ -418,19 +418,6 @@
       "harder": "bpop.ltr.mix:show_mc",
       "easier": "write.ltr.lc.dic:level2"
     },
-    "bpop.ltr.uc:say_mc": {
-      "type": "TRANSITION",
-      "skill": "letters",
-      "tutor_id": "bpop.ltr.uc:say_mc",
-      "tutor_desc": "bpop.ltr.uc",
-      "tutor_data": "[file]bpop.ltr.uc_say_mc.json",
-      "cell_row": "1",
-      "cell_column": "2",
-      "same": "bpop.ltr.uc:say_mc",
-      "next": "write.ltr.uc:level1",
-      "harder": "write.ltr.uc:level2",
-      "easier": "bpop.ltr.uc:say_show_mc"
-    },
     "bpop.ltr.lc:rnd_say_mc": {
       "type": "TRANSITION",
       "skill": "letters",
@@ -572,7 +559,7 @@
       "same": "bpop.ltr.uc:rnd_say_mc",
       "next": "write.ltr.uc:level2",
       "harder": "bpop.ltr.uc:rnd_say_rise",
-      "easier": "bpop.ltr.uc:say_show_mc"
+      "easier": "story.hear::letters_alphabet_song"
     },
     "bpop.ltr.mix:rnd_say_show_rise": {
       "type": "TRANSITION",
@@ -795,6 +782,19 @@
       "harder": "bpop.ltr.lc:show_mc",
       "easier": "bpop.ltr.uc:rnd_say_mc"
     },
+    "story.hear::letters_alphabet_song": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "story.hear::letters_alphabet_song",
+      "tutor_desc": "story.hear",
+      "tutor_data": "[encfolder]letters_alphabet_song",
+      "cell_row": "1",
+      "cell_column": "1",
+      "same": "story.hear::letters_alphabet_song",
+      "next": "bpop.ltr.uc:say_show_mc",
+      "harder": "bpop.ltr.uc:rnd_say_mc",
+      "easier": "write.ltr.uc.dic:level1"
+    },
     "bpop.ltr.uc:say_show_mc": {
       "type": "TRANSITION",
       "skill": "letters",
@@ -802,11 +802,11 @@
       "tutor_desc": "bpop.ltr.uc",
       "tutor_data": "[file]bpop.ltr.uc_say_show_mc.json",
       "cell_row": "1",
-      "cell_column": "1",
+      "cell_column": "2",
       "same": "bpop.ltr.uc:say_show_mc",
-      "next": "bpop.ltr.uc:say_mc",
-      "harder": "bpop.ltr.uc:rnd_say_mc",
-      "easier": "write.ltr.uc.dic:level1"
+      "next": "write.ltr.uc:level1",
+      "harder": "write.ltr.uc:level2",
+      "easier": "story.hear::letters_alphabet_song"
     },
     "write.wrd:7chr": {
       "type": "TRANSITION",
@@ -949,7 +949,7 @@
       "same": "write.ltr.uc:level2",
       "next": "bpop.ltr.uc:rnd_show_mc",
       "harder": "bpop.ltr.uc:rnd_show_rise",
-      "easier": "bpop.ltr.uc:say_mc"
+      "easier": "bpop.ltr.uc:say_show_mc"
     },
     "write.ltr.uc:level1": {
       "type": "TRANSITION",
@@ -962,7 +962,7 @@
       "same": "write.ltr.uc:level1",
       "next": "bpop.ltr.uc:show_mc",
       "harder": "bpop.ltr.uc:rnd_show_mc",
-      "easier": "bpop.ltr.uc:say_mc"
+      "easier": "bpop.ltr.uc:say_show_mc"
     },
     "bpop.ltr.lc:rnd_say_show_rise": {
       "type": "TRANSITION",
