@@ -1,5 +1,7 @@
 package cmu.xprize.robotutor.tutorengine.util;
 
+import cmu.xprize.comp_session.AS_CONST;
+
 /**
  * RoboTutor
  *
@@ -77,6 +79,38 @@ public class PerformanceData {
         this.selfAssessment = selfAssessment;
     }
 
+    /**
+     * translates from button name
+     * @param buttonName
+     */
+    public void setSelfAssessment(String buttonName) {
+        switch(buttonName) {
+
+            case AS_CONST.SELECT_REPEAT:
+                selfAssessment = StudentSelfAssessment.PLAY_AGAIN;
+                break;
+
+            case AS_CONST.SELECT_CONTINUE:
+                selfAssessment = StudentSelfAssessment.JUST_RIGHT;
+                break;
+
+            case AS_CONST.SELECT_MAKE_EASIER:
+                selfAssessment = StudentSelfAssessment.TOO_HARD;
+                break;
+
+            case AS_CONST.SELECT_MAKE_HARDER:
+                selfAssessment = StudentSelfAssessment.TOO_EASY;
+                break;
+
+            case AS_CONST.SELECT_AUTO_DIFFICULTY:
+                selfAssessment = StudentSelfAssessment.LET_ROBOTUTOR_DECIDE;
+                break;
+
+            default:
+                selfAssessment = null;
+        }
+    }
+
     public String getActivitySection() {
         return activitySection;
     }
@@ -91,5 +125,19 @@ public class PerformanceData {
 
     public void setActivityType(String activityType) {
         this.activityType = activityType;
+    }
+
+    @Override
+    public String toString() {
+        return "PerformanceData{" +
+                "numberCorrect=" + numberCorrect +
+                ", numberWrong=" + numberWrong +
+                ", numberAttempts=" + numberAttempts +
+                ", totalNumberQuestions=" + totalNumberQuestions +
+                ", timesPassedPreviously=" + timesPassedPreviously +
+                ", selfAssessment=" + selfAssessment +
+                ", activitySection='" + activitySection + '\'' +
+                ", activityType='" + activityType + '\'' +
+                '}';
     }
 }

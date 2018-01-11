@@ -27,6 +27,9 @@ import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.comp_session.CActivitySelector;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
+import cmu.xprize.robotutor.tutorengine.util.PerformanceData;
+import cmu.xprize.robotutor.tutorengine.util.PerformancePromotionRules;
+import cmu.xprize.robotutor.tutorengine.util.PromotionRules;
 import cmu.xprize.util.CAt_Data;
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
@@ -644,87 +647,95 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         }
 
-        boolean usePerformance = false;
-        if(TCONST.CONSIDER_STUDENT_PERFORMANCE) {
-            // returns true if performance-measuring is implemented for the current activity
-            usePerformance = assessStudentPerformance();
+        // 1. pick the next tutor
+        PromotionRules rules = new PerformancePromotionRules();
+        PerformanceData performance = new PerformanceData();
+        performance.setSelfAssessment(buttonid.toUpperCase());
+        performance.setActivityType(activeTutor);
+
+        // need to get the previous tutor and all that jazz...
+
+        String childScope = null;
+        if(activeTutor.startsWith("bpop")) {
+            childScope = "bubble_pop";
+
+        } else if (activeTutor.startsWith("akira")) {
+            childScope = "akira";
+
+        } else if (activeTutor.startsWith("math")) {
+            childScope = "add_subtract";
+
+        } else if (activeTutor.startsWith("write")) {
+            childScope = "word_copy";
+
+        } else if (activeTutor.startsWith("story")) {
+            childScope = "story_reading";
+
+        } else if (activeTutor.startsWith("countingx")) {
+            childScope = "countingx";
+
         }
 
-        switch (buttonid.toUpperCase()) {
+        // get tutor data from last tutor the user played
+        TScope lastScope = TScope.root().getChildScope(childScope);
+        CTutor lastTutor;
+        if(lastScope != null) {
+            lastTutor = lastScope.tutor();
+            performance.setNumberCorrect(lastTutor.getScore());
+            performance.setNumberWrong(lastTutor.getIncorrect());
+            performance.setNumberAttempts(lastTutor.getAttempts());
+            performance.setTotalNumberQuestions(lastTutor.getTotalQuestions());
+        }
 
-            case AS_CONST.SELECT_CONTINUE:
-                if(!usePerformance) {
-                    if(TCONST.OVERRIDE_SELF_ASSESSMENT) {
-                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-                    } else {
-                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-                    }
-                }
+        PromotionRules.SelectedActivity selectedActivity = rules.selectActivityByPerformance(performance);
+        Log.d(TAG, "PerformancePromotionRules result: " + selectedActivity);
 
-                mTutor.post(TCONST.ENDTUTOR);
-                RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+        CAt_Data transitionData = transitionMap.get(activeTutor);
+        switch(selectedActivity) {
+            case NEXT:
+                nextTutor = transitionData.next;
                 break;
 
-            case AS_CONST.SELECT_MAKE_HARDER:
-                if(!usePerformance) {
-                    if(TCONST.OVERRIDE_SELF_ASSESSMENT) {
-                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-                    } else {
-                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).harder;
-                    }
-                }
-
-                mTutor.post(TCONST.ENDTUTOR);
-                RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+            case SAME:
+                nextTutor = transitionData.same;
                 break;
 
-            case AS_CONST.SELECT_MAKE_EASIER:
-                if(!usePerformance) {
-                    if(TCONST.OVERRIDE_SELF_ASSESSMENT) {
-                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-                    } else {
-                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).easier;
-                    }
-                }
-
-                mTutor.post(TCONST.ENDTUTOR);
-                RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+            case OLD_EASIER:
+                nextTutor = transitionData.easier;
                 break;
 
-            case AS_CONST.SELECT_EXIT:
-                if(!usePerformance) {
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id;
-                }
-
-                mTutor.post(TCONST.FINISH);
-                RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+            case OLD_HARDER:
+                nextTutor = transitionData.harder;
                 break;
 
-            // If user selects "Let robotutor decide" then use student model to decide how to adjust the
-            // difficulty level.  We also flip mode to tutor_select to skip the tutor select phase and
-            // let the model do the tutor selection.
-            // At the moment default to continue to "next" link
-            //
-            case AS_CONST.SELECT_AUTO_DIFFICULTY:
-                if(!usePerformance) {
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-                }
-
-                // just reselect the current skill and continue with next tutor
-                // no skill selection phase
-                buttonid = activeSkill;
-                RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+            case PREVIOUS:
+                // XXX AFTER_NEXT nextTutor = transitionData.previous;
+                nextTutor = transitionData.easier;
                 break;
 
-            case AS_CONST.SELECT_REPEAT:
-                // do this regardless of performance
-                nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id; // if the select "repeat", then it will be the same tutor
-                // just reselect the current skill and continue with next tutor
-                // no skill selection phase
-                buttonid = activeSkill;
-                RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+            case DOUBLE_NEXT:
+                // XXX AFTER_NEXT nextTutor = transitionData.double_next;
+                nextTutor = transitionData.harder;
                 break;
         }
+
+        // 2. finish RoboTutor or the ActivitySelector, if necessary
+        if(buttonid.toUpperCase().equals(AS_CONST.SELECT_EXIT)) {
+            // if EXIT, we finish the app
+            mTutor.post(TCONST.FINISH);
+
+        } else if (buttonid.toUpperCase().equals(AS_CONST.SELECT_REPEAT) ||
+                buttonid.toUpperCase().equals(AS_CONST.SELECT_AUTO_DIFFICULTY)){
+
+            buttonid = activeSkill;
+
+        } else {
+            // unless they tap "REPEAT", go back to the main menu
+            mTutor.post(TCONST.ENDTUTOR);
+        }
+
+        // 3. Set SELECTOR_MODE
+        RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
 
         // Update the active skill
         //
@@ -855,77 +866,6 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         RoboTutor.logManager.postEvent_I(TAG, "Getting SharedPreferences: " + prefsName);
         return RoboTutor.ACTIVITY.getSharedPreferences(prefsName, Context.MODE_PRIVATE);
-    }
-
-    /**
-     * Checks if the last finished activity can be graded based on performance.
-     * If so, updates the "nextTutor" based on student performance and returns true.
-     * Otherwise, returns false.
-     *
-     * @return
-     */
-    private boolean assessStudentPerformance() {
-
-        boolean usePerformance = false; // usePerformance will only be true if performance metrics (correct, incorrect)
-        // are tracked for that activity
-
-        String childScope = null;
-        if(activeTutor.startsWith("bpop")) {
-            childScope = "bubble_pop";
-            usePerformance = true;
-        } else if (activeTutor.startsWith("akira")) {
-            childScope = "akira";
-            usePerformance = true;
-        } else if (activeTutor.startsWith("math")) {
-            childScope = "math";
-            usePerformance = true;
-        }
-
-        if(usePerformance) {
-            TScope lastScope = TScope.root().getChildScope(childScope);
-            CTutor lastTutor;
-            if(lastScope != null) {
-                lastTutor = lastScope.tutor();
-
-                int correct = lastTutor.getScore();
-                int attempts = lastTutor.getAttempts();
-                double percent = 0;
-                if (attempts > 0) {// don't divide by zero
-                    percent = correct / (double) attempts;
-                }
-                Log.i(PERFORMANCE_TAG, "performance = " + correct + " / " + attempts);
-
-                Log.i(PERFORMANCE_TAG, "activeTutor: " + activeTutor);
-                Log.i(PERFORMANCE_TAG, "nextTutor: " + nextTutor);
-
-
-                if (percent >= TCONST.HIGH_PERFORMANCE_THRESHOLD) {
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).harder;
-                } else if (percent >= TCONST.MID_PERFORMANCE_THRESHOLD) {
-                    // if user just quits...
-                    // note that as long as the student does "MIN_ATTEMPTS_TO_GRADE",
-                    // their percentage will be graded the same as if they had completed the entire activity
-                    // REVIEW what is the proper number?
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-                } else {
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).easier;
-                }
-
-                // if player doesn't acheive a minimum number of attempts, don't use performance data
-                int attemptsExpected = TCONST.MIN_ATTEMPTS_TO_GRADE;
-                if (attempts < attemptsExpected) {
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-                    usePerformance = false;
-                }
-
-            } else {
-                usePerformance = false; // in case of unexpected error
-            }
-
-        } else {
-            nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-        }
-        return usePerformance;
     }
 
 

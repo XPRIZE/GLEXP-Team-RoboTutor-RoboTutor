@@ -219,6 +219,12 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 // Load the datasource in the component module - i.e. the superclass
                 loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 
+                //
+                // set the total number of questions
+                if(question_count == 0) {
+                    mTutor.setTotalQuestions(gen_stimulusSet.length);
+                }
+
                 // preprocess the datasource e.g. populate instance arrays with general types
                 //
                 preProcessDataSource();
@@ -1065,5 +1071,8 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         // Log.d(TAG, "Loader iteration");
         super.loadJSON(jsonObj, (IScope2) scope);
+
+        // set the total number of questions
+        mTutor.setTotalQuestions(question_count);
     }
 }

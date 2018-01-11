@@ -743,7 +743,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
             // For XPrize we limit this to 10 elements from an umlimited random data set
             // used to be : dataSet.size()
-            for (int i1 = 0; i1 < 10 ; i1++) {
+            for (int i1 = 0; i1 < TCONST.WRITING_DATA_LIMIT ; i1++) {
                 int randIndex = (int) (Math.random() * dataSet.size());
 
                 _data.add(dataSet.get(randIndex));

@@ -1068,6 +1068,12 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         // Log.d(TAG, "Loader iteration");
         super.loadJSON(jsonObj, (IScope2) scope);
 
+        // set number of questions
+        // asm activities w/ demo call this method twice, so must check it's not demo
+        if(dataSource.length > 0 && !dataSource[0].level.equals("demo")) {
+            mTutor.setTotalQuestions(dataSource.length);
+        }
+
         // Apply any features defined directly in the datasource itself - e.g. demo related features
         //
         if(!bootFeatures.equals(EMPTY)) {

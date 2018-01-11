@@ -176,6 +176,9 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
             //
             if (dataCount > TCONST.MAX_AKDATA) {
 
+                // set how many total questions we have
+                mTutor.setTotalQuestions(TCONST.MAX_AKDATA);
+
                 for (int i1 = 0; i1 < TCONST.MAX_AKDATA; i1++) {
 
                     int randomKey = (int) (Math.random() * setSize);
@@ -188,6 +191,9 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
                     setSize--;
                 }
+            } else {
+                // set how many total questions we have
+                mTutor.setTotalQuestions(dataCount);
             }
         }
         catch (Exception e) {

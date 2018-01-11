@@ -763,6 +763,9 @@ public class TCONST {
     public static final String PROMPT_3V = "PROMPT_3V";
 
 
+    // Writing behavior...
+    public static final int WRITING_DATA_LIMIT = 10;
+
     // Counting
     public static final String COUNTING_DEBUG_LOG = "COUNTING_DEBUG_LOG";
 

@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import cmu.xprize.robotutor.RoboTutor;
+
 /**
  * RoboTutor
  * <p>
@@ -14,6 +16,8 @@ import java.util.List;
  */
 
 public class PerformancePromotionRules extends PromotionRules {
+
+    private String TAG = "PerformancePromotionRules";
 
     List<String> nonAssessableActivities = Arrays.asList("story.read", "story.echo", "story.hear", "countingx", "write");
 
@@ -35,6 +39,7 @@ public class PerformancePromotionRules extends PromotionRules {
 
     @Override
     public SelectedActivity selectActivityByPerformance(PerformanceData performance) {
+        RoboTutor.logManager.postEvent_D(TAG, performance.toString());
 
         // if they want to play again, repeat no matter what
         if (performance.getSelfAssessment() == PerformanceData.StudentSelfAssessment.PLAY_AGAIN) {
