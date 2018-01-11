@@ -22,13 +22,16 @@ import static org.junit.Assert.assertEquals;
 
 public class PerformanceBasedPromotionRulesTest {
 
-
+    // the student performance
     private PerformanceData performance;
 
+    // our rule-engine of choice
     private PromotionRules rules;
 
-    private SelectedActivity selectedActivity;
+    // which activity are we expecting next?
     private SelectedActivity expectedSelection;
+    // which activity did our rule-engine actually select?
+    private SelectedActivity selectedActivity;
 
 
     @Before

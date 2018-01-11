@@ -21,32 +21,35 @@ import static org.junit.Assert.assertEquals;
 
 public class SelfAssessmentPromotionRulesTest {
 
+    // the student performance
+    private PerformanceData performance;
 
-    private PerformanceData studentPerformance;
+    // our rule-engine of choice
+    private PromotionRules rules;
 
-    private PromotionRules selfAssessRules;
-
-    private SelectedActivity next;
-    private SelectedActivity expectedNext;
+    // which activity are we expecting next?
+    private SelectedActivity expectedSelection;
+    // which activity did our rule-engine actually select?
+    private SelectedActivity selectedActivity;
 
 
     @Before
     public void setUp () {
 
-        selfAssessRules = new SelfAssessmentPromotionRules();
+        rules = new SelfAssessmentPromotionRules();
     }
 
     /**
-     * If null go to next activity
+     * If null go to selectedActivity activity
      */
     @Test
     public void selfAssessNull() {
-        studentPerformance = new PerformanceData();
+        performance = new PerformanceData();
 
-        next = selfAssessRules.selectActivityByPerformance(studentPerformance);
-        expectedNext = SelectedActivity.NEXT;
+        selectedActivity = rules.selectActivityByPerformance(performance);
+        expectedSelection = SelectedActivity.NEXT;
 
-        assertEquals(expectedNext, next);
+        assertEquals(expectedSelection, selectedActivity);
     }
 
     /**
@@ -55,28 +58,28 @@ public class SelfAssessmentPromotionRulesTest {
     @Test
     public void selfAssessRepeat() {
 
-        studentPerformance = new PerformanceData();
-        studentPerformance.setSelfAssessment(StudentSelfAssessment.PLAY_AGAIN);
+        performance = new PerformanceData();
+        performance.setSelfAssessment(StudentSelfAssessment.PLAY_AGAIN);
 
-        next = selfAssessRules.selectActivityByPerformance(studentPerformance);
-        expectedNext = SelectedActivity.SAME;
+        selectedActivity = rules.selectActivityByPerformance(performance);
+        expectedSelection = SelectedActivity.SAME;
 
-        assertEquals(expectedNext, next);
+        assertEquals(expectedSelection, selectedActivity);
     }
 
     /**
-     * If "Just right" go to next activity
+     * If "Just right" go to selectedActivity activity
      */
     @Test
     public void selfAssessJustRight() {
 
-        studentPerformance = new PerformanceData();
-        studentPerformance.setSelfAssessment(StudentSelfAssessment.JUST_RIGHT);
+        performance = new PerformanceData();
+        performance.setSelfAssessment(StudentSelfAssessment.JUST_RIGHT);
 
-        next = selfAssessRules.selectActivityByPerformance(studentPerformance);
-        expectedNext = SelectedActivity.NEXT;
+        selectedActivity = rules.selectActivityByPerformance(performance);
+        expectedSelection = SelectedActivity.NEXT;
 
-        assertEquals(expectedNext, next);
+        assertEquals(expectedSelection, selectedActivity);
     }
 
     /**
@@ -85,13 +88,13 @@ public class SelfAssessmentPromotionRulesTest {
     @Test
     public void selfAssessTooHard() {
 
-        studentPerformance = new PerformanceData();
-        studentPerformance.setSelfAssessment(StudentSelfAssessment.TOO_HARD);
+        performance = new PerformanceData();
+        performance.setSelfAssessment(StudentSelfAssessment.TOO_HARD);
 
-        next = selfAssessRules.selectActivityByPerformance(studentPerformance);
-        expectedNext = SelectedActivity.OLD_EASIER;
+        selectedActivity = rules.selectActivityByPerformance(performance);
+        expectedSelection = SelectedActivity.OLD_EASIER;
 
-        assertEquals(expectedNext, next);
+        assertEquals(expectedSelection, selectedActivity);
     }
 
     /**
@@ -100,13 +103,13 @@ public class SelfAssessmentPromotionRulesTest {
     @Test
     public void selfAssessTooEasy() {
 
-        studentPerformance = new PerformanceData();
-        studentPerformance.setSelfAssessment(StudentSelfAssessment.TOO_EASY);
+        performance = new PerformanceData();
+        performance.setSelfAssessment(StudentSelfAssessment.TOO_EASY);
 
-        next = selfAssessRules.selectActivityByPerformance(studentPerformance);
-        expectedNext = SelectedActivity.OLD_HARDER;
+        selectedActivity = rules.selectActivityByPerformance(performance);
+        expectedSelection = SelectedActivity.OLD_HARDER;
 
-        assertEquals(expectedNext, next);
+        assertEquals(expectedSelection, selectedActivity);
     }
 
 
