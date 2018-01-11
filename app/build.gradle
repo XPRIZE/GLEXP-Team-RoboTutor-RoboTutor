@@ -13,6 +13,10 @@ android {
         // default is signed by the Android default key
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     // Create a variable called keystorePropertiesFile, and initialize it to your
     // keystore.properties file, in the rootProject folder.
     def keystorePropertiesFile = rootProject.file("keystore.properties")

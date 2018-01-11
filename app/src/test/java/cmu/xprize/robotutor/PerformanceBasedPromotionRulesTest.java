@@ -84,6 +84,9 @@ public class PerformanceBasedPromotionRulesTest {
 
     /**
      * If student played a non-assessable activity, go to NEXT activity
+     *
+     * TODO problems:
+     * TODO  - once you reach one of these, there's no way to reach previous activities
      */
     @Test
     public void testNonAssessableActivity() {
@@ -115,6 +118,15 @@ public class PerformanceBasedPromotionRulesTest {
         assertEquals(expectedSelection, selectedActivity);
 
 
+        // test write
+        performance = new PerformanceData();
+        performance.setActivityType("write");
+
+        expectedSelection = SelectedActivity.NEXT;
+        selectedActivity = rules.selectActivityByPerformance(performance);
+        assertEquals(expectedSelection, selectedActivity);
+
+
         // test countingx
         performance = new PerformanceData();
         performance.setActivityType("countingx");
@@ -128,25 +140,142 @@ public class PerformanceBasedPromotionRulesTest {
 
     /**
      * If student does not complete enough problems to be assessed, go to NEXT activity
+     *
      */
     @Test
-    public void testNotEnoughProblems() {
+    public void testNotEnoughAttempts() {
 
-        // TODO continue
-        // NEXT after this....
+        // student does not try any questions. Go to next?
+        performance = new PerformanceData();
+        performance.setActivityType("bpop");
+        performance.setNumberCorrect(0);
+        performance.setNumberWrong(0);
+        performance.setNumberAttempts(0);
+        performance.setTotalNumberQuestions(10);
+
+        expectedSelection = SelectedActivity.NEXT;
+        selectedActivity = rules.selectActivityByPerformance(performance);
+        assertEquals(expectedSelection, selectedActivity);
+
+
+        // student tries one question and quits. Go to next?
+        performance = new PerformanceData();
+        performance.setActivityType("bpop");
+        performance.setNumberCorrect(0);
+        performance.setNumberWrong(1);
+        performance.setNumberAttempts(1);
+        performance.setTotalNumberQuestions(10);
+
+        expectedSelection = SelectedActivity.NEXT;
+        selectedActivity = rules.selectActivityByPerformance(performance);
+        assertEquals(expectedSelection, selectedActivity);
+
+
+        // student tries two questions and quits. Go to next?
+        performance = new PerformanceData();
+        performance.setActivityType("bpop");
+        performance.setNumberCorrect(0);
+        performance.setNumberWrong(2);
+        performance.setNumberAttempts(2);
+        performance.setTotalNumberQuestions(10);
+
+        expectedSelection = SelectedActivity.NEXT;
+        selectedActivity = rules.selectActivityByPerformance(performance);
+        assertEquals(expectedSelection, selectedActivity);
+
     }
 
     /**
-     * If student gets 0 out of 7 on a 7-question BubblePop problem, go to previous
+     * Weird edge case...  what if they have a low number of attempts, but there are also a low number of problems?
+     */
+    @Test
+    public void testLowAttemptsLowTotalQuestions() {
+        // what if student quits a problem with only three problems???
+        performance = new PerformanceData();
+        performance.setActivityType("bpop");
+        performance.setNumberCorrect(1);
+        performance.setNumberWrong(0);
+        performance.setNumberAttempts(1);
+        performance.setTotalNumberQuestions(3);
+
+        expectedSelection = SelectedActivity.NEXT;
+        selectedActivity = rules.selectActivityByPerformance(performance);
+        assertEquals(expectedSelection, selectedActivity);
+    }
+
+    /**
+     * If the problem has a low number of questions, go to NEXT activity
+     * TODO questions:
+     * TODO   - what is the threshold for number of total questions?
+     */
+    @Test
+    public void testLowQuestionTotal() {
+
+        // student gets 0/3 correct, go to previous
+        performance = new PerformanceData();
+        performance.setActivityType("bpop");
+        performance.setNumberCorrect(0);
+        performance.setNumberWrong(3);
+        performance.setNumberAttempts(3);
+        performance.setTotalNumberQuestions(3);
+
+        expectedSelection = SelectedActivity.PREVIOUS;
+        selectedActivity = rules.selectActivityByPerformance(performance);
+        assertEquals(expectedSelection, selectedActivity);
+
+
+        // student gets 1/3 correct, go to previous
+        performance = new PerformanceData();
+        performance.setActivityType("bpop");
+        performance.setNumberCorrect(1);
+        performance.setNumberWrong(2);
+        performance.setNumberAttempts(3);
+        performance.setTotalNumberQuestions(3);
+
+        expectedSelection = SelectedActivity.PREVIOUS;
+        selectedActivity = rules.selectActivityByPerformance(performance);
+        assertEquals(expectedSelection, selectedActivity);
+
+
+        // student gets 2/3 correct, stay here
+        performance = new PerformanceData();
+        performance.setActivityType("bpop");
+        performance.setNumberCorrect(2);
+        performance.setNumberWrong(1);
+        performance.setNumberAttempts(3);
+        performance.setTotalNumberQuestions(3);
+
+        expectedSelection = SelectedActivity.SAME;
+        selectedActivity = rules.selectActivityByPerformance(performance);
+        assertEquals(expectedSelection, selectedActivity);
+
+
+        // student gets 3/3 correct, go to next
+        performance = new PerformanceData();
+        performance.setActivityType("bpop");
+        performance.setNumberCorrect(3);
+        performance.setNumberWrong(0);
+        performance.setNumberAttempts(3);
+        performance.setTotalNumberQuestions(3);
+
+        expectedSelection = SelectedActivity.NEXT;
+        selectedActivity = rules.selectActivityByPerformance(performance);
+        assertEquals(expectedSelection, selectedActivity);
+
+
+    }
+
+    /**
+     * If student gets 0 out of 10 on a 10-question BubblePop problem, go to previous
      */
     @Test
     public void testLowPerformanceBubblePop() {
         performance = new PerformanceData();
         performance.setActivityType("bpop");
-        performance.setSelfAssessment(StudentSelfAssessment.JUST_RIGHT);
         performance.setNumberCorrect(0);
-        performance.setNumberWrong(7);
-        performance.setNumberAttempts(7);
+        performance.setNumberWrong(10);
+        performance.setNumberAttempts(10);
+        performance.setTotalNumberQuestions(10);
 
         expectedSelection = SelectedActivity.PREVIOUS;
 
@@ -162,10 +291,10 @@ public class PerformanceBasedPromotionRulesTest {
     public void testLowToMidPerformanceBubblePop() {
         performance = new PerformanceData();
         performance.setActivityType("bpop");
-        performance.setSelfAssessment(StudentSelfAssessment.JUST_RIGHT);
         performance.setNumberCorrect(5);
-        performance.setNumberWrong(10);
+        performance.setNumberWrong(5);
         performance.setNumberAttempts(10);
+        performance.setTotalNumberQuestions(10);
 
         expectedSelection = SelectedActivity.SAME;
 
@@ -180,10 +309,10 @@ public class PerformanceBasedPromotionRulesTest {
     public void testMidToHighPerformanceBubblePop() {
         performance = new PerformanceData();
         performance.setActivityType("bpop");
-        performance.setSelfAssessment(StudentSelfAssessment.JUST_RIGHT);
         performance.setNumberCorrect(8);
-        performance.setNumberWrong(10);
+        performance.setNumberWrong(2);
         performance.setNumberAttempts(10);
+        performance.setTotalNumberQuestions(10);
 
         expectedSelection = SelectedActivity.NEXT;
 
@@ -198,10 +327,10 @@ public class PerformanceBasedPromotionRulesTest {
     public void testAboveHighPerformanceBubblePop() {
         performance = new PerformanceData();
         performance.setActivityType("bpop");
-        performance.setSelfAssessment(StudentSelfAssessment.JUST_RIGHT);
         performance.setNumberCorrect(10);
-        performance.setNumberWrong(10);
+        performance.setNumberWrong(0);
         performance.setNumberAttempts(10);
+        performance.setTotalNumberQuestions(10);
 
         selectedActivity = rules.selectActivityByPerformance(performance);
         // could be one of two options
