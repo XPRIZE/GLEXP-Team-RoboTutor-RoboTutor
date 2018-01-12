@@ -709,13 +709,34 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                 break;
 
             case PREVIOUS:
-                // XXX AFTER_NEXT nextTutor = transitionData.previous;
-                nextTutor = transitionData.easier;
+                // XXX FIXME nextTutor = transitionData.previous;
+                // for now... do the super hacky way of iterating through the whole map until we find one who refers to "activeTutor" via "next"
+                String tempNextTutor = null;
+                for (Map.Entry<String, CAt_Data> e : transitionMap.entrySet()) {
+                    Log.d("TRANSITION_MAP", e.getValue().toString());
+                    CAt_Data value = e.getValue();
+                    if (value.next.equals(activeTutor)) {
+                        tempNextTutor = e.getKey();
+                    }
+                }
+                // no "next" reference, probably means it's the first item
+                if (tempNextTutor == null) {
+                    tempNextTutor = activeTutor;
+                }
+                nextTutor = tempNextTutor;
+                // XXX FIXME end super hacky code
+
                 break;
 
             case DOUBLE_NEXT:
-                // XXX AFTER_NEXT nextTutor = transitionData.double_next;
-                nextTutor = transitionData.harder;
+                // XXX FIXME nextTutor = transitionData.double_next;
+                // for now... do the slightly less hacky way of doing "next" of "next"
+                String notNextTutor = transitionData.next;
+
+                CAt_Data nextTransitionData = transitionMap.get(notNextTutor);
+                nextTutor = nextTransitionData.next;
+                // XXX FIXME end slightly less hacky code
+                // XXX note that these will not show up in the debugger graph
                 break;
         }
 
