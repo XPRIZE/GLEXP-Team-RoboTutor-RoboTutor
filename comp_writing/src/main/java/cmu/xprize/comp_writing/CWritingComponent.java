@@ -15,6 +15,9 @@
 //    limitations under the License.
 //
 //*********************************************************************************
+/*
+ * Edited and commented by Kevin DeLand
+ */
 
 package cmu.xprize.comp_writing;
 
@@ -62,7 +65,6 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.util.TCONST.EMPTY;
-import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 
 /**
@@ -150,6 +152,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         setClipChildren(false);
 
+        // initialize with four features
         _attemptFTR.add(WR_CONST.FTR_ATTEMPT_1);
         _attemptFTR.add(WR_CONST.FTR_ATTEMPT_2);
         _attemptFTR.add(WR_CONST.FTR_ATTEMPT_3);
@@ -341,7 +344,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         _charValid   = stimController.testStimulus( candidate.getRecChar());
         _metricValid = _metric.testConstraint(candidate.getGlyph(), this);
-        _isValid     = _charValid && _metricValid;
+        _isValid     = _charValid && _metricValid; // _isValid essentially means "is a correct drawing"
 
         // Update the controller feedback colors
         //
@@ -362,17 +365,22 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         //
         if(isComplete()) {
 
-            applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
+            applyBehavior(WR_CONST.DATA_ITEM_COMPLETE); // goto node "ITEM_COMPLETE_BEHAVIOR" -- run when item is complete...
         }
         else {
 
             if(!_isValid) {
 
+                // lots of fun feature updating here
                 publishFeature(WR_CONST.FTR_HAD_ERRORS);
 
-                updateAttemptFeature();
+                int attempt = updateAttemptFeature();
 
-                applyBehavior(WR_CONST.ON_ERROR);
+                if(attempt > 4) {
+                    applyBehavior(WR_CONST.MERCY_RULE); // goto node "MERCY_RULE_BEHAVIOR"
+                } else {
+                    applyBehavior(WR_CONST.ON_ERROR); // goto node "GENERAL_ERROR_BEHAVIOR"
+                }
 
                 if (!_charValid)
                     applyBehavior(WR_CONST.ON_CHAR_ERROR);
@@ -382,11 +390,25 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             else {
                 updateStalledStatus();
 
-                applyBehavior(WR_CONST.ON_CORRECT);
+                applyBehavior(WR_CONST.ON_CORRECT); //goto node "GENERAL_CORRECT_BEHAVIOR"
             }
         }
 
         return _isValid;
+    }
+
+    /**
+     * Designed to enable character-level mercy rule on multi-char sequences...
+     * This method not used (does not work as intended)
+     */
+    public void mercyRuleCleanup() {
+
+        mActiveController.updateCorrectStatus(true);
+        if(isComplete()) {
+            applyBehavior(WR_CONST.DATA_ITEM_COMPLETE); // YYY run when item is complete...
+        } else {
+            applyBehavior(WR_CONST.ON_CORRECT);
+        }
     }
 
 
@@ -405,8 +427,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
     }
 
-
-    private void clearAttemptFeature() {
+    /**
+     * Retracts all features that indicate which attempt the student is on
+     */
+    private void clearAttemptFeatures() {
 
         for (String attempt : _attemptFTR) {
             retractFeature(attempt);
@@ -414,18 +438,30 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
-    private void updateAttemptFeature() {
+    /**
+     * Updates and returns the student attempt. Also returns which attempt the student is on.
+     *
+     * @return
+     */
+    private int updateAttemptFeature() {
 
-        clearAttemptFeature();
+        clearAttemptFeatures();
 
         int attempt = mActiveController.incAttempt();
 
-        if(attempt > 4) attempt = 4;
+        // only publish attempt feature for first four attempts... next time will activate mercy rule
+        if(attempt <= 4)
+            publishFeature(_attemptFTR.get(attempt-1));
 
-        publishFeature(_attemptFTR.get(attempt-1));
+        return attempt;
     }
 
 
+    /**
+     * Iterates through each character in a word to see if it's been drawn completely.
+     *
+     * @return
+     */
     private boolean isComplete() {
 
         boolean result = true;
@@ -610,6 +646,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
+    /**
+     * in multi-char, highlights next character
+     */
     public void highlightNext() {
 
         CStimulusController r;
@@ -1107,7 +1146,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     case WR_CONST.INHIBIT_OTHERS:
 
                         if(mActiveController != null)
-                            inhibitInput(mActiveController, true);
+                            inhibitInput(mActiveController, true); // YYY what is this???
                         break;
 
                     case WR_CONST.CLEAR_ATTEMPT:
@@ -1115,7 +1154,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         // which attempt they succeeded - We don't want this persisting if they
                         // subsequently keep getting them correct
                         //
-                        clearAttemptFeature();
+                        clearAttemptFeatures();
                         break;
 
                     case TCONST.APPLY_BEHAVIOR:
@@ -1125,13 +1164,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                     case WR_CONST.RIPPLE_DEMO:
 
-                        rippleReplay(_command, true);
+                        rippleReplay(_command, true); // YYY Ripple Replay: use to show tracing
                         break;
 
                     case WR_CONST.RIPPLE_REPLAY:
                     case WR_CONST.RIPPLE_PROTO:
 
-                        rippleReplay(_command, false);
+                        rippleReplay(_command, false); // YYY Ripple Replay: use to show tracing
                         break;
 
                     case WR_CONST.SHOW_SAMPLE:

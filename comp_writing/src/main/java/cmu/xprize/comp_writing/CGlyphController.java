@@ -232,6 +232,9 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         }
     }
 
+    /**
+     * This erases the glyph drawn by the user
+     */
     public void eraseGlyph() {
 
         mGlyphInput.erase();
@@ -412,7 +415,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     }
 
     public void updateCorrectStatus(boolean correct) {
-        mGlyphInput.updateCorrectStatus(correct);
+        mGlyphInput.updateAndDisplayCorrectStatus(correct);
     }
 
     public boolean getGlyphStarted() {
@@ -504,17 +507,17 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
 
                     case WR_CONST.SHOW_SAMPLE:
 
-                        mGlyphInput.showSampleChar(true);
+                        mGlyphInput.showSampleChar(true); // shows the traceable outline
                         break;
 
                     case WR_CONST.HIDE_SAMPLE:
 
-                        mGlyphInput.showSampleChar(false);
+                        mGlyphInput.showSampleChar(false); // hides the traceable outline
                         break;
 
                     case WR_CONST.ERASE_GLYPH:
 
-                        eraseGlyph();
+                        eraseGlyph(); // erase the user-drawn glyph
                         break;
 
                     case TCONST.HIGHLIGHT:
@@ -534,7 +537,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
                         break;
 
                     case WR_CONST.RIPPLE_DEMO:
-
+                        // YYY this is where RoboFinger draws the demo glyph
                         mGlyphReplay.setPointAtStroke(true);
                         mGlyphInput.replayGlyph(WR_CONST.REPLAY_PROTOGLYPH);
                         break;

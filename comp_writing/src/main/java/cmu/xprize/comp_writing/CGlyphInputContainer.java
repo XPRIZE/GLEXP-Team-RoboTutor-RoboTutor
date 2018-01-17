@@ -882,6 +882,9 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     }
 
 
+    /**
+     * This is the animation of the the user-drawn glyph scaling into the right size,
+     */
     public void animateOverlay() {
 
         AnimatorSet animator = new AnimatorSet();
@@ -1003,6 +1006,11 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     }
 
 
+    /**
+     * Shows and hides the traceable sample character outline
+     *
+     * @param show
+     */
     public void showSampleChar(boolean show) {
 
         _showSampleChar = show;
@@ -1162,10 +1170,11 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     //***********************************************************************
 
 
+    /**
+     * also removes the sample/traceable character
+     */
     public void erase() {
 
-        // This can be set by a feedback mode - so we always resest it when clearing
-        _showSampleChar = false;
         _showUserGlyph  = true;
 
         clear();
@@ -1219,7 +1228,12 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     }
 
 
-    public void updateCorrectStatus(boolean correct) {
+    /**
+     * Updates whether glyph is correct, and displays it in the proper color
+     *
+     * @param correct
+     */
+    public void updateAndDisplayCorrectStatus(boolean correct) {
 
         _correct = correct;
 
@@ -1232,6 +1246,15 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         }
 
         invalidate();
+    }
+
+    /**
+     * used for mercy rule
+     *
+     * @param correct
+     */
+    public void updateCorrectStatus(boolean correct) {
+        _correct = correct;
     }
 
 
