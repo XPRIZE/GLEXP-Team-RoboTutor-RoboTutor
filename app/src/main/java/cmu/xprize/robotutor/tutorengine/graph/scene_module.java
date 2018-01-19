@@ -106,7 +106,6 @@ public class scene_module extends scene_node implements ILoadableObject2 {
         String         features;
         boolean        featurePass = false;
         boolean        validAction = false;
-
         // If the node is completed and reusable then reset
         //
         resetNode();

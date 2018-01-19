@@ -530,7 +530,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
 
             _enableTouchEvent = false;
 
-            mComponent.publishState(bubble, SbubbleStumulus);
+            mComponent.publishState(bubble, SbubbleStumulus, mProblemType);
             mComponent.applyBehavior(BP_CONST.BUBBLE_TOUCH_EVENT);
         }
     }

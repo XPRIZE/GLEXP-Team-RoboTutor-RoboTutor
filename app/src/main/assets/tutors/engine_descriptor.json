@@ -65,10 +65,15 @@
       "tutorName": "bubble_pop",
       "features": "SHAPES"
     },
-    "bpop.ex": {
+    "bpop.ex.e2n": {
       "type": "TUTORVAR_MAP",
       "tutorName": "bubble_pop",
-      "features": "FTR_EXPRESSIONS"
+      "features": "FTR_EXPRESSIONS_E2N"
+    },
+    "bpop.ex.n2e": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_EXPRESSIONS_N2E"
     },
     "bpop.phon": {
       "type": "TUTORVAR_MAP",

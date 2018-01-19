@@ -563,7 +563,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
-    protected void publishState(CBubble bubble, CBubbleStimulus bubbleStimulus) {
+    protected void publishState(CBubble bubble, CBubbleStimulus bubbleStimulus, String mProblemType) {
 
     }
 

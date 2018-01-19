@@ -193,7 +193,6 @@ public class CObjectDelegate implements ITutorObject, Button.OnClickListener, IE
 
                 case TCONST.NEXT_NODE:
                     Log.v(QGRAPH_MSG, "event.click: " + " CObjectDelegate: TCONST.NEXT_NODE");
-
                     mTutor.mSceneGraph.post(this, TCONST.NEXT_NODE);
                     break;
 

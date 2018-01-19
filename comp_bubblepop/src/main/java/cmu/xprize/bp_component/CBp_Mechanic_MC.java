@@ -173,7 +173,6 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
         CBubble bubble;
         long    delay = 0;
-
         super.execCommand(command, target);
 
         switch(command) {
@@ -219,7 +218,6 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
                         setupWiggle(bubble, 0);
                         bubble.setOnClickListener(CBp_Mechanic_MC.this);
-                        Log.d("TOMBRADY", Integer.toString(bubble.getWidth()));
                     }
 
                     @Override
@@ -439,7 +437,6 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
             int numChar = singleLine.length();
             bubbleWidth = bubbleWidth - 30 * numChar;
             bubbleWidth = 190;
-            Log.d("TOMBRADY", "Num Char: " + numChar);
 
             float[] _widthRange = calcVectorRange(_angle, bubbleWidth * SBubbles[i1].getAssignedScale());
             float[] _heightRange = calcVectorRange(_angle,  bubbleHeight * SBubbles[i1].getAssignedScale());
