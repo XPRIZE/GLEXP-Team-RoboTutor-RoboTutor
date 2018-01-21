@@ -31,6 +31,7 @@ import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.TCONST;
+import android.util.Log;
 
 
 
@@ -117,7 +118,6 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
             _nodeState = _currNode.next();
 
             switch(_nodeState) {
-
                 // If the node is exhausted move to next node
 
                 case TCONST.NONE:

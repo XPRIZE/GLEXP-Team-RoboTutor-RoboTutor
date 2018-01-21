@@ -120,13 +120,6 @@ public class CBubble extends FrameLayout {
         mProblemType = problemType;
     }
 
-    public void configData(String stimulusVal, String correctVal) {
-
-        mCorrectVal = correctVal;
-        mStimulusVal = stimulusVal;
-    }
-
-
     public boolean isCorrect() {
 
         return mCorrectVal.equals(mStimulusVal);
@@ -347,7 +340,12 @@ public class CBubble extends FrameLayout {
                 mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 80);
             }
             else {
-                mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 128);
+                if(text.length() < 5) {
+                    mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 128);
+                }
+                else {
+                    mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, (60));
+                }
             }
         }
 

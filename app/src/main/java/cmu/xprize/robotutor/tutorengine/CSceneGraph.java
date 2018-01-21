@@ -239,7 +239,6 @@ public class CSceneGraph  {
                     case TCONST.NEXT_NODE:
 
                         String sceneState;
-
                         if(_sceneGraph.testFeatures()) {
                             sceneState = _sceneGraph.applyNode();
                         }
@@ -369,7 +368,6 @@ public class CSceneGraph  {
 
         if(!mDisabled) {
             queueMap.put(qCommand, qCommand);
-
             mainHandler.post(qCommand);
         }
     }
@@ -380,7 +378,6 @@ public class CSceneGraph  {
      * @param command
      */
     public void post(IEventSource source, String command) {
-
         enQueue(new Queue(source, command));
     }
 

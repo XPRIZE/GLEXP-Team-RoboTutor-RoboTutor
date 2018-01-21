@@ -164,7 +164,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         // Let the compoenent process the new data set
         //
         super.updateDataSet(data);
-        publishQuestionState(data);
+        publishQuestionState(data, problem_type);
     }
 
 
@@ -471,7 +471,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     public boolean applyBehavior(String event) {
 
         boolean result = false;
-
         if (volatileMap.containsKey(event)) {
 
             RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:volatile,behavior:" + event);
@@ -501,7 +500,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     @Override
     public void applyBehaviorNode(String nodeName) {
         IScriptable2 obj = null;
-
         if (nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
 
             try {
@@ -655,7 +653,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
      * Publish the Stimulus value as Scope variables for script access
      */
     @Override
-    protected void publishState(CBubble bubble, CBubbleStimulus bubbleStimulus) {
+    protected void publishState(CBubble bubble, CBubbleStimulus bubbleStimulus, String problemType) {
 
         _touchedBubble = bubble;
         _bubbleStimulus = bubbleStimulus;
@@ -669,29 +667,31 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             answer = answer.toLowerCase();
         }
 
-        if(answer.contains("\n")) {
+        switch(problemType) {
 
-            int index = answer.indexOf("\n");
-            String firstNum = answer.substring(0, index);
-            String operation = answer.substring(index + 1, index + 2);
-            String secondNum = answer.substring(index+2);
+            case "EXPRESSION_N2E":
+                int index = answer.indexOf("\n");
+                String firstNum = answer.substring(0, index);
+                String operation = answer.substring(index + 1, index + 2);
+                String secondNum = answer.substring(index+2);
 
-            if(operation.equals("+")) {
-                operation = "plus";
-            }
-            else {
-                operation = "minus";
-            }
+                if(operation.equals("+")) {
+                    operation = "plus";
+                }
+                else {
+                    operation = "minus";
+                }
 
-            publishValue(BP_CONST.ANSWER_VAR, firstNum);
-            publishValue(BP_CONST.ANSWER_VAR_TWO, operation);
-            publishValue(BP_CONST.ANSWER_VAR_THREE, secondNum);
-        }
+                publishValue(BP_CONST.ANSWER_VAR, firstNum);
+                publishValue(BP_CONST.ANSWER_VAR_TWO, operation);
+                publishValue(BP_CONST.ANSWER_VAR_THREE, secondNum);
+                break;
 
-        else {
-            publishValue(BP_CONST.ANSWER_VAR, answer);
-            publishValue(BP_CONST.ANSWER_VAR_TWO, "TRASH");
-            publishValue(BP_CONST.ANSWER_VAR_THREE, "TRASH");
+            default:
+                publishValue(BP_CONST.ANSWER_VAR, answer);
+                break;
+
+
         }
 
         resetValid();
@@ -778,62 +778,70 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         RoboTutor.logManager.postEvent_I(TCONST.PERFORMANCE_TAG, event.toString());
     }
 
-    protected void publishQuestionState(CBp_Data data) {
+    protected void publishQuestionState(CBp_Data data, String problemType) {
 
         TScope scope = mTutor.getScope();
 
         resetState();
 
         String correctVal = data.stimulus;
-        String comp_pos = data.comp_pos;
-        String comp_len = data.comp_len;
+        String comp_start_end = data.comp_start_end;
+        String comp_with_like = data.comp_with_like;
+        String phonemic_matching = "";
 
         // Ensure letters are lowercase for mp3 matching
         //
         correctVal = correctVal.toLowerCase();
-        if(comp_pos != null && comp_len != null) {
-            if(comp_pos == "Starts") {
-                comp_pos = "kuanza";
-            }
-            else {
-                comp_pos = "mwishoni";
-            }
-            if(comp_len== "With") {
-                comp_len = "na";
-            }
-            else {
-                comp_len = "kama";
-            }
-            publishValue(BP_CONST.QUEST_VAR, comp_pos);
-            publishValue(BP_CONST.QUEST_VAR_TWO, comp_len);
-            publishValue(BP_CONST.QUEST_VAR_THREE, correctVal);
+
+        switch(problemType) {
+
+            case "EXPRESSION_E2N":
+
+                int index = correctVal.indexOf("\n");
+                String firstNum = correctVal.substring(0, index);
+                String operation = correctVal.substring(index + 1, index + 2);
+                String secondNum = correctVal.substring(index+2);
+
+                if(operation.equals("+")) {
+                    operation = "plus";
+                }
+                else {
+                    operation = "minus";
+                }
+
+                publishValue(BP_CONST.QUEST_VAR, firstNum);
+                publishValue(BP_CONST.QUEST_VAR_TWO, operation);
+                publishValue(BP_CONST.QUEST_VAR_THREE, secondNum);
+                break;
+
+            case "PHONEMICS":
+                switch(comp_start_end) {
+                    case "Starts" : switch(comp_with_like) {
+                        case "With" :
+                            phonemic_matching = "Neno gani huanza na";
+                            break;
+                        case "Like" :
+                            phonemic_matching = "Neno gani linaanza kama";
+                            break;
+                    }
+                    case "Ends" : switch(comp_with_like) {
+                        case "With" :
+                            phonemic_matching = "Neno gani kuishia na";
+                            break;
+                        case "Like" :
+                            phonemic_matching = "Neno gani linaisha kama";
+                            break;
+                    }
+                }
+                publishValue(BP_CONST.QUEST_VAR, phonemic_matching);
+                publishValue(BP_CONST.QUEST_VAR_TWO, correctVal);
+                break;
+
+            default:
+                publishValue(BP_CONST.QUEST_VAR, correctVal);
+                break;
         }
 
-        else if(correctVal.contains("\n")) {
-
-            int index = correctVal.indexOf("\n");
-            String firstNum = correctVal.substring(0, index);
-            String operation = correctVal.substring(index + 1, index + 2);
-            String secondNum = correctVal.substring(index+2);
-
-            if(operation.equals("+")) {
-                operation = "plus";
-            }
-            else {
-                operation = "minus";
-            }
-
-            publishValue(BP_CONST.QUEST_VAR, firstNum);
-            publishValue(BP_CONST.QUEST_VAR_TWO, operation);
-            publishValue(BP_CONST.QUEST_VAR_THREE, secondNum);
-
-        }
-
-        else {
-            publishValue(BP_CONST.QUEST_VAR, correctVal);
-            publishValue(BP_CONST.QUEST_VAR_TWO, "TRASH");
-            publishValue(BP_CONST.QUEST_VAR_THREE, "TRASH");
-        }
 
         if (data.question_say) {
             publishFeature(TCONST.SAY_STIMULUS);
