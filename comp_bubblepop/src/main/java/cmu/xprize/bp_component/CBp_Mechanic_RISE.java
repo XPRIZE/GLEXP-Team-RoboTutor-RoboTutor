@@ -48,9 +48,8 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
     private String          mProblemType;
 
 
-    public CBp_Mechanic_RISE(Context context, CBP_Component parent, String problem_type) {
+    public CBp_Mechanic_RISE(Context context, CBP_Component parent) {
         super.init(context, parent);
-        mProblemType = problem_type;
     }
 
     @Override

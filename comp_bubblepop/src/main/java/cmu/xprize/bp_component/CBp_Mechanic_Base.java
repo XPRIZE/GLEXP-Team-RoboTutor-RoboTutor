@@ -94,18 +94,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
         mParent.setOnTouchListener(this);
     }
 
-    protected void init(Context context, CBP_Component parent, String problem_type) {
-
-        mContext   = context;
-        mComponent = parent;
-        mProblemType = problem_type;
-        mParent    = parent.getContainer();
-
-        // Capture the local broadcast manager
-        bManager = LocalBroadcastManager.getInstance(mContext);
-        mParent.setOnTouchListener(this);
-    }
-
     @Override
     public void onDestroy() {
 

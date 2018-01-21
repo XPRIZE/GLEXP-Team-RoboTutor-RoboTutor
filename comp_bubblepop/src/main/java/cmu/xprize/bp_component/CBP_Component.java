@@ -338,12 +338,12 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
             case "mc":
             case "multiplechoice":
             case "multiple-choice":
-                _mechanics = new CBp_Mechanic_MC(mContext, this, problem_type);
+                _mechanics = new CBp_Mechanic_MC(mContext, this);
                 break;
 
             case "rise":
             case "rising":
-                _mechanics = new CBp_Mechanic_RISE(mContext, this, problem_type);
+                _mechanics = new CBp_Mechanic_RISE(mContext, this);
                 break;
         }
 

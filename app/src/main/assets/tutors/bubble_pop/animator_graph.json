@@ -177,18 +177,19 @@
 
             {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "STIMULUS_SHOWN:String|NEXTNODE:String" , "features":"FTR_SHOW"},
             {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_STIMULUS:String"                  ,  "features":"FTR_SHOW"},
+            {"type": "COMMAND", "cmd": "WAIT", "features":"FTR_SHOW"},
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"event", "features": "FTR_SAY&FTR_WORDS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": "FTR_SAY&FTR_NUMBERS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"letters", "volume": 1.0, "mode":"event", "features": "FTR_SAY&FTR_LETTERS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"shapes", "volume": 1.0, "mode":"event", "features": "FTR_SAY&FTR_SHAPES"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_EXPRESSIONS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueTwo}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_EXPRESSIONS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueThree}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_EXPRESSIONS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_EXPRESSIONS_E2N"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueTwo}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_EXPRESSIONS_E2N"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueThree}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_EXPRESSIONS_E2N"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_EXPRESSIONS_N2E"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueTwo}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_PHONEMICS"},
 
 
-            {"type": "COMMAND", "cmd": "WAIT", "features":"FTR_SHOW"},
 
             // If we are showing it we have to wait for the animation to complete before continuing
 
@@ -226,9 +227,10 @@
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"event", "features": "FTR_WORDS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"event", "features": "FTR_PHONEMICS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": "FTR_NUMBERS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueTwo}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueThree}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": "FTR_EXPRESSIONS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS_N2E"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueTwo}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS_N2E"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueThree}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": "FTR_EXPRESSIONS_N2E"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS_E2N"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"letters", "volume": 1.0, "mode":"event", "features": "FTR_LETTERS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"shapes", "volume": 1.0, "mode":"event", "features": "FTR_SHAPES"},
 
@@ -252,9 +254,10 @@
             {"type": "AUDIO", "command": "PLAY", "soundsource": "wrong.mp3", "soundpackage":"tutor_effect", "volume": 0.05, "mode":"event", "features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"event", "features": "FTR_WORDS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"event", "features": "FTR_PHONEMICS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueTwo}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueThree}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": "FTR_EXPRESSIONS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS_N2E"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueTwo}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS_N2E"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueThree}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": "FTR_EXPRESSIONS_N2E"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS_E2N"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"letters", "volume": 1.0, "mode":"event", "features": "FTR_LETTERS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"shapes", "volume": 1.0, "mode":"event", "features": "FTR_SHAPES"},
 
@@ -293,9 +296,10 @@
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"flow", "features": "FTR_WORDS&!BPOP_MATH_EXPR"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"flow", "features": "FTR_PHONEMICS&!BPOP_MATH_EXPR"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_NUMBERS&!BPOP_MATH_EXPR"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS&!BPOP_MATH_EXPR"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueTwo}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS&!BPOP_MATH_EXPR"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueThree}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS&!BPOP_MATH_EXPR"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS_N2E&!BPOP_MATH_EXPR"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueTwo}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS_N2E&!BPOP_MATH_EXPR"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueThree}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS_N2E&!BPOP_MATH_EXPR"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS_E2N&!BPOP_MATH_EXPR"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"letters", "volume": 1.0, "mode":"flow", "features": "FTR_LETTERS&!BPOP_MATH_EXPR"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"shapes", "volume": 1.0, "mode":"flow", "features": "FTR_SHAPES&!BPOP_MATH_EXPR"},
 
@@ -311,9 +315,10 @@
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_PHONEMICS&!BPOP_MATH_EXPR"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueTwo}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_PHONEMICS&!BPOP_MATH_EXPR"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_NUMBERS&!BPOP_MATH_EXPR&!BPOP_MATH_EXPR"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_EXPRESSIONS&!BPOP_MATH_EXPR"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueTwo}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_EXPRESSIONS&!BPOP_MATH_EXPR"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueThree}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_EXPRESSIONS&!BPOP_MATH_EXPR"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_EXPRESSIONS_E2N&!BPOP_MATH_EXPR"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueTwo}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_EXPRESSIONS_E2N&!BPOP_MATH_EXPR"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueThree}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_EXPRESSIONS_E2N&!BPOP_MATH_EXPR"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_EXPRESSIONS_N2E&!BPOP_MATH_EXPR"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"letters", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_LETTERS&!BPOP_MATH_EXPR"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"shapes", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_SHAPES&!BPOP_MATH_EXPR"},
 
