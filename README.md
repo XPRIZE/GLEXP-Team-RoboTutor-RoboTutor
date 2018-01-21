@@ -3,7 +3,7 @@
 
 # **RoboTutor**
 
-Welcome to RoboTutor:
+Welcome to RoboTutor::
 
 ## **Setup and Configuration:**
 
