@@ -16,7 +16,7 @@
       "question_say": true,
       "question_show": false,
       "answer_type": "text_data",
-      "answer": "7\n+12",
+      "answer": "2\n+13",
       "question_type": "multiple-choice",
       "stimulus_type": "text_data",
       "responsetype_set": [
@@ -26,37 +26,13 @@
         "text_data",
         "text_data"
       ],
-      "stimulus": "19",
+      "stimulus": "15",
       "response_set": [
-        "12\n+8",
-        "14\n+8",
-        "7\n+12",
-        "10\n+4",
-        "12\n+8"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "4\n+12",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "16",
-      "response_set": [
-        "4\n+12",
-        "14\n+4",
-        "13\n+9",
-        "12\n+7",
-        "10\n+3"
+        "18\n+2",
+        "12\n+1",
+        "2\n+13",
+        "11\n+1",
+        "13\n+0"
       ],
       "gen_question": false
     },
@@ -76,11 +52,11 @@
       ],
       "stimulus": "18",
       "response_set": [
-        "17\n+3",
-        "2\n+16",
+        "17\n+8",
         "14\n+0",
-        "18\n+2",
-        "10\n+7"
+        "10\n+0",
+        "18\n+1",
+        "2\n+16"
       ],
       "gen_question": false
     },
@@ -88,7 +64,7 @@
       "question_say": true,
       "question_show": false,
       "answer_type": "text_data",
-      "answer": "6\n+11",
+      "answer": "8\n+11",
       "question_type": "multiple-choice",
       "stimulus_type": "text_data",
       "responsetype_set": [
@@ -98,61 +74,13 @@
         "text_data",
         "text_data"
       ],
-      "stimulus": "17",
+      "stimulus": "19",
       "response_set": [
-        "6\n+11",
-        "9\n+6",
-        "17\n+7",
-        "18\n+2",
-        "12\n+7"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "2\n+13",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "15",
-      "response_set": [
-        "11\n+0",
-        "20\n+6",
-        "14\n+3",
-        "2\n+13",
-        "15\n+1"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "7\n+11",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "18",
-      "response_set": [
-        "9\n+6",
+        "10\n+10",
+        "10\n+3",
         "16\n+1",
-        "11\n+8",
-        "7\n+11",
-        "18\n+9"
+        "8\n+11",
+        "12\n+6"
       ],
       "gen_question": false
     },
@@ -160,7 +88,7 @@
       "question_say": true,
       "question_show": false,
       "answer_type": "text_data",
-      "answer": "1\n+17",
+      "answer": "0\n+20",
       "question_type": "multiple-choice",
       "stimulus_type": "text_data",
       "responsetype_set": [
@@ -170,13 +98,13 @@
         "text_data",
         "text_data"
       ],
-      "stimulus": "18",
+      "stimulus": "20",
       "response_set": [
-        "1\n+17",
-        "17\n+3",
-        "19\n+2",
-        "18\n+7",
-        "13\n+5"
+        "21\n+1",
+        "15\n+1",
+        "18\n+0",
+        "11\n+1",
+        "0\n+20"
       ],
       "gen_question": false
     },
@@ -196,11 +124,11 @@
       ],
       "stimulus": "19",
       "response_set": [
-        "14\n+7",
+        "15\n+6",
+        "15\n+8",
+        "15\n+5",
         "6\n+13",
-        "12\n+0",
-        "12\n+0",
-        "11\n+4"
+        "12\n+5"
       ],
       "gen_question": false
     },
@@ -208,7 +136,31 @@
       "question_say": true,
       "question_show": false,
       "answer_type": "text_data",
-      "answer": "4\n+16",
+      "answer": "1\n+16",
+      "question_type": "multiple-choice",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "17",
+      "response_set": [
+        "14\n+2",
+        "1\n+16",
+        "15\n+0",
+        "18\n+3",
+        "19\n+7"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "9\n+11",
       "question_type": "multiple-choice",
       "stimulus_type": "text_data",
       "responsetype_set": [
@@ -220,11 +172,11 @@
       ],
       "stimulus": "20",
       "response_set": [
-        "15\n+2",
+        "10\n+6",
+        "9\n+11",
+        "11\n+11",
         "17\n+6",
-        "11\n+5",
-        "4\n+16",
-        "18\n+5"
+        "13\n+9"
       ],
       "gen_question": false
     },
@@ -232,7 +184,7 @@
       "question_say": true,
       "question_show": false,
       "answer_type": "text_data",
-      "answer": "3\n+12",
+      "answer": "2\n+10",
       "question_type": "multiple-choice",
       "stimulus_type": "text_data",
       "responsetype_set": [
@@ -242,13 +194,61 @@
         "text_data",
         "text_data"
       ],
-      "stimulus": "15",
+      "stimulus": "12",
       "response_set": [
-        "3\n+12",
-        "10\n+2",
-        "11\n+5",
-        "20\n+4",
-        "20\n+6"
+        "2\n+10",
+        "18\n+8",
+        "11\n+3",
+        "12\n+3",
+        "14\n+1"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "10\n+10",
+      "question_type": "multiple-choice",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "20",
+      "response_set": [
+        "13\n+12",
+        "10\n+10",
+        "8\n+8",
+        "11\n+19",
+        "12\n+12"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "6\n+10",
+      "question_type": "multiple-choice",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "16",
+      "response_set": [
+        "6\n+10",
+        "10\n+7",
+        "9\n+5",
+        "9\n+6",
+        "18\n+1"
       ],
       "gen_question": false
     }

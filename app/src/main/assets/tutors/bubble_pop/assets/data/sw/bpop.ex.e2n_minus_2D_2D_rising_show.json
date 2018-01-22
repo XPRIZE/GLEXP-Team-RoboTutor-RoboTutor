@@ -4,7 +4,7 @@
   "gen_responsetype": "text_data",
   "question_count": 10,
   "banner_color": "#000066",
-  "problem_type": "exp",
+  "problem_type": "EXPRESSION_E2N",
   "gen_answerSet": [],
   "gen_responseSet": [],
   "gen_answertype": "text_data",
@@ -16,7 +16,7 @@
       "question_say": false,
       "question_show": true,
       "answer_type": "text_data",
-      "answer": "5",
+      "answer": "2",
       "question_type": "rising",
       "stimulus_type": "text_data",
       "responsetype_set": [
@@ -26,12 +26,36 @@
         "text_data",
         "text_data"
       ],
-      "stimulus": "18\n-13",
+      "stimulus": "12\n-10",
+      "response_set": [
+        "5",
+        "7",
+        "4",
+        "1",
+        "2"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": false,
+      "question_show": true,
+      "answer_type": "text_data",
+      "answer": "7",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "17\n-10",
       "response_set": [
         "7",
+        "6",
         "5",
-        "3",
-        "0",
+        "2",
         "4"
       ],
       "gen_question": false
@@ -40,7 +64,7 @@
       "question_say": false,
       "question_show": true,
       "answer_type": "text_data",
-      "answer": "0",
+      "answer": "3",
       "question_type": "rising",
       "stimulus_type": "text_data",
       "responsetype_set": [
@@ -50,13 +74,13 @@
         "text_data",
         "text_data"
       ],
-      "stimulus": "17\n-17",
+      "stimulus": "19\n-16",
       "response_set": [
-        "7",
-        "0",
+        "3",
+        "4",
+        "5",
         "2",
-        "34",
-        "3"
+        "0"
       ],
       "gen_question": false
     },
@@ -64,7 +88,7 @@
       "question_say": false,
       "question_show": true,
       "answer_type": "text_data",
-      "answer": "10",
+      "answer": "3",
       "question_type": "rising",
       "stimulus_type": "text_data",
       "responsetype_set": [
@@ -74,13 +98,37 @@
         "text_data",
         "text_data"
       ],
-      "stimulus": "20\n-10",
+      "stimulus": "13\n-10",
       "response_set": [
+        "1",
+        "2",
         "9",
-        "11",
-        "15",
-        "10",
-        "12"
+        "3",
+        "0"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": false,
+      "question_show": true,
+      "answer_type": "text_data",
+      "answer": "1",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "20\n-19",
+      "response_set": [
+        "7",
+        "1",
+        "39",
+        "3",
+        "4"
       ],
       "gen_question": false
     },
@@ -100,11 +148,11 @@
       ],
       "stimulus": "14\n-10",
       "response_set": [
-        "3",
-        "6",
         "4",
+        "7",
+        "24",
         "1",
-        "5"
+        "2"
       ],
       "gen_question": false
     },
@@ -122,13 +170,13 @@
         "text_data",
         "text_data"
       ],
-      "stimulus": "17\n-12",
+      "stimulus": "20\n-15",
       "response_set": [
         "6",
+        "35",
+        "2",
         "5",
-        "2",
-        "8",
-        "3"
+        "7"
       ],
       "gen_question": false
     },
@@ -136,7 +184,7 @@
       "question_say": false,
       "question_show": true,
       "answer_type": "text_data",
-      "answer": "8",
+      "answer": "7",
       "question_type": "rising",
       "stimulus_type": "text_data",
       "responsetype_set": [
@@ -146,37 +194,13 @@
         "text_data",
         "text_data"
       ],
-      "stimulus": "19\n-11",
+      "stimulus": "20\n-13",
       "response_set": [
+        "7",
+        "2",
         "8",
-        "0",
-        "30",
         "9",
-        "2"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": false,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "2",
-      "question_type": "rising",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "19\n-17",
-      "response_set": [
-        "2",
-        "1",
-        "0",
-        "3",
-        "4"
+        "5"
       ],
       "gen_question": false
     },
@@ -194,61 +218,37 @@
         "text_data",
         "text_data"
       ],
-      "stimulus": "17\n-16",
+      "stimulus": "19\n-18",
+      "response_set": [
+        "1",
+        "37",
+        "0",
+        "8",
+        "9"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": false,
+      "question_show": true,
+      "answer_type": "text_data",
+      "answer": "7",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "19\n-12",
       "response_set": [
         "9",
-        "3",
-        "8",
-        "1",
-        "33"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": false,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "0",
-      "question_type": "rising",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "18\n-18",
-      "response_set": [
-        "0",
-        "4",
-        "2",
-        "8",
-        "36"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": false,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "8",
-      "question_type": "rising",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "19\n-11",
-      "response_set": [
-        "30",
-        "0",
+        "5",
         "7",
-        "3",
-        "8"
+        "8",
+        "1"
       ],
       "gen_question": false
     }
