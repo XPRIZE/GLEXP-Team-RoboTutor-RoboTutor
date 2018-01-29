@@ -16,7 +16,7 @@
       "question_say": false,
       "question_show": true,
       "answer_type": "text_data",
-      "answer": "2",
+      "answer": "1",
       "question_type": "rising",
       "stimulus_type": "text_data",
       "responsetype_set": [
@@ -26,13 +26,157 @@
         "text_data",
         "text_data"
       ],
-      "stimulus": "12\n-10",
+      "stimulus": "16\n-15",
       "response_set": [
+        "31",
+        "0",
+        "1",
+        "6",
+        "8"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": false,
+      "question_show": true,
+      "answer_type": "text_data",
+      "answer": "5",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "17\n-12",
+      "response_set": [
+        "6",
+        "3",
         "5",
         "7",
+        "1"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": false,
+      "question_show": true,
+      "answer_type": "text_data",
+      "answer": "1",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "15\n-14",
+      "response_set": [
+        "0",
+        "29",
         "4",
         "1",
         "2"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": false,
+      "question_show": true,
+      "answer_type": "text_data",
+      "answer": "0",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "14\n-14",
+      "response_set": [
+        "0",
+        "28",
+        "1",
+        "6",
+        "5"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": false,
+      "question_show": true,
+      "answer_type": "text_data",
+      "answer": "4",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "20\n-16",
+      "response_set": [
+        "4",
+        "36",
+        "6",
+        "1",
+        "5"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": false,
+      "question_show": true,
+      "answer_type": "text_data",
+      "answer": "3",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "16\n-13",
+      "response_set": [
+        "29",
+        "5",
+        "8",
+        "3",
+        "2"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": false,
+      "question_show": true,
+      "answer_type": "text_data",
+      "answer": "1",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "17\n-16",
+      "response_set": [
+        "1",
+        "8",
+        "2",
+        "3",
+        "6"
       ],
       "gen_question": false
     },
@@ -52,59 +196,11 @@
       ],
       "stimulus": "17\n-10",
       "response_set": [
-        "7",
-        "6",
-        "5",
-        "2",
-        "4"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": false,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "3",
-      "question_type": "rising",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "19\n-16",
-      "response_set": [
-        "3",
-        "4",
-        "5",
-        "2",
-        "0"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": false,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "3",
-      "question_type": "rising",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "13\n-10",
-      "response_set": [
-        "1",
         "2",
         "9",
-        "3",
-        "0"
+        "7",
+        "27",
+        "1"
       ],
       "gen_question": false
     },
@@ -112,7 +208,7 @@
       "question_say": false,
       "question_show": true,
       "answer_type": "text_data",
-      "answer": "1",
+      "answer": "0",
       "question_type": "rising",
       "stimulus_type": "text_data",
       "responsetype_set": [
@@ -122,37 +218,13 @@
         "text_data",
         "text_data"
       ],
-      "stimulus": "20\n-19",
+      "stimulus": "17\n-17",
       "response_set": [
-        "7",
         "1",
-        "39",
-        "3",
-        "4"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": false,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "4",
-      "question_type": "rising",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "14\n-10",
-      "response_set": [
-        "4",
+        "6",
         "7",
-        "24",
-        "1",
-        "2"
+        "0",
+        "34"
       ],
       "gen_question": false
     },
@@ -170,85 +242,13 @@
         "text_data",
         "text_data"
       ],
-      "stimulus": "20\n-15",
+      "stimulus": "18\n-13",
       "response_set": [
-        "6",
-        "35",
-        "2",
         "5",
-        "7"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": false,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "7",
-      "question_type": "rising",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "20\n-13",
-      "response_set": [
-        "7",
-        "2",
         "8",
-        "9",
-        "5"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": false,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "1",
-      "question_type": "rising",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "19\n-18",
-      "response_set": [
         "1",
-        "37",
-        "0",
-        "8",
-        "9"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": false,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "7",
-      "question_type": "rising",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "19\n-12",
-      "response_set": [
-        "9",
-        "5",
-        "7",
-        "8",
-        "1"
+        "6",
+        "7"
       ],
       "gen_question": false
     }

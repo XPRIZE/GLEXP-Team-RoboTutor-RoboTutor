@@ -473,9 +473,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     public boolean applyBehavior(String event) {
 
         boolean result = false;
-
         if (volatileMap.containsKey(event)) {
-
             RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:volatile,behavior:" + event);
             applyBehaviorNode(volatileMap.get(event));
 
@@ -484,7 +482,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             result = true;
 
         } else if (stickyMap.containsKey(event)) {
-
             RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:sticky,behavior:" + event);
             applyBehaviorNode(stickyMap.get(event));
 
@@ -503,7 +500,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     @Override
     public void applyBehaviorNode(String nodeName) {
         IScriptable2 obj = null;
-
         if (nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
 
             try {
@@ -512,7 +508,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 if (obj != null) {
 
                     RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehaviornode,type:" + obj.getType() + ",behavior:" + nodeName);
-
                     switch(obj.getType()) {
 
                         case TCONST.SUBGRAPH:
