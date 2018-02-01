@@ -24,13 +24,19 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
     public Context _context;
     private CCountX_Component _component;
 
+    // where animation happens
+    private AnimationThread thread;
+
     // painting tools
     private SurfaceHolder _holder;
     private Paint _paint;
 
-    // important things
+    // Collection of Countable objects e.g. bananas or dots or fruits
     private Vector<Countable> _countables;
     private boolean tappable;
+
+    private TenFrame tenFrame = new TenFrame(400, 400, 200, 200);
+    private boolean showTenFrame = false;
 
     private int[] FRUITS = {
             R.drawable.banana,
@@ -39,6 +45,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
             R.drawable.tomato
     };
 
+    // holds the image for the fruit Countable being displayed
     private Bitmap _fruitMap;
 
     private static final String TAG = "CCountXSurfaceView";
@@ -164,7 +171,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
     }
 
     /**
-     * redraw
+     * redraws everything contained within the Canvas
      */
     private void redraw(Canvas canvas) {
 
@@ -174,6 +181,20 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
             // draw each Countable object
             for (Countable c : _countables) {
                 c.draw(canvas, _paint);
+            }
+
+            if (showTenFrame) {
+                tenFrame.draw(canvas, _paint);
+
+                for (int i = 0; i < _countables.size(); i++) {
+                    Countable c = _countables.get(i);
+
+                    TenFrame.XY xy =tenFrame.getLocationOfIthObject(i+1);
+                    c.x = xy.x;
+                    c.y = xy.y;
+
+                    c.draw(canvas, _paint);
+                }
             }
 
             if(!tappable && COUNTX_CONST.USE_JAIL_BARS) {
@@ -330,6 +351,27 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         _fruitMap = generateRandomFruit();
 
         redraw();
+    }
+
+    public void hideTenFrame() {
+        showTenFrame = false;
+    }
+
+    /**
+     * Move items to the DotBag/TenFrame
+     */
+    public void moveItemsToTenFrame() {
+
+        // get Index, and XY locations of items
+        showTenFrame = true;
+
+        thread = new AnimationThread(getHolder(), this);
+        thread.setRunning(true);
+
+        thread.start();
+        //redraw();
+
+        // animate items so that they move to their proper box in the TenFrame
 
     }
 
@@ -375,6 +417,96 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
 
+        thread.setRunning(false);
+    }
+
+
+
+    private class AnimationThread extends Thread {
+
+        private final SurfaceHolder _surfaceHolder;
+        private CCountX_SurfaceView _surfaceView;
+        private boolean running = false;
+        static final int SLEEP_TIME = 10;
+
+        AnimationThread(SurfaceHolder surfaceHolder, CCountX_SurfaceView surfaceView) {
+            _surfaceHolder = surfaceHolder;
+            _surfaceView = surfaceView;
+        }
+
+        void setRunning(boolean run) { running = run;}
+
+        @Override
+        public void run() {
+
+            Canvas c;
+
+            while(running) {
+
+                boolean[] finished = updateAnimationState();
+
+                c = null;
+                try {
+                    c = _surfaceHolder.lockCanvas(null);
+
+                    if (!running || c == null) {
+                        return;
+                    }
+
+                    synchronized (_surfaceHolder) {
+                        _surfaceView.draw(c);
+                    }
+                } finally {
+                    if (c != null) {
+                        _surfaceHolder.unlockCanvasAndPost(c);
+                    }
+                }
+
+                boolean allFinished = true;
+                for(boolean f : finished) {
+                    if (!f)
+                        allFinished = false;
+                }
+
+                if (!running || allFinished) {
+                    return;
+                }
+
+                try {
+                    //
+                    Thread.sleep(SLEEP_TIME);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * Animate each countable object to its position
+     *
+     * @return array of booleans for which are done animating
+     */
+    private boolean [] updateAnimationState() {
+        int step = 10;
+
+        boolean[] done = new boolean[_countables.size()];
+
+        for (int i = 0; i < _countables.size(); i++) {
+            Countable c = _countables.get(i);
+
+            TenFrame.XY destination = tenFrame.getLocationOfIthObject(i+1);
+
+            c.x += Math.min(step, destination.x - c.x);
+            c.y += Math.min(step, destination.y - c.y);
+
+            if (c.x == destination.x && c.y == destination.y) {
+                done[i] = true;
+            }
+
+        }
+
+        return done;
     }
 
 }

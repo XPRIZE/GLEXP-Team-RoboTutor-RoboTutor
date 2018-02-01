@@ -122,6 +122,8 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
                 _dataIndex++;
                 numDotsCounted = 0;
 
+                surfaceView.hideTenFrame();
+
                 // reset target text
                 stimulusText.setText("");
             }
@@ -236,6 +238,11 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
      */
     public void playChime() {
 
+    }
+
+    public void demonstrateTenFrame() {
+
+        surfaceView.moveItemsToTenFrame();
     }
 
     /**
