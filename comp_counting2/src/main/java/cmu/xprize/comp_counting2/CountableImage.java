@@ -23,6 +23,7 @@ public class CountableImage extends Countable {
     @Override
     void draw(Canvas c, Paint p) {
         // draws at the center
-        c.drawBitmap(bmp, this.x - bmp.getWidth() / 2, this.y - bmp.getHeight() / 2, p);
+        c.drawBitmap(bmp, this.x - bmp.getWidth() / 2 + displacementX, this.y - bmp.getHeight() / 2, p);
     }
+
 }

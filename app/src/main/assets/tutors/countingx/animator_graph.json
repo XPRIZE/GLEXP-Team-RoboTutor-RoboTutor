@@ -157,7 +157,11 @@
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
 
-            {"type": "COMMAND", "id": "SCountingX", "method": "demonstrateTenFrame", "parms":"", "features":""}
+            {"type": "COMMAND", "id": "SCountingX", "method": "demonstrateTenFrame", "parms":"", "features":""},
+
+            {"type": "COMMAND", "id": "SCountingX", "method": "setVolatileBehavior", "parms": "DONE_MOVING_TO_TEN_FRAME:String|NEXTNODE:String", "features": ""},
+
+            {"type": "COMMAND", "cmd": "WAIT"}
           ]
         },
 

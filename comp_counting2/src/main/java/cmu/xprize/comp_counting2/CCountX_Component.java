@@ -75,6 +75,10 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     private ArrayList<Boolean> dotsTapped;
 
 
+    // Animation stuff
+    private boolean isRunning = false;
+
+
     static final String TAG = "CCount_Component";
 
     // REMOVE private CCount_DotBag dotBag;
@@ -110,7 +114,30 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
         bManager = LocalBroadcastManager.getInstance(getContext());
 
+        //mainHandler.post(animationRunnable);
+
     }
+
+    private int runCount = 0;
+    private int runWait = 100;
+    private Runnable animationRunnable = new Runnable() {
+        @Override
+        public void run() {
+
+            if(isRunning) {
+                surfaceView.wiggleFruit();
+                mainHandler.postDelayed(animationRunnable, 10);
+                runCount++;
+
+            }
+
+            // if we're done counting, apply behavior to queue and stop thread
+            if (surfaceView.doneMovingToTenFrame) {
+                applyBehavior(COUNTX_CONST.DONE_MOVING_TO_TEN_FRAME);
+                isRunning = false;
+            }
+        }
+    };
 
     public void next() {
 
@@ -242,7 +269,10 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
     public void demonstrateTenFrame() {
 
-        surfaceView.moveItemsToTenFrame();
+        surfaceView.showTenFrame();
+        isRunning = true;
+        mainHandler.post(animationRunnable);
+        //surfaceView.moveItemsToTenFrame();
     }
 
     /**

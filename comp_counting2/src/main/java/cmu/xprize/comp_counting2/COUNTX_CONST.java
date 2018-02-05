@@ -21,6 +21,8 @@ public class COUNTX_CONST {
     public static final String PLAY_CHIME = "PLAY_CHIME";
     public static final String DONE_COUNTING_TO_N = "DONE_COUNTING_TO_N";
 
+    public static final String DONE_MOVING_TO_TEN_FRAME = "DONE_MOVING_TO_TEN_FRAME";
+
     public static final String[][] CHIMES = {
             {"49", "51", "53", "54", "56", "57", "58", "59", "60", "61"},
             {"37", "39", "41", "42", "44", "45", "46", "47", "48", "49"},

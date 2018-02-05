@@ -25,7 +25,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
     private CCountX_Component _component;
 
     // where animation happens
-    private AnimationThread thread;
+    //private AnimationThread thread;
 
     // painting tools
     private SurfaceHolder _holder;
@@ -118,6 +118,26 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         return resizedBmp;
     }
 
+    public boolean doneMovingToTenFrame = false;
+
+
+    public void wiggleFruit() {
+
+        doneMovingToTenFrame = true;
+        boolean[] fruitInTenFrame = new boolean[_countables.size()];
+        for (int i=0; i < _countables.size(); i++) {
+            Countable c = _countables.get(i);
+
+            TenFrame.XY xy = tenFrame.getLocationOfIthObject(i+1);
+            fruitInTenFrame[i] = c.moveTowards(xy.x, xy.y);
+            if(!fruitInTenFrame[i]) {
+                doneMovingToTenFrame = false;
+            }
+        }
+
+        redraw();
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
@@ -186,6 +206,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
             if (showTenFrame) {
                 tenFrame.draw(canvas, _paint);
 
+                /*
                 for (int i = 0; i < _countables.size(); i++) {
                     Countable c = _countables.get(i);
 
@@ -195,6 +216,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
                     c.draw(canvas, _paint);
                 }
+                */
             }
 
             if(!tappable && COUNTX_CONST.USE_JAIL_BARS) {
@@ -360,15 +382,11 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
     /**
      * Move items to the DotBag/TenFrame
      */
-    public void moveItemsToTenFrame() {
+    public void showTenFrame() {
 
         // get Index, and XY locations of items
         showTenFrame = true;
 
-        thread = new AnimationThread(getHolder(), this);
-        thread.setRunning(true);
-
-        thread.start();
         //redraw();
 
         // animate items so that they move to their proper box in the TenFrame
@@ -417,7 +435,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
 
-        thread.setRunning(false);
+        /*thread.setRunning(false);*/
     }
 
 
