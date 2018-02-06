@@ -9,19 +9,22 @@ import android.graphics.Color;
 public class COUNTX_CONST {
 
     // drawing parameters
-    public static final int COLOR_PINK = Color.rgb(255, 150, 150);
-    public static final int COLOR_BACKGROUND = Color.LTGRAY;
+    public static final int COLOR_PINK = Color.rgb(255, 180, 180);
+    public static final int COLOR_BACKGROUND = Color.rgb(230, 230, 230);
     public static final int DRAWABLE_RADIUS = 100;
     public static final int BOX_MARGIN = 100;
-    public static final float BOX_BOUNDARY_STROKE_WIDTH = 10.0f;
+    public static final float BOX_BOUNDARY_STROKE_WIDTH = 5.0f;
 
     public static final boolean USE_JAIL_BARS = true;
 
     // actions
     public static final String PLAY_CHIME = "PLAY_CHIME";
+    public static final String PLAY_FINAL_COUNT = "PLAY_FINAL_COUNT";
     public static final String DONE_COUNTING_TO_N = "DONE_COUNTING_TO_N";
 
+
     public static final String DONE_MOVING_TO_TEN_FRAME = "DONE_MOVING_TO_TEN_FRAME";
+    public static final String DONE_SAYING_FINAL_COUNT = "DONE_SAYING_FINAL_COUNT";
 
     public static final String[][] CHIMES = {
             {"49", "51", "53", "54", "56", "57", "58", "59", "60", "61"},

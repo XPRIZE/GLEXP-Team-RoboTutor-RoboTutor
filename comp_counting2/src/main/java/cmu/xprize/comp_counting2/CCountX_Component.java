@@ -133,8 +133,10 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
             // if we're done counting, apply behavior to queue and stop thread
             if (surfaceView.doneMovingToTenFrame) {
+                postFinalCount();
                 applyBehavior(COUNTX_CONST.DONE_MOVING_TO_TEN_FRAME);
                 isRunning = false;
+
             }
         }
     };
@@ -264,6 +266,13 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
      * Overridden by child class.
      */
     public void playChime() {
+
+    }
+
+    /**
+     * Overridden by child class.
+     */
+    public void postFinalCount() {
 
     }
 

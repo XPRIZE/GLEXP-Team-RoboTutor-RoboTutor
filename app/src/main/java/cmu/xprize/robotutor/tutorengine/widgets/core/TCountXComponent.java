@@ -254,6 +254,15 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
         postEvent(COUNTX_CONST.PLAY_CHIME);
     }
 
+    @Override
+    public void postFinalCount() {
+
+        TScope scope = mTutor.getScope();
+
+        scope.addUpdateVar("FinalCount", new TString(String.valueOf(currentCount)));
+
+    }
+
 
 
     /**
