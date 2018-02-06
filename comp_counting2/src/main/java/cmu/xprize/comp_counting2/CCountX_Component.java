@@ -124,7 +124,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         @Override
         public void run() {
 
-            if(isRunning) {
+            if(isRunning && surfaceView!= null) {
                 surfaceView.wiggleFruit();
                 mainHandler.postDelayed(animationRunnable, 10);
                 runCount++;

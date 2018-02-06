@@ -35,7 +35,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
     private Vector<Countable> _countables;
     private boolean tappable;
 
-    private TenFrame tenFrame = new TenFrame(400, 400, 200, 200);
+    private TenFrame tenFrame;
     private boolean showTenFrame = false;
 
     private int[] FRUITS = {
@@ -94,6 +94,16 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         getHolder().addCallback(this);
     }
 
+    private void initTenFrame() {
+        int holeWidth = 200;
+        int holeHeight = 200;
+
+
+        int x = (getWidth() / 2) - (holeWidth * 5) / 2;
+        int y = (getHeight() / 2) - holeHeight;
+        tenFrame = new TenFrame(x, y, holeWidth, holeHeight);
+    }
+
     public void setComponent(CCountX_Component component) {
         _component = component;
     }
@@ -129,7 +139,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
             Countable c = _countables.get(i);
 
             TenFrame.XY xy = tenFrame.getLocationOfIthObject(i+1);
-            fruitInTenFrame[i] = c.moveTowards(xy.x, xy.y);
+            fruitInTenFrame[i] = c.moveTowardsAtVelocity(xy.x, xy.y, 40);
             if(!fruitInTenFrame[i]) {
                 doneMovingToTenFrame = false;
             }
@@ -187,7 +197,9 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
      */
     private void redraw() {
         Canvas canvas = _holder.lockCanvas();
-        redraw(canvas);
+        if (canvas != null) {
+            redraw(canvas);
+        }
     }
 
     /**
@@ -220,7 +232,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
             }
 
             if(!tappable && COUNTX_CONST.USE_JAIL_BARS) {
-                drawDiagonalBars(canvas);
+                //drawDiagonalBars(canvas);
             }
 
             drawBorderRectangles(canvas);
@@ -418,6 +430,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         if (canvas == null) {
             Log.e(TAG, "Cannot draw onto mull canvas");
         } else {
+            initTenFrame();
             initializeBackground(canvas, getWidth(), getHeight());
         }
     }
@@ -429,6 +442,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
 
     }
 

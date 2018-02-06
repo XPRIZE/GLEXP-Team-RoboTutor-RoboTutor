@@ -77,11 +77,5 @@ class TenFrame {
             c.drawLine(startX, startY + i*holeHeight, startX + 5*holeWidth, startY + i*holeHeight, p);
         }
 
-        for (int i = 1; i < 11; i++) {
-            XY xy = getLocationOfIthObject(i);
-            c.drawCircle(xy.x, xy.y, 20, p);
-            c.drawText("" + i, xy.x, xy.y, p);
-        }
-
     }
 }
