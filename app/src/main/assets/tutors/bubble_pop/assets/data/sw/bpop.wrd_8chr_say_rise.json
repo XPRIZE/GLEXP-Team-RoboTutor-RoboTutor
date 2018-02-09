@@ -1,0 +1,88 @@
+{
+  "gen_responsetype": "text_data",
+  "gen_responseSet": [
+    "nyumbani",
+    "walikuwa",
+    "mwingine",
+    "kulikuwa",
+    "marafiki",
+    "kijijini",
+    "msichana",
+    "aliuliza",
+    "palikuwa",
+    "nyingine",
+    "chochote",
+    "walienda",
+    "lilikuwa",
+    "alisikia",
+    "kukimbia",
+    "hatimaye"
+  ],
+  "gen_answertype": "text_data",
+  "gen_answerSet": [
+    "nyumbani",
+    "walikuwa",
+    "mwingine",
+    "kulikuwa",
+    "marafiki",
+    "kijijini",
+    "msichana",
+    "aliuliza",
+    "palikuwa",
+    "nyingine",
+    "chochote",
+    "walienda",
+    "lilikuwa",
+    "alisikia",
+    "kukimbia",
+    "hatimaye"
+  ],
+  "gen_stimulustype": "text_data",
+  "gen_stimulusSet": [
+    "nyumbani",
+    "walikuwa",
+    "mwingine",
+    "kulikuwa",
+    "marafiki",
+    "kijijini",
+    "msichana",
+    "aliuliza",
+    "palikuwa",
+    "nyingine",
+    "chochote",
+    "walienda",
+    "lilikuwa",
+    "alisikia",
+    "kukimbia",
+    "hatimaye"
+  ],
+  "question_count": 10,
+  "question_sequence": "RANDOM",
+  "question_replacement": false,
+  "response_replacement": false,
+  "problem_type": "wrd",
+  "dataSource": [
+    {
+      "question_type": "rising",
+      "question_say": true,
+      "question_show": false,
+      "gen_question": true,
+      "respCountExact": 5,
+      "answer_index": -1
+    }
+  ],
+  "view_background": {
+    "style": "primitives",
+    "kind": "squares",
+    "layout": "grid",
+    "layoutcount": 0,
+    "colorbase": "#666666",
+    "colorchoice": "fixed",
+    "colors": [
+      -6053120,
+      -7566336,
+      -2500352,
+      -5066240
+    ]
+  }
+}

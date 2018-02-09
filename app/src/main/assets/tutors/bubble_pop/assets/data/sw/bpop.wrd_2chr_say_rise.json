@@ -1,0 +1,73 @@
+{
+  "gen_responsetype": "text_data",
+  "gen_responseSet": [
+    "na",
+    "ya",
+    "wa",
+    "ni",
+    "la",
+    "za",
+    "tu",
+    "je",
+    "ng",
+    "si",
+    "au"
+  ],
+  "gen_answertype": "text_data",
+  "gen_answerSet": [
+    "na",
+    "ya",
+    "wa",
+    "ni",
+    "la",
+    "za",
+    "tu",
+    "je",
+    "ng",
+    "si",
+    "au"
+  ],
+  "gen_stimulustype": "text_data",
+  "gen_stimulusSet": [
+    "na",
+    "ya",
+    "wa",
+    "ni",
+    "la",
+    "za",
+    "tu",
+    "je",
+    "ng",
+    "si",
+    "au"
+  ],
+  "question_count": 10,
+  "question_sequence": "RANDOM",
+  "question_replacement": false,
+  "response_replacement": false,
+  "problem_type": "wrd",
+  "dataSource": [
+    {
+      "question_type": "rising",
+      "question_say": true,
+      "question_show": false,
+      "gen_question": true,
+      "respCountExact": 5,
+      "answer_index": -1
+    }
+  ],
+  "view_background": {
+    "style": "primitives",
+    "kind": "squares",
+    "layout": "grid",
+    "layoutcount": 0,
+    "colorbase": "#666666",
+    "colorchoice": "fixed",
+    "colors": [
+      -6053120,
+      -7566336,
+      -2500352,
+      -5066240
+    ]
+  }
+}
