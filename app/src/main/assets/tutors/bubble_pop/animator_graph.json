@@ -186,8 +186,9 @@
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueThree}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_EXPRESSIONS&FTR_E2N"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": "FTR_SAY&FTR_EXPRESSIONS&FTR_N2E"},
 
-            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "STIMULUS_SHOWN:String|NEXTNODE:String" , "features":"FTR_SHOW&!FTR_EXPRESSIONS&!FTR_E2N"},
-            {"type": "COMMAND", "cmd": "WAIT", "features":"FTR_SHOW&!FTR_EXPRESSIONS&!FTR_E2N"},
+            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "STIMULUS_SHOWN:String|NEXTNODE:String" , "features":"FTR_SHOW&!FTR_SAY|FTR_SHOW&!FTR_E2N"},
+            //Feature is logically equivalent to FTR_SHOW & !(FTR_SAY & FTR_E2N)
+            {"type": "COMMAND", "cmd": "WAIT", "features":"FTR_SHOW&!FTR_SAY|FTR_SHOW&!FTR_E2N"},
 
 //             If we are showing it we have to wait for the animation to complete before continuing
 
