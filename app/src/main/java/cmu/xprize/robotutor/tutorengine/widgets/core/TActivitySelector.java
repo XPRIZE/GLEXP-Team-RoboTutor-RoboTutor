@@ -58,7 +58,6 @@ import static cmu.xprize.comp_session.AS_CONST.VAR_DATASOURCE;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENTDATA;
 import static cmu.xprize.robotutor.tutorengine.util.CClassMap2.classMap;
-import static cmu.xprize.util.TCONST.PERFORMANCE_TAG;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
@@ -365,6 +364,40 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
      * @param buttonid
      */
     private void processTutorSelectMode(String buttonid) {
+
+        if (buttonid.startsWith(TCONST.PLEASE_DEBUG_ME)) {
+
+            String intent;
+            String file;
+
+            switch (buttonid) {
+                case TCONST.PLEASE_DEBUG_TAPCOUNT:
+                    intent = "countingx";
+                    file = "countingx_test.json";
+                    break;
+
+                case TCONST.PLEASE_DEBUG_AKIRA:
+                    intent = "akira";
+                    file = "akira_test.json";
+                    break;
+
+                case TCONST.PLEASE_DEBUG_ASM:
+                    intent = "math";
+                    file = "math_test.json";
+                    break;
+
+                default:
+                    intent = "bpop.num";
+                    file = "bpop_test.json";
+            }
+
+            // ZZZ this is where the sweet-spot is
+
+            doLaunch(intent, TCONST.TUTOR_NATIVE, TCONST.DEBUG_FILE_PREFIX + file);
+            return;
+
+        }
+
         boolean     buttonFound = false;
 
         // If user selects "Let robotutor decide" then use student model to decide skill to work next
@@ -818,6 +851,12 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     private String processDebugSelectMode(String buttonid) {
         // Update the active skill
         //
+        if(buttonid.startsWith(TCONST.PLEASE_DEBUG_ME)){
+            RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_LAUNCH;
+            return buttonid;
+
+        }
+
         switch (activeSkill) {
 
             case AS_CONST.SELECT_WRITING:

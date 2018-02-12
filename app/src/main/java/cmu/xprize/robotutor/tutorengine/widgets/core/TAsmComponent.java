@@ -355,6 +355,15 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
                 String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
                 loadJSON(new JSONObject(jsonData), null);
 
+            } else if (dataNameDescriptor.startsWith(TCONST.DEBUG_FILE_PREFIX)) { // ZZZ this should be in every component
+
+                String dataFile = dataNameDescriptor.substring(TCONST.DEBUG_FILE_PREFIX.length());
+
+                String dataPath = TCONST.DEBUG_RT_PATH + "/";
+                String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
+                loadJSON(new JSONObject(jsonData), mTutor.getScope());
+
+
             } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
                 dataNameDescriptor = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());

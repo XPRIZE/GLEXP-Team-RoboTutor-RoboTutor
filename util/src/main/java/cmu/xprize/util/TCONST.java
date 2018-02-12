@@ -199,6 +199,9 @@ public class TCONST {
     public static final String DOWNLOAD_RT_PATH    = "/sdcard/Download/RoboTutor";
     public static final String DOWNLOAD_RT_TUTOR   = "/sdcard/Download/RoboTutor/assets";
 
+    public static final String DEBUG_FILE_PREFIX = "[debug_file]";
+    public static final String DEBUG_RT_PATH       = "/sdcard/robo_debug";
+
     public static final String ARITHMETIC_DATA     = "tutors/add_subtract";
     public static final String AKIRA_DATA          = "tutors/akira";
     public static final String BUBBLEPOP_DATA      = "tutors/bubble_pop";
@@ -768,5 +771,11 @@ public class TCONST {
 
     // Counting
     public static final String COUNTING_DEBUG_LOG = "COUNTING_DEBUG_LOG";
+
+    // Data source debugger
+    public static final String PLEASE_DEBUG_ME = "PLEASE_DEBUG_ME";
+    public static final String PLEASE_DEBUG_TAPCOUNT = PLEASE_DEBUG_ME + "_TAPCOUNT";
+    public static final String PLEASE_DEBUG_AKIRA = PLEASE_DEBUG_ME + "_AKIRA";
+    public static final String PLEASE_DEBUG_ASM = PLEASE_DEBUG_ME + "_ASM";
 
 }

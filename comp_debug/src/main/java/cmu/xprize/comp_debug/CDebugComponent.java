@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import cmu.xprize.sm_component.CSm_Component;
 import cmu.xprize.util.CAt_Data;
 import cmu.xprize.util.IButtonController;
+import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.comp_debug.CD_CONST.SELECT_MATH;
 import static cmu.xprize.comp_debug.CD_CONST.SELECT_SHAPES;
@@ -46,8 +48,16 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
     private HashMap<String, CAt_Data>  transitionMap;
 
     private GridView      gridView;
-    private CSm_Component customView;
+    //private CSm_Component customView;
+
     private CDebugAdapter gridAdapter;
+
+    private LinearLayout customView;
+    //private Button SBpopCustom;
+    private Button SAsmCustom;
+    private Button SAkiraCustom;
+    private Button STapCountCustom;
+    //private Button SWrCustom;
 
     private boolean       viewGrid = true;
 
@@ -76,7 +86,13 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         mContext = context;
 
         gridView   = (GridView) findViewById(R.id.SdebugGrid);
-        customView = (CSm_Component) findViewById(R.id.SdbgComponent);
+
+        /* debug views */
+        customView = (LinearLayout) findViewById(R.id.SdbgComponent);
+        //SBpopCustom = (Button) findViewById(R.id.SBpopCustom);
+        STapCountCustom = (Button) findViewById(R.id.STapCountCustom);
+        SAkiraCustom = (Button) findViewById(R.id.SAkiraCustom);
+        SAsmCustom = (Button) findViewById(R.id.SAsmCustom);
 
         mContainer = (ViewGroup) findViewById(R.id.SdebugContainer);
 
@@ -104,6 +120,9 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
             }
         });
 
+        /*
+         * Custom launch!
+         */
         ScustomLaunch.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
@@ -112,11 +131,49 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
                 viewGrid = !viewGrid;
 
+                if(mButtonController != null) {
+                    gridView.setVisibility(viewGrid? VISIBLE:GONE);
+                    customView.setVisibility(viewGrid? GONE:VISIBLE);
+
+
+                    // ZZZ where debug launch happens
+                    // mButtonController.doDebugLaunchAction(TCONST.PLEASE_DEBUG_ME);
+                    return;
+                }
+
                 gridView.setVisibility(viewGrid? VISIBLE:GONE);
                 customView.setVisibility(viewGrid? GONE:VISIBLE);
             }
         });
 
+
+        STapCountCustom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mButtonController.doDebugLaunchAction(TCONST.PLEASE_DEBUG_TAPCOUNT);
+            }
+        });
+
+        SAkiraCustom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mButtonController.doDebugLaunchAction(TCONST.PLEASE_DEBUG_AKIRA);
+            }
+        });
+
+        SAsmCustom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mButtonController.doDebugLaunchAction(TCONST.PLEASE_DEBUG_ASM);
+            }
+        });
+
+        /*
+         * Reset Tutor to original
+         */
         SresetTutor.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
@@ -138,7 +195,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
     public void setButtonController(IButtonController controller) {
 
         mButtonController = controller;
-        customView.setButtonController(controller);
+        //customView.setButtonController(controller);
     }
 
 
@@ -182,7 +239,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
         }
 
-        customView.setDataSource("[local_file]" + skillType);
+        //customView.setDataSource("[local_file]" + skillType);
         mContainer.setBackgroundColor(color);
         SskillTitle.setText(text);
     }
