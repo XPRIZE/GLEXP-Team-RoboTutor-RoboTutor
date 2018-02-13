@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import cmu.xprize.comp_counting.CCount_Component;
 import cmu.xprize.comp_counting2.CCountX_Component;
 import cmu.xprize.comp_counting2.COUNTX_CONST;
 import cmu.xprize.comp_logging.CErrorManager;
@@ -184,6 +183,7 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
         publishFeature(TCONST.ALL_CORRECT);
 
         // TODO: globally make startWith type TCONST
+        //
         try {
             if (dataNameDescriptor.startsWith(TCONST.LOCAL_FILE)) {
 
@@ -195,6 +195,14 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
                 //
                 String dataPath = TCONST.DOWNLOAD_RT_TUTOR + "/" + mTutor.getTutorName() + "/";
 
+                String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
+                loadJSON(new JSONObject(jsonData), mTutor.getScope());
+
+            } else if (dataNameDescriptor.startsWith(TCONST.DEBUG_FILE_PREFIX)) { // this must be reproduced in every robo_debuggable component
+
+                String dataFile = dataNameDescriptor.substring(TCONST.DEBUG_FILE_PREFIX.length());
+
+                String dataPath = TCONST.DEBUG_RT_PATH + "/";
                 String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
                 loadJSON(new JSONObject(jsonData), mTutor.getScope());
 

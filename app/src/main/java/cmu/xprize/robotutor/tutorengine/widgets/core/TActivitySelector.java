@@ -58,8 +58,11 @@ import static cmu.xprize.comp_session.AS_CONST.VAR_DATASOURCE;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENTDATA;
 import static cmu.xprize.robotutor.tutorengine.util.CClassMap2.classMap;
-import static cmu.xprize.util.TCONST.PERFORMANCE_TAG;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_AKIRA;
+import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_ASM;
+import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_BPOP;
+import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_TAP_COUNT;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
 public class TActivitySelector extends CActivitySelector implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource, IPublisher, ITutorLogger {
@@ -320,6 +323,28 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         applyBehavior(AS_CONST.SELECT_DEBUGLAUNCH);
     }
 
+    /** This allows us to update the current tutor for a given skill from the CDebugComponent
+     *
+     */
+    @Override
+    public void doDebugTagLaunchAction(String tag) {
+
+        publishValue(AS_CONST.VAR_DEBUG_TAG, tag);
+
+        applyBehavior(AS_CONST.SELECT_DEBUG_TAG_LAUNCH);
+    }
+
+    @Override
+    public void doTaggedButtonBehavior(String tag) {
+        Log.d(TAG, "Debug Button with tag: " + tag);
+
+        // sometimes figuring out new code is like driving a new route in a slightly familiar city...
+        // you are driving along unfamiliar roats and you're like "where the heck am I?"
+        // then you turn a corner and all of a sudden you know you're exactly where you are...
+        // and you're like "huh! I never would have guessed that this is where I'd end up!"
+        performButtonBehavior(tag, true);
+
+    }
 
     /**
      * Button clicks may come from either the skill selector ASK component or the Difficulty
@@ -331,14 +356,24 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     public void doButtonBehavior(String buttonid) {
 
         Log.d(TAG, "Button Selected: " + buttonid);
+        performButtonBehavior(buttonid, false);
 
 
+    }
+
+    /**
+     *
+     *
+     * @param buttonid
+     * @param roboDebugger
+     */
+    private void performButtonBehavior(String buttonid, boolean roboDebugger) {
         // If we are in debug mode then there is a third selection phase where we are presented
         // the transition table for the active skill - The author can select a new target tutor
         // from any of the transition entries.
         //
         if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_SELECT)) {
-            buttonid = processDebugSelectMode(buttonid);
+            buttonid = processDebugSelectMode(buttonid, roboDebugger);
         }
 
         // If we are in Assessment mode we have prompted the student to assess the difficulty of the
@@ -355,7 +390,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         // RoboTutor will go into an activity.
         if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT) ||
            RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_LAUNCH)) {
-            processTutorSelectMode(buttonid);
+            processTutorSelectMode(buttonid, roboDebugger);
 
         }
     }
@@ -364,7 +399,38 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
      * Method for processing button press on the TUTOR_SELECT (home) screen
      * @param buttonid
      */
-    private void processTutorSelectMode(String buttonid) {
+    private void processTutorSelectMode(String buttonid, boolean roboDebugger) {
+
+        if (roboDebugger) {
+
+            String intent;
+            String file;
+
+            intent = buttonid;
+
+            // specify the file name we're debugging with
+            switch (buttonid) {
+                case TCONST.TAG_DEBUG_TAP_COUNT:
+                    file = ROBO_DEBUG_FILE_TAP_COUNT;
+                    break;
+
+                case TCONST.TAG_DEBUG_AKIRA:
+                    file = ROBO_DEBUG_FILE_AKIRA;
+                    break;
+
+                case TCONST.TAG_DEBUG_ASM:
+                    file = ROBO_DEBUG_FILE_ASM;
+                    break;
+
+                default:
+                    file = ROBO_DEBUG_FILE_BPOP;
+            }
+
+            doLaunch(intent, TCONST.TUTOR_NATIVE, TCONST.DEBUG_FILE_PREFIX + file);
+            return;
+
+        }
+
         boolean     buttonFound = false;
 
         // If user selects "Let robotutor decide" then use student model to decide skill to work next
@@ -815,9 +881,16 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
      * @param buttonid
      * @return new button id, to be selected for the DEBUG_LAUNCH screen
      */
-    private String processDebugSelectMode(String buttonid) {
+    private String processDebugSelectMode(String buttonid, boolean roboDebugger) {
         // Update the active skill
         //
+        if(roboDebugger){
+            // we know which selector mode we're in, so we can return without changing anything
+            RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_LAUNCH;
+            return buttonid;
+
+        }
+
         switch (activeSkill) {
 
             case AS_CONST.SELECT_WRITING:

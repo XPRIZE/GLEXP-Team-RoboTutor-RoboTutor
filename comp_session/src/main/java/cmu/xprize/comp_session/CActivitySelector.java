@@ -121,7 +121,16 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     }
 
     @Override
+    public void doDebugTagLaunchAction(String tag) {
+
+    }
+
+    @Override
     public void doButtonBehavior(String buttonid) {
+    }
+
+    @Override
+    public void doTaggedButtonBehavior(String tag) {
     }
 
     @Override
@@ -252,6 +261,10 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
 
                         doButtonBehavior(_target);
                         break;
+
+                    case AS_CONST.TAGGED_BUTTON_EVENT:
+
+                        doTaggedButtonBehavior(_target);
 
                     case AS_CONST.CANCEL_DESCRIBE:
 

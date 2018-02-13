@@ -203,6 +203,24 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
                 loadJSON(new JSONObject(jsonData), mTutor.getScope());
 
+            } else if (dataNameDescriptor.startsWith(TCONST.DEBUG_FILE_PREFIX)) { // this must be reproduced in every robo_debuggable component
+
+                String dataFile = dataNameDescriptor.substring(TCONST.DEBUG_FILE_PREFIX.length());
+
+                String dataPath = TCONST.DEBUG_RT_PATH + "/";
+                String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
+                loadJSON(new JSONObject(jsonData), mTutor.getScope());
+
+                // these two code statements below are the same as in the "startsWith SOURCEFILE" condition
+                // set the total number of questions
+                if(question_count == 0) {
+                    mTutor.setTotalQuestions(gen_stimulusSet.length);
+                }
+
+                // preprocess the datasource e.g. populate instance arrays with general types
+                //
+                preProcessDataSource();
+
             } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
                 String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
