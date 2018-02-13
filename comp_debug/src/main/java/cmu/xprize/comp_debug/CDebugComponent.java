@@ -163,12 +163,14 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
             }
         });
 
+        /*
+         * A click listener that sends the android:tag to the ActivitySelector
+         */
         View.OnClickListener roboDebuggerClickListener = new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
-                // ZZZ pass tag
                 mButtonController.doDebugTagLaunchAction((String) view.getTag());
             }
         };
@@ -187,7 +189,13 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
             }
         });
 
-
+        // add listeners for BubblePop
+        SBPopLetters.setOnClickListener(roboDebuggerClickListener);
+        SBPopWords.setOnClickListener(roboDebuggerClickListener);
+        SBPopPhonemes.setOnClickListener(roboDebuggerClickListener);
+        SBPopNumbers.setOnClickListener(roboDebuggerClickListener);
+        SBPopShapes.setOnClickListener(roboDebuggerClickListener);
+        SBPopExpressions.setOnClickListener(roboDebuggerClickListener);
 
         /*
          * Reset Tutor to original

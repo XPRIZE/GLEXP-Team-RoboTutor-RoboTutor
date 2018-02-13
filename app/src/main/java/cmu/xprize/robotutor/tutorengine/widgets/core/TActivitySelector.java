@@ -59,6 +59,10 @@ import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENTDATA;
 import static cmu.xprize.robotutor.tutorengine.util.CClassMap2.classMap;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_AKIRA;
+import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_ASM;
+import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_BPOP;
+import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_TAP_COUNT;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
 public class TActivitySelector extends CActivitySelector implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource, IPublisher, ITutorLogger {
@@ -404,24 +408,23 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
             intent = buttonid;
 
+            // specify the file name we're debugging with
             switch (buttonid) {
                 case TCONST.TAG_DEBUG_TAP_COUNT:
-                    file = "countingx_test.json";
+                    file = ROBO_DEBUG_FILE_TAP_COUNT;
                     break;
 
                 case TCONST.TAG_DEBUG_AKIRA:
-                    file = "akira_test.json";
+                    file = ROBO_DEBUG_FILE_AKIRA;
                     break;
 
                 case TCONST.TAG_DEBUG_ASM:
-                    file = "math_test.json";
+                    file = ROBO_DEBUG_FILE_ASM;
                     break;
 
                 default:
-                    file = "bpop.json";
+                    file = ROBO_DEBUG_FILE_BPOP;
             }
-
-            // ZZZ this is where the sweet-spot is
 
             doLaunch(intent, TCONST.TUTOR_NATIVE, TCONST.DEBUG_FILE_PREFIX + file);
             return;

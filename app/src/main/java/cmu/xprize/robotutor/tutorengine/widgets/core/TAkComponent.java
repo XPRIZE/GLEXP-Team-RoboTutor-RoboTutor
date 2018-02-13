@@ -233,7 +233,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
                 String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
                 loadJSON(new JSONObject(jsonData), null);
 
-            } else if (dataNameDescriptor.startsWith(TCONST.DEBUG_FILE_PREFIX)) { // ZZZ this should be in every component
+            } else if (dataNameDescriptor.startsWith(TCONST.DEBUG_FILE_PREFIX)) { // this must be reproduced in every robo_debuggable component
 
                 String dataFile = dataNameDescriptor.substring(TCONST.DEBUG_FILE_PREFIX.length());
 

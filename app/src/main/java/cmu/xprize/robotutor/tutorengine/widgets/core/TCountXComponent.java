@@ -183,7 +183,7 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
         publishFeature(TCONST.ALL_CORRECT);
 
         // TODO: globally make startWith type TCONST
-        // ZZZ a ha!
+        //
         try {
             if (dataNameDescriptor.startsWith(TCONST.LOCAL_FILE)) {
 
@@ -198,7 +198,7 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
                 String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
                 loadJSON(new JSONObject(jsonData), mTutor.getScope());
 
-            } else if (dataNameDescriptor.startsWith(TCONST.DEBUG_FILE_PREFIX)) { // ZZZ this should be in every component
+            } else if (dataNameDescriptor.startsWith(TCONST.DEBUG_FILE_PREFIX)) { // this must be reproduced in every robo_debuggable component
 
                 String dataFile = dataNameDescriptor.substring(TCONST.DEBUG_FILE_PREFIX.length());
 

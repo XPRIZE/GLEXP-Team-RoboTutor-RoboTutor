@@ -784,4 +784,9 @@ public class TCONST {
     public static final String TAG_DEBUG_BPOP_SHP = "bpop.shp";
     public static final String TAG_DEBUG_BPOP_EX = "bpop.ex";
 
+    public static final String ROBO_DEBUG_FILE_TAP_COUNT = "countingx_test.json";
+    public static final String ROBO_DEBUG_FILE_AKIRA = "akira_test.json";
+    public static final String ROBO_DEBUG_FILE_ASM = "math_test.json";
+    public static final String ROBO_DEBUG_FILE_BPOP = "bpop.json";
+
 }
