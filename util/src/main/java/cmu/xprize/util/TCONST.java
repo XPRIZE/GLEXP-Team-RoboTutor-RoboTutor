@@ -773,9 +773,15 @@ public class TCONST {
     public static final String COUNTING_DEBUG_LOG = "COUNTING_DEBUG_LOG";
 
     // Data source debugger
-    public static final String PLEASE_DEBUG_ME = "PLEASE_DEBUG_ME";
-    public static final String PLEASE_DEBUG_TAPCOUNT = PLEASE_DEBUG_ME + "_TAPCOUNT";
-    public static final String PLEASE_DEBUG_AKIRA = PLEASE_DEBUG_ME + "_AKIRA";
-    public static final String PLEASE_DEBUG_ASM = PLEASE_DEBUG_ME + "_ASM";
+
+    public static final String TAG_DEBUG_AKIRA = "akira";
+    public static final String TAG_DEBUG_ASM = "math";
+    public static final String TAG_DEBUG_TAP_COUNT = "countingx";
+    public static final String TAG_DEBUG_BPOP_LTR = "bpop.ltr.mix";
+    public static final String TAG_DEBUG_BPOP_WRD = "bpop.wrd";
+    public static final String TAG_DEBUG_BPOP_PHON = "bpop.phon";
+    public static final String TAG_DEBUG_BPOP_NUM = "bpop.num";
+    public static final String TAG_DEBUG_BPOP_SHP = "bpop.shp";
+    public static final String TAG_DEBUG_BPOP_EX = "bpop.ex";
 
 }

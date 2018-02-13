@@ -54,9 +54,19 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
     private LinearLayout customView;
     //private Button SBpopCustom;
-    private Button SAsmCustom;
-    private Button SAkiraCustom;
-    private Button STapCountCustom;
+    Button SAsmCustom;
+    Button SAkiraCustom;
+    Button STapCountCustom;
+    // bubble pop
+    Button SBpopMenuButton;
+    boolean viewBpopMenu = false;
+    LinearLayout SBpopMenu;
+    Button SBPopLetters;
+    Button SBPopWords;
+    Button SBPopPhonemes;
+    Button SBPopNumbers;
+    Button SBPopShapes;
+    Button SBPopExpressions;
     //private Button SWrCustom;
 
     private boolean       viewGrid = true;
@@ -93,6 +103,16 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         STapCountCustom = (Button) findViewById(R.id.STapCountCustom);
         SAkiraCustom = (Button) findViewById(R.id.SAkiraCustom);
         SAsmCustom = (Button) findViewById(R.id.SAsmCustom);
+        /* bubble pop debug views */
+        SBpopMenuButton = (Button) findViewById(R.id.SBPopMenuButton);
+        SBpopMenu = (LinearLayout) findViewById(R.id.SBPopMenu);
+        SBPopLetters = (Button) findViewById(R.id.SBPopLetters);
+        SBPopWords = (Button) findViewById(R.id.SBPopWords);
+        SBPopPhonemes = (Button) findViewById(R.id.SBPopPhonemes);
+        SBPopNumbers = (Button) findViewById(R.id.SBPopNumbers);
+        SBPopShapes = (Button) findViewById(R.id.SBPopShapes);
+        SBPopExpressions = (Button) findViewById(R.id.SBPopExpressions);
+
 
         mContainer = (ViewGroup) findViewById(R.id.SdebugContainer);
 
@@ -135,9 +155,6 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                     gridView.setVisibility(viewGrid? VISIBLE:GONE);
                     customView.setVisibility(viewGrid? GONE:VISIBLE);
 
-
-                    // ZZZ where debug launch happens
-                    // mButtonController.doDebugLaunchAction(TCONST.PLEASE_DEBUG_ME);
                     return;
                 }
 
@@ -146,30 +163,31 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
             }
         });
 
+        View.OnClickListener roboDebuggerClickListener = new View.OnClickListener() {
 
-        STapCountCustom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                mButtonController.doDebugLaunchAction(TCONST.PLEASE_DEBUG_TAPCOUNT);
+                // ZZZ pass tag
+                mButtonController.doDebugTagLaunchAction((String) view.getTag());
             }
-        });
+        };
 
-        SAkiraCustom.setOnClickListener(new View.OnClickListener() {
+        STapCountCustom.setOnClickListener(roboDebuggerClickListener);
+
+        SAkiraCustom.setOnClickListener(roboDebuggerClickListener);
+
+        SAsmCustom.setOnClickListener(roboDebuggerClickListener);
+
+        SBpopMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                mButtonController.doDebugLaunchAction(TCONST.PLEASE_DEBUG_AKIRA);
+                viewBpopMenu = !viewBpopMenu;
+                SBpopMenu.setVisibility(viewBpopMenu ? VISIBLE : GONE);
             }
         });
 
-        SAsmCustom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                mButtonController.doDebugLaunchAction(TCONST.PLEASE_DEBUG_ASM);
-            }
-        });
 
         /*
          * Reset Tutor to original

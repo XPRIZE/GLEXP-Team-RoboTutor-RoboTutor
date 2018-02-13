@@ -14,6 +14,8 @@ public class AS_CONST {
     public static final String BUTTON_EVENT      = "BUTTON_EVENT";
     public static final String LAUNCH_EVENT      = "LAUNCH_EVENT";
 
+    public static final String TAGGED_BUTTON_EVENT = "TAGGED_BUTTON_EVENT";
+
     public static final String BUTTON1           = "SBUTTON1";
     public static final String BUTTON2           = "SBUTTON2";
     public static final String BUTTON3           = "SBUTTON3";
@@ -26,6 +28,7 @@ public class AS_CONST {
     public static final String SELECT_SHAPES     = "SELECT_SHAPES";
     public static final String SELECT_ROBOTUTOR  = "SELECT_ROBOTUTOR";
     public static final String SELECT_DEBUGLAUNCH= "SELECT_DEBUGLAUNCH";
+    public static final String SELECT_DEBUG_TAG_LAUNCH= "SELECT_DEBUG_TAG_LAUNCH";
 
     public static final String SELECT_CONTINUE        = "SELECT_CONTINUE";
     public static final String SELECT_MAKE_HARDER     = "SELECT_MAKE_HARDER";
@@ -38,6 +41,7 @@ public class AS_CONST {
 
     public static final String VAR_BUTTONID         = ".buttonid";
     public static final String VAR_BUT_BEHAVIOR     = ".buttonbehavior";
+    public static final String VAR_DEBUG_TAG        = ".debugTag";
     public static final String VAR_HELP_AUDIO       = ".helpAudio";
     public static final String VAR_PROMPT_AUDIO     = ".promptAudio";
 
