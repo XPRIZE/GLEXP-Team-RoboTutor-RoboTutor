@@ -5104,6 +5104,19 @@
       "next": "bpop.shp:say_mc",
       "harder": "bpop.shp:say_mc",
       "easier": "bpop.shp:say_mc"
+    },
+    "numberscale:1": {
+      "type": "TRANSITION",
+      "skill": "shapes",
+      "tutor_id": "numberscale:1",
+      "tutor_desc": "numberscale",
+      "tutor_data": "[file]numberscale_1.json",
+      "cell_row": "2",
+      "cell_column": "1",
+      "same": "numberscale:1",
+      "next": "bpop.shp:say_rise",
+      "harder": "bpop.shp:say_rise",
+      "easier": "bpop.shp:say_rise"
     }
   }
 }
