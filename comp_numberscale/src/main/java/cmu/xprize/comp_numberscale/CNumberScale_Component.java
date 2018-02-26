@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PointF;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import org.json.JSONObject;
@@ -119,6 +121,15 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     protected void resetView() {
 
 
+    }
+
+    public boolean onTouchEvent(MotionEvent event) {
+        final int action = MotionEventCompat.getActionMasked(event);
+        if (action == MotionEvent.ACTION_DOWN) {
+            //handleClick();
+        }
+
+        return true;
     }
 
     /**
