@@ -175,6 +175,8 @@
 
             {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_STIMULUS:String"                  ,  "features":"FTR_SHOW"},
 
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"event", "features": "FTR_SAY&FTR_MIS_NUM"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"event", "features": "FTR_SAY&FTR_GT_LT"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "FTR_SAY&FTR_PHONEMICS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueTwo}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"event", "features": "FTR_SAY&FTR_PHONEMICS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",  "soundpackage":"words", "volume": 1.0, "mode":"event", "features": "FTR_SAY&FTR_WORDS"},
@@ -191,8 +193,13 @@
             {"type": "COMMAND", "cmd": "WAIT", "features":"FTR_SHOW&!FTR_SAY|FTR_SHOW&!FTR_E2N"},
 
 //             If we are showing it we have to wait for the animation to complete before continuing
-
             {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_BUBBLES:String"              ,"features":""}
+
+//                        {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS&FTR_N2E"},
+//                        {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueTwo}}.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS&FTR_N2E"},
+//                        {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueThree}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": "FTR_EXPRESSIONS&FTR_N2E"},
+//                        {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_EXPRESSIONS&FTR_E2N"}
+
 
           ]
         },

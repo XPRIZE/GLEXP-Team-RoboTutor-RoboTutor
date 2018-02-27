@@ -688,6 +688,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 publishValue(BP_CONST.ANSWER_VAR_THREE, secondNum);
                 break;
 
+
             default:
                 publishValue(BP_CONST.ANSWER_VAR, answer);
                 break;
@@ -821,7 +822,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         switch(mProblemType) {
 
             case "EXPRESSION_E2N":
-
                 int index = correctVal.indexOf("\n");
                 String firstNum = correctVal.substring(0, index);
                 String operation = correctVal.substring(index + 1, index + 2);
@@ -837,6 +837,43 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 publishValue(BP_CONST.QUEST_VAR, firstNum);
                 publishValue(BP_CONST.QUEST_VAR_TWO, operation);
                 publishValue(BP_CONST.QUEST_VAR_THREE, secondNum);
+                break;
+
+            case "EXPRESSION_E2N_ADD":
+                index = correctVal.indexOf('+');
+                firstNum = correctVal.substring(0, index);
+                operation = "plus";
+                secondNum = correctVal.substring(index+1);
+
+                publishValue(BP_CONST.QUEST_VAR, firstNum);
+                publishValue(BP_CONST.QUEST_VAR_TWO, operation);
+                publishValue(BP_CONST.QUEST_VAR_THREE, secondNum);
+                break;
+
+            case "EXPRESSION_E2N_SUB":
+                index = correctVal.indexOf('-');
+                firstNum = correctVal.substring(0, index);
+                operation = "minus";
+                secondNum = correctVal.substring(index+1);
+
+                publishValue(BP_CONST.QUEST_VAR, firstNum);
+                publishValue(BP_CONST.QUEST_VAR_TWO, operation);
+                publishValue(BP_CONST.QUEST_VAR_THREE, secondNum);
+                break;
+
+            case "MIS_NUM":
+                String question_type = "Please fill the missing blank";
+                publishValue(BP_CONST.QUEST_VAR, question_type);
+                break;
+
+            case "GL_GT":
+                question_type = "Please tap the greatest number";
+                publishValue(BP_CONST.QUEST_VAR, question_type);
+                break;
+
+            case "GL_LT":
+                question_type = "Please tap the least number";
+                publishValue(BP_CONST.QUEST_VAR, question_type);
                 break;
 
             case "PHONEMICS":
