@@ -111,6 +111,19 @@ public class BP_CONST {
     public static final String QUEST_VAR_THREE    = ".questValueThree";
     public static final String ANSWER_VAR_THREE   = ".ansValueThree";
 
+    public static final String STIM_VAL_ZERO   = ".stimValueZero";
+    public static final String STIM_VAL_ONE   = ".stimValueOne";
+    public static final String STIM_VAL_TWO   = ".stimValueTwo";
+    public static final String STIM_VAL_THREE   = ".stimValueThree";
+    public static final String STIM_VAL_FOUR   = ".stimValueFour";
+
+    public static final String SHOW_BUBBLE_ZERO  =   "SHOW_BUBBLE_ZERO";
+    public static final String SHOW_BUBBLE_ONE  =   "SHOW_BUBBLE_ONE";
+    public static final String SHOW_BUBBLE_TWO  =   "SHOW_BUBBLE_TWO";
+    public static final String SHOW_BUBBLE_THREE  =   "SHOW_BUBBLE_THREE";
+    public static final String SHOW_BUBBLE_FOUR  =   "SHOW_BUBBLE_FOUR";
+
+
     public static final String SHOW_BUBBLE_MASK          = "SHOW_BUBBLE_MASK";
     public static final String HIDE_MASK          = "HIDE_MASK";
 

@@ -4699,6 +4699,19 @@
       "harder": "bpop.num:n2s_show_mc",
       "easier": "bpop.num:s2n_say_show_rise"
     },
+    "bpop.aud.ex.e2n_plus_1D_1D_multiple-choice_say_show": {
+      "cell_column": 14,
+      "cell_row": 1,
+      "easier": "bpop.ex.n2e:plus_1D_1D_rising_show",
+      "harder": "bpop.ex.e2n:minus_1D_1D_multiple-choice_show",
+      "next": "bpop.ex.e2n:minus_1D_1D_multiple-choice_show",
+      "same": "bpop.aud.ex.e2n_plus_1D_1D_multiple-choice_say_show",
+      "skill": "number",
+      "tutor_data": "[file]bpop.ex.e2n_plus_1D_1D_multiple-choice_say_show.json",
+      "tutor_desc": "bpop.aud.ex.e2n",
+      "tutor_id": "bpop.aud.ex.e2n_plus_1D_1D_multiple-choice_say_show",
+      "type": "TRANSITION"
+    },
     "bpop.ex.e2n:minus_1D_1D_multiple-choice_say_show": {
       "cell_column": 11,
       "cell_row": 9,

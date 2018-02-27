@@ -235,7 +235,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
         switch(command) {
 
             case BP_CONST.WIGGLE_BUBBLE:
-
                 bubble = (CBubble)target;
 
                 broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(bubble.getCenterPosition()));

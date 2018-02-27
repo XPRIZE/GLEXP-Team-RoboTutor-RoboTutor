@@ -414,6 +414,26 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 post(BP_CONST.SHOW_BUBBLES);
                 break;
 
+            case BP_CONST.SHOW_BUBBLE_ZERO:
+                post(BP_CONST.SHOW_BUBBLE_ZERO);
+                break;
+
+            case BP_CONST.SHOW_BUBBLE_ONE:
+                post(BP_CONST.SHOW_BUBBLE_ONE);
+                break;
+
+            case BP_CONST.SHOW_BUBBLE_TWO:
+                post(BP_CONST.SHOW_BUBBLE_TWO);
+                break;
+
+            case BP_CONST.SHOW_BUBBLE_THREE:
+                post(BP_CONST.SHOW_BUBBLE_THREE);
+                break;
+
+            case BP_CONST.SHOW_BUBBLE_FOUR:
+                post(BP_CONST.SHOW_BUBBLE_FOUR);
+                break;
+
             case BP_CONST.POP_BUBBLE:
                 post(BP_CONST.POP_BUBBLE, _touchedBubble);
                 break;
@@ -666,9 +686,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             answer = answer.toLowerCase();
         }
 
-        Log.d("TOMBRADY", "Publish State: " + mProblemType);
-
-
         switch(mProblemType) {
 
             case "EXPRESSION_N2E":
@@ -690,6 +707,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
 
             default:
+                Log.d("TOMBRADY", answer);
                 publishValue(BP_CONST.ANSWER_VAR, answer);
                 break;
 
@@ -809,7 +827,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         TScope scope = mTutor.getScope();
 
         resetState();
-        Log.d("TOMBRADY", "Publish Question State: " + mProblemType);
         String correctVal = data.stimulus;
         String comp_start_end = data.comp_start_end;
         String comp_with_like = data.comp_with_like;
@@ -837,6 +854,11 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 publishValue(BP_CONST.QUEST_VAR, firstNum);
                 publishValue(BP_CONST.QUEST_VAR_TWO, operation);
                 publishValue(BP_CONST.QUEST_VAR_THREE, secondNum);
+                publishValue(BP_CONST.STIM_VAL_ZERO, data.response_set[0]);
+                publishValue(BP_CONST.STIM_VAL_ONE, data.response_set[1]);
+                publishValue(BP_CONST.STIM_VAL_TWO, data.response_set[2]);
+                publishValue(BP_CONST.STIM_VAL_THREE, data.response_set[3]);
+                publishValue(BP_CONST.STIM_VAL_FOUR, data.response_set[4]);
                 break;
 
             case "EXPRESSION_E2N_ADD":
