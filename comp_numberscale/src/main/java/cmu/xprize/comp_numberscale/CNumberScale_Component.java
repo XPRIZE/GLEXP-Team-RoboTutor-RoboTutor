@@ -9,6 +9,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import org.json.JSONObject;
 
 import cmu.xprize.comp_logging.CErrorManager;
@@ -31,7 +33,9 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     protected String task;
     protected String layout;
     protected int[] dataset;
-
+    private TextView addNumber;
+    private TextView minusNumber;
+    private TextView displayNumber;
 
     // json loadable
     public String bootFeatures;
@@ -71,6 +75,9 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         inflate(getContext(), R.layout.numberscale_layout, this);
 
         Scontent = (RelativeLayout) findViewById(R.id.Scontent);
+        addNumber = (TextView) findViewById(R.id.add);
+        minusNumber = (TextView) findViewById(R.id.minus);
+        displayNumber = (TextView) findViewById(R.id.display);
 
     }
 
@@ -125,6 +132,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
 
     public boolean onTouchEvent(MotionEvent event) {
         final int action = MotionEventCompat.getActionMasked(event);
+
         if (action == MotionEvent.ACTION_DOWN) {
             //handleClick();
         }
@@ -136,7 +144,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
      * Point at a view
      */
     public void pointAtSomething() {
-        View v = findViewById(R.id.hello);
+        /*View v = findViewById(R.id.hello);
 
         int[] screenCoord = new int[2];
 
@@ -145,7 +153,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         Intent msg = new Intent(TCONST.POINTAT);
         msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
 
-        bManager.sendBroadcast(msg);
+        bManager.sendBroadcast(msg);*/
     }
 
 
