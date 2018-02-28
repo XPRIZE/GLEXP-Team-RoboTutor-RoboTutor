@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 import cmu.xprize.comp_logging.ITutorLogger;
+import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.comp_writing.CWritingComponent;
 import cmu.xprize.comp_writing.WR_CONST;
 import cmu.xprize.ltkplus.CRecognizerPlus;
@@ -47,6 +48,7 @@ import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.util.IEventSource;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -476,6 +478,32 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                 publishFeature(WR_CONST.ERROR_CHAR);
             }
         }
+
+        trackAndLogPerformance(_isValid);
+    }
+
+    private void trackAndLogPerformance(boolean isCorrect) {
+
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
+        event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(mTutor.getTutorName());
+        event.setLevelName(level);
+        event.setTaskName(task);
+        event.setProblemName("write_" + mStimulus);
+        event.setProblemNumber(_dataIndex);
+        event.setSubstepNumber(mActiveIndex);
+        event.setAttemptNumber(-1);
+        event.setExpectedAnswer(mStimulus.substring(mActiveIndex, mActiveIndex + 1));
+        event.setUserResponse(mResponse);
+        event.setCorrectness(isCorrect ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.perfLogManager.postEvent_I(TCONST.PERFORMANCE_TAG, event.toString());
     }
 
     @Override

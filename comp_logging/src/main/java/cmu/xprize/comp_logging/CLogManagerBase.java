@@ -85,10 +85,6 @@ public class CLogManagerBase implements ILogManager {
         log_Path = logPath;
         log_Filename = logFilename;
 
-        Log.d("NNNNN", "log_path" + logPath);
-        Log.d("NNNNN", "log_file" + logFilename);
-
-
         // Restart the log if necessary
         //
         stopLogging();
