@@ -168,7 +168,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
         event.setTimestamp(System.currentTimeMillis());
 
-        RoboTutor.logManager.postEvent_I(TCONST.PERFORMANCE_TAG, event.toString());
+        RoboTutor.perfLogManager.postEvent_I(TCONST.PERFORMANCE_TAG, event.toString());
     }
 
     /**

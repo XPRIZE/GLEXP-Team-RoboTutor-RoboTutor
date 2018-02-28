@@ -18,17 +18,17 @@
 
 package cmu.xprize.comp_logging;
 
-public class CLogManager extends CLogManagerBase implements ILogManager {
+public class CPerfLogManager extends CLogManagerBase implements ILogManager {
     private static String TAG = "CLogManager";
 
     // Singleton
-    private static CLogManager ourInstance = new CLogManager();
+    private static CPerfLogManager ourInstance = new CPerfLogManager();
 
-    public static CLogManager getInstance() {
+    public static CPerfLogManager getInstance() {
         return ourInstance;
     }
 
-    private CLogManager() {
+    private CPerfLogManager() {
         super.TAG = TAG;
     }
 }

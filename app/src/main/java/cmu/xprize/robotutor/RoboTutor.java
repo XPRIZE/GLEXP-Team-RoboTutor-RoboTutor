@@ -49,6 +49,7 @@ import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
 import cmu.xprize.util.CDisplayMetrics;
 import cmu.xprize.util.CLoaderView;
 import cmu.xprize.comp_logging.CLogManager;
+import cmu.xprize.comp_logging.CPerfLogManager;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorManager;
 import cmu.xprize.robotutor.tutorengine.widgets.core.IGuidView;
@@ -92,6 +93,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     static public ITutorManager masterContainer;
     static public ILogManager   logManager;
+    static public ILogManager   perfLogManager;
 
     static CTutorAssetManager   tutorAssetManager;
     static public String        VERSION_RT;
@@ -174,6 +176,9 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         logManager = CLogManager.getInstance();
         logManager.startLogging(LOG_PATH, LOG_FILENAME);
         CErrorManager.setLogManager(logManager);
+
+        perfLogManager = CPerfLogManager.getInstance();
+        perfLogManager.startLogging(LOG_PATH, "PERF_" + LOG_FILENAME);
 
         // TODO : implement time stamps
         logManager.postDateTimeStamp(GRAPH_MSG, "RoboTutor:SessionStart");
@@ -709,9 +714,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         logManager.postDateTimeStamp(GRAPH_MSG, "RoboTutor:SessionEnd");
         logManager.stopLogging();
+        perfLogManager.stopLogging();
     }
-
-
-
 }
 
