@@ -884,17 +884,19 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 break;
 
             case "MIS_NUM":
-                String question_type = "Please fill the missing blank";
+                String question_type = "What number belongs here";
                 publishValue(BP_CONST.QUEST_VAR, question_type);
                 break;
 
             case "GL_GT":
-                question_type = "Please tap the greatest number";
+                question_type = "Touch the largest number";
+                Log.d("TOMBRADY", question_type);
                 publishValue(BP_CONST.QUEST_VAR, question_type);
                 break;
 
             case "GL_LT":
-                question_type = "Please tap the least number";
+                question_type = "Touch the smallest number";
+                Log.d("TOMBRADY", question_type);
                 publishValue(BP_CONST.QUEST_VAR, question_type);
                 break;
 

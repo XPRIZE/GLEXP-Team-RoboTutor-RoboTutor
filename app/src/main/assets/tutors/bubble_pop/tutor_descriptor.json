@@ -29,7 +29,8 @@
 		"numbers":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/numbers"},
 		"letters":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/letters"},
 		"shapes":        {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/shapes"},
-        "writing":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/writing"}
+        "writing":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/writing"},
+		"missing_number": {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/missing_number"}
 	},
 
 	"navigatorType":"SIMPLE_NAVIGATOR"
