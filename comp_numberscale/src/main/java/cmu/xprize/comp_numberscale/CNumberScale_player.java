@@ -53,6 +53,8 @@ public class CNumberScale_player extends LinearLayout {
 
     protected void init(Context context, AttributeSet attrs) {
         _context = context;
+
+
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -61,9 +63,9 @@ public class CNumberScale_player extends LinearLayout {
         if(event.getAction() == MotionEvent.ACTION_DOWN) {
             float x = event.getX();
             float y = event.getY();
-
-
-
+            System.out.print(x);
+            System.out.print(y);
+            return true;
 
         }
 

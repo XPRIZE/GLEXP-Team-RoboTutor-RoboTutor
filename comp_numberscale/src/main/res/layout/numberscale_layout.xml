@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/Scontent"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -9,18 +10,17 @@
 
   <ImageView
       android:id="@+id/backimage"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:background = "@drawable/white"/>
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="@drawable/white" />
 
   <TextView
       android:id="@+id/add"
-      android:layout_width="100sp"
-      android:layout_height="100sp"
-      android:layout_alignBaseline="@+id/display"
+      android:layout_width="120sp"
+      android:layout_height="120sp"
       android:layout_alignBottom="@+id/display"
-      android:layout_alignParentStart="true"
-      android:layout_marginStart="120dp"
+      android:layout_marginBottom="51dp"
+      android:layout_toStartOf="@+id/display"
       android:background="@drawable/stimulus_back"
       android:gravity="center"
       android:text=""
@@ -29,10 +29,11 @@
 
   <TextView
       android:id="@+id/display"
-      android:layout_width="250sp"
-      android:layout_height="250sp"
+      android:layout_width="240sp"
+      android:layout_height="240sp"
+      android:layout_alignParentBottom="true"
       android:layout_centerHorizontal="true"
-      android:layout_centerVertical="true"
+      android:layout_marginBottom="35dp"
       android:background="@drawable/counter_back"
       android:gravity="center"
       android:text=""
@@ -41,17 +42,24 @@
 
   <TextView
       android:id="@+id/minus"
-      android:layout_width="100sp"
-      android:layout_height="100sp"
-      android:layout_alignBottom="@+id/add"
-      android:layout_alignParentEnd="true"
-      android:layout_marginEnd="123dp"
+      android:layout_width="120sp"
+      android:layout_height="120sp"
+      android:layout_alignTop="@+id/add"
+      android:layout_toEndOf="@+id/display"
       android:background="@drawable/stimulus_back"
       android:gravity="center"
       android:text=""
       android:textColor="@android:color/holo_blue_dark"
       android:textSize="60sp" />
 
+  <ImageView
+      android:id="@+id/reset"
+      android:layout_width="60dp"
+      android:layout_height="60dp"
+      android:layout_alignParentTop="true"
+      android:layout_centerHorizontal="true"
+      android:layout_marginTop="8dp"
+      app:srcCompat="@drawable/reset" />
 
 
 </RelativeLayout>

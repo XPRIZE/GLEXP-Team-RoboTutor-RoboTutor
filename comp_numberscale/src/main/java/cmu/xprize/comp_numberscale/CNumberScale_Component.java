@@ -6,8 +6,11 @@ import android.graphics.PointF;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,7 +28,9 @@ import cmu.xprize.util.TCONST;
 
 public class CNumberScale_Component extends RelativeLayout implements ILoadableObject {
 
-    protected RelativeLayout Scontent;
+    protected ImageView Scontent;
+    protected CNumberScale_player player;
+
 
     // DataSource Variables
     protected   int                   _dataIndex = 0;
@@ -33,9 +38,13 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     protected String task;
     protected String layout;
     protected int[] dataset;
+    protected int countStart;
+    protected int delta;
+    protected int maxHit;
     private TextView addNumber;
     private TextView minusNumber;
     private TextView displayNumber;
+    private ImageView reset;
 
     // json loadable
     public String bootFeatures;
@@ -74,10 +83,11 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
 
         inflate(getContext(), R.layout.numberscale_layout, this);
 
-        Scontent = (RelativeLayout) findViewById(R.id.Scontent);
+        Scontent = (ImageView) findViewById(R.id.backimage);
         addNumber = (TextView) findViewById(R.id.add);
         minusNumber = (TextView) findViewById(R.id.minus);
         displayNumber = (TextView) findViewById(R.id.display);
+        reset = (ImageView) findViewById(R.id.reset);
 
     }
 
@@ -104,8 +114,8 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
 
         // first load dataset into fields
         loadDataSet(data);
-
-        updateStimulus();
+        resetView();
+        //updateStimulus();
 
     }
 
@@ -120,13 +130,24 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         layout = data.layout;
         dataset = data.dataset;
 
+        countStart = data.dataset[0];
+        delta = data.dataset[1];
+        maxHit = data.dataset[2];
+
+        Log.d(TCONST.COUNTING_DEBUG_LOG, "start=" + countStart +"delta"+delta+ ";index=" + _dataIndex);
     }
 
     /**
      * Resets the view for the next task.
      */
     protected void resetView() {
+        String display = String.valueOf(countStart);
+        String add = "+"+String.valueOf(delta);
+        String minus = "-"+String.valueOf(delta);
 
+        displayNumber.setText(display);
+        addNumber.setText(add);
+        minusNumber.setText(minus);
 
     }
 
@@ -134,6 +155,8 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         final int action = MotionEventCompat.getActionMasked(event);
 
         if (action == MotionEvent.ACTION_DOWN) {
+
+            player.onTouchEvent(event);
             //handleClick();
         }
 
@@ -181,7 +204,5 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         _dataIndex = 0;
     }
 
-    public RelativeLayout getContainer() {
-        return Scontent;
-    }
+
 }
