@@ -44,7 +44,9 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     private TextView addNumber;
     private TextView minusNumber;
     private TextView displayNumber;
-    private ImageView reset;
+    private int currentHit;
+    private int currentNumber;
+    protected ImageView reset;
 
     // json loadable
     public String bootFeatures;
@@ -82,12 +84,15 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         mContext = context;
 
         inflate(getContext(), R.layout.numberscale_layout, this);
+        player = (CNumberScale_player) findViewById(R.id.numberplayer);
 
         Scontent = (ImageView) findViewById(R.id.backimage);
         addNumber = (TextView) findViewById(R.id.add);
         minusNumber = (TextView) findViewById(R.id.minus);
         displayNumber = (TextView) findViewById(R.id.display);
         reset = (ImageView) findViewById(R.id.reset);
+        player.setComponent(this);
+        currentHit = 0;
 
     }
 
@@ -131,8 +136,10 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         dataset = data.dataset;
 
         countStart = data.dataset[0];
+        currentNumber = countStart;
         delta = data.dataset[1];
         maxHit = data.dataset[2];
+
 
         Log.d(TCONST.COUNTING_DEBUG_LOG, "start=" + countStart +"delta"+delta+ ";index=" + _dataIndex);
     }
@@ -141,7 +148,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
      * Resets the view for the next task.
      */
     protected void resetView() {
-        String display = String.valueOf(countStart);
+        String display = String.valueOf(currentNumber);
         String add = "+"+String.valueOf(delta);
         String minus = "-"+String.valueOf(delta);
 
@@ -149,6 +156,47 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         addNumber.setText(add);
         minusNumber.setText(minus);
 
+    }
+
+    protected void updateView() {
+        String display = String.valueOf(currentNumber);
+        String add = "+"+String.valueOf(delta);
+        String minus = "-"+String.valueOf(delta);
+
+        displayNumber.setText(display);
+        addNumber.setText(add);
+        minusNumber.setText(minus);
+        currentHit = 0;
+
+    }
+
+    public void update_current_hit(){
+        currentHit+=1;
+    }
+
+    public int get_current_hit(){
+        return currentHit;
+    }
+
+    public int get_max_hit(){
+        return maxHit;
+    }
+
+    public void add_delta(){
+        currentNumber+=delta;
+        updateView();
+        update_current_hit();
+    }
+
+    public void minus_delta(){
+        currentNumber-=delta;
+        updateView();
+        update_current_hit();
+    }
+    public void reset_current_number(){
+        currentNumber = countStart;
+        updateView();
+        update_current_hit();
     }
 
     public boolean onTouchEvent(MotionEvent event) {

@@ -45,6 +45,7 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
     private CMediaManager mMediaManager;
+    private int current_hit;
 
     private HashMap<String, String> volatileMap = new HashMap<>();
     private HashMap<String, String> stickyMap   = new HashMap<>();
@@ -459,7 +460,9 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
         return result;
     }
 
+    public void getHits(){
 
+    }
     /**
      * Apply Events in the Tutor Domain.
      *
