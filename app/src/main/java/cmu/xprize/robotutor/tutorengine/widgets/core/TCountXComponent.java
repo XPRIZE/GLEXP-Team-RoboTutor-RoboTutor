@@ -169,16 +169,17 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
 
     private void trackAndLogPerformance(String stage) {
 
+        String tutorName = mTutor.getTutorName();
         PerformanceLogItem event = new PerformanceLogItem();
 
         event.setUserId(RoboTutor.STUDENT_ID);
         event.setSessionId(RoboTutor.SESSION_ID);
         event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
         event.setLanguage(CTutorEngine.language);
-        event.setTutorName(mTutor.getTutorName());
+        event.setTutorName(tutorName);
         event.setLevelName(level);
         event.setTaskName(task);
-        event.setProblemName("countingx_");
+        event.setProblemName("countingx");
         event.setProblemNumber(_dataIndex);
         event.setSubstepNumber(-1);
         event.setAttemptNumber(-1);

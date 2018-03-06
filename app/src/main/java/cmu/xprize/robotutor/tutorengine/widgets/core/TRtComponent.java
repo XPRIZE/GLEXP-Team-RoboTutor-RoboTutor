@@ -33,12 +33,14 @@ import java.util.List;
 import java.util.Map;
 
 import cmu.xprize.comp_logging.ITutorLogger;
+import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CMediaPackage;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -859,6 +861,8 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
         reset();
 
+        trackAndLogPerformance(correct);
+
         if(correct)
             publishFeature(TCONST.GENERIC_RIGHT);
         else
@@ -1044,5 +1048,30 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
         // Log.d(TAG, "Loader iteration");
         super.loadJSON(jsonObj, (IScope2) scope);
+    }
+
+    private void trackAndLogPerformance(boolean correct) {
+
+        String tutorName = mTutor.getTutorName();
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
+        event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(tutorName);
+        event.setLevelName("");
+        event.setTaskName(currentSentence);
+        event.setProblemName("reading");
+        event.setProblemNumber(currentIndex);
+        event.setSubstepNumber(expectedWordIndex);
+        event.setAttemptNumber(-1);
+        event.setExpectedAnswer(sentenceWords[expectedWordIndex]);
+        event.setUserResponse("");
+        event.setCorrectness(correct ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.perfLogManager.postEvent_I(TCONST.PERFORMANCE_TAG, event.toString());
     }
 }
