@@ -46,6 +46,7 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
     private CObjectDelegate mSceneObject;
     private CMediaManager mMediaManager;
     private int current_hit;
+    private int max_hit;
 
     private HashMap<String, String> volatileMap = new HashMap<>();
     private HashMap<String, String> stickyMap   = new HashMap<>();
@@ -75,7 +76,7 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
     @Override
     public void init(Context context, AttributeSet attrs) {
         super.init(context, attrs);
-
+        max_hit = super.get_max_hit();
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
     }
@@ -460,8 +461,17 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
         return result;
     }
 
-    public void getHits(){
-
+    public void getHit(){
+        System.out.println("get into");
+        current_hit = super.get_current_hit();
+        max_hit = super.get_max_hit();
+        System.out.println(current_hit);
+        System.out.println(max_hit);
+       // if (current_hit == max_hit){
+           // publishFeature(TCONST.FTR_EOD);
+        //} else {
+          //  publishFeature(TCONST.CONTINUE);
+       // }
     }
     /**
      * Apply Events in the Tutor Domain.

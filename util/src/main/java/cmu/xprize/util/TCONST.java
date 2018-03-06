@@ -497,6 +497,7 @@ public class TCONST {
     public static final String FWUNKNOWN    = "FTR_UNRECOGNIZED";
     public static final String FTR_EOI      = "FTR_NOWORDS";
     public static final String FTR_EOD      = "FTR_EOD";
+    public static final String CONTINUE      = "CONTINUE";
     public static final String ALL_CORRECT  = "ALL_CORRECT";
 
     public static final String LOG_CORRECT = "CORRECT";
@@ -771,6 +772,7 @@ public class TCONST {
 
     // Counting
     public static final String COUNTING_DEBUG_LOG = "COUNTING_DEBUG_LOG";
+
 
     // Data source debugger
 

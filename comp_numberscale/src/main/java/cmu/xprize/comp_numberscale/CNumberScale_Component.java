@@ -31,7 +31,6 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     protected ImageView Scontent;
     protected CNumberScale_player player;
 
-
     // DataSource Variables
     protected   int                   _dataIndex = 0;
     protected String level;
@@ -189,9 +188,11 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     }
 
     public void minus_delta(){
-        currentNumber-=delta;
-        updateView();
-        update_current_hit();
+        if (currentNumber>=delta){
+            currentNumber-=delta;
+            updateView();
+            update_current_hit();
+        }
     }
     public void reset_current_number(){
         currentNumber = countStart;

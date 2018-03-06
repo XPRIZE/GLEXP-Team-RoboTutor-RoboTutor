@@ -23,6 +23,7 @@
           "preexit": [],
           "edges": [
             {
+              //add a state to read the numbers;
               "constraint": "",
               "edge": "UPDATE_STIMULUS"
             }
@@ -47,17 +48,23 @@
 
         "USER_INPUT": {
           "COMMENT":"Wait for the user to touch",
-          "type": "node",
+          "type": "NODE",
           "maptype":"moduleMap",
           "mapname": "USERINPUT",
           "preenter": [],
           "preexit": [],
-          "edges":
-                  [
-                    {"constraint": "FTR_EOD", "edge": "NEXT_SCENE"},
-                    {"constraint": "", "edge":"UPDATE_STIMULUS"}
+          "edges":[
+            {
+              "constraint":"FTR_EOD",
+              "edge": "NEXT_SCENE"
+            },
+            {
+              "constraint":"CONTINUE",
+              "edge": "USER_INPUT"
+            }
+          ]
 
-                  ]
+
         },
 
         "PROBLEMCORRECT": {
@@ -162,10 +169,9 @@
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#WAIT_FOR_INPUT:String", "features":""},
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#USERINPUT:String", "features":""},
+            {"type": "COMMAND", "id": "SNumberScale", "method": "getHit","params":"", "features": ""},
 
-
-            {"type": "COMMAND", "cmd": "WAIT"}
           ]
         }
 
@@ -192,6 +198,11 @@
         "FTR_EOD": {
           "type": "CONDITION",
           "test": "FTR_EOD"
+        },
+
+        "CONTINUE":{
+          "type": "CONDITION",
+          "test": "CONTINUE"
         }
 
       }

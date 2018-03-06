@@ -74,12 +74,12 @@ public class CNumberScale_player extends LinearLayout {
 
             if (x>=320 && x<=620 && y>=420 && y<=705){
                 //click on the minus button
-                _component.add_delta();
+                _component.minus_delta();
 
                 System.out.println("add");
             } else if (x>=1260 && x<=1530 && y>=450 && y<=730){
                 //click on the add button
-                _component.minus_delta();
+                _component.add_delta();
 
                 System.out.println("minus");
             } else if (x>=860 && x<=1000 && y>=65 && y<=200){

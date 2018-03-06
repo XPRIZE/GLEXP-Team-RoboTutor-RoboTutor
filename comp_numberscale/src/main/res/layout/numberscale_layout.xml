@@ -15,7 +15,7 @@
       android:background="@drawable/white" />
 
   <TextView
-      android:id="@+id/add"
+      android:id="@+id/minus"
       android:layout_width="120sp"
       android:layout_height="120sp"
       android:layout_alignBottom="@+id/display"
@@ -29,6 +29,7 @@
 
   <TextView
       android:id="@+id/display"
+
       android:layout_width="240sp"
       android:layout_height="240sp"
       android:layout_alignParentBottom="true"
@@ -38,13 +39,14 @@
       android:gravity="center"
       android:text=""
       android:textColor="@android:color/holo_purple"
-      android:textSize="60sp" />
+      android:textSize="100sp" />
 
   <TextView
-      android:id="@+id/minus"
+      android:id="@+id/add"
+
       android:layout_width="120sp"
       android:layout_height="120sp"
-      android:layout_alignTop="@+id/add"
+      android:layout_alignTop="@+id/minus"
       android:layout_toEndOf="@+id/display"
       android:background="@drawable/stimulus_back"
       android:gravity="center"
@@ -69,6 +71,7 @@
       android:layout_alignParentStart="true"
       android:layout_marginBottom="11dp"
       android:layout_marginStart="12dp" />
+
 
 
 </RelativeLayout>
