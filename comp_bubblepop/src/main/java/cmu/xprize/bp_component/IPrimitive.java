@@ -24,6 +24,7 @@ import android.graphics.Paint;
 public interface IPrimitive {
 
     public void setColor(int itemColor);
+    public void setHexColor(String itemColor);
     public void draw(Canvas canvas, Paint paint);
 
 }
