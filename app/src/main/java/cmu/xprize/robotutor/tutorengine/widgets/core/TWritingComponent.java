@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 import cmu.xprize.comp_logging.ITutorLogger;
+import cmu.xprize.comp_writing.CWr_Data;
 import cmu.xprize.comp_writing.CWritingComponent;
 import cmu.xprize.comp_writing.WR_CONST;
 import cmu.xprize.ltkplus.CRecognizerPlus;
@@ -693,7 +694,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
                 // Pass an array of strings as the data source.
                 //
-                setDataSource(dataNameDescriptor.split(","));
+//                setDataSource(dataNameDescriptor.split(",")); tadpolr
 
             } else {
                 throw (new Exception("test"));
@@ -738,11 +739,13 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
         private HashMap<String,Boolean> _FeatureStore;
 
-        protected List<String>  _dataStore;
+//        protected List<String>  _dataStore; tadpolr
+        protected List<CWr_Data>  _dataStore;
         protected int           _dataIndexStore;
         protected boolean       _dataEOIStore;
 
-        String[]                _dataSourceStore;
+//        String[]                _dataSourceStore; tadpolr
+        CWr_Data[]                _dataSourceStore;
 
         public CDataSourceImg() {
 

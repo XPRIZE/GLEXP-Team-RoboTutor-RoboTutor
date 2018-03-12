@@ -112,10 +112,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     protected String            mResponse;
     protected String            mStimulus;
+    // tadpolr
+    protected String            mAudioStimulus;
+    protected String            mAnswer;
 
     protected CGlyphMetricConstraint _metric = new CGlyphMetricConstraint();
 
-    protected List<String>      _data;
+//    protected List<String>      _data; tadpolr
+    protected List<CWr_Data>      _data;
     protected int               _dataIndex = 0;
     protected boolean           _dataEOI   = false;
 
@@ -126,7 +130,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     // json loadable
     public String               bootFeatures = EMPTY;
     public boolean              random       = false;
-    public String[]             dataSource;
+//    public String[]             dataSource; tadpolr
+    public boolean              singleStimulus = false;
+    public CWr_Data[]             dataSource;
 
     final private String  TAG        = "CWritingComponent";
 
@@ -769,30 +775,61 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         return (_dataIndex >= _data.size())? true:false;
     }
 
-    public void setDataSource(String[] dataSource) {
+//    public void setDataSource(String[] dataSource) {
+//
+//
+//        if(random) {
+//
+//            ArrayList<String> dataSet = new ArrayList<String>(Arrays.asList(dataSource));
+//
+//            // _data takes the form - ["92","3","146"]
+//            //
+//            _data = new ArrayList<String>();
+//
+//            // For XPrize we limit this to 10 elements from an umlimited random data set
+//            // used to be : dataSet.size()
+//            for (int i1 = 0; i1 < TCONST.WRITING_DATA_LIMIT ; i1++) {
+//                int randIndex = (int) (Math.random() * dataSet.size());
+//
+//                _data.add(dataSet.get(randIndex));
+//                dataSet.remove(randIndex);
+//            }
+//        }
+//        else {
+//
+//            _data = new ArrayList<String>(Arrays.asList(dataSource));
+//        }
+//
+//        _dataIndex = 0;
+//        _dataEOI   = false;
+//    } tadpolr
+
+    public void setDataSource(CWr_Data[] dataSource) {
 
 
-        if(random) {
+//        if(random) {
+//
+//            ArrayList<String> dataSet = new ArrayList<String>(Arrays.asList(dataSource));
+//
+//            // _data takes the form - ["92","3","146"]
+//            //
+//            _data = new ArrayList<String>();
+//
+//            // For XPrize we limit this to 10 elements from an umlimited random data set
+//            // used to be : dataSet.size()
+//            for (int i1 = 0; i1 < TCONST.WRITING_DATA_LIMIT ; i1++) {
+//                int randIndex = (int) (Math.random() * dataSet.size());
+//
+//                _data.add(dataSet.get(randIndex));
+//                dataSet.remove(randIndex);
+//            }
+//        }
+//        else {
+//
+//            _data = new ArrayList<String>(Arrays.asList(dataSource));
+//        }
 
-            ArrayList<String> dataSet = new ArrayList<String>(Arrays.asList(dataSource));
-
-            // _data takes the form - ["92","3","146"]
-            //
-            _data = new ArrayList<String>();
-
-            // For XPrize we limit this to 10 elements from an umlimited random data set
-            // used to be : dataSet.size()
-            for (int i1 = 0; i1 < TCONST.WRITING_DATA_LIMIT ; i1++) {
-                int randIndex = (int) (Math.random() * dataSet.size());
-
-                _data.add(dataSet.get(randIndex));
-                dataSet.remove(randIndex);
-            }
-        }
-        else {
-
-            _data = new ArrayList<String>(Arrays.asList(dataSource));
-        }
+        _data = new ArrayList<CWr_Data>(Arrays.asList(dataSource));
 
         _dataIndex = 0;
         _dataEOI   = false;
@@ -818,16 +855,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
     }
 
-
     /**
      * @param data
      */
-    public void updateText(String data) {
+    public void updateText(CWr_Data data) {
 
         CStimulusController r;
         CGlyphController    v;
 
-        mStimulus = data;
+        mStimulus = data.stimulus;
 
         // Add the recognized response display containers
         //
@@ -876,6 +912,64 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             v.setWritingController(this);
         }
     }
+
+//    /**
+//     * @param data
+//     */
+//    public void updateText(String data) {
+//
+//        CStimulusController r;
+//        CGlyphController    v;
+//
+//        mStimulus = data;
+//
+//        // Add the recognized response display containers
+//        //
+//        mRecogList.removeAllViews();
+//
+//        for(int i1 =0 ; i1 < mStimulus.length() ; i1++)
+//        {
+//            // create a new view
+//            r = (CStimulusController)LayoutInflater.from(getContext())
+//                    .inflate(R.layout.recog_resp_comp, null, false);
+//
+//            r.setStimulusChar(mStimulus.substring(i1, i1 + 1));
+//
+//            mRecogList.addView(r);
+//
+//            r.setLinkedScroll(mDrawnScroll);
+//            r.setWritingController(this);
+//        }
+//
+//
+//        // Add the Glyph input containers
+//        //
+//        mGlyphList.removeAllViews();
+//        mGlyphList.setClipChildren(false);
+//
+//        for(int i1 =0 ; i1 < mStimulus.length() ; i1++)
+//        {
+//            // create a new view
+//            v = (CGlyphController)LayoutInflater.from(getContext())
+//                    .inflate(R.layout.drawn_input_comp, null, false);
+//
+//            // Last is used for display updates - limits the extent of the baseline
+//            v.setIsLast(i1 ==  mStimulus.length()-1);
+//
+//            String expectedChar = mStimulus.substring(i1,i1+1);
+//
+//            v.setExpectedChar(expectedChar);
+//
+//            if(!expectedChar.equals(" ")) {
+//                v.setProtoGlyph(_glyphSet.cloneGlyph(expectedChar));
+//            }
+//
+//            mGlyphList.addView(v);
+//
+//            v.setLinkedScroll(mDrawnScroll);
+//            v.setWritingController(this);
+//        }
+//    } tadpolr
 
 
 

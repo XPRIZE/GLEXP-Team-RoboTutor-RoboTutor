@@ -106,6 +106,21 @@
   "rootSkillMath": "story.hear::numbers_counting_song",
   "rootSkillShapes": "bpop.shp:say_mc",
   "writeTransitions":{
+    "write.wrd:test": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "write.wrd:test",
+      "tutor_desc": "write.wrd",
+      "tutor_data": "[file]write.wrd_test.json",
+      "cell_row": "16",
+      "cell_column": "7",
+      "same": "write.wrd:test",
+      "next": "bpop.wrd:3chr_say_mc",
+      "next_next": "bpop.wrd:3chr_say_rise",
+      "prev": "akira:2chr",
+      "harder": "write.wrd:3chr",
+      "easier": "bpop.ltr.mix:rnd_say_show_rise"
+    },
     "story.hear::letters_alphabet_song": {
       "type": "TRANSITION",
       "skill": "letters",
