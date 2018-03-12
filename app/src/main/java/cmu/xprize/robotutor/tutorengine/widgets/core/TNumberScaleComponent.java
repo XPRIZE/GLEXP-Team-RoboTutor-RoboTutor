@@ -76,7 +76,6 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
     @Override
     public void init(Context context, AttributeSet attrs) {
         super.init(context, attrs);
-        max_hit = super.get_max_hit();
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
     }

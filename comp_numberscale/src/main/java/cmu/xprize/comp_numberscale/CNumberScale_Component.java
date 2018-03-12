@@ -45,7 +45,8 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     private TextView displayNumber;
     private int currentHit;
     private int currentNumber;
-    protected ImageView reset;
+    private int min;
+    private int max;
 
     // json loadable
     public String bootFeatures;
@@ -89,7 +90,6 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         addNumber = (TextView) findViewById(R.id.add);
         minusNumber = (TextView) findViewById(R.id.minus);
         displayNumber = (TextView) findViewById(R.id.display);
-        reset = (ImageView) findViewById(R.id.reset);
         player.setComponent(this);
         currentHit = 0;
 
@@ -132,13 +132,16 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         level = data.level;
         task = data.task;
         layout = data.layout;
-        dataset = data.dataset;
 
         countStart = data.dataset[0];
-        currentNumber = countStart;
         delta = data.dataset[1];
         maxHit = data.dataset[2];
 
+        min = countStart;
+        max = min+delta*maxHit/2;
+        currentNumber = countStart;
+
+        player.loadData(min,max,delta,maxHit);
 
         Log.d(TCONST.COUNTING_DEBUG_LOG, "start=" + countStart +"delta"+delta+ ";index=" + _dataIndex);
     }
@@ -154,6 +157,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         displayNumber.setText(display);
         addNumber.setText(add);
         minusNumber.setText(minus);
+
 
     }
 
@@ -181,6 +185,15 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         return maxHit;
     }
 
+    public int getCurrentNumber() {return currentNumber;}
+
+    public int get_delta(){return delta;}
+
+    public int get_min(){return min;}
+
+    public int get_max(){return max;}
+
+
     public void add_delta(){
         currentNumber+=delta;
         updateView();
@@ -188,17 +201,12 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     }
 
     public void minus_delta(){
-        if (currentNumber>=delta){
-            currentNumber-=delta;
-            updateView();
-            update_current_hit();
-        }
-    }
-    public void reset_current_number(){
-        currentNumber = countStart;
+        currentNumber-=delta;
         updateView();
         update_current_hit();
+
     }
+
 
     public boolean onTouchEvent(MotionEvent event) {
         final int action = MotionEventCompat.getActionMasked(event);

@@ -17,7 +17,9 @@ public class CNumberScale_Data implements ILoadableObject{
     public String level;
     public String task;
     public String layout;
+    public int start;
     public int[] dataset;
+
 
 
     @Override
