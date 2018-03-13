@@ -16,6 +16,7 @@ import cmu.xprize.comp_numberscale.CNumberScale_Component;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.comp_logging.ITutorLogger;
+import cmu.xprize.comp_numberscale.NSCONST;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
@@ -26,6 +27,7 @@ import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEventSource;
@@ -241,6 +243,16 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
     @Override
     public void publishState() {
 
+    }
+
+    public void playChime() {
+
+        TScope scope = mTutor.getScope();
+
+
+        scope.addUpdateVar("CurrentCount", new TString(String.valueOf(currentNumber)));
+
+        postEvent(NSCONST.PLAY_CHIME);
     }
 
     @Override

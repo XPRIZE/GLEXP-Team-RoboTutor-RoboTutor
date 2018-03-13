@@ -10,6 +10,23 @@
       "version": "1.0.0",
       "rootnode": "INTRO_STATE",
 
+      "queueMap": {
+        "PLAY_CHIME": {
+          "type": "QUEUE",
+          "COMMENT": "Chime when user creates new object",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
+
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCount}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": ""}
+
+          ],
+          "preexit":[],
+          "edges":[]
+        }
+      },
+
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
@@ -19,7 +36,7 @@
           "COMMENT": "Intro Clip - we only ever visit this node once",
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
-          "preenter": ["SET_VERSION", "SET_DATASOURCE"],
+          "preenter": ["SET_VERSION", "SET_DATASOURCE","SET_CHIME_BEHAVIOR"],
           "preexit": [],
           "edges": [
             {
@@ -171,7 +188,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#USERINPUT:String", "features":""},
             {"type": "COMMAND", "id": "SNumberScale", "method": "getHit","params":"", "features": ""},
-
+            {"type": "COMMAND", "cmd": "WAIT"}
           ]
         }
 
@@ -183,7 +200,7 @@
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
         "SET_DATASOURCE":{"type": "COMMAND", "id": "SNumberScale", "method": "setDataSource", "parms": "LOCAL_FILE:String","features":""},
-
+        "SET_CHIME_BEHAVIOR": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_CHIME:String|PLAY_CHIME:String" ,"features":""},
         "NEXT_DATASET": {"type": "COMMAND", "id": "SNumberScale", "method": "next", "features": ""},
         "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"},
 

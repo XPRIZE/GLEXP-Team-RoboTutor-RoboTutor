@@ -199,12 +199,14 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
                 if (barIndex>0){
                     barIndex-=1;
                     _component.minus_delta();
+                    _component.playChime();
                 }
                 System.out.println("minus");
             } else if (x>=1700 && x<=1965 && y>=470 && y<=750){
                 if (barIndex<maxHit/2){
                     barIndex+=1;
                     _component.add_delta();
+                    _component.playChime();
                 }
                 //click on the add button
                 System.out.println("add");

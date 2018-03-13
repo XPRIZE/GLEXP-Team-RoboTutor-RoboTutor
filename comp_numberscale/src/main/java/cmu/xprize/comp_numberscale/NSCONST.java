@@ -14,6 +14,8 @@ public class NSCONST {
     public static final int BOX_MARGIN = 15;
     public static final int TEXT_SIZE = 60;
 
+    public static final String PLAY_CHIME  = "PLAY_CHIME";
+
 
 
 

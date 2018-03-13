@@ -3,6 +3,8 @@ package cmu.xprize.comp_numberscale;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PointF;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
@@ -16,6 +18,8 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
@@ -27,6 +31,14 @@ import cmu.xprize.util.TCONST;
  */
 
 public class CNumberScale_Component extends RelativeLayout implements ILoadableObject {
+
+
+    // Infrastructure
+    protected final Handler mainHandler  = new Handler(Looper.getMainLooper());
+    protected HashMap queueMap     = new HashMap();
+    protected HashMap           nameMap      = new HashMap();
+    protected boolean           _qDisabled   = false;
+
 
     protected ImageView Scontent;
     protected CNumberScale_player player;
@@ -44,7 +56,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     private TextView minusNumber;
     private TextView displayNumber;
     private int currentHit;
-    private int currentNumber;
+    protected int currentNumber;
     private int min;
     private int max;
 
@@ -220,6 +232,11 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         return true;
     }
 
+    //Overriden by child class
+
+    public void playChime(){
+
+    }
     /**
      * Point at a view
      */
@@ -259,6 +276,78 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
 
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
         _dataIndex = 0;
+    }
+
+    public void postEvent(String event) {
+        postEvent(event, 0);
+    }
+
+    public void postEvent(String event, Integer delay) {
+
+        post(event, delay);
+    }
+
+    public void post(String command, long delay) {
+
+        enQueue(new Queue(command, command), delay);
+    }
+
+    private void enQueue(Queue qCommand, long delay) {
+
+        if(!_qDisabled) {
+            queueMap.put(qCommand, qCommand);
+
+            if(delay > 0) {
+                mainHandler.postDelayed(qCommand, delay);
+            }
+            else {
+                mainHandler.post(qCommand);
+            }
+        }
+    }
+
+    /**
+     * This is how Component-specific commands are added to the Queue.
+     */
+    public class Queue implements Runnable {
+
+        String _name;
+        String _command;
+        String _target;
+        String _item;
+
+        Queue(String name, String command) {
+            _name = name;
+            _command = command;
+
+            nameMap.put(name, this);
+        }
+
+        @Override
+        public void run() {
+
+            Log.d("COUNTINGX_DEBUG_TAG", "Running queue: _command=" + _command);
+            try {
+                if(_name != null) {
+                    nameMap.remove(_name);
+                }
+
+                queueMap.remove(this);
+
+                switch(_command) {
+                    case NSCONST.PLAY_CHIME:
+                        applyBehavior(_command);
+                        break;
+
+                    default:
+                        break;
+                }
+
+            }  catch(Exception e) {
+                CErrorManager.logEvent(TAG, "Run Error:", e, false);
+            }
+
+        }
     }
 
 
