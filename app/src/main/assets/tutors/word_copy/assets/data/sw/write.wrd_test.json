@@ -1,29 +1,28 @@
 { "dataType": "CWr_Data",
-  "singleStimulus": "false",
+  "singleStimulus": "true",
   "dataSource": [
+    {
+      "stimulus": "o o o\no o o\n",
+      "audioStimulus": "6",
+      "answer": "6"
+    },
+    {
+      "stimulus": "10+13",
+      "audioStimulus": "23",
+      "answer": "23"
+    },
     {
       "stimulus": "zao",
       "audioStimulus": "zao",
       "answer": "zao"
     },
     {
-      "stimulus": "b",
-      "audioStimulus": "b",
-      "answer": "b"
+      "stimulus": "A",
+      "audioStimulus": "A",
+      "answer": "A"
     },
     {
-      "stimulus": "A"
-    },
-    {
-      "stimulus": "b"
-    },
-    {
-      "stimulus": "\\n  o o o  \\n",
-      "audioStimulus": "3",
-      "answer": "3"
-    },
-    {
-      "stimulus": "z o",
+      "stimulus": "z_o",
       "audioStimulus": "zao",
       "answer": "a"
     },

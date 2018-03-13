@@ -357,7 +357,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         // Update the controller feedback colors
         //
         mActiveController.updateCorrectStatus(_isValid);
-        stimController.updateStimulusState(_isValid);
+
+        if(!singleStimulus) {
+            stimController.updateStimulusState(_isValid);
+        }
 
         // Depending upon the result we allow the controller to disable other fields if it is working
         // in Immediate feedback mode
