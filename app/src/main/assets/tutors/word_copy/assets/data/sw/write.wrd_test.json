@@ -2,14 +2,35 @@
   "singleStimulus": "false",
   "dataSource": [
     {
-      "stimulus": "STM",
-      "audioStimulus": "A",
-      "answer": "ANS"
+      "stimulus": "zao",
+      "audioStimulus": "zao",
+      "answer": "zao"
     },
     {
-      "stimulus": "STM2",
-      "audioStimulus": "B",
-      "answer": "ANS2"
+      "stimulus": "b",
+      "audioStimulus": "b",
+      "answer": "b"
+    },
+    {
+      "stimulus": "A"
+    },
+    {
+      "stimulus": "b"
+    },
+    {
+      "stimulus": "\\n  o o o  \\n",
+      "audioStimulus": "3",
+      "answer": "3"
+    },
+    {
+      "stimulus": "z o",
+      "audioStimulus": "zao",
+      "answer": "a"
+    },
+    {
+      "stimulus": "1+1",
+      "audioStimulus": "",
+      "answer": "2"
     }
   ]
 }

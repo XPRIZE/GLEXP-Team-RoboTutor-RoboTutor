@@ -290,6 +290,11 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         return mGlyphInput.getExpectedChar();
     }
 
+    // tadpolr
+    public boolean checkAnswer(String resp) {
+        return mGlyphInput.checkAnswer(resp);
+    }
+
     public void hideUserGlyph() {
         mGlyphInput.hideUserGlyph();
     }
