@@ -209,6 +209,7 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
                 if (barIndex>0){
                     barIndex-=1;
                     _component.minus_delta();
+                    tappable = false;
                     _component.playChime();
                 }
                 System.out.println("minus");
@@ -216,6 +217,7 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
                 if (barIndex<maxHit/2){
                     barIndex+=1;
                     _component.add_delta();
+                    tappable = false;
                     _component.playChime();
                 }
                 //click on the add button

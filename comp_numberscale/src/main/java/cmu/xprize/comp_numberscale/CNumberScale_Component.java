@@ -104,6 +104,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         displayNumber = (TextView) findViewById(R.id.display);
         player.setComponent(this);
         currentHit = 0;
+        bManager = LocalBroadcastManager.getInstance(getContext());
 
     }
 
@@ -157,6 +158,21 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
 
         Log.d(TCONST.COUNTING_DEBUG_LOG, "start=" + countStart +"delta"+delta+ ";index=" + _dataIndex);
     }
+
+    public void pointAtCenterOfActivity() {
+        Log.d(TCONST.COUNTING_DEBUG_LOG, "pointing at something");
+
+        int[] screenCoord = new int[2];
+        player.getLocationOnScreen(screenCoord);
+
+        PointF targetPoint = new PointF(screenCoord[0] + player.getWidth()/2,
+                screenCoord[1] + player.getHeight()/2);
+        Intent msg = new Intent(TCONST.POINTAT);
+        msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
+
+        bManager.sendBroadcast(msg);
+    }
+
 
     /**
      * Resets the view for the next task.

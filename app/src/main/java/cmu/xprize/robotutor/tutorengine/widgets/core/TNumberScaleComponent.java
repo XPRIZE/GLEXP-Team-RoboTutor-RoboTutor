@@ -522,6 +522,16 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
 
                             if(obj.testFeatures()) {
                                 obj.applyNode();
+                                new java.util.Timer().schedule(
+                                        new java.util.TimerTask() {
+                                            @Override
+                                            public void run() {
+                                                enableTapping();
+                                            }
+                                        },
+                                        1500
+                                );
+
                             }
                             break;
 
