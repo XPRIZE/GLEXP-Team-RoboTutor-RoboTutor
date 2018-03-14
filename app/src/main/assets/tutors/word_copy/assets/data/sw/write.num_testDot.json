@@ -1,0 +1,32 @@
+{ "bootFeatures":"",
+  "random":"",
+  "singleStimulus": "true",
+  "dataSource": [
+    {
+      "stimulus": "o o o\no o o",
+      "audioStimulus": "6",
+      "answer": "6"
+    },
+    {
+      "stimulus": "\n o o \no o o",
+      "audioStimulus": "5",
+      "answer": "5"
+    },
+    {
+      "stimulus": "o o o",
+      "audioStimulus": "3",
+      "answer": "3"
+    },
+    {
+      "stimulus": " o \no o\n o ",
+      "audioStimulus": "4",
+      "answer": "4"
+    },
+    {
+      "stimulus": "o o o o\no o o o\no o o o",
+      "audioStimulus": "12",
+      "answer": "12"
+    }
+  ]
+}
+

@@ -1,0 +1,42 @@
+{ "bootFeatures":"",
+  "random": true,
+  "singleStimulus": "false",
+  "dataSource": [
+    {
+      "stimulus": "A",
+      "audioStimulus": "A",
+      "answer": "A"
+    },
+    {
+      "stimulus": "B",
+      "audioStimulus": "B",
+      "answer": "B"
+    },
+    {
+      "stimulus": "a",
+      "audioStimulus": "a",
+      "answer": "a"
+    },
+    {
+      "stimulus": "G",
+      "audioStimulus": "G",
+      "answer": "g"
+    },
+    {
+      "stimulus": "D",
+      "audioStimulus": "",
+      "answer": ""
+    },
+    {
+      "stimulus": "E",
+      "audioStimulus": "",
+      "answer": "F"
+    },
+    {
+      "stimulus": "E",
+      "audioStimulus": "E",
+      "answer": ""
+    }
+  ]
+}
+

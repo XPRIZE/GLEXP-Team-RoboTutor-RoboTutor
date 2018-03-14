@@ -1,0 +1,32 @@
+{ "bootFeatures":"",
+  "random": true,
+  "singleStimulus": "true",
+  "dataSource": [
+    {
+      "stimulus": "20+30",
+      "audioStimulus": "50",
+      "answer": "50"
+    },
+    {
+      "stimulus": "150-30",
+      "audioStimulus": "120",
+      "answer": "120"
+    },
+    {
+      "stimulus": "3+3",
+      "audioStimulus": "6",
+      "answer": "6"
+    },
+    {
+      "stimulus": "4-2",
+      "audioStimulus": "2",
+      "answer": "2"
+    },
+    {
+      "stimulus": "13-11",
+      "audioStimulus": "2",
+      "answer": "2"
+    }
+  ]
+}
+
