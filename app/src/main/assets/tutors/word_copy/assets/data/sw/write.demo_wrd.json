@@ -2,6 +2,13 @@
   "bootFeatures":"FTR_DEMO_WRD",
 
   "dataSource": [
-    "saba"
- ]
+    {
+      "stimulus": "saba",
+      "audioStimulus": "saba",
+      "answer": "saba"
+    }
+  ]
+//  "dataSource": [
+//    "saba"
+// ]
 }

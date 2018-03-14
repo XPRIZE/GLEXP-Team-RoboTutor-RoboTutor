@@ -21,10 +21,11 @@ public class CWr_Data implements ILoadableObject{
     public void loadJSON(JSONObject jsonObj, IScope scope) {
         JSON_Helper.parseSelf(jsonObj, this, CClassMap.classMap, scope);
 
-        if(audioStimulus == "") {
+        if(audioStimulus.equals("")) {
             audioStimulus = stimulus;
         }
-        if(answer == "") {
+
+        if(answer.equals("")) {
             answer = stimulus;
         }
     }
