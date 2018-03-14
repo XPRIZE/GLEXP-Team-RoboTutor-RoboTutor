@@ -15,6 +15,7 @@ public class NSCONST {
     public static final int TEXT_SIZE = 60;
 
     public static final String PLAY_CHIME  = "PLAY_CHIME";
+    public static final String MAX_HIT_REACHED= "MAX_HIT_REACHED";
 
 
 

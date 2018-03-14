@@ -71,20 +71,14 @@
           "preenter": [],
           "preexit": [],
           "edges":[
-            {
-              "constraint":"FTR_EOD",
-              "edge": "NEXT_SCENE"
-            },
-            {
-              "constraint":"CONTINUE",
-              "edge": "USER_INPUT"
-            }
+            {"constraint": "", "edge":"PROBLEM_FINISHED"}
+
           ]
 
 
         },
 
-        "PROBLEMCORRECT": {
+        "PROBLEM_FINISHED": {
           "COMMENT": "When user inputs a correct answer...",
           "type": "node",
           "maptype": "moduleMap",
@@ -92,6 +86,8 @@
           "preenter": [],
           "preexit": [],
           "edges": [
+            {"constraint": "FTR_EOD", "edge": "NEXT_SCENE"},
+            {"constraint": "", "edge": "UPDATE_STIMULUS"}
           ]
         },
 
@@ -151,13 +147,11 @@
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
-            
-              {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE:String", "features":""},
-
-
-            {"type": "COMMAND", "cmd": "WAIT"}
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE:String", "features":""}
           ]
         },
+
+
 
         "PLAYWRONG": {
           "type": "MODULE",
@@ -165,7 +159,7 @@
           "COMMENT": "TBD",
           "tracks": [
 
-              {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#PLAYWRONG:String", "features":""},
+              {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#PLAYWRONG:String", "features":""}
 
           ]
         },
@@ -187,7 +181,7 @@
           "COMMENT": "TBD",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#USERINPUT:String", "features":""},
-            {"type": "COMMAND", "id": "SNumberScale", "method": "getHit","params":"", "features": ""},
+            {"type": "COMMAND", "id": "SNumberScale", "method": "setVolatileBehavior", "parms": "MAX_HIT_REACHED:String|NEXTNODE:String", "features": ""},
             {"type": "COMMAND", "cmd": "WAIT"}
           ]
         }

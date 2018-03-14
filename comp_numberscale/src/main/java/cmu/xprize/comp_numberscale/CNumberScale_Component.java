@@ -181,13 +181,15 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         displayNumber.setText(display);
         addNumber.setText(add);
         minusNumber.setText(minus);
-        currentHit = 0;
 
     }
 
     public void update_current_hit(){
+
         currentHit+=1;
-    }
+        if(currentHit == maxHit) {
+            applyBehavior(NSCONST.MAX_HIT_REACHED);
+        }}
 
     public int get_current_hit(){
         return currentHit;
