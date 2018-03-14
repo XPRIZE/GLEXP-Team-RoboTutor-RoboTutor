@@ -68,7 +68,7 @@
           "type": "NODE",
           "maptype":"moduleMap",
           "mapname": "USERINPUT",
-          "preenter": [],
+          "preenter": ["ENABLE_TAPPING"],
           "preexit": [],
           "edges":[
             {"constraint": "", "edge":"PROBLEM_FINISHED"}
@@ -83,7 +83,7 @@
           "type": "node",
           "maptype": "moduleMap",
           "mapname": "PLAYCOMPLETE",
-          "preenter": [],
+          "preenter": ["DISABLE_TAPPING"],
           "preexit": [],
           "edges": [
             {"constraint": "FTR_EOD", "edge": "NEXT_SCENE"},
@@ -147,7 +147,8 @@
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE:String", "features":""}
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE:String", "features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
           ]
         },
 
@@ -197,7 +198,8 @@
         "SET_CHIME_BEHAVIOR": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_CHIME:String|PLAY_CHIME:String" ,"features":""},
         "NEXT_DATASET": {"type": "COMMAND", "id": "SNumberScale", "method": "next", "features": ""},
         "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"},
-
+        "DISABLE_TAPPING": {"type": "COMMAND", "id": "SNumberScale", "method" : "disableTapping", "features":""},
+        "ENABLE_TAPPING": {"type": "COMMAND", "id": "SNumberScale", "method" : "enableTapping", "features":""},
         "NEXTSCENE": {"type":"COMMAND", "cmd": "NEXTSCENE"}
 
       },

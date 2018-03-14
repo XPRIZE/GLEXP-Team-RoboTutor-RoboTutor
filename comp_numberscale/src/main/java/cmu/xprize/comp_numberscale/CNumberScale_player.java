@@ -32,6 +32,7 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
     private int max;
     private int barIndex;
     private Paint strokePaint;
+    private boolean tappable;
 
     private static final String TAG = "NumberScaleSurfaceView";
 
@@ -101,6 +102,11 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
 
     public void setComponent(CNumberScale_Component component) {
         _component = component;
+    }
+
+    public void enableTapping(boolean tappable) {
+        this.tappable = tappable;
+        redraw();
     }
 
 
@@ -188,6 +194,9 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
 
 
         if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            if(!tappable) {
+                return true;
+            }
             float x = event.getX();
             float y = event.getY();
             System.out.println(x);

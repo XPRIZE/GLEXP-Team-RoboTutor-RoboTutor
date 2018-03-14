@@ -184,6 +184,17 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
 
     }
 
+    public void disableTapping() {player.enableTapping(false);
+    }
+
+    /**
+     * allow the student to tap
+     */
+    public void enableTapping() {
+        player.enableTapping(true);
+
+    }
+
     public void update_current_hit(){
 
         currentHit+=1;

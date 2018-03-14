@@ -7,7 +7,7 @@ import android.graphics.Color;
  */
 
 public class NSCONST {
-    public static final int COLOR_BLUE = Color.rgb(51, 204, 255);
+    public static final int COLOR_BLUE = Color.rgb(51, 181, 229);
     public static final int COLOR_WHITE = Color.rgb(255, 255, 255);
     public static final int BAR_MARGIN = 100;
     public static final int TOP_MARGIN = 1200;
