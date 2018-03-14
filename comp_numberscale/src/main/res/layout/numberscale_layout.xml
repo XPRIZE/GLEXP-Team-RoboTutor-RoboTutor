@@ -26,13 +26,13 @@
       android:id="@+id/minus"
       android:layout_width="160sp"
       android:layout_height="160sp"
+      android:layout_marginTop="220dp"
+      android:layout_toLeftOf="@+id/display"
       android:background="@drawable/stimulus_back"
       android:gravity="center"
       android:text=""
-      android:layout_toLeftOf="@+id/display"
-      android:layout_marginTop="220dp"
       android:textColor="@android:color/holo_blue_dark"
-      android:textSize="60sp" />
+      android:textSize="70sp" />
 
   <TextView
       android:id="@+id/display"
@@ -40,24 +40,24 @@
       android:layout_width="400sp"
       android:layout_height="400sp"
       android:layout_centerHorizontal="true"
-      android:background="@drawable/counter_back"
       android:layout_marginTop="100dp"
+      android:background="@drawable/counter_back"
       android:gravity="center"
       android:text=""
       android:textColor="@android:color/holo_purple"
-      android:textSize="100sp" />
+      android:textSize="120sp" />
 
   <TextView
       android:id="@+id/add"
-      android:layout_toRightOf="@+id/display"
       android:layout_width="160sp"
       android:layout_height="160sp"
       android:layout_marginTop="220dp"
+      android:layout_toRightOf="@+id/display"
       android:background="@drawable/stimulus_back"
       android:gravity="center"
       android:text=""
       android:textColor="@android:color/holo_blue_dark"
-      android:textSize="60sp" />
+      android:textSize="70sp" />
 
 
 </RelativeLayout>

@@ -172,6 +172,7 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
         text.setColor(NSCONST.COLOR_BLUE);
         text.setTextSize(NSCONST.TEXT_SIZE);
         text.setTextAlign(Paint.Align.CENTER);
+        text.setFakeBoldText(true);
         String num = Integer.toString(_numberbar[i]);
 
 

@@ -12,7 +12,7 @@ public class NSCONST {
     public static final int BAR_MARGIN = 100;
     public static final int TOP_MARGIN = 1200;
     public static final int BOX_MARGIN = 15;
-    public static final int TEXT_SIZE = 60;
+    public static final int TEXT_SIZE = 80;
 
     public static final String PLAY_CHIME  = "PLAY_CHIME";
     public static final String MAX_HIT_REACHED= "MAX_HIT_REACHED";
