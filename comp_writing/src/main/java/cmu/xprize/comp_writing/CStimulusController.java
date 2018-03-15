@@ -86,6 +86,7 @@ public class CStimulusController extends RelativeLayout implements IEventListene
     // Used in response-mode to maintain state info
 
     protected String        mStimulusString;        // String representation - even for numbers e.g. "34"
+    protected Boolean       singleStimulus;
 
     private Paint           _Paint;
     private Typeface        _fontFace;
@@ -199,9 +200,14 @@ public class CStimulusController extends RelativeLayout implements IEventListene
     }
 
 
-    public void setStimulusChar(String stim) {
+    public void setStimulusChar(String stim, Boolean singleStim) {
 
         mStimulusString = stim;
+        singleStimulus = singleStim;
+
+        if(singleStimulus) {
+            mUnderline.setVisibility(View.INVISIBLE);
+        }
 
         mRecogChar.setText(mStimulusString);
     }
@@ -235,7 +241,7 @@ public class CStimulusController extends RelativeLayout implements IEventListene
 
 
     public void resetStimulusState() {
-
+        Log.d("tadpolr", "resetStimulusState: ");
         int charColor   = TCONST.colorMap.get(TCONST.COLORNORMAL);
         int borderColor = TCONST.colorMap.get(TCONST.COLORNONE);
 
@@ -637,7 +643,12 @@ public class CStimulusController extends RelativeLayout implements IEventListene
 
                     case TCONST.HIGHLIGHT:
 
-                        mUnderline.setVisibility(View.VISIBLE);
+                        if(singleStimulus){
+                            mUnderline.setVisibility(View.INVISIBLE);
+                        } else {
+                            mUnderline.setVisibility(View.VISIBLE);
+                        }
+
                         mRecogChar.setTextColor(WR_CONST.HLCOLOR);
                         mUnderlineDrawable.setStroke(TCONST.STROKE_STIM_UNDERLINE, WR_CONST.HLCOLOR);
                         invalidate();
@@ -646,7 +657,12 @@ public class CStimulusController extends RelativeLayout implements IEventListene
 
                     case TCONST.SHOW_NORMAL:
 
-                        mUnderline.setVisibility(View.VISIBLE);
+                        if(singleStimulus){
+                            mUnderline.setVisibility(View.INVISIBLE);
+                        } else {
+                            mUnderline.setVisibility(View.VISIBLE);
+                        }
+
                         mRecogChar.setTextColor(TCONST.colorMap.get(TCONST.COLORNORMAL));
                         mUnderlineDrawable.setStroke(TCONST.STROKE_STIM_UNDERLINE, TCONST.colorMap.get(TCONST.COLORNORMAL));
                         invalidate();

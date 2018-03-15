@@ -3,66 +3,29 @@
   "singleStimulus": "false",
   "dataSource": [
     {
-            "stimulus": "0",
-            "audioStimulus": [0,1,2],
-            "answer": "0"
+      "stimulus": "0",
+      "audioStimulus": ["0"],
+      "answer": "0"
+    },
+    {
+      "stimulus": "1",
+      "audioStimulus": ["1",""],
+      "answer": "1"
+    },
+    {
+      "stimulus": "2",
+      "audioStimulus": ["2","",""],
+      "answer": "2"
+    },
+    {
+      "stimulus": "3",
+      "audioStimulus": ["3",""],
+      "answer": "3"
+    },
+    {
+      "stimulus": "4",
+      "audioStimulus": ["4"],
+      "answer": "4"
     }
   ]
-//  "dataSource": [
-//    {
-//      "stimulus": "0",
-//      "audioStimulus": "0",
-//      "answer": "0"
-//    },
-//    {
-//      "stimulus": "5",
-//      "audioStimulus": "5",
-//      "answer": "5"
-//    },
-//    {
-//      "stimulus": "15",
-//      "audioStimulus": "15",
-//      "answer": "15"
-//    },
-//    {
-//      "stimulus": "93",
-//      "audioStimulus": "93",
-//      "answer": "93"
-//    },
-//    {
-//      "stimulus": "250",
-//      "audioStimulus": "250",
-//      "answer": "250"
-//    },
-//    {
-//      "stimulus": "2",
-//      "audioStimulus": "2",
-//      "answer": "2"
-//    },
-//    {
-//      "stimulus": "2000",
-//      "audioStimulus": "2000",
-//      "answer": "2000"
-//    },
-//    {
-//      "stimulus": "3",
-//      "audioStimulus": "3",
-//      "answer": "3"
-//    },
-//    {
-//      "stimulus": "4",
-//      "audioStimulus": "4",
-//      "answer": "4"
-//    },
-//    {
-//      "stimulus": "7",
-//      "audioStimulus": "7",
-//      "answer": "7"
-//    },
-//    {
-//      "stimulus": "8",
-//      "audioStimulus": "8",
-//      "answer": "8"
-//    }
-//  ]
 }

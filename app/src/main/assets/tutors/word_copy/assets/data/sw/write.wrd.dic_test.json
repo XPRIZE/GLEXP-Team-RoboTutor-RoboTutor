@@ -1,36 +1,32 @@
-{ "bootFeatures":"",
+{
+  "bootFeatures":"",
   "random": false,
   "singleStimulus": "false",
   "dataSource": [
     {
       "stimulus": "au",
-      "audioStimulus": "au",
+      "audioStimulus": ["au"],
       "answer": "au"
     },
     {
       "stimulus": "matunda",
-      "audioStimulus": "matunda",
+      "audioStimulus": ["matunda", ""],
       "answer": "matunda"
     },
     {
       "stimulus": "cha",
-      "audioStimulus": "cha",
+      "audioStimulus": ["cha", "", ""],
       "answer": "cha"
     },
     {
       "stimulus": "bado",
-      "audioStimulus": "bado",
+      "audioStimulus": ["bado", ""],
       "answer": "bado"
     },
     {
-      "stimulus": "hicho",
-      "audioStimulus": "hicho",
-      "answer": "hicho"
-    },
-    {
-      "stimulus": "alifurahi",
-      "audioStimulus": "alifurahi",
-      "answer": "alifurahi"
+      "stimulus": "saba",
+      "audioStimulus": ["saba"],
+      "answer": "saba"
     }
   ]
 }

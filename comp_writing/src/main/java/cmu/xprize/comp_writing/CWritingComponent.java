@@ -846,7 +846,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 r = (CStimulusController)LayoutInflater.from(getContext())
                         .inflate(R.layout.recog_resp_comp, null, false);
 
-                r.setStimulusChar(mStimulus.substring(i1, i1 + 1));
+                r.setStimulusChar(mStimulus.substring(i1, i1 + 1), singleStimulus);
 
                 mRecogList.addView(r);
 
@@ -858,7 +858,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             r = (CStimulusController)LayoutInflater.from(getContext())
                     .inflate(R.layout.recog_resp_comp, null, false);
 
-            r.setStimulusChar(mStimulus);
+            r.setStimulusChar(mStimulus, singleStimulus);
 
             mRecogList.addView(r);
 

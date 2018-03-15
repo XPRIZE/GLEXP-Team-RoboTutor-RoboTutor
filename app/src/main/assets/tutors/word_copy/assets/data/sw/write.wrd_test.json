@@ -5,30 +5,29 @@
   "dataSource": [
     {
       "stimulus": "au",
-      "audioStimulus": ["matunda", "au", "bado"],
+      "audioStimulus": ["au"],
       "answer": "au"
     },
     {
       "stimulus": "matunda",
-      "audioStimulus": ["alifurahi"],
+      "audioStimulus": ["matunda", ""],
       "answer": "matunda"
     },
     {
       "stimulus": "cha",
-      "audioStimulus": ["hicho", "au"],
+      "audioStimulus": ["cha", "", ""],
       "answer": "cha"
     },
     {
       "stimulus": "bado",
-      "audioStimulus": ["D"],
+      "audioStimulus": ["bado", ""],
       "answer": "bado"
     },
     {
-      "stimulus": "hicho",
-      "audioStimulus": ["A", "", ""],
-      "answer": "hicho"
+      "stimulus": "saba",
+      "audioStimulus": ["saba"],
+      "answer": "saba"
     }
-
   ]
 }
 
