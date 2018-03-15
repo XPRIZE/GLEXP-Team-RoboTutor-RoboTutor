@@ -4,11 +4,8 @@
   "dataSource": [
     {
       "stimulus": "saba",
-      "audioStimulus": "saba",
+      "audioStimulus": ["saba"],
       "answer": "saba"
     }
   ]
-//  "dataSource": [
-//    "saba"
-// ]
 }

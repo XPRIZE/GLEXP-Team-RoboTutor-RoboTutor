@@ -13,17 +13,14 @@ public class CWr_Data implements ILoadableObject{
 
     //json loadable
     public String           stimulus        = "";
-    public String           audioStimulus   = "";
+    public String[]         audioStimulus   = null;
     public String           answer          = "";
+
 
 
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
         JSON_Helper.parseSelf(jsonObj, this, CClassMap.classMap, scope);
-
-        if(audioStimulus.equals("")) {
-            audioStimulus = stimulus;
-        }
 
         if(answer.equals("")) {
             answer = stimulus;

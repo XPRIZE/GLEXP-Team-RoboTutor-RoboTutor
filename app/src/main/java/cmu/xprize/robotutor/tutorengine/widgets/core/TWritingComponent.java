@@ -717,8 +717,39 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
         // update the Scope response variable  "<Sstimulus>.value"
         //
-//        publishValue(WR_CONST.VALUE_VAR, mStimulus.toLowerCase());
-        publishValue(WR_CONST.VALUE_VAR, mAudioStimulus.toLowerCase());
+        publishValue(WR_CONST.VALUE_VAR, mStimulus.toLowerCase());
+
+
+        // update the Scope response variable  "SWordCopy.audiostim"
+        //
+        if (mAudioStimulus.length == 1) {
+            Log.d("tadpolr", "PUBLISH AUDIO CASE 1");
+
+            publishValue(WR_CONST.AUDIO_STIM_1, mAudioStimulus[0].toLowerCase());
+            publishValue(WR_CONST.AUDIO_STIM_2, "");
+            publishValue(WR_CONST.AUDIO_STIM_3, "");
+
+        } else if (mAudioStimulus.length == 2) {
+            Log.d("tadpolr", "PUBLISH AUDIO CASE 2");
+
+            publishValue(WR_CONST.AUDIO_STIM_1, mAudioStimulus[0].toLowerCase());
+            publishValue(WR_CONST.AUDIO_STIM_2, mAudioStimulus[1].toLowerCase());
+            publishValue(WR_CONST.AUDIO_STIM_3, "");
+
+        } else if (mAudioStimulus.length >= 3) {
+            Log.d("tadpolr", "PUBLISH AUDIO CASE 3");
+
+            publishValue(WR_CONST.AUDIO_STIM_1, mAudioStimulus[0].toLowerCase());
+            publishValue(WR_CONST.AUDIO_STIM_2, mAudioStimulus[1].toLowerCase());
+            publishValue(WR_CONST.AUDIO_STIM_3, mAudioStimulus[2].toLowerCase());
+
+        } else {
+            Log.d("tadpolr", "PUBLISH AUDIO CASE 4");
+
+            publishValue(WR_CONST.AUDIO_STIM_1, mStimulus.toLowerCase());
+            publishValue(WR_CONST.AUDIO_STIM_2, "");
+            publishValue(WR_CONST.AUDIO_STIM_3, "");
+        }
 
         if(dataExhausted()) {
 

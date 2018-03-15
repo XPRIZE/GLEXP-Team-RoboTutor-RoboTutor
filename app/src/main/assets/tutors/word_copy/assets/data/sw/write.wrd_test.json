@@ -1,37 +1,34 @@
-{ "bootFeatures":"FTR_DEMO_WRD",
+{
+  "bootFeatures":"FTR_DEMO_WRD",
   "random": false,
   "singleStimulus": "false",
   "dataSource": [
     {
       "stimulus": "au",
-      "audioStimulus": "au",
+      "audioStimulus": ["matunda", "au", "bado"],
       "answer": "au"
     },
     {
       "stimulus": "matunda",
-      "audioStimulus": "matunda",
+      "audioStimulus": ["alifurahi"],
       "answer": "matunda"
     },
     {
       "stimulus": "cha",
-      "audioStimulus": "cha",
+      "audioStimulus": ["hicho", "au"],
       "answer": "cha"
     },
     {
       "stimulus": "bado",
-      "audioStimulus": "bado",
+      "audioStimulus": ["D"],
       "answer": "bado"
     },
     {
       "stimulus": "hicho",
-      "audioStimulus": "hicho",
+      "audioStimulus": ["A", "", ""],
       "answer": "hicho"
-    },
-    {
-      "stimulus": "alifurahi",
-      "audioStimulus": "alifurahi",
-      "answer": "alifurahi"
     }
+
   ]
 }
 
