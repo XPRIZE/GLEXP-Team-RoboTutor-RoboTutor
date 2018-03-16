@@ -68,22 +68,22 @@
     "bpop.aud.ex.e2n": {
       "type": "TUTORVAR_MAP",
       "tutorName": "bubble_pop",
-      "features": "FTR_AUDIO:FTR_EXPRESSIONS:FTR_E2N:"
+      "features": "FTR_AUDIO:FTR_E2N:"
     },
     "bpop.ex.e2n": {
       "type": "TUTORVAR_MAP",
       "tutorName": "bubble_pop",
-      "features": "FTR_EXPRESSIONS:FTR_E2N"
+      "features": "FTR_E2N"
     },
     "bpop.ex.add.num": {
       "type": "TUTORVAR_MAP",
       "tutorName": "bubble_pop",
-      "features": "FTR_EXPRESSIONS:FTR_E2N"
+      "features": "FTR_E2N"
     },
     "bpop.ex.sub.num": {
       "type": "TUTORVAR_MAP",
       "tutorName": "bubble_pop",
-      "features": "FTR_EXPRESSIONS:FTR_E2N"
+      "features": "FTR_E2N"
     },
     "bpop.ex.mn.num": {
       "type": "TUTORVAR_MAP",
@@ -98,7 +98,7 @@
     "bpop.ex.n2e": {
       "type": "TUTORVAR_MAP",
       "tutorName": "bubble_pop",
-      "features": "FTR_EXPRESSIONS:FTR_N2E"
+      "features": "FTR_N2E"
     },
     "write.ltr.uc": {
       "type": "TUTORVAR_MAP",

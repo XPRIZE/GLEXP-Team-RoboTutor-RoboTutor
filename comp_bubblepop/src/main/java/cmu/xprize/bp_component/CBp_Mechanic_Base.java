@@ -366,7 +366,18 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 SbubbleStumulus.setX((mParent.getWidth() - width) / 2);
                 SbubbleStumulus.setY((mParent.getHeight() - height) / 2);
 
-                inflator = CAnimatorUtil.configZoomIn(SbubbleStumulus, 600, 0, new BounceInterpolator(), 0f, 3.0f);
+                float scaleStimulusVal = 3.0f;
+                if(width > 500) {
+                    scaleStimulusVal = 2.5f;
+                }
+                if(width > 1000) {
+                    scaleStimulusVal = 1.25f;
+                }
+                if(width > 2000) {
+                    scaleStimulusVal = 1.0f;
+                }
+//                Log.d("TOMBRADY", "Width: " + width);
+                inflator = CAnimatorUtil.configZoomIn(SbubbleStumulus, 600, 0, new BounceInterpolator(), 0f, scaleStimulusVal);
 
                 inflator.addListener(new Animator.AnimatorListener() {
                     @Override

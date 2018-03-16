@@ -772,11 +772,41 @@ public class CTutor implements ILoadableObject2, IEventSource {
     {
         if(element.charAt(0) == '!')
         {
+            if(element.substring(1).equals("true")) return false;
+            if(element.substring(1).equals("false")) return true;
             return (fFeatures.indexOf(element.substring(1)) != -1)? false:true;
         }
         else {
+            if(element.equals("true")) return true;
+            if(element.equals("false")) return false;
             return (fFeatures.indexOf(element) != -1) ? true : false;
         }
+    }
+
+    private String calcParenExp(String featSet) {
+        int rightMostOpenParen = -1;
+        int parenCount = 0;
+        boolean foundParen = false;
+        StringBuffer parenFeatSet = new StringBuffer(featSet);
+
+        for (int i = 0; i < featSet.length(); i++) {
+            String curString = featSet.substring(i, i+1);
+
+            if(curString.equals("(")) {
+                parenCount += 1;
+                foundParen = true;
+                rightMostOpenParen = i;
+            }
+            else if(curString.equals(")")) {
+                parenCount -= 1;
+                if(parenCount == 0 && foundParen == true) {
+                    boolean result = testNonParenFeatureSet(parenFeatSet.substring(rightMostOpenParen+1, i));
+                    parenFeatSet.replace(rightMostOpenParen, i+1, String.valueOf(result));
+                }
+            }
+        }
+
+        return new String(parenFeatSet).replaceAll(" ", "");
     }
 
 
@@ -784,6 +814,14 @@ public class CTutor implements ILoadableObject2, IEventSource {
     // TODO: Enhance with fsm
     //
     public boolean testFeatureSet(String featSet) {
+        while(featSet.contains("(")) {
+            featSet = calcParenExp(featSet);
+        }
+
+        return testNonParenFeatureSet(featSet);
+    }
+
+    private boolean testNonParenFeatureSet(String featSet) {
 
         boolean      result = false;
 
@@ -793,7 +831,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
         // match a null set - i.e. empty string means the object is not feature constrained
 
         if(featSet.equals(""))
-                    return true;
+            return true;
 
         // Check all disjunctive featuresets - one in each element of disjFeat
         // As long as one is true we pass
@@ -803,7 +841,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
             conjFeat   = Arrays.asList(dfeature.split("\\&"));
             result = true;
 
-            // Check that all conjunctive features are set in fFeatures 
+            // Check that all conjunctive features are set in fFeatures
 
             for (String cfeature : conjFeat) {
                 if(!testFeature(cfeature))
@@ -811,7 +849,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
             }
 
             if(result)
-                        break;
+                break;
         }
 
         return result;

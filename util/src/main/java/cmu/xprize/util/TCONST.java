@@ -225,7 +225,7 @@ public class TCONST {
     public static final String NO_SPACE            = "";
     public static final int    MAX_AKDATA          = 10;
 
-    public static final String FTR_COMPLETE = "FTR_COMPLETE";
+    public static final String FTR_COMPLETE             = "FTR_COMPLETE";
 
     public static final String START_PROGRESSIVE_UPDATE   = "START_PROGRESSIVE_UPDATE";
     public static final String START_INDETERMINATE_UPDATE = "START_INDETERMINATE_UPDATE";
@@ -264,7 +264,6 @@ public class TCONST {
     public static final double HIGH_PERFORMANCE_THRESHOLD       = 0.9; // percent to be upgraded a level
     public static final double MID_PERFORMANCE_THRESHOLD        = 0.5; // percent to pass
     public static final int MIN_ATTEMPTS_TO_GRADE               = 5;   // minimum number of attempts to be graded
-    public static final String BUBBLEPOP_MATH_EXPRESSION = "BPOP_MATH_EXPR";
 
     public static final String DEFAULT_STUDENT_ID = "DEBUG";
     public static final String STUDENT_ID_VAR = "studentId";
