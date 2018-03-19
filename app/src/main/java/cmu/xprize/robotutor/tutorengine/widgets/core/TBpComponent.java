@@ -20,6 +20,7 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -31,6 +32,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import cmu.xprize.bp_component.BP_CONST;
 import cmu.xprize.bp_component.CBP_Component;
@@ -260,6 +262,22 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         } catch (Exception e) {
             CErrorManager.logEvent(TAG, "Invalid Data Source - " + dataNameDescriptor + " for : " + name() + " : ", e, false);
         }
+    }
+
+
+    /**
+     * Chooses one track randomly out of a list kept in string.xml
+     */
+    public void setSoundTrack() {
+
+        Resources res = getResources();
+        String[] sound_tracks = res.getStringArray(cmu.xprize.bp_component.R.array.sound_tracks);
+        Random rand = new Random();
+        String sound_track = sound_tracks[rand.nextInt(sound_tracks.length)];
+
+        Log.i("BPOP", "Chosen sound track: " + sound_track);
+
+        publishValue(BP_CONST.SOUND_TRACK, sound_track);
     }
 
 
