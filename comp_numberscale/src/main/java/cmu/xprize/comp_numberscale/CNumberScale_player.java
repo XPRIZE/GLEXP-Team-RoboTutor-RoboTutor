@@ -124,15 +124,6 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
      */
     private void redraw(Canvas canvas) {
         drawContainingRectangle(canvas);
-        if (greyOutMinus){
-            drawMinus(canvas);
-
-        }
-        if (greyOutPlus){
-            drawAdd(canvas);
-
-        }
-
         //When the dataset is not loaded, draw nothing.
         if (maxHit!=0){
             int margin = NSCONST.BAR_MARGIN;
@@ -156,41 +147,8 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
 
     }
 
-    private void drawAdd(Canvas canvas){
-        float left = _component.addSpecs[0];
-        float right = _component.addSpecs[1];
-        float up = _component.addSpecs[2];
-        float down = _component.addSpecs[3];
 
-        float barSpacing = 50;
 
-        Paint jailBars = new Paint();
-        jailBars.setStyle(Paint.Style.STROKE);
-        jailBars.setStrokeWidth(NSCONST.BOX_BOUNDARY_STROKE_WIDTH);
-        jailBars.setARGB(128, 128, 128, 128);
-
-        for (float x = left-20; x <= right; x += barSpacing) {
-            canvas.drawLine(x, up, x, down, jailBars);
-        }
-    }
-
-    private void drawMinus(Canvas canvas){
-        float left = _component.minusSpecs[0];
-        float right = _component.minusSpecs[1];
-        float up = _component.minusSpecs[2];
-        float down = _component.minusSpecs[3];
-
-        float barSpacing = 50;
-
-        Paint jailBars = new Paint();
-        jailBars.setStyle(Paint.Style.STROKE);
-        jailBars.setStrokeWidth(NSCONST.BOX_BOUNDARY_STROKE_WIDTH);
-        jailBars.setARGB(128, 128, 128, 128);
-
-        for (float x = left; x <= right; x += barSpacing) {
-            canvas.drawLine(x, up, x, down, jailBars);
-        }
-    }
     private void drawContainingRectangle(Canvas canvas) {
 
         float margin=0;

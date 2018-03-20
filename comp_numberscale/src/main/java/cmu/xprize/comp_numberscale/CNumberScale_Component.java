@@ -284,13 +284,16 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
 
     public void ungreyMinus(){
         minusNumber.setTextColor(getResources().getColor(android.R.color.holo_blue_dark));
+        minusNumber.setBackground(getResources().getDrawable(R.drawable.stimulus_back));
     }
     public void greyOutAdd(){
         addNumber.setTextColor(NSCONST.COLOR_DARKGREY);
+        addNumber.setBackground(getResources().getDrawable(R.drawable.grey));
     }
 
     public void ungreyAdd(){
         addNumber.setTextColor(getResources().getColor(android.R.color.holo_blue_dark));
+        addNumber.setBackground(getResources().getDrawable(R.drawable.stimulus_back));
 
     }
 
