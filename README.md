@@ -22,7 +22,16 @@ RoboTutor uses a large volume of external assets at runtime.  To successfully ru
 
 3. You may need to install different versions of the build tools and SDKs.
 
-4. There are a number of build variants you can select to generate versions that support static language selections and also vesions that permit dynamic language selection at runtime.
+4. add a file named "keystore.properties" to your root project directory, and give it the following contents
+```
+storePassword=xxx
+keyPassword=xxx
+keyAlias=xxx
+storeFile=/Users/
+```
+
+
+5. There are a number of build variants you can select to generate versions that support static language selections and also vesions that permit dynamic language selection at runtime. In order to generate any flavor that depends on the key signature, you must generate your own keystore.
 
 
 

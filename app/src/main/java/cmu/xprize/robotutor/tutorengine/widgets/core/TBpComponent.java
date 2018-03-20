@@ -229,6 +229,24 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
                 loadJSON(new JSONObject(jsonData), mTutor.getScope());
 
+            } else if (dataNameDescriptor.startsWith(TCONST.DEBUG_FILE_PREFIX)) { // this must be reproduced in every robo_debuggable component
+
+                String dataFile = dataNameDescriptor.substring(TCONST.DEBUG_FILE_PREFIX.length());
+
+                String dataPath = TCONST.DEBUG_RT_PATH + "/";
+                String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
+                loadJSON(new JSONObject(jsonData), mTutor.getScope());
+
+                // these two code statements below are the same as in the "startsWith SOURCEFILE" condition
+                // set the total number of questions
+                if(question_count == 0) {
+                    mTutor.setTotalQuestions(gen_stimulusSet.length);
+                }
+
+                // preprocess the datasource e.g. populate instance arrays with general types
+                //
+                preProcessDataSource();
+
             } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
                 String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
@@ -244,6 +262,12 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
                 // Load the datasource in the component module - i.e. the superclass
                 loadJSON(new JSONObject(jsonData), mTutor.getScope() );
+
+                //
+                // set the total number of questions
+                if(question_count == 0) {
+                    mTutor.setTotalQuestions(gen_stimulusSet.length);
+                }
 
                 // preprocess the datasource e.g. populate instance arrays with general types
                 //
@@ -850,7 +874,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         PerformanceLogItem event = new PerformanceLogItem();
 
-        // YYY possibly use dataSource instead of _currData
         String problemName = "BPOP_" + _currData.answer + "_";
         for(int i = 0; i < _currData.response_set.length-1; i++) {
             problemName += _currData.response_set[i] + "-";
@@ -861,8 +884,8 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         if (_currData.question_say) promptType += "say";
         if (_currData.question_show) promptType += ((promptType.length() > 0) ? "+" : "") + "show";
 
-        event.setUserId(RoboTutor.STUDENT_ID);      // YYY get userId from FaceLogin
-        event.setSessionId(RoboTutor.SESSION_ID);      // YYY get sessionId
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
         event.setGameId(mTutor.getUuid().toString());
         event.setLanguage(CTutorEngine.language);
         event.setTutorName(mTutor.getTutorName());
@@ -1283,5 +1306,8 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         // Log.d(TAG, "Loader iteration");
         super.loadJSON(jsonObj, (IScope2) scope);
+
+        // set the total number of questions
+        mTutor.setTotalQuestions(question_count);
     }
 }

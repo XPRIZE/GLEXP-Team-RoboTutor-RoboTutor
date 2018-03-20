@@ -355,6 +355,15 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
                 String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
                 loadJSON(new JSONObject(jsonData), null);
 
+            } else if (dataNameDescriptor.startsWith(TCONST.DEBUG_FILE_PREFIX)) { // this must be reproduced in every robo_debuggable component
+
+                String dataFile = dataNameDescriptor.substring(TCONST.DEBUG_FILE_PREFIX.length());
+
+                String dataPath = TCONST.DEBUG_RT_PATH + "/";
+                String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
+                loadJSON(new JSONObject(jsonData), mTutor.getScope());
+
+
             } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
                 dataNameDescriptor = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
@@ -1067,6 +1076,12 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
         // Log.d(TAG, "Loader iteration");
         super.loadJSON(jsonObj, (IScope2) scope);
+
+        // set number of questions
+        // asm activities w/ demo call this method twice, so must check it's not demo
+        if(dataSource.length > 0 && !dataSource[0].level.equals("demo")) {
+            mTutor.setTotalQuestions(dataSource.length);
+        }
 
         // Apply any features defined directly in the datasource itself - e.g. demo related features
         //

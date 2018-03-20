@@ -883,7 +883,18 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     //************************************************************************
     //************************************************************************
 
+    /* For scoring */
 
+    public void resetScore() {
+        mTutor.resetScore();
+    }
+    public void countCorrect() {
+        mTutor.countCorrect();
+    }
+
+    public void countIncorrect() {
+        mTutor.countIncorrect();
+    }
 
 
     // *** Serialization
@@ -897,6 +908,9 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
         // Log.d(TAG, "Loader iteration");
         super.loadJSON(jsonObj, scope);
+
+        // set total question numbers
+        mTutor.setTotalQuestions(TCONST.WRITING_DATA_LIMIT);
 
         // Apply any features defined directly in the datasource itself - e.g. demo related features
         //

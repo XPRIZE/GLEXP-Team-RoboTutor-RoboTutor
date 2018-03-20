@@ -1,0 +1,14 @@
+{
+  "bootFeatures":"",
+
+  "rows": 2,
+
+  "cols": 6,
+
+  "dataSource": [
+
+    {"type":"Count_Data", "level":"count_1", "task":"Count to 9 by +1", "layout":"default", "dataset":[0, 9, 1]},
+    {"type":"Count_Data", "level":"count_1", "task":"Count to 9 by +1", "layout":"default", "dataset":[2, 4, 1]},
+    {"type":"Count_Data", "level":"count_1", "task":"Count to 9 by +1", "layout":"default", "dataset":[1, 3, 1]}
+    ]
+}

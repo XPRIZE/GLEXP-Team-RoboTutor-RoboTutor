@@ -100,6 +100,15 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
     private UUID uuid;
 
+    /**
+     * for tracking student score within an activity
+     * REVIEW build into existing architecture more fluidly
+     */
+    private int score = 0;
+    private int incorrect = 0;
+    private int attempts = 0;
+    private int totalQuestions; // total possible questions to answer in data source
+
     // json loadable
     public scene_initializer[]              scenedata;
     public defdata_tutor                    dataSource = null;
@@ -247,16 +256,16 @@ public class CTutor implements ILoadableObject2, IEventSource {
         mTutorGraph.onDestroy();
     }
 
-
     /**
      * for tracking student score within an activity
      * REVIEW build into existing architecture more fluidly
      */
-    private int score = 0;
-    private int attempts = 0;
-
     public int getScore() {
         return score;
+    }
+
+    public int getIncorrect() {
+        return incorrect;
     }
 
     public int getAttempts() {
@@ -269,18 +278,28 @@ public class CTutor implements ILoadableObject2, IEventSource {
     }
 
     public void countIncorrect() {
+        incorrect++;
         attempts++;
     }
 
     public void resetScore() {
         score = 0;
+        incorrect = 0;
         attempts = 0;
     }
+
+    public int getTotalQuestions() {
+        return totalQuestions;
+    }
+
+    public void setTotalQuestions(int totalQuestions) {
+        this.totalQuestions = totalQuestions;
+    }
+
 
     public UUID getUuid() {
         return uuid;
     }
-
 
     public class Queue implements Runnable {
 
@@ -552,6 +571,9 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         // Map the sceneid to it's named xml Layout resource.
         //
+        String packageName = mContext.getPackageName();
+        String sceneId = scenedata.id;
+
         int id = mContext.getResources().getIdentifier(scenedata.id, "layout", mContext.getPackageName());
 
         LayoutInflater inflater = (LayoutInflater)mContext.getSystemService

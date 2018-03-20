@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/Scontent">
+
+    <TextView
+        android:text="6"
+        android:textSize="40sp"
+        android:textAlignment="center"
+        android:id="@+id/SGoalText"
+        app:layout_widthPercent="10%"
+        app:layout_heightPercent="10%"
+        android:layout_centerHorizontal="true"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        android:background="@android:color/holo_blue_light"
+        android:visibility="invisible"
+        />
+
+    <TableLayout
+        android:id="@+id/STable"
+        android:scaleType="fitCenter"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/SGoalText"
+        app:layout_heightPercent="60%"
+        app:layout_widthPercent="80%"
+        android:visibility="invisible">
+
+        <TableRow
+            android:id="@+id/SRowOnes">
+
+            <!--replace source below w/ android:src="@drawable/dot_pile_1"-->
+            <ImageButton
+                android:src="@drawable/circle"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+
+            <RelativeLayout
+                android:id="@+id/SDotBagOnes"
+                android:layout_weight="8"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+        </TableRow>
+
+    </TableLayout>
+
+</android.support.percent.PercentRelativeLayout>

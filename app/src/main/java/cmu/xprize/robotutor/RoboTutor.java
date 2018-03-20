@@ -129,6 +129,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     public final static String  EXT_ASSET_PATH = Environment.getExternalStorageDirectory() + File.separator + TCONST.ROBOTUTOR_ASSET_FOLDER;
 
     private final  String  TAG = "CRoboTutor";
+    private final String ID_TAG = "StudentId";
 
 
 
@@ -230,7 +231,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     private void setUniqueIdentifiers() {
         String BUNDLE_TAG = "BUNDLE";
 
-        Log.i(BUNDLE_TAG, "starting!");
+        logManager.postEvent_I(ID_TAG, "RoboTutor:setUniqueIdentifiers");
+
 
 
         if(getIntent() != null && getIntent().getExtras() != null) {
@@ -243,9 +245,11 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
             if(STUDENT_ID != null) {
                 Log.i(BUNDLE_TAG, "studentId passed! " + STUDENT_ID);
+                logManager.postEvent_I(ID_TAG, "StudentID:" + STUDENT_ID);
             } else {
-                Log.w(BUNDLE_TAG, "no studentId passed!");
+                logManager.postEvent_I(ID_TAG, "NoStudentFound:settingDefault");
                 STUDENT_ID = TCONST.DEFAULT_STUDENT_ID;
+                logManager.postEvent_I(ID_TAG, "StudentID:" + STUDENT_ID);
             }
 
             SESSION_ID = getIntent().getExtras().getString(TCONST.SESSION_ID_VAR);
@@ -253,16 +257,11 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         } else {
             Log.w(BUNDLE_TAG, "no extras passed!");
+            logManager.postEvent_I(ID_TAG, "NoStudentFound:settingDefault");
             STUDENT_ID = TCONST.DEFAULT_STUDENT_ID;
-        }
+            logManager.postEvent_I(ID_TAG, "StudentID:" + STUDENT_ID);
 
-        // ZZZ remove before committing
-        /*boolean TESTING;
-        if(TESTING = false) {
-            STUDENT_ID = "STUDENT_" + (new Random()).nextInt(3);
         }
-
-        Log.d(TAG, "STUDENT_ID = " + STUDENT_ID);*/
     }
 
 

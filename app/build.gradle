@@ -13,6 +13,10 @@ android {
         // default is signed by the Android default key
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
 //    // Create a variable called keystorePropertiesFile, and initialize it to your
 //    // keystore.properties file, in the rootProject folder.
 //    def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -51,6 +55,7 @@ android {
         def LANGUAGE_SWAHILI    = "\"LANG_SW\""
         def LANGUAGE_ENGLISH    = "\"LANG_EN\""
         def LANGUAGE_UNDEFINED  = "\"LANG_NULL\""
+        def SHOW_DEMO_VIDS      = "SHOW_DEMO_VIDS"
 
         def NO_ASR_APPS = "NO_ASR_APPS"
 
@@ -61,6 +66,7 @@ android {
             buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_UNDEFINED
+            buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -72,6 +78,7 @@ android {
             buildConfigField BOOLEAN, LANGUAGE_SWITCH, TRUE
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_UNDEFINED
+            buildConfigField BOOLEAN, SHOW_DEMO_VIDS, FALSE
 
             debuggable true
         }
@@ -85,6 +92,21 @@ android {
             buildConfigField BOOLEAN, LANGUAGE_SWITCH, TRUE
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_UNDEFINED
+            buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
+
+//            signingConfig signingConfigs.android
+        }
+
+        release_dbg_no_demo {
+            buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, FALSE
+            buildConfigField BOOLEAN, SHOW_TUTORVERSION, TRUE
+            buildConfigField BOOLEAN, SHOW_DEBUGLAUNCHER, TRUE
+            buildConfigField BOOLEAN, LANGUAGE_SWITCH, TRUE
+            buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
+            buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_UNDEFINED
+            buildConfigField BOOLEAN, SHOW_DEMO_VIDS, FALSE
+
+//            signingConfig signingConfigs.android
         }
 
         // These releases will remove the language selection toggle switch if present in the UI
@@ -97,6 +119,7 @@ android {
             buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
+            buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
 
 //            signingConfig signingConfigs.android
         }
@@ -108,7 +131,8 @@ android {
             buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
-            
+            buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
+
 //            signingConfig signingConfigs.android
         }
 
@@ -119,6 +143,7 @@ android {
             buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
+            buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
 
 //            signingConfig signingConfigs.android
         }
@@ -130,6 +155,7 @@ android {
             buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
+            buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
 
 //            signingConfig signingConfigs.android
         }
@@ -141,6 +167,7 @@ android {
             buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
             buildConfigField BOOLEAN, NO_ASR_APPS, TRUE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
+            buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
         }
     }
 
@@ -190,4 +217,6 @@ dependencies {
     compile project(path: ':comp_session')
     compile project(path: ':comp_debug')
     compile project(':comp_logging')
+    compile project(path: ':comp_counting')
+    compile project(path: ':comp_counting2')
 }

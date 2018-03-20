@@ -2,12 +2,16 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.SurfaceView;
+import android.view.View;
 import android.view.ViewGroup;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,6 +27,9 @@ import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.comp_session.CActivitySelector;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
+import cmu.xprize.robotutor.tutorengine.util.PerformanceData;
+import cmu.xprize.robotutor.tutorengine.util.PerformancePromotionRules;
+import cmu.xprize.robotutor.tutorengine.util.PromotionRules;
 import cmu.xprize.util.CAt_Data;
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
@@ -51,8 +58,11 @@ import static cmu.xprize.comp_session.AS_CONST.VAR_DATASOURCE;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENTDATA;
 import static cmu.xprize.robotutor.tutorengine.util.CClassMap2.classMap;
-import static cmu.xprize.util.TCONST.PERFORMANCE_TAG;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_AKIRA;
+import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_ASM;
+import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_BPOP;
+import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_TAP_COUNT;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
 public class TActivitySelector extends CActivitySelector implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource, IPublisher, ITutorLogger {
@@ -91,6 +101,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     private HashMap<String,String>  _StringVar  = new HashMap<>();
     private HashMap<String,Integer> _IntegerVar = new HashMap<>();
     private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
+
+    CAt_Data tutorToLaunch;
 
 
     final private String  TAG = "TActivitySelector";
@@ -311,6 +323,28 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         applyBehavior(AS_CONST.SELECT_DEBUGLAUNCH);
     }
 
+    /** This allows us to update the current tutor for a given skill from the CDebugComponent
+     *
+     */
+    @Override
+    public void doDebugTagLaunchAction(String tag) {
+
+        publishValue(AS_CONST.VAR_DEBUG_TAG, tag);
+
+        applyBehavior(AS_CONST.SELECT_DEBUG_TAG_LAUNCH);
+    }
+
+    @Override
+    public void doTaggedButtonBehavior(String tag) {
+        Log.d(TAG, "Debug Button with tag: " + tag);
+
+        // sometimes figuring out new code is like driving a new route in a slightly familiar city...
+        // you are driving along unfamiliar roats and you're like "where the heck am I?"
+        // then you turn a corner and all of a sudden you know you're exactly where you are...
+        // and you're like "huh! I never would have guessed that this is where I'd end up!"
+        performButtonBehavior(tag, true);
+
+    }
 
     /**
      * Button clicks may come from either the skill selector ASK component or the Difficulty
@@ -322,14 +356,24 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     public void doButtonBehavior(String buttonid) {
 
         Log.d(TAG, "Button Selected: " + buttonid);
+        performButtonBehavior(buttonid, false);
 
 
+    }
+
+    /**
+     *
+     *
+     * @param buttonid
+     * @param roboDebugger
+     */
+    private void performButtonBehavior(String buttonid, boolean roboDebugger) {
         // If we are in debug mode then there is a third selection phase where we are presented
         // the transition table for the active skill - The author can select a new target tutor
         // from any of the transition entries.
         //
         if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_SELECT)) {
-            buttonid = processDebugSelectMode(buttonid);
+            buttonid = processDebugSelectMode(buttonid, roboDebugger);
         }
 
         // If we are in Assessment mode we have prompted the student to assess the difficulty of the
@@ -346,7 +390,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         // RoboTutor will go into an activity.
         if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT) ||
            RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_LAUNCH)) {
-            processTutorSelectMode(buttonid);
+            processTutorSelectMode(buttonid, roboDebugger);
 
         }
     }
@@ -355,7 +399,38 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
      * Method for processing button press on the TUTOR_SELECT (home) screen
      * @param buttonid
      */
-    private void processTutorSelectMode(String buttonid) {
+    private void processTutorSelectMode(String buttonid, boolean roboDebugger) {
+
+        if (roboDebugger) {
+
+            String intent;
+            String file;
+
+            intent = buttonid;
+
+            // specify the file name we're debugging with
+            switch (buttonid) {
+                case TCONST.TAG_DEBUG_TAP_COUNT:
+                    file = ROBO_DEBUG_FILE_TAP_COUNT;
+                    break;
+
+                case TCONST.TAG_DEBUG_AKIRA:
+                    file = ROBO_DEBUG_FILE_AKIRA;
+                    break;
+
+                case TCONST.TAG_DEBUG_ASM:
+                    file = ROBO_DEBUG_FILE_ASM;
+                    break;
+
+                default:
+                    file = ROBO_DEBUG_FILE_BPOP;
+            }
+
+            doLaunch(intent, TCONST.TUTOR_NATIVE, TCONST.DEBUG_FILE_PREFIX + file);
+            return;
+
+        }
+
         boolean     buttonFound = false;
 
         // If user selects "Let robotutor decide" then use student model to decide skill to work next
@@ -416,6 +491,9 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE);
         }
 
+        // check SharedPreferences
+        final SharedPreferences prefs = getStudentSharedPreferences();
+
         if (buttonFound) {
 
             // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
@@ -423,13 +501,13 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             //
             if (!BuildConfig.NO_ASR_APPS || (transitionMap != storyTransitions)) {
 
-                CAt_Data tutor = (CAt_Data) transitionMap.get(activeTutor);
+                tutorToLaunch = (CAt_Data) transitionMap.get(activeTutor);
 
                 // This is just to make sure we go somewhere if there is a bad link - which
                 // there shuoldn't be :)
                 //
-                if (tutor == null) {
-                    tutor = (CAt_Data) transitionMap.get(rootTutor);
+                if (tutorToLaunch == null) {
+                    tutorToLaunch = (CAt_Data) transitionMap.get(rootTutor);
                 }
 
                 // #Mod 330 Show TutorID in Banner in debug builds
@@ -449,23 +527,154 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                 }
                 else {
                     // Update the tutor id shown in the log stream
-                    //
-                    CLogManager.setTutor(activeTutor);
 
-                    doLaunch(tutor.tutor_desc, TCONST.TUTOR_NATIVE, tutor.tutor_data);
+                    if(BuildConfig.SHOW_DEMO_VIDS) {
+
+
+                        String whichActivityIsNext = parseActiveTutorForTutorName(activeTutor);
+                        final String activityPreferenceKey = whichActivityIsNext + "_TIMES_PLAYED";
+
+                        // bpop, write, akira, story, math, etc
+                        final int timesPlayedActivity = prefs.getInt(activityPreferenceKey, 0); // i = default value
+                        boolean playDemoVid = timesPlayedActivity < 1; // only play video once
+
+                        String pathToFile = getTutorInstructionalVideoPath(whichActivityIsNext);
+
+                        if(playDemoVid && pathToFile != null) {
+
+                            // load SurfaceView to hold the video
+                            final SurfaceView fullscreenView = (SurfaceView) findViewById(R.id.SvideoSurface);
+                            fullscreenView.setVisibility(View.VISIBLE);
+                            final TLangToggle langToggle = (TLangToggle) findViewById(R.id.SlangToggle);
+                            langToggle.setVisibility(View.INVISIBLE); // prevent user from changing language
+
+                            // Here is where we will play the video
+                            final MediaPlayer mp = new MediaPlayer();
+
+                            try {
+                                // TODO fix this exception handling
+                                mp.setDataSource(pathToFile);
+                                mp.setDisplay(fullscreenView.getHolder());
+                                mp.prepare();
+
+                                mp.start();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+
+                                // if an error occurs with media player, we don't want to freeze the app completely
+                                CLogManager.setTutor(activeTutor);
+
+                                doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data);
+                            }
+
+
+
+                            //MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), videoId);
+                            //mediaPlayer.setDisplay(fullscreenView.getHolder());
+                            //mediaPlayer.start();
+
+                            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                @Override
+                                public void onCompletion(MediaPlayer mediaPlayer) {
+                                    mp.release();
+                                    fullscreenView.setVisibility(View.INVISIBLE);
+                                    langToggle.setVisibility(View.VISIBLE); // prevent from changing language
+
+                                    SharedPreferences.Editor editor = prefs.edit();
+                                    editor.putInt(activityPreferenceKey, timesPlayedActivity + 1); // increment to let them know we watched the video
+                                    editor.apply();
+
+
+                                    CLogManager.setTutor(activeTutor);
+
+                                    doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data);
+                                }
+                            });
+                        } else {
+
+                            CLogManager.setTutor(activeTutor);
+
+                            doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data);
+
+                        }
+                    } else {
+
+                        CLogManager.setTutor(activeTutor);
+
+                        doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data);
+                    }
+
+
+
                 }
+
+                SharedPreferences.Editor editor = prefs.edit();
 
                 // Serialize the new state
                 // #Mod 329 language switch capability
                 //
-                SharedPreferences prefs = getStudentSharedPreferences();
-                SharedPreferences.Editor editor = prefs.edit();
-
                 editor.putString(TCONST.SKILL_SELECTED, activeSkill);
                 editor.apply();
+
             } else
                 SaskActivity.enableButtons(true);
         }
+    }
+
+    /**
+     * Parses tutor for its core tutor name
+     * e.g. bpop.num:s2n_say_show_mc --> bpop
+     * akira:10_2 --> akira
+     *
+     * @param tutor
+     * @return
+     */
+    private String parseActiveTutorForTutorName(String tutor) {
+
+        // deals with format of tutor names....
+        // math:10, read.echo:1, read.hear:2, bpop.ltr.uc:2, etc
+        String whichActivityIsNext = tutor;
+        int colonIndex = tutor.indexOf(':');
+        if(colonIndex > 0) {
+            whichActivityIsNext = tutor.substring(0, colonIndex);
+        }
+        int periodIndex = whichActivityIsNext.indexOf('.');
+        if(periodIndex > 0) {
+            whichActivityIsNext = whichActivityIsNext.substring(0, periodIndex);
+        }
+
+        return whichActivityIsNext;
+    }
+
+
+    /**
+     * Gets the video resource to play based on tutor.
+     *
+     * @param tutor
+     * @return
+     */
+    private String getTutorInstructionalVideoPath(String tutor) {
+
+        String PATH_TO_FILE = TCONST.ROBOTUTOR_ASSETS + "/" + "video" + "/";
+
+        // note that this was initially done w/ a "substring" check, but each tutor has a different
+        // naming format e.g. math:10 vs. story.hear:1 vs. story.echo:1
+        if (activeTutor.startsWith("bpop")) {
+            PATH_TO_FILE += "bpop_demo.mp4";
+        } else if (activeTutor.startsWith("akira")) {
+            PATH_TO_FILE += "akira_demo.mp4";
+        } else if (activeTutor.startsWith("math")) {
+            PATH_TO_FILE += "asm_demo.mp4";
+        } else if (activeTutor.startsWith("write")) {
+            PATH_TO_FILE += "write_demo.mp4";
+        } else if (activeTutor.startsWith("story.read") || activeTutor.startsWith("story.echo")) {
+            PATH_TO_FILE += "read_demo.mp4";
+        } else {
+            return null;
+        }
+
+        return PATH_TO_FILE;
+
     }
 
     /**
@@ -504,87 +713,116 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         }
 
-        boolean usePerformance = false;
-        if(TCONST.CONSIDER_STUDENT_PERFORMANCE) {
-            // returns true if performance-measuring is implemented for the current activity
-            usePerformance = assessStudentPerformance();
+        // 1. pick the next tutor
+        PromotionRules rules = new PerformancePromotionRules();
+        PerformanceData performance = new PerformanceData();
+        performance.setSelfAssessment(buttonid.toUpperCase());
+        performance.setActivityType(activeTutor);
+
+        // need to get the previous tutor and all that jazz...
+
+        String childScope = null;
+        if(activeTutor.startsWith("bpop")) {
+            childScope = "bubble_pop";
+
+        } else if (activeTutor.startsWith("akira")) {
+            childScope = "akira";
+
+        } else if (activeTutor.startsWith("math")) {
+            childScope = "add_subtract";
+
+        } else if (activeTutor.startsWith("write")) {
+            childScope = "word_copy";
+
+        } else if (activeTutor.startsWith("story")) {
+            childScope = "story_reading";
+
+        } else if (activeTutor.startsWith("countingx")) {
+            childScope = "countingx";
+
         }
 
-        switch (buttonid.toUpperCase()) {
+        // get tutor data from last tutor the user played
+        TScope lastScope = TScope.root().getChildScope(childScope);
+        CTutor lastTutor;
+        if(lastScope != null) {
+            lastTutor = lastScope.tutor();
+            performance.setNumberCorrect(lastTutor.getScore());
+            performance.setNumberWrong(lastTutor.getIncorrect());
+            performance.setNumberAttempts(lastTutor.getAttempts());
+            performance.setTotalNumberQuestions(lastTutor.getTotalQuestions());
+        }
 
-            case AS_CONST.SELECT_CONTINUE:
-                if(!usePerformance) {
-                    if(TCONST.OVERRIDE_SELF_ASSESSMENT) {
-                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-                    } else {
-                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
+        PromotionRules.SelectedActivity selectedActivity = rules.selectActivityByPerformance(performance);
+        Log.d(TAG, "PerformancePromotionRules result: " + selectedActivity);
+
+        CAt_Data transitionData = transitionMap.get(activeTutor);
+        switch(selectedActivity) {
+            case NEXT:
+                nextTutor = transitionData.next;
+                break;
+
+            case SAME:
+                nextTutor = transitionData.same;
+                break;
+
+            case OLD_EASIER:
+                nextTutor = transitionData.easier;
+                break;
+
+            case OLD_HARDER:
+                nextTutor = transitionData.harder;
+                break;
+
+            case PREVIOUS:
+                // XXX FIXME nextTutor = transitionData.previous;
+                // for now... do the super hacky way of iterating through the whole map until we find one who refers to "activeTutor" via "next"
+                String tempNextTutor = null;
+                for (Map.Entry<String, CAt_Data> e : transitionMap.entrySet()) {
+                    Log.d("TRANSITION_MAP", e.getValue().toString());
+                    CAt_Data value = e.getValue();
+                    if (value.next.equals(activeTutor)) {
+                        tempNextTutor = e.getKey();
                     }
                 }
-
-                mTutor.post(TCONST.ENDTUTOR);
-                RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
-                break;
-
-            case AS_CONST.SELECT_MAKE_HARDER:
-                if(!usePerformance) {
-                    if(TCONST.OVERRIDE_SELF_ASSESSMENT) {
-                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-                    } else {
-                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).harder;
-                    }
+                // no "next" reference, probably means it's the first item
+                if (tempNextTutor == null) {
+                    tempNextTutor = activeTutor;
                 }
+                nextTutor = tempNextTutor;
+                // XXX FIXME end super hacky code
 
-                mTutor.post(TCONST.ENDTUTOR);
-                RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
                 break;
 
-            case AS_CONST.SELECT_MAKE_EASIER:
-                if(!usePerformance) {
-                    if(TCONST.OVERRIDE_SELF_ASSESSMENT) {
-                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-                    } else {
-                        nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).easier;
-                    }
-                }
+            case DOUBLE_NEXT:
+                // XXX FIXME nextTutor = transitionData.double_next;
+                // for now... do the slightly less hacky way of doing "next" of "next"
+                String notNextTutor = transitionData.next;
 
-                mTutor.post(TCONST.ENDTUTOR);
-                RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
-                break;
-
-            case AS_CONST.SELECT_EXIT:
-                if(!usePerformance) {
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id;
-                }
-
-                mTutor.post(TCONST.FINISH);
-                RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
-                break;
-
-            // If user selects "Let robotutor decide" then use student model to decide how to adjust the
-            // difficulty level.  We also flip mode to tutor_select to skip the tutor select phase and
-            // let the model do the tutor selection.
-            // At the moment default to continue to "next" link
-            //
-            case AS_CONST.SELECT_AUTO_DIFFICULTY:
-                if(!usePerformance) {
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-                }
-
-                // just reselect the current skill and continue with next tutor
-                // no skill selection phase
-                buttonid = activeSkill;
-                RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
-                break;
-
-            case AS_CONST.SELECT_REPEAT:
-                // do this regardless of performance
-                nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).tutor_id; // if the select "repeat", then it will be the same tutor
-                // just reselect the current skill and continue with next tutor
-                // no skill selection phase
-                buttonid = activeSkill;
-                RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+                CAt_Data nextTransitionData = transitionMap.get(notNextTutor);
+                nextTutor = nextTransitionData.next;
+                // XXX FIXME end slightly less hacky code
+                // XXX note that these will not show up in the debugger graph
                 break;
         }
+
+        // 2. finish RoboTutor or the ActivitySelector, if necessary
+        if(buttonid.toUpperCase().equals(AS_CONST.SELECT_EXIT)) {
+            // if EXIT, we finish the app
+            mTutor.post(TCONST.FINISH);
+
+        } else if (buttonid.toUpperCase().equals(AS_CONST.SELECT_REPEAT) ||
+                buttonid.toUpperCase().equals(AS_CONST.SELECT_AUTO_DIFFICULTY)){
+
+            buttonid = activeSkill;
+
+        } else {
+            // unless they tap "REPEAT", go back to the main menu
+            mTutor.post(TCONST.ENDTUTOR);
+        }
+
+        // 3. Set SELECTOR_MODE
+        RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
 
         // Update the active skill
         //
@@ -643,9 +881,16 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
      * @param buttonid
      * @return new button id, to be selected for the DEBUG_LAUNCH screen
      */
-    private String processDebugSelectMode(String buttonid) {
+    private String processDebugSelectMode(String buttonid, boolean roboDebugger) {
         // Update the active skill
         //
+        if(roboDebugger){
+            // we know which selector mode we're in, so we can return without changing anything
+            RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_LAUNCH;
+            return buttonid;
+
+        }
+
         switch (activeSkill) {
 
             case AS_CONST.SELECT_WRITING:
@@ -702,7 +947,11 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         return buttonid;
     }
 
+    /**
+     * gets the stored data for each student based on STUDENT_ID.
+     */
     private SharedPreferences getStudentSharedPreferences() {
+        // each ID name is composed of the STUDENT_ID plus the language i.e. EN or SW
         String prefsName = "";
         if(RoboTutor.STUDENT_ID != null) {
             prefsName += RoboTutor.STUDENT_ID + "_";
@@ -711,77 +960,6 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         RoboTutor.logManager.postEvent_I(TAG, "Getting SharedPreferences: " + prefsName);
         return RoboTutor.ACTIVITY.getSharedPreferences(prefsName, Context.MODE_PRIVATE);
-    }
-
-    /**
-     * Checks if the last finished activity can be graded based on performance.
-     * If so, updates the "nextTutor" based on student performance and returns true.
-     * Otherwise, returns false.
-     *
-     * @return
-     */
-    private boolean assessStudentPerformance() {
-
-        boolean usePerformance = false; // usePerformance will only be true if performance metrics (correct, incorrect)
-        // are tracked for that activity
-
-        String childScope = null;
-        if(activeTutor.startsWith("bpop")) {
-            childScope = "bubble_pop";
-            usePerformance = true;
-        } else if (activeTutor.startsWith("akira")) {
-            childScope = "akira";
-            usePerformance = true;
-        } else if (activeTutor.startsWith("math")) {
-            childScope = "math";
-            usePerformance = true;
-        }
-
-        if(usePerformance) {
-            TScope lastScope = TScope.root().getChildScope(childScope);
-            CTutor lastTutor;
-            if(lastScope != null) {
-                lastTutor = lastScope.tutor();
-
-                int correct = lastTutor.getScore();
-                int attempts = lastTutor.getAttempts();
-                double percent = 0;
-                if (attempts > 0) {// don't divide by zero
-                    percent = correct / (double) attempts;
-                }
-                Log.i(PERFORMANCE_TAG, "performance = " + correct + " / " + attempts);
-
-                Log.i(PERFORMANCE_TAG, "activeTutor: " + activeTutor);
-                Log.i(PERFORMANCE_TAG, "nextTutor: " + nextTutor);
-
-
-                if (percent >= TCONST.HIGH_PERFORMANCE_THRESHOLD) {
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).harder;
-                } else if (percent >= TCONST.MID_PERFORMANCE_THRESHOLD) {
-                    // if user just quits...
-                    // note that as long as the student does "MIN_ATTEMPTS_TO_GRADE",
-                    // their percentage will be graded the same as if they had completed the entire activity
-                    // REVIEW what is the proper number?
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-                } else {
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).easier;
-                }
-
-                // if player doesn't acheive a minimum number of attempts, don't use performance data
-                int attemptsExpected = TCONST.MIN_ATTEMPTS_TO_GRADE;
-                if (attempts < attemptsExpected) {
-                    nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-                    usePerformance = false;
-                }
-
-            } else {
-                usePerformance = false; // in case of unexpected error
-            }
-
-        } else {
-            nextTutor = ((CAt_Data) transitionMap.get(activeTutor)).next;
-        }
-        return usePerformance;
     }
 
 

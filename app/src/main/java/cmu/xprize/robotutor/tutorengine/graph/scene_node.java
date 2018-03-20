@@ -218,19 +218,24 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
 
     public scene_node nextNode() {
 
+        Log.d(TCONST.COUNTING_DEBUG_LOG, this.name);
+
         scene_node node = null;		// When we run out of tracks we just want to stop
 
         preExit();
 
         for(graph_edge edge : edges) {
 
-            RoboTutor.logManager.postEvent_I(_logType, "target:node.edge,action:test,name:" + edge.constraint );
+            RoboTutor.logManager.postEvent_I(TAG, "target:node.edge,action:test,name:" + edge.constraint );
 
             if(edge.testConstraint())
             {
-                RoboTutor.logManager.postEvent_I(_logType, "target:node.edge,action:taken,name:" + edge.edge );
+                RoboTutor.logManager.postEvent_I(TAG, "target:node.edge,action:taken,name:" + edge.edge );
 
                 node = edge.followEdge();
+
+                Log.d(TCONST.COUNTING_DEBUG_LOG, node.name);
+
 
                 if(node != null)
                         node.preEnter();

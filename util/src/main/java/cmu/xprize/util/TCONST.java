@@ -20,9 +20,6 @@ package cmu.xprize.util;
 
 // global tutor constants
 
-import android.content.Context;
-
-import java.io.File;
 import java.util.HashMap;
 
 public class TCONST {
@@ -201,6 +198,9 @@ public class TCONST {
     public static final String DOWNLOAD_PATH       = "/sdcard/Download";
     public static final String DOWNLOAD_RT_PATH    = "/sdcard/Download/RoboTutor";
     public static final String DOWNLOAD_RT_TUTOR   = "/sdcard/Download/RoboTutor/assets";
+
+    public static final String DEBUG_FILE_PREFIX = "[debug_file]";
+    public static final String DEBUG_RT_PATH       = "/sdcard/robo_debug";
 
     public static final String ARITHMETIC_DATA     = "tutors/add_subtract";
     public static final String AKIRA_DATA          = "tutors/akira";
@@ -763,5 +763,29 @@ public class TCONST {
     public static final String PROMPT_2RIGHT = "PROMPT_2RIGHT";
     public static final String PROMPT_3 = "PROMPT_3";
     public static final String PROMPT_3V = "PROMPT_3V";
+
+
+    // Writing behavior...
+    public static final int WRITING_DATA_LIMIT = 10;
+
+    // Counting
+    public static final String COUNTING_DEBUG_LOG = "COUNTING_DEBUG_LOG";
+
+    // Data source debugger
+
+    public static final String TAG_DEBUG_AKIRA = "akira";
+    public static final String TAG_DEBUG_ASM = "math";
+    public static final String TAG_DEBUG_TAP_COUNT = "countingx";
+    public static final String TAG_DEBUG_BPOP_LTR = "bpop.ltr.mix";
+    public static final String TAG_DEBUG_BPOP_WRD = "bpop.wrd";
+    public static final String TAG_DEBUG_BPOP_PHON = "bpop.phon";
+    public static final String TAG_DEBUG_BPOP_NUM = "bpop.num";
+    public static final String TAG_DEBUG_BPOP_SHP = "bpop.shp";
+    public static final String TAG_DEBUG_BPOP_EX = "bpop.ex";
+
+    public static final String ROBO_DEBUG_FILE_TAP_COUNT = "countingx_test.json";
+    public static final String ROBO_DEBUG_FILE_AKIRA = "akira_test.json";
+    public static final String ROBO_DEBUG_FILE_ASM = "math_test.json";
+    public static final String ROBO_DEBUG_FILE_BPOP = "bpop.json";
 
 }

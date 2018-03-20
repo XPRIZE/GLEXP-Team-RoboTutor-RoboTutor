@@ -20,6 +20,8 @@ public class WR_CONST {
 
     public static final String ON_CORRECT               = "ON_CORRECT";
 
+    public static final String MERCY_RULE               = "MERCY_RULE";
+
     public static final String ON_ERASE                 = "ON_ERASE";
 
     public static final String POINT_AT_ERASE_BUTTON    = "POINT_AT_ERASE_BUTTON";
