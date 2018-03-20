@@ -116,11 +116,7 @@
           "tracks": [
               
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""},
-            {"name": "Introduction Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets count.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""},
-            {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "pointAtCenterOfActivity", "parms": "", "features":""},
-            {"name": "RoboFinger Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Please tap here.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""}
-
-
+            {"name": "Introduction Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets count.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""}
             ]
         },
 
@@ -129,7 +125,11 @@
           "reuse": true,
           "tracks": [
               
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""}
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
+            {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "pointAtAdd", "parms": "", "features":""},
+            {"name": "RoboFinger Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "tap plus.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""},
+            {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "pointAtMinus", "parms": "", "features":""},
+            {"name": "RoboFinger Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "tap minus.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""}
     
           ]
         },

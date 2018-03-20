@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/Scontent"
@@ -23,11 +24,11 @@
       android:layout_height="match_parent" />
 
   <TextView
-      android:id="@+id/minus"
+      android:id="@+id/add"
       android:layout_width="160sp"
       android:layout_height="160sp"
       android:layout_marginTop="220dp"
-      android:layout_toLeftOf="@+id/display"
+      android:layout_toRightOf="@+id/display"
       android:background="@drawable/stimulus_back"
       android:gravity="center"
       android:text=""
@@ -37,22 +38,21 @@
   <TextView
       android:id="@+id/display"
 
-      android:layout_width="400sp"
+      android:layout_width="600sp"
       android:layout_height="400sp"
       android:layout_centerHorizontal="true"
       android:layout_marginTop="100dp"
-      android:background="@drawable/counter_back"
       android:gravity="center"
       android:text=""
       android:textColor="@android:color/holo_purple"
       android:textSize="140sp" />
 
   <TextView
-      android:id="@+id/add"
+      android:id="@+id/minus"
       android:layout_width="160sp"
       android:layout_height="160sp"
       android:layout_marginTop="220dp"
-      android:layout_toRightOf="@+id/display"
+      android:layout_toLeftOf="@+id/display"
       android:background="@drawable/stimulus_back"
       android:gravity="center"
       android:text=""

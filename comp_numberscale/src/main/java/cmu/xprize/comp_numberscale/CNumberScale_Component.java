@@ -15,6 +15,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 
 import org.json.JSONObject;
 
@@ -59,6 +61,10 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     protected int currentNumber;
     private int min;
     private int max;
+    public int[] addSpecs = new int[4];
+    public int[] minusSpecs = new int[4];
+    public int[] addPosition = new int[2];
+    public int[] minusPosition = new int[2];
 
     // json loadable
     public String bootFeatures;
@@ -106,10 +112,42 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         currentHit = 0;
         bManager = LocalBroadcastManager.getInstance(getContext());
 
-        int [] location = new int[2];
-        addNumber.getLocationOnScreen(location);
-        System.out.println("location:");
-        
+        displayNumber.setBackgroundColor(NSCONST.COLOR_GREY);
+
+        ViewTreeObserver vto=addNumber.getViewTreeObserver();
+
+        vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener(){
+            @Override
+            public void onGlobalLayout(){
+                int [] location = new int[2];
+                addSpecs[0]=addNumber.getLeft();
+                addSpecs[1]=addNumber.getRight();
+                addSpecs[2]=addNumber.getTop();
+                addSpecs[3]=addNumber.getBottom();
+                addNumber.getLocationOnScreen(addPosition);
+                //System.out.println(addNumber.getLeft() + " " + addNumber.getRight() + " " + addNumber.getTop()+" "+addNumber.getBottom());
+                addNumber.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+
+            }
+        });
+
+        ViewTreeObserver vto1=minusNumber.getViewTreeObserver();
+
+        vto1.addOnGlobalLayoutListener(new OnGlobalLayoutListener(){
+            @Override
+            public void onGlobalLayout(){
+                int [] location = new int[2];
+                minusSpecs[0]=minusNumber.getLeft();
+                minusSpecs[1]=minusNumber.getRight();
+                minusSpecs[2]=minusNumber.getTop();
+                minusSpecs[3]=minusNumber.getBottom();
+                minusNumber.getLocationOnScreen(minusPosition);
+                //System.out.println(minusNumber.getLeft() + " " + minusNumber.getRight() + " " + minusNumber.getTop()+" "+minusNumber.getBottom());
+                addNumber.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+
+            }
+        });
+
 
     }
 
@@ -178,6 +216,29 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         bManager.sendBroadcast(msg);
     }
 
+    public void pointAtAdd() {
+
+        // point to it using RoboFinger
+
+        PointF targetPoint = new PointF((addSpecs[0]+addSpecs[1])/2, (addSpecs[2]+addSpecs[3])/2);
+        Intent msg = new Intent(TCONST.POINTAT);
+        msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
+
+        bManager.sendBroadcast(msg);
+
+    }
+
+    public void pointAtMinus() {
+
+        // point to it using RoboFinger
+        PointF targetPoint = new PointF((minusSpecs[0]+minusSpecs[1])/2, (minusSpecs[2]+minusSpecs[3])/2);
+        Intent msg = new Intent(TCONST.POINTAT);
+        msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
+
+        bManager.sendBroadcast(msg);
+
+    }
+
 
     /**
      * Resets the view for the next task.
@@ -213,6 +274,23 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
      */
     public void enableTapping() {
         player.enableTapping(true);
+
+    }
+
+    public void greyOutMinus(){
+        minusNumber.setTextColor(NSCONST.COLOR_DARKGREY);
+        minusNumber.setBackground(getResources().getDrawable(R.drawable.grey));
+    }
+
+    public void ungreyMinus(){
+        minusNumber.setTextColor(getResources().getColor(android.R.color.holo_blue_dark));
+    }
+    public void greyOutAdd(){
+        addNumber.setTextColor(NSCONST.COLOR_DARKGREY);
+    }
+
+    public void ungreyAdd(){
+        addNumber.setTextColor(getResources().getColor(android.R.color.holo_blue_dark));
 
     }
 
@@ -261,7 +339,11 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
 
             player.onTouchEvent(event);
             //handleClick();
+
         }
+
+
+
 
         return true;
     }

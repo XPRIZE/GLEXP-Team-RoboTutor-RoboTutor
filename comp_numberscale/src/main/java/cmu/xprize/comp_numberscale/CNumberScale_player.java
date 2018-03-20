@@ -33,7 +33,8 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
     private int barIndex;
     private Paint strokePaint;
     private boolean tappable;
-
+    private boolean greyOutMinus = false;
+    private boolean greyOutPlus = false;
     private static final String TAG = "NumberScaleSurfaceView";
 
 
@@ -74,6 +75,8 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
         strokePaint = new Paint();
         strokePaint.setColor(NSCONST.COLOR_BLUE);
         strokePaint.setStrokeWidth(10);
+
+
 
         getHolder().addCallback(this);
 
@@ -121,6 +124,14 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
      */
     private void redraw(Canvas canvas) {
         drawContainingRectangle(canvas);
+        if (greyOutMinus){
+            drawMinus(canvas);
+
+        }
+        if (greyOutPlus){
+            drawAdd(canvas);
+
+        }
 
         //When the dataset is not loaded, draw nothing.
         if (maxHit!=0){
@@ -145,6 +156,41 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
 
     }
 
+    private void drawAdd(Canvas canvas){
+        float left = _component.addSpecs[0];
+        float right = _component.addSpecs[1];
+        float up = _component.addSpecs[2];
+        float down = _component.addSpecs[3];
+
+        float barSpacing = 50;
+
+        Paint jailBars = new Paint();
+        jailBars.setStyle(Paint.Style.STROKE);
+        jailBars.setStrokeWidth(NSCONST.BOX_BOUNDARY_STROKE_WIDTH);
+        jailBars.setARGB(128, 128, 128, 128);
+
+        for (float x = left-20; x <= right; x += barSpacing) {
+            canvas.drawLine(x, up, x, down, jailBars);
+        }
+    }
+
+    private void drawMinus(Canvas canvas){
+        float left = _component.minusSpecs[0];
+        float right = _component.minusSpecs[1];
+        float up = _component.minusSpecs[2];
+        float down = _component.minusSpecs[3];
+
+        float barSpacing = 50;
+
+        Paint jailBars = new Paint();
+        jailBars.setStyle(Paint.Style.STROKE);
+        jailBars.setStrokeWidth(NSCONST.BOX_BOUNDARY_STROKE_WIDTH);
+        jailBars.setARGB(128, 128, 128, 128);
+
+        for (float x = left; x <= right; x += barSpacing) {
+            canvas.drawLine(x, up, x, down, jailBars);
+        }
+    }
     private void drawContainingRectangle(Canvas canvas) {
 
         float margin=0;
@@ -206,8 +252,9 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
             System.out.println(x);
             System.out.println(y);
             System.out.println("tap");
-
-            if (x>=550 && x<=850 && y>=470 && y<=760){
+            int[] minusSpec = _component.minusSpecs;
+            int[] addSpec = _component.addSpecs;
+            if (x>=minusSpec[0] && x<=minusSpec[1] && y>=minusSpec[2] && y<=minusSpec[3] && !greyOutMinus){
                 //click on the minus button
                 if (barIndex>0){
                     barIndex-=1;
@@ -215,14 +262,48 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
                     tappable = false;
                     _component.playChime();
                 }
+
+                if (barIndex == 0){
+                    greyOutMinus = true;
+                    _component.greyOutMinus();
+                } else {
+                    greyOutMinus=false;
+                    _component.ungreyMinus();
+                }
+
+                if (barIndex == maxHit/2) {
+                    greyOutPlus = true;
+                    _component.greyOutAdd();
+                } else {
+                    greyOutPlus = false;
+                    _component.ungreyAdd();
+                }
+
                 System.out.println("minus");
-            } else if (x>=1700 && x<=1965 && y>=470 && y<=750){
+            } else if (x>=addSpec[0] && x<=addSpec[1] && y>=addSpec[2] && y<=addSpec[3]){
                 if (barIndex<maxHit/2){
                     barIndex+=1;
                     _component.add_delta();
                     tappable = false;
                     _component.playChime();
                 }
+
+                if (barIndex == 0){
+                    greyOutMinus = true;
+                    _component.greyOutMinus();
+                } else {
+                    greyOutMinus=false;
+                    _component.ungreyMinus();
+                }
+
+                if (barIndex == maxHit/2) {
+                    greyOutPlus = true;
+                    _component.greyOutAdd();
+                } else {
+                    greyOutPlus = false;
+                    _component.ungreyAdd();
+                }
+
                 //click on the add button
                 System.out.println("add");
             }
