@@ -186,8 +186,11 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
         float right1=right-NSCONST.BOX_MARGIN;
         float bottom1=bottom-NSCONST.BOX_MARGIN;
 
-        canvas.drawRect(left, top, right, bottom, strokePaint);
-        canvas.drawRect(left1,top1,right1,bottom1,white);
+        //not drawing the box for the first number
+        if (i!=0){
+            canvas.drawRect(left, top, right, bottom, strokePaint);
+            canvas.drawRect(left1,top1,right1,bottom1,white);
+        }
         canvas.drawText(num,(left+right)/2,(top+bottom)/2+NSCONST.TEXT_SIZE/3,text);
     }
 

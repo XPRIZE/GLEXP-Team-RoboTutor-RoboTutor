@@ -106,6 +106,11 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         currentHit = 0;
         bManager = LocalBroadcastManager.getInstance(getContext());
 
+        int [] location = new int[2];
+        addNumber.getLocationOnScreen(location);
+        System.out.println("location:");
+        
+
     }
 
     public void next() {
