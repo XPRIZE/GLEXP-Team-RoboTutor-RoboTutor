@@ -113,7 +113,7 @@
           "type": "node",
           "maptype": "moduleMap",
           "mapname": "PLAYCOMPLETE",
-          "preenter": ["DISABLE_TAPPING"],
+          "preenter": ["DISABLE_TAPPING","CLR_CHIME_BEHAVIOR","CLR_TUTOR_BEHAVIOR1","CLR_TUTOR_BEHAVIOR2"],
           "preexit": [],
           "edges": [
             {"constraint": "FTR_EOD", "edge": "NEXT_SCENE"},
@@ -183,6 +183,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE:String", "features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+
           ]
         },
 
@@ -232,6 +233,10 @@
         "SET_CHIME_BEHAVIOR": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_CHIME:String|PLAY_CHIME:String" ,"features":""},
         "SET_TUTOR_BEHAVIOR1": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_TUTOR_PLUS:String|PLAY_TUTOR_PLUS:String" ,"features":""},
         "SET_TUTOR_BEHAVIOR2": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_TUTOR_MINUS:String|PLAY_TUTOR_MINUS:String" ,"features":""},
+
+        "CLR_CHIME_BEHAVIOR": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_CHIME:String|NULL:String" ,"features":""},
+        "CLR_TUTOR_BEHAVIOR1": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_TUTOR_PLUS:String|NULL:String" ,"features":""},
+        "CLR_TUTOR_BEHAVIOR2": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_TUTOR_MINUS:String|NULL:String" ,"features":""},
         "NEXT_DATASET": {"type": "COMMAND", "id": "SNumberScale", "method": "next", "features": ""},
         "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"},
         "DISABLE_TAPPING": {"type": "COMMAND", "id": "SNumberScale", "method" : "disableTapping", "features":""},

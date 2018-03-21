@@ -448,6 +448,10 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         t.schedule(new playTutor(2),19000);
     }
 
+    public void killTimer(){
+        t.cancel();
+    }
+
     public void playTutor(){
 
     }
