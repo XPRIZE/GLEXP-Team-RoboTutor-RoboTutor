@@ -199,7 +199,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         maxHit = Integer.parseInt(data.max_taps);
         max = Integer.parseInt(data.max);
         if (countStart>=100){
-            waitTime = 2000;
+            waitTime = 2500;
         } else {
             waitTime = 1200;
         }
