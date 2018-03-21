@@ -1,5 +1,5 @@
 {
   "bootFeatures":"",
 
-  "dataSource":[{"type":"CNumberScale_Data", "level":"numscale_1", "task":"Count to 10", "layout":"default", "dataset":[10,841,30,941]}]
+  "dataSource":[{"type":"CNumberScale_Data", "level":"numscale_1", "task":"Count to 10", "layout":"default", "offset":"10","max":"941","max_taps":"30","start":"841"}]
 }

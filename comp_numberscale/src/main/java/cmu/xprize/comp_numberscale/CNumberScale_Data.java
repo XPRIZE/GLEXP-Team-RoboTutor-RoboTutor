@@ -17,7 +17,11 @@ public class CNumberScale_Data implements ILoadableObject{
     public String level;
     public String task;
     public String layout;
-    public int[] dataset;
+    public String offset;
+    public String max;
+    public String max_taps;
+    public String start;
+    //public int[] dataset;
 
 
 

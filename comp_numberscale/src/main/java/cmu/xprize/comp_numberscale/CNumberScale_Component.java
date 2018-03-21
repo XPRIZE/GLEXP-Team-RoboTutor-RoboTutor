@@ -188,11 +188,10 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         level = data.level;
         task = data.task;
         layout = data.layout;
-        dataset =data.dataset;
-        countStart = dataset[1];
-        delta = dataset[0];
-        maxHit = dataset[2];
-        max = dataset[3];
+        countStart = Integer.parseInt(data.start);
+        delta = Integer.parseInt(data.offset);
+        maxHit = Integer.parseInt(data.max_taps);
+        max = Integer.parseInt(data.max);
 
         min = countStart;
         currentNumber = countStart;
