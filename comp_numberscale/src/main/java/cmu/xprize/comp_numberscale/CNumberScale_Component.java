@@ -114,6 +114,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         displayNumber = (TextView) findViewById(R.id.display);
         player.setComponent(this);
         currentHit = 0;
+        greyOutMinus();
         bManager = LocalBroadcastManager.getInstance(getContext());
 
         displayNumber.setBackgroundColor(NSCONST.COLOR_GREY);
@@ -204,7 +205,8 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
 
         //set Timer
         t = new Timer();
-        t.schedule(new playTutor(),15000);
+        t.schedule(new playTutor(1),15000);
+        t.schedule(new playTutor(2),19000);
 
         Log.d(TCONST.COUNTING_DEBUG_LOG, "start=" + countStart +"delta"+delta+ ";index=" + _dataIndex);
     }
@@ -440,18 +442,34 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
      * This is how Component-specific commands are added to the Queue.
      */
     public void setNewTimer(){
-        t = new Timer();
-        t.schedule(new playTutor(),15000);
+        t.cancel();
+        t=new Timer();
+        t.schedule(new playTutor(1),15000);
+        t.schedule(new playTutor(2),19000);
     }
 
     public void playTutor(){
 
     }
 
-    public class playTutor extends TimerTask{
+    public void playTutor1(){
+
+    }
+
+    public class playTutor extends TimerTask {
+        int _tutorType;
+
+        playTutor(int i) {
+            _tutorType = i;
+        }
+
         @Override
-        public void run(){
-            playTutor();
+        public void run() {
+            if (_tutorType == 1) {
+                playTutor();
+            } else {
+                playTutor1();
+            }
         }
     }
 
@@ -485,8 +503,14 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
                         applyBehavior(_command);
                         break;
 
-                    case NSCONST.PLAY_TUTOR:
-                        applyBehavior(_command);
+                    case NSCONST.PLAY_TUTOR_PLUS:
+                        applyBehavior(NSCONST.PLAY_TUTOR_PLUS);
+                        break;
+                    case NSCONST.PLAY_TUTOR_MINUS:
+                        applyBehavior(NSCONST.PLAY_TUTOR_MINUS);
+
+
+
 
                     default:
                         break;

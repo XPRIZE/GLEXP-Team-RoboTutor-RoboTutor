@@ -265,7 +265,16 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
 
     public void playTutor(){
         TScope scope = mTutor.getScope();
-        postEvent(NSCONST.PLAY_TUTOR);
+        postEvent(NSCONST.PLAY_TUTOR_PLUS);
+
+
+    }
+
+    public void playTutor1(){
+        TScope scope = mTutor.getScope();
+        postEvent(NSCONST.PLAY_TUTOR_MINUS);
+
+
     }
 
 
@@ -479,6 +488,7 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
 
             RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:sticky,behavior:" + event);
             applyBehaviorNode(stickyMap.get(event));
+
 
             result = true;
         }
