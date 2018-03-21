@@ -247,6 +247,8 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
 
     public void playChime() {
 
+
+
         TScope scope = mTutor.getScope();
 
 // select which chime to play, via protected integer
@@ -256,11 +258,22 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
         String octaveChime = NSCONST.CHIMES[2][chimeIndex];
 
         Log.d("PlayChime", currentChime);
-        scope.addUpdateVar("CountChime", new TString(currentChime));
-        scope.addUpdateVar("OctaveChime", new TString(octaveChime));
-        scope.addUpdateVar("CurrentCount", new TString(String.valueOf(currentNumber)));
 
-        postEvent(NSCONST.PLAY_CHIME);
+        if (currentNumber<=20||(currentNumber%10 == 0)){
+            scope.addUpdateVar("CountChime", new TString(currentChime));
+            scope.addUpdateVar("OctaveChime", new TString(octaveChime));
+            scope.addUpdateVar("CurrentCount", new TString(String.valueOf(currentNumber)));
+            postEvent(NSCONST.PLAY_CHIME);
+        } else {
+            //needs concantenation
+            scope.addUpdateVar("CountChime", new TString(currentChime));
+            scope.addUpdateVar("OctaveChime", new TString(octaveChime));
+            scope.addUpdateVar("CurrentCount", new TString(String.valueOf((int)(currentNumber/10))));
+            scope.addUpdateVar("CurrentCountt",new TString(String.valueOf((int)(currentNumber%10))));
+            postEvent(NSCONST.PLAY_CHIME_PLUS);
+        }
+
+
     }
 
     public void playTutor(){

@@ -507,6 +507,10 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
                         applyBehavior(_command);
                         break;
 
+                    case NSCONST.PLAY_CHIME_PLUS:
+                        applyBehavior(_command);
+                        break;
+
                     case NSCONST.PLAY_TUTOR_PLUS:
                         applyBehavior(NSCONST.PLAY_TUTOR_PLUS);
                         break;
