@@ -586,7 +586,7 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
                                                 enableTapping();
                                             }
                                         },
-                                        1200
+                                        waitTime
                                 );
 
                             }

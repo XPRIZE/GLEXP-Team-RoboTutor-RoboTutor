@@ -68,6 +68,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     public int[] addPosition = new int[2];
     public int[] minusPosition = new int[2];
     protected Timer t;
+    protected int waitTime=1200;
 
 
     // json loadable
@@ -197,6 +198,11 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         delta = Integer.parseInt(data.offset);
         maxHit = Integer.parseInt(data.max_taps);
         max = Integer.parseInt(data.max);
+        if (countStart>=100){
+            waitTime = 2000;
+        } else {
+            waitTime = 1200;
+        }
 
         min = countStart;
         currentNumber = countStart;
