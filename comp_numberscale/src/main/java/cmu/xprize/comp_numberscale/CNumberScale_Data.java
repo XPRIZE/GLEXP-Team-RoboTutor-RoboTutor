@@ -17,13 +17,12 @@ public class CNumberScale_Data implements ILoadableObject{
     public String level;
     public String task;
     public String layout;
-    public int start;
     public int[] dataset;
 
 
 
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
-        JSON_Helper.parseSelf(jsonObj, this, CClassMap.classMap, scope);
+        JSON_Helper.parseSelf(jsonObj, this, cmu.xprize.util.CClassMap.classMap, scope);
     }
 }

@@ -30,6 +30,7 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
     private float edgelength;
     private int min;
     private int max;
+    private int maxIndex = 0;
     private int barIndex;
     private Paint strokePaint;
     private boolean tappable;
@@ -96,10 +97,11 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
     }
 
     protected void setNumberBar(){
-        _numberbar = new int[maxHit/2+1];
+        _numberbar = new int[maxHit];
         int delta = _component.get_delta();
-        for(int i=0;i<=maxHit/2;i++){
-            _numberbar[i]=min+i*delta;
+        for(int i=min;i<=max;i=i+delta){
+            _numberbar[maxIndex]=i;
+            maxIndex++;
         }
     }
 
@@ -120,17 +122,19 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
     }
 
     /**
+     *
+     *
      * redraw
      */
     private void redraw(Canvas canvas) {
         drawContainingRectangle(canvas);
         //When the dataset is not loaded, draw nothing.
-        if (maxHit!=0){
+        if (maxIndex!=0){
             int margin = NSCONST.BAR_MARGIN;
             int bartop = NSCONST.TOP_MARGIN;
             float left = margin;
             float right = canvas.getWidth() - margin;
-            edgelength = (right-left)/(maxHit/2+1);
+            edgelength = (right-left)/maxIndex;
 
 
             if (_holder != null) {
@@ -229,7 +233,7 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
                     _component.ungreyMinus();
                 }
 
-                if (barIndex == maxHit/2) {
+                if (barIndex == maxIndex-1) {
                     greyOutPlus = true;
                     _component.greyOutAdd();
                 } else {
@@ -239,7 +243,7 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
 
                 System.out.println("minus");
             } else if (x>=addSpec[0] && x<=addSpec[1] && y>=addSpec[2] && y<=addSpec[3]){
-                if (barIndex<maxHit/2){
+                if (barIndex<maxIndex-1){
                     barIndex+=1;
                     _component.add_delta();
                     tappable = false;
@@ -254,7 +258,7 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
                     _component.ungreyMinus();
                 }
 
-                if (barIndex == maxHit/2) {
+                if (barIndex == maxIndex-1) {
                     greyOutPlus = true;
                     _component.greyOutAdd();
                 } else {
