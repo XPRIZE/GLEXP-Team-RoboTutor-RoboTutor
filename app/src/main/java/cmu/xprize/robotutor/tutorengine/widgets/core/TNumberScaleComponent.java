@@ -249,7 +249,15 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
 
         TScope scope = mTutor.getScope();
 
+// select which chime to play, via protected integer
+        int d = (currentNumber-countStart)/delta;
+        int chimeIndex = d == 0 ? 0 : (d - 1) % 10;
+        String currentChime = NSCONST.CHIMES[1][chimeIndex];
+        String octaveChime = NSCONST.CHIMES[2][chimeIndex];
 
+        Log.d("PlayChime", currentChime);
+        scope.addUpdateVar("CountChime", new TString(currentChime));
+        scope.addUpdateVar("OctaveChime", new TString(octaveChime));
         scope.addUpdateVar("CurrentCount", new TString(String.valueOf(currentNumber)));
 
         postEvent(NSCONST.PLAY_CHIME);
