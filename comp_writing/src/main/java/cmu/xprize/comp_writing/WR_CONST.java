@@ -35,6 +35,8 @@ public class WR_CONST {
     public static final String ACTION_COMPLETE          = "ACTION_COMPLETE";
     public static final String RIPPLE_REPLAY            = "RIPPLE_REPLAY";
     public static final String RIPPLE_HIGHLIGHT         = "RIPPLE_HIGHLIGHT";
+    public static final String STIMULUS_HIGHLIGHT       = "STIMULUS_HIGHLIGHT";
+    public static final String GLYPH_HIGHLIGHT         = "GLYPH_HIGHLIGHT";
     public static final String RIPPLE_DEMO              = "RIPPLE_DEMO";
     public static final String FIELD_REPLAY_COMPLETE    = "FIELD_REPLAY_COMPLETE";
     public static final String REPLAY_COMPLETE          = "REPLAY_COMPLETE";

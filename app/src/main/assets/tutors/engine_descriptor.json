@@ -90,11 +90,6 @@
       "tutorName": "word_copy",
       "features": "FTR_LETTERS:FTR_UPPERCASE:FTR_DICTATION"
     },
-    "write.wrd": {
-      "type": "TUTORVAR_MAP",
-      "tutorName": "word_copy",
-      "features": "FTR_WORDS"
-    },
     "write.ltr.lc": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
@@ -105,15 +100,35 @@
       "tutorName": "word_copy",
       "features": "FTR_LETTERS:FTR_LOWERCASE:FTR_DICTATION"
     },
+    "write.num": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_NUMBERS"
+    },
+    "write.wrd": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_WORDS"
+    },
+    "write.wrd.dic": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_WORDS:FTR_DICTATION"
+    },
     "write.num.dic": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
       "features": "FTR_NUMBERS:FTR_DICTATION"
     },
-    "write.num": {
+    "write.dotCount": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
-      "features": "FTR_NUMBERS"
+      "features": "FTR_DOTCOUNT"
+    },
+    "write.arith": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_ARITH"
     },
     "story.echo": {
       "type": "TUTORVAR_MAP",

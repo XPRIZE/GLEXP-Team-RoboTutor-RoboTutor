@@ -717,7 +717,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
         // update the Scope response variable  "<Sstimulus>.value"
         //
-        publishValue(WR_CONST.VALUE_VAR, mStimulus.toLowerCase());
+        publishValue(WR_CONST.VALUE_VAR, mAnswer.toLowerCase());
 
 
         // update the Scope response variable  "SWordCopy.audiostim"

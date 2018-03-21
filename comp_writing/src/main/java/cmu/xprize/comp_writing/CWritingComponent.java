@@ -626,6 +626,34 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     }
 
+    public void highlightStimulus() {
+
+        long delay = 0;
+        CStimulusController r;
+
+        for(int i1 = 0 ; i1 < mRecogList.getChildCount() ; i1++) {
+
+            r = (CStimulusController)mRecogList.getChildAt(i1);
+
+            r.post(TCONST.HIGHLIGHT, delay);
+            delay += WR_CONST.RIPPLE_DELAY;
+        }
+    }
+
+    public void highlightGlyph() {
+
+        long delay = 0;
+        CGlyphController   v;
+
+        for(int i1 = 0; i1 < mGlyphList.getChildCount() ; i1++) {
+
+            v = (CGlyphController) mGlyphList.getChildAt(i1);
+
+            v.post(TCONST.HIGHLIGHT, delay);
+            delay += WR_CONST.RIPPLE_DELAY;
+        }
+
+    }
 
     public void hideGlyphs() {
 
@@ -1216,6 +1244,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     case WR_CONST.CANCEL_POINTAT:
 
                         cancelPointAt();
+                        break;
+
+                    case WR_CONST.STIMULUS_HIGHLIGHT:
+
+                        highlightStimulus();
+                        break;
+
+                    case WR_CONST.GLYPH_HIGHLIGHT:
+
+                        highlightGlyph();
                         break;
 
                     default:
