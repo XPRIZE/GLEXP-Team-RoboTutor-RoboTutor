@@ -263,6 +263,12 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
         postEvent(NSCONST.PLAY_CHIME);
     }
 
+    public void playTutor(){
+        TScope scope = mTutor.getScope();
+        postEvent(NSCONST.PLAY_TUTOR);
+    }
+
+
     @Override
     public void publishValue(String varName, String value) {
 

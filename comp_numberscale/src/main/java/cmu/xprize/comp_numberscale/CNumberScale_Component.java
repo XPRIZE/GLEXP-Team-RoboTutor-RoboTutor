@@ -21,6 +21,8 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
@@ -65,6 +67,8 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     public int[] minusSpecs = new int[4];
     public int[] addPosition = new int[2];
     public int[] minusPosition = new int[2];
+    protected Timer t;
+
 
     // json loadable
     public String bootFeatures;
@@ -198,6 +202,10 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
 
         player.loadData(min,max,delta,maxHit);
 
+        //set Timer
+        t = new Timer();
+        t.schedule(new playTutor(),15000);
+
         Log.d(TCONST.COUNTING_DEBUG_LOG, "start=" + countStart +"delta"+delta+ ";index=" + _dataIndex);
     }
 
@@ -264,6 +272,8 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         minusNumber.setText(minus);
 
     }
+
+
 
     public void disableTapping() {player.enableTapping(false);
     }
@@ -350,6 +360,8 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         return true;
     }
 
+
+
     //Overriden by child class
 
     public void playChime(){
@@ -427,6 +439,22 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     /**
      * This is how Component-specific commands are added to the Queue.
      */
+    public void setNewTimer(){
+        t = new Timer();
+        t.schedule(new playTutor(),15000);
+    }
+
+    public void playTutor(){
+
+    }
+
+    public class playTutor extends TimerTask{
+        @Override
+        public void run(){
+            playTutor();
+        }
+    }
+
     public class Queue implements Runnable {
 
         String _name;
@@ -456,6 +484,9 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
                     case NSCONST.PLAY_CHIME:
                         applyBehavior(_command);
                         break;
+
+                    case NSCONST.PLAY_TUTOR:
+                        applyBehavior(_command);
 
                     default:
                         break;

@@ -223,6 +223,7 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
                     _component.minus_delta();
                     tappable = false;
                     _component.playChime();
+                    _component.setNewTimer();
                 }
 
                 if (barIndex == 0){
@@ -248,6 +249,7 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
                     _component.add_delta();
                     tappable = false;
                     _component.playChime();
+                    _component.setNewTimer();
                 }
 
                 if (barIndex == 0){

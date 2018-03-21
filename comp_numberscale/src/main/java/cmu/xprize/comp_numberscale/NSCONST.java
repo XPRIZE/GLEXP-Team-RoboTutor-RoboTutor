@@ -18,6 +18,7 @@ public class NSCONST {
     public static final float BOX_BOUNDARY_STROKE_WIDTH = 10.0f;
 
     public static final String PLAY_CHIME  = "PLAY_CHIME";
+    public static final String PLAY_TUTOR = "PLAY_TUTOR";
     public static final String MAX_HIT_REACHED= "MAX_HIT_REACHED";
 
     public static final String[][] CHIMES = {
