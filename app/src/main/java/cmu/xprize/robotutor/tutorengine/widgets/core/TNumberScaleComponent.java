@@ -259,18 +259,38 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
 
         Log.d("PlayChime", currentChime);
 
-        if (currentNumber<=20||(currentNumber%10 == 0)){
+        if (currentNumber<=20||(currentNumber%10 == 0 && currentNumber <100)||(currentNumber%100==0)){
             scope.addUpdateVar("CountChime", new TString(currentChime));
             scope.addUpdateVar("OctaveChime", new TString(octaveChime));
             scope.addUpdateVar("CurrentCount", new TString(String.valueOf(currentNumber)));
             postEvent(NSCONST.PLAY_CHIME);
-        } else {
-            //needs concantenation
+        } else if (currentNumber<100 ){
+            //needs concantenation once
             scope.addUpdateVar("CountChime", new TString(currentChime));
             scope.addUpdateVar("OctaveChime", new TString(octaveChime));
-            scope.addUpdateVar("CurrentCount", new TString(String.valueOf((int)(currentNumber/10))));
+            scope.addUpdateVar("CurrentCount", new TString(String.valueOf((int)(currentNumber-currentNumber%10))));
             scope.addUpdateVar("CurrentCountt",new TString(String.valueOf((int)(currentNumber%10))));
             postEvent(NSCONST.PLAY_CHIME_PLUS);
+        } else if(currentNumber % 10 ==0){
+            scope.addUpdateVar("CountChime", new TString(currentChime));
+            scope.addUpdateVar("OctaveChime", new TString(octaveChime));
+            scope.addUpdateVar("CurrentCountt", new TString(String.valueOf((int)(currentNumber-currentNumber%100))));
+            scope.addUpdateVar("CurrentCount",new TString(String.valueOf((int)(currentNumber%100))));
+            postEvent(NSCONST.PLAY_CHIME_PLUS);
+
+        }else {
+            int c1 = currentNumber % 10;
+            int c2= currentNumber % 100-c1;
+            int c3 = currentNumber -currentNumber%100;
+            scope.addUpdateVar("CountChime", new TString(currentChime));
+            scope.addUpdateVar("OctaveChime", new TString(octaveChime));
+            scope.addUpdateVar("CurrentCount", new TString(String.valueOf((c1))));
+            scope.addUpdateVar("CurrentCountt",new TString(String.valueOf((c2))));
+            scope.addUpdateVar("CurrentCounttt",new TString(String.valueOf((c3))));
+            postEvent(NSCONST.PLAY_CHIME_PPLUS);
+
+            //need concantenation twice
+
         }
 
 

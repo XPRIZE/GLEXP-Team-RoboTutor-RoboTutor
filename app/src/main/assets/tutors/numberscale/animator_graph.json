@@ -37,9 +37,9 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id":"SNumberScale", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
             {"name":"Play Chimes:", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{CountChime}}.mp3", "repeat":false, "volume": "0.5", "mode":"event", "features": ""},
             {"name":"Play Chimes:", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{OctaveChime}}.mp3", "repeat":false, "volume": "0.5", "mode":"event", "features": ""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCount}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "na1.mp3",  "soundpackage":"default", "volume": 1.2, "mode":"flow", "features": ""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCountt}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""}
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCountt}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "na.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCount}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""}
 
           ],
           "preexit":[],
@@ -54,11 +54,11 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id":"SNumberScale", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
             {"name":"Play Chimes:", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{CountChime}}.mp3", "repeat":false, "volume": "0.5", "mode":"event", "features": ""},
             {"name":"Play Chimes:", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{OctaveChime}}.mp3", "repeat":false, "volume": "0.5", "mode":"event", "features": ""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCount}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "na1.mp3",  "soundpackage":"default", "volume": 1.2, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCounttt}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "na.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCountt}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "na1.mp3",  "soundpackage":"default", "volume": 1.2, "mode":"flow", "features": ""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCounttt}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""}
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "na1.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCount}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""}
 
           ],
           "preexit":[],
