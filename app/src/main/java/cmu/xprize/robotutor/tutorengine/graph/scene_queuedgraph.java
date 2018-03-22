@@ -236,6 +236,7 @@ public class scene_queuedgraph extends scene_module {
                             }
                         }
                         catch(Exception e) {
+                            // GRAY_SCREEN_BUG here is where the error is caught
                             CErrorManager.logEvent(_logType,"target:node.queuedgraph: apply failed: ", e, false);
                         }
                         break;

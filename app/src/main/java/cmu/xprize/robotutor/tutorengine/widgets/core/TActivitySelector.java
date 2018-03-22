@@ -163,7 +163,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         if(!BuildConfig.LANGUAGE_SWITCH) {
 
             mLangButton.setVisibility(INVISIBLE);
-            requestLayout();
+            requestLayout(); // https://stackoverflow.com/questions/13856180/usage-of-forcelayout-requestlayout-and-invalidate
         }
     }
 

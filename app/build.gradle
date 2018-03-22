@@ -94,6 +94,7 @@ android {
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_UNDEFINED
             buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
 
+            debuggable true
             signingConfig signingConfigs.android
         }
 
@@ -121,6 +122,7 @@ android {
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
             buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
 
+            debuggable true
             signingConfig signingConfigs.android
         }
 
@@ -132,7 +134,8 @@ android {
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
             buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
-            
+
+            debuggable true
             signingConfig signingConfigs.android
         }
 

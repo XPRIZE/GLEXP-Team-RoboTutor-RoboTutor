@@ -789,4 +789,7 @@ public class TCONST {
     public static final String ROBO_DEBUG_FILE_ASM = "math_test.json";
     public static final String ROBO_DEBUG_FILE_BPOP = "bpop.json";
 
+
+    // debug vals
+    public static final String DEBUG_GRAY_SCREEN_TAG = "DEBUG_GRAY_SCREEN";
 }

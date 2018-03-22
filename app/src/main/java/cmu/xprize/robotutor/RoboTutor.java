@@ -39,7 +39,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
 
 import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.GCONST;
@@ -131,8 +130,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     private final  String  TAG = "CRoboTutor";
     private final String ID_TAG = "StudentId";
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -141,6 +138,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         super.onCreate(null);
 
 
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onCreate");
         // Catch all errors and cause a clean exit -
         // TODO: this doesn't work as expected
         //
@@ -347,6 +345,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         @Override
         protected Boolean doInBackground(Void... unused) {
 
+            Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: tutorConfigTask.doInBackground");
             boolean result = false;
 
             try {
@@ -425,7 +424,14 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 mMediaController.setTTS(TTS);
                 break;
         }
-        startEngine();
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onServiceReady: " + serviceName + ":" + status);
+
+
+        // check whether TTS, ASR, and ROOT are ready before starting engine
+        if((TTS != null && TTS.isReady()) && (ASR != null && ASR.isReady()) && isReady) {
+
+            startEngine();
+        }
     }
 
 
@@ -440,48 +446,46 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
      */
     private void startEngine() {
 
-        if((TTS != null && TTS.isReady()) &&
-           (ASR != null && ASR.isReady()) && isReady) {
+        if(!engineStarted) {
+            engineStarted = true;
 
-            if(!engineStarted) {
-                engineStarted = true;
+            logManager.postEvent_V(TAG, "TutorEngine:Starting");
 
-                logManager.postEvent_V(TAG, "TutorEngine:Starting");
+            // Delete the asset loader utility ASR object
+            ASR = null;
 
-                // Delete the asset loader utility ASR object
-                ASR = null;
+            masterContainer.removeView(progressView);
 
-                masterContainer.removeView(progressView);
+            // Initialize the Engine - set the EXTERN File path for file installs
+            // Load the default tutor defined in assets/tutors/engine_descriptor.json
+            // TODO: Handle tutor creation failure
+            //
+            tutorEngine = CTutorEngine.getTutorEngine(RoboTutor.this);
 
-                // Initialize the Engine - set the EXTERN File path for file installs
-                // Load the default tutor defined in assets/tutors/engine_descriptor.json
-                // TODO: Handle tutor creation failure
+            // If running without built-in home screen add a start screen
+            //
+            if(STANDALONE) {
+
+                // TODO: This is a temporary log update mechanism - see below
                 //
-                tutorEngine = CTutorEngine.getTutorEngine(RoboTutor.this);
-
-                // If running without built-in home screen add a start screen
-                //
-                if(STANDALONE) {
-
-                    // TODO: This is a temporary log update mechanism - see below
-                    //
-                    masterContainer.addAndShow(startView);
-                    startView.startTapTutor();
-                    setFullScreen();
-                }
-                // Otherwise go directly to the sessionManager
-                //
-                else {
-                    onStartTutor();
-                }
-
+                masterContainer.addAndShow(startView);
+                startView.startTapTutor();
+                setFullScreen();
             }
-            // Note that it is possible for the masterContainer to be recreated without the
-            // engine begin destroyed so we must maintain sync here.
+            // Otherwise go directly to the sessionManager
+            //
             else {
-                logManager.postEvent_V(TAG, "TutorEngine:Restarting");
+                Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "xx: onStartTutor in 'RoboTutor.startEngine'");
+                onStartTutor();
             }
+
         }
+        // Note that it is possible for the masterContainer to be recreated without the
+        // engine begin destroyed so we must maintain sync here.
+        else {
+            logManager.postEvent_V(TAG, "TutorEngine:Restarting");
+        }
+
     }
 
 
@@ -500,6 +504,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         logManager.postEvent_V(TAG, "LOG_GUID:" + LOG_ID );
         LOG_ID = CPreferenceCache.initLogPreference(this);
 
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "xx: startSessionManager in 'onStartTutor'");
         tutorEngine.startSessionManager();
 
         startView.stopTapTutor();
@@ -519,6 +524,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     public void onBackPressed() {
         logManager.postEvent_V(TAG, "RoboTuTor:onBackPressed");
 
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r4: killActiveTutor called from onBackPressed()");
         tutorEngine.killActiveTutor();
 
         // Allow the screen to sleep when not in a session
@@ -548,6 +554,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
      */
     @Override
     protected void onStart() {
+
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onStart");
 
         super.onStart();
 
@@ -593,6 +601,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         // Start the async task to initialize the tutor
         //
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onStart -- tutorConfigTask");
         new tutorConfigTask().execute();
     }
 
@@ -614,11 +623,13 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     protected void onStop() {
 
         super.onStop();
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onStop");
         // Off-Screen
         logManager.postEvent_V(TAG, "Robotutor:onStop");
 
         // Need to do this before releasing TTS
         //
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r4: killActiveTutor called from onStop()");
         tutorEngine.killActiveTutor();
 
         if(TTS != null && TTS.isReady()) {
@@ -645,6 +656,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     protected void onPause() {
 
         super.onPause();
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onPause");
         logManager.postEvent_V(TAG, "RoboTutor:onPause");
 
         SharedPreferences.Editor prefs = getPreferences(Context.MODE_PRIVATE).edit();
@@ -658,6 +670,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     protected void onResume() {
 
         super.onResume();
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onResume");
         logManager.postEvent_V(TAG, "Robotutor:onResume");
 
         SharedPreferences prefs = getPreferences(MODE_PRIVATE);
@@ -694,6 +707,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     @Override
     protected void onDestroy() {
 
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onDestroy");
         logManager.postEvent_V(TAG, "RoboTutor:onDestroy");
 
         Log.v(TAG, "isfinishing:" + isFinishing());
