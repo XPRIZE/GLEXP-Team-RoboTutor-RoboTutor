@@ -121,9 +121,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     //
     static private IGuidView    guidCallBack;
 
-    public final static String  LOG_PATH       = Environment.getExternalStorageDirectory() + TCONST.ROBOTUTOR_FOLDER;
-    public final static String  INIT_TIME      = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-    public final static String  LOG_FILENAME   = "RoboTutor" + "_" + BuildConfig.BUILD_TYPE + "." + BuildConfig.VERSION_NAME + "_" + INIT_TIME + "_" + Build.SERIAL;
+    String hotLogPath;
+    String readyLogPath;
     public final static String  DOWNLOAD_PATH  = Environment.getExternalStorageDirectory() + File.separator + Environment.DIRECTORY_DOWNLOADS;
     public final static String  EXT_ASSET_PATH = Environment.getExternalStorageDirectory() + File.separator + TCONST.ROBOTUTOR_ASSET_FOLDER;
 
@@ -136,6 +135,11 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         // Note = we don't want the system to try and recreate any of our views- always pass null
         //
         super.onCreate(null);
+
+        hotLogPath   = Environment.getExternalStorageDirectory() + TCONST.HOT_LOG_FOLDER;
+        readyLogPath = Environment.getExternalStorageDirectory() + TCONST.READY_LOG_FOLDER;
+        String initTime     = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+        String logFilename  = "RoboTutor" + "_" + BuildConfig.BUILD_TYPE + "." + BuildConfig.VERSION_NAME + "_" + initTime + "_" + Build.SERIAL;
 
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onCreate");
@@ -169,8 +173,12 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         VERSION_RT   = BuildConfig.VERSION_NAME;
         VERSION_SPEC = CAssetObject.parseVersionSpec(VERSION_RT);
 
+        Log.w("LOG_DEBUG", "Beginning new session with LOG_FILENAME = " + logFilename);
+
         logManager = CLogManager.getInstance();
-        logManager.startLogging(LOG_PATH, LOG_FILENAME);
+        logManager.transferHotLogs(hotLogPath, readyLogPath);
+
+        logManager.startLogging(hotLogPath, logFilename);
         CErrorManager.setLogManager(logManager);
 
         // TODO : implement time stamps
@@ -220,6 +228,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         masterContainer.addAndShow(progressView);
     }
+
 
     /**
      * This file gets the Extras that are passed from FaceLogin and uses them to set the uniqueIDs,
@@ -350,7 +359,9 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
             try {
                 // TODO: Don't do this in production
-                // At the moment we always reinstall the tutor spec data - for development
+                // At the moment we always reinstall the tutor spec data - for 
+              
+              
                 if(CacheSource.equals(TCONST.EXTERN)) {
                     tutorAssetManager.installAssets(TCONST.TUTORROOT);
                     logManager.postEvent_V(TAG, "INFO:Tutor Assets installed");
@@ -723,6 +734,9 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         logManager.postDateTimeStamp(GRAPH_MSG, "RoboTutor:SessionEnd");
         logManager.stopLogging();
+
+        // after logging, transfer logs to READY folder
+        logManager.transferHotLogs(hotLogPath, readyLogPath);
     }
 
 

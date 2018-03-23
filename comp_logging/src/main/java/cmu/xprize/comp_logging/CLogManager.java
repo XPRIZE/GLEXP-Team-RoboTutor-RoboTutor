@@ -18,20 +18,26 @@
 
 package cmu.xprize.comp_logging;
 
+import android.icu.util.Output;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.logging.ErrorManager;
 
 
 public class CLogManager implements ILogManager {
@@ -86,6 +92,52 @@ public class CLogManager implements ILogManager {
     }
 
     private CLogManager() {
+    }
+
+
+    public void transferHotLogs(String hotPath, String readyPath) {
+
+        File hotDir = new File(hotPath);
+
+        // our first time...
+        if (!hotDir.exists()) {
+            return;
+        }
+
+        File readyDir = new File(readyPath);
+
+        try {
+
+            // make dir if necessary
+            if (!readyDir.exists()) {
+                readyDir.mkdir();
+            }
+
+            for (File f : hotDir.listFiles()) {
+                Log.w("LOG_DEBUG", "Transferring file " + f.getName());
+
+                if (f.isDirectory()) {
+                    // do nothing... there should not be any directories
+                } else {
+                    File readyLog = new File(readyPath, f.getName());
+                    InputStream in = new FileInputStream(f);
+                    OutputStream out = new FileOutputStream(readyLog);
+                    byte[] buf = new byte[1024];
+                    int len;
+                    while ((len = in.read(buf)) > 0) {
+                        out.write(buf, 0, len);
+                    }
+
+                    in.close();
+                    out.close();
+
+                    f.delete();
+                }
+            }
+        } catch (IOException e) {
+            CErrorManager.logEvent(TAG, "Transfer Error:", e, false);
+        }
+
     }
 
 
