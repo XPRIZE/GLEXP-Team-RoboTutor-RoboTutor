@@ -111,7 +111,6 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
 
     public void enableTapping(boolean tappable) {
         this.tappable = tappable;
-        redraw();
     }
 
 
@@ -127,27 +126,33 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
      * redraw
      */
     private void redraw(Canvas canvas) {
-        drawContainingRectangle(canvas);
-        //When the dataset is not loaded, draw nothing.
-        if (maxIndex!=0){
-            int margin = NSCONST.BAR_MARGIN;
-            int bartop = NSCONST.TOP_MARGIN;
-            float left = margin;
-            float right = canvas.getWidth() - margin;
-            edgelength = (right-left)/maxIndex;
+        if(_holder!=null){
+
+            drawContainingRectangle(canvas);
+            //When the dataset is not loaded, draw nothing.
+            if (maxIndex!=0){
+                int margin = NSCONST.BAR_MARGIN;
+                int bartop = NSCONST.TOP_MARGIN;
+                float left = margin;
+                float right = canvas.getWidth() - margin;
+                edgelength = (right-left)/maxIndex;
 
 
-            if (_holder != null) {
-                for (int i=0;i<=barIndex;i++) {
-                    drawEachBox(canvas, i);
+                if (_holder != null) {
+                    for (int i=0;i<maxIndex;i++) {
+                        drawEachBox(canvas, i);
+                    }
                 }
+
             }
 
+
+            // after all drawing, post changes
+
+
         }
-
-
-        // after all drawing, post changes
         _holder.unlockCanvasAndPost(canvas);
+
 
     }
 
@@ -183,6 +188,10 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
         text.setFakeBoldText(true);
         String num = Integer.toString(_numberbar[i]);
 
+        Paint l = new Paint();
+        l.setColor(NSCONST.COLOR_BLUE);
+        l.setStrokeWidth(10);
+
 
         Paint white = new Paint();
         white.setColor(NSCONST.COLOR_WHITE);
@@ -196,10 +205,15 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
 
         //not drawing the box for the first number
         if (i!=0){
-            canvas.drawRect(left, top, right, bottom, strokePaint);
-            canvas.drawRect(left1,top1,right1,bottom1,white);
+            canvas.drawLine(left+edgelength/5,bottom-edgelength/4,right-edgelength/5,bottom-edgelength/4,l);
+            if(i!=maxIndex-1){
+            canvas.drawText(",",right,bottom-edgelength/5,text);}
         }
-        canvas.drawText(num,(left+right)/2,(top+bottom)/2+NSCONST.TEXT_SIZE/3,text);
+
+        if (i<=barIndex){
+            canvas.drawText(num,(left+right)/2,(top+bottom)/2+NSCONST.TEXT_SIZE/3,text);
+        }
+
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -272,9 +286,8 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
                 System.out.println("add");
             }
 
-            Canvas canvas = _holder.lockCanvas();
 
-            redraw(canvas);
+            redraw();
 
 
 
