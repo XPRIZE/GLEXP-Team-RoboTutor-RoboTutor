@@ -104,7 +104,6 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
 
     }
 
-
     public void setSpeakButton(String command) {
     }
 
@@ -149,6 +148,10 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
     @Override
     public void echoLine() {
 
+    }
+
+    @Override
+    public void parrotLine() {
     }
 
     @Override

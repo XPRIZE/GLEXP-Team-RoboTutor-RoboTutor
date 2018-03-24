@@ -211,6 +211,9 @@ public class TCONST {
     public static final String FTR_USER_HEAR       = "FTR_USER_HEAR";
     public static final String FTR_USER_READ       = "FTR_USER_READ";
     public static final String FTR_USER_ECHO       = "FTR_USER_ECHO";
+    public static final String FTR_USER_HIDE       = "FTR_USER_HIDE";
+    public static final String FTR_USER_REVEAL     = "FTR_USER_REVEAL";
+    public static final String FTR_USER_PARROT     = "FTR_USER_PARROT";
     public static final String FTR_USER_READING    = "FTR_USER_READING";
 
     public static final String NARRATE_STORY       = "NARRATE_STORY";
@@ -733,14 +736,15 @@ public class TCONST {
     public static final int INCR = 1;
     public static final int DECR = -1;
 
-    public static final String RTC_VAR_ECHOSTATE  = ".echoState";
-    public static final String RTC_VAR_PAGESTATE  = ".pageState";
-    public static final String RTC_VAR_PARASTATE  = ".paraState";
-    public static final String RTC_VAR_LINESTATE  = ".lineState";
-    public static final String RTC_VAR_WORDSTATE  = ".wordState";
-    public static final String RTC_VAR_ATTEMPT    = ".attempt";
-    public static final String LAST               = "LAST";
-    public static final String NOT_LAST           = "NOT_LAST";
+    public static final String RTC_VAR_ECHOSTATE   = ".echoState";
+    public static final String RTC_VAR_PARROTSTATE = ".parrotState";
+    public static final String RTC_VAR_PAGESTATE   = ".pageState";
+    public static final String RTC_VAR_PARASTATE   = ".paraState";
+    public static final String RTC_VAR_LINESTATE   = ".lineState";
+    public static final String RTC_VAR_WORDSTATE   = ".wordState";
+    public static final String RTC_VAR_ATTEMPT     = ".attempt";
+    public static final String LAST                = "LAST";
+    public static final String NOT_LAST            = "NOT_LAST";
 
     public static final String RTC_VAR_STATE         = ".storyState";
     public static final String RTC_PARAGRAPHCOMPLETE = "PARAGRAPH_COMPLETE";

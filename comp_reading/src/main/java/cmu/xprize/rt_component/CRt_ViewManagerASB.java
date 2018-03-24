@@ -129,6 +129,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private String                  completedSentences     = "";
     private String                  futureSentencesFmtd    = "";
     private String                  futureSentences        = "";
+    private boolean                 showWords              = true;
+    private boolean                 showFutureWords        = true;
     private boolean                 showFutureContent      = true;
     private boolean                 listenFutureContent    = false;
     private String                  assetLocation;
@@ -196,6 +198,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         storyBooting  = true;
         assetLocation = location;
 
+        if (mParent.testFeature(TCONST.FTR_USER_HIDE)) showWords = false;
+        if (mParent.testFeature(TCONST.FTR_USER_REVEAL)) showFutureWords = showFutureContent = false;
+
+        Log.d(TAG, "initStory: showWords = " + showWords + ", showFutureWords = " + showFutureWords + ", showFutureContent = " + showFutureContent);
+
         mParent.setFeature(TCONST.FTR_STORY_STARTING, TCONST.ADD_FEATURE);
 
         seekToPage(TCONST.ZERO);
@@ -213,7 +220,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         // reset boot flag to inhibit future calls
         //
-        if(storyBooting) {
+        if (storyBooting) {
 
             mParent.setFeature(TCONST.FTR_STORY_STARTING, TCONST.DEL_FEATURE);
 
@@ -221,11 +228,10 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             // start with USER_READ where the student reads aloud and if USER_ECHO
             // is in effect we then toggle between READ and HEAR for each sentence.
             //
-            if(mParent.testFeature(TCONST.FTR_USER_HEAR)) {
+            if (mParent.testFeature(TCONST.FTR_USER_HEAR) || mParent.testFeature(TCONST.FTR_USER_HIDE) || mParent.testFeature(TCONST.FTR_USER_PARROT)) {
 
                 hearRead = TCONST.FTR_USER_HEAR;
-            }
-            else {
+            } else {
                 hearRead = FTR_USER_READ;
                 mParent.publishFeature(FTR_USER_READING);
             }
@@ -238,11 +244,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     public void speakOrListen() {
 
-        if(hearRead.equals(TCONST.FTR_USER_HEAR)) {
+        if (hearRead.equals(TCONST.FTR_USER_HEAR)) {
 
             mParent.applyBehavior(TCONST.NARRATE_STORY);
         }
-        if(hearRead.equals(FTR_USER_READ)) {
+        if (hearRead.equals(FTR_USER_READ)) {
 
             startListening();
         }
@@ -266,7 +272,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         try {
 
-            switch(command) {
+            switch (command) {
 
                 case "ENABLE":
                     control.setEnabled(true);
@@ -290,7 +296,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     public void setSpeakButton(String command) {
 
-        switch(command) {
+        switch (command) {
 
             case "ENABLE":
                 speakButtonEnable = command;
@@ -314,7 +320,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     public void setPageFlipButton(String command) {
 
-        switch(command) {
+        switch (command) {
 
             case "ENABLE":
                 Log.i("ASB", "ENABLE Flip Button");
@@ -376,7 +382,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         // Note that we use zero based indexing so page zero is first page - i.e. odd
         //
-        if(mCurrPage % 2 == 0) {
+        if (mCurrPage % 2 == 0) {
 
             mCurrViewIndex = mOddIndex;
             mPageImage = (ImageView) mOddPage.findViewById(R.id.SpageImage);
@@ -384,8 +390,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
             mPageFlip = (ImageButton) mOddPage.findViewById(R.id.SpageFlip);
             mSay      = (ImageButton) mOddPage.findViewById(R.id.Sspeak);
-        }
-        else {
+        } else {
 
             mCurrViewIndex = mEvenIndex;
             mPageImage = (ImageView) mEvenPage.findViewById(R.id.SpageImage);
@@ -429,18 +434,17 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         ArrayList<String> wordList = new ArrayList<>();
 
-        for(String word : wordArray) {
+        for (String word : wordArray) {
 
             String[] wordSplit = word.split(splitChar);
 
-            if(wordSplit.length > 1) {
+            if (wordSplit.length > 1) {
 
-                for(int i1 = 0 ; i1 < wordSplit.length-1 ; i1++) {
+                for (int i1 = 0 ; i1 < wordSplit.length-1 ; i1++) {
                     wordList.add(wordSplit[i1] + splitChar);
                 }
                 wordList.add(wordSplit[wordSplit.length-1]);
-            }
-            else {
+            } else {
                 wordList.add(wordSplit[0]);
             }
         }
@@ -481,12 +485,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         sentenceWords = splitRawSentence(rawSentence);
 
-        for(int i1 = 0 ; i1 < sentenceWords.length ; i1++) {
+        for (int i1 = 0 ; i1 < sentenceWords.length ; i1++) {
 
-            if(sentenceWords[i1].endsWith("'") || sentenceWords[i1].endsWith("-")) {
+            if (sentenceWords[i1].endsWith("'") || sentenceWords[i1].endsWith("-")) {
                 sentence.append(sentenceWords[i1]);
-            }
-            else{
+            } else {
                 sentence.append(sentenceWords[i1] + ((i1 < sentenceWords.length-1)? TCONST.WORD_SPACE: TCONST.NO_SPACE));
             }
         }
@@ -497,10 +500,10 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     private String stripLeadingTrailing(String sentence, String stripChar) {
 
-        if(sentence.startsWith(stripChar)) {
+        if (sentence.startsWith(stripChar)) {
             sentence = sentence.substring(1);
         }
-        if(sentence.endsWith(stripChar)) {
+        if (sentence.endsWith(stripChar)) {
             sentence = sentence.substring(0, sentence.length()-1);
         }
 
@@ -512,12 +515,12 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         ArrayList<String> wordList = new ArrayList<>();
 
-        for(String word : wordArray) {
+        for (String word : wordArray) {
 
-            if(word.startsWith(stripChar)) {
+            if (word.startsWith(stripChar)) {
                 word = word.substring(1);
             }
-            if(word.endsWith(stripChar)) {
+            if (word.endsWith(stripChar)) {
                 word = word.substring(0, word.length()-1);
             }
 
@@ -555,11 +558,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         // 1. A visually formatted representation of the words already spoken
         // 2. A list of words already spoken - for use in the Sphinx language model
         //
-        if(currPara > 0 || currLine > 0) {
+        if (currPara > 0 || currLine > 0) {
 
             // First generate all completed paragraphs in their entirity
             //
-            for(int paraIndex = 0 ; paraIndex < currPara ; paraIndex++) {
+            for (int paraIndex = 0 ; paraIndex < currPara ; paraIndex++) {
 
                 for (CASB_Content rawContent : data[currPage].text[paraIndex]) {
 
@@ -573,13 +576,13 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
                     completedSentences += processRawSentence(rawContent.sentence) + TCONST.SENTENCE_SPACE;
                 }
-                if(paraIndex < currPara)
+                if (paraIndex < currPara)
                     completedSentences += "<br><br>";
             }
 
             // Then generate all completed sentences from the current paragraph
             //
-            for(int lineIndex = 0 ; lineIndex <  currLine ; lineIndex++) {
+            for (int lineIndex = 0 ; lineIndex <  currLine ; lineIndex++) {
 
                 rawSentence = data[currPage].text[currPara][lineIndex].sentence;
                 otherWordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
@@ -647,13 +650,13 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         // 1. A visually formatted representation of the words not yet spoken
         // 2. A list of future words to be spoken - for use in the Sphinx language model
         //
-        if(showFutureContent) {
+        if (showFutureContent) {
 
             // Generate all remaining sentences in the current paragraph
             //
             // Then generate all future sentences from the current paragraph
             //
-            for(int lineIndex = currLine+1 ; lineIndex <  mLineCount ; lineIndex++) {
+            for (int lineIndex = currLine+1 ; lineIndex <  mLineCount ; lineIndex++) {
 
                 rawSentence = data[currPage].text[currPara][lineIndex].sentence;
                 otherWordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
@@ -669,7 +672,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
             // First generate all completed paragraphs in their entirity
             //
-            for(int paraIndex = currPara+1 ; paraIndex < mParaCount ; paraIndex++) {
+            for (int paraIndex = currPara+1 ; paraIndex < mParaCount ; paraIndex++) {
 
                 // Add the paragraph break if not at the end
                 //
@@ -707,7 +710,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         // Once past the storyName initialization stage - Listen for the target word -
         //
-        if(!storyBooting)
+        if (!storyBooting)
             speakOrListen();
 
     }
@@ -728,7 +731,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         //
         String filename = currUtterance.audio.toLowerCase();
 
-        if(filename.endsWith(".wav") || filename.endsWith(".mp3")) {
+        if (filename.endsWith(".wav") || filename.endsWith(".mp3")) {
             filename = filename.substring(0,filename.length()-4);
         }
 
@@ -748,7 +751,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     private void trackNarration(boolean start) {
 
-        if(start) {
+        if (start) {
 
             mHeardWord    = 0;
             splitIndex    = TCONST.INITSPLIT;
@@ -763,8 +766,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             mParent.applyBehavior(TCONST.SPEAK_UTTERANCE);
 
             postDelayedTracker();
-        }
-        else {
+        } else {
 
             // NOTE: The narration mode uses the ASR logic to simplify operation.  In doing this
             /// it uses the wordsToSpeak array to progressively highlight the on screen text based
@@ -783,12 +785,10 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 splitIndex = 0;
                 spokenWords.add(splitSegment[splitIndex++]);
 
-            }
-            else if(splitIndex < splitSegment.length){
+            } else if (splitIndex < splitSegment.length){
 
                 spokenWords.add(splitSegment[splitIndex++]);
-            }
-            else {
+            } else {
 
                 Log.d(TAG, "HERE");
             }
@@ -861,14 +861,13 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     private void trackSegment() {
 
-        if(!endOfSentence) {
+        if (!endOfSentence) {
 
             // Tell the script to speak the new uttereance
             //
             mParent.applyBehavior(TCONST.SPEAK_UTTERANCE);
             postDelayedTracker();
-        }
-        else {
+        } else {
             mParent.applyBehavior(TCONST.UTTERANCE_COMPLETE_EVENT);
         }
     }
@@ -878,7 +877,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         long    delay  = 0;
 
-        switch(command) {
+        switch (command) {
 
             case TCONST.START_NARRATION:
 
@@ -928,11 +927,14 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      */
     private void publishStateValues() {
 
+        Log.d(TAG, "publishStateValues: mCurrWord = " + mCurrWord + ", mWordCount = " + mWordCount);
+
         String cummulativeState = TCONST.RTC_CLEAR;
 
         // ensure encho state has a valid value.
         //
         mParent.publishValue(TCONST.RTC_VAR_ECHOSTATE, TCONST.FALSE);
+        mParent.publishValue(TCONST.RTC_VAR_PARROTSTATE, TCONST.FALSE);
 
         // Set the scriptable flag indicating the current state.
         //
@@ -941,19 +943,22 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             // In echo mode - After line has been echoed we switch to Read mode and
             // read the next sentence.
             //
-            if(mParent.testFeature(TCONST.FTR_USER_ECHO)) {
+            if (mParent.testFeature(TCONST.FTR_USER_ECHO) || mParent.testFeature(TCONST.FTR_USER_REVEAL) || mParent.testFeature(TCONST.FTR_USER_PARROT)) {
 
                 // Read Mode - When user finishes reading switch to Narrate mode and
                 // narrate the same sentence - i.e. echo
                 //
-                if(hearRead.equals(FTR_USER_READ)) {
+                if (hearRead.equals(FTR_USER_READ)) {
 
-                    mParent.publishValue(TCONST.RTC_VAR_ECHOSTATE, TCONST.TRUE);
+                    if (!mParent.testFeature(TCONST.FTR_USER_PARROT)) mParent.publishValue(TCONST.RTC_VAR_ECHOSTATE, TCONST.TRUE);
 
                     hearRead = TCONST.FTR_USER_HEAR;
                     mParent.retractFeature(FTR_USER_READING);
 
                     Log.d("ISREADING", "NO");
+
+                    cummulativeState = TCONST.RTC_LINECOMPLETE;
+                    mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.LAST);
 
                     mListener.setPauseListener(true);
                 }
@@ -963,39 +968,36 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                     hearRead = FTR_USER_READ;
                     mParent.publishFeature(FTR_USER_READING);
 
+                    if (mParent.testFeature(TCONST.FTR_USER_PARROT)) mParent.publishValue(TCONST.RTC_VAR_PARROTSTATE, TCONST.TRUE);
+
                     Log.d("ISREADING", "YES");
 
                     cummulativeState = TCONST.RTC_LINECOMPLETE;
                     mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.LAST);
                 }
-            }
-            else {
+            } else {
                 cummulativeState = TCONST.RTC_LINECOMPLETE;
                 mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.LAST);
             }
-        }
-        else
+        } else
             mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.NOT_LAST);
 
         if (mCurrLine >= mLineCount-1) {
             cummulativeState = TCONST.RTC_PARAGRAPHCOMPLETE;
             mParent.publishValue(TCONST.RTC_VAR_LINESTATE, TCONST.LAST);
-        }
-        else
+        } else
             mParent.publishValue(TCONST.RTC_VAR_LINESTATE, TCONST.NOT_LAST);
 
         if (mCurrPara >= mParaCount-1) {
             cummulativeState = TCONST.RTC_PAGECOMPLETE;
             mParent.publishValue(TCONST.RTC_VAR_PARASTATE, TCONST.LAST);
-        }
-        else
+        } else
             mParent.publishValue(TCONST.RTC_VAR_PARASTATE, TCONST.NOT_LAST);
 
         if (mCurrPage >= mPageCount-1) {
             cummulativeState = TCONST.RTC_STORYCMPLETE;
             mParent.publishValue(TCONST.RTC_VAR_PAGESTATE, TCONST.LAST);
-        }
-        else
+        } else
             mParent.publishValue(TCONST.RTC_VAR_PAGESTATE, TCONST.NOT_LAST);
 
 
@@ -1016,8 +1018,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         mCurrPage = pageIndex;
 
-        if(mCurrPage > mPageCount-1) mCurrPage = mPageCount-1;
-        if(mCurrPage < TCONST.ZERO)  mCurrPage = TCONST.ZERO;
+        if (mCurrPage > mPageCount-1) mCurrPage = mPageCount-1;
+        if (mCurrPage < TCONST.ZERO)  mCurrPage = TCONST.ZERO;
 
         incPage(TCONST.ZERO);
     }
@@ -1025,7 +1027,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     @Override
     public void nextPage() {
 
-        if(mCurrPage < mPageCount-1) {
+        if (mCurrPage < mPageCount-1) {
             incPage(TCONST.INCR);
         }
 
@@ -1036,7 +1038,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     @Override
     public void prevPage() {
 
-        if(mCurrPage > 0) {
+        if (mCurrPage > 0) {
             incPage(TCONST.DECR);
         }
 
@@ -1075,8 +1077,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         mCurrPara = paraIndex;
 
-        if(mCurrPara > mParaCount-1) mCurrPara = mParaCount-1;
-        if(mCurrPara < TCONST.ZERO)  mCurrPara = TCONST.ZERO;
+        if (mCurrPara > mParaCount-1) mCurrPara = mParaCount-1;
+        if (mCurrPara < TCONST.ZERO)  mCurrPara = TCONST.ZERO;
 
         incPara(TCONST.ZERO);
     }
@@ -1084,14 +1086,15 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     @Override
     public void nextPara() {
 
-        if(mCurrPara < mParaCount-1) {
+        if (mCurrPara < mParaCount-1) {
             incPara(TCONST.INCR);
         }
     }
+
     @Override
     public void prevPara() {
 
-        if(mCurrPara > 0) {
+        if (mCurrPara > 0) {
             incPara(TCONST.DECR);
         }
     }
@@ -1118,8 +1121,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         mCurrLine = lineIndex;
 
-        if(mCurrLine > mLineCount-1) mCurrLine = mLineCount-1;
-        if(mCurrLine < TCONST.ZERO)  mCurrLine = TCONST.ZERO;
+        if (mCurrLine > mLineCount-1) mCurrLine = mLineCount-1;
+        if (mCurrLine < TCONST.ZERO)  mCurrLine = TCONST.ZERO;
 
         incLine(TCONST.ZERO);
     }
@@ -1127,14 +1130,14 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     @Override
     public void nextLine() {
 
-        if(mCurrLine < mLineCount-1) {
+        if (mCurrLine < mLineCount-1) {
             incLine(TCONST.INCR);
         }
     }
     @Override
     public void prevLine() {
 
-        if(mCurrLine > 0 ) {
+        if (mCurrLine > 0 ) {
             incLine(TCONST.DECR);
         }
     }
@@ -1147,12 +1150,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         // reset boot flag to
         //
-        if(storyBooting) {
+        if (storyBooting) {
 
             storyBooting = false;
             speakOrListen();
-        }
-        else {
+        } else {
 
             mCurrLine += incr;
 
@@ -1167,6 +1169,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      *  NOTE: we reset mCurrWord - last parm in seekToStoryPosition
      *
      */
+    @Override
     public void echoLine() {
 
         // reset the echo flag
@@ -1175,6 +1178,20 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         // Update the state vars
         //
+        seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
+    }
+
+
+    /**
+     *
+     */
+    @Override
+    public void parrotLine() {
+
+        mParent.publishValue(TCONST.RTC_VAR_PARROTSTATE, TCONST.FALSE);
+
+        Log.d(TAG, "parrotLine");
+
         seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
     }
 
@@ -1191,8 +1208,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         mCurrWord = wordIndex;
         mHeardWord = 0;
 
-        if(mCurrWord > mWordCount-1) mCurrWord = mWordCount-1;
-        if(mCurrWord < TCONST.ZERO)  mCurrWord = TCONST.ZERO;
+        if (mCurrWord > mWordCount-1) mCurrWord = mWordCount-1;
+        if (mCurrWord < TCONST.ZERO)  mCurrWord = TCONST.ZERO;
 
         // Update the state vars
         //
@@ -1209,14 +1226,14 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     @Override
     public void nextWord() {
 
-        if(mCurrWord < mWordCount) {
+        if (mCurrWord < mWordCount) {
             incWord(TCONST.INCR);
         }
     }
     @Override
     public void prevWord() {
 
-        if(mCurrWord > 0) {
+        if (mCurrWord > 0) {
             incWord(TCONST.DECR);
         }
     }
@@ -1284,7 +1301,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         // If we want to listen for all the words that are visible
         //
-        if(listenFutureContent) {
+        if (listenFutureContent) {
             for (String word : futureSpoken) {
                 wordsToListenFor.add(word);
             }
@@ -1316,7 +1333,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         // Update the sentence display
         //
-        if(update)
+        if (update)
             UpdateDisplay();
     }
 
@@ -1326,48 +1343,51 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      */
     private void UpdateDisplay() {
 
-        String fmtSentence = "";
+        if (showWords) {
+            String fmtSentence = "";
 
-        for (int i = 0; i < wordsToDisplay.length; i++) {
+            for (int i = 0; i < wordsToDisplay.length; i++) {
 
-            String styledWord = wordsToDisplay[i];                           // default plain
+                String styledWord = wordsToDisplay[i];                           // default plain
 
-            if(i < mCurrWord) {
-                styledWord = "<font color='#00B600'>" + styledWord + "</font>";
+                if (i < mCurrWord) {
+                    styledWord = "<font color='#00B600'>" + styledWord + "</font>";
+                }
+
+                if (i == mCurrWord) {// style the next expected word
+
+                    if (!mCurrHighlight.equals(TCONST.EMPTY))
+                        styledWord = "<font color='" + mCurrHighlight + "'>" + styledWord + "</font>";
+
+                    styledWord = "<u>" + styledWord + "</u>";
+                }
+
+                if (showFutureWords || i < mCurrWord) {
+                    if (wordsToDisplay[i].endsWith("'") || wordsToDisplay[i].endsWith("-")) {
+                        fmtSentence += styledWord;
+                    } else {
+                        fmtSentence += styledWord + ((i < wordsToDisplay.length - 1) ? TCONST.WORD_SPACE : TCONST.NO_SPACE);
+                    }
+                }
             }
 
-            if (i == mCurrWord) {// style the next expected word
+            // Generate the text to be displayed
+            //
+            String content = completedSentencesFmtd + fmtSentence;
 
-                if(!mCurrHighlight.equals(TCONST.EMPTY))
-                    styledWord = "<font color='"+ mCurrHighlight + "'>" + styledWord + "</font>";
+            if (showFutureContent)
+                content += TCONST.SENTENCE_SPACE + futureSentencesFmtd;
 
-                styledWord = "<u>" + styledWord + "</u>";
-            }
+            mPageText.setText(Html.fromHtml(content));
 
-            if(wordsToDisplay[i].endsWith("'") || wordsToDisplay[i].endsWith("-")) {
-                fmtSentence += styledWord;
-            }
-            else{
-                fmtSentence += styledWord + ((i < wordsToDisplay.length-1)? TCONST.WORD_SPACE: TCONST.NO_SPACE);
-            }
+            Log.d(TAG, "Story Sentence Text: " + content);
         }
-
-        // Generate the text to be displayed
-        //
-        String content = completedSentencesFmtd + fmtSentence;
-
-        if(showFutureContent)
-            content += TCONST.SENTENCE_SPACE + futureSentencesFmtd;
-
-        mPageText.setText(Html.fromHtml(content));
-
-        Log.d(TAG, "Story Sentence Text: " + content);
 
         broadcastActiveTextPos(mPageText, wordsToDisplay);
 
         // Publish the current word / sentence / remaining words for use in scripts
         //
-        if(mCurrWord < wordsToSpeak.length) {
+        if (mCurrWord < wordsToSpeak.length) {
             mParent.publishValue(TCONST.RTC_VAR_WORDVALUE, wordsToSpeak[mCurrWord]);
 
             String remaining[] = Arrays.copyOfRange(wordsToSpeak, mCurrWord, wordsToSpeak.length);
@@ -1393,7 +1413,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         try {
             Layout layout = text.getLayout();
 
-            if(layout != null && mCurrWord < words.length) {
+            if (layout != null && mCurrWord < words.length) {
 
                 // Point to the start of the Target sentence (mCurrLine)
                 charPos  = completedSentences.length();
@@ -1453,8 +1473,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 Log.i("ASR", "RIGHT");
                 attemptNum = 0;
                 result = true;
-            }
-            else {
+            } else {
                 Log.e(TAG, "Input Error in narrator no match found - mCurrWord ->" + wordsToSpeak[mCurrWord] + " -> heardWords: " + heardWords[mHeardWord]);
 
                 nextWord();
@@ -1492,10 +1511,9 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         try {
             for (int i = 0; i < heardWords.length; i++) {
-                if(heardWords[i] != null) {
+                if (heardWords[i] != null) {
                     logString += heardWords[i].hypWord.toLowerCase() + ":" + heardWords[i].iSentenceWord + " | ";
-                }
-                else {
+                } else {
                     logString += "VIRTUAL | ";
                 }
             }
@@ -1513,8 +1531,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                     Log.i("ASR", "RIGHT");
                     attemptNum = 0;
                     result = true;
-                }
-                else {
+                } else {
 
                     mListener.setPauseListener(true);
 
@@ -1582,7 +1599,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     public boolean endOfData() {
         return false;
     }
-
 
 
 
