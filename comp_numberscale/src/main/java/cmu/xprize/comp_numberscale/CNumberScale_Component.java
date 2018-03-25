@@ -118,7 +118,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         greyOutMinus();
         bManager = LocalBroadcastManager.getInstance(getContext());
 
-        displayNumber.setBackgroundColor(NSCONST.COLOR_GREY);
+        //displayNumber.setBackgroundColor(NSCONST.COLOR_GREY);
 
         ViewTreeObserver vto=addNumber.getViewTreeObserver();
 

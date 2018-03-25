@@ -206,9 +206,11 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
         //not drawing the box for the first number
         if (i!=0){
             canvas.drawLine(left+edgelength/5,bottom-edgelength/4,right-edgelength/5,bottom-edgelength/4,l);
-            if(i!=maxIndex-1){
-            canvas.drawText(",",right,bottom-edgelength/5,text);}
         }
+
+        if(i!=maxIndex-1){
+            canvas.drawText(",",right,bottom-edgelength/5,text);}
+
 
         if (i<=barIndex){
             canvas.drawText(num,(left+right)/2,(top+bottom)/2+NSCONST.TEXT_SIZE/3,text);
