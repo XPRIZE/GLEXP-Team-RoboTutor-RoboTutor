@@ -180,7 +180,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         StringBuilder problemName = new StringBuilder();
 
         try {
-            int currentProblemIndex = _dataIndex - 1;
+            int currentProblemIndex = random ? _actualDataIndex : _dataIndex - 1;
             problemName.append(dataSource[currentProblemIndex].dataset[0]);
             problemName.append(dataSource[currentProblemIndex].operation);
             problemName.append(dataSource[currentProblemIndex].dataset[1]);
