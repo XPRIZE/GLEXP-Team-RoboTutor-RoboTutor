@@ -1,5 +1,6 @@
 {
   "bootFeatures":"",
+  "dataSource":[
+    {"type":"CNumberScale_Data","level":"ns_4","task":"Add or Sub 1", "layout":"default","offset":"2","max":"229","max_taps":"30","start":"209"}]}
 
-  "dataSource":[{"type":"CNumberScale_Data", "level":"numscale_1", "task":"Count to 10", "layout":"default", "offset":"15","max":"350","max_taps":"30","start":"200"}]
-}
+
