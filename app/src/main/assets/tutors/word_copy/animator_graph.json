@@ -600,14 +600,22 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "logState", "parms": "type#node,value#PLAYWORD:String", "features":""},
 
             {"name":"Zoom Sstimulus",  "type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":""},
+
+            // Play prompt & audiostimulus for write.wrd
             {"name":"Play - .audiostimulus",  "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim1}}.mp3","soundpackage": "words","mode":"flow", "features": "FTR_WORDS"},
-            {"name":"Play - .audiostimulus",  "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim1}}.mp3","soundpackage": "letters","mode":"flow", "features": "FTR_LETTERS"},
+
+            // Play prompt & audiostimulus for write.ltr
+            {"name":"Play - big",   "type": "AUDIO", "command": "PLAY", "soundsource": "kubwa.mp3", "soundpackage": "xprize", "mode":"flow", "features": "FTR_LETTERS&FTR_UPPERCASE"},
+            {"name":"Play - small", "type": "AUDIO", "command": "PLAY", "soundsource": "ndogo.mp3", "soundpackage": "xprize", "mode":"flow", "features": "FTR_LETTERS&FTR_LOWERCASE"},
+            {"name":"Play - .audiostimulus",  "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim1}}.mp3", "soundpackage": "letters","mode":"flow", "features": "FTR_LETTERS"},
+
+            // Play prompt & audiostimulus for write.num
             {"name":"Play - .audiostimulus",  "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim1}}.mp3","soundpackage": "numbers","mode":"flow", "features": "FTR_NUMBERS"},
 
-            // Play prompt for write.dotCount
-            {"name":"PLAY - how many things ...",  "type": "AUDIO", "command": "PLAY", "soundsource": "How many things are here.mp3", "soundpackage":"arithmetic", "volume": 1.0, "mode":"flow", "features": "FTR_DOTCOUNT"},
+            // Play prompt & audiostimulus for write.dotCount
+            {"name":"PLAY - how many things ...",  "type": "AUDIO", "command": "PLAY", "soundsource": "How many things are here.mp3", "soundpackage":"arithmetic", "mode":"flow", "features": "FTR_DOTCOUNT"},
 
-            // Play audiostimulus for write.arith e.g. 3 plus 2
+            // Play prompt & audiostimulus for write.arith e.g. 3 plus 2
             {"name":"Play - .audiostimulus",  "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim1}}.mp3","soundpackage": "numbers","mode":"flow", "features": "FTR_ARITH"},
             {"name":"Play - .audiostimulus",  "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim2}}.mp3","soundpackage": "xprize","mode":"flow", "features": "FTR_ARITH"},
             {"name":"Play - .audiostimulus",  "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim3}}.mp3","soundpackage": "numbers","mode":"flow", "features": "FTR_ARITH"}
