@@ -211,13 +211,28 @@
       "harder": "write.wrd:3chr",
       "easier": "bpop.ltr.mix:rnd_say_show_rise"
     },
-    "write.arith:testArith": {
+    "write.arith:testArith_add": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "write.arith:testArith",
-      "tutor_desc": "write.arith",
-      "tutor_data": "[file]write.arith_testArith.json",
+      "tutor_id": "write.arith:testArith_add",
+      "tutor_desc": "write.arith.add",
+      "tutor_data": "[file]write.arith_testArith_add.json",
       "cell_row": "8",
+      "cell_column": "9",
+      "same": "write.wrd:test",
+      "next": "bpop.wrd:3chr_say_mc",
+      "next_next": "bpop.wrd:3chr_say_rise",
+      "prev": "akira:2chr",
+      "harder": "write.wrd:3chr",
+      "easier": "bpop.ltr.mix:rnd_say_show_rise"
+    },
+    "write.arith:testArith_sub": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "write.arith:testArith_sub",
+      "tutor_desc": "write.arith.sub",
+      "tutor_data": "[file]write.arith_testArith_sub.json",
+      "cell_row": "9",
       "cell_column": "9",
       "same": "write.wrd:test",
       "next": "bpop.wrd:3chr_say_mc",

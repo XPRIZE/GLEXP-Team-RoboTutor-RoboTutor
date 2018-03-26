@@ -504,7 +504,11 @@
             {"name":"PLAY - now lets practice...",  "type": "AUDIO", "command": "PLAY", "soundsource": "now lets practice writing some words.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "FTR_WORDS"},
 
             // Intro for write.dotCount
-            {"name":"PLAY - lets count",  "type": "AUDIO", "command": "PLAY", "soundsource": "Let's count.mp3", "soundpackage":"counting", "volume": 1.0, "mode":"flow", "features": "FTR_DOTCOUNT"}
+            {"name":"PLAY - lets count",  "type": "AUDIO", "command": "PLAY", "soundsource": "Let's count.mp3", "soundpackage":"counting", "volume": 1.0, "mode":"flow", "features": "FTR_DOTCOUNT"},
+
+            // Intro for write.arith
+            {"name":"PLAY - Lets add ...",  "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3", "soundpackage":"arithmetic", "volume": 1.0, "mode":"flow", "features": "FTR_ARITH&FTR_ADD"},
+            {"name":"PLAY - Lets subtract ...",  "type": "AUDIO", "command": "PLAY", "soundsource": "Lets subtract some numbers now.mp3", "soundpackage":"arithmetic", "volume": 1.0, "mode":"flow", "features": "FTR_ARITH&FTR_SUB"}
 
           ]
         },
@@ -521,7 +525,8 @@
             {"name":"pushDataSource - [file]write.demo_ltr_uc", "type": "COMMAND", "id": "SWordCopy", "method": "pushDataSource", "parms": "[file]write.demo_ltr_uc.json:String"   ,"features":"FTR_DEMO_LTR_UC"},
             {"name":"pushDataSource - [file]write.demo_num",    "type": "COMMAND", "id": "SWordCopy", "method": "pushDataSource", "parms": "[file]write.demo_num.json:String"      ,"features":"FTR_DEMO_NUM"},
             {"name":"pushDataSource - [file]write.demo_dotCount",    "type": "COMMAND", "id": "SWordCopy", "method": "pushDataSource", "parms": "[file]write.demo_dotCount.json:String"      ,"features":"FTR_DEMO_DOTCOUNT"},
-            {"name":"pushDataSource - [file]write.demo_arith",    "type": "COMMAND", "id": "SWordCopy", "method": "pushDataSource", "parms": "[file]write.demo_arith.json:String"      ,"features":"FTR_DEMO_ARITH"},
+            {"name":"pushDataSource - [file]write.demo_arith_add",    "type": "COMMAND", "id": "SWordCopy", "method": "pushDataSource", "parms": "[file]write.demo_arith_add.json:String"      ,"features":"FTR_DEMO_ARITH_ADD"},
+            {"name":"pushDataSource - [file]write.demo_arith_sub",    "type": "COMMAND", "id": "SWordCopy", "method": "pushDataSource", "parms": "[file]write.demo_arith_sub.json:String"      ,"features":"FTR_DEMO_ARITH_SUB"},
             {"name":"PUBLISH - FTR_DEMO",             "type": "COMMAND", "id": "SWordCopy", "method": "publishFeature", "parms": "FTR_DEMO:String", "features":""}
           ]
         },
@@ -833,7 +838,7 @@
 
         "FTR_DEMO":{
           "type": "CONDITION",
-          "test":"FTR_DEMO_WRD|FTR_DEMO_NUM|FTR_DEMO_LTR_LC|FTR_DEMO_LTR_UC|FTR_DEMO_DOTCOUNT|FTR_DEMO_ARITH"
+          "test":"FTR_DEMO_WRD|FTR_DEMO_NUM|FTR_DEMO_LTR_LC|FTR_DEMO_LTR_UC|FTR_DEMO_DOTCOUNT|FTR_DEMO_ARITH_ADD|FTR_DEMO_ARITH_SUB"
         },
 
         "ALL_CORRECT":{

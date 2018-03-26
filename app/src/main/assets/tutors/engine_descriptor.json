@@ -125,10 +125,15 @@
       "tutorName": "word_copy",
       "features": "FTR_DOTCOUNT"
     },
-    "write.arith": {
+    "write.arith.add": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
-      "features": "FTR_ARITH"
+      "features": "FTR_ARITH:FTR_ADD"
+    },
+    "write.arith.sub": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_ARITH:FTR_SUB"
     },
     "story.echo": {
       "type": "TUTORVAR_MAP",
