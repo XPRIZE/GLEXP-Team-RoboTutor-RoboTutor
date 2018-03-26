@@ -125,6 +125,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     protected LocalBroadcastManager bManager;
 
+    protected String            activityFeature; // features of current activity e.g. FTR_LETTERS:FTR_DICTATION
+
     // json loadable
     public String               bootFeatures = EMPTY;
     public boolean              random       = false;
@@ -333,7 +335,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
 
     public boolean updateStatus(IGlyphController glyphController, CRecResult[] _ltkPlusCandidates) {
-        Log.d("tadpolr", "updateStatus: ");
+
         mActiveController = glyphController;
 
         mActiveIndex = mGlyphList.indexOfChild((View)mActiveController);
@@ -345,7 +347,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         publishValue(WR_CONST.CANDIDATE_VAR, candidate.getRecChar().toLowerCase());
         publishValue(WR_CONST.EXPECTED_VAR, mActiveController.getExpectedChar().toLowerCase());
 
-        _charValid   = gController.checkAnswer( candidate.getRecChar() ) ;
+
+        // Avoid caseSensitive for words activity
+        boolean isAnswerCaseSensitive = true;
+        if (activityFeature.contains("FTR_WORDS")) {
+            isAnswerCaseSensitive = false;
+        }
+
+        // Check answer
+        _charValid   = gController.checkAnswer( candidate.getRecChar(), isAnswerCaseSensitive ) ;
         _metricValid = _metric.testConstraint(candidate.getGlyph(), this);
         _isValid     = _charValid && _metricValid; // _isValid essentially means "is a correct drawing"
 
@@ -903,8 +913,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             r.setLinkedScroll(mDrawnScroll);
             r.setWritingController(this);
         }
-
-
 
         // Add the Glyph input containers
         //

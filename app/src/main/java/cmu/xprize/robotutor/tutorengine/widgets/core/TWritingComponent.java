@@ -719,7 +719,6 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         //
         publishValue(WR_CONST.VALUE_VAR, mAnswer.toLowerCase());
 
-
         // update the Scope response variable  "SWordCopy.audiostim"
         //
         if (mAudioStimulus.length == 1) {
@@ -857,8 +856,11 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     @Override
     public void setTutor(CTutor tutor) {
+
         mTutor = tutor;
         mTutorScene.setTutor(tutor);
+
+        activityFeature = mTutor.getFeatures();
 
         // The media manager is tutor specific so we have to use the tutor to access
         // the correct instance for this component.

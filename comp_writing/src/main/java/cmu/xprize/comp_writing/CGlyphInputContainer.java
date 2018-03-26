@@ -1263,7 +1263,11 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         _sampleExpected = protoChar;
     }
 
-    public boolean checkAnswer(String resp) {
+    public boolean checkAnswer(String resp, boolean isAnswerCaseSensitive) {
+
+        if(!isAnswerCaseSensitive) {
+            return _sampleExpected.toLowerCase().equals(resp.toLowerCase());
+        }
 
         return _sampleExpected.equals(resp);
     }
