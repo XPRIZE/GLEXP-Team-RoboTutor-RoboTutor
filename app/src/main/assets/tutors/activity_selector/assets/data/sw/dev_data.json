@@ -3356,7 +3356,7 @@
       "cell_column": "6",
       "same": "bpop.num:s2n_say_show_rise",
       "next": "write.num:level1",
-      "harder": "bpop.num:n2s_say_mc",
+      "harder": "write.num:0_10_dn",
       "easier": "bpop.num:s2n_say_show_mc"
     },
     "write.num:level1": {
@@ -3395,7 +3395,7 @@
       "cell_column": "9",
       "same": "bpop.num:n2s_say_show_rise",
       "next": "write.num.dic:level1",
-      "harder": "bpop.num:n2s_say_rise",
+      "harder": "write.num.dic:0_10_dn",
       "easier": "bpop.num:n2s_say_show_mc"
     },
     "write.num.dic:level1": {
@@ -3408,7 +3408,7 @@
       "cell_column": "10",
       "same": "write.num.dic:level1",
       "next": "countingx:2",
-      "harder": "bpop.num:n2s_say_rise",
+      "harder": "write.num.dic:0_10_dn",
       "easier": "bpop.num:n2s_say_show_rise"
     },
     "countingx:2": {
@@ -3485,9 +3485,24 @@
       "cell_row": "2",
       "cell_column": "6",
       "same": "bpop.num:s2n_say_rise",
-      "next": "bpop.num:n2s_say_mc",
+      "next": "write.num:0_10_dn",
       "harder": "write.num:level2",
       "easier": "bpop.num:s2n_say_show_mc"
+    },
+    "write.num:0_10_dn": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.num:0_10_dn",
+      "tutor_desc": "write.num",
+      "tutor_data": "[file]write.num_0_10_dn.json",
+      "cell_row": "2",
+      "cell_column": "7",
+      "same": "write.num:0_10_dn",
+      "next": "bpop.num:n2s_say_mc",
+      "next_next": "bpop.num:n2s_say_rise",
+      "prev": "bpop.num:s2n_say_rise",
+      "harder": "bpop.num:n2s_show_mc",
+      "easier": "bpop.num:s2n_say_show_rise"
     },
     "bpop.num:n2s_say_mc": {
       "type": "TRANSITION",
@@ -3496,7 +3511,7 @@
       "tutor_desc": "bpop.num",
       "tutor_data": "[file]bpop.num_n2s_say_mc.json",
       "cell_row": "2",
-      "cell_column": "7",
+      "cell_column": "8",
       "same": "bpop.num:n2s_say_mc",
       "next": "bpop.num:n2s_say_rise",
       "harder": "bpop.num:n2s_show_mc",
@@ -3509,11 +3524,26 @@
       "tutor_desc": "bpop.num",
       "tutor_data": "[file]bpop.num_n2s_say_rise.json",
       "cell_row": "2",
-      "cell_column": "8",
+      "cell_column": "9",
       "same": "bpop.num:n2s_say_rise",
-      "next": "countingx:3",
+      "next": "write.num.dic:0_10_dn",
       "harder": "bpop.num:n2s_show_rise",
       "easier": "write.num:level1"
+    },
+    "write.num.dic:0_10_dn": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.num.dic:0_10_dn",
+      "tutor_desc": "write.num.dic",
+      "tutor_data": "[file]write.num.dic_0_10_dn.json",
+      "cell_row": "2",
+      "cell_column": "10",
+      "same": "write.num.dic:0_10_dn",
+      "next": "countingx:3",
+      "next_next": "akira:2_2",
+      "prev": "bpop.num:n2s_say_rise",
+      "harder": "write.num.dic:level2",
+      "easier": "bpop.num:n2s_say_show_rise"
     },
     "countingx:3": {
       "type": "TRANSITION",
@@ -3526,7 +3556,7 @@
       "same": "countingx:3",
       "next": "akira:2_2",
       "harder": "math:1",
-      "easier": "bpop.num:n2s_say_rise"
+      "easier": "write.num.dic:0_10_dn"
     },
     "akira:2_2": {
       "type": "TRANSITION",
@@ -3617,7 +3647,7 @@
       "same": "bpop.num:n2s_show_mc",
       "next": "bpop.num:n2s_show_rise",
       "harder": "math:1",
-      "easier": "bpop.num:n2s_say_mc"
+      "easier": "write.num:0_10_dn"
     },
     "bpop.num:n2s_show_rise": {
       "type": "TRANSITION",
@@ -3772,7 +3802,7 @@
       "cell_column": "1",
       "same": "math:13",
       "next": "akira:5_1",
-      "harder": "akira:5_1",
+      "harder": "write.num:10_19_up",
       "easier": "math:11"
     },
     "akira:5_1": {
@@ -3784,8 +3814,38 @@
       "cell_row": "12",
       "cell_column": "1",
       "same": "akira:5_1",
-      "next": "akira:6_2",
+      "next": "write.num:10_19_up",
       "harder": "akira:6_2",
+      "easier": "math:13"
+    },
+    "write.num:10_19_up": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.num:10_19_up",
+      "tutor_desc": "write.num",
+      "tutor_data": "[file]write.num_10_19_up.json",
+      "cell_row": "12",
+      "cell_column": "2",
+      "same": "write.num:10_19_up",
+      "next": "write.num.dic:10_19_up",
+      "next_next": "akira:6_2",
+      "prev": "akira:5_1",
+      "harder": "write.num.dic:0_19_rnd",
+      "easier": "math:13"
+    },
+    "write.num.dic:10_19_up": {
+      "type": "TRANSITION",
+      "skill": true,
+      "tutor_id": "write.num.dic:10_19_up",
+      "tutor_desc": "write.num.dic",
+      "tutor_data": "[file]write.num.dic_10_19_up.json",
+      "cell_row": "12",
+      "cell_column": "3",
+      "same": "write.num.dic:10_19_up",
+      "next": "akira:6_2",
+      "next_next": "write.num:0_19_rnd",
+      "prev": "write.num:10_19_up",
+      "harder": "write.num.dic:0_19_rnd",
       "easier": "math:13"
     },
     "akira:6_2": {
@@ -3797,9 +3857,39 @@
       "cell_row": "13",
       "cell_column": "1",
       "same": "akira:6_2",
-      "next": "math:14",
+      "next": "write.num:0_19_rnd",
+      "harder": "akira:7_1",
+      "easier": "write.num.dic:10_19_up"
+    },
+    "write.num:0_19_rnd": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.num:0_19_rnd",
+      "tutor_desc": "write.num",
+      "tutor_data": "[file]write.num_0_19_rnd.json",
+      "cell_row": "13",
+      "cell_column": "2",
+      "same": "write.num:0_19_rnd",
+      "next": "write.num.dic:0_19_rnd",
+      "next_next": "math:14",
+      "prev": "akira:6_2",
       "harder": "akira:7_1",
       "easier": "akira:5_1"
+    },
+    "write.num.dic:0_19_rnd": {
+      "type": "TRANSITION",
+      "skill": true,
+      "tutor_id": "write.num.dic:0_19_rnd",
+      "tutor_desc": "write.num.dic",
+      "tutor_data": "[file]write.num.dic_0_19_rnd.json",
+      "cell_row": "13",
+      "cell_column": "3",
+      "same": "write.num.dic:0_19_rnd",
+      "next": "math:14",
+      "next_next": "akira:7_1",
+      "prev": "write.num:0_19_rnd",
+      "harder": "akira:7_1",
+      "easier": "write.num:10_19_up"
     },
     "math:14": {
       "type": "TRANSITION",
@@ -3812,7 +3902,7 @@
       "same": "math:14",
       "next": "akira:7_1",
       "harder": "akira:8_2",
-      "easier": "akira:6_2"
+      "easier": "write.num.dic:0_19_rnd"
     },
     "akira:7_1": {
       "type": "TRANSITION",
@@ -3940,7 +4030,37 @@
       "cell_row": "21",
       "cell_column": "2",
       "same": "akira:9_1",
+      "next": "write.num:10_100_by_10_up",
+      "harder": "math:20",
+      "easier": "math:16"
+    },
+    "write.num:10_100_by_10_up": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.num:10_100_by_10_up",
+      "tutor_desc": "write.num",
+      "tutor_data": "[file]write.num_10_100_by_10_up.json",
+      "cell_row": "21",
+      "cell_column": "3",
+      "same": "write.num:10_100_by_10_up",
+      "next": "write.num.dic:10_100_by_10_up",
+      "next_next": "math:20",
+      "prev": "akira:9_1",
+      "harder": "math:20",
+      "easier": "math:16"
+    },
+    "write.num.dic:10_100_by_10_up": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.num.dic:10_100_by_10_up",
+      "tutor_desc": "write.num.dic",
+      "tutor_data": "[file]write.num.dic_10_100_by_10_up.json",
+      "cell_row": "21",
+      "cell_column": "4",
+      "same": "write.num.dic:10_100_by_10_up",
       "next": "math:20",
+      "next_next": "math:21",
+      "prev": "write.num:10_100_by_10_up",
       "harder": "math:20",
       "easier": "math:16"
     },
@@ -3955,7 +4075,7 @@
       "same": "math:20",
       "next": "math:21",
       "harder": "math:21",
-      "easier": "akira:9_1"
+      "easier": "write.num.dic:10_100_by_10_up"
     },
     "math:21": {
       "type": "TRANSITION",
@@ -3992,8 +4112,38 @@
       "cell_row": "24",
       "cell_column": "2",
       "same": "akira:10_2",
+      "next": "write.num:10_100_by_10_rnd",
+      "harder": "write.num.dic:0_99_rnd",
+      "easier": "math:21"
+    },
+    "write.num:10_100_by_10_rnd": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.num:10_100_by_10_rnd",
+      "tutor_desc": "write.num",
+      "tutor_data": "[file]write.num_10_100_by_10_rnd.json",
+      "cell_row": "24",
+      "cell_column": "3",
+      "same": "write.num:10_100_by_10_rnd",
+      "next": "write.num.dic:10_100_by_10_rnd",
+      "next_next": "akira:11_1",
+      "prev": "akira:10_2",
+      "harder": "write.num.dic:0_99_rnd",
+      "easier": "math:21"
+    },
+    "write.num.dic:10_100_by_10_rnd": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.num.dic:10_100_by_10_rnd",
+      "tutor_desc": "write.num.dic",
+      "tutor_data": "[file]write.num.dic_10_100_by_10_rnd.json",
+      "cell_row": "24",
+      "cell_column": "4",
+      "same": "write.num.dic:10_100_by_10_rnd",
       "next": "akira:11_1",
-      "harder": "akira:11_1",
+      "next_next": "write.num:0_99_rnd",
+      "prev": "write.num:10_100_by_10_rnd",
+      "harder": "write.num.dic:0_99_rnd",
       "easier": "math:21"
     },
     "akira:11_1": {
@@ -4005,7 +4155,37 @@
       "cell_row": "25",
       "cell_column": "1",
       "same": "akira:11_1",
+      "next": "write.num:0_99_rnd",
+      "harder": "akira:12_2",
+      "easier": "write.num.dic:10_100_by_10_rnd"
+    },
+    "write.num:0_99_rnd": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.num:0_99_rnd",
+      "tutor_desc": "write.num",
+      "tutor_data": "[file]write.num_0_99_rnd.json",
+      "cell_row": "25",
+      "cell_column": "2",
+      "same": "write.num:0_99_rnd",
+      "next": "write.num.dic:0_99_rnd",
+      "next_next": "math:22",
+      "prev": "akira:11_1",
+      "harder": "akira:12_2",
+      "easier": "math:18"
+    },
+    "write.num.dic:0_99_rnd": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.num.dic:0_99_rnd",
+      "tutor_desc": "write.num.dic",
+      "tutor_data": "[file]write.num.dic_0_99_rnd.json",
+      "cell_row": "25",
+      "cell_column": "3",
+      "same": "write.num.dic:0_99_rnd",
       "next": "math:22",
+      "next_next": "akira:12_2",
+      "prev": "write.num:0_99_rnd",
       "harder": "akira:12_2",
       "easier": "akira:10_2"
     },
@@ -4020,7 +4200,7 @@
       "same": "math:22",
       "next": "akira:12_2",
       "harder": "akira:13_1",
-      "easier": "akira:11_1"
+      "easier": "write.num.dic:0_99_rnd"
     },
     "akira:12_2": {
       "type": "TRANSITION",
@@ -4058,7 +4238,7 @@
       "cell_column": "2",
       "same": "akira:13_1",
       "next": "math:23",
-      "harder": "akira:14_2",
+      "harder": "write.num:100_900_by_100_up",
       "easier": "math:22"
     },
     "math:23": {
@@ -4083,9 +4263,39 @@
       "cell_row": "28",
       "cell_column": "2",
       "same": "akira:14_2",
-      "next": "math:24",
-      "harder": "akira:15_1",
+      "next": "write.num:100_900_by_100_up",
+      "harder": "write.num:100_900_by_100_rnd",
       "easier": "math:19"
+    },
+    "write.num:100_900_by_100_up": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.num:100_900_by_100_up",
+      "tutor_desc": "write.num",
+      "tutor_data": "[file]write.num_100_900_by_100_up.json",
+      "cell_row": "28",
+      "cell_column": "3",
+      "same": "write.num:100_900_by_100_up",
+      "next": "write.num.dic:100_900_by_100_up",
+      "next_next": "math:24",
+      "prev": "akira:14_2",
+      "harder": "write.num.dic:100_900_by_100_rnd",
+      "easier": "akira:13_1"
+    },
+    "write.num.dic:100_900_by_100_up": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.num.dic:100_900_by_100_up",
+      "tutor_desc": "write.num.dic",
+      "tutor_data": "[file]write.num.dic_100_900_by_100_up.json",
+      "cell_row": "28",
+      "cell_column": "4",
+      "same": "write.num.dic:100_900_by_100_up",
+      "next": "math:24",
+      "next_next": "akira:15_1",
+      "prev": "write.num:100_900_by_100_up",
+      "harder": "write.num.dic:100_900_by_100_rnd",
+      "easier": "akira:13_1"
     },
     "math:24": {
       "type": "TRANSITION",
@@ -4098,7 +4308,7 @@
       "same": "math:24",
       "next": "akira:15_1",
       "harder": "akira:16_2",
-      "easier": "akira:14_2"
+      "easier": "write.num.dic:100_900_by_100_up"
     },
     "akira:15_1": {
       "type": "TRANSITION",
@@ -4109,9 +4319,39 @@
       "cell_row": "29",
       "cell_column": "2",
       "same": "akira:15_1",
-      "next": "math:26",
+      "next": "write.num:100_900_by_100_rnd",
       "harder": "akira:16_2",
       "easier": "math:23"
+    },
+    "write.num:100_900_by_100_rnd": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.num:100_900_by_100_rnd",
+      "tutor_desc": "write.num",
+      "tutor_data": "[file]write.num_100_900_by_100_rnd.json",
+      "cell_row": "29",
+      "cell_column": "3",
+      "same": "write.num:100_900_by_100_rnd",
+      "next": "write.num.dic:100_900_by_100_rnd",
+      "next_next": "math:26",
+      "prev": "akira:15_1",
+      "harder": "akira:16_2",
+      "easier": "akira:14_2"
+    },
+    "write.num.dic:100_900_by_100_rnd": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.num.dic:100_900_by_100_rnd",
+      "tutor_desc": "write.num.dic",
+      "tutor_data": "[file]write.num.dic_100_900_by_100_rnd.json",
+      "cell_row": "29",
+      "cell_column": "4",
+      "same": "write.num.dic:100_900_by_100_rnd",
+      "next": "math:26",
+      "next_next": "akira:16_2",
+      "prev": "write.num:100_900_by_100_rnd",
+      "harder": "akira:16_2",
+      "easier": "write.num:100_900_by_100_up"
     },
     "math:26": {
       "type": "TRANSITION",
@@ -4124,7 +4364,7 @@
       "same": "math:26",
       "next": "math:26",
       "harder": "akira:16_2",
-      "easier": "akira:15_1"
+      "easier": "write.num.dic:100_900_by_100_rnd"
     },
     "akira:16_2": {
       "type": "TRANSITION",
