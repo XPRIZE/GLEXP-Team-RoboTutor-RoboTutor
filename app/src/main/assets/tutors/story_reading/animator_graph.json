@@ -319,7 +319,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#PARROT_LINE:String", "features": ""},
 
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please read aloud.mp3", "mode": "flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.prompt}}", "mode": "flow", "features": ""},
             {"type": "COMMAND", "id": "SstoryReading", "method": "parrotLine" , "features": ""}
           ]
         },

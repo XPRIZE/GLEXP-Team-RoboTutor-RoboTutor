@@ -753,6 +753,7 @@ public class TCONST {
     public static final String RTC_LINECOMPLETE      = "LINE_COMPLETE";
     public static final String RTC_CLEAR             = "";
 
+    public static final String RTC_VAR_PROMPT     = ".prompt";
     public static final String RTC_VAR_WORDVALUE  = ".currentWord";
     public static final String RTC_VAR_INDEX      = ".wordindex";
     public static final String RTC_VAR_REMAINING  = ".remainingWords";
