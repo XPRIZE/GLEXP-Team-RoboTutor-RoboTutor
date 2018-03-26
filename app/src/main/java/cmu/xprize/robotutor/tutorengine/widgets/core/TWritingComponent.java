@@ -694,7 +694,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
                 // Pass an array of strings as the data source.
                 //
-//                setDataSource(dataNameDescriptor.split(",")); tadpolr
+//                setDataSource(dataNameDescriptor.split(","));
 
             } else {
                 throw (new Exception("test"));
@@ -723,28 +723,24 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         // update the Scope response variable  "SWordCopy.audiostim"
         //
         if (mAudioStimulus.length == 1) {
-            Log.d("tadpolr", "PUBLISH AUDIO CASE 1");
 
             publishValue(WR_CONST.AUDIO_STIM_1, mAudioStimulus[0].toLowerCase());
             publishValue(WR_CONST.AUDIO_STIM_2, "");
             publishValue(WR_CONST.AUDIO_STIM_3, "");
 
         } else if (mAudioStimulus.length == 2) {
-            Log.d("tadpolr", "PUBLISH AUDIO CASE 2");
 
             publishValue(WR_CONST.AUDIO_STIM_1, mAudioStimulus[0].toLowerCase());
             publishValue(WR_CONST.AUDIO_STIM_2, mAudioStimulus[1].toLowerCase());
             publishValue(WR_CONST.AUDIO_STIM_3, "");
 
         } else if (mAudioStimulus.length >= 3) {
-            Log.d("tadpolr", "PUBLISH AUDIO CASE 3");
 
             publishValue(WR_CONST.AUDIO_STIM_1, mAudioStimulus[0].toLowerCase());
             publishValue(WR_CONST.AUDIO_STIM_2, mAudioStimulus[1].toLowerCase());
             publishValue(WR_CONST.AUDIO_STIM_3, mAudioStimulus[2].toLowerCase());
 
         } else {
-            Log.d("tadpolr", "PUBLISH AUDIO CASE 4");
 
             publishValue(WR_CONST.AUDIO_STIM_1, mStimulus.toLowerCase());
             publishValue(WR_CONST.AUDIO_STIM_2, "");
@@ -771,13 +767,11 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
         private HashMap<String,Boolean> _FeatureStore;
 
-//        protected List<String>  _dataStore; tadpolr
-        protected List<CWr_Data>  _dataStore;
-        protected int           _dataIndexStore;
-        protected boolean       _dataEOIStore;
+        protected List<CWr_Data>    _dataStore;
+        protected int               _dataIndexStore;
+        protected boolean           _dataEOIStore;
 
-//        String[]                _dataSourceStore; tadpolr
-        CWr_Data[]                _dataSourceStore;
+        CWr_Data[]                  _dataSourceStore;
 
         public CDataSourceImg() {
 

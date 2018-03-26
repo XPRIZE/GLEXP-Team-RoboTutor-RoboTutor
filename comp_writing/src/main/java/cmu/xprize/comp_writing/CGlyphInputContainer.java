@@ -1263,7 +1263,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         _sampleExpected = protoChar;
     }
 
-    // tadpolr
     public boolean checkAnswer(String resp) {
 
         return _sampleExpected.equals(resp);

@@ -241,7 +241,6 @@ public class CStimulusController extends RelativeLayout implements IEventListene
 
 
     public void resetStimulusState() {
-        Log.d("tadpolr", "resetStimulusState: ");
         int charColor   = TCONST.colorMap.get(TCONST.COLORNORMAL);
         int borderColor = TCONST.colorMap.get(TCONST.COLORNONE);
 
