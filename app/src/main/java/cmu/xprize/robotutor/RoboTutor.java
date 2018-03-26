@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
+import cmu.xprize.comp_logging.IPerfLogManager;
 import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.ltkplus.IGlyphSink;
@@ -93,7 +94,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     static public ITutorManager masterContainer;
     static public ILogManager   logManager;
-    static public ILogManager   perfLogManager;
+    static public IPerfLogManager perfLogManager;
 
     static CTutorAssetManager   tutorAssetManager;
     static public String        VERSION_RT;

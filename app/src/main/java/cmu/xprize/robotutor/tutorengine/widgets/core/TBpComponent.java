@@ -798,7 +798,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         event.setTimestamp(System.currentTimeMillis());
 
-        RoboTutor.perfLogManager.postEvent_I(TCONST.PERFORMANCE_TAG, event.toString());
+        RoboTutor.perfLogManager.postPerformanceLog(event);
     }
 
     protected void publishQuestionState(CBp_Data data) {

@@ -463,26 +463,32 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         retractFeature(TCONST.GENERIC_RIGHT);
         retractFeature(TCONST.GENERIC_WRONG);
 
-        if(_isValid) {
+        String reason;
 
+        if(_isValid) {
             publishFeature(TCONST.GENERIC_RIGHT);
+            reason = TCONST.GENERIC_RIGHT;
         }
         else {
 
             publishFeature(TCONST.GENERIC_WRONG);
+            reason = TCONST.GENERIC_WRONG;
 
             if(!_metricValid) {
                 publishFeature(WR_CONST.ERROR_METRIC);
+                reason += " - " + WR_CONST.ERROR_METRIC;
             }
+
             if(!_charValid) {
                 publishFeature(WR_CONST.ERROR_CHAR);
+                reason += " - " + WR_CONST.ERROR_CHAR;
             }
         }
 
-        trackAndLogPerformance(_isValid);
+        trackAndLogPerformance(_isValid, reason);
     }
 
-    private void trackAndLogPerformance(boolean isCorrect) {
+    private void trackAndLogPerformance(boolean isCorrect, String reason) {
 
         PerformanceLogItem event = new PerformanceLogItem();
 
@@ -500,10 +506,11 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         event.setExpectedAnswer(mStimulus.substring(mActiveIndex, mActiveIndex + 1));
         event.setUserResponse(mResponse);
         event.setCorrectness(isCorrect ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+        event.setFeedbackType(reason);
 
         event.setTimestamp(System.currentTimeMillis());
 
-        RoboTutor.perfLogManager.postEvent_I(TCONST.PERFORMANCE_TAG, event.toString());
+        RoboTutor.perfLogManager.postPerformanceLog(event);
     }
 
     @Override

@@ -137,7 +137,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         // this is a special case when the solution is a 3-digit number with a 0 in the middle i.e. "509".
         // after the second step, studentWholeAnswer will be read as "9", even if the student has written "09"
         int answerLength = corValue.toString().length();
-        int expectedNumDigitsInStudentAnswer = answerLength == 0 ? 1 : answerLength - digitIndex + 1;
+        int expectedNumDigitsInStudentAnswer = answerLength < digitIndex ? 1 : answerLength - digitIndex + 1;
 
         if (studentWholeAnswer.toString().length() < expectedNumDigitsInStudentAnswer) { // 1 < 2
             studentMostRecentDigit = 0;
@@ -170,7 +170,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
         event.setTimestamp(System.currentTimeMillis());
 
-        RoboTutor.perfLogManager.postEvent_I(TCONST.PERFORMANCE_TAG, event.toString());
+        RoboTutor.perfLogManager.postPerformanceLog(event);
     }
 
     /**

@@ -582,5 +582,4 @@ public class CLogManagerBase implements ILogManager {
 
         post(packet);
     }
-
 }

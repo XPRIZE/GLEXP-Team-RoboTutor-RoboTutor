@@ -34,6 +34,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
+import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.graph.databinding;
@@ -160,7 +161,6 @@ public class CTutorEngine implements ILoadableObject2 {
 
         return result;
     }
-
 
     static public TScope getScope() {
 

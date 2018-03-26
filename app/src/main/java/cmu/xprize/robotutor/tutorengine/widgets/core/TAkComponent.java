@@ -541,7 +541,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
         event.setTimestamp(System.currentTimeMillis());
 
-        RoboTutor.perfLogManager.postEvent_I(TCONST.PERFORMANCE_TAG, event.toString());
+        RoboTutor.perfLogManager.postPerformanceLog(event);
     }
 
 

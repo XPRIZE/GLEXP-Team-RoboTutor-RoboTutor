@@ -1072,6 +1072,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
         event.setTimestamp(System.currentTimeMillis());
 
-        RoboTutor.perfLogManager.postEvent_I(TCONST.PERFORMANCE_TAG, event.toString());
+        RoboTutor.perfLogManager.postPerformanceLog(event);
     }
 }

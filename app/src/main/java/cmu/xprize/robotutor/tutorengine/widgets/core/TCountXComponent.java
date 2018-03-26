@@ -189,7 +189,7 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
 
         event.setTimestamp(System.currentTimeMillis());
 
-        RoboTutor.perfLogManager.postEvent_I(TCONST.PERFORMANCE_TAG, event.toString());
+        RoboTutor.perfLogManager.postPerformanceLog(event);
     }
 
 
