@@ -169,7 +169,7 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
 
     private void trackAndLogPerformance(String stage) {
 
-        String tutorName = mTutor.getTutorName();
+        String tutorName = mTutor.getTutorName() + "-";
         PerformanceLogItem event = new PerformanceLogItem();
 
         event.setUserId(RoboTutor.STUDENT_ID);
