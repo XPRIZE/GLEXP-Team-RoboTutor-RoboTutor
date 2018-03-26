@@ -90,6 +90,11 @@
       "tutorName": "word_copy",
       "features": "FTR_LETTERS:FTR_UPPERCASE:FTR_DICTATION"
     },
+    "write.ltr.uc.trc": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_LETTERS:FTR_UPPERCASE:FTR_TRACE"
+    },
     "write.ltr.lc": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
@@ -100,10 +105,25 @@
       "tutorName": "word_copy",
       "features": "FTR_LETTERS:FTR_LOWERCASE:FTR_DICTATION"
     },
+    "write.ltr.lc.trc": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_LETTERS:FTR_LOWERCASE:FTR_TRACE"
+    },
     "write.num": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
       "features": "FTR_NUMBERS"
+    },
+    "write.num.dic": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_NUMBERS:FTR_DICTATION"
+    },
+    "write.num.trc": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_NUMBERS:FTR_TRACE"
     },
     "write.wrd": {
       "type": "TUTORVAR_MAP",
@@ -114,11 +134,6 @@
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
       "features": "FTR_WORDS:FTR_DICTATION"
-    },
-    "write.num.dic": {
-      "type": "TUTORVAR_MAP",
-      "tutorName": "word_copy",
-      "features": "FTR_NUMBERS:FTR_DICTATION"
     },
     "write.dotCount": {
       "type": "TUTORVAR_MAP",

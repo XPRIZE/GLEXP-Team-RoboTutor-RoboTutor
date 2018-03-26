@@ -631,6 +631,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     }
     private void enQueue(Queue qCommand, long delay) {
 
+        Log.d("tadpolr", "enQueue: " + qCommand.toString());
         if(!_qDisabled) {
             queueMap.put(qCommand, qCommand);
 

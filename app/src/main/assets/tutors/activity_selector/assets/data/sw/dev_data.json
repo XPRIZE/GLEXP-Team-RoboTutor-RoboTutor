@@ -241,6 +241,21 @@
       "harder": "write.wrd:3chr",
       "easier": "bpop.ltr.mix:rnd_say_show_rise"
     },
+    "write.ltr.trc:test": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "write.ltr.trc:test",
+      "tutor_desc": "write.ltr.uc.trc",
+      "tutor_data": "[file]write.ltr.trc_test.json",
+      "cell_row": "10",
+      "cell_column": "9",
+      "same": "write.wrd:test",
+      "next": "bpop.wrd:3chr_say_mc",
+      "next_next": "bpop.wrd:3chr_say_rise",
+      "prev": "akira:2chr",
+      "harder": "write.wrd:3chr",
+      "easier": "bpop.ltr.mix:rnd_say_show_rise"
+    },
     "story.hear::letters_alphabet_song": {
       "type": "TRANSITION",
       "skill": "letters",

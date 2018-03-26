@@ -50,6 +50,7 @@ public class WR_CONST {
     public static final String FIELD_COMPLETE           = "FIELD_COMPLETE";
     public static final String ANIMATE_ALIGN            = "ANIMATE_ALIGN";
     public static final String HIGHLIGHT_NEXT           = "HIGHLIGHT_NEXT";
+    public static final String SHOW_TRACELINE           = "SHOW_TRACELINE";
     public static final String SHOW_SAMPLE              = "SHOW_SAMPLE";
     public static final String ERASE_GLYPH              = "ERASE_GLYPH";
     public static final String DEMO_PROTOGLYPH          = "DEMO_PROTOGLYPH";

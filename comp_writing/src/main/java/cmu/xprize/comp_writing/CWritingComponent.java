@@ -134,7 +134,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     final private String  TAG        = "CWritingComponent";
 
 
-
     public CWritingComponent(Context context) {
         super(context);
         init(context, null);
@@ -334,7 +333,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
 
     public boolean updateStatus(IGlyphController glyphController, CRecResult[] _ltkPlusCandidates) {
-
+        Log.d("tadpolr", "updateStatus: ");
         mActiveController = glyphController;
 
         mActiveIndex = mGlyphList.indexOfChild((View)mActiveController);
@@ -729,6 +728,17 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
               broadcastMsg(TCONST.POINT_FADE);
 
             applyBehavior(WR_CONST.REPLAY_COMPLETE);
+        }
+    }
+
+
+    private void showTraceLine() {
+
+        CGlyphController   v;
+
+        for (int i = 0; i < mGlyphList.getChildCount(); i++) {
+            v = (CGlyphController) mGlyphList.getChildAt(i);
+            v.post("SHOW_SAMPLE");
         }
     }
 
@@ -1218,7 +1228,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                         rippleReplay(_command, false); // YYY Ripple Replay: use to show tracing
                         break;
+                    case WR_CONST.SHOW_TRACELINE:
 
+                        showTraceLine();
+                        break;
                     case WR_CONST.SHOW_SAMPLE:
                     case WR_CONST.HIDE_SAMPLE:
                     case WR_CONST.ERASE_GLYPH:
