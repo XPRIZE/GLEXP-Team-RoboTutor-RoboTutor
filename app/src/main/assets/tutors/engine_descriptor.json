@@ -60,11 +60,6 @@
       "tutorName": "bubble_pop",
       "features": "FTR_WORDS"
     },
-    "bpop.phon": {
-      "type": "TUTORVAR_MAP",
-      "tutorName": "bubble_pop",
-      "features": "FTR_PHONEMICS"
-    },
     "bpop.num": {
       "type": "TUTORVAR_MAP",
       "tutorName": "bubble_pop",
@@ -75,40 +70,20 @@
       "tutorName": "bubble_pop",
       "features": "FTR_SHAPES"
     },
-    "bpop.aud.ex.e2n": {
-      "type": "TUTORVAR_MAP",
-      "tutorName": "bubble_pop",
-      "features": "FTR_AUDIO:FTR_E2N:"
-    },
-    "bpop.ex.e2n": {
+    "bpop.addsub": {
       "type": "TUTORVAR_MAP",
       "tutorName": "bubble_pop",
       "features": "FTR_E2N"
     },
-    "bpop.ex.add.num": {
-      "type": "TUTORVAR_MAP",
-      "tutorName": "bubble_pop",
-      "features": "FTR_E2N"
-    },
-    "bpop.ex.sub.num": {
-      "type": "TUTORVAR_MAP",
-      "tutorName": "bubble_pop",
-      "features": "FTR_E2N"
-    },
-    "bpop.ex.mn.num": {
-      "type": "TUTORVAR_MAP",
-      "tutorName": "bubble_pop",
-      "features": "FTR_MIS_NUM"
-    },
-    "bpop.ex.gl.num": {
+    "bpop.gl": {
       "type": "TUTORVAR_MAP",
       "tutorName": "bubble_pop",
       "features": "FTR_GT_LT"
     },
-    "bpop.ex.n2e": {
+    "bpop.mn": {
       "type": "TUTORVAR_MAP",
       "tutorName": "bubble_pop",
-      "features": "FTR_N2E"
+      "features": "FTR_MIS_NUM"
     },
     "write.ltr.uc": {
       "type": "TUTORVAR_MAP",
