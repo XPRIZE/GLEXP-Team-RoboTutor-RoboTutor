@@ -101,7 +101,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private int                     mWordCount;
     private int                     attemptNum = 1;
     private boolean                 storyBooting;
-    private String                  prompt;
 
     private String                  wordsToDisplay[];                    // current sentence words to display - contain punctuation
     private String                  wordsToSpeak[];                      // current sentence words to hear
@@ -118,6 +117,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private ArrayList<String>       spokenWords;
     private int                     utteranceNdx;
     private int                     segmentNdx;
+    private String                  page_prompt;
 
     private int                     numUtterance;
     private CASB_Narration          currUtterance;
@@ -151,6 +151,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     public String        copyright;
     public String        titleimage;
 
+    public String        prompt;
     public String        parser;
     public CASB_data     data[];
 
@@ -619,8 +620,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         rawNarration = data[currPage].text[currPara][currLine].narration;
         rawSentence  = data[currPage].text[currPara][currLine].sentence;
-        prompt = data[currPage].prompt;
-
+        if (data[currPage].prompt != null) page_prompt = data[currPage].prompt;
 
         // Words that are used to build the display text - include punctuation etc.
         //
@@ -938,7 +938,15 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         mParent.publishValue(TCONST.RTC_VAR_ECHOSTATE, TCONST.FALSE);
         mParent.publishValue(TCONST.RTC_VAR_PARROTSTATE, TCONST.FALSE);
 
-        mParent.publishValue(TCONST.RTC_VAR_PROMPT, prompt);
+        if (prompt != null) {
+            mParent.publishValue(TCONST.RTC_VAR_PROMPT, prompt);
+            mParent.publishFeature((TCONST.FTR_PROMPT));
+        }
+
+        if (page_prompt != null) {
+            mParent.publishValue(TCONST.RTC_VAR_PAGE_PROMPT, page_prompt);
+            mParent.publishFeature((TCONST.FTR_PAGE_PROMPT));
+        }
 
         // Set the scriptable flag indicating the current state.
         //

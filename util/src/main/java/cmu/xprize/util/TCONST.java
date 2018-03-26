@@ -228,7 +228,9 @@ public class TCONST {
     public static final String NO_SPACE            = "";
     public static final int    MAX_AKDATA          = 10;
 
-    public static final String FTR_COMPLETE = "FTR_COMPLETE";
+    public static final String FTR_COMPLETE      = "FTR_COMPLETE";
+    public static final String FTR_PROMPT        = "FTR_PROMPT";
+    public static final String FTR_PAGE_PROMPT   = "FTR_PAGE_PROMPT";
 
     public static final String START_PROGRESSIVE_UPDATE   = "START_PROGRESSIVE_UPDATE";
     public static final String START_INDETERMINATE_UPDATE = "START_INDETERMINATE_UPDATE";
@@ -753,12 +755,13 @@ public class TCONST {
     public static final String RTC_LINECOMPLETE      = "LINE_COMPLETE";
     public static final String RTC_CLEAR             = "";
 
-    public static final String RTC_VAR_PROMPT     = ".prompt";
-    public static final String RTC_VAR_WORDVALUE  = ".currentWord";
-    public static final String RTC_VAR_INDEX      = ".wordindex";
-    public static final String RTC_VAR_REMAINING  = ".remainingWords";
-    public static final String RTC_VAR_SENTENCE   = ".sentence";
-    public static final String RTC_VAR_UTTERANCE  = ".utterance";
+    public static final String RTC_VAR_PROMPT      = ".prompt";
+    public static final String RTC_VAR_PAGE_PROMPT = ".page_prompt";
+    public static final String RTC_VAR_WORDVALUE   = ".currentWord";
+    public static final String RTC_VAR_INDEX       = ".wordindex";
+    public static final String RTC_VAR_REMAINING   = ".remainingWords";
+    public static final String RTC_VAR_SENTENCE    = ".sentence";
+    public static final String RTC_VAR_UTTERANCE   = ".utterance";
 
     //Akira Game Prompt Situation
     public static final String PROMPT_1LEFT = "PROMPT_1LEFT";

@@ -47,6 +47,7 @@
         "NARRATE_SENTENCE_BEHAVIOR": {
           "type": "QUEUE",
           "COMMENT": "Speak the current word and continue to next.",
+
           "preenter": [],
           "reuse": true,
           "tracks": [
@@ -282,12 +283,9 @@
 
             // Note that the sw actually says "please read the story aloud'
             //
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please read aloud.mp3", "mode": "flow", "features": "FTR_USER_READ"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please read aloud.mp3", "mode": "flow", "features": "FTR_USER_ECHO"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please read aloud.mp3", "mode": "flow", "features": "FTR_USER_REVEAL"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets listen to a story.mp3", "mode": "flow", "features": "FTR_USER_HEAR"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets listen to a story.mp3", "mode": "flow", "features": "FTR_USER_HIDE"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets listen to a story.mp3", "mode": "flow", "features": "FTR_USER_PARROT"}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.prompt}}", "mode": "flow", "features": "FTR_PROMPT"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please read aloud.mp3", "mode": "flow", "features": "!FTR_PROMPT&FTR_USER_READ|!FTR_PROMPT&FTR_USER_ECHO|!FTR_PROMPT&FTR_USER_REVEAL"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets listen to a story.mp3", "mode": "flow", "features": "!FTR_PROMPT&FTR_USER_HEAR|!FTR_PROMPT&FTR_USER_HIDE|!FTR_PROMPT&FTR_USER_PARROT"}
           ]
         },
 
@@ -319,7 +317,8 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#PARROT_LINE:String", "features": ""},
 
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.prompt}}", "mode": "flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.page_prompt}}", "mode": "flow", "features": "FTR_PAGE_PROMPT"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Repeat after me.mp3", "mode": "flow", "features": "!FTR_PAGE_PROMPT"},
             {"type": "COMMAND", "id": "SstoryReading", "method": "parrotLine" , "features": ""}
           ]
         },
