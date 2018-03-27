@@ -69,6 +69,22 @@ public class WR_CONST {
     public static final String AUDIO_STIM_2             = ".audiostim2";
     public static final String AUDIO_STIM_3             = ".audiostim3";
 
+    public static final String FTR_STIM_1_CONCAT            = "FTR_STIM_1_CONCAT";
+    public static final String AUDIO_STIM_1_CONCAT_HUNDREDS = ".audioStimOneConcatHundreds";
+    public static final String AUDIO_STIM_1_CONCAT_TENS     = ".audioStimOneConcatTens";
+    public static final String AUDIO_STIM_1_CONCAT_ONES     = ".audioStimOneConcatOnes";
+
+    public static final String FTR_STIM_3_CONCAT            = "FTR_STIM_3_CONCAT";
+    public static final String AUDIO_STIM_3_CONCAT_HUNDREDS = ".audioStimThreeConcatHundreds";
+    public static final String AUDIO_STIM_3_CONCAT_TENS     = ".audioStimThreeConcatTens";
+    public static final String AUDIO_STIM_3_CONCAT_ONES     = ".audioStimThreeConcatOnes";
+
+    public static final String FTR_ANS_CONCAT            = "FTR_ANS_CONCAT";
+    public static final String AUDIO_ANS                 = ".audioAns";
+    public static final String AUDIO_ANS_CONCAT_HUNDREDS = ".audioAnsConcatHundreds";
+    public static final String AUDIO_ANS_CONCAT_TENS     = ".audioAnsConcatTens";
+    public static final String AUDIO_ANS_CONCAT_ONES     = ".audioAnsConcatOnes";
+
     public static final String FTR_INPUT_STALLED        = "FTR_INPUT_STALLED";
     public static final String FTR_HAD_ERRORS           = "FTR_HAD_ERRORS";
 

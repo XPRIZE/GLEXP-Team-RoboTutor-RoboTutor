@@ -706,6 +706,56 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     }
 
+    // Helper function that converts 3 digit number to list of digits
+    private int[] getListDigits(int num) {
+        int hundredsDigit = 0;  int tensDigit = 0;
+        if(num >= 100) {
+            hundredsDigit = (num / 100) * 100;
+        }
+        num = num % 100;
+
+        tensDigit = num;
+
+        Log.d("tadpolr", hundredsDigit + " " + tensDigit + " ");
+        return (new int[]{hundredsDigit, tensDigit});
+    }
+
+    // Publish concatenated audio.
+    public void publishConcatAudio(String constant, String value) {
+            String publishValueConstHundreds = "";
+            String publishValueConstTens = "";
+            String publishFeatureValue = "";
+
+            if(constant == "STIM_1") {
+                publishFeatureValue = WR_CONST.FTR_STIM_1_CONCAT;
+                publishValueConstHundreds = WR_CONST.AUDIO_STIM_1_CONCAT_HUNDREDS;
+                publishValueConstTens = WR_CONST.AUDIO_STIM_1_CONCAT_TENS;
+            } else if (constant == "STIM_3") {
+                publishFeatureValue = WR_CONST.FTR_STIM_3_CONCAT;
+                publishValueConstHundreds = WR_CONST.AUDIO_STIM_3_CONCAT_HUNDREDS;
+                publishValueConstTens = WR_CONST.AUDIO_STIM_3_CONCAT_TENS;
+            } else if (constant == "ANS") {
+                Log.d("tadpolr", "publishConcat ANS");
+                publishFeatureValue = WR_CONST.FTR_ANS_CONCAT;
+                publishValueConstHundreds = WR_CONST.AUDIO_ANS_CONCAT_HUNDREDS;
+                publishValueConstTens = WR_CONST.AUDIO_ANS_CONCAT_TENS;
+            }
+
+            int operand1 = Integer.parseInt(value);
+            int[] operand1Digits = getListDigits(operand1);
+
+            //Publish features and values for each digit of first operand so that audios can be played separately
+            if (operand1Digits[0] >= 100) {
+
+                publishFeature(publishFeatureValue);
+                publishValue(publishValueConstHundreds, operand1Digits[0]);
+            }
+
+            if (operand1Digits[1] >= 1) {
+
+                publishValue(publishValueConstTens, operand1Digits[1]);
+            }
+    }
 
     public void next() {
 
@@ -718,6 +768,20 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         // update the Scope response variable  "<Sstimulus>.value"
         //
         publishValue(WR_CONST.VALUE_VAR, mAnswer.toLowerCase());
+
+        // For number activity that may need concatenation.
+        //
+        boolean isNumberActivity = activityFeature.contains("FTR_NUMBERS");
+        boolean isDotCountActivity = activityFeature.contains("FTR_DOTCOUNT");
+        boolean isArithActivity = activityFeature.contains("FTR_ARITH");
+
+        if (isNumberActivity || isDotCountActivity || isArithActivity) {
+            publishConcatAudio("ANS", mAnswer);
+            publishConcatAudio("STIM_1", mAudioStimulus[0]);
+            if (mAudioStimulus.length >= 3) {
+                publishConcatAudio("STIM_3", mAudioStimulus[2]);
+            }
+        }
 
         // update the Scope response variable  "SWordCopy.audiostim"
         //
@@ -745,6 +809,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
             publishValue(WR_CONST.AUDIO_STIM_2, "");
             publishValue(WR_CONST.AUDIO_STIM_3, "");
         }
+
 
         if(dataExhausted()) {
 
