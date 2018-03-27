@@ -19,8 +19,10 @@
 package cmu.xprize.robotutor.tutorengine;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.ViewGroup;
 
@@ -231,6 +233,16 @@ public class CTutorEngine implements ILoadableObject2 {
             featureString += ":" + TCONST.FTR_GOODBYE + "_" + goodbyeId;
         }
 
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "**: Creating Tutor in startSessionManager: " + defTutor);
+
+        // don't create a new tutor when the screen is off, because on relaunch it will set-in-motion the "KILLTUTOR"
+        // https://stackoverflow.com/questions/2474367/how-can-i-tell-if-the-screen-is-on-in-android
+        PowerManager powerManager = (PowerManager) Activity.getSystemService(Context.POWER_SERVICE);
+        if (powerManager != null && !powerManager.isInteractive()) {
+            Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "fx: Not creating new tutor when screen is off...");
+            return;
+        }
+
         createTutor(defTutor, featureString);
         launchTutor(tutorBindings);
     }
@@ -248,6 +260,7 @@ public class CTutorEngine implements ILoadableObject2 {
         activeTutor = null;
         RoboTutor.masterContainer.removeView(deadTutor.getTutorContainer());
 
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "p4: StartSessionManager in 'CTutorEngine.destroyCurrentTutor': " + defTutor);
         startSessionManager();
 
         Log.d(TAG, "destroyCurrentTutor: " + deadTutor.getTutorName());
@@ -280,6 +293,7 @@ public class CTutorEngine implements ILoadableObject2 {
      */
     static public void killActiveTutor() {
 
+        // GRAY_SCREEN_BUG
         if(activeTutor != null) {
 
             deadTutor = activeTutor;
@@ -289,7 +303,10 @@ public class CTutorEngine implements ILoadableObject2 {
             Log.d(TAG, "Killing Tutor: " + deadTutor.getTutorName());
 
             RoboTutor.masterContainer.removeView(deadTutor.getTutorContainer());
+            Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r3: Killing Active Tutor: " + deadTutor.getTutorName());
             deadTutor.post(TCONST.KILLTUTOR);
+        } else {
+            Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r3: NULL ACTIVE TUTOR. DeadTutor = " + ((deadTutor == null) ? "null" : deadTutor.getTutorName()));
         }
     }
 
@@ -302,8 +319,10 @@ public class CTutorEngine implements ILoadableObject2 {
      */
     static private void createTutor(String tutorName, String features) {
 
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r4: killActiveTutor called from createTutor(" + tutorName + ")");
         killActiveTutor();
 
+        // GRAY_SCREEN_BUG
         Log.d(TAG, "createTutor: " + tutorName);
 
         // Create a new tutor container relative to the masterContainer
@@ -314,6 +333,8 @@ public class CTutorEngine implements ILoadableObject2 {
 
         RoboTutor.masterContainer.addView((ITutorManager)tutorContainer);
 
+        // GRAY_SCREEN_BUG CTutor created --> Media Manager created --> added to map
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "p2: Initializing tutor: " + tutorName);
         activeTutor = new CTutor(Activity, tutorName, (ITutorManager)tutorContainer, TutorLogManager, mRootScope, language, features);
     }
 
@@ -506,6 +527,7 @@ public class CTutorEngine implements ILoadableObject2 {
             //
             case "native":
 
+                Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "p3b: Creating Tutor in 'CTutor.launch': " + tutorDescriptor.tutorName);
                 createTutor(tutorDescriptor.tutorName, tutorDescriptor.features);
                 launchTutor(tutorBinding);
                 break;

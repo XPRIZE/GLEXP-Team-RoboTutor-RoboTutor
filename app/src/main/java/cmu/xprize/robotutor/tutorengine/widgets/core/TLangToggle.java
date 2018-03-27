@@ -24,6 +24,7 @@
         import android.view.View;
         import android.widget.ToggleButton;
 
+        import cmu.xprize.robotutor.BuildConfig;
         import cmu.xprize.robotutor.RoboTutor;
         import cmu.xprize.robotutor.tutorengine.CMediaController;
         import cmu.xprize.robotutor.tutorengine.CMediaManager;
@@ -78,11 +79,17 @@ public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.
 
     @Override
     public void onClick(View v) {
-        mLangState    = !mLangState;
 
-        Log.v(QGRAPH_MSG, "event.click: " + " TLangToggle: " + mLangState);
+        // if the LangToggle button remains showing for some reason, and is clicked, don't actually change the language.
+        if(!BuildConfig.LANGUAGE_OVERRIDE) {
+            mLangState    = !mLangState;
 
-        CTutorEngine.setDefaultLanguage(mLangState? TCONST.LANG_EN: TCONST.LANG_SW);
+            Log.v(QGRAPH_MSG, "event.click: " + " TLangToggle: " + mLangState);
+
+            CTutorEngine.setDefaultLanguage(mLangState? TCONST.LANG_EN: TCONST.LANG_SW);
+        } else {
+            Log.v(QGRAPH_MSG, "event.click: " + " TLangToggle: IGNORING");
+        }
 
         // #Mod 329 language switch capability
         // When switching languages it may occur on any Selector screens so we want to

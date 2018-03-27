@@ -18,8 +18,10 @@
 
 package cmu.xprize.comp_logging;
 
+
 public class CLogManager extends CLogManagerBase implements ILogManager {
     private static String TAG = "CLogManager";
+
 
     // Singleton
     private static CLogManager ourInstance = new CLogManager();
@@ -31,4 +33,8 @@ public class CLogManager extends CLogManagerBase implements ILogManager {
     private CLogManager() {
         super.TAG = TAG;
     }
+
+
+
+
 }

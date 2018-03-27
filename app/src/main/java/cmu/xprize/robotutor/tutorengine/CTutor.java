@@ -32,7 +32,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -134,6 +133,8 @@ public class CTutor implements ILoadableObject2, IEventSource {
         mTutorLogManager = logManager;
 
         mAssetManager    = context.getAssets();
+        // GRAY_SCREEN_BUG this is where Media Manager is initialized
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "p1: Initializing tutor: " + mTutorName);
         mMediaManager    = CMediaController.newMediaManager(mTutorName);
 
         uuid = UUID.randomUUID();
@@ -311,6 +312,8 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         private void cleanUpTutor() {
 
+            // GRAY_SCREEN_BUG tutor might be cleaned up here
+            Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r1: Cleaning up tutor " + mTutorName);
             CMediaController.destroyMediaManager(mTutorName);
 
             // disable the input queue permanently in prep for destruction
@@ -339,6 +342,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
                     //
                     case TCONST.KILLTUTOR:
 
+                        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r2: In Queue: " + _command);
                         cleanUpTutor();
 
                         CTutorEngine.killDeadTutor();
@@ -350,6 +354,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
                     //
                     case TCONST.ENDTUTOR:
 
+                        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r2: In Queue: " + _command);
                         cleanUpTutor();
 
                         CTutorEngine.destroyCurrentTutor();
@@ -362,6 +367,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
                     //
                     case TCONST.FINISH:
 
+                        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r2: In Queue: " + _command);
                         cleanUpTutor();
 
                         CTutorEngine.destroyCurrentTutor();

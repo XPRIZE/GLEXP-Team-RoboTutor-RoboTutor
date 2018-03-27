@@ -590,7 +590,8 @@ public class TCONST {
     public static final String FW_RESPONSE = "FW_RESPONSE";
 
     public static final String WRITINGTUTOR_FOLDER      = "/WritingTutor/";
-    public static final String ROBOTUTOR_FOLDER         = "/RoboTutor/";
+    public static final String HOT_LOG_FOLDER = "/RoboTutor_HOT/";
+    public static final String READY_LOG_FOLDER = "/RoboTutor/";
     public static final String ROBOTUTOR_ASSET_FOLDER   = "/robotutor_assets/";
     public static final String GLYPHS_FOLDER            = "/glyphs/";
 
@@ -789,4 +790,7 @@ public class TCONST {
     public static final String ROBO_DEBUG_FILE_ASM = "math_test.json";
     public static final String ROBO_DEBUG_FILE_BPOP = "bpop.json";
 
+
+    // debug vals
+    public static final String DEBUG_GRAY_SCREEN_TAG = "DEBUG_GRAY_SCREEN";
 }

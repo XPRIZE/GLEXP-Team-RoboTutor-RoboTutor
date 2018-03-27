@@ -405,8 +405,11 @@ public class type_audio extends type_action implements IMediaListener {
             // An audio source can force a language by setting "lang" to a known language Feature ID
             // e.g. LANG_SW | LANG_EN | LANG_FR
 
+            // GRAY_SCREEN_BUG _scope.tutorName = "activity_selector"
+            // GRAY_SCREEN_BUG returns null
             mMediaManager = CMediaController.getManagerInstance(_scope.tutorName());
 
+            // GRAY_SCREEN_BUG X
             langPath = mMediaManager.mapSoundPackage(_scope.tutor(), soundpackage, lang);
 
             // Update the path to the sound source file
