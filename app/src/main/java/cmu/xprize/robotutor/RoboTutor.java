@@ -40,6 +40,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import cmu.xprize.comp_logging.IPerfLogManager;
 import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.ltkplus.IGlyphSink;
@@ -48,6 +49,7 @@ import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
 import cmu.xprize.util.CDisplayMetrics;
 import cmu.xprize.util.CLoaderView;
 import cmu.xprize.comp_logging.CLogManager;
+import cmu.xprize.comp_logging.CPerfLogManager;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorManager;
 import cmu.xprize.robotutor.tutorengine.widgets.core.IGuidView;
@@ -91,6 +93,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     static public ITutorManager masterContainer;
     static public ILogManager   logManager;
+    static public IPerfLogManager perfLogManager;
 
     static CTutorAssetManager   tutorAssetManager;
     static public String        VERSION_RT;
@@ -180,6 +183,9 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         logManager.startLogging(hotLogPath, logFilename);
         CErrorManager.setLogManager(logManager);
+
+        perfLogManager = CPerfLogManager.getInstance();
+        perfLogManager.startLogging(hotLogPath, "PERF_" + logFilename);
 
         // TODO : implement time stamps
         logManager.postDateTimeStamp(GRAPH_MSG, "RoboTutor:SessionStart");
@@ -734,12 +740,11 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         logManager.postDateTimeStamp(GRAPH_MSG, "RoboTutor:SessionEnd");
         logManager.stopLogging();
+        perfLogManager.stopLogging();
 
         // after logging, transfer logs to READY folder
         logManager.transferHotLogs(hotLogPath, readyLogPath);
+
     }
-
-
-
 }
 
