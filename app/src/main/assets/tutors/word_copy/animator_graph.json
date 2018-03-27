@@ -20,6 +20,8 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "logState", "parms": "type#feedback,value#INPUT_HESITATION_FEEDBACK:String", "features":""},
 
+            {"name": "Disable Input",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "TRUE:Boolean",  "features":"" },
+
             // Dictation Hesitation
             {"name": "Point at Replay Button", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "POINT_AT_REPLAY_BUTTON:String", "features":"FTR_DICTATION"},
             {"name": "Tap Prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap here to hear the word again.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DICTATION"},
@@ -37,7 +39,9 @@
             {"name": "Say audio stimulus", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim1}}.mp3","soundpackage": "numbers","mode":"flow", "features": "FTR_NUMBERS&!FTR_DICTATION"},
             {"name": "Say audio stimulus", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim1}}.mp3","soundpackage": "numbers","mode":"flow", "features": "FTR_ARITH"},
             {"name": "Say audio stimulus", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim2}}.mp3","soundpackage": "xprize","mode":"flow", "features": "FTR_ARITH"},
-            {"name": "Say audio stimulus", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim3}}.mp3","soundpackage": "numbers","mode":"flow", "features": "FTR_ARITH"}
+            {"name": "Say audio stimulus", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim3}}.mp3","soundpackage": "numbers","mode":"flow", "features": "FTR_ARITH"},
+
+            {"name": "Enable Input",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "FALSE:Boolean", "features":""}
           ],
           "preexit": [
             "CLEAR_CANCEL_HESITATION_BEHAVIOR","CANCEL_POINT"
@@ -200,6 +204,7 @@
             {"name": "prompt - MAKE IT LOOK...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Try to make it look more like this.mp3", "soundpackage": "default", "mode": "flow", "features": "!FTR_ATTEMPT_1&!FTR_DICTATION"},
             {"name": "ERASE GLYPH", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "ERASE_GLYPH:String", "features":"!FTR_ATTEMPT_1&!FTR_DICTATION"},
             {"name": "HIDE SAMPLE", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_SAMPLE:String", "features":"!FTR_ATTEMPT_1&!FTR_DICTATION"},
+            {"name": "Disable Input",   "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "TRUE:Boolean",  "features":""},
 
             // For dictation activity
             {"name": "Write Prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3","soundpackage": "default","mode": "flow", "features": "FTR_NUMBERS&FTR_DICTATION"},
@@ -213,11 +218,10 @@
             {"name": "prompt - value to write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3", "soundpackage": "words",   "mode": "flow", "features": "FTR_WORDS&!FTR_ATTEMPT_4"},
             {"name": "prompt - value to write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3", "soundpackage": "letters", "mode": "flow", "features": "FTR_LETTERS&!FTR_ATTEMPT_4"},
             {"name": "prompt - value to write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3", "soundpackage": "numbers", "mode": "flow", "features": "FTR_NUMBERS&!FTR_ATTEMPT_4"},
-            {"name": "prompt - value to write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3", "soundpackage": "numbers", "mode": "flow", "features": "FTR_DOTCOUNT&!FTR_ATTEMPT_4"},
-            {"name": "prompt - value to write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3", "soundpackage": "numbers", "mode": "flow", "features": "FTR_ARITH&!FTR_ATTEMPT_4"},
+            {"name": "prompt - value to write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3", "soundpackage": "numbers", "mode": "flow", "features": "FTR_DOTCOUNT&!FTR_ATTEMPT_1&!FTR_ATTEMPT_4"},
+            {"name": "prompt - value to write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3", "soundpackage": "numbers", "mode": "flow", "features": "FTR_ARITH&!FTR_ATTEMPT_1&!FTR_ATTEMPT_4"},
 
             {"name": "HIDE ALL SAMPLE", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_TRACELINE:String", "features":"!FTR_ATTEMPT_1&!FTR_DICTATION&!FTR_ATTEMPT_4"},
-            {"name": "ERASE GLYPH",     "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "ERASE_GLYPH:String",    "features":""},
 
 
             // On iteration 4+ we ask them to trace the character.
@@ -259,15 +263,24 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "logState", "parms": "type#behavior,value#MERCY_RULE_BEHAVIOR:String", "features":""},
 
-            {"name": "Disable Input",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",        "parms": "TRUE:Boolean",  "features":""},
+            {"name": "Disable Input", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput", "parms": "TRUE:Boolean", "features":""},
 
             {"name": "DO BETTER NEXT TIME - Feedback", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Next time you can do better.mp3","soundpackage": "xprize","mode": "flow", "features": ""},
-            {"name": "Hide Glyphs",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent",           "parms": "HIDE_GLYPHS:String",  "features":""},
+            {"name": "Hide Glyphs",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_GLYPHS:String", "features":""},
 
-            {"name": "Ripple Prototype",         "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent",           "parms": "RIPPLE_PROTO:String",                        "features":""},
-            {"name": "Clear attempt Index", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "CLEAR_ATTEMPT:String",  "features":""},
+            {"name": "Replay Complete behavior", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|DELAYED_NEXT_2:String" ,"features":""},
+            {"name": "Ripple Prototype",         "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "RIPPLE_PROTO:String",  "features":""},
 
-            {"name": "DELAY - Next Node",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "APPLY_BEHAVIOR:String|NEXT_NODE:String|2000:Integer", "features":""}
+            {"name": "Correct Value Feedback", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3","soundpackage": "words",   "mode":"flow", "features": "FTR_WORDS"},
+            {"name": "Correct Value Feedback", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3","soundpackage": "letters", "mode":"flow", "features": "FTR_LETTERS"},
+            {"name": "Correct Value Feedback", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3","soundpackage": "numbers", "mode":"flow", "features": "FTR_NUMBERS"},
+            {"name": "Correct Value Feedback", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3","soundpackage": "numbers", "mode":"flow", "features": "FTR_DOTCOUNT"},
+            {"name": "Correct Value Feedback", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3","soundpackage": "numbers", "mode":"flow", "features": "FTR_ARITH"},
+
+            {"name": "Clear attempt Index",      "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "CLEAR_ATTEMPT:String", "features":""},
+
+            {"name": "WAIT", "type": "QUEUEDCOMMAND", "cmd": "WAIT", "features":""},
+            {"name": "DELAY - Next Node", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "APPLY_BEHAVIOR:String|NEXT_NODE:String|600:Integer", "features":""}
 
           ]
         },
@@ -614,6 +627,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "logState", "parms": "type#node,value#PLAYWORD:String", "features":""},
 
+            {"name": "Disable Input",   "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "TRUE:Boolean",  "features":""},
             {"name":"Zoom Sstimulus",  "type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":""},
 
             // Show trace line for write.trc
@@ -634,9 +648,9 @@
             {"name":"PLAY - how many things ...",  "type": "AUDIO", "command": "PLAY", "soundsource": "How many things are here.mp3", "soundpackage":"arithmetic", "mode":"flow", "features": "FTR_DOTCOUNT"},
 
             // Play prompt & audiostimulus for write.arith e.g. 3 plus 2
-            {"name":"Play - .audiostimulus",  "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim1}}.mp3","soundpackage": "numbers","mode":"flow", "features": "FTR_ARITH"},
-            {"name":"Play - .audiostimulus",  "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim2}}.mp3","soundpackage": "xprize","mode":"flow", "features": "FTR_ARITH"},
-            {"name":"Play - .audiostimulus",  "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim3}}.mp3","soundpackage": "numbers","mode":"flow", "features": "FTR_ARITH"}
+            {"name":"Play - .audiostimulus",  "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim1}}.mp3","soundpackage": "numbers", "mode":"flow", "features": "FTR_ARITH"},
+            {"name":"Play - .audiostimulus",  "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim2}}.mp3","soundpackage": "xprize",  "mode":"flow", "features": "FTR_ARITH"},
+            {"name":"Play - .audiostimulus",  "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim3}}.mp3","soundpackage": "numbers", "mode":"flow", "features": "FTR_ARITH"}
           ]
         },
 
@@ -818,6 +832,7 @@
         "PICKER_TRACK": {"name":"",  "type": "TIMELINE", "trackname": "ASK_BUTTON", "features": ""},
 
         "DELAYED_NEXT":      {"name":"",  "type": "COMMAND", "id": "ITEM_COMPLETE_BEHAVIOR", "method": "post", "parms": "NEXT_NODE:String", "features":""},
+        "DELAYED_NEXT_2":    {"name":"",  "type": "COMMAND", "id": "MERCY_RULE_BEHAVIOR",    "method": "post", "parms": "NEXT_NODE:String", "features":""},
         "DELAYED_DEMO_NEXT": {"name":"",  "type": "COMMAND", "id": "DEMO_COMPLETE_BEHAVIOR", "method": "post", "parms": "NEXT_NODE:String", "features":""},
 
         "CANCEL_POINT": {"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "CANCEL_POINTAT:String", "features":""},
