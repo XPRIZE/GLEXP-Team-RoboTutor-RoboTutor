@@ -861,7 +861,8 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
         reset();
 
-        trackAndLogPerformance(correct);
+        // BUG commenting out trackAndLogPerformance to preserve reading functionality
+        // trackAndLogPerformance(correct);
 
         if(correct)
             publishFeature(TCONST.GENERIC_RIGHT);
