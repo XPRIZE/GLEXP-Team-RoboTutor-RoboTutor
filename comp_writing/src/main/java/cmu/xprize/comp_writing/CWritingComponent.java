@@ -743,7 +743,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
 
     private void showTraceLine() {
-
+        Log.d("tadpolr", "showTraceLine: ");
         CGlyphController   v;
 
         for (int i = 0; i < mGlyphList.getChildCount(); i++) {
@@ -752,6 +752,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
     }
 
+    private void hideTraceLine() {
+        Log.d("tadpolr", "hideTraceLine: ");
+        CGlyphController   v;
+
+        for (int i = 0; i < mGlyphList.getChildCount(); i++) {
+            v = (CGlyphController) mGlyphList.getChildAt(i);
+            v.post("HIDE_SAMPLE");
+        }
+    }
 
 
     public boolean scanForPendingRecognition(IGlyphController source) {
@@ -1236,9 +1245,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                         rippleReplay(_command, false); // YYY Ripple Replay: use to show tracing
                         break;
-                    case WR_CONST.SHOW_TRACELINE:
+                    case WR_CONST.SHOW_TRACELINE: // Show all glyphs trace line.
 
                         showTraceLine();
+                        break;
+                    case WR_CONST.HIDE_TRACELINE: // Hide all glyphs trace line.
+
+                        hideTraceLine();
                         break;
                     case WR_CONST.SHOW_SAMPLE:
                     case WR_CONST.HIDE_SAMPLE:

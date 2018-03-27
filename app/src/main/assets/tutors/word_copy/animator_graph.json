@@ -187,37 +187,38 @@
             {"name": "Disable Replay",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "enableReplayButton", "parms": "FALSE:Boolean", "features":"FTR_DICTATION"},
             {"name": "Disable Input",   "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "TRUE:Boolean",  "features":""},
 
-// Old scaffolding
-//            {"name": "OVERLAY Animation", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent",           "parms": "ANIMATE_OVERLAY:String",                  "features":"!FTR_DICTATION"},
-//            {"name": "prompt - MAKE IT LOOK...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Try to make it look more like this.mp3",  "soundpackage": "default", "mode": "flow", "features": "!FTR_ATTEMPT_4&!FTR_DICTATION"},
-//            {"name": "ERASE GLYPH", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent",           "parms": "ERASE_GLYPH:String",                  "features":"!FTR_ATTEMPT_4&!FTR_DICTATION"},
-//            {"name": "SHOW SAMPLE", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent",           "parms": "SHOW_SAMPLE:String",                  "features":"!FTR_ATTEMPT_4&!FTR_DICTATION"},
 
             // 1st wrong attempt
+            //
             {"name": "prompt - Not quite, Try again", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3","soundpackage": "arithmetic","mode": "flow", "features": "FTR_ATTEMPT_1"},
+            {"name": "ERASE GLYPH", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "ERASE_GLYPH:String", "features":"FTR_ATTEMPT_1"},
+
 
             // 2nd-3rd wrong attempt - show overlay
+            //
             {"name": "OVERLAY Animation", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "ANIMATE_OVERLAY:String", "features":"!FTR_ATTEMPT_1&!FTR_DICTATION"},
             {"name": "prompt - MAKE IT LOOK...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Try to make it look more like this.mp3", "soundpackage": "default", "mode": "flow", "features": "!FTR_ATTEMPT_1&!FTR_DICTATION"},
-            {"name": "ERASE GLYPH", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "ERASE_GLYPH:String", "features":"!FTR_ATTEMPT_4&!FTR_DICTATION&"},
-            {"name": "HIDE SAMPLE", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_SAMPLE:String", "features":"!FTR_ATTEMPT_1&!FTR_DICTATION&"},
+            {"name": "ERASE GLYPH", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "ERASE_GLYPH:String", "features":"!FTR_ATTEMPT_1&!FTR_DICTATION"},
+            {"name": "HIDE SAMPLE", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_SAMPLE:String", "features":"!FTR_ATTEMPT_1&!FTR_DICTATION"},
 
             // For dictation activity
             {"name": "Write Prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3","soundpackage": "default","mode": "flow", "features": "FTR_NUMBERS&FTR_DICTATION"},
             {"name": "Write Prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please write the letter.mp3","soundpackage": "default","mode": "flow", "features": "FTR_LETTERS&FTR_DICTATION"},
             {"name": "Write Prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please write the word.mp3",  "soundpackage": "default","mode": "flow", "features": "FTR_WORDS&FTR_DICTATION"},
 
+            // For non dictation activity - Flash all trace line
+            {"name": "SHOW ALL SAMPLE", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "SHOW_TRACELINE:String", "features":"!FTR_ATTEMPT_1&!FTR_DICTATION&!FTR_ATTEMPT_4"},
 
-            {"name": "prompt - value to write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.expected}}.mp3", "soundpackage": "letters", "mode": "flow", "features": "FTR_WORDS&!FTR_ATTEMPT_4"},
-            {"name": "prompt - value to write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.expected}}.mp3", "soundpackage": "letters", "mode": "flow", "features": "FTR_LETTERS&!FTR_ATTEMPT_4"},
-            {"name": "prompt - value to write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.expected}}.mp3", "soundpackage": "numbers", "mode": "flow", "features": "FTR_NUMBERS&!FTR_ATTEMPT_4"},
-            {"name": "prompt - value to write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.expected}}.mp3", "soundpackage": "numbers", "mode": "flow", "features": "FTR_DOTCOUNT&!FTR_ATTEMPT_4"},
-            {"name": "prompt - value to write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.expected}}.mp3", "soundpackage": "numbers", "mode": "flow", "features": "FTR_ARITH&!FTR_ATTEMPT_4"},
+            // Say audio stimulus
+            {"name": "prompt - value to write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3", "soundpackage": "words",   "mode": "flow", "features": "FTR_WORDS&!FTR_ATTEMPT_4"},
+            {"name": "prompt - value to write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3", "soundpackage": "letters", "mode": "flow", "features": "FTR_LETTERS&!FTR_ATTEMPT_4"},
+            {"name": "prompt - value to write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3", "soundpackage": "numbers", "mode": "flow", "features": "FTR_NUMBERS&!FTR_ATTEMPT_4"},
+            {"name": "prompt - value to write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3", "soundpackage": "numbers", "mode": "flow", "features": "FTR_DOTCOUNT&!FTR_ATTEMPT_4"},
+            {"name": "prompt - value to write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3", "soundpackage": "numbers", "mode": "flow", "features": "FTR_ARITH&!FTR_ATTEMPT_4"},
 
-            {"name": "ERASE GLYPH", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent",           "parms": "ERASE_GLYPH:String",                  "features":""},
+            {"name": "HIDE ALL SAMPLE", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_TRACELINE:String", "features":"!FTR_ATTEMPT_1&!FTR_DICTATION&!FTR_ATTEMPT_4"},
+            {"name": "ERASE GLYPH",     "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "ERASE_GLYPH:String",    "features":""},
 
-            // For write.trc - show trace line
-            {"name": "SHOW sample", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "SHOW_SAMPLE:String", "features":"FTR_TRACE&!FTR_ATTEMPT_4"},
 
             // On iteration 4+ we ask them to trace the character.
             //
@@ -225,6 +226,7 @@
             {"name": "INHIBIT OTHER FIELDS", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent",  "parms": "INHIBIT_OTHERS:String", "features":"FTR_ATTEMPT_4"},
 
             {"name": "prompt - please trace the...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please trace the letter.mp3", "soundpackage": "default","mode": "flow", "features": "FTR_LETTERS&FTR_ATTEMPT_4"},
+            {"name": "prompt - please trace the...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please trace the letter.mp3", "soundpackage": "default","mode": "flow", "features": "FTR_WORDS&FTR_ATTEMPT_4"},
             {"name": "prompt - please trace the...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please trace the number.mp3", "soundpackage": "default","mode": "flow", "features": "FTR_NUMBERS&FTR_ATTEMPT_4"},
             {"name": "prompt - please trace the...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please trace the number.mp3", "soundpackage": "default","mode": "flow", "features": "FTR_DOTCOUNT&FTR_ATTEMPT_4"},
             {"name": "prompt - please trace the...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please trace the number.mp3", "soundpackage": "default","mode": "flow", "features": "FTR_ARITH&FTR_ATTEMPT_4"},
@@ -234,6 +236,10 @@
             {"name": "prompt - value to Trace", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.expected}}.mp3", "soundpackage": "numbers", "mode": "flow", "features": "FTR_NUMBERS&FTR_ATTEMPT_4"},
             {"name": "prompt - value to Trace", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.expected}}.mp3", "soundpackage": "numbers", "mode": "flow", "features": "FTR_DOTCOUNT&FTR_ATTEMPT_4"},
             {"name": "prompt - value to Trace", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.expected}}.mp3", "soundpackage": "numbers", "mode": "flow", "features": "FTR_ARITH&FTR_ATTEMPT_4"},
+
+
+            // For write.trc - show trace line
+            {"name": "SHOW sample", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "SHOW_SAMPLE:String", "features":"FTR_TRACE&!FTR_ATTEMPT_4"},
 
             {"name": "Enable Input",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "FALSE:Boolean", "features":""},
             {"name": "Enable Replay", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "enableReplayButton", "parms": "TRUE:Boolean",  "features":"FTR_DICTATION"}
