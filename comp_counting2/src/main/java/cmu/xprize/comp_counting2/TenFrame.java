@@ -16,12 +16,14 @@ class TenFrame {
     int startY;
     int holeWidth;
     int holeHeight;
+    boolean line;
 
-    TenFrame(int startX, int startY, int holeWidth, int holeHeight) {
+    TenFrame(int startX, int startY, int holeWidth, int holeHeight,boolean isline) {
         this.startX = startX;
         this.startY = startY;
         this.holeWidth = holeWidth;
         this.holeHeight = holeHeight;
+        this.line = isline;
     }
 
     /** holds the coordinates for a TenFrame **/
@@ -67,7 +69,7 @@ class TenFrame {
         p.setColor(Color.BLACK);
         p.setStyle(Paint.Style.STROKE);
         p.setStrokeWidth(5f);
-
+        if (!line){
         // vertical lines
         for (int i = 0; i < 5 + 1; i++) {
             c.drawLine(startX + i * holeWidth, startY, startX + i*holeWidth, startY + 2*holeHeight, p);
@@ -75,7 +77,14 @@ class TenFrame {
 
         for (int i = 0; i < 2 + 1; i++) {
             c.drawLine(startX, startY + i*holeHeight, startX + 5*holeWidth, startY + i*holeHeight, p);
-        }
+        }}else{
+            for (int i = 0; i < 10 + 1; i++) {
+                c.drawLine(startX + i * holeWidth, startY, startX + i*holeWidth, startY + 2*holeHeight, p);
+            }
+
+            for (int i = 0; i < 1; i++) {
+                c.drawLine(startX, startY + i*holeHeight, startX + 5*holeWidth, startY + i*holeHeight, p);
+        }}
 
     }
 }

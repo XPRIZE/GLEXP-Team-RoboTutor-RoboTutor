@@ -55,7 +55,8 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     protected int countTarget;
     protected int currentCount;
     protected int delta;
-
+    protected int tenPower;
+    protected boolean tenInited=false;
 
     // json loadable
     public String bootFeatures;
@@ -172,10 +173,10 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
         // first load dataset into fields
         loadDataSet(data);
+        surfaceView.initTenFrame();
+        surfaceView.resetCounter();
 
-
-        // reset view
-        resetView();
+        // reset vieresetView();
         // update stimulus
 
         // then update visuals
@@ -192,7 +193,14 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         task = data.task;
         layout = data.layout; // NOV_1 make this consistent w/ Anthony
         countStart = data.dataset[0];
-        countTarget = data.dataset[1];
+
+        if (data.tenPower.equals("one")){
+            tenPower = 1;} else if (data.tenPower.equals("ten")){
+            tenPower = 10;
+        } else {
+                tenPower = 100;
+        }
+        countTarget = data.dataset[1]*tenPower;
 
         Log.d(TCONST.COUNTING_DEBUG_LOG, "target=" + countTarget + ";index=" + _dataIndex);
     }

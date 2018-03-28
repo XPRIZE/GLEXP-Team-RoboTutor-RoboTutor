@@ -13,6 +13,7 @@ public class COUNTX_CONST {
     public static final int COLOR_BACKGROUND = Color.rgb(230, 230, 230);
     public static final int DRAWABLE_RADIUS = 100;
     public static final int BOX_MARGIN = 100;
+    public static final int GRID_MARGIN = 30;
     public static final float BOX_BOUNDARY_STROKE_WIDTH = 5.0f;
 
     public static final boolean USE_JAIL_BARS = true;

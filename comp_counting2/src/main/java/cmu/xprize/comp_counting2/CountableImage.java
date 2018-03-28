@@ -20,6 +20,8 @@ public class CountableImage extends Countable {
         this.bmp = bmp;
     }
 
+
+
     @Override
     void draw(Canvas c, Paint p) {
         // draws at the center

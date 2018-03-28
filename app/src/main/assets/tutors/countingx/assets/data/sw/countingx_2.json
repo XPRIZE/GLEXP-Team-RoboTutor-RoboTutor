@@ -3,9 +3,10 @@
 
   "dataSource": [
 
-    {"type":"CountX_Data", "level":"countx_2", "task":"Count 4 to 6", "layout":"default", "dataset":[0, 4]},
-    {"type":"CountX_Data", "level":"countx_2", "task":"Count 4 to 6", "layout":"default", "dataset":[0, 5]},
-    {"type":"CountX_Data", "level":"countx_2", "task":"Count 4 to 6", "layout":"default", "dataset":[0, 6]}
+    {"type":"CountX_Data", "level":"countx_1", "task":"Count to 5","tenPower":"ten", "layout":"default", "dataset":[0, 1]},
+    {"type":"CountX_Data", "level":"countx_1", "task":"Count to 3","tenPower":"ten", "layout":"default", "dataset":[0, 2]},
+    {"type":"CountX_Data", "level":"countx_1", "task":"Count to 3", "tenPower":"ten","layout":"default", "dataset":[0, 3]}
+
   ]
 
 }
