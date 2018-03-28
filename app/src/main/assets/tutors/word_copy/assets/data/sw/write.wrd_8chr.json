@@ -1,19 +1,83 @@
 {"random": true,
 "dataSource": [
-"alisikia", 
-"aliuliza", 
-"chochote", 
-"hatimaye", 
-"kijijini", 
-"kukimbia", 
-"kulikuwa", 
-"lilikuwa", 
-"marafiki", 
-"msichana", 
-"mwingine", 
-"nyingine", 
-"nyumbani", 
-"palikuwa", 
-"walienda", 
-"walikuwa"
+    {
+        "stimulus": "alisikia",
+        "audioStimulus": ["alisikia"],
+        "answer": "alisikia"
+    },
+    {
+        "stimulus": "aliuliza",
+        "audioStimulus": ["aliuliza"],
+        "answer": "aliuliza"
+    },
+    {
+        "stimulus": "chochote",
+        "audioStimulus": ["chochote"],
+        "answer": "chochote"
+    },
+    {
+        "stimulus": "hatimaye",
+        "audioStimulus": ["hatimaye"],
+        "answer": "hatimaye"
+    },
+    {
+        "stimulus": "kijijini",
+        "audioStimulus": ["kijijini"],
+        "answer": "kijijini"
+    },
+    {
+        "stimulus": "kukimbia",
+        "audioStimulus": ["kukimbia"],
+        "answer": "kukimbia"
+    },
+    {
+        "stimulus": "kulikuwa",
+        "audioStimulus": ["kulikuwa"],
+        "answer": "kulikuwa"
+    },
+    {
+        "stimulus": "lilikuwa",
+        "audioStimulus": ["lilikuwa"],
+        "answer": "lilikuwa"
+    },
+    {
+        "stimulus": "marafiki",
+        "audioStimulus": ["marafiki"],
+        "answer": "marafiki"
+    },
+    {
+        "stimulus": "msichana",
+        "audioStimulus": ["msichana"],
+        "answer": "msichana"
+    },
+    {
+        "stimulus": "mwingine",
+        "audioStimulus": ["mwingine"],
+        "answer": "mwingine"
+    },
+    {
+        "stimulus": "nyingine",
+        "audioStimulus": ["nyingine"],
+        "answer": "nyingine"
+    },
+    {
+        "stimulus": "nyumbani",
+        "audioStimulus": ["nyumbani"],
+        "answer": "nyumbani"
+    },
+    {
+        "stimulus": "palikuwa",
+        "audioStimulus": ["palikuwa"],
+        "answer": "palikuwa"
+    },
+    {
+        "stimulus": "walienda",
+        "audioStimulus": ["walienda"],
+        "answer": "walienda"
+    },
+    {
+        "stimulus": "walikuwa",
+        "audioStimulus": ["walikuwa"],
+        "answer": "walikuwa"
+    }
 ]}
