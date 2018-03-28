@@ -794,7 +794,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         event.setLanguage(CTutorEngine.language);
         event.setTutorName(mTutor.getTutorName());
         event.setProblemName(problemName);
-        event.setProblemNumber(question_Index);
+        event.setProblemNumber(logQuestionIndex);
         event.setTotalSubsteps(1);
         event.setSubstepNumber(1);
         event.setSubstepProblem(1);

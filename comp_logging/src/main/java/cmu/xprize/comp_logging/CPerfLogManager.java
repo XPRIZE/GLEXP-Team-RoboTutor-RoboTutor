@@ -38,7 +38,6 @@ public class CPerfLogManager extends CLogManagerBase implements IPerfLogManager 
 
     @Override
     public void postPerformanceLog(PerformanceLogItem event) {
-        Log.d("dddd", "event added!");
         lastEvent = event;
         postEvent_I(TLOG_CONST.PERFORMANCE_TAG, event.toString());
     }
@@ -84,3 +83,4 @@ public class CPerfLogManager extends CLogManagerBase implements IPerfLogManager 
         postEvent_I(TLOG_CONST.PERFORMANCE_TAG, event.toString());
     }
 }
+

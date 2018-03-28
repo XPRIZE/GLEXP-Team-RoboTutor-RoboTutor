@@ -556,7 +556,9 @@ public class CLogManagerBase implements ILogManager {
             case "TUTORSTATE":
                 postUnencoded(packet, null, Msg);
                 break;
-
+            case "VERBOSE":
+            case "DEBUG":
+                break;
             default:
                 postUnencoded(packet, Msg, null);
                 break;

@@ -55,7 +55,7 @@ public class scene_queuedgraph extends scene_module {
 
         // If queue is in progress cancel operations.
         //
-        RoboTutor.logManager.postEvent_I(_logType, "target:node.queuedgraph,action:cancelnode,name:" + name );
+        RoboTutor.logManager.postEvent_V(_logType, "target:node.queuedgraph,action:cancelnode,name:" + name );
         terminateQueue();
 
         // If there is an active node e.g. audioqueue - kill it off
@@ -211,7 +211,7 @@ public class scene_queuedgraph extends scene_module {
                                 else {
                                     _moduleState = TCONST.DONE;
                                 }
-                                RoboTutor.logManager.postEvent_I(_logType, "target:node.queuedgraph,name:" + _nextAction.name + ",endstate:" + _moduleState);
+                                RoboTutor.logManager.postEvent_V(_logType, "target:node.queuedgraph,name:" + _nextAction.name + ",endstate:" + _moduleState);
 
                                 switch (_moduleState) {
 
@@ -232,7 +232,7 @@ public class scene_queuedgraph extends scene_module {
                                 preExit();
                                 _nextAction = null;
 
-                                RoboTutor.logManager.postEvent_I(_logType, "target:node.queuedgraph,END_GRAPH:COMPLETE");
+                                RoboTutor.logManager.postEvent_V(_logType, "target:node.queuedgraph,END_GRAPH:COMPLETE");
                             }
                         }
                         catch(Exception e) {

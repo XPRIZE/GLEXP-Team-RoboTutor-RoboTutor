@@ -115,6 +115,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     public void onDestroy() {
         super.onDestroy();
         mSceneObject.onDestroy();
+        trackAndLogPerformance("END");
     }
 
 
@@ -1015,7 +1016,9 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     }
 
     @Override
-    public void onCreate() {}
+    public void onCreate() {
+        trackAndLogPerformance("START");
+    }
 
     @Override
     public void setNavigator(ITutorGraph navigator) {
@@ -1053,7 +1056,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         super.loadJSON(jsonObj, (IScope2) scope);
     }
 
-    private void trackAndLogPerformance(boolean correct) {
+    private void trackAndLogPerformance(String stage) {
 
         String tutorName = mTutor.getTutorName();
         PerformanceLogItem event = new PerformanceLogItem();
@@ -1064,14 +1067,14 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         event.setLanguage(CTutorEngine.language);
         event.setTutorName(tutorName);
         event.setLevelName("");
-        event.setTaskName(currentSentence);
-        event.setProblemName("reading");
-        event.setProblemNumber(currentIndex);
-        event.setSubstepNumber(expectedWordIndex);
+        event.setTaskName("");
+        event.setProblemName("story");
+        event.setProblemNumber(-1);
+        event.setSubstepNumber(-1);
         event.setAttemptNumber(-1);
-        event.setExpectedAnswer(sentenceWords[expectedWordIndex]);
+        event.setExpectedAnswer(stage);
         event.setUserResponse("");
-        event.setCorrectness(correct ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+        event.setCorrectness(TCONST.LOG_CORRECT);
 
         event.setTimestamp(System.currentTimeMillis());
 

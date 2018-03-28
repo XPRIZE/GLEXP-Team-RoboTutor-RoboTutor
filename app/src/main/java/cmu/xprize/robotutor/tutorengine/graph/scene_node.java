@@ -226,11 +226,11 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
 
         for(graph_edge edge : edges) {
 
-            RoboTutor.logManager.postEvent_I(TAG, "target:node.edge,action:test,name:" + edge.constraint );
+            RoboTutor.logManager.postEvent_V(TAG, "target:node.edge,action:test,name:" + edge.constraint );
 
             if(edge.testConstraint())
             {
-                RoboTutor.logManager.postEvent_I(TAG, "target:node.edge,action:taken,name:" + edge.edge );
+                RoboTutor.logManager.postEvent_V(TAG, "target:node.edge,action:taken,name:" + edge.edge );
 
                 node = edge.followEdge();
 
