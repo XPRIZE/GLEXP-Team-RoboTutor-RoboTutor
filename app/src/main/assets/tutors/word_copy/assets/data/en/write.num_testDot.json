@@ -1,0 +1,22 @@
+{ "bootFeatures":"",
+  "random": false,
+  "singleStimulus": true,
+  "dataSource": [
+    {
+      "stimulus": "o o o o o",
+      "audioStimulus": ["5","",""],
+      "answer": "5"
+    },
+    {
+      "stimulus": "o o o\no o o",
+      "audioStimulus": ["6","",""],
+      "answer": "6"
+    },
+    {
+      "stimulus": "o o o o",
+      "audioStimulus": ["4","",""],
+      "answer": "4"
+    }
+  ]
+}
+

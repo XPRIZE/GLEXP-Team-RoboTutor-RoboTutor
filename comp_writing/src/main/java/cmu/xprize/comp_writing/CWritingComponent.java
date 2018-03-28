@@ -112,10 +112,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     protected String            mResponse;
     protected String            mStimulus;
+    protected String[]          mAudioStimulus;
+    protected String            mAnswer;
 
     protected CGlyphMetricConstraint _metric = new CGlyphMetricConstraint();
 
-    protected List<String>      _data;
+    protected List<CWr_Data>      _data;
     protected int               _dataIndex = 0;
     protected boolean           _dataEOI   = false;
 
@@ -123,10 +125,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     protected LocalBroadcastManager bManager;
 
+    protected String            activityFeature; // features of current activity e.g. FTR_LETTERS:FTR_DICTATION
+
     // json loadable
     public String               bootFeatures = EMPTY;
     public boolean              random       = false;
-    public String[]             dataSource;
+    public boolean              singleStimulus = false;
+    public CWr_Data[]           dataSource;
 
     final private String  TAG        = "CWritingComponent";
 
@@ -340,12 +345,26 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         CRecResult          candidate      = _ltkPlusCandidates[0];
         CStimulusController stimController = (CStimulusController)mRecogList.getChildAt(mActiveIndex);
+        CGlyphController    gController = (CGlyphController)mGlyphList.getChildAt(mActiveIndex);
 
         publishValue(WR_CONST.CANDIDATE_VAR, candidate.getRecChar().toLowerCase());
         publishValue(WR_CONST.EXPECTED_VAR, mActiveController.getExpectedChar().toLowerCase());
 
+
+        // Avoid caseSensitive for words activity
+        boolean isAnswerCaseSensitive = true;
+
+        boolean isWordActivity = activityFeature.contains("FTR_WORDS");
+        boolean isMissingLtrActivity = activityFeature.contains("FTR_MISSING_LTR");
+
+        if (isWordActivity || isMissingLtrActivity) {
+            isAnswerCaseSensitive = false;
+        }
+
+        // Check answer
         mResponse = candidate.getRecChar();
-        _charValid   = stimController.testStimulus(mResponse);
+        _charValid   = gController.checkAnswer(mResponse, isAnswerCaseSensitive ) ;
+
         _metricValid = _metric.testConstraint(candidate.getGlyph(), this);
         _isValid     = _charValid && _metricValid; // _isValid essentially means "is a correct drawing"
 
@@ -353,7 +372,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         // Update the controller feedback colors
         //
         mActiveController.updateCorrectStatus(_isValid);
-        stimController.updateStimulusState(_isValid);
+
+        if(!singleStimulus) {
+            stimController.updateStimulusState(_isValid);
+        }
 
         // Depending upon the result we allow the controller to disable other fields if it is working
         // in Immediate feedback mode
@@ -623,6 +645,34 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     }
 
+    public void highlightStimulus() {
+
+        long delay = 0;
+        CStimulusController r;
+
+        for(int i1 = 0 ; i1 < mRecogList.getChildCount() ; i1++) {
+
+            r = (CStimulusController)mRecogList.getChildAt(i1);
+
+            r.post(TCONST.HIGHLIGHT, delay);
+            delay += WR_CONST.RIPPLE_DELAY;
+        }
+    }
+
+    public void highlightGlyph() {
+
+        long delay = 0;
+        CGlyphController   v;
+
+        for(int i1 = 0; i1 < mGlyphList.getChildCount() ; i1++) {
+
+            v = (CGlyphController) mGlyphList.getChildAt(i1);
+
+            v.post(TCONST.HIGHLIGHT, delay);
+            delay += WR_CONST.RIPPLE_DELAY;
+        }
+
+    }
 
     public void hideGlyphs() {
 
@@ -702,6 +752,26 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
+    private void showTraceLine() {
+
+        CGlyphController   v;
+
+        for (int i = 0; i < mGlyphList.getChildCount(); i++) {
+            v = (CGlyphController) mGlyphList.getChildAt(i);
+            v.post("SHOW_SAMPLE");
+        }
+    }
+
+    private void hideTraceLine() {
+
+        CGlyphController   v;
+
+        for (int i = 0; i < mGlyphList.getChildCount(); i++) {
+            v = (CGlyphController) mGlyphList.getChildAt(i);
+            v.post("HIDE_SAMPLE");
+        }
+    }
+
 
     public boolean scanForPendingRecognition(IGlyphController source) {
 
@@ -770,19 +840,18 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     //*****************  DataSink Interface
 
     public boolean dataExhausted() {
-        return (_dataIndex >= _data.size())? true:false;
+        return (_dataIndex >= _data.size());
     }
 
-    public void setDataSource(String[] dataSource) {
-
+    public void setDataSource(CWr_Data[] dataSource) {
 
         if(random) {
 
-            ArrayList<String> dataSet = new ArrayList<String>(Arrays.asList(dataSource));
+            ArrayList<CWr_Data> dataSet = new ArrayList<CWr_Data>(Arrays.asList(dataSource));
 
             // _data takes the form - ["92","3","146"]
             //
-            _data = new ArrayList<String>();
+            _data = new ArrayList<CWr_Data>();
 
             // For XPrize we limit this to 10 elements from an umlimited random data set
             // used to be : dataSet.size()
@@ -795,7 +864,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
         else {
 
-            _data = new ArrayList<String>(Arrays.asList(dataSource));
+            _data = new ArrayList<CWr_Data>(Arrays.asList(dataSource));
         }
 
         _dataIndex = 0;
@@ -804,7 +873,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
 
     public void next() {
-
         try {
             if (_data != null) {
 
@@ -822,28 +890,42 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
     }
 
-
     /**
      * @param data
      */
-    public void updateText(String data) {
+    public void updateText(CWr_Data data) {
 
         CStimulusController r;
         CGlyphController    v;
 
-        mStimulus = data;
+        mStimulus = data.stimulus;
+        mAudioStimulus = data.audioStimulus;
+        mAnswer = data.answer;
 
         // Add the recognized response display containers
         //
         mRecogList.removeAllViews();
 
-        for(int i1 =0 ; i1 < mStimulus.length() ; i1++)
-        {
+        if(!singleStimulus) {
+            for(int i1 =0 ; i1 < mStimulus.length() ; i1++)
+            {
+                // create a new view
+                r = (CStimulusController)LayoutInflater.from(getContext())
+                        .inflate(R.layout.recog_resp_comp, null, false);
+
+                r.setStimulusChar(mStimulus.substring(i1, i1 + 1), singleStimulus);
+
+                mRecogList.addView(r);
+
+                r.setLinkedScroll(mDrawnScroll);
+                r.setWritingController(this);
+            }
+        } else {
             // create a new view
             r = (CStimulusController)LayoutInflater.from(getContext())
                     .inflate(R.layout.recog_resp_comp, null, false);
 
-            r.setStimulusChar(mStimulus.substring(i1, i1 + 1));
+            r.setStimulusChar(mStimulus, singleStimulus);
 
             mRecogList.addView(r);
 
@@ -851,22 +933,21 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             r.setWritingController(this);
         }
 
-
         // Add the Glyph input containers
         //
         mGlyphList.removeAllViews();
         mGlyphList.setClipChildren(false);
 
-        for(int i1 =0 ; i1 < mStimulus.length() ; i1++)
+        for(int i1 =0 ; i1 < mAnswer.length() ; i1++)
         {
             // create a new view
             v = (CGlyphController)LayoutInflater.from(getContext())
                     .inflate(R.layout.drawn_input_comp, null, false);
 
             // Last is used for display updates - limits the extent of the baseline
-            v.setIsLast(i1 ==  mStimulus.length()-1);
+            v.setIsLast(i1 ==  mAnswer.length()-1);
 
-            String expectedChar = mStimulus.substring(i1,i1+1);
+            String expectedChar = mAnswer.substring(i1,i1+1);
 
             v.setExpectedChar(expectedChar);
 
@@ -880,8 +961,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             v.setWritingController(this);
         }
     }
-
-
 
     //************************************************************************
     //************************************************************************
@@ -1176,7 +1255,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                         rippleReplay(_command, false); // YYY Ripple Replay: use to show tracing
                         break;
+                    case WR_CONST.SHOW_TRACELINE: // Show all glyphs trace line.
 
+                        showTraceLine();
+                        break;
+                    case WR_CONST.HIDE_TRACELINE: // Hide all glyphs trace line.
+
+                        hideTraceLine();
+                        break;
                     case WR_CONST.SHOW_SAMPLE:
                     case WR_CONST.HIDE_SAMPLE:
                     case WR_CONST.ERASE_GLYPH:
@@ -1202,6 +1288,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     case WR_CONST.CANCEL_POINTAT:
 
                         cancelPointAt();
+                        break;
+
+                    case WR_CONST.STIMULUS_HIGHLIGHT:
+
+                        highlightStimulus();
+                        break;
+
+                    case WR_CONST.GLYPH_HIGHLIGHT:
+
+                        highlightGlyph();
                         break;
 
                     default:

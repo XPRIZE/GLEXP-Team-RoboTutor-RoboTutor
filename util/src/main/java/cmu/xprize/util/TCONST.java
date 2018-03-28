@@ -211,6 +211,9 @@ public class TCONST {
     public static final String FTR_USER_HEAR       = "FTR_USER_HEAR";
     public static final String FTR_USER_READ       = "FTR_USER_READ";
     public static final String FTR_USER_ECHO       = "FTR_USER_ECHO";
+    public static final String FTR_USER_HIDE       = "FTR_USER_HIDE";
+    public static final String FTR_USER_REVEAL     = "FTR_USER_REVEAL";
+    public static final String FTR_USER_PARROT     = "FTR_USER_PARROT";
     public static final String FTR_USER_READING    = "FTR_USER_READING";
 
     public static final String NARRATE_STORY       = "NARRATE_STORY";
@@ -225,7 +228,9 @@ public class TCONST {
     public static final String NO_SPACE            = "";
     public static final int    MAX_AKDATA          = 10;
 
-    public static final String FTR_COMPLETE = "FTR_COMPLETE";
+    public static final String FTR_COMPLETE      = "FTR_COMPLETE";
+    public static final String FTR_PROMPT        = "FTR_PROMPT";
+    public static final String FTR_PAGE_PROMPT   = "FTR_PAGE_PROMPT";
 
     public static final String START_PROGRESSIVE_UPDATE   = "START_PROGRESSIVE_UPDATE";
     public static final String START_INDETERMINATE_UPDATE = "START_INDETERMINATE_UPDATE";
@@ -735,14 +740,15 @@ public class TCONST {
     public static final int INCR = 1;
     public static final int DECR = -1;
 
-    public static final String RTC_VAR_ECHOSTATE  = ".echoState";
-    public static final String RTC_VAR_PAGESTATE  = ".pageState";
-    public static final String RTC_VAR_PARASTATE  = ".paraState";
-    public static final String RTC_VAR_LINESTATE  = ".lineState";
-    public static final String RTC_VAR_WORDSTATE  = ".wordState";
-    public static final String RTC_VAR_ATTEMPT    = ".attempt";
-    public static final String LAST               = "LAST";
-    public static final String NOT_LAST           = "NOT_LAST";
+    public static final String RTC_VAR_ECHOSTATE   = ".echoState";
+    public static final String RTC_VAR_PARROTSTATE = ".parrotState";
+    public static final String RTC_VAR_PAGESTATE   = ".pageState";
+    public static final String RTC_VAR_PARASTATE   = ".paraState";
+    public static final String RTC_VAR_LINESTATE   = ".lineState";
+    public static final String RTC_VAR_WORDSTATE   = ".wordState";
+    public static final String RTC_VAR_ATTEMPT     = ".attempt";
+    public static final String LAST                = "LAST";
+    public static final String NOT_LAST            = "NOT_LAST";
 
     public static final String RTC_VAR_STATE         = ".storyState";
     public static final String RTC_PARAGRAPHCOMPLETE = "PARAGRAPH_COMPLETE";
@@ -751,11 +757,13 @@ public class TCONST {
     public static final String RTC_LINECOMPLETE      = "LINE_COMPLETE";
     public static final String RTC_CLEAR             = "";
 
-    public static final String RTC_VAR_WORDVALUE  = ".currentWord";
-    public static final String RTC_VAR_INDEX      = ".wordindex";
-    public static final String RTC_VAR_REMAINING  = ".remainingWords";
-    public static final String RTC_VAR_SENTENCE   = ".sentence";
-    public static final String RTC_VAR_UTTERANCE  = ".utterance";
+    public static final String RTC_VAR_PROMPT      = ".prompt";
+    public static final String RTC_VAR_PAGE_PROMPT = ".page_prompt";
+    public static final String RTC_VAR_WORDVALUE   = ".currentWord";
+    public static final String RTC_VAR_INDEX       = ".wordindex";
+    public static final String RTC_VAR_REMAINING   = ".remainingWords";
+    public static final String RTC_VAR_SENTENCE    = ".sentence";
+    public static final String RTC_VAR_UTTERANCE   = ".utterance";
 
     //Akira Game Prompt Situation
     public static final String PROMPT_1LEFT = "PROMPT_1LEFT";

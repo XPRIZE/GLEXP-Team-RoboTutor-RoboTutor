@@ -1,8 +1,28 @@
 {"random": true,
 "dataSource": [
-"alifurahi", 
-"alipofika", 
-"alipokuwa", 
-"aliyekuwa", 
-"tafadhali"
+    {
+        "stimulus": "alifurahi",
+        "audioStimulus": ["alifurahi"],
+        "answer": "alifurahi"
+    },
+    {
+        "stimulus": "alipofika",
+        "audioStimulus": ["alipofika"],
+        "answer": "alipofika"
+    },
+    {
+        "stimulus": "alipokuwa",
+        "audioStimulus": ["alipokuwa"],
+        "answer": "alipokuwa"
+    },
+    {
+        "stimulus": "aliyekuwa",
+        "audioStimulus": ["aliyekuwa"],
+        "answer": "aliyekuwa"
+    },
+    {
+        "stimulus": "tafadhali",
+        "audioStimulus": ["tafadhali"],
+        "answer": "tafadhali"
+    }
 ]}

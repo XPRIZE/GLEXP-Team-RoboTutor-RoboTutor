@@ -36,6 +36,8 @@ public interface IRtComponent {
 
     void echoLine();
 
+    void parrotLine();
+
     void nextLine();
 
     void prevLine();

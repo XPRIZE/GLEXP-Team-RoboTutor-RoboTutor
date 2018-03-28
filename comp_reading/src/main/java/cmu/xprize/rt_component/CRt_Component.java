@@ -425,7 +425,6 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
         mViewManager.startStory();
     }
 
-
     public void speakTargetSentence() {   // to speak the entire Target word sentence
 
     }
