@@ -347,10 +347,10 @@ public class type_action extends scene_node {
                                     // Note the logging parser expects comma delimiters
                                     //
                                     decodedParms = decodedParms.replaceAll("\\|", ",");
-                                    RoboTutor.logManager.postEvent_I(_logType, "target:node.action,view:" + id + ",method:" + method + "," + decodedParms);
+                                    RoboTutor.logManager.postEvent_V(_logType, "target:node.action,view:" + id + ",method:" + method + "," + decodedParms);
                                 }
                                 else {
-                                    RoboTutor.logManager.postEvent_I(_logType, "target:node.action,view:" + id + ",method:" + method );
+                                    RoboTutor.logManager.postEvent_V(_logType, "target:node.action,view:" + id + ",method:" + method );
                                 }
 
                             }
@@ -368,10 +368,10 @@ public class type_action extends scene_node {
                                     // Note the logging parser expects comma delimiters
                                     //
                                     decodedParms = decodedParms.replaceAll("\\|", ",");
-                                    RoboTutor.logManager.postEvent_I(_logType, "target:node.action,scopevar:" + id + ",method:" + method + "," + decodedParms);
+                                    RoboTutor.logManager.postEvent_V(_logType, "target:node.action,scopevar:" + id + ",method:" + method + "," + decodedParms);
                                 }
                                 else {
-                                    RoboTutor.logManager.postEvent_I(_logType, "target:node.action,scopevar:" + id + ",method:" + method);
+                                    RoboTutor.logManager.postEvent_V(_logType, "target:node.action,scopevar:" + id + ",method:" + method);
                                 }
                             }
 

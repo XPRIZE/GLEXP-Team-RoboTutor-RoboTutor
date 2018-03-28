@@ -183,11 +183,11 @@ public class type_audio extends type_action implements IMediaListener {
             // Flows automatically emit a NEXT_NODE event to scenegraph.
             //
             if (mode.equals(TCONST.AUDIOFLOW)) {
-                RoboTutor.logManager.postEvent_I(_logType, "target:node.audio,event:oncompletion,type:flow,emit:eventNext,name:"+mRawName);
+                RoboTutor.logManager.postEvent_V(_logType, "target:node.audio,event:oncompletion,type:flow,emit:eventNext,name:"+mRawName);
                 _scope.tutor().eventNext();
             }
             else {
-                RoboTutor.logManager.postEvent_I(_logType, "target:node.audio,event:oncompletion,type:stream,name:"+mRawName);
+                RoboTutor.logManager.postEvent_V(_logType, "target:node.audio,event:oncompletion,type:stream,name:"+mRawName);
             }
         }
         // If this is an AUDIOEVENT type then the mPlayer was released already but we need
@@ -345,7 +345,7 @@ public class type_audio extends type_action implements IMediaListener {
             // instance of the sound while the other is still playing.
             //
             if(mode == TCONST.AUDIOEVENT) {
-                RoboTutor.logManager.postEvent_I(_logType, "target:node.audio,type:event,action:complete,name:" + mRawName);
+                RoboTutor.logManager.postEvent_V(_logType, "target:node.audio,type:event,action:complete,name:" + mRawName);
 
                 mPlayer = null;
             }
