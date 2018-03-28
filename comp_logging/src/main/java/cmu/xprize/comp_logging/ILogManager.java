@@ -35,5 +35,7 @@ public interface ILogManager {
     public void postError(String Tag, String Msg);
     public void postError(String Tag, String Msg, Exception e);
 
+    public void postBattery(String Tag, String percent, String chargeType);
+
     public void postPacket(String packet);
 }

@@ -252,6 +252,7 @@ public class TCONST {
     public static final String QGRAPH_MSG                 = "RQTag";
     public static final String LTKPLUS_MSG                = "RLTag";
     public static final String LOGSTATE                   = "logState";
+    public static final String BATTERY_MSG                = "Battery";
 
     public static final String AUDIO_EVENT                = "AUDIO_EVENT";
     public static final String TYPE_AUDIO                 = "type_audio";

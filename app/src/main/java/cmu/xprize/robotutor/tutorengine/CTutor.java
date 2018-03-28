@@ -19,7 +19,10 @@
 package cmu.xprize.robotutor.tutorengine;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.AssetManager;
+import android.os.BatteryManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -153,6 +156,38 @@ public class CTutor implements ILoadableObject2, IEventSource {
         inflateTutor();
 
         mTutorLogManager.postEvent_I(GRAPH_MSG, "target:ctutor,action:create,tutorname:" + name);
+
+        monitorBattery();
+    }
+
+    /**
+     * log the battery... this should eventually be moved to a separate class so it can be
+     * accessed by other classes
+     */
+    private void monitorBattery() {
+
+        IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = mContext.registerReceiver(null, iFilter);
+
+        // Are we charging / charged?
+        int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+        boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                status == BatteryManager.BATTERY_STATUS_FULL;
+
+        int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+        boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
+        boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
+        String chargeType = isCharging ? "CHARGING" : "UNPLUGGED";
+
+
+        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+
+        float batteryPct = level / (float)scale;
+
+        //Log.wtf("BATTERY", String.format("status=%d  isCharging=%s  percent=%f", status, isCharging ? "YES": "NO", batteryPct));
+        RoboTutor.logManager.postBattery(TCONST.BATTERY_MSG, String.valueOf(batteryPct), chargeType);
+
     }
 
 

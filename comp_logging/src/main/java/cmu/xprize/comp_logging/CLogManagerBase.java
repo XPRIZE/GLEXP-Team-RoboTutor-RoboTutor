@@ -625,6 +625,24 @@ public class CLogManagerBase implements ILogManager {
         post(packet);
     }
 
+    @Override
+    public void postBattery(String Tag, String percent, String chargeType) {
+
+        String packet;
+
+        packet = "{" +
+                "\"class\":\"BATTERY\"," +
+                "\"tag\":\"" + Tag + "\"," +
+                "\"time\":\"" + System.currentTimeMillis() + "\"," +
+                "\"percent\":\"" + percent + "\"," +
+                "\"chargeType\":\"" + chargeType + "\"" +
+                "},\n";
+
+        post(packet);
+
+        Log.i(Tag, packet);
+    }
+
 
     @Override
     public void postPacket(String packet) {
