@@ -56,6 +56,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     protected int currentCount;
     protected int delta;
     protected int tenPower;
+    protected int drawIndex;
     protected boolean tenInited=false;
 
     // json loadable
@@ -114,6 +115,8 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         stimulusText = (TextView) findViewById(R.id.stimulusText);
 
         bManager = LocalBroadcastManager.getInstance(getContext());
+        drawIndex =-10;
+
 
         //mainHandler.post(animationRunnable);
 

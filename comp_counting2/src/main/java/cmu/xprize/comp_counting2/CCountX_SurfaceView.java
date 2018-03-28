@@ -120,19 +120,24 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         int holeWidth = 200;
         int holeHeight = 200;
         boolean isline =false;
+        int x = (getWidth() / 2) - (holeWidth * 5) / 2;
+        int y = (getHeight() / 2) - holeHeight;
         if (_component.tenPower==100){
             holeWidth = 400;
             holeHeight = 400;
         }
 
         if (_component.tenPower==10){
-            holeWidth =200;
-            holeHeight = 1500;
+            holeWidth =130;
+            holeHeight = 1200;
+            isline=true;
+            x = (getWidth() / 2) - (holeWidth * 10) / 2;
+            y = (getHeight() / 2) - holeHeight/2;
         }
 
 
-        int x = (getWidth() / 2) - (holeWidth * 5) / 2;
-        int y = (getHeight() / 2) - holeHeight;
+
+
         tenFrame = new TenFrame(x, y, holeWidth, holeHeight,isline);
         _component.tenInited = true;
         }
@@ -163,6 +168,11 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         // initialize images
         if(_component.tenPower == 1) {
             int drawable = FRUITS[(new Random()).nextInt(FRUITS.length)];
+            if (_component.drawIndex!=-10){
+                drawable = _component.drawIndex;
+            } else {
+                _component.drawIndex=drawable;
+            }
             Bitmap immutableBmp = BitmapFactory.decodeResource(getResources(), drawable);
             Bitmap resizedBmp = Bitmap.createScaledBitmap(immutableBmp, COUNTX_CONST.DRAWABLE_RADIUS * 2,
                     COUNTX_CONST.DRAWABLE_RADIUS * 2, false);
@@ -170,19 +180,28 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
         } else if(_component.tenPower==10){
             int drawable = TENS[(new Random()).nextInt(TENS.length)];
+            if (_component.drawIndex!=-10){
+                drawable = _component.drawIndex;
+            } else {
+                _component.drawIndex=drawable;
+            }
 
 
             //int bheight = (int)(down-up-2*gmargin);
             //int bwidth = (int)((right-left-11*gmargin)/10);
 
             Bitmap immutableBmp = BitmapFactory.decodeResource(getResources(), drawable);
-            Bitmap resizedBmp = Bitmap.createScaledBitmap(immutableBmp, 150,
-                    1400, false);
+            Bitmap resizedBmp = Bitmap.createScaledBitmap(immutableBmp, 100,
+                    1000, false);
 
             return resizedBmp;
         } else {
             int drawable = HUNDREDS[(new Random()).nextInt(HUNDREDS.length)];
-
+            if (_component.drawIndex!=-10){
+                drawable = _component.drawIndex;
+            } else {
+                _component.drawIndex=drawable;
+            }
 
             //int bheight = (int)((down-up-3*gmargin)/2);
             //int bwidth = (int)((right-left-6*gmargin)/5);
@@ -258,7 +277,9 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                 int centerx = (int)x ;
                 int centery = (int)((down-up)/2);
 
-                countable = new CountableImage(centerx,centery,_countMap);
+                TenFrame.XY destination = tenFrame.getLocationOfIthObject(_countables.size()+1);
+
+                countable = new CountableImage(destination.x,destination.y,_countMap);
                 _countables.add(countable);
 
             }  else {
@@ -266,7 +287,8 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                 int indexy =_countables.size()/5;
                 int centerx = (int)x;
                 int centery = (int)y;
-                countable = new CountableImage(centerx,centery,_countMap);
+                TenFrame.XY destination = tenFrame.getLocationOfIthObject(_countables.size()+1);
+                countable = new CountableImage(destination.x,destination.y,_countMap);
                 _countables.add(countable);
 
             }
@@ -280,7 +302,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
             _component.updateCount(_countables.size()*_component.tenPower);
             //*1/*10*
             // playChime plays the chime, AND the audio...
-            _component.playChime();
+             _component.playChime();
 
 
         }
@@ -311,7 +333,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                 c.draw(canvas, _paint);
             }
 
-            if (showTenFrame) {
+            if (showTenFrame ) {
                 tenFrame.draw(canvas, _paint);
 
                 /*
@@ -326,6 +348,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                 }
                 */
             }
+
 
             if(!tappable && COUNTX_CONST.USE_JAIL_BARS) {
                 //drawDiagonalBars(canvas);

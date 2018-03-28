@@ -46,7 +46,7 @@ class TenFrame {
     XY getLocationOfIthObject(int i) {
         if (i <= 0 || i > 10) {
             return null;
-        } else if (i < 6) {
+        } else if (i < 6 || line) {
             // first row
             int x = startX + holeWidth * (i - 1) + holeWidth / 2;
             int y = startY + holeHeight / 2;
@@ -78,12 +78,13 @@ class TenFrame {
         for (int i = 0; i < 2 + 1; i++) {
             c.drawLine(startX, startY + i*holeHeight, startX + 5*holeWidth, startY + i*holeHeight, p);
         }}else{
+
             for (int i = 0; i < 10 + 1; i++) {
-                c.drawLine(startX + i * holeWidth, startY, startX + i*holeWidth, startY + 2*holeHeight, p);
+                c.drawLine(startX + i * holeWidth, startY, startX + i*holeWidth, startY + holeHeight, p);
             }
 
-            for (int i = 0; i < 1; i++) {
-                c.drawLine(startX, startY + i*holeHeight, startX + 5*holeWidth, startY + i*holeHeight, p);
+            for (int i = 0; i < 2; i++) {
+                c.drawLine(startX, startY + i*holeHeight, startX + 10*holeWidth, startY + i*holeHeight, p);
         }}
 
     }
