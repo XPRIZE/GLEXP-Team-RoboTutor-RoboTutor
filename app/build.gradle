@@ -17,24 +17,24 @@ android {
         unitTests.returnDefaultValues = true
     }
 
-//    // Create a variable called keystorePropertiesFile, and initialize it to your
-//    // keystore.properties file, in the rootProject folder.
-//    def keystorePropertiesFile = rootProject.file("keystore.properties")
-//
-//    // Initialize a new Properties() object called keystoreProperties
-//    def keystoreProperties = new Properties()
-//
-//    // Load your keystore.properties file into the keystoreProperties object.
-//    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-//
-//    signingConfigs {
-//        android {
-//            keyAlias keystoreProperties['keyAlias']
-//            keyPassword keystoreProperties['keyPassword']
-//            storeFile file(keystoreProperties['storeFile'])
-//            storePassword keystoreProperties['storePassword']
-//        }
-//    }
+    // Create a variable called keystorePropertiesFile, and initialize it to your
+    // keystore.properties file, in the rootProject folder.
+    def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+    // Initialize a new Properties() object called keystoreProperties
+    def keystoreProperties = new Properties()
+
+    // Load your keystore.properties file into the keystoreProperties object.
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+    signingConfigs {
+        android {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
 
     buildTypes {
 
@@ -94,7 +94,7 @@ android {
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_UNDEFINED
             buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
 
-//            signingConfig signingConfigs.android
+            signingConfig signingConfigs.android
         }
 
         release_dbg_no_demo {
@@ -106,7 +106,7 @@ android {
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_UNDEFINED
             buildConfigField BOOLEAN, SHOW_DEMO_VIDS, FALSE
 
-//            signingConfig signingConfigs.android
+            signingConfig signingConfigs.android
         }
 
         // These releases will remove the language selection toggle switch if present in the UI
@@ -121,7 +121,7 @@ android {
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
             buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
 
-//            signingConfig signingConfigs.android
+            signingConfig signingConfigs.android
         }
 
         release_sw_xprize {
@@ -133,7 +133,7 @@ android {
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
             buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
 
-//            signingConfig signingConfigs.android
+            signingConfig signingConfigs.android
         }
 
         release_en {
@@ -145,7 +145,7 @@ android {
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
             buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
 
-//            signingConfig signingConfigs.android
+            signingConfig signingConfigs.android
         }
 
         release_en_xprize {
@@ -157,7 +157,7 @@ android {
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
             buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
 
-//            signingConfig signingConfigs.android
+            signingConfig signingConfigs.android
         }
 
         release_sw_noasr {

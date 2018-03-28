@@ -331,37 +331,37 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
         }
 
-//        if(answerString != null && answerString.matches("[-+]?\\d*\\.?\\d+")) {
-//            removeFeature(AKCONST.FTR_TEST_AUDIO);
-//
-//            int[] listDigits = getListDigits(Integer.parseInt(answerString));
-//
-//            if(listDigits[0] >= 1) {
-//                publishFeature(AKCONST.FTR_TEST_AUDIO_HUNDREDS);
-//                publishValue(AKCONST.TESTAUDIO_HUNDREDS, listDigits[0]);
-//            }
-//            else {
-//                removeFeature(AKCONST.FTR_TEST_AUDIO_HUNDREDS);
-//            }
-//            if (listDigits[1] >= 1 || listDigits[0] == 0){
-//                publishFeature(AKCONST.FTR_TEST_AUDIO_TENS);
-//                publishValue(AKCONST.TESTAUDIO_TENS, listDigits[1]);
-//            }
-//            else {
-//                removeFeature(AKCONST.FTR_TEST_AUDIO_TENS);
-//            }
-//            applyEventNode("PLAY_AUDIO");
-//            Log.d("TOMBRADY", listDigits[0] + " " + listDigits[1]);
-//        }
-//
-//        else {
-//            removeFeature(AKCONST.FTR_TEST_AUDIO_HUNDREDS);
-//            removeFeature(AKCONST.FTR_TEST_AUDIO_TENS);
-//            publishFeature(AKCONST.FTR_TEST_AUDIO);
+        if(answerString != null && answerString.matches("[-+]?\\d*\\.?\\d+")) {
+            removeFeature(AKCONST.FTR_TEST_AUDIO);
+
+            int[] listDigits = getListDigits(Integer.parseInt(answerString));
+
+            if(listDigits[0] >= 1) {
+                publishFeature(AKCONST.FTR_TEST_AUDIO_HUNDREDS);
+                publishValue(AKCONST.TESTAUDIO_HUNDREDS, listDigits[0]);
+            }
+            else {
+                removeFeature(AKCONST.FTR_TEST_AUDIO_HUNDREDS);
+            }
+            if (listDigits[1] >= 1 || listDigits[0] == 0){
+                publishFeature(AKCONST.FTR_TEST_AUDIO_TENS);
+                publishValue(AKCONST.TESTAUDIO_TENS, listDigits[1]);
+            }
+            else {
+                removeFeature(AKCONST.FTR_TEST_AUDIO_TENS);
+            }
+            applyEventNode("PLAY_AUDIO");
+            Log.d("TOMBRADY", listDigits[0] + " " + listDigits[1]);
+        }
+
+        else {
+            removeFeature(AKCONST.FTR_TEST_AUDIO_HUNDREDS);
+            removeFeature(AKCONST.FTR_TEST_AUDIO_TENS);
+            publishFeature(AKCONST.FTR_TEST_AUDIO);
             publishValue(AKCONST.TESTAUDIO, answerString);
             applyEventNode("PLAY_AUDIO");
             Log.d("TOMBRADY", answerString);
-//        }
+        }
 
 
     }
