@@ -125,6 +125,8 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         if (_component.tenPower==100){
             holeWidth = 400;
             holeHeight = 400;
+            x = (getWidth() / 2) - (holeWidth * 5) / 2;
+            y = (getHeight() / 2) - holeHeight;
         }
 
         if (_component.tenPower==10){
@@ -333,7 +335,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                 c.draw(canvas, _paint);
             }
 
-            if (showTenFrame ) {
+            if (showTenFrame && _component.tenPower==1) {
                 tenFrame.draw(canvas, _paint);
 
                 /*
