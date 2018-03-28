@@ -19,7 +19,10 @@
 package cmu.xprize.robotutor.tutorengine;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.AssetManager;
+import android.os.BatteryManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -32,7 +35,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -134,6 +136,8 @@ public class CTutor implements ILoadableObject2, IEventSource {
         mTutorLogManager = logManager;
 
         mAssetManager    = context.getAssets();
+        // GRAY_SCREEN_BUG this is where Media Manager is initialized
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "p1: Initializing tutor: " + mTutorName);
         mMediaManager    = CMediaController.newMediaManager(mTutorName);
 
         uuid = UUID.randomUUID();
@@ -152,6 +156,38 @@ public class CTutor implements ILoadableObject2, IEventSource {
         inflateTutor();
 
         mTutorLogManager.postEvent_I(GRAPH_MSG, "target:ctutor,action:create,tutorname:" + name);
+
+        monitorBattery();
+    }
+
+    /**
+     * log the battery... this should eventually be moved to a separate class so it can be
+     * accessed by other classes
+     */
+    private void monitorBattery() {
+
+        IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = mContext.registerReceiver(null, iFilter);
+
+        // Are we charging / charged?
+        int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+        boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                status == BatteryManager.BATTERY_STATUS_FULL;
+
+        int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+        boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
+        boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
+        String chargeType = isCharging ? "CHARGING" : "UNPLUGGED";
+
+
+        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+
+        float batteryPct = level / (float)scale;
+
+        //Log.wtf("BATTERY", String.format("status=%d  isCharging=%s  percent=%f", status, isCharging ? "YES": "NO", batteryPct));
+        RoboTutor.logManager.postBattery(TCONST.BATTERY_MSG, String.valueOf(batteryPct), chargeType);
+
     }
 
 
@@ -311,6 +347,8 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         private void cleanUpTutor() {
 
+            // GRAY_SCREEN_BUG tutor might be cleaned up here
+            Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r1: Cleaning up tutor " + mTutorName);
             CMediaController.destroyMediaManager(mTutorName);
 
             // disable the input queue permanently in prep for destruction
@@ -339,6 +377,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
                     //
                     case TCONST.KILLTUTOR:
 
+                        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r2: In Queue: " + _command);
                         cleanUpTutor();
 
                         CTutorEngine.killDeadTutor();
@@ -350,6 +389,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
                     //
                     case TCONST.ENDTUTOR:
 
+                        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r2: In Queue: " + _command);
                         cleanUpTutor();
 
                         CTutorEngine.destroyCurrentTutor();
@@ -362,6 +402,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
                     //
                     case TCONST.FINISH:
 
+                        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r2: In Queue: " + _command);
                         cleanUpTutor();
 
                         CTutorEngine.destroyCurrentTutor();

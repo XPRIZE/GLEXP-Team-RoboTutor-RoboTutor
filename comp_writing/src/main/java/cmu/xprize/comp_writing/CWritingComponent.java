@@ -83,7 +83,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected CLinkedScrollView mRecognizedScroll;
     protected CLinkedScrollView mDrawnScroll;
     private   IGlyphController  mActiveController;
-    private   int               mActiveIndex;
+    protected int               mActiveIndex;
 
     protected ImageButton       mReplayButton;
 
@@ -135,6 +135,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     final private String  TAG        = "CWritingComponent";
 
+    // This is for performance tag.
+    // TODO: Need to update datasource to contain these data.
+    protected String task;
+    protected String level;
 
     public CWritingComponent(Context context) {
         super(context);
@@ -333,7 +337,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mGlyphList.removeAllViews();
     }
 
-
     public boolean updateStatus(IGlyphController glyphController, CRecResult[] _ltkPlusCandidates) {
 
         mActiveController = glyphController;
@@ -359,9 +362,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
 
         // Check answer
-        _charValid   = gController.checkAnswer( candidate.getRecChar(), isAnswerCaseSensitive ) ;
+        mResponse = candidate.getRecChar();
+        _charValid   = gController.checkAnswer(mResponse, isAnswerCaseSensitive ) ;
+
         _metricValid = _metric.testConstraint(candidate.getGlyph(), this);
         _isValid     = _charValid && _metricValid; // _isValid essentially means "is a correct drawing"
+
 
         // Update the controller feedback colors
         //

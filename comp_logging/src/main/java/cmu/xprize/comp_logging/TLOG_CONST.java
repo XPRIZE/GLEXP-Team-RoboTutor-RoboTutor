@@ -17,4 +17,5 @@ public class TLOG_CONST {
     public static final int     GUID_LEN        = 5;
     public static final String  GUID_UPDATE     = "GUIDUPDATE";
 
+    public static final String PERFORMANCE_TAG  = "PERFORMANCE_TAG";
 }

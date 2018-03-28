@@ -39,6 +39,7 @@ import java.util.Map;
 
 import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.comp_writing.CWr_Data;
+import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.comp_writing.CWritingComponent;
 import cmu.xprize.comp_writing.WR_CONST;
 import cmu.xprize.ltkplus.CRecognizerPlus;
@@ -48,6 +49,7 @@ import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.util.IEventSource;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -462,21 +464,54 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         retractFeature(TCONST.GENERIC_RIGHT);
         retractFeature(TCONST.GENERIC_WRONG);
 
-        if(_isValid) {
+        String reason;
 
+        if(_isValid) {
             publishFeature(TCONST.GENERIC_RIGHT);
+            reason = TCONST.GENERIC_RIGHT;
         }
         else {
 
             publishFeature(TCONST.GENERIC_WRONG);
+            reason = TCONST.GENERIC_WRONG;
 
             if(!_metricValid) {
                 publishFeature(WR_CONST.ERROR_METRIC);
+                reason += " - " + WR_CONST.ERROR_METRIC;
             }
+
             if(!_charValid) {
                 publishFeature(WR_CONST.ERROR_CHAR);
+                reason += " - " + WR_CONST.ERROR_CHAR;
             }
         }
+
+        trackAndLogPerformance(_isValid, reason);
+    }
+
+    private void trackAndLogPerformance(boolean isCorrect, String reason) {
+
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
+        event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(mTutor.getTutorName());
+        event.setLevelName(level);
+        event.setTaskName(task);
+        event.setProblemName("write_" + mStimulus);
+        event.setProblemNumber(_dataIndex);
+        event.setSubstepNumber(mActiveIndex);
+        event.setAttemptNumber(-1);
+        event.setExpectedAnswer(mStimulus.substring(mActiveIndex, mActiveIndex + 1));
+        event.setUserResponse(mResponse);
+        event.setCorrectness(isCorrect ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+        event.setFeedbackType(reason);
+
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.perfLogManager.postPerformanceLog(event);
     }
 
     @Override
