@@ -939,6 +939,8 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         mViewManager.echoLine();
     }
 
+    @Override
+    public void parrotLine() { mViewManager.parrotLine(); }
 
     @Override
     public void prevLine() {

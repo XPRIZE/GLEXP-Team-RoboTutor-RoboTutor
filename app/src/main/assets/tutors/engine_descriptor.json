@@ -169,6 +169,21 @@
       "type": "TUTORVAR_MAP",
       "tutorName": "story_reading",
       "features": "FTR_USER_READ"
+    },
+    "story.hide": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_reading",
+      "features": "FTR_USER_HIDE"
+    },
+    "story.reveal": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_reading",
+      "features": "FTR_USER_REVEAL"
+    },
+    "story.parrot": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_reading",
+      "features": "FTR_USER_PARROT"
     }
   },
 
