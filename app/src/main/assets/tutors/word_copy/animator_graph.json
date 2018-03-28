@@ -276,15 +276,15 @@
             {"name": "Play - answer concat Na",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Na.mp3",                                   "soundpackage": "xprize",  "mode":"flow", "features": "FTR_NUMBERS&!FTR_ATTEMPT_4&FTR_ANS_CONCAT"},
             {"name": "Play - answer concat Tens"    , "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioAnsConcatTens}}.mp3",     "soundpackage": "numbers", "mode":"flow", "features": "FTR_NUMBERS&!FTR_ATTEMPT_4&FTR_ANS_CONCAT"},
 
-            {"name": "Correct Value Feedback", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3","soundpackage": "numbers", "mode":"flow", "features": "FTR_DOTCOUNT&!FTR_ATTEMPT_4&!FTR_ANS_CONCAT"},
-            {"name": "Play - answer concat Hundreds", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioAnsConcatHundreds}}.mp3", "soundpackage": "numbers", "mode":"flow", "features": "FTR_DOTCOUNT&!FTR_ATTEMPT_4&FTR_ANS_CONCAT"},
-            {"name": "Play - answer concat Na",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Na.mp3",                                   "soundpackage": "xprize",  "mode":"flow", "features": "FTR_DOTCOUNT&!FTR_ATTEMPT_4&FTR_ANS_CONCAT"},
-            {"name": "Play - answer concat Tens"    , "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioAnsConcatTens}}.mp3",     "soundpackage": "numbers", "mode":"flow", "features": "FTR_DOTCOUNT&!FTR_ATTEMPT_4&FTR_ANS_CONCAT"},
+            {"name": "Correct Value Feedback", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3","soundpackage": "numbers", "mode":"flow", "features": "FTR_DOTCOUNT&!FTR_ATTEMPT_1&!FTR_ATTEMPT_4&!FTR_ANS_CONCAT"},
+            {"name": "Play - answer concat Hundreds", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioAnsConcatHundreds}}.mp3", "soundpackage": "numbers", "mode":"flow", "features": "FTR_DOTCOUNT&!FTR_ATTEMPT_1&!FTR_ATTEMPT_4&FTR_ANS_CONCAT"},
+            {"name": "Play - answer concat Na",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Na.mp3",                                   "soundpackage": "xprize",  "mode":"flow", "features": "FTR_DOTCOUNT&!FTR_ATTEMPT_1&!FTR_ATTEMPT_4&FTR_ANS_CONCAT"},
+            {"name": "Play - answer concat Tens"    , "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioAnsConcatTens}}.mp3",     "soundpackage": "numbers", "mode":"flow", "features": "FTR_DOTCOUNT&!FTR_ATTEMPT_1&!FTR_ATTEMPT_4&FTR_ANS_CONCAT"},
 
-            {"name": "Correct Value Feedback", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3","soundpackage": "numbers", "mode":"flow", "features": "FTR_ARITH&!FTR_ATTEMPT_4&!FTR_ANS_CONCAT"},
-            {"name": "Play - answer concat Hundreds", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioAnsConcatHundreds}}.mp3", "soundpackage": "numbers", "mode":"flow", "features": "FTR_ARITH&!FTR_ATTEMPT_4&FTR_ANS_CONCAT"},
-            {"name": "Play - answer concat Na",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Na.mp3",                                   "soundpackage": "xprize",  "mode":"flow", "features": "FTR_ARITH&!FTR_ATTEMPT_4&FTR_ANS_CONCAT"},
-            {"name": "Play - answer concat Tens"    , "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioAnsConcatTens}}.mp3",     "soundpackage": "numbers", "mode":"flow", "features": "FTR_ARITH&!FTR_ATTEMPT_4&FTR_ANS_CONCAT"},
+            {"name": "Correct Value Feedback", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.value}}.mp3","soundpackage": "numbers", "mode":"flow", "features": "FTR_ARITH&!FTR_ATTEMPT_1&!FTR_ATTEMPT_4&!FTR_ANS_CONCAT"},
+            {"name": "Play - answer concat Hundreds", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioAnsConcatHundreds}}.mp3", "soundpackage": "numbers", "mode":"flow", "features": "FTR_ARITH&!FTR_ATTEMPT_1&!FTR_ATTEMPT_4&FTR_ANS_CONCAT"},
+            {"name": "Play - answer concat Na",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Na.mp3",                                   "soundpackage": "xprize",  "mode":"flow", "features": "FTR_ARITH&!FTR_ATTEMPT_1&!FTR_ATTEMPT_4&FTR_ANS_CONCAT"},
+            {"name": "Play - answer concat Tens"    , "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioAnsConcatTens}}.mp3",     "soundpackage": "numbers", "mode":"flow", "features": "FTR_ARITH&!FTR_ATTEMPT_1&!FTR_ATTEMPT_4&FTR_ANS_CONCAT"},
 
             {"name": "HIDE ALL SAMPLE", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_TRACELINE:String", "features":"!FTR_ATTEMPT_1&!FTR_ATTEMPT_4"},
 
@@ -768,7 +768,7 @@
 //            {"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "setStickyBehavior", "parms": "ON_CHAR_ERROR:String|CHAR_ERROR_BEHAVIOR:String" ,"features":""},
 
             {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_INPUT_HESITATION_POSTING",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_INPUT_HESITATION_POSTING:String" ,"features":""},
-            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":""},
+            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|10000:Long", "features":""},
 
             {"name":"SetVolatile - DATA_ITEM_COMPLETE - ITEM_COMPLETE_BEHAVIOR",  "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "DATA_ITEM_COMPLETE:String|ITEM_COMPLETE_BEHAVIOR:String" ,"features":""},
 

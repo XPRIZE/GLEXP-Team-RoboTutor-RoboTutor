@@ -530,6 +530,13 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         mTutor.addFeature(feature);
     }
 
+
+    public void removeFeature(String feature) {
+        _FeatureMap.remove(feature);
+        mTutor.delFeature(feature);
+    }
+
+
     /**
      * Note that we may retract features before they're published to add them to the
      * FeatureSet that should be pushed/popped when using pushDataSource
@@ -727,15 +734,17 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
             String publishFeatureValue = "";
 
             if(constant == "STIM_1") {
+                Log.d("tadpolr", "publishConcat: STIM_1");
                 publishFeatureValue = WR_CONST.FTR_STIM_1_CONCAT;
                 publishValueConstHundreds = WR_CONST.AUDIO_STIM_1_CONCAT_HUNDREDS;
                 publishValueConstTens = WR_CONST.AUDIO_STIM_1_CONCAT_TENS;
             } else if (constant == "STIM_3") {
+                Log.d("tadpolr", "publishConcat: STIM_3");
                 publishFeatureValue = WR_CONST.FTR_STIM_3_CONCAT;
                 publishValueConstHundreds = WR_CONST.AUDIO_STIM_3_CONCAT_HUNDREDS;
                 publishValueConstTens = WR_CONST.AUDIO_STIM_3_CONCAT_TENS;
             } else if (constant == "ANS") {
-                Log.d("tadpolr", "publishConcat ANS");
+                Log.d("tadpolr", "publishConcat: ANS");
                 publishFeatureValue = WR_CONST.FTR_ANS_CONCAT;
                 publishValueConstHundreds = WR_CONST.AUDIO_ANS_CONCAT_HUNDREDS;
                 publishValueConstTens = WR_CONST.AUDIO_ANS_CONCAT_TENS;
@@ -746,14 +755,17 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
             //Publish features and values for each digit of first operand so that audios can be played separately
             if (operand1Digits[0] >= 100) {
-
                 publishFeature(publishFeatureValue);
                 publishValue(publishValueConstHundreds, operand1Digits[0]);
+            } else {
+                removeFeature(publishFeatureValue);
+                publishValue(publishValueConstHundreds, "");
             }
 
             if (operand1Digits[1] >= 1) {
-
                 publishValue(publishValueConstTens, operand1Digits[1]);
+            } else {
+                publishValue(publishValueConstTens, "");
             }
     }
 

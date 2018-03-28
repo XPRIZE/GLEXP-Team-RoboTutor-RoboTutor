@@ -743,7 +743,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
 
     private void showTraceLine() {
-        Log.d("tadpolr", "showTraceLine: ");
+
         CGlyphController   v;
 
         for (int i = 0; i < mGlyphList.getChildCount(); i++) {
@@ -753,7 +753,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     private void hideTraceLine() {
-        Log.d("tadpolr", "hideTraceLine: ");
+
         CGlyphController   v;
 
         for (int i = 0; i < mGlyphList.getChildCount(); i++) {
