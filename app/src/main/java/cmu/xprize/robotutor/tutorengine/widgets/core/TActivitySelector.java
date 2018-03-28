@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import cmu.xprize.comp_ask.CAskElement;
 import cmu.xprize.comp_ask.CAsk_Data;
@@ -437,7 +438,22 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         // At the moment default to Stories
         //
         if (buttonid.toUpperCase().equals(AS_CONST.SELECT_ROBOTUTOR)) {
-            buttonid = AS_CONST.SELECT_STORIES;
+
+            int next = (new Random()).nextInt(3);
+            switch(next) {
+                case 0:
+                    buttonid = AS_CONST.SELECT_WRITING;
+                    break;
+
+                case 1:
+                    buttonid = AS_CONST.SELECT_STORIES;
+                    break;
+
+                case 2:
+                    buttonid = AS_CONST.SELECT_MATH;
+                    break;
+            }
+
         }
 
         // First check if it is a skill selection button =

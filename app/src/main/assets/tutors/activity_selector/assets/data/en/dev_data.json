@@ -30,14 +30,6 @@
         },
         {
           "datatype": "IMAGEBUTTON",
-          "resource": "button_shapes_select",
-          "componentID": "Sbutton4",
-          "behavior": "SELECT_SHAPES",
-          "prompt": "shapes",
-          "help": "Tap here to learn shapes"
-        },
-        {
-          "datatype": "IMAGEBUTTON",
           "resource": "button_robotutor_select",
           "componentID": "Sbutton5",
           "behavior": "SELECT_ROBOTUTOR",
