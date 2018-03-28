@@ -63,9 +63,9 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
     private String          mProblemType;
 
-    public CBp_Mechanic_MC(Context context, CBP_Component parent) {
+    public CBp_Mechanic_MC(Context context, CBP_Component parent, String problem_type) {
         super.init(context, parent);
-//        mProblemType = problem_type;
+        mProblemType = problem_type;
     }
 
     @Override

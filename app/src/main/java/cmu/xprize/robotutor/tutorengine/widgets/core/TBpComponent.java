@@ -109,12 +109,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             hundredsDigit = (num / 100) * 100;
         }
         num = num % 100;
-        if (num >= 10) {
-            tensDigit = (num / 10) * 10;
-        }
-        int onesDigit = num % 10;
-        Log.d("TOMBRADY", hundredsDigit + " " + tensDigit + " " + onesDigit);
-        return (new int[]{hundredsDigit, tensDigit, onesDigit});
+        return (new int[]{hundredsDigit, num});
     }
 
     //Helper function that splits expression into operand1, key, and operand2
@@ -755,19 +750,12 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             else {
                 removeFeature(BP_CONST.FTR_ANS_STIM_ONE_HUNDREDS);
             }
-            if(operand1Digits[1] >= 10) {
+            if(operand1Digits[1] >= 1 || operand1Digits[0] == 0) {
                 publishFeature(BP_CONST.FTR_ANS_STIM_ONE_TENS);
                 publishValue(BP_CONST.ANS_VAR_STIM_ONE_TENS, operand1Digits[1]);
             }
             else {
                 removeFeature(BP_CONST.FTR_ANS_STIM_ONE_TENS);
-            }
-            if(operand1Digits[2] >= 1) {
-                publishFeature(BP_CONST.FTR_ANS_STIM_ONE_ONES);
-                publishValue(BP_CONST.ANS_VAR_STIM_ONE_ONES, operand1Digits[2]);
-            }
-            else {
-                removeFeature(BP_CONST.FTR_ANS_STIM_ONE_ONES);
             }
 
             publishValue(BP_CONST.ANS_VAR_OPERAND, operation);
@@ -780,19 +768,12 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             else {
                 removeFeature(BP_CONST.FTR_ANS_STIM_TWO_HUNDREDS);
             }
-            if(operand2Digits[1] >= 10) {
+            if(operand2Digits[1] >= 1 || operand2Digits[0] == 0 ) {
                 publishFeature(BP_CONST.FTR_ANS_STIM_TWO_TENS);
                 publishValue(BP_CONST.ANS_VAR_STIM_TWO_TENS, operand2Digits[1]);
             }
             else {
                 removeFeature(BP_CONST.FTR_ANS_STIM_TWO_TENS);
-            }
-            if(operand2Digits[2] >= 1) {
-                publishFeature(BP_CONST.FTR_ANS_STIM_TWO_ONES);
-                publishValue(BP_CONST.ANS_VAR_STIM_TWO_ONES, operand2Digits[2]);
-            }
-            else {
-                removeFeature(BP_CONST.FTR_ANS_STIM_TWO_ONES);
             }
         }
         else  {
@@ -811,19 +792,12 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 else {
                     removeFeature(BP_CONST.FTR_ANS_HUNDREDS);
                 }
-                if(ansDigits[1] >= 10) {
+                if(ansDigits[1] >= 10 || ansDigits[0] == 0) {
                     publishFeature(BP_CONST.FTR_ANS_TENS);
                     publishValue(BP_CONST.ANS_VAR_TENS, ansDigits[1]);
                 }
                 else {
                     removeFeature(BP_CONST.FTR_ANS_TENS);
-                }
-                if(ansDigits[2] >= 1) {
-                    publishFeature(BP_CONST.FTR_ANS_ONES);
-                    publishValue(BP_CONST.ANS_VAR_ONES, ansDigits[2]);
-                }
-                else {
-                    removeFeature(BP_CONST.FTR_ANS_ONES);
                 }
             }
             //If value is not number, publish the value as string
@@ -928,6 +902,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         //Cases over the problem type to publish diffferent features and values
         if(mProblemType.startsWith("EXPRESSION_E2N")) {
+
             publishFeature("FTR_E2N");
 
             String key = "\n";
@@ -951,19 +926,12 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             else {
                 removeFeature(BP_CONST.FTR_QUEST_STIM_ONE_HUNDREDS);
             }
-            if(operand1Digits[1] >= 10) {
+            if(operand1Digits[1] >= 1 || operand1Digits[0] == 0) {
                 publishFeature(BP_CONST.FTR_QUEST_STIM_ONE_TENS);
                 publishValue(BP_CONST.QUEST_VAR_STIM_ONE_TENS, operand1Digits[1]);
             }
             else {
                 removeFeature(BP_CONST.FTR_QUEST_STIM_ONE_TENS);
-            }
-            if(operand1Digits[2] >= 1) {
-                publishFeature(BP_CONST.FTR_QUEST_STIM_ONE_ONES);
-                publishValue(BP_CONST.QUEST_VAR_STIM_ONE_ONES, operand1Digits[2]);
-            }
-            else {
-                removeFeature(BP_CONST.FTR_QUEST_STIM_ONE_ONES);
             }
 
             publishValue(BP_CONST.QUEST_VAR_OPERAND, operation);
@@ -976,26 +944,13 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             else {
                 removeFeature(BP_CONST.FTR_QUEST_STIM_TWO_HUNDREDS);
             }
-            if(operand2Digits[1] >= 10) {
+            if(operand2Digits[1] >= 1 || operand2Digits[0] == 0) {
                 publishFeature(BP_CONST.FTR_QUEST_STIM_TWO_TENS);
                 publishValue(BP_CONST.QUEST_VAR_STIM_TWO_TENS, operand2Digits[1]);
             }
             else {
                 removeFeature(BP_CONST.FTR_QUEST_STIM_TWO_TENS);
             }
-            if(operand2Digits[2] >= 1) {
-                publishFeature(BP_CONST.FTR_QUEST_STIM_TWO_ONES);
-                publishValue(BP_CONST.QUEST_VAR_STIM_TWO_ONES, operand2Digits[2]);
-            }
-            else {
-                removeFeature(BP_CONST.FTR_QUEST_STIM_TWO_ONES);
-            }
-
-//            publishValue(BP_CONST.STIM_VAL_ZERO, data.response_set[0]);
-//            publishValue(BP_CONST.STIM_VAL_ONE, data.response_set[1]);
-//            publishValue(BP_CONST.STIM_VAL_TWO, data.response_set[2]);
-//            publishValue(BP_CONST.STIM_VAL_THREE, data.response_set[3]);
-//            publishValue(BP_CONST.STIM_VAL_FOUR, data.response_set[4]);
         }
         else if(mProblemType.equals("EXPRESSION_N2E")) {
             publishFeature(BP_CONST.FTR_N2E);
@@ -1010,19 +965,12 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             else {
                 removeFeature(BP_CONST.FTR_QUEST_HUNDREDS);
             }
-            if(ansDigits[1] >= 10) {
+            if(ansDigits[1] >= 1 || ansDigits[0] == 0) {
                 publishFeature(BP_CONST.FTR_QUEST_TENS);
                 publishValue(BP_CONST.QUEST_VAR_TENS, ansDigits[1]);
             }
             else {
                 removeFeature(BP_CONST.FTR_QUEST_TENS);
-            }
-            if(ansDigits[2] >= 1) {
-                publishFeature(BP_CONST.FTR_QUEST_ONES);
-                publishValue(BP_CONST.QUEST_VAR_ONES, ansDigits[2]);
-            }
-            else {
-                removeFeature(BP_CONST.FTR_QUEST_ONES);
             }
         }
         else {
@@ -1048,24 +996,28 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 else {
                     removeFeature(BP_CONST.FTR_QUEST_HUNDREDS);
                 }
-                if(ansDigits[1] >= 10) {
+                if(ansDigits[1] >= 1 || ansDigits[0] == 0) {
                     publishFeature(BP_CONST.FTR_QUEST_TENS);
                     publishValue(BP_CONST.QUEST_VAR_TENS, ansDigits[1]);
                 }
                 else {
                     removeFeature(BP_CONST.FTR_QUEST_TENS);
                 }
-                if(ansDigits[2] >= 1) {
-                    publishFeature(BP_CONST.FTR_QUEST_ONES);
-                    publishValue(BP_CONST.QUEST_VAR_ONES, ansDigits[2]);
-                }
-                else {
-                    removeFeature(BP_CONST.FTR_QUEST_ONES);
-                }
             }
             //If value is not number, publish the value as string
             catch(NumberFormatException nfe) {
-                publishValue(BP_CONST.QUEST_VAR, correctVal);
+
+                if(mProblemType.equals("WORD_STARTS_WITH")) {
+                    publishFeature(BP_CONST.FTR_WRD_STARTS_WITH);
+                    publishValue(BP_CONST.QUEST_VAR, correctVal);
+                }
+                else if(mProblemType.equals("WORD_ENDS_WITH")) {
+                    publishFeature(BP_CONST.FTR_WRD_ENDS_WITH);
+                    publishValue(BP_CONST.QUEST_VAR, correctVal);
+                }
+                else {
+                    publishValue(BP_CONST.QUEST_VAR, correctVal);
+                }
             }
 
         }

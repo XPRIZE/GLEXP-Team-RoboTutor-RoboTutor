@@ -149,7 +149,8 @@ public class CBubble extends FrameLayout {
 
     public void setColor(String color) {
         mColor = color;
-        if(mProblemType != null && mProblemType.equals("wrd")) {
+
+        if(mProblemType != null && mProblemType.toLowerCase().startsWith("word")) {
             setBackgroundResource(BP_CONST.elongatedBubbleMap.get(mColor));
         }
         else {

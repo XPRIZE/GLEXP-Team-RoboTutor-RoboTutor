@@ -136,24 +136,21 @@ public class BP_CONST {
 
     public static final String FTR_ANS_HUNDREDS  = "FTR_ANS_HUNDREDS";
     public static final String FTR_ANS_TENS      = "FTR_ANS_TENS";
-    public static final String FTR_ANS_ONES      = "FTR_ANS_ONES";
     public static final String FTR_QUEST_HUNDREDS = "FTR_QUEST_HUNDREDS";
     public static final String FTR_QUEST_TENS     = "FTR_QUEST_TENS";
-    public static final String FTR_QUEST_ONES     = "FTR_QUEST_ONES";
 
     public static final String FTR_ANS_STIM_ONE_HUNDREDS  = "FTR_ANS_STIM_ONE_HUNDREDS";
     public static final String FTR_ANS_STIM_ONE_TENS      = "FTR_ANS_STIM_ONE_TENS";
-    public static final String FTR_ANS_STIM_ONE_ONES      = "FTR_ANS_STIM_ONE_ONES";
     public static final String FTR_ANS_STIM_TWO_HUNDREDS  = "FTR_ANS_STIM_TWO_HUNDREDS";
     public static final String FTR_ANS_STIM_TWO_TENS      = "FTR_ANS_STIM_TWO_TENS";
-    public static final String FTR_ANS_STIM_TWO_ONES      = "FTR_ANS_STIM_TWO_ONES";
 
     public static final String FTR_QUEST_STIM_ONE_HUNDREDS = "FTR_QUEST_STIM_ONE_HUNDREDS";
     public static final String FTR_QUEST_STIM_ONE_TENS     = "FTR_QUEST_STIM_ONE_TENS";
-    public static final String FTR_QUEST_STIM_ONE_ONES     = "FTR_QUEST_STIM_ONE_ONES";
     public static final String FTR_QUEST_STIM_TWO_HUNDREDS = "FTR_QUEST_STIM_TWO_HUNDREDS";
     public static final String FTR_QUEST_STIM_TWO_TENS     = "FTR_QUEST_STIM_TWO_TENS";
-    public static final String FTR_QUEST_STIM_TWO_ONES     = "FTR_QUEST_STIM_TWO_ONES";
+
+    public static final String FTR_WRD_STARTS_WITH         = "FTR_WORD_STARTS_WITH";
+    public static final String FTR_WRD_ENDS_WITH           = "FTR_WORD_ENDS_WITH";
 
     public static final String FTR_E2N           = "FTR_E2N";
     public static final String FTR_N2E           = "FTR_N2E";

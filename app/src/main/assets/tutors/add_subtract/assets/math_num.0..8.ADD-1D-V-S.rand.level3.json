@@ -1,0 +1,24 @@
+{
+	"bootFeatures": "FTR_DEMO_ADD",
+
+	"dataSource": [
+	
+		{"type": "Asm_Data", "level": "demo", "task": "Add single digits no carry", "dataset": [4,5,9], "operation": "+", "image": "circle"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Add single digits no carry", "dataset": [2,5,7], "operation": "+", "image": "circle"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Add single digits no carry", "dataset": [4,0,4], "operation": "+", "image": "circle"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Add single digits no carry", "dataset": [6,3,9], "operation": "+", "image": "circle"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Add single digits no carry", "dataset": [5,3,8], "operation": "+", "image": "circle"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Add single digits no carry", "dataset": [4,1,5], "operation": "+", "image": "circle"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Add single digits no carry", "dataset": [6,2,8], "operation": "+", "image": "circle"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Add single digits no carry", "dataset": [0,5,5], "operation": "+", "image": "circle"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Add single digits no carry", "dataset": [0,1,1], "operation": "+", "image": "circle"}]
+
+}
