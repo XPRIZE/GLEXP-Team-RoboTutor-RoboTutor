@@ -271,6 +271,21 @@
       "harder": "write.wrd:3chr",
       "easier": "bpop.ltr.mix:rnd_say_show_rise"
     },
+    "write.missingLtr:test": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "write.missingLtr:test",
+      "tutor_desc": "write.missingLtr",
+      "tutor_data": "[file]write.missingLtr_test.json",
+      "cell_row": "12",
+      "cell_column": "9",
+      "same": "write.wrd:test",
+      "next": "bpop.wrd:3chr_say_mc",
+      "next_next": "bpop.wrd:3chr_say_rise",
+      "prev": "akira:2chr",
+      "harder": "write.wrd:3chr",
+      "easier": "bpop.ltr.mix:rnd_say_show_rise"
+    },
     "story.hear::letters_alphabet_song": {
       "type": "TRANSITION",
       "skill": "letters",

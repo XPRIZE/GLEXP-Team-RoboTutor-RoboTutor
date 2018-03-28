@@ -350,7 +350,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         // Avoid caseSensitive for words activity
         boolean isAnswerCaseSensitive = true;
-        if (activityFeature.contains("FTR_WORDS")) {
+
+        boolean isWordActivity = activityFeature.contains("FTR_WORDS");
+        boolean isMissingLtrActivity = activityFeature.contains("FTR_MISSING_LTR");
+
+        if (isWordActivity || isMissingLtrActivity) {
             isAnswerCaseSensitive = false;
         }
 

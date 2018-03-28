@@ -150,6 +150,11 @@
       "tutorName": "word_copy",
       "features": "FTR_ARITH:FTR_SUB"
     },
+    "write.missingLtr": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_MISSING_LTR"
+    },
     "story.echo": {
       "type": "TUTORVAR_MAP",
       "tutorName": "story_reading",

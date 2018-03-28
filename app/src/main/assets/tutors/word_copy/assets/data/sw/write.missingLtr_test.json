@@ -1,0 +1,17 @@
+{
+  "bootFeatures":"FTR_DEMO_MISSING_LTR",
+  "random": false,
+  "singleStimulus": "true",
+  "dataSource": [
+    {
+      "stimulus": "s_ba",
+      "audioStimulus": ["saba"],
+      "answer": "a"
+    },
+    {
+      "stimulus": "c_a",
+      "audioStimulus": ["cha"],
+      "answer": "h"
+    }
+  ]
+}
