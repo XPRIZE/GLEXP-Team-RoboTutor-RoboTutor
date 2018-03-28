@@ -77,11 +77,11 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     private HashMap<String,String>  _StringVar  = new HashMap<>();
     private HashMap<String,Integer> _IntegerVar = new HashMap<>();
     private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
-    
+
     static final String TAG = "TAkComponent";
 
-    
-    
+
+
     public TAkComponent(Context context) {
         super(context);
     }
@@ -329,12 +329,12 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     }
 
     public void instructAudio(String instruction){
-        
+
         TScope scope = mTutor.getScope();
         Log.d("InstructAudio", instruction);
-        
+
         publishValue(AKCONST.VAR_AUDIO, instruction);
-        
+
         applyEventNode("PAUSE");
         applyEventNode("INSTRUCT_AUDIO");
         applyEventNode("RESUME");
@@ -570,7 +570,10 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
                 int quantity = countCharOccurrences(currentProblem.belowString, 'o');
                 nameBuilder.append("o");
                 nameBuilder.append(quantity);
+            } else {
+                nameBuilder.append(currentProblem.belowString);
             }
+
             nameBuilder.append("_");
 
             for (String choice : currentProblem.choices) {
