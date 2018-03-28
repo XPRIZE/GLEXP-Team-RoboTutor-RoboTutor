@@ -834,7 +834,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     //*****************  DataSink Interface
 
     public boolean dataExhausted() {
-        return (_dataIndex >= _data.size())? true:false;
+        return (_dataIndex >= _data.size());
     }
 
     public void setDataSource(CWr_Data[] dataSource) {

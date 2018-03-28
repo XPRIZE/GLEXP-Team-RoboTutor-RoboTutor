@@ -750,6 +750,9 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                 publishValueConstTens = WR_CONST.AUDIO_ANS_CONCAT_TENS;
             }
 
+        // attempt to parse non-int value will prevent _data
+        // from changing from demo_data to data_source_data
+        try {
             int operand1 = Integer.parseInt(value);
             int[] operand1Digits = getListDigits(operand1);
 
@@ -767,6 +770,10 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
             } else {
                 publishValue(publishValueConstTens, "");
             }
+        } catch (NumberFormatException e) {
+                Log.d("tadpolr", "tried parsing empty String as number");
+        }
+
     }
 
     public void next() {
