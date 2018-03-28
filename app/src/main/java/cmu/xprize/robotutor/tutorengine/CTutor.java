@@ -777,7 +777,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
         for(String feature: fFeatures) {
             builder.append(feature).append(':');
         }
-        builder.deleteCharAt(builder.length());
+        builder.deleteCharAt(builder.length() - 1);
 
         return builder.toString();
     }

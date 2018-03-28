@@ -35,6 +35,8 @@ public class WR_CONST {
     public static final String ACTION_COMPLETE          = "ACTION_COMPLETE";
     public static final String RIPPLE_REPLAY            = "RIPPLE_REPLAY";
     public static final String RIPPLE_HIGHLIGHT         = "RIPPLE_HIGHLIGHT";
+    public static final String STIMULUS_HIGHLIGHT       = "STIMULUS_HIGHLIGHT";
+    public static final String GLYPH_HIGHLIGHT         = "GLYPH_HIGHLIGHT";
     public static final String RIPPLE_DEMO              = "RIPPLE_DEMO";
     public static final String FIELD_REPLAY_COMPLETE    = "FIELD_REPLAY_COMPLETE";
     public static final String REPLAY_COMPLETE          = "REPLAY_COMPLETE";
@@ -48,6 +50,8 @@ public class WR_CONST {
     public static final String FIELD_COMPLETE           = "FIELD_COMPLETE";
     public static final String ANIMATE_ALIGN            = "ANIMATE_ALIGN";
     public static final String HIGHLIGHT_NEXT           = "HIGHLIGHT_NEXT";
+    public static final String SHOW_TRACELINE           = "SHOW_TRACELINE";
+    public static final String HIDE_TRACELINE           = "HIDE_TRACELINE";
     public static final String SHOW_SAMPLE              = "SHOW_SAMPLE";
     public static final String ERASE_GLYPH              = "ERASE_GLYPH";
     public static final String DEMO_PROTOGLYPH          = "DEMO_PROTOGLYPH";
@@ -61,6 +65,25 @@ public class WR_CONST {
     public static final String CANDIDATE_VAR            = ".candidate";
     public static final String EXPECTED_VAR             = ".expected";
     public static final String VALUE_VAR                = ".value";
+    public static final String AUDIO_STIM_1             = ".audiostim1";
+    public static final String AUDIO_STIM_2             = ".audiostim2";
+    public static final String AUDIO_STIM_3             = ".audiostim3";
+
+    public static final String FTR_STIM_1_CONCAT            = "FTR_STIM_1_CONCAT";
+    public static final String AUDIO_STIM_1_CONCAT_HUNDREDS = ".audioStimOneConcatHundreds";
+    public static final String AUDIO_STIM_1_CONCAT_TENS     = ".audioStimOneConcatTens";
+    public static final String AUDIO_STIM_1_CONCAT_ONES     = ".audioStimOneConcatOnes";
+
+    public static final String FTR_STIM_3_CONCAT            = "FTR_STIM_3_CONCAT";
+    public static final String AUDIO_STIM_3_CONCAT_HUNDREDS = ".audioStimThreeConcatHundreds";
+    public static final String AUDIO_STIM_3_CONCAT_TENS     = ".audioStimThreeConcatTens";
+    public static final String AUDIO_STIM_3_CONCAT_ONES     = ".audioStimThreeConcatOnes";
+
+    public static final String FTR_ANS_CONCAT            = "FTR_ANS_CONCAT";
+    public static final String AUDIO_ANS                 = ".audioAns";
+    public static final String AUDIO_ANS_CONCAT_HUNDREDS = ".audioAnsConcatHundreds";
+    public static final String AUDIO_ANS_CONCAT_TENS     = ".audioAnsConcatTens";
+    public static final String AUDIO_ANS_CONCAT_ONES     = ".audioAnsConcatOnes";
 
     public static final String FTR_INPUT_STALLED        = "FTR_INPUT_STALLED";
     public static final String FTR_HAD_ERRORS           = "FTR_HAD_ERRORS";

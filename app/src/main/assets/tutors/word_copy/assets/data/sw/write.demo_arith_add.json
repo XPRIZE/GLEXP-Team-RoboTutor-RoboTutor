@@ -1,0 +1,11 @@
+{
+  "bootFeatures":"FTR_DEMO_ARITH_ADD",
+
+  "dataSource": [
+    {
+      "stimulus": "3+2",
+      "audioStimulus": ["3","plus","2"],
+      "answer": "5"
+    }
+  ]
+}
