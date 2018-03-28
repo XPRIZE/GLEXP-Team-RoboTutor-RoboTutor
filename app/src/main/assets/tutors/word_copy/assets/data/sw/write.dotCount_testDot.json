@@ -1,0 +1,21 @@
+{ "bootFeatures":"FTR_DEMO_DOTCOUNT",
+  "random": false,
+  "singleStimulus": true,
+  "dataSource": [
+    {
+      "stimulus": "o o o o o",
+      "audioStimulus": ["5","",""],
+      "answer": "5"
+    },
+    {
+      "stimulus": "o o o o\no o o o\no o o o",
+      "audioStimulus": ["12","",""],
+      "answer": "12"
+    },
+    {
+      "stimulus": "o o o o",
+      "audioStimulus": ["4","",""],
+      "answer": "4"
+    }
+  ]
+}

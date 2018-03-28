@@ -94,6 +94,7 @@ android {
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_UNDEFINED
             buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
 
+            debuggable true
             signingConfig signingConfigs.android
         }
 
@@ -121,6 +122,7 @@ android {
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
             buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
 
+            debuggable true
             signingConfig signingConfigs.android
         }
 
@@ -132,7 +134,8 @@ android {
             buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
             buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
-            
+
+            debuggable true
             signingConfig signingConfigs.android
         }
 
@@ -195,7 +198,6 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:percent:25.2.0'

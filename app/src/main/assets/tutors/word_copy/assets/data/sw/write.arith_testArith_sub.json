@@ -1,0 +1,22 @@
+{ "bootFeatures":"FTR_DEMO_ARITH_SUB",
+  "random": false,
+  "singleStimulus": true,
+  "dataSource": [
+    {
+      "stimulus": "50-30",
+      "audioStimulus": ["50", "minus", "30"],
+      "answer": "20"
+    },
+    {
+      "stimulus": "5-3",
+      "audioStimulus": ["5", "minus", "3"],
+      "answer": "2"
+    },
+    {
+      "stimulus": "8-3",
+      "audioStimulus": ["8", "minus", "3"],
+      "answer": "5"
+    }
+  ]
+}
+

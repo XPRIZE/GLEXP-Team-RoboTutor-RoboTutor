@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 
 import cmu.xprize.comp_logging.ITutorLogger;
+import cmu.xprize.comp_writing.CWr_Data;
+import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.comp_writing.CWritingComponent;
 import cmu.xprize.comp_writing.WR_CONST;
 import cmu.xprize.ltkplus.CRecognizerPlus;
@@ -47,6 +49,7 @@ import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.util.IEventSource;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -461,21 +464,54 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         retractFeature(TCONST.GENERIC_RIGHT);
         retractFeature(TCONST.GENERIC_WRONG);
 
-        if(_isValid) {
+        String reason;
 
+        if(_isValid) {
             publishFeature(TCONST.GENERIC_RIGHT);
+            reason = TCONST.GENERIC_RIGHT;
         }
         else {
 
             publishFeature(TCONST.GENERIC_WRONG);
+            reason = TCONST.GENERIC_WRONG;
 
             if(!_metricValid) {
                 publishFeature(WR_CONST.ERROR_METRIC);
+                reason += " - " + WR_CONST.ERROR_METRIC;
             }
+
             if(!_charValid) {
                 publishFeature(WR_CONST.ERROR_CHAR);
+                reason += " - " + WR_CONST.ERROR_CHAR;
             }
         }
+
+        trackAndLogPerformance(_isValid, reason);
+    }
+
+    private void trackAndLogPerformance(boolean isCorrect, String reason) {
+
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
+        event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(mTutor.getTutorName());
+        event.setLevelName(level);
+        event.setTaskName(task);
+        event.setProblemName("write_" + mStimulus);
+        event.setProblemNumber(_dataIndex);
+        event.setSubstepNumber(mActiveIndex);
+        event.setAttemptNumber(-1);
+        event.setExpectedAnswer(mStimulus.substring(mActiveIndex, mActiveIndex + 1));
+        event.setUserResponse(mResponse);
+        event.setCorrectness(isCorrect ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+        event.setFeedbackType(reason);
+
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.perfLogManager.postPerformanceLog(event);
     }
 
     @Override
@@ -528,6 +564,13 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         _FeatureMap.put(feature, true);
         mTutor.addFeature(feature);
     }
+
+
+    public void removeFeature(String feature) {
+        _FeatureMap.remove(feature);
+        mTutor.delFeature(feature);
+    }
+
 
     /**
      * Note that we may retract features before they're published to add them to the
@@ -693,7 +736,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
                 // Pass an array of strings as the data source.
                 //
-                setDataSource(dataNameDescriptor.split(","));
+//                setDataSource(dataNameDescriptor.split(","));
 
             } else {
                 throw (new Exception("test"));
@@ -705,6 +748,68 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     }
 
+    // Helper function that converts 3 digit number to list of digits
+    private int[] getListDigits(int num) {
+        int hundredsDigit = 0;  int tensDigit = 0;
+        if(num >= 100) {
+            hundredsDigit = (num / 100) * 100;
+        }
+        num = num % 100;
+
+        tensDigit = num;
+
+        Log.d("tadpolr", hundredsDigit + " " + tensDigit + " ");
+        return (new int[]{hundredsDigit, tensDigit});
+    }
+
+    // Publish concatenated audio.
+    public void publishConcatAudio(String constant, String value) {
+            String publishValueConstHundreds = "";
+            String publishValueConstTens = "";
+            String publishFeatureValue = "";
+
+            if(constant == "STIM_1") {
+                Log.d("tadpolr", "publishConcat: STIM_1");
+                publishFeatureValue = WR_CONST.FTR_STIM_1_CONCAT;
+                publishValueConstHundreds = WR_CONST.AUDIO_STIM_1_CONCAT_HUNDREDS;
+                publishValueConstTens = WR_CONST.AUDIO_STIM_1_CONCAT_TENS;
+            } else if (constant == "STIM_3") {
+                Log.d("tadpolr", "publishConcat: STIM_3");
+                publishFeatureValue = WR_CONST.FTR_STIM_3_CONCAT;
+                publishValueConstHundreds = WR_CONST.AUDIO_STIM_3_CONCAT_HUNDREDS;
+                publishValueConstTens = WR_CONST.AUDIO_STIM_3_CONCAT_TENS;
+            } else if (constant == "ANS") {
+                Log.d("tadpolr", "publishConcat: ANS");
+                publishFeatureValue = WR_CONST.FTR_ANS_CONCAT;
+                publishValueConstHundreds = WR_CONST.AUDIO_ANS_CONCAT_HUNDREDS;
+                publishValueConstTens = WR_CONST.AUDIO_ANS_CONCAT_TENS;
+            }
+
+        // attempt to parse non-int value will prevent _data
+        // from changing from demo_data to data_source_data
+        try {
+            int operand1 = Integer.parseInt(value);
+            int[] operand1Digits = getListDigits(operand1);
+
+            //Publish features and values for each digit of first operand so that audios can be played separately
+            if (operand1Digits[0] >= 100) {
+                publishFeature(publishFeatureValue);
+                publishValue(publishValueConstHundreds, operand1Digits[0]);
+            } else {
+                removeFeature(publishFeatureValue);
+                publishValue(publishValueConstHundreds, "");
+            }
+
+            if (operand1Digits[1] >= 1) {
+                publishValue(publishValueConstTens, operand1Digits[1]);
+            } else {
+                publishValue(publishValueConstTens, "");
+            }
+        } catch (NumberFormatException e) {
+                Log.d("tadpolr", "tried parsing empty String as number");
+        }
+
+    }
 
     public void next() {
 
@@ -716,7 +821,49 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
         // update the Scope response variable  "<Sstimulus>.value"
         //
-        publishValue(WR_CONST.VALUE_VAR, mStimulus.toLowerCase());
+        publishValue(WR_CONST.VALUE_VAR, mAnswer.toLowerCase());
+
+        // For number activity that may need concatenation.
+        //
+        boolean isNumberActivity = activityFeature.contains("FTR_NUMBERS");
+        boolean isDotCountActivity = activityFeature.contains("FTR_DOTCOUNT");
+        boolean isArithActivity = activityFeature.contains("FTR_ARITH");
+
+        if (isNumberActivity || isDotCountActivity || isArithActivity) {
+            publishConcatAudio("ANS", mAnswer);
+            publishConcatAudio("STIM_1", mAudioStimulus[0]);
+            if (mAudioStimulus.length >= 3) {
+                publishConcatAudio("STIM_3", mAudioStimulus[2]);
+            }
+        }
+
+        // update the Scope response variable  "SWordCopy.audiostim"
+        //
+        if (mAudioStimulus.length == 1) {
+
+            publishValue(WR_CONST.AUDIO_STIM_1, mAudioStimulus[0].toLowerCase());
+            publishValue(WR_CONST.AUDIO_STIM_2, "");
+            publishValue(WR_CONST.AUDIO_STIM_3, "");
+
+        } else if (mAudioStimulus.length == 2) {
+
+            publishValue(WR_CONST.AUDIO_STIM_1, mAudioStimulus[0].toLowerCase());
+            publishValue(WR_CONST.AUDIO_STIM_2, mAudioStimulus[1].toLowerCase());
+            publishValue(WR_CONST.AUDIO_STIM_3, "");
+
+        } else if (mAudioStimulus.length >= 3) {
+
+            publishValue(WR_CONST.AUDIO_STIM_1, mAudioStimulus[0].toLowerCase());
+            publishValue(WR_CONST.AUDIO_STIM_2, mAudioStimulus[1].toLowerCase());
+            publishValue(WR_CONST.AUDIO_STIM_3, mAudioStimulus[2].toLowerCase());
+
+        } else {
+
+            publishValue(WR_CONST.AUDIO_STIM_1, mStimulus.toLowerCase());
+            publishValue(WR_CONST.AUDIO_STIM_2, "");
+            publishValue(WR_CONST.AUDIO_STIM_3, "");
+        }
+
 
         if(dataExhausted()) {
 
@@ -738,11 +885,11 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
         private HashMap<String,Boolean> _FeatureStore;
 
-        protected List<String>  _dataStore;
-        protected int           _dataIndexStore;
-        protected boolean       _dataEOIStore;
+        protected List<CWr_Data>    _dataStore;
+        protected int               _dataIndexStore;
+        protected boolean           _dataEOIStore;
 
-        String[]                _dataSourceStore;
+        CWr_Data[]                  _dataSourceStore;
 
         public CDataSourceImg() {
 
@@ -828,8 +975,11 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     @Override
     public void setTutor(CTutor tutor) {
+
         mTutor = tutor;
         mTutorScene.setTutor(tutor);
+
+        activityFeature = mTutor.getFeatures();
 
         // The media manager is tutor specific so we have to use the tutor to access
         // the correct instance for this component.
