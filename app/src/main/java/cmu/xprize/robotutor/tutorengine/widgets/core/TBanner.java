@@ -20,15 +20,18 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
 import cmu.xprize.banner.CBanner;
+import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -86,6 +89,14 @@ public class TBanner extends CBanner implements ITutorObjectImpl, View.OnClickLi
     public void onClick(View v) {
 
         RoboTutor.logManager.postEvent_I(TUTOR_STATE_MSG, "BACKBUTTON:PRESSED");
+
+        PerformanceLogItem event = new PerformanceLogItem();
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
+        event.setLanguage(CTutorEngine.language);
+        event.setTaskName("BACKBUTTON:PRESSED");
+        event.setTimestamp(System.currentTimeMillis());
+        RoboTutor.perfLogManager.postPerformanceLogWithoutContext(event);
 
         mBackButton.setOnClickListener(null);
         mSceneObject.endTutor();

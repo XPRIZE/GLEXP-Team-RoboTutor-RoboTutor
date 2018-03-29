@@ -6,6 +6,7 @@ import android.util.Log;
 import java.util.HashMap;
 
 import cmu.xprize.util.IMediaController;
+import cmu.xprize.util.TCONST;
 import cmu.xprize.util.TTSsynthesizer;
 import edu.cmu.xprize.listener.ListenerBase;
 
@@ -36,8 +37,10 @@ public class CMediaController implements IMediaController{
 
     static public CMediaManager newMediaManager(String parentTutor) {
 
+        // GRAY_SCREEN_BUG this should be initialized, but it's not!!!
         CMediaManager manager = new CMediaManager(ourInstance, mAssetManager);
 
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "p0: Putting CMediaManager: " + parentTutor);
         managerMap.put(parentTutor, manager);
 
         return manager;
@@ -46,6 +49,7 @@ public class CMediaController implements IMediaController{
 
     static public CMediaManager getManagerInstance(String parentTutor) {
 
+        // GRAY_SCREEN_BUG managerMap is empty, has no entry for "activity_selector"
         CMediaManager manager = managerMap.get(parentTutor);
 
         return manager;
@@ -60,6 +64,8 @@ public class CMediaController implements IMediaController{
             manager.restartMediaManager();
         }
 
+        // GRAY_SCREEN_BUG this is where MediaManager is removed
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r0: Removing tutor " + tutor);
         managerMap.remove(tutor);
     }
 

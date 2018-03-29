@@ -1,13 +1,53 @@
 {"random": true,
 "dataSource": [
-"always", 
-"around", 
-"before", 
-"better", 
-"giving", 
-"little", 
-"myself", 
-"please", 
-"pretty", 
-"yellow"
+    {
+        "stimulus": "always",
+        "audioStimulus": ["always"],
+        "answer": "always"
+    },
+    {
+        "stimulus": "around",
+        "audioStimulus": ["around"],
+        "answer": "around"
+    },
+    {
+        "stimulus": "before",
+        "audioStimulus": ["before"],
+        "answer": "before"
+    },
+    {
+        "stimulus": "better",
+        "audioStimulus": ["better"],
+        "answer": "better"
+    },
+    {
+        "stimulus": "giving",
+        "audioStimulus": ["giving"],
+        "answer": "giving"
+    },
+    {
+        "stimulus": "little",
+        "audioStimulus": ["little"],
+        "answer": "little"
+    },
+    {
+        "stimulus": "myself",
+        "audioStimulus": ["myself"],
+        "answer": "myself"
+    },
+    {
+        "stimulus": "please",
+        "audioStimulus": ["please"],
+        "answer": "please"
+    },
+    {
+        "stimulus": "pretty",
+        "audioStimulus": ["pretty"],
+        "answer": "pretty"
+    },
+    {
+        "stimulus": "yellow",
+        "audioStimulus": ["yellow"],
+        "answer": "yellow"
+    }
 ]}

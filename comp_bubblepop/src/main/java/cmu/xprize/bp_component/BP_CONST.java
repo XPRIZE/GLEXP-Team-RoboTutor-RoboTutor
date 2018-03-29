@@ -102,6 +102,7 @@ public class BP_CONST {
     public static final String RESUME_ANIMATION   = "RESUME_ANIMATION";
     public static final int    MAX_ATTEMPT        = 3;
 
+    public static final String SOUND_TRACK        = ".sound_track";
     public static final String QUEST_VAR          = ".questValue";
     public static final String ANS_VAR         = ".ansValue";
 
@@ -161,10 +162,10 @@ public class BP_CONST {
     public static final String SHOW_BUBBLE_THREE  =   "SHOW_BUBBLE_THREE";
     public static final String SHOW_BUBBLE_FOUR  =   "SHOW_BUBBLE_FOUR";
 
-    public static final String SHOW_BUBBLE_MASK          = "SHOW_BUBBLE_MASK";
+    public static final String SHOW_BUBBLE_MASK   = "SHOW_BUBBLE_MASK";
     public static final String HIDE_MASK          = "HIDE_MASK";
 
-    public static final String SHOW_STIMULUS_MASK          = "SHOW_STIMULUS_MASK";
+    public static final String SHOW_STIMULUS_MASK = "SHOW_STIMULUS_MASK";
 
 
     static public HashMap<String, Integer> bubbleMap = new HashMap<String, Integer>();

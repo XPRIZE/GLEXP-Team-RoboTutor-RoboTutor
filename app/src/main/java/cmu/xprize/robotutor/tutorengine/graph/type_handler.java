@@ -250,7 +250,7 @@ public class type_handler extends type_action implements IMediaListener {
                     IScriptable2 obj = null;
 
                     try {
-                        RoboTutor.logManager.postEvent_I(_logType, "target:node.handler,name:" + name + ",event:timeout" + "run_method:" + ontimer);
+                        RoboTutor.logManager.postEvent_V(_logType, "target:node.handler,name:" + name + ",event:timeout" + "run_method:" + ontimer);
 
                         // Recover the node to be executed when the timer expires
                         // and apply it.
@@ -262,7 +262,7 @@ public class type_handler extends type_action implements IMediaListener {
                         }
 
                         if(repeat) {
-                            RoboTutor.logManager.postEvent_I(_logType, "target:node.handler.repeat,name:" + name );
+                            RoboTutor.logManager.postEvent_V(_logType, "target:node.handler.repeat,name:" + name );
 
                             _handler.postDelayed(_frameTask, period);
                         }
@@ -274,7 +274,7 @@ public class type_handler extends type_action implements IMediaListener {
                         }
 
                     } catch (Exception e) {
-                        RoboTutor.logManager.postEvent_I(_logType, "target:node.handler,name:" + name + "event:timeout failed");
+                        RoboTutor.logManager.postEvent_V(_logType, "target:node.handler,name:" + name + "event:timeout failed");
 
                         // TODO: Manage invalid Timer Behavior
                         e.printStackTrace();
@@ -294,7 +294,7 @@ public class type_handler extends type_action implements IMediaListener {
 
             if(_playing) {
 
-                RoboTutor.logManager.postEvent_I(_logType, "target:node.handler.stop,name:" + name);
+                RoboTutor.logManager.postEvent_V(_logType, "target:node.handler.stop,name:" + name);
 
                 if (_frameTask != null)
                     _handler.removeCallbacks(_frameTask);
@@ -311,7 +311,7 @@ public class type_handler extends type_action implements IMediaListener {
 
             if(_playing) {
 
-                RoboTutor.logManager.postEvent_I(_logType, "target:node.handler.destroy,name:" + name);
+                RoboTutor.logManager.postEvent_V(_logType, "target:node.handler.destroy,name:" + name);
 
                 stopTimer();
 
@@ -319,7 +319,7 @@ public class type_handler extends type_action implements IMediaListener {
             }
             else {
 
-                RoboTutor.logManager.postEvent_I(_logType, "target:node.handler.destroy,state:not_playing,name:" + name);
+                RoboTutor.logManager.postEvent_V(_logType, "target:node.handler.destroy,state:not_playing,name:" + name);
             }
         }
 

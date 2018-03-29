@@ -167,7 +167,7 @@ public class CSceneGraph  {
             try {
                 queueMap.remove(this);
 
-                RoboTutor.logManager.postEvent_I(_logType, "target:node.scenegraph.run,command:" + _command + ",from:" + _source.getEventSourceName() + ",type:" + _source.getEventSourceType() + ",target:" + _target);
+                RoboTutor.logManager.postEvent_V(_logType, "target:node.scenegraph.run,command:" + _command + ",from:" + _source.getEventSourceName() + ",type:" + _source.getEventSourceType() + ",target:" + _target);
 
                 switch (_command) {
                     case TCONST.ENTER_SCENE:
@@ -177,7 +177,7 @@ public class CSceneGraph  {
                         try {
                             _sceneGraph = (scene_graph) mScope.mapSymbol(mGraphName);
 
-                            RoboTutor.logManager.postEvent_I(_logType, "target:node.scenegraph,action:run,event:enterscene,name:" + _sceneGraph.name + ",maptype:" + _sceneGraph.type );
+                            RoboTutor.logManager.postEvent_V(_logType, "target:node.scenegraph,action:run,event:enterscene,name:" + _sceneGraph.name + ",maptype:" + _sceneGraph.type );
 
                         } catch (Exception e) {
 
@@ -208,7 +208,7 @@ public class CSceneGraph  {
                             _sceneGraph = (scene_graph) mScope.mapSymbol(mGraphName);
                             _sceneGraph.resetNode();
 
-                            RoboTutor.logManager.postEvent_I(_logType, "target:node.scenegraph,action:run,event:callgraph,name:" + _sceneGraph.name + ",mapType:" + _sceneGraph.type );
+                            RoboTutor.logManager.postEvent_V(_logType, "target:node.scenegraph,action:run,event:callgraph,name:" + _sceneGraph.name + ",mapType:" + _sceneGraph.type );
 
                             // Seek the graph to the root node and execute it
                             //
@@ -365,7 +365,7 @@ public class CSceneGraph  {
      */
     private void enQueue(Queue qCommand) {
 
-        RoboTutor.logManager.postEvent_I(_logType, "target:node.scenegraph,action:enqueue,command:" + qCommand._command + ",from:" +  qCommand._source.getEventSourceName() + ",target:" + qCommand._target );
+        RoboTutor.logManager.postEvent_V(_logType, "target:node.scenegraph,action:enqueue,command:" + qCommand._command + ",from:" +  qCommand._source.getEventSourceName() + ",target:" + qCommand._target );
 
         if(!mDisabled) {
             queueMap.put(qCommand, qCommand);

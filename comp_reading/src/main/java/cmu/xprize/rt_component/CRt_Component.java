@@ -68,17 +68,17 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     protected String                mDataSource;
 
     private ArrayList<String>       sentences              = null;                  //list of sentences of the given passage
-    private String                  currentSentence;                                //currently displayed sentence that need to be recognized
+    protected String                currentSentence;                                //currently displayed sentence that need to be recognized
     private HashMap<String, String> suggestions            = null;
     private String                  completedSentencesFmtd = "";
     private String                  completedSentences     = "";
 
     // state for the current sentence
-    private int                     currentIndex          = 0;                      // current sentence index in storyName, -1 if unset
+    protected int                   currentIndex          = 0;                      // current sentence index in storyName, -1 if unset
     private int                     currIntervention      = TCONST.NOINTERVENTION;  //
     private int                     completeSentenceIndex = 0;
-    private String                  sentenceWords[];                                // current sentence words to hear
-    private int                     expectedWordIndex     = 0;                      // index of expected next word in sentence
+    protected String                sentenceWords[];                                // current sentence words to hear
+    protected int                   expectedWordIndex     = 0;                      // index of expected next word in sentence
     private static int[]            creditLevel           = null;                   // per-word credit levelFolder according to current hyp
 
     protected String                DATASOURCEPATH;
@@ -424,7 +424,6 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     public void startStory() {
         mViewManager.startStory();
     }
-
 
     public void speakTargetSentence() {   // to speak the entire Target word sentence
 

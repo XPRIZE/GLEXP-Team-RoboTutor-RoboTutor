@@ -19,7 +19,7 @@
           "COMMENT": "Intro Clip - we only ever visit this node once",
           "maptype":"moduleMap",
           "mapname": "INTROSTATE",
-          "preenter": ["SET_VERSION","SET_DATASOURCE"],
+          "preenter": ["SET_VERSION","SET_DATASOURCE", "SET_SOUND_TRACK"],
           "preexit": [],
           "edges": [
             {
@@ -159,7 +159,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBubblePop", "method": "logState", "parms": "type#node,value#INTROSTATE:String", "features":""},
 
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "gamesound.mp3", "soundpackage":"tutor_effect", "repeat":true, "volume": 0.10, "mode":"event", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.sound_track}}", "soundpackage":"tutor_effect", "repeat":true, "volume": 0.10, "mode":"event", "features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Please tap on it.mp3", "soundpackage":"default", "volume": 0.7, "mode":"flow", "features": ""}
           ]
         },
@@ -396,11 +396,12 @@
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
-        "PLAY_BACKINGTRACK": {"type": "AUDIO", "command": "PLAY", "soundsource": "gamesound.mp3", "soundpackage":"tutor_effect", "repeat":true, "volume": 0.20, "mode":"event", "features": ""},
+        "PLAY_BACKINGTRACK": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.sound_track}}", "soundpackage":"tutor_effect", "repeat":true, "volume": 0.20, "mode":"event", "features": ""},
         "PLAY_PROMPT": {"type": "AUDIO", "command": "PLAY", "soundsource": "Please tap on it.mp3", "soundpackage":"default", "volume": 0.7, "mode":"flow", "features": ""},
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
         "SET_DATASOURCE":{"type": "COMMAND", "id": "SBubblePop", "method": "setDataSource", "parms": "[file]bp_data.json:String","features":"!DATA_SBUBBLEPOP"},
+        "SET_SOUND_TRACK":{"type": "COMMAND", "id": "SBubblePop", "method": "setSoundTrack"},
         "NEXT_DATASET":{"type": "COMMAND", "id": "SBubblePop", "method": "next" ,"features":""},
 
 

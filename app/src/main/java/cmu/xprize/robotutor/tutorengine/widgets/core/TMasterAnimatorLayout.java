@@ -124,6 +124,7 @@ public class TMasterAnimatorLayout extends ViewAnimator implements ITutorManager
 
         super.removeView((View) delView);
 
+        // GRAY_SCREEN_BUG
         Log.d(TAG, "REMOVE > Child Count: " + getChildCount() );
     }
 
