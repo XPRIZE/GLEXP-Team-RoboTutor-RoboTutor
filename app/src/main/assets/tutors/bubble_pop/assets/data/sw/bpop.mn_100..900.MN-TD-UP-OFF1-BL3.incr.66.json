@@ -1,630 +1,630 @@
 {
+  "gen_responseSet": [],
+  "problem_type": "MIS_NUM",
+  "question_replacement": false,
   "view_background": {
-    "layout": "grid",
-    "colorbase": "#666666",
     "style": "primitives",
-    "kind": "squares",
-    "layoutcount": 0,
     "colors": [
       -6053120,
       -7566336,
       -2500352,
       -5066240
     ],
-    "colorchoice": "fixed"
+    "layout": "grid",
+    "colorbase": "#666666",
+    "colorchoice": "fixed",
+    "kind": "squares",
+    "layoutcount": 0
   },
-  "question_replacement": false,
-  "gen_answertype": "text-data",
-  "gen_responsetype": "text-data",
-  "gen_answerSet": [],
-  "gen_stimulustype": "text-data",
+  "banner_color": "#000066",
   "question_count": 30,
   "dataSource": [
     {
-      "answer": 786,
-      "question_type": "rising",
-      "response_set": [
-        617,
-        786,
-        582
-      ],
-      "stimulus": "784, 785, __, 787",
+      "question_type": "multiple-choice",
       "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
       "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "182, 183, __, 185",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        184,
+        497,
+        316
+      ],
       "question_say": true,
-      "answer_type": "reference"
+      "answer": 184
     },
     {
-      "answer": 418,
-      "question_type": "rising",
-      "response_set": [
-        697,
-        418,
-        372
-      ],
-      "stimulus": "416, 417, __, 419",
+      "question_type": "multiple-choice",
       "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
       "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "281, 282, __, 284",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        283,
+        652,
+        574
+      ],
       "question_say": true,
-      "answer_type": "reference"
+      "answer": 283
     },
     {
-      "answer": 124,
-      "question_type": "rising",
-      "response_set": [
-        752,
-        468,
-        124
-      ],
-      "stimulus": "122, 123, __, 125",
+      "question_type": "multiple-choice",
       "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
       "gen_question": false,
-      "question_say": true,
-      "answer_type": "reference"
-    },
-    {
-      "answer": 783,
-      "question_type": "rising",
-      "response_set": [
-        896,
-        246,
-        783
-      ],
-      "stimulus": "781, 782, __, 784",
-      "question_show": true,
       "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
+        "text_data",
+        "text_data",
+        "text_data"
       ],
-      "stimulus_type": "reference",
-      "gen_question": false,
-      "question_say": true,
-      "answer_type": "reference"
-    },
-    {
-      "answer": 319,
-      "question_type": "rising",
+      "stimulus": "192, 193, __, 195",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
       "response_set": [
-        530,
-        668,
-        319
-      ],
-      "stimulus": "317, 318, __, 320",
-      "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
-      "gen_question": false,
-      "question_say": true,
-      "answer_type": "reference"
-    },
-    {
-      "answer": 595,
-      "question_type": "rising",
-      "response_set": [
-        601,
-        595,
-        902
-      ],
-      "stimulus": "593, 594, __, 596",
-      "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
-      "gen_question": false,
-      "question_say": true,
-      "answer_type": "reference"
-    },
-    {
-      "answer": 607,
-      "question_type": "rising",
-      "response_set": [
-        175,
-        127,
-        607
-      ],
-      "stimulus": "605, 606, __, 608",
-      "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
-      "gen_question": false,
-      "question_say": true,
-      "answer_type": "reference"
-    },
-    {
-      "answer": 216,
-      "question_type": "rising",
-      "response_set": [
-        216,
+        194,
         291,
-        596
+        844
       ],
-      "stimulus": "214, 215, __, 217",
-      "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
-      "gen_question": false,
       "question_say": true,
-      "answer_type": "reference"
+      "answer": 194
     },
     {
-      "answer": 842,
-      "question_type": "rising",
-      "response_set": [
-        842,
-        773,
-        573
-      ],
-      "stimulus": "840, 841, __, 843",
+      "question_type": "multiple-choice",
       "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
       "gen_question": false,
-      "question_say": true,
-      "answer_type": "reference"
-    },
-    {
-      "answer": 250,
-      "question_type": "rising",
-      "response_set": [
-        250,
-        172,
-        759
-      ],
-      "stimulus": "248, 249, __, 251",
-      "question_show": true,
       "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
+        "text_data",
+        "text_data",
+        "text_data"
       ],
-      "stimulus_type": "reference",
-      "gen_question": false,
-      "question_say": true,
-      "answer_type": "reference"
-    },
-    {
-      "answer": 814,
-      "question_type": "rising",
-      "response_set": [
-        507,
-        676,
-        814
-      ],
-      "stimulus": "812, 813, __, 815",
-      "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
-      "gen_question": false,
-      "question_say": true,
-      "answer_type": "reference"
-    },
-    {
-      "answer": 598,
-      "question_type": "rising",
-      "response_set": [
-        280,
-        358,
-        598
-      ],
-      "stimulus": "596, 597, __, 599",
-      "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
-      "gen_question": false,
-      "question_say": true,
-      "answer_type": "reference"
-    },
-    {
-      "answer": 254,
-      "question_type": "rising",
-      "response_set": [
-        880,
-        754,
-        254
-      ],
-      "stimulus": "252, 253, __, 255",
-      "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
-      "gen_question": false,
-      "question_say": true,
-      "answer_type": "reference"
-    },
-    {
-      "answer": 739,
-      "question_type": "rising",
-      "response_set": [
-        739,
-        477,
-        399
-      ],
-      "stimulus": "737, 738, __, 740",
-      "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
-      "gen_question": false,
-      "question_say": true,
-      "answer_type": "reference"
-    },
-    {
-      "answer": 416,
-      "question_type": "rising",
-      "response_set": [
-        416,
-        530,
-        781
-      ],
-      "stimulus": "414, 415, __, 417",
-      "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
-      "gen_question": false,
-      "question_say": true,
-      "answer_type": "reference"
-    },
-    {
-      "answer": 759,
-      "question_type": "rising",
+      "stimulus": "641, 642, __, 644",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
       "response_set": [
         107,
-        262,
-        759
+        643,
+        408
       ],
-      "stimulus": "757, 758, __, 760",
-      "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
-      "gen_question": false,
       "question_say": true,
-      "answer_type": "reference"
+      "answer": 643
     },
     {
-      "answer": 779,
-      "question_type": "rising",
-      "response_set": [
-        779,
-        205,
-        655
-      ],
-      "stimulus": "777, 778, __, 780",
+      "question_type": "multiple-choice",
       "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
       "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "879, 880, __, 882",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        881,
+        882,
+        266
+      ],
       "question_say": true,
-      "answer_type": "reference"
+      "answer": 881
     },
     {
-      "answer": 324,
-      "question_type": "rising",
-      "response_set": [
-        655,
-        324,
-        519
-      ],
-      "stimulus": "322, 323, __, 325",
+      "question_type": "multiple-choice",
       "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
       "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "747, 748, __, 750",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        557,
+        868,
+        749
+      ],
       "question_say": true,
-      "answer_type": "reference"
+      "answer": 749
     },
     {
-      "answer": 277,
-      "question_type": "rising",
-      "response_set": [
-        458,
-        277,
-        677
-      ],
-      "stimulus": "275, 276, __, 278",
+      "question_type": "multiple-choice",
       "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
       "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "760, 761, __, 763",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        762,
+        485,
+        750
+      ],
       "question_say": true,
-      "answer_type": "reference"
+      "answer": 762
     },
     {
-      "answer": 296,
-      "question_type": "rising",
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "697, 698, __, 700",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
       "response_set": [
-        296,
-        693,
+        699,
+        276,
+        870
+      ],
+      "question_say": true,
+      "answer": 699
+    },
+    {
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "134, 135, __, 137",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        136,
+        538,
+        99
+      ],
+      "question_say": true,
+      "answer": 136
+    },
+    {
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "109, 110, __, 112",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        644,
+        685,
+        111
+      ],
+      "question_say": true,
+      "answer": 111
+    },
+    {
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "523, 524, __, 526",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        520,
+        529,
+        525
+      ],
+      "question_say": true,
+      "answer": 525
+    },
+    {
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "751, 752, __, 754",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        753,
+        233,
+        237
+      ],
+      "question_say": true,
+      "answer": 753
+    },
+    {
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "717, 718, __, 720",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        186,
+        117,
         719
       ],
-      "stimulus": "294, 295, __, 297",
-      "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
-      "gen_question": false,
       "question_say": true,
-      "answer_type": "reference"
+      "answer": 719
     },
     {
-      "answer": 497,
-      "question_type": "rising",
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "131, 132, __, 134",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
       "response_set": [
-        497,
-        202,
-        795
+        786,
+        133,
+        662
       ],
-      "stimulus": "495, 496, __, 498",
-      "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
-      "gen_question": false,
       "question_say": true,
-      "answer_type": "reference"
+      "answer": 133
     },
     {
-      "answer": 215,
-      "question_type": "rising",
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "316, 317, __, 319",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
       "response_set": [
-        592,
-        449,
-        215
+        330,
+        316,
+        318
       ],
-      "stimulus": "213, 214, __, 216",
-      "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
-      "gen_question": false,
       "question_say": true,
-      "answer_type": "reference"
+      "answer": 318
     },
     {
-      "answer": 346,
-      "question_type": "rising",
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "300, 301, __, 303",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
       "response_set": [
-        321,
-        346,
-        173
+        805,
+        302,
+        471
       ],
-      "stimulus": "344, 345, __, 347",
-      "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
-      "gen_question": false,
       "question_say": true,
-      "answer_type": "reference"
+      "answer": 302
     },
     {
-      "answer": 233,
-      "question_type": "rising",
-      "response_set": [
-        690,
-        233,
-        226
-      ],
-      "stimulus": "231, 232, __, 234",
+      "question_type": "multiple-choice",
       "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
       "gen_question": false,
-      "question_say": true,
-      "answer_type": "reference"
-    },
-    {
-      "answer": 339,
-      "question_type": "rising",
-      "response_set": [
-        880,
-        339,
-        183
-      ],
-      "stimulus": "337, 338, __, 340",
-      "question_show": true,
       "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
+        "text_data",
+        "text_data",
+        "text_data"
       ],
-      "stimulus_type": "reference",
-      "gen_question": false,
-      "question_say": true,
-      "answer_type": "reference"
-    },
-    {
-      "answer": 163,
-      "question_type": "rising",
-      "response_set": [
-        859,
-        163,
-        406
-      ],
-      "stimulus": "161, 162, __, 164",
-      "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
-      "gen_question": false,
-      "question_say": true,
-      "answer_type": "reference"
-    },
-    {
-      "answer": 383,
-      "question_type": "rising",
-      "response_set": [
-        495,
-        878,
-        383
-      ],
-      "stimulus": "381, 382, __, 384",
-      "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
-      "gen_question": false,
-      "question_say": true,
-      "answer_type": "reference"
-    },
-    {
-      "answer": 519,
-      "question_type": "rising",
-      "response_set": [
-        294,
-        558,
-        519
-      ],
-      "stimulus": "517, 518, __, 520",
-      "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
-      "gen_question": false,
-      "question_say": true,
-      "answer_type": "reference"
-    },
-    {
-      "answer": 315,
-      "question_type": "rising",
+      "stimulus": "796, 797, __, 799",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
       "response_set": [
         153,
-        282,
-        315
+        828,
+        798
       ],
-      "stimulus": "313, 314, __, 316",
-      "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
-      "gen_question": false,
       "question_say": true,
-      "answer_type": "reference"
+      "answer": 798
     },
     {
-      "answer": 709,
-      "question_type": "rising",
-      "response_set": [
-        578,
-        251,
-        709
-      ],
-      "stimulus": "707, 708, __, 710",
+      "question_type": "multiple-choice",
       "question_show": true,
-      "responsetype_set": [
-        "reference",
-        "reference",
-        "reference"
-      ],
-      "stimulus_type": "reference",
       "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "629, 630, __, 632",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        601,
+        479,
+        631
+      ],
       "question_say": true,
-      "answer_type": "reference"
+      "answer": 631
+    },
+    {
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "704, 705, __, 707",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        706,
+        587,
+        639
+      ],
+      "question_say": true,
+      "answer": 706
+    },
+    {
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "262, 263, __, 265",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        264,
+        564,
+        333
+      ],
+      "question_say": true,
+      "answer": 264
+    },
+    {
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "112, 113, __, 115",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        114,
+        652,
+        850
+      ],
+      "question_say": true,
+      "answer": 114
+    },
+    {
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "722, 723, __, 725",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        546,
+        724,
+        125
+      ],
+      "question_say": true,
+      "answer": 724
+    },
+    {
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "623, 624, __, 626",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        625,
+        323,
+        798
+      ],
+      "question_say": true,
+      "answer": 625
+    },
+    {
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "700, 701, __, 703",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        106,
+        677,
+        702
+      ],
+      "question_say": true,
+      "answer": 702
+    },
+    {
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "503, 504, __, 506",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        505,
+        898,
+        334
+      ],
+      "question_say": true,
+      "answer": 505
+    },
+    {
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "570, 571, __, 573",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        595,
+        572,
+        229
+      ],
+      "question_say": true,
+      "answer": 572
+    },
+    {
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "672, 673, __, 675",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        674,
+        269,
+        422
+      ],
+      "question_say": true,
+      "answer": 674
+    },
+    {
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "682, 683, __, 685",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        328,
+        684,
+        389
+      ],
+      "question_say": true,
+      "answer": 684
+    },
+    {
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "392, 393, __, 395",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        162,
+        394,
+        797
+      ],
+      "question_say": true,
+      "answer": 394
+    },
+    {
+      "question_type": "multiple-choice",
+      "question_show": true,
+      "gen_question": false,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "442, 443, __, 445",
+      "stimulus_type": "text_data",
+      "answer_type": "text_data",
+      "response_set": [
+        626,
+        444,
+        325
+      ],
+      "question_say": true,
+      "answer": 444
     }
   ],
-  "gen_stimulusSet": [],
-  "question_sequence": "sequential",
-  "problem_type": "MIS_NUM",
-  "gen_responseSet": [],
+  "gen_responsetype": "text_data",
+  "gen_answerSet": [],
+  "gen_stimulustype": "text_data",
   "response_replacement": false,
-  "banner_color": "#000066"
+  "gen_stimulusSet": [],
+  "question_sequence": "RANDOM",
+  "gen_answertype": "text_data"
 }

@@ -118,14 +118,20 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     private String[] splitExpression(String exp, String key) {
         int index = exp.indexOf(key);
         String operand1 = exp.substring(0, index);
-        String operation = exp.substring(index + 1, index + 2);
-        String operand2 = exp.substring(index + 2);
+        String operation = "";
         if(key.equals("\n")) {
-            if (operation.equals("+")) {
-                key = "plus";
-            } else {
-                key = "minus";
-            }
+            operation = exp.substring(index + 1, index + 2);
+        }
+        else {
+            operation = exp.substring(index, index + 1);
+        }
+        String operand2 = exp.substring(index + 2);
+
+        if (operation.equals("+") || operation.equals("plus")) {
+            key = "plus";
+        }
+        else {
+            key = "minus";
         }
 
         return (new String[]{operand1, key, operand2});
@@ -377,11 +383,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
     public void maskStimulus() {
         RectF  boundRect = _bubbleStimulus.getRectBound();
-//        Log.d("TOMBRADY", "Mask Stimulus");
-//        Log.d("TOMBRADY", Float.toString(boundRect.bottom));
-//        Log.d("TOMBRADY", Float.toString(boundRect.top));
-//        Log.d("TOMBRADY", Float.toString(boundRect.left));
-//        Log.d("TOMBRADY", Float.toString(boundRect.right));
 
         // Add an exclusion around stimulus
         Intent msg = new Intent(MASK_ADDEXCL);
@@ -398,7 +399,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         //
         msg = new Intent(MASK_SETALPHA);
         msg.putExtra(MASK_ALPHA, mask_alpha);
-//        Log.d("TOMBRADY", "Alpha" + mask_alpha);
         bManager.sendBroadcast(msg);
 
 
@@ -406,11 +406,9 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         //
         msg = new Intent(MASK_SHOWHIDE);
         msg.putExtra(MASK_SHOWHIDE, VISIBLE);
-//        Log.d("TOMBRADY", "Visible: " + VISIBLE);
 
         bManager.sendBroadcast(msg);
 
-//        Log.d("TOMBRADY", "Masked Stimlus");
     }
 
 
@@ -478,26 +476,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
             case BP_CONST.SHOW_BUBBLES:
                 post(BP_CONST.SHOW_BUBBLES);
-                break;
-
-            case BP_CONST.SHOW_BUBBLE_ZERO:
-                post(BP_CONST.SHOW_BUBBLE_ZERO);
-                break;
-
-            case BP_CONST.SHOW_BUBBLE_ONE:
-                post(BP_CONST.SHOW_BUBBLE_ONE);
-                break;
-
-            case BP_CONST.SHOW_BUBBLE_TWO:
-                post(BP_CONST.SHOW_BUBBLE_TWO);
-                break;
-
-            case BP_CONST.SHOW_BUBBLE_THREE:
-                post(BP_CONST.SHOW_BUBBLE_THREE);
-                break;
-
-            case BP_CONST.SHOW_BUBBLE_FOUR:
-                post(BP_CONST.SHOW_BUBBLE_FOUR);
                 break;
 
             case BP_CONST.POP_BUBBLE:
@@ -953,6 +931,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             }
 
             publishValue(BP_CONST.QUEST_VAR_OPERAND, operation);
+            Log.d("TOMBRADY", operation);
 
             //Publish features and values for each digit of second operand so that audios can be played separately
             if(operand2Digits[0] >= 100) {
@@ -969,6 +948,8 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             else {
                 removeFeature(BP_CONST.FTR_QUEST_STIM_TWO_TENS);
             }
+
+
         }
         else if(mProblemType.equals("EXPRESSION_N2E")) {
             publishFeature(BP_CONST.FTR_N2E);
