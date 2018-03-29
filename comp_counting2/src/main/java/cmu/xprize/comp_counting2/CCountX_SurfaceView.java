@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+
 import java.util.Random;
 import java.util.Vector;
 
@@ -24,13 +25,20 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
     public Context _context;
     private CCountX_Component _component;
 
+    // where animation happens
+    //private AnimationThread thread;
+
     // painting tools
     private SurfaceHolder _holder;
     private Paint _paint;
 
-    // important things
+
+    // Collection of Countable objects e.g. bananas or dots or fruits
     private Vector<Countable> _countables;
     private boolean tappable;
+
+    private TenFrame tenFrame;
+    private boolean showTenFrame = false;
 
     private int[] FRUITS = {
             R.drawable.banana,
@@ -39,7 +47,26 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
             R.drawable.tomato
     };
 
-    private Bitmap _fruitMap;
+    private int[] TENS = {
+            R.drawable.sq_ten_black,
+            R.drawable.sq_ten_blue,
+            R.drawable.sq_ten_green,
+            R.drawable.sq_ten_teal
+    };
+
+    private int[] HUNDREDS = {
+            R.drawable.sq_hun_black,
+            R.drawable.sq_hun_blue,
+            R.drawable.sq_hun_green,
+            R.drawable.sq_hun_teal
+    };
+
+    //tens
+    //hundreds
+    //
+
+    // holds the image for the fruit Countable being displayed
+    private Bitmap _countMap;
 
     private static final String TAG = "CCountXSurfaceView";
 
@@ -81,18 +108,50 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         _paint.setColor(Color.BLACK);
 
         _countables = new Vector<>();
-        resetCounter();
+        //resetCounter();
 
 
         getHolder().addCallback(this);
+    }
+
+    protected void initTenFrame() {
+        if (!_component.tenInited)
+        {
+        int holeWidth = 200;
+        int holeHeight = 200;
+        boolean isline =false;
+        int x = (getWidth() / 2) - (holeWidth * 5) / 2;
+        int y = (getHeight() / 2) - holeHeight;
+        if (_component.tenPower==100){
+            holeWidth = 400;
+            holeHeight = 400;
+            x = (getWidth() / 2) - (holeWidth * 5) / 2;
+            y = (getHeight() / 2) - holeHeight;
+        }
+
+        if (_component.tenPower==10){
+            holeWidth =130;
+            holeHeight = 1200;
+            isline=true;
+            x = (getWidth() / 2) - (holeWidth * 10) / 2;
+            y = (getHeight() / 2) - holeHeight/2;
+        }
+
+
+
+
+        tenFrame = new TenFrame(x, y, holeWidth, holeHeight,isline);
+        _component.tenInited = true;
+        }
     }
 
     public void setComponent(CCountX_Component component) {
         _component = component;
     }
 
-    private void resetCounter() {
-        _fruitMap = generateRandomFruit();
+    protected void resetCounter() {
+
+        _countMap = generateRandomCount();
     }
 
 
@@ -101,14 +160,81 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
      *
      * @return
      */
-    private Bitmap generateRandomFruit() {
-        // initialize images
-        int drawable = FRUITS[(new Random()).nextInt(FRUITS.length)];
-        Bitmap immutableBmp = BitmapFactory.decodeResource(getResources(), drawable);
-        Bitmap resizedBmp = Bitmap.createScaledBitmap(immutableBmp, COUNTX_CONST.DRAWABLE_RADIUS * 2,
-                COUNTX_CONST.DRAWABLE_RADIUS * 2, false);
+    private Bitmap generateRandomCount() {
 
-        return resizedBmp;
+
+        int margin = COUNTX_CONST.BOX_MARGIN;
+
+        int gmargin = COUNTX_CONST.GRID_MARGIN;
+
+        // initialize images
+        if(_component.tenPower == 1) {
+            int drawable = FRUITS[(new Random()).nextInt(FRUITS.length)];
+            if (_component.drawIndex!=-10){
+                drawable = _component.drawIndex;
+            } else {
+                _component.drawIndex=drawable;
+            }
+            Bitmap immutableBmp = BitmapFactory.decodeResource(getResources(), drawable);
+            Bitmap resizedBmp = Bitmap.createScaledBitmap(immutableBmp, COUNTX_CONST.DRAWABLE_RADIUS * 2,
+                    COUNTX_CONST.DRAWABLE_RADIUS * 2, false);
+            return resizedBmp;
+
+        } else if(_component.tenPower==10){
+            int drawable = TENS[(new Random()).nextInt(TENS.length)];
+            if (_component.drawIndex!=-10){
+                drawable = _component.drawIndex;
+            } else {
+                _component.drawIndex=drawable;
+            }
+
+
+            //int bheight = (int)(down-up-2*gmargin);
+            //int bwidth = (int)((right-left-11*gmargin)/10);
+
+            Bitmap immutableBmp = BitmapFactory.decodeResource(getResources(), drawable);
+            Bitmap resizedBmp = Bitmap.createScaledBitmap(immutableBmp, 100,
+                    1000, false);
+
+            return resizedBmp;
+        } else {
+            int drawable = HUNDREDS[(new Random()).nextInt(HUNDREDS.length)];
+            if (_component.drawIndex!=-10){
+                drawable = _component.drawIndex;
+            } else {
+                _component.drawIndex=drawable;
+            }
+
+            //int bheight = (int)((down-up-3*gmargin)/2);
+            //int bwidth = (int)((right-left-6*gmargin)/5);
+            //int radius = bheight<bwidth ? bheight : bwidth;
+
+            Bitmap immutableBmp = BitmapFactory.decodeResource(getResources(), drawable);
+            Bitmap resizedBmp = Bitmap.createScaledBitmap(immutableBmp, 350,
+                    350, false);
+            return resizedBmp;
+
+        }
+    }
+
+    public boolean doneMovingToTenFrame = false;
+
+
+    public void wiggleFruit() {
+
+        doneMovingToTenFrame = true;
+        boolean[] fruitInTenFrame = new boolean[_countables.size()];
+        for (int i=0; i < _countables.size(); i++) {
+            Countable c = _countables.get(i);
+
+            TenFrame.XY xy = tenFrame.getLocationOfIthObject(i+1);
+            fruitInTenFrame[i] = c.moveTowardsAtVelocity(xy.x, xy.y, 40);
+            if(!fruitInTenFrame[i]) {
+                doneMovingToTenFrame = false;
+            }
+        }
+
+        redraw();
     }
 
     @Override
@@ -132,22 +258,53 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
             // don't draw if outside the box
             int margin = COUNTX_CONST.BOX_MARGIN;
+            float left = margin;
+            float right = canvas.getWidth() - margin;
+            float up = margin;
+            float down = canvas.getHeight() - margin;
+            int gmargin = COUNTX_CONST.GRID_MARGIN;
+
             if(x < margin || x > canvas.getWidth() - margin || y < margin || y > canvas.getHeight() - margin) {
                 redraw(canvas);
                 return true;
             }
 
             Countable countable;
-            countable = new CountableImage((int) x, (int) y, _fruitMap);
-            _countables.add(countable);
+            if (_component.tenPower ==1){
+                countable = new CountableImage((int)x, (int) y, _countMap);
+                _countables.add(countable);
+
+            } else if(_component.tenPower==10){
+
+                int centerx = (int)x ;
+                int centery = (int)((down-up)/2);
+
+                TenFrame.XY destination = tenFrame.getLocationOfIthObject(_countables.size()+1);
+
+                countable = new CountableImage(destination.x,destination.y,_countMap);
+                _countables.add(countable);
+
+            }  else {
+                int indexx =_countables.size()%5;
+                int indexy =_countables.size()/5;
+                int centerx = (int)x;
+                int centery = (int)y;
+                TenFrame.XY destination = tenFrame.getLocationOfIthObject(_countables.size()+1);
+                countable = new CountableImage(destination.x,destination.y,_countMap);
+                _countables.add(countable);
+
+            }
+
+
 
 
             redraw(canvas);
 
             // make sure to update the TextView
-            _component.updateCount(_countables.size());
+            _component.updateCount(_countables.size()*_component.tenPower);
+            //*1/*10*
             // playChime plays the chime, AND the audio...
-            _component.playChime();
+             _component.playChime();
 
 
         }
@@ -160,11 +317,13 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
      */
     private void redraw() {
         Canvas canvas = _holder.lockCanvas();
-        redraw(canvas);
+        if (canvas != null) {
+            redraw(canvas);
+        }
     }
 
     /**
-     * redraw
+     * redraws everything contained within the Canvas
      */
     private void redraw(Canvas canvas) {
 
@@ -176,8 +335,25 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                 c.draw(canvas, _paint);
             }
 
+            if (showTenFrame && _component.tenPower==1) {
+                tenFrame.draw(canvas, _paint);
+
+                /*
+                for (int i = 0; i < _countables.size(); i++) {
+                    Countable c = _countables.get(i);
+
+                    TenFrame.XY xy =tenFrame.getLocationOfIthObject(i+1);
+                    c.x = xy.x;
+                    c.y = xy.y;
+
+                    c.draw(canvas, _paint);
+                }
+                */
+            }
+
+
             if(!tappable && COUNTX_CONST.USE_JAIL_BARS) {
-                drawDiagonalBars(canvas);
+                //drawDiagonalBars(canvas);
             }
 
             drawBorderRectangles(canvas);
@@ -327,9 +503,26 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         }
 
         _countables.removeAllElements();
-        _fruitMap = generateRandomFruit();
+        _countMap = generateRandomCount();
 
         redraw();
+    }
+
+    public void hideTenFrame() {
+        showTenFrame = false;
+    }
+
+    /**
+     * Move items to the DotBag/TenFrame
+     */
+    public void showTenFrame() {
+
+        // get Index, and XY locations of items
+        showTenFrame = true;
+
+        //redraw();
+
+        // animate items so that they move to their proper box in the TenFrame
 
     }
 
@@ -358,6 +551,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         if (canvas == null) {
             Log.e(TAG, "Cannot draw onto mull canvas");
         } else {
+            //initTenFrame();
             initializeBackground(canvas, getWidth(), getHeight());
         }
     }
@@ -370,11 +564,102 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 
+
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
 
+        /*thread.setRunning(false);*/
+    }
+
+
+
+    private class AnimationThread extends Thread {
+
+        private final SurfaceHolder _surfaceHolder;
+        private CCountX_SurfaceView _surfaceView;
+        private boolean running = false;
+        static final int SLEEP_TIME = 10;
+
+        AnimationThread(SurfaceHolder surfaceHolder, CCountX_SurfaceView surfaceView) {
+            _surfaceHolder = surfaceHolder;
+            _surfaceView = surfaceView;
+        }
+
+        void setRunning(boolean run) { running = run;}
+
+        @Override
+        public void run() {
+
+            Canvas c;
+
+            while(running) {
+
+                boolean[] finished = updateAnimationState();
+
+                c = null;
+                try {
+                    c = _surfaceHolder.lockCanvas(null);
+
+                    if (!running || c == null) {
+                        return;
+                    }
+
+                    synchronized (_surfaceHolder) {
+                        _surfaceView.draw(c);
+                    }
+                } finally {
+                    if (c != null) {
+                        _surfaceHolder.unlockCanvasAndPost(c);
+                    }
+                }
+
+                boolean allFinished = true;
+                for(boolean f : finished) {
+                    if (!f)
+                        allFinished = false;
+                }
+
+                if (!running || allFinished) {
+                    return;
+                }
+
+                try {
+                    //
+                    Thread.sleep(SLEEP_TIME);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * Animate each countable object to its position
+     *
+     * @return array of booleans for which are done animating
+     */
+    private boolean [] updateAnimationState() {
+        int step = 10;
+
+        boolean[] done = new boolean[_countables.size()];
+
+        for (int i = 0; i < _countables.size(); i++) {
+            Countable c = _countables.get(i);
+
+            TenFrame.XY destination = tenFrame.getLocationOfIthObject(i+1);
+
+            c.x += Math.min(step, destination.x - c.x);
+            c.y += Math.min(step, destination.y - c.y);
+
+            if (c.x == destination.x && c.y == destination.y) {
+                done[i] = true;
+            }
+
+        }
+
+        return done;
     }
 
 }
