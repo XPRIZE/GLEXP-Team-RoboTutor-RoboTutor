@@ -1395,7 +1395,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             Log.d(TAG, "Story Sentence Text: " + content);
         }
 
-        broadcastActiveTextPos(mPageText, wordsToDisplay);
+        if (showWords && (showFutureWords || mCurrWord > 0)) broadcastActiveTextPos(mPageText, wordsToDisplay);
 
         // Publish the current word / sentence / remaining words for use in scripts
         //
