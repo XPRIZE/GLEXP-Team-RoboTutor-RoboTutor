@@ -104,6 +104,15 @@ public class BP_CONST {
 
     public static final String SOUND_TRACK        = ".sound_track";
     public static final String QUEST_VAR          = ".questValue";
+
+    public static final String ANSWER_VAR         = ".ansValue";
+
+    public static final String QUEST_VAR_TWO      = ".questValueTwo";
+    public static final String ANSWER_VAR_TWO     = ".ansValueTwo";
+
+    public static final String QUEST_VAR_THREE    = ".questValueThree";
+    public static final String ANSWER_VAR_THREE   = ".ansValueThree";
+
     public static final String ANS_VAR         = ".ansValue";
 
     public static final String QUEST_VAR_HUNDREDS = ".questValueHundreds";
@@ -244,6 +253,17 @@ public class BP_CONST {
     public static int [] DOT_9  =  {R.drawable.dot_9_0, R.drawable.dot_9_1, R.drawable.dot_9_2, R.drawable.dot_9_3, R.drawable.dot_9_4};
     public static int [] DOT_10 =  {R.drawable.dot_10_0, R.drawable.dot_10_1, R.drawable.dot_10_2, R.drawable.dot_10_3, R.drawable.dot_10_4, R.drawable.dot_10_5, R.drawable.dot_10_6, R.drawable.dot_10_7, R.drawable.dot_10_8};
 
+    private static int[] TENFRAME_H_0 = {R.drawable.tenframe_h_0};
+    private static int[] TENFRAME_H_1 = {R.drawable.tenframe_h_1};
+    private static int[] TENFRAME_H_2 = {R.drawable.tenframe_h_2};
+    private static int[] TENFRAME_H_3 = {R.drawable.tenframe_h_3};
+    private static int[] TENFRAME_H_4 = {R.drawable.tenframe_h_4};
+    private static int[] TENFRAME_H_5 = {R.drawable.tenframe_h_5};
+    private static int[] TENFRAME_H_6 = {R.drawable.tenframe_h_6};
+    private static int[] TENFRAME_H_7 = {R.drawable.tenframe_h_7};
+    private static int[] TENFRAME_H_8 = {R.drawable.tenframe_h_8};
+    private static int[] TENFRAME_H_9 = {R.drawable.tenframe_h_9};
+    private static int[] TENFRAME_H_10 = {R.drawable.tenframe_h_10};
 
     static public HashMap<String, int[]> drawableMap = new HashMap<String, int[]>();
 
@@ -265,7 +285,19 @@ public class BP_CONST {
         drawableMap.put("trapezoid" , SHAPE_trapezoid  );
         drawableMap.put("triangle"  , SHAPE_triangle   );
 
-        drawableMap.put("0"  , DOT_0  );
+        drawableMap.put("0"  , TENFRAME_H_0  );
+        drawableMap.put("1"  , TENFRAME_H_1  );
+        drawableMap.put("2"  , TENFRAME_H_2  );
+        drawableMap.put("3"  , TENFRAME_H_3  );
+        drawableMap.put("4"  , TENFRAME_H_4  );
+        drawableMap.put("5"  , TENFRAME_H_5  );
+        drawableMap.put("6"  , TENFRAME_H_6  );
+        drawableMap.put("7"  , TENFRAME_H_7  );
+        drawableMap.put("8"  , TENFRAME_H_8  );
+        drawableMap.put("9"  , TENFRAME_H_9  );
+        drawableMap.put("10" , TENFRAME_H_10 );
+
+        /*drawableMap.put("0"  , DOT_0  );
         drawableMap.put("1"  , DOT_1  );
         drawableMap.put("2"  , DOT_2  );
         drawableMap.put("3"  , DOT_3  );
@@ -275,7 +307,7 @@ public class BP_CONST {
         drawableMap.put("7"  , DOT_7  );
         drawableMap.put("8"  , DOT_8  );
         drawableMap.put("9"  , DOT_9  );
-        drawableMap.put("10" , DOT_10 );
+        drawableMap.put("10" , DOT_10 );*/
     }
 
 }

@@ -20,6 +20,11 @@
   //
   "tutorVariants": {
 
+    "numberscale": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "numberscale",
+      "features": ""
+    },
     "countingx": {
       "type": "TUTORVAR_MAP",
       "tutorName": "countingx",
@@ -199,6 +204,20 @@
   //
   "bindingPatterns": {
 
+    "numberscale": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "numberscale": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SNumberScale",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
     "countingx": {
       "type": "TUTORDATA_MAP",
       "scene_bindings": {

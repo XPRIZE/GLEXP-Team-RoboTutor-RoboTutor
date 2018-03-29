@@ -221,4 +221,6 @@ dependencies {
     compile project(':comp_logging')
     compile project(path: ':comp_counting')
     compile project(path: ':comp_counting2')
+    compile project(path: ':comp_numberscale')
 }
+

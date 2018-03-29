@@ -228,7 +228,6 @@ public class TCONST {
     public static final String NO_SPACE            = "";
     public static final int    MAX_AKDATA          = 10;
 
-
     public static final String FTR_COMPLETE      = "FTR_COMPLETE";
     public static final String FTR_PROMPT        = "FTR_PROMPT";
     public static final String FTR_PAGE_PROMPT   = "FTR_PAGE_PROMPT";
@@ -503,6 +502,7 @@ public class TCONST {
     public static final String FWUNKNOWN    = "FTR_UNRECOGNIZED";
     public static final String FTR_EOI      = "FTR_NOWORDS";
     public static final String FTR_EOD      = "FTR_EOD";
+    public static final String CONTINUE      = "CONTINUE";
     public static final String ALL_CORRECT  = "ALL_CORRECT";
 
     public static final String LOG_CORRECT = "CORRECT";
@@ -640,6 +640,7 @@ public class TCONST {
     // Generic error codes
     public static final String GENERIC_RIGHT  = "FTR_RIGHT";
     public static final String GENERIC_WRONG  = "FTR_WRONG";
+    public static final String NEXTTURN = "THRD_WRONG";
     public static final String GENERIC_SUCCESSIVEWRONG = "FTR_SWRONG";
     public static final boolean TRUE_ERROR    = true;
     public static final boolean TRUE_NOERROR  = true;
@@ -781,6 +782,7 @@ public class TCONST {
 
     // Counting
     public static final String COUNTING_DEBUG_LOG = "COUNTING_DEBUG_LOG";
+
 
     // Data source debugger
 

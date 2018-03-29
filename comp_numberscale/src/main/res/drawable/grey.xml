@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:drawable="@drawable/greybar" />
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle" >
+            <stroke android:width="10dip" android:color="#939393"/>
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+
+</layer-list>
