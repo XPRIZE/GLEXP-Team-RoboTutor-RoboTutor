@@ -359,11 +359,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
     public void maskStimulus() {
         RectF  boundRect = _bubbleStimulus.getRectBound();
-//        Log.d("TOMBRADY", "Mask Stimulus");
-//        Log.d("TOMBRADY", Float.toString(boundRect.bottom));
-//        Log.d("TOMBRADY", Float.toString(boundRect.top));
-//        Log.d("TOMBRADY", Float.toString(boundRect.left));
-//        Log.d("TOMBRADY", Float.toString(boundRect.right));
 
         // Add an exclusion around stimulus
         Intent msg = new Intent(MASK_ADDEXCL);
@@ -380,7 +375,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         //
         msg = new Intent(MASK_SETALPHA);
         msg.putExtra(MASK_ALPHA, mask_alpha);
-//        Log.d("TOMBRADY", "Alpha" + mask_alpha);
         bManager.sendBroadcast(msg);
 
 
@@ -388,11 +382,9 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         //
         msg = new Intent(MASK_SHOWHIDE);
         msg.putExtra(MASK_SHOWHIDE, VISIBLE);
-//        Log.d("TOMBRADY", "Visible: " + VISIBLE);
 
         bManager.sendBroadcast(msg);
 
-//        Log.d("TOMBRADY", "Masked Stimlus");
     }
 
 

@@ -292,7 +292,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 // of the screen.
                 //
                 showStimulus((CBp_Data) target);
-                Log.d("TOMBRADY", "TargetL " + target);
                 mComponent.post(BP_CONST.ZOOM_STIMULUS);
                 break;
 
@@ -377,7 +376,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 if(width > 2000) {
                     scaleStimulusVal = 1.0f;
                 }
-//                Log.d("TOMBRADY", "Width: " + width);
                 inflator = CAnimatorUtil.configZoomIn(SbubbleStumulus, 600, 0, new BounceInterpolator(), 0f, scaleStimulusVal);
 
                 inflator.addListener(new Animator.AnimatorListener() {
