@@ -7,6 +7,7 @@
   "gen_stimulusSet": [],
   "dataSource": [
     {
+
       "question_say": false,
       "response_set": [
         "1",
@@ -14,9 +15,9 @@
         "5"
       ],
       "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
+        "reference",
+        "reference",
+        "reference"
       ],
       "answer_type": "text_data",
       "stimulus": "0+100",
@@ -34,9 +35,9 @@
         "200"
       ],
       "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
+        "reference",
+        "reference",
+        "reference"
       ],
       "answer_type": "text_data",
       "stimulus": "100+100",
