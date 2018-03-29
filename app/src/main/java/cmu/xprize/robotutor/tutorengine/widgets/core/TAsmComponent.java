@@ -136,7 +136,9 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
         // this is a special case when the solution is a 3-digit number with a 0 in the middle i.e. "509".
         // after the second step, studentWholeAnswer will be read as "9", even if the student has written "09"
-        int expectedNumDigitsInStudentAnswer = corValue.toString().length() - digitIndex + 1;
+        int answerLength = corValue.toString().length();
+        int expectedNumDigitsInStudentAnswer = answerLength < digitIndex ? 1 : answerLength - digitIndex + 1;
+
         if (studentWholeAnswer.toString().length() < expectedNumDigitsInStudentAnswer) { // 1 < 2
             studentMostRecentDigit = 0;
         }
@@ -168,7 +170,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
         event.setTimestamp(System.currentTimeMillis());
 
-        RoboTutor.logManager.postEvent_I(TCONST.PERFORMANCE_TAG, event.toString());
+        RoboTutor.perfLogManager.postPerformanceLog(event);
     }
 
     /**
@@ -180,7 +182,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         StringBuilder problemName = new StringBuilder();
 
         try {
-            int currentProblemIndex = _dataIndex - 1;
+            int currentProblemIndex = random ? _actualDataIndex : _dataIndex - 1;
             problemName.append(dataSource[currentProblemIndex].dataset[0]);
             problemName.append(dataSource[currentProblemIndex].operation);
             problemName.append(dataSource[currentProblemIndex].dataset[1]);
@@ -354,6 +356,15 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
                 String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
                 loadJSON(new JSONObject(jsonData), null);
+
+            } else if (dataNameDescriptor.startsWith(TCONST.DEBUG_FILE_PREFIX)) { // this must be reproduced in every robo_debuggable component
+
+                String dataFile = dataNameDescriptor.substring(TCONST.DEBUG_FILE_PREFIX.length());
+
+                String dataPath = TCONST.DEBUG_RT_PATH + "/";
+                String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
+                loadJSON(new JSONObject(jsonData), mTutor.getScope());
+
 
             } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 

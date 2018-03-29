@@ -199,6 +199,9 @@ public class TCONST {
     public static final String DOWNLOAD_RT_PATH    = "/sdcard/Download/RoboTutor";
     public static final String DOWNLOAD_RT_TUTOR   = "/sdcard/Download/RoboTutor/assets";
 
+    public static final String DEBUG_FILE_PREFIX = "[debug_file]";
+    public static final String DEBUG_RT_PATH       = "/sdcard/robo_debug";
+
     public static final String ARITHMETIC_DATA     = "tutors/add_subtract";
     public static final String AKIRA_DATA          = "tutors/akira";
     public static final String BUBBLEPOP_DATA      = "tutors/bubble_pop";
@@ -208,6 +211,9 @@ public class TCONST {
     public static final String FTR_USER_HEAR       = "FTR_USER_HEAR";
     public static final String FTR_USER_READ       = "FTR_USER_READ";
     public static final String FTR_USER_ECHO       = "FTR_USER_ECHO";
+    public static final String FTR_USER_HIDE       = "FTR_USER_HIDE";
+    public static final String FTR_USER_REVEAL     = "FTR_USER_REVEAL";
+    public static final String FTR_USER_PARROT     = "FTR_USER_PARROT";
     public static final String FTR_USER_READING    = "FTR_USER_READING";
 
     public static final String NARRATE_STORY       = "NARRATE_STORY";
@@ -222,7 +228,9 @@ public class TCONST {
     public static final String NO_SPACE            = "";
     public static final int    MAX_AKDATA          = 10;
 
-    public static final String FTR_COMPLETE = "FTR_COMPLETE";
+    public static final String FTR_COMPLETE      = "FTR_COMPLETE";
+    public static final String FTR_PROMPT        = "FTR_PROMPT";
+    public static final String FTR_PAGE_PROMPT   = "FTR_PAGE_PROMPT";
 
     public static final String START_PROGRESSIVE_UPDATE   = "START_PROGRESSIVE_UPDATE";
     public static final String START_INDETERMINATE_UPDATE = "START_INDETERMINATE_UPDATE";
@@ -249,6 +257,7 @@ public class TCONST {
     public static final String QGRAPH_MSG                 = "RQTag";
     public static final String LTKPLUS_MSG                = "RLTag";
     public static final String LOGSTATE                   = "logState";
+    public static final String BATTERY_MSG                = "Battery";
 
     public static final String AUDIO_EVENT                = "AUDIO_EVENT";
     public static final String TYPE_AUDIO                 = "type_audio";
@@ -261,7 +270,6 @@ public class TCONST {
     public static final double HIGH_PERFORMANCE_THRESHOLD       = 0.9; // percent to be upgraded a level
     public static final double MID_PERFORMANCE_THRESHOLD        = 0.5; // percent to pass
     public static final int MIN_ATTEMPTS_TO_GRADE               = 5;   // minimum number of attempts to be graded
-    public static final String BUBBLEPOP_MATH_EXPRESSION = "BPOP_MATH_EXPR";
 
     public static final String DEFAULT_STUDENT_ID = "DEBUG";
     public static final String STUDENT_ID_VAR = "studentId";
@@ -494,6 +502,7 @@ public class TCONST {
     public static final String FWUNKNOWN    = "FTR_UNRECOGNIZED";
     public static final String FTR_EOI      = "FTR_NOWORDS";
     public static final String FTR_EOD      = "FTR_EOD";
+    public static final String CONTINUE      = "CONTINUE";
     public static final String ALL_CORRECT  = "ALL_CORRECT";
 
     public static final String LOG_CORRECT = "CORRECT";
@@ -587,7 +596,8 @@ public class TCONST {
     public static final String FW_RESPONSE = "FW_RESPONSE";
 
     public static final String WRITINGTUTOR_FOLDER      = "/WritingTutor/";
-    public static final String ROBOTUTOR_FOLDER         = "/RoboTutor/";
+    public static final String HOT_LOG_FOLDER = "/RoboTutor_HOT/";
+    public static final String READY_LOG_FOLDER = "/RoboTutor/";
     public static final String ROBOTUTOR_ASSET_FOLDER   = "/robotutor_assets/";
     public static final String GLYPHS_FOLDER            = "/glyphs/";
 
@@ -630,6 +640,7 @@ public class TCONST {
     // Generic error codes
     public static final String GENERIC_RIGHT  = "FTR_RIGHT";
     public static final String GENERIC_WRONG  = "FTR_WRONG";
+    public static final String NEXTTURN = "THRD_WRONG";
     public static final String GENERIC_SUCCESSIVEWRONG = "FTR_SWRONG";
     public static final boolean TRUE_ERROR    = true;
     public static final boolean TRUE_NOERROR  = true;
@@ -730,14 +741,15 @@ public class TCONST {
     public static final int INCR = 1;
     public static final int DECR = -1;
 
-    public static final String RTC_VAR_ECHOSTATE  = ".echoState";
-    public static final String RTC_VAR_PAGESTATE  = ".pageState";
-    public static final String RTC_VAR_PARASTATE  = ".paraState";
-    public static final String RTC_VAR_LINESTATE  = ".lineState";
-    public static final String RTC_VAR_WORDSTATE  = ".wordState";
-    public static final String RTC_VAR_ATTEMPT    = ".attempt";
-    public static final String LAST               = "LAST";
-    public static final String NOT_LAST           = "NOT_LAST";
+    public static final String RTC_VAR_ECHOSTATE   = ".echoState";
+    public static final String RTC_VAR_PARROTSTATE = ".parrotState";
+    public static final String RTC_VAR_PAGESTATE   = ".pageState";
+    public static final String RTC_VAR_PARASTATE   = ".paraState";
+    public static final String RTC_VAR_LINESTATE   = ".lineState";
+    public static final String RTC_VAR_WORDSTATE   = ".wordState";
+    public static final String RTC_VAR_ATTEMPT     = ".attempt";
+    public static final String LAST                = "LAST";
+    public static final String NOT_LAST            = "NOT_LAST";
 
     public static final String RTC_VAR_STATE         = ".storyState";
     public static final String RTC_PARAGRAPHCOMPLETE = "PARAGRAPH_COMPLETE";
@@ -746,11 +758,13 @@ public class TCONST {
     public static final String RTC_LINECOMPLETE      = "LINE_COMPLETE";
     public static final String RTC_CLEAR             = "";
 
-    public static final String RTC_VAR_WORDVALUE  = ".currentWord";
-    public static final String RTC_VAR_INDEX      = ".wordindex";
-    public static final String RTC_VAR_REMAINING  = ".remainingWords";
-    public static final String RTC_VAR_SENTENCE   = ".sentence";
-    public static final String RTC_VAR_UTTERANCE  = ".utterance";
+    public static final String RTC_VAR_PROMPT      = ".prompt";
+    public static final String RTC_VAR_PAGE_PROMPT = ".page_prompt";
+    public static final String RTC_VAR_WORDVALUE   = ".currentWord";
+    public static final String RTC_VAR_INDEX       = ".wordindex";
+    public static final String RTC_VAR_REMAINING   = ".remainingWords";
+    public static final String RTC_VAR_SENTENCE    = ".sentence";
+    public static final String RTC_VAR_UTTERANCE   = ".utterance";
 
     //Akira Game Prompt Situation
     public static final String PROMPT_1LEFT = "PROMPT_1LEFT";
@@ -769,4 +783,25 @@ public class TCONST {
     // Counting
     public static final String COUNTING_DEBUG_LOG = "COUNTING_DEBUG_LOG";
 
+
+    // Data source debugger
+
+    public static final String TAG_DEBUG_AKIRA = "akira";
+    public static final String TAG_DEBUG_ASM = "math";
+    public static final String TAG_DEBUG_TAP_COUNT = "countingx";
+    public static final String TAG_DEBUG_BPOP_LTR = "bpop.ltr.mix";
+    public static final String TAG_DEBUG_BPOP_WRD = "bpop.wrd";
+    public static final String TAG_DEBUG_BPOP_PHON = "bpop.phon";
+    public static final String TAG_DEBUG_BPOP_NUM = "bpop.num";
+    public static final String TAG_DEBUG_BPOP_SHP = "bpop.shp";
+    public static final String TAG_DEBUG_BPOP_EX = "bpop.ex";
+
+    public static final String ROBO_DEBUG_FILE_TAP_COUNT = "countingx_test.json";
+    public static final String ROBO_DEBUG_FILE_AKIRA = "akira_test.json";
+    public static final String ROBO_DEBUG_FILE_ASM = "math_test.json";
+    public static final String ROBO_DEBUG_FILE_BPOP = "bpop.json";
+
+
+    // debug vals
+    public static final String DEBUG_GRAY_SCREEN_TAG = "DEBUG_GRAY_SCREEN";
 }

@@ -12,17 +12,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import cmu.xprize.comp_counting.CCount_Component;
 import cmu.xprize.comp_counting2.CCountX_Component;
 import cmu.xprize.comp_counting2.COUNTX_CONST;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.comp_logging.ITutorLogger;
+import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -84,12 +85,12 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
 
     @Override
     public void onCreate() {
-
+        trackAndLogPerformance("START");
     }
 
     @Override
     public void onDestroy() {
-
+        trackAndLogPerformance("END");
     }
 
     @Override
@@ -166,6 +167,31 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
         }
     }
 
+    private void trackAndLogPerformance(String stage) {
+
+        String tutorName = mTutor.getTutorName();
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
+        event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(tutorName);
+        event.setLevelName(level);
+        event.setTaskName(task);
+        event.setProblemName("countingx");
+        event.setProblemNumber(_dataIndex);
+        event.setSubstepNumber(-1);
+        event.setAttemptNumber(-1);
+        event.setExpectedAnswer(stage);
+        event.setUserResponse("");
+        event.setCorrectness(TCONST.LOG_CORRECT);
+
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.perfLogManager.postPerformanceLog(event);
+    }
+
 
     /**
      * @param dataNameDescriptor
@@ -184,6 +210,7 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
         publishFeature(TCONST.ALL_CORRECT);
 
         // TODO: globally make startWith type TCONST
+        //
         try {
             if (dataNameDescriptor.startsWith(TCONST.LOCAL_FILE)) {
 
@@ -195,6 +222,14 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
                 //
                 String dataPath = TCONST.DOWNLOAD_RT_TUTOR + "/" + mTutor.getTutorName() + "/";
 
+                String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
+                loadJSON(new JSONObject(jsonData), mTutor.getScope());
+
+            } else if (dataNameDescriptor.startsWith(TCONST.DEBUG_FILE_PREFIX)) { // this must be reproduced in every robo_debuggable component
+
+                String dataFile = dataNameDescriptor.substring(TCONST.DEBUG_FILE_PREFIX.length());
+
+                String dataPath = TCONST.DEBUG_RT_PATH + "/";
                 String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
                 loadJSON(new JSONObject(jsonData), mTutor.getScope());
 

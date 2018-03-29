@@ -45,9 +45,12 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
     static final String TAG = "CBp_Mechanic_RISE";
 
+    private String          mProblemType;
 
-    public CBp_Mechanic_RISE(Context context, CBP_Component parent) {
+
+    public CBp_Mechanic_RISE(Context context, CBP_Component parent, String problem_type) {
         super.init(context, parent);
+        mProblemType = problem_type;
     }
 
     @Override
@@ -239,7 +242,7 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
                             int[] shapeSet = BP_CONST.drawableMap.get(responseVal);
 
-                            nextBubble.configData(responseVal, correctVal);
+                            nextBubble.configData(responseVal, correctVal, mProblemType);
                             nextBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
                             xRange = new float[]{0, mParent.getWidth() - (BP_CONST.BUBBLE_DESIGN_RADIUS * nextBubble.getAssignedScale())};
                             timeOfFlight = (long) (_travelTime / nextBubble.getAssignedScale());
@@ -247,7 +250,7 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
                         case BP_CONST.TEXTDATA:
 
-                            nextBubble.configData(responseVal, correctVal);
+                            nextBubble.configData(responseVal, correctVal, mProblemType);
                             nextBubble.setContents(0, responseVal);
 
                             Paint paint = new Paint();

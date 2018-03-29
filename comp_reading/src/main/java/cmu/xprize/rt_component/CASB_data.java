@@ -29,6 +29,7 @@ public class CASB_data implements ILoadableObject {
     // json loadable
     public CASB_Content text[][];
     public String       image;
+    public String       prompt;
 
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {

@@ -28,6 +28,20 @@
             }
           ]
         },
+        "REMAIN_STIMULUS" : {
+          "type" : "NODE",
+          "COMMENT" : "",
+          "maptype": "moduleMap",
+          "mapname" : "POST_QUESTION",
+          "preenter": ["SAME_DATASET"],
+          "preexit" : [],
+          "edges" : [
+            {
+              "constraint" : "",
+              "edge": "USER_INPUT"
+            }
+          ]
+        },
 
         "UPDATE_STIMULUS" : {
           "type" : "NODE",
@@ -65,6 +79,10 @@
             {
               "constraint": "FTR_WRONG",
               "edge": "WRONG"
+            },
+            {
+              "constraint": "THRD_WRONG",
+              "edge": "THRDWRONG"
             }
           ]
         },
@@ -94,6 +112,26 @@
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
           "maptype":"moduleMap",
           "mapname": "PLAYWRONG",
+          "preenter": ["PAUSE"],
+          "preexit": ["RESUME"],
+          "edges": [
+            {
+              "constraint": "FTR_EOD",
+              "edge": "POSTFINISHLINE"
+            },
+
+            {
+              "constraint": "",
+              "edge": "REMAIN_STIMULUS"
+            }
+          ]
+        },
+
+        "THRDWRONG": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"moduleMap",
+          "mapname": "PLAYTHRDWRONG",
           "preenter": ["PAUSE"],
           "preexit": ["RESUME"],
           "edges": [
@@ -167,7 +205,7 @@
 
             {
               "constraint": "",
-              "edge": "UPDATE_STIMULUS"
+              "edge": "REMAIN_STIMULUS"
             }
           ]
         },
@@ -187,7 +225,7 @@
 
             {
               "constraint": "",
-              "edge": "UPDATE_STIMULUS"
+              "edge": "REMAIN_STIMULUS"
             }
           ]
         },
@@ -207,7 +245,7 @@
 
             {
               "constraint": "",
-              "edge": "UPDATE_STIMULUS"
+              "edge": "REMAIN_STIMULUS"
             }
           ]
         },
@@ -227,7 +265,7 @@
 
             {
               "constraint": "",
-              "edge": "UPDATE_STIMULUS"
+              "edge": "REMAIN_STIMULUS"
             }
           ]
         },
@@ -247,7 +285,7 @@
 
             {
               "constraint": "",
-              "edge": "UPDATE_STIMULUS"
+              "edge": "REMAIN_STIMULUS"
             }
           ]
         },
@@ -267,7 +305,7 @@
 
             {
               "constraint": "",
-              "edge": "UPDATE_STIMULUS"
+              "edge": "REMAIN_STIMULUS"
             }
           ]
         },
@@ -287,7 +325,7 @@
 
             {
               "constraint": "",
-              "edge": "UPDATE_STIMULUS"
+              "edge": "REMAIN_STIMULUS"
             }
           ]
         },
@@ -306,7 +344,7 @@
             },
             {
               "constraint": "",
-              "edge": "UPDATE_STIMULUS"
+              "edge": "REMAIN_STIMULUS"
             }
           ]
         },
@@ -357,9 +395,8 @@
           "COMMENT": "????",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#PLAYCORRECT:String", "features":""},
-
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Correct v1.mp3", "soundpackage":"tutor_effect", "volume": 0.10, "mode":"event", "features": ""},
             {"type": "COMMAND", "id": "SAkira", "method": "increaseScore", "parms": "", "features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3","soundpackage":"default" ,"repeat":false, "volume": "1", "mode":"flow", "features": ""},
             {"type": "COMMAND", "cmd": "WAIT"}
           ]
         },
@@ -521,7 +558,11 @@
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "This says.mp3","soundpackage":"default" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": ""},
             {"type": "COMMAND", "id": "SAkira", "method": "indicate3Sign", "parms": "", "features":""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio}}.mp3","soundpackage":"xprize_words" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": ""},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio_hundreds}}.mp3","soundpackage":"xprize_numbers" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": "FTR_TEST_AUDIO_HUNDREDS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Na.mp3","soundpackage":"xprize" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": "FTR_TEST_AUDIO_HUNDREDS&FTR_TEST_AUDIO_TENS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio_tens}}.mp3","soundpackage":"xprize_numbers" ,"repeat":false, "volume": "0.7", "mode":"event", "features": "FTR_TEST_AUDIO_TENS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio}}.mp3","soundpackage":"xprize_words" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": "FTR_TEST_AUDIO"},
             {"type": "COMMAND", "id": "SAkira", "method": "hideFinger", "parms": "", "features":""},
             {"type": "COMMAND", "id": "SAkira", "method": "instruct_finger", "parms": "", "features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "so tap here.mp3","soundpackage":"default" ,"repeat":false, "volume": "20.0", "mode":"flow", "features": ""}
@@ -534,7 +575,20 @@
           "COMMENT": "????",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#PLAYWRONG:String", "features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Incorrect v1.mp3", "soundpackage":"tutor_effect", "volume": 0.10, "mode":"event", "features": ""},
+            {"type": "COMMAND", "id": "SAkira", "method": "crash", "parms": "", "features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3","soundpackage":"default" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": ""},
+            {"type": "COMMAND", "id": "SAkira", "method": "decreaseScore", "parms": "", "features":""},
+            {"type": "COMMAND", "cmd": "WAIT"}
+          ]
+        },
 
+        "PLAYTHRDWRONG": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#PLAYWRONG:String", "features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Incorrect v1.mp3", "soundpackage":"tutor_effect", "volume": 0.10, "mode":"event", "features": ""},
             {"type": "COMMAND", "id": "SAkira", "method": "crash", "parms": "", "features":""},
             {"type": "COMMAND", "id": "SAkira", "method": "decreaseScore", "parms": "", "features":""},
@@ -589,13 +643,19 @@
 
         "NEXT_DATASET":{"type": "COMMAND", "id": "SAkira", "method": "next" ,"features":""},
 
+        "SAME_DATASET":{"type": "COMMAND", "id": "SAkira" ,"method": "same","features":""},
+
         "NEXT_SCENE": {
           "type": "COMMAND", "cmd": "gotoNextScene"
         },
 
         "NEXT": {"type": "COMMAND", "cmd": "NEXT"  },
 
-        "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio}}.mp3","soundpackage":"xprize_words" ,"repeat":false, "volume": "0.7", "mode":"event", "features": ""},
+        "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio_hundreds}}.mp3","soundpackage":"xprize_numbers" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": "FTR_TEST_AUDIO_HUNDREDS"},
+        "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "Na.mp3","soundpackage":"xprize" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": "FTR_TEST_AUDIO_HUNDREDS&FTR_TEST_AUDIO_TENS"},
+        "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio_tens}}.mp3","soundpackage":"xprize_numbers" ,"repeat":false, "volume": "0.7", "mode":"event", "features": "FTR_TEST_AUDIO_TENS"},
+        "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio}}.mp3","soundpackage":"xprize_words" ,"repeat":false, "volume": "0.7", "mode":"event", "features": "FTR_TEST_AUDIO"},
+
         "INSTRUCT_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.audio}}.mp3","soundpackage":"default" ,"repeat":false, "volume": "0.7", "mode":"event", "features": ""},
         "WAIT":{"type": "COMMAND", "cmd": "WAIT"},
 

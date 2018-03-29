@@ -14,7 +14,7 @@
         android:scaleType="fitCenter"
         android:padding="40dp"
         app:layout_heightPercent="50%"
-        app:layout_widthPercent="33%"
+        app:layout_widthPercent="50%"
         android:background="@null"
         />
 
@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:padding="40dp"
         app:layout_heightPercent="50%"
-        app:layout_widthPercent="33%"
+        app:layout_widthPercent="50%"
         android:background="@null"/>
 
     <ImageButton
@@ -35,29 +35,19 @@
         android:layout_width="match_parent"
         android:padding="40dp"
         app:layout_heightPercent="50%"
-        app:layout_widthPercent="33%"
+        app:layout_widthPercent="50%"
         android:background="@null"/>
 
-    <ImageButton
-        android:id="@+id/Sbutton4"
-        android:layout_below="@id/Sbutton3"
-        android:layout_toRightOf="@id/Sbutton2"
-        android:scaleType="fitCenter"
-        android:layout_width="match_parent"
-        android:padding="40dp"
-        app:layout_heightPercent="50%"
-        app:layout_widthPercent="33%"
-        android:background="@null"/>
 
     <ImageButton
         android:id="@+id/Sbutton5"
-        android:layout_toRightOf="@id/Sbutton3"
+        android:layout_toRightOf="@id/Sbutton2"
+        android:layout_below="@+id/Sbutton3"
         android:scaleType="fitCenter"
         android:layout_width="match_parent"
         android:padding="40dp"
         app:layout_heightPercent="50%"
-        app:layout_widthPercent="33%"
-        android:layout_centerVertical="true"
+        app:layout_widthPercent="50%"
         android:background="@null"/>
 
     <cmu.xprize.robotutor.tutorengine.widgets.core.THandAnimation

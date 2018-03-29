@@ -31,6 +31,8 @@
 		"xprize_effect": {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/global"},
 		"default":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/writing"},
 		"xprize":        {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global"},
+		"counting":      {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/counting"},
+		"arithmetic":    {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/arithmetic"},
 		"_ask":          {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/ask"},
 		"words":         {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/words"},
         "numbers":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/numbers"},

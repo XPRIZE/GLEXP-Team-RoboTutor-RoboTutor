@@ -1,0 +1,31 @@
+{ "bootFeatures":"FTR_DEMO_NUM",
+  "random": true,
+  "singleStimulus": false,
+  "dataSource": [
+    {
+      "stimulus": "115",
+      "audioStimulus": ["115"],
+      "answer": "115"
+    },
+    {
+      "stimulus": "15",
+      "audioStimulus": ["15",""],
+      "answer": "15"
+    },
+    {
+      "stimulus": "113",
+      "audioStimulus": ["113","",""],
+      "answer": "113"
+    },
+    {
+      "stimulus": "105",
+      "audioStimulus": ["105",""],
+      "answer": "105"
+    },
+    {
+      "stimulus": "4",
+      "audioStimulus": ["4"],
+      "answer": "4"
+    }
+  ]
+}

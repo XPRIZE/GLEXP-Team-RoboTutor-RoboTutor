@@ -1,0 +1,230 @@
+{
+  "view_background": {
+    "layout": "grid",
+    "colorbase": "#666666",
+    "style": "primitives",
+    "kind": "squares",
+    "layoutcount": 0,
+    "colors": [
+      -6053120,
+      -7566336,
+      -2500352,
+      -5066240
+    ],
+    "colorchoice": "fixed"
+  },
+  "question_replacement": false,
+  "gen_answertype": "text-data",
+  "gen_responsetype": "text-data",
+  "gen_answerSet": [],
+  "gen_stimulustype": "text-data",
+  "question_count": 10,
+  "dataSource": [
+    {
+      "answer": 10,
+      "question_type": "rising",
+      "response_set": [
+        10,
+        11,
+        4
+      ],
+      "stimulus": "8, 9, __, 11",
+      "question_show": true,
+      "responsetype_set": [
+        "reference",
+        "reference",
+        "reference"
+      ],
+      "stimulus_type": "reference",
+      "gen_question": false,
+      "question_say": true,
+      "answer_type": "reference"
+    },
+    {
+      "answer": 4,
+      "question_type": "rising",
+      "response_set": [
+        4,
+        6,
+        7
+      ],
+      "stimulus": "2, 3, __, 5",
+      "question_show": true,
+      "responsetype_set": [
+        "reference",
+        "reference",
+        "reference"
+      ],
+      "stimulus_type": "reference",
+      "gen_question": false,
+      "question_say": true,
+      "answer_type": "reference"
+    },
+    {
+      "answer": 6,
+      "question_type": "rising",
+      "response_set": [
+        4,
+        6,
+        7
+      ],
+      "stimulus": "4, 5, __, 7",
+      "question_show": true,
+      "responsetype_set": [
+        "reference",
+        "reference",
+        "reference"
+      ],
+      "stimulus_type": "reference",
+      "gen_question": false,
+      "question_say": true,
+      "answer_type": "reference"
+    },
+    {
+      "answer": 4,
+      "question_type": "rising",
+      "response_set": [
+        0,
+        4,
+        6
+      ],
+      "stimulus": "2, 3, __, 5",
+      "question_show": true,
+      "responsetype_set": [
+        "reference",
+        "reference",
+        "reference"
+      ],
+      "stimulus_type": "reference",
+      "gen_question": false,
+      "question_say": true,
+      "answer_type": "reference"
+    },
+    {
+      "answer": 9,
+      "question_type": "rising",
+      "response_set": [
+        9,
+        10,
+        13
+      ],
+      "stimulus": "7, 8, __, 10",
+      "question_show": true,
+      "responsetype_set": [
+        "reference",
+        "reference",
+        "reference"
+      ],
+      "stimulus_type": "reference",
+      "gen_question": false,
+      "question_say": true,
+      "answer_type": "reference"
+    },
+    {
+      "answer": 11,
+      "question_type": "rising",
+      "response_set": [
+        11,
+        13,
+        7
+      ],
+      "stimulus": "9, 10, __, 12",
+      "question_show": true,
+      "responsetype_set": [
+        "reference",
+        "reference",
+        "reference"
+      ],
+      "stimulus_type": "reference",
+      "gen_question": false,
+      "question_say": true,
+      "answer_type": "reference"
+    },
+    {
+      "answer": 7,
+      "question_type": "rising",
+      "response_set": [
+        2,
+        11,
+        7
+      ],
+      "stimulus": "5, 6, __, 8",
+      "question_show": true,
+      "responsetype_set": [
+        "reference",
+        "reference",
+        "reference"
+      ],
+      "stimulus_type": "reference",
+      "gen_question": false,
+      "question_say": true,
+      "answer_type": "reference"
+    },
+    {
+      "answer": 12,
+      "question_type": "rising",
+      "response_set": [
+        1,
+        2,
+        12
+      ],
+      "stimulus": "10, 11, __, 13",
+      "question_show": true,
+      "responsetype_set": [
+        "reference",
+        "reference",
+        "reference"
+      ],
+      "stimulus_type": "reference",
+      "gen_question": false,
+      "question_say": true,
+      "answer_type": "reference"
+    },
+    {
+      "answer": 10,
+      "question_type": "rising",
+      "response_set": [
+        10,
+        2,
+        7
+      ],
+      "stimulus": "8, 9, __, 11",
+      "question_show": true,
+      "responsetype_set": [
+        "reference",
+        "reference",
+        "reference"
+      ],
+      "stimulus_type": "reference",
+      "gen_question": false,
+      "question_say": true,
+      "answer_type": "reference"
+    },
+    {
+      "answer": 10,
+      "question_type": "rising",
+      "response_set": [
+        10,
+        2,
+        13
+      ],
+      "stimulus": "8, 9, __, 11",
+      "question_show": true,
+      "responsetype_set": [
+        "reference",
+        "reference",
+        "reference"
+      ],
+      "stimulus_type": "reference",
+      "gen_question": false,
+      "question_say": true,
+      "answer_type": "reference"
+    }
+  ],
+  "gen_stimulusSet": [],
+  "question_sequence": "sequential",
+  "problem_type": "MIS_NUM",
+  "gen_responseSet": [],
+  "response_replacement": false,
+  "banner_color": "#000066"
+}
