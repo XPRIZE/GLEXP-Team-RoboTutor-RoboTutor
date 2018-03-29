@@ -532,12 +532,21 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
         }else {
             wrongTimes++;
+            if (wrongTimes == 3){
+                publishFeature(TCONST.NEXTTURN);
+                wrongTimes = 0;
+            } else if(wrongTimes != 2) {
+                publishFeature(TCONST.GENERIC_WRONG);
+            }else{
+                publishFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
+            }
+            /*
             if(wrongTimes != 2) {
                 publishFeature(TCONST.GENERIC_WRONG);
             }else{
                 publishFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
                 wrongTimes = 0;
-            }
+            }*/
 
         }
 
@@ -785,7 +794,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         if(extraSpeed != 0) {
             mask.setVisibility(VISIBLE);
             Animator animator = scoreboard.reward(player.getX() + player.carImage.getX(),
-                    player.getY(), "-" + extraSpeed);
+                    player.getY(), " ");
             animator.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
@@ -795,8 +804,9 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
                         scoreboard.decrease(player.score);
                         player.score = 0;
                     } else {
-                        scoreboard.decrease(extraSpeed);
-                        player.score -= extraSpeed;
+                        int d = 0;
+                        scoreboard.decrease(d);
+                        player.score -= 0;
                     }
                     new AnimateScoreboard().execute(scoreboard);
                 }
