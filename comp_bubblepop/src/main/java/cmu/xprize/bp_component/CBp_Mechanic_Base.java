@@ -292,6 +292,7 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 // of the screen.
                 //
                 showStimulus((CBp_Data) target);
+                Log.d("TOMBRADY", "TargetL " + target);
                 mComponent.post(BP_CONST.ZOOM_STIMULUS);
                 break;
 

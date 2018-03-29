@@ -462,26 +462,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 post(BP_CONST.SHOW_BUBBLES);
                 break;
 
-            case BP_CONST.SHOW_BUBBLE_ZERO:
-                post(BP_CONST.SHOW_BUBBLE_ZERO);
-                break;
-
-            case BP_CONST.SHOW_BUBBLE_ONE:
-                post(BP_CONST.SHOW_BUBBLE_ONE);
-                break;
-
-            case BP_CONST.SHOW_BUBBLE_TWO:
-                post(BP_CONST.SHOW_BUBBLE_TWO);
-                break;
-
-            case BP_CONST.SHOW_BUBBLE_THREE:
-                post(BP_CONST.SHOW_BUBBLE_THREE);
-                break;
-
-            case BP_CONST.SHOW_BUBBLE_FOUR:
-                post(BP_CONST.SHOW_BUBBLE_FOUR);
-                break;
-
             case BP_CONST.POP_BUBBLE:
                 post(BP_CONST.POP_BUBBLE, _touchedBubble);
                 break;
@@ -899,7 +879,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         // Ensure letters are lowercase for mp3 matching
         //
         correctVal = correctVal.toLowerCase();
-
+        Log.d("TOMBRADY", mProblemType + " " + correctVal);
         //Cases over the problem type to publish diffferent features and values
         if(mProblemType.startsWith("EXPRESSION_E2N")) {
 
