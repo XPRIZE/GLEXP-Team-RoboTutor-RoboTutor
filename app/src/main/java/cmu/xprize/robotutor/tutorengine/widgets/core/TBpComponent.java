@@ -116,14 +116,20 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     private String[] splitExpression(String exp, String key) {
         int index = exp.indexOf(key);
         String operand1 = exp.substring(0, index);
-        String operation = exp.substring(index + 1, index + 2);
-        String operand2 = exp.substring(index + 2);
+        String operation = "";
         if(key.equals("\n")) {
-            if (operation.equals("+")) {
-                key = "plus";
-            } else {
-                key = "minus";
-            }
+            operation = exp.substring(index + 1, index + 2);
+        }
+        else {
+            operation = exp.substring(index, index + 1);
+        }
+        String operand2 = exp.substring(index + 2);
+
+        if (operation.equals("+") || operation.equals("plus")) {
+            key = "plus";
+        }
+        else {
+            key = "minus";
         }
 
         return (new String[]{operand1, key, operand2});
@@ -871,7 +877,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         // Ensure letters are lowercase for mp3 matching
         //
         correctVal = correctVal.toLowerCase();
-        Log.d("TOMBRADY", mProblemType + " " + correctVal);
+
         //Cases over the problem type to publish diffferent features and values
         if(mProblemType.startsWith("EXPRESSION_E2N")) {
 
@@ -907,6 +913,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             }
 
             publishValue(BP_CONST.QUEST_VAR_OPERAND, operation);
+            Log.d("TOMBRADY", operation);
 
             //Publish features and values for each digit of second operand so that audios can be played separately
             if(operand2Digits[0] >= 100) {
@@ -923,6 +930,8 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             else {
                 removeFeature(BP_CONST.FTR_QUEST_STIM_TWO_TENS);
             }
+
+
         }
         else if(mProblemType.equals("EXPRESSION_N2E")) {
             publishFeature(BP_CONST.FTR_N2E);

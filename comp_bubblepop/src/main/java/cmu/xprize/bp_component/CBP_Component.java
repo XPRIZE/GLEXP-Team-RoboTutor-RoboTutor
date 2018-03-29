@@ -46,6 +46,7 @@ import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
+import java.util.*;
 
 
 public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoadableObject {
@@ -285,6 +286,18 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         // Preprocess the response set data so the size is available for the randomizer
         //
         preProcessQuestion();
+
+        //Randomly shuffle questions in datasource (from stackoverflow)
+        if(question_sequence.equals("RANDOM")) {
+            for (int i = dataSource.length - 1; i > 0; i--) {
+                int j = (int)(Math.floor(Math.random() * (i + 1)));
+                CBp_Data f = dataSource[i];
+                dataSource[i] = dataSource[j];
+                dataSource[j] = f;
+            }
+            Log.d("TOMBRADY", "RANDOM");
+        }
+
     }
 
 
@@ -295,6 +308,8 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
             if (dataSource != null) {
 
                 updateDataSet(dataSource[_dataIndex]);
+
+                Log.d("TOMBRADY", dataSource[_dataIndex].stimulus);
 
                 // We cycle through the dataSource question types iteratively
                 //
@@ -354,6 +369,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
 
     protected void selectQuestion(CBp_Data data) {
+
 
         //***** Select the question from the stimulus set
         //

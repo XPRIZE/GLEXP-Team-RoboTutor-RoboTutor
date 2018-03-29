@@ -351,7 +351,6 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
                 removeFeature(AKCONST.FTR_TEST_AUDIO_TENS);
             }
             applyEventNode("PLAY_AUDIO");
-            Log.d("TOMBRADY", listDigits[0] + " " + listDigits[1]);
         }
 
         else {
@@ -360,7 +359,6 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
             publishFeature(AKCONST.FTR_TEST_AUDIO);
             publishValue(AKCONST.TESTAUDIO, answerString);
             applyEventNode("PLAY_AUDIO");
-            Log.d("TOMBRADY", answerString);
         }
 
 
