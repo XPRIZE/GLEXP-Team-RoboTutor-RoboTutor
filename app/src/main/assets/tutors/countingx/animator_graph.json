@@ -72,10 +72,10 @@
           "preenter": ["ENABLE_TAPPING"],
           "preexit": [],
           "edges":
-                  [
-                    {"constraint": "", "edge":"PROBLEM_FINISHED"}
+          [
+            {"constraint": "", "edge":"PROBLEM_FINISHED"}
 
-                  ]
+          ]
         },
 
         "PROBLEM_FINISHED": {
@@ -121,7 +121,7 @@
             {"name": "RoboFinger Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Please tap here.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""}
 
 
-            ]
+          ]
         },
 
         "UPDATESTIMULUS": {
@@ -154,7 +154,6 @@
           "COMMENT": "TBD",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE:String", "features":""},
-
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
           ]
         },
@@ -185,9 +184,7 @@
           "COMMENT": "TBD",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#node,value#WAIT_FOR_INPUT:String", "features":""},
-
             {"type": "COMMAND", "id": "SCountingX", "method": "setVolatileBehavior", "parms": "DONE_COUNTING_TO_N:String|NEXTNODE:String", "features": ""},
-
             {"type": "COMMAND", "cmd": "WAIT"}
           ]
         }
