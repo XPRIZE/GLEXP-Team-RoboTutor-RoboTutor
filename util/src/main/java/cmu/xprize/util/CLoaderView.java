@@ -119,7 +119,7 @@ public class CLoaderView extends LinearLayout {
 
         public void onReceive (Context context, Intent intent) {
 
-            Log.d("Loader", "Broadcast recieved: ");
+            Log.d("Loader", "Broadcast received: ");
 
             switch(intent.getAction()) {
 

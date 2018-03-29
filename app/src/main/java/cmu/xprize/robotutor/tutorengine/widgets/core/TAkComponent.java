@@ -77,11 +77,11 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     private HashMap<String,String>  _StringVar  = new HashMap<>();
     private HashMap<String,Integer> _IntegerVar = new HashMap<>();
     private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
-    
+
     static final String TAG = "TAkComponent";
 
-    
-    
+
+
     public TAkComponent(Context context) {
         super(context);
     }
@@ -233,6 +233,15 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
                 String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
                 loadJSON(new JSONObject(jsonData), null);
 
+            } else if (dataNameDescriptor.startsWith(TCONST.DEBUG_FILE_PREFIX)) { // this must be reproduced in every robo_debuggable component
+
+                String dataFile = dataNameDescriptor.substring(TCONST.DEBUG_FILE_PREFIX.length());
+
+                String dataPath = TCONST.DEBUG_RT_PATH + "/";
+                String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
+                loadJSON(new JSONObject(jsonData), mTutor.getScope());
+
+
             } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
                 String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
@@ -288,9 +297,18 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
             publishFeature(TCONST.FTR_EOD);
     }
 
+    //Helper function that converts 3 digit number to list of digits
+    private int[] getListDigits(int num) {
+        int hundredsDigit = 0;  int tensDigit = 0;
+        if(num >= 100) {
+            hundredsDigit = (num / 100) * 100;
+        }
+        num = num % 100;
+        return (new int[]{hundredsDigit, num});
+    }
+
     @Override
     public void playAudio(CAk_Data data){
-
         String answerString = "";
 
         TScope scope = mTutor.getScope();
@@ -313,19 +331,48 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
         }
 
-        Log.d("PlayAudio", answerString);
+        if(answerString != null && answerString.matches("[-+]?\\d*\\.?\\d+")) {
+            removeFeature(AKCONST.FTR_TEST_AUDIO);
 
-        publishValue(AKCONST.TESTAUDIO, answerString);
-        applyEventNode("PLAY_AUDIO");
+            int[] listDigits = getListDigits(Integer.parseInt(answerString));
+
+            if(listDigits[0] >= 1) {
+                publishFeature(AKCONST.FTR_TEST_AUDIO_HUNDREDS);
+                publishValue(AKCONST.TESTAUDIO_HUNDREDS, listDigits[0]);
+            }
+            else {
+                removeFeature(AKCONST.FTR_TEST_AUDIO_HUNDREDS);
+            }
+            if (listDigits[1] >= 1 || listDigits[0] == 0){
+                publishFeature(AKCONST.FTR_TEST_AUDIO_TENS);
+                publishValue(AKCONST.TESTAUDIO_TENS, listDigits[1]);
+            }
+            else {
+                removeFeature(AKCONST.FTR_TEST_AUDIO_TENS);
+            }
+            applyEventNode("PLAY_AUDIO");
+            Log.d("TOMBRADY", listDigits[0] + " " + listDigits[1]);
+        }
+
+        else {
+            removeFeature(AKCONST.FTR_TEST_AUDIO_HUNDREDS);
+            removeFeature(AKCONST.FTR_TEST_AUDIO_TENS);
+            publishFeature(AKCONST.FTR_TEST_AUDIO);
+            publishValue(AKCONST.TESTAUDIO, answerString);
+            applyEventNode("PLAY_AUDIO");
+            Log.d("TOMBRADY", answerString);
+        }
+
+
     }
 
     public void instructAudio(String instruction){
-        
+
         TScope scope = mTutor.getScope();
         Log.d("InstructAudio", instruction);
-        
+
         publishValue(AKCONST.VAR_AUDIO, instruction);
-        
+
         applyEventNode("PAUSE");
         applyEventNode("INSTRUCT_AUDIO");
         applyEventNode("RESUME");
@@ -532,7 +579,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
         event.setTimestamp(System.currentTimeMillis());
 
-        RoboTutor.logManager.postEvent_I(TCONST.PERFORMANCE_TAG, event.toString());
+        RoboTutor.perfLogManager.postPerformanceLog(event);
     }
 
 
@@ -561,7 +608,10 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
                 int quantity = countCharOccurrences(currentProblem.belowString, 'o');
                 nameBuilder.append("o");
                 nameBuilder.append(quantity);
+            } else {
+                nameBuilder.append(currentProblem.belowString);
             }
+
             nameBuilder.append("_");
 
             for (String choice : currentProblem.choices) {
@@ -985,6 +1035,11 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
         _FeatureMap.put(feature, true);
         mTutor.addFeature(feature);
+    }
+
+    public void removeFeature(String feature) {
+        _FeatureMap.remove(feature);
+        mTutor.delFeature(feature);
     }
 
     /**

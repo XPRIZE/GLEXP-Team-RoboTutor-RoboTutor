@@ -1,72 +1,348 @@
 {"random": true,
 "dataSource": [
-"baba", 
-"bado", 
-"basi", 
-"bila", 
-"gani", 
-"giza", 
-"hadi", 
-"hapa", 
-"hapo", 
-"hata", 
-"hebu", 
-"hili", 
-"hilo", 
-"hivi", 
-"hiyo", 
-"huko", 
-"huku", 
-"huyo", 
-"huyu", 
-"jina", 
-"joto", 
-"kale", 
-"kama", 
-"kazi", 
-"kila", 
-"kitu", 
-"kula", 
-"kuna", 
-"kuwa", 
-"lake", 
-"maji", 
-"mama", 
-"mara", 
-"mimi", 
-"miti", 
-"moja", 
-"moto", 
-"muda", 
-"mzee", 
-"nami", 
-"nani", 
-"naye", 
-"nguo", 
-"nini", 
-"njaa", 
-"ombe", 
-"pale", 
-"sana", 
-"sasa", 
-"siku", 
-"tatu", 
-"tena", 
-"vile", 
-"wake", 
-"wako", 
-"wala", 
-"wale", 
-"wapi", 
-"watu", 
-"wazo", 
-"wewe", 
-"wote", 
-"yake", 
-"yako", 
-"yeye", 
-"yote", 
-"yule", 
-"zake", 
-"zote"
+    {
+        "stimulus": "baba",
+        "audioStimulus": ["baba"],
+        "answer": "baba"
+    },
+    {
+        "stimulus": "bado",
+        "audioStimulus": ["bado"],
+        "answer": "bado"
+    },
+    {
+        "stimulus": "basi",
+        "audioStimulus": ["basi"],
+        "answer": "basi"
+    },
+    {
+        "stimulus": "bila",
+        "audioStimulus": ["bila"],
+        "answer": "bila"
+    },
+    {
+        "stimulus": "gani",
+        "audioStimulus": ["gani"],
+        "answer": "gani"
+    },
+    {
+        "stimulus": "giza",
+        "audioStimulus": ["giza"],
+        "answer": "giza"
+    },
+    {
+        "stimulus": "hadi",
+        "audioStimulus": ["hadi"],
+        "answer": "hadi"
+    },
+    {
+        "stimulus": "hapa",
+        "audioStimulus": ["hapa"],
+        "answer": "hapa"
+    },
+    {
+        "stimulus": "hapo",
+        "audioStimulus": ["hapo"],
+        "answer": "hapo"
+    },
+    {
+        "stimulus": "hata",
+        "audioStimulus": ["hata"],
+        "answer": "hata"
+    },
+    {
+        "stimulus": "hebu",
+        "audioStimulus": ["hebu"],
+        "answer": "hebu"
+    },
+    {
+        "stimulus": "hili",
+        "audioStimulus": ["hili"],
+        "answer": "hili"
+    },
+    {
+        "stimulus": "hilo",
+        "audioStimulus": ["hilo"],
+        "answer": "hilo"
+    },
+    {
+        "stimulus": "hivi",
+        "audioStimulus": ["hivi"],
+        "answer": "hivi"
+    },
+    {
+        "stimulus": "hiyo",
+        "audioStimulus": ["hiyo"],
+        "answer": "hiyo"
+    },
+    {
+        "stimulus": "huko",
+        "audioStimulus": ["huko"],
+        "answer": "huko"
+    },
+    {
+        "stimulus": "huku",
+        "audioStimulus": ["huku"],
+        "answer": "huku"
+    },
+    {
+        "stimulus": "huyo",
+        "audioStimulus": ["huyo"],
+        "answer": "huyo"
+    },
+    {
+        "stimulus": "huyu",
+        "audioStimulus": ["huyu"],
+        "answer": "huyu"
+    },
+    {
+        "stimulus": "jina",
+        "audioStimulus": ["jina"],
+        "answer": "jina"
+    },
+    {
+        "stimulus": "joto",
+        "audioStimulus": ["joto"],
+        "answer": "joto"
+    },
+    {
+        "stimulus": "kale",
+        "audioStimulus": ["kale"],
+        "answer": "kale"
+    },
+    {
+        "stimulus": "kama",
+        "audioStimulus": ["kama"],
+        "answer": "kama"
+    },
+    {
+        "stimulus": "kazi",
+        "audioStimulus": ["kazi"],
+        "answer": "kazi"
+    },
+    {
+        "stimulus": "kila",
+        "audioStimulus": ["kila"],
+        "answer": "kila"
+    },
+    {
+        "stimulus": "kitu",
+        "audioStimulus": ["kitu"],
+        "answer": "kitu"
+    },
+    {
+        "stimulus": "kula",
+        "audioStimulus": ["kula"],
+        "answer": "kula"
+    },
+    {
+        "stimulus": "kuna",
+        "audioStimulus": ["kuna"],
+        "answer": "kuna"
+    },
+    {
+        "stimulus": "kuwa",
+        "audioStimulus": ["kuwa"],
+        "answer": "kuwa"
+    },
+    {
+        "stimulus": "lake",
+        "audioStimulus": ["lake"],
+        "answer": "lake"
+    },
+    {
+        "stimulus": "maji",
+        "audioStimulus": ["maji"],
+        "answer": "maji"
+    },
+    {
+        "stimulus": "mama",
+        "audioStimulus": ["mama"],
+        "answer": "mama"
+    },
+    {
+        "stimulus": "mara",
+        "audioStimulus": ["mara"],
+        "answer": "mara"
+    },
+    {
+        "stimulus": "mimi",
+        "audioStimulus": ["mimi"],
+        "answer": "mimi"
+    },
+    {
+        "stimulus": "miti",
+        "audioStimulus": ["miti"],
+        "answer": "miti"
+    },
+    {
+        "stimulus": "moja",
+        "audioStimulus": ["moja"],
+        "answer": "moja"
+    },
+    {
+        "stimulus": "moto",
+        "audioStimulus": ["moto"],
+        "answer": "moto"
+    },
+    {
+        "stimulus": "muda",
+        "audioStimulus": ["muda"],
+        "answer": "muda"
+    },
+    {
+        "stimulus": "mzee",
+        "audioStimulus": ["mzee"],
+        "answer": "mzee"
+    },
+    {
+        "stimulus": "nami",
+        "audioStimulus": ["nami"],
+        "answer": "nami"
+    },
+    {
+        "stimulus": "nani",
+        "audioStimulus": ["nani"],
+        "answer": "nani"
+    },
+    {
+        "stimulus": "naye",
+        "audioStimulus": ["naye"],
+        "answer": "naye"
+    },
+    {
+        "stimulus": "nguo",
+        "audioStimulus": ["nguo"],
+        "answer": "nguo"
+    },
+    {
+        "stimulus": "nini",
+        "audioStimulus": ["nini"],
+        "answer": "nini"
+    },
+    {
+        "stimulus": "njaa",
+        "audioStimulus": ["njaa"],
+        "answer": "njaa"
+    },
+    {
+        "stimulus": "ombe",
+        "audioStimulus": ["ombe"],
+        "answer": "ombe"
+    },
+    {
+        "stimulus": "pale",
+        "audioStimulus": ["pale"],
+        "answer": "pale"
+    },
+    {
+        "stimulus": "sana",
+        "audioStimulus": ["sana"],
+        "answer": "sana"
+    },
+    {
+        "stimulus": "sasa",
+        "audioStimulus": ["sasa"],
+        "answer": "sasa"
+    },
+    {
+        "stimulus": "siku",
+        "audioStimulus": ["siku"],
+        "answer": "siku"
+    },
+    {
+        "stimulus": "tatu",
+        "audioStimulus": ["tatu"],
+        "answer": "tatu"
+    },
+    {
+        "stimulus": "tena",
+        "audioStimulus": ["tena"],
+        "answer": "tena"
+    },
+    {
+        "stimulus": "vile",
+        "audioStimulus": ["vile"],
+        "answer": "vile"
+    },
+    {
+        "stimulus": "wake",
+        "audioStimulus": ["wake"],
+        "answer": "wake"
+    },
+    {
+        "stimulus": "wako",
+        "audioStimulus": ["wako"],
+        "answer": "wako"
+    },
+    {
+        "stimulus": "wala",
+        "audioStimulus": ["wala"],
+        "answer": "wala"
+    },
+    {
+        "stimulus": "wale",
+        "audioStimulus": ["wale"],
+        "answer": "wale"
+    },
+    {
+        "stimulus": "wapi",
+        "audioStimulus": ["wapi"],
+        "answer": "wapi"
+    },
+    {
+        "stimulus": "watu",
+        "audioStimulus": ["watu"],
+        "answer": "watu"
+    },
+    {
+        "stimulus": "wazo",
+        "audioStimulus": ["wazo"],
+        "answer": "wazo"
+    },
+    {
+        "stimulus": "wewe",
+        "audioStimulus": ["wewe"],
+        "answer": "wewe"
+    },
+    {
+        "stimulus": "wote",
+        "audioStimulus": ["wote"],
+        "answer": "wote"
+    },
+    {
+        "stimulus": "yake",
+        "audioStimulus": ["yake"],
+        "answer": "yake"
+    },
+    {
+        "stimulus": "yako",
+        "audioStimulus": ["yako"],
+        "answer": "yako"
+    },
+    {
+        "stimulus": "yeye",
+        "audioStimulus": ["yeye"],
+        "answer": "yeye"
+    },
+    {
+        "stimulus": "yote",
+        "audioStimulus": ["yote"],
+        "answer": "yote"
+    },
+    {
+        "stimulus": "yule",
+        "audioStimulus": ["yule"],
+        "answer": "yule"
+    },
+    {
+        "stimulus": "zake",
+        "audioStimulus": ["zake"],
+        "answer": "zake"
+    },
+    {
+        "stimulus": "zote",
+        "audioStimulus": ["zote"],
+        "answer": "zote"
+    }
 ]}

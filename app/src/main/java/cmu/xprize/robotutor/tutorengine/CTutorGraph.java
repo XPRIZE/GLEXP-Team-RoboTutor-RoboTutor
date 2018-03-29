@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.graph.databinding;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
@@ -206,6 +207,15 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
                         if (gotoNextScene(false).equals(TCONST.ENDTUTOR)) {
 
                             //mainHandler.post(mTutor.new Queue(TCONST.ENDTUTOR));
+
+                            PerformanceLogItem event = new PerformanceLogItem();
+                            event.setUserId(RoboTutor.STUDENT_ID);
+                            event.setSessionId(RoboTutor.SESSION_ID);
+                            event.setLanguage(CTutorEngine.language);
+                            event.setTaskName("ENDTUTOR");
+                            event.setTimestamp(System.currentTimeMillis());
+                            RoboTutor.perfLogManager.postPerformanceLogWithoutContext(event);
+
                             mTutor.post(TCONST.ENDTUTOR);
                         }
                         break;
@@ -355,7 +365,6 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
         while((features = navigatedata[_sceneCurr].features) != null)
         {
             // If this scene is not in the feature set for the tutor then check the next one.
-
             if(!mTutor.testFeatureSet(features)) _sceneCurr++;
             else break;
         }

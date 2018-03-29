@@ -40,12 +40,185 @@
             android:stretchMode="none"
             android:background="#44DDDDDD" />
 
-        <cmu.xprize.robotutor.tutorengine.widgets.core.TSmComponent
-            android:id="@+id/SdbgComponent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#44DDDD00"
-            android:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/SdbgComponent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#44DDDD00"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/STutorSelect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/SAkiraCustom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/launchnormal"
+                        android:backgroundTint="#FF00FF"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginEnd="50dp"
+                        android:scaleType="fitCenter"
+                        android:padding="20dp"
+                        android:textSize="23sp"
+                        android:textColor="#FFFFFF"
+                        android:text="Akira"
+                        android:tag="akira"/>
+
+                    <Button
+                        android:id="@+id/SAsmCustom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/launchnormal"
+                        android:backgroundTint="#FF00FF"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginEnd="50dp"
+                        android:scaleType="fitCenter"
+                        android:padding="20dp"
+                        android:textSize="23sp"
+                        android:textColor="#FFFFFF"
+                        android:text="Add Subtract"
+                        android:tag="math"/>
+
+                    <Button
+                        android:id="@+id/STapCountCustom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/launchnormal"
+                        android:backgroundTint="#FF00FF"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginEnd="50dp"
+                        android:scaleType="fitCenter"
+                        android:padding="20dp"
+                        android:textSize="23sp"
+                        android:textColor="#FFFFFF"
+                        android:text="Tap and Count"
+                        android:tag="countingx"/>
+
+                    <Button
+                        android:id="@+id/SBPopMenuButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/launchnormal"
+                        android:backgroundTint="#FF00FF"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginEnd="50dp"
+                        android:scaleType="fitCenter"
+                        android:padding="20dp"
+                        android:textSize="23sp"
+                        android:textColor="#FFFFFF"
+                        android:text="BUBBLE POP"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/SBPopMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <Button
+                        android:id="@+id/SBPopLetters"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/launchnormal"
+                        android:backgroundTint="#FF00FF"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginEnd="50dp"
+                        android:scaleType="fitCenter"
+                        android:padding="12dp"
+                        android:textSize="16sp"
+                        android:textColor="#FFFFFF"
+                        android:text="LETTERS"
+                        android:tag="bpop.ltr.mix"/>
+
+                    <Button
+                        android:id="@+id/SBPopWords"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/launchnormal"
+                        android:backgroundTint="#FF00FF"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginEnd="50dp"
+                        android:scaleType="fitCenter"
+                        android:padding="12dp"
+                        android:textSize="16sp"
+                        android:textColor="#FFFFFF"
+                        android:text="WORDS"
+                        android:tag="bpop.wrd"/>
+
+                    <Button
+                        android:id="@+id/SBPopPhonemes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/launchnormal"
+                        android:backgroundTint="#FF00FF"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginEnd="50dp"
+                        android:scaleType="fitCenter"
+                        android:padding="12dp"
+                        android:textSize="16sp"
+                        android:textColor="#FFFFFF"
+                        android:text="PHONEMES"
+                        android:tag="bpop.phon"/>
+
+                    <Button
+                        android:id="@+id/SBPopNumbers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/launchnormal"
+                        android:backgroundTint="#FF00FF"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginEnd="50dp"
+                        android:scaleType="fitCenter"
+                        android:padding="12dp"
+                        android:textSize="16sp"
+                        android:textColor="#FFFFFF"
+                        android:text="NUMBERS"
+                        android:tag="bpop.num"/>
+
+                    <Button
+                        android:id="@+id/SBPopShapes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/launchnormal"
+                        android:backgroundTint="#FF00FF"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginEnd="50dp"
+                        android:scaleType="fitCenter"
+                        android:padding="12dp"
+                        android:textSize="16sp"
+                        android:textColor="#FFFFFF"
+                        android:text="SHAPES"
+                        android:tag="bpop.shp"/>
+
+                    <Button
+                        android:id="@+id/SBPopExpressions"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/launchnormal"
+                        android:backgroundTint="#FF00FF"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginEnd="50dp"
+                        android:scaleType="fitCenter"
+                        android:padding="12dp"
+                        android:textSize="16sp"
+                        android:textColor="#FFFFFF"
+                        android:text="EXPRESSIONS"
+                        android:tag="bpop.ex"/>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
 
     </FrameLayout>
 

@@ -57,6 +57,10 @@ public class CBpBackground extends View implements ILoadableObject {
     public String          colorbase;
     public String          colorchoice;
     public int[]           colors;
+    public String[]        hex_colors; // for backwards compatibility
+
+    private enum ColorType {INT, HEX};
+    private ColorType myColorType;
 
     static final String TAG = "CBpBackground";
 
@@ -196,6 +200,13 @@ public class CBpBackground extends View implements ILoadableObject {
 
     private void genColorLayout() {
 
+        // for backwards compatibility
+        if(colors != null) {
+            myColorType = ColorType.INT;
+        } else if (hex_colors != null) {
+            myColorType = ColorType.HEX;
+        }
+
         int colorNdx = 0;
 
         for(IPrimitive item : bgPrimitives) {
@@ -203,8 +214,13 @@ public class CBpBackground extends View implements ILoadableObject {
             switch (colorchoice) {
 
                 case "fixed":
-                    item.setColor(colors[colorNdx]);
-                    colorNdx = (colorNdx + 1) % colors.length;
+                    if(myColorType == ColorType.INT) {
+                        item.setColor(colors[colorNdx]);
+                        colorNdx = (colorNdx + 1) % colors.length;
+                    } else {
+                        item.setHexColor(hex_colors[colorNdx]);
+                        colorNdx = (colorNdx + 1) % hex_colors.length;
+                    }
 
                     break;
 

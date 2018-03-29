@@ -1,0 +1,32 @@
+{ "bootFeatures":"",
+  "random": false,
+  "singleStimulus": "true",
+  "dataSource": [
+    {
+      "stimulus": "50+50",
+      "audioStimulus": ["50", "plus", "50"],
+      "answer": "100"
+    },
+    {
+      "stimulus": "50-30",
+      "audioStimulus": ["50", "minus", "30"],
+      "answer": "20"
+    },
+    {
+      "stimulus": "3+3",
+      "audioStimulus": ["3", "plus", "3"],
+      "answer": "6"
+    },
+    {
+      "stimulus": "4-2",
+      "audioStimulus": ["4", "minus", "2"],
+      "answer": "2"
+    },
+    {
+      "stimulus": "13-11",
+      "audioStimulus": ["13", "minus", "11"],
+      "answer": "2"
+    }
+  ]
+}
+

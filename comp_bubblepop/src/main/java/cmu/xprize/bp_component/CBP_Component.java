@@ -65,6 +65,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
     protected CBp_Data              _currData;
     public    int                   question_Index;
+    public    int                   logQuestionIndex; // TODO: This is the workaround to get correct problem number in log. We should refactor and use existing question_Index instead.
     private   int                   _dataIndex = 0;
 
     protected IBubbleMechanic       _mechanics;
@@ -225,6 +226,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         // If presenting stimulus values sequentially then we use this to track the current value.
         //
         question_Index = 0;
+        logQuestionIndex = 0;
         correct_Count  = 0;
     }
 
@@ -306,6 +308,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
                 //
                 question_count--;
                 question_Index++;
+                logQuestionIndex++;
                 attempt_count = BP_CONST.MAX_ATTEMPT;
 
                 Log.d("BPOP", "question Count: " + question_count);
@@ -338,14 +341,12 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
             case "mc":
             case "multiplechoice":
             case "multiple-choice":
-
                 _mechanics = new CBp_Mechanic_MC(mContext, this, problem_type);
                 break;
 
             case "rise":
             case "rising":
-
-                _mechanics = new CBp_Mechanic_RISE(mContext, this);
+                _mechanics = new CBp_Mechanic_RISE(mContext, this, problem_type);
                 break;
         }
 
@@ -770,7 +771,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         bringChildToFront(Scontent);
 
         if(banner_color != null) {
-             dispatchEvent(new CEvent(TCONST.SET_BANNER_COLOR, TCONST.VALUE , banner_color));
+//             dispatchEvent(new CEvent(TCONST.SET_BANNER_COLOR, TCONST.VALUE , banner_color));
 
         }
     }

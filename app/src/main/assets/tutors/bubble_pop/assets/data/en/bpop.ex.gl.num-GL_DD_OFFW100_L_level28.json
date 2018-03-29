@@ -1,0 +1,240 @@
+{
+  "gen_responseSet": [],
+  "gen_stimulusSet": [],
+  "response_replacement": false,
+  "banner_color": "#000066",
+  "view_background": {
+    "layoutcount": 0,
+    "style": "primitives",
+    "colorchoice": "fixed",
+    "layout": "grid",
+    "kind": "squares",
+    "colorbase": "#666666",
+    "colors": [
+      -6053120,
+      -7566336,
+      -2500352,
+      -5066240
+    ]
+  },
+  "dataSource": [
+    {
+      "stimulus": "LEAST",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_type": "multiple-choice",
+      "question_show": false,
+      "gen_question": false,
+      "answer_type": "text_data",
+      "stimulus_type": "text_data",
+      "response_set": [
+        362,
+        854
+      ],
+      "question_say": true,
+      "answer": 362
+    },
+    {
+      "stimulus": "LEAST",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_type": "multiple-choice",
+      "question_show": false,
+      "gen_question": false,
+      "answer_type": "text_data",
+      "stimulus_type": "text_data",
+      "response_set": [
+        658,
+        307
+      ],
+      "question_say": true,
+      "answer": 307
+    },
+    {
+      "stimulus": "LEAST",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_type": "multiple-choice",
+      "question_show": false,
+      "gen_question": false,
+      "answer_type": "text_data",
+      "stimulus_type": "text_data",
+      "response_set": [
+        281,
+        528
+      ],
+      "question_say": true,
+      "answer": 281
+    },
+    {
+      "stimulus": "LEAST",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_type": "multiple-choice",
+      "question_show": false,
+      "gen_question": false,
+      "answer_type": "text_data",
+      "stimulus_type": "text_data",
+      "response_set": [
+        882,
+        567
+      ],
+      "question_say": true,
+      "answer": 567
+    },
+    {
+      "stimulus": "LEAST",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_type": "multiple-choice",
+      "question_show": false,
+      "gen_question": false,
+      "answer_type": "text_data",
+      "stimulus_type": "text_data",
+      "response_set": [
+        102,
+        781
+      ],
+      "question_say": true,
+      "answer": 102
+    },
+    {
+      "stimulus": "LEAST",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_type": "multiple-choice",
+      "question_show": false,
+      "gen_question": false,
+      "answer_type": "text_data",
+      "stimulus_type": "text_data",
+      "response_set": [
+        167,
+        306
+      ],
+      "question_say": true,
+      "answer": 167
+    },
+    {
+      "stimulus": "LEAST",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_type": "multiple-choice",
+      "question_show": false,
+      "gen_question": false,
+      "answer_type": "text_data",
+      "stimulus_type": "text_data",
+      "response_set": [
+        359,
+        791
+      ],
+      "question_say": true,
+      "answer": 359
+    },
+    {
+      "stimulus": "LEAST",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_type": "multiple-choice",
+      "question_show": false,
+      "gen_question": false,
+      "answer_type": "text_data",
+      "stimulus_type": "text_data",
+      "response_set": [
+        388,
+        158
+      ],
+      "question_say": true,
+      "answer": 158
+    },
+    {
+      "stimulus": "LEAST",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_type": "multiple-choice",
+      "question_show": false,
+      "gen_question": false,
+      "answer_type": "text_data",
+      "stimulus_type": "text_data",
+      "response_set": [
+        819,
+        395
+      ],
+      "question_say": true,
+      "answer": 395
+    },
+    {
+      "stimulus": "LEAST",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_type": "multiple-choice",
+      "question_show": false,
+      "gen_question": false,
+      "answer_type": "text_data",
+      "stimulus_type": "text_data",
+      "response_set": [
+        892,
+        265
+      ],
+      "question_say": true,
+      "answer": 265
+    }
+  ],
+  "question_count": 10,
+  "question_sequence": "sequential",
+  "gen_answertype": "text_data",
+  "gen_stimulustype": "text_data",
+  "problem_type": "GL_LT",
+  "question_replacement": false,
+  "gen_answerSet": [],
+  "gen_responsetype": "text_data"
+}

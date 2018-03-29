@@ -1,0 +1,307 @@
+{
+  "animatorMap": {
+    "COMMENT": "Number Scale",
+
+    "numberscale": {
+
+      "type": "ANIMATOR",
+      "title": "Number Scale",
+      "COMMENT": "Number Scale",
+      "version": "1.0.0",
+      "rootnode": "INTRO_STATE",
+
+      "queueMap": {
+        "PLAY_CHIME": {
+          "type": "QUEUE",
+          "COMMENT": "Chime when user creates new object",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id":"SNumberScale", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
+            {"name":"Play Chimes:", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{CountChime}}.mp3", "repeat":false, "volume": "0.5", "mode":"event", "features": ""},
+            {"name":"Play Chimes:", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{OctaveChime}}.mp3", "repeat":false, "volume": "0.5", "mode":"event", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCount}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": ""}
+
+          ],
+          "preexit":[],
+          "edges":[]
+        },
+
+
+        "PLAY_CHIME_PLUS": {
+          "type": "QUEUE",
+          "COMMENT": "Chime when user creates new object",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id":"SNumberScale", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
+            {"name":"Play Chimes:", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{CountChime}}.mp3", "repeat":false, "volume": "0.5", "mode":"event", "features": ""},
+            {"name":"Play Chimes:", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{OctaveChime}}.mp3", "repeat":false, "volume": "0.5", "mode":"event", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCountt}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "na.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCount}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""}
+
+          ],
+          "preexit":[],
+          "edges":[]
+        },
+        "PLAY_CHIME_PPLUS": {
+          "type": "QUEUE",
+          "COMMENT": "Chime when user creates new object",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id":"SNumberScale", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
+            {"name":"Play Chimes:", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{CountChime}}.mp3", "repeat":false, "volume": "0.5", "mode":"event", "features": ""},
+            {"name":"Play Chimes:", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{OctaveChime}}.mp3", "repeat":false, "volume": "0.5", "mode":"event", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCounttt}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "na.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCountt}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "na1.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCount}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""}
+
+          ],
+          "preexit":[],
+          "edges":[]
+        },
+
+        "PLAY_TUTOR_PLUS": {
+          "type": "QUEUE",
+          "COMMENT": "play tutor again when user hesitates for a long time",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id":"SNumberScale", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
+            {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "pointAtAdd", "parms": "", "features":""},
+            {"name": "TAP", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"default", "soundsource": "tap plus.mp3", "repeat":false, "volume": "0.5", "mode":"event", "features": ""}
+
+          ],
+          "preexit":[],
+          "edges":[]
+        },
+        "PLAY_TUTOR_MINUS": {
+          "type": "QUEUE",
+          "COMMENT": "play tutor again when user hesitates for a long time",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id":"SNumberScale", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
+            {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "pointAtMinus", "parms": "", "features":""},
+            {"name": "TAP", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"default", "soundsource": "tap minus.mp3", "repeat":false, "volume": "0.5", "mode":"event", "features": ""}
+
+          ],
+          "preexit":[],
+          "edges":[]
+        }
+      },
+
+      "nodeMap": {
+
+        "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        "INTRO_STATE": {
+          "type": "NODE",
+          "COMMENT": "Intro Clip - we only ever visit this node once",
+          "maptype":"moduleMap",
+          "mapname": "PLAYINTRO",
+          "preenter": ["SET_VERSION", "SET_DATASOURCE","SET_CHIME_BEHAVIOR","SET_CHIME_PLUS_BEHAVIOR","SET_CHIME_PPLUS_BEHAVIOR","DISABLE_TAPPING","SET_TUTOR_BEHAVIOR1","SET_TUTOR_BEHAVIOR2"],
+          "preexit": [],
+          "edges": [
+            {
+              //add a state to read the numbers;
+              "constraint": "",
+              "edge": "UPDATE_STIMULUS"
+            }
+          ]
+        },
+
+        "UPDATE_STIMULUS": {
+          "type": "NODE",
+          "COMMENT": "We may say or show the stimulus at this point",
+          "maptype":"moduleMap",
+          "mapname": "UPDATESTIMULUS",
+          "preenter": ["NEXT_DATASET"],
+          "preexit": [],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "USER_INPUT"
+            }
+          ]
+        },
+
+
+        "USER_INPUT": {
+          "COMMENT":"Wait for the user to touch",
+          "type": "NODE",
+          "maptype":"moduleMap",
+          "mapname": "USERINPUT",
+          "preenter": ["ENABLE_TAPPING"],
+          "preexit": [],
+          "edges":[
+            {"constraint": "", "edge":"PROBLEM_FINISHED"}
+
+          ]
+
+
+        },
+
+        "PROBLEM_FINISHED": {
+          "COMMENT": "When user inputs a correct answer...",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "PLAYCOMPLETE",
+          "preenter": ["DISABLE_TAPPING","CLR_CHIME_BEHAVIOR","CLR_CHIME_PLUS_BEHAVIOR","CLR_CHIME_PPLUS_BEHAVIOR","CLR_TUTOR_BEHAVIOR1","CLR_TUTOR_BEHAVIOR2"],
+          "preexit": [],
+          "edges": [
+            {"constraint": "FTR_EOD", "edge": "NEXT_SCENE"},
+            {"constraint": "", "edge": "UPDATE_STIMULUS"}
+          ]
+        },
+
+        "NEXT_SCENE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene",
+          "maptype": "actionMap",
+          "mapname": "NEXTSCENE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+
+          ]
+        }
+
+      },
+
+      "moduleMap": {
+
+        "COMMENT": "@@@@@  CModules  @@@@@",
+
+        "PLAYINTRO": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+              
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""},
+
+            {"name": "Introduction Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets count.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""}
+            ]
+        },
+
+        "UPDATESTIMULUS": {
+          "type": "MODULE",
+          "reuse": true,
+          "tracks": [
+              
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
+            {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "pointAtAdd", "parms": "", "features":""},
+            {"name": "RoboFinger Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "tap plus.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""},
+            {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "pointAtMinus", "parms": "", "features":""},
+            {"name": "RoboFinger Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "tap minus.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""}
+    
+          ]
+        },
+
+        "NEXTPROBLEM": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#NEXT_PROBLEM:String", "features":""},
+
+            {"type": "COMMAND", "id": "SNumberScale", "method": "next", "features": ""}
+          ]
+        },
+
+        "PLAYCOMPLETE": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE:String", "features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+
+          ]
+        },
+
+
+
+        "PLAYWRONG": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+
+              {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#PLAYWRONG:String", "features":""}
+
+          ]
+        },
+
+        "EMPTYMODULE": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            
+              {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#EMPTYMODULE:String", "features":""}
+              
+          ]
+        },
+
+        "USERINPUT": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#USERINPUT:String", "features":""},
+            {"type": "COMMAND", "id": "SNumberScale", "method": "setVolatileBehavior", "parms": "MAX_HIT_REACHED:String|NEXTNODE:String", "features": ""},
+            {"type": "COMMAND", "cmd": "WAIT"}
+          ]
+        }
+
+      },
+
+      "actionMap": {
+
+        "COMMENT": "@@@@@  CActions @@@@@ ",
+
+        "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "SNumberScale", "method": "setDataSource", "parms": "LOCAL_FILE:String","features":""},
+        "SET_CHIME_BEHAVIOR": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_CHIME:String|PLAY_CHIME:String" ,"features":""},
+        "SET_CHIME_PLUS_BEHAVIOR": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_CHIME_PLUS:String|PLAY_CHIME_PLUS:String" ,"features":""},
+        "SET_CHIME_PPLUS_BEHAVIOR": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_CHIME_PPLUS:String|PLAY_CHIME_PPLUS:String" ,"features":""},
+        "SET_TUTOR_BEHAVIOR1": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_TUTOR_PLUS:String|PLAY_TUTOR_PLUS:String" ,"features":""},
+        "SET_TUTOR_BEHAVIOR2": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_TUTOR_MINUS:String|PLAY_TUTOR_MINUS:String" ,"features":""},
+
+        "CLR_CHIME_BEHAVIOR": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_CHIME:String|NULL:String" ,"features":""},
+        "CLR_CHIME_PLUS_BEHAVIOR": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_CHIME_PLUS:String|NULL:String" ,"features":""},
+        "CLR_CHIME_PPLUS_BEHAVIOR": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_CHIME_PPLUS:String|NULL:String" ,"features":""},
+        "CLR_TUTOR_BEHAVIOR1": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_TUTOR_PLUS:String|NULL:String" ,"features":""},
+        "CLR_TUTOR_BEHAVIOR2": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_TUTOR_MINUS:String|NULL:String" ,"features":""},
+        "NEXT_DATASET": {"type": "COMMAND", "id": "SNumberScale", "method": "next", "features": ""},
+        "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"},
+        "DISABLE_TAPPING": {"type": "COMMAND", "id": "SNumberScale", "method" : "disableTapping", "features":""},
+        "ENABLE_TAPPING": {"type": "COMMAND", "id": "SNumberScale", "method" : "enableTapping", "features":""},
+        "NEXTSCENE": {"type":"COMMAND", "cmd": "NEXTSCENE"}
+
+      },
+
+      "constraintMap": {
+
+        "COMMENT": "@@@@@  CConstraints @@@@@ ",
+
+        "FTR_EOD": {
+          "type": "CONDITION",
+          "test": "FTR_EOD"
+        },
+
+        "CONTINUE":{
+          "type": "CONDITION",
+          "test": "CONTINUE"
+        }
+
+      }
+    }
+  }
+}

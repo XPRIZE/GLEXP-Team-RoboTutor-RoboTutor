@@ -1,5 +1,5 @@
 story.hear::numbers_counting_song,,countingx:1,,,,,,,,,bpop.num:say_show_mc,bpop.num:say_show_rise,bpop.num:s2n_say_show_mc,bpop.num:s2n_say_show_rise,write.num:level1,bpop.num:n2s_say_show_mc,bpop.num:n2s_say_show_rise,,write.num.dic:level1
-,,countingx:2,,,,,,,,akira:1_1,bpop.num:say_mc,bpop.num:say_rise,bpop.num:s2n_say_mc,bpop.num:s2n_say_rise,,bpop.num:n2s_say_mc,bpop.num:n2s_say_rise,,
+,,countingx:2,,,,,,,,akira:1_1,bpop.num:say_mc,bpop.num:say_rise,bpop.num:s2n_say_mc,bpop.num:s2n_say_rise,write.num:0_10_dn,bpop.num:n2s_say_mc,bpop.num:n2s_say_rise,,write.num.dic:0_10_dn
 ,,countingx:3,,,,,,,,akira:2_2,bpop.num:show_mc,bpop.num:show_rise,bpop.num:s2n_show_mc,bpop.num:s2n_show_rise,write.num:level2,bpop.num:n2s_show_mc,bpop.num:n2s_show_rise,,write.num.dic:level2
 ,math:1,,,,,,,,,,,,,,,,,,
 ,math:3,,,,,,,,,akira:3_1,,,,,,,,,
@@ -9,8 +9,8 @@ story.hear::numbers_counting_song,,countingx:1,,,,,,,,,bpop.num:say_show_mc,bpop
 ,math:12,,,,,,,,,,,,,,,,,,
 ,math:11,,,,,,,,,,,,,,,,,,
 ,math:13,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,akira:5_1,,,,,,,,,
-,,,,,,,,,,akira:6_2,,,,,,,,,
+,,,,,,,,,,akira:5_1,,,,,write.num:10_19_up,,,,write.num.dic:10_19_up
+,,,,,,,,,,akira:6_2,,,,,write.num:0_19_rnd,,,,write.num.dic:0_19_rnd
 ,math:14,,,,,,,,,akira:7_1,,,,,,,,,
 ,math:7,,,,,,,,,akira:8_2,,,,,,,,,
 ,math:10,,,,,,,,,,,,,,,,,,
@@ -18,13 +18,13 @@ story.hear::numbers_counting_song,,countingx:1,,,,,,,,,bpop.num:say_show_mc,bpop
 ,math:8,,,,,,,,,,,,,,,,,,
 ,math:9,,,,,,,,,,,,,,,,,,
 ,math:16,,,,,,,,,,,,,,,,,,
-,math:17,,,,,,,,,akira:9_1,,,,,,,,,
+,math:17,,,,,,,,,akira:9_1,,,,,write.num:10_100_by_10_up,,,,write.num.dic:10_100_by_10_up
 ,math:20,,,,,,,,,,,,,,,,,,
 ,math:21,,,,,,,,,,,,,,,,,,
-,math:18,,,,,,,,,akira:10_2,,,,,,,,,
-,,,,,,,,,,akira:11_1,,,,,,,,,
+,math:18,,,,,,,,,akira:10_2,,,,,write.num:10_100_by_10_rnd,,,,write.num.dic:10_100_by_10_rnd
+,,,,,,,,,,akira:11_1,,,,,write.num:0_99_rnd,,,,write.num.dic:0_99_rnd
 ,math:22,,,,,,,,,akira:12_2,,,,,,,,,
 ,math:19,,,,,,,,,akira:13_1,,,,,,,,,
-,math:23,,,,,,,,,akira:14_2,,,,,,,,,
-,math:24,,,,,,,,,akira:15_1,,,,,,,,,
+,math:23,,,,,,,,,akira:14_2,,,,,write.num:100_900_by_100_up,,,,write.num.dic:100_900_by_100_up
+,math:24,,,,,,,,,akira:15_1,,,,,write.num:100_900_by_100_rnd,,,,write.num.dic:100_900_by_100_rnd
 ,math:26,,,,,,,,,akira:16_2,,,,,,,,,

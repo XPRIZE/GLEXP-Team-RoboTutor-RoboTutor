@@ -36,7 +36,7 @@ public class PerformanceLogItem {
     // iterative way to print fields in the desired order
     private static final String[] orderedFieldsToPrint =
             {"userId", "sessionId", "gameId", "tutorName", "levelName", "taskName", "problemNumber", "problemName", "substepNumber",
-                    "expectedAnswer", "userResponse", "correctness", "timestamp"};
+                    "expectedAnswer", "userResponse", "correctness", "timestamp", "feedbackType"};
 
 
 
@@ -224,7 +224,11 @@ public class PerformanceLogItem {
         this.levelName = levelName;
     }
 
+    public String getLevelName() { return levelName; }
+
     public void setTaskName(String taskName) {
         this.taskName = taskName;
     }
+
+    public String getTaskName() { return taskName; }
 }

@@ -1,44 +1,208 @@
 {"random": true,
 "dataSource": [
-"about", 
-"after", 
-"again", 
-"black", 
-"bring", 
-"brown", 
-"carry", 
-"clean", 
-"could", 
-"don't", 
-"drink", 
-"eight", 
-"every", 
-"first", 
-"found", 
-"funny", 
-"green", 
-"laugh", 
-"light", 
-"never", 
-"right", 
-"round", 
-"seven", 
-"shall", 
-"sleep", 
-"small", 
-"start", 
-"thank", 
-"their", 
-"there", 
-"these", 
-"think", 
-"those", 
-"three", 
-"today", 
-"under", 
-"where", 
-"which", 
-"white", 
-"would", 
-"write"
+    {
+        "stimulus": "about",
+        "audioStimulus": ["about"],
+        "answer": "about"
+    },
+    {
+        "stimulus": "after",
+        "audioStimulus": ["after"],
+        "answer": "after"
+    },
+    {
+        "stimulus": "again",
+        "audioStimulus": ["again"],
+        "answer": "again"
+    },
+    {
+        "stimulus": "black",
+        "audioStimulus": ["black"],
+        "answer": "black"
+    },
+    {
+        "stimulus": "bring",
+        "audioStimulus": ["bring"],
+        "answer": "bring"
+    },
+    {
+        "stimulus": "brown",
+        "audioStimulus": ["brown"],
+        "answer": "brown"
+    },
+    {
+        "stimulus": "carry",
+        "audioStimulus": ["carry"],
+        "answer": "carry"
+    },
+    {
+        "stimulus": "clean",
+        "audioStimulus": ["clean"],
+        "answer": "clean"
+    },
+    {
+        "stimulus": "could",
+        "audioStimulus": ["could"],
+        "answer": "could"
+    },
+    {
+        "stimulus": "don't",
+        "audioStimulus": ["don't"],
+        "answer": "don't"
+    },
+    {
+        "stimulus": "drink",
+        "audioStimulus": ["drink"],
+        "answer": "drink"
+    },
+    {
+        "stimulus": "eight",
+        "audioStimulus": ["eight"],
+        "answer": "eight"
+    },
+    {
+        "stimulus": "every",
+        "audioStimulus": ["every"],
+        "answer": "every"
+    },
+    {
+        "stimulus": "first",
+        "audioStimulus": ["first"],
+        "answer": "first"
+    },
+    {
+        "stimulus": "found",
+        "audioStimulus": ["found"],
+        "answer": "found"
+    },
+    {
+        "stimulus": "funny",
+        "audioStimulus": ["funny"],
+        "answer": "funny"
+    },
+    {
+        "stimulus": "green",
+        "audioStimulus": ["green"],
+        "answer": "green"
+    },
+    {
+        "stimulus": "laugh",
+        "audioStimulus": ["laugh"],
+        "answer": "laugh"
+    },
+    {
+        "stimulus": "light",
+        "audioStimulus": ["light"],
+        "answer": "light"
+    },
+    {
+        "stimulus": "never",
+        "audioStimulus": ["never"],
+        "answer": "never"
+    },
+    {
+        "stimulus": "right",
+        "audioStimulus": ["right"],
+        "answer": "right"
+    },
+    {
+        "stimulus": "round",
+        "audioStimulus": ["round"],
+        "answer": "round"
+    },
+    {
+        "stimulus": "seven",
+        "audioStimulus": ["seven"],
+        "answer": "seven"
+    },
+    {
+        "stimulus": "shall",
+        "audioStimulus": ["shall"],
+        "answer": "shall"
+    },
+    {
+        "stimulus": "sleep",
+        "audioStimulus": ["sleep"],
+        "answer": "sleep"
+    },
+    {
+        "stimulus": "small",
+        "audioStimulus": ["small"],
+        "answer": "small"
+    },
+    {
+        "stimulus": "start",
+        "audioStimulus": ["start"],
+        "answer": "start"
+    },
+    {
+        "stimulus": "thank",
+        "audioStimulus": ["thank"],
+        "answer": "thank"
+    },
+    {
+        "stimulus": "their",
+        "audioStimulus": ["their"],
+        "answer": "their"
+    },
+    {
+        "stimulus": "there",
+        "audioStimulus": ["there"],
+        "answer": "there"
+    },
+    {
+        "stimulus": "these",
+        "audioStimulus": ["these"],
+        "answer": "these"
+    },
+    {
+        "stimulus": "think",
+        "audioStimulus": ["think"],
+        "answer": "think"
+    },
+    {
+        "stimulus": "those",
+        "audioStimulus": ["those"],
+        "answer": "those"
+    },
+    {
+        "stimulus": "three",
+        "audioStimulus": ["three"],
+        "answer": "three"
+    },
+    {
+        "stimulus": "today",
+        "audioStimulus": ["today"],
+        "answer": "today"
+    },
+    {
+        "stimulus": "under",
+        "audioStimulus": ["under"],
+        "answer": "under"
+    },
+    {
+        "stimulus": "where",
+        "audioStimulus": ["where"],
+        "answer": "where"
+    },
+    {
+        "stimulus": "which",
+        "audioStimulus": ["which"],
+        "answer": "which"
+    },
+    {
+        "stimulus": "white",
+        "audioStimulus": ["white"],
+        "answer": "white"
+    },
+    {
+        "stimulus": "would",
+        "audioStimulus": ["would"],
+        "answer": "would"
+    },
+    {
+        "stimulus": "write",
+        "audioStimulus": ["write"],
+        "answer": "write"
+    }
 ]}

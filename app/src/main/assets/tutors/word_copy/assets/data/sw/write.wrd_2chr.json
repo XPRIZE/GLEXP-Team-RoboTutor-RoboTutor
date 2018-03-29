@@ -4,16 +4,60 @@
   "random": true,
 
   "dataSource": [
-    "au",
-    "je",
-    "la",
-    "na",
-    "ng",
-    "ni",
-    "si",
-    "tu",
-    "wa",
-    "ya",
-    "za"
+      {
+          "stimulus": "au",
+          "audioStimulus": ["au"],
+          "answer": "au"
+      },
+      {
+          "stimulus": "je",
+          "audioStimulus": ["je"],
+          "answer": "je"
+      },
+      {
+          "stimulus": "la",
+          "audioStimulus": ["la"],
+          "answer": "la"
+      },
+      {
+          "stimulus": "na",
+          "audioStimulus": ["na"],
+          "answer": "na"
+      },
+      {
+          "stimulus": "ng",
+          "audioStimulus": ["ng"],
+          "answer": "ng"
+      },
+      {
+          "stimulus": "ni",
+          "audioStimulus": ["ni"],
+          "answer": "ni"
+      },
+      {
+          "stimulus": "si",
+          "audioStimulus": ["si"],
+          "answer": "si"
+      },
+      {
+          "stimulus": "tu",
+          "audioStimulus": ["tu"],
+          "answer": "tu"
+      },
+      {
+          "stimulus": "wa",
+          "audioStimulus": ["wa"],
+          "answer": "wa"
+      },
+      {
+          "stimulus": "ya",
+          "audioStimulus": ["ya"],
+          "answer": "ya"
+      },
+      {
+          "stimulus": "za",
+          "audioStimulus": ["za"],
+          "answer": "za"
+      }
     ]
 }

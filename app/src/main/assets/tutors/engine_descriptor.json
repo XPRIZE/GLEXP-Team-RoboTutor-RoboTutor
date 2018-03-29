@@ -20,6 +20,11 @@
   //
   "tutorVariants": {
 
+    "numberscale": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "numberscale",
+      "features": ""
+    },
     "countingx": {
       "type": "TUTORVAR_MAP",
       "tutorName": "countingx",
@@ -60,11 +65,6 @@
       "tutorName": "bubble_pop",
       "features": "FTR_WORDS"
     },
-    "bpop.phon": {
-      "type": "TUTORVAR_MAP",
-      "tutorName": "bubble_pop",
-      "features": "FTR_PHONEMICS"
-    },
     "bpop.num": {
       "type": "TUTORVAR_MAP",
       "tutorName": "bubble_pop",
@@ -75,10 +75,20 @@
       "tutorName": "bubble_pop",
       "features": "FTR_SHAPES"
     },
-    "bpop.ex": {
+    "bpop.addsub": {
       "type": "TUTORVAR_MAP",
       "tutorName": "bubble_pop",
-      "features": "FTR_EXPRESSIONS"
+      "features": "FTR_E2N"
+    },
+    "bpop.gl": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_GT_LT"
+    },
+    "bpop.mn": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_MIS_NUM"
     },
     "write.ltr.uc": {
       "type": "TUTORVAR_MAP",
@@ -90,10 +100,10 @@
       "tutorName": "word_copy",
       "features": "FTR_LETTERS:FTR_UPPERCASE:FTR_DICTATION"
     },
-    "write.wrd": {
+    "write.ltr.uc.trc": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
-      "features": "FTR_WORDS"
+      "features": "FTR_LETTERS:FTR_UPPERCASE:FTR_TRACE"
     },
     "write.ltr.lc": {
       "type": "TUTORVAR_MAP",
@@ -105,15 +115,55 @@
       "tutorName": "word_copy",
       "features": "FTR_LETTERS:FTR_LOWERCASE:FTR_DICTATION"
     },
-    "write.num.dic": {
+    "write.ltr.lc.trc": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
-      "features": "FTR_NUMBERS:FTR_DICTATION"
+      "features": "FTR_LETTERS:FTR_LOWERCASE:FTR_TRACE"
     },
     "write.num": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
       "features": "FTR_NUMBERS"
+    },
+    "write.num.dic": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_NUMBERS:FTR_DICTATION"
+    },
+    "write.num.trc": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_NUMBERS:FTR_TRACE"
+    },
+    "write.wrd": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_WORDS"
+    },
+    "write.wrd.dic": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_WORDS:FTR_DICTATION"
+    },
+    "write.dotCount": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_DOTCOUNT"
+    },
+    "write.arith.add": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_ARITH:FTR_ADD"
+    },
+    "write.arith.sub": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_ARITH:FTR_SUB"
+    },
+    "write.missingLtr": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_MISSING_LTR"
     },
     "story.echo": {
       "type": "TUTORVAR_MAP",
@@ -129,6 +179,21 @@
       "type": "TUTORVAR_MAP",
       "tutorName": "story_reading",
       "features": "FTR_USER_READ"
+    },
+    "story.hide": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_reading",
+      "features": "FTR_USER_HIDE"
+    },
+    "story.reveal": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_reading",
+      "features": "FTR_USER_REVEAL"
+    },
+    "story.parrot": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_reading",
+      "features": "FTR_USER_PARROT"
     }
   },
 
@@ -139,6 +204,20 @@
   //
   "bindingPatterns": {
 
+    "numberscale": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "numberscale": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SNumberScale",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
     "countingx": {
       "type": "TUTORDATA_MAP",
       "scene_bindings": {
