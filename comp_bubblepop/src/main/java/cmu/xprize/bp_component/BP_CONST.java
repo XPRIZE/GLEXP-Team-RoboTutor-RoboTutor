@@ -115,25 +115,16 @@ public class BP_CONST {
 
     public static final String QUEST_VAR_STIM_ONE_HUNDREDS = ".questValueStimOneHundreds";
     public static final String QUEST_VAR_STIM_ONE_TENS = ".questValueStimOneTens";
-    public static final String QUEST_VAR_STIM_ONE_ONES = ".questValueStimOneOnes";
     public static final String QUEST_VAR_OPERAND  = ".questValueOperand";
     public static final String QUEST_VAR_STIM_TWO_HUNDREDS = ".questValueStimTwoHundreds";
     public static final String QUEST_VAR_STIM_TWO_TENS = ".questValueStimTwoTens";
-    public static final String QUEST_VAR_STIM_TWO_ONES = ".questValueStimTwoOnes";
 
     public static final String ANS_VAR_STIM_ONE_HUNDREDS= ".ansValueStimOneHundreds";
     public static final String ANS_VAR_STIM_ONE_TENS= ".ansValueStimOneTens";
-    public static final String ANS_VAR_STIM_ONE_ONES= ".ansValueStimOneOnes";
     public static final String ANS_VAR_OPERAND = ".ansValueOperand";
     public static final String ANS_VAR_STIM_TWO_HUNDREDS = ".ansValueStimTwoHundreds";
     public static final String ANS_VAR_STIM_TWO_TENS = ".ansValueStimTwoTens";
-    public static final String ANS_VAR_STIM_TWO_ONES = ".ansValueStimTwoOnes";
 
-    public static final String STIM_VAL_ZERO  = ".stimValueZero";
-    public static final String STIM_VAL_ONE   = ".stimValueOne";
-    public static final String STIM_VAL_TWO   = ".stimValueTwo";
-    public static final String STIM_VAL_THREE = ".stimValueThree";
-    public static final String STIM_VAL_FOUR  = ".stimValueFour";
 
     public static final String FTR_ANS_HUNDREDS  = "FTR_ANS_HUNDREDS";
     public static final String FTR_ANS_TENS      = "FTR_ANS_TENS";
@@ -162,7 +153,9 @@ public class BP_CONST {
     public static final String SHOW_BUBBLE_THREE  =   "SHOW_BUBBLE_THREE";
     public static final String SHOW_BUBBLE_FOUR  =   "SHOW_BUBBLE_FOUR";
 
-    public static final String SHOW_BUBBLE_MASK   = "SHOW_BUBBLE_MASK";
+
+    public static final String SHOW_BUBBLE_MASK          = "SHOW_BUBBLE_MASK";
+
     public static final String HIDE_MASK          = "HIDE_MASK";
 
     public static final String SHOW_STIMULUS_MASK = "SHOW_STIMULUS_MASK";

@@ -191,26 +191,6 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
                 }
                 break;
 
-            case BP_CONST.SHOW_BUBBLE_ZERO:
-                mComponent.post(BP_CONST.INFLATE, SBubbles[0], delay);
-                break;
-
-            case BP_CONST.SHOW_BUBBLE_ONE:
-                mComponent.post(BP_CONST.INFLATE, SBubbles[1], delay);
-                break;
-
-            case BP_CONST.SHOW_BUBBLE_TWO:
-                mComponent.post(BP_CONST.INFLATE, SBubbles[2], delay);
-                break;
-
-            case BP_CONST.SHOW_BUBBLE_THREE:
-                mComponent.post(BP_CONST.INFLATE, SBubbles[3], delay);
-                break;
-
-            case BP_CONST.SHOW_BUBBLE_FOUR:
-                mComponent.post(BP_CONST.INFLATE, SBubbles[4], delay);
-                break;
-
             case BP_CONST.INFLATE:
                 bubble = (CBubble)target;
 
