@@ -1,0 +1,210 @@
+{
+  "gen_stimulustype": "text-data",
+  "view_background": {
+    "kind": "squares",
+    "colors": [
+      -6053120,
+      -7566336,
+      -2500352,
+      -5066240
+    ],
+    "style": "primitives",
+    "colorchoice": "fixed",
+    "colorbase": "#666666",
+    "layout": "grid",
+    "layoutcount": 0
+  },
+  "question_sequence": "sequential",
+  "response_replacement": false,
+  "question_count": 10,
+  "dataSource": [
+    {
+      "response_set": [
+        85,
+        75
+      ],
+      "gen_question": false,
+      "responsetype_set": [
+        "reference",
+        "reference"
+      ],
+      "question_show": false,
+      "answer_type": "reference",
+      "stimulus_type": "reference",
+      "question_type": "rising",
+      "question_say": true,
+      "answer": 85,
+      "stimulus": "GREATEST"
+    },
+    {
+      "response_set": [
+        21,
+        31
+      ],
+      "gen_question": false,
+      "responsetype_set": [
+        "reference",
+        "reference"
+      ],
+      "question_show": false,
+      "answer_type": "reference",
+      "stimulus_type": "reference",
+      "question_type": "rising",
+      "question_say": true,
+      "answer": 31,
+      "stimulus": "GREATEST"
+    },
+    {
+      "response_set": [
+        61,
+        51
+      ],
+      "gen_question": false,
+      "responsetype_set": [
+        "reference",
+        "reference"
+      ],
+      "question_show": false,
+      "answer_type": "reference",
+      "stimulus_type": "reference",
+      "question_type": "rising",
+      "question_say": true,
+      "answer": 61,
+      "stimulus": "GREATEST"
+    },
+    {
+      "response_set": [
+        73,
+        63
+      ],
+      "gen_question": false,
+      "responsetype_set": [
+        "reference",
+        "reference"
+      ],
+      "question_show": false,
+      "answer_type": "reference",
+      "stimulus_type": "reference",
+      "question_type": "rising",
+      "question_say": true,
+      "answer": 73,
+      "stimulus": "GREATEST"
+    },
+    {
+      "response_set": [
+        81,
+        91
+      ],
+      "gen_question": false,
+      "responsetype_set": [
+        "reference",
+        "reference"
+      ],
+      "question_show": false,
+      "answer_type": "reference",
+      "stimulus_type": "reference",
+      "question_type": "rising",
+      "question_say": true,
+      "answer": 91,
+      "stimulus": "GREATEST"
+    },
+    {
+      "response_set": [
+        44,
+        54
+      ],
+      "gen_question": false,
+      "responsetype_set": [
+        "reference",
+        "reference"
+      ],
+      "question_show": false,
+      "answer_type": "reference",
+      "stimulus_type": "reference",
+      "question_type": "rising",
+      "question_say": true,
+      "answer": 54,
+      "stimulus": "GREATEST"
+    },
+    {
+      "response_set": [
+        34,
+        24
+      ],
+      "gen_question": false,
+      "responsetype_set": [
+        "reference",
+        "reference"
+      ],
+      "question_show": false,
+      "answer_type": "reference",
+      "stimulus_type": "reference",
+      "question_type": "rising",
+      "question_say": true,
+      "answer": 34,
+      "stimulus": "GREATEST"
+    },
+    {
+      "response_set": [
+        40,
+        30
+      ],
+      "gen_question": false,
+      "responsetype_set": [
+        "reference",
+        "reference"
+      ],
+      "question_show": false,
+      "answer_type": "reference",
+      "stimulus_type": "reference",
+      "question_type": "rising",
+      "question_say": true,
+      "answer": 40,
+      "stimulus": "GREATEST"
+    },
+    {
+      "response_set": [
+        62,
+        52
+      ],
+      "gen_question": false,
+      "responsetype_set": [
+        "reference",
+        "reference"
+      ],
+      "question_show": false,
+      "answer_type": "reference",
+      "stimulus_type": "reference",
+      "question_type": "rising",
+      "question_say": true,
+      "answer": 62,
+      "stimulus": "GREATEST"
+    },
+    {
+      "response_set": [
+        23,
+        13
+      ],
+      "gen_question": false,
+      "responsetype_set": [
+        "reference",
+        "reference"
+      ],
+      "question_show": false,
+      "answer_type": "reference",
+      "stimulus_type": "reference",
+      "question_type": "rising",
+      "question_say": true,
+      "answer": 23,
+      "stimulus": "GREATEST"
+    }
+  ],
+  "problem_type": "GL_GT",
+  "gen_answerSet": [],
+  "gen_responsetype": "text-data",
+  "question_replacement": false,
+  "banner_color": "#000066",
+  "gen_responseSet": [],
+  "gen_answertype": "text-data",
+  "gen_stimulusSet": []
+}

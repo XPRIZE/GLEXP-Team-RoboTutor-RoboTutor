@@ -64,7 +64,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
     private String          mProblemType;
 
     public CBp_Mechanic_MC(Context context, CBP_Component parent, String problem_type) {
-        super.init(context, parent, problem_type);
+        super.init(context, parent);
         mProblemType = problem_type;
     }
 
@@ -185,11 +185,30 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
                     for(CBubble ibubble : SBubbles) {
                         mComponent.post(BP_CONST.INFLATE, ibubble, delay);
-
                         delay += BP_CONST.INFLATE_DELAY;
                     }
 
                 }
+                break;
+
+            case BP_CONST.SHOW_BUBBLE_ZERO:
+                mComponent.post(BP_CONST.INFLATE, SBubbles[0], delay);
+                break;
+
+            case BP_CONST.SHOW_BUBBLE_ONE:
+                mComponent.post(BP_CONST.INFLATE, SBubbles[1], delay);
+                break;
+
+            case BP_CONST.SHOW_BUBBLE_TWO:
+                mComponent.post(BP_CONST.INFLATE, SBubbles[2], delay);
+                break;
+
+            case BP_CONST.SHOW_BUBBLE_THREE:
+                mComponent.post(BP_CONST.INFLATE, SBubbles[3], delay);
+                break;
+
+            case BP_CONST.SHOW_BUBBLE_FOUR:
+                mComponent.post(BP_CONST.INFLATE, SBubbles[4], delay);
                 break;
 
             case BP_CONST.INFLATE:
@@ -376,7 +395,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
                     try {
                         int[] shapeSet = BP_CONST.drawableMap.get(responseVal);
 
-                        newBubble.configData(responseVal, correctVal);
+                        newBubble.configData(responseVal, correctVal, mProblemType);
                         newBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
 
                         //Moved set color to here to so that text would be known when setting the color(generating  bubble)
@@ -437,6 +456,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
             int numChar = singleLine.length();
             bubbleWidth = bubbleWidth - 30 * numChar;
+            bubbleWidth = 190;
 
             float[] _widthRange = calcVectorRange(_angle, bubbleWidth * SBubbles[i1].getAssignedScale());
             float[] _heightRange = calcVectorRange(_angle,  bubbleHeight * SBubbles[i1].getAssignedScale());

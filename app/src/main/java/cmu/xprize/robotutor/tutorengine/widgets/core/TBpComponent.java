@@ -89,6 +89,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
     static final String TAG = "TBpComponent";
 
+    private String mProblemType = "";
 
 
     public TBpComponent(Context context) {
@@ -103,7 +104,32 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         super(context, attrs, defStyleAttr);
     }
 
+    //Helper function that converts 3 digit number to list of digits
+    private int[] getListDigits(int num) {
+        int hundredsDigit = 0;  int tensDigit = 0;
+        if(num >= 100) {
+            hundredsDigit = (num / 100) * 100;
+        }
+        num = num % 100;
+        return (new int[]{hundredsDigit, num});
+    }
 
+    //Helper function that splits expression into operand1, key, and operand2
+    private String[] splitExpression(String exp, String key) {
+        int index = exp.indexOf(key);
+        String operand1 = exp.substring(0, index);
+        String operation = exp.substring(index + 1, index + 2);
+        String operand2 = exp.substring(index + 2);
+        if(key.equals("\n")) {
+            if (operation.equals("+")) {
+                key = "plus";
+            } else {
+                key = "minus";
+            }
+        }
+
+        return (new String[]{operand1, key, operand2});
+    }
 
     //***********************************************************
     // Event Listener/Dispatcher - Start
@@ -166,6 +192,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         // Let the compoenent process the new data set
         //
         super.updateDataSet(data);
+        mProblemType = problem_type;
         publishQuestionState(data);
     }
 
@@ -179,12 +206,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         // on the first pass.
         //
         reset();
-
-        if (dataNameDescriptor.startsWith("[file]bpop.num.mc_show_") ||
-                dataNameDescriptor.startsWith("[file]bpop.num.rise_show_")
-                ) {
-            publishFeature(TCONST.BUBBLEPOP_MATH_EXPRESSION);
-        }
 
         // We make the assumption that all are correct until proven wrong
         //
@@ -356,9 +377,13 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
     public void maskStimulus() {
         RectF  boundRect = _bubbleStimulus.getRectBound();
+//        Log.d("TOMBRADY", "Mask Stimulus");
+//        Log.d("TOMBRADY", Float.toString(boundRect.bottom));
+//        Log.d("TOMBRADY", Float.toString(boundRect.top));
+//        Log.d("TOMBRADY", Float.toString(boundRect.left));
+//        Log.d("TOMBRADY", Float.toString(boundRect.right));
 
-        // Add an exclusion around the bubble the (incorrect) user tapped
-        //
+        // Add an exclusion around stimulus
         Intent msg = new Intent(MASK_ADDEXCL);
 
         msg.putExtra(MASK_TYPE, EXCLUDE_SQUARE);
@@ -373,7 +398,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         //
         msg = new Intent(MASK_SETALPHA);
         msg.putExtra(MASK_ALPHA, mask_alpha);
-
+//        Log.d("TOMBRADY", "Alpha" + mask_alpha);
         bManager.sendBroadcast(msg);
 
 
@@ -381,10 +406,11 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         //
         msg = new Intent(MASK_SHOWHIDE);
         msg.putExtra(MASK_SHOWHIDE, VISIBLE);
+//        Log.d("TOMBRADY", "Visible: " + VISIBLE);
 
         bManager.sendBroadcast(msg);
 
-
+//        Log.d("TOMBRADY", "Masked Stimlus");
     }
 
 
@@ -454,6 +480,26 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 post(BP_CONST.SHOW_BUBBLES);
                 break;
 
+            case BP_CONST.SHOW_BUBBLE_ZERO:
+                post(BP_CONST.SHOW_BUBBLE_ZERO);
+                break;
+
+            case BP_CONST.SHOW_BUBBLE_ONE:
+                post(BP_CONST.SHOW_BUBBLE_ONE);
+                break;
+
+            case BP_CONST.SHOW_BUBBLE_TWO:
+                post(BP_CONST.SHOW_BUBBLE_TWO);
+                break;
+
+            case BP_CONST.SHOW_BUBBLE_THREE:
+                post(BP_CONST.SHOW_BUBBLE_THREE);
+                break;
+
+            case BP_CONST.SHOW_BUBBLE_FOUR:
+                post(BP_CONST.SHOW_BUBBLE_FOUR);
+                break;
+
             case BP_CONST.POP_BUBBLE:
                 post(BP_CONST.POP_BUBBLE, _touchedBubble);
                 break;
@@ -513,9 +559,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     public boolean applyBehavior(String event) {
 
         boolean result = false;
-
         if (volatileMap.containsKey(event)) {
-
             RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:volatile,behavior:" + event);
             applyBehaviorNode(volatileMap.get(event));
 
@@ -524,7 +568,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             result = true;
 
         } else if (stickyMap.containsKey(event)) {
-
             RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:sticky,behavior:" + event);
             applyBehaviorNode(stickyMap.get(event));
 
@@ -543,7 +586,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     @Override
     public void applyBehaviorNode(String nodeName) {
         IScriptable2 obj = null;
-
         if (nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
 
             try {
@@ -552,7 +594,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 if (obj != null) {
 
                     RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehaviornode,type:" + obj.getType() + ",behavior:" + nodeName);
-
                     switch(obj.getType()) {
 
                         case TCONST.SUBGRAPH:
@@ -711,29 +752,76 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             answer = answer.toLowerCase();
         }
 
-        if(answer.contains("\n")) {
+        if(mProblemType.equals("EXPRESSION_N2E")) {
+            publishFeature(BP_CONST.FTR_N2E);
 
-            int index = answer.indexOf("\n");
-            String firstNum = answer.substring(0, index);
-            String operation = answer.substring(index + 1, index + 2);
-            String secondNum = answer.substring(index+2);
+            String[] expTerms = splitExpression(answer, "\n");
+            int operand1 = Integer.parseInt(expTerms[0]); int operand2 = Integer.parseInt(expTerms[2]);
+            String operation = expTerms[1];
+            int[] operand1Digits = getListDigits(operand1); int[] operand2Digits = getListDigits(operand2);
 
-            if(operation.equals("+")) {
-                operation = "plus";
+            //Publish features and values for each digit of first operand so that audios for each digit can be played separately
+            if(operand1Digits[0] >= 100) {
+                publishFeature(BP_CONST.FTR_ANS_STIM_ONE_HUNDREDS);
+                publishValue(BP_CONST.ANS_VAR_STIM_ONE_HUNDREDS, operand1Digits[0]);
             }
             else {
-                operation = "minus";
+                removeFeature(BP_CONST.FTR_ANS_STIM_ONE_HUNDREDS);
+            }
+            if(operand1Digits[1] >= 1 || operand1Digits[0] == 0) {
+                publishFeature(BP_CONST.FTR_ANS_STIM_ONE_TENS);
+                publishValue(BP_CONST.ANS_VAR_STIM_ONE_TENS, operand1Digits[1]);
+            }
+            else {
+                removeFeature(BP_CONST.FTR_ANS_STIM_ONE_TENS);
             }
 
-            publishValue(BP_CONST.ANSWER_VAR, firstNum);
-            publishValue(BP_CONST.ANSWER_VAR_TWO, operation);
-            publishValue(BP_CONST.ANSWER_VAR_THREE, secondNum);
-        }
+            publishValue(BP_CONST.ANS_VAR_OPERAND, operation);
 
-        else {
-            publishValue(BP_CONST.ANSWER_VAR, answer);
-            publishValue(BP_CONST.ANSWER_VAR_TWO, "TRASH");
-            publishValue(BP_CONST.ANSWER_VAR_THREE, "TRASH");
+            //Publish features and values for each digit of second operand so that audios for each digit can be played separately
+            if(operand2Digits[0] >= 100) {
+                publishFeature(BP_CONST.FTR_ANS_STIM_TWO_HUNDREDS);
+                publishValue(BP_CONST.ANS_VAR_STIM_TWO_HUNDREDS, operand2Digits[0]);
+            }
+            else {
+                removeFeature(BP_CONST.FTR_ANS_STIM_TWO_HUNDREDS);
+            }
+            if(operand2Digits[1] >= 1 || operand2Digits[0] == 0 ) {
+                publishFeature(BP_CONST.FTR_ANS_STIM_TWO_TENS);
+                publishValue(BP_CONST.ANS_VAR_STIM_TWO_TENS, operand2Digits[1]);
+            }
+            else {
+                removeFeature(BP_CONST.FTR_ANS_STIM_TWO_TENS);
+            }
+        }
+        else  {
+            if(mProblemType.startsWith("EXPRESSION_E2N")) {
+                publishFeature(BP_CONST.FTR_E2N);
+            }
+
+            try {
+                int ans = Integer.parseInt(answer);
+                int[] ansDigits = getListDigits(ans);
+
+                if(ansDigits[0] >= 100) {
+                    publishFeature(BP_CONST.FTR_ANS_HUNDREDS);
+                    publishValue(BP_CONST.ANS_VAR_HUNDREDS, ansDigits[0]);
+                }
+                else {
+                    removeFeature(BP_CONST.FTR_ANS_HUNDREDS);
+                }
+                if(ansDigits[1] >= 10 || ansDigits[0] == 0) {
+                    publishFeature(BP_CONST.FTR_ANS_TENS);
+                    publishValue(BP_CONST.ANS_VAR_TENS, ansDigits[1]);
+                }
+                else {
+                    removeFeature(BP_CONST.FTR_ANS_TENS);
+                }
+            }
+            //If value is not number, publish the value as string
+            catch(NumberFormatException nfe) {
+                publishValue(BP_CONST.ANS_VAR, answer);
+            }
         }
 
         resetValid();
@@ -824,56 +912,132 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         TScope scope = mTutor.getScope();
 
         resetState();
-
         String correctVal = data.stimulus;
-        String comp_pos = data.comp_pos;
-        String comp_len = data.comp_len;
 
         // Ensure letters are lowercase for mp3 matching
         //
         correctVal = correctVal.toLowerCase();
-        if(comp_pos != null && comp_len != null) {
-            if(comp_pos == "Starts") {
-                comp_pos = "kuanza";
+
+        //Cases over the problem type to publish diffferent features and values
+        if(mProblemType.startsWith("EXPRESSION_E2N")) {
+
+            publishFeature("FTR_E2N");
+
+            String key = "\n";
+            if(mProblemType.equals("EXPRESSION_E2N_ADD")) {
+                key = "+";
+            }
+            else if(mProblemType.equals("EXPRESSION_E2N_SUB")) {
+                key = "-";
+            }
+
+            String[] expTerms = splitExpression(correctVal, key);
+            int operand1 = Integer.parseInt(expTerms[0]); int operand2 = Integer.parseInt(expTerms[2]);
+            String operation = expTerms[1];
+            int[] operand1Digits = getListDigits(operand1); int[] operand2Digits = getListDigits(operand2);
+
+            //Publish features and values for each digit of first operand so that audios can be played separately
+            if(operand1Digits[0] >= 100) {
+                publishFeature(BP_CONST.FTR_QUEST_STIM_ONE_HUNDREDS);
+                publishValue(BP_CONST.QUEST_VAR_STIM_ONE_HUNDREDS, operand1Digits[0]);
             }
             else {
-                comp_pos = "mwishoni";
+                removeFeature(BP_CONST.FTR_QUEST_STIM_ONE_HUNDREDS);
             }
-            if(comp_len== "With") {
-                comp_len = "na";
+            if(operand1Digits[1] >= 1 || operand1Digits[0] == 0) {
+                publishFeature(BP_CONST.FTR_QUEST_STIM_ONE_TENS);
+                publishValue(BP_CONST.QUEST_VAR_STIM_ONE_TENS, operand1Digits[1]);
             }
             else {
-                comp_len = "kama";
+                removeFeature(BP_CONST.FTR_QUEST_STIM_ONE_TENS);
             }
-            publishValue(BP_CONST.QUEST_VAR, comp_pos);
-            publishValue(BP_CONST.QUEST_VAR_TWO, comp_len);
-            publishValue(BP_CONST.QUEST_VAR_THREE, correctVal);
+
+            publishValue(BP_CONST.QUEST_VAR_OPERAND, operation);
+
+            //Publish features and values for each digit of second operand so that audios can be played separately
+            if(operand2Digits[0] >= 100) {
+                publishFeature(BP_CONST.FTR_QUEST_STIM_TWO_HUNDREDS);
+                publishValue(BP_CONST.QUEST_VAR_STIM_TWO_HUNDREDS, operand2Digits[0]);
+            }
+            else {
+                removeFeature(BP_CONST.FTR_QUEST_STIM_TWO_HUNDREDS);
+            }
+            if(operand2Digits[1] >= 1 || operand2Digits[0] == 0) {
+                publishFeature(BP_CONST.FTR_QUEST_STIM_TWO_TENS);
+                publishValue(BP_CONST.QUEST_VAR_STIM_TWO_TENS, operand2Digits[1]);
+            }
+            else {
+                removeFeature(BP_CONST.FTR_QUEST_STIM_TWO_TENS);
+            }
         }
+        else if(mProblemType.equals("EXPRESSION_N2E")) {
+            publishFeature(BP_CONST.FTR_N2E);
 
-        else if(correctVal.contains("\n")) {
+            int ans = Integer.parseInt(correctVal);
+            int[] ansDigits = getListDigits(ans);
 
-            int index = correctVal.indexOf("\n");
-            String firstNum = correctVal.substring(0, index);
-            String operation = correctVal.substring(index + 1, index + 2);
-            String secondNum = correctVal.substring(index+2);
-
-            if(operation.equals("+")) {
-                operation = "plus";
+            if(ansDigits[0] >= 100) {
+                publishFeature(BP_CONST.FTR_QUEST_HUNDREDS);
+                publishValue(BP_CONST.QUEST_VAR_HUNDREDS, ansDigits[0]);
             }
             else {
-                operation = "minus";
+                removeFeature(BP_CONST.FTR_QUEST_HUNDREDS);
             }
-
-            publishValue(BP_CONST.QUEST_VAR, firstNum);
-            publishValue(BP_CONST.QUEST_VAR_TWO, operation);
-            publishValue(BP_CONST.QUEST_VAR_THREE, secondNum);
-
+            if(ansDigits[1] >= 1 || ansDigits[0] == 0) {
+                publishFeature(BP_CONST.FTR_QUEST_TENS);
+                publishValue(BP_CONST.QUEST_VAR_TENS, ansDigits[1]);
+            }
+            else {
+                removeFeature(BP_CONST.FTR_QUEST_TENS);
+            }
         }
-
         else {
-            publishValue(BP_CONST.QUEST_VAR, correctVal);
-            publishValue(BP_CONST.QUEST_VAR_TWO, "TRASH");
-            publishValue(BP_CONST.QUEST_VAR_THREE, "TRASH");
+            if(mProblemType.equals("MIS_NUM")) {
+                correctVal = "What number belongs here";
+            }
+            else if(mProblemType.equals("GL_GT")) {
+                correctVal = "Touch the largest number";
+            }
+            else if(mProblemType.equals("GL_LT")) {
+                correctVal = "Touch the smallest number";
+            }
+
+            //Publishes a value for each digit so audio for each individual digit is played
+            try {
+                int ans = Integer.parseInt(correctVal);
+                int[] ansDigits = getListDigits(ans);
+
+                if(ansDigits[0] >= 100) {
+                    publishFeature(BP_CONST.FTR_QUEST_HUNDREDS);
+                    publishValue(BP_CONST.QUEST_VAR_HUNDREDS, ansDigits[0]);
+                }
+                else {
+                    removeFeature(BP_CONST.FTR_QUEST_HUNDREDS);
+                }
+                if(ansDigits[1] >= 1 || ansDigits[0] == 0) {
+                    publishFeature(BP_CONST.FTR_QUEST_TENS);
+                    publishValue(BP_CONST.QUEST_VAR_TENS, ansDigits[1]);
+                }
+                else {
+                    removeFeature(BP_CONST.FTR_QUEST_TENS);
+                }
+            }
+            //If value is not number, publish the value as string
+            catch(NumberFormatException nfe) {
+
+                if(mProblemType.equals("WORD_STARTS_WITH")) {
+                    publishFeature(BP_CONST.FTR_WRD_STARTS_WITH);
+                    publishValue(BP_CONST.QUEST_VAR, correctVal);
+                }
+                else if(mProblemType.equals("WORD_ENDS_WITH")) {
+                    publishFeature(BP_CONST.FTR_WRD_ENDS_WITH);
+                    publishValue(BP_CONST.QUEST_VAR, correctVal);
+                }
+                else {
+                    publishValue(BP_CONST.QUEST_VAR, correctVal);
+                }
+            }
+
         }
 
         if (data.question_say) {
@@ -940,6 +1104,11 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         _FeatureMap.put(feature, true);
         mTutor.addFeature(feature);
+    }
+
+    public void removeFeature(String feature) {
+        _FeatureMap.remove(feature);
+        mTutor.delFeature(feature);
     }
 
     /**

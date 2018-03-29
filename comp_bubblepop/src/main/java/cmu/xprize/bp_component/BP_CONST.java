@@ -104,6 +104,7 @@ public class BP_CONST {
 
     public static final String SOUND_TRACK        = ".sound_track";
     public static final String QUEST_VAR          = ".questValue";
+
     public static final String ANSWER_VAR         = ".ansValue";
 
     public static final String QUEST_VAR_TWO      = ".questValueTwo";
@@ -111,6 +112,64 @@ public class BP_CONST {
 
     public static final String QUEST_VAR_THREE    = ".questValueThree";
     public static final String ANSWER_VAR_THREE   = ".ansValueThree";
+
+    public static final String ANS_VAR         = ".ansValue";
+
+    public static final String QUEST_VAR_HUNDREDS = ".questValueHundreds";
+    public static final String QUEST_VAR_TENS     = ".questValueTens";
+    public static final String QUEST_VAR_ONES      = ".questValueOnes";
+    public static final String ANS_VAR_HUNDREDS= ".ansValueHundreds";
+    public static final String ANS_VAR_TENS    = ".ansValueTens";
+    public static final String ANS_VAR_ONES    = ".ansValueOnes";
+
+    public static final String QUEST_VAR_STIM_ONE_HUNDREDS = ".questValueStimOneHundreds";
+    public static final String QUEST_VAR_STIM_ONE_TENS = ".questValueStimOneTens";
+    public static final String QUEST_VAR_STIM_ONE_ONES = ".questValueStimOneOnes";
+    public static final String QUEST_VAR_OPERAND  = ".questValueOperand";
+    public static final String QUEST_VAR_STIM_TWO_HUNDREDS = ".questValueStimTwoHundreds";
+    public static final String QUEST_VAR_STIM_TWO_TENS = ".questValueStimTwoTens";
+    public static final String QUEST_VAR_STIM_TWO_ONES = ".questValueStimTwoOnes";
+
+    public static final String ANS_VAR_STIM_ONE_HUNDREDS= ".ansValueStimOneHundreds";
+    public static final String ANS_VAR_STIM_ONE_TENS= ".ansValueStimOneTens";
+    public static final String ANS_VAR_STIM_ONE_ONES= ".ansValueStimOneOnes";
+    public static final String ANS_VAR_OPERAND = ".ansValueOperand";
+    public static final String ANS_VAR_STIM_TWO_HUNDREDS = ".ansValueStimTwoHundreds";
+    public static final String ANS_VAR_STIM_TWO_TENS = ".ansValueStimTwoTens";
+    public static final String ANS_VAR_STIM_TWO_ONES = ".ansValueStimTwoOnes";
+
+    public static final String STIM_VAL_ZERO  = ".stimValueZero";
+    public static final String STIM_VAL_ONE   = ".stimValueOne";
+    public static final String STIM_VAL_TWO   = ".stimValueTwo";
+    public static final String STIM_VAL_THREE = ".stimValueThree";
+    public static final String STIM_VAL_FOUR  = ".stimValueFour";
+
+    public static final String FTR_ANS_HUNDREDS  = "FTR_ANS_HUNDREDS";
+    public static final String FTR_ANS_TENS      = "FTR_ANS_TENS";
+    public static final String FTR_QUEST_HUNDREDS = "FTR_QUEST_HUNDREDS";
+    public static final String FTR_QUEST_TENS     = "FTR_QUEST_TENS";
+
+    public static final String FTR_ANS_STIM_ONE_HUNDREDS  = "FTR_ANS_STIM_ONE_HUNDREDS";
+    public static final String FTR_ANS_STIM_ONE_TENS      = "FTR_ANS_STIM_ONE_TENS";
+    public static final String FTR_ANS_STIM_TWO_HUNDREDS  = "FTR_ANS_STIM_TWO_HUNDREDS";
+    public static final String FTR_ANS_STIM_TWO_TENS      = "FTR_ANS_STIM_TWO_TENS";
+
+    public static final String FTR_QUEST_STIM_ONE_HUNDREDS = "FTR_QUEST_STIM_ONE_HUNDREDS";
+    public static final String FTR_QUEST_STIM_ONE_TENS     = "FTR_QUEST_STIM_ONE_TENS";
+    public static final String FTR_QUEST_STIM_TWO_HUNDREDS = "FTR_QUEST_STIM_TWO_HUNDREDS";
+    public static final String FTR_QUEST_STIM_TWO_TENS     = "FTR_QUEST_STIM_TWO_TENS";
+
+    public static final String FTR_WRD_STARTS_WITH         = "FTR_WORD_STARTS_WITH";
+    public static final String FTR_WRD_ENDS_WITH           = "FTR_WORD_ENDS_WITH";
+
+    public static final String FTR_E2N           = "FTR_E2N";
+    public static final String FTR_N2E           = "FTR_N2E";
+
+    public static final String SHOW_BUBBLE_ZERO  =   "SHOW_BUBBLE_ZERO";
+    public static final String SHOW_BUBBLE_ONE  =   "SHOW_BUBBLE_ONE";
+    public static final String SHOW_BUBBLE_TWO  =   "SHOW_BUBBLE_TWO";
+    public static final String SHOW_BUBBLE_THREE  =   "SHOW_BUBBLE_THREE";
+    public static final String SHOW_BUBBLE_FOUR  =   "SHOW_BUBBLE_FOUR";
 
     public static final String SHOW_BUBBLE_MASK   = "SHOW_BUBBLE_MASK";
     public static final String HIDE_MASK          = "HIDE_MASK";

@@ -365,7 +365,6 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
         while((features = navigatedata[_sceneCurr].features) != null)
         {
             // If this scene is not in the feature set for the tutor then check the next one.
-
             if(!mTutor.testFeatureSet(features)) _sceneCurr++;
             else break;
         }

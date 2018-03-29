@@ -120,13 +120,6 @@ public class CBubble extends FrameLayout {
         mProblemType = problemType;
     }
 
-    public void configData(String stimulusVal, String correctVal) {
-
-        mCorrectVal = correctVal;
-        mStimulusVal = stimulusVal;
-    }
-
-
     public boolean isCorrect() {
 
         return mCorrectVal.equals(mStimulusVal);
@@ -156,7 +149,8 @@ public class CBubble extends FrameLayout {
 
     public void setColor(String color) {
         mColor = color;
-        if(mProblemType != null && mProblemType.equals("wrd")) {
+
+        if(mProblemType != null && mProblemType.toLowerCase().startsWith("word")) {
             setBackgroundResource(BP_CONST.elongatedBubbleMap.get(mColor));
         }
         else {
@@ -347,7 +341,12 @@ public class CBubble extends FrameLayout {
                 mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 80);
             }
             else {
-                mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 128);
+                if(text.length() < 5) {
+                    mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 128);
+                }
+                else {
+                    mText.setTextSize(TypedValue.COMPLEX_UNIT_PX, (60));
+                }
             }
         }
 

@@ -60,11 +60,6 @@
       "tutorName": "bubble_pop",
       "features": "FTR_WORDS"
     },
-    "bpop.phon": {
-      "type": "TUTORVAR_MAP",
-      "tutorName": "bubble_pop",
-      "features": "FTR_PHONEMICS"
-    },
     "bpop.num": {
       "type": "TUTORVAR_MAP",
       "tutorName": "bubble_pop",
@@ -75,10 +70,20 @@
       "tutorName": "bubble_pop",
       "features": "FTR_SHAPES"
     },
-    "bpop.ex": {
+    "bpop.addsub": {
       "type": "TUTORVAR_MAP",
       "tutorName": "bubble_pop",
-      "features": "FTR_EXPRESSIONS"
+      "features": "FTR_E2N"
+    },
+    "bpop.gl": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_GT_LT"
+    },
+    "bpop.mn": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_MIS_NUM"
     },
     "write.ltr.uc": {
       "type": "TUTORVAR_MAP",

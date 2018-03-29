@@ -297,9 +297,18 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
             publishFeature(TCONST.FTR_EOD);
     }
 
+    //Helper function that converts 3 digit number to list of digits
+    private int[] getListDigits(int num) {
+        int hundredsDigit = 0;  int tensDigit = 0;
+        if(num >= 100) {
+            hundredsDigit = (num / 100) * 100;
+        }
+        num = num % 100;
+        return (new int[]{hundredsDigit, num});
+    }
+
     @Override
     public void playAudio(CAk_Data data){
-
         String answerString = "";
 
         TScope scope = mTutor.getScope();
@@ -322,10 +331,39 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
         }
 
-        Log.d("PlayAudio", answerString);
+        if(answerString != null && answerString.matches("[-+]?\\d*\\.?\\d+")) {
+            removeFeature(AKCONST.FTR_TEST_AUDIO);
 
-        publishValue(AKCONST.TESTAUDIO, answerString);
-        applyEventNode("PLAY_AUDIO");
+            int[] listDigits = getListDigits(Integer.parseInt(answerString));
+
+            if(listDigits[0] >= 1) {
+                publishFeature(AKCONST.FTR_TEST_AUDIO_HUNDREDS);
+                publishValue(AKCONST.TESTAUDIO_HUNDREDS, listDigits[0]);
+            }
+            else {
+                removeFeature(AKCONST.FTR_TEST_AUDIO_HUNDREDS);
+            }
+            if (listDigits[1] >= 1 || listDigits[0] == 0){
+                publishFeature(AKCONST.FTR_TEST_AUDIO_TENS);
+                publishValue(AKCONST.TESTAUDIO_TENS, listDigits[1]);
+            }
+            else {
+                removeFeature(AKCONST.FTR_TEST_AUDIO_TENS);
+            }
+            applyEventNode("PLAY_AUDIO");
+            Log.d("TOMBRADY", listDigits[0] + " " + listDigits[1]);
+        }
+
+        else {
+            removeFeature(AKCONST.FTR_TEST_AUDIO_HUNDREDS);
+            removeFeature(AKCONST.FTR_TEST_AUDIO_TENS);
+            publishFeature(AKCONST.FTR_TEST_AUDIO);
+            publishValue(AKCONST.TESTAUDIO, answerString);
+            applyEventNode("PLAY_AUDIO");
+            Log.d("TOMBRADY", answerString);
+        }
+
+
     }
 
     public void instructAudio(String instruction){
@@ -997,6 +1035,11 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
         _FeatureMap.put(feature, true);
         mTutor.addFeature(feature);
+    }
+
+    public void removeFeature(String feature) {
+        _FeatureMap.remove(feature);
+        mTutor.delFeature(feature);
     }
 
     /**
