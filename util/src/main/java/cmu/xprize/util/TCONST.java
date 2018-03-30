@@ -76,7 +76,7 @@ public class TCONST {
 
     // They will arrive in files named - RoboTutor_AssetA.0.1.0.zip
     //
-    //public static final String ROBOTUTOR_ASSET_PATTERN = "rtasset_";
+    public static final String ROBOTUTOR_ASSET_PATTERN = "rtasset_";
     public static final String CODE_DROP_1_ASSET_PATTERN = "codedrop1_";
 
     public static final String COMMAND      = "COMMAND";
@@ -193,6 +193,8 @@ public class TCONST {
     public static final String STORY_INTENT        = "story_reading";
     public static final String ON_CLICK            = "ON_CLICK";
     public static final String ENCODED_FOLDER      = "[encfolder]";
+    public static final String SHARED_MATH         = "[sharedmath]";
+    public static final String SHARED_MATH_FOLDER = "shared/shared_math";
     public static final String STORY_PATH          = "cmu/xprize/story_reading/";
 
     public static final String LOCAL_FILE          = "[local_file]";
@@ -383,7 +385,10 @@ public class TCONST {
     public static final String ASSETS          = "ASSETS";
     public static final String RESOURCES       = "RESOURCE";
     public static final String EXTERN          = "EXTERN";
+    public static final String EXTERN_SHARED   = "EXTERN_SHARED";
     public static final String DEFINED         = "DEFINED";
+
+    public static final String DEBUG_STORY_TAG = "GENERAL_TSO";
 
     // Navigator types
     final static public String SIMPLENAV       = "SIMPLE_NAVIGATOR";

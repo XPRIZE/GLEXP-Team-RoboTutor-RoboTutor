@@ -62,12 +62,10 @@ import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
 
 import static cmu.xprize.util.TCONST.ASREventMap;
-import static cmu.xprize.util.TCONST.EMPTY;
 import static cmu.xprize.util.TCONST.LANG_AUTO;
 import static cmu.xprize.util.TCONST.LOCAL_STORY_AUDIO;
 import static cmu.xprize.util.TCONST.MEDIA_STORY;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
-import static cmu.xprize.util.TCONST.SPEAK_UTTERANCE;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
 public class TRtComponent extends CRt_Component implements IBehaviorManager, ITutorObjectImpl, Button.OnClickListener, IRtComponent, IDataSink, IEventSource, IPublisher, ITutorLogger {
@@ -558,13 +556,45 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 // Create the story specific sound package and push it into the soundMap in the MediaManager
                 //
                 AUDIOSOURCEPATH = TCONST.STORY_PATH + levelFolder + "/" + storyFolder ;
-                // "cmu/xprize/story_reading/"
+                // "cmu/xprize/story_reading/<level>/<level_story>"
 
                 configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
                 mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
 
                 // ZZZ load story!!!
+                // ZZZ STORYSOURCEPATH contains storydata.json and images
+                // ZZZ EXTERN is... TCONST.EXTERN
                 loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
+            }
+
+            else if (dataNameDescriptor.startsWith(TCONST.SHARED_MATH)) {
+
+                String storyFolder = dataNameDescriptor.substring(TCONST.SHARED_MATH.length()).toLowerCase();
+
+                String[] levelval = storyFolder.split("_");
+
+                String levelFolder = levelval[0];
+
+
+                DATASOURCEPATH = TCONST.ROBOTUTOR_ASSETS + "/" + TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+                // "robotutor_assets/assets/story/sw"
+                STORYSOURCEPATH = DATASOURCEPATH + levelFolder + "/" + storyFolder + "/";
+                // "robotutor_assets/assets/story/sw/hello/hello_world"
+
+                // instead of having a unique folder, we rely on shared assets
+                AUDIOSOURCEPATH = TCONST.STORY_PATH + TCONST.SHARED_MATH_FOLDER;
+                // "cmu/xprize/story_reading/shared/shared_math"
+
+                SHAREDPATH = DATASOURCEPATH + TCONST.SHARED_MATH_FOLDER + "/";
+
+                configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
+                mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
+
+
+                // ZZZ how to change this???
+
+                loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN_SHARED, SHAREDPATH);
+
             }
 
             // Note that here the {file] load-type semantics is for an external file and [asset] may be used

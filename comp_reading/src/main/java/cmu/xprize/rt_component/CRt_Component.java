@@ -84,6 +84,7 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     protected String                DATASOURCEPATH;
     protected String                STORYSOURCEPATH;
     protected String                AUDIOSOURCEPATH;
+    protected String                SHAREDPATH;
 
     private final Handler           mainHandler = new Handler(Looper.getMainLooper());
     private HashMap                 queueMap    = new HashMap();
@@ -539,14 +540,34 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
      */
     public void loadStory(String EXTERNPATH, String viewType, String assetLocation) {
 
+        loadStory(EXTERNPATH, viewType, assetLocation, null);
+    }
+
+
+    /**
+     * sometimes the storydata.json file is in one repo (assetLocation), but the other assets needed (images)
+     * are in a shared location (sharedAssetLocation)
+     *
+     * @param EXTERNPATH
+     * @param viewType
+     * @param assetLocation
+     * @param SHAREDEXTERNPATH
+     */
+    public void loadStory(String EXTERNPATH, String viewType, String assetLocation, String SHAREDEXTERNPATH) {
+
+        Log.d(TCONST.DEBUG_STORY_TAG, String.format("assetLocation=%s -- EXTERNPATH=%s", assetLocation, EXTERNPATH));
+
         Class<?> storyClass = viewClassMap.get(viewType);
 
         try {
             // Generate the View manager for the storyName - specified in the data
             //
+            // ooooh maybe check if it's math and make text closer to image
             mViewManager = (ICRt_ViewManager)storyClass.getConstructor(new Class[]{CRt_Component.class, ListenerBase.class}).newInstance(this,mListener);
 
+            // ZZZ it loads the story data JUST FINE
             String jsonData = JSON_Helper.cacheDataByName(EXTERNPATH + TCONST.STORYDATA);
+            Log.d(TCONST.DEBUG_STORY_TAG, "logging jsonData:");
 
             mViewManager.loadJSON(new JSONObject(jsonData), null);
 
@@ -555,9 +576,18 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
             CErrorManager.logEvent(TAG, "Story Parse Error: ", e, false);
         }
 
-        // Configure the view manager for the first line of the storyName.
+
+        if (assetLocation.equals(TCONST.EXTERN_SHARED)) {
+            Log.d(TCONST.DEBUG_STORY_TAG, "SHARED!");
+            // we are done using sharedAssetLocation
+            EXTERNPATH = SHAREDEXTERNPATH;
+        }
         //
+        // ZZZ what are these values?
+        // ZZZ EXTERNPATH = TCONST.EXTERN
+        // ZZZ assetLocation contains storydata.json and images
         mViewManager.initStory(this, EXTERNPATH, assetLocation);
+
     }
 
 
