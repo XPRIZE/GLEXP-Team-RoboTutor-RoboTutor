@@ -278,16 +278,54 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
 
     }
 
+
+    public void playTutorIntro(){
+        playIntro();
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        playTutor();
+                    }
+                },
+                4000
+        );
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        playTutor1();
+                    }
+                },
+                8000
+        );
+
+    }
+
     public void playTutor(){
+        if(inmode){
         TScope scope = mTutor.getScope();
-        postEvent(NSCONST.PLAY_TUTOR_PLUS);
+        scope.addUpdateVar("offset", new TString(String.valueOf(delta)));
+
+        postEvent(NSCONST.PLAY_TUTOR_PLUS);}
 
 
     }
 
-    public void playTutor1(){
+
+
+    public void playIntro(){
         TScope scope = mTutor.getScope();
-        postEvent(NSCONST.PLAY_TUTOR_MINUS);
+        scope.addUpdateVar("offset", new TString(String.valueOf(delta)));
+        postEvent(NSCONST.PLAY_INTRO);
+    }
+
+    public void playTutor1(){
+        if(inmode){
+        TScope scope = mTutor.getScope();
+        scope.addUpdateVar("offset", new TString(String.valueOf(delta)));
+        postEvent(NSCONST.PLAY_TUTOR_MINUS);}
+
 
 
     }
