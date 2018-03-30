@@ -534,23 +534,36 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
             } else if (dataNameDescriptor.startsWith(TCONST.ENCODED_FOLDER)) {
 
+                // ZZZ detect story [encfolder]
+                // "story.parrot::0..10.SD_OFF1_DES.34" --> "[encfolder]0..10.SD_OFF1_DES.34"
+                // "story.hear::3_2" --> "[encfolder]3_2"
                 String storyFolder = dataNameDescriptor.substring(TCONST.ENCODED_FOLDER.length()).toLowerCase();
+                // "0..10.SD_OFF1_DES.34"
+                // "3_2"
 
                 String[] levelval   = storyFolder.split("_");
+                // "0..10.SD", "OFF1", "DES.34"
+                // "3", "2"
 
                 String levelFolder = levelval[0];
+                // "0..10.SD"
+                // "3"
 
                 DATASOURCEPATH  = TCONST.ROBOTUTOR_ASSETS + "/" +  TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+                // "robotutor_assets/assets/story/sw/"
                 STORYSOURCEPATH = DATASOURCEPATH + levelFolder + "/" + storyFolder + "/";
+                // "robotutor_assets/assets/story/sw/0..10.SD/0..10.SD_OFF1_DES.34"
 
                 // The audio for the story is in a  story specific folder -
                 // Create the story specific sound package and push it into the soundMap in the MediaManager
                 //
                 AUDIOSOURCEPATH = TCONST.STORY_PATH + levelFolder + "/" + storyFolder ;
+                // "cmu/xprize/story_reading/"
 
                 configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
                 mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
 
+                // ZZZ load story!!!
                 loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
             }
 

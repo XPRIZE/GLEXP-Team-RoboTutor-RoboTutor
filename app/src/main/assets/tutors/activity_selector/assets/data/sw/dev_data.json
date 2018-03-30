@@ -3453,15 +3453,15 @@
     }
   },
   "mathTransitions": {
-    "story.parrot::1..4.SD_OFF1_INC.1": {
+    "story.parrot::hello_world": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.parrot::1..4.SD_OFF1_INC.1",
+      "tutor_id": "story.parrot::hello_world",
       "tutor_desc": "story.parrot",
-      "tutor_data": "[encfolder]1..4.SD_OFF1_INC.1",
+      "tutor_data": "[encfolder]hello_world",
       "cell_row": "1",
       "cell_column": "2",
-      "same": "story.parrot::1..4.SD_OFF1_INC.1",
+      "same": "story.parrot::hello_world",
       "next": "story.parrot::1..4.SD_OFF1_DES.2",
       "next_next": "story.parrot::0..10.SD_OFF1_INC.3",
       "prev": "num.scale:0..10.off1.1__it_1",
@@ -3479,9 +3479,9 @@
       "same": "story.parrot::1..4.SD_OFF1_DES.2",
       "next": "story.parrot::0..10.SD_OFF1_INC.3",
       "next_next": "story.parrot::0..10.SD_OFF1_DES.4",
-      "prev": "story.parrot::1..4.SD_OFF1_INC.1",
+      "prev": "story.parrot::hello_world",
       "harder": "story.parrot::0..10.SS_OFF1_INC.3",
-      "easier": "story.parrot::1..4.SD_OFF1_INC.1"
+      "easier": "story.parrot::hello_world"
     },
     "story.parrot::0..10.SD_OFF1_INC.3": {
       "type": "TRANSITION",
@@ -3811,7 +3811,7 @@
       "next_next": "story.parrot::0..10.SS_OFF1_DES.4",
       "prev": "story.parrot::1..4.SS_OFF1_INC.1",
       "harder": "bpop.gl:dot.0..9.GL_SD_OFFW1_M.bub2.7",
-      "easier": "story.parrot::1..4.SD_OFF1_INC.1"
+      "easier": "story.parrot::hello_world"
     },
     "story.parrot::0..10.SS_OFF1_INC.3": {
       "type": "TRANSITION",
@@ -4827,7 +4827,7 @@
       "cell_row": "1",
       "cell_column": "1",
       "same": "num.scale:0..10.off1.1__it_1",
-      "next": "story.parrot::1..4.SD_OFF1_INC.1",
+      "next": "story.parrot::hello_world",
       "next_next": "story.parrot::1..4.SD_OFF1_DES.2",
       "prev": "num.scale:0..10.off1.1__it_1",
       "harder": "story.parrot::1..4.SS_OFF1_INC.1",
