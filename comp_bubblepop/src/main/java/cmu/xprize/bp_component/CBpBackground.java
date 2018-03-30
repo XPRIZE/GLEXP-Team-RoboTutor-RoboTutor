@@ -291,7 +291,8 @@ public class CBpBackground extends View implements ILoadableObject {
 
 
                     // TODO BUG REVIEW move this to external assets!!!
-                    //int nextBackground = BP_CONST.BPOP_BACKGROUNDS[1];
+                    //int nextBackground = BP_CONST.BPOP_BACKGROUNDS[0];
+
                     int nextBackground = BP_CONST.BPOP_BACKGROUNDS[(new Random().nextInt(BP_CONST.BPOP_BACKGROUNDS.length))];
 
                     CLogManager.getInstance().postEvent_I(TAG, "PickedBackground:" + nextBackground);

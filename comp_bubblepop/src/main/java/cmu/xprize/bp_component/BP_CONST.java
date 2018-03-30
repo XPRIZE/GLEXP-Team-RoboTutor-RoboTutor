@@ -266,6 +266,9 @@ public class BP_CONST {
     private static int[] TENFRAME_H_10 = {R.drawable.tenframe_h_10};
 
     public static int[] BPOP_BACKGROUNDS = {
+            R.raw.astrology_astronomy_beautiful_713664,
+            R.raw.blue_sky_camels_desert_71241,
+            R.raw.bow_river_canada_forest_219972,
             R.raw.adventure_alone_arid_274014,              // works
             R.raw.animal_carnivore_countryside_667204,      // too big
             R.raw.autumn_beautiful_city_210243,
