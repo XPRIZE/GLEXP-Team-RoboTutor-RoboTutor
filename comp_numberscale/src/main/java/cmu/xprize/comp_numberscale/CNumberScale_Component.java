@@ -69,6 +69,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     public int[] minusPosition = new int[2];
     protected Timer t;
     protected int waitTime=1000;
+    protected  boolean inmode =true;
 
 
     // json loadable
