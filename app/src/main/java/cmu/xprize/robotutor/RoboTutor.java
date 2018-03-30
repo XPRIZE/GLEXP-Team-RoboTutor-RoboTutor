@@ -126,7 +126,9 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     static private IGuidView    guidCallBack;
 
     String hotLogPath;
+    String hotLogPathPerf;
     String readyLogPath;
+    String readyLogPathPerf;
     public final static String  DOWNLOAD_PATH  = Environment.getExternalStorageDirectory() + File.separator + Environment.DIRECTORY_DOWNLOADS;
     public final static String  EXT_ASSET_PATH = Environment.getExternalStorageDirectory() + File.separator + TCONST.ROBOTUTOR_ASSET_FOLDER;
 
@@ -142,6 +144,9 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         hotLogPath   = Environment.getExternalStorageDirectory() + TCONST.HOT_LOG_FOLDER;
         readyLogPath = Environment.getExternalStorageDirectory() + TCONST.READY_LOG_FOLDER;
+
+        hotLogPathPerf = Environment.getExternalStorageDirectory() + TCONST.HOT_LOG_FOLDER_PERF;
+        readyLogPathPerf = Environment.getExternalStorageDirectory() + TCONST.READY_LOG_FOLDER_PERF;
         String initTime     = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
         String logFilename  = "RoboTutor" + "_" + BuildConfig.BUILD_TYPE + "." + BuildConfig.VERSION_NAME + "_" + initTime + "_" + Build.SERIAL;
 
@@ -181,12 +186,13 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         logManager = CLogManager.getInstance();
         logManager.transferHotLogs(hotLogPath, readyLogPath);
+        logManager.transferHotLogs(hotLogPathPerf, readyLogPathPerf);
 
         logManager.startLogging(hotLogPath, logFilename);
         CErrorManager.setLogManager(logManager);
 
         perfLogManager = CPerfLogManager.getInstance();
-        perfLogManager.startLogging(hotLogPath, "PERF_" + logFilename);
+        perfLogManager.startLogging(hotLogPathPerf, "PERF_" + logFilename);
 
         // TODO : implement time stamps
         logManager.postDateTimeStamp(GRAPH_MSG, "RoboTutor:SessionStart");
@@ -747,6 +753,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         // after logging, transfer logs to READY folder
         logManager.transferHotLogs(hotLogPath, readyLogPath);
+        logManager.transferHotLogs(hotLogPathPerf, readyLogPathPerf);
 
     }
 }
