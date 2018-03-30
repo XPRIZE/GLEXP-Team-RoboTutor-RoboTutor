@@ -68,7 +68,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     public int[] addPosition = new int[2];
     public int[] minusPosition = new int[2];
     protected Timer t;
-    protected int waitTime=1200;
+    protected int waitTime=1000;
 
 
     // json loadable
@@ -199,9 +199,9 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         maxHit = Integer.parseInt(data.max_taps);
         max = Integer.parseInt(data.max);
         if (countStart>=100){
-            waitTime = 2500;
+            waitTime = 2000;
         } else {
-            waitTime = 1200;
+            waitTime = 1000;
         }
 
         min = countStart;
@@ -450,8 +450,8 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     public void setNewTimer(){
         t.cancel();
         t=new Timer();
-        t.schedule(new playTutor(1),15000);
-        t.schedule(new playTutor(2),19000);
+        t.schedule(new playTutor(1),7000);
+        t.schedule(new playTutor(2),11000);
     }
 
     public void killTimer(){

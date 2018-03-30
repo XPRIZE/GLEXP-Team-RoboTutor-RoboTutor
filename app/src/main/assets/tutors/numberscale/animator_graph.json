@@ -73,7 +73,8 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id":"SNumberScale", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
             {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "pointAtAdd", "parms": "", "features":""},
-            {"name": "TAP", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"default", "soundsource": "tap plus.mp3", "repeat":false, "volume": "0.5", "mode":"event", "features": ""}
+            {"name": "TAP", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"default", "soundsource": "Tap here to add.mp3", "repeat":false, "volume": "0.8", "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{offset}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""}
 
           ],
           "preexit":[],
@@ -87,7 +88,8 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id":"SNumberScale", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
             {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "pointAtMinus", "parms": "", "features":""},
-            {"name": "TAP", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"default", "soundsource": "tap minus.mp3", "repeat":false, "volume": "0.5", "mode":"event", "features": ""}
+            {"name": "TAP", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"default", "soundsource": "Tap here to subtract.mp3", "repeat":false, "volume": "0.8", "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{offset}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""}
 
           ],
           "preexit":[],
@@ -183,9 +185,7 @@
           "COMMENT": "????",
           "tracks": [
               
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""},
-
-            {"name": "Introduction Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets count.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""}
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""}
             ]
         },
 
@@ -195,10 +195,8 @@
           "tracks": [
               
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
-            {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "pointAtAdd", "parms": "", "features":""},
-            {"name": "RoboFinger Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "tap plus.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""},
-            {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "pointAtMinus", "parms": "", "features":""},
-            {"name": "RoboFinger Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "tap minus.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""}
+            {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "playTutorIntro", "parms": "", "features":""}
+
     
           ]
         },
