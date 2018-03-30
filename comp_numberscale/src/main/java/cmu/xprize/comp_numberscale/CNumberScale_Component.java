@@ -450,8 +450,8 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     public void setNewTimer(){
         t.cancel();
         t=new Timer();
-        t.schedule(new playTutor(1),7000);
-        t.schedule(new playTutor(2),11000);
+        t.schedule(new playTutor(1),9000);
+        t.schedule(new playTutor(2),13000);
     }
 
     public void killTimer(){

@@ -304,6 +304,7 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
         TScope scope = mTutor.getScope();
         scope.addUpdateVar("offset", new TString(String.valueOf(delta)));
         postEvent(NSCONST.PLAY_TUTOR_MINUS);
+        setNewTimer();
 
 
     }
