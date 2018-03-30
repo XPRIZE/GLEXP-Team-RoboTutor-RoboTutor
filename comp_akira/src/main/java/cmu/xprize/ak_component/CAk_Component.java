@@ -82,6 +82,8 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     private long questionTime;
     private ImageView cityBackground;
     protected View mask;
+    protected int deviceX=0;
+    protected int deviceY=0;
 
     protected boolean isRunning = true;
 
@@ -136,6 +138,9 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         super.onLayout(changed, left, top, right, bottom);
         final float width = right - left;
         final float height = bottom - top;
+        player.deviceX = right;
+        player.deviceY=bottom;
+
 
         sidewalkLeftPoints[0].x = width * 0.20f;
         sidewalkLeftPoints[0].y = height * 0.25f;
@@ -267,6 +272,22 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
     }
 
+    public void same() {
+
+        try {
+
+            if (datasource != null) {
+                _dataIndex--;
+                updateDataSet(datasource[_dataIndex]);
+                _dataIndex++;
+            } else {
+                CErrorManager.logEvent(TAG,  "Error no DataSource : ", null, false);
+            }
+        }
+        catch(Exception e) {
+            CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, false);
+        }
+    }
 
     public void next() {
 
@@ -288,6 +309,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
     public boolean dataExhausted() {
         return _dataIndex >= TCONST.MAX_AKDATA;
     }
+
 
 
     protected void updateDataSet(CAk_Data data) {
@@ -490,7 +512,7 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
             if(isFirstInstall && !teachFinger.finishTeaching)
                 teachFinger.onTouch(event, player);
             player.onTouch(event);
-            soundPool.play(carscreechMedia, 0.1f, 0.1f, 1, 0, 1.0f);
+            //soundPool.play(carscreechMedia, 0.1f, 0.1f, 1, 0, 1.0f);
             return true;
         }
         if(event.getAction()==MotionEvent.ACTION_UP)

@@ -53,6 +53,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
     protected String            mDataSource;
     protected int               _dataIndex;
+    protected int               _actualDataIndex; // TODO: This is used for random. Need refactor.
     protected boolean           _dataEOI   = false;
     protected int[]             dataset;
 
@@ -237,6 +238,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
                 } else {
                     // with no replacement?
                     int nextIndex = (new Random()).nextInt(dataSource.length);
+                    _actualDataIndex = nextIndex;
                     updateDataSet(dataSource[nextIndex]);
 
                     boolean replace = true;

@@ -274,6 +274,7 @@ public class CSb_Scoreboard extends android.support.percent.PercentRelativeLayou
                                 }
                             }
                             mScore += (int) Math.pow(10, i);
+
                         }
 
                     }

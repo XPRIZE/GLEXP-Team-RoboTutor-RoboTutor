@@ -55,7 +55,9 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     protected int countTarget;
     protected int currentCount;
     protected int delta;
-
+    protected int tenPower;
+    protected int drawIndex;
+    protected boolean tenInited=false;
 
     // json loadable
     public String bootFeatures;
@@ -73,6 +75,10 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     private LocalBroadcastManager bManager;
 
     private ArrayList<Boolean> dotsTapped;
+
+
+    // Animation stuff
+    private boolean isRunning = false;
 
 
     static final String TAG = "CCount_Component";
@@ -109,8 +115,35 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         stimulusText = (TextView) findViewById(R.id.stimulusText);
 
         bManager = LocalBroadcastManager.getInstance(getContext());
+        drawIndex =-10;
+
+
+        //mainHandler.post(animationRunnable);
 
     }
+
+    private int runCount = 0;
+    private int runWait = 100;
+    private Runnable animationRunnable = new Runnable() {
+        @Override
+        public void run() {
+
+            if(isRunning && surfaceView!= null) {
+                surfaceView.wiggleFruit();
+                mainHandler.postDelayed(animationRunnable, 10);
+                runCount++;
+
+            }
+
+            // if we're done counting, apply behavior to queue and stop thread
+            if (surfaceView.doneMovingToTenFrame) {
+                postFinalCount();
+                applyBehavior(COUNTX_CONST.DONE_MOVING_TO_TEN_FRAME);
+                isRunning = false;
+
+            }
+        }
+    };
 
     public void next() {
 
@@ -121,6 +154,8 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
                 _dataIndex++;
                 numDotsCounted = 0;
+
+                surfaceView.hideTenFrame();
 
                 // reset target text
                 stimulusText.setText("");
@@ -141,10 +176,10 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
         // first load dataset into fields
         loadDataSet(data);
+        surfaceView.initTenFrame();
+        surfaceView.resetCounter();
 
-
-        // reset view
-        resetView();
+        // reset vieresetView();
         // update stimulus
 
         // then update visuals
@@ -161,7 +196,14 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         task = data.task;
         layout = data.layout; // NOV_1 make this consistent w/ Anthony
         countStart = data.dataset[0];
-        countTarget = data.dataset[1];
+
+        if (data.tenPower.equals("one")){
+            tenPower = 1;} else if (data.tenPower.equals("ten")){
+            tenPower = 10;
+        } else {
+                tenPower = 100;
+        }
+        countTarget = data.dataset[1]*tenPower;
 
         Log.d(TCONST.COUNTING_DEBUG_LOG, "target=" + countTarget + ";index=" + _dataIndex);
     }
@@ -236,6 +278,21 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
      */
     public void playChime() {
 
+    }
+
+    /**
+     * Overridden by child class.
+     */
+    public void postFinalCount() {
+
+    }
+
+    public void demonstrateTenFrame() {
+
+        surfaceView.showTenFrame();
+        isRunning = true;
+        mainHandler.post(animationRunnable);
+        //surfaceView.moveItemsToTenFrame();
     }
 
     /**

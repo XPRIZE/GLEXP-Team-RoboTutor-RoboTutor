@@ -187,7 +187,7 @@ public class CMediaManager {
     }
 
     // TODO: When starting debugging with the screen off - one of these may be null
-    //
+    // GRAY_SCREEN_BUG X
     public String mapSoundPackage(CTutor tTutor, String packageName, String langOverride) {
 
         HashMap<String,CMediaPackage> soundMap;

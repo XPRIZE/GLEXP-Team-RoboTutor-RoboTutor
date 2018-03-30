@@ -1,0 +1,19 @@
+{
+  "bootFeatures":"",
+
+  "dataSource": [
+
+    {"type":"CountX_Data", "level":"countx_1_10", "task":"Count to 10", "layout":"default", "dataset":[0, 1], "tenPower": "one"},
+    {"type":"CountX_Data", "level":"countx_1_10", "task":"Count to 10", "layout":"default", "dataset":[0, 2], "tenPower": "one"},
+    {"type":"CountX_Data", "level":"countx_1_10", "task":"Count to 10", "layout":"default", "dataset":[0, 3], "tenPower": "one"},
+    {"type":"CountX_Data", "level":"countx_1_10", "task":"Count to 10", "layout":"default", "dataset":[0, 4], "tenPower": "one"},
+    {"type":"CountX_Data", "level":"countx_1_10", "task":"Count to 10", "layout":"default", "dataset":[0, 5], "tenPower": "one"},
+    {"type":"CountX_Data", "level":"countx_1_10", "task":"Count to 10", "layout":"default", "dataset":[0, 6], "tenPower": "one"},
+    {"type":"CountX_Data", "level":"countx_1_10", "task":"Count to 10", "layout":"default", "dataset":[0, 7], "tenPower": "one"},
+    {"type":"CountX_Data", "level":"countx_1_10", "task":"Count to 10", "layout":"default", "dataset":[0, 8], "tenPower": "one"},
+    {"type":"CountX_Data", "level":"countx_1_10", "task":"Count to 10", "layout":"default", "dataset":[0, 9], "tenPower": "one"},
+    {"type":"CountX_Data", "level":"countx_1_10", "task":"Count to 10", "layout":"default", "dataset":[0, 10], "tenPower": "one"}
+
+  ]
+
+}

@@ -22,7 +22,9 @@
 	"soundMap" : {
 		"default": {"type": "SOUNDMAP", "language": "LANG_AUTO", "path": "cmu/xprize/numberscale"},
 		"numbers": {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/numbers"},
-		"chimes":  {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "chimes"}
+		"chimes":  {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "chimes"},
+		"arithmetic": {"type": "SOUNDMAP", "language": "LANG_AUTO", "path": "cmu/xprize/new/Leonora/arithmetic"}
+
 	},
 
 	"navigatorType":"SIMPLE_NAVIGATOR"

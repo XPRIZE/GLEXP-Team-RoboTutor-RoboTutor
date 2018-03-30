@@ -17,11 +17,13 @@ import cmu.xprize.comp_counting2.COUNTX_CONST;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.comp_logging.ITutorLogger;
+import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -83,12 +85,12 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
 
     @Override
     public void onCreate() {
-
+        trackAndLogPerformance("START");
     }
 
     @Override
     public void onDestroy() {
-
+        trackAndLogPerformance("END");
     }
 
     @Override
@@ -163,6 +165,31 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
             publishFeature(TCONST.FTR_EOD);
             Log.d(TCONST.COUNTING_DEBUG_LOG, "Data Exhausted");
         }
+    }
+
+    private void trackAndLogPerformance(String stage) {
+
+        String tutorName = mTutor.getTutorName();
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
+        event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(tutorName);
+        event.setLevelName(level);
+        event.setTaskName(task);
+        event.setProblemName("countingx");
+        event.setProblemNumber(_dataIndex);
+        event.setSubstepNumber(-1);
+        event.setAttemptNumber(-1);
+        event.setExpectedAnswer(stage);
+        event.setUserResponse("");
+        event.setCorrectness(TCONST.LOG_CORRECT);
+
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.perfLogManager.postPerformanceLog(event);
     }
 
 
@@ -260,6 +287,15 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
         scope.addUpdateVar("CurrentCount", new TString(String.valueOf(currentCount)));
 
         postEvent(COUNTX_CONST.PLAY_CHIME);
+    }
+
+    @Override
+    public void postFinalCount() {
+
+        TScope scope = mTutor.getScope();
+
+        scope.addUpdateVar("FinalCount", new TString(String.valueOf(currentCount)));
+
     }
 
 

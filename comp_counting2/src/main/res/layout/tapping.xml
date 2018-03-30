@@ -14,10 +14,10 @@
 
     <TextView
         android:id="@+id/stimulusText"
-        android:layout_width="100sp"
-        android:layout_height="100sp"
+        android:layout_width="120sp"
+        android:layout_height="120sp"
         android:text=""
-        android:textSize="60sp"
+        android:textSize="40sp"
         android:textColor="@android:color/holo_blue_dark"
         android:gravity="center"
         android:layout_alignParentTop="true"
@@ -27,10 +27,10 @@
 
     <TextView
         android:id="@+id/counterText"
-        android:layout_width="100sp"
-        android:layout_height="100sp"
+        android:layout_width="120sp"
+        android:layout_height="120sp"
         android:text=""
-        android:textSize="60sp"
+        android:textSize="40sp"
         android:textColor="@android:color/holo_purple"
         android:gravity="center"
         android:layout_alignParentBottom="true"

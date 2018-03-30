@@ -86,6 +86,18 @@
           "preenter": ["DISABLE_TAPPING"],
           "preexit": [],
           "edges": [
+            {"constraint": "", "edge":"PROBLEM_FINISHED_AFTER"}
+          ]
+        },
+
+        "PROBLEM_FINISHED_AFTER": {
+          "COMMENT": "When user inputs a correct answer...",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "PLAYCOMPLETE2",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
             {"constraint": "FTR_EOD", "edge": "NEXT_SCENE"},
             {"constraint": "", "edge": "UPDATE_STIMULUS"}
           ]
@@ -116,9 +128,9 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""},
 
-            {"name": "Introduction Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets count.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""},
-            {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "pointAtCenterOfActivity", "parms": "", "features":""},
-            {"name": "RoboFinger Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Please tap here.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""}
+            {"name": "Introduction Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets count.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":"FTR_DEBUG"},
+            {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "pointAtCenterOfActivity", "parms": "", "features":"FTR_DEBUG"},
+            {"name": "RoboFinger Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Please tap here.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":"FTR_DEBUG"}
 
 
           ]
@@ -154,7 +166,27 @@
           "COMMENT": "TBD",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE:String", "features":""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+
+            {"type": "COMMAND", "id": "SCountingX", "method": "demonstrateTenFrame", "parms":"", "features":""},
+
+            {"type": "COMMAND", "id": "SCountingX", "method": "setVolatileBehavior", "parms": "DONE_MOVING_TO_TEN_FRAME:String|NEXTNODE:String", "features": ""},
+
+            {"type": "COMMAND", "cmd": "WAIT"}
+          ]
+        },
+
+        "PLAYCOMPLETE2": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "Plays after PLAYCOMPLETE",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE2:String", "features":""},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{FinalCount}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": ""},
+
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE2:String", "features":""}
           ]
         },
 
@@ -200,10 +232,6 @@
 
         "SET_CHIME_BEHAVIOR": {"type": "COMMAND", "id": "SCountingX", "method": "setStickyBehavior", "parms": "PLAY_CHIME:String|PLAY_CHIME:String" ,"features":""},
         "CLR_CHIME_BEHAVIOR": {"type": "COMMAND", "id": "SCountingX", "method": "setStickyBehavior", "parms": "PLAY_CHIME:String|NULL:String" ,"features":""},
-
-
-        "ADD_DOT": {"type": "COMMAND", "id": "SCountingX", "method": "addDots", "parms": "", "features": ""},
-        "ADD_TRIANGLE": {"type": "COMMAND", "id": "SCountingX", "method": "addTriangle", "parms": "", "features": ""},
 
         "NEXT_DATASET": {"type": "COMMAND", "id": "SCountingX", "method": "next", "features": ""},
         "DISABLE_TAPPING": {"type": "COMMAND", "id": "SCountingX", "method" : "disableTapping", "features":""},

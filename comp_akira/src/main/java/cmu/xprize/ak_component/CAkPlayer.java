@@ -25,7 +25,7 @@ import android.widget.TextView;
 
 public class CAkPlayer extends LinearLayout{
     public enum Lane{LEFT, MID, RIGHT, SIGH1, SIGH2L, SIGH2R, SIGH3L, SIGH3M, SIGH3R}
-
+    public String[] choices;
     protected boolean isPlaying;
     public int score;
     public String rearString;
@@ -38,8 +38,12 @@ public class CAkPlayer extends LinearLayout{
     public TextView aboveTextView;
     public TextView belowTextView;
     public ImageView carImage;
+    protected int deviceX;
+    protected int deviceY;
 
     private PercentRelativeLayout.LayoutParams params;
+
+
 
     public CAkPlayer(Context context) {
         super(context);
@@ -170,17 +174,43 @@ public class CAkPlayer extends LinearLayout{
 
 
     public void onTouch(MotionEvent event){
-        float touchX = event.getX();
+        float yratio = ((float)deviceY)/((float)1800);
+        float xratio = ((float)deviceX)/((float)2560);
+        float touchX=event.getX();
+        float touchY = event.getY();
+        if (xratio!=0 && yratio!=0){
+        touchX = event.getX()/xratio; touchY = event.getY()/yratio;}
+
         //Change to left lane
+        float line1 = (float)(-1.018*touchY +1678);
+        float line2 = (float)(-0.3353*touchY+1398);
+        float line3 = (float)(0.3736*touchY+1101);
+        float line4 = (float)(0.9898*touchY+860);
+        if(touchY>750){
+            if (touchX>=line1 && touchX<line2){
+                lane = Lane.LEFT;
+                System.out.println("Left");
+            } else if (touchX>=line2 && touchX<line3){
+                lane = Lane.MID;
+                System.out.println("Mid");
+            } else if (touchX>=line3 && touchX<=line4){
+                lane = Lane.RIGHT;
+                System.out.println("Right");
+
+            }
+        }
+        /*
         if(touchX < getX() + getWidth()/2) {
-            lane = lane == Lane.RIGHT? Lane.MID : Lane.LEFT;
+
+            lane = lane == Lane.RIGHT? Lane.MID: Lane.LEFT;
             System.out.println("To left");
         }
 //        //change to right lane
         else {
             lane = lane == Lane.LEFT? Lane.MID : Lane.RIGHT;
             System.out.println("To right");
-        }
+        }*/
+
     }
 
     public void crash() {
@@ -201,6 +231,8 @@ public class CAkPlayer extends LinearLayout{
     public Lane getLane() {
         return lane;
     }
+
+
 
     public void setText(String above, String below) {
         aboveTextView.setTextSize(textSize);

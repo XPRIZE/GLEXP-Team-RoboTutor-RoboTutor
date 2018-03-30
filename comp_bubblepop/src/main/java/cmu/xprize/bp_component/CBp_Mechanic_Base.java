@@ -94,18 +94,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
         mParent.setOnTouchListener(this);
     }
 
-    protected void init(Context context, CBP_Component parent, String problem_type) {
-
-        mContext   = context;
-        mComponent = parent;
-        mProblemType = problem_type;
-        mParent    = parent.getContainer();
-
-        // Capture the local broadcast manager
-        bManager = LocalBroadcastManager.getInstance(mContext);
-        mParent.setOnTouchListener(this);
-    }
-
     @Override
     public void onDestroy() {
 
@@ -247,7 +235,6 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
         switch(command) {
 
             case BP_CONST.WIGGLE_BUBBLE:
-
                 bubble = (CBubble)target;
 
                 broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(bubble.getCenterPosition()));
@@ -379,7 +366,17 @@ public class CBp_Mechanic_Base implements IBubbleMechanic, View.OnTouchListener,
                 SbubbleStumulus.setX((mParent.getWidth() - width) / 2);
                 SbubbleStumulus.setY((mParent.getHeight() - height) / 2);
 
-                inflator = CAnimatorUtil.configZoomIn(SbubbleStumulus, 600, 0, new BounceInterpolator(), 0f, 3.0f);
+                float scaleStimulusVal = 3.0f;
+                if(width > 500) {
+                    scaleStimulusVal = 2.5f;
+                }
+                if(width > 1000) {
+                    scaleStimulusVal = 1.25f;
+                }
+                if(width > 2000) {
+                    scaleStimulusVal = 1.0f;
+                }
+                inflator = CAnimatorUtil.configZoomIn(SbubbleStumulus, 600, 0, new BounceInterpolator(), 0f, scaleStimulusVal);
 
                 inflator.addListener(new Animator.AnimatorListener() {
                     @Override

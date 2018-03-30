@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="95dp"
+    android:height="95dp"
+    android:viewportWidth="95"
+    android:viewportHeight="95">
+
+    <!-- box -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="0.5"
+        android:pathData="M 1 27 V 68 H 94 V 27 H 1 "/>
+
+    <!-- vertical lines -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="0.5"
+        android:pathData="M 20 27 V 68"/>
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="0.5"
+        android:pathData="M 38 27 V 68"/>
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="0.5"
+        android:pathData="M 56.5 27 V 68"/>
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="0.5"
+        android:pathData="M 75 27 V 68"/>
+
+    <!-- horizontal line -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="0.5"
+        android:pathData="M 1 47.5 H 94"/>
+
+    <!-- dots -->
+    <path
+        android:fillColor="#000000"
+        android:strokeColor="#6D6E71"
+        android:strokeWidth="1"
+        android:strokeMiterLimit="10"
+        android:pathData="M 47.5 29.6 C 51.8078210487 29.6 55.3 33.0921789513 55.3 37.4 C 55.3 41.7078210487 51.8078210487 45.2 47.5 45.2 C 43.1921789513 45.2 39.7 41.7078210487 39.7 37.4 C 39.7 33.0921789513 43.1921789513 29.6 47.5 29.6 Z" />
+    <path
+        android:fillColor="#000000"
+        android:strokeColor="#6D6E71"
+        android:strokeWidth="1"
+        android:strokeMiterLimit="10"
+        android:pathData="M 29 29.6 C 33.3078210487 29.6 36.8 33.0921789513 36.8 37.4 C 36.8 41.7078210487 33.3078210487 45.2 29 45.2 C 24.6921789513 45.2 21.2 41.7078210487 21.2 37.4 C 21.2 33.0921789513 24.6921789513 29.6 29 29.6 Z" />
+    <path
+        android:fillColor="#000000"
+        android:strokeColor="#6D6E71"
+        android:strokeWidth="1"
+        android:strokeMiterLimit="10"
+        android:pathData="M 10.6 29.8 C 14.9078210487 29.8 18.4 33.2921789513 18.4 37.6 C 18.4 41.9078210487 14.9078210487 45.4 10.6 45.4 C 6.29217895132 45.4 2.8 41.9078210487 2.8 37.6 C 2.8 33.2921789513 6.29217895132 29.8 10.6 29.8 Z" />
+</vector>

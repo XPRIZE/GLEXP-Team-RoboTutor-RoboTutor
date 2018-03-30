@@ -102,7 +102,9 @@ public class BP_CONST {
     public static final String RESUME_ANIMATION   = "RESUME_ANIMATION";
     public static final int    MAX_ATTEMPT        = 3;
 
+    public static final String SOUND_TRACK        = ".sound_track";
     public static final String QUEST_VAR          = ".questValue";
+
     public static final String ANSWER_VAR         = ".ansValue";
 
     public static final String QUEST_VAR_TWO      = ".questValueTwo";
@@ -111,10 +113,61 @@ public class BP_CONST {
     public static final String QUEST_VAR_THREE    = ".questValueThree";
     public static final String ANSWER_VAR_THREE   = ".ansValueThree";
 
+    public static final String ANS_VAR         = ".ansValue";
+
+    public static final String QUEST_VAR_HUNDREDS = ".questValueHundreds";
+    public static final String QUEST_VAR_TENS     = ".questValueTens";
+    public static final String QUEST_VAR_ONES      = ".questValueOnes";
+    public static final String ANS_VAR_HUNDREDS= ".ansValueHundreds";
+    public static final String ANS_VAR_TENS    = ".ansValueTens";
+    public static final String ANS_VAR_ONES    = ".ansValueOnes";
+
+    public static final String QUEST_VAR_STIM_ONE_HUNDREDS = ".questValueStimOneHundreds";
+    public static final String QUEST_VAR_STIM_ONE_TENS = ".questValueStimOneTens";
+    public static final String QUEST_VAR_OPERAND  = ".questValueOperand";
+    public static final String QUEST_VAR_STIM_TWO_HUNDREDS = ".questValueStimTwoHundreds";
+    public static final String QUEST_VAR_STIM_TWO_TENS = ".questValueStimTwoTens";
+
+    public static final String ANS_VAR_STIM_ONE_HUNDREDS= ".ansValueStimOneHundreds";
+    public static final String ANS_VAR_STIM_ONE_TENS= ".ansValueStimOneTens";
+    public static final String ANS_VAR_OPERAND = ".ansValueOperand";
+    public static final String ANS_VAR_STIM_TWO_HUNDREDS = ".ansValueStimTwoHundreds";
+    public static final String ANS_VAR_STIM_TWO_TENS = ".ansValueStimTwoTens";
+
+
+    public static final String FTR_ANS_HUNDREDS  = "FTR_ANS_HUNDREDS";
+    public static final String FTR_ANS_TENS      = "FTR_ANS_TENS";
+    public static final String FTR_QUEST_HUNDREDS = "FTR_QUEST_HUNDREDS";
+    public static final String FTR_QUEST_TENS     = "FTR_QUEST_TENS";
+
+    public static final String FTR_ANS_STIM_ONE_HUNDREDS  = "FTR_ANS_STIM_ONE_HUNDREDS";
+    public static final String FTR_ANS_STIM_ONE_TENS      = "FTR_ANS_STIM_ONE_TENS";
+    public static final String FTR_ANS_STIM_TWO_HUNDREDS  = "FTR_ANS_STIM_TWO_HUNDREDS";
+    public static final String FTR_ANS_STIM_TWO_TENS      = "FTR_ANS_STIM_TWO_TENS";
+
+    public static final String FTR_QUEST_STIM_ONE_HUNDREDS = "FTR_QUEST_STIM_ONE_HUNDREDS";
+    public static final String FTR_QUEST_STIM_ONE_TENS     = "FTR_QUEST_STIM_ONE_TENS";
+    public static final String FTR_QUEST_STIM_TWO_HUNDREDS = "FTR_QUEST_STIM_TWO_HUNDREDS";
+    public static final String FTR_QUEST_STIM_TWO_TENS     = "FTR_QUEST_STIM_TWO_TENS";
+
+    public static final String FTR_WRD_STARTS_WITH         = "FTR_WORD_STARTS_WITH";
+    public static final String FTR_WRD_ENDS_WITH           = "FTR_WORD_ENDS_WITH";
+
+    public static final String FTR_E2N           = "FTR_E2N";
+    public static final String FTR_N2E           = "FTR_N2E";
+
+    public static final String SHOW_BUBBLE_ZERO  =   "SHOW_BUBBLE_ZERO";
+    public static final String SHOW_BUBBLE_ONE  =   "SHOW_BUBBLE_ONE";
+    public static final String SHOW_BUBBLE_TWO  =   "SHOW_BUBBLE_TWO";
+    public static final String SHOW_BUBBLE_THREE  =   "SHOW_BUBBLE_THREE";
+    public static final String SHOW_BUBBLE_FOUR  =   "SHOW_BUBBLE_FOUR";
+
+
     public static final String SHOW_BUBBLE_MASK          = "SHOW_BUBBLE_MASK";
+
     public static final String HIDE_MASK          = "HIDE_MASK";
 
-    public static final String SHOW_STIMULUS_MASK          = "SHOW_STIMULUS_MASK";
+    public static final String SHOW_STIMULUS_MASK = "SHOW_STIMULUS_MASK";
 
 
     static public HashMap<String, Integer> bubbleMap = new HashMap<String, Integer>();
@@ -200,6 +253,17 @@ public class BP_CONST {
     public static int [] DOT_9  =  {R.drawable.dot_9_0, R.drawable.dot_9_1, R.drawable.dot_9_2, R.drawable.dot_9_3, R.drawable.dot_9_4};
     public static int [] DOT_10 =  {R.drawable.dot_10_0, R.drawable.dot_10_1, R.drawable.dot_10_2, R.drawable.dot_10_3, R.drawable.dot_10_4, R.drawable.dot_10_5, R.drawable.dot_10_6, R.drawable.dot_10_7, R.drawable.dot_10_8};
 
+    private static int[] TENFRAME_H_0 = {R.drawable.tenframe_h_0};
+    private static int[] TENFRAME_H_1 = {R.drawable.tenframe_h_1};
+    private static int[] TENFRAME_H_2 = {R.drawable.tenframe_h_2};
+    private static int[] TENFRAME_H_3 = {R.drawable.tenframe_h_3};
+    private static int[] TENFRAME_H_4 = {R.drawable.tenframe_h_4};
+    private static int[] TENFRAME_H_5 = {R.drawable.tenframe_h_5};
+    private static int[] TENFRAME_H_6 = {R.drawable.tenframe_h_6};
+    private static int[] TENFRAME_H_7 = {R.drawable.tenframe_h_7};
+    private static int[] TENFRAME_H_8 = {R.drawable.tenframe_h_8};
+    private static int[] TENFRAME_H_9 = {R.drawable.tenframe_h_9};
+    private static int[] TENFRAME_H_10 = {R.drawable.tenframe_h_10};
 
     static public HashMap<String, int[]> drawableMap = new HashMap<String, int[]>();
 
@@ -221,7 +285,19 @@ public class BP_CONST {
         drawableMap.put("trapezoid" , SHAPE_trapezoid  );
         drawableMap.put("triangle"  , SHAPE_triangle   );
 
-        drawableMap.put("0"  , DOT_0  );
+        drawableMap.put("0"  , TENFRAME_H_0  );
+        drawableMap.put("1"  , TENFRAME_H_1  );
+        drawableMap.put("2"  , TENFRAME_H_2  );
+        drawableMap.put("3"  , TENFRAME_H_3  );
+        drawableMap.put("4"  , TENFRAME_H_4  );
+        drawableMap.put("5"  , TENFRAME_H_5  );
+        drawableMap.put("6"  , TENFRAME_H_6  );
+        drawableMap.put("7"  , TENFRAME_H_7  );
+        drawableMap.put("8"  , TENFRAME_H_8  );
+        drawableMap.put("9"  , TENFRAME_H_9  );
+        drawableMap.put("10" , TENFRAME_H_10 );
+
+        /*drawableMap.put("0"  , DOT_0  );
         drawableMap.put("1"  , DOT_1  );
         drawableMap.put("2"  , DOT_2  );
         drawableMap.put("3"  , DOT_3  );
@@ -231,7 +307,7 @@ public class BP_CONST {
         drawableMap.put("7"  , DOT_7  );
         drawableMap.put("8"  , DOT_8  );
         drawableMap.put("9"  , DOT_9  );
-        drawableMap.put("10" , DOT_10 );
+        drawableMap.put("10" , DOT_10 );*/
     }
 
 }

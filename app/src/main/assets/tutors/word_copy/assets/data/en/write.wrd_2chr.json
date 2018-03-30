@@ -3,29 +3,125 @@
 
   "random": true,
   "dataSource": [
-    "am",
-    "an",
-    "as",
-    "at",
-    "be",
-    "by",
-    "do",
-    "go",
-    "he",
-    "if",
-    "in",
-    "is",
-    "it",
-    "me",
-    "my",
-    "no",
-    "of",
-    "on",
-    "or",
-    "so",
-    "to",
-    "up",
-    "us",
-    "we"
+      {
+          "stimulus": "am",
+          "audioStimulus": ["am"],
+          "answer": "am"
+      },
+      {
+          "stimulus": "an",
+          "audioStimulus": ["an"],
+          "answer": "an"
+      },
+      {
+          "stimulus": "as",
+          "audioStimulus": ["as"],
+          "answer": "as"
+      },
+      {
+          "stimulus": "at",
+          "audioStimulus": ["at"],
+          "answer": "at"
+      },
+      {
+          "stimulus": "be",
+          "audioStimulus": ["be"],
+          "answer": "be"
+      },
+      {
+          "stimulus": "by",
+          "audioStimulus": ["by"],
+          "answer": "by"
+      },
+      {
+          "stimulus": "do",
+          "audioStimulus": ["do"],
+          "answer": "do"
+      },
+      {
+          "stimulus": "go",
+          "audioStimulus": ["go"],
+          "answer": "go"
+      },
+      {
+          "stimulus": "he",
+          "audioStimulus": ["he"],
+          "answer": "he"
+      },
+      {
+          "stimulus": "if",
+          "audioStimulus": ["if"],
+          "answer": "if"
+      },
+      {
+          "stimulus": "in",
+          "audioStimulus": ["in"],
+          "answer": "in"
+      },
+      {
+          "stimulus": "is",
+          "audioStimulus": ["is"],
+          "answer": "is"
+      },
+      {
+          "stimulus": "it",
+          "audioStimulus": ["it"],
+          "answer": "it"
+      },
+      {
+          "stimulus": "me",
+          "audioStimulus": ["me"],
+          "answer": "me"
+      },
+      {
+          "stimulus": "my",
+          "audioStimulus": ["my"],
+          "answer": "my"
+      },
+      {
+          "stimulus": "no",
+          "audioStimulus": ["no"],
+          "answer": "no"
+      },
+      {
+          "stimulus": "of",
+          "audioStimulus": ["of"],
+          "answer": "of"
+      },
+      {
+          "stimulus": "on",
+          "audioStimulus": ["on"],
+          "answer": "on"
+      },
+      {
+          "stimulus": "or",
+          "audioStimulus": ["or"],
+          "answer": "or"
+      },
+      {
+          "stimulus": "so",
+          "audioStimulus": ["so"],
+          "answer": "so"
+      },
+      {
+          "stimulus": "to",
+          "audioStimulus": ["to"],
+          "answer": "to"
+      },
+      {
+          "stimulus": "up",
+          "audioStimulus": ["up"],
+          "answer": "up"
+      },
+      {
+          "stimulus": "us",
+          "audioStimulus": ["us"],
+          "answer": "us"
+      },
+      {
+          "stimulus": "we",
+          "audioStimulus": ["we"],
+          "answer": "we"
+      }
     ]
 }

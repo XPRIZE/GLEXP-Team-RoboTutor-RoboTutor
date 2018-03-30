@@ -1,0 +1,32 @@
+{
+  "bootFeatures":"",
+  "random": false,
+  "singleStimulus": false,
+  "dataSource": [
+    {
+      "stimulus": "au",
+      "audioStimulus": ["au"],
+      "answer": "au"
+    },
+    {
+      "stimulus": "matunda",
+      "audioStimulus": ["matunda", ""],
+      "answer": "matunda"
+    },
+    {
+      "stimulus": "cha",
+      "audioStimulus": ["cha", "", ""],
+      "answer": "cha"
+    },
+    {
+      "stimulus": "bado",
+      "audioStimulus": ["bado", ""],
+      "answer": "bado"
+    },
+    {
+      "stimulus": "saba",
+      "audioStimulus": ["saba"],
+      "answer": "saba"
+    }
+  ]
+}
