@@ -265,6 +265,17 @@ public class BP_CONST {
     private static int[] TENFRAME_H_9 = {R.drawable.tenframe_h_9};
     private static int[] TENFRAME_H_10 = {R.drawable.tenframe_h_10};
 
+    public static int[] BPOP_BACKGROUNDS = {
+            R.raw.adventure_alone_arid_274014,              // works
+            R.raw.animal_carnivore_countryside_667204,      // too big
+            R.raw.autumn_beautiful_city_210243,
+            R.raw.beach_blue_coast_417144,
+            R.raw.birds_of_prey_black_and_white_dawn_748877,
+            R.raw.clouds_conifer_daylight_388065,
+            R.raw.clouds_cropland_crops_462023,
+            R.raw.desert_egypt_great_sphinx_of_giza_2359
+    };
+
     static public HashMap<String, int[]> drawableMap = new HashMap<String, int[]>();
 
     static {
@@ -309,5 +320,7 @@ public class BP_CONST {
         drawableMap.put("9"  , DOT_9  );
         drawableMap.put("10" , DOT_10 );*/
     }
+
+
 
 }
