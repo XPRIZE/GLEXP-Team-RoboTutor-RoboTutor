@@ -173,6 +173,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     protected void updateDataSet(CCountX_Data data) {
         Log.d(TCONST.COUNTING_DEBUG_LOG, "updateDateSet");
 
+        resetView();
 
         // first load dataset into fields
         loadDataSet(data);
