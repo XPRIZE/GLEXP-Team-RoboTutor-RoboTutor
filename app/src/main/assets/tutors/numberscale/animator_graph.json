@@ -65,6 +65,21 @@
           "edges":[]
         },
 
+        "PLAY_INTRO": {
+          "type": "QUEUE",
+          "COMMENT": "play tutor again when user hesitates for a long time",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id":"SNumberScale", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
+            {"name": "TAP", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"default", "soundsource": "Now let’s count by.mp3", "repeat":false, "volume": "0.8", "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{offset}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""}
+
+          ],
+          "preexit":[],
+          "edges":[]
+        },
+
         "PLAY_TUTOR_PLUS": {
           "type": "QUEUE",
           "COMMENT": "play tutor again when user hesitates for a long time",
@@ -106,7 +121,7 @@
           "COMMENT": "Intro Clip - we only ever visit this node once",
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
-          "preenter": ["SET_VERSION", "SET_DATASOURCE","SET_CHIME_BEHAVIOR","SET_CHIME_PLUS_BEHAVIOR","SET_CHIME_PPLUS_BEHAVIOR","DISABLE_TAPPING","SET_TUTOR_BEHAVIOR1","SET_TUTOR_BEHAVIOR2"],
+          "preenter": ["SET_VERSION", "SET_DATASOURCE","SET_INTRO","SET_CHIME_BEHAVIOR","SET_CHIME_PLUS_BEHAVIOR","SET_CHIME_PPLUS_BEHAVIOR","DISABLE_TAPPING","SET_TUTOR_BEHAVIOR1","SET_TUTOR_BEHAVIOR2"],
           "preexit": [],
           "edges": [
             {
@@ -153,7 +168,7 @@
           "type": "node",
           "maptype": "moduleMap",
           "mapname": "PLAYCOMPLETE",
-          "preenter": ["DISABLE_TAPPING","CLR_CHIME_BEHAVIOR","CLR_CHIME_PLUS_BEHAVIOR","CLR_CHIME_PPLUS_BEHAVIOR","CLR_TUTOR_BEHAVIOR1","CLR_TUTOR_BEHAVIOR2"],
+          "preenter": ["DISABLE_TAPPING","CLR_CHIME_BEHAVIOR","CLR_INTRO","CLR_CHIME_PLUS_BEHAVIOR","CLR_CHIME_PPLUS_BEHAVIOR","CLR_TUTOR_BEHAVIOR1","CLR_TUTOR_BEHAVIOR2"],
           "preexit": [],
           "edges": [
             {"constraint": "FTR_EOD", "edge": "NEXT_SCENE"},
@@ -271,12 +286,14 @@
         "SET_CHIME_PPLUS_BEHAVIOR": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_CHIME_PPLUS:String|PLAY_CHIME_PPLUS:String" ,"features":""},
         "SET_TUTOR_BEHAVIOR1": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_TUTOR_PLUS:String|PLAY_TUTOR_PLUS:String" ,"features":""},
         "SET_TUTOR_BEHAVIOR2": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_TUTOR_MINUS:String|PLAY_TUTOR_MINUS:String" ,"features":""},
+        "SET_INTRO": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_INTRO:String|PLAY_INTRO:String" ,"features":""},
 
         "CLR_CHIME_BEHAVIOR": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_CHIME:String|NULL:String" ,"features":""},
         "CLR_CHIME_PLUS_BEHAVIOR": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_CHIME_PLUS:String|NULL:String" ,"features":""},
         "CLR_CHIME_PPLUS_BEHAVIOR": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_CHIME_PPLUS:String|NULL:String" ,"features":""},
         "CLR_TUTOR_BEHAVIOR1": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_TUTOR_PLUS:String|NULL:String" ,"features":""},
         "CLR_TUTOR_BEHAVIOR2": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_TUTOR_MINUS:String|NULL:String" ,"features":""},
+        "CLR_INTRO": {"type": "COMMAND", "id": "SNumberScale", "method": "setStickyBehavior", "parms": "PLAY_INTRO:String|NULL:String" ,"features":""},
         "NEXT_DATASET": {"type": "COMMAND", "id": "SNumberScale", "method": "next", "features": ""},
         "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"},
         "DISABLE_TAPPING": {"type": "COMMAND", "id": "SNumberScale", "method" : "disableTapping", "features":""},
