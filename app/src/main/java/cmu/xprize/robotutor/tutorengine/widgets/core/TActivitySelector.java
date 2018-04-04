@@ -202,29 +202,33 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                     activeTutor   = writingTutorID;
                     transitionMap = writeTransitions;
+                    rootTutor = rootSkillWrite;
                     break;
 
                 case AS_CONST.SELECT_STORIES:
 
                     activeTutor   = storiesTutorID;
                     transitionMap = storyTransitions;
+                    rootTutor = rootSkillStories;
                     break;
 
                 case AS_CONST.SELECT_MATH:
 
                     activeTutor   = mathTutorID;
                     transitionMap = mathTransitions;
+                    rootTutor = rootSkillMath;
                     break;
 
                 case AS_CONST.SELECT_SHAPES:
 
                     activeTutor   = shapesTutorID;
                     transitionMap = shapeTransitions;
+                    rootTutor = rootSkillShapes;
                     break;
 
             }
 
-            SdebugActivity.initGrid(activeSkill, activeTutor, transitionMap);
+            SdebugActivity.initGrid(activeSkill, activeTutor, transitionMap, rootTutor);
         }
         else {
 

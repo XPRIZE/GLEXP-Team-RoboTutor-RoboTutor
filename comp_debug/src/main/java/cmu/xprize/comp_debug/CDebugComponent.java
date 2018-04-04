@@ -211,7 +211,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                 tutorName = gridAdapter.updateCurrentTutorByIndex(transitionMap.get(initialTutor).gridIndex);
 
                 if(!tutorName.equals("")) {
-                    changeCurrentTutor(tutorName);
+                    changeCurrentTutor(tutorName, null);
                 }
             }
         });
@@ -271,7 +271,16 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
     }
 
 
-    public void initGrid(String _activeSkill, String _activeTutor, HashMap _transitionMap) {
+    /**
+     * Initialize grid for the active skill.
+     * RootTutor is passed along just in case we've switched tables between updates.
+     *
+     * @param _activeSkill
+     * @param _activeTutor
+     * @param _transitionMap
+     * @param rootTutor
+     */
+    public void initGrid(String _activeSkill, String _activeTutor, HashMap _transitionMap, String rootTutor) {
 
         initialSkill  = _activeSkill;
         initialTutor  = _activeTutor;
@@ -279,10 +288,12 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
         initDisplay();
 
-        changeCurrentTutor(_activeTutor);
+        // BUG this could be a value not in current matrix
+        currentTutor = _activeTutor;
+        changeCurrentTutor(currentTutor, rootTutor);
 
         gridView    = (GridView) findViewById(R.id.SdebugGrid);
-        gridAdapter = new CDebugAdapter(mContext, _activeTutor, _transitionMap, this);
+        gridAdapter = new CDebugAdapter(mContext, currentTutor, transitionMap, this);
 
         gridView.setNumColumns(gridAdapter.getGridColumnCount());
 
@@ -303,11 +314,16 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
     // IDebugLauncher Interface
     //
     @Override
-    public void changeCurrentTutor(String transitionID) {
+    public void changeCurrentTutor(String transitionID, String rootTutor) {
 
         currentTutor = transitionID;
 
         currentTransition = transitionMap.get(currentTutor);
+        // this happens when we're debugging and we suddenly switch to a new Transition Table and the previous currentTutor doesn't exist
+        if(currentTransition == null) {
+            currentTutor = rootTutor;
+            currentTransition = transitionMap.get(currentTutor);
+        }
         udpateViewVectorNames();
     }
 
