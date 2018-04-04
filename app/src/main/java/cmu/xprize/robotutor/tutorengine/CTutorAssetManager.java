@@ -34,8 +34,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.LogManager;
 import java.util.zip.ZipFile;
 
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
 import cmu.xprize.robotutor.tutorengine.util.Zip;
@@ -402,61 +404,67 @@ public class CTutorAssetManager {
             //
             if (objectname.toLowerCase().startsWith(assetName)) {
 
-                String srcPath = RoboTutor.DOWNLOAD_PATH + File.separator + objectname;
-                assetFile     = new File(srcPath);
+                try {
 
-                // Extract the Found assets version spec and assign a File object
-                //
-                ArrayList assetVersion = mAssetObject.createConstraintByName(ASSET_TO_MATCH, objectname);
-                mAssetObject.setAssetFile(ASSET_TO_MATCH, assetFile);
+                    String srcPath = RoboTutor.DOWNLOAD_PATH + File.separator + objectname;
+                    assetFile     = new File(srcPath);
 
-                // i.e. the app can't use an older ot newer asset version than it supports.
-                //
-                switch (mAssetObject.testConstraint(TCONST.ASSET_CODE_VERSION, ASSET_TO_MATCH, INDEX_INSTALLED)) {
+                    // Extract the Found assets version spec and assign a File object
+                    //
+                    ArrayList assetVersion = mAssetObject.createConstraintByName(ASSET_TO_MATCH, objectname);
+                    mAssetObject.setAssetFile(ASSET_TO_MATCH, assetFile);
 
-                    case ASSET_VERSIONMATCH:
+                    // i.e. the app can't use an older ot newer asset version than it supports.
+                    //
+                    switch (mAssetObject.testConstraint(TCONST.ASSET_CODE_VERSION, ASSET_TO_MATCH, INDEX_INSTALLED)) {
 
-                        switch(mAssetObject.queryMatch()) {
+                        case ASSET_VERSIONMATCH:
 
-                            // There are currently no matching asset found in the storyFolder
-                            //
-                            case HAS_NOMATCH:
-                                doReleaseMatch(assetFile, assetVersion, INDEX_INSTALLED);
-                                break;
+                            switch(mAssetObject.queryMatch()) {
 
-                            // There is currently a release-match - i.e. a full asset distribution zip
-                            //
-                            case HAS_RELEASE_MATCH:
+                                // There are currently no matching asset found in the storyFolder
+                                //
+                                case HAS_NOMATCH:
+                                    doReleaseMatch(assetFile, assetVersion, INDEX_INSTALLED);
+                                    break;
 
-                                doReleaseMatch(assetFile, assetVersion, RELEASE_MATCH);
-                                break;
+                                // There is currently a release-match - i.e. a full asset distribution zip
+                                //
+                                case HAS_RELEASE_MATCH:
 
-                            // There are currently release&update-matches -
-                            // i.e. a full asset distribution zip and matching update zip
-                            //
-                            case HAS_UPDATE_MATCH:
+                                    doReleaseMatch(assetFile, assetVersion, RELEASE_MATCH);
+                                    break;
 
-                                doReleaseMatch(assetFile, assetVersion, UPDATE_MATCH);
-                                break;
+                                // There are currently release&update-matches -
+                                // i.e. a full asset distribution zip and matching update zip
+                                //
+                                case HAS_UPDATE_MATCH:
 
-                            // There is currently an orphan-match - i.e. an update match that doesn't have a
-                            // matching or installed full release.
-                            //
-                            case HAS_ORPHAN_MATCH:
+                                    doReleaseMatch(assetFile, assetVersion, UPDATE_MATCH);
+                                    break;
 
-                                doReleaseMatch(assetFile, assetVersion, ORPHAN_MATCH);
-                                break;
-                        }
-                        break;
+                                // There is currently an orphan-match - i.e. an update match that doesn't have a
+                                // matching or installed full release.
+                                //
+                                case HAS_ORPHAN_MATCH:
+
+                                    doReleaseMatch(assetFile, assetVersion, ORPHAN_MATCH);
+                                    break;
+                            }
+                            break;
 
                         // The asset file doesn't match the required version for the current tutorEngine
                         //
-                    default:
+                        default:
 
-                        // Delete up and down versions -
-                        mAssetObject.deleteAsset(ASSET_TO_MATCH);
-                        break;
+                            // Delete up and down versions -
+                            mAssetObject.deleteAsset(ASSET_TO_MATCH);
+                            break;
+                    }
+                } catch (Exception e) {
+                    CErrorManager.logEvent(TAG, "Error loading asset: " + objectname, true);
                 }
+
             }
         }
     }
