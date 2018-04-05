@@ -1,230 +1,230 @@
 {
   "question_replacement": false,
-  "response_replacement": false,
-  "gen_responsetype": "text_data",
-  "question_count": 10,
-  "banner_color": "#000066",
-  "gen_answerSet": [],
-  "gen_responseSet": [],
-  "gen_answertype": "text_data",
-  "gen_stimulusSet": [],
-  "gen_stimulustype": "text_data",
-  "question_sequence": "sequential",
   "problem_type": "WORD_ENDS_WITH",
   "dataSource": [
     {
-      "question_say": true,
+      "gen_question": false,
+      "stimulus_type": "text_data",
       "question_show": true,
       "answer_type": "text_data",
-      "answer": "tuli",
       "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
+      "stimulus": "_ _ li",
+      "question_say": true,
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
-      "stimulus": "_ _ li",
       "response_set": [
-        "mume",
-        "dume",
-        "tuli"
+        "rudi",
+        "goli",
+        "nayo"
       ],
-      "gen_question": false
+      "answer": "goli"
     },
     {
-      "question_say": true,
+      "gen_question": false,
+      "stimulus_type": "text_data",
       "question_show": true,
       "answer_type": "text_data",
-      "answer": "kali",
       "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
+      "stimulus": "_ _ li",
+      "question_say": true,
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
-      "stimulus": "_ _ li",
       "response_set": [
-        "titi",
+        "zamu",
+        "bali",
+        "boga"
+      ],
+      "answer": "bali"
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_show": true,
+      "answer_type": "text_data",
+      "question_type": "multiple-choice",
+      "stimulus": "_ _ li",
+      "question_say": true,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "response_set": [
+        "moja",
+        "goli",
+        "jiji"
+      ],
+      "answer": "goli"
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_show": true,
+      "answer_type": "text_data",
+      "question_type": "multiple-choice",
+      "stimulus": "_ _ li",
+      "question_say": true,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "response_set": [
+        "sisa",
+        "pili",
+        "wapi"
+      ],
+      "answer": "pili"
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_show": true,
+      "answer_type": "text_data",
+      "question_type": "multiple-choice",
+      "stimulus": "_ _ li",
+      "question_say": true,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "response_set": [
+        "taja",
+        "goli",
+        "yadi"
+      ],
+      "answer": "goli"
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_show": true,
+      "answer_type": "text_data",
+      "question_type": "multiple-choice",
+      "stimulus": "_ _ li",
+      "question_say": true,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "response_set": [
+        "omba",
         "kali",
-        "honi"
+        "moyo"
       ],
-      "gen_question": false
+      "answer": "kali"
     },
     {
-      "question_say": true,
+      "gen_question": false,
+      "stimulus_type": "text_data",
       "question_show": true,
       "answer_type": "text_data",
-      "answer": "hali",
       "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
+      "stimulus": "_ _ li",
+      "question_say": true,
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
-      "stimulus": "_ _ li",
-      "response_set": [
-        "wiki",
-        "pori",
-        "hali"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "hili",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "_ _ li",
-      "response_set": [
-        "hili",
-        "kike",
-        "pesa"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "tuli",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "_ _ li",
-      "response_set": [
-        "soko",
-        "hivi",
-        "tuli"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "pili",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "_ _ li",
-      "response_set": [
-        "vipi",
-        "jani",
-        "pili"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "wali",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "_ _ li",
-      "response_set": [
-        "pana",
-        "mbwo",
-        "wali"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "pili",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "_ _ li",
       "response_set": [
         "pili",
-        "ndio",
-        "saba"
+        "heri",
+        "mpwa"
       ],
-      "gen_question": false
+      "answer": "pili"
     },
     {
-      "question_say": true,
+      "gen_question": false,
+      "stimulus_type": "text_data",
       "question_show": true,
       "answer_type": "text_data",
-      "answer": "wali",
       "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
+      "stimulus": "_ _ li",
+      "question_say": true,
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
-      "stimulus": "_ _ li",
       "response_set": [
-        "akon",
-        "wali",
-        "waaa"
+        "tuwe",
+        "pili",
+        "boma"
       ],
-      "gen_question": false
+      "answer": "pili"
     },
     {
-      "question_say": true,
+      "gen_question": false,
+      "stimulus_type": "text_data",
       "question_show": true,
       "answer_type": "text_data",
-      "answer": "nili",
       "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
+      "stimulus": "_ _ li",
+      "question_say": true,
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
-      "stimulus": "_ _ li",
       "response_set": [
-        "lisa",
-        "kumi",
-        "nili"
+        "bali",
+        "mito",
+        "eupe"
       ],
-      "gen_question": false
+      "answer": "bali"
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_show": true,
+      "answer_type": "text_data",
+      "question_type": "multiple-choice",
+      "stimulus": "_ _ li",
+      "question_say": true,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "response_set": [
+        "mali",
+        "mate",
+        "nguo"
+      ],
+      "answer": "mali"
     }
   ],
+  "gen_answertype": "text_data",
+  "gen_answerSet": [],
+  "gen_responseSet": [],
+  "response_replacement": false,
+  "question_sequence": "RANDOM",
+  "question_count": 10,
   "view_background": {
-    "layout": "grid",
     "kind": "squares",
-    "layoutcount": 0,
-    "style": "primitives",
-    "colorchoice": "fixed",
     "colorbase": "#666666",
+    "colorchoice": "fixed",
+    "layout": "grid",
+    "layoutcount": 0,
     "colors": [
       -6053120,
       -7566336,
       -2500352,
       -5066240
-    ]
-  }
+    ],
+    "style": "primitives"
+  },
+  "gen_responsetype": "text_data",
+  "banner_color": "#000066",
+  "gen_stimulustype": "text_data",
+  "gen_stimulusSet": []
 }

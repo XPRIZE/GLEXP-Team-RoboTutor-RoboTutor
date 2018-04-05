@@ -1,0 +1,506 @@
+{
+  "question_replacement": false,
+  "problem_type": "WORD_STARTS_WITH",
+  "dataSource": [
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_show": false,
+      "answer_type": "text_data",
+      "question_type": "multiple-choice",
+      "stimulus": "all_ _",
+      "question_say": true,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "response_set": [
+        [
+          "sifa",
+          "siku",
+          "simo",
+          "simu",
+          "sina",
+          "siri",
+          "sisa",
+          "sisi",
+          "sita",
+          "siyo"
+        ],
+        "embe",
+        "jivu"
+      ],
+      "answer": [
+        "sifa",
+        "siku",
+        "simo",
+        "simu",
+        "sina",
+        "siri",
+        "sisa",
+        "sisi",
+        "sita",
+        "siyo"
+      ]
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_show": false,
+      "answer_type": "text_data",
+      "question_type": "multiple-choice",
+      "stimulus": "all_ _",
+      "question_say": true,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "response_set": [
+        "zake",
+        [
+          "kufa",
+          "kuja",
+          "kuku",
+          "kula",
+          "kule",
+          "kumi",
+          "kuna",
+          "kuni",
+          "kuoa",
+          "kuta",
+          "kuua",
+          "kuwa",
+          "kuyu"
+        ],
+        "nusu"
+      ],
+      "answer": [
+        "kufa",
+        "kuja",
+        "kuku",
+        "kula",
+        "kule",
+        "kumi",
+        "kuna",
+        "kuni",
+        "kuoa",
+        "kuta",
+        "kuua",
+        "kuwa",
+        "kuyu"
+      ]
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_show": false,
+      "answer_type": "text_data",
+      "question_type": "multiple-choice",
+      "stimulus": "all_ _",
+      "question_say": true,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "response_set": [
+        "nalo",
+        "taja",
+        [
+          "sifa",
+          "siku",
+          "simo",
+          "simu",
+          "sina",
+          "siri",
+          "sisa",
+          "sisi",
+          "sita",
+          "siyo"
+        ]
+      ],
+      "answer": [
+        "sifa",
+        "siku",
+        "simo",
+        "simu",
+        "sina",
+        "siri",
+        "sisa",
+        "sisi",
+        "sita",
+        "siyo"
+      ]
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_show": false,
+      "answer_type": "text_data",
+      "question_type": "multiple-choice",
+      "stimulus": "all_ _",
+      "question_say": true,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "response_set": [
+        "sana",
+        [
+          "waje",
+          "wake",
+          "wako",
+          "wala",
+          "wale",
+          "wali",
+          "wana",
+          "wapi",
+          "watu",
+          "waua",
+          "wavu",
+          "wawe",
+          "wazi",
+          "wazo"
+        ],
+        "wote"
+      ],
+      "answer": [
+        "waje",
+        "wake",
+        "wako",
+        "wala",
+        "wale",
+        "wali",
+        "wana",
+        "wapi",
+        "watu",
+        "waua",
+        "wavu",
+        "wawe",
+        "wazi",
+        "wazo"
+      ]
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_show": false,
+      "answer_type": "text_data",
+      "question_type": "multiple-choice",
+      "stimulus": "all_ _",
+      "question_say": true,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "response_set": [
+        "zizi",
+        [
+          "hadi",
+          "haha",
+          "haja",
+          "haki",
+          "hali",
+          "hamu",
+          "hana",
+          "hapa",
+          "hapo",
+          "hasa",
+          "hata",
+          "hawa",
+          "haya",
+          "hayo"
+        ],
+        "basi"
+      ],
+      "answer": [
+        "hadi",
+        "haha",
+        "haja",
+        "haki",
+        "hali",
+        "hamu",
+        "hana",
+        "hapa",
+        "hapo",
+        "hasa",
+        "hata",
+        "hawa",
+        "haya",
+        "hayo"
+      ]
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_show": false,
+      "answer_type": "text_data",
+      "question_type": "multiple-choice",
+      "stimulus": "all_ _",
+      "question_say": true,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "response_set": [
+        "tisa",
+        [
+          "kufa",
+          "kuja",
+          "kuku",
+          "kula",
+          "kule",
+          "kumi",
+          "kuna",
+          "kuni",
+          "kuoa",
+          "kuta",
+          "kuua",
+          "kuwa",
+          "kuyu"
+        ],
+        "siyo"
+      ],
+      "answer": [
+        "kufa",
+        "kuja",
+        "kuku",
+        "kula",
+        "kule",
+        "kumi",
+        "kuna",
+        "kuni",
+        "kuoa",
+        "kuta",
+        "kuua",
+        "kuwa",
+        "kuyu"
+      ]
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_show": false,
+      "answer_type": "text_data",
+      "question_type": "multiple-choice",
+      "stimulus": "all_ _",
+      "question_say": true,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "response_set": [
+        "mkuu",
+        [
+          "kifo",
+          "kiio",
+          "kike",
+          "kiki",
+          "kiko",
+          "kila",
+          "kile",
+          "kima",
+          "kina",
+          "kinu",
+          "kipi",
+          "kisa",
+          "kisu",
+          "kiti",
+          "kitu",
+          "kiwe"
+        ],
+        "pedi"
+      ],
+      "answer": [
+        "kifo",
+        "kiio",
+        "kike",
+        "kiki",
+        "kiko",
+        "kila",
+        "kile",
+        "kima",
+        "kina",
+        "kinu",
+        "kipi",
+        "kisa",
+        "kisu",
+        "kiti",
+        "kitu",
+        "kiwe"
+      ]
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_show": false,
+      "answer_type": "text_data",
+      "question_type": "multiple-choice",
+      "stimulus": "all_ _",
+      "question_say": true,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "response_set": [
+        "huku",
+        "honi",
+        [
+          "sifa",
+          "siku",
+          "simo",
+          "simu",
+          "sina",
+          "siri",
+          "sisa",
+          "sisi",
+          "sita",
+          "siyo"
+        ]
+      ],
+      "answer": [
+        "sifa",
+        "siku",
+        "simo",
+        "simu",
+        "sina",
+        "siri",
+        "sisa",
+        "sisi",
+        "sita",
+        "siyo"
+      ]
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_show": false,
+      "answer_type": "text_data",
+      "question_type": "multiple-choice",
+      "stimulus": "all_ _",
+      "question_say": true,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "response_set": [
+        [
+          "waje",
+          "wake",
+          "wako",
+          "wala",
+          "wale",
+          "wali",
+          "wana",
+          "wapi",
+          "watu",
+          "waua",
+          "wavu",
+          "wawe",
+          "wazi",
+          "wazo"
+        ],
+        "hamu",
+        "bora"
+      ],
+      "answer": [
+        "waje",
+        "wake",
+        "wako",
+        "wala",
+        "wale",
+        "wali",
+        "wana",
+        "wapi",
+        "watu",
+        "waua",
+        "wavu",
+        "wawe",
+        "wazi",
+        "wazo"
+      ]
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_show": false,
+      "answer_type": "text_data",
+      "question_type": "multiple-choice",
+      "stimulus": "all_ _",
+      "question_say": true,
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "response_set": [
+        "wezi",
+        [
+          "kaka",
+          "kale",
+          "kali",
+          "kama",
+          "kana",
+          "kapu",
+          "karo",
+          "kasa",
+          "kasi",
+          "kata",
+          "kati",
+          "kato",
+          "kavu",
+          "kazi"
+        ],
+        "mara"
+      ],
+      "answer": [
+        "kaka",
+        "kale",
+        "kali",
+        "kama",
+        "kana",
+        "kapu",
+        "karo",
+        "kasa",
+        "kasi",
+        "kata",
+        "kati",
+        "kato",
+        "kavu",
+        "kazi"
+      ]
+    }
+  ],
+  "gen_answertype": "text_data",
+  "gen_answerSet": [],
+  "gen_responseSet": [],
+  "response_replacement": false,
+  "question_sequence": "RANDOM",
+  "question_count": 10,
+  "view_background": {
+    "kind": "squares",
+    "colorbase": "#666666",
+    "colorchoice": "fixed",
+    "layout": "grid",
+    "layoutcount": 0,
+    "colors": [
+      -6053120,
+      -7566336,
+      -2500352,
+      -5066240
+    ],
+    "style": "primitives"
+  },
+  "gen_responsetype": "text_data",
+  "banner_color": "#000066",
+  "gen_stimulustype": "text_data",
+  "gen_stimulusSet": []
+}

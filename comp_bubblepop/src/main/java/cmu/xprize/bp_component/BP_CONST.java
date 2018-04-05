@@ -156,15 +156,7 @@ public class BP_CONST {
     public static final String FTR_E2N           = "FTR_E2N";
     public static final String FTR_N2E           = "FTR_N2E";
 
-    public static final String SHOW_BUBBLE_ZERO  =   "SHOW_BUBBLE_ZERO";
-    public static final String SHOW_BUBBLE_ONE  =   "SHOW_BUBBLE_ONE";
-    public static final String SHOW_BUBBLE_TWO  =   "SHOW_BUBBLE_TWO";
-    public static final String SHOW_BUBBLE_THREE  =   "SHOW_BUBBLE_THREE";
-    public static final String SHOW_BUBBLE_FOUR  =   "SHOW_BUBBLE_FOUR";
-
-
     public static final String SHOW_BUBBLE_MASK          = "SHOW_BUBBLE_MASK";
-
     public static final String HIDE_MASK          = "HIDE_MASK";
 
     public static final String SHOW_STIMULUS_MASK = "SHOW_STIMULUS_MASK";

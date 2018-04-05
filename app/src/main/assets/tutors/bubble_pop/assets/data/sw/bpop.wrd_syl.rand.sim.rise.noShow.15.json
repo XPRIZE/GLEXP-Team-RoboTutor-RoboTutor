@@ -1,230 +1,230 @@
 {
-  "question_replacement": false,
-  "response_replacement": false,
-  "gen_responsetype": "text_data",
-  "question_count": 10,
-  "banner_color": "#000066",
-  "gen_answerSet": [],
-  "gen_responseSet": [],
-  "gen_answertype": "text_data",
-  "gen_stimulusSet": [],
-  "gen_stimulustype": "text_data",
-  "question_sequence": "sequential",
-  "problem_type": "syllable",
   "dataSource": [
     {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "ha",
-      "question_type": "rising",
+      "answer": "zi",
+      "gen_question": false,
       "stimulus_type": "text_data",
+      "stimulus": "zi",
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
-      "stimulus": "ha",
-      "response_set": [
-        "za",
-        "ha",
-        "fa"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "ta",
       "question_type": "rising",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "ta",
+      "answer_type": "text_data",
+      "question_show": false,
       "response_set": [
-        "ta",
-        "fa",
-        "swa"
+        "ndi",
+        "chi",
+        "zi"
       ],
-      "gen_question": false
+      "question_say": true
     },
     {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "mji",
-      "question_type": "rising",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "mji",
-      "response_set": [
-        "yi",
-        "ti",
-        "mji"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "mko",
-      "question_type": "rising",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "mko",
-      "response_set": [
-        "mko",
-        "bo",
-        "so"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
       "answer": "yu",
-      "question_type": "rising",
+      "gen_question": false,
       "stimulus_type": "text_data",
+      "stimulus": "yu",
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
-      "stimulus": "yu",
+      "question_type": "rising",
+      "answer_type": "text_data",
+      "question_show": false,
       "response_set": [
+        "vu",
+        "lu",
+        "yu"
+      ],
+      "question_say": true
+    },
+    {
+      "answer": "tha",
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "stimulus": "tha",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_type": "rising",
+      "answer_type": "text_data",
+      "question_show": false,
+      "response_set": [
+        "tha",
+        "ya",
+        "gha"
+      ],
+      "question_say": true
+    },
+    {
+      "answer": "kwe",
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "stimulus": "kwe",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_type": "rising",
+      "answer_type": "text_data",
+      "question_show": false,
+      "response_set": [
+        "se",
+        "twe",
+        "kwe"
+      ],
+      "question_say": true
+    },
+    {
+      "answer": "mbu",
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "stimulus": "mbu",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_type": "rising",
+      "answer_type": "text_data",
+      "question_show": false,
+      "response_set": [
+        "lu",
+        "mbu",
+        "wu"
+      ],
+      "question_say": true
+    },
+    {
+      "answer": "tu",
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "stimulus": "tu",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_type": "rising",
+      "answer_type": "text_data",
+      "question_show": false,
+      "response_set": [
+        "tu",
         "yu",
-        "gu",
         "mzu"
       ],
-      "gen_question": false
+      "question_say": true
     },
     {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "sa",
-      "question_type": "rising",
+      "answer": "mwi",
+      "gen_question": false,
       "stimulus_type": "text_data",
+      "stimulus": "mwi",
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
-      "stimulus": "sa",
+      "question_type": "rising",
+      "answer_type": "text_data",
+      "question_show": false,
       "response_set": [
-        "sa",
-        "la",
-        "sa"
+        "ni",
+        "mwi",
+        "mwi"
       ],
-      "gen_question": false
+      "question_say": true
     },
     {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "mvu",
-      "question_type": "rising",
+      "answer": "vo",
+      "gen_question": false,
       "stimulus_type": "text_data",
+      "stimulus": "vo",
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
-      "stimulus": "mvu",
+      "question_type": "rising",
+      "answer_type": "text_data",
+      "question_show": false,
       "response_set": [
-        "ju",
-        "mbu",
-        "mvu"
+        "mlo",
+        "vo",
+        "vyo"
       ],
-      "gen_question": false
+      "question_say": true
     },
     {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "mle",
-      "question_type": "rising",
+      "answer": "mi",
+      "gen_question": false,
       "stimulus_type": "text_data",
+      "stimulus": "mi",
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
-      "stimulus": "mle",
+      "question_type": "rising",
+      "answer_type": "text_data",
+      "question_show": false,
       "response_set": [
-        "mje",
-        "fe",
-        "mle"
+        "di",
+        "mwi",
+        "mi"
       ],
-      "gen_question": false
+      "question_say": true
     },
     {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "ho",
-      "question_type": "rising",
+      "answer": "ze",
+      "gen_question": false,
       "stimulus_type": "text_data",
+      "stimulus": "ze",
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
-      "stimulus": "ho",
-      "response_set": [
-        "mko",
-        "ho",
-        "to"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "te",
       "question_type": "rising",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "te",
+      "answer_type": "text_data",
+      "question_show": false,
       "response_set": [
-        "nde",
-        "te",
-        "mle"
+        "ze",
+        "vye",
+        "le"
       ],
-      "gen_question": false
+      "question_say": true
     }
   ],
+  "gen_responseSet": [],
+  "question_count": 10,
+  "gen_stimulustype": "text_data",
   "view_background": {
-    "layout": "grid",
-    "kind": "squares",
+    "colorbase": "#666666",
     "layoutcount": 0,
     "style": "primitives",
-    "colorchoice": "fixed",
-    "colorbase": "#666666",
     "colors": [
       -6053120,
       -7566336,
       -2500352,
       -5066240
-    ]
-  }
+    ],
+    "colorchoice": "fixed",
+    "layout": "grid",
+    "kind": "squares"
+  },
+  "gen_stimulusSet": [],
+  "banner_color": "#000066",
+  "gen_responsetype": "text_data",
+  "gen_answerSet": [],
+  "problem_type": "syllable",
+  "response_replacement": false,
+  "question_sequence": "RANDOM",
+  "gen_answertype": "text_data",
+  "question_replacement": false
 }

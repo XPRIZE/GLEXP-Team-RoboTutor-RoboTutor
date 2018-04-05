@@ -1,230 +1,230 @@
 {
-  "question_replacement": false,
-  "response_replacement": false,
-  "gen_responsetype": "text_data",
-  "question_count": 10,
-  "banner_color": "#000066",
-  "gen_answerSet": [],
-  "gen_responseSet": [],
-  "gen_answertype": "text_data",
-  "gen_stimulusSet": [],
-  "gen_stimulustype": "text_data",
-  "question_sequence": "sequential",
+  "question_sequence": "RANDOM",
   "problem_type": "word",
-  "dataSource": [
-    {
-      "question_say": true,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "hamsini",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "hamsini",
-      "response_set": [
-        "kumi",
-        "sita",
-        "hamsini"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "thelathini",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "thelathini",
-      "response_set": [
-        "arobaini",
-        "saba",
-        "thelathini"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "kumi",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "kumi",
-      "response_set": [
-        "kumi",
-        "moja",
-        "tano"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "tano",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "tano",
-      "response_set": [
-        "tano",
-        "elfu",
-        "tisa"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "tisa",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "tisa",
-      "response_set": [
-        "elfu",
-        "tisa",
-        "mbili"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "sabini",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "sabini",
-      "response_set": [
-        "saba",
-        "sita",
-        "sabini"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "nane",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "nane",
-      "response_set": [
-        "tisa",
-        "nane",
-        "tatu"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "elfu",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "elfu",
-      "response_set": [
-        "elfu",
-        "sifuri",
-        "hamsini"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "sita",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "sita",
-      "response_set": [
-        "sita",
-        "ishirini",
-        "sabini"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": true,
-      "answer_type": "text_data",
-      "answer": "ishirini",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "ishirini",
-      "response_set": [
-        "thelathini",
-        "ishirini",
-        "sita"
-      ],
-      "gen_question": false
-    }
-  ],
+  "question_count": 10,
   "view_background": {
-    "layout": "grid",
-    "kind": "squares",
-    "layoutcount": 0,
     "style": "primitives",
-    "colorchoice": "fixed",
-    "colorbase": "#666666",
+    "kind": "squares",
     "colors": [
       -6053120,
       -7566336,
       -2500352,
       -5066240
-    ]
-  }
+    ],
+    "colorchoice": "fixed",
+    "colorbase": "#666666",
+    "layoutcount": 0,
+    "layout": "grid"
+  },
+  "gen_stimulustype": "text_data",
+  "response_replacement": false,
+  "gen_responseSet": [],
+  "dataSource": [
+    {
+      "question_type": "multiple-choice",
+      "answer": "sitini",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": true,
+      "stimulus": "sitini",
+      "response_set": [
+        "mbili",
+        "sifuri",
+        "sitini"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "sifuri",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": true,
+      "stimulus": "sifuri",
+      "response_set": [
+        "sifuri",
+        "sita",
+        "arobaini"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "tisini",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": true,
+      "stimulus": "tisini",
+      "response_set": [
+        "moja",
+        "tisini",
+        "ishirini"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "sabini",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": true,
+      "stimulus": "sabini",
+      "response_set": [
+        "ishirini",
+        "sabini",
+        "sita"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "nane",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": true,
+      "stimulus": "nane",
+      "response_set": [
+        "tatu",
+        "saba",
+        "nane"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "themanini",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": true,
+      "stimulus": "themanini",
+      "response_set": [
+        "hamsini",
+        "themanini",
+        "saba"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "arobaini",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": true,
+      "stimulus": "arobaini",
+      "response_set": [
+        "arobaini",
+        "elfu",
+        "themanini"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "tano",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": true,
+      "stimulus": "tano",
+      "response_set": [
+        "mbili",
+        "nane",
+        "tano"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "hamsini",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": true,
+      "stimulus": "hamsini",
+      "response_set": [
+        "hamsini",
+        "arobaini",
+        "themanini"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "thelathini",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": true,
+      "stimulus": "thelathini",
+      "response_set": [
+        "sabini",
+        "thelathini",
+        "tisa"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    }
+  ],
+  "question_replacement": false,
+  "gen_responsetype": "text_data",
+  "banner_color": "#000066",
+  "gen_answerSet": [],
+  "gen_answertype": "text_data",
+  "gen_stimulusSet": []
 }
