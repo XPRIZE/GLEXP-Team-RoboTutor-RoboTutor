@@ -738,6 +738,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         PerformanceData performance = new PerformanceData();
         performance.setSelfAssessment(buttonid.toUpperCase());
         performance.setActivityType(activeTutor);
+        performance.setActiveSkill(activeSkill);
 
         // need to get the previous tutor and all that jazz...
 

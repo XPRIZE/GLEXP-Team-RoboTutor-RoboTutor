@@ -28,10 +28,10 @@ public class SelfAssessmentPromotionRules extends PromotionRules {
                 return SelectedActivity.NEXT;
 
             case TOO_EASY:
-                return SelectedActivity.OLD_HARDER;
+                return SelectedActivity.DOUBLE_NEXT;
 
             case TOO_HARD:
-                return SelectedActivity.OLD_EASIER;
+                return SelectedActivity.PREVIOUS;
 
             case JUST_RIGHT:
                 return SelectedActivity.NEXT;
