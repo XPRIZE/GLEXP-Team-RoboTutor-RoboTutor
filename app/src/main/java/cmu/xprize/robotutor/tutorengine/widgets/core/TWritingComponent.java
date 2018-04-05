@@ -312,6 +312,10 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         super.pointAtEraseButton();
     }
 
+    public void pointAtGlyph() {
+        super.pointAtGlyph();
+    }
+
     public void showReplayButton(Boolean show) { mReplayButton.setVisibility(show? VISIBLE:INVISIBLE); }
 
     public void highlightFields() {
@@ -792,7 +796,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
             int[] operand1Digits = getListDigits(operand1);
 
             //Publish features and values for each digit of first operand so that audios can be played separately
-            if (operand1Digits[0] >= 100) {
+            if (( operand1Digits[0] >= 100 ) && ( operand1Digits[1] >= 1 )) {
                 publishFeature(publishFeatureValue);
                 publishValue(publishValueConstHundreds, operand1Digits[0]);
             } else {
