@@ -131,8 +131,9 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
             drawContainingRectangle(canvas);
             //When the dataset is not loaded, draw nothing.
             if (maxIndex!=0){
-                int margin = NSCONST.BAR_MARGIN;
-                int bartop = NSCONST.TOP_MARGIN;
+
+                int margin = canvas.getWidth()/9;
+                int bartop = canvas.getHeight()*5/7;
                 float left = margin;
                 float right = canvas.getWidth() - margin;
                 edgelength = (right-left)/maxIndex;
@@ -174,8 +175,8 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
 
     private void drawEachBox(Canvas canvas,int i){
 
-        int margin = NSCONST.BAR_MARGIN;
-        float top = (float)NSCONST.TOP_MARGIN;
+        int margin = canvas.getWidth()/9;
+        float top = canvas.getHeight()*5/7;
 
         float left = margin+i*edgelength;
         float right = margin+(i+1)*edgelength;
@@ -218,9 +219,6 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
 
     }
 
-    public boolean inmode(){
-        return true;
-    }
 
     public boolean onTouchEvent(MotionEvent event) {
 

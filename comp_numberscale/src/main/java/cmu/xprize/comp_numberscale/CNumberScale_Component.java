@@ -232,7 +232,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
 
         // point to it using RoboFinger
 
-        PointF targetPoint = new PointF((addSpecs[0]+addSpecs[1])/2, (addSpecs[2]+addSpecs[3])/2);
+        PointF targetPoint = new PointF((addSpecs[0]/2+addSpecs[1]/2), (addSpecs[2]/4+addSpecs[3]*3/4));
         Intent msg = new Intent(TCONST.POINTAT);
         msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
 
@@ -243,7 +243,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     public void pointAtMinus() {
 
         // point to it using RoboFinger
-        PointF targetPoint = new PointF((minusSpecs[0]+minusSpecs[1])/2, (minusSpecs[2]+minusSpecs[3])/2);
+        PointF targetPoint = new PointF((minusSpecs[0]+minusSpecs[1])/2, (minusSpecs[2]/4+minusSpecs[3]*3/4));
         Intent msg = new Intent(TCONST.POINTAT);
         msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
 
@@ -448,8 +448,8 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         if (t!=null){
         t.cancel();}
         t=new Timer();
-        t.schedule(new playTutor(1),10000);
-        t.schedule(new playTutor(2),14000);
+        t.schedule(new playTutor(1),12000);
+        t.schedule(new playTutor(2),16000);
     }
 
     public void killTimer(){
@@ -505,7 +505,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
                 }
 
                 queueMap.remove(this);
-                if (player.inmode()){
+
                 switch(_command) {
                     case NSCONST.PLAY_CHIME:
                         applyBehavior(_command);
@@ -532,7 +532,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
 
                     default:
                         break;
-                }}
+                }
 
             }  catch(Exception e) {
                 CErrorManager.logEvent(TAG, "Run Error:", e, false);
