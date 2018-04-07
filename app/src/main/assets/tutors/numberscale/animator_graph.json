@@ -297,6 +297,7 @@
         "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"},
         "DISABLE_TAPPING": {"type": "COMMAND", "id": "SNumberScale", "method" : "disableTapping", "features":""},
         "ENABLE_TAPPING": {"type": "COMMAND", "id": "SNumberScale", "method" : "enableTapping", "features":""},
+        "INIT_TIMER":{"type": "COMMAND", "id": "SNumberScale", "method" : "setNewTimer", "features":""},
         "NEXTSCENE": {"type":"COMMAND", "cmd": "NEXTSCENE"}
 
       },

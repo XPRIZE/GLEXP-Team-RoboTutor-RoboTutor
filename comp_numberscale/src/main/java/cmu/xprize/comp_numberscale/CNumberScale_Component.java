@@ -69,7 +69,6 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     public int[] minusPosition = new int[2];
     protected Timer t;
     protected int waitTime=1000;
-    protected  boolean inmode =true;
 
 
     // json loadable
@@ -211,10 +210,6 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
 
         player.loadData(min,max,delta,maxHit);
 
-        //set Timer
-        t = new Timer();
-        t.schedule(new playTutor(1),15000);
-        t.schedule(new playTutor(2),19000);
 
         Log.d(TCONST.COUNTING_DEBUG_LOG, "start=" + countStart +"delta"+delta+ ";index=" + _dataIndex);
     }
@@ -450,10 +445,11 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
      * This is how Component-specific commands are added to the Queue.
      */
     public void setNewTimer(){
-        t.cancel();
+        if (t!=null){
+        t.cancel();}
         t=new Timer();
-        t.schedule(new playTutor(1),9000);
-        t.schedule(new playTutor(2),13000);
+        t.schedule(new playTutor(1),10000);
+        t.schedule(new playTutor(2),14000);
     }
 
     public void killTimer(){
@@ -509,7 +505,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
                 }
 
                 queueMap.remove(this);
-
+                if (player.inmode()){
                 switch(_command) {
                     case NSCONST.PLAY_CHIME:
                         applyBehavior(_command);
@@ -536,7 +532,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
 
                     default:
                         break;
-                }
+                }}
 
             }  catch(Exception e) {
                 CErrorManager.logEvent(TAG, "Run Error:", e, false);

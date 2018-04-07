@@ -127,7 +127,6 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
      */
     private void redraw(Canvas canvas) {
         if(_holder!=null){
-            _component.inmode = true;
 
             drawContainingRectangle(canvas);
             //When the dataset is not loaded, draw nothing.
@@ -151,8 +150,6 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
             // after all drawing, post changes
 
 
-        } else {
-            _component.inmode =false;
         }
         _holder.unlockCanvasAndPost(canvas);
 
@@ -219,6 +216,10 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
             canvas.drawText(num,(left+right)/2,(top+bottom)/2+NSCONST.TEXT_SIZE/3,text);
         }
 
+    }
+
+    public boolean inmode(){
+        return true;
     }
 
     public boolean onTouchEvent(MotionEvent event) {
