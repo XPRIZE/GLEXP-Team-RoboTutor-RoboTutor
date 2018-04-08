@@ -1,0 +1,17 @@
+{
+	"bootFeatures":"FTR_DEMO_WRD",
+	"random": true,
+	"singleStimulus": false,
+	"dataSource": [
+		{ "stimulus": "nyimbo", "audioStimulus": [ "nyimbo", "", "" ], "answer": "nyimbo" },
+		{ "stimulus": "nafaka", "audioStimulus": [ "nafaka", "", "" ], "answer": "nafaka" },
+		{ "stimulus": "nanasi", "audioStimulus": [ "nanasi", "", "" ], "answer": "nanasi" },
+		{ "stimulus": "tayari", "audioStimulus": [ "tayari", "", "" ], "answer": "tayari" },
+		{ "stimulus": "karibu", "audioStimulus": [ "karibu", "", "" ], "answer": "karibu" },
+		{ "stimulus": "vichwa", "audioStimulus": [ "vichwa", "", "" ], "answer": "vichwa" },
+		{ "stimulus": "nipate", "audioStimulus": [ "nipate", "", "" ], "answer": "nipate" },
+		{ "stimulus": "kakake", "audioStimulus": [ "kakake", "", "" ], "answer": "kakake" },
+		{ "stimulus": "shanga", "audioStimulus": [ "shanga", "", "" ], "answer": "shanga" },
+		{ "stimulus": "kiundu", "audioStimulus": [ "kiundu", "", "" ], "answer": "kiundu" }
+	]
+}

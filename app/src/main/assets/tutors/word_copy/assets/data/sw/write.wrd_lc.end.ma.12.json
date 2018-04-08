@@ -1,0 +1,17 @@
+{
+	"bootFeatures":"FTR_DEMO_MISSING_LTR",
+	"random": true,
+	"singleStimulus": false,
+	"dataSource": [
+		{ "stimulus": "__ma", "audioStimulus": [ "kama", "", "" ], "answer": "ka" },
+		{ "stimulus": "__ma", "audioStimulus": [ "kima", "", "" ], "answer": "ki" },
+		{ "stimulus": "__ma", "audioStimulus": [ "mama", "", "" ], "answer": "ma" },
+		{ "stimulus": "__ma", "audioStimulus": [ "juma", "", "" ], "answer": "ju" },
+		{ "stimulus": "__ma", "audioStimulus": [ "mama", "", "" ], "answer": "ma" },
+		{ "stimulus": "__ma", "audioStimulus": [ "mama", "", "" ], "answer": "ma" },
+		{ "stimulus": "__ma", "audioStimulus": [ "kima", "", "" ], "answer": "ki" },
+		{ "stimulus": "__ma", "audioStimulus": [ "mama", "", "" ], "answer": "ma" },
+		{ "stimulus": "__ma", "audioStimulus": [ "mama", "", "" ], "answer": "ma" },
+		{ "stimulus": "__ma", "audioStimulus": [ "kama", "", "" ], "answer": "ka" }
+	]
+}

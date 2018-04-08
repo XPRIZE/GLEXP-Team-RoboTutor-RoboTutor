@@ -1,0 +1,17 @@
+{
+	"bootFeatures":"FTR_DEMO_MISSING_LTR",
+	"random": true,
+	"singleStimulus": false,
+	"dataSource": [
+		{ "stimulus": "__ni", "audioStimulus": [ "geni", "", "" ], "answer": "ge" },
+		{ "stimulus": "__ni", "audioStimulus": [ "gani", "", "" ], "answer": "ga" },
+		{ "stimulus": "__ni", "audioStimulus": [ "kuni", "", "" ], "answer": "ku" },
+		{ "stimulus": "__ni", "audioStimulus": [ "honi", "", "" ], "answer": "ho" },
+		{ "stimulus": "__ni", "audioStimulus": [ "nani", "", "" ], "answer": "na" },
+		{ "stimulus": "__ni", "audioStimulus": [ "pini", "", "" ], "answer": "pi" },
+		{ "stimulus": "__ni", "audioStimulus": [ "duni", "", "" ], "answer": "du" },
+		{ "stimulus": "__ni", "audioStimulus": [ "tani", "", "" ], "answer": "ta" },
+		{ "stimulus": "__ni", "audioStimulus": [ "lini", "", "" ], "answer": "li" },
+		{ "stimulus": "__ni", "audioStimulus": [ "uani", "", "" ], "answer": "ua" }
+	]
+}

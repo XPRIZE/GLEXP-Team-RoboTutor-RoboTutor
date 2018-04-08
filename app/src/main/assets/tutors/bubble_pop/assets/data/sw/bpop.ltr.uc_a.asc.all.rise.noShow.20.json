@@ -1,510 +1,510 @@
 {
+  "question_replacement": false,
+  "response_replacement": false,
   "gen_responsetype": "text_data",
-  "gen_responseSet": [],
-  "gen_stimulusSet": [],
+  "question_count": 24,
   "banner_color": "#000066",
+  "gen_answerSet": [],
+  "gen_responseSet": [],
+  "gen_answertype": "text_data",
+  "gen_stimulusSet": [],
+  "gen_stimulustype": "text_data",
+  "question_sequence": "sequential",
+  "problem_type": "letter",
+  "dataSource": [
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "A",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "A",
+      "response_set": [
+        "G",
+        "J",
+        "A"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "B",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "B",
+      "response_set": [
+        "M",
+        "B",
+        "T"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "CH",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "CH",
+      "response_set": [
+        "O",
+        "I",
+        "CH"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "D",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "D",
+      "response_set": [
+        "M",
+        "D",
+        "K"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "E",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "E",
+      "response_set": [
+        "E",
+        "L",
+        "O"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "F",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "F",
+      "response_set": [
+        "V",
+        "T",
+        "F"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "G",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "G",
+      "response_set": [
+        "Z",
+        "S",
+        "G"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "H",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "H",
+      "response_set": [
+        "H",
+        "O",
+        "N"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "I",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "I",
+      "response_set": [
+        "I",
+        "V",
+        "N"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "J",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "J",
+      "response_set": [
+        "J",
+        "L",
+        "A"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "K",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "K",
+      "response_set": [
+        "F",
+        "N",
+        "K"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "L",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "L",
+      "response_set": [
+        "O",
+        "N",
+        "L"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "M",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "M",
+      "response_set": [
+        "P",
+        "F",
+        "M"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "N",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "N",
+      "response_set": [
+        "N",
+        "G",
+        "H"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "O",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "O",
+      "response_set": [
+        "D",
+        "F",
+        "O"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "P",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "P",
+      "response_set": [
+        "U",
+        "P",
+        "F"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "R",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "R",
+      "response_set": [
+        "V",
+        "J",
+        "R"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "S",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "S",
+      "response_set": [
+        "N",
+        "O",
+        "S"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "T",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "T",
+      "response_set": [
+        "U",
+        "T",
+        "K"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "U",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "U",
+      "response_set": [
+        "U",
+        "CH",
+        "N"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "V",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "V",
+      "response_set": [
+        "V",
+        "O",
+        "R"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "W",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "W",
+      "response_set": [
+        "O",
+        "W",
+        "F"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "Y",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "Y",
+      "response_set": [
+        "W",
+        "Y",
+        "J"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "Z",
+      "question_type": "rising",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "Z",
+      "response_set": [
+        "E",
+        "R",
+        "Z"
+      ],
+      "gen_question": false
+    }
+  ],
   "view_background": {
     "layout": "grid",
     "kind": "squares",
-    "colorbase": "#666666",
+    "layoutcount": 0,
     "style": "primitives",
+    "colorchoice": "fixed",
+    "colorbase": "#666666",
     "colors": [
       -6053120,
       -7566336,
       -2500352,
       -5066240
-    ],
-    "colorchoice": "fixed",
-    "layoutcount": 0
-  },
-  "question_sequence": "RANDOM",
-  "gen_answertype": "text_data",
-  "dataSource": [
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "D",
-        "N",
-        "A"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "A",
-      "answer": "A",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "B",
-        "Z",
-        "V"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "B",
-      "answer": "B",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "G",
-        "CH",
-        "Y"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "CH",
-      "answer": "CH",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "D",
-        "A",
-        "L"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "D",
-      "answer": "D",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "N",
-        "E",
-        "Y"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "E",
-      "answer": "E",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "T",
-        "N",
-        "F"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "F",
-      "answer": "F",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "G",
-        "A",
-        "J"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "G",
-      "answer": "G",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "L",
-        "H",
-        "CH"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "H",
-      "answer": "H",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "I",
-        "T",
-        "P"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "I",
-      "answer": "I",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "L",
-        "J",
-        "I"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "J",
-      "answer": "J",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "K",
-        "U",
-        "G"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "K",
-      "answer": "K",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "H",
-        "U",
-        "L"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "L",
-      "answer": "L",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "U",
-        "M",
-        "S"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "M",
-      "answer": "M",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "W",
-        "Z",
-        "N"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "N",
-      "answer": "N",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "R",
-        "O",
-        "I"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "O",
-      "answer": "O",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "A",
-        "P",
-        "Z"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "P",
-      "answer": "P",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "V",
-        "W",
-        "R"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "R",
-      "answer": "R",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "T",
-        "O",
-        "S"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "S",
-      "answer": "S",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "T",
-        "E",
-        "R"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "T",
-      "answer": "T",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "R",
-        "F",
-        "U"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "U",
-      "answer": "U",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "D",
-        "I",
-        "V"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "V",
-      "answer": "V",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "W",
-        "B",
-        "E"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "W",
-      "answer": "W",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "W",
-        "R",
-        "Y"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "Y",
-      "answer": "Y",
-      "question_show": false
-    },
-    {
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_type": "rising",
-      "question_say": true,
-      "response_set": [
-        "Z",
-        "B",
-        "K"
-      ],
-      "answer_type": "text_data",
-      "stimulus": "Z",
-      "answer": "Z",
-      "question_show": false
-    }
-  ],
-  "response_replacement": false,
-  "question_count": 24,
-  "question_replacement": false,
-  "problem_type": "letter",
-  "gen_stimulustype": "text_data",
-  "gen_answerSet": []
+    ]
+  }
 }

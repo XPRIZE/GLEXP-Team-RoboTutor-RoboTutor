@@ -1,0 +1,17 @@
+{
+	"bootFeatures":"FTR_DEMO_WRD",
+	"random": true,
+	"singleStimulus": false,
+	"dataSource": [
+		{ "stimulus": "wakaanza", "audioStimulus": [ "wakaanza", "", "" ], "answer": "wakaanza" },
+		{ "stimulus": "kumfuata", "audioStimulus": [ "kumfuata", "", "" ], "answer": "kumfuata" },
+		{ "stimulus": "mwenzake", "audioStimulus": [ "mwenzake", "", "" ], "answer": "mwenzake" },
+		{ "stimulus": "netasile", "audioStimulus": [ "netasile", "", "" ], "answer": "netasile" },
+		{ "stimulus": "yalianza", "audioStimulus": [ "yalianza", "", "" ], "answer": "yalianza" },
+		{ "stimulus": "aliwaona", "audioStimulus": [ "aliwaona", "", "" ], "answer": "aliwaona" },
+		{ "stimulus": "kunyesha", "audioStimulus": [ "kunyesha", "", "" ], "answer": "kunyesha" },
+		{ "stimulus": "hakufika", "audioStimulus": [ "hakufika", "", "" ], "answer": "hakufika" },
+		{ "stimulus": "amefanya", "audioStimulus": [ "amefanya", "", "" ], "answer": "amefanya" },
+		{ "stimulus": "nimefika", "audioStimulus": [ "nimefika", "", "" ], "answer": "nimefika" }
+	]
+}

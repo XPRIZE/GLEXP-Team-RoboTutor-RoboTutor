@@ -1,130 +1,130 @@
 {
+  "question_replacement": false,
+  "response_replacement": false,
+  "gen_responsetype": "text_data",
+  "question_count": 5,
+  "banner_color": "#000066",
+  "gen_answerSet": [],
+  "gen_responseSet": [],
+  "gen_answertype": "text_data",
+  "gen_stimulusSet": [],
+  "gen_stimulustype": "text_data",
+  "question_sequence": "sequential",
+  "problem_type": "syllable",
   "dataSource": [
     {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
       "answer": "nya",
-      "gen_question": false,
+      "question_type": "multiple-choice",
       "stimulus_type": "text_data",
-      "stimulus": "nya",
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
-      "question_type": "multiple-choice",
-      "answer_type": "text_data",
-      "question_show": false,
+      "stimulus": "nya",
       "response_set": [
-        "nyu",
+        "nyo",
         "nya",
         "nye"
       ],
-      "question_say": true
+      "gen_question": false
     },
     {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
       "answer": "nye",
-      "gen_question": false,
+      "question_type": "multiple-choice",
       "stimulus_type": "text_data",
-      "stimulus": "nye",
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
-      "question_type": "multiple-choice",
-      "answer_type": "text_data",
-      "question_show": false,
+      "stimulus": "nye",
       "response_set": [
+        "nya",
         "nye",
+        "nyo"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "nyi",
+      "question_type": "multiple-choice",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "nyi",
+      "response_set": [
         "nyu",
+        "nyo",
         "nyi"
       ],
-      "question_say": true
+      "gen_question": false
     },
     {
-      "answer": "nyi",
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "stimulus": "nyi",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "question_type": "multiple-choice",
-      "answer_type": "text_data",
+      "question_say": true,
       "question_show": false,
-      "response_set": [
-        "nyi",
-        "nye",
-        "nya"
-      ],
-      "question_say": true
-    },
-    {
+      "answer_type": "text_data",
       "answer": "nyo",
-      "gen_question": false,
+      "question_type": "multiple-choice",
       "stimulus_type": "text_data",
-      "stimulus": "nyo",
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
-      "question_type": "multiple-choice",
-      "answer_type": "text_data",
-      "question_show": false,
+      "stimulus": "nyo",
       "response_set": [
         "nyo",
-        "nyu",
-        "nya"
+        "nya",
+        "nyi"
       ],
-      "question_say": true
+      "gen_question": false
     },
     {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
       "answer": "nyu",
-      "gen_question": false,
+      "question_type": "multiple-choice",
       "stimulus_type": "text_data",
-      "stimulus": "nyu",
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
-      "question_type": "multiple-choice",
-      "answer_type": "text_data",
-      "question_show": false,
+      "stimulus": "nyu",
       "response_set": [
         "nyu",
-        "nyo",
-        "nya"
+        "nye",
+        "nyo"
       ],
-      "question_say": true
+      "gen_question": false
     }
   ],
-  "gen_responseSet": [],
-  "question_count": 5,
-  "gen_stimulustype": "text_data",
   "view_background": {
-    "colorbase": "#666666",
+    "layout": "grid",
+    "kind": "squares",
     "layoutcount": 0,
     "style": "primitives",
+    "colorchoice": "fixed",
+    "colorbase": "#666666",
     "colors": [
       -6053120,
       -7566336,
       -2500352,
       -5066240
-    ],
-    "colorchoice": "fixed",
-    "layout": "grid",
-    "kind": "squares"
-  },
-  "gen_stimulusSet": [],
-  "banner_color": "#000066",
-  "gen_responsetype": "text_data",
-  "gen_answerSet": [],
-  "problem_type": "syllable",
-  "response_replacement": false,
-  "question_sequence": "RANDOM",
-  "gen_answertype": "text_data",
-  "question_replacement": false
+    ]
+  }
 }

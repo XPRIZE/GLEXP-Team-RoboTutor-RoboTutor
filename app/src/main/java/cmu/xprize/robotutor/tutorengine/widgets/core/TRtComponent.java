@@ -567,7 +567,31 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
             }
 
-            else if (dataNameDescriptor.startsWith(TCONST.SHARED_MATH)) {
+            else if (dataNameDescriptor.startsWith(TCONST.SHARED_LITERACY)) {
+                 // ZZZ 1: replace code in Transition Table to make it [sharedliteracy] (DONE)
+                String storyFolder = dataNameDescriptor.substring(TCONST.SHARED_LITERACY.length()).toLowerCase();
+
+                String levelFolder = "literacy";
+
+                // don't use level folder...
+                DATASOURCEPATH = TCONST.ROBOTUTOR_ASSETS + "/" + TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+                // "robotutor_assets/assets/story/sw/"
+                STORYSOURCEPATH = DATASOURCEPATH + levelFolder + "/" + storyFolder + "/";
+                // "robotutor_assets/assets/story/sw/xyz/"
+
+                // ZZZ 3: TODO AUDIOSOURCE must be collected and decided
+                AUDIOSOURCEPATH = TCONST.STORY_PATH + TCONST.SHARED_LITERACY_FOLDER;
+                // "cmu/xprize/story_reading/shared/shared_literacy"
+
+                // ZZZ TODO move all images
+                SHAREDPATH = DATASOURCEPATH + TCONST.SHARED_LITERACY_FOLDER + "/";
+
+                configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
+                mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
+
+                loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN_SHARED, SHAREDPATH);
+
+            } else if (dataNameDescriptor.startsWith(TCONST.SHARED_MATH)) {
 
                 String storyFolder = dataNameDescriptor.substring(TCONST.SHARED_MATH.length()).toLowerCase();
 

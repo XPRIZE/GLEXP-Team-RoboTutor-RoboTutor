@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":['bila', 'vozo', 'yize'],
+ "item_counter":1,
+ "answer":"MID",
+ "target":"vozo",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":['gane', 'loko', 'mile'],
+ "item_counter":2,
+ "answer":"RIGHT",
+ "target":"mile",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":['mupe', 'madi', 'mimi'],
+ "item_counter":3,
+ "answer":"RIGHT",
+ "target":"mimi",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":['bila', 'fihu', 'woye'],
+ "item_counter":4,
+ "answer":"MID",
+ "target":"fihu",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":['buri', 'fihu', 'veja'],
+ "item_counter":5,
+ "answer":"LEFT",
+ "target":"buri",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":['satu', 'tuhu', 'buri'],
+ "item_counter":6,
+ "answer":"LEFT",
+ "target":"satu",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":['geda', 'botu', 'hiji'],
+ "item_counter":7,
+ "answer":"MID",
+ "target":"botu",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":['muba', 'yize', 'vufo'],
+ "item_counter":8,
+ "answer":"MID",
+ "target":"yize",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":['hiji', 'satu', 'zuda'],
+ "item_counter":9,
+ "answer":"LEFT",
+ "target":"hiji",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":['tupi', 'hage', 'gane'],
+ "item_counter":10,
+ "answer":"LEFT",
+ "target":"tupi",
+ "belowString":"audio",
+ "audio":"true" 
+       } 
+
+   ]
+}

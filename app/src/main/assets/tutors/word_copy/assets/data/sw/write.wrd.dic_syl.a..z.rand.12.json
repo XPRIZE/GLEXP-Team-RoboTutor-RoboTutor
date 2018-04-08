@@ -1,0 +1,17 @@
+{
+	"bootFeatures":"FTR_DEMO_WRD",
+	"random": true,
+	"singleStimulus": false,
+	"dataSource": [
+		{ "stimulus": "mzu", "audioStimulus": [ "mzu", "", "" ], "answer": "mzu" },
+		{ "stimulus": "ba", "audioStimulus": [ "ba", "", "" ], "answer": "ba" },
+		{ "stimulus": "ngu", "audioStimulus": [ "ngu", "", "" ], "answer": "ngu" },
+		{ "stimulus": "mfu", "audioStimulus": [ "mfu", "", "" ], "answer": "mfu" },
+		{ "stimulus": "shi", "audioStimulus": [ "shi", "", "" ], "answer": "shi" },
+		{ "stimulus": "nde", "audioStimulus": [ "nde", "", "" ], "answer": "nde" },
+		{ "stimulus": "ko", "audioStimulus": [ "ko", "", "" ], "answer": "ko" },
+		{ "stimulus": "shu", "audioStimulus": [ "shu", "", "" ], "answer": "shu" },
+		{ "stimulus": "be", "audioStimulus": [ "be", "", "" ], "answer": "be" },
+		{ "stimulus": "mpi", "audioStimulus": [ "mpi", "", "" ], "answer": "mpi" }
+	]
+}

@@ -1,0 +1,31 @@
+{
+	"bootFeatures":"FTR_DEMO_LTR_LC",
+	"random": false,
+	"singleStimulus": false,
+	"dataSource": [
+		{ "stimulus": "a", "audioStimulus": [ "a", "", "" ], "answer": "a" },
+		{ "stimulus": "b", "audioStimulus": [ "b", "", "" ], "answer": "b" },
+		{ "stimulus": "ch", "audioStimulus": [ "ch", "", "" ], "answer": "ch" },
+		{ "stimulus": "d", "audioStimulus": [ "d", "", "" ], "answer": "d" },
+		{ "stimulus": "e", "audioStimulus": [ "e", "", "" ], "answer": "e" },
+		{ "stimulus": "f", "audioStimulus": [ "f", "", "" ], "answer": "f" },
+		{ "stimulus": "g", "audioStimulus": [ "g", "", "" ], "answer": "g" },
+		{ "stimulus": "h", "audioStimulus": [ "h", "", "" ], "answer": "h" },
+		{ "stimulus": "i", "audioStimulus": [ "i", "", "" ], "answer": "i" },
+		{ "stimulus": "j", "audioStimulus": [ "j", "", "" ], "answer": "j" },
+		{ "stimulus": "k", "audioStimulus": [ "k", "", "" ], "answer": "k" },
+		{ "stimulus": "l", "audioStimulus": [ "l", "", "" ], "answer": "l" },
+		{ "stimulus": "m", "audioStimulus": [ "m", "", "" ], "answer": "m" },
+		{ "stimulus": "n", "audioStimulus": [ "n", "", "" ], "answer": "n" },
+		{ "stimulus": "o", "audioStimulus": [ "o", "", "" ], "answer": "o" },
+		{ "stimulus": "p", "audioStimulus": [ "p", "", "" ], "answer": "p" },
+		{ "stimulus": "r", "audioStimulus": [ "r", "", "" ], "answer": "r" },
+		{ "stimulus": "s", "audioStimulus": [ "s", "", "" ], "answer": "s" },
+		{ "stimulus": "t", "audioStimulus": [ "t", "", "" ], "answer": "t" },
+		{ "stimulus": "u", "audioStimulus": [ "u", "", "" ], "answer": "u" },
+		{ "stimulus": "v", "audioStimulus": [ "v", "", "" ], "answer": "v" },
+		{ "stimulus": "w", "audioStimulus": [ "w", "", "" ], "answer": "w" },
+		{ "stimulus": "y", "audioStimulus": [ "y", "", "" ], "answer": "y" },
+		{ "stimulus": "z", "audioStimulus": [ "z", "", "" ], "answer": "z" }
+	]
+}

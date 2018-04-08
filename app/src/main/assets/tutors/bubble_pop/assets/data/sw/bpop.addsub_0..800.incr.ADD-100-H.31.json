@@ -7,8 +7,7 @@
   "gen_stimulusSet": [],
   "dataSource": [
     {
-      "question_say": false,
-      "stimulus_type": "text_data",
+
       "question_say": false,
       "response_set": [
         "1",
@@ -21,8 +20,6 @@
         "reference"
       ],
       "answer_type": "text_data",
-      "question_say": false,
-      "question_show": true,
       "stimulus": "0+100",
       "stimulus_type": "text_data",
       "gen_question": false,
@@ -32,7 +29,6 @@
     },
     {
       "question_say": false,
-      "stimulus_type": "text_data",
       "response_set": [
         "2",
         "8",
@@ -44,8 +40,6 @@
         "reference"
       ],
       "answer_type": "text_data",
-      "question_say": false,
-      "question_show": true,
       "stimulus": "100+100",
       "stimulus_type": "text_data",
       "gen_question": false,
