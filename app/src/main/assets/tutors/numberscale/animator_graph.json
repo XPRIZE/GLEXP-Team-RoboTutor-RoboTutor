@@ -201,6 +201,7 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
+
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""}
             ]
         },
@@ -212,6 +213,10 @@
               
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
             {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "playTutorIntro", "parms": "", "features":""}
+
+
+    
+
           ]
         },
 
