@@ -3,29 +3,49 @@
 
        {
  "type":"CAk_Data",
- "choices":["4", "5", "7"],
+ "choices":["7", "0", "7"],
  "item_counter":1,
- "answer":"RIGHT",
- "target":7,
+ "answer":"MID",
+ "target":0,
  "belowString":"audio",
  "audio":"true" 
        } ,
 
        {
  "type":"CAk_Data",
- "choices":["4", "5", "8"],
+ "choices":["1", "4", "2"],
  "item_counter":2,
- "answer":"MID",
- "target":5,
+ "answer":"LEFT",
+ "target":1,
  "belowString":"audio",
  "audio":"true" 
        } ,
 
        {
  "type":"CAk_Data",
- "choices":["3", "4", "5"],
+ "choices":["6", "0", "2"],
  "item_counter":3,
- "answer":"MID",
+ "answer":"RIGHT",
+ "target":2,
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["8", "3", "3"],
+ "item_counter":4,
+ "answer":"RIGHT",
+ "target":3,
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["7", "6", "4"],
+ "item_counter":5,
+ "answer":"RIGHT",
  "target":4,
  "belowString":"audio",
  "audio":"true" 
@@ -33,8 +53,18 @@
 
        {
  "type":"CAk_Data",
- "choices":["0", "4", "6"],
- "item_counter":4,
+ "choices":["5", "5", "7"],
+ "item_counter":6,
+ "answer":"LEFT",
+ "target":5,
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["5", "9", "6"],
+ "item_counter":7,
  "answer":"RIGHT",
  "target":6,
  "belowString":"audio",
@@ -43,39 +73,9 @@
 
        {
  "type":"CAk_Data",
- "choices":["0", "2", "8"],
- "item_counter":5,
- "answer":"RIGHT",
- "target":8,
- "belowString":"audio",
- "audio":"true" 
-       } ,
-
-       {
- "type":"CAk_Data",
- "choices":["0", "1", "2"],
- "item_counter":6,
- "answer":"RIGHT",
- "target":2,
- "belowString":"audio",
- "audio":"true" 
-       } ,
-
-       {
- "type":"CAk_Data",
- "choices":["0", "7", "8"],
- "item_counter":7,
- "answer":"RIGHT",
- "target":8,
- "belowString":"audio",
- "audio":"true" 
-       } ,
-
-       {
- "type":"CAk_Data",
- "choices":["1", "5", "7"],
+ "choices":["7", "6", "5"],
  "item_counter":8,
- "answer":"RIGHT",
+ "answer":"LEFT",
  "target":7,
  "belowString":"audio",
  "audio":"true" 
@@ -83,33 +83,23 @@
 
        {
  "type":"CAk_Data",
- "choices":["1", "2", "7"],
+ "choices":["8", "9", "1"],
  "item_counter":9,
- "answer":"RIGHT",
- "target":7,
+ "answer":"LEFT",
+ "target":8,
  "belowString":"audio",
  "audio":"true" 
        } ,
 
        {
  "type":"CAk_Data",
- "choices":["2", "3", "7"],
+ "choices":["9", "2", "2"],
  "item_counter":10,
- "answer":"RIGHT",
- "target":7,
+ "answer":"LEFT",
+ "target":9,
  "belowString":"audio",
  "audio":"true" 
        } ,
-
-       {
- "type":"CAk_Data",
- "choices":["0", "2", "6"],
- "item_counter":11,
- "answer":"MID",
- "target":2,
- "belowString":"audio",
- "audio":"true" 
-       } 
 
    ]
 }
