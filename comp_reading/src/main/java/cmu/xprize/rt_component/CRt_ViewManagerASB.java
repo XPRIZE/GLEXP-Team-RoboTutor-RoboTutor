@@ -419,17 +419,17 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         try {
             if (assetLocation.equals(TCONST.EXTERN)) {
 
-                in = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
                 Log.d(TCONST.DEBUG_STORY_TAG, "loading image " + mAsset + data[mCurrPage].image);
+                in = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
 
             } else if (assetLocation.equals(TCONST.EXTERN_SHARED)) {
 
-                in = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
                 Log.d(TCONST.DEBUG_STORY_TAG, "loading shared image " + mAsset + data[mCurrPage].image);
+                in = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
             } else {
 
-                in = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image); // ZZZ load image
                 Log.d(TCONST.DEBUG_STORY_TAG, "loading image from asset" + mAsset + data[mCurrPage].image);
+                in = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image); // ZZZ load image
             }
 
             mPageImage.setImageBitmap(BitmapFactory.decodeStream(in));
