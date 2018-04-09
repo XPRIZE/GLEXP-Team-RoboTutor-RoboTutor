@@ -577,7 +577,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 DATASOURCEPATH = TCONST.ROBOTUTOR_ASSETS + "/" + TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
                 // "robotutor_assets/assets/story/sw/"
                 STORYSOURCEPATH = DATASOURCEPATH + levelFolder + "/" + storyFolder + "/";
-                // "robotutor_assets/assets/story/sw/xyz/"
+                // "robotutor_assets/assets/story/sw/literacy/xyz/"
 
                 // ZZZ 3: TODO AUDIOSOURCE must be collected and decided
                 AUDIOSOURCEPATH = TCONST.STORY_PATH + TCONST.SHARED_LITERACY_FOLDER;
@@ -618,6 +618,31 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 // ZZZ how to change this???
 
                 loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN_SHARED, SHAREDPATH);
+
+            } else if (dataNameDescriptor.startsWith(TCONST.SONG)) {
+
+                String storyFolder = dataNameDescriptor.substring(TCONST.SONG.length()).toLowerCase();
+
+                String levelFolder = "songs";
+
+                DATASOURCEPATH = TCONST.ROBOTUTOR_ASSETS + "/" + TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+                // "robotutor_assets/assets/story/sw"
+                STORYSOURCEPATH = DATASOURCEPATH + levelFolder + "/" + storyFolder + "/";
+                // "robotutor_assets/assets/story/sw"/songs/<xyz>/
+
+                // The audio for the story is in a  story specific folder -
+                // Create the story specific sound package and push it into the soundMap in the MediaManager
+                //
+                AUDIOSOURCEPATH = TCONST.STORY_PATH + levelFolder + "/" + storyFolder ;
+                // "cmu/xprize/story_reading/songs/<xyz>"
+
+                configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
+                mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
+
+                // ZZZ load story!!!
+                // ZZZ STORYSOURCEPATH contains storydata.json and images
+                // ZZZ EXTERN is... TCONST.EXTERN
+                loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
 
             }
 
