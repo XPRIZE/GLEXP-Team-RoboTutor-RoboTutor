@@ -3,7 +3,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['nyoka', 'simba', 'farasi'],
+ "choices":["nyoka", "simba", "farasi"],
  "item_counter":1,
  "answer":"MID",
  "target":"simba",
@@ -13,7 +13,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['mbwa', 'punda', 'nyoka'],
+ "choices":["mbwa", "punda", "nyoka"],
  "item_counter":2,
  "answer":"MID",
  "target":"punda",
@@ -23,7 +23,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['punda', 'twiga', 'paka'],
+ "choices":["punda", "twiga", "paka"],
  "item_counter":3,
  "answer":"LEFT",
  "target":"punda",
@@ -33,7 +33,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['fisi', 'chura', 'chui'],
+ "choices":["fisi", "chura", "chui"],
  "item_counter":4,
  "answer":"RIGHT",
  "target":"chui",
@@ -43,7 +43,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['fisi', 'mbuzi', 'songura'],
+ "choices":["fisi", "mbuzi", "songura"],
  "item_counter":5,
  "answer":"RIGHT",
  "target":"songura",
@@ -53,7 +53,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['kondoo', 'twiga', 'mbwa'],
+ "choices":["kondoo", "twiga", "mbwa"],
  "item_counter":6,
  "answer":"LEFT",
  "target":"kondoo",
@@ -63,7 +63,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['mbuni', 'songura', 'mbwa'],
+ "choices":["mbuni", "songura", "mbwa"],
  "item_counter":7,
  "answer":"RIGHT",
  "target":"mbwa",
@@ -73,7 +73,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['nyoka', 'simba', 'mbuni'],
+ "choices":["nyoka", "simba", "mbuni"],
  "item_counter":8,
  "answer":"LEFT",
  "target":"nyoka",
@@ -83,7 +83,7 @@
 
        {
  "type":"CAk_Data",
- "choices":["ng'ombe", 'mbuni', 'nyoka'],
+ "choices":["ng'ombe", "mbuni", "nyoka"],
  "item_counter":9,
  "answer":"LEFT",
  "target":"ng'ombe",
@@ -93,7 +93,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['fisi', 'punda', 'panya'],
+ "choices":["fisi", "punda", "panya"],
  "item_counter":10,
  "answer":"MID",
  "target":"punda",

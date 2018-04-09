@@ -3,7 +3,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['se', 'pe', 'mu'],
+ "choices":["se", "pe", "mu"],
  "item_counter":1,
  "answer":"MID",
  "target":"pe",
@@ -13,7 +13,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['mu', 'se', 've'],
+ "choices":["mu", "se", "ve"],
  "item_counter":2,
  "answer":"MID",
  "target":"se",
@@ -23,7 +23,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['fo', 'ra', 'le'],
+ "choices":["fo", "ra", "le"],
  "item_counter":3,
  "answer":"MID",
  "target":"ra",
@@ -33,7 +33,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['ve', 'ru', 'we'],
+ "choices":["ve", "ru", "we"],
  "item_counter":4,
  "answer":"MID",
  "target":"ru",
@@ -43,7 +43,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['hu', 'ba', 'ya'],
+ "choices":["hu", "ba", "ya"],
  "item_counter":5,
  "answer":"RIGHT",
  "target":"ya",
@@ -53,7 +53,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['du', 'ge', 'wi'],
+ "choices":["du", "ge", "wi"],
  "item_counter":6,
  "answer":"LEFT",
  "target":"du",
@@ -63,7 +63,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['la', 'ma', 'gi'],
+ "choices":["la", "ma", "gi"],
  "item_counter":7,
  "answer":"LEFT",
  "target":"la",
@@ -73,7 +73,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['ta', 'to', 'za'],
+ "choices":["ta", "to", "za"],
  "item_counter":8,
  "answer":"MID",
  "target":"to",
@@ -83,7 +83,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['ka', 'ki', 'ro'],
+ "choices":["ka", "ki", "ro"],
  "item_counter":9,
  "answer":"MID",
  "target":"ki",
@@ -93,7 +93,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['ma', 'bo', 'za'],
+ "choices":["ma", "bo", "za"],
  "item_counter":10,
  "answer":"RIGHT",
  "target":"za",

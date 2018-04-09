@@ -3,7 +3,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['kuutafuta', 'akatembea', 'kuvumilia'],
+ "choices":["kuutafuta", "akatembea", "kuvumilia"],
  "item_counter":1,
  "answer":"LEFT",
  "target":"kuutafuta",
@@ -13,7 +13,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['alimsikia', 'wanasimba', 'waliaanza'],
+ "choices":["alimsikia", "wanasimba", "waliaanza"],
  "item_counter":2,
  "answer":"RIGHT",
  "target":"waliaanza",
@@ -23,7 +23,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['alimwokoa', 'wasaidizi', 'dirishani'],
+ "choices":["alimwokoa", "wasaidizi", "dirishani"],
  "item_counter":3,
  "answer":"RIGHT",
  "target":"dirishani",
@@ -33,7 +33,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['nikichuma', 'umuunguze', 'helikopta'],
+ "choices":["nikichuma", "umuunguze", "helikopta"],
  "item_counter":4,
  "answer":"LEFT",
  "target":"nikichuma",
@@ -43,7 +43,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['kumshinda', 'kufukuzia', 'kumweleza'],
+ "choices":["kumshinda", "kufukuzia", "kumweleza"],
  "item_counter":5,
  "answer":"RIGHT",
  "target":"kumweleza",
@@ -53,7 +53,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['kushiriki', 'kuwaambia', 'akajaribu'],
+ "choices":["kushiriki", "kuwaambia", "akajaribu"],
  "item_counter":6,
  "answer":"RIGHT",
  "target":"akajaribu",
@@ -63,7 +63,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['hakuliona', 'ilifunika', 'wachukuwa'],
+ "choices":["hakuliona", "ilifunika", "wachukuwa"],
  "item_counter":7,
  "answer":"LEFT",
  "target":"hakuliona",
@@ -73,7 +73,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['akafikiri', 'alipoenda', 'akikimbia'],
+ "choices":["akafikiri", "alipoenda", "akikimbia"],
  "item_counter":8,
  "answer":"MID",
  "target":"alipoenda",
@@ -83,7 +83,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['isiyokuwa', 'alipopita', 'aliyevuta'],
+ "choices":["isiyokuwa", "alipopita", "aliyevuta"],
  "item_counter":9,
  "answer":"LEFT",
  "target":"isiyokuwa",
@@ -93,7 +93,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['nawasikia', 'nakwambia', 'tutaepuka'],
+ "choices":["nawasikia", "nakwambia", "tutaepuka"],
  "item_counter":10,
  "answer":"MID",
  "target":"nakwambia",

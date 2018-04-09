@@ -3,7 +3,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['nelima', 'anasoma', 'duma'],
+ "choices":["nelima", "anasoma", "duma"],
  "item_counter":1,
  "answer":"LEFT",
  "target":"nelima",
@@ -13,7 +13,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['anasoma', 'nyama', 'selma'],
+ "choices":["anasoma", "nyama", "selma"],
  "item_counter":2,
  "answer":"LEFT",
  "target":"anasoma",
@@ -23,7 +23,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['salama', 'lilisema', 'lima'],
+ "choices":["salama", "lilisema", "lima"],
  "item_counter":3,
  "answer":"RIGHT",
  "target":"lima",
@@ -33,7 +33,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['huzima', 'anasema', 'anasoma'],
+ "choices":["huzima", "anasema", "anasoma"],
  "item_counter":4,
  "answer":"RIGHT",
  "target":"anasoma",
@@ -43,7 +43,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['nelima', 'ukulima', 'milima'],
+ "choices":["nelima", "ukulima", "milima"],
  "item_counter":5,
  "answer":"RIGHT",
  "target":"milima",
@@ -53,7 +53,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['juma', 'vyema', 'nyama'],
+ "choices":["juma", "vyema", "nyama"],
  "item_counter":6,
  "answer":"MID",
  "target":"vyema",
@@ -63,7 +63,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['mkulima', 'mjoma', 'mapema'],
+ "choices":["mkulima", "mjoma", "mapema"],
  "item_counter":7,
  "answer":"LEFT",
  "target":"mkulima",
@@ -73,7 +73,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['akasema', 'alimtuma', 'selma'],
+ "choices":["akasema", "alimtuma", "selma"],
  "item_counter":8,
  "answer":"RIGHT",
  "target":"selma",
@@ -83,7 +83,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['salama', 'inauma', 'sakima'],
+ "choices":["salama", "inauma", "sakima"],
  "item_counter":9,
  "answer":"MID",
  "target":"inauma",
@@ -93,7 +93,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['alisimama', 'juma', 'alama'],
+ "choices":["alisimama", "juma", "alama"],
  "item_counter":10,
  "answer":"RIGHT",
  "target":"alama",

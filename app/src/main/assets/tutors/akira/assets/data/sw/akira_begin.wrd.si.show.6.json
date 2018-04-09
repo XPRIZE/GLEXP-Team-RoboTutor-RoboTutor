@@ -3,7 +3,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['sijaiona', 'siwezi', 'sisi'],
+ "choices":["sijaiona", "siwezi", "sisi"],
  "item_counter":1,
  "answer":"RIGHT",
  "target":"sisi",
@@ -13,7 +13,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['sifa', 'sisi', 'siyo'],
+ "choices":["sifa", "sisi", "siyo"],
  "item_counter":2,
  "answer":"LEFT",
  "target":"sifa",
@@ -23,7 +23,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['simba', 'simu', 'simama'],
+ "choices":["simba", "simu", "simama"],
  "item_counter":3,
  "answer":"MID",
  "target":"simu",
@@ -33,7 +33,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['sina', 'sijawahi', 'siyo'],
+ "choices":["sina", "sijawahi", "siyo"],
  "item_counter":4,
  "answer":"LEFT",
  "target":"sina",
@@ -43,7 +43,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['simba', 'sitawahi', 'sisi'],
+ "choices":["simba", "sitawahi", "sisi"],
  "item_counter":5,
  "answer":"RIGHT",
  "target":"sisi",
@@ -53,7 +53,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['simu', 'sikio', 'siyo'],
+ "choices":["simu", "sikio", "siyo"],
  "item_counter":6,
  "answer":"RIGHT",
  "target":"siyo",
@@ -63,7 +63,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['sijawahi', 'sisi', 'sinsou'],
+ "choices":["sijawahi", "sisi", "sinsou"],
  "item_counter":7,
  "answer":"RIGHT",
  "target":"sinsou",
@@ -73,7 +73,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['siafu', 'sivyo', 'siwezi'],
+ "choices":["siafu", "sivyo", "siwezi"],
  "item_counter":8,
  "answer":"LEFT",
  "target":"siafu",
@@ -83,7 +83,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['siafu', 'sisi', 'sivyo'],
+ "choices":["siafu", "sisi", "sivyo"],
  "item_counter":9,
  "answer":"MID",
  "target":"sisi",
@@ -93,7 +93,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['sinsou', 'simama', 'siku'],
+ "choices":["sinsou", "simama", "siku"],
  "item_counter":10,
  "answer":"LEFT",
  "target":"sinsou",

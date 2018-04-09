@@ -3,7 +3,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['mfu', 'ne', 'me'],
+ "choices":["mfu", "ne", "me"],
  "item_counter":1,
  "answer":"RIGHT",
  "target":"me",
@@ -13,7 +13,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['nge', 'me', 'va'],
+ "choices":["nge", "me", "va"],
  "item_counter":2,
  "answer":"MID",
  "target":"me",
@@ -23,7 +23,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['me', 'mpe', 'mle'],
+ "choices":["me", "mpe", "mle"],
  "item_counter":3,
  "answer":"LEFT",
  "target":"me",
@@ -33,7 +33,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['mvu', 'me', 'be'],
+ "choices":["mvu", "me", "be"],
  "item_counter":4,
  "answer":"MID",
  "target":"me",
@@ -43,7 +43,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['ngo', 'me', 'shu'],
+ "choices":["ngo", "me", "shu"],
  "item_counter":5,
  "answer":"MID",
  "target":"me",
@@ -53,7 +53,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['shi', 'me', 'fi'],
+ "choices":["shi", "me", "fi"],
  "item_counter":6,
  "answer":"MID",
  "target":"me",
@@ -63,7 +63,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['su', 'va', 'me'],
+ "choices":["su", "va", "me"],
  "item_counter":7,
  "answer":"RIGHT",
  "target":"me",
@@ -73,7 +73,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['ti', 'me', 'mwu'],
+ "choices":["ti", "me", "mwu"],
  "item_counter":8,
  "answer":"MID",
  "target":"me",
@@ -83,7 +83,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['me', 'di', 'hi'],
+ "choices":["me", "di", "hi"],
  "item_counter":9,
  "answer":"LEFT",
  "target":"me",
@@ -93,7 +93,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['mre', 'me', 'hu'],
+ "choices":["mre", "me", "hu"],
  "item_counter":10,
  "answer":"MID",
  "target":"me",

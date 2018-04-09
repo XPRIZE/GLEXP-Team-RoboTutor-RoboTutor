@@ -3,7 +3,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['mpwa', 'ikiwa', 'mbawa'],
+ "choices":["mpwa", "ikiwa", "mbawa"],
  "item_counter":1,
  "answer":"LEFT",
  "target":"mpwa",
@@ -13,7 +13,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['ziwa', 'nilikuwa', 'itakuwa'],
+ "choices":["ziwa", "nilikuwa", "itakuwa"],
  "item_counter":2,
  "answer":"LEFT",
  "target":"ziwa",
@@ -23,7 +23,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['lililokuwa', 'zilikuwa', 'alishindwa'],
+ "choices":["lililokuwa", "zilikuwa", "alishindwa"],
  "item_counter":3,
  "answer":"LEFT",
  "target":"lililokuwa",
@@ -33,7 +33,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['palikuwa', 'njiwa', 'imefungwa'],
+ "choices":["palikuwa", "njiwa", "imefungwa"],
  "item_counter":4,
  "answer":"LEFT",
  "target":"palikuwa",
@@ -43,7 +43,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['yalikuwa', 'maziwa', 'lilikuwa'],
+ "choices":["yalikuwa", "maziwa", "lilikuwa"],
  "item_counter":5,
  "answer":"LEFT",
  "target":"yalikuwa",
@@ -53,7 +53,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['hewa', 'ingawa', 'nilikuwa'],
+ "choices":["hewa", "ingawa", "nilikuwa"],
  "item_counter":6,
  "answer":"LEFT",
  "target":"hewa",
@@ -63,7 +63,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['huwa', 'alijawa', 'alipewa'],
+ "choices":["huwa", "alijawa", "alipewa"],
  "item_counter":7,
  "answer":"MID",
  "target":"alijawa",
@@ -73,7 +73,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['mkubwa', 'palikuwa', 'mpendwa'],
+ "choices":["mkubwa", "palikuwa", "mpendwa"],
  "item_counter":8,
  "answer":"RIGHT",
  "target":"mpendwa",
@@ -83,7 +83,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['akiwa', 'akawa', 'lilikuwa'],
+ "choices":["akiwa", "akawa", "lilikuwa"],
  "item_counter":9,
  "answer":"RIGHT",
  "target":"lilikuwa",
@@ -93,7 +93,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['alikunywa', 'makubwa', 'machungwa'],
+ "choices":["alikunywa", "makubwa", "machungwa"],
  "item_counter":10,
  "answer":"MID",
  "target":"makubwa",

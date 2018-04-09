@@ -3,7 +3,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['baba', 'bibi', 'mjoma'],
+ "choices":["baba", "bibi", "mjoma"],
  "item_counter":1,
  "answer":"RIGHT",
  "target":"mjoma",
@@ -13,7 +13,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['shangazi', 'mwanafunzi', 'dada'],
+ "choices":["shangazi", "mwanafunzi", "dada"],
  "item_counter":2,
  "answer":"MID",
  "target":"mwanafunzi",
@@ -23,7 +23,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['mjoma', 'mwalimu', 'mkulima'],
+ "choices":["mjoma", "mwalimu", "mkulima"],
  "item_counter":3,
  "answer":"RIGHT",
  "target":"mkulima",
@@ -33,7 +33,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['kinyozi', 'bibi', 'mwanafunzi'],
+ "choices":["kinyozi", "bibi", "mwanafunzi"],
  "item_counter":4,
  "answer":"LEFT",
  "target":"kinyozi",
@@ -43,7 +43,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['baba', 'kaka', 'babu'],
+ "choices":["baba", "kaka", "babu"],
  "item_counter":5,
  "answer":"LEFT",
  "target":"baba",
@@ -53,7 +53,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['mwalimu', 'kaka', 'mama'],
+ "choices":["mwalimu", "kaka", "mama"],
  "item_counter":6,
  "answer":"MID",
  "target":"kaka",
@@ -63,7 +63,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['mwalimu', 'kaka', 'babu'],
+ "choices":["mwalimu", "kaka", "babu"],
  "item_counter":7,
  "answer":"MID",
  "target":"kaka",
@@ -73,7 +73,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['mjoma', 'mkulima', 'shangazi'],
+ "choices":["mjoma", "mkulima", "shangazi"],
  "item_counter":8,
  "answer":"RIGHT",
  "target":"shangazi",
@@ -83,7 +83,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['kinyozi', 'bibi', 'mjoma'],
+ "choices":["kinyozi", "bibi", "mjoma"],
  "item_counter":9,
  "answer":"MID",
  "target":"bibi",
@@ -93,7 +93,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['dada', 'baba', 'kinyozi'],
+ "choices":["dada", "baba", "kinyozi"],
  "item_counter":10,
  "answer":"LEFT",
  "target":"dada",

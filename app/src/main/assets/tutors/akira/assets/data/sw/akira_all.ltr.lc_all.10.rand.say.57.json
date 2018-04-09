@@ -3,7 +3,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['n', 't', 'q'],
+ "choices":["n", "t", "q"],
  "item_counter":1,
  "answer":"MID",
  "target":"t",
@@ -13,7 +13,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['x', 't', 'u'],
+ "choices":["x", "t", "u"],
  "item_counter":2,
  "answer":"MID",
  "target":"t",
@@ -23,7 +23,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['a', 'v', 't'],
+ "choices":["a", "v", "t"],
  "item_counter":3,
  "answer":"RIGHT",
  "target":"t",
@@ -33,7 +33,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['t', 's', 'o'],
+ "choices":["t", "s", "o"],
  "item_counter":4,
  "answer":"LEFT",
  "target":"t",
@@ -43,7 +43,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['u', 'l', 't'],
+ "choices":["u", "l", "t"],
  "item_counter":5,
  "answer":"RIGHT",
  "target":"t",
@@ -53,7 +53,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['c', 'p', 't'],
+ "choices":["c", "p", "t"],
  "item_counter":6,
  "answer":"RIGHT",
  "target":"t",
@@ -63,7 +63,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['y', 's', 't'],
+ "choices":["y", "s", "t"],
  "item_counter":7,
  "answer":"RIGHT",
  "target":"t",
@@ -73,7 +73,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['o', 'z', 't'],
+ "choices":["o", "z", "t"],
  "item_counter":8,
  "answer":"MID",
  "target":"z",
@@ -83,7 +83,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['z', 'q', 'f'],
+ "choices":["z", "q", "f"],
  "item_counter":9,
  "answer":"MID",
  "target":"q",
@@ -93,7 +93,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['h', 'b', 't'],
+ "choices":["h", "b", "t"],
  "item_counter":10,
  "answer":"RIGHT",
  "target":"t",

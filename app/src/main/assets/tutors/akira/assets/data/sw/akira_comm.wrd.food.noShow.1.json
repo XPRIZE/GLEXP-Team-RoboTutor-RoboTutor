@@ -3,7 +3,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['chapati', 'ugali', 'mboga'],
+ "choices":["chapati", "ugali", "mboga"],
  "item_counter":1,
  "answer":"LEFT",
  "target":"chapati",
@@ -13,7 +13,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['nyanya', 'maziwa', 'karoti'],
+ "choices":["nyanya", "maziwa", "karoti"],
  "item_counter":2,
  "answer":"LEFT",
  "target":"nyanya",
@@ -23,7 +23,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['samaki', 'maziwa', 'chai'],
+ "choices":["samaki", "maziwa", "chai"],
  "item_counter":3,
  "answer":"MID",
  "target":"maziwa",
@@ -33,7 +33,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['vitumbua', 'wali', 'karoti'],
+ "choices":["vitumbua", "wali", "karoti"],
  "item_counter":4,
  "answer":"RIGHT",
  "target":"karoti",
@@ -43,7 +43,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['samaki', 'mboga', 'chakula'],
+ "choices":["samaki", "mboga", "chakula"],
  "item_counter":5,
  "answer":"LEFT",
  "target":"samaki",
@@ -53,7 +53,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['ugali', 'mandazi', 'maharage'],
+ "choices":["ugali", "mandazi", "maharage"],
  "item_counter":6,
  "answer":"RIGHT",
  "target":"maharage",
@@ -63,7 +63,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['nyama', 'chakula', 'chapati'],
+ "choices":["nyama", "chakula", "chapati"],
  "item_counter":7,
  "answer":"LEFT",
  "target":"nyama",
@@ -73,7 +73,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['karoti', 'mboga', 'vitumbua'],
+ "choices":["karoti", "mboga", "vitumbua"],
  "item_counter":8,
  "answer":"MID",
  "target":"mboga",
@@ -83,7 +83,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['maziwa', 'nyama', 'nyanya'],
+ "choices":["maziwa", "nyama", "nyanya"],
  "item_counter":9,
  "answer":"LEFT",
  "target":"maziwa",
@@ -93,7 +93,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['maji', 'karoti', 'embe'],
+ "choices":["maji", "karoti", "embe"],
  "item_counter":10,
  "answer":"RIGHT",
  "target":"embe",
