@@ -580,11 +580,12 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 // "robotutor_assets/assets/story/sw/literacy/xyz/"
 
                 // ZZZ 3: TODO AUDIOSOURCE must be collected and decided
-                AUDIOSOURCEPATH = TCONST.STORY_PATH + TCONST.SHARED_LITERACY_FOLDER;
-                // "cmu/xprize/story_reading/shared/shared_literacy"
+                AUDIOSOURCEPATH = TCONST.STORY_PATH + TCONST.SHARED_LITERACY_AUDIO_FOLDER;
+                // "cmu/xprize/story_reading/shared/shared_lit"
 
                 // ZZZ TODO move all images
-                SHAREDPATH = DATASOURCEPATH + TCONST.SHARED_LITERACY_FOLDER + "/";
+                SHAREDPATH = DATASOURCEPATH + TCONST.SHARED_LITERACY_IMAGE_FOLDER + "/";
+                // "cmu/xprize/story_reading/shared/shared_literacy"
 
                 configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
                 mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));

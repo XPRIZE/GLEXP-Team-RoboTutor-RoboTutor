@@ -198,7 +198,8 @@ public class TCONST {
     public static final String SHARED_MATH         = "[sharedmath]";
     public static final String SHARED_MATH_FOLDER = "shared/shared_math";
     public static final String SHARED_LITERACY     = "[sharedliteracy]";
-    public static final String SHARED_LITERACY_FOLDER = "shared/shared_lit";
+    public static final String SHARED_LITERACY_AUDIO_FOLDER = "shared/shared_lit"; // TODO fix this abominable inconsistency
+    public static final String SHARED_LITERACY_IMAGE_FOLDER = "shared/shared_literacy";
     public static final String SONG                = "[song]";
     public static final String SONG_FOLDER         = "?";
     public static final String STORY_PATH          = "cmu/xprize/story_reading/";
