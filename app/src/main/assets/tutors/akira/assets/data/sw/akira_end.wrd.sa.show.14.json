@@ -3,7 +3,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['pesa', 'sasa', 'rosa'],
+ "choices":["pesa", "sasa", "rosa"],
  "item_counter":1,
  "answer":"MID",
  "target":"sasa",
@@ -13,7 +13,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['pesa', 'palesa', 'lisa'],
+ "choices":["pesa", "palesa", "lisa"],
  "item_counter":2,
  "answer":"RIGHT",
  "target":"lisa",
@@ -23,7 +23,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['pesa', 'nosisa', 'palesa'],
+ "choices":["pesa", "nosisa", "palesa"],
  "item_counter":3,
  "answer":"RIGHT",
  "target":"palesa",
@@ -33,7 +33,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['sasa', 'palesa', 'elsa'],
+ "choices":["sasa", "palesa", "elsa"],
  "item_counter":4,
  "answer":"MID",
  "target":"palesa",
@@ -43,7 +43,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['elsa', 'rosa', 'sasa'],
+ "choices":["elsa", "rosa", "sasa"],
  "item_counter":5,
  "answer":"LEFT",
  "target":"elsa",
@@ -53,7 +53,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['palesa', 'kosa', 'rosa'],
+ "choices":["palesa", "kosa", "rosa"],
  "item_counter":6,
  "answer":"LEFT",
  "target":"palesa",
@@ -63,7 +63,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['elsa', 'makosa', 'rosa'],
+ "choices":["elsa", "makosa", "rosa"],
  "item_counter":7,
  "answer":"MID",
  "target":"makosa",
@@ -73,7 +73,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['sasa', 'rosa', 'pesa'],
+ "choices":["sasa", "rosa", "pesa"],
  "item_counter":8,
  "answer":"RIGHT",
  "target":"pesa",
@@ -83,7 +83,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['sasa', 'pesa', 'lisa'],
+ "choices":["sasa", "pesa", "lisa"],
  "item_counter":9,
  "answer":"MID",
  "target":"pesa",
@@ -93,7 +93,7 @@
 
        {
  "type":"CAk_Data",
- "choices":['makosa', 'pesa', 'nosisa'],
+ "choices":["makosa", "pesa", "nosisa"],
  "item_counter":10,
  "answer":"LEFT",
  "target":"makosa",
