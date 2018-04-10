@@ -612,8 +612,8 @@ public class TCONST {
     public static final String HOT_LOG_FOLDER = "/RoboTutor_HOT/";
     public static final String READY_LOG_FOLDER = "/RoboTutor/";
 
-    public static final String  HOT_LOG_FOLDER_PERF = "/RoboTutor_PERF_H/";
-    public static final String READY_LOG_FOLDER_PERF = "/RoboTutor_PERF/";
+    public static final String  HOT_LOG_FOLDER_PERF = "/RoboTutor_HOT/"; // use same as normal logs
+    public static final String READY_LOG_FOLDER_PERF = "/RoboTutor/";    // use same as normal logs
 
     public static final String ROBOTUTOR_ASSET_FOLDER   = "/robotutor_assets/";
     public static final String GLYPHS_FOLDER            = "/glyphs/";
