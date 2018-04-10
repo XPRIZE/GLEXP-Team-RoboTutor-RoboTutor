@@ -396,7 +396,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#PLAYCORRECT:String", "features":""},
             {"type": "COMMAND", "id": "SAkira", "method": "increaseScore", "parms": "", "features":""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3","soundpackage":"default" ,"repeat":false, "volume": "1", "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","soundpackage":"writing" ,"repeat":false, "volume": "1", "mode":"flow", "features": ""},
             {"type": "COMMAND", "cmd": "WAIT"}
           ]
         },
