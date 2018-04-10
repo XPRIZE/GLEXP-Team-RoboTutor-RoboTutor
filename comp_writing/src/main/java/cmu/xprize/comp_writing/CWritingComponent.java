@@ -431,7 +431,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         mActiveController.updateCorrectStatus(true);
         if(isComplete()) {
-            applyBehavior(WR_CONST.DATA_ITEM_COMPLETE); // YYY run when item is complete...
+            applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
         } else {
             applyBehavior(WR_CONST.ON_CORRECT);
         }
@@ -1237,7 +1237,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     case WR_CONST.INHIBIT_OTHERS:
 
                         if(mActiveController != null)
-                            inhibitInput(mActiveController, true); // YYY what is this???
+                            inhibitInput(mActiveController, true);
                         break;
 
                     case WR_CONST.CLEAR_ATTEMPT:
@@ -1255,13 +1255,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                     case WR_CONST.RIPPLE_DEMO:
 
-                        rippleReplay(_command, true); // YYY Ripple Replay: use to show tracing
+                        rippleReplay(_command, true);
                         break;
 
                     case WR_CONST.RIPPLE_REPLAY:
                     case WR_CONST.RIPPLE_PROTO:
 
-                        rippleReplay(_command, false); // YYY Ripple Replay: use to show tracing
+                        rippleReplay(_command, false);
                         break;
                     case WR_CONST.SHOW_TRACELINE: // Show all glyphs trace line.
 

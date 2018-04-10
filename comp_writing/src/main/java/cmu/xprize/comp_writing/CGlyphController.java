@@ -545,7 +545,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
                         break;
 
                     case WR_CONST.RIPPLE_DEMO:
-                        // YYY this is where RoboFinger draws the demo glyph
+
                         mGlyphReplay.setPointAtStroke(true);
                         mGlyphInput.replayGlyph(WR_CONST.REPLAY_PROTOGLYPH);
                         break;
