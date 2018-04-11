@@ -286,6 +286,19 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         mGlyphInput.setExpectedChar(protoChar);
     }
 
+    public void setIsStimulus(String protoChar) {
+
+        mGlyphInput.setExpectedChar(protoChar);
+        mGlyphInput.setIsStimulus();
+
+        // For write.missingLtr: To make Stimulus text narrower.
+        info.aspectRatio = mGlyphInput.getFontAspect();
+    }
+
+    public boolean checkIsStimulus() {
+        return mGlyphInput.checkIsStimulus();
+    }
+
     public String getExpectedChar() {
         return mGlyphInput.getExpectedChar();
     }
@@ -548,6 +561,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
                         // YYY this is where RoboFinger draws the demo glyph
                         mGlyphReplay.setPointAtStroke(true);
                         mGlyphInput.replayGlyph(WR_CONST.REPLAY_PROTOGLYPH);
+
                         break;
 
                     case WR_CONST.RIPPLE_REPLAY:
