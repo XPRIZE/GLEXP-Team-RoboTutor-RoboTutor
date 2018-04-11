@@ -56,6 +56,7 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     protected int countStart;
     protected int delta;
     protected int maxHit;
+    protected boolean kill = false;
     private TextView addNumber;
     private TextView minusNumber;
     private TextView displayNumber;

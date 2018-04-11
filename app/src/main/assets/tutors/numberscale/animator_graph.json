@@ -155,7 +155,7 @@
           "type": "NODE",
           "maptype":"moduleMap",
           "mapname": "USERINPUT",
-          "preenter": ["ENABLE_TAPPING"],
+          "preenter": [],
           "preexit": [],
           "edges":[
             {"constraint": "", "edge":"PROBLEM_FINISHED"}

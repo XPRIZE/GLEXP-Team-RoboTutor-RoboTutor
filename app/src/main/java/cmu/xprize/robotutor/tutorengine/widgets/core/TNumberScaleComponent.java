@@ -284,12 +284,14 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
     }
 
     public void playTutorIntro(){
-        playIntro();
+        if(!kill){
+        playIntro();}
         new java.util.Timer().schedule(
                 new java.util.TimerTask() {
                     @Override
                     public void run() {
-                        playTutor();
+                        if (!kill){
+                        playTutor();}
                     }
                 },
                 4000
@@ -298,11 +300,14 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
                 new java.util.TimerTask() {
                     @Override
                     public void run() {
-                        playTutor1();
+                        if(!kill){
+                        playTutor1();}
+
                     }
                 },
                 8000
         );
+
 
     }
 
@@ -334,6 +339,7 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
             scope.addUpdateVar("offset", new TString(String.valueOf(delta)));
 
             postEvent(NSCONST.PLAY_TUTOR_MINUS);
+            enableTapping();
             setNewTimer();
 
         }

@@ -33,7 +33,7 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
     private int maxIndex = 0;
     private int barIndex;
     private Paint strokePaint;
-    private boolean tappable;
+    private boolean tappable = false;
     private boolean greyOutMinus = false;
     private boolean greyOutPlus = false;
     private static final String TAG = "NumberScaleSurfaceView";
@@ -235,6 +235,7 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
             System.out.println(x);
             System.out.println(y);
             System.out.println("tap");
+            _component.kill = true;
             int[] minusSpec = _component.minusSpecs;
             int[] addSpec = _component.addSpecs;
             if (x>=minusSpec[0] && x<=minusSpec[1] && y>=minusSpec[2] && y<=minusSpec[3] && !greyOutMinus){
