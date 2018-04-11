@@ -139,7 +139,7 @@
           "COMMENT": "We may say or show the stimulus at this point",
           "maptype":"moduleMap",
           "mapname": "UPDATESTIMULUS",
-          "preenter": ["NEXT_DATASET"],
+          "preenter": ["NEXT_DATASET","DISABLE_TAPPING"],
           "preexit": [],
           "edges": [
             {

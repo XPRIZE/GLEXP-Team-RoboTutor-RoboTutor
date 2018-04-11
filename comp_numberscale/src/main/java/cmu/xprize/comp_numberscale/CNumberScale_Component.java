@@ -69,12 +69,11 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
     public int[] minusPosition = new int[2];
     protected Timer t;
     protected int waitTime=1000;
-<<<<<<< HEAD
-=======
+
 
     protected  boolean inmode =true;
 
->>>>>>> 12ccbdada27004e577e7a3c11da02e404f362c66
+
 
 
     // json loadable
@@ -454,13 +453,10 @@ public class CNumberScale_Component extends RelativeLayout implements ILoadableO
         if (t!=null){
         t.cancel();}
         t=new Timer();
-<<<<<<< HEAD
-        t.schedule(new playTutor(1),12000);
-        t.schedule(new playTutor(2),16000);
-=======
+
         t.schedule(new playTutor(1),9000);
         t.schedule(new playTutor(2),13000);
->>>>>>> 12ccbdada27004e577e7a3c11da02e404f362c66
+
     }
 
     public void killTimer(){
