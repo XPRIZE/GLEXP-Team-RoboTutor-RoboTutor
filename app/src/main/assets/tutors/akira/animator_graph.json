@@ -653,8 +653,8 @@
 
         "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio_hundreds}}.mp3","soundpackage":"xprize_numbers" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": "FTR_TEST_AUDIO_HUNDREDS"},
         "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "Na.mp3","soundpackage":"xprize" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": "FTR_TEST_AUDIO_HUNDREDS&FTR_TEST_AUDIO_TENS"},
-        "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio_tens}}.mp3","soundpackage":"xprize_numbers" ,"repeat":false, "volume": "0.7", "mode":"event", "features": "FTR_TEST_AUDIO_TENS"},
-        "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio}}.mp3","soundpackage":"shared_words" ,"repeat":false, "volume": "0.7", "mode":"event", "features": "FTR_TEST_AUDIO"},
+        "PLAY_NUM_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio_tens}}.mp3","soundpackage":"xprize_numbers" ,"repeat":false, "volume": "0.7", "mode":"event", "features": "FTR_TEST_AUDIO_TENS"},
+        "PLAY_WORD_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio}}.mp3","soundpackage":"shared_words" ,"repeat":false, "volume": "0.7", "mode":"event", "features": "FTR_TEST_AUDIO"},
 
         "INSTRUCT_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.audio}}.mp3","soundpackage":"default" ,"repeat":false, "volume": "0.7", "mode":"event", "features": ""},
         "WAIT":{"type": "COMMAND", "cmd": "WAIT"},

@@ -580,12 +580,15 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 // "robotutor_assets/assets/story/sw/literacy/xyz/"
 
                 // ZZZ 3: TODO AUDIOSOURCE must be collected and decided
-                AUDIOSOURCEPATH = TCONST.STORY_PATH + TCONST.SHARED_LITERACY_AUDIO_FOLDER;
+                //AUDIOSOURCEPATH = TCONST.STORY_PATH + TCONST.SHARED_LITERACY_AUDIO_FOLDER;
                 // "cmu/xprize/story_reading/shared/shared_lit"
+                AUDIOSOURCEPATH = "cmu/xprize/literacy";
+                // ayy lmao
 
                 // ZZZ TODO move all images
                 SHAREDPATH = DATASOURCEPATH + TCONST.SHARED_LITERACY_IMAGE_FOLDER + "/";
                 // "cmu/xprize/story_reading/shared/shared_literacy"
+
 
                 configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
                 mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
@@ -607,8 +610,9 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 // "robotutor_assets/assets/story/sw/hello/hello_world"
 
                 // instead of having a unique folder, we rely on shared assets
-                AUDIOSOURCEPATH = TCONST.STORY_PATH + TCONST.SHARED_MATH_FOLDER;
+                //AUDIOSOURCEPATH = TCONST.STORY_PATH + TCONST.SHARED_MATH_FOLDER;
                 // "cmu/xprize/story_reading/shared/shared_math"
+                AUDIOSOURCEPATH = "cmu/xprize/literacy";
 
                 SHAREDPATH = DATASOURCEPATH + TCONST.SHARED_MATH_FOLDER + "/";
 
