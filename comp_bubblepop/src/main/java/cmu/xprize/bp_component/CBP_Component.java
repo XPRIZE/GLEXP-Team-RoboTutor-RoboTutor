@@ -297,7 +297,6 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
                 dataSource[i] = dataSource[j];
                 dataSource[j] = f;
             }
-            Log.d("TOMBRADY", "RANDOM");
         }
 
     }
@@ -310,8 +309,6 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
             if (dataSource != null) {
 
                 updateDataSet(dataSource[_dataIndex]);
-
-                Log.d("TOMBRADY", dataSource[_dataIndex].stimulus);
 
                 // We cycle through the dataSource question types iteratively
                 //

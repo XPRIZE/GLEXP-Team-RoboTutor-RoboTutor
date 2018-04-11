@@ -141,6 +141,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
 
     // json loadable
+    // ZZZ where the money gets loaded
 
     public String        license;
     public String        story_name;
@@ -153,6 +154,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     public String        prompt;
     public String        parser;
+    // ZZZ the money
     public CASB_data     data[];
 
 
@@ -196,9 +198,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     public void initStory(IVManListener owner, String assetPath, String location) {
 
         mOwner        = owner;
-        mAsset        = assetPath;
+        mAsset        = assetPath; // ZZZ assetPath... TCONST.EXTERN
         storyBooting  = true;
-        assetLocation = location;
+        assetLocation = location;  // ZZZ assetLocation... contains storydata.json and images
+
+        Log.d(TCONST.DEBUG_STORY_TAG, String.format("mAsset=%s -- assetLocation=%s", mAsset, assetLocation));
 
         if (mParent.testFeature(TCONST.FTR_USER_HIDE)) showWords = false;
         if (mParent.testFeature(TCONST.FTR_USER_REVEAL)) showFutureWords = showFutureContent = false;
@@ -415,11 +419,17 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         try {
             if (assetLocation.equals(TCONST.EXTERN)) {
 
-                in = new FileInputStream(mAsset + data[mCurrPage].image);
+                Log.d(TCONST.DEBUG_STORY_TAG, "loading image " + mAsset + data[mCurrPage].image);
+                in = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
 
+            } else if (assetLocation.equals(TCONST.EXTERN_SHARED)) {
+
+                Log.d(TCONST.DEBUG_STORY_TAG, "loading shared image " + mAsset + data[mCurrPage].image);
+                in = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
             } else {
 
-                in = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image);
+                Log.d(TCONST.DEBUG_STORY_TAG, "loading image from asset" + mAsset + data[mCurrPage].image);
+                in = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image); // ZZZ load image
             }
 
             mPageImage.setImageBitmap(BitmapFactory.decodeStream(in));

@@ -1,0 +1,17 @@
+{
+	"bootFeatures":"FTR_DEMO_LTR_LC",
+	"random": true,
+	"singleStimulus": false,
+	"dataSource": [
+		{ "stimulus": "f", "audioStimulus": [ "f", "", "" ], "answer": "f" },
+		{ "stimulus": "t", "audioStimulus": [ "t", "", "" ], "answer": "t" },
+		{ "stimulus": "i", "audioStimulus": [ "i", "", "" ], "answer": "i" },
+		{ "stimulus": "j", "audioStimulus": [ "j", "", "" ], "answer": "j" },
+		{ "stimulus": "m", "audioStimulus": [ "m", "", "" ], "answer": "m" },
+		{ "stimulus": "e", "audioStimulus": [ "e", "", "" ], "answer": "e" },
+		{ "stimulus": "g", "audioStimulus": [ "g", "", "" ], "answer": "g" },
+		{ "stimulus": "s", "audioStimulus": [ "s", "", "" ], "answer": "s" },
+		{ "stimulus": "ch", "audioStimulus": [ "ch", "", "" ], "answer": "ch" },
+		{ "stimulus": "l", "audioStimulus": [ "l", "", "" ], "answer": "l" }
+	]
+}

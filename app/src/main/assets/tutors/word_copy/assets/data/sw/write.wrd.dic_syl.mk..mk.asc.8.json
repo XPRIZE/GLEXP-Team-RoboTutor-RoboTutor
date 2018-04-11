@@ -1,0 +1,12 @@
+{
+	"bootFeatures":"FTR_DEMO_WRD",
+	"random": false,
+	"singleStimulus": false,
+	"dataSource": [
+		{ "stimulus": "mka", "audioStimulus": [ "mka", "", "" ], "answer": "mka" },
+		{ "stimulus": "mke", "audioStimulus": [ "mke", "", "" ], "answer": "mke" },
+		{ "stimulus": "mki", "audioStimulus": [ "mki", "", "" ], "answer": "mki" },
+		{ "stimulus": "mko", "audioStimulus": [ "mko", "", "" ], "answer": "mko" },
+		{ "stimulus": "mku", "audioStimulus": [ "mku", "", "" ], "answer": "mku" }
+	]
+}

@@ -674,6 +674,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     }
 
+    public void pointAtGlyph() {
+
+        CGlyphController glyphInput;
+
+        glyphInput = (CGlyphController) mGlyphList.getChildAt(0);
+        glyphInput.pointAtGlyph();
+    }
+
     public void hideGlyphs() {
 
         CGlyphController   v;
@@ -1283,6 +1291,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     case WR_CONST.POINT_AT_REPLAY_BUTTON:
 
                         pointAtReplayButton();
+                        break;
+
+                    case WR_CONST.POINT_AT_GLYPH:
+
+                        pointAtGlyph();
                         break;
 
                     case WR_CONST.CANCEL_POINTAT:

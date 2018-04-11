@@ -1,0 +1,17 @@
+{
+	"bootFeatures":"FTR_DEMO_MISSING_LTR",
+	"random": true,
+	"singleStimulus": false,
+	"dataSource": [
+		{ "stimulus": "ka__", "audioStimulus": [ "kaka", "", "" ], "answer": "ka" },
+		{ "stimulus": "ka__", "audioStimulus": [ "kazi", "", "" ], "answer": "zi" },
+		{ "stimulus": "ka__", "audioStimulus": [ "kati", "", "" ], "answer": "ti" },
+		{ "stimulus": "ka__", "audioStimulus": [ "kali", "", "" ], "answer": "li" },
+		{ "stimulus": "ka__", "audioStimulus": [ "karo", "", "" ], "answer": "ro" },
+		{ "stimulus": "ka__", "audioStimulus": [ "kana", "", "" ], "answer": "na" },
+		{ "stimulus": "ka__", "audioStimulus": [ "kasi", "", "" ], "answer": "si" },
+		{ "stimulus": "ka__", "audioStimulus": [ "kama", "", "" ], "answer": "ma" },
+		{ "stimulus": "ka__", "audioStimulus": [ "kale", "", "" ], "answer": "le" },
+		{ "stimulus": "ka__", "audioStimulus": [ "kasa", "", "" ], "answer": "sa" }
+	]
+}

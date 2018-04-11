@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["sabini", "tisini", "arobaini"],
+ "item_counter":1,
+ "answer":"MID",
+ "target":"tisini",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["tisa", "tatu", "sitini"],
+ "item_counter":2,
+ "answer":"MID",
+ "target":"tatu",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["mbili", "tisa", "sabini"],
+ "item_counter":3,
+ "answer":"LEFT",
+ "target":"mbili",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["saba", "sifuri", "arobaini"],
+ "item_counter":4,
+ "answer":"RIGHT",
+ "target":"arobaini",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["arobaini", "nne", "elfu"],
+ "item_counter":5,
+ "answer":"LEFT",
+ "target":"arobaini",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["themanini", "saba", "kumi"],
+ "item_counter":6,
+ "answer":"RIGHT",
+ "target":"kumi",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["themanini", "tano", "kumi"],
+ "item_counter":7,
+ "answer":"MID",
+ "target":"tano",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["nane", "elfu", "sifuri"],
+ "item_counter":8,
+ "answer":"MID",
+ "target":"elfu",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["ishirini", "saba", "sitini"],
+ "item_counter":9,
+ "answer":"RIGHT",
+ "target":"sitini",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["thelathini", "saba", "mbili"],
+ "item_counter":10,
+ "answer":"LEFT",
+ "target":"thelathini",
+ "belowString":"audio",
+ "audio":"true" 
+       } 
+
+   ]
+}

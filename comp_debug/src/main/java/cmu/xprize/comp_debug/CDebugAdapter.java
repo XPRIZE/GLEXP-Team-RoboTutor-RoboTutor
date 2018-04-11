@@ -341,7 +341,7 @@ public class CDebugAdapter extends BaseAdapter {
             tutorName = updateCurrentTutorByIndex(gridPosition);
 
             if(!tutorName.equals("")) {
-                mLauncher.changeCurrentTutor(tutorName);
+                mLauncher.changeCurrentTutor(tutorName, null);
             }
 
             }

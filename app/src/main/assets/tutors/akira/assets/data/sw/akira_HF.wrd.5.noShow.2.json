@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["nzito", "wapya", "mmeze"],
+ "item_counter":1,
+ "answer":"RIGHT",
+ "target":"mmeze",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kanga", "langu", "randa"],
+ "item_counter":2,
+ "answer":"MID",
+ "target":"langu",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["ajuza", "ngozi", "aling"],
+ "item_counter":3,
+ "answer":"MID",
+ "target":"ngozi",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kimya", "mkoba", "akpaa"],
+ "item_counter":4,
+ "answer":"RIGHT",
+ "target":"akpaa",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["mvivu", "mioto", "rahim"],
+ "item_counter":5,
+ "answer":"RIGHT",
+ "target":"rahim",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["ncede", "mwili", "amung"],
+ "item_counter":6,
+ "answer":"LEFT",
+ "target":"ncede",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["amani", "usemi", "mkosa"],
+ "item_counter":7,
+ "answer":"LEFT",
+ "target":"amani",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["laini", "milio", "miale"],
+ "item_counter":8,
+ "answer":"RIGHT",
+ "target":"miale",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["nione", "meupe", "sivyo"],
+ "item_counter":9,
+ "answer":"MID",
+ "target":"meupe",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["bonde", "kweli", "mbizi"],
+ "item_counter":10,
+ "answer":"RIGHT",
+ "target":"mbizi",
+ "belowString":"audio",
+ "audio":"true" 
+       } 
+
+   ]
+}

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.robotutor.RoboTutor;
 
 /**
@@ -46,6 +47,12 @@ public class PerformancePromotionRules extends PromotionRules {
             return SelectedActivity.SAME;
         }
 
+        // make it so if in story.hear... the smiley face actually does something? They may have gotten used to being able to navigate...
+        // if student is in the "stories" skill, then give them ability to navigate. Otherwise they could never repeat a story again without cycling through end.
+        if (performance.getActiveSkill().equals(AS_CONST.SELECT_STORIES)) {
+            return (new SelfAssessmentPromotionRules()).selectActivityByPerformance(performance);
+        }
+
         // test Non-assessable activities
         if (performance.getActivityType() != null) {
             for (String type : nonAssessableActivities) {
@@ -63,7 +70,7 @@ public class PerformancePromotionRules extends PromotionRules {
         }
 
         // prevent divide by zero
-        if(performance.getTotalNumberQuestions() == 0) {
+        if (performance.getTotalNumberQuestions() == 0) {
             return SelectedActivity.NEXT;
         }
 

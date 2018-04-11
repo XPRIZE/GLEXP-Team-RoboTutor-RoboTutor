@@ -156,15 +156,7 @@ public class BP_CONST {
     public static final String FTR_E2N           = "FTR_E2N";
     public static final String FTR_N2E           = "FTR_N2E";
 
-    public static final String SHOW_BUBBLE_ZERO  =   "SHOW_BUBBLE_ZERO";
-    public static final String SHOW_BUBBLE_ONE  =   "SHOW_BUBBLE_ONE";
-    public static final String SHOW_BUBBLE_TWO  =   "SHOW_BUBBLE_TWO";
-    public static final String SHOW_BUBBLE_THREE  =   "SHOW_BUBBLE_THREE";
-    public static final String SHOW_BUBBLE_FOUR  =   "SHOW_BUBBLE_FOUR";
-
-
     public static final String SHOW_BUBBLE_MASK          = "SHOW_BUBBLE_MASK";
-
     public static final String HIDE_MASK          = "HIDE_MASK";
 
     public static final String SHOW_STIMULUS_MASK = "SHOW_STIMULUS_MASK";
@@ -265,6 +257,20 @@ public class BP_CONST {
     private static int[] TENFRAME_H_9 = {R.drawable.tenframe_h_9};
     private static int[] TENFRAME_H_10 = {R.drawable.tenframe_h_10};
 
+    public static int[] BPOP_BACKGROUNDS = {
+            R.raw.astrology_astronomy_beautiful_713664,
+            R.raw.blue_sky_camels_desert_71241,
+            R.raw.bow_river_canada_forest_219972,
+            R.raw.adventure_alone_arid_274014,              // works
+            R.raw.animal_carnivore_countryside_667204,      // too big
+            R.raw.autumn_beautiful_city_210243,
+            R.raw.beach_blue_coast_417144,
+            R.raw.birds_of_prey_black_and_white_dawn_748877,
+            R.raw.clouds_conifer_daylight_388065,
+            R.raw.clouds_cropland_crops_462023,
+            R.raw.desert_egypt_great_sphinx_of_giza_2359
+    };
+
     static public HashMap<String, int[]> drawableMap = new HashMap<String, int[]>();
 
     static {
@@ -309,5 +315,7 @@ public class BP_CONST {
         drawableMap.put("9"  , DOT_9  );
         drawableMap.put("10" , DOT_10 );*/
     }
+
+
 
 }

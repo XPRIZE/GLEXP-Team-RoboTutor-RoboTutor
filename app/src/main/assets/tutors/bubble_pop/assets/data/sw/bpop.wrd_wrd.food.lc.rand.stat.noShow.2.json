@@ -1,230 +1,230 @@
 {
-  "question_replacement": false,
-  "response_replacement": false,
-  "gen_responsetype": "text_data",
-  "question_count": 10,
-  "banner_color": "#000066",
-  "gen_answerSet": [],
-  "gen_responseSet": [],
-  "gen_answertype": "text_data",
-  "gen_stimulusSet": [],
-  "gen_stimulustype": "text_data",
-  "question_sequence": "sequential",
+  "question_sequence": "RANDOM",
   "problem_type": "word",
-  "dataSource": [
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "chakula",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "chakula",
-      "response_set": [
-        "ndizi",
-        "chakula",
-        "viazi"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "chapati",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "chapati",
-      "response_set": [
-        "chapati",
-        "viazi",
-        "samaki"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "maharage",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "maharage",
-      "response_set": [
-        "wali",
-        "maharage",
-        "chai"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "maji",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "maji",
-      "response_set": [
-        "maji",
-        "nyama",
-        "karoti"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "viazi",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "viazi",
-      "response_set": [
-        "viazi",
-        "chapati",
-        "maharage"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "vitumbua",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "vitumbua",
-      "response_set": [
-        "karoti",
-        "ndizi",
-        "vitumbua"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "chai",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "chai",
-      "response_set": [
-        "chai",
-        "viazi",
-        "embe"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "karoti",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "karoti",
-      "response_set": [
-        "karoti",
-        "nyanya",
-        "chapati"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "samaki",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "samaki",
-      "response_set": [
-        "chakula",
-        "nyanya",
-        "samaki"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "wali",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "wali",
-      "response_set": [
-        "chakula",
-        "ugali",
-        "wali"
-      ],
-      "gen_question": false
-    }
-  ],
+  "question_count": 10,
   "view_background": {
-    "layout": "grid",
-    "kind": "squares",
-    "layoutcount": 0,
     "style": "primitives",
-    "colorchoice": "fixed",
-    "colorbase": "#666666",
+    "kind": "squares",
     "colors": [
       -6053120,
       -7566336,
       -2500352,
       -5066240
-    ]
-  }
+    ],
+    "colorchoice": "fixed",
+    "colorbase": "#666666",
+    "layoutcount": 0,
+    "layout": "grid"
+  },
+  "gen_stimulustype": "text_data",
+  "response_replacement": false,
+  "gen_responseSet": [],
+  "dataSource": [
+    {
+      "question_type": "multiple-choice",
+      "answer": "chakula",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "chakula",
+      "response_set": [
+        "maji",
+        "chakula",
+        "karoti"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "chapati",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "chapati",
+      "response_set": [
+        "chapati",
+        "maharage",
+        "chai"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "mandazi",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "mandazi",
+      "response_set": [
+        "mandazi",
+        "maziwa",
+        "ugali"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "maharage",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "maharage",
+      "response_set": [
+        "maharage",
+        "chapati",
+        "ndizi"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "mboga",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "mboga",
+      "response_set": [
+        "mboga",
+        "maji",
+        "ndizi"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "nyama",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "nyama",
+      "response_set": [
+        "wali",
+        "mboga",
+        "nyama"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "maziwa",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "maziwa",
+      "response_set": [
+        "maziwa",
+        "nyanya",
+        "chai"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "nyanya",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "nyanya",
+      "response_set": [
+        "maji",
+        "nyanya",
+        "ugali"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "chai",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "chai",
+      "response_set": [
+        "chai",
+        "nyama",
+        "ndizi"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "vitumbua",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "vitumbua",
+      "response_set": [
+        "mboga",
+        "vitumbua",
+        "viazi"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    }
+  ],
+  "question_replacement": false,
+  "gen_responsetype": "text_data",
+  "banner_color": "#000066",
+  "gen_answerSet": [],
+  "gen_answertype": "text_data",
+  "gen_stimulusSet": []
 }

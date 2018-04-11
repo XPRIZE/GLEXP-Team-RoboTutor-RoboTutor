@@ -359,6 +359,10 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         broadcastLocation(TCONST.POINT_AND_TAP, mEraseGlyphBut);
     }
 
+    public void pointAtGlyph() {
+
+        broadcastLocation(TCONST.POINTAT, mGlyphInput);
+    }
 
     public void setProtoTypeDirty(boolean isDirty) {
         mGlyphSaveBut.setVisibility(isDirty? VISIBLE:INVISIBLE);

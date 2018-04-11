@@ -19,6 +19,8 @@
 package cmu.xprize.bp_component;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -29,6 +31,10 @@ import android.view.View;
 
 import org.json.JSONObject;
 
+import java.util.Random;
+import java.util.logging.LogManager;
+
+import cmu.xprize.comp_logging.CLogManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -269,6 +275,7 @@ public class CBpBackground extends View implements ILoadableObject {
                 canvas.drawRect(mViewRegion, mPaint);
             }
 
+            style = "bitmap";
             switch (style) {
 
                 case "primitives":
@@ -281,6 +288,18 @@ public class CBpBackground extends View implements ILoadableObject {
                     break;
 
                 case "bitmap":
+
+
+                    // TODO BUG REVIEW move this to external assets!!!
+                    //int nextBackground = BP_CONST.BPOP_BACKGROUNDS[0];
+
+                    int nextBackground = BP_CONST.BPOP_BACKGROUNDS[(new Random().nextInt(BP_CONST.BPOP_BACKGROUNDS.length))];
+
+                    CLogManager.getInstance().postEvent_I(TAG, "PickedBackground:" + nextBackground);
+
+                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), nextBackground);
+                    Bitmap scaled = Bitmap.createScaledBitmap(bmp, canvas.getWidth(), canvas.getHeight(), false);
+                    canvas.drawBitmap(scaled, mViewRegion, mViewRegion, mPaint);
                     break;
             }
         }

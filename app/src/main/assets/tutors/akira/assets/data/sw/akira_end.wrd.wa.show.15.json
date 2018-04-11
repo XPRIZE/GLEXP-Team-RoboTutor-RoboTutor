@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["mpwa", "ikiwa", "mbawa"],
+ "item_counter":1,
+ "answer":"LEFT",
+ "target":"mpwa",
+ "belowString":"mpwa",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["ziwa", "nilikuwa", "itakuwa"],
+ "item_counter":2,
+ "answer":"LEFT",
+ "target":"ziwa",
+ "belowString":"ziwa",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["lililokuwa", "zilikuwa", "alishindwa"],
+ "item_counter":3,
+ "answer":"LEFT",
+ "target":"lililokuwa",
+ "belowString":"lililokuwa",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["palikuwa", "njiwa", "imefungwa"],
+ "item_counter":4,
+ "answer":"LEFT",
+ "target":"palikuwa",
+ "belowString":"palikuwa",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["yalikuwa", "maziwa", "lilikuwa"],
+ "item_counter":5,
+ "answer":"LEFT",
+ "target":"yalikuwa",
+ "belowString":"yalikuwa",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["hewa", "ingawa", "nilikuwa"],
+ "item_counter":6,
+ "answer":"LEFT",
+ "target":"hewa",
+ "belowString":"hewa",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["huwa", "alijawa", "alipewa"],
+ "item_counter":7,
+ "answer":"MID",
+ "target":"alijawa",
+ "belowString":"alijawa",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["mkubwa", "palikuwa", "mpendwa"],
+ "item_counter":8,
+ "answer":"RIGHT",
+ "target":"mpendwa",
+ "belowString":"mpendwa",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["akiwa", "akawa", "lilikuwa"],
+ "item_counter":9,
+ "answer":"RIGHT",
+ "target":"lilikuwa",
+ "belowString":"lilikuwa",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["alikunywa", "makubwa", "machungwa"],
+ "item_counter":10,
+ "answer":"MID",
+ "target":"makubwa",
+ "belowString":"makubwa",
+ "audio":"true" 
+       } 
+
+   ]
+}

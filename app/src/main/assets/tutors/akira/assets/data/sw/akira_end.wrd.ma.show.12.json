@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["nelima", "anasoma", "duma"],
+ "item_counter":1,
+ "answer":"LEFT",
+ "target":"nelima",
+ "belowString":"nelima",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["anasoma", "nyama", "selma"],
+ "item_counter":2,
+ "answer":"LEFT",
+ "target":"anasoma",
+ "belowString":"anasoma",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["salama", "lilisema", "lima"],
+ "item_counter":3,
+ "answer":"RIGHT",
+ "target":"lima",
+ "belowString":"lima",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["huzima", "anasema", "anasoma"],
+ "item_counter":4,
+ "answer":"RIGHT",
+ "target":"anasoma",
+ "belowString":"anasoma",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["nelima", "ukulima", "milima"],
+ "item_counter":5,
+ "answer":"RIGHT",
+ "target":"milima",
+ "belowString":"milima",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["juma", "vyema", "nyama"],
+ "item_counter":6,
+ "answer":"MID",
+ "target":"vyema",
+ "belowString":"vyema",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["mkulima", "mjoma", "mapema"],
+ "item_counter":7,
+ "answer":"LEFT",
+ "target":"mkulima",
+ "belowString":"mkulima",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["akasema", "alimtuma", "selma"],
+ "item_counter":8,
+ "answer":"RIGHT",
+ "target":"selma",
+ "belowString":"selma",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["salama", "inauma", "sakima"],
+ "item_counter":9,
+ "answer":"MID",
+ "target":"inauma",
+ "belowString":"inauma",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["alisimama", "juma", "alama"],
+ "item_counter":10,
+ "answer":"RIGHT",
+ "target":"alama",
+ "belowString":"alama",
+ "audio":"true" 
+       } 
+
+   ]
+}

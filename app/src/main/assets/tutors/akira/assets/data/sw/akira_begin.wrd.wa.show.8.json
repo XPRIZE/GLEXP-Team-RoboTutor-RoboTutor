@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["walihisi", "walio", "watu"],
+ "item_counter":1,
+ "answer":"LEFT",
+ "target":"walihisi",
+ "belowString":"walihisi",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["wahalifu", "wanakijiji", "waligundua"],
+ "item_counter":2,
+ "answer":"MID",
+ "target":"wanakijiji",
+ "belowString":"wanakijiji",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["walikutana", "wangu", "wadogo"],
+ "item_counter":3,
+ "answer":"LEFT",
+ "target":"walikutana",
+ "belowString":"walikutana",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["wakiwa", "wanane", "walianza"],
+ "item_counter":4,
+ "answer":"LEFT",
+ "target":"wakiwa",
+ "belowString":"wakiwa",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["wapenzi", "waliamua", "walio"],
+ "item_counter":5,
+ "answer":"LEFT",
+ "target":"wapenzi",
+ "belowString":"wapenzi",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["walimsikia", "walihisi", "wanawe"],
+ "item_counter":6,
+ "answer":"MID",
+ "target":"walihisi",
+ "belowString":"walihisi",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["wakiruka", "wapinzani", "wanane"],
+ "item_counter":7,
+ "answer":"MID",
+ "target":"wapinzani",
+ "belowString":"wapinzani",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["wakipiga", "waliruka", "walitafuta"],
+ "item_counter":8,
+ "answer":"RIGHT",
+ "target":"walitafuta",
+ "belowString":"walitafuta",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["wachafu", "waligundua", "walioishi"],
+ "item_counter":9,
+ "answer":"RIGHT",
+ "target":"walioishi",
+ "belowString":"walioishi",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["wakulima", "wanawe", "wakasema"],
+ "item_counter":10,
+ "answer":"LEFT",
+ "target":"wakulima",
+ "belowString":"wakulima",
+ "audio":"true" 
+       } 
+
+   ]
+}

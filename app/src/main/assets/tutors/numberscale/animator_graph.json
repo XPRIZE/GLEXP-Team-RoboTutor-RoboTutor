@@ -212,6 +212,7 @@
               
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
             {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "playTutorIntro", "parms": "", "features":""}
+
           ]
         },
 

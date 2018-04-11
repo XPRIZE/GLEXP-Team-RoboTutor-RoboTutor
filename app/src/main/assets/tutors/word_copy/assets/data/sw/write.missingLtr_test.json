@@ -4,14 +4,14 @@
   "singleStimulus": true,
   "dataSource": [
     {
-      "stimulus": "s_ba",
-      "audioStimulus": ["saba"],
-      "answer": "a"
+      "stimulus": "c_a",
+      "audioStimulus": ["Tafadhali andika herufi inayokosekana katika", "cha"],
+      "answer": "h"
     },
     {
-      "stimulus": "c_a",
-      "audioStimulus": ["cha"],
-      "answer": "h"
+      "stimulus": "s_b_",
+      "audioStimulus": ["Tafadhali andika herufi zinazokosekana katika", "saba"],
+      "answer": "aa"
     }
   ]
 }

@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["hasira", "hakika", "hawana"],
+ "item_counter":1,
+ "answer":"LEFT",
+ "target":"hasira",
+ "belowString":"hasira",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["hayo", "hajui", "hatua"],
+ "item_counter":2,
+ "answer":"MID",
+ "target":"hajui",
+ "belowString":"hajui",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["hakujali", "hakupata", "hakuweza"],
+ "item_counter":3,
+ "answer":"RIGHT",
+ "target":"hakuweza",
+ "belowString":"hakuweza",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["hayo", "hawezi", "hawakuweza"],
+ "item_counter":4,
+ "answer":"RIGHT",
+ "target":"hawakuweza",
+ "belowString":"hawakuweza",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["hamu", "harufu", "hakupata"],
+ "item_counter":5,
+ "answer":"LEFT",
+ "target":"hamu",
+ "belowString":"hamu",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["hawana", "hapo", "hawakujua"],
+ "item_counter":6,
+ "answer":"MID",
+ "target":"hapo",
+ "belowString":"hapo",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["hawakuweza", "haraka", "hakujua"],
+ "item_counter":7,
+ "answer":"LEFT",
+ "target":"hawakuweza",
+ "belowString":"hawakuweza",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["harufu", "hamu", "hana"],
+ "item_counter":8,
+ "answer":"MID",
+ "target":"hamu",
+ "belowString":"hamu",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["haha", "halikuwa", "hata"],
+ "item_counter":9,
+ "answer":"RIGHT",
+ "target":"hata",
+ "belowString":"hata",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["hakujua", "hawakuwa", "hadithi"],
+ "item_counter":10,
+ "answer":"MID",
+ "target":"hawakuwa",
+ "belowString":"hawakuwa",
+ "audio":"true" 
+       } 
+
+   ]
+}

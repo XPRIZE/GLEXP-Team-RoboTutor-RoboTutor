@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["kwako", "jiko", "zako"],
+ "item_counter":1,
+ "answer":"MID",
+ "target":"jiko",
+ "belowString":"jiko",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["yuko", "zako", "dadako"],
+ "item_counter":2,
+ "answer":"MID",
+ "target":"zako",
+ "belowString":"zako",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["lako", "mshtuko", "babako"],
+ "item_counter":3,
+ "answer":"RIGHT",
+ "target":"babako",
+ "belowString":"babako",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["babako", "huko", "soko"],
+ "item_counter":4,
+ "answer":"RIGHT",
+ "target":"soko",
+ "belowString":"soko",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kwako", "mifuko", "jiko"],
+ "item_counter":5,
+ "answer":"MID",
+ "target":"mifuko",
+ "belowString":"mifuko",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["ziko", "zako", "chako"],
+ "item_counter":6,
+ "answer":"RIGHT",
+ "target":"chako",
+ "belowString":"chako",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["zako", "mfuko", "mshtuko"],
+ "item_counter":7,
+ "answer":"MID",
+ "target":"mfuko",
+ "belowString":"mfuko",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["msisimuko", "yuko", "soko"],
+ "item_counter":8,
+ "answer":"RIGHT",
+ "target":"soko",
+ "belowString":"soko",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["msisimko", "soko", "mfuko"],
+ "item_counter":9,
+ "answer":"MID",
+ "target":"soko",
+ "belowString":"soko",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kwako", "ambako", "yuko"],
+ "item_counter":10,
+ "answer":"RIGHT",
+ "target":"yuko",
+ "belowString":"yuko",
+ "audio":"true" 
+       } 
+
+   ]
+}

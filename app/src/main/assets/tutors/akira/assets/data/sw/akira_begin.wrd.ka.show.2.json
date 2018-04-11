@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["kati", "kalio", "kayanja"],
+ "item_counter":1,
+ "answer":"LEFT",
+ "target":"kati",
+ "belowString":"kati",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["karo", "kakake", "kabla"],
+ "item_counter":2,
+ "answer":"LEFT",
+ "target":"karo",
+ "belowString":"karo",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kata", "katikati", "kazi"],
+ "item_counter":3,
+ "answer":"LEFT",
+ "target":"kata",
+ "belowString":"kata",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["karatasi", "karibuni", "kasa"],
+ "item_counter":4,
+ "answer":"MID",
+ "target":"karibuni",
+ "belowString":"karibuni",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kaka", "kana", "kanyada"],
+ "item_counter":5,
+ "answer":"LEFT",
+ "target":"kaka",
+ "belowString":"kaka",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["katikati", "karibu", "kabla"],
+ "item_counter":6,
+ "answer":"MID",
+ "target":"karibu",
+ "belowString":"karibu",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kali", "kayanja", "kakake"],
+ "item_counter":7,
+ "answer":"LEFT",
+ "target":"kali",
+ "belowString":"kali",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kasa", "karo", "kanyada"],
+ "item_counter":8,
+ "answer":"RIGHT",
+ "target":"kanyada",
+ "belowString":"kanyada",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kambo", "karibuni", "kapu"],
+ "item_counter":9,
+ "answer":"MID",
+ "target":"karibuni",
+ "belowString":"karibuni",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kawaida", "kando", "kati"],
+ "item_counter":10,
+ "answer":"RIGHT",
+ "target":"kati",
+ "belowString":"kati",
+ "audio":"true" 
+       } 
+
+   ]
+}
