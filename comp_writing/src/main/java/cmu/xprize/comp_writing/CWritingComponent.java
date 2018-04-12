@@ -676,11 +676,29 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     public void pointAtGlyph() {
+        _fieldIndex = 0;
+
+        pointAtInputGlyph();
+    }
+    public void pointAtInputGlyph() {
 
         CGlyphController glyphInput;
 
-        glyphInput = (CGlyphController) mGlyphList.getChildAt(0);
-        glyphInput.pointAtGlyph();
+        if( _fieldIndex < mGlyphList.getChildCount()) {
+
+            glyphInput = (CGlyphController) mGlyphList.getChildAt(_fieldIndex);
+
+            if (glyphInput.checkIsStimulus()) {
+
+                // For write.missingLtr: To not point at non-answer Glyphs.
+                _fieldIndex++;
+                pointAtInputGlyph();
+            } else {
+
+                glyphInput.pointAtGlyph();
+            }
+
+        }
     }
 
     public void hideGlyphs() {
