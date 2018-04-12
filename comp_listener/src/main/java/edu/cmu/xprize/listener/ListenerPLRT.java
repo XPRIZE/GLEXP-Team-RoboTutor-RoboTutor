@@ -155,7 +155,7 @@ public class ListenerPLRT extends ListenerBase {
         public void onStableResult(String[] hypothesis) {
             // NOTE: that hypothesis may be null during shutdown
             if(hypothesis != null) {
-                Log.i("ASR", "Part Hyp: " + hypothesis);
+                Log.i("ASR", "Part Hyp: " + TextUtils.join(" ", hypothesis));
                 processHypothesis(hypothesis, false);
             }
         }
