@@ -139,7 +139,7 @@
           "COMMENT": "We may say or show the stimulus at this point",
           "maptype":"moduleMap",
           "mapname": "UPDATESTIMULUS",
-          "preenter": ["NEXT_DATASET"],
+          "preenter": ["NEXT_DATASET","DISABLE_TAPPING"],
           "preexit": [],
           "edges": [
             {
@@ -155,7 +155,7 @@
           "type": "NODE",
           "maptype":"moduleMap",
           "mapname": "USERINPUT",
-          "preenter": ["ENABLE_TAPPING"],
+          "preenter": [],
           "preexit": [],
           "edges":[
             {"constraint": "", "edge":"PROBLEM_FINISHED"}
@@ -201,7 +201,6 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
-
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""}
             ]
         },
@@ -213,9 +212,6 @@
               
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
             {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SNumberScale", "method": "playTutorIntro", "parms": "", "features":""}
-
-
-    
 
           ]
         },
@@ -302,6 +298,7 @@
         "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"},
         "DISABLE_TAPPING": {"type": "COMMAND", "id": "SNumberScale", "method" : "disableTapping", "features":""},
         "ENABLE_TAPPING": {"type": "COMMAND", "id": "SNumberScale", "method" : "enableTapping", "features":""},
+        "INIT_TIMER":{"type": "COMMAND", "id": "SNumberScale", "method" : "setNewTimer", "features":""},
         "NEXTSCENE": {"type":"COMMAND", "cmd": "NEXTSCENE"}
 
       },
