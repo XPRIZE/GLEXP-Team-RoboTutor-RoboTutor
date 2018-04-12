@@ -123,7 +123,7 @@
       "cell_column": "3",
       "same": "bpop.ltr.uc:A..A.vow.rand.all.stat.show.1",
       "next": "bpop.ltr.uc:A..A.vow.rand.all.stat.noShow.2",
-      "next_next": "akira:vow.ltr.uc:A..A.all.10.rand.say.1",
+      "next_next": "akira:vow.ltr.uc:A..A.vow.10.rand.say.1",
       "prev": "story.hear::UC_Vowel_Song_1__it_1",
       "harder": "bpop.ltr.lc:A..A.vow.rand.all.stat.noShow.12",
       "easier": "story.hear::School_Welcome_Song"
@@ -137,21 +137,21 @@
       "cell_row": "2",
       "cell_column": "4",
       "same": "bpop.ltr.uc:A..A.vow.rand.all.stat.noShow.2",
-      "next": "akira:vow.ltr.uc:A..A.all.10.rand.say.1",
+      "next": "akira:vow.ltr.uc:A..A.vow.10.rand.say.1",
       "next_next": "story.hear::UC_Vowel_Song_1__it_2",
       "prev": "bpop.ltr.uc:A..A.vow.rand.all.stat.show.1",
-      "harder": "akira:vow.ltr.lc:A..A.all.10.rand.say.6",
+      "harder": "akira:vow.ltr.lc:A..A.vow.10.rand.say.6",
       "easier": "story.hear::School_Welcome_Song"
     },
-    "akira:vow.ltr.uc:A..A.all.10.rand.say.1": {
+    "akira:vow.ltr.uc:A..A.vow.10.rand.say.1": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:vow.ltr.uc:A..A.all.10.rand.say.1",
+      "tutor_id": "akira:vow.ltr.uc:A..A.vow.10.rand.say.1",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_vow.ltr.uc_A..A.all.10.rand.say.1.json",
+      "tutor_data": "[file]akira_vow.ltr.uc_A..A.vow.10.rand.say.1.json",
       "cell_row": "2",
       "cell_column": "5",
-      "same": "akira:vow.ltr.uc:A..A.all.10.rand.say.1",
+      "same": "akira:vow.ltr.uc:A..A.vow.10.rand.say.1",
       "next": "story.hear::UC_Vowel_Song_1__it_2",
       "next_next": "story.parrot::vow.A..Z.asc.uc.1__it_1",
       "prev": "bpop.ltr.uc:A..A.vow.rand.all.stat.noShow.2",
@@ -184,7 +184,7 @@
       "same": "story.hear::UC_Vowel_Song_1__it_2",
       "next": "story.parrot::vow.A..Z.asc.uc.1__it_1",
       "next_next": "story.echo::vow.A..Z.asc.uc.2__it_1",
-      "prev": "akira:vow.ltr.uc:A..A.all.10.rand.say.1",
+      "prev": "akira:vow.ltr.uc:A..A.vow.10.rand.say.1",
       "harder": "story.parrot::vow.A..Z.asc.lc.5__it_1",
       "easier": "story.hear::School_Welcome_Song"
     },
@@ -213,7 +213,7 @@
       "cell_column": "13",
       "same": "bpop.ltr.uc:E..E.vow.rand.all.stat.show.3",
       "next": "bpop.ltr.uc:E..E.vow.rand.all.stat.noShow.4",
-      "next_next": "akira:vow.ltr.uc:E..E.all.10.rand.say.2",
+      "next_next": "akira:vow.ltr.uc:E..E.vow.10.rand.say.2",
       "prev": "story.hear::UC_Vowel_Song_1__it_3",
       "harder": "bpop.ltr.lc:E..E.vow.rand.all.stat.noShow.14",
       "easier": "story.hear::School_Welcome_Song"
@@ -227,21 +227,21 @@
       "cell_row": "2",
       "cell_column": "14",
       "same": "bpop.ltr.uc:E..E.vow.rand.all.stat.noShow.4",
-      "next": "akira:vow.ltr.uc:E..E.all.10.rand.say.2",
+      "next": "akira:vow.ltr.uc:E..E.vow.10.rand.say.2",
       "next_next": "story.hear::UC_Vowel_Song_1__it_4",
       "prev": "bpop.ltr.uc:E..E.vow.rand.all.stat.show.3",
-      "harder": "akira:vow.ltr.lc:E..E.all.10.rand.say.7",
+      "harder": "akira:vow.ltr.lc:E..E.vow.10.rand.say.7",
       "easier": "story.hear::School_Welcome_Song"
     },
-    "akira:vow.ltr.uc:E..E.all.10.rand.say.2": {
+    "akira:vow.ltr.uc:E..E.vow.10.rand.say.2": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:vow.ltr.uc:E..E.all.10.rand.say.2",
+      "tutor_id": "akira:vow.ltr.uc:E..E.vow.10.rand.say.2",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_vow.ltr.uc_E..E.all.10.rand.say.2.json",
+      "tutor_data": "[file]akira_vow.ltr.uc_E..E.vow.10.rand.say.2.json",
       "cell_row": "2",
       "cell_column": "15",
-      "same": "akira:vow.ltr.uc:E..E.all.10.rand.say.2",
+      "same": "akira:vow.ltr.uc:E..E.vow.10.rand.say.2",
       "next": "story.hear::UC_Vowel_Song_1__it_4",
       "next_next": "story.parrot::vow.A..Z.asc.uc.1__it_2",
       "prev": "bpop.ltr.uc:E..E.vow.rand.all.stat.noShow.4",
@@ -259,7 +259,7 @@
       "same": "story.hear::UC_Vowel_Song_1__it_4",
       "next": "story.parrot::vow.A..Z.asc.uc.1__it_2",
       "next_next": "story.echo::vow.A..Z.asc.uc.2__it_2",
-      "prev": "akira:vow.ltr.uc:E..E.all.10.rand.say.2",
+      "prev": "akira:vow.ltr.uc:E..E.vow.10.rand.say.2",
       "harder": "story.parrot::vow.A..Z.asc.lc.5__it_2",
       "easier": "story.hear::School_Welcome_Song"
     },
@@ -393,7 +393,7 @@
       "cell_column": "22",
       "same": "bpop.ltr.uc:I..I.vow.rand.all.stat.show.5",
       "next": "bpop.ltr.uc:I..I.vow.rand.all.stat.noShow.6",
-      "next_next": "akira:vow.ltr.uc:I..I.all.10.rand.say.3",
+      "next_next": "akira:vow.ltr.uc:I..I.vow.10.rand.say.3",
       "prev": "story.parrot::ltr-I.rand.24__it_1",
       "harder": "bpop.ltr.lc:I..I.vow.rand.all.stat.show.15",
       "easier": "story.hear::School_Welcome_Song"
@@ -407,25 +407,25 @@
       "cell_row": "2",
       "cell_column": "23",
       "same": "bpop.ltr.uc:I..I.vow.rand.all.stat.noShow.6",
-      "next": "akira:vow.ltr.uc:I..I.all.10.rand.say.3",
+      "next": "akira:vow.ltr.uc:I..I.vow.10.rand.say.3",
       "next_next": "story.hear::UC_Vowel_Song_1__it_5",
       "prev": "bpop.ltr.uc:I..I.vow.rand.all.stat.show.5",
       "harder": "bpop.ltr.lc:I..I.vow.rand.all.stat.noShow.16",
       "easier": "story.hear::School_Welcome_Song"
     },
-    "akira:vow.ltr.uc:I..I.all.10.rand.say.3": {
+    "akira:vow.ltr.uc:I..I.vow.10.rand.say.3": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:vow.ltr.uc:I..I.all.10.rand.say.3",
+      "tutor_id": "akira:vow.ltr.uc:I..I.vow.10.rand.say.3",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_vow.ltr.uc_I..I.all.10.rand.say.3.json",
+      "tutor_data": "[file]akira_vow.ltr.uc_I..I.vow.10.rand.say.3.json",
       "cell_row": "2",
       "cell_column": "24",
-      "same": "akira:vow.ltr.uc:I..I.all.10.rand.say.3",
+      "same": "akira:vow.ltr.uc:I..I.vow.10.rand.say.3",
       "next": "story.hear::UC_Vowel_Song_1__it_5",
       "next_next": "story.parrot::vow.A..Z.asc.uc.1__it_3",
       "prev": "bpop.ltr.uc:I..I.vow.rand.all.stat.noShow.6",
-      "harder": "akira:vow.ltr.lc:I..I.all.10.rand.say.8",
+      "harder": "akira:vow.ltr.lc:I..I.vow.10.rand.say.8",
       "easier": "story.hear::School_Welcome_Song"
     },
     "story.hear::UC_Vowel_Song_1__it_5": {
@@ -439,7 +439,7 @@
       "same": "story.hear::UC_Vowel_Song_1__it_5",
       "next": "story.parrot::vow.A..Z.asc.uc.1__it_3",
       "next_next": "story.echo::vow.A..Z.asc.uc.2__it_3",
-      "prev": "akira:vow.ltr.uc:I..I.all.10.rand.say.3",
+      "prev": "akira:vow.ltr.uc:I..I.vow.10.rand.say.3",
       "harder": "story.hear::LC_Vowel_Song_1__it_3",
       "easier": "story.hear::School_Welcome_Song"
     },
@@ -513,7 +513,7 @@
       "cell_column": "31",
       "same": "bpop.ltr.uc:O..O.vow.rand.all.stat.show.7",
       "next": "bpop.ltr.uc:O..O.vow.rand.all.stat.noShow.8",
-      "next_next": "akira:vow.ltr.uc:O..O.all.10.rand.say.4",
+      "next_next": "akira:vow.ltr.uc:O..O.vow.10.rand.say.4",
       "prev": "story.parrot::ltr-O.rand.30__it_1",
       "harder": "story.hear::LC_Vowel_Song_2__it_4",
       "easier": "story.hear::School_Welcome_Song"
@@ -527,21 +527,21 @@
       "cell_row": "2",
       "cell_column": "32",
       "same": "bpop.ltr.uc:O..O.vow.rand.all.stat.noShow.8",
-      "next": "akira:vow.ltr.uc:O..O.all.10.rand.say.4",
+      "next": "akira:vow.ltr.uc:O..O.vow.10.rand.say.4",
       "next_next": "story.hear::UC_Vowel_Song_1__it_6",
       "prev": "bpop.ltr.uc:O..O.vow.rand.all.stat.show.7",
       "harder": "bpop.ltr.lc:O..O.vow.rand.all.stat.show.17",
       "easier": "story.hear::School_Welcome_Song"
     },
-    "akira:vow.ltr.uc:O..O.all.10.rand.say.4": {
+    "akira:vow.ltr.uc:O..O.vow.10.rand.say.4": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:vow.ltr.uc:O..O.all.10.rand.say.4",
+      "tutor_id": "akira:vow.ltr.uc:O..O.vow.10.rand.say.4",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_vow.ltr.uc_O..O.all.10.rand.say.4.json",
+      "tutor_data": "[file]akira_vow.ltr.uc_O..O.vow.10.rand.say.4.json",
       "cell_row": "2",
       "cell_column": "33",
-      "same": "akira:vow.ltr.uc:O..O.all.10.rand.say.4",
+      "same": "akira:vow.ltr.uc:O..O.vow.10.rand.say.4",
       "next": "story.hear::UC_Vowel_Song_1__it_6",
       "next_next": "story.parrot::vow.A..Z.asc.uc.1__it_4",
       "prev": "bpop.ltr.uc:O..O.vow.rand.all.stat.noShow.8",
@@ -559,8 +559,8 @@
       "same": "story.hear::UC_Vowel_Song_1__it_6",
       "next": "story.parrot::vow.A..Z.asc.uc.1__it_4",
       "next_next": "story.echo::vow.A..Z.asc.uc.2__it_4",
-      "prev": "akira:vow.ltr.uc:O..O.all.10.rand.say.4",
-      "harder": "akira:vow.ltr.lc:O..O.all.10.rand.say.9",
+      "prev": "akira:vow.ltr.uc:O..O.vow.10.rand.say.4",
+      "harder": "akira:vow.ltr.lc:O..O.vow.10.rand.say.9",
       "easier": "story.hear::School_Welcome_Song"
     },
     "story.parrot::vow.A..Z.asc.uc.1__it_4": {
@@ -633,7 +633,7 @@
       "cell_column": "40",
       "same": "bpop.ltr.uc:U..U.vow.rand.all.stat.show.9",
       "next": "bpop.ltr.uc:U..U.vow.rand.all.stat.noShow.10",
-      "next_next": "akira:vow.ltr.uc:U..U.all.10.rand.say.5",
+      "next_next": "akira:vow.ltr.uc:U..U.vow.10.rand.say.5",
       "prev": "story.parrot::ltr-U.rand.35__it_1",
       "harder": "story.parrot::ltr-U.rand.59__it_1",
       "easier": "story.hear::School_Welcome_Song"
@@ -647,21 +647,21 @@
       "cell_row": "2",
       "cell_column": "41",
       "same": "bpop.ltr.uc:U..U.vow.rand.all.stat.noShow.10",
-      "next": "akira:vow.ltr.uc:U..U.all.10.rand.say.5",
+      "next": "akira:vow.ltr.uc:U..U.vow.10.rand.say.5",
       "next_next": "story.hear::UC_Vowel_Song_1__it_7",
       "prev": "bpop.ltr.uc:U..U.vow.rand.all.stat.show.9",
       "harder": "story.hear::LC_Vowel_Song_2__it_5",
       "easier": "story.hear::School_Welcome_Song"
     },
-    "akira:vow.ltr.uc:U..U.all.10.rand.say.5": {
+    "akira:vow.ltr.uc:U..U.vow.10.rand.say.5": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:vow.ltr.uc:U..U.all.10.rand.say.5",
+      "tutor_id": "akira:vow.ltr.uc:U..U.vow.10.rand.say.5",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_vow.ltr.uc_U..U.all.10.rand.say.5.json",
+      "tutor_data": "[file]akira_vow.ltr.uc_U..U.vow.10.rand.say.5.json",
       "cell_row": "2",
       "cell_column": "42",
-      "same": "akira:vow.ltr.uc:U..U.all.10.rand.say.5",
+      "same": "akira:vow.ltr.uc:U..U.vow.10.rand.say.5",
       "next": "story.hear::UC_Vowel_Song_1__it_7",
       "next_next": "story.parrot::vow.A..Z.asc.uc.1__it_5",
       "prev": "bpop.ltr.uc:U..U.vow.rand.all.stat.noShow.10",
@@ -679,7 +679,7 @@
       "same": "story.hear::UC_Vowel_Song_1__it_7",
       "next": "story.parrot::vow.A..Z.asc.uc.1__it_5",
       "next_next": "story.echo::vow.A..Z.asc.uc.2__it_5",
-      "prev": "akira:vow.ltr.uc:U..U.all.10.rand.say.5",
+      "prev": "akira:vow.ltr.uc:U..U.vow.10.rand.say.5",
       "harder": "bpop.ltr.lc:U..U.vow.rand.all.stat.noShow.20",
       "easier": "story.hear::School_Welcome_Song"
     },
@@ -695,7 +695,7 @@
       "next": "story.echo::vow.A..Z.asc.uc.2__it_5",
       "next_next": "bpop.ltr.uc:A..Z.vow.asc.all.stat.show.21__it_5",
       "prev": "story.hear::UC_Vowel_Song_1__it_7",
-      "harder": "akira:vow.ltr.lc:U..U.all.10.rand.say.10",
+      "harder": "akira:vow.ltr.lc:U..U.vow.10.rand.say.10",
       "easier": "story.hear::School_Welcome_Song"
     },
     "story.echo::vow.A..Z.asc.uc.2__it_5": {
@@ -768,7 +768,7 @@
       "cell_column": "49",
       "same": "write.ltr.uc:vow.asc.A..Z.2",
       "next": "write.ltr.uc.dic:vow.asc.A..Z.3",
-      "next_next": "akira:vow.ltr.uc:A..Z.all.5.asc.say.11",
+      "next_next": "akira:vow.ltr.uc:A..Z.vow.5.asc.say.11",
       "prev": "write.ltr.uc.trc:vow.asc.A..Z.1",
       "harder": "bpop.ltr.lc:A..Z.vow.asc.sim.stat.show.24__it_5",
       "easier": "story.hear::School_Welcome_Song"
@@ -782,21 +782,21 @@
       "cell_row": "2",
       "cell_column": "50",
       "same": "write.ltr.uc.dic:vow.asc.A..Z.3",
-      "next": "akira:vow.ltr.uc:A..Z.all.5.asc.say.11",
+      "next": "akira:vow.ltr.uc:A..Z.vow.5.asc.say.11",
       "next_next": "bpop.ltr.uc:A..Z.vow.asc.all.stat.noShow.25",
       "prev": "write.ltr.uc:vow.asc.A..Z.2",
       "harder": "write.ltr.lc.trc:vow.asc.A..Z.4",
       "easier": "story.hear::School_Welcome_Song"
     },
-    "akira:vow.ltr.uc:A..Z.all.5.asc.say.11": {
+    "akira:vow.ltr.uc:A..Z.vow.5.asc.say.11": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:vow.ltr.uc:A..Z.all.5.asc.say.11",
+      "tutor_id": "akira:vow.ltr.uc:A..Z.vow.5.asc.say.11",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_vow.ltr.uc_A..Z.all.5.asc.say.11.json",
+      "tutor_data": "[file]akira_vow.ltr.uc_A..Z.vow.5.asc.say.11.json",
       "cell_row": "2",
       "cell_column": "51",
-      "same": "akira:vow.ltr.uc:A..Z.all.5.asc.say.11",
+      "same": "akira:vow.ltr.uc:A..Z.vow.5.asc.say.11",
       "next": "bpop.ltr.uc:A..Z.vow.asc.all.stat.noShow.25",
       "next_next": "story.parrot::ltr-A.rand.40__it_1",
       "prev": "write.ltr.uc.dic:vow.asc.A..Z.3",
@@ -814,7 +814,7 @@
       "same": "bpop.ltr.uc:A..Z.vow.asc.all.stat.noShow.25",
       "next": "story.parrot::ltr-A.rand.40__it_1",
       "next_next": "story.hear::LC_Vowel_Song_2__it_1",
-      "prev": "akira:vow.ltr.uc:A..Z.all.5.asc.say.11",
+      "prev": "akira:vow.ltr.uc:A..Z.vow.5.asc.say.11",
       "harder": "write.ltr.lc.dic:vow.asc.A..Z.6",
       "easier": "story.hear::School_Welcome_Song"
     },
@@ -828,7 +828,7 @@
       "cell_column": "3",
       "same": "bpop.ltr.lc:A..A.vow.rand.all.stat.show.11",
       "next": "bpop.ltr.lc:A..A.vow.rand.all.stat.noShow.12",
-      "next_next": "akira:vow.ltr.lc:A..A.all.10.rand.say.6",
+      "next_next": "akira:vow.ltr.lc:A..A.vow.10.rand.say.6",
       "prev": "story.hear::LC_Vowel_Song_2__it_1",
       "harder": "bpop.ltr.uc:A..A.all.rand.all.stat.show.27",
       "easier": "story.hear::UC_Vowel_Song_1__it_1"
@@ -842,21 +842,21 @@
       "cell_row": "3",
       "cell_column": "4",
       "same": "bpop.ltr.lc:A..A.vow.rand.all.stat.noShow.12",
-      "next": "akira:vow.ltr.lc:A..A.all.10.rand.say.6",
+      "next": "akira:vow.ltr.lc:A..A.vow.10.rand.say.6",
       "next_next": "story.hear::LC_Vowel_Song_1__it_1",
       "prev": "bpop.ltr.lc:A..A.vow.rand.all.stat.show.11",
       "harder": "bpop.ltr.uc:A..A.all.rand.all.stat.noShow.28",
       "easier": "bpop.ltr.uc:A..A.vow.rand.all.stat.show.1"
     },
-    "akira:vow.ltr.lc:A..A.all.10.rand.say.6": {
+    "akira:vow.ltr.lc:A..A.vow.10.rand.say.6": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:vow.ltr.lc:A..A.all.10.rand.say.6",
+      "tutor_id": "akira:vow.ltr.lc:A..A.vow.10.rand.say.6",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_vow.ltr.lc_A..A.all.10.rand.say.6.json",
+      "tutor_data": "[file]akira_vow.ltr.lc_A..A.vow.10.rand.say.6.json",
       "cell_row": "3",
       "cell_column": "5",
-      "same": "akira:vow.ltr.lc:A..A.all.10.rand.say.6",
+      "same": "akira:vow.ltr.lc:A..A.vow.10.rand.say.6",
       "next": "story.hear::LC_Vowel_Song_1__it_1",
       "next_next": "story.parrot::vow.A..Z.asc.lc.5__it_1",
       "prev": "bpop.ltr.lc:A..A.vow.rand.all.stat.noShow.12",
@@ -903,7 +903,7 @@
       "cell_column": "13",
       "same": "bpop.ltr.lc:E..E.vow.rand.all.stat.show.13",
       "next": "bpop.ltr.lc:E..E.vow.rand.all.stat.noShow.14",
-      "next_next": "akira:vow.ltr.lc:E..E.all.10.rand.say.7",
+      "next_next": "akira:vow.ltr.lc:E..E.vow.10.rand.say.7",
       "prev": "story.hear::LC_Vowel_Song_2__it_2",
       "harder": "bpop.ltr.uc:B..B.all.rand.all.stat.show.29",
       "easier": "story.hear::UC_Vowel_Song_1__it_3"
@@ -917,21 +917,21 @@
       "cell_row": "3",
       "cell_column": "14",
       "same": "bpop.ltr.lc:E..E.vow.rand.all.stat.noShow.14",
-      "next": "akira:vow.ltr.lc:E..E.all.10.rand.say.7",
+      "next": "akira:vow.ltr.lc:E..E.vow.10.rand.say.7",
       "next_next": "story.hear::LC_Vowel_Song_1__it_2",
       "prev": "bpop.ltr.lc:E..E.vow.rand.all.stat.show.13",
       "harder": "bpop.ltr.uc:B..B.all.rand.all.stat.noShow.30",
       "easier": "bpop.ltr.uc:E..E.vow.rand.all.stat.show.3"
     },
-    "akira:vow.ltr.lc:E..E.all.10.rand.say.7": {
+    "akira:vow.ltr.lc:E..E.vow.10.rand.say.7": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:vow.ltr.lc:E..E.all.10.rand.say.7",
+      "tutor_id": "akira:vow.ltr.lc:E..E.vow.10.rand.say.7",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_vow.ltr.lc_E..E.all.10.rand.say.7.json",
+      "tutor_data": "[file]akira_vow.ltr.lc_E..E.vow.10.rand.say.7.json",
       "cell_row": "3",
       "cell_column": "15",
-      "same": "akira:vow.ltr.lc:E..E.all.10.rand.say.7",
+      "same": "akira:vow.ltr.lc:E..E.vow.10.rand.say.7",
       "next": "story.hear::LC_Vowel_Song_1__it_2",
       "next_next": "story.parrot::vow.A..Z.asc.lc.5__it_2",
       "prev": "bpop.ltr.lc:E..E.vow.rand.all.stat.noShow.14",
@@ -949,9 +949,9 @@
       "same": "story.hear::LC_Vowel_Song_1__it_1",
       "next": "story.parrot::vow.A..Z.asc.lc.5__it_1",
       "next_next": "story.echo::vow.A..Z.asc.lc.6__it_1",
-      "prev": "akira:vow.ltr.lc:A..A.all.10.rand.say.6",
+      "prev": "akira:vow.ltr.lc:A..A.vow.10.rand.say.6",
       "harder": "story.parrot::all.A..Z.asc.uc.3__it_1",
-      "easier": "akira:vow.ltr.uc:A..A.all.10.rand.say.1"
+      "easier": "akira:vow.ltr.uc:A..A.vow.10.rand.say.1"
     },
     "story.hear::LC_Vowel_Song_1__it_2": {
       "type": "TRANSITION",
@@ -964,9 +964,9 @@
       "same": "story.hear::LC_Vowel_Song_1__it_2",
       "next": "story.parrot::vow.A..Z.asc.lc.5__it_2",
       "next_next": "story.echo::vow.A..Z.asc.lc.6__it_2",
-      "prev": "akira:vow.ltr.lc:E..E.all.10.rand.say.7",
+      "prev": "akira:vow.ltr.lc:E..E.vow.10.rand.say.7",
       "harder": "story.parrot::all.A..Z.asc.uc.3__it_2",
-      "easier": "akira:vow.ltr.uc:E..E.all.10.rand.say.2"
+      "easier": "akira:vow.ltr.uc:E..E.vow.10.rand.say.2"
     },
     "story.parrot::vow.A..Z.asc.lc.5__it_1": {
       "type": "TRANSITION",
@@ -1113,7 +1113,7 @@
       "cell_column": "23",
       "same": "bpop.ltr.lc:I..I.vow.rand.all.stat.show.15",
       "next": "bpop.ltr.lc:I..I.vow.rand.all.stat.noShow.16",
-      "next_next": "akira:vow.ltr.lc:I..I.all.10.rand.say.8",
+      "next_next": "akira:vow.ltr.lc:I..I.vow.10.rand.say.8",
       "prev": "story.hear::LC_Vowel_Song_2__it_3",
       "harder": "bpop.ltr.uc:CH..CH.all.rand.all.stat.show.31",
       "easier": "bpop.ltr.uc:I..I.vow.rand.all.stat.show.5"
@@ -1127,26 +1127,26 @@
       "cell_row": "3",
       "cell_column": "24",
       "same": "bpop.ltr.lc:I..I.vow.rand.all.stat.noShow.16",
-      "next": "akira:vow.ltr.lc:I..I.all.10.rand.say.8",
+      "next": "akira:vow.ltr.lc:I..I.vow.10.rand.say.8",
       "next_next": "story.hear::LC_Vowel_Song_1__it_3",
       "prev": "bpop.ltr.lc:I..I.vow.rand.all.stat.show.15",
       "harder": "bpop.ltr.uc:CH..CH.all.rand.all.stat.noShow.32",
       "easier": "bpop.ltr.uc:I..I.vow.rand.all.stat.noShow.6"
     },
-    "akira:vow.ltr.lc:I..I.all.10.rand.say.8": {
+    "akira:vow.ltr.lc:I..I.vow.10.rand.say.8": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:vow.ltr.lc:I..I.all.10.rand.say.8",
+      "tutor_id": "akira:vow.ltr.lc:I..I.vow.10.rand.say.8",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_vow.ltr.lc_I..I.all.10.rand.say.8.json",
+      "tutor_data": "[file]akira_vow.ltr.lc_I..I.vow.10.rand.say.8.json",
       "cell_row": "3",
       "cell_column": "25",
-      "same": "akira:vow.ltr.lc:I..I.all.10.rand.say.8",
+      "same": "akira:vow.ltr.lc:I..I.vow.10.rand.say.8",
       "next": "story.hear::LC_Vowel_Song_1__it_3",
       "next_next": "story.parrot::vow.A..Z.asc.lc.5__it_3",
       "prev": "bpop.ltr.lc:I..I.vow.rand.all.stat.noShow.16",
       "harder": "akira:all.ltr.uc:CH..CH.all.10.rand.say.17",
-      "easier": "akira:vow.ltr.uc:I..I.all.10.rand.say.3"
+      "easier": "akira:vow.ltr.uc:I..I.vow.10.rand.say.3"
     },
     "story.hear::LC_Vowel_Song_1__it_3": {
       "type": "TRANSITION",
@@ -1159,7 +1159,7 @@
       "same": "story.hear::LC_Vowel_Song_1__it_3",
       "next": "story.parrot::vow.A..Z.asc.lc.5__it_3",
       "next_next": "story.echo::vow.A..Z.asc.lc.6__it_3",
-      "prev": "akira:vow.ltr.lc:I..I.all.10.rand.say.8",
+      "prev": "akira:vow.ltr.lc:I..I.vow.10.rand.say.8",
       "harder": "story.parrot::all.A..Z.asc.uc.3__it_3",
       "easier": "story.hear::UC_Vowel_Song_1__it_5"
     },
@@ -1248,7 +1248,7 @@
       "cell_column": "33",
       "same": "bpop.ltr.lc:O..O.vow.rand.all.stat.show.17",
       "next": "bpop.ltr.lc:O..O.vow.rand.all.stat.noShow.18",
-      "next_next": "akira:vow.ltr.lc:O..O.all.10.rand.say.9",
+      "next_next": "akira:vow.ltr.lc:O..O.vow.10.rand.say.9",
       "prev": "story.hear::LC_Vowel_Song_2__it_4",
       "harder": "bpop.ltr.uc:D..D.all.rand.all.stat.show.33",
       "easier": "bpop.ltr.uc:O..O.vow.rand.all.stat.noShow.8"
@@ -1262,21 +1262,21 @@
       "cell_row": "3",
       "cell_column": "34",
       "same": "bpop.ltr.lc:O..O.vow.rand.all.stat.noShow.18",
-      "next": "akira:vow.ltr.lc:O..O.all.10.rand.say.9",
+      "next": "akira:vow.ltr.lc:O..O.vow.10.rand.say.9",
       "next_next": "story.hear::LC_Vowel_Song_1__it_4",
       "prev": "bpop.ltr.lc:O..O.vow.rand.all.stat.show.17",
       "harder": "bpop.ltr.uc:D..D.all.rand.all.stat.noShow.34",
-      "easier": "akira:vow.ltr.uc:O..O.all.10.rand.say.4"
+      "easier": "akira:vow.ltr.uc:O..O.vow.10.rand.say.4"
     },
-    "akira:vow.ltr.lc:O..O.all.10.rand.say.9": {
+    "akira:vow.ltr.lc:O..O.vow.10.rand.say.9": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:vow.ltr.lc:O..O.all.10.rand.say.9",
+      "tutor_id": "akira:vow.ltr.lc:O..O.vow.10.rand.say.9",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_vow.ltr.lc_O..O.all.10.rand.say.9.json",
+      "tutor_data": "[file]akira_vow.ltr.lc_O..O.vow.10.rand.say.9.json",
       "cell_row": "3",
       "cell_column": "35",
-      "same": "akira:vow.ltr.lc:O..O.all.10.rand.say.9",
+      "same": "akira:vow.ltr.lc:O..O.vow.10.rand.say.9",
       "next": "story.hear::LC_Vowel_Song_1__it_4",
       "next_next": "story.parrot::vow.A..Z.asc.lc.5__it_4",
       "prev": "bpop.ltr.lc:O..O.vow.rand.all.stat.noShow.18",
@@ -1294,7 +1294,7 @@
       "same": "story.hear::LC_Vowel_Song_1__it_4",
       "next": "story.parrot::vow.A..Z.asc.lc.5__it_4",
       "next_next": "story.echo::vow.A..Z.asc.lc.6__it_4",
-      "prev": "akira:vow.ltr.lc:O..O.all.10.rand.say.9",
+      "prev": "akira:vow.ltr.lc:O..O.vow.10.rand.say.9",
       "harder": "story.parrot::all.A..Z.asc.uc.3__it_4",
       "easier": "story.parrot::vow.A..Z.asc.uc.1__it_4"
     },
@@ -1383,10 +1383,10 @@
       "cell_column": "43",
       "same": "bpop.ltr.lc:U..U.vow.rand.all.stat.show.19",
       "next": "bpop.ltr.lc:U..U.vow.rand.all.stat.noShow.20",
-      "next_next": "akira:vow.ltr.lc:U..U.all.10.rand.say.10",
+      "next_next": "akira:vow.ltr.lc:U..U.vow.10.rand.say.10",
       "prev": "story.hear::LC_Vowel_Song_2__it_5",
       "harder": "bpop.ltr.uc:E..E.all.rand.all.stat.show.35",
-      "easier": "akira:vow.ltr.uc:U..U.all.10.rand.say.5"
+      "easier": "akira:vow.ltr.uc:U..U.vow.10.rand.say.5"
     },
     "bpop.ltr.lc:U..U.vow.rand.all.stat.noShow.20": {
       "type": "TRANSITION",
@@ -1397,21 +1397,21 @@
       "cell_row": "3",
       "cell_column": "44",
       "same": "bpop.ltr.lc:U..U.vow.rand.all.stat.noShow.20",
-      "next": "akira:vow.ltr.lc:U..U.all.10.rand.say.10",
+      "next": "akira:vow.ltr.lc:U..U.vow.10.rand.say.10",
       "next_next": "story.hear::LC_Vowel_Song_1__it_5",
       "prev": "bpop.ltr.lc:U..U.vow.rand.all.stat.show.19",
       "harder": "bpop.ltr.uc:E..E.all.rand.all.stat.noShow.36",
       "easier": "story.hear::UC_Vowel_Song_1__it_7"
     },
-    "akira:vow.ltr.lc:U..U.all.10.rand.say.10": {
+    "akira:vow.ltr.lc:U..U.vow.10.rand.say.10": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:vow.ltr.lc:U..U.all.10.rand.say.10",
+      "tutor_id": "akira:vow.ltr.lc:U..U.vow.10.rand.say.10",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_vow.ltr.lc_U..U.all.10.rand.say.10.json",
+      "tutor_data": "[file]akira_vow.ltr.lc_U..U.vow.10.rand.say.10.json",
       "cell_row": "3",
       "cell_column": "45",
-      "same": "akira:vow.ltr.lc:U..U.all.10.rand.say.10",
+      "same": "akira:vow.ltr.lc:U..U.vow.10.rand.say.10",
       "next": "story.hear::LC_Vowel_Song_1__it_5",
       "next_next": "story.parrot::vow.A..Z.asc.lc.5__it_5",
       "prev": "bpop.ltr.lc:U..U.vow.rand.all.stat.noShow.20",
@@ -1429,7 +1429,7 @@
       "same": "story.hear::LC_Vowel_Song_1__it_5",
       "next": "story.parrot::vow.A..Z.asc.lc.5__it_5",
       "next_next": "story.echo::vow.A..Z.asc.lc.6__it_5",
-      "prev": "akira:vow.ltr.lc:U..U.all.10.rand.say.10",
+      "prev": "akira:vow.ltr.lc:U..U.vow.10.rand.say.10",
       "harder": "story.parrot::all.A..Z.asc.uc.3__it_5",
       "easier": "story.echo::vow.A..Z.asc.uc.2__it_5"
     },
@@ -1518,10 +1518,10 @@
       "cell_column": "52",
       "same": "write.ltr.lc:vow.asc.A..Z.5",
       "next": "write.ltr.lc.dic:vow.asc.A..Z.6",
-      "next_next": "akira:vow.ltr.lc:A..Z.all.5.asc.say.12",
+      "next_next": "akira:vow.ltr.lc:A..Z.vow.5.asc.say.12",
       "prev": "write.ltr.lc.trc:vow.asc.A..Z.4",
       "harder": "story.parrot::ltr-F.rand.21",
-      "easier": "akira:vow.ltr.uc:A..Z.all.5.asc.say.11"
+      "easier": "akira:vow.ltr.uc:A..Z.vow.5.asc.say.11"
     },
     "write.ltr.lc.dic:vow.asc.A..Z.6": {
       "type": "TRANSITION",
@@ -1532,21 +1532,21 @@
       "cell_row": "3",
       "cell_column": "53",
       "same": "write.ltr.lc.dic:vow.asc.A..Z.6",
-      "next": "akira:vow.ltr.lc:A..Z.all.5.asc.say.12",
+      "next": "akira:vow.ltr.lc:A..Z.vow.5.asc.say.12",
       "next_next": "bpop.ltr.lc:A..Z.vow.asc.all.stat.noShow.26",
       "prev": "write.ltr.lc:vow.asc.A..Z.5",
       "harder": "bpop.ltr.uc:F..F.all.rand.all.stat.show.37",
       "easier": "bpop.ltr.uc:A..Z.vow.asc.all.stat.noShow.25"
     },
-    "akira:vow.ltr.lc:A..Z.all.5.asc.say.12": {
+    "akira:vow.ltr.lc:A..Z.vow.5.asc.say.12": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:vow.ltr.lc:A..Z.all.5.asc.say.12",
+      "tutor_id": "akira:vow.ltr.lc:A..Z.vow.5.asc.say.12",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_vow.ltr.lc_A..Z.all.5.asc.say.12.json",
+      "tutor_data": "[file]akira_vow.ltr.lc_A..Z.vow.5.asc.say.12.json",
       "cell_row": "3",
       "cell_column": "54",
-      "same": "akira:vow.ltr.lc:A..Z.all.5.asc.say.12",
+      "same": "akira:vow.ltr.lc:A..Z.vow.5.asc.say.12",
       "next": "bpop.ltr.lc:A..Z.vow.asc.all.stat.noShow.26",
       "next_next": "story.hear::letters_alphabet_song__it_1",
       "prev": "write.ltr.lc.dic:vow.asc.A..Z.6",
@@ -1564,7 +1564,7 @@
       "same": "bpop.ltr.lc:A..Z.vow.asc.all.stat.noShow.26",
       "next": "story.hear::letters_alphabet_song__it_1",
       "next_next": "story.hear::ABCDEFG_EnglishTune_UpperCase__it_1",
-      "prev": "akira:vow.ltr.lc:A..Z.all.5.asc.say.12",
+      "prev": "akira:vow.ltr.lc:A..Z.vow.5.asc.say.12",
       "harder": "akira:all.ltr.uc:F..F.all.10.rand.say.20",
       "easier": "bpop.ltr.uc:A..Z.vow.asc.all.stat.noShow.25"
     },
@@ -1641,7 +1641,7 @@
       "next_next": "story.echo::all.A..Z.asc.uc.4__it_1",
       "prev": "bpop.ltr.uc:A..A.all.rand.all.stat.noShow.28",
       "harder": "story.parrot::all.A..Z.asc.lc.7__it_1",
-      "easier": "akira:vow.ltr.lc:A..A.all.10.rand.say.6"
+      "easier": "akira:vow.ltr.lc:A..A.vow.10.rand.say.6"
     },
     "story.hear::letters_alphabet_song__it_1": {
       "type": "TRANSITION",
@@ -1761,7 +1761,7 @@
       "next_next": "story.echo::all.A..Z.asc.uc.4__it_2",
       "prev": "bpop.ltr.uc:B..B.all.rand.all.stat.noShow.30",
       "harder": "story.parrot::all.A..Z.asc.lc.7__it_2",
-      "easier": "akira:vow.ltr.lc:E..E.all.10.rand.say.7"
+      "easier": "akira:vow.ltr.lc:E..E.vow.10.rand.say.7"
     },
     "story.parrot::all.A..Z.asc.uc.3__it_1": {
       "type": "TRANSITION",
@@ -1971,7 +1971,7 @@
       "next_next": "story.echo::all.A..Z.asc.uc.4__it_3",
       "prev": "bpop.ltr.uc:CH..CH.all.rand.all.stat.noShow.32",
       "harder": "story.parrot::all.A..Z.asc.lc.7__it_3",
-      "easier": "akira:vow.ltr.lc:I..I.all.10.rand.say.8"
+      "easier": "akira:vow.ltr.lc:I..I.vow.10.rand.say.8"
     },
     "story.parrot::all.A..Z.asc.uc.3__it_3": {
       "type": "TRANSITION",
@@ -2121,7 +2121,7 @@
       "next_next": "story.echo::all.A..Z.asc.uc.4__it_4",
       "prev": "bpop.ltr.uc:D..D.all.rand.all.stat.noShow.34",
       "harder": "story.parrot::all.A..Z.asc.lc.7__it_4",
-      "easier": "akira:vow.ltr.lc:O..O.all.10.rand.say.9"
+      "easier": "akira:vow.ltr.lc:O..O.vow.10.rand.say.9"
     },
     "story.parrot::all.A..Z.asc.uc.3__it_4": {
       "type": "TRANSITION",
@@ -2286,7 +2286,7 @@
       "next_next": "story.echo::all.A..Z.asc.uc.4__it_5",
       "prev": "bpop.ltr.uc:E..E.all.rand.all.stat.noShow.36",
       "harder": "story.parrot::all.A..Z.asc.lc.7__it_5",
-      "easier": "akira:vow.ltr.lc:U..U.all.10.rand.say.10"
+      "easier": "akira:vow.ltr.lc:U..U.vow.10.rand.say.10"
     },
     "story.parrot::all.A..Z.asc.uc.3__it_5": {
       "type": "TRANSITION",
@@ -2421,7 +2421,7 @@
       "next_next": "story.parrot::all.A..Z.asc.uc.3__it_6",
       "prev": "bpop.ltr.uc:F..F.all.rand.all.stat.show.37",
       "harder": "akira:all.ltr.lc:F..F.all.10.rand.say.44",
-      "easier": "akira:vow.ltr.lc:A..Z.all.5.asc.say.12"
+      "easier": "akira:vow.ltr.lc:A..Z.vow.5.asc.say.12"
     },
     "akira:all.ltr.uc:F..F.all.10.rand.say.20": {
       "type": "TRANSITION",
