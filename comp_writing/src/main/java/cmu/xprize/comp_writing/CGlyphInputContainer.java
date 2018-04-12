@@ -129,6 +129,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     public static String          RECMSG = "CHAR_RECOG";
 
     private boolean               mHasGlyph = false;
+    private boolean               mIsStimulus = false; // For write.missingLtr: To make Glyph behave as simple text stimulus.
 
     private boolean               _DEVMODE = false;             // Used in GlyphRecognizer project to update metrics etc.
 
@@ -625,9 +626,14 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         float width  = _widthBnds.width();
         float height = _heightBnds.height();
 
-        _aspect = width / height;
+        if (mIsStimulus) {
+            // This is for write.missingLtr: To make Stimulus text narrower.
+            _aspect = .45f;
+        } else {
+            _aspect = width / height; //.7f;
+        }
 
-        return _aspect; //.7f;
+        return _aspect;
     }
 
 
@@ -690,135 +696,149 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         super.onDraw(canvas);
 
-        // Display the background box.
-        //
-        if(!mHasGlyph) {
+        if(mIsStimulus) {
+            mPaint.setStrokeWidth(1);
+            mPaint.setAlpha(255);
+            mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+            mPaint.setColor(Color.BLACK);
+            mPaint.setTextSize(380);
 
-            RectF viewBndsF = new RectF(_viewBnds);
-            viewBndsF.inset(GCONST.LINE_WEIGHT / 2, GCONST.LINE_WEIGHT / 2);
-
-            mPaintBG.setStyle(Paint.Style.FILL);
-            mPaintBG.setColor(Color.WHITE);
-            canvas.drawRoundRect(viewBndsF, GCONST.CORNER_RAD, GCONST.CORNER_RAD, mPaintBG);
-
-            mPaintBG.setStyle(Paint.Style.STROKE);
-            mPaintBG.setStrokeWidth(GCONST.LINE_WEIGHT);
-            mPaintBG.setColor(_boxColor);
-            canvas.drawRoundRect(viewBndsF, GCONST.CORNER_RAD, GCONST.CORNER_RAD, mPaintBG);
-        }
-
-        // Set the lower case upper boundry line
-        //
-        if(_drawUpper) {
-            Path linePath = new Path();
-            linePath.moveTo(0, _topLine);
-            linePath.lineTo(getWidth(), _topLine);
-            canvas.drawPath(linePath, mPaintUpper);
-        }
-
-        if(_drawBase) {
-
-            // We want the baseline to appear to be continuous.  However the baseline should not
-            // extend past the last character in the string.
-            //
-            canvas.getClipBounds(_clipRect);
-
-            int extension = _isLast? 0:_clipRect.width()/2;
-
-            canvas.save();
-            _clipRect.right += extension;
-            canvas.clipRect(_clipRect, Region.Op.REPLACE);
-
-            canvas.drawLine(0, _baseLine, _clipRect.width(), _baseLine, mPaintBase);
-            canvas.restore();
-        }
-
-        mPaint.setStrokeWidth(1);
-        mPaint.setAlpha(255);
-        mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-
-        if(_bitmapDirty) {
-            _bitmapDirty = false;
-
-            if(_showUserGlyph)
-                _drawGlyph = _userGlyph;
-            else
-                _drawGlyph = _protoGlyph;
-
-            if(_drawGlyph != null) {
-
-                _bitmap = _drawGlyph.getMetric().generateVisualComparison(_fontBnds, _sampleExpected, _drawGlyph, mPaint, _stroke_weight, false);
-
-                canvas.drawBitmap(_bitmap, _fontCharBnds.left, _fontCharBnds.top, null);
-            }
-            return;
-        }
-
-        // Draw the prototype char - adjusted for off-origin alignment - i.e. the font character
-        // may be created so it's left edge doesn't align with x=0
-        //
-        if(_sampleExpected != "" && _showSampleChar) {
             getFontCharBounds(_sampleExpected);
-
-            mPaint.setColor(WR_CONST.SAMPLE_COLOR);
             canvas.drawText(_sampleExpected, _sampleHorzAdjusted, _sampleVertAdjusted, mPaint);
-        }
+            mPaint.setAlpha(255);
 
-        mPaint.setAlpha(255);
-
-        if(DBG) {
-
-            // The getStroke is switching to strokeandfill spontaneously
-            // This is an attempt to mitigate
-            // Using existing Paint with forced STROKE was not successful
+        } else {
+            // Display the background box.
             //
-            mPaintDBG = new Paint();
+            if(!mHasGlyph) {
 
-            mPaintDBG.setStyle(Paint.Style.STROKE);
-            mPaintDBG.setStrokeJoin(Paint.Join.ROUND);
-            mPaintDBG.setStrokeCap(Paint.Cap.ROUND);
-            mPaintDBG.setStrokeWidth(4);
-            mPaintDBG.setAntiAlias(true);
+                RectF viewBndsF = new RectF(_viewBnds);
+                viewBndsF.inset(GCONST.LINE_WEIGHT / 2, GCONST.LINE_WEIGHT / 2);
 
-            mPaintDBG.setStyle(Paint.Style.STROKE);
-            mPaintDBG.setColor(Color.BLUE);
-            canvas.drawRect(_viewBnds, mPaintDBG);
+                mPaintBG.setStyle(Paint.Style.FILL);
+                mPaintBG.setColor(Color.WHITE);
+                canvas.drawRoundRect(viewBndsF, GCONST.CORNER_RAD, GCONST.CORNER_RAD, mPaintBG);
 
-            mPaintDBG.setStyle(Paint.Style.STROKE);
-            mPaintDBG.setColor(Color.MAGENTA);
-            canvas.drawRect(_fontBnds, mPaintDBG);
+                mPaintBG.setStyle(Paint.Style.STROKE);
+                mPaintBG.setStrokeWidth(GCONST.LINE_WEIGHT);
+                mPaintBG.setColor(_boxColor);
+                canvas.drawRoundRect(viewBndsF, GCONST.CORNER_RAD, GCONST.CORNER_RAD, mPaintBG);
+            }
 
-            mPaintDBG.setStyle(Paint.Style.STROKE);
-            mPaintDBG.setColor(Color.RED);
-            canvas.drawRect(_fontCharBnds, mPaintDBG);
-
-            // This is the inflated font bounds to encompass the stroke weight
+            // Set the lower case upper boundry line
             //
-            if(_showUserGlyph && _userGlyph != null) {
+            if(_drawUpper) {
+                Path linePath = new Path();
+                linePath.moveTo(0, _topLine);
+                linePath.lineTo(getWidth(), _topLine);
+                canvas.drawPath(linePath, mPaintUpper);
+            }
+
+            if(_drawBase) {
+
+                // We want the baseline to appear to be continuous.  However the baseline should not
+                // extend past the last character in the string.
+                //
+                canvas.getClipBounds(_clipRect);
+
+                int extension = _isLast ? 0 : _clipRect.width()/2;
+
+                canvas.save();
+                _clipRect.right += extension;
+                canvas.clipRect(_clipRect, Region.Op.REPLACE);
+
+                canvas.drawLine(0, _baseLine, _clipRect.width(), _baseLine, mPaintBase);
+                canvas.restore();
+            }
+
+            mPaint.setStrokeWidth(1);
+            mPaint.setAlpha(255);
+            mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+
+            if(_bitmapDirty) {
+                _bitmapDirty = false;
+
+                if(_showUserGlyph)
+                    _drawGlyph = _userGlyph;
+                else
+                    _drawGlyph = _protoGlyph;
+
+                if(_drawGlyph != null) {
+
+                    _bitmap = _drawGlyph.getMetric().generateVisualComparison(_fontBnds, _sampleExpected, _drawGlyph, mPaint, _stroke_weight, false);
+
+                    canvas.drawBitmap(_bitmap, _fontCharBnds.left, _fontCharBnds.top, null);
+                }
+                return;
+            }
+
+            // Draw the prototype char - adjusted for off-origin alignment - i.e. the font character
+            // may be created so it's left edge doesn't align with x=0
+            //
+            if(_sampleExpected != "" && _showSampleChar) {
+                getFontCharBounds(_sampleExpected);
+
+                mPaint.setColor(WR_CONST.SAMPLE_COLOR);
+                canvas.drawText(_sampleExpected, _sampleHorzAdjusted, _sampleVertAdjusted, mPaint);
+            }
+
+            mPaint.setAlpha(255);
+
+            if(DBG) {
+
+                // The getStroke is switching to strokeandfill spontaneously
+                // This is an attempt to mitigate
+                // Using existing Paint with forced STROKE was not successful
+                //
+                mPaintDBG = new Paint();
+
+                mPaintDBG.setStyle(Paint.Style.STROKE);
+                mPaintDBG.setStrokeJoin(Paint.Join.ROUND);
+                mPaintDBG.setStrokeCap(Paint.Cap.ROUND);
+                mPaintDBG.setStrokeWidth(4);
+                mPaintDBG.setAntiAlias(true);
+
+                mPaintDBG.setStyle(Paint.Style.STROKE);
+                mPaintDBG.setColor(Color.BLUE);
+                canvas.drawRect(_viewBnds, mPaintDBG);
+
                 mPaintDBG.setStyle(Paint.Style.STROKE);
                 mPaintDBG.setColor(Color.MAGENTA);
-                canvas.drawRect(_userGlyph.getGlyphViewBounds(_viewBnds, _stroke_weight), mPaintDBG);
+                canvas.drawRect(_fontBnds, mPaintDBG);
+
+                mPaintDBG.setStyle(Paint.Style.STROKE);
+                mPaintDBG.setColor(Color.RED);
+                canvas.drawRect(_fontCharBnds, mPaintDBG);
+
+                // This is the inflated font bounds to encompass the stroke weight
+                //
+                if(_showUserGlyph && _userGlyph != null) {
+                    mPaintDBG.setStyle(Paint.Style.STROKE);
+                    mPaintDBG.setColor(Color.MAGENTA);
+                    canvas.drawRect(_userGlyph.getGlyphViewBounds(_viewBnds, _stroke_weight), mPaintDBG);
+                }
             }
-        }
 
-        mPaint.setColor(_glyphColor);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeWidth(_stroke_weight);
+            mPaint.setColor(_glyphColor);
+            mPaint.setStyle(Paint.Style.STROKE);
+            mPaint.setStrokeWidth(_stroke_weight);
 
-        // Redraw the current glyph path
-        //
-        if(_showUserGlyph && _userGlyph != null) {
-            _userGlyph.drawGylyph(canvas,  mPaint, _viewBnds);
-        }
+            // Redraw the current glyph path
+            //
+            if(_showUserGlyph && _userGlyph != null) {
+                _userGlyph.drawGylyph(canvas,  mPaint, _viewBnds);
+            }
 
-        // Redraw the current prototype glyph path
-        //
-        if(_showProtoGlyph && _protoGlyph != null) {
-            _protoGlyph.drawGylyph(canvas,  mPaint, _viewBnds);
-        }
+            // Redraw the current prototype glyph path
+            //
+            if(_showProtoGlyph && _protoGlyph != null) {
+                _protoGlyph.drawGylyph(canvas,  mPaint, _viewBnds);
+            }
 
-        if(_isDrawing) {
-            _drawGlyph.drawGylyph(canvas,  mPaint, _viewBnds);
+            if(_isDrawing) {
+                _drawGlyph.drawGylyph(canvas,  mPaint, _viewBnds);
+            }
+
         }
 
     }
@@ -879,6 +899,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                 }
             }
         }
+
     }
 
 
@@ -1257,6 +1278,17 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         _correct = correct;
     }
 
+    // For write.missingLtr: To make Glyph behave as simple text stimulus.
+    public void setIsStimulus() {
+
+        mIsStimulus = true;
+        this.setOnTouchListener(null);
+    }
+
+    public boolean checkIsStimulus() {
+
+        return mIsStimulus;
+    }
 
     public void setExpectedChar(String protoChar) {
 
@@ -1318,7 +1350,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                     clear();
         }
         else {
-            if(!mHasGlyph)
+            if(!mHasGlyph && !mIsStimulus)
                this.setOnTouchListener(this);
 
             Log.v(GRAPH_MSG, "CGlyphInputContainer.inhibitInput: UN-mute: " + _sampleExpected);
