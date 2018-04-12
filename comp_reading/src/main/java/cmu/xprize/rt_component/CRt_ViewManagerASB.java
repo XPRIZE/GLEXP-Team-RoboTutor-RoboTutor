@@ -102,14 +102,14 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private int                     attemptNum = 1;
     private boolean                 storyBooting;
 
-    private String                  wordsToDisplay[];                    // current sentence words to display - contain punctuation
-    private String                  wordsToSpeak[];                      // current sentence words to hear
+    private String[]                wordsToDisplay;                      // current sentence words to display - contain punctuation
+    private String[]                wordsToSpeak;                        // current sentence words to hear
     private ArrayList<String>       wordsToListenFor;                    // current sentence words to build language model
     private String                  hearRead;
     private Boolean                 echo = false;
 
     private CASB_Narration[]        rawNarration;                        // The narration segmentation info for the active sentence
-    private String                  rawSentence;                         //currently displayed sentence that need to be recognized
+    private String                  rawSentence;                         // currently displayed sentence that need to be recognized
     private CASB_Seg                narrationSegment;
     private String[]                splitSegment;
     private int                     splitIndex = TCONST.INITSPLIT;
@@ -155,7 +155,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     public String        prompt;
     public String        parser;
     // ZZZ the money
-    public CASB_data     data[];
+    public CASB_data[]   data;
 
 
     static final String TAG = "CRt_ViewManagerASB";
@@ -1504,6 +1504,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 attemptNum = 0;
                 result = true;
             }
+            mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord - 1, heardWords[mHeardWord - 1], attemptNum, result);
         }
 
         // Publish the outcome
@@ -1530,7 +1531,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         boolean result    = true;
         String  logString = "";
 
-
         try {
             for (int i = 0; i < heardWords.length; i++) {
                 if (heardWords[i] != null) {
@@ -1540,8 +1540,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 }
             }
 
-            while ((mCurrWord  < wordsToSpeak.length) &&
-                   (mHeardWord < heardWords.length)) {
+            while ((mCurrWord < wordsToSpeak.length) && (mHeardWord < heardWords.length)) {
 
                 if (wordsToSpeak[mCurrWord].equals(heardWords[mHeardWord].hypWord)) {
 
@@ -1553,6 +1552,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                     Log.i("ASR", "RIGHT");
                     attemptNum = 0;
                     result = true;
+                    mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord - 1, heardWords[mHeardWord - 1].hypWord, attemptNum, result);
+
                 } else {
 
                     mListener.setPauseListener(true);
@@ -1560,6 +1561,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                     Log.i("ASR", "WRONG");
                     attemptNum++;
                     result = false;
+                    mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord,  heardWords[mHeardWord].hypWord, attemptNum, result);
                     break;
                 }
             }
@@ -1571,8 +1573,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             mParent.UpdateValue(result);
 
             mParent.onASREvent(TCONST.RECOGNITION_EVENT);
-        }
-        catch(Exception e) {
+
+        } catch (Exception e) {
 
             Log.e("ASR", "onUpdate Fault: " + e);
         }
@@ -1623,7 +1625,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     }
 
 
-
     //************ Serialization
 
 
@@ -1637,7 +1638,4 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
     }
-
 }
-
-

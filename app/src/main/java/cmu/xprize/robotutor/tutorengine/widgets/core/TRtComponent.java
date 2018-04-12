@@ -81,9 +81,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     private HashMap<String,Integer> _IntegerVar = new HashMap<>();
     private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
 
-    
     static private String TAG = "TRtComponent";
-
 
     public TRtComponent(Context context) {
         super(context);
@@ -93,7 +91,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         super(context, attrs);
     }
 
-    
 
     @Override
     public void init(Context context, AttributeSet attrs) {
@@ -113,7 +110,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     public void onDestroy() {
         super.onDestroy();
         mSceneObject.onDestroy();
-        trackAndLogPerformance("END");
+        trackAndLogPerformance("END", true);
     }
 
 
@@ -141,20 +138,21 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         //
         Integer eventType = ASREventMap.get(event);
 
-        if(eventType != null) switch(eventType) {
+        if (eventType != null)
+            switch (eventType) {
 
-            case TCONST.SILENCE_EVENT:
-            case TCONST.SOUND_EVENT:
-            case TCONST.WORD_EVENT:
+                case TCONST.SILENCE_EVENT:
+                case TCONST.SOUND_EVENT:
+                case TCONST.WORD_EVENT:
 
-                if (behavior.toUpperCase().equals(TCONST.NULL)) {
+                    if (behavior.toUpperCase().equals(TCONST.NULL)) {
 
-                    mListener.resetStaticEvent(eventType);
-                } else {
-                    mListener.configStaticEvent(eventType);
-                }
-                break;
-        }
+                        mListener.resetStaticEvent(eventType);
+                    } else {
+                        mListener.configStaticEvent(eventType);
+                    }
+                    break;
+            }
     }
 
 
@@ -174,21 +172,22 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         //
         Integer eventType = ASREventMap.get(event);
 
-        if(eventType != null) switch (eventType) {
+        if (eventType != null)
+            switch (eventType) {
 
-            case TCONST.TIMEDSILENCE_EVENT:
-            case TCONST.TIMEDSOUND_EVENT:
-            case TCONST.TIMEDWORD_EVENT:
+                case TCONST.TIMEDSILENCE_EVENT:
+                case TCONST.TIMEDSOUND_EVENT:
+                case TCONST.TIMEDWORD_EVENT:
 
-                if (behavior.toUpperCase().equals(TCONST.NULL)) {
+                    if (behavior.toUpperCase().equals(TCONST.NULL)) {
 
-                    mListener.resetTimedEvent(eventType);
-                }
-                else {
-                    mListener.configTimedEvent(eventType, timeout);
-                }
-                break;
-        }
+                        mListener.resetTimedEvent(eventType);
+                    }
+                    else {
+                        mListener.configTimedEvent(eventType, timeout);
+                    }
+                    break;
+            }
     }
 
 
@@ -211,21 +210,22 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         //
         Integer eventType = ASREventMap.get(event);
 
-        if(eventType != null) switch(eventType) {
+        if (eventType != null)
+            switch(eventType) {
 
-            case TCONST.SILENCE_EVENT:
-            case TCONST.SOUND_EVENT:
-            case TCONST.WORD_EVENT:
+                case TCONST.SILENCE_EVENT:
+                case TCONST.SOUND_EVENT:
+                case TCONST.WORD_EVENT:
 
-                if (behavior.toUpperCase().equals(TCONST.NULL)) {
+                    if (behavior.toUpperCase().equals(TCONST.NULL)) {
 
-                    mListener.resetStaticEvent(eventType);
-                }
-                else {
-                    mListener.configStaticEvent(eventType);
-                }
-                break;
-        }
+                        mListener.resetStaticEvent(eventType);
+                    }
+                    else {
+                        mListener.configStaticEvent(eventType);
+                    }
+                    break;
+            }
     }
 
 
@@ -245,21 +245,22 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         //
         Integer eventType = ASREventMap.get(event);
 
-        if(eventType != null) switch(eventType) {
+        if (eventType != null)
+            switch(eventType) {
 
-            case TCONST.TIMEDSILENCE_EVENT:
-            case TCONST.TIMEDSOUND_EVENT:
-            case TCONST.TIMEDWORD_EVENT:
+                case TCONST.TIMEDSILENCE_EVENT:
+                case TCONST.TIMEDSOUND_EVENT:
+                case TCONST.TIMEDWORD_EVENT:
 
-                if (behavior.toUpperCase().equals(TCONST.NULL)) {
+                    if (behavior.toUpperCase().equals(TCONST.NULL)) {
 
-                    mListener.resetTimedEvent(eventType);
-                }
-                else {
-                    mListener.configTimedEvent(eventType, timeout);
-                }
-                break;
-        }
+                        mListener.resetTimedEvent(eventType);
+                    }
+                    else {
+                        mListener.configTimedEvent(eventType, timeout);
+                    }
+                    break;
+            }
     }
 
 
@@ -315,7 +316,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
                     RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehaviornode,type:" + obj.getType() + ",behavior:" + nodeName);
 
-                    switch(obj.getType()) {
+                    switch (obj.getType()) {
 
                         case TCONST.SUBGRAPH:
 
@@ -333,14 +334,14 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                         //
                         case TCONST.QUEUE:
 
-                            if(obj.testFeatures()) {
+                            if (obj.testFeatures()) {
                                 obj.applyNode();
                             }
                             break;
 
                         default:
 
-                            if(obj.testFeatures()) {
+                            if (obj.testFeatures()) {
                                 obj.preEnter();
                                 obj.applyNode();
                             }
@@ -364,12 +365,11 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     @Override
     public void onClick(View v) {
 
-        if(v == this) {
+        if (v == this) {
             Log.v(QGRAPH_MSG, "event.click: " + " view");
 
             applyBehavior(TCONST.ON_CLICK);
         }
-
     }
 
 
@@ -387,7 +387,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
     private void enableOnClickBehavior(String event, String behavior) {
 
-        if(event.toUpperCase().equals(TCONST.ON_CLICK)) {
+        if (event.toUpperCase().equals(TCONST.ON_CLICK)) {
 
             if (behavior.toUpperCase().equals(TCONST.NULL)) {
                 setOnClickListener(null);
@@ -410,7 +410,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
         Iterator<?> tObjects = map.entrySet().iterator();
 
-        while(tObjects.hasNext() ) {
+        while (tObjects.hasNext() ) {
 
             builder.append(',');
 
@@ -432,13 +432,13 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
         // Scan to build a list of active features
         //
-        while(tObjects.hasNext() ) {
+        while (tObjects.hasNext() ) {
 
             Map.Entry entry = (Map.Entry) tObjects.next();
 
             Boolean value = (Boolean) entry.getValue();
 
-            if(value) {
+            if (value) {
                 featureset.append(entry.getKey().toString() + ";");
             }
         }
@@ -446,7 +446,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         // If there are active features then trim the last ',' and add the
         // comma delimited list as the "$features" object.
         //
-        if(featureset.length() != 0) {
+        if (featureset.length() != 0) {
             featureset.deleteCharAt(featureset.length()-1);
 
             builder.append(",$features#" + featureset.toString());
@@ -565,9 +565,8 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 // ZZZ STORYSOURCEPATH contains storydata.json and images
                 // ZZZ EXTERN is... TCONST.EXTERN
                 loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
-            }
 
-            else if (dataNameDescriptor.startsWith(TCONST.SHARED_LITERACY)) {
+            } else if (dataNameDescriptor.startsWith(TCONST.SHARED_LITERACY)) {
                  // ZZZ 1: replace code in Transition Table to make it [sharedliteracy] (DONE)
                 String storyFolder = dataNameDescriptor.substring(TCONST.SHARED_LITERACY.length()).toLowerCase();
 
@@ -670,9 +669,8 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
                 configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
                 setStory(dataSource[storyIndex].storyName, TCONST.EXTERN);
-            }
 
-            else if (dataNameDescriptor.startsWith(TCONST.ASSETFILE)) {
+            } else if (dataNameDescriptor.startsWith(TCONST.ASSETFILE)) {
 
                 String dataFile = dataNameDescriptor.substring(TCONST.ASSETFILE.length());
 
@@ -732,7 +730,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
     @Override
     public void publishState() {
-
     }
 
     @Override
@@ -742,7 +739,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
         // update the response variable  "<ComponentName>.<varName>"
         mTutor.getScope().addUpdateVar(name() + varName, new TString(value));
-
     }
 
     @Override
@@ -752,7 +748,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
         // update the response variable  "<ComponentName>.<varName>"
         mTutor.getScope().addUpdateVar(name() + varName, new TInteger(value));
-
     }
 
     @Override
@@ -761,7 +756,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         // Add new features - no duplicates
         List<String> featArray = Arrays.asList(featureSet.split(","));
 
-        for(String feature : featArray) {
+        for (String feature : featArray) {
 
             publishFeature(feature);
         }
@@ -773,7 +768,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         // Add new features - no duplicates
         List<String> featArray = Arrays.asList(featureSet.split(","));
 
-        for(String feature : featArray) {
+        for (String feature : featArray) {
 
             retractFeature(feature);
         }
@@ -810,13 +805,13 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
         Iterator<?> tObjects = featureMap.entrySet().iterator();
 
-        while(tObjects.hasNext() ) {
+        while (tObjects.hasNext()) {
 
             Map.Entry entry = (Map.Entry) tObjects.next();
 
             Boolean active = (Boolean)entry.getValue();
 
-            if(active) {
+            if (active) {
                 String feature = (String)entry.getKey();
 
                 mTutor.addFeature(feature);
@@ -834,13 +829,13 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
         Iterator<?> tObjects = featureMap.entrySet().iterator();
 
-        while(tObjects.hasNext() ) {
+        while (tObjects.hasNext()) {
 
             Map.Entry entry = (Map.Entry) tObjects.next();
 
             Boolean active = (Boolean)entry.getValue();
 
-            if(active) {
+            if (active) {
                 String feature = (String)entry.getKey();
 
                 mTutor.delFeature(feature);
@@ -880,13 +875,11 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     @Override
     public void setFeature(String feature, boolean fadd) {
 
-        if(fadd) {
+        if (fadd) {
             publishFeature(feature);
-        }
-        else {
+        } else {
             retractFeature(feature);
         }
-
     }
 
 
@@ -903,7 +896,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
         super.next();
 
-        if(dataExhausted())
+        if (dataExhausted())
             publishFeature(TCONST.FTR_EOI);
     }
 
@@ -916,7 +909,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     public TBoolean test() {
         boolean correct = isCorrect();
 
-        if(correct)
+        if (correct)
             publishFeature("FTR_RIGHT");
         else
             publishFeature("FTR_WRONG");
@@ -926,19 +919,17 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
 
     public void setPageFlipButton(String command) {
-
         super.setPageFlipButton(command);
     }
 
     public void setSpeakButton(String command) {
-
         super.setSpeakButton(command);
     }
 
 
     public void onButtonClick(String buttonName) {
 
-        switch(buttonName) {
+        switch (buttonName) {
             case TCONST.PAGEFLIP_BUTTON:
                 applyBehavior(buttonName);
                 break;
@@ -951,14 +942,25 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
 
     @Override
+    public void updateContext(String sentence, int index, String[] wordList, int wordIndex, String word, int attempts, boolean correct) {
+
+        currentSentence = sentence;
+        currentIndex = index;
+        sentenceWords = wordList;
+        expectedWordIndex = wordIndex;
+        currentWord = word;
+        attemptCount = attempts;
+
+        trackAndLogPerformance("WORD", correct);
+    }
+
+
+    @Override
     public void UpdateValue(boolean correct) {
 
         reset();
 
-        // BUG commenting out trackAndLogPerformance to preserve reading functionality
-        // trackAndLogPerformance(correct);
-
-        if(correct)
+        if (correct)
             publishFeature(TCONST.GENERIC_RIGHT);
         else
             publishFeature(TCONST.GENERIC_WRONG);
@@ -1015,7 +1017,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     @Override
     public void prevPara() {
         mViewManager.prevPara();
-
     }
 
     @Override
@@ -1034,7 +1035,9 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     }
 
     @Override
-    public void parrotLine() { mViewManager.parrotLine(); }
+    public void parrotLine() {
+        mViewManager.parrotLine();
+    }
 
     @Override
     public void prevLine() {
@@ -1077,7 +1080,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     //************************************************************************
 
 
-
     //**********************************************************
     //**********************************************************
     //*****************  Common Tutor Object Methods
@@ -1099,6 +1101,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
     @Override
     public void setTutor(CTutor tutor) {
+
         mTutor = tutor;
         mSceneObject.setTutor(tutor);
 
@@ -1110,7 +1113,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
     @Override
     public void onCreate() {
-        trackAndLogPerformance("START");
+        trackAndLogPerformance("START", true);
     }
 
     @Override
@@ -1130,11 +1133,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     }
 
 
-
-
-
     // *** Serialization
-
 
 
     /**
@@ -1149,25 +1148,24 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         super.loadJSON(jsonObj, (IScope2) scope);
     }
 
-    private void trackAndLogPerformance(String stage) {
+    private void trackAndLogPerformance(String task, boolean correct) {
 
-        String tutorName = mTutor.getTutorName();
         PerformanceLogItem event = new PerformanceLogItem();
 
         event.setUserId(RoboTutor.STUDENT_ID);
         event.setSessionId(RoboTutor.SESSION_ID);
         event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
         event.setLanguage(CTutorEngine.language);
-        event.setTutorName(tutorName);
-        event.setLevelName("");
-        event.setTaskName("");
+        event.setTutorName(mTutor.getTutorName());
+        event.setLevelName(task);
+        event.setTaskName(currentSentence);
         event.setProblemName("story");
-        event.setProblemNumber(-1);
-        event.setSubstepNumber(-1);
+        event.setProblemNumber(currentIndex);
+        event.setSubstepNumber(expectedWordIndex);
         event.setAttemptNumber(-1);
-        event.setExpectedAnswer(stage);
-        event.setUserResponse("");
-        event.setCorrectness(TCONST.LOG_CORRECT);
+        event.setExpectedAnswer(sentenceWords != null && expectedWordIndex < sentenceWords.length ? sentenceWords[expectedWordIndex] : "");
+        event.setUserResponse(currentWord);
+        event.setCorrectness(correct ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
 
         event.setTimestamp(System.currentTimeMillis());
 
