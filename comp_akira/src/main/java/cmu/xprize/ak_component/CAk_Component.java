@@ -312,8 +312,14 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
 
     public boolean dataExhausted() {
-        return datasource[_dataIndex]==null;
+        return _dataIndex>=datasource.length;
     }
+
+    public boolean dataExhaustedForSame() {
+        return _dataIndex>=datasource.length-1;
+    }
+
+
 
     protected void setQuestionBoard(CAk_Data data) {
         player.setText("", "");

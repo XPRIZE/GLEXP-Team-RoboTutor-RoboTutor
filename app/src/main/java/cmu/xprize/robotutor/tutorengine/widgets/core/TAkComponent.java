@@ -302,6 +302,23 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
             publishFeature(TCONST.FTR_EOD);
     }
 
+    public void same() {
+
+        // If wrong reset ALLCORRECT
+        //
+        if(mTutor.testFeatureSet(TCONST.GENERIC_WRONG)) {
+
+            retractFeature(TCONST.ALL_CORRECT);
+        }
+
+        reset();
+
+        super.same();
+
+        if(dataExhaustedForSame())
+            publishFeature(TCONST.FTR_EOD);
+    }
+
 
     //Helper function that converts 3 digit number to list of digits
     private int[] getListDigits(int num) {
@@ -537,8 +554,10 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
                 publishFeature(TCONST.NEXTTURN);
                 wrongTimes = 0;
             } else if(wrongTimes != 2) {
+                retractFeature(TCONST.FTR_EOD);
                 publishFeature(TCONST.GENERIC_WRONG);
             }else{
+                retractFeature(TCONST.FTR_EOD);
                 publishFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
             }
             /*
