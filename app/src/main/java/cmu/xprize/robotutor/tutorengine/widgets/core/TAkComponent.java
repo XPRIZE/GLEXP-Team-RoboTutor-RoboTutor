@@ -50,18 +50,21 @@ import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.CEvent;
+import cmu.xprize.util.IBehaviorManager;
+import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
 /**
  * Created by jacky on 2016/7/6.
  */
 
-public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDataSink, IPublisher, ITutorLogger {
+public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDataSink, IPublisher, ITutorLogger,IBehaviorManager, IEventSource {
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
@@ -73,6 +76,8 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     private boolean     first3sign = true;
 
     private PercentRelativeLayout curpercentLayout = (PercentRelativeLayout) getChildAt(0);
+    private HashMap<String, String> stickyMap   = new HashMap<>();
+    private HashMap<String, String> volatileMap = new HashMap<>();
 
     private HashMap<String,String>  _StringVar  = new HashMap<>();
     private HashMap<String,Integer> _IntegerVar = new HashMap<>();
@@ -297,6 +302,24 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
             publishFeature(TCONST.FTR_EOD);
     }
 
+    public void same() {
+
+        // If wrong reset ALLCORRECT
+        //
+        if(mTutor.testFeatureSet(TCONST.GENERIC_WRONG)) {
+
+            retractFeature(TCONST.ALL_CORRECT);
+        }
+
+        reset();
+
+        super.same();
+
+        if(dataExhaustedForSame())
+            publishFeature(TCONST.FTR_EOD);
+    }
+
+
     //Helper function that converts 3 digit number to list of digits
     private int[] getListDigits(int num) {
         int hundredsDigit = 0;  int tensDigit = 0;
@@ -309,9 +332,9 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
     @Override
     public void playAudio(CAk_Data data){
+        TScope scope = mTutor.getScope();
         String answerString = "";
 
-        TScope scope = mTutor.getScope();
 
         switch(data.answer)  {
             case TCONST.LEFTLANE:
@@ -334,28 +357,25 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         if(answerString != null && answerString.matches("[-+]?\\d*\\.?\\d+")) {
             removeFeature(AKCONST.FTR_TEST_AUDIO);
 
-            int[] listDigits = getListDigits(Integer.parseInt(answerString));
+            int currentNumber = Integer.parseInt(answerString);
+            if (currentNumber<=100||currentNumber%100==0){
+                scope.addUpdateVar("CurrentCount", new TString(String.valueOf(currentNumber)));
+                postEvent(AKCONST.PLAY_CHIME);
+            } else {
+                scope.addUpdateVar("CurrentCountt", new TString(String.valueOf((int)(currentNumber-currentNumber%100))));
+                scope.addUpdateVar("CurrentCount",new TString(String.valueOf((int)(currentNumber%100))));
+                postEvent(AKCONST.PLAY_CHIME_PLUS);
 
-            if(listDigits[0] >= 1) {
-                publishFeature(AKCONST.FTR_TEST_AUDIO_HUNDREDS);
-                publishValue(AKCONST.TESTAUDIO_HUNDREDS, listDigits[0]);
             }
-            else {
-                removeFeature(AKCONST.FTR_TEST_AUDIO_HUNDREDS);
-            }
-            if (listDigits[1] >= 1 || listDigits[0] == 0){
-                publishFeature(AKCONST.FTR_TEST_AUDIO_TENS);
-                publishValue(AKCONST.TESTAUDIO_TENS, listDigits[1]);
-            }
-            else {
-                removeFeature(AKCONST.FTR_TEST_AUDIO_TENS);
-            }
-            applyEventNode("PLAY_NUM_AUDIO");
+
+
+
+
+
         }
 
+
         else {
-            removeFeature(AKCONST.FTR_TEST_AUDIO_HUNDREDS);
-            removeFeature(AKCONST.FTR_TEST_AUDIO_TENS);
             publishFeature(AKCONST.FTR_TEST_AUDIO);
             publishValue(AKCONST.TESTAUDIO, answerString);
             applyEventNode("PLAY_WORD_AUDIO");
@@ -534,8 +554,10 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
                 publishFeature(TCONST.NEXTTURN);
                 wrongTimes = 0;
             } else if(wrongTimes != 2) {
+                retractFeature(TCONST.FTR_EOD);
                 publishFeature(TCONST.GENERIC_WRONG);
             }else{
+                retractFeature(TCONST.FTR_EOD);
                 publishFeature(TCONST.GENERIC_SUCCESSIVEWRONG);
             }
             /*
@@ -765,25 +787,26 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
 
     public void increaseScore() {
+        //hardcoded to 1 in codedrop 1
         if(extraSpeed != 0) {
             mask.setVisibility(VISIBLE);
             Animator animator = scoreboard.reward(player.getX() + player.carImage.getX(),
-                    player.getY(), "+" + extraSpeed);
+                    player.getY(), "+" + 1);
             LayoutParams params =  (LayoutParams) getLayoutParams();
             animator.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
                     scoreboard.removeTextView();
-                    scoreboard.increase(extraSpeed);
-                    player.score += extraSpeed;
+                    scoreboard.increase(1);
+                    player.score += 1;
                     new AnimateScoreboard().execute(scoreboard);
                 }
             });
             animator.start();
         }
         else {
-            scoreboard.increase(extraSpeed);
+            scoreboard.increase(1);
             new AnimateScoreboard().execute(scoreboard);
         }
     }
@@ -978,7 +1001,90 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
         RoboTutor.logManager.postTutorState(TUTOR_STATE_MSG, "target#akira," + logData + builder.toString());
     }
+    public void setVolatileBehavior(String event, String behavior) {
 
+        if (behavior.toUpperCase().equals(TCONST.NULL)) {
+
+            if (volatileMap.containsKey(event)) {
+                volatileMap.remove(event);
+            }
+        } else {
+            volatileMap.put(event, behavior);
+        }
+    }
+    public void setStickyBehavior(String event, String behavior) {
+
+        if (behavior.toUpperCase().equals(TCONST.NULL)) {
+
+            if (stickyMap.containsKey(event)) {
+                stickyMap.remove(event);
+            }
+        } else {
+            stickyMap.put(event, behavior);
+        }
+    }
+
+
+    // Execute scirpt target if behavior is defined for this event
+    //
+    @Override
+    public boolean applyBehavior(String event) {
+
+        boolean result = false;
+
+        if (stickyMap.containsKey(event)) {
+
+            RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:sticky,behavior:" + event);
+            applyBehaviorNode(stickyMap.get(event));
+
+
+            result = true;
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Apply Events in the Tutor Domain.
+     *
+     * @param nodeName
+     */
+    @Override
+    public void applyBehaviorNode(String nodeName) {
+        IScriptable2 obj = null;
+
+        if (nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
+
+            try {
+                obj = mTutor.getScope().mapSymbol(nodeName);
+
+                if (obj != null) {
+                    switch(obj.getType()) {
+                        case TCONST.QUEUE:
+
+                            if(obj.testFeatures()) {
+                                obj.applyNode();
+
+                            }
+                            break;
+
+                        default:
+
+                            if(obj.testFeatures()) {
+                                obj.preEnter();
+                                obj.applyNode();
+                            }
+                            break;
+                    }
+                }
+
+            } catch (Exception e) {
+                // TODO: Manage invalid Behavior
+                e.printStackTrace();
+            }
+        }
+    }
     // ITutorLogger - End
     //***********************************************************
 
@@ -1130,5 +1236,15 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     public void loadJSON(JSONObject jsonData, IScope scope) {
 
         super.loadJSON(jsonData, scope);
+    }
+
+    @Override
+    public String getEventSourceName() {
+        return name();
+    }
+
+    @Override
+    public String getEventSourceType() {
+        return "TAKComponent";
     }
 }
