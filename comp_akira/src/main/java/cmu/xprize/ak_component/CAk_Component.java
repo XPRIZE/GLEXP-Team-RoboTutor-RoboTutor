@@ -327,10 +327,39 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         questionBoard_exist = true;
     }
 
+    protected void slowdown(CAk_Data data){
+        String answerString = "";
+        switch(data.answer)  {
+            case TCONST.LEFTLANE:
+                answerString = data.choices[0];
+                break;
+
+            case TCONST.CENTERLANE:
+                answerString = data.choices[1];
+                break;
+
+            case TCONST.RIGHTLANE:
+                if(data.choices.length > 2)
+                    answerString = data.choices[2];
+                else
+                    answerString = data.choices[1];
+                break;
+
+        }
+
+        if(answerString != null && answerString.matches("[-+]?\\d*\\.?\\d+")){
+            //it is a number
+            int currentNumber = Integer.parseInt(answerString);
+            if (currentNumber>=100 && currentNumber %100!=0){
+                extraSpeed = (int)(extraSpeed*-10);
+            }
+        }
+    }
+
     protected void updateDataSet(CAk_Data data) {
-
+        extraSpeed = 1;
         boolean isAudio = isAudio(data);
-
+        slowdown(data);
 
         if(isAudio){
             playAudio(data);

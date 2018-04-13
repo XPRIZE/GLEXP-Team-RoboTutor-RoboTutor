@@ -787,25 +787,26 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
 
 
     public void increaseScore() {
+        //hardcoded to 1 in codedrop 1
         if(extraSpeed != 0) {
             mask.setVisibility(VISIBLE);
             Animator animator = scoreboard.reward(player.getX() + player.carImage.getX(),
-                    player.getY(), "+" + extraSpeed);
+                    player.getY(), "+" + 1);
             LayoutParams params =  (LayoutParams) getLayoutParams();
             animator.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
                     scoreboard.removeTextView();
-                    scoreboard.increase(extraSpeed);
-                    player.score += extraSpeed;
+                    scoreboard.increase(1);
+                    player.score += 1;
                     new AnimateScoreboard().execute(scoreboard);
                 }
             });
             animator.start();
         }
         else {
-            scoreboard.increase(extraSpeed);
+            scoreboard.increase(1);
             new AnimateScoreboard().execute(scoreboard);
         }
     }
