@@ -1158,8 +1158,8 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         event.setLanguage(CTutorEngine.language);
         event.setTutorName(mTutor.getTutorName());
         event.setLevelName(task);
-        event.setTaskName(currentSentence);
-        event.setProblemName("story");
+        event.setTaskName("story");
+        event.setProblemName(currentSentence);
         event.setProblemNumber(currentIndex);
         event.setSubstepNumber(expectedWordIndex);
         event.setAttemptNumber(attemptCount);
