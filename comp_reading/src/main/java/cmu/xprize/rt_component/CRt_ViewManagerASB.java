@@ -1504,7 +1504,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 attemptNum = 0;
                 result = true;
             }
-            mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord - 1, heardWords[mHeardWord - 1], attemptNum, result);
+            mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord - 1, heardWords[mHeardWord - 1], attemptNum, false, result);
         }
 
         // Publish the outcome
@@ -1552,7 +1552,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                     Log.i("ASR", "RIGHT");
                     attemptNum = 0;
                     result = true;
-                    mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord - 1, heardWords[mHeardWord - 1].hypWord, attemptNum, result);
+                    mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord - 1, heardWords[mHeardWord - 1].hypWord, attemptNum, heardWords[mHeardWord - 1].utteranceId == "", result);
 
                 } else {
 
@@ -1561,7 +1561,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                     Log.i("ASR", "WRONG");
                     attemptNum++;
                     result = false;
-                    mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord,  heardWords[mHeardWord].hypWord, attemptNum, result);
+                    mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord, heardWords[mHeardWord].hypWord, attemptNum, heardWords[mHeardWord].utteranceId == "", result);
                     break;
                 }
             }

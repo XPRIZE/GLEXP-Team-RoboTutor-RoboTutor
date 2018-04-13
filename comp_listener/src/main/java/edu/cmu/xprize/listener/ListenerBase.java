@@ -27,6 +27,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -519,6 +520,31 @@ public class ListenerBase {
         protected static String asrWordText(String taggedWord) {
             int iParen = taggedWord.indexOf('(');
             return (iParen >= 0) ? taggedWord.substring(0, iParen) : taggedWord;
+        }
+
+        private static final String[] fieldsToPrint = {"hypWord", "iSentenceWord", "matchLevel", "startTime", "endTime", "utteranceStartTime", "utteranceId", "silence", "latency"};
+
+        public String toString() {
+            StringBuilder msg = new StringBuilder();
+
+            msg.append("{");
+            for (String fieldName : fieldsToPrint) {
+                try {
+                    Field field = this.getClass().getDeclaredField(fieldName);
+                    msg.append(fieldName);
+                    msg.append(": ");
+                    msg.append(field.get(this));
+                    msg.append(", ");
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+            msg.delete(msg.length() - 2, msg.length());
+            msg.append("}");
+
+            return msg.toString();
         }
     }
 

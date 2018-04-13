@@ -79,7 +79,7 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     protected String[]              sentenceWords;                                  // current sentence words to hear
     protected int                   expectedWordIndex     = 0;                      // index of expected next word in sentence
     private static int[]            creditLevel           = null;                   // per-word credit levelFolder according to current hyp
-    protected String                currentWord;                                    // current spoken word
+    protected String                spokenWord;                                     // current spoken word
     protected int                   attemptCount          = 0;                      // number of attempts
 
     protected String                DATASOURCEPATH;
@@ -505,7 +505,7 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
-    public void updateContext(String sentence, int index, String[] wordList, int wordIndex, String word, int attempts, boolean correct) {
+    public void updateContext(String sentence, int index, String[] wordList, int wordIndex, String word, int attempts, boolean virtual, boolean correct) {
     }
 
 

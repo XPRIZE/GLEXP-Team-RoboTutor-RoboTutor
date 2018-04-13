@@ -942,13 +942,13 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
 
     @Override
-    public void updateContext(String sentence, int index, String[] wordList, int wordIndex, String word, int attempts, boolean correct) {
+    public void updateContext(String sentence, int index, String[] wordList, int wordIndex, String word, int attempts, boolean virtual, boolean correct) {
 
         currentSentence = sentence;
         currentIndex = index;
         sentenceWords = wordList;
         expectedWordIndex = wordIndex;
-        currentWord = word;
+        spokenWord = attemptCount == 2 && virtual ? "AUTO_GENERATED" : virtual ? "TOUCH_GENERATED" : word;
         attemptCount = attempts;
 
         trackAndLogPerformance("WORD", correct);
@@ -1162,9 +1162,9 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         event.setProblemName("story");
         event.setProblemNumber(currentIndex);
         event.setSubstepNumber(expectedWordIndex);
-        event.setAttemptNumber(-1);
+        event.setAttemptNumber(attemptCount);
         event.setExpectedAnswer(sentenceWords != null && expectedWordIndex < sentenceWords.length ? sentenceWords[expectedWordIndex] : "");
-        event.setUserResponse(currentWord);
+        event.setUserResponse(spokenWord);
         event.setCorrectness(correct ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
 
         event.setTimestamp(System.currentTimeMillis());
