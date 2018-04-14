@@ -322,8 +322,8 @@
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",              "soundpackage":"missing_number", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_MIS_NUM"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",              "soundpackage":"missing_number", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_GT_LT"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Neno gani huanza na.mp3",                    "soundpackage":"xprize",          "volume": 1.0, "mode":"flow","features": "!FTR_LASTATTEMPTFTR_SAY&FTR_WORDS&FTR_WORD_STARTS_WITH"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Neno gani kuishia na.mp3",                   "soundpackage":"xprize",          "volume": 1.0, "mode":"flow","features": "!FTR_LASTATTEMPTFTR_SAY&FTR_WORDS&FTR_WORD_ENDS_WITH"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Neno gani huanza na.mp3",                    "soundpackage":"xprize",          "volume": 1.0, "mode":"flow","features": "!FTR_LASTATTEMPT&FTR_SAY&FTR_WORDS&FTR_WORD_STARTS_WITH"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Neno gani kuishia na.mp3",                   "soundpackage":"xprize",          "volume": 1.0, "mode":"flow","features": "!FTR_LASTATTEMPT&FTR_SAY&FTR_WORDS&FTR_WORD_ENDS_WITH"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",              "soundpackage":"words",          "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_WORDS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueHundreds}}.mp3",      "soundpackage":"numbers",        "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_NUMBERS&FTR_QUEST_HUNDREDS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Na.mp3",                                     "soundpackage":"xprize",         "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_NUMBERS&FTR_QUEST_HUNDREDS&FTR_QUEST_TENS"},

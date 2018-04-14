@@ -123,15 +123,15 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         int x = (getWidth() / 2) - (holeWidth * 5) / 2;
         int y = (getHeight() / 2) - holeHeight;
         if (_component.tenPower==100){
-            holeWidth = 400;
-            holeHeight = 400;
+            holeWidth = getWidth()/6;
+            holeHeight = getWidth()/6;
             x = (getWidth() / 2) - (holeWidth * 5) / 2;
             y = (getHeight() / 2) - holeHeight;
         }
 
         if (_component.tenPower==10){
-            holeWidth =130;
-            holeHeight = 1200;
+            holeWidth =getWidth()/20;
+            holeHeight = getHeight()/3;
             isline=true;
             x = (getWidth() / 2) - (holeWidth * 10) / 2;
             y = (getHeight() / 2) - holeHeight/2;
@@ -192,8 +192,8 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
             //int bwidth = (int)((right-left-11*gmargin)/10);
 
             Bitmap immutableBmp = BitmapFactory.decodeResource(getResources(), drawable);
-            Bitmap resizedBmp = Bitmap.createScaledBitmap(immutableBmp, 100,
-                    1000, false);
+            Bitmap resizedBmp = Bitmap.createScaledBitmap(immutableBmp, getWidth()/25,
+                    getHeight()/2, false);
 
             return resizedBmp;
         } else {
@@ -208,8 +208,8 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
             //int radius = bheight<bwidth ? bheight : bwidth;
 
             Bitmap immutableBmp = BitmapFactory.decodeResource(getResources(), drawable);
-            Bitmap resizedBmp = Bitmap.createScaledBitmap(immutableBmp, 350,
-                    350, false);
+            Bitmap resizedBmp = Bitmap.createScaledBitmap(immutableBmp, getHeight()/5,
+                    getHeight()/5, false);
             return resizedBmp;
 
         }

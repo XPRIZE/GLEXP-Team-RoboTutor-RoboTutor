@@ -3,100 +3,100 @@
 
        {
  "type":"CAk_Data",
- "choices":["wasivu", "rugume", "lovasu"],
+ "choices":["tunosi", "sovipa", "voriza"],
  "item_counter":1,
- "answer":"MID",
- "target":"rugume",
+ "answer":"RIGHT",
+ "target":"voriza",
  "belowString":"audio",
  "audio":"true" 
        } ,
 
        {
  "type":"CAk_Data",
- "choices":["yalisa", "vagiba", "fabole"],
+ "choices":["lorewi", "veweho", "jowoma"],
  "item_counter":2,
  "answer":"RIGHT",
- "target":"fabole",
+ "target":"jowoma",
  "belowString":"audio",
  "audio":"true" 
        } ,
 
        {
  "type":"CAk_Data",
- "choices":["kabako", "gukewe", "yasifu"],
+ "choices":["veweho", "tuvari", "dopufa"],
  "item_counter":3,
- "answer":"MID",
- "target":"gukewe",
+ "answer":"LEFT",
+ "target":"veweho",
  "belowString":"audio",
  "audio":"true" 
        } ,
 
        {
  "type":"CAk_Data",
- "choices":["rumepo", "joyepa", "yafiki"],
+ "choices":["sujuye", "lununa", "veweho"],
  "item_counter":4,
- "answer":"RIGHT",
- "target":"yafiki",
- "belowString":"audio",
- "audio":"true" 
-       } ,
-
-       {
- "type":"CAk_Data",
- "choices":["kofafe", "somimi", "navefo"],
- "item_counter":5,
- "answer":"RIGHT",
- "target":"navefo",
- "belowString":"audio",
- "audio":"true" 
-       } ,
-
-       {
- "type":"CAk_Data",
- "choices":["pukeli", "niduyi", "rugume"],
- "item_counter":6,
- "answer":"LEFT",
- "target":"pukeli",
- "belowString":"audio",
- "audio":"true" 
-       } ,
-
-       {
- "type":"CAk_Data",
- "choices":["tohaya", "meyoka", "jaruhi"],
- "item_counter":7,
- "answer":"RIGHT",
- "target":"jaruhi",
- "belowString":"audio",
- "audio":"true" 
-       } ,
-
-       {
- "type":"CAk_Data",
- "choices":["tetuse", "pukeli", "jemani"],
- "item_counter":8,
- "answer":"RIGHT",
- "target":"jemani",
- "belowString":"audio",
- "audio":"true" 
-       } ,
-
-       {
- "type":"CAk_Data",
- "choices":["kabako", "pukeli", "ruzavo"],
- "item_counter":9,
- "answer":"LEFT",
- "target":"kabako",
- "belowString":"audio",
- "audio":"true" 
-       } ,
-
-       {
- "type":"CAk_Data",
- "choices":["tovere", "jaruhi", "kabako"],
- "item_counter":10,
  "answer":"MID",
- "target":"jaruhi",
+ "target":"lununa",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["fihulu", "yulefo", "jowoma"],
+ "item_counter":5,
+ "answer":"MID",
+ "target":"yulefo",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["ravojo", "lununa", "yujaya"],
+ "item_counter":6,
+ "answer":"MID",
+ "target":"lununa",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["pazaba", "fihulu", "rinoke"],
+ "item_counter":7,
+ "answer":"MID",
+ "target":"fihulu",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["ponuvi", "bodabi", "ravojo"],
+ "item_counter":8,
+ "answer":"MID",
+ "target":"bodabi",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["hufuvo", "jezipi", "fekewa"],
+ "item_counter":9,
+ "answer":"RIGHT",
+ "target":"fekewa",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["fekewa", "pumise", "vitezu"],
+ "item_counter":10,
+ "answer":"RIGHT",
+ "target":"vitezu",
  "belowString":"audio",
  "audio":"true" 
        } 

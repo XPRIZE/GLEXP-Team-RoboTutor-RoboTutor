@@ -9,6 +9,39 @@
       "COMMENT": "This is where you describe your tutor",
       "version": "1.0.0",
       "rootnode": "INTRO_STATE",
+      "queueMap": {
+        "PLAY_CHIME": {
+          "type": "QUEUE",
+          "COMMENT": "Chime when user creates new object",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id":"SAkira", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCount}}.mp3",  "soundpackage":"xprize_numbers", "volume": 1.0, "mode":"event", "features": ""}
+
+          ],
+          "preexit":[],
+          "edges":[]
+        },
+        "PLAY_CHIME_PLUS": {
+          "type": "QUEUE",
+          "COMMENT": "Chime when user creates new object",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id":"SAkira", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCountt}}.mp3",  "soundpackage":"xprize_numbers", "volume": 0.9, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Na.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCount}}.mp3",  "soundpackage":"xprize_numbers", "volume": 0.9, "mode":"flow", "features": ""}
+
+          ],
+          "preexit":[],
+          "edges":[]
+        }},
+
+
+
+
 
       "nodeMap": {
 
@@ -19,7 +52,7 @@
           "COMMENT": "Intro Clip",
           "maptype":"moduleMap",
           "mapname": "INTRO_STATE_TRACK",
-          "preenter": ["SET_VERSION", "SET_DATASOURCE"],
+          "preenter": ["SET_VERSION", "SET_DATASOURCE","SET_CHIME_BEHAVIOR","SET_CHIME_PLUS_BEHAVIOR"],
           "preexit": [],
           "edges": [
             {
@@ -354,7 +387,7 @@
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
           "maptype":"moduleMap",
           "mapname": "POST_FINISHLINE",
-          "preenter": [],
+          "preenter": ["CLR_CHIME_BEHAVIOR","CLR_CHIME_PLUS_BEHAVIOR"],
           "preexit": [],
           "edges": [
             {
@@ -650,11 +683,18 @@
         },
 
         "NEXT": {"type": "COMMAND", "cmd": "NEXT"  },
+        "SET_CHIME_BEHAVIOR": {"type": "COMMAND", "id": "SAkira", "method": "setStickyBehavior", "parms": "PLAY_CHIME:String|PLAY_CHIME:String" ,"features":""},
+        "SET_CHIME_PLUS_BEHAVIOR": {"type": "COMMAND", "id": "SAkira", "method": "setStickyBehavior", "parms": "PLAY_CHIME_PLUS:String|PLAY_CHIME_PLUS:String" ,"features":""},
+        "CLR_CHIME_BEHAVIOR": {"type": "COMMAND", "id": "Skira", "method": "setStickyBehavior", "parms": "PLAY_CHIME:String|NULL:String" ,"features":""},
+        "CLR_CHIME_PLUS_BEHAVIOR": {"type": "COMMAND", "id": "Skira", "method": "setStickyBehavior", "parms": "PLAY_CHIME_PLUS:String|NULL:String" ,"features":""},
+
+
 
         "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio_hundreds}}.mp3","soundpackage":"xprize_numbers" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": "FTR_TEST_AUDIO_HUNDREDS"},
-        "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "Na.mp3","soundpackage":"xprize" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": "FTR_TEST_AUDIO_HUNDREDS&FTR_TEST_AUDIO_TENS"},
-        "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio_tens}}.mp3","soundpackage":"xprize_numbers" ,"repeat":false, "volume": "0.7", "mode":"event", "features": "FTR_TEST_AUDIO_TENS"},
-        "PLAY_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio}}.mp3","soundpackage":"shared_words" ,"repeat":false, "volume": "0.7", "mode":"event", "features": "FTR_TEST_AUDIO"},
+        "PLAY_NA_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "Na.mp3","soundpackage":"xprize" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": "FTR_TEST_AUDIO_HUNDREDS&FTR_TEST_AUDIO_TENS"},
+        "PLAY_NUM_AUDIO": {
+          "type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio_tens}}.mp3","soundpackage":"xprize_numbers" ,"repeat":false, "volume": "0.7", "mode":"flow", "features": "FTR_TEST_AUDIO_TENS"},
+        "PLAY_WORD_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.testaudio}}.mp3","soundpackage":"shared_words" ,"repeat":false, "volume": "0.7", "mode":"event", "features": "FTR_TEST_AUDIO"},
 
         "INSTRUCT_AUDIO": {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SAkira.audio}}.mp3","soundpackage":"default" ,"repeat":false, "volume": "0.7", "mode":"event", "features": ""},
         "WAIT":{"type": "COMMAND", "cmd": "WAIT"},

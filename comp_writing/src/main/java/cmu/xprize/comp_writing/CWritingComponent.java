@@ -89,6 +89,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     protected LinearLayout      mRecogList;
     protected LinearLayout      mGlyphList;
+    protected LinearLayout      mGlyphAnswerList;
 
     protected int               mMaxLength   = 0; //GCONST.ALPHABET.length();                // Maximum string length
 
@@ -431,7 +432,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         mActiveController.updateCorrectStatus(true);
         if(isComplete()) {
-            applyBehavior(WR_CONST.DATA_ITEM_COMPLETE); // YYY run when item is complete...
+            applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
         } else {
             applyBehavior(WR_CONST.ON_CORRECT);
         }
@@ -675,11 +676,29 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     public void pointAtGlyph() {
+        _fieldIndex = 0;
+
+        pointAtInputGlyph();
+    }
+    public void pointAtInputGlyph() {
 
         CGlyphController glyphInput;
 
-        glyphInput = (CGlyphController) mGlyphList.getChildAt(0);
-        glyphInput.pointAtGlyph();
+        if( _fieldIndex < mGlyphList.getChildCount()) {
+
+            glyphInput = (CGlyphController) mGlyphList.getChildAt(_fieldIndex);
+
+            if (glyphInput.checkIsStimulus()) {
+
+                // For write.missingLtr: To not point at non-answer Glyphs.
+                _fieldIndex++;
+                pointAtInputGlyph();
+            } else {
+
+                glyphInput.pointAtGlyph();
+            }
+
+        }
     }
 
     public void hideGlyphs() {
@@ -747,9 +766,17 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         if( _fieldIndex < mGlyphList.getChildCount()) {
 
             v = (CGlyphController) mGlyphList.getChildAt(_fieldIndex);
-            v.post(_replayType);
 
-            _fieldIndex++;
+            if (v.checkIsStimulus()) {
+
+                // For write.missingLtr: To omit non-answer Glyphs from replay.
+                _fieldIndex++;
+                replayNext();
+            } else {
+
+                v.post(_replayType);
+                _fieldIndex++;
+            }
         }
         else {
             if(_isDemo)
@@ -946,27 +973,73 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mGlyphList.removeAllViews();
         mGlyphList.setClipChildren(false);
 
-        for(int i1 =0 ; i1 < mAnswer.length() ; i1++)
-        {
-            // create a new view
-            v = (CGlyphController)LayoutInflater.from(getContext())
-                    .inflate(R.layout.drawn_input_comp, null, false);
+        // For write.missingLtr: We need non-answer Glyphs to behave like simple text stimulus
+        if (activityFeature.contains("FTR_MISSING_LTR")) {
 
-            // Last is used for display updates - limits the extent of the baseline
-            v.setIsLast(i1 ==  mAnswer.length()-1);
+            int answerIndex = 0;
 
-            String expectedChar = mAnswer.substring(i1,i1+1);
+            for(int i1 =0 ; i1 < mStimulus.length() ; i1++)
+            {
+                // create a new view
+                v = (CGlyphController)LayoutInflater.from(getContext())
+                        .inflate(R.layout.drawn_input_comp, null, false);
 
-            v.setExpectedChar(expectedChar);
+                // Last is used for display updates - limits the extent of the baseline
 
-            if(!expectedChar.equals(" ")) {
-                v.setProtoGlyph(_glyphSet.cloneGlyph(expectedChar));
+
+                String Char = mStimulus.substring(i1,i1+1);
+
+                if (Char.equals("_")) {
+
+                    String expectedChar = mAnswer.substring(answerIndex,answerIndex+1);
+
+                    v.setExpectedChar(expectedChar);
+                    answerIndex++;
+
+                    v.setIsLast(answerIndex ==  mAnswer.length());
+
+                    if(!expectedChar.equals(" ")) {
+                        v.setProtoGlyph(_glyphSet.cloneGlyph(expectedChar));
+                    }
+
+                    mGlyphList.addView(v);
+                } else {
+
+                    v.setIsStimulus(Char);
+                    if(!Char.equals(" ")) {
+                        v.setProtoGlyph(_glyphSet.cloneGlyph(Char));
+                        v.updateCorrectStatus(true);
+                    }
+                    mGlyphList.addView(v);
+                }
+
+                v.setLinkedScroll(mDrawnScroll);
+                v.setWritingController(this);
             }
+        } else {
 
-            mGlyphList.addView(v);
+            for(int i1 =0 ; i1 < mAnswer.length() ; i1++)
+            {
+                // create a new view
+                v = (CGlyphController)LayoutInflater.from(getContext())
+                        .inflate(R.layout.drawn_input_comp, null, false);
 
-            v.setLinkedScroll(mDrawnScroll);
-            v.setWritingController(this);
+                // Last is used for display updates - limits the extent of the baseline
+                v.setIsLast(i1 ==  mAnswer.length()-1);
+
+                String expectedChar = mAnswer.substring(i1,i1+1);
+
+                v.setExpectedChar(expectedChar);
+
+                if(!expectedChar.equals(" ")) {
+                    v.setProtoGlyph(_glyphSet.cloneGlyph(expectedChar));
+                }
+
+                mGlyphList.addView(v);
+
+                v.setLinkedScroll(mDrawnScroll);
+                v.setWritingController(this);
+            }
         }
     }
 
@@ -1237,7 +1310,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     case WR_CONST.INHIBIT_OTHERS:
 
                         if(mActiveController != null)
-                            inhibitInput(mActiveController, true); // YYY what is this???
+                            inhibitInput(mActiveController, true);
                         break;
 
                     case WR_CONST.CLEAR_ATTEMPT:
@@ -1255,13 +1328,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                     case WR_CONST.RIPPLE_DEMO:
 
-                        rippleReplay(_command, true); // YYY Ripple Replay: use to show tracing
+                        rippleReplay(_command, true);
                         break;
 
                     case WR_CONST.RIPPLE_REPLAY:
                     case WR_CONST.RIPPLE_PROTO:
 
-                        rippleReplay(_command, false); // YYY Ripple Replay: use to show tracing
+                        rippleReplay(_command, false);
                         break;
                     case WR_CONST.SHOW_TRACELINE: // Show all glyphs trace line.
 

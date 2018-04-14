@@ -25,6 +25,7 @@ import android.widget.TextView;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -57,6 +58,10 @@ import static cmu.xprize.util.TCONST.QGRAPH_MSG;
  */
 public class CAk_Component extends RelativeLayout implements ILoadableObject{
     static public Context mContext;
+    //protected final Handler mainHandler  = new Handler(Looper.getMainLooper());
+    protected HashMap queueMap     = new HashMap();
+    protected HashMap           nameMap      = new HashMap();
+    protected boolean           _qDisabled   = false;
 
     protected String      mDataSource;
     protected   int       _dataIndex = 0;
@@ -307,25 +312,66 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
 
 
     public boolean dataExhausted() {
-        return _dataIndex >= TCONST.MAX_AKDATA;
+        return _dataIndex>=datasource.length;
+    }
+
+    public boolean dataExhaustedForSame() {
+        return _dataIndex>=datasource.length-1;
     }
 
 
 
-    protected void updateDataSet(CAk_Data data) {
-
-        boolean isAudio = isAudio(data);
+    protected void setQuestionBoard(CAk_Data data) {
+        player.setText("", "");
         questionBoard = new CAkQuestionBoard(mContext, data.answerLane, data.choices);
         questionBoard_exist = true;
+    }
 
-        // task-level info
-        level = data.level;
-        task = data.task;
+    protected void slowdown(CAk_Data data){
+        String answerString = "";
+        switch(data.answer)  {
+            case TCONST.LEFTLANE:
+                answerString = data.choices[0];
+                break;
+
+            case TCONST.CENTERLANE:
+                answerString = data.choices[1];
+                break;
+
+            case TCONST.RIGHTLANE:
+                if(data.choices.length > 2)
+                    answerString = data.choices[2];
+                else
+                    answerString = data.choices[1];
+                break;
+
+        }
+
+        if(answerString != null && answerString.matches("[-+]?\\d*\\.?\\d+")){
+            //it is a number
+            int currentNumber = Integer.parseInt(answerString);
+            if (currentNumber>=100 && currentNumber %100!=0){
+                extraSpeed = (int)(extraSpeed*-10);
+            }
+        }
+    }
+
+    protected void updateDataSet(CAk_Data data) {
+        extraSpeed = 1;
+        boolean isAudio = isAudio(data);
+        slowdown(data);
 
         if(isAudio){
             playAudio(data);
-            player.setText("", "");
+            setQuestionBoard(data);
+
         }else{
+            questionBoard = new CAkQuestionBoard(mContext, data.answerLane, data.choices);
+            questionBoard_exist = true;
+
+            // task-level info
+            level = data.level;
+            task = data.task;
             player.aboveTextView.setScaleX((float)1.25);
             player.belowTextView.setScaleX((float)1.25);
             player.aboveTextView.setScaleY((float)1.25);
@@ -537,6 +583,82 @@ public class CAk_Component extends RelativeLayout implements ILoadableObject{
         _dataIndex = 0;
 
     }
+
+    public boolean applyBehavior(String event){ return false;}
+
+    public void postEvent(String event) {
+        postEvent(event, 0);
+    }
+
+    public void postEvent(String event, Integer delay) {
+
+        post1(event, delay);
+    }
+
+    public void post1(String command, long delay) {
+
+        enQueue(new Queue(command, command), delay);
+    }
+
+    private void enQueue(Queue qCommand, long delay) {
+
+        if(!_qDisabled) {
+            queueMap.put(qCommand, qCommand);
+
+            if(delay > 0) {
+                mainHandler.postDelayed(qCommand, delay);
+            }
+            else {
+                mainHandler.post(qCommand);
+            }
+        }
+    }
+
+    public class Queue implements Runnable {
+
+        String _name;
+        String _command;
+        String _target;
+        String _item;
+
+        Queue(String name, String command) {
+            _name = name;
+            _command = command;
+
+            nameMap.put(name, this);
+        }
+
+        @Override
+        public void run() {
+
+            Log.d("COUNTINGX_DEBUG_TAG", "Running queue: _command=" + _command);
+            try {
+                if(_name != null) {
+                    nameMap.remove(_name);
+                }
+
+                queueMap.remove(this);
+
+                switch(_command) {
+                    case AKCONST.PLAY_CHIME:
+                        applyBehavior(_command);
+                        break;
+
+                    case AKCONST.PLAY_CHIME_PLUS:
+                        applyBehavior(_command);
+                        break;
+
+                    default:
+                        break;
+                }
+
+            }  catch(Exception e) {
+                CErrorManager.logEvent(TAG, "Run Error:", e, false);
+            }
+
+        }
+    }
+
 
 
 

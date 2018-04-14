@@ -3,100 +3,100 @@
 
        {
  "type":"CAk_Data",
- "choices":["bila", "vozo", "yize"],
+ "choices":["pogu", "muma", "suvi"],
  "item_counter":1,
- "answer":"MID",
- "target":"vozo",
+ "answer":"RIGHT",
+ "target":"suvi",
  "belowString":"audio",
  "audio":"true" 
        } ,
 
        {
  "type":"CAk_Data",
- "choices":["gane", "loko", "mile"],
+ "choices":["hone", "pibu", "hejo"],
  "item_counter":2,
- "answer":"RIGHT",
- "target":"mile",
+ "answer":"LEFT",
+ "target":"hone",
  "belowString":"audio",
  "audio":"true" 
        } ,
 
        {
  "type":"CAk_Data",
- "choices":["mupe", "madi", "mimi"],
+ "choices":["gubo", "muye", "muma"],
  "item_counter":3,
- "answer":"RIGHT",
- "target":"mimi",
- "belowString":"audio",
- "audio":"true" 
-       } ,
-
-       {
- "type":"CAk_Data",
- "choices":["bila", "fihu", "woye"],
- "item_counter":4,
  "answer":"MID",
- "target":"fihu",
+ "target":"muye",
  "belowString":"audio",
  "audio":"true" 
        } ,
 
        {
  "type":"CAk_Data",
- "choices":["buri", "fihu", "veja"],
+ "choices":["gove", "lera", "bepi"],
+ "item_counter":4,
+ "answer":"LEFT",
+ "target":"gove",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["suvi", "bepu", "hoho"],
  "item_counter":5,
  "answer":"LEFT",
- "target":"buri",
+ "target":"suvi",
  "belowString":"audio",
  "audio":"true" 
        } ,
 
        {
  "type":"CAk_Data",
- "choices":["satu", "tuhu", "buri"],
+ "choices":["fago", "tade", "biye"],
  "item_counter":6,
- "answer":"LEFT",
- "target":"satu",
+ "answer":"RIGHT",
+ "target":"biye",
  "belowString":"audio",
  "audio":"true" 
        } ,
 
        {
  "type":"CAk_Data",
- "choices":["geda", "botu", "hiji"],
+ "choices":["bepi", "zeti", "boyi"],
  "item_counter":7,
  "answer":"MID",
- "target":"botu",
+ "target":"zeti",
  "belowString":"audio",
  "audio":"true" 
        } ,
 
        {
  "type":"CAk_Data",
- "choices":["muba", "yize", "vufo"],
+ "choices":["reho", "tade", "sevu"],
  "item_counter":8,
- "answer":"MID",
- "target":"yize",
+ "answer":"RIGHT",
+ "target":"sevu",
  "belowString":"audio",
  "audio":"true" 
        } ,
 
        {
  "type":"CAk_Data",
- "choices":["hiji", "satu", "zuda"],
+ "choices":["muma", "wope", "hejo"],
  "item_counter":9,
- "answer":"LEFT",
- "target":"hiji",
+ "answer":"RIGHT",
+ "target":"hejo",
  "belowString":"audio",
  "audio":"true" 
        } ,
 
        {
  "type":"CAk_Data",
- "choices":["tupi", "hage", "gane"],
+ "choices":["bobo", "tade", "zadi"],
  "item_counter":10,
  "answer":"LEFT",
- "target":"tupi",
+ "target":"bobo",
  "belowString":"audio",
  "audio":"true" 
        } 

@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import java.util.Random;
 import java.util.logging.LogManager;
 
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.CLogManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
@@ -289,17 +290,24 @@ public class CBpBackground extends View implements ILoadableObject {
 
                 case "bitmap":
 
+                    int nextBackground = 0;
 
-                    // TODO BUG REVIEW move this to external assets!!!
-                    //int nextBackground = BP_CONST.BPOP_BACKGROUNDS[0];
+                    try {
+                        // TODO BUG REVIEW move this to external assets!!!
+                        //int nextBackground = BP_CONST.BPOP_BACKGROUNDS[0];
 
-                    int nextBackground = BP_CONST.BPOP_BACKGROUNDS[(new Random().nextInt(BP_CONST.BPOP_BACKGROUNDS.length))];
+                        nextBackground = BP_CONST.BPOP_BACKGROUNDS[(new Random().nextInt(BP_CONST.BPOP_BACKGROUNDS.length))];
 
-                    CLogManager.getInstance().postEvent_I(TAG, "PickedBackground:" + nextBackground);
+                        CLogManager.getInstance().postEvent_I(TAG, "PickedBackground:" + nextBackground);
 
-                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), nextBackground);
-                    Bitmap scaled = Bitmap.createScaledBitmap(bmp, canvas.getWidth(), canvas.getHeight(), false);
-                    canvas.drawBitmap(scaled, mViewRegion, mViewRegion, mPaint);
+                        Bitmap bmp = BitmapFactory.decodeResource(getResources(), nextBackground);
+                        Bitmap scaled = Bitmap.createScaledBitmap(bmp, canvas.getWidth(), canvas.getHeight(), false);
+                        canvas.drawBitmap(scaled, mViewRegion, mViewRegion, mPaint);
+                    } catch (Exception e) {
+                        // if there's an error setting the image, use gray bg, instead of crashing
+                        CErrorManager.logEvent(TAG, "Failed background w/ image " + nextBackground, true);
+
+                    }
                     break;
             }
         }

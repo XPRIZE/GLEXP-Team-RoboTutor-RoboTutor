@@ -145,6 +145,11 @@
       "tutorName": "word_copy",
       "features": "FTR_WORDS:FTR_DICTATION"
     },
+    "write.wrd.trc": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_WORDS:FTR_TRACE"
+    },
     "write.dotCount": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",

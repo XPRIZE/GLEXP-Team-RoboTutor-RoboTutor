@@ -12,12 +12,16 @@ import android.widget.FrameLayout;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import cmu.xprize.comp_ask.CAskComponent;
 import cmu.xprize.comp_ask.CAsk_Data;
+import cmu.xprize.util.CPlacementTest_Tutor;
 import cmu.xprize.util.IButtonController;
 import cmu.xprize.comp_debug.CDebugComponent;
 import cmu.xprize.comp_logging.CErrorManager;
@@ -57,6 +61,9 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     public HashMap      storyTransitions;
     public HashMap      mathTransitions;
     public HashMap      shapeTransitions;
+
+    public CPlacementTest_Tutor[] writePlacement;
+    public CPlacementTest_Tutor[]   mathPlacement;
 
     final private String  TAG = "CActivitySelector";
 

@@ -33,7 +33,7 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
     private int maxIndex = 0;
     private int barIndex;
     private Paint strokePaint;
-    private boolean tappable;
+    private boolean tappable = false;
     private boolean greyOutMinus = false;
     private boolean greyOutPlus = false;
     private static final String TAG = "NumberScaleSurfaceView";
@@ -132,8 +132,9 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
             drawContainingRectangle(canvas);
             //When the dataset is not loaded, draw nothing.
             if (maxIndex!=0){
-                int margin = NSCONST.BAR_MARGIN;
-                int bartop = NSCONST.TOP_MARGIN;
+
+                int margin = canvas.getWidth()/9;
+                int bartop = canvas.getHeight()*5/7;
                 float left = margin;
                 float right = canvas.getWidth() - margin;
                 edgelength = (right-left)/maxIndex;
@@ -177,8 +178,8 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
 
     private void drawEachBox(Canvas canvas,int i){
 
-        int margin = NSCONST.BAR_MARGIN;
-        float top = (float)NSCONST.TOP_MARGIN;
+        int margin = canvas.getWidth()/9;
+        float top = canvas.getHeight()*5/7;
 
         float left = margin+i*edgelength;
         float right = margin+(i+1)*edgelength;
@@ -221,6 +222,7 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
 
     }
 
+
     public boolean onTouchEvent(MotionEvent event) {
 
 
@@ -233,6 +235,7 @@ public class CNumberScale_player extends SurfaceView implements SurfaceHolder.Ca
             System.out.println(x);
             System.out.println(y);
             System.out.println("tap");
+            _component.kill = true;
             int[] minusSpec = _component.minusSpecs;
             int[] addSpec = _component.addSpecs;
             if (x>=minusSpec[0] && x<=minusSpec[1] && y>=minusSpec[2] && y<=minusSpec[3] && !greyOutMinus){
