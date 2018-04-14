@@ -34,28 +34,22 @@ public class PerformanceLogItem {
     private String feedbackType;
 
     // iterative way to print fields in the desired order
-    private static final String[] orderedFieldsToPrint =
-            {"userId", "sessionId", "gameId", "tutorName", "levelName", "taskName", "problemNumber", "problemName", "substepNumber",
-                    "expectedAnswer", "userResponse", "correctness", "timestamp", "feedbackType"};
-
-
+    private static final String[] orderedFieldsToPrint = {"timestamp", "userId", "sessionId", "gameId", "language", "tutorName", "levelName", "taskName",
+            "problemName", "problemNumber", "substepNumber", "substepProblem", "attemptNumber", "expectedAnswer", "userResponse", "correctness", "feedbackType"};
 
     public PerformanceLogItem() {
-
     }
 
     public String toString() {
         StringBuilder msg = new StringBuilder();
 
-        String SEP = ",";
-
         for (String fieldName : orderedFieldsToPrint) {
             try {
                 Field field = this.getClass().getDeclaredField(fieldName);
                 msg.append(fieldName);
-                msg.append(":");
+                msg.append(": ");
                 msg.append(field.get(this));
-                msg.append(",");
+                msg.append(", ");
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -65,7 +59,7 @@ public class PerformanceLogItem {
         }
 
         String result = msg.toString();
-        return result.substring(0, result.length() - 1); // don't forget to slice off that last comma
+        return result.substring(0, result.length() - 2); // don't forget to slice off that last comma
     }
 
     public String getUserId() {
