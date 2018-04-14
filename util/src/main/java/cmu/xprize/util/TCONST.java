@@ -47,6 +47,12 @@ public class TCONST {
     public static final String SKILL_STORIES    = "stories";
     public static final String SKILL_MATH       = "numbers";
     public static final String SKILL_SHAPES     = "shapes";
+
+
+    public static final String SKILL_WRITING_PLACEMENT    = "letters_placement";
+    public static final String SKILL_MATH_PLACEMENT       = "numbers_placement";
+
+
     public static final String FINISH           = "FINISH";
     public static final String SELECTOR_MODE    = "SELECTOR_MODE";
 
@@ -823,4 +829,6 @@ public class TCONST {
     public static final String DEBUG_GRAY_SCREEN_TAG = "DEBUG_GRAY_SCREEN";
 
     public static final String DEBUG_AUDIO_FILE = "DEBUG_AUDIO";
+
+    public static final String PLACEMENT_TAG = "DEBUG_PLACEMENT";
 }
