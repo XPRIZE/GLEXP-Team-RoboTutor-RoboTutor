@@ -1,466 +1,230 @@
 {
   "question_replacement": false,
+  "response_replacement": false,
+  "gen_responsetype": "text_data",
+  "question_count": 10,
+  "banner_color": "#000066",
+  "gen_answerSet": [],
+  "gen_responseSet": [],
+  "gen_answertype": "text_data",
+  "gen_stimulusSet": [],
+  "gen_stimulustype": "text_data",
+  "question_sequence": "RANDOM",
   "problem_type": "WORD_ENDS_WITH",
   "dataSource": [
     {
-      "gen_question": false,
-      "stimulus_type": "text_data",
+      "question_say": true,
       "question_show": false,
       "answer_type": "text_data",
+      "answer": "hawa",
       "question_type": "multiple-choice",
-      "stimulus": "_ _ all",
-      "question_say": true,
+      "stimulus_type": "text_data",
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
+      "stimulus": "_ _ wa",
       "response_set": [
-        "wivu",
-        [
-          "duni",
-          "gani",
-          "geni",
-          "honi",
-          "jani",
-          "kuni",
-          "lini",
-          "nani",
-          "nini",
-          "pini",
-          "tani",
-          "uani"
-        ],
-        "safi"
+        "nazo",
+        "kasa",
+        "hawa"
       ],
-      "answer": [
-        "duni",
-        "gani",
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "lima",
+      "question_type": "multiple-choice",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "_ _ ma",
+      "response_set": [
+        "lima",
+        "tope",
+        "hiki"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "bali",
+      "question_type": "multiple-choice",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "_ _ li",
+      "response_set": [
+        "tuzo",
+        "bali",
+        "goso"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "tuna",
+      "question_type": "multiple-choice",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "_ _ na",
+      "response_set": [
+        "hula",
+        "tuna",
+        "pale"
+      ],
+      "gen_question": false
+    },
+    {
+      "question_say": true,
+      "question_show": false,
+      "answer_type": "text_data",
+      "answer": "hili",
+      "question_type": "multiple-choice",
+      "stimulus_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus": "_ _ li",
+      "response_set": [
         "geni",
-        "honi",
-        "jani",
-        "kuni",
-        "lini",
-        "nani",
-        "nini",
-        "pini",
-        "tani",
-        "uani"
-      ]
+        "saba",
+        "hili"
+      ],
+      "gen_question": false
     },
     {
-      "gen_question": false,
-      "stimulus_type": "text_data",
+      "question_say": true,
       "question_show": false,
       "answer_type": "text_data",
+      "answer": "tisa",
       "question_type": "multiple-choice",
-      "stimulus": "_ _ all",
-      "question_say": true,
+      "stimulus_type": "text_data",
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
+      "stimulus": "_ _ sa",
       "response_set": [
-        [
-          "bali",
-          "goli",
-          "hali",
-          "hili",
-          "kali",
-          "mali",
-          "pili",
-          "wali"
-        ],
-        "moja",
-        "mvua"
+        "koti",
+        "tisa",
+        "saba"
       ],
-      "answer": [
-        "bali",
-        "goli",
-        "hali",
-        "hili",
-        "kali",
-        "mali",
-        "pili",
-        "wali"
-      ]
+      "gen_question": false
     },
     {
-      "gen_question": false,
-      "stimulus_type": "text_data",
+      "question_say": true,
       "question_show": false,
       "answer_type": "text_data",
+      "answer": "sana",
       "question_type": "multiple-choice",
-      "stimulus": "_ _ all",
-      "question_say": true,
+      "stimulus_type": "text_data",
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
+      "stimulus": "_ _ na",
       "response_set": [
-        [
-          "dawa",
-          "hawa",
-          "hewa",
-          "huwa",
-          "kuwa",
-          "mbwa",
-          "miwa",
-          "mpwa",
-          "sawa",
-          "umwa",
-          "ziwa"
-        ],
-        "titi",
-        "sisi"
+        "sana",
+        "hema",
+        "nazo"
       ],
-      "answer": [
-        "dawa",
-        "hawa",
-        "hewa",
-        "huwa",
-        "kuwa",
-        "mbwa",
-        "miwa",
-        "mpwa",
-        "sawa",
-        "umwa",
-        "ziwa"
-      ]
+      "gen_question": false
     },
     {
-      "gen_question": false,
-      "stimulus_type": "text_data",
+      "question_say": true,
       "question_show": false,
       "answer_type": "text_data",
+      "answer": "kiko",
       "question_type": "multiple-choice",
-      "stimulus": "_ _ all",
-      "question_say": true,
+      "stimulus_type": "text_data",
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
+      "stimulus": "_ _ ko",
       "response_set": [
-        "mmea",
-        [
-          "dawa",
-          "hawa",
-          "hewa",
-          "huwa",
-          "kuwa",
-          "mbwa",
-          "miwa",
-          "mpwa",
-          "sawa",
-          "umwa",
-          "ziwa"
-        ],
-        "mito"
+        "yowe",
+        "kiko",
+        "sifa"
       ],
-      "answer": [
-        "dawa",
-        "hawa",
-        "hewa",
-        "huwa",
-        "kuwa",
-        "mbwa",
-        "miwa",
-        "mpwa",
-        "sawa",
-        "umwa",
-        "ziwa"
-      ]
+      "gen_question": false
     },
     {
-      "gen_question": false,
-      "stimulus_type": "text_data",
+      "question_say": true,
       "question_show": false,
       "answer_type": "text_data",
+      "answer": "ngwe",
       "question_type": "multiple-choice",
-      "stimulus": "_ _ all",
-      "question_say": true,
+      "stimulus_type": "text_data",
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
+      "stimulus": "_ _ we",
       "response_set": [
-        "sawa",
-        [
-          "bali",
-          "goli",
-          "hali",
-          "hili",
-          "kali",
-          "mali",
-          "pili",
-          "wali"
-        ],
-        "wazi"
-      ],
-      "answer": [
-        "bali",
-        "goli",
-        "hali",
-        "hili",
-        "kali",
-        "mali",
-        "pili",
-        "wali"
-      ]
-    },
-    {
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_show": false,
-      "answer_type": "text_data",
-      "question_type": "multiple-choice",
-      "stimulus": "_ _ all",
-      "question_say": true,
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "response_set": [
-        [
-          "jiwe",
-          "kiwe",
-          "mawe",
-          "nawe",
-          "ngwe",
-          "niwe",
-          "tuwe",
-          "wawe",
-          "wewe",
-          "yawe",
-          "yowe",
-          "ziwe"
-        ],
-        "boga",
+        "mito",
+        "nchi",
         "ngwe"
       ],
-      "answer": [
-        "jiwe",
-        "kiwe",
-        "mawe",
-        "nawe",
-        "ngwe",
-        "niwe",
-        "tuwe",
-        "wawe",
-        "wewe",
-        "yawe",
-        "yowe",
-        "ziwe"
-      ]
+      "gen_question": false
     },
     {
-      "gen_question": false,
-      "stimulus_type": "text_data",
+      "question_say": true,
       "question_show": false,
       "answer_type": "text_data",
+      "answer": "kuna",
       "question_type": "multiple-choice",
-      "stimulus": "_ _ all",
-      "question_say": true,
+      "stimulus_type": "text_data",
       "responsetype_set": [
         "text_data",
         "text_data",
         "text_data"
       ],
+      "stimulus": "_ _ na",
       "response_set": [
-        "visu",
-        "mvua",
-        [
-          "bali",
-          "goli",
-          "hali",
-          "hili",
-          "kali",
-          "mali",
-          "pili",
-          "wali"
-        ]
+        "goso",
+        "ziwa",
+        "kuna"
       ],
-      "answer": [
-        "bali",
-        "goli",
-        "hali",
-        "hili",
-        "kali",
-        "mali",
-        "pili",
-        "wali"
-      ]
-    },
-    {
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_show": false,
-      "answer_type": "text_data",
-      "question_type": "multiple-choice",
-      "stimulus": "_ _ all",
-      "question_say": true,
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "response_set": [
-        "goli",
-        [
-          "huko",
-          "jiko",
-          "kiko",
-          "koko",
-          "lako",
-          "niko",
-          "soko",
-          "wako",
-          "yako",
-          "yuko",
-          "zako",
-          "ziko"
-        ],
-        "mama"
-      ],
-      "answer": [
-        "huko",
-        "jiko",
-        "kiko",
-        "koko",
-        "lako",
-        "niko",
-        "soko",
-        "wako",
-        "yako",
-        "yuko",
-        "zako",
-        "ziko"
-      ]
-    },
-    {
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_show": false,
-      "answer_type": "text_data",
-      "question_type": "multiple-choice",
-      "stimulus": "_ _ all",
-      "question_say": true,
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "response_set": [
-        "baba",
-        "nchi",
-        [
-          "duni",
-          "gani",
-          "geni",
-          "honi",
-          "jani",
-          "kuni",
-          "lini",
-          "nani",
-          "nini",
-          "pini",
-          "tani",
-          "uani"
-        ]
-      ],
-      "answer": [
-        "duni",
-        "gani",
-        "geni",
-        "honi",
-        "jani",
-        "kuni",
-        "lini",
-        "nani",
-        "nini",
-        "pini",
-        "tani",
-        "uani"
-      ]
-    },
-    {
-      "gen_question": false,
-      "stimulus_type": "text_data",
-      "question_show": false,
-      "answer_type": "text_data",
-      "question_type": "multiple-choice",
-      "stimulus": "_ _ all",
-      "question_say": true,
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "response_set": [
-        "jina",
-        [
-          "kale",
-          "kile",
-          "kule",
-          "lele",
-          "lile",
-          "pale",
-          "pole",
-          "tele",
-          "tule",
-          "vile",
-          "wale",
-          "yale",
-          "yule",
-          "zile"
-        ],
-        "hapo"
-      ],
-      "answer": [
-        "kale",
-        "kile",
-        "kule",
-        "lele",
-        "lile",
-        "pale",
-        "pole",
-        "tele",
-        "tule",
-        "vile",
-        "wale",
-        "yale",
-        "yule",
-        "zile"
-      ]
+      "gen_question": false
     }
   ],
-  "gen_answertype": "text_data",
-  "gen_answerSet": [],
-  "gen_responseSet": [],
-  "response_replacement": false,
-  "question_sequence": "RANDOM",
-  "question_count": 10,
   "view_background": {
-    "kind": "squares",
-    "colorbase": "#666666",
-    "colorchoice": "fixed",
     "layout": "grid",
+    "kind": "squares",
     "layoutcount": 0,
+    "style": "primitives",
+    "colorchoice": "fixed",
+    "colorbase": "#666666",
     "colors": [
       -6053120,
       -7566336,
       -2500352,
       -5066240
-    ],
-    "style": "primitives"
-  },
-  "gen_responsetype": "text_data",
-  "banner_color": "#000066",
-  "gen_stimulustype": "text_data",
-  "gen_stimulusSet": []
+    ]
+  }
 }
