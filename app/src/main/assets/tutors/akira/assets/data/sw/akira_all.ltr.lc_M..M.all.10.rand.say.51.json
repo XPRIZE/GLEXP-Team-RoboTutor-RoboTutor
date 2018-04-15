@@ -2,101 +2,101 @@
  "datasource" : [
 
 	{
-"type":"CAk_data",
-"choices":["m", "d", "k"],
+"type":"CAk_Data",
+"choices":["m", "v", "s"],
 "item_counter":1,
 "answer":"LEFT",
-"target":m,
+"target":"m",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["k", "m", "d"],
+"type":"CAk_Data",
+"choices":["m", "a", "f"],
 "item_counter":2,
-"answer":"MID",
-"target":m,
+"answer":"LEFT",
+"target":"m",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["h", "p", "m"],
+"type":"CAk_Data",
+"choices":["j", "g", "m"],
 "item_counter":3,
 "answer":"RIGHT",
-"target":m,
+"target":"m",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["m", "w", "l"],
+"type":"CAk_Data",
+"choices":["y", "m", "u"],
 "item_counter":4,
-"answer":"LEFT",
-"target":m,
-"belowString":"audio",
-"audio":"true"
-	} ,
-
-	{
-"type":"CAk_data",
-"choices":["ch", "m", "n"],
-"item_counter":5,
 "answer":"MID",
-"target":m,
+"target":"m",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["m", "z", "k"],
+"type":"CAk_Data",
+"choices":["z", "j", "m"],
+"item_counter":5,
+"answer":"RIGHT",
+"target":"m",
+"belowString":"audio",
+"audio":"true"
+	} ,
+
+	{
+"type":"CAk_Data",
+"choices":["m", "ch", "g"],
 "item_counter":6,
 "answer":"LEFT",
-"target":m,
+"target":"m",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["v", "t", "m"],
+"type":"CAk_Data",
+"choices":["p", "m", "ch"],
 "item_counter":7,
-"answer":"RIGHT",
-"target":m,
+"answer":"MID",
+"target":"m",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["t", "m", "b"],
+"type":"CAk_Data",
+"choices":["t", "m", "a"],
 "item_counter":8,
 "answer":"MID",
-"target":m,
+"target":"m",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["m", "u", "w"],
+"type":"CAk_Data",
+"choices":["f", "n", "m"],
 "item_counter":9,
-"answer":"LEFT",
-"target":m,
+"answer":"RIGHT",
+"target":"m",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["b", "v", "m"],
+"type":"CAk_Data",
+"choices":["m", "r", "t"],
 "item_counter":10,
-"answer":"RIGHT",
-"target":m,
+"answer":"LEFT",
+"target":"m",
 "belowString":"audio",
 "audio":"true"
 	}

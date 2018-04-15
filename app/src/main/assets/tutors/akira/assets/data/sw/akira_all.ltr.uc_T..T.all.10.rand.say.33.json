@@ -2,101 +2,101 @@
  "datasource" : [
 
 	{
-"type":"CAk_data",
-"choices":["M", "T", "V"],
+"type":"CAk_Data",
+"choices":["F", "CH", "T"],
 "item_counter":1,
-"answer":"MID",
-"target":T,
+"answer":"RIGHT",
+"target":"T",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["T", "W", "I"],
+"type":"CAk_Data",
+"choices":["F", "T", "E"],
 "item_counter":2,
-"answer":"LEFT",
-"target":T,
+"answer":"MID",
+"target":"T",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["I", "J", "T"],
+"type":"CAk_Data",
+"choices":["I", "R", "T"],
 "item_counter":3,
 "answer":"RIGHT",
-"target":T,
+"target":"T",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["V", "T", "N"],
+"type":"CAk_Data",
+"choices":["Y", "T", "H"],
 "item_counter":4,
 "answer":"MID",
-"target":T,
+"target":"T",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["N", "T", "U"],
+"type":"CAk_Data",
+"choices":["R", "T", "A"],
 "item_counter":5,
 "answer":"MID",
-"target":T,
+"target":"T",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["T", "G", "U"],
+"type":"CAk_Data",
+"choices":["T", "O", "CH"],
 "item_counter":6,
 "answer":"LEFT",
-"target":T,
+"target":"T",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["Z", "D", "T"],
+"type":"CAk_Data",
+"choices":["G", "L", "T"],
 "item_counter":7,
 "answer":"RIGHT",
-"target":T,
+"target":"T",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["T", "E", "A"],
+"type":"CAk_Data",
+"choices":["T", "V", "S"],
 "item_counter":8,
 "answer":"LEFT",
-"target":T,
+"target":"T",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["J", "P", "T"],
+"type":"CAk_Data",
+"choices":["T", "H", "N"],
 "item_counter":9,
-"answer":"RIGHT",
-"target":T,
+"answer":"LEFT",
+"target":"T",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["N", "U", "T"],
+"type":"CAk_Data",
+"choices":["G", "T", "S"],
 "item_counter":10,
-"answer":"RIGHT",
-"target":T,
+"answer":"MID",
+"target":"T",
 "belowString":"audio",
 "audio":"true"
 	}
