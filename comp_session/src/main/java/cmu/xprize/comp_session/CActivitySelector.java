@@ -151,7 +151,7 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
      * @param intent
      * @param intentData
      */
-    public void doLaunch(String intent, String intentData, String dataSource) {
+    public void doLaunch(String intent, String intentData, String dataSource, String tutorId) {
     }
 
     // IButtonController Interface END

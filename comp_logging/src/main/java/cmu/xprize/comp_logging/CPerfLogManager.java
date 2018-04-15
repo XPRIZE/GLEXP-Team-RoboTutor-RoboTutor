@@ -54,6 +54,10 @@ public class CPerfLogManager extends CLogManagerBase implements IPerfLogManager 
             event.setTutorName(lastEvent.getTutorName());
         }
 
+        if (event.getTutorId() == null || event.getTutorId().isEmpty()) {
+            event.setTutorId(lastEvent.getTutorId());
+        }
+
 
         if (event.getTaskName() == null || event.getTaskName().isEmpty()) {
             event.setTaskName(lastEvent.getTaskName());

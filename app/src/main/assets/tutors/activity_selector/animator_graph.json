@@ -251,7 +251,8 @@
         "CANCEL_BUTTON_DESCRIPTION":  {"type": "COMMAND", "id": "BUTTON_DESCRIPTION", "method": "cancelNode", "parms": "", "features":""},
         "CANCEL_INTRO_STATEMENT":  {"type": "COMMAND", "id": "INTRO_STATEMENT_BEHAVIOR", "method": "cancelNode", "parms": "", "features":""},
 
-        "LAUNCH_BEHAVIOR":{"type": "COMMAND", "cmd": "LAUNCH-TUTOR", "parms":"{{activity_selector.intent}}:String|{{activity_selector.intentData}}:String|{{activity_selector.dataSource}}:String|{{activity_selector.features}}:String" },
+        "LAUNCH_BEHAVIOR_OLD":{"type": "COMMAND", "cmd": "LAUNCH-TUTOR", "parms":"{{activity_selector.intent}}:String|{{activity_selector.intentData}}:String|{{activity_selector.dataSource}}:String|{{activity_selector.features}}:String" },
+        "LAUNCH_BEHAVIOR":{"type": "COMMAND", "cmd": "LAUNCH-TUTOR", "parms":"{{activity_selector.intent}}:String|{{activity_selector.intentData}}:String|{{activity_selector.dataSource}}:|{{activity_selector.tutorId}}:String|{{activity_selector.features}}:String" },
 
         "CANCEL_POINT":    {"type": "COMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "CANCEL_POINTAT:String", "features":""},
         "CANCEL_FEEDBACK": {"type": "COMMAND", "cmd": "CANCEL_NODE"},

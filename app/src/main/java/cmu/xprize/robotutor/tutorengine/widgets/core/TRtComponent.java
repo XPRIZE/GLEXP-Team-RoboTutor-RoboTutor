@@ -1161,6 +1161,8 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
         event.setLanguage(CTutorEngine.language);
         event.setTutorName(mTutor.getTutorName());
+        Log.wtf("WARRIOR_MAN", mTutor.getTutorId());
+        event.setTutorId(mTutor.getTutorId());
         event.setLevelName(task);
         event.setTaskName("story");
         event.setProblemName(currentSentence);

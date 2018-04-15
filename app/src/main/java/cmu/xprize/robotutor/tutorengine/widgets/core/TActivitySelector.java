@@ -60,6 +60,7 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.comp_session.AS_CONST.LAUNCH_EVENT;
+import static cmu.xprize.comp_session.AS_CONST.VAR_TUTOR_ID;
 import static cmu.xprize.comp_session.AS_CONST.VAR_DATASOURCE;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENTDATA;
@@ -441,7 +442,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                     file = ROBO_DEBUG_FILE_BPOP;
             }
 
-            doLaunch(intent, TCONST.TUTOR_NATIVE, TCONST.DEBUG_FILE_PREFIX + file);
+            doLaunch(intent, TCONST.TUTOR_NATIVE, TCONST.DEBUG_FILE_PREFIX + file, "DEBUGGER");
             return;
 
         }
@@ -594,7 +595,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                                 // if an error occurs with media player, we don't want to freeze the app completely
                                 CLogManager.setTutor(activeTutor);
 
-                                doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data);
+                                doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
                             }
 
 
@@ -617,21 +618,21 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                                     CLogManager.setTutor(activeTutor);
 
-                                    doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data);
+                                    doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
                                 }
                             });
                         } else {
 
                             CLogManager.setTutor(activeTutor);
 
-                            doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data);
+                            doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
 
                         }
                     } else {
 
                         CLogManager.setTutor(activeTutor);
 
-                        doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data);
+                        doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
                     }
 
 
@@ -1157,7 +1158,9 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
      * @param intentData
      */
     @Override
-    public void doLaunch(String intent, String intentData, String dataSource) {
+    public void doLaunch(String intent, String intentData, String dataSource, String tutorId) {
+
+        Log.wtf("WARRIOR_MAN", "doLaunch: tutorId = " + tutorId);
 
         RoboTutor.SELECTOR_MODE = TCONST.FTR_DIFFICULTY_ASSESS;
 
@@ -1166,6 +1169,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         publishValue(VAR_INTENT, intent);
         publishValue(VAR_INTENTDATA, intentData);
         publishValue(VAR_DATASOURCE, dataSource);
+        publishValue(VAR_TUTOR_ID, tutorId);
 
         applyBehavior(LAUNCH_EVENT);
     }

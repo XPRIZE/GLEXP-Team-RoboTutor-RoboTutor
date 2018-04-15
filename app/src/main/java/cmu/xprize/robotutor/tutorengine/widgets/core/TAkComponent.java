@@ -596,6 +596,8 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         event.setGameId(mTutor.getUuid().toString());  // a new tutor is generated for each game, so this will be unique
         event.setLanguage(CTutorEngine.language);
         event.setTutorName(mTutor.getTutorName());
+        Log.wtf("WARRIOR_MAN", mTutor.getTutorId());
+        event.setTutorId(mTutor.getTutorId());
         event.setLevelName(level);
         event.setTaskName(task);
         event.setProblemName(generateProblemName());

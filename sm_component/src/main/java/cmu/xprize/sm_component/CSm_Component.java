@@ -87,7 +87,7 @@ public class CSm_Component extends ScrollView implements ILoadableObject, ILaunc
 
     public void launchTutor(String tutorDesc, String tutorNative, String tutorData) {
 
-        mButtonController.doLaunch(tutorDesc, tutorNative, tutorData);
+        mButtonController.doLaunch(tutorDesc, tutorNative, tutorData, null); // WARRIOR_MAN what is this???
     }
 
     private void buildInterface() {
