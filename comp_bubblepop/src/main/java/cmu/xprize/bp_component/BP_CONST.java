@@ -258,17 +258,44 @@ public class BP_CONST {
     private static int[] TENFRAME_H_10 = {R.drawable.tenframe_h_10};
 
     public static int[] BPOP_BACKGROUNDS = {
-            R.raw.astrology_astronomy_beautiful_713664,
-            R.raw.blue_sky_camels_desert_71241,
-            R.raw.bow_river_canada_forest_219972,
-            R.raw.adventure_alone_arid_274014,              // works
-            R.raw.animal_carnivore_countryside_667204,      // too big
-            R.raw.autumn_beautiful_city_210243,
+            R.raw.bark_close_up_crack_207328,
+            R.raw.bay_beach_clouds_175717,
+            R.raw.beach_beach_chairs_beach_hut_531035,
+            R.raw.beach_beach_chairs_coconut_trees_131423,
             R.raw.beach_blue_coast_417144,
+            R.raw.beach_boardwalk_boat_132037,
+            R.raw.beach_bora_bora_flow_21787,
+            R.raw.beach_cc0_coast_103567,
+            R.raw.beach_clouds_horizon_96798,
+            R.raw.beach_coast_horizon_51809,
+            R.raw.beach_horizon_ocean_55637,
+            R.raw.beautiful_dark_evening_29435,
             R.raw.birds_of_prey_black_and_white_dawn_748877,
+            R.raw.blue_sky_camels_desert_71241,
+            R.raw.blue_water_calm_h2o_734973,
+            R.raw.bow_river_canada_forest_219972,
+            R.raw.camels_desert_landscape_53537,
+            R.raw.close_up_dew_green_207299,
+            R.raw.clouds_coast_landscape_29049,
             R.raw.clouds_conifer_daylight_388065,
+            R.raw.clouds_countryside_daylight_51947,
             R.raw.clouds_cropland_crops_462023,
-            R.raw.desert_egypt_great_sphinx_of_giza_2359
+            R.raw.clouds_daylight_fjord_135157,
+            R.raw.clouds_daylight_forest_761517,
+            R.raw.clouds_landscape_light_33834,
+            R.raw.crafts_drums_handmade_158664,
+            R.raw.dawn_dusk_hd_wallpaper_149246,
+            R.raw.dawn_dusk_hills_66997,
+            R.raw.daylight_farm_forest_771308,
+            R.raw.daylight_forest_grass_247600,
+            R.raw.desert_egypt_great_sphinx_of_giza_2359,
+            R.raw.desert_hd_wallpaper_nature_80454,
+            R.raw.forest_nature_river_105170,
+            R.raw.galaxy_milky_way_night_7480,
+            R.raw.horizon_ocean_salt_water_7321,
+            R.raw.mobilechallenge_close_up_dew_807598,
+            R.raw.nature_river_rocks_7138
+
     };
 
     static public HashMap<String, int[]> drawableMap = new HashMap<String, int[]>();
