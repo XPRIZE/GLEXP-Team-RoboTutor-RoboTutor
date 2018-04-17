@@ -858,6 +858,8 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         event.setGameId(mTutor.getUuid().toString());
         event.setLanguage(CTutorEngine.language);
         event.setTutorName(mTutor.getTutorName());
+        Log.wtf("WARRIOR_MAN", mTutor.getTutorId());
+        event.setTutorId(mTutor.getTutorId());
         event.setProblemName(problemName);
         event.setProblemNumber(logQuestionIndex);
         event.setTotalSubsteps(1);

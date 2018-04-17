@@ -243,7 +243,7 @@ public class CTutorEngine implements ILoadableObject2 {
             return;
         }
 
-        createTutor(defTutor, featureString);
+        createTutor(defTutor, featureString, null);
         launchTutor(tutorBindings);
     }
 
@@ -317,13 +317,15 @@ public class CTutorEngine implements ILoadableObject2 {
      * @param tutorName
      * @param features
      */
-    static private void createTutor(String tutorName, String features) {
+    static private void createTutor(String tutorName, String features, String tutorId) {
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r4: killActiveTutor called from createTutor(" + tutorName + ")");
         killActiveTutor();
 
         // GRAY_SCREEN_BUG
         Log.d(TAG, "createTutor: " + tutorName);
+        Log.wtf("WARRIOR_MAN", "createTutor: tutorName=" + tutorName);
+        Log.wtf("WARRIOR_MAN", "createTutor: tutorId=" + tutorId);
 
         // Create a new tutor container relative to the masterContainer
         //
@@ -335,7 +337,7 @@ public class CTutorEngine implements ILoadableObject2 {
 
         // GRAY_SCREEN_BUG CTutor created --> Media Manager created --> added to map
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "p2: Initializing tutor: " + tutorName);
-        activeTutor = new CTutor(Activity, tutorName, (ITutorManager)tutorContainer, TutorLogManager, mRootScope, language, features);
+        activeTutor = new CTutor(Activity, tutorName, tutorId, (ITutorManager)tutorContainer, TutorLogManager, mRootScope, language, features);
     }
 
     /**
@@ -505,7 +507,9 @@ public class CTutorEngine implements ILoadableObject2 {
      * @param tutorVariant
      * @param intentType
      */
-    static public void launch(String intentType, String tutorVariant, String dataSource ) {
+    static public void launch(String intentType, String tutorVariant, String dataSource, String tutorId) {
+
+        Log.wtf("WARRIOR_MAN", "launch: tutorId=" + tutorId);
 
         Intent extIntent = new Intent();
         String extPackage;
@@ -528,7 +532,7 @@ public class CTutorEngine implements ILoadableObject2 {
             case "native":
 
                 Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "p3b: Creating Tutor in 'CTutor.launch': " + tutorDescriptor.tutorName);
-                createTutor(tutorDescriptor.tutorName, tutorDescriptor.features);
+                createTutor(tutorDescriptor.tutorName, tutorDescriptor.features, tutorId);
                 launchTutor(tutorBinding);
                 break;
 

@@ -2,51 +2,51 @@
  "datasource" : [
 
 	{
-"type":"CAk_data",
-"choices":["U", "A", "E"],
+"type":"CAk_Data",
+"choices":["U", "E", "A"],
 "item_counter":1,
-"answer":"MID",
-"target":A,
+"answer":"RIGHT",
+"target":"A",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["U", "E", "O"],
+"type":"CAk_Data",
+"choices":["E", "O", "U"],
 "item_counter":2,
-"answer":"MID",
-"target":E,
-"belowString":"audio",
-"audio":"true"
-	} ,
-
-	{
-"type":"CAk_data",
-"choices":["I", "U", "O"],
-"item_counter":3,
 "answer":"LEFT",
-"target":I,
+"target":"E",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["O", "E", "U"],
+"type":"CAk_Data",
+"choices":["U", "I", "A"],
+"item_counter":3,
+"answer":"MID",
+"target":"I",
+"belowString":"audio",
+"audio":"true"
+	} ,
+
+	{
+"type":"CAk_Data",
+"choices":["O", "U", "I"],
 "item_counter":4,
 "answer":"LEFT",
-"target":O,
+"target":"O",
 "belowString":"audio",
 "audio":"true"
 	} ,
 
 	{
-"type":"CAk_data",
-"choices":["A", "O", "U"],
+"type":"CAk_Data",
+"choices":["U", "O", "E"],
 "item_counter":5,
-"answer":"RIGHT",
-"target":U,
+"answer":"LEFT",
+"target":"U",
 "belowString":"audio",
 "audio":"true"
 	}

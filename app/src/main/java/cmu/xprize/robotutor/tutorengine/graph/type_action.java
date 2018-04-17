@@ -171,8 +171,12 @@ public class type_action extends scene_node {
                         String intent     = getScope().parseTemplate(parmList.get(0));
                         String intentData = getScope().parseTemplate(parmList.get(2));
                         String dataSource = getScope().parseTemplate(parmList.get(4));
+                        String tutorId    = getScope().parseTemplate(parmList.get(6));
 
-                        CTutorEngine.launch(intentData, intent, dataSource );
+
+                        Log.wtf("WARRIOR_MAN", "tutorId = " + tutorId);
+
+                        CTutorEngine.launch(intentData, intent, dataSource, tutorId);
 
                     } catch (Exception e) {
                         CErrorManager.logEvent(TAG, "Launch Command Invalid: ", e, false);

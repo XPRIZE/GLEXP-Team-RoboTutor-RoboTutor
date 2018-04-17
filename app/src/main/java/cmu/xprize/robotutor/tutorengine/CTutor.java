@@ -90,6 +90,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
     public ViewGroup                     mSceneContainer;
 
     public String                        mTutorName = "";
+    public String                        mTutorId = "";
     public AssetManager                  mAssetManager;
     public boolean                       mTutorActive = false;
 
@@ -127,11 +128,12 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
 
 
-    public CTutor(Context context, String name, ITutorManager tutorContainer, ILogManager logManager, TScope rootScope, String tarLanguage, String featSet) {
+    public CTutor(Context context, String name, String tutorId, ITutorManager tutorContainer, ILogManager logManager, TScope rootScope, String tarLanguage, String featSet) {
 
         mTutorScope      = new TScope(this, name, rootScope);
         mContext         = context;
         mTutorName       = name;
+        mTutorId         = tutorId;
         mTutorContainer  = tutorContainer;
         mTutorLogManager = logManager;
 
@@ -929,6 +931,9 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
     public String getTutorName() {
         return mTutorName;
+    }
+    public String getTutorId() {
+        return mTutorId;
     }
 
 
