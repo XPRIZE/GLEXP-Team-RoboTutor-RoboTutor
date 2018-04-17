@@ -775,21 +775,19 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             if(mProblemType.startsWith("EXPRESSION_E2N")) {
                 publishFeature(BP_CONST.FTR_E2N);
             }
-            Log.d("TOMBRADY", answer);
 
             if(answer != null && answer.matches("[-+]?\\d*\\.?\\d+")) {
                 int ans = Integer.parseInt(answer);
                 int[] ansDigits = getListDigits(ans);
-                Log.d("TOMBRADY", Integer.toString(ansDigits[0]));
+
                 if(ansDigits[0] >= 100) {
-                    Log.d("TOMBRADY", Integer.toString(ansDigits[0]));
                     publishFeature(BP_CONST.FTR_ANS_HUNDREDS);
                     publishValue(BP_CONST.ANS_VAR_HUNDREDS, ansDigits[0]);
                 }
                 else {
                     removeFeature(BP_CONST.FTR_ANS_HUNDREDS);
                 }
-                if(ansDigits[1] >= 10 || ansDigits[0] == 0) {
+                if(ansDigits[1] >= 1 || ansDigits[0] == 0) {
                     publishFeature(BP_CONST.FTR_ANS_TENS);
                     publishValue(BP_CONST.ANS_VAR_TENS, ansDigits[1]);
                 }
