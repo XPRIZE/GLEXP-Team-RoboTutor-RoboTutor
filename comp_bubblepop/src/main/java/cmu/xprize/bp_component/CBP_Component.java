@@ -474,7 +474,8 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
             if(i1 == ansIndex) {
 
                 data.response_set[ansIndex]     = data.stimulus;
-                data.responsetype_set[ansIndex] = data.stimulus_type;
+                data.responsetype_set[ansIndex] = data.stimulus_type; // YOGURT is reference when shouldn't be
+                data.responsetype_set[ansIndex] = wrk_respTypeSet.get(0); // YOGURT hacky
                 if(data.response_script != null)
                     data.response_script[ansIndex]  = data.stimulus_script;
             }
