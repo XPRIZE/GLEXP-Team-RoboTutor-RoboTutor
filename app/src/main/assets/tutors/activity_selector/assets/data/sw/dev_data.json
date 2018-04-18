@@ -30,11 +30,11 @@
         },
         {
           "datatype": "IMAGEBUTTON",
-          "resource": "button_robotutor_select",
-          "componentID": "Sbutton5",
-          "behavior": "SELECT_ROBOTUTOR",
-          "prompt": "Let RoboTutor decide",
-          "help": "Tap here to let RoboTutor decide"
+          "resource": "button_exit_select",
+          "componentID": "Sbutton6",
+          "behavior": "SELECT_EXIT",
+          "prompt": "I want to stop using RoboTutor",
+          "help": "tap here to stop using robotutor"
         }
       ]
     },

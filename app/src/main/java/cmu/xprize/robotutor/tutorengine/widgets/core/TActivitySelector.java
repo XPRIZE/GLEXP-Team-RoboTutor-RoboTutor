@@ -471,6 +471,13 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         }
 
+        // 2. finish RoboTutor or the ActivitySelector, if necessary
+        if(buttonid.toUpperCase().equals(AS_CONST.SELECT_EXIT)) {
+            // if EXIT, we finish the app
+            mTutor.post(TCONST.FINISH);
+
+        }
+
         // First check if it is a skill selection button =
         //
         switch (buttonid.toUpperCase()) {
