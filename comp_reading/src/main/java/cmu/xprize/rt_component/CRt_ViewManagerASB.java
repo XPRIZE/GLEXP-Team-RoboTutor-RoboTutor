@@ -124,7 +124,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private CASB_Seg[]              segmentArray;
     private int                     numSegments;
     private int                     utterancePrev;
-    private int                     utteranceCurr;
+    private int                     segmentPrev;
+    private int                     segmentCurr;
 
     private String                  completedSentencesFmtd = "";
     private String                  completedSentences     = "";
@@ -474,7 +475,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         sentenceWords = stripLeadingTrailing(sentenceWords, "'");
         sentenceWords = splitWordOnChar(sentenceWords, "-");
         sentenceWords = splitWordOnChar(sentenceWords, "'");
-        sentenceWords = splitWordOnChar(sentenceWords, ",");
 
         return sentenceWords;
     }
@@ -643,7 +643,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         // automatically.
         //
         wordsToDisplay = splitRawSentence(rawSentence);
-
+        Log.d(TAG, "rawSentence = " + rawSentence);
+        Log.d(TAG, "wordsToDisplay = " + TextUtils.join("|", wordsToDisplay));
 
         // TODO: strip word-final or -initial apostrophes as in James' or 'cause.
         // Currently assuming hyphenated expressions split into two Asr words.
@@ -737,7 +738,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         segmentNdx    = _segNdx;
         numSegments   = segmentArray.length;
-        utterancePrev = 0;
+        utterancePrev = utteranceNdx == 0 ? 0 : rawNarration[utteranceNdx - 1].until;
+        segmentPrev   = utterancePrev;
 
         // Clean the extension off the end - could be either wav/mp3
         //
@@ -863,11 +865,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         narrationSegment = rawNarration[utteranceNdx].segmentation[segmentNdx];
 
-        utteranceCurr = narrationSegment.start;
+        segmentCurr = utterancePrev + narrationSegment.end;
 
-        mParent.post(TCONST.TRACK_NARRATION, new Long((utteranceCurr - utterancePrev) * 10));
+        mParent.post(TCONST.TRACK_NARRATION, new Long((segmentCurr - segmentPrev) * 10));
 
-        utterancePrev = utteranceCurr;
+        segmentPrev = segmentCurr;
     }
 
 
@@ -875,7 +877,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         if (!endOfSentence) {
 
-            // Tell the script to speak the new uttereance
+            // Tell the script to speak the new utterance
             //
             mParent.applyBehavior(TCONST.SPEAK_UTTERANCE);
             postDelayedTracker();
