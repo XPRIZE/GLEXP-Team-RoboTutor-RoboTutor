@@ -66,7 +66,8 @@ public class PerformancePromotionRules extends PromotionRules {
 
         // if they start an activity but don't like it.... what do?
         if (performance.getNumberAttempts() <= 2 && performance.getTotalNumberQuestions() > 3) {
-            return SelectedActivity.NEXT;
+            // equiprobably go to next or previous
+            return Math.random() > 0.5 ? SelectedActivity.NEXT : SelectedActivity.PREVIOUS;
         }
 
         // prevent divide by zero
