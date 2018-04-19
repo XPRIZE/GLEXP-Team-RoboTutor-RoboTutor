@@ -643,8 +643,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         // automatically.
         //
         wordsToDisplay = splitRawSentence(rawSentence);
-        Log.d(TAG, "rawSentence = " + rawSentence);
-        Log.d(TAG, "wordsToDisplay = " + TextUtils.join("|", wordsToDisplay));
+
 
         // TODO: strip word-final or -initial apostrophes as in James' or 'cause.
         // Currently assuming hyphenated expressions split into two Asr words.
