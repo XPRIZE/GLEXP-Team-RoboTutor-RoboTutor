@@ -1165,7 +1165,8 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         event.setTutorId(mTutor.getTutorId());
         event.setLevelName(task);
         event.setTaskName("story");
-        event.setProblemName(currentSentence);
+        String cleanedSentence = currentSentence.replaceAll(",", "").replaceAll("\"", ""); // logger handles commas and quotes weird
+        event.setProblemName(cleanedSentence);
         event.setProblemNumber(currentIndex);
         event.setSubstepNumber(expectedWordIndex);
         event.setAttemptNumber(attemptCount);
