@@ -707,6 +707,10 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             PATH_TO_FILE += "write_demo.mp4";
         } else if (activeTutor.startsWith("story.read") || activeTutor.startsWith("story.echo")) {
             PATH_TO_FILE += "read_demo.mp4";
+        } else if (activeTutor.startsWith("numscale") || activeTutor.startsWith("num.scale")) {
+            PATH_TO_FILE += "numscale_demo.mp4";
+        } else if (activeTutor.startsWith("countingx")) {
+            PATH_TO_FILE += "countingx_demo.mp4";
         } else {
             return null;
         }
