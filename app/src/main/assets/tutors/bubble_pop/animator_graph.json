@@ -197,7 +197,7 @@
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueTens}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow",    "features": "FTR_SAY&FTR_N2E&FTR_QUEST_TENS"},
 
 
-            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "STIMULUS_SHOWN:String|NEXTNODE:String" , "features":"FTR_SHOW&!(FTR_SAY&(FTR_E2N|FTR_WORD_STARTS_WITH|FTR_WORD_ENDS_WITH|FTR_GT_LT|FTR_QUEST_HUNDREDS|FTR_WORDS))"},
+            //{"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "STIMULUS_SHOWN:String|NEXTNODE:String" , "features":"FTR_SHOW&!(FTR_SAY&(FTR_E2N|FTR_WORD_STARTS_WITH|FTR_WORD_ENDS_WITH|FTR_GT_LT|FTR_QUEST_HUNDREDS|FTR_WORDS))"},
 
             //If we are showing it we have to wait for the animation to complete before continuing
             //Only wait for non expression or short numbers (without hundreds) which are spoken
