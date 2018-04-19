@@ -285,7 +285,9 @@
             //
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.prompt}}", "mode": "flow", "features": "FTR_PROMPT"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Please read aloud.mp3", "mode": "flow", "features": "!FTR_PROMPT&FTR_USER_READ|!FTR_PROMPT&FTR_USER_ECHO|!FTR_PROMPT&FTR_USER_REVEAL"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets listen to a story.mp3", "mode": "flow", "features": "!FTR_PROMPT&FTR_USER_HEAR|!FTR_PROMPT&FTR_USER_HIDE|!FTR_PROMPT&FTR_USER_PARROT"}
+            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets listen to a story.mp3", "mode": "flow", "features": "!FTR_PROMPT&FTR_USER_HEAR|!FTR_PROMPT&FTR_USER_HIDE"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Listen carefully.mp3", "mode": "flow", "features": "!FTR_PROMPT&FTR_USER_HEAR|!FTR_PROMPT&FTR_USER_HIDE"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please listen and repeat after me.mp3", "mode": "flow", "features": "!FTR_PROMPT&FTR_USER_PARROT"}
           ]
         },
 
