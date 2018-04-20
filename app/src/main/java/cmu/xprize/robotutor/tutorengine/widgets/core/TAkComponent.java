@@ -601,6 +601,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
         event.setLevelName(level);
         event.setTaskName(task);
         event.setProblemName(generateProblemName());
+        event.setTotalProblemsCount(mTutor.getTotalQuestions());
         event.setProblemNumber(_dataIndex);
         event.setSubstepNumber(1); // always 1 for Akira
         event.setAttemptNumber(1); // always 1 for Akira

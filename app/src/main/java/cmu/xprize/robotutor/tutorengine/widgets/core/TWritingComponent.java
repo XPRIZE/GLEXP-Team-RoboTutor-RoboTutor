@@ -514,6 +514,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         event.setLevelName(level);
         event.setTaskName(task);
         event.setProblemName("write_" + mStimulus);
+        event.setTotalProblemsCount(_data.size());
         event.setProblemNumber(_dataIndex);
         event.setSubstepNumber(mActiveIndex);
         event.setAttemptNumber(-1);

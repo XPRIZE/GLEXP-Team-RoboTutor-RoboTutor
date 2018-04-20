@@ -18,6 +18,7 @@ public class PerformanceLogItem {
     private String problemName;
     private int problemNumber;
     private String levelName;
+    private int totalProblemsCount;
 
     private String matrixName; // could be literacy or math or whatever
     private final static String MATH_MATRIX = "math";
@@ -45,7 +46,7 @@ public class PerformanceLogItem {
 
     // iterative way to print fields in the desired order
     private static final String[] orderedFieldsToPrint = {"timestamp", "userId", "sessionId", "gameId", "language", "tutorName", "tutorId", "matrixName", "levelName", "taskName",
-            "problemName", "problemNumber", "substepNumber", "substepProblem", "attemptNumber", "expectedAnswer", "userResponse", "correctness", "feedbackType"};
+            "problemName", "problemNumber", "substepNumber", "substepProblem", "attemptNumber", "expectedAnswer", "userResponse", "correctness", "feedbackType", "totalProblemsCount"};
 
     public PerformanceLogItem() {
     }
@@ -315,9 +316,11 @@ public class PerformanceLogItem {
         this.problemNumber = problemNumber;
     }
 
-    public int getTotalSubsteps() {
-        return totalSubsteps;
-    }
+    public int getTotalProblemsCount() { return totalProblemsCount; }
+
+    public void setTotalProblemsCount(int totalProblemsCount) { this.totalProblemsCount = totalProblemsCount; }
+
+    public int getTotalSubsteps() { return totalSubsteps; }
 
     public void setTotalSubsteps(int totalSubsteps) {
         this.totalSubsteps = totalSubsteps;

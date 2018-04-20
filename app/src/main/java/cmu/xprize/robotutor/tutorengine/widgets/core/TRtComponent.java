@@ -1168,6 +1168,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         String cleanedSentence = currentSentence.replaceAll(",", "").replaceAll("\"", ""); // logger handles commas and quotes weird
         event.setProblemName(cleanedSentence);
         event.setProblemNumber(currentIndex);
+        event.setTotalProblemsCount(dataSource.length);
         event.setSubstepNumber(expectedWordIndex);
         event.setAttemptNumber(attemptCount);
         event.setExpectedAnswer(sentenceWords != null && expectedWordIndex < sentenceWords.length ? sentenceWords[expectedWordIndex] : "");
