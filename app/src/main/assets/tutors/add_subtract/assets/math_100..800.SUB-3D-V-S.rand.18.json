@@ -1,6 +1,7 @@
 {
-	"bootFeatures": "FTR_DEMO_SUB",
-
+	"bootFeatures": "",
+    "random": "true",
+    "questionCount": 10,
 	"dataSource": [
 	
 		{"type": "Asm_Data", "level": "demo", "task": "Subtract triple digits no Borrow", "dataset": [650,250,400], "operation": "-", "image": "star"},

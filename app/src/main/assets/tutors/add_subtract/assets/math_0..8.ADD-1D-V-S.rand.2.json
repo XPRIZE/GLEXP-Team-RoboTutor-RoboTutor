@@ -1,6 +1,8 @@
 {
 	"bootFeatures": "FTR_DEMO_ADD",
-
+    "random": "true",
+    "questionCount": 10,
+    
 	"dataSource": [
 	
 		{"type": "Asm_Data", "level": "demo", "task": "Add single digits no carry", "dataset": [2,1,3], "operation": "+", "image": "triangle"},

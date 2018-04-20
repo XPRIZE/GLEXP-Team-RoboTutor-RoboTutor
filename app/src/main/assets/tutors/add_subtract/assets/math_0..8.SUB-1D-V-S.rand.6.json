@@ -1,6 +1,8 @@
 {
 	"bootFeatures": "FTR_DEMO_SUB",
 
+    "random": "true",
+    "questionCount": 10,
 	"dataSource": [
 	
 		{"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [4,3,1], "operation": "-", "image": "star"},
@@ -13,7 +15,13 @@
 
 		{"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [8,6,2], "operation": "-", "image": "star"},
 
-		{"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [8,6,2], "operation": "-", "image": "star"},
+		{"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [9,1,8], "operation": "-", "image": "star"},
+
+            {"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [9,2,7], "operation": "-", "image": "star"},
+
+            {"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [8,2,6], "operation": "-", "image": "star"},
+
+            {"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [3,1,2], "operation": "-", "image": "star"},
 
 		{"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [7,3,4], "operation": "-", "image": "star"},
 
