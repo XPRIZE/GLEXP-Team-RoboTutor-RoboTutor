@@ -182,6 +182,7 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
         event.setLevelName(level);
         event.setTaskName(task);
         event.setProblemName("countingx");
+        event.setTotalProblemsCount(dataSource.length);
         event.setProblemNumber(_dataIndex);
         event.setSubstepNumber(-1);
         event.setAttemptNumber(-1);

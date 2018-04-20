@@ -153,6 +153,8 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
         PerformanceLogItem event = new PerformanceLogItem();
 
+        int totalProblemsCount = random ? questionCount : dataSource.length;
+
         event.setUserId(RoboTutor.STUDENT_ID);
         event.setSessionId(RoboTutor.SESSION_ID);
         event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
@@ -163,6 +165,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         event.setLevelName(level);
         event.setTaskName(task);
         event.setProblemName(generateProblemName());
+        event.setTotalProblemsCount(totalProblemsCount);
         event.setProblemNumber(_dataIndex);
         event.setSubstepNumber(expectedNumDigitsInStudentAnswer); // 1=ones, 2=tens, 3=hundreds
         event.setAttemptNumber(-1); // this can be inferred in the data
