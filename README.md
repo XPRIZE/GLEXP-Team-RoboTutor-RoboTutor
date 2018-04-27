@@ -5,6 +5,7 @@
 
 Welcome to RoboTutor:
 
+
 ## **Setup and Configuration:**
 
 [Install Android Studio](http://developer.android.com/sdk/index.html)<br>
@@ -20,9 +21,9 @@ RoboTutor uses a large volume of external assets at runtime.  To successfully ru
 
 2. **Import** the RoboTutor project into Android Studio.
 
-3. You may need to install different versions of the build tools and SDKs.
+3. You may need to install different versions of the build tools and android SDKs.
 
-4. There are a number of build variants you can select to generate versions that support static language selections and also vesions that permit dynamic language selection at runtime. In order to generate any flavor that depends on the key signature, you must generate your own keystore (see next steps).
+4. There are a number of build variants you can select to generate versions that support static language selections and also vesions that permit dynamic language selection at runtime. In order to generate any flavor that depends on the key signature, you must generate your own keystore (see next steps). Note that the version used in the XPrize code drop 1 submission usees flavor *release_sw*, which depends on a signed APK.
 
 
 5. If you do not already have one, follow the steps [here](https://stackoverflow.com/questions/3997748/how-can-i-create-a-keystore) to generate a keystore.
@@ -35,7 +36,7 @@ keyAlias=<your_key_alias>
 storeFile=<path_to_location_of_keystore>
 ```
 
-7. Use Android Studio or gradlew to generate a signed APK with the flavor "release_sw" or "release_dbg". This APK can be transferred to your local SystemBuild directory.
+7. Use Android Studio or gradlew to generate a signed APK with the flavor *release_sw*. This will generate the file *robotutor.release_sw.1.8.8.1.apk*. This APK should be transferred to the apk in your local SystemBuild directory.
 
 
 
