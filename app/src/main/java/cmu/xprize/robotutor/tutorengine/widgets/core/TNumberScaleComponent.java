@@ -3,6 +3,7 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.widget.TextView;
 
 import org.json.JSONObject;
 
@@ -17,6 +18,7 @@ import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.comp_numberscale.NSCONST;
+import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
@@ -49,6 +51,8 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
     private CMediaManager mMediaManager;
     private int current_hit;
     private int max_hit;
+    protected TextView banner;
+    protected boolean inmode = true;
 
     private HashMap<String, String> volatileMap = new HashMap<>();
     private HashMap<String, String> stickyMap   = new HashMap<>();
@@ -78,6 +82,7 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
     @Override
     public void init(Context context, AttributeSet attrs) {
         super.init(context, attrs);
+        banner = (TextView) findViewById (R.id.SBanner);
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
     }
@@ -89,7 +94,7 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
 
     @Override
     public void onDestroy() {
-
+        inmode = false;
     }
 
     @Override
@@ -278,17 +283,66 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
 
     }
 
-    public void playTutor(){
-        TScope scope = mTutor.getScope();
-        postEvent(NSCONST.PLAY_TUTOR_PLUS);
+    public void playTutorIntro(){
+        if(!kill){
+        playIntro();}
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        if (!kill){
+                        playTutor();}
+                    }
+                },
+                4000
+        );
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        if(!kill){
+                        playTutor1();}
+
+                    }
+                },
+                8000
+        );
 
 
     }
 
-    public void playTutor1(){
-        TScope scope = mTutor.getScope();
-        postEvent(NSCONST.PLAY_TUTOR_MINUS);
+    public void playTutor(){
+        if(inmode) {
+            TScope scope = mTutor.getScope();
+            scope.addUpdateVar("offset", new TString(String.valueOf(delta)));
 
+            postEvent(NSCONST.PLAY_TUTOR_PLUS);
+
+        }
+
+    }
+
+
+
+    public void playIntro(){
+        TScope scope = mTutor.getScope();
+        scope.addUpdateVar("offset", new TString(String.valueOf(delta)));
+        postEvent(NSCONST.PLAY_INTRO);
+    }
+
+
+
+
+    public void playTutor1(){
+        if(inmode) {
+            TScope scope = mTutor.getScope();
+            scope.addUpdateVar("offset", new TString(String.valueOf(delta)));
+
+            postEvent(NSCONST.PLAY_TUTOR_MINUS);
+            enableTapping();
+            setNewTimer();
+
+        }
 
     }
 
@@ -491,7 +545,6 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
         boolean result = false;
 
         if (volatileMap.containsKey(event)) {
-
             RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:volatile,behavior:" + event);
             applyBehaviorNode(volatileMap.get(event));
 
@@ -500,9 +553,9 @@ public class TNumberScaleComponent extends CNumberScale_Component implements ITu
             result = true;
 
         } else if (stickyMap.containsKey(event)) {
-
+            if (inmode){
             RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:sticky,behavior:" + event);
-            applyBehaviorNode(stickyMap.get(event));
+            applyBehaviorNode(stickyMap.get(event));}
 
 
             result = true;

@@ -1,230 +1,230 @@
 {
-  "question_replacement": false,
-  "response_replacement": false,
-  "gen_responsetype": "text_data",
-  "question_count": 10,
-  "banner_color": "#000066",
   "gen_answerSet": [],
-  "gen_responseSet": [],
-  "gen_answertype": "text_data",
-  "gen_stimulusSet": [],
-  "gen_stimulustype": "text_data",
-  "question_sequence": "sequential",
   "problem_type": "word",
-  "dataSource": [
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "roruhoze",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "roruhoze",
-      "response_set": [
-        "tokuviku",
-        "lazububu",
-        "roruhoze"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "yogetoje",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "yogetoje",
-      "response_set": [
-        "yogetoje",
-        "burigema",
-        "tujubiri"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "zifuhalu",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "zifuhalu",
-      "response_set": [
-        "pabihako",
-        "wovudaku",
-        "zifuhalu"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "kavunahe",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "kavunahe",
-      "response_set": [
-        "kavunahe",
-        "tozasomi",
-        "zalokiye"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "jimidelo",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "jimidelo",
-      "response_set": [
-        "towamuvu",
-        "jimidelo",
-        "fizevana"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "honojuye",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "honojuye",
-      "response_set": [
-        "pabihako",
-        "honojuye",
-        "nerohoye"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "tokuviku",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "tokuviku",
-      "response_set": [
-        "fewebiza",
-        "tokuviku",
-        "zazumuba"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "fewebiza",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "fewebiza",
-      "response_set": [
-        "fewebiza",
-        "kirarijo",
-        "tozasomi"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "tetafeki",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "tetafeki",
-      "response_set": [
-        "hasavefi",
-        "tetafeki",
-        "pabihako"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "kirarijo",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "kirarijo",
-      "response_set": [
-        "honojuye",
-        "katepama",
-        "kirarijo"
-      ],
-      "gen_question": false
-    }
-  ],
+  "question_count": 10,
+  "gen_stimulustype": "text_data",
+  "gen_responsetype": "text_data",
+  "question_replacement": false,
   "view_background": {
-    "layout": "grid",
-    "kind": "squares",
     "layoutcount": 0,
-    "style": "primitives",
-    "colorchoice": "fixed",
-    "colorbase": "#666666",
     "colors": [
       -6053120,
       -7566336,
       -2500352,
       -5066240
-    ]
-  }
+    ],
+    "style": "primitives",
+    "kind": "squares",
+    "layout": "grid",
+    "colorbase": "#666666",
+    "colorchoice": "fixed"
+  },
+  "gen_responseSet": [],
+  "question_sequence": "RANDOM",
+  "gen_stimulusSet": [],
+  "response_replacement": false,
+  "gen_answertype": "text_data",
+  "banner_color": "#000066",
+  "dataSource": [
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_type": "multiple-choice",
+      "answer": "hasavefi",
+      "response_set": [
+        "burigema",
+        "hasavefi",
+        "kosihife"
+      ],
+      "answer_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_show": false,
+      "stimulus": "hasavefi",
+      "question_say": true
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_type": "multiple-choice",
+      "answer": "kosihife",
+      "response_set": [
+        "heyiyiku",
+        "salitune",
+        "kosihife"
+      ],
+      "answer_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_show": false,
+      "stimulus": "kosihife",
+      "question_say": true
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_type": "multiple-choice",
+      "answer": "dovimahu",
+      "response_set": [
+        "heyiyiku",
+        "velohuha",
+        "dovimahu"
+      ],
+      "answer_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_show": false,
+      "stimulus": "dovimahu",
+      "question_say": true
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_type": "multiple-choice",
+      "answer": "jimidelo",
+      "response_set": [
+        "zatuteme",
+        "burigema",
+        "jimidelo"
+      ],
+      "answer_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_show": false,
+      "stimulus": "jimidelo",
+      "question_say": true
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_type": "multiple-choice",
+      "answer": "wovudaku",
+      "response_set": [
+        "wovudaku",
+        "jimidelo",
+        "heyiyiku"
+      ],
+      "answer_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_show": false,
+      "stimulus": "wovudaku",
+      "question_say": true
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_type": "multiple-choice",
+      "answer": "pabihako",
+      "response_set": [
+        "lazububu",
+        "pabihako",
+        "kirarijo"
+      ],
+      "answer_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_show": false,
+      "stimulus": "pabihako",
+      "question_say": true
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_type": "multiple-choice",
+      "answer": "fizevana",
+      "response_set": [
+        "fizevana",
+        "honojuye",
+        "tetafeki"
+      ],
+      "answer_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_show": false,
+      "stimulus": "fizevana",
+      "question_say": true
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_type": "multiple-choice",
+      "answer": "lazububu",
+      "response_set": [
+        "zazumuba",
+        "lazububu",
+        "hasavefi"
+      ],
+      "answer_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_show": false,
+      "stimulus": "lazububu",
+      "question_say": true
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_type": "multiple-choice",
+      "answer": "zazumuba",
+      "response_set": [
+        "honojuye",
+        "lefarako",
+        "zazumuba"
+      ],
+      "answer_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_show": false,
+      "stimulus": "zazumuba",
+      "question_say": true
+    },
+    {
+      "gen_question": false,
+      "stimulus_type": "text_data",
+      "question_type": "multiple-choice",
+      "answer": "kavunahe",
+      "response_set": [
+        "kavunahe",
+        "timumugu",
+        "pukamebu"
+      ],
+      "answer_type": "text_data",
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "question_show": false,
+      "stimulus": "kavunahe",
+      "question_say": true
+    }
+  ]
 }

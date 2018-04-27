@@ -1,230 +1,230 @@
 {
-  "question_replacement": false,
-  "response_replacement": false,
-  "gen_responsetype": "text_data",
-  "question_count": 10,
-  "banner_color": "#000066",
-  "gen_answerSet": [],
-  "gen_responseSet": [],
-  "gen_answertype": "text_data",
-  "gen_stimulusSet": [],
-  "gen_stimulustype": "text_data",
-  "question_sequence": "sequential",
+  "question_sequence": "RANDOM",
   "problem_type": "word",
-  "dataSource": [
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "mbuzi",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "mbuzi",
-      "response_set": [
-        "mbuzi",
-        "simba",
-        "mbuni"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "farasi",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "farasi",
-      "response_set": [
-        "chura",
-        "farasi",
-        "songura"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "paka",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "paka",
-      "response_set": [
-        "kondoo",
-        "songura",
-        "paka"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "kondoo",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "kondoo",
-      "response_set": [
-        "tembo",
-        "kondoo",
-        "panya"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "ng'ombe",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "ng'ombe",
-      "response_set": [
-        "nyoka",
-        "fisi",
-        "ng'ombe"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "chura",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "chura",
-      "response_set": [
-        "twiga",
-        "chura",
-        "panya"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "fisi",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "fisi",
-      "response_set": [
-        "twiga",
-        "kondoo",
-        "fisi"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "mbuni",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "mbuni",
-      "response_set": [
-        "mbuni",
-        "twiga",
-        "kondoo"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "punda",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "punda",
-      "response_set": [
-        "punda",
-        "chura",
-        "tembo"
-      ],
-      "gen_question": false
-    },
-    {
-      "question_say": true,
-      "question_show": false,
-      "answer_type": "text_data",
-      "answer": "chui",
-      "question_type": "multiple-choice",
-      "stimulus_type": "text_data",
-      "responsetype_set": [
-        "text_data",
-        "text_data",
-        "text_data"
-      ],
-      "stimulus": "chui",
-      "response_set": [
-        "paka",
-        "fisi",
-        "chui"
-      ],
-      "gen_question": false
-    }
-  ],
+  "question_count": 10,
   "view_background": {
-    "layout": "grid",
-    "kind": "squares",
-    "layoutcount": 0,
     "style": "primitives",
-    "colorchoice": "fixed",
-    "colorbase": "#666666",
+    "kind": "squares",
     "colors": [
       -6053120,
       -7566336,
       -2500352,
       -5066240
-    ]
-  }
+    ],
+    "colorchoice": "fixed",
+    "colorbase": "#666666",
+    "layoutcount": 0,
+    "layout": "grid"
+  },
+  "gen_stimulustype": "text_data",
+  "response_replacement": false,
+  "gen_responseSet": [],
+  "dataSource": [
+    {
+      "question_type": "multiple-choice",
+      "answer": "chura",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "chura",
+      "response_set": [
+        "chura",
+        "farasi",
+        "panya"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "bata",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "bata",
+      "response_set": [
+        "bata",
+        "farasi",
+        "kuku"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "chui",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "chui",
+      "response_set": [
+        "twiga",
+        "fisi",
+        "chui"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "panya",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "panya",
+      "response_set": [
+        "bata",
+        "panya",
+        "mbuzi"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "punda",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "punda",
+      "response_set": [
+        "simba",
+        "punda",
+        "songura"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "mbuzi",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "mbuzi",
+      "response_set": [
+        "chura",
+        "mbwa",
+        "mbuzi"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "kuku",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "kuku",
+      "response_set": [
+        "ng'ombe",
+        "kuku",
+        "mbuni"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "mbwa",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "mbwa",
+      "response_set": [
+        "mbwa",
+        "chui",
+        "mbuzi"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "fisi",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "fisi",
+      "response_set": [
+        "kondoo",
+        "fisi",
+        "panya"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    },
+    {
+      "question_type": "multiple-choice",
+      "answer": "nyoka",
+      "gen_question": false,
+      "answer_type": "text_data",
+      "question_show": false,
+      "stimulus": "nyoka",
+      "response_set": [
+        "chura",
+        "nyoka",
+        "kuku"
+      ],
+      "responsetype_set": [
+        "text_data",
+        "text_data",
+        "text_data"
+      ],
+      "stimulus_type": "text_data",
+      "question_say": true
+    }
+  ],
+  "question_replacement": false,
+  "gen_responsetype": "text_data",
+  "banner_color": "#000066",
+  "gen_answerSet": [],
+  "gen_answertype": "text_data",
+  "gen_stimulusSet": []
 }

@@ -90,6 +90,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
     public ViewGroup                     mSceneContainer;
 
     public String                        mTutorName = "";
+    public String                        mTutorId = "";
     public AssetManager                  mAssetManager;
     public boolean                       mTutorActive = false;
 
@@ -127,11 +128,12 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
 
 
-    public CTutor(Context context, String name, ITutorManager tutorContainer, ILogManager logManager, TScope rootScope, String tarLanguage, String featSet) {
+    public CTutor(Context context, String name, String tutorId, ITutorManager tutorContainer, ILogManager logManager, TScope rootScope, String tarLanguage, String featSet) {
 
         mTutorScope      = new TScope(this, name, rootScope);
         mContext         = context;
         mTutorName       = name;
+        mTutorId         = tutorId;
         mTutorContainer  = tutorContainer;
         mTutorLogManager = logManager;
 
@@ -831,62 +833,70 @@ public class CTutor implements ILoadableObject2, IEventSource {
     //## Mod Jul 01 2012 - Support for NOT operation on features.
     //
     //	
-    public boolean testFeature(String element)
-    {
+    public boolean testFeature(String element) {
         if(element.charAt(0) == '!')
         {
-            if(element.substring(1).equals("true")) return false;
-            if(element.substring(1).equals("false")) return true;
-            return (fFeatures.indexOf(element.substring(1)) != -1)? false:true;
+            return (fFeatures.indexOf(element.substring(1)) != -1)? false : true;
         }
         else {
-            if(element.equals("true")) return true;
-            if(element.equals("false")) return false;
             return (fFeatures.indexOf(element) != -1) ? true : false;
         }
     }
 
-    private String calcParenExp(String featSet) {
-        int rightMostOpenParen = -1;
-        int parenCount = 0;
-        boolean foundParen = false;
-        StringBuffer parenFeatSet = new StringBuffer(featSet);
-
-        for (int i = 0; i < featSet.length(); i++) {
-            String curString = featSet.substring(i, i+1);
-
-            if(curString.equals("(")) {
-                parenCount += 1;
-                foundParen = true;
-                rightMostOpenParen = i;
-            }
-            else if(curString.equals(")")) {
-                parenCount -= 1;
-                if(parenCount == 0 && foundParen == true) {
-                    boolean result = testNonParenFeatureSet(parenFeatSet.substring(rightMostOpenParen+1, i));
-                    parenFeatSet.replace(rightMostOpenParen, i+1, String.valueOf(result));
-                }
-            }
+    public String testFeatureHelper(String element) {
+        if(element.charAt(0) == '!') {
+            if(element.substring(1).equals("true")) return "false";
+            if(element.substring(1).equals("false")) return "true";
+            return (fFeatures.indexOf(element.substring(1)) != -1)? "false" : "true";
         }
-
-        return new String(parenFeatSet).replaceAll(" ", "");
+        else {
+            if(element.equals("true")) return "true";
+            if(element.equals("false")) return "false";
+            return (fFeatures.indexOf(element) != -1) ? "true" : "false";
+        }
     }
-
 
     // test possibly compound features
     // TODO: Enhance with fsm
-    //
+    // Doesn't allow inner paren matching
     public boolean testFeatureSet(String featSet) {
-        while(featSet.contains("(")) {
-            featSet = calcParenExp(featSet);
-        }
-
-        return testNonParenFeatureSet(featSet);
+        String result = testFeatureSetHelper(featSet);
+        return result.equals("true") ? true : false;
     }
 
-    private boolean testNonParenFeatureSet(String featSet) {
+    public String testFeatureSetHelper(String featSet) {
+        int curParenCount = 0;
+        int leftMostOpenParen = -1;
 
-        boolean      result = false;
+        StringBuffer featSetBuffer = new StringBuffer(featSet);
+
+        while(featSetBuffer.indexOf("(") != -1) {
+            for(int i = 0; i < featSetBuffer.length(); i++) {
+                String curString = featSetBuffer.substring(i, i+1);
+
+                if(curString.equals("(")) {
+                    curParenCount += 1;
+                    if(leftMostOpenParen == -1) {
+                        leftMostOpenParen = i;
+                    }
+                }
+                if(curString.equals(")")) {
+                    curParenCount -= 1;
+                    if(curParenCount == 0) {
+                        String withParen = featSetBuffer.substring(leftMostOpenParen + 1, i);
+                        featSetBuffer.replace(leftMostOpenParen, i+1, testFeatureSetHelper(withParen));
+                        leftMostOpenParen = -1;
+                        break;
+                    }
+                }
+            }
+        }
+        return testNonParenFeatureSet(featSetBuffer.toString());
+    }
+
+    private String testNonParenFeatureSet(String featSet) {
+
+        String      result = "false";
 
         List<String> disjFeat = Arrays.asList(featSet.split("\\|"));   // | Disjunctive features
         List<String> conjFeat;                                          // & Conjunctive features
@@ -894,7 +904,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
         // match a null set - i.e. empty string means the object is not feature constrained
 
         if(featSet.equals(""))
-            return true;
+            return "true";
 
         // Check all disjunctive featuresets - one in each element of disjFeat
         // As long as one is true we pass
@@ -902,16 +912,16 @@ public class CTutor implements ILoadableObject2, IEventSource {
         for (String dfeature : disjFeat)
         {
             conjFeat   = Arrays.asList(dfeature.split("\\&"));
-            result = true;
+            result = "true";
 
             // Check that all conjunctive features are set in fFeatures
 
             for (String cfeature : conjFeat) {
-                if(!testFeature(cfeature))
-                    result = false;
+                if(!(testFeatureHelper(cfeature) == "true"))
+                    result = "false";
             }
 
-            if(result)
+            if(result == "true")
                 break;
         }
 
@@ -921,6 +931,9 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
     public String getTutorName() {
         return mTutorName;
+    }
+    public String getTutorId() {
+        return mTutorId;
     }
 
 

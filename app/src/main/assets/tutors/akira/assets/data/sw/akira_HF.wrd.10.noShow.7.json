@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["walimfuata", "kukasirike", "alimpeleka"],
+ "item_counter":1,
+ "answer":"LEFT",
+ "target":"walimfuata",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["ukiangalia", "wakatoroka", "nikikuokoa"],
+ "item_counter":2,
+ "answer":"RIGHT",
+ "target":"nikikuokoa",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kumfagilia", "kuwafukuza", "niliyoweka"],
+ "item_counter":3,
+ "answer":"LEFT",
+ "target":"kumfagilia",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["ningevivaa", "kukosolewa", "aliofunzwa"],
+ "item_counter":4,
+ "answer":"RIGHT",
+ "target":"aliofunzwa",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["aliniwekea", "limezimika", "unavipenda"],
+ "item_counter":5,
+ "answer":"RIGHT",
+ "target":"unavipenda",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["amefunikwa", "nimeugonga", "nilifurahi"],
+ "item_counter":6,
+ "answer":"LEFT",
+ "target":"amefunikwa",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["lililoitwa", "ukishirika", "alimwarifu"],
+ "item_counter":7,
+ "answer":"LEFT",
+ "target":"lililoitwa",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["akimpeleka", "kilichooza", "tunayovuna"],
+ "item_counter":8,
+ "answer":"RIGHT",
+ "target":"tunayovuna",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["wanakijiji", "walitambua", "vimepasuka"],
+ "item_counter":9,
+ "answer":"LEFT",
+ "target":"wanakijiji",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["tutatembea", "akionyesha", "ameonyesha"],
+ "item_counter":10,
+ "answer":"RIGHT",
+ "target":"ameonyesha",
+ "belowString":"audio",
+ "audio":"true" 
+       } 
+
+   ]
+}

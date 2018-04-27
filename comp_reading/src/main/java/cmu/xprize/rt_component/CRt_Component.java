@@ -59,7 +59,6 @@ import static cmu.xprize.util.TCONST.TYPE_AUDIO;
 public class CRt_Component extends ViewAnimator implements IEventListener, IVManListener, IAsrEventListener, ILoadableObject, IPublisher {
 
     private Context                 mContext;
-    private String                  word;
 
     protected ListenerBase          mListener;
     protected TTSsynthesizer        mSynthesizer;
@@ -77,13 +76,16 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     protected int                   currentIndex          = 0;                      // current sentence index in storyName, -1 if unset
     private int                     currIntervention      = TCONST.NOINTERVENTION;  //
     private int                     completeSentenceIndex = 0;
-    protected String                sentenceWords[];                                // current sentence words to hear
+    protected String[]              sentenceWords;                                  // current sentence words to hear
     protected int                   expectedWordIndex     = 0;                      // index of expected next word in sentence
     private static int[]            creditLevel           = null;                   // per-word credit levelFolder according to current hyp
+    protected String                spokenWord;                                     // current spoken word
+    protected int                   attemptCount          = 0;                      // number of attempts
 
     protected String                DATASOURCEPATH;
     protected String                STORYSOURCEPATH;
     protected String                AUDIOSOURCEPATH;
+    protected String                SHAREDPATH;
 
     private final Handler           mainHandler = new Handler(Looper.getMainLooper());
     private HashMap                 queueMap    = new HashMap();
@@ -116,7 +118,6 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     static final String TAG = "CRt_Component";
 
 
-
     public CRt_Component(Context context) {
         super(context);
         init(context, null);
@@ -128,7 +129,7 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     }
 
 
-    public void init(Context context, AttributeSet attrs ) {
+    public void init(Context context, AttributeSet attrs) {
 
         inflate(getContext(), R.layout.rt__component, this);
 
@@ -145,12 +146,12 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
 
         terminateQueue();
 
-        if(mListener != null) {
+        if (mListener != null) {
             mListener.stop();
             mListener = null;
         }
 
-        if(mViewManager != null) {
+        if (mViewManager != null) {
             mViewManager.onDestroy();
             mViewManager = null;
         }
@@ -238,14 +239,14 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
      */
     public void animatePageFlip(boolean forward, int index) {
 
-        if(forward) {
-            if(_scrollVertical)
+        if (forward) {
+            if (_scrollVertical)
                 setInAnimation(slide_bottom_up);
             else
                 setInAnimation(slide_right_to_left);
         }
         else {
-            if(_scrollVertical)
+            if (_scrollVertical)
                 setInAnimation(slide_top_down);
             else
                 setInAnimation(slide_left_to_right);
@@ -504,6 +505,13 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
+    public void updateContext(String sentence, int index, String[] wordList, int wordIndex, String word, int attempts, boolean virtual, boolean correct) {
+    }
+
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
     public void UpdateValue(boolean correct) {
     }
 
@@ -539,14 +547,34 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
      */
     public void loadStory(String EXTERNPATH, String viewType, String assetLocation) {
 
+        loadStory(EXTERNPATH, viewType, assetLocation, null);
+    }
+
+
+    /**
+     * sometimes the storydata.json file is in one repo (assetLocation), but the other assets needed (images)
+     * are in a shared location (sharedAssetLocation)
+     *
+     * @param EXTERNPATH
+     * @param viewType
+     * @param assetLocation
+     * @param SHAREDEXTERNPATH
+     */
+    public void loadStory(String EXTERNPATH, String viewType, String assetLocation, String SHAREDEXTERNPATH) {
+
+        Log.d(TCONST.DEBUG_STORY_TAG, String.format("assetLocation=%s -- EXTERNPATH=%s", assetLocation, EXTERNPATH));
+
         Class<?> storyClass = viewClassMap.get(viewType);
 
         try {
             // Generate the View manager for the storyName - specified in the data
             //
+            // ooooh maybe check if it's math and make text closer to image
             mViewManager = (ICRt_ViewManager)storyClass.getConstructor(new Class[]{CRt_Component.class, ListenerBase.class}).newInstance(this,mListener);
 
+            // ZZZ it loads the story data JUST FINE
             String jsonData = JSON_Helper.cacheDataByName(EXTERNPATH + TCONST.STORYDATA);
+            Log.d(TCONST.DEBUG_STORY_TAG, "logging jsonData:");
 
             mViewManager.loadJSON(new JSONObject(jsonData), null);
 
@@ -555,9 +583,17 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
             CErrorManager.logEvent(TAG, "Story Parse Error: ", e, false);
         }
 
-        // Configure the view manager for the first line of the storyName.
+        if (assetLocation.equals(TCONST.EXTERN_SHARED)) {
+            Log.d(TCONST.DEBUG_STORY_TAG, "SHARED!");
+            // we are done using sharedAssetLocation
+            EXTERNPATH = SHAREDEXTERNPATH;
+        }
         //
+        // ZZZ what are these values?
+        // ZZZ EXTERNPATH = TCONST.EXTERN
+        // ZZZ assetLocation contains storydata.json and images
         mViewManager.initStory(this, EXTERNPATH, assetLocation);
+
     }
 
 
@@ -568,7 +604,7 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
      */
     public void setStory(String storyName, String assetLocation) {
 
-        for(int i1 = 0 ; i1 < dataSource.length ; i1++ ) {
+        for (int i1 = 0 ; i1 < dataSource.length ; i1++ ) {
 
             if(storyName.equals(dataSource[i1].storyName)) {
 
@@ -621,7 +657,7 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
         // We expect AUDIO_EVENTS from the narration type_audio nodes to let us know when
         // they are complete with an UTTERANCE_COMPLETE_EVENT
         //
-        if(mViewManager != null) {
+        if (mViewManager != null) {
             try {
                 switch (eventObject.getType()) {
 
@@ -677,7 +713,7 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
             try {
                 queueMap.remove(this);
 
-                if(mViewManager != null) {
+                if (mViewManager != null) {
                     mViewManager.execCommand(_command, _target);
                 }
             }
@@ -710,7 +746,7 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
 
         Iterator<?> tObjects = queueMap.entrySet().iterator();
 
-        while(tObjects.hasNext() ) {
+        while (tObjects.hasNext() ) {
             Map.Entry entry = (Map.Entry) tObjects.next();
 
             Log.d(TAG, "Post Cancelled on Flush: " + ((Queue)entry.getValue()).getCommand());
@@ -731,10 +767,10 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     }
     private void enQueue(Queue qCommand, Long delay) {
 
-        if(!_qDisabled) {
+        if (!_qDisabled) {
             queueMap.put(qCommand, qCommand);
 
-            if(delay > 0L) {
+            if (delay > 0L) {
                 mainHandler.postDelayed(qCommand, delay);
             }
             else {
@@ -771,14 +807,9 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     }
 
 
-
-
     // Component Message Queue  -- End
     //************************************************************************
     //************************************************************************
-
-
-
 
 
     //************ Serialization
@@ -794,5 +825,4 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
 
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
     }
-
 }

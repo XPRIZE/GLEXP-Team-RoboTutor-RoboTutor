@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["najiuliza", "nangila", "nayo"],
+ "item_counter":1,
+ "answer":"MID",
+ "target":"nangila",
+ "belowString":"nangila",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["nahitaji", "naweza", "nasi"],
+ "item_counter":2,
+ "answer":"RIGHT",
+ "target":"nasi",
+ "belowString":"nasi",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["najiuliza", "nafuu", "nasi"],
+ "item_counter":3,
+ "answer":"LEFT",
+ "target":"najiuliza",
+ "belowString":"najiuliza",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["namukhaywa", "nani", "nasi"],
+ "item_counter":4,
+ "answer":"RIGHT",
+ "target":"nasi",
+ "belowString":"nasi",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["najua", "naro", "nambuya"],
+ "item_counter":5,
+ "answer":"MID",
+ "target":"naro",
+ "belowString":"naro",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["najua", "namna", "nahitaji"],
+ "item_counter":6,
+ "answer":"MID",
+ "target":"namna",
+ "belowString":"namna",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["nasi", "nafuu", "nafasi"],
+ "item_counter":7,
+ "answer":"LEFT",
+ "target":"nasi",
+ "belowString":"nasi",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["nanu", "nami", "namukhaywa"],
+ "item_counter":8,
+ "answer":"MID",
+ "target":"nami",
+ "belowString":"nami",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["nayo", "nafasi", "namna"],
+ "item_counter":9,
+ "answer":"MID",
+ "target":"nafasi",
+ "belowString":"nafasi",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["nafuu", "nawe", "nalo"],
+ "item_counter":10,
+ "answer":"MID",
+ "target":"nawe",
+ "belowString":"nawe",
+ "audio":"true" 
+       } 
+
+   ]
+}

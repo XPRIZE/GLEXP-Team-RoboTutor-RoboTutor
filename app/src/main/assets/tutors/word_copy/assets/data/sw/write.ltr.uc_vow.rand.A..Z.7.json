@@ -1,0 +1,12 @@
+{
+	"bootFeatures":"FTR_DEMO_LTR_UC",
+	"random": true,
+	"singleStimulus": false,
+	"dataSource": [
+		{ "stimulus": "E", "audioStimulus": [ "E", "", "" ], "answer": "E" },
+		{ "stimulus": "U", "audioStimulus": [ "U", "", "" ], "answer": "U" },
+		{ "stimulus": "A", "audioStimulus": [ "A", "", "" ], "answer": "A" },
+		{ "stimulus": "O", "audioStimulus": [ "O", "", "" ], "answer": "O" },
+		{ "stimulus": "I", "audioStimulus": [ "I", "", "" ], "answer": "I" }
+	]
+}

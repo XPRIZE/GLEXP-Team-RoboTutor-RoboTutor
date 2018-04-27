@@ -219,6 +219,7 @@ public class type_audio extends type_action implements IMediaListener {
         mPathResolved = getScope().parseTemplate(mSourcePath);
 
         RoboTutor.logManager.postEvent_D(_logType, "target:node.audio,action:preload,name:" + mPathResolved);
+        RoboTutor.logManager.postEvent_D(TCONST.DEBUG_AUDIO_FILE, "target:node.audio,action:preload,name:" + mPathResolved);
 
         int endofPath = mPathResolved.lastIndexOf("/") + 1;
 

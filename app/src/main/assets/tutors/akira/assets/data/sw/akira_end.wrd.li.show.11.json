@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["bakuli", "fahali", "angekubali"],
+ "item_counter":1,
+ "answer":"RIGHT",
+ "target":"angekubali",
+ "belowString":"angekubali",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["mbali", "angekubali", "ugali"],
+ "item_counter":2,
+ "answer":"RIGHT",
+ "target":"ugali",
+ "belowString":"ugali",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["mbili", "ajili", "ugali"],
+ "item_counter":3,
+ "answer":"RIGHT",
+ "target":"ugali",
+ "belowString":"ugali",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["makali", "ugali", "pahali"],
+ "item_counter":4,
+ "answer":"LEFT",
+ "target":"makali",
+ "belowString":"makali",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["mwili", "fahali", "akakubali"],
+ "item_counter":5,
+ "answer":"RIGHT",
+ "target":"akakubali",
+ "belowString":"akakubali",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["ukweli", "hospitali", "alikubali"],
+ "item_counter":6,
+ "answer":"MID",
+ "target":"hospitali",
+ "belowString":"hospitali",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["hospitali", "makali", "mkali"],
+ "item_counter":7,
+ "answer":"RIGHT",
+ "target":"mkali",
+ "belowString":"mkali",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["bakuli", "ukweli", "fahili"],
+ "item_counter":8,
+ "answer":"LEFT",
+ "target":"bakuli",
+ "belowString":"bakuli",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["ajili", "angekubali", "fahili"],
+ "item_counter":9,
+ "answer":"MID",
+ "target":"angekubali",
+ "belowString":"angekubali",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["alikubali", "mbili", "mbali"],
+ "item_counter":10,
+ "answer":"RIGHT",
+ "target":"mbali",
+ "belowString":"mbali",
+ "audio":"true" 
+       } 
+
+   ]
+}

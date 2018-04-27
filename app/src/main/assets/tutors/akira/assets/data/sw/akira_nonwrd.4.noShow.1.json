@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["pogu", "muma", "suvi"],
+ "item_counter":1,
+ "answer":"RIGHT",
+ "target":"suvi",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["hone", "pibu", "hejo"],
+ "item_counter":2,
+ "answer":"LEFT",
+ "target":"hone",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["gubo", "muye", "muma"],
+ "item_counter":3,
+ "answer":"MID",
+ "target":"muye",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["gove", "lera", "bepi"],
+ "item_counter":4,
+ "answer":"LEFT",
+ "target":"gove",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["suvi", "bepu", "hoho"],
+ "item_counter":5,
+ "answer":"LEFT",
+ "target":"suvi",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["fago", "tade", "biye"],
+ "item_counter":6,
+ "answer":"RIGHT",
+ "target":"biye",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["bepi", "zeti", "boyi"],
+ "item_counter":7,
+ "answer":"MID",
+ "target":"zeti",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["reho", "tade", "sevu"],
+ "item_counter":8,
+ "answer":"RIGHT",
+ "target":"sevu",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["muma", "wope", "hejo"],
+ "item_counter":9,
+ "answer":"RIGHT",
+ "target":"hejo",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["bobo", "tade", "zadi"],
+ "item_counter":10,
+ "answer":"LEFT",
+ "target":"bobo",
+ "belowString":"audio",
+ "audio":"true" 
+       } 
+
+   ]
+}

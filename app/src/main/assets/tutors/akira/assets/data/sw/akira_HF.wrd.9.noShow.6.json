@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["kuutafuta", "akatembea", "kuvumilia"],
+ "item_counter":1,
+ "answer":"LEFT",
+ "target":"kuutafuta",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["alimsikia", "wanasimba", "waliaanza"],
+ "item_counter":2,
+ "answer":"RIGHT",
+ "target":"waliaanza",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["alimwokoa", "wasaidizi", "dirishani"],
+ "item_counter":3,
+ "answer":"RIGHT",
+ "target":"dirishani",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["nikichuma", "umuunguze", "helikopta"],
+ "item_counter":4,
+ "answer":"LEFT",
+ "target":"nikichuma",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kumshinda", "kufukuzia", "kumweleza"],
+ "item_counter":5,
+ "answer":"RIGHT",
+ "target":"kumweleza",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kushiriki", "kuwaambia", "akajaribu"],
+ "item_counter":6,
+ "answer":"RIGHT",
+ "target":"akajaribu",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["hakuliona", "ilifunika", "wachukuwa"],
+ "item_counter":7,
+ "answer":"LEFT",
+ "target":"hakuliona",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["akafikiri", "alipoenda", "akikimbia"],
+ "item_counter":8,
+ "answer":"MID",
+ "target":"alipoenda",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["isiyokuwa", "alipopita", "aliyevuta"],
+ "item_counter":9,
+ "answer":"LEFT",
+ "target":"isiyokuwa",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["nawasikia", "nakwambia", "tutaepuka"],
+ "item_counter":10,
+ "answer":"MID",
+ "target":"nakwambia",
+ "belowString":"audio",
+ "audio":"true" 
+       } 
+
+   ]
+}

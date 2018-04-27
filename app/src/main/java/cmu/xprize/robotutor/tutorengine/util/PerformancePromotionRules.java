@@ -4,9 +4,9 @@ package cmu.xprize.robotutor.tutorengine.util;
 import android.util.Log;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
+import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.robotutor.RoboTutor;
 
 /**
@@ -17,14 +17,21 @@ import cmu.xprize.robotutor.RoboTutor;
 
 public class PerformancePromotionRules extends PromotionRules {
 
+    private static final int MIN_NUM_ATTEMPTS = 2;
     private String TAG = "PerformancePromotionRules";
 
-    List<String> nonAssessableActivities = Arrays.asList("story.read", "story.echo", "story.hear", "countingx", "write");
+    List<String> nonAssessableActivities = Arrays.asList("story.read", "story.echo", "story.hear", "countingx", "numscale", "story");
 
+    List<String> lenientActivities = Arrays.asList("write", "math");
 
-    static final double LOW_PERFORMANCE_THRESHOLD = 0.4;
-    static final double MID_PERFORMANCE_THRESHOLD = 0.7;
+    static final double LOW_PERFORMANCE_THRESHOLD = 0.5;
+    static final double MID_PERFORMANCE_THRESHOLD = 0.83;
     static final double HIGH_PERFORMANCE_THRESHOLD = 0.9;
+
+    static final double LOW_LENIENT_PERFORMANCE_THRESHOLD = 0.4;
+    static final double MID_LENIENT_PERFORMANCE_THRESHOLD = 0.55;
+    static final double HIGH_LENIENT_PERFORMANCE_THRESHOLD = 0.7;
+
 
     // what if there are not enough total questions???
     // for reference... here is a simulation of percentages for #correct out of #problems {1,7}... and the respective promotion
@@ -46,6 +53,12 @@ public class PerformancePromotionRules extends PromotionRules {
             return SelectedActivity.SAME;
         }
 
+        // make it so if in story.hear... the smiley face actually does something? They may have gotten used to being able to navigate...
+        // if student is in the "stories" skill, then give them ability to navigate. Otherwise they could never repeat a story again without cycling through end.
+        if (performance.getActiveSkill().equals(AS_CONST.SELECT_STORIES)) {
+            return SelectedActivity.NEXT;
+        }
+
         // test Non-assessable activities
         if (performance.getActivityType() != null) {
             for (String type : nonAssessableActivities) {
@@ -58,33 +71,58 @@ public class PerformancePromotionRules extends PromotionRules {
         // now we get into assessment
 
         // if they start an activity but don't like it.... what do?
-        if (performance.getNumberAttempts() <= 2 && performance.getTotalNumberQuestions() > 3) {
-            return SelectedActivity.NEXT;
+        if (performance.getNumberAttempts() <= MIN_NUM_ATTEMPTS && performance.getTotalNumberQuestions() > 3) {
+            // equiprobably go to next or previous
+            return Math.random() > 0.5 ? SelectedActivity.NEXT : SelectedActivity.PREVIOUS;
         }
 
         // prevent divide by zero
-        if(performance.getTotalNumberQuestions() == 0) {
+        /*if (performance.getTotalNumberQuestions() == 0) {
             return SelectedActivity.NEXT;
-        }
+        }*/
 
         // percentage is #correct / #totalQuestions.... NOT #correct / #numAttempts
         // buuuuuut if they back out???
 
-        double percentCorrect = (double) performance.getNumberCorrect() / (double) performance.getTotalNumberQuestions();
+
+        double percentCorrect = (double) performance.getNumberCorrect() / (double) performance.getNumberAttempts();
         Log.d("PERCENT_CORRECT", "" + percentCorrect);
 
-        if (percentCorrect >= HIGH_PERFORMANCE_THRESHOLD) {
+        boolean useLenientThresholds = isLenientActivity(performance.getActivityType());
+        Log.i(TAG, (useLenientThresholds ? "U" : "Not u") + "sing lenient thresholds");;
+
+        double high_threshold = useLenientThresholds ? HIGH_LENIENT_PERFORMANCE_THRESHOLD: HIGH_PERFORMANCE_THRESHOLD;
+        double mid_threshold = useLenientThresholds ? MID_LENIENT_PERFORMANCE_THRESHOLD: MID_PERFORMANCE_THRESHOLD;
+        double low_threshold = useLenientThresholds ? LOW_LENIENT_PERFORMANCE_THRESHOLD: LOW_PERFORMANCE_THRESHOLD;
+        RoboTutor.logManager.postEvent_I(TAG, (useLenientThresholds ? "U" : "Not u") + "sing lenient thresholds -- ");;
+        RoboTutor.logManager.postEvent_I(TAG, "high_threshold " + high_threshold);;
+        RoboTutor.logManager.postEvent_I(TAG, "mid_threshold " + mid_threshold);;
+        RoboTutor.logManager.postEvent_I(TAG, "low_threshold " + low_threshold);;
+
+        if (percentCorrect >= high_threshold) {
             // 50/50 probability
             return Math.random() > 0.5 ? SelectedActivity.NEXT : SelectedActivity.DOUBLE_NEXT;
-        } else if (percentCorrect >= MID_PERFORMANCE_THRESHOLD) {
+        } else if (percentCorrect >= mid_threshold) {
             // pass to next
             return SelectedActivity.NEXT;
-        } else if (percentCorrect >= LOW_PERFORMANCE_THRESHOLD) {
+        } else if (percentCorrect >= low_threshold) {
             // repeat
             return SelectedActivity.SAME;
         } else {
             // drop down to lower level
             return SelectedActivity.PREVIOUS;
         }
+    }
+
+    /**
+     * if it's a math or writing activity, be slightly more lenient
+     * @param activityType
+     * @return
+     */
+    private boolean isLenientActivity(String activityType) {
+
+        return activityType.startsWith("math")
+                || activityType.startsWith("write");
+
     }
 }

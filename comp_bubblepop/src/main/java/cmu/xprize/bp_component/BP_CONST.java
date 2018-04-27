@@ -124,25 +124,16 @@ public class BP_CONST {
 
     public static final String QUEST_VAR_STIM_ONE_HUNDREDS = ".questValueStimOneHundreds";
     public static final String QUEST_VAR_STIM_ONE_TENS = ".questValueStimOneTens";
-    public static final String QUEST_VAR_STIM_ONE_ONES = ".questValueStimOneOnes";
     public static final String QUEST_VAR_OPERAND  = ".questValueOperand";
     public static final String QUEST_VAR_STIM_TWO_HUNDREDS = ".questValueStimTwoHundreds";
     public static final String QUEST_VAR_STIM_TWO_TENS = ".questValueStimTwoTens";
-    public static final String QUEST_VAR_STIM_TWO_ONES = ".questValueStimTwoOnes";
 
     public static final String ANS_VAR_STIM_ONE_HUNDREDS= ".ansValueStimOneHundreds";
     public static final String ANS_VAR_STIM_ONE_TENS= ".ansValueStimOneTens";
-    public static final String ANS_VAR_STIM_ONE_ONES= ".ansValueStimOneOnes";
     public static final String ANS_VAR_OPERAND = ".ansValueOperand";
     public static final String ANS_VAR_STIM_TWO_HUNDREDS = ".ansValueStimTwoHundreds";
     public static final String ANS_VAR_STIM_TWO_TENS = ".ansValueStimTwoTens";
-    public static final String ANS_VAR_STIM_TWO_ONES = ".ansValueStimTwoOnes";
 
-    public static final String STIM_VAL_ZERO  = ".stimValueZero";
-    public static final String STIM_VAL_ONE   = ".stimValueOne";
-    public static final String STIM_VAL_TWO   = ".stimValueTwo";
-    public static final String STIM_VAL_THREE = ".stimValueThree";
-    public static final String STIM_VAL_FOUR  = ".stimValueFour";
 
     public static final String FTR_ANS_HUNDREDS  = "FTR_ANS_HUNDREDS";
     public static final String FTR_ANS_TENS      = "FTR_ANS_TENS";
@@ -165,13 +156,7 @@ public class BP_CONST {
     public static final String FTR_E2N           = "FTR_E2N";
     public static final String FTR_N2E           = "FTR_N2E";
 
-    public static final String SHOW_BUBBLE_ZERO  =   "SHOW_BUBBLE_ZERO";
-    public static final String SHOW_BUBBLE_ONE  =   "SHOW_BUBBLE_ONE";
-    public static final String SHOW_BUBBLE_TWO  =   "SHOW_BUBBLE_TWO";
-    public static final String SHOW_BUBBLE_THREE  =   "SHOW_BUBBLE_THREE";
-    public static final String SHOW_BUBBLE_FOUR  =   "SHOW_BUBBLE_FOUR";
-
-    public static final String SHOW_BUBBLE_MASK   = "SHOW_BUBBLE_MASK";
+    public static final String SHOW_BUBBLE_MASK          = "SHOW_BUBBLE_MASK";
     public static final String HIDE_MASK          = "HIDE_MASK";
 
     public static final String SHOW_STIMULUS_MASK = "SHOW_STIMULUS_MASK";
@@ -272,6 +257,47 @@ public class BP_CONST {
     private static int[] TENFRAME_H_9 = {R.drawable.tenframe_h_9};
     private static int[] TENFRAME_H_10 = {R.drawable.tenframe_h_10};
 
+    public static int[] BPOP_BACKGROUNDS = {
+            R.raw.bark_close_up_crack_207328,
+            R.raw.bay_beach_clouds_175717,
+            R.raw.beach_beach_chairs_beach_hut_531035,
+            R.raw.beach_beach_chairs_coconut_trees_131423,
+            R.raw.beach_blue_coast_417144,
+            R.raw.beach_boardwalk_boat_132037,
+            R.raw.beach_bora_bora_flow_21787,
+            R.raw.beach_cc0_coast_103567,
+            R.raw.beach_clouds_horizon_96798,
+            R.raw.beach_coast_horizon_51809,
+            R.raw.beach_horizon_ocean_55637,
+            R.raw.beautiful_dark_evening_29435,
+            R.raw.birds_of_prey_black_and_white_dawn_748877,
+            R.raw.blue_sky_camels_desert_71241,
+            R.raw.blue_water_calm_h2o_734973,
+            R.raw.bow_river_canada_forest_219972,
+            R.raw.camels_desert_landscape_53537,
+            R.raw.close_up_dew_green_207299,
+            R.raw.clouds_coast_landscape_29049,
+            R.raw.clouds_conifer_daylight_388065,
+            R.raw.clouds_countryside_daylight_51947,
+            R.raw.clouds_cropland_crops_462023,
+            R.raw.clouds_daylight_fjord_135157,
+            R.raw.clouds_daylight_forest_761517,
+            R.raw.clouds_landscape_light_33834,
+            R.raw.crafts_drums_handmade_158664,
+            R.raw.dawn_dusk_hd_wallpaper_149246,
+            R.raw.dawn_dusk_hills_66997,
+            R.raw.daylight_farm_forest_771308,
+            R.raw.daylight_forest_grass_247600,
+            R.raw.desert_egypt_great_sphinx_of_giza_2359,
+            R.raw.desert_hd_wallpaper_nature_80454,
+            R.raw.forest_nature_river_105170,
+            R.raw.galaxy_milky_way_night_7480,
+            R.raw.horizon_ocean_salt_water_7321,
+            R.raw.mobilechallenge_close_up_dew_807598,
+            R.raw.nature_river_rocks_7138
+
+    };
+
     static public HashMap<String, int[]> drawableMap = new HashMap<String, int[]>();
 
     static {
@@ -316,5 +342,7 @@ public class BP_CONST {
         drawableMap.put("9"  , DOT_9  );
         drawableMap.put("10" , DOT_10 );*/
     }
+
+
 
 }

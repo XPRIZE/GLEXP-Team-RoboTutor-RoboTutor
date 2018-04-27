@@ -797,7 +797,7 @@ public class SpeechRecognizer {
             eventManager.updateStartTime(TCONST.TIMEDWORD_EVENT,
                     TCONST.TIMEDSILENCE_EVENT | TCONST.TIMEDSOUND_EVENT);
 
-            Log.d("STABLE", "Processing Hypothesis" + TextUtils.join(" ", resultSet));
+            Log.d("STABLE", "Processing Hypothesis: " + TextUtils.join(" ", resultSet));
 
             // If there is a new Hypothesis then process it in the subclass of ListenerBase
             try {

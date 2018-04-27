@@ -66,7 +66,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
     //
 
     // holds the image for the fruit Countable being displayed
-    private Bitmap _countMap;
+    private Bitmap _countableBitmap;
 
     private static final String TAG = "CCountXSurfaceView";
 
@@ -123,15 +123,15 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         int x = (getWidth() / 2) - (holeWidth * 5) / 2;
         int y = (getHeight() / 2) - holeHeight;
         if (_component.tenPower==100){
-            holeWidth = 400;
-            holeHeight = 400;
+            holeWidth = getWidth()/6;
+            holeHeight = getWidth()/6;
             x = (getWidth() / 2) - (holeWidth * 5) / 2;
             y = (getHeight() / 2) - holeHeight;
         }
 
         if (_component.tenPower==10){
-            holeWidth =130;
-            holeHeight = 1200;
+            holeWidth =getWidth()/20;
+            holeHeight = getHeight()/3;
             isline=true;
             x = (getWidth() / 2) - (holeWidth * 10) / 2;
             y = (getHeight() / 2) - holeHeight/2;
@@ -151,16 +151,19 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
     protected void resetCounter() {
 
-        _countMap = generateRandomCount();
+        _countableBitmap = generateRandomCountable();
     }
 
 
     /**
-     * Pick a random fruit to use as object.
+     * Pick a random Countable object.
+     * Ones = fruit
+     * Tens = ten bar
+     * Hundreds = hundred square
      *
      * @return
      */
-    private Bitmap generateRandomCount() {
+    private Bitmap generateRandomCountable() {
 
 
         int margin = COUNTX_CONST.BOX_MARGIN;
@@ -169,49 +172,44 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
         // initialize images
         if(_component.tenPower == 1) {
+            // ones uses random fruit
             int drawable = FRUITS[(new Random()).nextInt(FRUITS.length)];
-            if (_component.drawIndex!=-10){
-                drawable = _component.drawIndex;
-            } else {
-                _component.drawIndex=drawable;
-            }
+
+            _component.drawIndex=drawable;
+
             Bitmap immutableBmp = BitmapFactory.decodeResource(getResources(), drawable);
             Bitmap resizedBmp = Bitmap.createScaledBitmap(immutableBmp, COUNTX_CONST.DRAWABLE_RADIUS * 2,
                     COUNTX_CONST.DRAWABLE_RADIUS * 2, false);
             return resizedBmp;
 
         } else if(_component.tenPower==10){
+            // tens uses colored ten block
             int drawable = TENS[(new Random()).nextInt(TENS.length)];
-            if (_component.drawIndex!=-10){
-                drawable = _component.drawIndex;
-            } else {
-                _component.drawIndex=drawable;
-            }
 
+            _component.drawIndex=drawable;
 
             //int bheight = (int)(down-up-2*gmargin);
             //int bwidth = (int)((right-left-11*gmargin)/10);
 
             Bitmap immutableBmp = BitmapFactory.decodeResource(getResources(), drawable);
-            Bitmap resizedBmp = Bitmap.createScaledBitmap(immutableBmp, 100,
-                    1000, false);
+            Bitmap resizedBmp = Bitmap.createScaledBitmap(immutableBmp, getWidth()/25,
+                    getHeight()/2, false);
 
             return resizedBmp;
         } else {
+            // hundreds uses colored ten square
             int drawable = HUNDREDS[(new Random()).nextInt(HUNDREDS.length)];
-            if (_component.drawIndex!=-10){
-                drawable = _component.drawIndex;
-            } else {
-                _component.drawIndex=drawable;
-            }
+
+            _component.drawIndex=drawable;
+
 
             //int bheight = (int)((down-up-3*gmargin)/2);
             //int bwidth = (int)((right-left-6*gmargin)/5);
             //int radius = bheight<bwidth ? bheight : bwidth;
 
             Bitmap immutableBmp = BitmapFactory.decodeResource(getResources(), drawable);
-            Bitmap resizedBmp = Bitmap.createScaledBitmap(immutableBmp, 350,
-                    350, false);
+            Bitmap resizedBmp = Bitmap.createScaledBitmap(immutableBmp, getHeight()/5,
+                    getHeight()/5, false);
             return resizedBmp;
 
         }
@@ -271,7 +269,8 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
             Countable countable;
             if (_component.tenPower ==1){
-                countable = new CountableImage((int)x, (int) y, _countMap);
+
+                countable = new CountableImage((int)x, (int) y, _countableBitmap);
                 _countables.add(countable);
 
             } else if(_component.tenPower==10){
@@ -281,7 +280,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
                 TenFrame.XY destination = tenFrame.getLocationOfIthObject(_countables.size()+1);
 
-                countable = new CountableImage(destination.x,destination.y,_countMap);
+                countable = new CountableImage(destination.x,destination.y, _countableBitmap);
                 _countables.add(countable);
 
             }  else {
@@ -290,7 +289,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                 int centerx = (int)x;
                 int centery = (int)y;
                 TenFrame.XY destination = tenFrame.getLocationOfIthObject(_countables.size()+1);
-                countable = new CountableImage(destination.x,destination.y,_countMap);
+                countable = new CountableImage(destination.x,destination.y, _countableBitmap);
                 _countables.add(countable);
 
             }
@@ -503,7 +502,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         }
 
         _countables.removeAllElements();
-        _countMap = generateRandomCount();
+        _countableBitmap = generateRandomCountable();
 
         redraw();
     }

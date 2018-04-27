@@ -173,11 +173,13 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     protected void updateDataSet(CCountX_Data data) {
         Log.d(TCONST.COUNTING_DEBUG_LOG, "updateDateSet");
 
-
         // first load dataset into fields
         loadDataSet(data);
+
+
+        resetView();
         surfaceView.initTenFrame();
-        surfaceView.resetCounter();
+        //surfaceView.resetCounter(); // functionality already called above
 
         // reset vieresetView();
         // update stimulus
@@ -198,7 +200,8 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         countStart = data.dataset[0];
 
         if (data.tenPower.equals("one")){
-            tenPower = 1;} else if (data.tenPower.equals("ten")){
+            tenPower = 1;
+        } else if (data.tenPower.equals("ten")){
             tenPower = 10;
         } else {
                 tenPower = 100;

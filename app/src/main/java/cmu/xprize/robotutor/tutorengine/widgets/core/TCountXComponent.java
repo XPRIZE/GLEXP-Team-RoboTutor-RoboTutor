@@ -177,9 +177,14 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
         event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
         event.setLanguage(CTutorEngine.language);
         event.setTutorName(tutorName);
+        Log.wtf("WARRIOR_MAN", mTutor.getTutorId());
+        event.setTutorId(mTutor.getTutorId());
         event.setLevelName(level);
         event.setTaskName(task);
         event.setProblemName("countingx");
+        if(dataSource != null) {
+            event.setTotalProblemsCount(dataSource.length);
+        }
         event.setProblemNumber(_dataIndex);
         event.setSubstepNumber(-1);
         event.setAttemptNumber(-1);
@@ -277,7 +282,18 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
         TScope scope = mTutor.getScope();
 
         // select which chime to play, via protected integer
-        int chimeIndex = currentCount == 0 ? 0 : (currentCount - 1) % 10;
+        int scaledCount;
+        switch(tenPower) {
+            case 10:
+                scaledCount = currentCount / 10;
+                break;
+            case 100:
+                scaledCount = currentCount / 100;
+                break;
+            default:
+                scaledCount = currentCount;
+        }
+        int chimeIndex = scaledCount == 0 ? 0 : (scaledCount - 1) % 10;
         String currentChime = COUNTX_CONST.CHIMES[1][chimeIndex];
         String octaveChime = COUNTX_CONST.CHIMES[2][chimeIndex];
 

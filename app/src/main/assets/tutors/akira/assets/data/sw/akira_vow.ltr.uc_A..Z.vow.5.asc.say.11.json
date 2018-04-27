@@ -1,0 +1,55 @@
+{
+ "datasource" : [
+
+	{
+"type":"CAk_Data",
+"choices":["U", "E", "A"],
+"item_counter":1,
+"answer":"RIGHT",
+"target":"A",
+"belowString":"audio",
+"audio":"true"
+	} ,
+
+	{
+"type":"CAk_Data",
+"choices":["E", "O", "U"],
+"item_counter":2,
+"answer":"LEFT",
+"target":"E",
+"belowString":"audio",
+"audio":"true"
+	} ,
+
+	{
+"type":"CAk_Data",
+"choices":["U", "I", "A"],
+"item_counter":3,
+"answer":"MID",
+"target":"I",
+"belowString":"audio",
+"audio":"true"
+	} ,
+
+	{
+"type":"CAk_Data",
+"choices":["O", "U", "I"],
+"item_counter":4,
+"answer":"LEFT",
+"target":"O",
+"belowString":"audio",
+"audio":"true"
+	} ,
+
+	{
+"type":"CAk_Data",
+"choices":["U", "O", "E"],
+"item_counter":5,
+"answer":"LEFT",
+"target":"U",
+"belowString":"audio",
+"audio":"true"
+	}
+
+  ]
+}

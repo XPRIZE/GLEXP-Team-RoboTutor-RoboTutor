@@ -21,7 +21,7 @@ public class NSCONST {
     public static final String PLAY_NA  = "PLAY_NA";
     public static final String PLAY_CHIME_PLUS  = "PLAY_CHIME_PLUS";
     public static final String PLAY_CHIME_PPLUS  = "PLAY_CHIME_PPLUS";
-    public static final String PLAY_TUTOR = "PLAY_TUTOR";
+    public static final String PLAY_INTRO = "PLAY_INTRO";
     public static final String PLAY_TUTOR_PLUS = "PLAY_TUTOR_PLUS";
     public static final String PLAY_TUTOR_MINUS = "PLAY_TUTOR_MINUS";
     public static final String MAX_HIT_REACHED= "MAX_HIT_REACHED";

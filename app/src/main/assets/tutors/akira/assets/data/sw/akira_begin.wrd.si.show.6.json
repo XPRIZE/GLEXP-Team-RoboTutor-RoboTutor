@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["sijaiona", "siwezi", "sisi"],
+ "item_counter":1,
+ "answer":"RIGHT",
+ "target":"sisi",
+ "belowString":"sisi",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["sifa", "sisi", "siyo"],
+ "item_counter":2,
+ "answer":"LEFT",
+ "target":"sifa",
+ "belowString":"sifa",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["simba", "simu", "simama"],
+ "item_counter":3,
+ "answer":"MID",
+ "target":"simu",
+ "belowString":"simu",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["sina", "sijawahi", "siyo"],
+ "item_counter":4,
+ "answer":"LEFT",
+ "target":"sina",
+ "belowString":"sina",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["simba", "sitawahi", "sisi"],
+ "item_counter":5,
+ "answer":"RIGHT",
+ "target":"sisi",
+ "belowString":"sisi",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["simu", "sikio", "siyo"],
+ "item_counter":6,
+ "answer":"RIGHT",
+ "target":"siyo",
+ "belowString":"siyo",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["sijawahi", "sisi", "sinsou"],
+ "item_counter":7,
+ "answer":"RIGHT",
+ "target":"sinsou",
+ "belowString":"sinsou",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["siafu", "sivyo", "siwezi"],
+ "item_counter":8,
+ "answer":"LEFT",
+ "target":"siafu",
+ "belowString":"siafu",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["siafu", "sisi", "sivyo"],
+ "item_counter":9,
+ "answer":"MID",
+ "target":"sisi",
+ "belowString":"sisi",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["sinsou", "simama", "siku"],
+ "item_counter":10,
+ "answer":"LEFT",
+ "target":"sinsou",
+ "belowString":"sinsou",
+ "audio":"true" 
+       } 
+
+   ]
+}

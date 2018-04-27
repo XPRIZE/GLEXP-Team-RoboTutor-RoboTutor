@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["yeduyamo", "jigogiki", "dovimahu"],
+ "item_counter":1,
+ "answer":"RIGHT",
+ "target":"dovimahu",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kosihife", "pukamebu", "zalokiye"],
+ "item_counter":2,
+ "answer":"RIGHT",
+ "target":"zalokiye",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kavunahe", "kirarijo", "heyiyiku"],
+ "item_counter":3,
+ "answer":"MID",
+ "target":"kirarijo",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kavunahe", "dovimahu", "zazumuba"],
+ "item_counter":4,
+ "answer":"RIGHT",
+ "target":"zazumuba",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kavunahe", "mehayehe", "kirarijo"],
+ "item_counter":5,
+ "answer":"RIGHT",
+ "target":"kirarijo",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["tujubiri", "burigema", "neruzugi"],
+ "item_counter":6,
+ "answer":"LEFT",
+ "target":"tujubiri",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["nijujuwa", "fizevana", "lozeyimu"],
+ "item_counter":7,
+ "answer":"LEFT",
+ "target":"nijujuwa",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["fopozife", "jigogiki", "velohuha"],
+ "item_counter":8,
+ "answer":"LEFT",
+ "target":"fopozife",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["zazumuba", "tetafeki", "royuwika"],
+ "item_counter":9,
+ "answer":"LEFT",
+ "target":"zazumuba",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["fizevana", "royuwika", "hasavefi"],
+ "item_counter":10,
+ "answer":"RIGHT",
+ "target":"hasavefi",
+ "belowString":"audio",
+ "audio":"true" 
+       } 
+
+   ]
+}

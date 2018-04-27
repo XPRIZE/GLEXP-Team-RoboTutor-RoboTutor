@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["kile", "kikundi", "kingetokea"],
+ "item_counter":1,
+ "answer":"MID",
+ "target":"kikundi",
+ "belowString":"kikundi",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kitenge", "kibuyu", "kile"],
+ "item_counter":2,
+ "answer":"RIGHT",
+ "target":"kile",
+ "belowString":"kile",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kichwa", "kiingilio", "kipi"],
+ "item_counter":3,
+ "answer":"RIGHT",
+ "target":"kipi",
+ "belowString":"kipi",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kituo", "kibaya", "kipande"],
+ "item_counter":4,
+ "answer":"LEFT",
+ "target":"kituo",
+ "belowString":"kituo",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kinachomea", "kiingilio", "kipi"],
+ "item_counter":5,
+ "answer":"LEFT",
+ "target":"kinachomea",
+ "belowString":"kinachomea",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kiundu", "kijiti", "kijana"],
+ "item_counter":6,
+ "answer":"RIGHT",
+ "target":"kijana",
+ "belowString":"kijana",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kilichojaa", "kikapu", "kichala"],
+ "item_counter":7,
+ "answer":"MID",
+ "target":"kikapu",
+ "belowString":"kikapu",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kila", "kitandani", "kindi"],
+ "item_counter":8,
+ "answer":"LEFT",
+ "target":"kila",
+ "belowString":"kila",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kinu", "kikubwa", "kivuli"],
+ "item_counter":9,
+ "answer":"MID",
+ "target":"kikubwa",
+ "belowString":"kikubwa",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kitunguu", "kipi", "kichwa"],
+ "item_counter":10,
+ "answer":"MID",
+ "target":"kipi",
+ "belowString":"kipi",
+ "audio":"true" 
+       } 
+
+   ]
+}

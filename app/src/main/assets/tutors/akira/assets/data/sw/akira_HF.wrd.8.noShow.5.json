@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["haidhuru", "kiangazi", "nahitaji"],
+ "item_counter":1,
+ "answer":"RIGHT",
+ "target":"nahitaji",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kushtaki", "akachoma", "walijaze"],
+ "item_counter":2,
+ "answer":"LEFT",
+ "target":"kushtaki",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["mwanamke", "kufikiri", "wenzangu"],
+ "item_counter":3,
+ "answer":"RIGHT",
+ "target":"wenzangu",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["nausikia", "halikuwa", "aliupata"],
+ "item_counter":4,
+ "answer":"MID",
+ "target":"halikuwa",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["omusiani", "nitapata", "utapotea"],
+ "item_counter":5,
+ "answer":"LEFT",
+ "target":"omusiani",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["msichana", "michache", "kutimiza"],
+ "item_counter":6,
+ "answer":"MID",
+ "target":"michache",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["amepakwa", "sikuwahi", "demazane"],
+ "item_counter":7,
+ "answer":"MID",
+ "target":"sikuwahi",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["ulidunda", "nikiugua", "likiitwa"],
+ "item_counter":8,
+ "answer":"LEFT",
+ "target":"ulidunda",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kunibeba", "kijijini", "angeenda"],
+ "item_counter":9,
+ "answer":"RIGHT",
+ "target":"angeenda",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["aliongea", "kuanguka", "msisimko"],
+ "item_counter":10,
+ "answer":"LEFT",
+ "target":"aliongea",
+ "belowString":"audio",
+ "audio":"true" 
+       } 
+
+   ]
+}

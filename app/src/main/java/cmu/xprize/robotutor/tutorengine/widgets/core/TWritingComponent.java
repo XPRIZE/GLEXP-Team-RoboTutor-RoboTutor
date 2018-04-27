@@ -312,6 +312,10 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         super.pointAtEraseButton();
     }
 
+    public void pointAtGlyph() {
+        super.pointAtGlyph();
+    }
+
     public void showReplayButton(Boolean show) { mReplayButton.setVisibility(show? VISIBLE:INVISIBLE); }
 
     public void highlightFields() {
@@ -491,6 +495,13 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     private void trackAndLogPerformance(boolean isCorrect, String reason) {
 
+        // this is actually handled via the animator_graph
+        if(isCorrect) {
+            mTutor.countCorrect();
+        } else {
+            mTutor.countIncorrect();
+        }
+
         PerformanceLogItem event = new PerformanceLogItem();
 
         event.setUserId(RoboTutor.STUDENT_ID);
@@ -498,9 +509,12 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
         event.setLanguage(CTutorEngine.language);
         event.setTutorName(mTutor.getTutorName());
+        Log.wtf("WARRIOR_MAN", mTutor.getTutorId());
+        event.setTutorId(mTutor.getTutorId());
         event.setLevelName(level);
         event.setTaskName(task);
         event.setProblemName("write_" + mStimulus);
+        event.setTotalProblemsCount(_data.size());
         event.setProblemNumber(_dataIndex);
         event.setSubstepNumber(mActiveIndex);
         event.setAttemptNumber(-1);
@@ -792,7 +806,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
             int[] operand1Digits = getListDigits(operand1);
 
             //Publish features and values for each digit of first operand so that audios can be played separately
-            if (operand1Digits[0] >= 100) {
+            if (( operand1Digits[0] >= 100 ) && ( operand1Digits[1] >= 1 )) {
                 publishFeature(publishFeatureValue);
                 publishValue(publishValueConstHundreds, operand1Digits[0]);
             } else {

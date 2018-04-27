@@ -197,25 +197,14 @@
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueTens}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow",    "features": "FTR_SAY&FTR_N2E&FTR_QUEST_TENS"},
 
 
-            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "STIMULUS_SHOWN:String|NEXTNODE:String" , "features":"FTR_SHOW&!(FTR_SAY&FTR_E2N|FTR_QUEST_TENS)"},
+            //{"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "STIMULUS_SHOWN:String|NEXTNODE:String" , "features":"FTR_SHOW&!(FTR_SAY&(FTR_E2N|FTR_WORD_STARTS_WITH|FTR_WORD_ENDS_WITH|FTR_GT_LT|FTR_QUEST_HUNDREDS|FTR_WORDS))"},
 
             //If we are showing it we have to wait for the animation to complete before continuing
-            {"type": "COMMAND", "cmd": "WAIT", "features":"FTR_SHOW&!(FTR_SAY&FTR_E2N|FTR_QUEST_TENS)"},
-//            {"type": "COMMAND", "cmd": "WAIT", "features":"FTR_SHOW&!FTR_SAY&!FTR_QUEST_TENS|FTR_SHOW&!FTR_E2N&!FTR_QUEST_TENS"},
+            //Only wait for non expression or short numbers (without hundreds) which are spoken
+            //            {"type": "COMMAND", "id": "SBubblePop", "method": "setVolatileBehavior", "parms": "STIMULUS_SHOWN:String|NEXTNODE:String" , "features":"FTR_SHOW&FTR_SAY&FTR_LETTERS"},
 
 
-            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_BUBBLE_ZERO:String"              ,"features":"FTR_AUDIO"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.stimValueZero}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_AUDIO&FTR_SAY&FTR_E2N"},
-            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_BUBBLE_ONE:String"              ,"features":"FTR_AUDIO"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.stimValueOne}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_AUDIO&FTR_SAY&FTR_E2N"},
-            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_BUBBLE_TWO:String"              ,"features":"FTR_AUDIO"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.stimValueTwo}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_AUDIO&FTR_SAY&FTR_E2N"},
-            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_BUBBLE_THREE:String"              ,"features":"FTR_AUDIO"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.stimValueThree}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_AUDIO&FTR_SAY&FTR_E2N"},
-            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_BUBBLE_FOUR:String"              ,"features":"FTR_AUDIO"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.stimValueFour}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": "FTR_AUDIO&FTR_SAY&FTR_E2N"},
-
-            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_BUBBLES:String"              ,"features":"!FTR_AUDIO"}
+            {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_BUBBLES:String"              ,"features":""}
 
           ]
         },
@@ -308,13 +297,11 @@
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Na.mp3",                                     "soundpackage":"xprize",    "volume": 1.0, "mode":"flow", "features": "FTR_GT_LT&FTR_ANS_HUNDREDS&FTR_ANS_TENS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueTens}}.mp3",            "soundpackage":"numbers",   "volume": 1.0, "mode":"flow", "features": "FTR_GT_LT&FTR_ANS_TENS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValue}}.mp3",                "soundpackage":"words",     "volume": 1.0, "mode":"flow", "features": "FTR_WORDS"},
-
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueHundreds}}.mp3", "soundpackage":"numbers",   "volume": 1.0, "mode":"flow", "features": "FTR_NUMBERS&FTR_ANS_HUNDREDS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Na.mp3",                                     "soundpackage":"numbers",   "volume": 1.0, "mode":"flow", "features": "FTR_NUMBERS&FTR_ANS_HUNDREDS&FTR_ANS_TENS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueTens}}.mp3",     "soundpackage":"numbers",   "volume": 1.0, "mode":"flow", "features": "FTR_NUMBERS&FTR_ANS_TENS"},
-
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueHundreds}}.mp3",        "soundpackage":"numbers",   "volume": 1.0, "mode":"flow", "features": "FTR_NUMBERS&FTR_ANS_HUNDREDS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Na.mp3",                                     "soundpackage":"xprize",   "volume": 1.0, "mode":"flow", "features": "FTR_NUMBERS&FTR_ANS_HUNDREDS&FTR_ANS_TENS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueTens}}.mp3",            "soundpackage":"numbers",   "volume": 1.0, "mode":"flow", "features": "FTR_NUMBERS&FTR_ANS_TENS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueStimOneHundreds}}.mp3", "soundpackage":"numbers",   "volume": 1.0, "mode":"flow", "features": "FTR_N2E&FTR_ANS_STIM_ONE_HUNDREDS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Na.mp3",                                     "soundpackage":"numbers",   "volume": 1.0, "mode":"flow", "features": "FTR_N2E&FTR_ANS_STIM_ONE_HUNDREDS&FTR_ANS_STIM_ONE_TENS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Na.mp3",                                     "soundpackage":"xprize",   "volume": 1.0, "mode":"flow", "features": "FTR_N2E&FTR_ANS_STIM_ONE_HUNDREDS&FTR_ANS_STIM_ONE_TENS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueStimOneTens}}.mp3",     "soundpackage":"numbers",   "volume": 1.0, "mode":"flow", "features": "FTR_N2E&FTR_ANS_STIM_ONE_TENS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueOperand}}.mp3",         "soundpackage":"xprize",    "volume": 1.0, "mode":"flow", "features": "FTR_N2E"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.ansValueStimTwoHundreds}}.mp3", "soundpackage":"numbers",   "volume": 1.0, "mode":"flow", "features": "FTR_N2E&FTR_ANS_STIM_TWO_HUNDREDS"},
@@ -332,19 +319,22 @@
 
             {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent", "parms": "SHOW_STIMULUS_MASK:String" ,"features":"FTR_SHOW&!FTR_LASTATTEMPT"},
 
+
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",              "soundpackage":"missing_number", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_MIS_NUM"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",              "soundpackage":"missing_number", "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_GT_LT"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Neno gani huanza na.mp3",                    "soundpackage":"xprize",          "volume": 1.0, "mode":"flow","features": "!FTR_LASTATTEMPT&FTR_SAY&FTR_WORDS&FTR_WORD_STARTS_WITH"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Neno gani kuishia na.mp3",                   "soundpackage":"xprize",          "volume": 1.0, "mode":"flow","features": "!FTR_LASTATTEMPT&FTR_SAY&FTR_WORDS&FTR_WORD_ENDS_WITH"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",              "soundpackage":"words",          "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_WORDS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueHundreds}}.mp3",      "soundpackage":"numbers",        "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_NUMBERS&FTR_QUEST_HUNDREDS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Na.mp3",                                     "soundpackage":"xprize",         "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_NUMBERS&FTR_QUEST_HUNDREDS&FTR_QUEST_TENS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueTens}}.mp3",          "soundpackage":"numbers",        "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_NUMBERS&FTR_QUEST_TENS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueStimOneHundreds}}.mp3","soundpackage":"numbers",       "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&8FTR_E2N&FTR_QUEST_STIM_ONE_HUNDREDS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueStimOneHundreds}}.mp3","soundpackage":"numbers",       "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_E2N&FTR_QUEST_STIM_ONE_HUNDREDS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Na.mp3",                                     "soundpackage":"xprize",         "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_E2N&FTR_QUEST_STIM_ONE_HUNDREDS&FTR_QUEST_STIM_ONE_TENS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueStimOneTens}}.mp3",   "soundpackage":"numbers",        "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_E2N&FTR_QUEST_STIM_ONE_TENS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueOperand}}.mp3",       "soundpackage":"xprize",         "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_E2N"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueStimTwoHundreds}}.mp3","soundpackage":"numbers",       "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_E2N&FTR_QUEST_STIM_TWO_HUNDREDS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Na.mp3",                                     "soundpackage":"xprize",         "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_E2N&FTR_QUEST_STIM_TWO_HUNDREDS&FTR_QUEST_STIM_TWO_TENS"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueStimTwoTens}}.mp3",    "soundpackage":"numbers",        "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_E2N&FTR_QUEST_STIM_TWO_TENS"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueStimTwoTens}}.mp3",    "soundpackage":"numbers",        "volume": 1.0, "mode":"flow","features": "!FTR_LASTATTEMPT&FTR_E2N&FTR_QUEST_STIM_TWO_TENS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueHundreds}}.mp3",       "soundpackage":"numbers",       "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_N2E&FTR_QUEST_HUNDREDS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Na.mp3",                                     "soundpackage":"xprize",         "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_N2E&FTR_QUEST_HUNDREDS&FTR_QUEST_TENS"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValueTens}}.mp3",          "soundpackage":"numbers",        "volume": 1.0, "mode":"flow", "features": "!FTR_LASTATTEMPT&FTR_N2E&FTR_QUEST_TENS"},

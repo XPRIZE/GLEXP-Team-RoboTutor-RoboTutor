@@ -1,0 +1,34 @@
+{
+	"bootFeatures": "FTR_DEMO_SUB",
+
+    "questionCount": 10,
+    "random": "true",
+	"dataSource": [
+	
+		{"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [5,5,0], "operation": "-", "image": "hexagon"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [1,0,1], "operation": "-", "image": "hexagon"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [7,0,7], "operation": "-", "image": "hexagon"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [6,5,1], "operation": "-", "image": "hexagon"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [3,2,1], "operation": "-", "image": "hexagon"},
+
+	    {"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [7,2,5], "operation": "-", "image": "hexagon"},
+
+            {"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [6,3,3], "operation": "-", "image": "hexagon"},
+
+            {"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [7,5,2], "operation": "-", "image": "hexagon"},
+
+            {"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [3,1,2], "operation": "-", "image": "hexagon"},
+
+            {"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [4,2,2], "operation": "-", "image": "hexagon"},
+            
+		{"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [7,1,6], "operation": "-", "image": "hexagon"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [1,0,1], "operation": "-", "image": "hexagon"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Subtract single digits no Borrow", "dataset": [6,4,2], "operation": "-", "image": "hexagon"}]
+
+}

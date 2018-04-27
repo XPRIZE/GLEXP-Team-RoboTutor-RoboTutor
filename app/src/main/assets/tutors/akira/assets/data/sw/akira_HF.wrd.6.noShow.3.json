@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["foleni", "wawili", "mizizi"],
+ "item_counter":1,
+ "answer":"RIGHT",
+ "target":"mizizi",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["ulinzi", "kondoo", "miwani"],
+ "item_counter":2,
+ "answer":"MID",
+ "target":"kondoo",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["dasara", "vitamu", "subira"],
+ "item_counter":3,
+ "answer":"RIGHT",
+ "target":"subira",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kibano", "midomo", "wanume"],
+ "item_counter":4,
+ "answer":"MID",
+ "target":"midomo",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kimoja", "kitamu", "subuhi"],
+ "item_counter":5,
+ "answer":"MID",
+ "target":"kitamu",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["utakaa", "jasusi", "abiria"],
+ "item_counter":6,
+ "answer":"MID",
+ "target":"jasusi",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kijiji", "ujinga", "viumbe"],
+ "item_counter":7,
+ "answer":"RIGHT",
+ "target":"viumbe",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["alitoa", "mavuno", "vibaya"],
+ "item_counter":8,
+ "answer":"RIGHT",
+ "target":"vibaya",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["nyungu", "dasara", "kuunda"],
+ "item_counter":9,
+ "answer":"LEFT",
+ "target":"nyungu",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["ametoa", "fofofo", "kizima"],
+ "item_counter":10,
+ "answer":"MID",
+ "target":"fofofo",
+ "belowString":"audio",
+ "audio":"true" 
+       } 
+
+   ]
+}

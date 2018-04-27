@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["ziwe", "mayowe", "maharagwe"],
+ "item_counter":1,
+ "answer":"MID",
+ "target":"mayowe",
+ "belowString":"mayowe",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["usichukuwe", "mkewe", "jiwe"],
+ "item_counter":2,
+ "answer":"RIGHT",
+ "target":"jiwe",
+ "belowString":"jiwe",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["niwe", "mkongwe", "usiwe"],
+ "item_counter":3,
+ "answer":"RIGHT",
+ "target":"usiwe",
+ "belowString":"usiwe",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["mumewe", "wewe", "usiwe"],
+ "item_counter":4,
+ "answer":"MID",
+ "target":"wewe",
+ "belowString":"wewe",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["wenyewe", "ngwe", "usiwe"],
+ "item_counter":5,
+ "answer":"RIGHT",
+ "target":"usiwe",
+ "belowString":"usiwe",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["niwe", "mwanawe", "magozwe"],
+ "item_counter":6,
+ "answer":"MID",
+ "target":"mwanawe",
+ "belowString":"mwanawe",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["mawe", "mkwewe", "jiwe"],
+ "item_counter":7,
+ "answer":"LEFT",
+ "target":"mawe",
+ "belowString":"mawe",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["mkewe", "wenyewe", "mumewe"],
+ "item_counter":8,
+ "answer":"MID",
+ "target":"wenyewe",
+ "belowString":"wenyewe",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["jiwe", "ngwe", "mkongwe"],
+ "item_counter":9,
+ "answer":"LEFT",
+ "target":"jiwe",
+ "belowString":"jiwe",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["mawe", "jiwe", "mwishowe"],
+ "item_counter":10,
+ "answer":"RIGHT",
+ "target":"mwishowe",
+ "belowString":"mwishowe",
+ "audio":"true" 
+       } 
+
+   ]
+}

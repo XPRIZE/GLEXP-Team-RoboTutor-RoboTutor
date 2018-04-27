@@ -1,0 +1,245 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["K", "A", "Z"],
+ "item_counter":1,
+ "answer":"MID",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["R", "U", "A"],
+ "item_counter":2,
+ "answer":"RIGHT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["A", "B", "S"],
+ "item_counter":3,
+ "answer":"LEFT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["F", "D", "A"],
+ "item_counter":4,
+ "answer":"RIGHT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["A", "K", "F"],
+ "item_counter":5,
+ "answer":"LEFT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["A", "B", "D"],
+ "item_counter":6,
+ "answer":"LEFT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["A", "Z", "F"],
+ "item_counter":7,
+ "answer":"LEFT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["A", "E", "N"],
+ "item_counter":8,
+ "answer":"LEFT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["A", "C", "S"],
+ "item_counter":9,
+ "answer":"LEFT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["A", "I", "S"],
+ "item_counter":10,
+ "answer":"LEFT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["A", "L", "G"],
+ "item_counter":11,
+ "answer":"LEFT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["A", "J", "B"],
+ "item_counter":12,
+ "answer":"LEFT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["N", "U", "A"],
+ "item_counter":13,
+ "answer":"RIGHT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["Y", "R", "A"],
+ "item_counter":14,
+ "answer":"RIGHT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["O", "A", "L"],
+ "item_counter":15,
+ "answer":"MID",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["A", "O", "Y"],
+ "item_counter":16,
+ "answer":"LEFT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["V", "N", "A"],
+ "item_counter":17,
+ "answer":"MID",
+ "target":"N",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["V", "I", "A"],
+ "item_counter":18,
+ "answer":"RIGHT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["A", "X", "W"],
+ "item_counter":19,
+ "answer":"LEFT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["U", "L", "A"],
+ "item_counter":20,
+ "answer":"MID",
+ "target":"L",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["P", "H", "X"],
+ "item_counter":21,
+ "answer":"LEFT",
+ "target":"P",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["S", "A", "D"],
+ "item_counter":22,
+ "answer":"MID",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["X", "M", "K"],
+ "item_counter":23,
+ "answer":"LEFT",
+ "target":"X",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["A", "J", "O"],
+ "item_counter":24,
+ "answer":"LEFT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } 
+
+   ]
+}

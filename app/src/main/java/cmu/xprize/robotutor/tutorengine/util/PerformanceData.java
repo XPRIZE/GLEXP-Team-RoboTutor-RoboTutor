@@ -28,6 +28,9 @@ public class PerformanceData {
     private String activitySection; // stories, math, shapes, read/write
     private String activityType;
 
+    // used in promotion policy
+    private String activeSkill;
+
     public PerformanceData() {
     }
 
@@ -125,6 +128,14 @@ public class PerformanceData {
 
     public void setActivityType(String activityType) {
         this.activityType = activityType;
+    }
+
+    public String getActiveSkill() {
+        return activeSkill;
+    }
+    
+    public void setActiveSkill(String activeSkill) {
+        this.activeSkill = activeSkill;
     }
 
     @Override

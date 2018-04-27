@@ -48,5 +48,6 @@ public class AS_CONST {
     public static final String VAR_INTENT           = ".intent";
     public static final String VAR_INTENTDATA       = ".intentData";
     public static final String VAR_DATASOURCE       = ".dataSource";
+    public static final String VAR_TUTOR_ID         = ".tutorId";
 }
 

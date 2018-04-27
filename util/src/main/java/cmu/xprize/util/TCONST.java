@@ -20,6 +20,8 @@ package cmu.xprize.util;
 
 // global tutor constants
 
+import android.os.Environment;
+
 import java.util.HashMap;
 
 public class TCONST {
@@ -45,6 +47,12 @@ public class TCONST {
     public static final String SKILL_STORIES    = "stories";
     public static final String SKILL_MATH       = "numbers";
     public static final String SKILL_SHAPES     = "shapes";
+
+
+    public static final String SKILL_WRITING_PLACEMENT    = "letters_placement";
+    public static final String SKILL_MATH_PLACEMENT       = "numbers_placement";
+
+
     public static final String FINISH           = "FINISH";
     public static final String SELECTOR_MODE    = "SELECTOR_MODE";
 
@@ -77,6 +85,7 @@ public class TCONST {
     // They will arrive in files named - RoboTutor_AssetA.0.1.0.zip
     //
     public static final String ROBOTUTOR_ASSET_PATTERN = "rtasset_";
+    public static final String CODE_DROP_1_ASSET_PATTERN = "codedrop1_";
 
     public static final String COMMAND      = "COMMAND";
     public static final String MODULE       = "MODULE";
@@ -192,6 +201,13 @@ public class TCONST {
     public static final String STORY_INTENT        = "story_reading";
     public static final String ON_CLICK            = "ON_CLICK";
     public static final String ENCODED_FOLDER      = "[encfolder]";
+    public static final String SHARED_MATH         = "[sharedmath]";
+    public static final String SHARED_MATH_FOLDER = "shared/shared_math";
+    public static final String SHARED_LITERACY     = "[sharedliteracy]";
+    public static final String SHARED_LITERACY_AUDIO_FOLDER = "shared/shared_lit"; // TODO fix this abominable inconsistency
+    public static final String SHARED_LITERACY_IMAGE_FOLDER = "shared/shared_literacy";
+    public static final String SONG                = "[song]";
+    public static final String SONG_FOLDER         = "?";
     public static final String STORY_PATH          = "cmu/xprize/story_reading/";
 
     public static final String LOCAL_FILE          = "[local_file]";
@@ -382,7 +398,10 @@ public class TCONST {
     public static final String ASSETS          = "ASSETS";
     public static final String RESOURCES       = "RESOURCE";
     public static final String EXTERN          = "EXTERN";
+    public static final String EXTERN_SHARED   = "EXTERN_SHARED";
     public static final String DEFINED         = "DEFINED";
+
+    public static final String DEBUG_STORY_TAG = "GENERAL_TSO";
 
     // Navigator types
     final static public String SIMPLENAV       = "SIMPLE_NAVIGATOR";
@@ -598,6 +617,10 @@ public class TCONST {
     public static final String WRITINGTUTOR_FOLDER      = "/WritingTutor/";
     public static final String HOT_LOG_FOLDER = "/RoboTutor_HOT/";
     public static final String READY_LOG_FOLDER = "/RoboTutor/";
+
+    public static final String  HOT_LOG_FOLDER_PERF = "/RoboTutor_HOT/"; // use same as normal logs
+    public static final String READY_LOG_FOLDER_PERF = "/RoboTutor/";    // use same as normal logs
+
     public static final String ROBOTUTOR_ASSET_FOLDER   = "/robotutor_assets/";
     public static final String GLYPHS_FOLDER            = "/glyphs/";
 
@@ -804,4 +827,8 @@ public class TCONST {
 
     // debug vals
     public static final String DEBUG_GRAY_SCREEN_TAG = "DEBUG_GRAY_SCREEN";
+
+    public static final String DEBUG_AUDIO_FILE = "DEBUG_AUDIO";
+
+    public static final String PLACEMENT_TAG = "DEBUG_PLACEMENT";
 }

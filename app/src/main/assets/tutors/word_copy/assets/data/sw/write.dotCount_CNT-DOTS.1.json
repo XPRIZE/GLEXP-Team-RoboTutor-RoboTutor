@@ -1,0 +1,17 @@
+{
+	"bootFeatures":"FTR_DEMO_DOTCOUNT",
+	"random": true,
+	"singleStimulus": true,
+	"dataSource": [
+		{ "stimulus": "o", "audioStimulus": [ "1", "", "" ], "answer": "1" },
+		{ "stimulus": "o o", "audioStimulus": [ "2", "", "" ], "answer": "2" },
+		{ "stimulus": "o o o", "audioStimulus": [ "3", "", "" ], "answer": "3" },
+		{ "stimulus": "o o o o", "audioStimulus": [ "4", "", "" ], "answer": "4" },
+		{ "stimulus": "o o o o o", "audioStimulus": [ "5", "", "" ], "answer": "5" },
+		{ "stimulus": "o o o o o\no", "audioStimulus": [ "6", "", "" ], "answer": "6" },
+		{ "stimulus": "o o o o o\no o", "audioStimulus": [ "7", "", "" ], "answer": "7" },
+		{ "stimulus": "o o o o o\no o o", "audioStimulus": [ "8", "", "" ], "answer": "8" },
+		{ "stimulus": "o o o o o\no o o o", "audioStimulus": [ "9", "", "" ], "answer": "9" },
+		{ "stimulus": "o o o o o\no o o o o", "audioStimulus": [ "10", "", "" ], "answer": "10" }
+	]
+}

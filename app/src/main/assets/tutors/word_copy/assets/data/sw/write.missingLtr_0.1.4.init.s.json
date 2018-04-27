@@ -1,0 +1,112 @@
+{
+	"bootFeatures": "FTR_DEMO_MISSING_LTR",
+	"random": true,
+	"singleStimulus": true,
+	"dataSource": [
+		{
+			"stimulus": "_oma",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "boma", ""],
+			"answer": "b"
+		},
+		{
+			"stimulus": "_bili",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "mbili", ""],
+			"answer": "m"
+		},
+		{
+			"stimulus": "_pira",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "mpira", ""],
+			"answer": "m"
+		},
+		{
+			"stimulus": "_ofaa",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "tofaa", ""],
+			"answer": "t"
+		},
+		{
+			"stimulus": "_eno",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "meno", ""],
+			"answer": "m"
+		},
+		{
+			"stimulus": "_bele",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "mbele", ""],
+			"answer": "m"
+		},
+		{
+			"stimulus": "_lila",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "alila", ""],
+			"answer": "a"
+		},
+		{
+			"stimulus": "_ogo",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "gogo", ""],
+			"answer": "g"
+		},
+		{
+			"stimulus": "_enge",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "genge", ""],
+			"answer": "g"
+		},
+		{
+			"stimulus": "_embe",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "jembe", ""],
+			"answer": "j"
+		},
+		{
+			"stimulus": "_buzi",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "mbuzi", ""],
+			"answer": "m"
+		},
+		{
+			"stimulus": "_eusi",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "jeusi", ""],
+			"answer": "j"
+		},
+		{
+			"stimulus": "_huru",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "uhuru", ""],
+			"answer": "u"
+		},
+		{
+			"stimulus": "_hule",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "shule", ""],
+			"answer": "s"
+		},
+		{
+			"stimulus": "_mri",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "umri", ""],
+			"answer": "u"
+		},
+		{
+			"stimulus": "_keno",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "ekeno", ""],
+			"answer": "e"
+		},
+		{
+			"stimulus": "_ete",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "pete", ""],
+			"answer": "p"
+		},
+		{
+			"stimulus": "_ebu",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "hebu", ""],
+			"answer": "h"
+		},
+		{
+			"stimulus": "_ote",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "lote", ""],
+			"answer": "l"
+		},
+		{
+			"stimulus": "_e",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "we", ""],
+			"answer": "w"
+		},
+		{
+			"stimulus": "_a",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "wa", ""],
+			"answer": "w"
+		}
+	]
+}

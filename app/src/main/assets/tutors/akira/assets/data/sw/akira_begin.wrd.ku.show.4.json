@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["kuogelea", "kuonyesha", "kuwavutia"],
+ "item_counter":1,
+ "answer":"LEFT",
+ "target":"kuogelea",
+ "belowString":"kuogelea",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kumwoa", "kuvuta", "kumpiga"],
+ "item_counter":2,
+ "answer":"MID",
+ "target":"kuvuta",
+ "belowString":"kuvuta",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kununua", "kuanguka", "kuolewa"],
+ "item_counter":3,
+ "answer":"MID",
+ "target":"kuanguka",
+ "belowString":"kuanguka",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kumpiga", "kuonekana", "kuimba"],
+ "item_counter":4,
+ "answer":"RIGHT",
+ "target":"kuimba",
+ "belowString":"kuimba",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kuuza", "kufanya", "kumpikia"],
+ "item_counter":5,
+ "answer":"RIGHT",
+ "target":"kumpikia",
+ "belowString":"kumpikia",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kukimbia", "kumfanya", "kufika"],
+ "item_counter":6,
+ "answer":"LEFT",
+ "target":"kukimbia",
+ "belowString":"kukimbia",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kucheka", "kutoa", "kuanguka"],
+ "item_counter":7,
+ "answer":"MID",
+ "target":"kutoa",
+ "belowString":"kutoa",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kuna", "kuvuka", "kumwambia"],
+ "item_counter":8,
+ "answer":"MID",
+ "target":"kuvuka",
+ "belowString":"kuvuka",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kuangalia", "kusoma", "kujificha"],
+ "item_counter":9,
+ "answer":"LEFT",
+ "target":"kuangalia",
+ "belowString":"kuangalia",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["kushangaza", "kuonekana", "kupika"],
+ "item_counter":10,
+ "answer":"LEFT",
+ "target":"kushangaza",
+ "belowString":"kushangaza",
+ "audio":"true" 
+       } 
+
+   ]
+}

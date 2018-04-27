@@ -12,10 +12,12 @@ import android.view.ViewGroup;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
@@ -28,8 +30,10 @@ import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.comp_session.CActivitySelector;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
+import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.robotutor.tutorengine.util.PerformanceData;
 import cmu.xprize.robotutor.tutorengine.util.PerformancePromotionRules;
+import cmu.xprize.robotutor.tutorengine.util.PlacementPromotionRules;
 import cmu.xprize.robotutor.tutorengine.util.PromotionRules;
 import cmu.xprize.util.CAt_Data;
 import cmu.xprize.robotutor.BuildConfig;
@@ -46,6 +50,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.util.CPlacementTest_Tutor;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEventSource;
 import cmu.xprize.comp_logging.ILogManager;
@@ -55,10 +60,11 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.comp_session.AS_CONST.LAUNCH_EVENT;
+import static cmu.xprize.comp_session.AS_CONST.VAR_TUTOR_ID;
 import static cmu.xprize.comp_session.AS_CONST.VAR_DATASOURCE;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENTDATA;
-import static cmu.xprize.robotutor.tutorengine.util.CClassMap2.classMap;
+import static cmu.xprize.util.TCONST.PLACEMENT_TAG;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_AKIRA;
 import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_ASM;
@@ -87,7 +93,12 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     private String      rootTutor;
     private boolean     askButtonsEnabled = false;
 
-    private HashMap<String, CAt_Data> transitionMap;
+
+    private boolean IS_USING_PLACEMENT; // YYY true at first, then turns to false after a failure
+    private ArrayList<CPlacementTest_Tutor> placementArray;
+
+
+    private HashMap<String, CAt_Data> transitionMap; // YYY track me
 
     private String      writingTutorID;
     private String      storiesTutorID;
@@ -107,7 +118,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
 
     final private String  TAG = "TActivitySelector";
-
+    private int placementIndex;
 
 
     public TActivitySelector(Context context) {
@@ -202,29 +213,33 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                     activeTutor   = writingTutorID;
                     transitionMap = writeTransitions;
+                    rootTutor = rootSkillWrite;
                     break;
 
                 case AS_CONST.SELECT_STORIES:
 
                     activeTutor   = storiesTutorID;
                     transitionMap = storyTransitions;
+                    rootTutor = rootSkillStories;
                     break;
 
                 case AS_CONST.SELECT_MATH:
 
                     activeTutor   = mathTutorID;
                     transitionMap = mathTransitions;
+                    rootTutor = rootSkillMath;
                     break;
 
                 case AS_CONST.SELECT_SHAPES:
 
                     activeTutor   = shapesTutorID;
                     transitionMap = shapeTransitions;
+                    rootTutor = rootSkillShapes;
                     break;
 
             }
 
-            SdebugActivity.initGrid(activeSkill, activeTutor, transitionMap);
+            SdebugActivity.initGrid(activeSkill, activeTutor, transitionMap, rootTutor);
         }
         else {
 
@@ -427,7 +442,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                     file = ROBO_DEBUG_FILE_BPOP;
             }
 
-            doLaunch(intent, TCONST.TUTOR_NATIVE, TCONST.DEBUG_FILE_PREFIX + file);
+            doLaunch(intent, TCONST.TUTOR_NATIVE, TCONST.DEBUG_FILE_PREFIX + file, "DEBUGGER");
             return;
 
         }
@@ -453,6 +468,13 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                     buttonid = AS_CONST.SELECT_MATH;
                     break;
             }
+
+        }
+
+        // 2. finish RoboTutor or the ActivitySelector, if necessary
+        if(buttonid.toUpperCase().equals(AS_CONST.SELECT_EXIT)) {
+            // if EXIT, we finish the app
+            mTutor.post(TCONST.FINISH);
 
         }
 
@@ -580,7 +602,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                                 // if an error occurs with media player, we don't want to freeze the app completely
                                 CLogManager.setTutor(activeTutor);
 
-                                doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data);
+                                doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
                             }
 
 
@@ -603,21 +625,21 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                                     CLogManager.setTutor(activeTutor);
 
-                                    doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data);
+                                    doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
                                 }
                             });
                         } else {
 
                             CLogManager.setTutor(activeTutor);
 
-                            doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data);
+                            doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
 
                         }
                     } else {
 
                         CLogManager.setTutor(activeTutor);
 
-                        doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data);
+                        doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
                     }
 
 
@@ -685,6 +707,10 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             PATH_TO_FILE += "write_demo.mp4";
         } else if (activeTutor.startsWith("story.read") || activeTutor.startsWith("story.echo")) {
             PATH_TO_FILE += "read_demo.mp4";
+        } else if (activeTutor.startsWith("numscale") || activeTutor.startsWith("num.scale")) {
+            PATH_TO_FILE += "numscale_demo.mp4";
+        } else if (activeTutor.startsWith("countingx")) {
+            PATH_TO_FILE += "countingx_demo.mp4";
         } else {
             return null;
         }
@@ -699,6 +725,13 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
      * @return new buttonid, to be used for next screen
      */
     private String processDifficultyAssessMode(String buttonid) {
+
+        boolean useMathPlacement = false;
+        boolean useWritingPlacement = false;
+
+
+        SharedPreferences prefs = getStudentSharedPreferences();
+
         // Init the skill pointers
         //
         switch (activeSkill) {
@@ -707,6 +740,9 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                 activeTutor = writingTutorID;
                 transitionMap = writeTransitions;
+                useWritingPlacement = prefs.getBoolean("WRITING_PLACEMENT", false);
+                placementIndex = prefs.getInt("WRITING_PLACEMENT_INDEX", 0);
+
                 break;
 
             case AS_CONST.SELECT_STORIES:
@@ -719,6 +755,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                 activeTutor = mathTutorID;
                 transitionMap = mathTransitions;
+                useMathPlacement = prefs.getBoolean("MATH_PLACEMENT", false);
+                placementIndex = prefs.getInt("MATH_PLACEMENT_INDEX", 0);
                 break;
 
             case AS_CONST.SELECT_SHAPES:
@@ -729,105 +767,21 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         }
 
-        // 1. pick the next tutor
-        PromotionRules rules = new PerformancePromotionRules();
-        PerformanceData performance = new PerformanceData();
-        performance.setSelfAssessment(buttonid.toUpperCase());
-        performance.setActivityType(activeTutor);
 
-        // need to get the previous tutor and all that jazz...
+        nextTutor = selectNextTutor(buttonid, useWritingPlacement, useMathPlacement, prefs);
+        RoboTutor.logManager.postEvent_I(TCONST.PLACEMENT_TAG, "nextTutor = " + nextTutor);
 
-        String childScope = null;
-        if(activeTutor.startsWith("bpop")) {
-            childScope = "bubble_pop";
-
-        } else if (activeTutor.startsWith("akira")) {
-            childScope = "akira";
-
-        } else if (activeTutor.startsWith("math")) {
-            childScope = "add_subtract";
-
-        } else if (activeTutor.startsWith("write")) {
-            childScope = "word_copy";
-
-        } else if (activeTutor.startsWith("story")) {
-            childScope = "story_reading";
-
-        } else if (activeTutor.startsWith("countingx")) {
-            childScope = "countingx";
-
-        }
-
-        // get tutor data from last tutor the user played
-        TScope lastScope = TScope.root().getChildScope(childScope);
-        CTutor lastTutor;
-        if(lastScope != null) {
-            lastTutor = lastScope.tutor();
-            performance.setNumberCorrect(lastTutor.getScore());
-            performance.setNumberWrong(lastTutor.getIncorrect());
-            performance.setNumberAttempts(lastTutor.getAttempts());
-            performance.setTotalNumberQuestions(lastTutor.getTotalQuestions());
-        }
-
-        PromotionRules.SelectedActivity selectedActivity = rules.selectActivityByPerformance(performance);
-        Log.d(TAG, "PerformancePromotionRules result: " + selectedActivity);
-
-        CAt_Data transitionData = transitionMap.get(activeTutor);
-        switch(selectedActivity) {
-            case NEXT:
-                nextTutor = transitionData.next;
-                break;
-
-            case SAME:
-                nextTutor = transitionData.same;
-                break;
-
-            case OLD_EASIER:
-                nextTutor = transitionData.easier;
-                break;
-
-            case OLD_HARDER:
-                nextTutor = transitionData.harder;
-                break;
-
-            case PREVIOUS:
-                // XXX FIXME nextTutor = transitionData.previous;
-                // for now... do the super hacky way of iterating through the whole map until we find one who refers to "activeTutor" via "next"
-                String tempNextTutor = null;
-                for (Map.Entry<String, CAt_Data> e : transitionMap.entrySet()) {
-                    Log.d("TRANSITION_MAP", e.getValue().toString());
-                    CAt_Data value = e.getValue();
-                    if (value.next.equals(activeTutor)) {
-                        tempNextTutor = e.getKey();
-                    }
-                }
-                // no "next" reference, probably means it's the first item
-                if (tempNextTutor == null) {
-                    tempNextTutor = activeTutor;
-                }
-                nextTutor = tempNextTutor;
-                // XXX FIXME end super hacky code
-
-                break;
-
-            case DOUBLE_NEXT:
-                // XXX FIXME nextTutor = transitionData.double_next;
-                // for now... do the slightly less hacky way of doing "next" of "next"
-                String notNextTutor = transitionData.next;
-
-                CAt_Data nextTransitionData = transitionMap.get(notNextTutor);
-                nextTutor = nextTransitionData.next;
-                // XXX FIXME end slightly less hacky code
-                // XXX note that these will not show up in the debugger graph
-                break;
-        }
 
         // 2. finish RoboTutor or the ActivitySelector, if necessary
         if(buttonid.toUpperCase().equals(AS_CONST.SELECT_EXIT)) {
             // if EXIT, we finish the app
             mTutor.post(TCONST.FINISH);
 
-        } else if (buttonid.toUpperCase().equals(AS_CONST.SELECT_REPEAT) ||
+        }
+
+        // if (REPEAT || AUTO) => playTutor without going to home screen
+        //
+        else if (buttonid.toUpperCase().equals(AS_CONST.SELECT_REPEAT) ||
                 buttonid.toUpperCase().equals(AS_CONST.SELECT_AUTO_DIFFICULTY)){
 
             buttonid = activeSkill;
@@ -868,7 +822,6 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         // Serialize the new state
         // #Mod 329 language switch capability
         //
-        SharedPreferences prefs = getStudentSharedPreferences();
         SharedPreferences.Editor editor = prefs.edit();
 
         editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE);
@@ -890,6 +843,234 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE);
 
         return buttonid;
+    }
+
+    /**
+     * select Next Tutor
+     * @param buttonid
+     */
+    private String selectNextTutor(String buttonid, boolean useWritingPlacement, boolean useMathPlacement, SharedPreferences prefs) {
+        RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format(Locale.US, "selectNextTutor, w=%s, m=%s",
+                String.valueOf(useWritingPlacement),
+                String.valueOf(useMathPlacement)));
+        // 1. pick the next tutor
+        // YYY if placement, we will go by different rules
+        PromotionRules rules;
+        if(useWritingPlacement || useMathPlacement) {
+            rules = new PlacementPromotionRules();
+        } else {
+            rules = new PerformancePromotionRules();
+        }
+
+        PerformanceData performance = new PerformanceData();
+        performance.setSelfAssessment(buttonid.toUpperCase());
+        performance.setActivityType(activeTutor);
+        performance.setActiveSkill(activeSkill);
+
+        // need to get the previous tutor and all that jazz...
+        String childScope = getChildScope();
+
+        // get tutor data from last tutor the user played
+        TScope lastScope = TScope.root().getChildScope(childScope);
+        CTutor lastTutor;
+        if(lastScope != null) {
+            lastTutor = lastScope.tutor();
+            performance.setNumberCorrect(lastTutor.getScore());
+            performance.setNumberWrong(lastTutor.getIncorrect());
+            performance.setNumberAttempts(lastTutor.getAttempts());
+            performance.setTotalNumberQuestions(lastTutor.getTotalQuestions());
+        }
+
+        PromotionRules.SelectedActivity selectedActivity = rules.selectActivityByPerformance(performance);
+        Log.d(TAG, "PerformancePromotionRules result: " + selectedActivity);
+
+        // YYY use placement logic
+        if (useWritingPlacement || useMathPlacement) {
+            RoboTutor.logManager.postEvent_V(TCONST.PLACEMENT_TAG, "using placement logic");
+
+            String placementKey;
+            String placementIndexKey;
+
+            String nextTutor;
+
+            switch(selectedActivity) {
+
+                /// YYY it might be better to keep the placement tutors in a map instead of in an array
+                /// YYY logic might be more symmetrical
+                /// YYY if (placement) {placementMap.get(activeTutor)} else {transitionMap.get(activeTutor)}
+                // NEXT is equivalent to passing the placement test and moving to next placement test
+
+                case NEXT:
+                    // pass to next
+                    //
+                    if(useMathPlacement) {
+                        int mathPlacementIndex = placementIndex;
+
+
+                        if (mathPlacementIndex == mathPlacement.length) {
+                            // student has made it to the end
+                            CPlacementTest_Tutor lastPlacementTest = mathPlacement[mathPlacementIndex];
+                            // update our preferences to exit PLACEMENT mode
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putBoolean("MATH_PLACEMENT", false);
+                            editor.remove("MATH_PLACEMENT_INDEX");
+                            editor.apply();
+
+                            return lastPlacementTest.fail;
+                        } else {
+                            mathPlacementIndex++; // passing means incrementing by one
+                            CPlacementTest_Tutor nextPlacementTest = mathPlacement[mathPlacementIndex];
+
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putInt("MATH_PLACEMENT_INDEX", mathPlacementIndex);
+                            editor.apply();
+
+                            return nextPlacementTest.tutor; // go to beginning of last level
+                        }
+                    }
+                    // writingPlacement is only other option
+                    else {
+                        int writingPlacementIndex = placementIndex;
+
+                        if (writingPlacementIndex == writePlacement.length) {
+                            // student has made it to the end
+                            CPlacementTest_Tutor lastPlacementTest = writePlacement[writingPlacementIndex];
+                            // update our preferences to exit PLACEMENT mode
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putBoolean("WRITING_PLACEMENT", false);
+                            editor.remove("WRITING_PLACEMENT_INDEX");
+                            editor.apply();
+
+                            return lastPlacementTest.fail; // go to beginning of last level
+                        } else {
+                            writingPlacementIndex++; // passing means incrementing by one
+                            CPlacementTest_Tutor nextPlacementTest = writePlacement[writingPlacementIndex];
+
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putInt("WRITING_PLACEMENT_INDEX", writingPlacementIndex);
+                            editor.apply();
+
+                            return nextPlacementTest.tutor;
+                        }
+
+                    }
+
+
+                // SAME occurs when the student doesn't finish and we don't have enough information
+                case SAME:
+                    // play again
+                    // do nothing
+                    CAt_Data transitionData = transitionMap.get(activeTutor);
+                    return transitionData.same;
+
+
+                // PREVIOUS is equivalent to failing the placement test and going to first activity in level
+                case PREVIOUS:
+                default:
+                    CPlacementTest_Tutor lastPlacementTest;
+
+                    // set prefs.usesThingy to false
+                    if(useMathPlacement) {
+                        lastPlacementTest = mathPlacement[placementIndex];
+                        placementKey = "MATH_PLACEMENT";
+                        placementIndexKey = "MATH_PLACEMENT_INDEX";
+
+                    }
+                    // useWritePlacement only other option
+                    else {
+                        lastPlacementTest = writePlacement[placementIndex];
+                        placementKey = "WRITING_PLACEMENT";
+                        placementIndexKey = "WRITING_PLACEMENT_INDEX";
+
+                    }
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putBoolean(placementKey, false); // no more placement
+                    editor.remove(placementIndexKey);
+                    editor.apply();
+
+                    return lastPlacementTest.fail;
+
+
+            }
+
+        } else {
+
+            // this is
+            CAt_Data transitionData = transitionMap.get(activeTutor);
+            switch (selectedActivity) {
+                case NEXT:
+                    return transitionData.next;
+
+                case SAME:
+                    return transitionData.same;
+
+                case OLD_EASIER:
+                    return transitionData.easier;
+
+                case OLD_HARDER:
+                    return transitionData.harder;
+
+                case PREVIOUS:
+                    // XXX FIXME nextTutor = transitionData.previous;
+                    // for now... do the super hacky way of iterating through the whole map until we find one who refers to "activeTutor" via "next"
+                    String tempNextTutor = null;
+                    for (Map.Entry<String, CAt_Data> e : transitionMap.entrySet()) {
+                        Log.d("TRANSITION_MAP", e.getValue().toString());
+                        CAt_Data value = e.getValue();
+                        if (value.next.equals(activeTutor)) {
+                            tempNextTutor = e.getKey();
+                        }
+                    }
+                    // no "next" reference, probably means it's the first item
+                    if (tempNextTutor == null) {
+                        tempNextTutor = activeTutor;
+                    }
+                    return tempNextTutor;
+                // XXX FIXME end super hacky code
+
+
+                case DOUBLE_NEXT:
+                    // XXX FIXME nextTutor = transitionData.double_next;
+                    // for now... do the slightly less hacky way of doing "next" of "next"
+                    String notNextTutor = transitionData.next;
+
+                    CAt_Data nextTransitionData = transitionMap.get(notNextTutor);
+                    return nextTransitionData.next;
+                // XXX FIXME end slightly less hacky code
+                // XXX note that these will not show up in the debugger graph
+
+                // this shouldn't happen...
+                default:
+                    return transitionData.next;
+            }
+        }
+
+
+    }
+
+    private String getChildScope() {
+        String childScope = null;
+        if(activeTutor.startsWith("bpop")) {
+            childScope = "bubble_pop";
+
+        } else if (activeTutor.startsWith("akira")) {
+            childScope = "akira";
+
+        } else if (activeTutor.startsWith("math")) {
+            childScope = "add_subtract";
+
+        } else if (activeTutor.startsWith("write")) {
+            childScope = "word_copy";
+
+        } else if (activeTutor.startsWith("story")) {
+            childScope = "story_reading";
+
+        } else if (activeTutor.startsWith("countingx")) {
+            childScope = "countingx";
+        } else if (activeTutor.startsWith("num.scale")) {
+            childScope = "numberscale";
+        }
+        return childScope;
     }
 
     /**
@@ -965,6 +1146,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
     /**
      * gets the stored data for each student based on STUDENT_ID.
+     * YYY if this is a student's first time logging in, use PLACEMENT
      */
     private SharedPreferences getStudentSharedPreferences() {
         // each ID name is composed of the STUDENT_ID plus the language i.e. EN or SW
@@ -987,7 +1169,9 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
      * @param intentData
      */
     @Override
-    public void doLaunch(String intent, String intentData, String dataSource) {
+    public void doLaunch(String intent, String intentData, String dataSource, String tutorId) {
+
+        Log.wtf("WARRIOR_MAN", "doLaunch: tutorId = " + tutorId);
 
         RoboTutor.SELECTOR_MODE = TCONST.FTR_DIFFICULTY_ASSESS;
 
@@ -996,6 +1180,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         publishValue(VAR_INTENT, intent);
         publishValue(VAR_INTENTDATA, intentData);
         publishValue(VAR_DATASOURCE, dataSource);
+        publishValue(VAR_TUTOR_ID, tutorId);
 
         applyBehavior(LAUNCH_EVENT);
     }
@@ -1162,6 +1347,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     @Override
     public void setDataSource(String dataNameDescriptor) {
 
+        //
         // TODO: globally make startWith type TCONST
         try {
             if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
@@ -1177,6 +1363,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                 String jsonData = JSON_Helper.cacheData(dataPath + dataFile);
 
+                //
                 // Load the datasource in the component module - i.e. the superclass
                 loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 
@@ -1489,12 +1676,13 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         // Note we load in the TClass as we need to use the tutor classMap to permit
         // instantiation of type_audio objects
         //
-        JSON_Helper.parseSelf(jsonObj, this, classMap, scope);
+        //
+        JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
 
         // de-serialize state
         // #Mod 329 language switch capability
         //
-        SharedPreferences prefs = getStudentSharedPreferences();
+        SharedPreferences prefs = getStudentSharedPreferences(); // YYY
 
         if(prefs.getAll().entrySet().isEmpty())
             RoboTutor.logManager.postEvent_W(TAG, "SharedPreferences is empty");
@@ -1503,20 +1691,67 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             RoboTutor.logManager.postEvent_D(TAG, "SharedPreferences: " + entry.getKey() + " -- " + entry.getValue().toString());
         }
 
+
         activeSkill = prefs.getString(TCONST.SKILL_SELECTED, TCONST.SKILL_STORIES);
 
         validateRootVectors();
 
-        writingTutorID = prefs.getString(TCONST.SKILL_WRITING, rootSkillWrite);
+        // YYY maybe move this somewhere else???
+        String firstTime = prefs.getString("HAS_PLAYED", null);
+        // if it's the first time playing, we want to initialize our placement values
+        if (firstTime == null) {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("HAS_PLAYED", String.valueOf(true));
+            editor.putBoolean("MATH_PLACEMENT", true);
+            editor.putInt("MATH_PLACEMENT_INDEX", 0);
+            editor.putBoolean("WRITING_PLACEMENT", true);
+            editor.putInt("WRITING_PLACEMENT_INDEX", 0);
+            editor.apply();
+
+        }
+        boolean useMathPlacement = prefs.getBoolean("MATH_PLACEMENT", true);
+        boolean useWritingPlacement = prefs.getBoolean("WRITING_PLACEMENT", true);
+
+
+        RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useMathPlacement = %s", useMathPlacement));
+        RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useWritingPlacement = %s", useWritingPlacement));
+
+        if(useMathPlacement) {
+            int mathPlacementIndex = prefs.getInt("MATH_PLACEMENT_INDEX", 0);
+            CPlacementTest_Tutor mathPlacementTutor = mathPlacement[mathPlacementIndex];
+            RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("mathPlacementIndex = %d", mathPlacementIndex));
+            mathTutorID = mathPlacementTutor.tutor; // YYY tutor gets chosen here
+
+        } else {
+            mathTutorID    = prefs.getString(TCONST.SKILL_MATH,    rootSkillMath);
+        }
+        RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("mathTutorID = %s", mathTutorID));
+
+        if (useWritingPlacement) {
+            int writingPlacementIndex = prefs.getInt("WRITING_PLACEMENT_INDEX", 0);
+            CPlacementTest_Tutor writePlacementTutor = writePlacement[writingPlacementIndex];
+            RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writePlacementIndex = %d", writingPlacementIndex));
+            writingTutorID = writePlacementTutor.tutor; // YYY tutor gets chosen here
+        } else {
+            writingTutorID = prefs.getString(TCONST.SKILL_WRITING, rootSkillWrite);
+        }
+        RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writingTutorID = %s", writingTutorID));
+
+
+        // stories doesn't have placement testing
         storiesTutorID = prefs.getString(TCONST.SKILL_STORIES, rootSkillStories);
-        mathTutorID    = prefs.getString(TCONST.SKILL_MATH,    rootSkillMath);
         shapesTutorID  = prefs.getString(TCONST.SKILL_SHAPES,  rootSkillShapes);
 
         generateTransitionVectors();
 
         validateTables();
+
+        validatePlacementProgressions();
     }
 
+    /**
+     * this isn't used... just gives a sample
+     */
     private void generateTransitionVectors() {
 
         writingVector = (CAt_Data) writeTransitions.get(writingTutorID);
@@ -1571,6 +1806,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     }
 
 
+    /** checks whether each of the root skills exists in the transitions map **/
     private void validateRootVectors() {
 
         String outcome;
@@ -1640,5 +1876,35 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         validateTable(storyTransitions,  "storyTransition: ");
         validateTable(mathTransitions ,  "mathTransition: ");
         validateTable(shapeTransitions,  "shapeTransition: " );
+    }
+
+    /**
+     * Checks that every tutor in the Placement Progression is a legit tutor in the transition map
+     *
+     * @param progression
+     */
+    private void validatePlacementProgression(CPlacementTest_Tutor[] progression, HashMap transitionMap) {
+        // YYY TODO
+
+        StringBuilder outcome = new StringBuilder();
+
+        for(int i = 0; i < progression.length; i++) {
+
+            CPlacementTest_Tutor tutor = progression[0];
+            String tutorId = tutor.tutor;
+
+            outcome.append(validateMap(transitionMap, tutorId));
+
+        }
+
+        if (!outcome.toString().equals("")) {
+            Log.e(PLACEMENT_TAG, "Placement Error: " + outcome);
+        }
+
+    }
+
+    private void validatePlacementProgressions() {
+        validatePlacementProgression(writePlacement, writeTransitions);
+        validatePlacementProgression(mathPlacement, mathTransitions);
     }
 }

@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["vile", "mishale", "tele"],
+ "item_counter":1,
+ "answer":"MID",
+ "target":"mishale",
+ "belowString":"mishale",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["yale", "makelele", "gingile"],
+ "item_counter":2,
+ "answer":"RIGHT",
+ "target":"gingile",
+ "belowString":"gingile",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["tungule", "gingile", "miale"],
+ "item_counter":3,
+ "answer":"MID",
+ "target":"gingile",
+ "belowString":"gingile",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["vidole", "nozibele", "pale"],
+ "item_counter":4,
+ "answer":"MID",
+ "target":"nozibele",
+ "belowString":"nozibele",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["unywele", "polepole", "vidole"],
+ "item_counter":5,
+ "answer":"LEFT",
+ "target":"unywele",
+ "belowString":"unywele",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["tule", "kobole", "vile"],
+ "item_counter":6,
+ "answer":"LEFT",
+ "target":"tule",
+ "belowString":"tule",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["shule", "vidole", "alale"],
+ "item_counter":7,
+ "answer":"MID",
+ "target":"vidole",
+ "belowString":"vidole",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["zile", "alale", "vile"],
+ "item_counter":8,
+ "answer":"LEFT",
+ "target":"zile",
+ "belowString":"zile",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["alale", "netasile", "polepole"],
+ "item_counter":9,
+ "answer":"LEFT",
+ "target":"alale",
+ "belowString":"alale",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["makelele", "zile", "unywele"],
+ "item_counter":10,
+ "answer":"RIGHT",
+ "target":"unywele",
+ "belowString":"unywele",
+ "audio":"true" 
+       } 
+
+   ]
+}

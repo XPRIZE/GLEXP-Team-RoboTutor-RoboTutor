@@ -43,6 +43,7 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TFloat;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TReference;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
+import cmu.xprize.util.CPlacementTest_Tutor;
 
 public class CClassMap2 {
 
@@ -68,6 +69,7 @@ public class CClassMap2 {
         classMap.put("QUEUEDCOMMAND", type_queuedaction.class);
 
         classMap.put("TRANSITION", CAt_Data.class);
+        classMap.put("PLACEMENT", CPlacementTest_Tutor.class);
 
         classMap.put("TUTORDATA_MAP", defdata_tutor.class);
         classMap.put("TUTORVAR_MAP", defvar_tutor.class);

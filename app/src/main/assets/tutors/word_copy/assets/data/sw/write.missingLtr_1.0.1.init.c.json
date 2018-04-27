@@ -1,0 +1,112 @@
+{
+	"bootFeatures": "FTR_DEMO_MISSING_LTR",
+	"random": true,
+	"singleStimulus": true,
+	"dataSource": [
+		{
+			"stimulus": "ku__angalia",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "kuwaangalia", ""],
+			"answer": "wa"
+		},
+		{
+			"stimulus": "u__angalia",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "unaangalia", ""],
+			"answer": "na"
+		},
+		{
+			"stimulus": "ni__yopotea",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "niliyopotea", ""],
+			"answer": "li"
+		},
+		{
+			"stimulus": "ma__alea",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "malealea", ""],
+			"answer": "le"
+		},
+		{
+			"stimulus": "zi__elezea",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "zilielezea", ""],
+			"answer": "li"
+		},
+		{
+			"stimulus": "ku__zua",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "kuwazua", ""],
+			"answer": "wa"
+		},
+		{
+			"stimulus": "i__mwambia",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "ikimwambia", ""],
+			"answer": "ki"
+		},
+		{
+			"stimulus": "a__isikia",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "aliisikia", ""],
+			"answer": "li"
+		},
+		{
+			"stimulus": "li__lomjia",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "lililomjia", ""],
+			"answer": "li"
+		},
+		{
+			"stimulus": "wa__mjua",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "walimjua", ""],
+			"answer": "li"
+		},
+		{
+			"stimulus": "wa__mtafuta",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "walimtafuta", ""],
+			"answer": "li"
+		},
+		{
+			"stimulus": "ku__pa",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "kulipa", ""],
+			"answer": "li"
+		},
+		{
+			"stimulus": "m__rimu",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "mkarimu", ""],
+			"answer": "ka"
+		},
+		{
+			"stimulus": "a__utungia",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "aliutungia", ""],
+			"answer": "li"
+		},
+		{
+			"stimulus": "wa__takiwa",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "walitakiwa", ""],
+			"answer": "li"
+		},
+		{
+			"stimulus": "ku__beba",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "kukibeba", ""],
+			"answer": "ki"
+		},
+		{
+			"stimulus": "a__shikilia",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "anashikilia", ""],
+			"answer": "na"
+		},
+		{
+			"stimulus": "h_yu",
+			"audioStimulus": ["Tafadhali andika herufi inayokosekana katika neno", "huyu", ""],
+			"answer": "u"
+		},
+		{
+			"stimulus": "tu__enda",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "tutaenda", ""],
+			"answer": "ta"
+		},
+		{
+			"stimulus": "wa__keti",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "waliketi", ""],
+			"answer": "li"
+		},
+		{
+			"stimulus": "tu__yafahamu",
+			"audioStimulus": ["Tafadhali andika herufi zinazokosekana katika neno", "tunayafahamu", ""],
+			"answer": "na"
+		}
+	]
+}

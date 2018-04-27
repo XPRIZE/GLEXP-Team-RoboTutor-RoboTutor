@@ -116,16 +116,21 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
     //Helper function that splits expression into operand1, key, and operand2
     private String[] splitExpression(String exp, String key) {
-        int index = exp.indexOf(key);
-        String operand1 = exp.substring(0, index);
-        String operation = exp.substring(index + 1, index + 2);
-        String operand2 = exp.substring(index + 2);
+        int op_index = exp.indexOf(key);
+        String operand1 = exp.substring(0, op_index);
+
         if(key.equals("\n")) {
-            if (operation.equals("+")) {
-                key = "plus";
-            } else {
-                key = "minus";
-            }
+            op_index += 1;
+        }
+
+        String operation = exp.substring(op_index, op_index+1);
+        String operand2 = exp.substring(op_index+1);
+
+        if (operation.equals("+") || operation.equals("plus")) {
+            key = "plus";
+        }
+        else {
+            key = "minus";
         }
 
         return (new String[]{operand1, key, operand2});
@@ -377,11 +382,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
     public void maskStimulus() {
         RectF  boundRect = _bubbleStimulus.getRectBound();
-//        Log.d("TOMBRADY", "Mask Stimulus");
-//        Log.d("TOMBRADY", Float.toString(boundRect.bottom));
-//        Log.d("TOMBRADY", Float.toString(boundRect.top));
-//        Log.d("TOMBRADY", Float.toString(boundRect.left));
-//        Log.d("TOMBRADY", Float.toString(boundRect.right));
 
         // Add an exclusion around stimulus
         Intent msg = new Intent(MASK_ADDEXCL);
@@ -398,7 +398,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         //
         msg = new Intent(MASK_SETALPHA);
         msg.putExtra(MASK_ALPHA, mask_alpha);
-//        Log.d("TOMBRADY", "Alpha" + mask_alpha);
         bManager.sendBroadcast(msg);
 
 
@@ -406,11 +405,9 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         //
         msg = new Intent(MASK_SHOWHIDE);
         msg.putExtra(MASK_SHOWHIDE, VISIBLE);
-//        Log.d("TOMBRADY", "Visible: " + VISIBLE);
 
         bManager.sendBroadcast(msg);
 
-//        Log.d("TOMBRADY", "Masked Stimlus");
     }
 
 
@@ -478,26 +475,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
             case BP_CONST.SHOW_BUBBLES:
                 post(BP_CONST.SHOW_BUBBLES);
-                break;
-
-            case BP_CONST.SHOW_BUBBLE_ZERO:
-                post(BP_CONST.SHOW_BUBBLE_ZERO);
-                break;
-
-            case BP_CONST.SHOW_BUBBLE_ONE:
-                post(BP_CONST.SHOW_BUBBLE_ONE);
-                break;
-
-            case BP_CONST.SHOW_BUBBLE_TWO:
-                post(BP_CONST.SHOW_BUBBLE_TWO);
-                break;
-
-            case BP_CONST.SHOW_BUBBLE_THREE:
-                post(BP_CONST.SHOW_BUBBLE_THREE);
-                break;
-
-            case BP_CONST.SHOW_BUBBLE_FOUR:
-                post(BP_CONST.SHOW_BUBBLE_FOUR);
                 break;
 
             case BP_CONST.POP_BUBBLE:
@@ -799,7 +776,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 publishFeature(BP_CONST.FTR_E2N);
             }
 
-            try {
+            if(answer != null && answer.matches("[-+]?\\d*\\.?\\d+")) {
                 int ans = Integer.parseInt(answer);
                 int[] ansDigits = getListDigits(ans);
 
@@ -810,7 +787,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 else {
                     removeFeature(BP_CONST.FTR_ANS_HUNDREDS);
                 }
-                if(ansDigits[1] >= 10 || ansDigits[0] == 0) {
+                if(ansDigits[1] >= 1 || ansDigits[0] == 0) {
                     publishFeature(BP_CONST.FTR_ANS_TENS);
                     publishValue(BP_CONST.ANS_VAR_TENS, ansDigits[1]);
                 }
@@ -818,9 +795,9 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                     removeFeature(BP_CONST.FTR_ANS_TENS);
                 }
             }
-            //If value is not number, publish the value as string
-            catch(NumberFormatException nfe) {
+            else {
                 publishValue(BP_CONST.ANS_VAR, answer);
+
             }
         }
 
@@ -881,8 +858,11 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         event.setGameId(mTutor.getUuid().toString());
         event.setLanguage(CTutorEngine.language);
         event.setTutorName(mTutor.getTutorName());
+        Log.wtf("WARRIOR_MAN", mTutor.getTutorId());
+        event.setTutorId(mTutor.getTutorId());
         event.setProblemName(problemName);
         event.setProblemNumber(logQuestionIndex);
+        event.setTotalProblemsCount(mTutor.getTotalQuestions());
         event.setTotalSubsteps(1);
         event.setSubstepNumber(1);
         event.setSubstepProblem(1);
@@ -933,6 +913,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
             String[] expTerms = splitExpression(correctVal, key);
             int operand1 = Integer.parseInt(expTerms[0]); int operand2 = Integer.parseInt(expTerms[2]);
+
             String operation = expTerms[1];
             int[] operand1Digits = getListDigits(operand1); int[] operand2Digits = getListDigits(operand2);
 
@@ -995,15 +976,13 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             if(mProblemType.equals("MIS_NUM")) {
                 correctVal = "What number belongs here";
             }
-            else if(mProblemType.equals("GL_GT")) {
+            if(mProblemType.equals("GL_GT")) {
                 correctVal = "Touch the largest number";
             }
-            else if(mProblemType.equals("GL_LT")) {
+            if(mProblemType.equals("GL_LT")) {
                 correctVal = "Touch the smallest number";
             }
-
-            //Publishes a value for each digit so audio for each individual digit is played
-            try {
+            if(correctVal != null && correctVal.matches("[-+]?\\d*\\.?\\d+")) {
                 int ans = Integer.parseInt(correctVal);
                 int[] ansDigits = getListDigits(ans);
 
@@ -1022,14 +1001,12 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                     removeFeature(BP_CONST.FTR_QUEST_TENS);
                 }
             }
-            //If value is not number, publish the value as string
-            catch(NumberFormatException nfe) {
-
+            else {
                 if(mProblemType.equals("WORD_STARTS_WITH")) {
                     publishFeature(BP_CONST.FTR_WRD_STARTS_WITH);
                     publishValue(BP_CONST.QUEST_VAR, correctVal);
                 }
-                else if(mProblemType.equals("WORD_ENDS_WITH")) {
+                if(mProblemType.equals("WORD_ENDS_WITH")) {
                     publishFeature(BP_CONST.FTR_WRD_ENDS_WITH);
                     publishValue(BP_CONST.QUEST_VAR, correctVal);
                 }

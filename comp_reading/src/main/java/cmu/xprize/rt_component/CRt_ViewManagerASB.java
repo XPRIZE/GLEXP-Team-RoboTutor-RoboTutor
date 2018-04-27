@@ -102,14 +102,14 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private int                     attemptNum = 1;
     private boolean                 storyBooting;
 
-    private String                  wordsToDisplay[];                    // current sentence words to display - contain punctuation
-    private String                  wordsToSpeak[];                      // current sentence words to hear
+    private String[]                wordsToDisplay;                      // current sentence words to display - contain punctuation
+    private String[]                wordsToSpeak;                        // current sentence words to hear
     private ArrayList<String>       wordsToListenFor;                    // current sentence words to build language model
     private String                  hearRead;
     private Boolean                 echo = false;
 
     private CASB_Narration[]        rawNarration;                        // The narration segmentation info for the active sentence
-    private String                  rawSentence;                         //currently displayed sentence that need to be recognized
+    private String                  rawSentence;                         // currently displayed sentence that need to be recognized
     private CASB_Seg                narrationSegment;
     private String[]                splitSegment;
     private int                     splitIndex = TCONST.INITSPLIT;
@@ -124,7 +124,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private CASB_Seg[]              segmentArray;
     private int                     numSegments;
     private int                     utterancePrev;
-    private int                     utteranceCurr;
+    private int                     segmentPrev;
+    private int                     segmentCurr;
 
     private String                  completedSentencesFmtd = "";
     private String                  completedSentences     = "";
@@ -141,6 +142,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
 
     // json loadable
+    // ZZZ where the money gets loaded
 
     public String        license;
     public String        story_name;
@@ -153,7 +155,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     public String        prompt;
     public String        parser;
-    public CASB_data     data[];
+    // ZZZ the money
+    public CASB_data[]   data;
 
 
     static final String TAG = "CRt_ViewManagerASB";
@@ -196,9 +199,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     public void initStory(IVManListener owner, String assetPath, String location) {
 
         mOwner        = owner;
-        mAsset        = assetPath;
+        mAsset        = assetPath; // ZZZ assetPath... TCONST.EXTERN
         storyBooting  = true;
-        assetLocation = location;
+        assetLocation = location;  // ZZZ assetLocation... contains storydata.json and images
+
+        Log.d(TCONST.DEBUG_STORY_TAG, String.format("mAsset=%s -- assetLocation=%s", mAsset, assetLocation));
 
         if (mParent.testFeature(TCONST.FTR_USER_HIDE)) showWords = false;
         if (mParent.testFeature(TCONST.FTR_USER_REVEAL)) showFutureWords = showFutureContent = false;
@@ -415,11 +420,17 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         try {
             if (assetLocation.equals(TCONST.EXTERN)) {
 
-                in = new FileInputStream(mAsset + data[mCurrPage].image);
+                Log.d(TCONST.DEBUG_STORY_TAG, "loading image " + mAsset + data[mCurrPage].image);
+                in = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
 
+            } else if (assetLocation.equals(TCONST.EXTERN_SHARED)) {
+
+                Log.d(TCONST.DEBUG_STORY_TAG, "loading shared image " + mAsset + data[mCurrPage].image);
+                in = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
             } else {
 
-                in = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image);
+                Log.d(TCONST.DEBUG_STORY_TAG, "loading image from asset" + mAsset + data[mCurrPage].image);
+                in = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image); // ZZZ load image
             }
 
             mPageImage.setImageBitmap(BitmapFactory.decodeStream(in));
@@ -464,7 +475,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         sentenceWords = stripLeadingTrailing(sentenceWords, "'");
         sentenceWords = splitWordOnChar(sentenceWords, "-");
         sentenceWords = splitWordOnChar(sentenceWords, "'");
-        sentenceWords = splitWordOnChar(sentenceWords, ",");
 
         return sentenceWords;
     }
@@ -727,7 +737,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         segmentNdx    = _segNdx;
         numSegments   = segmentArray.length;
-        utterancePrev = 0;
+        utterancePrev = utteranceNdx == 0 ? 0 : rawNarration[utteranceNdx - 1].until;
+        segmentPrev   = utterancePrev;
 
         // Clean the extension off the end - could be either wav/mp3
         //
@@ -853,11 +864,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         narrationSegment = rawNarration[utteranceNdx].segmentation[segmentNdx];
 
-        utteranceCurr = narrationSegment.start;
+        segmentCurr = utterancePrev + narrationSegment.end;
 
-        mParent.post(TCONST.TRACK_NARRATION, new Long((utteranceCurr - utterancePrev) * 10));
+        mParent.post(TCONST.TRACK_NARRATION, new Long((segmentCurr - segmentPrev) * 10));
 
-        utterancePrev = utteranceCurr;
+        segmentPrev = segmentCurr;
     }
 
 
@@ -865,7 +876,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         if (!endOfSentence) {
 
-            // Tell the script to speak the new uttereance
+            // Tell the script to speak the new utterance
             //
             mParent.applyBehavior(TCONST.SPEAK_UTTERANCE);
             postDelayedTracker();
@@ -1494,6 +1505,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 attemptNum = 0;
                 result = true;
             }
+            mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord - 1, heardWords[mHeardWord - 1], attemptNum, false, result);
         }
 
         // Publish the outcome
@@ -1520,7 +1532,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         boolean result    = true;
         String  logString = "";
 
-
         try {
             for (int i = 0; i < heardWords.length; i++) {
                 if (heardWords[i] != null) {
@@ -1530,8 +1541,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 }
             }
 
-            while ((mCurrWord  < wordsToSpeak.length) &&
-                   (mHeardWord < heardWords.length)) {
+            while ((mCurrWord < wordsToSpeak.length) && (mHeardWord < heardWords.length)) {
 
                 if (wordsToSpeak[mCurrWord].equals(heardWords[mHeardWord].hypWord)) {
 
@@ -1543,6 +1553,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                     Log.i("ASR", "RIGHT");
                     attemptNum = 0;
                     result = true;
+                    mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord - 1, heardWords[mHeardWord - 1].hypWord, attemptNum, heardWords[mHeardWord - 1].utteranceId == "", result);
+
                 } else {
 
                     mListener.setPauseListener(true);
@@ -1550,6 +1562,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                     Log.i("ASR", "WRONG");
                     attemptNum++;
                     result = false;
+                    mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord, heardWords[mHeardWord].hypWord, attemptNum, heardWords[mHeardWord].utteranceId == "", result);
                     break;
                 }
             }
@@ -1561,8 +1574,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             mParent.UpdateValue(result);
 
             mParent.onASREvent(TCONST.RECOGNITION_EVENT);
-        }
-        catch(Exception e) {
+
+        } catch (Exception e) {
 
             Log.e("ASR", "onUpdate Fault: " + e);
         }
@@ -1613,7 +1626,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     }
 
 
-
     //************ Serialization
 
 
@@ -1627,7 +1639,4 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
     }
-
 }
-
-

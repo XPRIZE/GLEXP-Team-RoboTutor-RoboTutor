@@ -1,0 +1,69 @@
+{
+ "dataSource": [
+  {
+   "answer_index": -1,
+   "gen_question": true,
+   "question_say": true,
+   "question_show": false,
+   "question_type": "rising",
+   "respCountExact": 3
+  }
+ ],
+ "gen_answerSet": [
+  962,
+  802,
+  737,
+  683,
+  579,
+  432,
+  372,
+  241,
+  160,
+  107
+ ],
+ "gen_answertype": "text_data",
+ "gen_responseSet": [
+  962,
+  802,
+  737,
+  683,
+  579,
+  432,
+  372,
+  241,
+  160,
+  107
+ ],
+ "gen_responsetype": "text_data",
+ "gen_stimulusSet": [
+  962,
+  802,
+  737,
+  683,
+  579,
+  432,
+  372,
+  241,
+  160,
+  107
+ ],
+ "gen_stimulustype": "text_data",
+ "question_count": 10,
+ "question_replacement": false,
+ "question_sequence": "sequential",
+ "response_replacement": false,
+ "view_background": {
+  "colorbase": "#666666",
+  "colorchoice": "fixed",
+  "colors": [
+   -14001522,
+   -14926753,
+   -12679468,
+   -13406803
+  ],
+  "kind": "squares",
+  "layout": "grid",
+  "layoutcount": 0,
+  "style": "primitives"
+ }
+}

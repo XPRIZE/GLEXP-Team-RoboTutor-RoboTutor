@@ -46,6 +46,7 @@ import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
+import java.util.*;
 
 
 public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoadableObject {
@@ -287,6 +288,17 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
         // Preprocess the response set data so the size is available for the randomizer
         //
         preProcessQuestion();
+
+        //Randomly shuffle questions in datasource (from stackoverflow)
+        if(question_sequence.equals("RANDOM")) {
+            for (int i = dataSource.length - 1; i > 0; i--) {
+                int j = (int)(Math.floor(Math.random() * (i + 1)));
+                CBp_Data f = dataSource[i];
+                dataSource[i] = dataSource[j];
+                dataSource[j] = f;
+            }
+        }
+
     }
 
 
@@ -357,6 +369,7 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
 
 
     protected void selectQuestion(CBp_Data data) {
+
 
         //***** Select the question from the stimulus set
         //
@@ -461,7 +474,8 @@ public class CBP_Component extends FrameLayout implements IEventDispatcher, ILoa
             if(i1 == ansIndex) {
 
                 data.response_set[ansIndex]     = data.stimulus;
-                data.responsetype_set[ansIndex] = data.stimulus_type;
+                data.responsetype_set[ansIndex] = data.stimulus_type; // YOGURT is reference when shouldn't be
+                data.responsetype_set[ansIndex] = wrk_respTypeSet.get(0); // YOGURT hacky
                 if(data.response_script != null)
                     data.response_script[ansIndex]  = data.stimulus_script;
             }

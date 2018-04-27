@@ -1,0 +1,55 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["A", "V", "Z"],
+ "item_counter":1,
+ "answer":"LEFT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["A", "B", "G"],
+ "item_counter":2,
+ "answer":"LEFT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["A", "M", "U"],
+ "item_counter":3,
+ "answer":"LEFT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["Q", "A", "W"],
+ "item_counter":4,
+ "answer":"MID",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["X", "K", "A"],
+ "item_counter":5,
+ "answer":"RIGHT",
+ "target":"A",
+ "belowString":"audio",
+ "audio":"true" 
+       } 
+
+   ]
+}
