@@ -82,92 +82,101 @@ public class CDebugButton extends ImageButton {
         final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
 
         if(buttonState != null) {
-            // BOJACK where image is selected
+
+            if(tutorData != null) {
+
+                Log.d("BOJACK", "tutor_desc = " + tutorData.tutor_desc);
+                // tutortype is first token... e.g. "story.hear" --> "story"
+                String[] tutorDesc = tutorData.tutor_desc.split("\\.");
+                if (tutorDesc.length == 0) {
+                    return null;
+                }
+                Log.d("BOJACK", "tutorDesc = " + tutorDesc + ", " + tutorDesc.length);
+
+                int[] tutor_CONST;
+
+
+                String tutorType = tutorDesc[0];
+                Log.d("BOJACK", "tutorType = " + tutorType);
+
+                switch (tutorType) {
+                    case "akira":
+                        tutor_CONST = CD_CONST.TUTOR_AKIRA;
+                        break;
+
+                    case "bpop":
+                        tutor_CONST = CD_CONST.TUTOR_BPOP;
+                        break;
+
+                    case "countingx":
+                        tutor_CONST = CD_CONST.TUTOR_COUNTINGX;
+                        break;
+
+                    case "math":
+                        tutor_CONST = CD_CONST.TUTOR_MATH;
+                        break;
+
+                    case "numberscale":
+                        tutor_CONST = CD_CONST.TUTOR_NUMBERSCALE;
+                        break;
+
+                    case "story":
+                        tutor_CONST = CD_CONST.TUTOR_STORY;
+                        break;
+
+                    case "write":
+                        tutor_CONST = CD_CONST.TUTOR_WRITE;
+                        break;
+
+                    default:
+                        tutor_CONST = CD_CONST.SKILLS_NORMAL;
+                        break;
+
+                }
+
+                mergeDrawableStates(drawableState, tutor_CONST);
+            } else {
+                mergeDrawableStates(drawableState, CD_CONST.SKILLS_NORMAL);
+            }
+
             switch (buttonState) {
-
                 case STATE_NORMAL:
-
-
-                    Log.d("BOJACK", "tutor_desc = " + tutorData.tutor_desc);
-                    // tutortype is first token... e.g. "story.hear" --> "story"
-                    String[] tutorDesc = tutorData.tutor_desc.split("\\.");
-
-
-
-                    Log.d("BOJACK", "tutorDesc = " + tutorDesc + ", " + tutorDesc.length);
-
-                    int[] tutor_CONST;
-
-                    if(tutorData != null && tutorDesc.length != 0) {
-
-                        String tutorType = tutorDesc[0];
-                        Log.d("BOJACK", "tutorType = " + tutorType);
-
-                        switch (tutorType) {
-                            case "akira":
-                                tutor_CONST = CD_CONST.TUTOR_AKIRA;
-                                break;
-
-                            case "bpop":
-                                tutor_CONST = CD_CONST.TUTOR_BPOP;
-                                break;
-
-                            case "countingx":
-                                tutor_CONST = CD_CONST.TUTOR_COUNTINGX;
-                                break;
-
-                            case "math":
-                                tutor_CONST = CD_CONST.TUTOR_MATH;
-                                break;
-
-                            case "numberscale":
-                                tutor_CONST = CD_CONST.TUTOR_NUMBERSCALE;
-                                break;
-
-                            case "story":
-                                tutor_CONST = CD_CONST.TUTOR_STORY;
-                                break;
-
-                            case "write":
-                                tutor_CONST = CD_CONST.TUTOR_WRITE;
-                                break;
-
-                            default:
-                                tutor_CONST = CD_CONST.SKILLS_NORMAL;
-                                break;
-
-                        }
-
-                        mergeDrawableStates(drawableState, tutor_CONST);
-                    } else {
-                        mergeDrawableStates(drawableState, CD_CONST.SKILLS_NORMAL);
-                    }
-
+                    this.setBackground(getResources().getDrawable(R.drawable.outline_normal, null));
+                    this.setAlpha(0.3f); // adjust opacity to make selected tutors stand out
                     break;
 
                     // BOJACK 2 remove these
                 case STATE_CURRENT:
-                    mergeDrawableStates(drawableState, CD_CONST.SKILLS_CURRENT);
+                    this.setBackground(getResources().getDrawable(R.drawable.outline_current, null));
+                    this.setAlpha(1f); // adjust opacity to make selected tutors stand out
+                    //mergeDrawableStates(drawableState, CD_CONST.SKILLS_CURRENT);
                     break;
 
                 case STATE_NEXT:
-                    mergeDrawableStates(drawableState, CD_CONST.SKILLS_NEXT);
+                    this.setBackground(getResources().getDrawable(R.drawable.outline_next, null));
+                    this.setAlpha(1f); // adjust opacity to make selected tutors stand out
+                    //mergeDrawableStates(drawableState, CD_CONST.SKILLS_NEXT);
                     break;
 
                 case STATE_HARDER:
-                    mergeDrawableStates(drawableState, CD_CONST.SKILLS_HARDER);
+                    this.setBackground(getResources().getDrawable(R.drawable.outline_harder, null));
+                    this.setAlpha(1f); // adjust opacity to make selected tutors stand out
+                    //mergeDrawableStates(drawableState, CD_CONST.SKILLS_HARDER);
                     break;
 
                 case STATE_EASIER:
-                    mergeDrawableStates(drawableState, CD_CONST.SKILLS_EASIER);
+                    this.setBackground(getResources().getDrawable(R.drawable.outline_easier, null));
+                    this.setAlpha(1f); // adjust opacity to make selected tutors stand out
+                    //mergeDrawableStates(drawableState, CD_CONST.SKILLS_EASIER);
                     break;
 
                 case STATE_ERROR:
-                    mergeDrawableStates(drawableState, CD_CONST.SKILLS_ERROR);
+                    //mergeDrawableStates(drawableState, CD_CONST.SKILLS_ERROR);
                     break;
 
                 default:
-                    mergeDrawableStates(drawableState, CD_CONST.SKILLS_NULL);
+//                    mergeDrawableStates(drawableState, CD_CONST.SKILLS_NULL);
+                    this.setAlpha(0f);
                     break;
             }
         }

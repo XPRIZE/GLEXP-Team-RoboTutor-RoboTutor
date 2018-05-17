@@ -315,9 +315,8 @@ public class CDebugAdapter extends BaseAdapter {
             tutorSelector = new CDebugButton(mContext);
             Log.v("BOJACK", "Creating new CDebugButton");
             Log.wtf("BOJACK", tutorSelector.hashCode() + " -- Constructor -- " + gridPosition);
-            tutorSelector.setImageDrawable(mContext.getResources().getDrawable(R.drawable.debugbutton, null));
+            tutorSelector.setImageDrawable(mContext.getResources().getDrawable(R.drawable.debugbutton, null)); // BOJACK setting image drawable...
             tutorSelector.setTutorData(buttonTutorData);
-            tutorSelector.setBackgroundColor(0x00000000);
             tutorSelector.setLayoutParams(new GridView.LayoutParams(130, 130)); // BOJACK adjust these
             tutorSelector.setScaleType(CDebugButton.ScaleType.FIT_CENTER);
             tutorSelector.setPadding(12, 12, 12, 12);
