@@ -237,6 +237,7 @@ public class CDebugAdapter extends BaseAdapter {
 
         String buttonState;
 
+        // BOJACK where button states are assigned
         if(indexTransitionMap.containsKey(position)) {
 
             if(position == currentIndex)
@@ -264,12 +265,30 @@ public class CDebugAdapter extends BaseAdapter {
     }
 
 
+    // BOJACK gets tutor data
+    private CAt_Data mapIndexToTutorData(int gridPosition) {
+
+        if(indexTransitionMap.containsKey(gridPosition)) {
+            return indexTransitionMap.get(gridPosition);
+        }
+
+        return null;
+
+    }
+
+
     // create a new ImageView for each item referenced by the Adapter
     //
+    // BOJACK where is this called from?
     public View getView(int gridPosition, View convertView, ViewGroup parent) {
 
         CDebugButton tutorSelector;
+        // BOJACK this might be useful to set the button's tutor
+        Log.d("BOJACK", "CDebugAdapter.getView(" + gridPosition +")");
+        Log.wtf("BOJACK", "CDebugAdapter" + " -- getView -- " + gridPosition);
+
         String       buttonState = mapKeyState(gridPosition);
+        CAt_Data buttonTutorData = mapIndexToTutorData(gridPosition);
 
 //        Log.d(TAG, "GetView: " + gridPosition + " - convertible: " + convertView);
 
@@ -292,28 +311,42 @@ public class CDebugAdapter extends BaseAdapter {
 
 
         if (convertView == null) {
+            // BOJACK this is where the buttons are created
             tutorSelector = new CDebugButton(mContext);
+            Log.v("BOJACK", "Creating new CDebugButton");
+            Log.wtf("BOJACK", tutorSelector.hashCode() + " -- Constructor -- " + gridPosition);
             tutorSelector.setImageDrawable(mContext.getResources().getDrawable(R.drawable.debugbutton, null));
-            tutorSelector.setState(buttonState);
+            tutorSelector.setTutorData(buttonTutorData);
             tutorSelector.setBackgroundColor(0x00000000);
-            tutorSelector.setLayoutParams(new GridView.LayoutParams(75, 75));
+            tutorSelector.setLayoutParams(new GridView.LayoutParams(130, 130)); // BOJACK adjust these
             tutorSelector.setScaleType(CDebugButton.ScaleType.FIT_CENTER);
             tutorSelector.setPadding(12, 12, 12, 12);
+            tutorSelector.setGridPosition(gridPosition);
+            tutorSelector.setState(buttonState);
+            tutorSelector.refreshDrawableState(); // BOJACK refreshes
         }
         else
         {
             tutorSelector = (CDebugButton) convertView;
+            Log.wtf("BOJACK", tutorSelector.hashCode() + " -- ConvertView -- " + gridPosition);
 
             buttonMap.remove(tutorSelector.getGridPosition());
+
+            tutorSelector.setTutorData(buttonTutorData);
+            tutorSelector.setGridPosition(gridPosition);
             tutorSelector.setState(buttonState);
+            tutorSelector.refreshDrawableState(); // BOJACK refreshes
 
             Log.d(TAG, "GetView: reusing debug button");
         }
 
+        Log.wtf("BOJACK", "buttonMap size = " + buttonMap.size());
+
         // Keep track of the buttons so we can invalidate them if we change their state
         //
+
+        Log.wtf("BOJACK", "CDebugAdapter" + " -- puttingButtonMap -- " + gridPosition);
         buttonMap.put(gridPosition, tutorSelector);
-        tutorSelector.setGridPosition(gridPosition);
 
         if(buttonState.equals(STATE_NULL)) {
             tutorSelector.setEnabled(false);
@@ -351,6 +384,8 @@ public class CDebugAdapter extends BaseAdapter {
     }
 
 
+
+    // BOJACK where the click updates
     public String updateCurrentTutorByIndex(int gridPosition) {
 
         String currentTutorName = "";
@@ -359,6 +394,7 @@ public class CDebugAdapter extends BaseAdapter {
         //
         if(gridPosition != currentIndex) {
 
+            // reset indices
             setButtonSafeState(currentIndex, STATE_NORMAL);
             setButtonSafeState(nextIndex,    STATE_NORMAL);
             setButtonSafeState(harderIndex,  STATE_NORMAL);
@@ -386,7 +422,10 @@ public class CDebugAdapter extends BaseAdapter {
 
         if(buttonMap.containsKey(gridPosition)) {
 
-            buttonMap.get(gridPosition).setState(newState);
+
+            CDebugButton debugButton = buttonMap.get(gridPosition);
+            debugButton.setState(newState);
+            debugButton.refreshDrawableState(); // BOJACK refreshes
         }
     }
 
