@@ -20,6 +20,7 @@ import java.util.Iterator;
 import cmu.xprize.util.CAt_Data;
 import cmu.xprize.util.CFileNameHasher;
 import cmu.xprize.util.CTutorData_Metadata;
+import cmu.xprize.util.TCONST;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -46,13 +47,35 @@ public class CTutorData_Metadata_Test {
     }
 
     @Test
+    public void testThumbs() throws Exception {
+
+        JSONObject whichTransitions = storyTransitions;
+
+        Iterator<String> it = whichTransitions.keys();
+        while(it.hasNext()) {
+
+            String tutorKey = it.next();
+
+            // --- begin tutor Data ---
+            CAt_Data data = new CAt_Data();
+
+
+
+            data.loadJSON((JSONObject) whichTransitions.get(tutorKey), null);
+
+            //System.out.println(tutorKey);
+
+            TCONST.Thumb thumb = CTutorData_Metadata.getThumbImage(data);
+
+            assertNotNull("Tutor: " + tutorKey + " bad result", thumb);
+
+        }
+    }
+
+    @Test
     public void testWriteTransitions() throws Exception {
 
-
-
         JSONObject whichTransitions = writeTransitions;
-
-
 
         Iterator<String> it = whichTransitions.keys();
         while(it.hasNext()) {
@@ -65,15 +88,15 @@ public class CTutorData_Metadata_Test {
 
             data.loadJSON((JSONObject) whichTransitions.get(tutorKey), null);
 
-            System.out.println(tutorKey);
+            //System.out.println(tutorKey);
 
             ArrayList displayText = CTutorData_Metadata.parseNameIntoLabels(data);
 
             assertNotNull("Tutor: " + tutorKey + " bad result", displayText);
 
-            assertEquals("Tutor: " + tutorKey + " doesn't begin with ID.", displayText.get(0), "<b>" + tutorKey + "</b>");
+            //assertEquals("Tutor: " + tutorKey + " doesn't begin with ID.", displayText.get(0), "<b>" + tutorKey + "</b>");
 
-            assertTrue("Tutor: " + tutorKey + " has size of " + displayText.size(), displayText.size() > 1);
+            //assertTrue("Tutor: " + tutorKey + " has size of " + displayText.size(), displayText.size() > 1);
 
 
 
@@ -137,6 +160,32 @@ public class CTutorData_Metadata_Test {
 
 
             }
+        }
+    }
+
+    @Test
+    public void testMathTransitions() throws Exception {
+
+        JSONObject whichTransitions = mathTransitions;
+
+        Iterator<String> it = whichTransitions.keys();
+        while(it.hasNext()) {
+
+            String tutorKey = it.next();
+
+            // --- begin tutor Data ---
+            CAt_Data data = new CAt_Data();
+
+
+
+            data.loadJSON((JSONObject) whichTransitions.get(tutorKey), null);
+
+            //System.out.println(tutorKey);
+
+            ArrayList displayText = CTutorData_Metadata.parseNameIntoLabels(data);
+
+            assertNotNull("Tutor: " + tutorKey + " bad result", displayText);
+
         }
     }
 

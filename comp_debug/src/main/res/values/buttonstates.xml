@@ -21,7 +21,12 @@
         <attr name="tutor_countingx_100" format="boolean"/>
         <attr name="tutor_math" format="boolean"/>
         <attr name="tutor_numberscale" format="boolean"/>
-        <attr name="tutor_story" format="boolean"/>
+        <attr name="tutor_story_1" format="boolean"/>
+        <attr name="tutor_story_2" format="boolean"/>
+        <attr name="tutor_story_3" format="boolean"/>
+        <attr name="tutor_story_4" format="boolean"/>
+        <attr name="tutor_story_5" format="boolean"/>
+        <attr name="tutor_story_nonstory" format="boolean"/>
         <attr name="tutor_song" format="boolean"/>
         <attr name="tutor_write" format="boolean"/>
 

@@ -144,9 +144,28 @@ public class CDebugButton extends ImageButton {
                         tutor_CONST = CD_CONST.TUTOR_NUMBERSCALE;
                         break;
 
-                    case STORY:
-                        // USIDORE make icon for SONGS
-                        tutor_CONST = CD_CONST.TUTOR_STORY;
+                    case STORY_1:
+                        tutor_CONST = CD_CONST.TUTOR_STORY_1;
+                        break;
+
+                    case STORY_2:
+                        tutor_CONST = CD_CONST.TUTOR_STORY_2;
+                        break;
+
+                    case STORY_3:
+                        tutor_CONST = CD_CONST.TUTOR_STORY_3;
+                        break;
+
+                    case STORY_4:
+                        tutor_CONST = CD_CONST.TUTOR_STORY_4;
+                        break;
+
+                    case STORY_5:
+                        tutor_CONST = CD_CONST.TUTOR_STORY_5;
+                        break;
+
+                    case STORY_NONSTORY:
+                        tutor_CONST = CD_CONST.TUTOR_STORY_NONSTORY;
                         break;
 
                     case SONG:

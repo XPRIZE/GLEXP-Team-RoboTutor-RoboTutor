@@ -65,8 +65,28 @@
         android:drawable="@drawable/thumb_numscale" />
 
     <item
-        app:tutor_story="true"
-        android:drawable="@drawable/thumb_story" />
+        app:tutor_story_1="true"
+        android:drawable="@drawable/thumb_story_blue" />
+
+    <item
+        app:tutor_story_2="true"
+        android:drawable="@drawable/thumb_story_pink" />
+
+    <item
+        app:tutor_story_3="true"
+        android:drawable="@drawable/thumb_story_green" />
+
+    <item
+        app:tutor_story_4="true"
+        android:drawable="@drawable/thumb_story_violet" />
+
+    <item
+        app:tutor_story_5="true"
+        android:drawable="@drawable/thumb_story_red" />
+
+    <item
+        app:tutor_story_nonstory="true"
+        android:drawable="@drawable/thumb_story_gray" />
 
     <item
         app:tutor_song="true"

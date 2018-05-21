@@ -398,9 +398,28 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                 thumbId = R.drawable.thumb_numscale;
                 break;
 
+            case STORY_1:
+                thumbId = R.drawable.thumb_story_blue;
+                break;
 
-            case STORY:
-                thumbId = R.drawable.thumb_story;
+            case STORY_2:
+                thumbId = R.drawable.thumb_story_pink;
+                break;
+
+            case STORY_3:
+                thumbId = R.drawable.thumb_story_green;
+                break;
+
+            case STORY_4:
+                thumbId = R.drawable.thumb_story_violet;
+                break;
+
+            case STORY_5:
+                thumbId = R.drawable.thumb_story_red;
+                break;
+
+            case STORY_NONSTORY:
+                thumbId = R.drawable.thumb_story_gray;
                 break;
 
             case SONG:
