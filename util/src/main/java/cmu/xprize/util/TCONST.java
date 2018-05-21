@@ -825,6 +825,11 @@ public class TCONST {
     public static final String ROBO_DEBUG_FILE_BPOP = "bpop.json";
 
 
+    // Debugger Thumb key words
+    public enum Thumb {
+        AKIRA, BPOP_NUM, GL, MN, BPOP_LTR, CX_1, CX_10, CX_100, MATH, NUMSCALE, STORY, SONG, WRITE
+    }
+
     // debug vals
     public static final String DEBUG_GRAY_SCREEN_TAG = "DEBUG_GRAY_SCREEN";
 

@@ -12,11 +12,17 @@ public class CD_CONST {
 
     // BOJACK why is it like this??? Why so many steps?
     static final int[]    TUTOR_AKIRA    = {R.attr.tutor_akira};
-    static final int[]    TUTOR_BPOP    = {R.attr.tutor_bpop};
-    static final int[]    TUTOR_COUNTINGX    = {R.attr.tutor_countingx};
+    static final int[]    TUTOR_BPOP_LTR    = {R.attr.tutor_bpop_ltr};
+    static final int[]    TUTOR_BPOP_NUM    = {R.attr.tutor_bpop_num};
+    static final int[]    TUTOR_COMPARE    = {R.attr.tutor_compare};
+    static final int[]    TUTOR_MISSINGNO    = {R.attr.tutor_missingno};
+    static final int[]    TUTOR_COUNTINGX_1    = {R.attr.tutor_countingx_1};
+    static final int[]    TUTOR_COUNTINGX_10    = {R.attr.tutor_countingx_10};
+    static final int[]    TUTOR_COUNTINGX_100    = {R.attr.tutor_countingx_100};
     static final int[]    TUTOR_MATH    = {R.attr.tutor_math};
     static final int[]    TUTOR_NUMBERSCALE    = {R.attr.tutor_numberscale};
     static final int[]    TUTOR_STORY    = {R.attr.tutor_story};
+    static final int[]    TUTOR_SONG    = {R.attr.tutor_song};
     static final int[]    TUTOR_WRITE    = {R.attr.tutor_write};
 
 

@@ -29,24 +29,48 @@
         android:drawable="@drawable/thumb_akira" />
 
     <item
-        app:tutor_bpop="true"
-        android:drawable="@drawable/thumb_bpop" />
+        app:tutor_bpop_num="true"
+        android:drawable="@drawable/thumb_bpop_num" />
 
     <item
-        app:tutor_countingx="true"
-        android:drawable="@drawable/thumb_countingx" />
+        app:tutor_bpop_ltr="true"
+        android:drawable="@drawable/thumb_bpop_ltr_lc" />
+
+    <item
+        app:tutor_missingno="true"
+        android:drawable="@drawable/thumb_missingno" />
+
+    <item
+        app:tutor_compare="true"
+        android:drawable="@drawable/thumb_compare" />
+
+    <item
+        app:tutor_countingx_1="true"
+        android:drawable="@drawable/thumb_countingx_1" />
+
+    <item
+        app:tutor_countingx_10="true"
+        android:drawable="@drawable/thumb_countingx_10" />
+
+    <item
+        app:tutor_countingx_100="true"
+        android:drawable="@drawable/thumb_countingx_100" />
 
     <item
         app:tutor_math="true"
-        android:drawable="@drawable/thumb_math" />>
+        android:drawable="@drawable/thumb_math" />
 
     <item
         app:tutor_numberscale="true"
-        android:drawable="@drawable/thumb_numberscale" />
+        android:drawable="@drawable/thumb_numscale" />
 
     <item
         app:tutor_story="true"
         android:drawable="@drawable/thumb_story" />
+
+    <item
+        app:tutor_song="true"
+        android:drawable="@drawable/thumb_song" />
 
     <item
         app:tutor_write="true"

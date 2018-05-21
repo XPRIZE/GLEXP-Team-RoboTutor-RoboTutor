@@ -12,11 +12,17 @@
     
     <declare-styleable name="TutorType">
         <attr name="tutor_akira" format="boolean"/>
-        <attr name="tutor_bpop" format="boolean"/>
-        <attr name="tutor_countingx" format="boolean"/>
+        <attr name="tutor_bpop_ltr" format="boolean"/>
+        <attr name="tutor_bpop_num" format="boolean"/>
+        <attr name="tutor_compare" format="boolean"/>
+        <attr name="tutor_missingno" format="boolean"/>
+        <attr name="tutor_countingx_1" format="boolean"/>
+        <attr name="tutor_countingx_10" format="boolean"/>
+        <attr name="tutor_countingx_100" format="boolean"/>
         <attr name="tutor_math" format="boolean"/>
         <attr name="tutor_numberscale" format="boolean"/>
         <attr name="tutor_story" format="boolean"/>
+        <attr name="tutor_song" format="boolean"/>
         <attr name="tutor_write" format="boolean"/>
 
 

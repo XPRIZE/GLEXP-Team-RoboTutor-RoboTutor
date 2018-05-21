@@ -224,7 +224,37 @@
     </FrameLayout>
 
 
+    <RelativeLayout
+        android:id="@+id/SfootBlock0"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:layout_below="@+id/SdebugSelector">
+
+        <ImageView
+            android:id="@+id/ScurrentTutorImage"
+            android:layout_width="240sp"
+            android:layout_height="240sp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/debugbutton"/>
+
+        <LinearLayout
+            android:id="@+id/ScurrentTutorMetadata"
+            android:layout_toRightOf="@+id/ScurrentTutorImage"
+            android:padding="40dp"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <!-- Filled programatically -->
+
+        </LinearLayout>
+
+    </RelativeLayout>
+    <!-- BOJACK replace all Foot Blocks with detailed data for current tutor -->
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/SfootBlock1"
         android:layout_below="@+id/SdebugSelector"
         android:layout_width="match_parent"
@@ -251,6 +281,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/SfootBlock2"
         android:layout_below="@+id/SfootBlock1"
         android:layout_width="match_parent"
@@ -277,6 +308,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/SfootBlock3"
         android:layout_below="@+id/SfootBlock2"
         android:layout_width="match_parent"
@@ -303,6 +335,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/SfootBlock4"
         android:layout_below="@+id/SfootBlock3"
         android:layout_width="match_parent"

@@ -7,6 +7,8 @@ import android.util.Log;
 import android.widget.ImageButton;
 
 import cmu.xprize.util.CAt_Data;
+import cmu.xprize.util.CTutorData_Metadata;
+import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.comp_debug.CD_CONST.STATE_CURRENT;
 import static cmu.xprize.comp_debug.CD_CONST.STATE_EASIER;
@@ -85,6 +87,8 @@ public class CDebugButton extends ImageButton {
 
             if(tutorData != null) {
 
+
+                TCONST.Thumb thumbnail = CTutorData_Metadata.getThumbImage(tutorData);
                 Log.d("BOJACK", "tutor_desc = " + tutorData.tutor_desc);
                 // tutortype is first token... e.g. "story.hear" --> "story"
                 String[] tutorDesc = tutorData.tutor_desc.split("\\.");
@@ -99,32 +103,57 @@ public class CDebugButton extends ImageButton {
                 String tutorType = tutorDesc[0];
                 Log.d("BOJACK", "tutorType = " + tutorType);
 
-                switch (tutorType) {
-                    case "akira":
+                switch (thumbnail) {
+                    case AKIRA:
                         tutor_CONST = CD_CONST.TUTOR_AKIRA;
                         break;
 
-                    case "bpop":
-                        tutor_CONST = CD_CONST.TUTOR_BPOP;
+                    case BPOP_LTR:
+                        tutor_CONST = CD_CONST.TUTOR_BPOP_LTR;
                         break;
 
-                    case "countingx":
-                        tutor_CONST = CD_CONST.TUTOR_COUNTINGX;
+                    case BPOP_NUM:
+                        tutor_CONST = CD_CONST.TUTOR_BPOP_NUM;
                         break;
 
-                    case "math":
+                    case GL:
+                        tutor_CONST = CD_CONST.TUTOR_COMPARE;
+                        break;
+
+                    case MN:
+                        tutor_CONST = CD_CONST.TUTOR_MISSINGNO;
+                        break;
+
+                    case CX_1:
+                        tutor_CONST = CD_CONST.TUTOR_COUNTINGX_1;
+                        break;
+
+                    case CX_10:
+                        tutor_CONST = CD_CONST.TUTOR_COUNTINGX_10;
+                        break;
+
+                    case CX_100:
+                        tutor_CONST = CD_CONST.TUTOR_COUNTINGX_100;
+                        break;
+
+                    case MATH:
                         tutor_CONST = CD_CONST.TUTOR_MATH;
                         break;
 
-                    case "numberscale":
+                    case NUMSCALE:
                         tutor_CONST = CD_CONST.TUTOR_NUMBERSCALE;
                         break;
 
-                    case "story":
+                    case STORY:
+                        // USIDORE make icon for SONGS
                         tutor_CONST = CD_CONST.TUTOR_STORY;
                         break;
 
-                    case "write":
+                    case SONG:
+                        tutor_CONST = CD_CONST.TUTOR_SONG;
+                        break;
+
+                    case WRITE:
                         tutor_CONST = CD_CONST.TUTOR_WRITE;
                         break;
 
@@ -141,6 +170,9 @@ public class CDebugButton extends ImageButton {
 
             switch (buttonState) {
                 case STATE_NORMAL:
+                case STATE_NEXT:
+                case STATE_HARDER:
+                case STATE_EASIER:
                     this.setBackground(getResources().getDrawable(R.drawable.outline_normal, null));
                     this.setAlpha(0.3f); // adjust opacity to make selected tutors stand out
                     break;
@@ -152,23 +184,6 @@ public class CDebugButton extends ImageButton {
                     //mergeDrawableStates(drawableState, CD_CONST.SKILLS_CURRENT);
                     break;
 
-                case STATE_NEXT:
-                    this.setBackground(getResources().getDrawable(R.drawable.outline_next, null));
-                    this.setAlpha(1f); // adjust opacity to make selected tutors stand out
-                    //mergeDrawableStates(drawableState, CD_CONST.SKILLS_NEXT);
-                    break;
-
-                case STATE_HARDER:
-                    this.setBackground(getResources().getDrawable(R.drawable.outline_harder, null));
-                    this.setAlpha(1f); // adjust opacity to make selected tutors stand out
-                    //mergeDrawableStates(drawableState, CD_CONST.SKILLS_HARDER);
-                    break;
-
-                case STATE_EASIER:
-                    this.setBackground(getResources().getDrawable(R.drawable.outline_easier, null));
-                    this.setAlpha(1f); // adjust opacity to make selected tutors stand out
-                    //mergeDrawableStates(drawableState, CD_CONST.SKILLS_EASIER);
-                    break;
 
                 case STATE_ERROR:
                     //mergeDrawableStates(drawableState, CD_CONST.SKILLS_ERROR);

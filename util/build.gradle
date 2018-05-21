@@ -26,11 +26,16 @@ android {
         // if true, only report errors
         ignoreWarnings true
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    testCompile 'org.json:json:20140107'
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:percent:25.2.0'
     compile files('libs/datashop-logging.jar')
