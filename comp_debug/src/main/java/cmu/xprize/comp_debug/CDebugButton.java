@@ -187,6 +187,7 @@ public class CDebugButton extends ImageButton {
                 mergeDrawableStates(drawableState, CD_CONST.SKILLS_NORMAL);
             }
 
+            boolean isCurrent = false;
             switch (buttonState) {
                 case STATE_NORMAL:
                 case STATE_NEXT:
@@ -198,6 +199,7 @@ public class CDebugButton extends ImageButton {
 
                     // BOJACK 2 remove these
                 case STATE_CURRENT:
+                    isCurrent = true;
                     this.setBackground(getResources().getDrawable(R.drawable.outline_current, null));
                     this.setAlpha(1f); // adjust opacity to make selected tutors stand out
                     //mergeDrawableStates(drawableState, CD_CONST.SKILLS_CURRENT);
@@ -213,6 +215,39 @@ public class CDebugButton extends ImageButton {
                     this.setAlpha(0f);
                     break;
             }
+
+            // map to special tutors for showcasing at XPRIZE Impact Summit 
+            boolean SHOWCASE = false;
+            if(tutorData != null && SHOWCASE) {
+                switch (tutorData.tutor_id) {
+
+                    // bubble pop matching sounds to numbers
+                    case "bpop.num:1..4.by.1.asc.x2s.Ax.mc.9":
+
+                        // math one-digit
+                    case "countingx:1_10__it_1":
+                    case "num.scale:17..27.off1.5__it_2":
+
+                        // write missing letter (ha)...
+                    case "write.missingLtr:lc.begin.ha.1":
+
+                        // story
+                    case "story.echo::story_1":
+                        this.setBackground(getResources().getDrawable(R.drawable.outline_xprize, null));
+                        this.setAlpha(0.5f); // adjust opacity to make selected tutors stand out
+
+
+                        // story (with good audio)
+
+                }
+            }
+
+            if (isCurrent) {
+                this.setBackground(getResources().getDrawable(R.drawable.outline_current, null));
+                this.setAlpha(1f); // adjust opacity to make selected tutors stand out
+
+            }
+
         }
 
         return drawableState;
