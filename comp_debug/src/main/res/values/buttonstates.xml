@@ -9,4 +9,33 @@
         <attr name="state_skillnull"    format="boolean"/>
         <attr name="state_skillerror"   format="boolean"/>
     </declare-styleable>
+    
+    <declare-styleable name="TutorType">
+        <attr name="tutor_akira" format="boolean"/>
+        <attr name="tutor_bpop_ltr" format="boolean"/>
+        <attr name="tutor_bpop_num" format="boolean"/>
+        <attr name="tutor_compare" format="boolean"/>
+        <attr name="tutor_missingno" format="boolean"/>
+        <attr name="tutor_countingx_1" format="boolean"/>
+        <attr name="tutor_countingx_10" format="boolean"/>
+        <attr name="tutor_countingx_100" format="boolean"/>
+        <attr name="tutor_math" format="boolean"/>
+        <attr name="tutor_numberscale" format="boolean"/>
+        <attr name="tutor_story_1" format="boolean"/>
+        <attr name="tutor_story_2" format="boolean"/>
+        <attr name="tutor_story_3" format="boolean"/>
+        <attr name="tutor_story_4" format="boolean"/>
+        <attr name="tutor_story_5" format="boolean"/>
+        <attr name="tutor_story_nonstory" format="boolean"/>
+        <attr name="tutor_song" format="boolean"/>
+        <attr name="tutor_write" format="boolean"/>
+
+
+    </declare-styleable>
+
+    <declare-styleable name="Matrix">
+        <attr name="tutor_numbers" format="boolean"/>
+        <attr name="tutor_letters" format="boolean"/>
+        <attr name="tutor_stories" format="boolean"/>
+    </declare-styleable>
 </resources>

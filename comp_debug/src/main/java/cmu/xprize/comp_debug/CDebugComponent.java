@@ -2,21 +2,24 @@ package cmu.xprize.comp_debug;
 
 import android.content.Context;
 import android.support.percent.PercentRelativeLayout;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import cmu.xprize.sm_component.CSm_Component;
 import cmu.xprize.util.CAt_Data;
+import cmu.xprize.util.CTutorData_Metadata;
 import cmu.xprize.util.IButtonController;
-import cmu.xprize.util.TCONST;
+import cmu.xprize.util.TCONST.Thumb;
 
 import static cmu.xprize.comp_debug.CD_CONST.SELECT_MATH;
 import static cmu.xprize.comp_debug.CD_CONST.SELECT_SHAPES;
@@ -36,6 +39,10 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
     private TextView SharderTutorName;
     private TextView SeasierTutorName;
 
+    private ImageView ScurrentTutorImage;
+    private LinearLayout ScurrentTutorMetadata;
+
+
     private Button   SlaunchTutor;
     private Button   ScustomLaunch;
     private Button   SresetTutor;
@@ -47,9 +54,9 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
     private HashMap<String, CAt_Data>  transitionMap;
 
+    // BOJACK what is the role of gridView vs gridAdapter?
     private GridView      gridView;
     //private CSm_Component customView;
-
     private CDebugAdapter gridAdapter;
 
     private LinearLayout customView;
@@ -121,6 +128,11 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         SnextTutorName    = (TextView) findViewById(R.id.SnextTutorName);
         SharderTutorName  = (TextView) findViewById(R.id.SharderTutorName);
         SeasierTutorName  = (TextView) findViewById(R.id.SeasierTutorName);
+
+        // BOJACK new labels
+        ScurrentTutorImage = (ImageView) findViewById(R.id.ScurrentTutorImage);
+        ScurrentTutorMetadata = (LinearLayout) findViewById(R.id.ScurrentTutorMetadata);
+
 
         SlaunchTutor  = (Button) findViewById(R.id.SlaunchTutor);
         ScustomLaunch = (Button) findViewById(R.id.ScustomButton);
@@ -297,16 +309,136 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
         gridView.setNumColumns(gridAdapter.getGridColumnCount());
 
+        // BOJACK why does GridView need an adapter?
         gridView.setAdapter(gridAdapter);
     }
 
 
+    /**
+     * CHUNT this is called when a new tutor is selected
+     * CHUNT it updates the display names and the display image
+     */
     private void udpateViewVectorNames() {
 
         ScurrentTutorName.setText("Current Tutor:   " + currentTransition.tutor_id);
         SnextTutorName.setText("Next Tutor:   " + currentTransition.next);
         SharderTutorName.setText("Harder Tutor:   " + currentTransition.harder);
         SeasierTutorName.setText("Easier Tutor:   " + currentTransition.easier);
+
+        // CHUNT here's where you set the names
+
+
+        ArrayList<String> metadata;
+        metadata = CTutorData_Metadata.parseNameIntoLabels(currentTransition);
+
+        //metadata.add(currentTransition.tutor_id);
+        //metadata.add("Tutor Type: " + currentTransition.tutor_desc);
+        //metadata.add("Level: " + currentTransition.row);
+        //metadata.add("Task: " + currentTransition.col);
+
+        ScurrentTutorMetadata.removeAllViews();
+
+        for (int i=0; i<metadata.size(); i++) {
+            String m = metadata.get(i);
+
+            TextView textView = new TextView(mContext);
+            textView.setText(Html.fromHtml(m));
+            textView.setTextSize(30f);
+            if(i == 0) {
+                //textView.setTypeface(null, Typeface.BOLD); // make first one bold
+            }
+
+            ScurrentTutorMetadata.addView(textView);
+        }
+
+        // CHUNT change tutor image
+        Thumb tutorThumb = CTutorData_Metadata.getThumbImage(currentTransition);
+
+        int thumbId;
+
+        switch(tutorThumb) {
+            case AKIRA:
+                thumbId = R.drawable.thumb_akira;
+                break;
+
+            case BPOP_NUM:
+                thumbId = R.drawable.thumb_bpop_num;
+                break;
+
+            case BPOP_LTR:
+                thumbId = R.drawable.thumb_bpop_ltr_lc;
+                break;
+
+            case MN:
+                thumbId = R.drawable.thumb_missingno;
+                break;
+
+            case GL:
+                thumbId = R.drawable.thumb_compare;
+                break;
+
+            case MATH:
+                thumbId = R.drawable.thumb_math;
+                break;
+
+            // begin counting x
+            case CX_1:
+                thumbId = R.drawable.thumb_countingx_1;
+                break;
+
+            case CX_10:
+                thumbId = R.drawable.thumb_countingx_10;
+                break;
+
+            case CX_100:
+                thumbId = R.drawable.thumb_countingx_100;
+                break;
+
+            case NUMSCALE:
+                thumbId = R.drawable.thumb_numscale;
+                break;
+
+            case STORY_1:
+                thumbId = R.drawable.thumb_story_blue;
+                break;
+
+            case STORY_2:
+                thumbId = R.drawable.thumb_story_pink;
+                break;
+
+            case STORY_3:
+                thumbId = R.drawable.thumb_story_green;
+                break;
+
+            case STORY_4:
+                thumbId = R.drawable.thumb_story_violet;
+                break;
+
+            case STORY_5:
+                thumbId = R.drawable.thumb_story_red;
+                break;
+
+            case STORY_NONSTORY:
+                thumbId = R.drawable.thumb_story_gray;
+                break;
+
+            case SONG:
+                thumbId = R.drawable.thumb_song;
+                break;
+
+            case WRITE:
+                thumbId = R.drawable.thumb_write;
+                break;
+
+            default:
+                thumbId = R.drawable.debugnull;
+                break;
+
+        }
+        ScurrentTutorImage.setImageResource(thumbId);
+        ScurrentTutorImage.setPadding(36, 36, 36, 36);
+        ScurrentTutorImage.setBackground(getResources().getDrawable(R.drawable.outline_current_large, null));
+
     }
 
 

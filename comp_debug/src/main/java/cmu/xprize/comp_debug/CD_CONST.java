@@ -10,6 +10,31 @@ public class CD_CONST {
     static final int[]    SKILLS_ERROR   = {R.attr.state_skillerror};
     static final int[]    SKILLS_NULL    = {R.attr.state_skillnull};
 
+    // BOJACK why is it like this??? Why so many steps?
+    static final int[]    TUTOR_AKIRA    = {R.attr.tutor_akira};
+    static final int[]    TUTOR_BPOP_LTR    = {R.attr.tutor_bpop_ltr};
+    static final int[]    TUTOR_BPOP_NUM    = {R.attr.tutor_bpop_num};
+    static final int[]    TUTOR_COMPARE    = {R.attr.tutor_compare};
+    static final int[]    TUTOR_MISSINGNO    = {R.attr.tutor_missingno};
+    static final int[]    TUTOR_COUNTINGX_1    = {R.attr.tutor_countingx_1};
+    static final int[]    TUTOR_COUNTINGX_10    = {R.attr.tutor_countingx_10};
+    static final int[]    TUTOR_COUNTINGX_100    = {R.attr.tutor_countingx_100};
+    static final int[]    TUTOR_MATH    = {R.attr.tutor_math};
+    static final int[]    TUTOR_NUMBERSCALE    = {R.attr.tutor_numberscale};
+    static final int[]    TUTOR_STORY_1    = {R.attr.tutor_story_1};
+    static final int[]    TUTOR_STORY_2    = {R.attr.tutor_story_2};
+    static final int[]    TUTOR_STORY_3    = {R.attr.tutor_story_3};
+    static final int[]    TUTOR_STORY_4    = {R.attr.tutor_story_4};
+    static final int[]    TUTOR_STORY_5    = {R.attr.tutor_story_5};
+    static final int[]    TUTOR_STORY_NONSTORY    = {R.attr.tutor_story_nonstory};
+    static final int[]    TUTOR_SONG    = {R.attr.tutor_song};
+    static final int[]    TUTOR_WRITE    = {R.attr.tutor_write};
+
+
+    static final int[]    TUTOR_LETTERS    = {R.attr.tutor_letters};
+    static final int[]    TUTOR_NUMBERS    = {R.attr.tutor_numbers};
+    static final int[]    TUTOR_STORIES    = {R.attr.tutor_stories};
+
     static final String    STATE_NORMAL  = "STATE_NORMAL";
     static final String    STATE_CURRENT = "STATE_CURRENT";
     static final String    STATE_NEXT    = "STATE_NEXT";

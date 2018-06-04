@@ -95,7 +95,7 @@ android {
             buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
 
             debuggable true
-//            signingConfig signingConfigs.android
+            signingConfig signingConfigs.android
         }
 
         release_dbg_no_demo {
