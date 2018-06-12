@@ -107,7 +107,7 @@ android {
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_UNDEFINED
             buildConfigField BOOLEAN, SHOW_DEMO_VIDS, FALSE
 
-//            signingConfig signingConfigs.android
+            signingConfig signingConfigs.android
         }
 
         // These releases will remove the language selection toggle switch if present in the UI
@@ -136,7 +136,7 @@ android {
             buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
 
             debuggable true
-//            signingConfig signingConfigs.android
+            signingConfig signingConfigs.android
         }
 
         release_en {
@@ -148,7 +148,7 @@ android {
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
             buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
 
-//            signingConfig signingConfigs.android
+            signingConfig signingConfigs.android
         }
 
         release_en_xprize {
@@ -160,7 +160,7 @@ android {
             buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
             buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
 
-//            signingConfig signingConfigs.android
+            signingConfig signingConfigs.android
         }
 
         release_sw_noasr {

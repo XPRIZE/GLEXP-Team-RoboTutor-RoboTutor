@@ -82,6 +82,7 @@ import static cmu.xprize.util.TCONST.ROBOTUTOR_ASSET_PATTERN;
  */
 public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
+    private static final boolean QUICK_DEBUG = true; // LEBRON
     private CTutorEngine        tutorEngine;
     private CMediaController    mMediaController;
 
@@ -498,6 +499,13 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 startView.startTapTutor();
                 setFullScreen();
             }
+            // LEBRON
+            else if (QUICK_DEBUG) {
+
+                startQuickLaunch();
+
+                // start whatever tutor we're debugging
+            }
             // Otherwise go directly to the sessionManager
             //
             else {
@@ -512,6 +520,27 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
             logManager.postEvent_V(TAG, "TutorEngine:Restarting");
         }
 
+    }
+
+    /**
+     * LEBRON new method
+     * This launches a new tutor immediately at startup. Used for quick debugging.
+     */
+    private void startQuickLaunch() {
+        logManager.postEvent_V(TAG, "LOG_GUID:" + LOG_ID );
+        LOG_ID = CPreferenceCache.initLogPreference(this);
+
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "xx: startSessionManager in 'onStartTutor'");
+        //tutorEngine.startSessionManager(); // LEBRON don't startSessionManager
+        tutorEngine.quickLaunch();
+
+        startView.stopTapTutor();
+        masterContainer.removeView(startView);
+        setFullScreen();
+
+        // Disable screen sleep while in a session
+        //
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
 
@@ -531,7 +560,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         LOG_ID = CPreferenceCache.initLogPreference(this);
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "xx: startSessionManager in 'onStartTutor'");
-        tutorEngine.startSessionManager();
+        tutorEngine.startSessionManager(); // LEBRON don't startSessionManager
 
         startView.stopTapTutor();
         masterContainer.removeView(startView);

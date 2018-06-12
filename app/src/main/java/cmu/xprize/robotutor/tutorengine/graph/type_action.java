@@ -167,7 +167,7 @@ public class type_action extends scene_node {
 
                         // Resolve any variables in the parameters.
                         // Session manager uses TScope variables to store intents
-                        //
+                        // LEBRON TODO where does this come from???
                         String intent     = getScope().parseTemplate(parmList.get(0));
                         String intentData = getScope().parseTemplate(parmList.get(2));
                         String dataSource = getScope().parseTemplate(parmList.get(4));
