@@ -19,7 +19,11 @@
   // path through the given tutors anumation_graph.
   //
   "tutorVariants": {
-
+    "spelling": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "spelling",
+      "features": ""
+    },
     "numberscale": {
       "type": "TUTORVAR_MAP",
       "tutorName": "numberscale",
@@ -209,6 +213,20 @@
   //
   "bindingPatterns": {
 
+    "spelling": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "spelling": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SSpelling",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
     "numberscale": {
       "type": "TUTORDATA_MAP",
       "scene_bindings": {

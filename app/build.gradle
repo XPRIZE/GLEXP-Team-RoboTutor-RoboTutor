@@ -222,5 +222,6 @@ dependencies {
     compile project(path: ':comp_counting')
     compile project(path: ':comp_counting2')
     compile project(path: ':comp_numberscale')
+    compile project(path: ':comp_spelling')
 }
 
