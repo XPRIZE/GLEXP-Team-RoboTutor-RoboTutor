@@ -5,9 +5,13 @@ import android.content.Intent;
 import android.graphics.PointF;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
@@ -29,6 +33,8 @@ public class CSpelling_Component extends RelativeLayout implements ILoadableObje
     protected String task;
     protected String layout;
     protected String word;
+
+    TextView message;
 
 
     // json loadable
@@ -69,6 +75,7 @@ public class CSpelling_Component extends RelativeLayout implements ILoadableObje
         inflate(getContext(), R.layout.spelling_layout, this);
 
         Scontent = (RelativeLayout) findViewById(R.id.Scontent);
+        message = (TextView) findViewById(R.id.hello);
 
     }
 
@@ -110,6 +117,12 @@ public class CSpelling_Component extends RelativeLayout implements ILoadableObje
         task = data.task;
         layout = data.layout;
         word = data.word;
+
+        Log.wtf("LEBRON", "Loading data set " + word);
+
+        message.setText(word);
+        // next ???
+
 
     }
 

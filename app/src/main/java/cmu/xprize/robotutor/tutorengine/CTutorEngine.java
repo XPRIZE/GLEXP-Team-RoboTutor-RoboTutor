@@ -254,13 +254,14 @@ public class CTutorEngine implements ILoadableObject2 {
     public void quickLaunch() {
 
         // LEBRON TODO make hard-coding better
-        String tutorVariant = "spelling"; // LEBRON what is tutorVariant?
-        String tutorId = "spelling1"; // LEBRON what is tutorId?
+        String tutorVariant = "bpop.addsub"; // LEBRON what is tutorVariant?
+        String tutorId = "bpop.addsub:0..8.decr.SUB-1-H.22"; // LEBRON what is tutorId?
+
 
         defvar_tutor  tutorDescriptor = tutorVariants.get(tutorVariant);
         defdata_tutor tutorBinding    = bindingPatterns.get(tutorDescriptor.tutorName);
 
-        initializeBindingPattern(tutorBinding, "[file]spelling1.json");
+        initializeBindingPattern(tutorBinding, "[file]bpop.addsub_0..8.decr.SUB-1-H.22.json"); //"[file]spelling1.json");
 
         createTutor(tutorDescriptor.tutorName , tutorDescriptor.features, tutorId);
         launchTutor(tutorBinding);

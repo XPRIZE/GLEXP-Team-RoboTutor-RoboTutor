@@ -155,6 +155,7 @@ public class TSpellingComponent extends CSpelling_Component implements ITutorObj
 
     public void next() {
 
+        Log.wtf("LEBRON", "next");
         super.next();
 
         if (dataExhausted()) {
@@ -206,8 +207,10 @@ public class TSpellingComponent extends CSpelling_Component implements ITutorObj
 
                 String jsonData = JSON_Helper.cacheData(dataPath + dataFile);
 
+
+                JSONObject jsonObj = new JSONObject(jsonData);
                 // Load the datasource in the component module - i.e. the superclass
-                loadJSON(new JSONObject(jsonData), mTutor.getScope() );
+                loadJSON(jsonObj, mTutor.getScope() );
 
                 // preprocess the datasource e.g. populate instance arrays with general types
                 //
