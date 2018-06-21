@@ -82,7 +82,12 @@ import static cmu.xprize.util.TCONST.ROBOTUTOR_ASSET_PATTERN;
  */
 public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
-    private static final boolean QUICK_DEBUG = true; // LEBRON
+    // VARIABLES FOR QUICK DEBUG LAUNCH
+    private static final boolean QUICK_DEBUG = true;
+    private static final String debugTutorVariant = "countingx";
+    private static final String debugTutorId = "countingx:1_10";
+    private static final String debugTutorFile = "[file]countingx_1_10.json";
+
     private CTutorEngine        tutorEngine;
     private CMediaController    mMediaController;
 
@@ -499,7 +504,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 startView.startTapTutor();
                 setFullScreen();
             }
-            // LEBRON
+            // QUICK DEBUG LAUNCH
             else if (QUICK_DEBUG) {
 
                 startQuickLaunch();
@@ -522,27 +527,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     }
 
-    /**
-     * LEBRON new method
-     * This launches a new tutor immediately at startup. Used for quick debugging.
-     */
-    private void startQuickLaunch() {
-        logManager.postEvent_V(TAG, "LOG_GUID:" + LOG_ID );
-        LOG_ID = CPreferenceCache.initLogPreference(this);
-
-        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "xx: startSessionManager in 'onStartTutor'");
-        //tutorEngine.startSessionManager(); // LEBRON don't startSessionManager
-        tutorEngine.quickLaunch();
-
-        startView.stopTapTutor();
-        masterContainer.removeView(startView);
-        setFullScreen();
-
-        // Disable screen sleep while in a session
-        //
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    }
-
 
     // TODO: This is a temporary log update mechanism - see below
     //
@@ -560,7 +544,27 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         LOG_ID = CPreferenceCache.initLogPreference(this);
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "xx: startSessionManager in 'onStartTutor'");
-        tutorEngine.startSessionManager(); // LEBRON don't startSessionManager
+        tutorEngine.startSessionManager();
+
+        startView.stopTapTutor();
+        masterContainer.removeView(startView);
+        setFullScreen();
+
+        // Disable screen sleep while in a session
+        //
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    /**
+     *
+     * This launches a new tutor immediately at startup. Useful for quick debugging.
+     */
+    private void startQuickLaunch() {
+        logManager.postEvent_V(TAG, "LOG_GUID:" + LOG_ID );
+        LOG_ID = CPreferenceCache.initLogPreference(this);
+
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "xx: startSessionManager in 'onStartTutor'");
+        tutorEngine.quickLaunch(debugTutorVariant, debugTutorId, debugTutorFile);
 
         startView.stopTapTutor();
         masterContainer.removeView(startView);
