@@ -243,24 +243,21 @@ public class CTutorEngine implements ILoadableObject2 {
             return;
         }
 
-        createTutor(defTutor, featureString, null); // LEBRON mimic this
+        createTutor(defTutor, featureString, null);
         launchTutor(tutorBindings);
     }
 
     /**
-     * LEBRON new method
+     *
      * This launches a new tutor immediately at startup. Used for quick debugging.
      */
-    public void quickLaunch() {
+    public void quickLaunch(String tutorVariant, String tutorId, String tutorFile) {
 
-        // LEBRON TODO make hard-coding better
-        String tutorVariant = "bpop.num"; // LEBRON what is tutorVariant?
-        String tutorId = "bpop.num:0..9.by.1.asc.q2q.AV.rise.12__it_2"; // LEBRON what is tutorId?
 
         defvar_tutor  tutorDescriptor = tutorVariants.get(tutorVariant);
         defdata_tutor tutorBinding    = bindingPatterns.get(tutorDescriptor.tutorName);
 
-        initializeBindingPattern(tutorBinding, "[file]bpop.num_0..9.by.1.asc.q2q.AV.rise.12.json");
+        initializeBindingPattern(tutorBinding, tutorFile);
 
         createTutor(tutorDescriptor.tutorName , tutorDescriptor.features, tutorId);
         launchTutor(tutorBinding);
@@ -336,7 +333,6 @@ public class CTutorEngine implements ILoadableObject2 {
      * @param tutorName
      * @param features
      */
-    // LEBRON this is the method we'll be calling!
     static private void createTutor(String tutorName, String features, String tutorId) {
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r4: killActiveTutor called from createTutor(" + tutorName + ")");
@@ -357,7 +353,7 @@ public class CTutorEngine implements ILoadableObject2 {
 
         // GRAY_SCREEN_BUG CTutor created --> Media Manager created --> added to map
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "p2: Initializing tutor: " + tutorName);
-        // LEBRON tutor first created here
+
         activeTutor = new CTutor(Activity, tutorName, tutorId, (ITutorManager)tutorContainer, TutorLogManager, mRootScope, language, features);
     }
 
@@ -553,8 +549,7 @@ public class CTutorEngine implements ILoadableObject2 {
             case "native":
 
                 Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "p3b: Creating Tutor in 'CTutor.launch': " + tutorDescriptor.tutorName);
-                // LEBRON AAA copy this... tutor created here...
-                createTutor(tutorDescriptor.tutorName, tutorDescriptor.features, tutorId); // LEBRON where does tutorDescriptor come from? what about tutorBinding?
+                createTutor(tutorDescriptor.tutorName, tutorDescriptor.features, tutorId);
                 launchTutor(tutorBinding);
                 break;
 
