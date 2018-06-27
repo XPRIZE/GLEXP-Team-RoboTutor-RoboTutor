@@ -47,6 +47,7 @@ import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
+import cmu.xprize.robotutor.tutorengine.CMediaPackage;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
@@ -71,6 +72,8 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.util.TCONST.EMPTY;
+import static cmu.xprize.util.TCONST.LANG_AUTO;
+import static cmu.xprize.util.TCONST.MEDIA_STORY;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
@@ -96,6 +99,11 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     private HashMap<String,String>  _StringVar  = new HashMap<>();
     private HashMap<String,Integer> _IntegerVar = new HashMap<>();
     private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
+
+    protected String                DATASOURCEPATH;
+    protected String                STORYSOURCEPATH;
+    protected String                AUDIOSOURCEPATH;
+    protected String                SHAREDPATH;
 
     private static final String  TAG = "TWritingComponent";
 
@@ -720,7 +728,10 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                 //
                 setDataSource(dataSource);
 
-            } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
+            } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE) ||
+                    dataNameDescriptor.startsWith(TCONST.ENCODED_FOLDER)) {
+
+                // XYZ add a sound package... mimic behavior from XYZ-1
 
                 String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
 
@@ -736,6 +747,24 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                 // Load the datasource in the component module - i.e. the superclass
                 //
                 loadJSON(new JSONObject(jsonData), mTutor.getScope() );
+
+                // XYZ extra function to add a story sound package
+                if(dataNameDescriptor.startsWith(TCONST.ENCODED_FOLDER)) {
+
+                    String storyFolder = dataNameDescriptor.substring(TCONST.ENCODED_FOLDER.length()).toLowerCase();
+
+                    String[] levelval   = storyFolder.split("_");
+                    // "0..10.SD", "OFF1", "DES.34"
+                    // "3", "2"
+
+                    String levelFolder = levelval[0];
+
+                    AUDIOSOURCEPATH = TCONST.STORY_PATH + levelFolder + "/" + storyFolder;
+                    mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
+
+
+                }
+
 
                 // Pass the loaded json dataSource array
                 //
@@ -853,6 +882,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
         // update the Scope response variable  "SWordCopy.audiostim"
         //
+        // XYZ if this is a story, we have to look up the audio file from the story
         if (mAudioStimulus.length == 1) {
 
             publishValue(WR_CONST.AUDIO_STIM_1, mAudioStimulus[0].toLowerCase());

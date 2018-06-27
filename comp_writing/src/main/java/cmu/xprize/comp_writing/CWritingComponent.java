@@ -878,6 +878,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         return (_dataIndex >= _data.size());
     }
 
+    /**
+     * Either randomizes or leaves it.
+     *
+     * @param dataSource
+     */
     public void setDataSource(CWr_Data[] dataSource) {
 
         if(random) {
@@ -913,6 +918,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 retractFeature(WR_CONST.FTR_HAD_ERRORS);
 
+                // XYZ
                 updateText(_data.get(_dataIndex));
                 mDrawnScroll.scrollTo(0, 0);
 
@@ -927,12 +933,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     /**
      * @param data
+     * XYZ
      */
     public void updateText(CWr_Data data) {
 
         CStimulusController r;
         CGlyphController    v;
 
+        boolean isStory = data.isStory;
         mStimulus = data.stimulus;
         mAudioStimulus = data.audioStimulus;
         mAnswer = data.answer;
@@ -940,6 +948,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         // Add the recognized response display containers
         //
         mRecogList.removeAllViews();
+
+        // XYZ check if is story
+        if(isStory) {
+            // mStimulus = getStoryStimulus(storyName, storyLine);
+            // mAudioStimulus = getStoryAudio(storyName, storyLine);
+            // mAnswer = mStimulus;
+        }
 
         if(!singleStimulus) {
             for(int i1 =0 ; i1 < mStimulus.length() ; i1++)
