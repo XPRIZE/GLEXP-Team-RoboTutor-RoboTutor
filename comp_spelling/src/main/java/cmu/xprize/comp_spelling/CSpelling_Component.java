@@ -3,10 +3,13 @@ package cmu.xprize.comp_spelling;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PointF;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.Guideline;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,9 +26,11 @@ import cmu.xprize.util.TCONST;
  * Generated automatically w/ code written by Kevin DeLand
  */
 
-public class CSpelling_Component extends RelativeLayout implements ILoadableObject {
+public class CSpelling_Component extends ConstraintLayout implements ILoadableObject {
 
-    protected RelativeLayout Scontent;
+    // layout variables
+    protected ConstraintLayout Scontent;
+    protected Button SdebugButton;
 
     // DataSource Variables
     protected   int                   _dataIndex = 0;
@@ -68,14 +73,27 @@ public class CSpelling_Component extends RelativeLayout implements ILoadableObje
         init(context, attrs);
     }
 
+
+
     protected void init(Context context, AttributeSet attrs) {
 
         mContext = context;
 
         inflate(getContext(), R.layout.spelling_layout, this);
 
-        Scontent = (RelativeLayout) findViewById(R.id.Scontent);
-        message = (TextView) findViewById(R.id.hello);
+        Scontent = (ConstraintLayout) findViewById(R.id.SSpelling);
+
+        SdebugButton = findViewById(R.id.debugButton);
+        SdebugButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                // NAPOL this is how you go to the next node in an animator graph
+                applyBehavior("DONE_WITH_WORD");
+            }
+
+
+        });
 
     }
 
@@ -118,9 +136,10 @@ public class CSpelling_Component extends RelativeLayout implements ILoadableObje
         layout = data.layout;
         word = data.word;
 
-        Log.wtf("LEBRON", "Loading data set " + word);
+        // for each character in word, insert a new empty space into SPACES
+        // for each character in word, add to the list. Then add distractors. Then JUMBLE.
 
-        message.setText(word);
+
         // next ???
 
 
@@ -138,7 +157,7 @@ public class CSpelling_Component extends RelativeLayout implements ILoadableObje
      * Point at a view
      */
     public void pointAtSomething() {
-        View v = findViewById(R.id.hello);
+        View v = findViewById(R.id.letterHolder);
 
         int[] screenCoord = new int[2];
 
@@ -155,6 +174,8 @@ public class CSpelling_Component extends RelativeLayout implements ILoadableObje
      * Updates the stimulus.
      */
     protected void updateStimulus() {
+
+        Guideline bottomGuideline = findViewById(R.id.keyboardBottom);
 
     }
 
@@ -175,7 +196,7 @@ public class CSpelling_Component extends RelativeLayout implements ILoadableObje
         _dataIndex = 0;
     }
 
-    public RelativeLayout getContainer() {
+    public ConstraintLayout getContainer() {
         return Scontent;
     }
 }

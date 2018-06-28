@@ -164,6 +164,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#WAIT_FOR_INPUT:String", "features":""},
 
+            {"type": "COMMAND", "id": "SSpelling", "method": "setVolatileBehavior", "parms": "DONE_WITH_WORD:String|NEXTNODE:String", "features": ""}, // NAPOL this is how you go to the next node in an animator graph
 
             {"type": "COMMAND", "cmd": "WAIT"}
           ]

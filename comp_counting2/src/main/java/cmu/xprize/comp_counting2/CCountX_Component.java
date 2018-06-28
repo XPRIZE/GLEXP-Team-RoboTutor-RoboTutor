@@ -11,6 +11,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -233,6 +234,15 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         if(currentCount == countTarget) {
             applyBehavior(COUNTX_CONST.DONE_COUNTING_TO_N);
         }
+    }
+
+    /**
+     * Overridden by child class.
+     *
+     * @param v
+     */
+    public void nextWord(View v) {
+
     }
 
     /**
