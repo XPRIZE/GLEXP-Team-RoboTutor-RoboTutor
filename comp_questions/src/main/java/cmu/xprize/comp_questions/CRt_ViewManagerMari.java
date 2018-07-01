@@ -16,16 +16,13 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.rt_component;
+package cmu.xprize.comp_questions;
 
 import android.graphics.PointF;
 import android.os.Handler;
 import android.text.Html;
 import android.text.Layout;
-import android.text.Spanned;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.json.JSONObject;
@@ -51,7 +48,7 @@ import edu.cmu.xprize.listener.ListenerBase;
 public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
 
     private ListenerBase            mListener;
-    private IVManListener           mOwner;
+    private IVManListener mOwner;
     private TextView                mPageText;
 
     // state for the current sentence
@@ -71,12 +68,12 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
     private String                  completedSentences     = "";
     private String                  assetLocation;
 
-    private IVManListener           _publishListener;
+    private IVManListener _publishListener;
 
     // json loadable
     public String        parser;
     public String        data[];
-    public CMari_Data    rhymes[];
+    public CMari_Data rhymes[];
 
 
     static final String TAG = "CRt_ViewManagerMari";

@@ -354,8 +354,8 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
                 String dataFile = dataNameDescriptor.substring(TCONST.LOCAL_FILE.length());
 
                 // Generate a langauage specific path to the data source -
-                // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
-                // e.g. tutors/word_copy/assets/data/sw/
+                // i.e. tutors/story_questions/assets/data/<iana2_language_id>/
+                // e.g. tutors/story_questions/assets/data/sw/
                 //
                 String dataPath = TCONST.DOWNLOAD_RT_TUTOR + "/" + mTutor.getTutorName() + "/";
 

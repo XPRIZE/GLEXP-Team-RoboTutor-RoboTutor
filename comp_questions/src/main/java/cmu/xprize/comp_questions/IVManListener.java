@@ -1,6 +1,4 @@
-package cmu.xprize.rt_component;
-
-import android.view.View;
+package cmu.xprize.comp_questions;
 
 public interface IVManListener {
 

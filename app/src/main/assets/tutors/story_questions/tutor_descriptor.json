@@ -3,7 +3,7 @@
 
   "scenedata": [
 	{
-	  "id":"word_copy",
+	  "id":"story_questions",
 
 	  "oncreate":[
         {"type": "COMMAND", "id": "SinputBG", "method": "setBackground", "parms": "#A5C4D4:String", "features":"FTR_LETTERS|FTR_NUMBERS"},

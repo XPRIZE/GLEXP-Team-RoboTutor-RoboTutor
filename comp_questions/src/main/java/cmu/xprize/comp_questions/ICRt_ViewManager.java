@@ -16,7 +16,7 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.rt_component;
+package cmu.xprize.comp_questions;
 
 import cmu.xprize.util.ILoadableObject;
 import edu.cmu.xprize.listener.ListenerBase;

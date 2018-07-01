@@ -185,8 +185,8 @@ public class TAskComponent extends CAskComponent implements IBehaviorManager, IT
                 String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
 
                 // Generate a langauage specific path to the data source -
-                // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
-                // e.g. tutors/word_copy/assets/data/sw/
+                // i.e. tutors/story_questions/assets/data/<iana2_language_id>/
+                // e.g. tutors/story_questions/assets/data/sw/
                 //
                 String dataPath = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS;
                 dataPath += "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";

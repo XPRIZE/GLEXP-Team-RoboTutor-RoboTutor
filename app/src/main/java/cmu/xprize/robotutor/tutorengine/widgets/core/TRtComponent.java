@@ -679,8 +679,8 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 String dataFile = dataNameDescriptor.substring(TCONST.ASSETFILE.length());
 
                 // Generate a langauage specific path to the data source -
-                // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
-                // e.g. tutors/word_copy/assets/data/sw/
+                // i.e. tutors/story_questions/assets/data/<iana2_language_id>/
+                // e.g. tutors/story_questions/assets/data/sw/
                 //
                 DATASOURCEPATH = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS +
                                  "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";

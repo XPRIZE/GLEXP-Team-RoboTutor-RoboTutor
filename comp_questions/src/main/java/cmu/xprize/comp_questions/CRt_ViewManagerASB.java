@@ -16,7 +16,7 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.rt_component;
+package cmu.xprize.comp_questions;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -61,10 +61,10 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private Context                 mContext;
 
     private ListenerBase            mListener;
-    private IVManListener           mOwner;
+    private IVManListener mOwner;
     private String                  mAsset;
 
-    private CRt_Component           mParent;
+    private CRt_Component mParent;
     private ImageView               mPageImage;
     private TextView                mPageText;
 
@@ -110,7 +110,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     private CASB_Narration[]        rawNarration;                        // The narration segmentation info for the active sentence
     private String                  rawSentence;                         // currently displayed sentence that need to be recognized
-    private CASB_Seg                narrationSegment;
+    private CASB_Seg narrationSegment;
     private String[]                splitSegment;
     private int                     splitIndex = TCONST.INITSPLIT;
     private boolean                 endOfSentence = false;
@@ -120,7 +120,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private String                  page_prompt;
 
     private int                     numUtterance;
-    private CASB_Narration          currUtterance;
+    private CASB_Narration currUtterance;
     private CASB_Seg[]              segmentArray;
     private int                     numSegments;
     private int                     utterancePrev;

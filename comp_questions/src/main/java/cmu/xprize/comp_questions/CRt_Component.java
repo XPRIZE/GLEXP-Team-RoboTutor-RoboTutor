@@ -16,7 +16,7 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.rt_component;
+package cmu.xprize.comp_questions;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -43,8 +43,8 @@ import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
-import cmu.xprize.util.TTSsynthesizer;
 import cmu.xprize.util.TCONST;
+import cmu.xprize.util.TTSsynthesizer;
 import edu.cmu.xprize.listener.IAsrEventListener;
 import edu.cmu.xprize.listener.ListenerBase;
 import edu.cmu.xprize.listener.ListenerPLRT;
@@ -63,7 +63,7 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     protected ListenerBase          mListener;
     protected TTSsynthesizer        mSynthesizer;
 
-    protected ICRt_ViewManager      mViewManager;                                   // Created in TRt_Component sub-class in the tutor domain
+    protected ICRt_ViewManager mViewManager;                                   // Created in TRt_Component sub-class in the tutor domain
     protected String                mDataSource;
 
     private ArrayList<String>       sentences              = null;                  //list of sentences of the given passage

@@ -207,6 +207,7 @@ dependencies {
     compile project(':mn_component')
     compile project(':comp_listener')
     compile project(':comp_reading')
+    //    compile project(':comp_questions')
     compile project(':sm_component')
     compile project(':fw_component')
     compile project(':nl_component')

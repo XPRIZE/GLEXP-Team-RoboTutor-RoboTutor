@@ -16,7 +16,7 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.rt_component;
+package cmu.xprize.comp_questions;
 
 
 import org.json.JSONObject;
@@ -32,7 +32,7 @@ public class CASB_Narration implements ILoadableObject {
     public int       from;
     public int       until;
     public String    utterances;
-    public CASB_Seg  segmentation[];
+    public CASB_Seg segmentation[];
 
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
