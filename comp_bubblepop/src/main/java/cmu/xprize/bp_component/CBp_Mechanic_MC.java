@@ -416,7 +416,8 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
             // This is the scale the bubble will expand too.
             //
-            SBubbles[i1].setAssignedScale(getRandInRange(_scaleRange));
+            //SBubbles[i1].setAssignedScale(getRandInRange(_scaleRange));
+            SBubbles[i1].setAssignedScale(1.0f);
 
             Paint paint = new Paint();
 
