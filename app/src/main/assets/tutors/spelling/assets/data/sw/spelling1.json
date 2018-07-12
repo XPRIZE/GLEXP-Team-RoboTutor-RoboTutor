@@ -2,11 +2,9 @@
   "bootFeatures":"",
 
   "dataSource": [
-
-    {"type":"CSpelling_Data", "level":"spell_1", "task":"Spell numbers", "layout":"default", "word":"moja"},
-    {"type":"CSpelling_Data", "level":"spell_1", "task":"Spell numbers", "layout":"default", "word":"mbili"},
-    {"type":"CSpelling_Data", "level":"spell_1", "task":"Spell numbers", "layout":"default", "word":"tatu"}
-
+    {"type":"CSpelling_Data", "level":"spell_1", "task":"Spell numbers", "layout":"default", "word":"farisi", "image":""},
+//    {"type":"CSpelling_Data", "level":"spell_1", "task":"Spell numbers", "layout":"default", "word":["fa", "ri", "si"], "image":""},
+    {"type":"CSpelling_Data", "level":"spell_1", "task":"Spell numbers", "layout":"default", "word":["m", "bi", "li"]},
+    {"type":"CSpelling_Data", "level":"spell_1", "task":"Spell numbers", "layout":"default", "word":["ta", "tu"]}
   ]
-
 }

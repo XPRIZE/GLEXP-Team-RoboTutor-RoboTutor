@@ -139,49 +139,49 @@
         <!-- NAPOL add these programatically -->
         <!-- NAPOL make into a separate class e.g. LetterKey -->
         <!-- NAPOL add click listeners -->
-        <TextView
-            android:id="@+id/letter1"
-            android:layout_width="100sp"
-            android:layout_height="100sp"
-            android:layout_margin="20dp"
-            android:text="M"
-            android:textSize="60sp"
-            android:gravity="center"
-            android:background="@android:color/holo_orange_light"
-            />
+        <!--<TextView-->
+            <!--android:id="@+id/letter1"-->
+            <!--android:layout_width="100sp"-->
+            <!--android:layout_height="100sp"-->
+            <!--android:layout_margin="20dp"-->
+            <!--android:text="M"-->
+            <!--android:textSize="60sp"-->
+            <!--android:gravity="center"-->
+            <!--android:background="@android:color/holo_orange_light"-->
+            <!--/>-->
 
-        <TextView
-            android:id="@+id/letter2"
-            android:layout_width="100sp"
-            android:layout_height="100sp"
-            android:layout_margin="20dp"
-            android:text="O"
-            android:textSize="60sp"
-            android:gravity="center"
-            android:background="@android:color/holo_orange_light"
-            />
+        <!--<TextView-->
+            <!--android:id="@+id/letter2"-->
+            <!--android:layout_width="100sp"-->
+            <!--android:layout_height="100sp"-->
+            <!--android:layout_margin="20dp"-->
+            <!--android:text="O"-->
+            <!--android:textSize="60sp"-->
+            <!--android:gravity="center"-->
+            <!--android:background="@android:color/holo_orange_light"-->
+            <!--/>-->
 
-        <TextView
-            android:id="@+id/letter3"
-            android:layout_width="100sp"
-            android:layout_height="100sp"
-            android:layout_margin="20dp"
-            android:text="J"
-            android:textSize="60sp"
-            android:gravity="center"
-            android:background="@android:color/holo_orange_light"
-            />
+        <!--<TextView-->
+            <!--android:id="@+id/letter3"-->
+            <!--android:layout_width="100sp"-->
+            <!--android:layout_height="100sp"-->
+            <!--android:layout_margin="20dp"-->
+            <!--android:text="J"-->
+            <!--android:textSize="60sp"-->
+            <!--android:gravity="center"-->
+            <!--android:background="@android:color/holo_orange_light"-->
+            <!--/>-->
 
-        <TextView
-            android:id="@+id/letter4"
-            android:layout_width="100sp"
-            android:layout_height="100sp"
-            android:layout_margin="20dp"
-            android:text="A"
-            android:textSize="60sp"
-            android:gravity="center"
-            android:background="@android:color/holo_orange_light"
-            />
+        <!--<TextView-->
+            <!--android:id="@+id/letter4"-->
+            <!--android:layout_width="100sp"-->
+            <!--android:layout_height="100sp"-->
+            <!--android:layout_margin="20dp"-->
+            <!--android:text="A"-->
+            <!--android:textSize="60sp"-->
+            <!--android:gravity="center"-->
+            <!--android:background="@android:color/holo_orange_light"-->
+            <!--/>-->
 
     </LinearLayout>
 

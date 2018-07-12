@@ -175,7 +175,6 @@ public class TSpellingComponent extends CSpelling_Component implements ITutorObj
         //
         reset();
 
-
         // We make the assumption that all are correct until proven wrong
         //
         publishFeature(TCONST.ALL_CORRECT);

@@ -9,12 +9,19 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import org.json.JSONObject;
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
@@ -37,9 +44,15 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     protected String level;
     protected String task;
     protected String layout;
-    protected String word;
+
+    protected String _word;
+    protected int _currentWordIndex ;
+    protected List<String> _selectableLetters;
+    protected List<String> _selectedLetters;
 
     TextView message;
+    protected LinearLayout mLetterHolder;
+    protected LinearLayout mSelectedLetterHolder;
 
 
     // json loadable
@@ -63,7 +76,6 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         init(context, null);
     }
 
-
     public CSpelling_Component(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
@@ -73,6 +85,53 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         init(context, attrs);
     }
 
+    public void onLetterTouch(String letter, int index) {
+        Log.d("ddd", "touch: " + letter);
+
+        String current = "" + _word.charAt(_currentWordIndex);
+        Log.d("ddd", "current: " + current);
+
+        if (letter.equalsIgnoreCase(current)) {
+            Log.d("ddd", "correct: " + letter);
+
+            // Update _selectedLetter.
+            _selectedLetters.add(letter);
+
+            // Update _selectableLetters.
+            _selectableLetters.remove(index);
+
+            updateLetter();
+            _currentWordIndex++;
+        } else {
+            Log.d("ddd", "incorrect: " + letter);
+        }
+    }
+
+    public void updateLetter() {
+        mLetterHolder.removeAllViewsInLayout();
+        mSelectedLetterHolder.removeAllViewsInLayout();
+
+        int i = 0;
+        for (String l : _selectableLetters) {
+            CLetter_Tile letter = new CLetter_Tile(mContext, l, i, this);
+            i++;
+            mLetterHolder.addView(letter);
+            Log.d("ddd", "letter: " + l);
+        }
+
+        int j = 0;
+        for (String l : _selectedLetters) {
+            CLetter_Tile letter = new CLetter_Tile(mContext, l, j, this);
+            j++;
+            mSelectedLetterHolder.addView(letter);
+            Log.d("ddd", "selected letter: " + l);
+        }
+
+        for (int k = _word.length(); k > j; k--) {
+            CLetter_Tile letter = new CLetter_Tile(mContext, "_", k, this);
+            mSelectedLetterHolder.addView(letter);
+        }
+    }
 
 
     protected void init(Context context, AttributeSet attrs) {
@@ -83,17 +142,30 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 
         Scontent = (ConstraintLayout) findViewById(R.id.SSpelling);
 
-        SdebugButton = findViewById(R.id.debugButton);
+        SdebugButton = (Button) findViewById(R.id.debugButton);
         SdebugButton.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 // NAPOL this is how you go to the next node in an animator graph
                 applyBehavior("DONE_WITH_WORD");
             }
-
-
         });
+
+        mLetterHolder = (LinearLayout) findViewById(R.id.letterHolder);
+        mSelectedLetterHolder = (LinearLayout) findViewById(R.id.blankHolder);
+
+        Log.d("ddd", "init: " + _word);
+        _word = "universe";
+        _currentWordIndex = 0;
+        _selectableLetters = new ArrayList<>(Arrays.asList(_word.split("")));
+        Collections.shuffle(_selectableLetters);
+        _selectedLetters = new ArrayList<String>();
+
+        Log.d("ddd", "selectable letters: " + _selectableLetters);
+
+        updateLetter();
+
+//        valueTV.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
 
     }
 
@@ -131,10 +203,11 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
      * @param data the current element in the DataSource array.
      */
     protected void loadDataSet(CSpelling_Data data) {
+        Log.d("ddd", "loading dataset" + data.word);
         level = data.level;
         task = data.task;
         layout = data.layout;
-        word = data.word;
+        _word = data.word;
 
         // for each character in word, insert a new empty space into SPACES
         // for each character in word, add to the list. Then add distractors. Then JUMBLE.
@@ -175,7 +248,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
      */
     protected void updateStimulus() {
 
-        Guideline bottomGuideline = findViewById(R.id.keyboardBottom);
+        Guideline bottomGuideline = (Guideline) findViewById(R.id.keyboardBottom);
 
     }
 
@@ -191,7 +264,6 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
      */
     @Override
     public void loadJSON(JSONObject jsonData, IScope scope) {
-
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
         _dataIndex = 0;
     }
