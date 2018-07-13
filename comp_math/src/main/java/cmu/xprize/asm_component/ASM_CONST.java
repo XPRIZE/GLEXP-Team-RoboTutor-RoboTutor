@@ -21,7 +21,6 @@ public class ASM_CONST {
     public static final String NODE_USERINPUT = "USERINPUT";
     public static final String NODE_ADD_PROMPT = "ADD_PROMPT";
     public static final String NODE_SUB_PROMPT = "SUB_PROMPT";
-    public static final String NODE_MULTI_PROMPT = "MULTI_PROMPT";
 
     //for add and subtract
     public static final int ANIMATOR3    = 1;
@@ -32,13 +31,8 @@ public class ASM_CONST {
     public static final int OPERATOR_ROW = 6;
     public static final int RESULT_ROW   = 7;
 
-    //for multiplication
-    public static final int REGULAR_MULTI                  = 1;
-    public static final int OPERATION_MULTI                = 2;
-    public static final int RESULT_OR_ADD_MULTI_PART1     = 3;
 
     public static final int alleyMargin     = 10;
-    public static final int alleyMarginMul  = 3;
     public static final int rightPadding    = 15;
 
     public static final int textSize     = 18;  // 18

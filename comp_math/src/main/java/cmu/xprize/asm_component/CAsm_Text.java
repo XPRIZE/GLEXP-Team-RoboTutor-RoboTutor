@@ -39,12 +39,6 @@ public class CAsm_Text extends TextView implements IEventListener {
         reset();
     }
 
-    public CAsm_Text(Context context, boolean isMultiplication) {
-
-        super(context);
-        reset(isMultiplication);
-    }
-
     public CAsm_Text(Context context, AttributeSet attrs) {
 
         super(context, attrs);
@@ -67,10 +61,6 @@ public class CAsm_Text extends TextView implements IEventListener {
     }
 
     public void reset() {
-        reset(false);
-    }
-
-    public void reset(boolean isMultiplication) {
         isClicked = false;
 
         setStruck(false);
@@ -80,7 +70,7 @@ public class CAsm_Text extends TextView implements IEventListener {
 
         setTextColor(Color.BLACK);
         setGravity(Gravity.CENTER);
-        if (!isMultiplication) setTextSize(textSize);
+        setTextSize(textSize);
 
         setBackground(null);
         setTypeface(null);

@@ -86,7 +86,6 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     //used to show:
     //carrying in addition
     //borrowing in subtraction
-    //repeated addition in multiplication
     protected Integer   overheadVal = null;
     protected CAsm_Text overheadText = null;
     protected CAsm_Text overheadTextSupplement = null;
@@ -284,15 +283,11 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         numSlots   = CAsm_Util.maxDigits(dataset) + 1;
         digitIndex = numSlots;
 
-        if (operation != null && operation.equals("x")) {
-            alleyMargin = (int) (ASM_CONST.alleyMarginMul * scale);
-            updateAllAlleyForMultiplication();
-        } else {
-            alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
-            // MATHFIX original here
-            //inflate(getContext(), R.layout.new_math, this);
-            updateAllAlleyForAddSubtract();
-        }
+        alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
+        // MATHFIX original here
+        //inflate(getContext(), R.layout.new_math, this);
+        updateAllAlleyForAddSubtract();
+
 
         setMechanics();
         setSound();
@@ -371,28 +366,6 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         }
     }
 
-    private void updateAllAlleyForMultiplication() {
-        numSlots += 2;
-
-        // update alleys
-        updateAlley(0, dataset[0], ASM_CONST.REGULAR_MULTI, operation, false);
-        updateAlley(1, dataset[1], ASM_CONST.OPERATION_MULTI, operation, false);
-        updateAlley(2, dataset[2], ASM_CONST.RESULT_OR_ADD_MULTI_PART1, operation, false);
-
-        //Spare space to show repeated addition
-        for (int i = 3; i < 17; i++)
-            updateAlley(i, 0, i+1, operation, false);
-
-        // delete extra alleys
-        int delta = numAlleys - (dataset.length + 14);
-
-        if (delta > 0) {
-            for (int i = 0; i < delta; i++) {
-                delAlley();
-            }
-        }
-    }
-
 
     private void setSound() {
 
@@ -424,9 +397,6 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             case "-":
                 mechanics = new CAsm_MechanicSubtract(this);
                 break;
-            case "x":
-                mechanics = new CAsm_MechanicMultiply(this);
-                break;
         }
     }
 
@@ -442,22 +412,17 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             mechanics.nextDigit(); // REVIEW throws exception
         } catch (Exception e) {
             // REVIEW do nothing... this just prevents "corDigit" from be skipped over below, causing issue #139
-    }
-
-
-        if(operation.equals("x")) {
-
-            corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots-2)[digitIndex]);
-            if(corDigit.equals(allAlleys.get(ASM_CONST.RESULT_OR_ADD_MULTI_PART1 - 1).getTextLayout().getDigit(digitIndex)))
-                nextDigit();
-        } else {
-            corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[digitIndex]);
-
-            // Setup the Zero features used for the MATH_SCAFFOLD_BEHAVIOR Prompts
-            //
-            clearZeroFeatures();
-            setZeroFeatures();
         }
+
+
+
+        corDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots)[digitIndex]);
+
+        // Setup the Zero features used for the MATH_SCAFFOLD_BEHAVIOR Prompts
+        //
+        clearZeroFeatures();
+        setZeroFeatures();
+
     }
 
 
@@ -521,8 +486,8 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
     public void setDotBagsVisible(Boolean _dotbagsVisible, int curDigitIndex) {
 
-        if (!operation.equals("x"))
-            setDotBagsVisible(_dotbagsVisible, curDigitIndex, 0);
+
+        setDotBagsVisible(_dotbagsVisible, curDigitIndex, 0);
     }
 
 
@@ -531,8 +496,6 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         if (curDigitIndex != digitIndex) return;
 
         if (System.currentTimeMillis() - startTime < 3000 && _dotbagsVisible) return;
-
-        if (operation.equals("x") && !_dotbagsVisible) return;
 
         if (_dotbagsVisible && !hasShown && !isWriting) {
 
@@ -574,7 +537,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         int delayTime = 0;
 
         startRow = startRow >= 0? startRow : 0;
-        int lastRow = operation.equals("x") ? startRow + 3 : allAlleys.size();
+        int lastRow = allAlleys.size();
 
         for (int i = startRow; i < lastRow; i++) {
 
@@ -648,12 +611,9 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         final CAsm_DotBag curDB = curAlley.getDotBag();
         final CAsm_TextLayout curTextLayout;
 
-        if (operation.equals("x")) {
-            curTextLayout = curAlley.getTextLayout().getTextLayout(numSlots-1);
-        }
-        else {
-            curTextLayout = curAlley.getTextLayout().getTextLayout(digitIndex);
-        }
+
+        curTextLayout = curAlley.getTextLayout().getTextLayout(digitIndex);
+
 
         CAsm_Text curText = curTextLayout.getText(1);
 
@@ -662,21 +622,12 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             Handler h = new Handler();
 
             //wiggle operator
-            if ((allAlleys.indexOf(curAlley) == ASM_CONST.OPERATOR_ROW - 1 && !operation.equals("x"))) {
+            if (allAlleys.indexOf(curAlley) == ASM_CONST.OPERATOR_ROW - 1) {
                 h.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         if(curDigitIndex != digitIndex) return;
                         curAlley.getTextLayout().getTextLayout(0).getText(1).wiggle(300, 1, 0, .5f);
-                    }
-                }, delayTime);
-                delayTime += pace;
-            } else if (allAlleys.indexOf(curAlley) == startRow + 1 && operation.equals("x")) {
-                h.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(curDigitIndex != digitIndex) return;
-                        curAlley.getTextLayout().getTextLayout(numSlots - 1).getText(0).wiggle(300, 1, 0, .3f);
                     }
                 }, delayTime);
                 delayTime += pace;
@@ -689,7 +640,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
                     clickPaused = false;
                     curDB.setVisibility(VISIBLE);
                     curDB.wiggle(300, 1, 0, .05f);
-                    if (!operation.equals("x")) curTextLayout.getText(0).wiggle(300, 1, 0, .3f);
+                    curTextLayout.getText(0).wiggle(300, 1, 0, .3f);
                     curTextLayout.getText(1).wiggle(300, 1, 0, .3f);
                 }
             }, delayTime);
@@ -794,11 +745,9 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     public boolean isWholeCorrect() {
 
         int ans;
-        if (operation.equals("x"))
-            ans = allAlleys.get(ASM_CONST.RESULT_OR_ADD_MULTI_PART1 - 1).getNum();
-        else {
-            ans = allAlleys.get(numAlleys - 1).getNum();
-        }
+
+        ans = allAlleys.get(numAlleys - 1).getNum();
+
 
         return corValue.equals(ans);
 
@@ -820,14 +769,8 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         boolean isOverheadCorrect, bottomCorrect;
 
         CAsm_TextLayout textLayout;
-        if(operation.equals("x"))
-            textLayout = allAlleys.get(ASM_CONST.RESULT_OR_ADD_MULTI_PART1 - 1).getTextLayout();
-        else
-            textLayout = allAlleys.get(numAlleys - 1).getTextLayout();
 
-        //For multiplication, user can change the order of writing result.
-        //e.g. If the result is 123, user input 1 first. We need to confirm the “1” is a correct input.
-        if(operation.equals("x")) checkOtherBottomCorrect(textLayout);
+        textLayout = allAlleys.get(numAlleys - 1).getTextLayout();
 
         // first check bottom answer
         int writtenDigit = textLayout.getDigit(digitIndex);
@@ -837,8 +780,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         if (!bottomCorrect && textLayout.getDigit(digitIndex) != null) {
             // then
             wrongDigit(textLayout.getTextLayout(digitIndex).getText(1));
-            if (!(operation.equals("x") && resultCorrect == ASM_CONST.ALL_INPUT_RIGHT))
-                resultCorrect = ASM_CONST.NOT_ALL_INPUT_RIGHT;
+            resultCorrect = ASM_CONST.NOT_ALL_INPUT_RIGHT;
         }
 
         // now check overhead answer
@@ -890,27 +832,6 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         return bottomCorrect;
     }
 
-    public void checkOtherBottomCorrect(CAsm_TextLayout textLayout) {
-        int otherBottomCorrect = 0;
-        for(int i = 1; i < digitIndex; i++) {
-            Integer curDigit = Integer.valueOf(CAsm_Util.intToDigits(corValue, numSlots-2)[i]);
-            Integer digit = textLayout.getDigit(i);
-            if(digit != null && !digit.equals(""))
-                otherBottomCorrect = curDigit.equals(textLayout.getDigit(i))? 1 : 2;
-            if(otherBottomCorrect == 0 && i+ 1 == digitIndex)
-                break;
-            if(otherBottomCorrect == 1) {
-                textLayout.getTextLayout(i).getText(1).reset();
-                resultCorrect = ASM_CONST.ALL_INPUT_RIGHT;
-                i = digitIndex;
-            } else if(otherBottomCorrect == 2) {
-                wrongDigit(textLayout.getTextLayout(i).getText(1));
-                resultCorrect = ASM_CONST.NOT_ALL_INPUT_RIGHT;
-                i = digitIndex;
-            }
-        }
-    }
-
     public void wrongDigit(final CAsm_Text t) {
             //Indicates that the digit the user entered is wrong w/ red text.
             t.setTextColor(Color.RED);
@@ -951,31 +872,13 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             @Override
             public void onAnimationEnd(Animator animation) {
                 if (t.isWritable) {
-                    //For multiplication, user could choose the order of writing result digits
-                    if(operation.equals("x")) {
-                        CAsm_TextLayout resultTextLayout;
-                        resultTextLayout = allAlleys.get(ASM_CONST.RESULT_OR_ADD_MULTI_PART1 - 1).getTextLayout();
-                        for(int i = 1; i <= digitIndex; i++) {
-                            if(resultTextLayout.getTextLayout(i).getText(1).isWritable)
-                                resultTextLayout.getTextLayout(i).getText(1).setResult();
-                        }
-                    }
                     t.setResult();
                 }
             }
             @Override
             public void onAnimationCancel(Animator animation) {
                 if (t.isWritable) {
-                    //For multiplication, user could choose the order of writing result digits
-                    if(operation.equals("x")) {
-                        CAsm_TextLayout resultTextLayout;
-                        resultTextLayout = allAlleys.get(ASM_CONST.RESULT_OR_ADD_MULTI_PART1 - 1).getTextLayout();
-                        for(int i = 1; i <= digitIndex; i++) {
-                            if(resultTextLayout.getTextLayout(i).getText(1).isWritable)
-                                resultTextLayout.getTextLayout(i).getText(1).setResult();
-                        }
-                    } else
-                        t.setResult();
+                    t.setResult();
                 }
             }
         });

@@ -503,11 +503,8 @@ public class CAsm_DotBag extends TableLayout {
         }
     }
 
-    public void updateSize(boolean isMultiplication) {
-        if (isMultiplication)
-            size = (int)(ASM_CONST.textBoxHeightMul * scale);
-        else
-            size = (int)(ASM_CONST.textBoxHeight * scale);
+    public void updateSize() {
+        size = (int)(ASM_CONST.textBoxHeight * scale);
     }
 
     private void updateRows() {this.rows = allTableRows.size(); }

@@ -63,24 +63,17 @@ public class CAsm_Alley extends LinearLayout {
         this.numSlots = _numSlots;
         this.image = _image;
 
-        SdotBag.updateSize(operation.equals("x"));
+        SdotBag.updateSize();
         SdotBag.setHollow(false);
 
         STextLayout.resetAllValues();
 
-        if(operation.equals("x")) {
-            if(id != ASM_CONST.OPERATION_MULTI && id != ASM_CONST.REGULAR_MULTI)
-                STextLayout.resetAllBackground();
-            STextLayout.update(id, val, operation, numSlots);
-            SdotBag.setDrawBorder(false);
-        }
-        else {
-            if (id != ASM_CONST.OPERATOR_ROW && id != ASM_CONST.OPERAND_ROW)
-                STextLayout.resetAllBackground();
-            STextLayout.update(id, val, operation, numSlots);
+        if (id != ASM_CONST.OPERATOR_ROW && id != ASM_CONST.OPERAND_ROW)
+            STextLayout.resetAllBackground();
+        STextLayout.update(id, val, operation, numSlots);
 
-            SdotBag.setDrawBorder(id != ASM_CONST.ANIMATOR1 && id != ASM_CONST.ANIMATOR2 && id != ASM_CONST.ANIMATOR3);
-        }
+        SdotBag.setDrawBorder(id != ASM_CONST.ANIMATOR1 && id != ASM_CONST.ANIMATOR2 && id != ASM_CONST.ANIMATOR3);
+
         SdotBag.setVisibility(INVISIBLE);
     }
 
@@ -122,20 +115,12 @@ public class CAsm_Alley extends LinearLayout {
 
         STextLayout.performNextDigit();
 
-        if (operation.equals("x")) {
-/*            if (id == ASM_CONST.RESULT_OR_ADD_MULTI_PART1)
-                cols = 0;
-            else {
-                cols = STextLayout.getDigit(digitIndex);
-                cols = (cols != null)?cols:0;
-            }*/
-        } else {
-            if (id == ASM_CONST.RESULT_ROW)
-                cols = 0;
-            else {
-                cols = STextLayout.getDigit(digitIndex);
-                cols = (cols != null)?cols:0;
-            }
+
+        if (id == ASM_CONST.RESULT_ROW)
+            cols = 0;
+        else {
+            cols = STextLayout.getDigit(digitIndex);
+            cols = (cols != null)?cols:0;
         }
 
         if(operation.equals("-")) {
