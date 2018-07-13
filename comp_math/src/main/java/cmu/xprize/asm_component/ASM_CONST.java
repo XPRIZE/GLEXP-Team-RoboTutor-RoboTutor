@@ -112,4 +112,6 @@ public class ASM_CONST {
     //indicate which thing to highlight
     public static final String HIGHLIGHT_OVERHEAD = "HIGHLIGHT_OVERHEAD";
     public static final String HIGHLIGHT_RESULT   = "HIGHLIGHT_RESULT";
+
+    public static final String DEBUG_MATHFIX = "MATHFIX";
 }

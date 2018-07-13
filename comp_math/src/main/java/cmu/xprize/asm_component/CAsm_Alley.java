@@ -2,6 +2,7 @@ package cmu.xprize.asm_component;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 
@@ -87,21 +88,29 @@ public class CAsm_Alley extends LinearLayout {
 
         STextLayout = new CAsm_TextLayout(getContext());
 
+        // MATHFIX LayoutParams
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, rightPadding, 0);
         STextLayout.setLayoutParams(lp);
+
+        // MATHFIX Where TextLayout gets added to Alley
         addView(STextLayout, 0);
+        Log.d(ASM_CONST.DEBUG_MATHFIX, "addView CAsm_TextLayout to CAsm_Alley:" + id);
     }
 
     private void createDotBag() {
         // TODO: figure out why it won't show up unless updated
 
         SdotBag = new CAsm_DotBag(getContext());
+
+        // MATHFIX LayoutParams
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         SdotBag.setLayoutParams(lp);
+        // MATHFIX Where DotBag gets added to Alley
         addView(SdotBag, 1);
+        Log.d(ASM_CONST.DEBUG_MATHFIX, "addView CAsm_DotBag to CAsm_Alley:" + id);
 
     }
 

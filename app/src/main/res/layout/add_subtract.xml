@@ -20,6 +20,7 @@
         android:background="#800"
         android:gravity="center" />
 
+    <!-- MATHFIX TODO reference here? -->
     <cmu.xprize.robotutor.tutorengine.widgets.core.TAsmComponent
         android:id="@+id/SAddSubtract"
         android:layout_width="match_parent"

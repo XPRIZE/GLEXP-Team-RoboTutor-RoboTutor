@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
 
@@ -70,7 +71,9 @@ public class CAsm_TextLayout extends LinearLayout {
             newTextLayout = new CAsm_TextLayout(this.mContext);
             newTextLayout.addText(0, operation.equals("x"));
             newTextLayout.addText(1, operation.equals("x"));
+            // MATHFIX add TextLayout to TextLayout ???
             addView(newTextLayout, getChildCount());
+            Log.d(ASM_CONST.DEBUG_MATHFIX, "addView CAsm_TextLayout to CAsm_TextLayout");
 
             delta--;
         }
@@ -124,10 +127,13 @@ public class CAsm_TextLayout extends LinearLayout {
         }
         CAsm_Text newText = new CAsm_Text(getContext(), isMultiplication);
 
+        // MATHFIX LayoutParams
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(textBoxWidth, textBoxHeight);
         newText.setLayoutParams(lp);
 
+        // MATHFIX add Text to TextLayout
         addView(newText, index);
+        Log.d(ASM_CONST.DEBUG_MATHFIX, "addView CAsm_Text:" + index + " to CAsm_TextLayout:" + id);
 
     }
 

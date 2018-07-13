@@ -112,6 +112,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     protected String[]          twoRowschimes = new String[20];
     protected String            currentChime;
 
+    // MATHFIX where the alleys are
     protected ArrayList<CAsm_Alley> allAlleys = new ArrayList<>();
 
     protected IDotMechanics mechanics = new CAsm_MechanicBase();
@@ -158,9 +159,6 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     public void init(Context context, AttributeSet attrs) {
 
         setOrientation(VERTICAL);
-
-
-        //inflate(getContext(), R.layout.asm_container, this);
 
         mContext = context;
 
@@ -291,6 +289,8 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             updateAllAlleyForMultiplication();
         } else {
             alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
+            // MATHFIX original here
+            //inflate(getContext(), R.layout.new_math, this);
             updateAllAlleyForAddSubtract();
         }
 
@@ -328,6 +328,9 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     }
 
 
+    /**
+     * MATHFIX Alley: this initializes alleys
+     */
     private void updateAllAlleyForAddSubtract() {
         int     val, id;
         boolean clickable = true;
@@ -698,6 +701,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     }
 
 
+
     private void updateAlley(int index, int val, int id, String operation, boolean clickable) {
 
         CAsm_Alley currAlley;
@@ -715,8 +719,9 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
     private CAsm_Alley addAlley(int index ) {
 
-        CAsm_Alley newAlley = new CAsm_Alley(mContext);
+        CAsm_Alley newAlley = new CAsm_Alley(mContext); // MATHFIX TextLayout created here.
 
+        // MATHFIX LayoutParams
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT);
@@ -724,8 +729,10 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         newAlley.setLayoutParams(lp);
 
         //Scontent.addView(newAlley, index);
+        // MATHFIX where alley View gets added
         addView(newAlley, index);
         allAlleys.add(index, newAlley);
+        Log.d(ASM_CONST.DEBUG_MATHFIX, "addView CAsm_Alley:" + index + " to CAsm_Component");
 
         numAlleys++;
 

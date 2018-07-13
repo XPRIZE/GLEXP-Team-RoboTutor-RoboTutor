@@ -228,13 +228,16 @@ public class CAsm_DotBag extends TableLayout {
         // get the row in which to place the dot
         TableRow tableRow = allTableRows.get(row);
 
+        // MATHFIX Dot LayoutParams
         // initialize a new dot
         CAsm_Dot dot = new CAsm_Dot(context);
         dot.setParams(isClickable, imageName, row, col);
         dot.setLayoutParams(new TableRow.LayoutParams(size, size));
 
         // add the dot to the table
+        // MATHFIX where Dot gets added to DotBag TableRow
         tableRow.addView(dot, col);
+        Log.d(ASM_CONST.DEBUG_MATHFIX, "addView CAsm_Dot to CAsm_Dotbag");
 
         // updates
         updateRows();
@@ -280,6 +283,7 @@ public class CAsm_DotBag extends TableLayout {
             setLayoutParams(params);
         }
 
+        // MATHFIX TableRow LayoutParams
         TableRow tableRow = new TableRow(context);
 
         CAsm_DotBag.LayoutParams lp = new CAsm_DotBag.LayoutParams(LayoutParams.WRAP_CONTENT,
@@ -287,7 +291,9 @@ public class CAsm_DotBag extends TableLayout {
         lp.setMargins(size / 2, 0, size / 2, 0);
         tableRow.setLayoutParams(lp);
 
+        // MATHFIX where TableRow gets added to DotBag
         addView(tableRow, index);
+        Log.d(ASM_CONST.DEBUG_MATHFIX, "addView TableRow to CAsm_Dotbag");
         allTableRows.add(index, tableRow);
 
         return tableRow;
