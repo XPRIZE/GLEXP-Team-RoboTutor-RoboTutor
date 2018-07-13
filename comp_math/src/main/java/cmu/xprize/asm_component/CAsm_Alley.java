@@ -11,8 +11,8 @@ import android.widget.LinearLayout;
  */
 public class CAsm_Alley extends LinearLayout {
 
-    private CAsm_TextLayout STextLayout;
-    private CAsm_DotBag     SdotBag;
+    private CAsm_TextLayout STextLayout; // contains numbers
+    private CAsm_DotBag     SdotBag;     // contains dots
 
     private int digitIndex;
     private int val;
@@ -89,7 +89,7 @@ public class CAsm_Alley extends LinearLayout {
 
         // MATHFIX Where TextLayout gets added to Alley
         addView(STextLayout, 0);
-        Log.d(ASM_CONST.DEBUG_MATHFIX, "addView CAsm_TextLayout to CAsm_Alley:" + id);
+        Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "addView CAsm_TextLayout to CAsm_Alley:" + id);
     }
 
     private void createDotBag() {
@@ -103,7 +103,7 @@ public class CAsm_Alley extends LinearLayout {
         SdotBag.setLayoutParams(lp);
         // MATHFIX Where DotBag gets added to Alley
         addView(SdotBag, 1);
-        Log.d(ASM_CONST.DEBUG_MATHFIX, "addView CAsm_DotBag to CAsm_Alley:" + id);
+        Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "addView CAsm_DotBag to CAsm_Alley:" + id);
 
     }
 

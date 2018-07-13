@@ -17,7 +17,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.json.JSONObject;
 
@@ -28,9 +30,7 @@ import java.util.Map;
 import java.util.Random;
 
 import cmu.xprize.comp_logging.CErrorManager;
-import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.util.CAnimatorUtil;
-import cmu.xprize.util.CAt_Data;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEvent;
 import cmu.xprize.util.IEventListener;
@@ -284,9 +284,12 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         digitIndex = numSlots;
 
         alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
-        // MATHFIX original here
-        //inflate(getContext(), R.layout.new_math, this);
-        updateAllAlleyForAddSubtract();
+
+        if (ASM_CONST.USE_NEW_MATH)
+            inflate(getContext(), R.layout.new_math, this);  // MATHFIX new layout
+        else
+            updateAllAlleyForAddSubtract(); // MATHFIX original layout
+
 
 
         setMechanics();
@@ -304,6 +307,42 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
             problemDigits.add(opIndex, CAsm_Util.intToDigits(dataset[opIndex], numSlots));
         }
+
+        final CAsm_Component xyz = this;
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                logLayoutTree(xyz, "");
+            }
+        });
+    }
+
+    /**
+     * MATHFIX for debugging the entire layout tree
+     */
+    private void logLayoutTree(ViewGroup v, String parents) {
+
+        Log.d("LAYOUT_TREE", parents + " == " + v.getClass().getSimpleName() + " has " + v.getChildCount() + " children.");
+        if(this.getChildCount() == 0) {
+            Log.d("LAYOUT_TREE", "-- LEAF --");
+            return;
+        }
+
+        for(int i=0; i < v.getChildCount(); i++) {
+
+            View child = v.getChildAt(i);
+            String parentName = parents + "." + v.getClass().getSimpleName() + "(" + i + ")";
+
+
+            if (child instanceof ViewGroup) {
+                logLayoutTree((ViewGroup) child, parentName);
+            } else if (child instanceof TextView){
+                Log.d("LAYOUT_TREE", parentName + "." + child.getClass().getSimpleName() + " -- " + ((TextView) child).getText());
+            } else {
+                Log.d("LAYOUT_TREE", parentName + "." + child.getClass().getSimpleName() + " -- " + "LEAF");
+            }
+        }
+
     }
 
 
@@ -330,9 +369,9 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         int     val, id;
         boolean clickable = true;
 
-        updateAlley(0, 0, ASM_CONST.ANIMATOR3, operation, false); // animator alley
-        updateAlley(1, 0, ASM_CONST.ANIMATOR2, operation, false); // animator alley
-        updateAlley(2, 0, ASM_CONST.ANIMATOR1, operation, false); // animator alley
+        updateAlley(0, 0, ASM_CONST.ANIMATOR3, operation, false); // EXTRA SPACE animator alley
+        updateAlley(1, 0, ASM_CONST.ANIMATOR2, operation, false); // EXTRA SPACE animator alley
+        updateAlley(2, 0, ASM_CONST.ANIMATOR1, operation, false); // EXTRA SPACE animator alley
         updateAlley(3, 0, ASM_CONST.CARRY_BRW, operation, true);  // carry/borrow alley
 
         // update alleys
@@ -508,6 +547,14 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             return;
 
         dotbagsVisible = _dotbagsVisible;
+
+        final CAsm_Component xyz = this;
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                logLayoutTree(xyz, "");
+            }
+        });
     }
 
     public void animateTutorial(Integer pace) {
@@ -683,7 +730,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         // MATHFIX where alley View gets added
         addView(newAlley, index);
         allAlleys.add(index, newAlley);
-        Log.d(ASM_CONST.DEBUG_MATHFIX, "addView CAsm_Alley:" + index + " to CAsm_Component");
+        Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "addView CAsm_Alley:" + index + " to CAsm_Component");
 
         numAlleys++;
 

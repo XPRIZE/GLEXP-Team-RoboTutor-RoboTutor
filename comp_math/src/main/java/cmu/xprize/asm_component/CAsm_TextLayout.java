@@ -73,7 +73,10 @@ public class CAsm_TextLayout extends LinearLayout {
             newTextLayout.addText(1);
             // MATHFIX add TextLayout to TextLayout ???
             addView(newTextLayout, getChildCount());
-            Log.d(ASM_CONST.DEBUG_MATHFIX, "addView CAsm_TextLayout to CAsm_TextLayout");
+            // distinction between original and added
+            setBackgroundColor(ASM_CONST.DEBUG_TEXTLAYOUT_1_COLOR);
+            newTextLayout.setBackgroundColor(ASM_CONST.DEBUG_TEXTLAYOUT_2_COLOR);
+            Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "addView CAsm_TextLayout to CAsm_TextLayout");
 
             delta--;
         }
@@ -118,7 +121,7 @@ public class CAsm_TextLayout extends LinearLayout {
 
         // MATHFIX add Text to TextLayout
         addView(newText, index);
-        Log.d(ASM_CONST.DEBUG_MATHFIX, "addView CAsm_Text:" + index + " to CAsm_TextLayout:" + id);
+        Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "addView CAsm_Text:" + index + " to CAsm_TextLayout:" + id);
 
     }
 
@@ -142,6 +145,8 @@ public class CAsm_TextLayout extends LinearLayout {
 
                     curTextLayout = getTextLayout(i);
                     curTextLayout.getText(1).setText(digits[i]);
+                    curTextLayout.getText(1).setBackgroundColor(ASM_CONST.DEBUG_TEXT_COLOR);
+                    Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "setText CAsm_Text:1 in CAsm_TextLayout:" + i + " to " + digits[i]);
 
                 }
 
@@ -155,6 +160,8 @@ public class CAsm_TextLayout extends LinearLayout {
 
                     curTextLayout = getTextLayout(i);
                     curTextLayout.getText(1).setText(digits[i]);
+                    curTextLayout.getText(1).setBackgroundColor(ASM_CONST.DEBUG_TEXT_COLOR);
+                    Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "setText CAsm_Text:1 in CAsm_TextLayout:" + i + " to " + digits[i]);
 
                 }
 

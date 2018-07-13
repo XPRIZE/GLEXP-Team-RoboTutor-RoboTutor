@@ -1,6 +1,8 @@
 package cmu.xprize.asm_component;
 
 
+import android.graphics.Color;
+
 import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
@@ -107,5 +109,10 @@ public class ASM_CONST {
     public static final String HIGHLIGHT_OVERHEAD = "HIGHLIGHT_OVERHEAD";
     public static final String HIGHLIGHT_RESULT   = "HIGHLIGHT_RESULT";
 
-    public static final String DEBUG_MATHFIX = "MATHFIX";
+    // DEBUG VARIABLES
+    public static final boolean USE_NEW_MATH = false;
+    public static final String TAG_DEBUG_MATHFIX = "MATHFIX";
+    public static final int DEBUG_TEXT_COLOR = Color.parseColor("#ff22bb");
+    public static final int DEBUG_TEXTLAYOUT_1_COLOR = Color.parseColor("#22ffbb");
+    public static final int DEBUG_TEXTLAYOUT_2_COLOR = Color.parseColor("#bb22ff");
 }

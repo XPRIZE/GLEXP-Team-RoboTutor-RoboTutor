@@ -237,7 +237,7 @@ public class CAsm_DotBag extends TableLayout {
         // add the dot to the table
         // MATHFIX where Dot gets added to DotBag TableRow
         tableRow.addView(dot, col);
-        Log.d(ASM_CONST.DEBUG_MATHFIX, "addView CAsm_Dot to CAsm_Dotbag");
+        Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "addView CAsm_Dot to CAsm_Dotbag");
 
         // updates
         updateRows();
@@ -293,7 +293,7 @@ public class CAsm_DotBag extends TableLayout {
 
         // MATHFIX where TableRow gets added to DotBag
         addView(tableRow, index);
-        Log.d(ASM_CONST.DEBUG_MATHFIX, "addView TableRow to CAsm_Dotbag");
+        Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "addView TableRow to CAsm_Dotbag");
         allTableRows.add(index, tableRow);
 
         return tableRow;
