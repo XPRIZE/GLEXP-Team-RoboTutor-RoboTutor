@@ -29,13 +29,6 @@ public class CAsm_MechanicBase implements IDotMechanics {
     protected int secondBagIndex = 5;
     protected int resultIndex = 6;
 
-    protected int firstBagIndexForMulti = 0;
-    protected int secondBagIndexForMulti = 1;
-    protected int resultOrAddInMultiPart1 = 2;
-    protected int addInMultiPart2 = 3;
-    protected int addInMultiPart3 = 4;
-    protected int resultIndexForMultiBackup = 5;
-
     protected int clickedTextLayoutIndex = -1;
 
     static final String TAG = "CAsm_MechanicBase";
@@ -77,17 +70,9 @@ public class CAsm_MechanicBase implements IDotMechanics {
         for (CAsm_Alley alley: allAlleys) {
             text = alley.getTextLayout().getTextLayout(mComponent.digitIndex).getText(1);
 
-            if(!(mComponent.operation.equals("x") && allAlleys.indexOf(alley) == resultOrAddInMultiPart1)) {
-                if (!text.getIsStruck()) {
-                    CAnimatorUtil.zoomInOut(text, 1.5f, 1500L);
-                }
+            if (!text.getIsStruck()) {
+                CAnimatorUtil.zoomInOut(text, 1.5f, 1500L);
             }
-        }
-
-        if(mComponent.operation.equals("x")) {
-            CAsm_TextLayout resultTextLayout = allAlleys.get(resultOrAddInMultiPart1).getTextLayout();
-            for(int i = 1; i < resultTextLayout.getChildCount(); i++)
-                CAnimatorUtil.zoomInOut(resultTextLayout.getTextLayout(i).getText(1), 1.5f, 1500L);
         }
     }
 
@@ -119,12 +104,12 @@ public class CAsm_MechanicBase implements IDotMechanics {
                     mComponent.delAddFeature(TCONST.ASM_CLICK_ON_DOT, "");
                     if (mComponent.overheadTextSupplement != null) {
                         if ((clickedText.equals(mComponent.overheadText) || clickedText.equals(mComponent.overheadTextSupplement))
-                                && mComponent.overheadText.isWritable == true && mComponent.overheadTextSupplement.isWritable == true)
-                            mComponent.updateText(mComponent.overheadTextSupplement, mComponent.overheadText, clickedTextLayoutIndex < resultIndex && !mComponent.operation.equals("x"));
+                                && mComponent.overheadText.isWritable && mComponent.overheadTextSupplement.isWritable)
+                            mComponent.updateText(mComponent.overheadTextSupplement, mComponent.overheadText, clickedTextLayoutIndex < resultIndex);
                         else
-                            mComponent.updateText(null, clickedText, clickedTextLayoutIndex < resultIndex && !mComponent.operation.equals("x"));
+                            mComponent.updateText(null, clickedText, clickedTextLayoutIndex < resultIndex);
                     } else
-                        mComponent.updateText(null, clickedText, clickedTextLayoutIndex < resultIndex && !mComponent.operation.equals("x"));
+                        mComponent.updateText(null, clickedText, clickedTextLayoutIndex < resultIndex);
                 } else {
                     clickedTextLayout.setIsClicked(true);
                     clickedText.setIsClicked(true);
