@@ -63,16 +63,17 @@ public class CAsm_Alley extends LinearLayout {
         this.numSlots = _numSlots;
         this.image = _image;
 
-        SdotBag.updateSize();
-        SdotBag.setHollow(false);
-
         STextLayout.resetAllValues();
 
         if (id != ASM_CONST.OPERATOR_ROW && id != ASM_CONST.OPERAND_ROW)
             STextLayout.resetAllBackground();
         STextLayout.update(id, val, operation, numSlots);
 
-        SdotBag.setDrawBorder(id != ASM_CONST.ANIMATOR1 && id != ASM_CONST.ANIMATOR2 && id != ASM_CONST.ANIMATOR3);
+        // DotBag operations
+        SdotBag.updateSize();
+        SdotBag.setHollow(false);
+
+        SdotBag.setDrawBorder(id != ASM_CONST.ANIMATOR1 && id != ASM_CONST.ANIMATOR2 && id != ASM_CONST.ANIMATOR3); // why
 
         SdotBag.setVisibility(INVISIBLE);
     }
@@ -81,13 +82,13 @@ public class CAsm_Alley extends LinearLayout {
 
         STextLayout = new CAsm_TextLayout(getContext());
 
-        // MATHFIX LayoutParams
+        // MATHFIX_LAYOUT LayoutParams
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, rightPadding, 0);
         STextLayout.setLayoutParams(lp);
 
-        // MATHFIX Where TextLayout gets added to Alley
+        // MATHFIX_LAYOUT Where TextLayout gets added to Alley
         addView(STextLayout, 0);
         Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "addView CAsm_TextLayout to CAsm_Alley:" + id);
     }
@@ -97,11 +98,11 @@ public class CAsm_Alley extends LinearLayout {
 
         SdotBag = new CAsm_DotBag(getContext());
 
-        // MATHFIX LayoutParams
+        // MATHFIX_LAYOUT LayoutParams
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         SdotBag.setLayoutParams(lp);
-        // MATHFIX Where DotBag gets added to Alley
+        // MATHFIX_LAYOUT Where DotBag gets added to Alley
         addView(SdotBag, 1);
         Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "addView CAsm_DotBag to CAsm_Alley:" + id);
 

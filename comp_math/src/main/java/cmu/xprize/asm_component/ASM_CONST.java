@@ -2,12 +2,11 @@ package cmu.xprize.asm_component;
 
 
 import android.graphics.Color;
+import android.util.Log;
 
-import java.lang.reflect.Array;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
-
-import cmu.xprize.util.TCONST;
 
 public class ASM_CONST {
 
@@ -112,6 +111,14 @@ public class ASM_CONST {
     // DEBUG VARIABLES
     public static final boolean USE_NEW_MATH = false;
     public static final String TAG_DEBUG_MATHFIX = "MATHFIX";
+    public static final String TAG_DEBUG_MATHFIX_UI_REF = "MATHFIX_UI_REF";
+    public static final String ANNOYING_REFERENCE_STRING = "Alley(%d).Layout().Layout(%d).Text(%d) -- %s";
+
+    public static final void logAnnoyingReference(int alleyId, int textLayoutId, int textId, String descriptor) {
+        Log.d(TAG_DEBUG_MATHFIX_UI_REF, String.format(Locale.getDefault(), ASM_CONST.ANNOYING_REFERENCE_STRING, alleyId, textLayoutId, textId, descriptor));
+    }
+
+
     public static final int DEBUG_TEXT_COLOR = Color.parseColor("#ff22bb");
     public static final int DEBUG_TEXTLAYOUT_1_COLOR = Color.parseColor("#22ffbb");
     public static final int DEBUG_TEXTLAYOUT_2_COLOR = Color.parseColor("#bb22ff");

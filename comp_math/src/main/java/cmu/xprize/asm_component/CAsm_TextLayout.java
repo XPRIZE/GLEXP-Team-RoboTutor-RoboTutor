@@ -71,7 +71,7 @@ public class CAsm_TextLayout extends LinearLayout {
             newTextLayout = new CAsm_TextLayout(this.mContext);
             newTextLayout.addText(0);
             newTextLayout.addText(1);
-            // MATHFIX add TextLayout to TextLayout ???
+            // MATHFIX_LAYOUT add TextLayout to TextLayout ???
             addView(newTextLayout, getChildCount());
             // distinction between original and added
             setBackgroundColor(ASM_CONST.DEBUG_TEXTLAYOUT_1_COLOR);
@@ -89,9 +89,11 @@ public class CAsm_TextLayout extends LinearLayout {
         CAsm_Text currText;
 
         for (int i = 0; i < getChildCount(); i++) {
-            currText = getTextLayout(i).getText(0);
+            currText = getTextLayout(i).getText(0); // √√√
+            ASM_CONST.logAnnoyingReference(-1, i,0, "reset()");
             currText.reset();
-            currText = getTextLayout(i).getText(1);
+            currText = getTextLayout(i).getText(1); // √√√
+            ASM_CONST.logAnnoyingReference(-1, i, 1, "reset()");
             currText.reset();
         }
 
@@ -99,7 +101,7 @@ public class CAsm_TextLayout extends LinearLayout {
         // TODO: this will be a memory leak - must release the drawables explicitly
         //
         if (id == ASM_CONST.OPERATOR_ROW)
-            setBackground(getResources().getDrawable(R.drawable.underline, null));
+            setBackground(getResources().getDrawable(R.drawable.underline, null)); // MATHFIX_LAYOUT here's where the line comes in!
         else
             setBackground(null);
 
@@ -115,11 +117,11 @@ public class CAsm_TextLayout extends LinearLayout {
 
         CAsm_Text newText = new CAsm_Text(getContext());
 
-        // MATHFIX LayoutParams
+        // MATHFIX_LAYOUT LayoutParams
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(textBoxWidth, textBoxHeight);
         newText.setLayoutParams(lp);
 
-        // MATHFIX add Text to TextLayout
+        // MATHFIX_LAYOUT add Text to TextLayout
         addView(newText, index);
         Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "addView CAsm_Text:" + index + " to CAsm_TextLayout:" + id);
 
@@ -143,9 +145,10 @@ public class CAsm_TextLayout extends LinearLayout {
 
                 for (int i = 0; i < numSlots; i++) {
 
-                    curTextLayout = getTextLayout(i);
-                    curTextLayout.getText(1).setText(digits[i]);
-                    curTextLayout.getText(1).setBackgroundColor(ASM_CONST.DEBUG_TEXT_COLOR);
+                    curTextLayout = getTextLayout(i); // √√√
+                    curTextLayout.getText(1).setText(digits[i]); // √√√ MATHFIX_2 awful reference
+                    curTextLayout.getText(1).setBackgroundColor(ASM_CONST.DEBUG_TEXT_COLOR); // √√√
+                    ASM_CONST.logAnnoyingReference(-1, i, 1, "setText to digit");
                     Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "setText CAsm_Text:1 in CAsm_TextLayout:" + i + " to " + digits[i]);
 
                 }
@@ -158,9 +161,10 @@ public class CAsm_TextLayout extends LinearLayout {
 
                 for (int i = 0; i < numSlots; i++) {
 
-                    curTextLayout = getTextLayout(i);
-                    curTextLayout.getText(1).setText(digits[i]);
-                    curTextLayout.getText(1).setBackgroundColor(ASM_CONST.DEBUG_TEXT_COLOR);
+                    curTextLayout = getTextLayout(i); // √√√
+                    curTextLayout.getText(1).setText(digits[i]); // √√√ MATHFIX_2 awful reference
+                    curTextLayout.getText(1).setBackgroundColor(ASM_CONST.DEBUG_TEXT_COLOR); // √√√
+                    ASM_CONST.logAnnoyingReference(-1, i, 1, "setText to digit");
                     Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "setText CAsm_Text:1 in CAsm_TextLayout:" + i + " to " + digits[i]);
 
                 }
@@ -193,33 +197,39 @@ public class CAsm_TextLayout extends LinearLayout {
 
         digitIndex--;
 
+        // MATHFIX_2 UI: update previously added digit
         if (digitIndex != getChildCount()-1 ) {
-            CAsm_Text prevText = getTextLayout(digitIndex + 1).getText(1);
+            CAsm_Text prevText = getTextLayout(digitIndex + 1).getText(1); // √√√
+            ASM_CONST.logAnnoyingReference(-1, digitIndex + 1, 1, "performNextDigit()");
             prevText.setTypeface(null);
             prevText.setBackground(null);
             prevText.setWritable(false);
             prevText.setAlpha(0.5f);
 
-            prevText = getTextLayout(digitIndex + 1).getText(0);
+            prevText = getTextLayout(digitIndex + 1).getText(0); // √√√
+            ASM_CONST.logAnnoyingReference(-1, digitIndex + 1, 0, "performNextDigit()");
             prevText.setTypeface(null);
             prevText.setBackground(null);
             prevText.setWritable(false);
             prevText.setAlpha(0.5f);
         }
 
-        CAsm_Text curText = getTextLayout(digitIndex).getText(1);
+        CAsm_Text curText = getTextLayout(digitIndex).getText(1); // √√√
+        ASM_CONST.logAnnoyingReference(-1, digitIndex, 1, "performNextDigit()");
 
         if (curText.getIsStruck()) {
             // crossed out
             return;
         }
 
+        // MATHFIX_2 UI: bold current digit
         curText.setTextColor(Color.BLACK);
         curText.setTypeface(null, Typeface.BOLD);
         curText.setBackground(null);
 
         if (id == ASM_CONST.RESULT_ROW) {
-            getTextLayout(digitIndex).getText(0).reset();
+            getTextLayout(digitIndex).getText(0).reset(); // √√√
+            ASM_CONST.logAnnoyingReference(-1, digitIndex, 0, "reset()");
             curText.setResult();
         }
 
@@ -228,8 +238,10 @@ public class CAsm_TextLayout extends LinearLayout {
     public void resetValue(int index) {
 
         CAsm_TextLayout textLayout = (CAsm_TextLayout) getChildAt(index);
-        textLayout.getText(0).setText("");
-        textLayout.getText(1).setText("");
+        textLayout.getText(0).setText(""); // √√√
+        ASM_CONST.logAnnoyingReference(-1, index, 0, "setText(blank)");
+        textLayout.getText(1).setText(""); // √√√
+        ASM_CONST.logAnnoyingReference(-1, index, 1, "setText(blank)");
 
     }
 
@@ -239,6 +251,11 @@ public class CAsm_TextLayout extends LinearLayout {
         }
     }
 
+    /**
+     * Gets the number value of this TextLayout, i.e. a 3 in the hundreds column returns 300.
+     *
+     * @return
+     */
     public Integer getNum() {
 
 //        if (id != ASM_CONST.RESULT_ROW) {return value;}
@@ -249,7 +266,8 @@ public class CAsm_TextLayout extends LinearLayout {
         int num = numSlots;
         for (int i = 1; i < num; i++) {
 
-            CAsm_Text t = getTextLayout(i).getText(1);
+            CAsm_Text t = getTextLayout(i).getText(1); // √√√
+            ASM_CONST.logAnnoyingReference(-1, i, 1, "TextLayout.getNum()");
             String test = t.getText().toString();
 
             try {
@@ -263,17 +281,36 @@ public class CAsm_TextLayout extends LinearLayout {
         return j;
     }
 
+    /**
+     * Gets the digit value of this TextLayout, i.e. a 3 in the hundreds column returns 3.
+     *
+     * @param index
+     * @return
+     */
     public Integer getDigit(int index) {
 
-        CAsm_Text t = getTextLayout(index).getText(1);
+        CAsm_Text t = getTextLayout(index).getText(1); // √√√
+        ASM_CONST.logAnnoyingReference(-1, index, 1, "TextLayout.getDigit()");
         return t.getDigit();
 
     }
 
+    /**
+     * MATHFIX_2 also look for references of this
+     *
+     * @param index
+     * @return
+     */
     public CAsm_TextLayout getTextLayout(int index) {
         return (CAsm_TextLayout) getChildAt(index);
     }
 
+    /**
+     * MATHFIX_2 look for references of this, there are a LOT
+     *
+     * @param index
+     * @return
+     */
     public CAsm_Text getText(int index) {
         return (CAsm_Text) getChildAt(index);
     }
@@ -291,14 +328,16 @@ public class CAsm_TextLayout extends LinearLayout {
         CAsm_Text currText;
         CAsm_Text clickedText;
         for (int i = 0; i < getChildCount(); i++) {
-            currText = getTextLayout(i).getText(0);
+            currText = getTextLayout(i).getText(0); // √√√
+            ASM_CONST.logAnnoyingReference(-1, i, 0, "TextLayout.findClickedText()");
             if (currText.getIsClicked()) {
                 clickedTextIndex = 0;
                 clickedTextLayoutIndex = i;
                 clickedText = currText;
                 return clickedText;
             }
-            currText = getTextLayout(i).getText(1);
+            currText = getTextLayout(i).getText(1); // √√√
+            ASM_CONST.logAnnoyingReference(-1, i, 1, "TextLayout.findClickedText()");
             if (currText.getIsClicked()) {
                 clickedTextIndex = 1;
                 clickedTextLayoutIndex = i;
@@ -332,7 +371,8 @@ public class CAsm_TextLayout extends LinearLayout {
 
     public void resetAllBackground() {
         for (int i = 0; i < numSlots; i++) {
-            getTextLayout(i).setBackground(null);
+            getTextLayout(i).setBackground(null); // √√√
+            ASM_CONST.logAnnoyingReference(-1, i, -1, "setBackground(null)");
         }
     }
 }

@@ -1,6 +1,5 @@
 package cmu.xprize.asm_component;
 
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -68,7 +67,8 @@ public class CAsm_MechanicBase implements IDotMechanics {
         CAsm_Text text;
 
         for (CAsm_Alley alley: allAlleys) {
-            text = alley.getTextLayout().getTextLayout(mComponent.digitIndex).getText(1);
+            text = alley.getTextLayout().getTextLayout(mComponent.digitIndex).getText(1); // √√√
+            ASM_CONST.logAnnoyingReference(alley.getId(), mComponent.digitIndex, 1, "highlightDigits()");
 
             if (!text.getIsStruck()) {
                 CAnimatorUtil.zoomInOut(text, 1.5f, 1500L);
@@ -187,7 +187,8 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
         if (whichToHighlight.equals(ASM_CONST.HIGHLIGHT_RESULT)) {
 
-            mComponent.highlightText(allAlleys.get(resultIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1));
+            mComponent.highlightText(allAlleys.get(resultIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1)); // √√√
+            ASM_CONST.logAnnoyingReference(resultIndex, mComponent.digitIndex, 1, "highlightOverheadOrResult()");
             mComponent.delAddFeature(TCONST.ASM_ALL_DOTS_DOWN, "");
         }
     }

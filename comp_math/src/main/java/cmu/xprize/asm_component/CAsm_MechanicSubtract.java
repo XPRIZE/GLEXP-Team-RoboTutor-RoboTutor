@@ -44,16 +44,20 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
                 mComponent.curOverheadCol = firstBagIndex - 2 - (borrowBlockEndIndex - 1 - borrowBlockStartIndex) + 1;
 
             if (mComponent.digitIndex == digitBorrowingIndex &&
-                    !allAlleys.get(mComponent.curOverheadCol).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getText().equals("") &&
-                    !(allAlleys.get(mComponent.curOverheadCol).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getCurrentTextColor() == Color.RED))
-                    dotbagBorrow();
+                    !allAlleys.get(mComponent.curOverheadCol).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getText().equals("") && // √√√
+                    !(allAlleys.get(mComponent.curOverheadCol).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getCurrentTextColor() == Color.RED)) { // √√√
+                ASM_CONST.logAnnoyingReference(mComponent.curOverheadCol, mComponent.digitIndex, 1, "nextDigit:: check not equal blank or red");
+                dotbagBorrow();
+            }
         } else if (mComponent.digitIndex < digitBorrowingIndex){
             hasBorrowed = false;
 
-            allAlleys.get(digitBorrowingCol).getTextLayout().getTextLayout(digitBorrowingIndex).getText(1).setBorrowable(false);
+            allAlleys.get(digitBorrowingCol).getTextLayout().getTextLayout(digitBorrowingIndex).getText(1).setBorrowable(false); // √√√
+            ASM_CONST.logAnnoyingReference(digitBorrowingCol, digitBorrowingIndex, 1, "setBorrowable(false)");
 
-            if (allAlleys.get(digitBorrowingCol).getTextLayout().getTextLayout(digitBorrowingIndex).getText(0).getText().equals("1")) {
-                allAlleys.get(digitBorrowingCol).getTextLayout().getTextLayout(digitBorrowingIndex).getText(0).setBorrowable(false);
+            if (allAlleys.get(digitBorrowingCol).getTextLayout().getTextLayout(digitBorrowingIndex).getText(0).getText().equals("1")) { // √√√
+                allAlleys.get(digitBorrowingCol).getTextLayout().getTextLayout(digitBorrowingIndex).getText(0).setBorrowable(false); // √√√
+                ASM_CONST.logAnnoyingReference(digitBorrowingCol, digitBorrowingIndex, 0, "if == 1, setBorrowable(false)");
                 mComponent.curOverheadCol = digitBorrowingCol - 1;
             } else if (mComponent.curOverheadCol < overheadIndex)
                 mComponent.curOverheadCol = digitBorrowingCol + 1;
@@ -80,7 +84,8 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
             hasBorrowed = true;
             isBorrowedValue = true;
 
-            CAsm_TextLayout firstBagLayout = allAlleys.get(firstBagIndex).getTextLayout();
+            CAsm_TextLayout firstBagLayout = allAlleys.get(firstBagIndex).getTextLayout(); // √√√
+            ASM_CONST.logAnnoyingReference(firstBagIndex, -1, -1, "something with borrowing");
             // find first nonzero to borrow from - this should always break in the for loop!
             for (int i = mComponent.digitIndex - 1; i >= 0; i--) {
                 if (firstBagLayout.getDigit(i) > 0) {
@@ -165,9 +170,12 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         mComponent.delAddFeature("", TCONST.ASM_CLICK_ON_DOT);
         int clickedDotCol = clickedDot.getCol();
         int minuend = allAlleys.get(minuendIndex).getCurrentDigit();
+
+        ASM_CONST.logAnnoyingReference(firstBagIndex, mComponent.digitIndex, 1, "getIsStruck()");
         if(minuendIndex != firstBagIndex &&
-                !allAlleys.get(firstBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getIsStruck())
+                !allAlleys.get(firstBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getIsStruck()) { // √√√
             minuend = 10 + allAlleys.get(firstBagIndex).getCurrentDigit();
+        }
         int correspondingCol = minuend - subtrahendBag.getCols() + clickedDotCol;
 
         if (correspondingCol > minuendDotBag.getCols()-1) {
@@ -281,9 +289,10 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         dotBagBorrowed = true;
 
+        ASM_CONST.logAnnoyingReference(mComponent.curOverheadCol, mComponent.digitIndex, 1, "check is blank or red");
         if (mComponent.digitIndex == digitBorrowingIndex &&
-                !allAlleys.get(mComponent.curOverheadCol).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).equals("") &&
-                !(allAlleys.get(mComponent.curOverheadCol).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getCurrentTextColor() == Color.RED))
+                !allAlleys.get(mComponent.curOverheadCol).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).equals("") && // √√√
+                !(allAlleys.get(mComponent.curOverheadCol).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getCurrentTextColor() == Color.RED)) // √√√
             digitBorrowingCol = mComponent.curOverheadCol;
 
         CAsm_DotBag borrowBag = allAlleys.get(digitBorrowingCol).getDotBag();
@@ -293,11 +302,16 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         borrowBag.setDrawBorder(true);
         borrowBag.setRows(1);
         if(mComponent.digitIndex < borrowBlockEndIndex) {
-            borrowBag.setCols(allAlleys.get(mComponent.curOverheadCol).getTextLayout().getDigit(mComponent.digitIndex));
-            allAlleys.get(digitBorrowingCol + 1).getTextLayout().getTextLayout(mComponent.digitIndex).getText(0).setStruck(true);
-            allAlleys.get(digitBorrowingCol + 1).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).setStruck(true);
-            allAlleys.get(digitBorrowingCol + 1).getTextLayout().getTextLayout(mComponent.digitIndex).getBackground().setAlpha(100);;
-            allAlleys.get(firstBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).setStruck(true);
+            borrowBag.setCols(allAlleys.get(mComponent.curOverheadCol).getTextLayout().getDigit(mComponent.digitIndex)); // √√√
+            ASM_CONST.logAnnoyingReference(mComponent.curOverheadCol, mComponent.digitIndex, -1, "borrowing... borrowBag.setCols(this)");
+            allAlleys.get(digitBorrowingCol + 1).getTextLayout().getTextLayout(mComponent.digitIndex).getText(0).setStruck(true); // √√√
+            ASM_CONST.logAnnoyingReference(digitBorrowingCol + 1, mComponent.digitIndex, 0, "borrowing... setStruck(true)");
+            allAlleys.get(digitBorrowingCol + 1).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).setStruck(true); // √√√
+            ASM_CONST.logAnnoyingReference(digitBorrowingCol + 1, mComponent.digitIndex, 1, "borrowing... setStruck(true)");
+            allAlleys.get(digitBorrowingCol + 1).getTextLayout().getTextLayout(mComponent.digitIndex).getBackground().setAlpha(100);; // √√√
+            ASM_CONST.logAnnoyingReference(digitBorrowingCol + 1, mComponent.digitIndex, 1, "borrowing... setAlpha(100)");
+            allAlleys.get(firstBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).setStruck(true); // √√√
+            ASM_CONST.logAnnoyingReference(firstBagIndex, mComponent.digitIndex, 1, "borrowing... setStruck(true)");
         } else
             borrowBag.setCols(10);
 
@@ -351,23 +365,31 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         isBorrowedValue = !isBorrowedValue;
 
-        CAsm_TextLayout borrowingLayout = allAlleys.get(horizontalIndex).getTextLayout();
-        borrowingLayout.getTextLayout(verticalIndex).getText(1).setBorrowable(true);
-        if(!borrowingLayout.getTextLayout(verticalIndex).getText(0).getText().equals(""))
-            borrowingLayout.getTextLayout(verticalIndex).getText(0).setBorrowable(true);
+        CAsm_TextLayout borrowingLayout = allAlleys.get(horizontalIndex).getTextLayout(); // √√√
+        borrowingLayout.getTextLayout(verticalIndex).getText(1).setBorrowable(true); // √√√
+        ASM_CONST.logAnnoyingReference(horizontalIndex, verticalIndex, 1, "setBorrowable(true)");
+        ASM_CONST.logAnnoyingReference(horizontalIndex, verticalIndex, 0, "check not blank");
+        if(!borrowingLayout.getTextLayout(verticalIndex).getText(0).getText().equals("")) { // √√√
+            borrowingLayout.getTextLayout(verticalIndex).getText(0).setBorrowable(true); // √√√
+            ASM_CONST.logAnnoyingReference(horizontalIndex, verticalIndex, 0, "setBorrowable(true)");
+        }
 
         CAsm_TextLayout updatedLayout;
         if(isBorrowedValue) {
             mComponent.overheadVal = 10;
-            updatedLayout = allAlleys.get(horizontalIndex).getTextLayout();
-            mComponent.overheadText = updatedLayout.getTextLayout(verticalIndex + 1).getText(1);
-            mComponent.overheadTextSupplement = updatedLayout.getTextLayout(verticalIndex + 1).getText(0);
+            updatedLayout = allAlleys.get(horizontalIndex).getTextLayout(); // √√√
+            mComponent.overheadText = updatedLayout.getTextLayout(verticalIndex + 1).getText(1); // √√√
+            ASM_CONST.logAnnoyingReference(horizontalIndex, verticalIndex + 1, 1, "overheadText");
+            mComponent.overheadTextSupplement = updatedLayout.getTextLayout(verticalIndex + 1).getText(0); // √√√
+            ASM_CONST.logAnnoyingReference(horizontalIndex, verticalIndex + 1, 0, "overheadTextSupplement");
         } else {
             mComponent.overheadVal = borrowingLayout.getDigit(verticalIndex) - 1;
             mComponent.overheadVal =  mComponent.overheadVal < 0 ? 9 :  mComponent.overheadVal;
-            updatedLayout = allAlleys.get(horizontalIndex - 2).getTextLayout();
-            mComponent.overheadText = updatedLayout.getTextLayout(verticalIndex).getText(1);
-            mComponent.overheadTextSupplement = updatedLayout.getTextLayout(verticalIndex).getText(0);
+            updatedLayout = allAlleys.get(horizontalIndex - 2).getTextLayout(); // √√√
+            mComponent.overheadText = updatedLayout.getTextLayout(verticalIndex).getText(1); // √√√
+            ASM_CONST.logAnnoyingReference(horizontalIndex - 2, verticalIndex, 1, "overheadText");
+            mComponent.overheadTextSupplement = updatedLayout.getTextLayout(verticalIndex).getText(0); // √√√
+            ASM_CONST.logAnnoyingReference(horizontalIndex - 2, verticalIndex, 0, "overheadTextSupplement");
         }
 
     }
@@ -386,17 +408,23 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
         if (clickedText != null && clickedText.getIsBorrowable()) {
             clickedText.setStruck(true);
 
-            if(clickedTextLayout.findClickedTextIndex() == 0)
-                clickedTextLayout.getTextLayout(clickedTextLayout.findClickedTextLayoutIndex()).getText(1).setStruck(true);
-            else
-                clickedTextLayout.getTextLayout(clickedTextLayout.findClickedTextLayoutIndex()).getText(0).setStruck(true);
+            if(clickedTextLayout.findClickedTextIndex() == 0) {
+                clickedTextLayout.getTextLayout(clickedTextLayout.findClickedTextLayoutIndex()).getText(1).setStruck(true); // √√√
+                ASM_CONST.logAnnoyingReference(-1, clickedTextLayout.findClickedTextLayoutIndex(), 1, "setStruck(true)");
+            }
+            else {
+                clickedTextLayout.getTextLayout(clickedTextLayout.findClickedTextLayoutIndex()).getText(0).setStruck(true); // √√√
+                ASM_CONST.logAnnoyingReference(-1, clickedTextLayout.findClickedTextLayoutIndex(), 0, "setStruck(true)");
+            }
 
             if (!isBorrowedValue) {
                 //Display +1 with underline above the clicked digit
-                CAsm_TextLayout layout = allAlleys.get(digitBorrowingCol - 1).getTextLayout();
-                CAsm_TextLayout tempTextLayout = layout.getTextLayout(digitBorrowingIndex);
-                tempTextLayout.getText(0).setText("+");
-                tempTextLayout.getText(1).setText("1");
+                CAsm_TextLayout layout = allAlleys.get(digitBorrowingCol - 1).getTextLayout(); // √√√
+                CAsm_TextLayout tempTextLayout = layout.getTextLayout(digitBorrowingIndex); // √√√
+                tempTextLayout.getText(0).setText("+"); // √√√
+                ASM_CONST.logAnnoyingReference(digitBorrowingCol - 1, digitBorrowingIndex, 0, "setText(+)");
+                tempTextLayout.getText(1).setText("1"); // √√√
+                ASM_CONST.logAnnoyingReference(digitBorrowingCol - 1, digitBorrowingIndex, 1, "setText(1)");
                 tempTextLayout.setBackground(tempTextLayout.getResources().getDrawable(R.drawable.underline));
             } else {
                 clickedTextLayout.getTextLayout(clickedTextLayout.findClickedTextLayoutIndex()).getBackground().setAlpha(100);
@@ -437,8 +465,8 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         //if they borrow a few digits away, e.g. 3003 - 1928
         if(!isBorrowedValue) {
-            CAsm_TextLayout firstBagLayout = allAlleys.get(firstBagIndex).getTextLayout();
-            CAsm_Text origText = firstBagLayout.getTextLayout(digitBorrowingIndex).getText(1);
+            CAsm_Text origText = allAlleys.get(firstBagIndex).getTextLayout().getTextLayout(digitBorrowingIndex).getText(1); // √√√
+            ASM_CONST.logAnnoyingReference(firstBagIndex, digitBorrowingIndex, 1, "setStruck(true)");
             origText.setStruck(true);
         }
     }
@@ -447,7 +475,8 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
 
         // keep going up till you find text that is not struck
 
-        CAsm_Text curText = allAlleys.get(startIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1);
+        CAsm_Text curText = allAlleys.get(startIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1); // √√√
+        ASM_CONST.logAnnoyingReference(startIndex, mComponent.digitIndex, 1, "check is struck or blank");
         if ((curText.getIsStruck() || curText.getText().equals(""))) {
             return calcMinuendIndex(startIndex-1);
         } else {
@@ -465,13 +494,15 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
             if (digitBorrowingCol == 0 && digitBorrowingIndex == 0 || mComponent.digitIndex < digitBorrowingIndex)
                 return;
 
-            CAsm_TextLayout borrowableTextLayout = allAlleys.get(digitBorrowingCol).getTextLayout();
-            CAsm_Text borrowableText = borrowableTextLayout.getTextLayout(digitBorrowingIndex).getText(1);
+            CAsm_TextLayout borrowableTextLayout = allAlleys.get(digitBorrowingCol).getTextLayout(); // √√√
+            CAsm_Text borrowableText = borrowableTextLayout.getTextLayout(digitBorrowingIndex).getText(1); // √√√
+            ASM_CONST.logAnnoyingReference(digitBorrowingCol, digitBorrowingIndex, 1, "highlightText if not struck");
 
             if (!borrowableText.getIsStruck()) mComponent.highlightText(borrowableText);
 
             if (!isBorrowedValue && digitBorrowingCol != firstBagIndex) {
-                borrowableText = borrowableTextLayout.getTextLayout(digitBorrowingIndex).getText(0);
+                borrowableText = borrowableTextLayout.getTextLayout(digitBorrowingIndex).getText(0); // √√√
+                ASM_CONST.logAnnoyingReference(digitBorrowingCol, digitBorrowingIndex, 1, "highlightText if not struck");
                 if (!borrowableText.getIsStruck() && !borrowableText.getText().equals(""))
                     mComponent.highlightText(borrowableText);
             }

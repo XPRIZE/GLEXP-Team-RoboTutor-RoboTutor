@@ -41,7 +41,8 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
         for (CAsm_Alley alley: allAlleys) {
             if (allAlleys.indexOf(alley) == overheadIndex) {
-                CAsm_Text cur = alley.getTextLayout().getTextLayout(mComponent.digitIndex).getText(1);
+                CAsm_Text cur = alley.getTextLayout().getTextLayout(mComponent.digitIndex).getText(1); // √√√ MATHFIX_2 awful reference
+                ASM_CONST.logAnnoyingReference(alley.getId(), mComponent.digitIndex, 1, "nextDigit()");
                 if (cur.getText().equals("1") || cur.isWritable == true) {
                     cur.cancelResult();
                     cur.setText("1");
@@ -62,8 +63,9 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
             //
             alley.getDotBag().setHollow(false);
 
-            currLayout = alley.getTextLayout();
+            currLayout = alley.getTextLayout(); // √√√
             currValue = currLayout.getDigit(mComponent.digitIndex);
+            ASM_CONST.logAnnoyingReference(alley.getId(), mComponent.digitIndex, -1, "getDigit()");
 
             if (currValue != null) {
                 totalValue += currValue;
@@ -185,10 +187,13 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
             @Override
             public void onAnimationEnd(Animator animation) {
                 if(resultBag.getCols() >= 10 && resultBag.dotsStatic()) {
-                    Integer temp = allAlleys.get(overheadIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit();
+                    Integer temp = allAlleys.get(overheadIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit(); // √√√ MATHFIX_2 awful reference
+                    ASM_CONST.logAnnoyingReference(overheadIndex, mComponent.digitIndex, 1, "animateAdd.onAnimationEnd()");
                     int number1 = (temp == null || temp.equals("")) ? 0 : temp.intValue();
-                    int number2 = allAlleys.get(firstBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit().intValue();
-                    int number3 = allAlleys.get(secondBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit().intValue();
+                    int number2 = allAlleys.get(firstBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit().intValue(); // √√√ MATHFIX_2 awful reference
+                    ASM_CONST.logAnnoyingReference(firstBagIndex, mComponent.digitIndex, 1, "animateAdd.onAnimationEnd()");
+                    int number3 = allAlleys.get(secondBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit().intValue(); // √√√ MATHFIX_2 awful reference
+                    ASM_CONST.logAnnoyingReference(secondBagIndex, mComponent.digitIndex, 1, "animateAdd.onAnimationEnd()");
 
                     if (number1 + number2 + number3 == 10 + resultBag.getOverflowNum()) {
                         performCarry();
@@ -246,10 +251,13 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
             @Override
             public void onAnimationEnd(Animator animation) {
                 if(resultBag.getCols() >= 10 && resultBag.dotsStatic()) {
-                    Integer temp = allAlleys.get(overheadIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit();
+                    Integer temp = allAlleys.get(overheadIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit(); // √√√
+                    ASM_CONST.logAnnoyingReference(overheadIndex, mComponent.digitIndex, 1, "animateAddForCountFrom.onAnimationEnd()");
                     int number1 = (temp == null || temp.equals("")) ? 0 : temp.intValue();
-                    int number2 = allAlleys.get(firstBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit().intValue();
-                    int number3 = allAlleys.get(secondBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit().intValue();
+                    int number2 = allAlleys.get(firstBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit().intValue(); // √√√ MATHFIX_2 awful reference
+                    ASM_CONST.logAnnoyingReference(firstBagIndex, mComponent.digitIndex, 1, "animateAddForCountFrom.onAnimationEnd()");
+                    int number3 = allAlleys.get(secondBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit().intValue(); // √√√ MATHFIX_2 awful reference
+                    ASM_CONST.logAnnoyingReference(secondBagIndex, mComponent.digitIndex, 1, "animateAddForCountFrom.onAnimationEnd()");
 
                     if (number1 + number2 + number3 == 10 + resultBag.getOverflowNum()) {
                         performCarry();
@@ -427,9 +435,8 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
                 //resultBag.setCols(resultBag.getCols()-1);
                 resultBag.setImage(resultBag.getImageName());
 
-                CAsm_TextLayout carryLayout = allAlleys.get(overheadIndex).getTextLayout();
-                CAsm_Text carryText = carryLayout.getTextLayout(mComponent.digitIndex-1).getText(1);
-                Integer currCarryNum = carryLayout.getDigit(mComponent.digitIndex-1);
+                CAsm_Text carryText  = allAlleys.get(overheadIndex).getTextLayout().getTextLayout(mComponent.digitIndex-1).getText(1); // √√√ MATHFIX_2 awful reference
+                ASM_CONST.logAnnoyingReference(overheadIndex, mComponent.digitIndex-1, 1, "createCarryAnimation.onAnimationEnd()");
 
                 carryText.setText("1");
             }
@@ -452,8 +459,8 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
     private CAsm_Text setCarryText(){
 
-        CAsm_TextLayout textLayout = allAlleys.get(overheadIndex).getTextLayout();
-        CAsm_Text t = textLayout.getTextLayout(mComponent.digitIndex - 1).getText(1);
+        CAsm_Text t = allAlleys.get(overheadIndex).getTextLayout().getTextLayout(mComponent.digitIndex - 1).getText(1); // √√√ MATHFIX_2 awful reference
+        ASM_CONST.logAnnoyingReference(overheadIndex, mComponent.digitIndex-1, 1, "setCarryText()");
         t.setResult();
 
         return t;
