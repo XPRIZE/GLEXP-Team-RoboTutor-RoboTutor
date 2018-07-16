@@ -80,7 +80,6 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
     //used for addition
     //
-    protected String    curStrategy;
     protected boolean   dotbagsVisible = true;
 
     //used to show:
@@ -269,16 +268,6 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         // init the dataset
         //
         loadDataSet(data);
-
-        //set default strategy as "count_up" -
-        // TODO: this is currently not used in practice (i.e. never changed)
-        //
-        if (data.strategy.equals("")) {
-            curStrategy = ASM_CONST.STRATEGY_COUNT_UP;
-        }
-        else {
-            curStrategy = data.strategy;
-        }
 
         numSlots   = CAsm_Util.maxDigits(dataset) + 1;
         digitIndex = numSlots;

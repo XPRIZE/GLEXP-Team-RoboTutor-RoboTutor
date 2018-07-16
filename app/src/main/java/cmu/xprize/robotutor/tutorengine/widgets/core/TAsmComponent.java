@@ -1043,11 +1043,9 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         boolean oldState = hasShown;
         super.setDotBagsVisible(_dotbagsVisible, curDigitIndex, startRow);
 
-        if (oldState == false && hasShown == true) {
-            if (curStrategy.equals(ASM_CONST.STRATEGY_COUNT_FROM))
-                publishFeature(TCONST.ASM_ADD_PROMPT_COUNT_FROM);
-            else
-                publishFeature(TCONST.ASM_ADD_PROMPT);
+        if (!oldState && hasShown) {
+
+            publishFeature(TCONST.ASM_ADD_PROMPT);
             publishFeature(TCONST.ASM_SUB_PROMPT);
 
             if (curNode.equals(ASM_CONST.NODE_ADD_PROMPT) || curNode.equals(ASM_CONST.NODE_SUB_PROMPT)) {

@@ -131,14 +131,9 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
             mComponent.delAddFeature(TCONST.ASM_ADD_PROMPT, "");
             mComponent.delAddFeature(TCONST.ASM_ADD_PROMPT_COUNT_FROM, "");
             mComponent.delAddFeature("", TCONST.ASM_CLICK_ON_DOT);
-            //check the strategy of putting down
-            if (alleyNum == ASM_CONST.OPERATOR_ROW - 1 && mComponent.curStrategy.equals(ASM_CONST.STRATEGY_COUNT_FROM) && !firstRowHasDown)
-                return;
-            else if (alleyNum == ASM_CONST.OPERAND_ROW - 1 && mComponent.curStrategy.equals(ASM_CONST.STRATEGY_COUNT_FROM)) {
-                firstRowHasDown = true;
-                animateAddForCountFrom(clickedBag, alleyNum);
-            } else
-                animateAdd(clickedDot, alleyNum);
+
+
+            animateAdd(clickedDot, alleyNum);
 
             mComponent.playChime();
         }

@@ -14,9 +14,6 @@ public class ASM_CONST {
     public static final String LOCAL_FILE = "LOCAL_FILE";
     public static final String LOCAL_FILE_PATH = "/sdcard/Arithmetic/asm_data.txt";
 
-    //different strategy used in addition
-    public static final String STRATEGY_COUNT_UP = "count_up";
-    public static final String STRATEGY_COUNT_FROM = "count_from";
 
     //used to judge the current node in animator_graph
     public static final String NODE_USERINPUT = "USERINPUT";
