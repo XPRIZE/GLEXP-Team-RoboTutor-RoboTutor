@@ -1026,8 +1026,12 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         super.exitWrite();
     }
 
-    public void highlightOverheadOrResult(String whichToHighlight) {
-        mechanics.highlightOverheadOrResult(whichToHighlight);
+    public void highlightOverhead() {
+         mechanics.highlightOverhead();
+    }
+
+    public void highlightResult() {
+         mechanics.highlightResult();
     }
 
     public void addMapToTutor(String key, String value) {

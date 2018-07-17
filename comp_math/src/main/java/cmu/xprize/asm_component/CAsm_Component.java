@@ -624,12 +624,12 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             if ((allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(0).getText().equals("") // √√√
                     || allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(0).getCurrentTextColor() == Color.RED) && curOverheadCol > 9) { // √√√
                 ASM_CONST.logAnnoyingReference(curOverheadCol, digitIndex, 0, "check if blank or red");
-                mechanics.highlightOverheadOrResult(ASM_CONST.HIGHLIGHT_OVERHEAD);
+                mechanics.highlightOverhead();
                 return;
             } else if (allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(1).getText().equals("") // √√√
                     || allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(1).getCurrentTextColor() == Color.RED) { // √√√
                 ASM_CONST.logAnnoyingReference(curOverheadCol, digitIndex, 1, "check if blank or red");
-                mechanics.highlightOverheadOrResult(ASM_CONST.HIGHLIGHT_OVERHEAD);
+                mechanics.highlightOverhead();
                 return;
             } else {
                 curOverheadCol = -1;

@@ -183,14 +183,15 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     }
 
-    public void highlightOverheadOrResult(String whichToHighlight) {
+    // Overridden by child class.
+    public void highlightOverhead() {
 
-        if (whichToHighlight.equals(ASM_CONST.HIGHLIGHT_RESULT)) {
+    }
 
-            mComponent.highlightText(allAlleys.get(resultIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1)); // √√√
-            ASM_CONST.logAnnoyingReference(resultIndex, mComponent.digitIndex, 1, "highlightOverheadOrResult()");
-            mComponent.delAddFeature(TCONST.ASM_ALL_DOTS_DOWN, "");
-        }
+    public void highlightResult() {
+        mComponent.highlightText(allAlleys.get(resultIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1)); // √√√
+        ASM_CONST.logAnnoyingReference(resultIndex, mComponent.digitIndex, 1, "highlightOverheadOrResult()");
+        mComponent.delAddFeature(TCONST.ASM_ALL_DOTS_DOWN, "");
     }
 
     public int getCurRow() { return 2; }

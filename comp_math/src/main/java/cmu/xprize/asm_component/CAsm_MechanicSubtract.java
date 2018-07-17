@@ -485,28 +485,29 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     }
 
     @Override
-    public void highlightOverheadOrResult(String whichToHighlight) {
+    public void highlightOverhead() {
+        super.highlightOverhead();
 
-        super.highlightOverheadOrResult(whichToHighlight);
+        if (digitBorrowingCol == 0 && digitBorrowingIndex == 0 || mComponent.digitIndex < digitBorrowingIndex)
+            return;
 
-        if (whichToHighlight.equals(ASM_CONST.HIGHLIGHT_OVERHEAD)) {
+        CAsm_TextLayout borrowableTextLayout = allAlleys.get(digitBorrowingCol).getTextLayout(); // √√√
+        CAsm_Text borrowableText = borrowableTextLayout.getTextLayout(digitBorrowingIndex).getText(1); // √√√
+        ASM_CONST.logAnnoyingReference(digitBorrowingCol, digitBorrowingIndex, 1, "highlightText if not struck");
 
-            if (digitBorrowingCol == 0 && digitBorrowingIndex == 0 || mComponent.digitIndex < digitBorrowingIndex)
-                return;
+        if (!borrowableText.getIsStruck()) mComponent.highlightText(borrowableText);
 
-            CAsm_TextLayout borrowableTextLayout = allAlleys.get(digitBorrowingCol).getTextLayout(); // √√√
-            CAsm_Text borrowableText = borrowableTextLayout.getTextLayout(digitBorrowingIndex).getText(1); // √√√
+        if (!isBorrowedValue && digitBorrowingCol != firstBagIndex) {
+            borrowableText = borrowableTextLayout.getTextLayout(digitBorrowingIndex).getText(0); // √√√
             ASM_CONST.logAnnoyingReference(digitBorrowingCol, digitBorrowingIndex, 1, "highlightText if not struck");
-
-            if (!borrowableText.getIsStruck()) mComponent.highlightText(borrowableText);
-
-            if (!isBorrowedValue && digitBorrowingCol != firstBagIndex) {
-                borrowableText = borrowableTextLayout.getTextLayout(digitBorrowingIndex).getText(0); // √√√
-                ASM_CONST.logAnnoyingReference(digitBorrowingCol, digitBorrowingIndex, 1, "highlightText if not struck");
-                if (!borrowableText.getIsStruck() && !borrowableText.getText().equals(""))
-                    mComponent.highlightText(borrowableText);
-            }
+            if (!borrowableText.getIsStruck() && !borrowableText.getText().equals(""))
+                mComponent.highlightText(borrowableText);
         }
+    }
+
+    @Override
+    public void highlightResult() {
+        super.highlightResult();
     }
 
 }
