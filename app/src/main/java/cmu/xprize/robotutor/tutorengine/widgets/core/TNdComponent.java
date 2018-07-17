@@ -127,21 +127,25 @@ public class TNdComponent extends CNd_Component implements ITutorObjectImpl, IDa
 
     }
 
+    // ND_CLEAN get rid of this
     @Override
     public CObjectDelegate getimpl() {
         return null;
     }
 
+    // ND_CLEAN get rid of this
     @Override
     public void zoomInOut(Float scale, Long duration) {
 
     }
 
+    // ND_CLEAN get rid of this
     @Override
     public void wiggle(String direction, Float magnitude, Long duration, Integer repetition) {
 
     }
 
+    // ND_CLEAN get rid of this
     @Override
     public void setAlpha(Float alpha) {
 

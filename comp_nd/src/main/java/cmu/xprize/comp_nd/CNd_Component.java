@@ -25,7 +25,7 @@ import cmu.xprize.util.TCONST;
 
 public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
-    protected RelativeLayout Scontent;
+    protected ConstraintLayout Scontent;
 
     // DataSource Variables
     protected   int                   _dataIndex = 0;
@@ -45,6 +45,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     // View Things
     protected Context mContext;
 
+    // ND_CLEAN get rid of this
     private LocalBroadcastManager bManager;
 
 
@@ -72,7 +73,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
         inflate(getContext(), R.layout.nd_layout, this);
 
-        Scontent = (RelativeLayout) findViewById(R.id.Scontent);
+        Scontent = (ConstraintLayout) findViewById(R.id.num_discrim_layout);
 
     }
 
@@ -129,7 +130,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
      * Point at a view
      */
     public void pointAtSomething() {
-        View v = findViewById(R.id.hello);
+        View v = findViewById(R.id.num_discrim_layout);
 
         int[] screenCoord = new int[2];
 
@@ -147,8 +148,8 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
      */
     protected void updateStimulus() {
 
-        ((TextView) findViewById(R.id.hello)).setText(String.valueOf(dataset[0]));
-
+        // ND_BUILD how to not display concrete numbers immediately?
+        // ND_BUILD display numbers
     }
 
     // Must override in TClass
@@ -168,7 +169,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         _dataIndex = 0;
     }
 
-    public RelativeLayout getContainer() {
+    public ConstraintLayout getContainer() {
         return Scontent;
     }
 }
