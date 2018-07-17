@@ -107,6 +107,7 @@
           "tracks": [
               
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""}
+            // ND_CLEAN simplify
     
           ]
         },
@@ -141,7 +142,7 @@
           "COMMENT": "TBD",
           "tracks": [
 
-              {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#PLAYWRONG:String", "features":""},
+              {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#PLAYWRONG:String", "features":""}
 
           ]
         },
@@ -166,6 +167,8 @@
 
 
             {"type": "COMMAND", "cmd": "WAIT"}
+            // ND_BUILD advance on proper click
+            // ND_BUILD √√√ put two obvious buttons
           ]
         }
 

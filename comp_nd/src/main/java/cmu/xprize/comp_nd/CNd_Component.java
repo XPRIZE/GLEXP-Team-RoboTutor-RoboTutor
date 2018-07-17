@@ -3,17 +3,19 @@ package cmu.xprize.comp_nd;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PointF;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.util.Locale;
+
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.comp_nd.ui.CNd_LayoutManager_BaseTen;
+import cmu.xprize.comp_nd.ui.CNd_LayoutManagerInterface;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -24,8 +26,6 @@ import cmu.xprize.util.TCONST;
  */
 
 public class CNd_Component extends RelativeLayout implements ILoadableObject {
-
-    protected ConstraintLayout Scontent;
 
     // DataSource Variables
     protected   int                   _dataIndex = 0;
@@ -45,7 +45,13 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     // View Things
     protected Context mContext;
 
-    // ND_CLEAN get rid of this
+    // so that UI can be changed w/o changing behavior model
+    protected CNd_LayoutManagerInterface layoutManager;
+
+    // TUTOR STATE
+    protected String _correctChoice; // can be "left" or "right"
+
+    // might need?
     private LocalBroadcastManager bManager;
 
 
@@ -56,8 +62,6 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         super(context);
         init(context, null);
     }
-
-
     public CNd_Component(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
@@ -71,9 +75,10 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
         mContext = context;
 
-        inflate(getContext(), R.layout.nd_layout, this);
+        layoutManager = new CNd_LayoutManager_BaseTen(this, context);
 
-        Scontent = (ConstraintLayout) findViewById(R.id.num_discrim_layout);
+        layoutManager.initialize();
+        layoutManager.resetView();
 
     }
 
@@ -101,6 +106,13 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         // first load dataset into fields
         loadDataSet(data);
 
+        // for now, can only be left or right
+        if (dataset[0] > dataset[1]) {
+            _correctChoice = "left";
+        } else if (dataset[0] < dataset[1]) {
+            _correctChoice = "right";
+        }
+
         updateStimulus();
 
     }
@@ -115,14 +127,6 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         task = data.task;
         layout = data.layout;
         dataset = data.dataset;
-
-    }
-
-    /**
-     * Resets the view for the next task.
-     */
-    protected void resetView() {
-
 
     }
 
@@ -148,8 +152,33 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
      */
     protected void updateStimulus() {
 
-        // ND_BUILD how to not display concrete numbers immediately?
-        // ND_BUILD display numbers
+        setVisibility(VISIBLE);
+
+        layoutManager.displayDigits(dataset[0], dataset[1]);
+        layoutManager.displayConcreteRepresentations(dataset[0], dataset[1]);
+
+        // ND_BUILD after saying the right prompt...
+        layoutManager.enableChooseNumber(true);
+
+    }
+
+    /**
+     * Can be left or right
+     *
+     * @param studentChoice can be "left" or "right".
+     */
+    public void registerStudentChoice(String studentChoice) {
+
+        Log.d(TAG, String.format(Locale.US, "The student chose the number on the %s. The correct answer is on the %s", studentChoice, _correctChoice));
+
+        if (studentChoice.equals(_correctChoice)) {
+            // ND_BUILD do something... move on in animator_graph
+            Log.d(TAG, "CORRECT!");
+        } else {
+            // ND_BUILD do something... move on in animator_graph
+            Log.d(TAG, "WRONG!");
+        }
+
     }
 
     // Must override in TClass
@@ -167,9 +196,5 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
         _dataIndex = 0;
-    }
-
-    public ConstraintLayout getContainer() {
-        return Scontent;
     }
 }

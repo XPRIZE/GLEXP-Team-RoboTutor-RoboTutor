@@ -4,8 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/num_discrim_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
+  <!-- ND_BUILD √√√ put two obvious buttons -->
 
   <!-- Guidelines -->
   <android.support.constraint.Guideline
