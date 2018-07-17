@@ -86,7 +86,10 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     private static final boolean QUICK_DEBUG = true;
     private static final String debugTutorVariant = "write.wrd";
     private static final String debugTutorId = "write.wrd:story_1_1";
-    private static final String debugTutorFile = "[encfolder]write.wrd.story_1_1.json";
+    private static final String debugTutorFile = "[file]write.wrd.story_1_1.json";
+    //amogh dictation
+//    private static final String debugTutorFile = "[file]write.wrd.dic_lc.begin.ha.18.json";
+
 
     private CTutorEngine        tutorEngine;
     private CMediaController    mMediaController;

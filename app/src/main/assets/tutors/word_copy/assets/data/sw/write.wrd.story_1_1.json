@@ -1,9 +1,9 @@
 {
-	"bootFeatures":"",
+	"bootFeatures":"FTR_DEMO_WRD",
 	"random": false,
 	"singleStimulus": false,
 	"dataSource": [
-		{ "isStory": true, "stimulus": "kwere,yaani", "audioStimulus": [ "kwere", "", "" ], "answer": "kwere,yaani" },
+		{ "isStory": true, "stimulus": "kwere", "audioStimulus": [ "kwere", "", "" ], "answer": "kwere" },
 		{ "stimulus": "yaani", "audioStimulus": [ "yaani", "", "" ], "answer": "yaani" },
 		{ "stimulus": "tumia", "audioStimulus": [ "tumia", "", "" ], "answer": "tumia" },
 		{ "stimulus": "alioa", "audioStimulus": [ "alioa", "", "" ], "answer": "alioa" },
