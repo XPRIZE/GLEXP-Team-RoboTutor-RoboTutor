@@ -1011,7 +1011,6 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                     return transitionData.harder;
 
                 case PREVIOUS:
-                    // XXX FIXME nextTutor = transitionData.previous;
                     // for now... do the super hacky way of iterating through the whole map until we find one who refers to "activeTutor" via "next"
                     String tempNextTutor = null;
                     for (Map.Entry<String, CAt_Data> e : transitionMap.entrySet()) {
@@ -1026,18 +1025,14 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                         tempNextTutor = activeTutor;
                     }
                     return tempNextTutor;
-                // XXX FIXME end super hacky code
 
 
                 case DOUBLE_NEXT:
-                    // XXX FIXME nextTutor = transitionData.double_next;
                     // for now... do the slightly less hacky way of doing "next" of "next"
                     String notNextTutor = transitionData.next;
 
                     CAt_Data nextTransitionData = transitionMap.get(notNextTutor);
                     return nextTransitionData.next;
-                // XXX FIXME end slightly less hacky code
-                // XXX note that these will not show up in the debugger graph
 
                 // this shouldn't happen...
                 default:
