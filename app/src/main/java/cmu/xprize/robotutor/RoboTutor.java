@@ -84,9 +84,9 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     // VARIABLES FOR QUICK DEBUG LAUNCH
     private static final boolean QUICK_DEBUG = true;
-    private static final String debugTutorVariant = "math";
-    private static final String debugTutorId = "math:0..8.ADD-1D-V-S.rand.3";
-    private static final String debugTutorFile = "[file]math_0..800.ADD-100-V-S.incr.13.json";//"[file]math_0..8.ADD-1-V-S.incr.1.json";
+    private static final String debugTutorVariant = "numdiscr";//"math";
+    private static final String debugTutorId = "numdiscr:sample";//"math:0..8.ADD-1D-V-S.rand.3";
+    private static final String debugTutorFile = "[file]numdiscr_sample.json";//"[file]math_0..800.ADD-100-V-S.incr.13.json";//"[file]math_0..8.ADD-1-V-S.incr.1.json";
 
     private CTutorEngine        tutorEngine;
     private CMediaController    mMediaController;
