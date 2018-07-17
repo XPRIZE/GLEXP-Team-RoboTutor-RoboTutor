@@ -32,7 +32,7 @@ import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
-import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
+import cmu.xprize.robotutor.tutorengine.ITutorObject;
 
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.comp_ask.CAsk_Data;
@@ -46,7 +46,7 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
 
-public class TAskComponent extends CAskComponent implements IBehaviorManager, ITutorObjectImpl, IDataSink, IEventSource {
+public class TAskComponent extends CAskComponent implements IBehaviorManager, ITutorObject, IDataSink, IEventSource {
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
@@ -138,31 +138,6 @@ public class TAskComponent extends CAskComponent implements IBehaviorManager, IT
     public void setLogManager(ILogManager logManager) {
         mSceneObject.setLogManager(logManager);
     }
-
-
-
-
-    @Override
-    public CObjectDelegate getimpl() {
-        return mSceneObject;
-    }
-
-    @Override
-    public void zoomInOut(Float scale, Long duration) {
-
-    }
-
-    @Override
-    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition) {
-
-    }
-
-    @Override
-    public void setAlpha(Float alpha) {
-
-    }
-
-
 
     //************************************************************************
     //************************************************************************

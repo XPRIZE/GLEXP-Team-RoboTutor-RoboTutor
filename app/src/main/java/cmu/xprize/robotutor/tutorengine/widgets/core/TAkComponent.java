@@ -39,7 +39,7 @@ import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
-import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
+import cmu.xprize.robotutor.tutorengine.ITutorObject;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
@@ -64,7 +64,7 @@ import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
  * Created by jacky on 2016/7/6.
  */
 
-public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDataSink, IPublisher, ITutorLogger,IBehaviorManager, IEventSource {
+public class TAkComponent extends CAk_Component implements ITutorObject, IDataSink, IPublisher, ITutorLogger,IBehaviorManager, IEventSource {
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
@@ -919,28 +919,6 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
     public void setLogManager(ILogManager logManager) {
         mSceneObject.setLogManager(logManager);
     }
-
-
-    @Override
-    public CObjectDelegate getimpl() {
-        return mSceneObject;
-    }
-
-    @Override
-    public void zoomInOut(Float scale, Long duration) {
-
-    }
-
-    @Override
-    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition) {
-
-    }
-
-    @Override
-    public void setAlpha(Float alpha) {
-
-    }
-
 
 
     //***********************************************************

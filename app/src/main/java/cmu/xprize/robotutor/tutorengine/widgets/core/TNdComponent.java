@@ -22,7 +22,7 @@ import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
-import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
+import cmu.xprize.robotutor.tutorengine.ITutorObject;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
@@ -40,7 +40,7 @@ import static cmu.xprize.util.TCONST.QGRAPH_MSG;
  * Generated automatically w/ code written by Kevin DeLand
  */
 
-public class TNdComponent extends CNd_Component implements ITutorObjectImpl, IDataSink, IPublisher, ITutorLogger, IBehaviorManager, IEventSource {
+public class TNdComponent extends CNd_Component implements ITutorObject, IDataSink, IPublisher, ITutorLogger, IBehaviorManager, IEventSource {
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
@@ -126,31 +126,6 @@ public class TNdComponent extends CNd_Component implements ITutorObjectImpl, IDa
     public void setLogManager(ILogManager logManager) {
 
     }
-
-    // ND_CLEAN get rid of this
-    @Override
-    public CObjectDelegate getimpl() {
-        return null;
-    }
-
-    // ND_CLEAN get rid of this
-    @Override
-    public void zoomInOut(Float scale, Long duration) {
-
-    }
-
-    // ND_CLEAN get rid of this
-    @Override
-    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition) {
-
-    }
-
-    // ND_CLEAN get rid of this
-    @Override
-    public void setAlpha(Float alpha) {
-
-    }
-
 
     private void reset() {
         // TODO retract Features
