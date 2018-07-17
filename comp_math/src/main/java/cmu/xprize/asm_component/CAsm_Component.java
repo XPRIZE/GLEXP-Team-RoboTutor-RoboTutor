@@ -275,11 +275,11 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
 
         if (ASM_CONST.USE_NEW_MATH) {
-            inflate(getContext(), R.layout.new_math, this);  // MATHFIX_LAYOUT new layout
+            inflate(getContext(), R.layout.new_math, this);  // MATHFIX_2 DONE new layout
             updateNewMathAlleys();
         }
         else {
-            updateAllAlleyForAddSubtract(); // MATHFIX_LAYOUT original layout
+            updateAllAlleyForAddSubtract(); // MATHFIX_2 DONE original layout
         }
 
 
@@ -310,7 +310,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     }
 
     /**
-     * MATHFIX_LAYOUT for debugging the entire layout tree
+     * MATHFIX_2 for debugging the entire layout tree
      */
     private void logLayoutTree(ViewGroup v, String parents) {
 
@@ -355,7 +355,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
 
     /**
-     * MATHFIX_LAYOUT NEXT NEXT NEXT Copy updateAllAlleyForAddSubtract, but simpler
+     * MATHFIX_2 Copy updateAllAlleyForAddSubtract, but simpler
      */
     private void updateNewMathAlleys() {
         try {
@@ -380,11 +380,11 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             TextView onesDigit = findViewById(R.id.top_one_text);
             onesDigit.setText(String.valueOf(operandA % 10));
 
-            // MATHFIX_LAYOUT NEXT update opA dot bag
+            // MATHFIX_2 NEXT update opA dot bag
 
-            // MATHFIX_LAYOUT NEXT align left properly
-            // MATHFIX_LAYOUT NEXT update operator
-            // MATHFIX_LAYOUT NEXT add baseline
+            // MATHFIX_2 NEXT align left properly
+            // MATHFIX_2 NEXT update operator
+            // MATHFIX_2 NEXT add baseline
 
 
             // UPDATE ALLEY OPERAND 2
@@ -399,7 +399,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             onesDigit = findViewById(R.id.mid_one_text);
             onesDigit.setText(String.valueOf(operandB % 10));
 
-            // MATHFIX_LAYOUT update opB dot bag
+            // MATHFIX_2 update opB dot bag
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -408,7 +408,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     }
 
     /**
-     * MATHFIX_LAYOUT Alley: this initializes alleys
+     * MATHFIX_2 Alley: this initializes alleys
      */
     private void updateAllAlleyForAddSubtract() {
         int     val, id;
@@ -418,7 +418,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         updateAlley(0, 0, ASM_CONST.ANIMATOR3, operation, false); // EXTRA SPACE animator alley
         updateAlley(1, 0, ASM_CONST.ANIMATOR2, operation, false); // EXTRA SPACE animator alley
         updateAlley(2, 0, ASM_CONST.ANIMATOR1, operation, false); // EXTRA SPACE animator alley
-        // MATHFIX_LAYOUT may need this
+        // MATHFIX_2 may need this
         updateAlley(3, 0, ASM_CONST.CARRY_BRW, operation, true);  // carry/borrow alley
 
         // update alleys

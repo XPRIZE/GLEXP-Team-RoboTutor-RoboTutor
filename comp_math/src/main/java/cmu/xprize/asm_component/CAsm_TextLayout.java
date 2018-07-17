@@ -105,7 +105,7 @@ public class CAsm_TextLayout extends LinearLayout {
         else
             setBackground(null);
 
-        setTextForAddSubtract();
+        setDigitTextForAddSubtract();
 
 
     }
@@ -133,7 +133,10 @@ public class CAsm_TextLayout extends LinearLayout {
 
     }
 
-    private void setTextForAddSubtract() {
+    /**
+     * MATHFIX_2 finally, this is where the Digit Texts are set
+     */
+    private void setDigitTextForAddSubtract() {
 
         int numSlots = getChildCount();
         String[] digits = CAsm_Util.intToDigits(value, numSlots);
@@ -146,7 +149,7 @@ public class CAsm_TextLayout extends LinearLayout {
                 for (int i = 0; i < numSlots; i++) {
 
                     curTextLayout = getTextLayout(i); // √√√
-                    curTextLayout.getText(1).setText(digits[i]); // √√√ MATHFIX_2 awful reference
+                    curTextLayout.getText(1).setText(digits[i]); // √√√
                     curTextLayout.getText(1).setBackgroundColor(ASM_CONST.DEBUG_TEXT_COLOR); // √√√
                     ASM_CONST.logAnnoyingReference(-1, i, 1, "setText to digit");
                     Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "setText CAsm_Text:1 in CAsm_TextLayout:" + i + " to " + digits[i]);
@@ -162,7 +165,7 @@ public class CAsm_TextLayout extends LinearLayout {
                 for (int i = 0; i < numSlots; i++) {
 
                     curTextLayout = getTextLayout(i); // √√√
-                    curTextLayout.getText(1).setText(digits[i]); // √√√ MATHFIX_2 awful reference
+                    curTextLayout.getText(1).setText(digits[i]); // √√√
                     curTextLayout.getText(1).setBackgroundColor(ASM_CONST.DEBUG_TEXT_COLOR); // √√√
                     ASM_CONST.logAnnoyingReference(-1, i, 1, "setText to digit");
                     Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "setText CAsm_Text:1 in CAsm_TextLayout:" + i + " to " + digits[i]);

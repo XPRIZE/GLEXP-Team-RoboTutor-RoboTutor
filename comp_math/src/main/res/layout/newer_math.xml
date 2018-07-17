@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Guidelines -->
+    <android.support.constraint.Guideline
+        android:id="@+id/operator_left"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/digit_lane_1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/digit_lane_2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.3"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/digit_lane_3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/borrow_carry_lane"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/op1_lane"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/op2_lane"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/result_lane"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8"/>
+
+
+    <!-- Operand 1 -->
+    <cmu.xprize.asm_component.CAsm_Text
+        android:id="@+id/top_hun_text"
+        android:layout_width="@dimen/text_box_width"
+        android:layout_height="@dimen/text_box_height"
+        android:text="9"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintLeft_toLeftOf="@id/digit_lane_1"
+        app:layout_constraintTop_toTopOf="@id/op1_lane"/>
+
+    <cmu.xprize.asm_component.CAsm_Text
+        android:id="@+id/top_ten_text"
+        android:layout_width="@dimen/text_box_width"
+        android:layout_height="@dimen/text_box_height"
+        android:text="0"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintLeft_toLeftOf="@id/digit_lane_2"
+        app:layout_constraintTop_toTopOf="@id/op1_lane"/>
+
+    <cmu.xprize.asm_component.CAsm_Text
+        android:id="@+id/top_one_text"
+        android:layout_width="@dimen/text_box_width"
+        android:layout_height="@dimen/text_box_height"
+        android:text="0"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintLeft_toLeftOf="@id/digit_lane_3"
+        app:layout_constraintTop_toTopOf="@id/op1_lane"/>
+
+
+    <!-- Operand 2 -->
+    <cmu.xprize.asm_component.CAsm_Text
+        android:id="@+id/mid_hun_text"
+        android:layout_width="@dimen/text_box_width"
+        android:layout_height="@dimen/text_box_height"
+        android:text="8"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintLeft_toLeftOf="@id/digit_lane_1"
+        app:layout_constraintTop_toTopOf="@id/op2_lane"/>
+
+    <cmu.xprize.asm_component.CAsm_Text
+        android:id="@+id/mid_ten_text"
+        android:layout_width="@dimen/text_box_width"
+        android:layout_height="@dimen/text_box_height"
+        android:text="0"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintLeft_toLeftOf="@id/digit_lane_2"
+        app:layout_constraintTop_toTopOf="@id/op2_lane"/>
+
+    <cmu.xprize.asm_component.CAsm_Text
+        android:id="@+id/mid_one_text"
+        android:layout_width="@dimen/text_box_width"
+        android:layout_height="@dimen/text_box_height"
+        android:text="0"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintLeft_toLeftOf="@id/digit_lane_3"
+        app:layout_constraintTop_toTopOf="@id/op2_lane"/>
+
+</android.support.constraint.ConstraintLayout>

@@ -19,16 +19,8 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
     public CAsm_MechanicAdd(CAsm_Component mComponent) {super.init(mComponent);}
 
     protected String operation = "+";
-    private boolean firstRowHasDown = false;
 
     static final String TAG = "CAsm_MechanicAdd";
-
-
-    @Override
-    public void next() {
-        super.next();
-        firstRowHasDown = false;
-    }
 
     @Override
     public void nextDigit() {
@@ -41,7 +33,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
         for (CAsm_Alley alley: allAlleys) {
             if (allAlleys.indexOf(alley) == overheadIndex) {
-                CAsm_Text cur = alley.getTextLayout().getTextLayout(mComponent.digitIndex).getText(1); // √√√ MATHFIX_2 awful reference
+                CAsm_Text cur = alley.getTextLayout().getTextLayout(mComponent.digitIndex).getText(1); // √√√
                 ASM_CONST.logAnnoyingReference(alley.getId(), mComponent.digitIndex, 1, "nextDigit()");
                 if (cur.getText().equals("1") || cur.isWritable == true) {
                     cur.cancelResult();
@@ -182,12 +174,12 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
             @Override
             public void onAnimationEnd(Animator animation) {
                 if(resultBag.getCols() >= 10 && resultBag.dotsStatic()) {
-                    Integer temp = allAlleys.get(overheadIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit(); // √√√ MATHFIX_2 awful reference
+                    Integer temp = allAlleys.get(overheadIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit(); // √√√
                     ASM_CONST.logAnnoyingReference(overheadIndex, mComponent.digitIndex, 1, "animateAdd.onAnimationEnd()");
                     int number1 = (temp == null || temp.equals("")) ? 0 : temp.intValue();
-                    int number2 = allAlleys.get(firstBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit().intValue(); // √√√ MATHFIX_2 awful reference
+                    int number2 = allAlleys.get(firstBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit().intValue(); // √√√
                     ASM_CONST.logAnnoyingReference(firstBagIndex, mComponent.digitIndex, 1, "animateAdd.onAnimationEnd()");
-                    int number3 = allAlleys.get(secondBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit().intValue(); // √√√ MATHFIX_2 awful reference
+                    int number3 = allAlleys.get(secondBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit().intValue(); // √√√
                     ASM_CONST.logAnnoyingReference(secondBagIndex, mComponent.digitIndex, 1, "animateAdd.onAnimationEnd()");
 
                     if (number1 + number2 + number3 == 10 + resultBag.getOverflowNum()) {
@@ -208,69 +200,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         animSetXY.start();
     }
 
-    public void animateAddForCountFrom(final CAsm_DotBag clickedBag, int alleyNum) {
-        final CAsm_DotBag resultBag = allAlleys.get(resultIndex).getDotBag();
-        int dy = determineAlleyDY(alleyNum, resultIndex);
 
-        AnimatorSet animSet = new AnimatorSet();
-        List<Animator> animList = new ArrayList<Animator>();
-        CAsm_Dot curDot;
-
-        resultBag.setRows(clickedBag.getRows());
-        resultBag.setCols(clickedBag.getCols());
-
-        for (int i = 0; i < clickedBag.getRows(); i++) {
-            for (int j = 0; j < clickedBag.getCols(); j++) {
-                curDot = resultBag.getDot(i, j);
-                curDot.setTranslationY(-dy);
-                curDot.setIsClickable(false);
-                animList.add(ObjectAnimator.ofFloat(curDot, "translationY", 0));
-            }
-        }
-        animSet.playTogether(animList);
-        animSet.setDuration(1000);
-        animSet.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                CAsm_Dot oldDot;
-                for (int i = 0; i < clickedBag.getRows(); i++) {
-                    for (int j = 0; j < clickedBag.getCols(); j++) {
-                        oldDot = clickedBag.getDot(i, j);
-                        oldDot.setHollow(true);
-                        oldDot.setIsClickable(false);
-                    }
-                }
-                clickedBag.setClickable(false);
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                if(resultBag.getCols() >= 10 && resultBag.dotsStatic()) {
-                    Integer temp = allAlleys.get(overheadIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit(); // √√√
-                    ASM_CONST.logAnnoyingReference(overheadIndex, mComponent.digitIndex, 1, "animateAddForCountFrom.onAnimationEnd()");
-                    int number1 = (temp == null || temp.equals("")) ? 0 : temp.intValue();
-                    int number2 = allAlleys.get(firstBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit().intValue(); // √√√ MATHFIX_2 awful reference
-                    ASM_CONST.logAnnoyingReference(firstBagIndex, mComponent.digitIndex, 1, "animateAddForCountFrom.onAnimationEnd()");
-                    int number3 = allAlleys.get(secondBagIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1).getDigit().intValue(); // √√√ MATHFIX_2 awful reference
-                    ASM_CONST.logAnnoyingReference(secondBagIndex, mComponent.digitIndex, 1, "animateAddForCountFrom.onAnimationEnd()");
-
-                    if (number1 + number2 + number3 == 10 + resultBag.getOverflowNum()) {
-                        performCarry();
-                    }
-                }
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-            }
-        });
-
-        animSet.start();
-    }
 
     public boolean allDotsDown() {
         CAsm_DotBag dotBag1 = allAlleys.get(firstBagIndex).getDotBag();
@@ -430,7 +360,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
                 //resultBag.setCols(resultBag.getCols()-1);
                 resultBag.setImage(resultBag.getImageName());
 
-                CAsm_Text carryText  = allAlleys.get(overheadIndex).getTextLayout().getTextLayout(mComponent.digitIndex-1).getText(1); // √√√ MATHFIX_2 awful reference
+                CAsm_Text carryText  = allAlleys.get(overheadIndex).getTextLayout().getTextLayout(mComponent.digitIndex-1).getText(1); // √√√
                 ASM_CONST.logAnnoyingReference(overheadIndex, mComponent.digitIndex-1, 1, "createCarryAnimation.onAnimationEnd()");
 
                 carryText.setText("1");
@@ -454,7 +384,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
 
     private CAsm_Text setCarryText(){
 
-        CAsm_Text t = allAlleys.get(overheadIndex).getTextLayout().getTextLayout(mComponent.digitIndex - 1).getText(1); // √√√ MATHFIX_2 awful reference
+        CAsm_Text t = allAlleys.get(overheadIndex).getTextLayout().getTextLayout(mComponent.digitIndex - 1).getText(1); // √√√
         ASM_CONST.logAnnoyingReference(overheadIndex, mComponent.digitIndex-1, 1, "setCarryText()");
         t.setResult();
 

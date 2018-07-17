@@ -60,6 +60,9 @@ public class CAsm_Text extends TextView implements IEventListener {
         } else return false;
     }
 
+    /**
+     * MATHFIX_LAYOUT should be set in design config
+     */
     public void reset() {
         isClicked = false;
 

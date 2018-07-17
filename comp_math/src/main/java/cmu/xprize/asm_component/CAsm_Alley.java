@@ -72,9 +72,7 @@ public class CAsm_Alley extends LinearLayout {
         // DotBag operations
         SdotBag.updateSize();
         SdotBag.setHollow(false);
-
         SdotBag.setDrawBorder(id != ASM_CONST.ANIMATOR1 && id != ASM_CONST.ANIMATOR2 && id != ASM_CONST.ANIMATOR3); // why
-
         SdotBag.setVisibility(INVISIBLE);
     }
 
