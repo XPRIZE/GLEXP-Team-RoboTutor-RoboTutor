@@ -130,6 +130,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     protected String            activityFeature; // features of current activity e.g. FTR_LETTERS:FTR_DICTATION
 
+    protected List<Integer>     _spaceIndices = new ArrayList<Integer>();
+
     // json loadable
     public String               bootFeatures = EMPTY;
     public boolean              random       = false;
@@ -372,16 +374,23 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         _metricValid = _metric.testConstraint(candidate.getGlyph(), this);
         _isValid     = _charValid && _metricValid; // _isValid essentially means "is a correct drawing"
 
-        //amogh added
+        //amogh added to set the valid character in response.
         if(_isValid){
             CStimulusController resp = (CStimulusController)mResponseViewList.getChildAt(mActiveIndex);
             String charExpected = gController.getExpectedChar();
             resp.setStimulusChar(charExpected,false);
 //            updateResponseView(mResponse);
+            if(_spaceIndices.contains(mActiveIndex-1)){
+                CGlyphController    gControllerSpace = (CGlyphController)mGlyphList.getChildAt(mActiveIndex-1);
+                gControllerSpace.setIsStimulus("");
+                gControllerSpace.updateCorrectStatus(_isValid);
+            }
         }
         // Update the controller feedback colors
         //
         mActiveController.updateCorrectStatus(_isValid);
+
+
 
         if(!singleStimulus) {
             stimController.updateStimulusState(_isValid);
@@ -1070,6 +1079,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 if(!expectedChar.equals(" ")) {
                     v.setProtoGlyph(_glyphSet.cloneGlyph(expectedChar));
+                }
+                else{
+                    _spaceIndices.add(i1);
                 }
 
                 mGlyphList.addView(v);

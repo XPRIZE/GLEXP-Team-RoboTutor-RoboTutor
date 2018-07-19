@@ -1291,7 +1291,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     public void setIsStimulus() {
 
         mIsStimulus = true;
-        this.setOnTouchListener(null);
+//        this.setOnTouchListener(null);
     }
 
     public boolean checkIsStimulus() {

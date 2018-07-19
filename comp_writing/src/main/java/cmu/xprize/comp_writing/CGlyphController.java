@@ -35,6 +35,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.RemoteViews;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -80,6 +81,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     protected final Handler         mainHandler = new Handler(Looper.getMainLooper());
     protected HashMap               queueMap    = new HashMap();
     protected boolean               _qDisabled  = false;
+
 
     private LocalBroadcastManager   bManager;
 
