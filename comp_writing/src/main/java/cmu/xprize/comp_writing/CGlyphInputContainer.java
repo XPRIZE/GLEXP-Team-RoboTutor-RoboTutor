@@ -479,8 +479,10 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
                 mWritingComponent.applyBehavior(WR_CONST.WRITE_BEHAVIOR);
 
-                if(mScrollView != null)
-                    mScrollView.setEnableScrolling(mHasGlyph);
+//                if(mScrollView != null) //amogh commented, so that the existing glyph can be erased
+                    mScrollView.setEnableScrolling(false); //amogh edited so that existing glyph can can be erased by drawing over it.
+
+
 
                 _prevTime = _time = System.nanoTime();
                 startTouch(x, y);
@@ -510,9 +512,15 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                 //#Mod305 Mar 9 2017 -
                 // Ensure glyph valid or this may cause issues - fixes #305
                 //
+
+                //amogh added
                 if(_drawGlyph != null) {
+                    if (mHasGlyph){
+                        erase();
+                    }
                     moveTouch(x, y);
                 }
+
                 break;
 
             case MotionEvent.ACTION_UP:
@@ -1343,7 +1351,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             if(_counter != null)
                 _counter.cancel();
 
-            this.setOnTouchListener(null);
+            this.setOnTouchListener(this);
 
             // If user is in the process of writing in this field then clear it.
             //
