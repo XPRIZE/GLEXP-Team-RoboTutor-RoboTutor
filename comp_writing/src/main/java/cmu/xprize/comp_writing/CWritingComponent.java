@@ -285,6 +285,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         int index = mGlyphList.indexOfChild(child);
 
         mGlyphList.removeViewAt(index);
+        mResponseViewList.removeViewAt(index);
 //        mRecogList.removeViewAt(index); //amogh commented to avoid removal from stimulus
     }
 
@@ -310,6 +311,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //
 //        r.setLinkedScroll(mDrawnScroll);         //amogh commented to avoid removal from stimulus
 //        r.setWritingController(this);          //amogh commented to avoid removal from stimulus
+
+
+        r = (CStimulusController)LayoutInflater.from(getContext())  //amogh added
+                                    .inflate(R.layout.recog_resp_comp, null, false);   //amogh added
+        mResponseViewList.addView(r, index + inc);          //amogh added
+
+        r.setLinkedScroll(mDrawnScroll);         //amogh added
+        r.setWritingController(this);          //amogh added
+
 
         // create a new view
         v = (CGlyphController)LayoutInflater.from(getContext())
@@ -540,8 +550,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public void stimulusClicked(CStimulusController controller) {
 
         CGlyphController   v;
-
-        int index = mRecogList.indexOfChild(controller);
+        int index = mResponseViewList.indexOfChild(controller); //amogh edited
 
         v = (CGlyphController) mGlyphList.getChildAt(index);
 
@@ -978,6 +987,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         // Add the recognized response display containers
         //
+        _spaceIndices.clear();
         mRecogList.removeAllViews();
         mResponseViewList.removeAllViews(); //amogh added
         // XYZ check if is story
@@ -1093,6 +1103,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 resp = (CStimulusController)LayoutInflater.from(getContext())
                         .inflate(R.layout.recog_resp_comp, null, false);
                 mResponseViewList.addView(resp);
+                resp.setLinkedScroll(mDrawnScroll);
+                resp.setWritingController(this);
                 //amogh add finish
             }
         }

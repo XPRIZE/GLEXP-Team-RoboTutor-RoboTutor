@@ -132,7 +132,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         mInsLftSpaceBut.setVisibility(VISIBLE);
         mInsRgtSpaceBut.setVisibility(VISIBLE);
         mDeleteSpaceBut.setVisibility(VISIBLE);
-        mEraseGlyphBut.setVisibility(VISIBLE);
+        mEraseGlyphBut.setVisibility(INVISIBLE);
 
         mGlyphReplayBut = (ImageButton)findViewById(R.id.glyph_playback);
         mGlyphMorphBut = (ImageButton)findViewById(R.id.glyph_align);
@@ -216,7 +216,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         @Override
         public void onClick(View v) {
             Log.v(QGRAPH_MSG, "event.click: " + " CGlyphController:deleteItem");
-
+//            mDeleteSpaceBut.set
             mWritingComponent.deleteItem(mThis);
         }
     }

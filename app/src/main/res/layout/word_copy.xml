@@ -17,23 +17,23 @@
     <cmu.xprize.robotutor.tutorengine.widgets.core.TView
         android:id="@+id/SstimulusBG"
         android:layout_below="@id/Sbanner"
-        app:layout_heightPercent="15%"
+        app:layout_heightPercent="20%"
         android:layout_width="match_parent"
-        android:background="#FF0000"/>
+        android:background="#FFFFFF"/>
 
     <cmu.xprize.robotutor.tutorengine.widgets.core.TView
         android:id="@+id/SresponseviewBG"
         android:layout_below="@id/SstimulusBG"
-        app:layout_heightPercent="15%"
+        app:layout_heightPercent="10%"
         android:layout_width="match_parent"
-        android:background="#FA8072"/>
+        android:background="#FFFFFF"/>
 
     <cmu.xprize.robotutor.tutorengine.widgets.core.TView
         android:id="@+id/SinputBG"
         android:layout_below="@id/SresponseviewBG"
         app:layout_heightPercent="60%"
         android:layout_width="match_parent"
-        android:background="#FFFF00"/>
+        android:background="#FFFFFF"/>
 
     <cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout
         android:id="@+id/SaudioReplay"
@@ -63,7 +63,7 @@
         android:layout_below="@id/Sbanner"
         android:layout_width="match_parent"
         android:visibility="invisible"
-        app:layout_heightPercent="15%">
+        app:layout_heightPercent="20%">
 
         <cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView
             android:id="@+id/Sstimulus"
@@ -95,7 +95,7 @@
         android:layout_below="@id/SstimulusBG"
         android:layout_width="match_parent"
         android:visibility="visible"
-        app:layout_heightPercent="15%">
+        app:layout_heightPercent="10%">
 
         <cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView
             android:id="@+id/Sresponseview"

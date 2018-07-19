@@ -155,7 +155,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 // TODO: DEBUG only
 //        mRecogList.setOnTouchListener(new RecogTouchListener());
 //        mGlyphList.setOnTouchListener(new drawnTouchListener());
-
+        mResponseViewScroll.setLinkedScroll(mDrawnScroll);
         mRecognizedScroll.setLinkedScroll(mDrawnScroll);
         mDrawnScroll.setLinkedScroll(mRecognizedScroll);
 
