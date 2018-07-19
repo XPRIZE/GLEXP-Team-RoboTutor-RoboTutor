@@ -81,6 +81,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     private   List<IEventListener>  mListeners = new ArrayList<IEventListener>();
 
     protected CLinkedScrollView mRecognizedScroll;
+    protected CLinkedScrollView mResponseViewScroll;
     protected CLinkedScrollView mDrawnScroll;
     private   IGlyphController  mActiveController;
     protected int               mActiveIndex;
@@ -88,6 +89,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected ImageButton       mReplayButton;
 
     protected LinearLayout      mRecogList;
+    protected LinearLayout      mResponseViewList;
     protected LinearLayout      mGlyphList;
     protected LinearLayout      mGlyphAnswerList;
 
@@ -281,7 +283,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         int index = mGlyphList.indexOfChild(child);
 
         mGlyphList.removeViewAt(index);
-        mRecogList.removeViewAt(index);
+//        mRecogList.removeViewAt(index); //amogh commented to avoid removal from stimulus
     }
 
 
@@ -298,13 +300,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         int index = mGlyphList.indexOfChild(child);
 
         // create a new view
-        r = (CStimulusController)LayoutInflater.from(getContext())
-                                    .inflate(R.layout.recog_resp_comp, null, false);
 
-        mRecogList.addView(r, index + inc);
-
-        r.setLinkedScroll(mDrawnScroll);
-        r.setWritingController(this);
+//        r = (CStimulusController)LayoutInflater.from(getContext())  //amogh commented to avoid removal from stimulus
+//                                    .inflate(R.layout.recog_resp_comp, null, false);   //amogh commented to avoid removal from stimulus
+////amogh commented to avoid removal from stimulus
+//        mRecogList.addView(r, index + inc);          //amogh commented to avoid removal from stimulus
+//
+//        r.setLinkedScroll(mDrawnScroll);         //amogh commented to avoid removal from stimulus
+//        r.setWritingController(this);          //amogh commented to avoid removal from stimulus
 
         // create a new view
         v = (CGlyphController)LayoutInflater.from(getContext())
@@ -369,7 +372,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         _metricValid = _metric.testConstraint(candidate.getGlyph(), this);
         _isValid     = _charValid && _metricValid; // _isValid essentially means "is a correct drawing"
 
-
+        //amogh added
+        if(_isValid){
+            CStimulusController resp = (CStimulusController)mResponseViewList.getChildAt(mActiveIndex);
+            String charExpected = gController.getExpectedChar();
+            resp.setStimulusChar(charExpected,false);
+//            updateResponseView(mResponse);
+        }
         // Update the controller feedback colors
         //
         mActiveController.updateCorrectStatus(_isValid);
@@ -931,6 +940,18 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
     }
 
+    //amogh added
+    public void updateResponseView(String a)
+    {
+        mResponseViewList.removeAllViews();
+        CStimulusController resp;
+        resp = (CStimulusController)LayoutInflater.from(getContext()).inflate(R.layout.recog_resp_comp, null, false);
+        resp.setStimulusChar(a,false);
+        mResponseViewList.addView(resp);
+        resp.setLinkedScroll(mDrawnScroll);
+        resp.setWritingController(this);
+    }
+
     /**
      * @param data
      * XYZ
@@ -939,6 +960,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         CStimulusController r;
         CGlyphController    v;
+        CStimulusController resp; //amogh added
 
         boolean isStory = data.isStory;
         mStimulus = data.stimulus;
@@ -948,7 +970,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         // Add the recognized response display containers
         //
         mRecogList.removeAllViews();
-
+        mResponseViewList.removeAllViews(); //amogh added
         // XYZ check if is story
         if(isStory) {
             // mStimulus = getStoryStimulus(storyName, storyLine);
@@ -1054,6 +1076,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 v.setLinkedScroll(mDrawnScroll);
                 v.setWritingController(this);
+
+                //amogh added
+                resp = (CStimulusController)LayoutInflater.from(getContext())
+                        .inflate(R.layout.recog_resp_comp, null, false);
+                mResponseViewList.addView(resp);
+                //amogh add finish
             }
         }
     }

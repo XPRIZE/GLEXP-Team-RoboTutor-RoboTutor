@@ -483,23 +483,24 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                     mScrollView.setEnableScrolling(mHasGlyph);
 
                 _prevTime = _time = System.nanoTime();
-
-                if(!mHasGlyph) {
-
-                    startTouch(x, y);
-                }
-                else if(_DEVMODE) {
-
-                    if(_showUserGlyph)
-                        _drawGlyph = _userGlyph;
-                    else
-                        _drawGlyph = _protoGlyph;
-
-                    if(_drawGlyph != null) {
-
-                        _recognizer.postToQueue(CGlyphInputContainer.this, _drawGlyph);
-                    }
-                }
+                startTouch(x, y);
+//
+//                if(!mHasGlyph) {
+//
+//                    startTouch(x, y);
+//                }
+//                else if(_DEVMODE) {
+//
+//                    if(_showUserGlyph)
+//                        _drawGlyph = _userGlyph;
+//                    else
+//                        _drawGlyph = _protoGlyph;
+//
+//                    if(_drawGlyph != null) {
+//
+//                        _recognizer.postToQueue(CGlyphInputContainer.this, _drawGlyph);
+//                    }
+//                }
                 break;
 
             case MotionEvent.ACTION_MOVE:

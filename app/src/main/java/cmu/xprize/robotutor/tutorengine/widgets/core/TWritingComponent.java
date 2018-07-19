@@ -143,6 +143,9 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         mRecognizedScroll = (CLinkedScrollView) findViewById(R.id.Sstimulus);
         mRecogList        = (LinearLayout) findViewById(R.id.SstimulusList);
 
+        mResponseViewScroll = (CLinkedScrollView) findViewById(R.id.Sresponseview);
+        mResponseViewList = (LinearLayout) findViewById(R.id.SresponseviewList);
+
         mDrawnScroll = (CLinkedScrollView) findViewById(R.id.SfingerWriter);
         mGlyphList   = (LinearLayout) findViewById(R.id.Sdrawn_glyphs);
         mGlyphList.setClipChildren(false);
