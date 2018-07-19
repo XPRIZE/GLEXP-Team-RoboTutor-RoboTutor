@@ -517,6 +517,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                 if(_drawGlyph != null) {
                     if (mHasGlyph){
                         erase();
+
                     }
                     moveTouch(x, y);
                 }

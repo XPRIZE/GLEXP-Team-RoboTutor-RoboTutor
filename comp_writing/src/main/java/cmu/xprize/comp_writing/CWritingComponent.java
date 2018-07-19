@@ -385,13 +385,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         _isValid     = _charValid && _metricValid; // _isValid essentially means "is a correct drawing"
 
         //amogh added to set the valid character in response.
-        if(_isValid){
+
             CStimulusController resp = (CStimulusController)mResponseViewList.getChildAt(mActiveIndex);
             String charExpected = gController.getExpectedChar();
-            resp.setStimulusChar(charExpected,false);
+            resp.setStimulusChar(mResponse,false);
 //            updateResponseView(mResponse);
+        if(_isValid){
             if(_spaceIndices.contains(mActiveIndex-1)){
                 CGlyphController    gControllerSpace = (CGlyphController)mGlyphList.getChildAt(mActiveIndex-1);
+                CStimulusController respSpace = (CStimulusController)mResponseViewList.getChildAt(mActiveIndex-1);
+                respSpace.setStimulusChar("",false);
                 gControllerSpace.setIsStimulus("");
                 gControllerSpace.updateCorrectStatus(_isValid);
             }
