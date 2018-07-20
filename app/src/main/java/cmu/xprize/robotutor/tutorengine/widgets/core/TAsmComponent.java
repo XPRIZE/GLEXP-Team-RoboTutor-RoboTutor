@@ -37,7 +37,6 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.util.IBehaviorManager;
-import cmu.xprize.util.IEvent;
 import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.IScope;
@@ -105,11 +104,11 @@ public class TAsmComponent extends CAsm_Component implements ITutorObject, IData
         mSceneObject.setVisibility(visible);
     }
 
-    public void evaluateWhole () {
+    public void evaluateWhole (String character) {
 
         reset();
 
-        boolean wholeCorrect = isWholeCorrect();
+        boolean wholeCorrect = isWholeCorrect(character); // MATHFIX_WRITE here is where assessment happens
         trackAndLogPerformance();
 
 
@@ -694,6 +693,8 @@ public class TAsmComponent extends CAsm_Component implements ITutorObject, IData
         extractFeatureContents(builder, _FeatureMap);
 
         RoboTutor.logManager.postTutorState(TUTOR_STATE_MSG, "target#math," + logData + builder.toString());
+
+        Log.i(ASM_CONST.TAG_DEBUG_MATHFIX_UI_REF, logData);
     }
 
     // ITutorLogger - End
@@ -966,19 +967,23 @@ public class TAsmComponent extends CAsm_Component implements ITutorObject, IData
 
 
     /**
-     * These events come from the FingerWriter Component which is connected in the Layout XML
+     * MATHFIX_WRITE These events come from the FingerWriter Component which is connected in the Layout XML
      *
-     * @param event
-     */    @Override
-    public void onEvent(IEvent event) {
+     * @param character
+     */
+    @Override
+    public void charRecCallback(String character) {
 
         retractFeature(TCONST.ASM_ALL_DOTS_DOWN);
 
         //retractFeature(TCONST.ASM_MULTI);
-        super.onEvent(event);
+        super.charRecCallback(character);
 
-        evaluateWhole();
+        // MATHFIX_WRITE this is where the digit should be updated
 
+        evaluateWhole(character);
+
+        // MATHFIX_WRITE
         postEvent(ASM_CONST.INPUT_BEHAVIOR);
     }
 

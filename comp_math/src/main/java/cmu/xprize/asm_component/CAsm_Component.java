@@ -26,16 +26,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
 import cmu.xprize.asm_component.ui.CAsm_LayoutManagerInterface;
 import cmu.xprize.asm_component.ui.CAsm_LayoutManager_NewMath;
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.comp_writing.simple.ICharRecListener_Simple;
 import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.IBehaviorManager;
-import cmu.xprize.util.IEvent;
-import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
@@ -43,7 +43,7 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
 
-public class CAsm_Component extends LinearLayout implements IBehaviorManager, ILoadableObject, IEventListener, IPublisher {
+public class CAsm_Component extends LinearLayout implements IBehaviorManager, ILoadableObject, ICharRecListener_Simple, IPublisher {
 
 
     private Context mContext;
@@ -836,12 +836,13 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
      * but ans will always be one digit.
      * @return
      */
-    public boolean isWholeCorrect() {
+    public boolean isWholeCorrect(String character) {
 
         int ans;
 
-        ans = allAlleys.get(numAlleys - 1).getNum();
+        ans = allAlleys.get(numAlleys - 1).getNum(); // MATHFIX_WRITE are you kidding me... why not use the event that you *just got*
 
+        Log.wtf("Y_U_DO_THIS", String.format(Locale.US, "compare character=%s to ans=%s to corValue=%s", character, ans, corValue)); // MATHFIX_WRITE these will be the same
 
         return corValue.equals(ans);
 
@@ -868,7 +869,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         ASM_CONST.logAnnoyingReference(numAlleys - 1, -1, -1, "isDigitCorrect");
 
         // first check bottom answer
-        int writtenDigit = textLayout.getDigit(digitIndex); // MATHFIX_WRITE how does the written digit get sent???
+        int writtenDigit = textLayout.getDigit(digitIndex);
         bottomCorrect = corDigit.equals(writtenDigit);
 
         // if the bottom was not correct, and the bottom was not null
@@ -1000,15 +1001,16 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
         if (!mPopup.isActive && !mPopupSupplement.isActive) {
 
-            applyBehavior(ASM_CONST.START_WRITING_BEHAVIOR); // MATHFIX_WRITE this prevents scaffolding. What happens next?
+            applyBehavior(ASM_CONST.START_WRITING_BEHAVIOR); // MATHFIX_WRITE this prevents scaffolding
 
-            ArrayList<IEventListener> listeners = new ArrayList<>();
+            // MATHFIX_WRITE is there a simpler way to do this?
+            ArrayList<ICharRecListener_Simple> listeners = new ArrayList<>();
 
             listeners.add(t2);
             listeners.add(this);
 
             mPopup.showAtLocation(this, Gravity.LEFT, 10, 10); // MATHFIX_WRITE show popup MATHFIX_LAYOUT this should be in Layout
-            mPopup.enable(true, listeners);                          // MATHFIX_WRITE who is listeners?
+            mPopup.enable(true, listeners);                          // MATHFIX_WRITE listeners contain the CAsm_Text (which updates its value) and this (which detects if choice was correct)
 
             if(isClickingBorrowing) {
                 mPopup.update(t2, 120, -500, 500, 500);
@@ -1019,7 +1021,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             else {
                 mPopup.update(t2, 60, 20, 500, 500);
 
-                mPopup.setExpectedDigit(getCorrectDigit().toString());    // MATHFIX_WRITE waiting for digit...
+                mPopup.setExpectedDigit(getCorrectDigit().toString());    // MATHFIX_WRITE does this get used?
                 Log.d(TAG, "Correct Answer Digit: " + getCorrectDigit().toString());
             }
 
@@ -1074,8 +1076,10 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     }
 
 
+    // MATHFIX_WRITE NEXT can this be simpler?
+    // MATHFIX_WRITE NEXT can we change the digit from here?
     @Override
-    public void onEvent(IEvent event) { // MATHFIX_WRITE NEXT put a debug statement here... this is where Write is registered
+    public void charRecCallback(String character) {
 
         if (!hasTwoPopup) {
             mPopup.reset();
@@ -1471,16 +1475,6 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
         _dataIndex = 0;
 
-    }
-
-    /**
-     * MATHFIX_DEBUG put this in each
-     *
-     * @param methodName
-     */
-    public void debugNewMath(String methodName) {
-
-        Log.i(ASM_CONST.TAG_DEBUG_MATHFIX_UI_REF, "animator_graph: " + methodName);
     }
 
 }

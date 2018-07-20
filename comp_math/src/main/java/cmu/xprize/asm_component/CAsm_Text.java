@@ -4,25 +4,19 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 
-import cmu.xprize.util.CAnimatorUtil;
-import cmu.xprize.util.IEvent;
-import cmu.xprize.util.IEventListener;
-import cmu.xprize.util.TCONST;
+import cmu.xprize.comp_writing.simple.ICharRecListener_Simple;
 
 /**
  *
  */
-public class CAsm_Text extends TextView implements IEventListener {
+public class CAsm_Text extends TextView implements ICharRecListener_Simple {
 
     float scale = getResources().getDisplayMetrics().density;
     int textSize = (int)(ASM_CONST.textSize*scale);
@@ -127,10 +121,15 @@ public class CAsm_Text extends TextView implements IEventListener {
         return false;
     }
 
-    public void onEvent(IEvent event) {
-        //Called when user responds through the fingerwriter, to change the text to user's response.
-        String response  = (String)event.getString(TCONST.FW_VALUE);
-        this.setText(response);
+    /**
+     * Called when user responds through the fingerwriter, to change the text to user's response.
+     *
+     * @param character
+     */
+    public void charRecCallback(String character) {
+        //String response  = (String)event.getString(TCONST.FW_VALUE);
+        // MATHFIX_WRITE this listener should not exist. This digit should be set from TAsmComponent
+        this.setText(character);
     }
 
     public void setIsClicked(boolean _isClicked) {this.isClicked = _isClicked;}

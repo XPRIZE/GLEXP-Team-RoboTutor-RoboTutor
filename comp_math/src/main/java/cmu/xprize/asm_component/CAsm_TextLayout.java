@@ -255,7 +255,7 @@ public class CAsm_TextLayout extends LinearLayout {
     }
 
     /**
-     * Gets the number value of this TextLayout, i.e. a 3 in the hundreds column returns 300.
+     * Gets the CUMULATIVE number value of this and all TextLayout... i.e. a 3 in the hundreds column returns 300 + t * 10 + o
      *
      * @return
      */
