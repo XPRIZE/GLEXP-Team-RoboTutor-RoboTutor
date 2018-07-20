@@ -107,7 +107,7 @@
           "tracks": [
               
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""}
-            // ND_CLEAN simplify
+            // ND_CLEAN simplify... get rid of some of these graph steps
     
           ]
         },
@@ -169,6 +169,7 @@
             {"type": "COMMAND", "cmd": "WAIT"}
             // ND_BUILD advance on proper click
             // ND_BUILD √√√ put two obvious buttons
+            // ND_BUILD make buttons more obvious
           ]
         }
 

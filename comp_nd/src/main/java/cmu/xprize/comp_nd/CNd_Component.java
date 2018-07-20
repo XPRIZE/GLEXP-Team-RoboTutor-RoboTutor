@@ -46,7 +46,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     protected Context mContext;
 
     // so that UI can be changed w/o changing behavior model
-    protected CNd_LayoutManagerInterface layoutManager;
+    protected CNd_LayoutManagerInterface _layoutManager;
 
     // TUTOR STATE
     protected String _correctChoice; // can be "left" or "right"
@@ -75,10 +75,10 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
         mContext = context;
 
-        layoutManager = new CNd_LayoutManager_BaseTen(this, context);
+        _layoutManager = new CNd_LayoutManager_BaseTen(this, context);
 
-        layoutManager.initialize();
-        layoutManager.resetView();
+        _layoutManager.initialize();
+        _layoutManager.resetView();
 
     }
 
@@ -113,6 +113,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
             _correctChoice = "right";
         }
 
+        // ND_CLEAN simplify... make this consistent w/ animator graph
         updateStimulus();
 
     }
@@ -154,11 +155,11 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
         setVisibility(VISIBLE);
 
-        layoutManager.displayDigits(dataset[0], dataset[1]);
-        layoutManager.displayConcreteRepresentations(dataset[0], dataset[1]);
+        _layoutManager.displayDigits(dataset[0], dataset[1]);
+        _layoutManager.displayConcreteRepresentations(dataset[0], dataset[1]);
 
         // ND_BUILD after saying the right prompt...
-        layoutManager.enableChooseNumber(true);
+        _layoutManager.enableChooseNumber(true);
 
     }
 

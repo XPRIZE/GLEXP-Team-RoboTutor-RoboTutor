@@ -112,6 +112,7 @@
 
         <!-- DotBag -->
         <cmu.xprize.asm_component.CAsm_DotBag
+            android:id="@+id/top_dotbag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <TableRow

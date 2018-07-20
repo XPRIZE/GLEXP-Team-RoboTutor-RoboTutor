@@ -63,17 +63,22 @@ public class CAsm_Alley extends LinearLayout {
         this.numSlots = _numSlots;
         this.image = _image;
 
-        STextLayout.resetAllValues();
 
-        if (id != ASM_CONST.OPERATOR_ROW && id != ASM_CONST.OPERAND_ROW)
-            STextLayout.resetAllBackground();
-        STextLayout.update(id, val, operation, numSlots);
+        if(!ASM_CONST.USE_NEW_MATH) {
 
-        // DotBag operations
-        SdotBag.updateSize();
-        SdotBag.setHollow(false);
-        SdotBag.setDrawBorder(id != ASM_CONST.ANIMATOR1 && id != ASM_CONST.ANIMATOR2 && id != ASM_CONST.ANIMATOR3); // why
-        SdotBag.setVisibility(INVISIBLE);
+            STextLayout.resetAllValues();
+
+            if (id != ASM_CONST.OPERATOR_ROW && id != ASM_CONST.OPERAND_ROW)
+                STextLayout.resetAllBackground();               // MATHFIX_BUILD what is this?
+            STextLayout.update(id, val, operation, numSlots); // MATHFIX_BUILD what is this?
+
+            // MATHFIX_BUILD what is this?
+            // DotBag operations
+            SdotBag.updateSize();
+            SdotBag.setHollow(false);
+            SdotBag.setDrawBorder(id != ASM_CONST.ANIMATOR1 && id != ASM_CONST.ANIMATOR2 && id != ASM_CONST.ANIMATOR3); // why
+            SdotBag.setVisibility(INVISIBLE);
+        }
     }
 
     private void createText() {

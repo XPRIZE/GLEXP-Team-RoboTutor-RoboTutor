@@ -29,6 +29,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
+import cmu.xprize.asm_component.ui.CAsm_LayoutManagerInterface;
+import cmu.xprize.asm_component.ui.CAsm_LayoutManager_NewMath;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.IBehaviorManager;
@@ -45,6 +47,8 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
 
     private Context mContext;
+
+    private CAsm_LayoutManagerInterface _layoutManager;
 
     protected final Handler     mainHandler  = new Handler(Looper.getMainLooper());
     protected HashMap           queueMap     = new HashMap();
@@ -269,48 +273,69 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         //
         loadDataSet(data);
 
+        // MATHFIX_3 use numSlots. Might have to move to LinearLayout.
         numSlots   = CAsm_Util.maxDigits(dataset) + 1;
         digitIndex = numSlots;
 
         alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
 
+
+
+        // MATHFIX_BUILD use this conditional to reproduce the code, one part at a time
         if (ASM_CONST.USE_NEW_MATH) {
-            inflate(getContext(), R.layout.new_math, this);  // MATHFIX_2 DONE new layout
-            updateNewMathAlleys();
-        }
-        else {
-            updateAllAlleyForAddSubtract(); // MATHFIX_2 DONE original layout
-        }
+            Log.wtf("UI_REF", "wtf1");
+            _layoutManager = new CAsm_LayoutManager_NewMath(this, mContext);
+            Log.wtf("UI_REF", "wtf2");
+            _layoutManager.initialize();
+            Log.wtf("UI_REF", "wtf3");
+            _layoutManager.initializeProblem(dataset[0], dataset[1], dataset[2], operation);
+            Log.wtf("UI_REF", "wtf4");
+
+            _layoutManager.emphasizeCurrentDigitColumn("one");
 
 
+            // this should be moved into the delayed scaffolding
+            _layoutManager.showDotBagsForDigit("one", dataset[0], dataset[1]);
 
-        setMechanics();
-        setSound();
-
-        // Extract an easily accessible set of problem digits.
-        // Each element in problemDigits is an array of digits representing
-        // the place values of the given operand.
-        // NOTE: -1 we don't include the "answer" which is the last element in the
-        // dataset.
-        //
-        problemDigits = new ArrayList<>();
-
-        for(int opIndex = 0 ; opIndex < dataset.length-1 ; opIndex++) {
-
-            problemDigits.add(opIndex, CAsm_Util.intToDigits(dataset[opIndex], numSlots));
         }
 
-        final CAsm_Component xyz = this;
-        mainHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                logLayoutTree(xyz, "");
+        updateAllAlleyForAddSubtract();
+
+
+
+        if (!ASM_CONST.USE_NEW_MATH) {
+            setMechanics();
+
+
+            setSound();
+
+
+            // Extract an easily accessible set of problem digits.
+            // Each element in problemDigits is an array of digits representing
+            // the place values of the given operand.
+            // NOTE: -1 we don't include the "answer" which is the last element in the
+            // dataset.
+            //
+            problemDigits = new ArrayList<>();
+
+            for (int opIndex = 0; opIndex < dataset.length - 1; opIndex++) {
+
+                problemDigits.add(opIndex, CAsm_Util.intToDigits(dataset[opIndex], numSlots));
             }
-        });
+
+
+            final CAsm_Component xyz = this;
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    logLayoutTree(xyz, "");
+                }
+            });
+        }
     }
 
     /**
-     * MATHFIX_2 for debugging the entire layout tree
+     * for debugging the entire layout tree
      */
     private void logLayoutTree(ViewGroup v, String parents) {
 
@@ -353,73 +378,22 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         task      = data.task;
     }
 
-
     /**
-     * MATHFIX_2 Copy updateAllAlleyForAddSubtract, but simpler
-     */
-    private void updateNewMathAlleys() {
-        try {
-            Log.d("MATH_UI", "updating new math alleys");
-
-            int SOME_ALLEY_INDEX = 0;
-
-            // just a test
-
-            // UPDATE ALLEY OPERAND 1
-            // op A
-            // make the first operand display data
-            int operandA = dataset[0];
-
-            // the new way...
-            TextView hunsDigit = findViewById(R.id.top_hun_text);
-            hunsDigit.setText(String.valueOf(operandA / 100));
-
-            TextView tensDigit = findViewById(R.id.top_ten_text);
-            tensDigit.setText(String.valueOf((operandA / 10) % 10));
-
-            TextView onesDigit = findViewById(R.id.top_one_text);
-            onesDigit.setText(String.valueOf(operandA % 10));
-
-            // MATHFIX_2 NEXT update opA dot bag
-
-            // MATHFIX_2 NEXT align left properly
-            // MATHFIX_2 NEXT update operator
-            // MATHFIX_2 NEXT add baseline
-
-
-            // UPDATE ALLEY OPERAND 2
-            int operandB = dataset[1];
-
-            hunsDigit = findViewById(R.id.mid_hun_text);
-            hunsDigit.setText(String.valueOf(operandB / 100));
-
-            tensDigit = findViewById(R.id.mid_ten_text);
-            tensDigit.setText(String.valueOf((operandB / 10) % 10));
-
-            onesDigit = findViewById(R.id.mid_one_text);
-            onesDigit.setText(String.valueOf(operandB % 10));
-
-            // MATHFIX_2 update opB dot bag
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    /**
-     * MATHFIX_2 Alley: this initializes alleys
+     * this initializes alleys to hold Digits and DotBags
      */
     private void updateAllAlleyForAddSubtract() {
         int     val, id;
         boolean clickable = true;
 
-        // don't need any of these
-        updateAlley(0, 0, ASM_CONST.ANIMATOR3, operation, false); // EXTRA SPACE animator alley
-        updateAlley(1, 0, ASM_CONST.ANIMATOR2, operation, false); // EXTRA SPACE animator alley
-        updateAlley(2, 0, ASM_CONST.ANIMATOR1, operation, false); // EXTRA SPACE animator alley
-        // MATHFIX_2 may need this
-        updateAlley(3, 0, ASM_CONST.CARRY_BRW, operation, true);  // carry/borrow alley
+        if (!ASM_CONST.USE_NEW_MATH) {
+            // don't need any of these
+            updateAlley(0, 0, ASM_CONST.ANIMATOR3, operation, false); // EXTRA SPACE animator alley
+            updateAlley(1, 0, ASM_CONST.ANIMATOR2, operation, false); // EXTRA SPACE animator alley
+            updateAlley(2, 0, ASM_CONST.ANIMATOR1, operation, false); // EXTRA SPACE animator alley
+            // MATHFIX_2 may need this
+            updateAlley(3, 0, ASM_CONST.CARRY_BRW, operation, true);  // carry/borrow alley
+
+        }
 
         // update alleys
         for (int i = 0; i < dataset.length; i++) {
@@ -448,13 +422,16 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             updateAlley(i + 4, val, id, operation, clickable);
         }
 
-        // delete extra alleys
-        // TODO: Eliminate / Fix this delete code
-        int delta = numAlleys - (dataset.length + 4);
 
-        if (delta > 0) {
-            for (int i = 0; i < delta; i++) {
-                delAlley();
+        if (!ASM_CONST.USE_NEW_MATH) {
+            // delete extra alleys
+            // TODO: Eliminate / Fix this delete code
+            int delta = numAlleys - (dataset.length + 4);
+
+            if (delta > 0) {
+                for (int i = 0; i < delta; i++) {
+                    delAlley();
+                }
             }
         }
     }
@@ -776,6 +753,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             currAlley = allAlleys.get(index);
         }
 
+        // MATHFIX_3 next, use numSlots. Update views to be consistent. Might have to move to LinearLayout
         // change the text digits to be "val"
         // change the dotbags to use image "curImage"
         // change the operation to be "operation" (+/-)
@@ -890,7 +868,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         ASM_CONST.logAnnoyingReference(numAlleys - 1, -1, -1, "isDigitCorrect");
 
         // first check bottom answer
-        int writtenDigit = textLayout.getDigit(digitIndex);
+        int writtenDigit = textLayout.getDigit(digitIndex); // MATHFIX_WRITE how does the written digit get sent???
         bottomCorrect = corDigit.equals(writtenDigit);
 
         // if the bottom was not correct, and the bottom was not null
@@ -1022,15 +1000,15 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
         if (!mPopup.isActive && !mPopupSupplement.isActive) {
 
-            applyBehavior(ASM_CONST.START_WRITING_BEHAVIOR);
+            applyBehavior(ASM_CONST.START_WRITING_BEHAVIOR); // MATHFIX_WRITE this prevents scaffolding. What happens next?
 
             ArrayList<IEventListener> listeners = new ArrayList<>();
 
             listeners.add(t2);
             listeners.add(this);
 
-            mPopup.showAtLocation(this, Gravity.LEFT, 10, 10);
-            mPopup.enable(true, listeners);
+            mPopup.showAtLocation(this, Gravity.LEFT, 10, 10); // MATHFIX_WRITE show popup MATHFIX_LAYOUT this should be in Layout
+            mPopup.enable(true, listeners);                          // MATHFIX_WRITE who is listeners?
 
             if(isClickingBorrowing) {
                 mPopup.update(t2, 120, -500, 500, 500);
@@ -1041,7 +1019,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             else {
                 mPopup.update(t2, 60, 20, 500, 500);
 
-                mPopup.setExpectedDigit(getCorrectDigit().toString());
+                mPopup.setExpectedDigit(getCorrectDigit().toString());    // MATHFIX_WRITE waiting for digit...
                 Log.d(TAG, "Correct Answer Digit: " + getCorrectDigit().toString());
             }
 
@@ -1096,7 +1074,8 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     }
 
 
-    public void onEvent(IEvent event) {
+    @Override
+    public void onEvent(IEvent event) { // MATHFIX_WRITE NEXT put a debug statement here... this is where Write is registered
 
         if (!hasTwoPopup) {
             mPopup.reset();
@@ -1492,6 +1471,16 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
         _dataIndex = 0;
 
+    }
+
+    /**
+     * MATHFIX_DEBUG put this in each
+     *
+     * @param methodName
+     */
+    public void debugNewMath(String methodName) {
+
+        Log.i(ASM_CONST.TAG_DEBUG_MATHFIX_UI_REF, "animator_graph: " + methodName);
     }
 
 }

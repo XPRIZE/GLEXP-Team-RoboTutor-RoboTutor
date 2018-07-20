@@ -22,7 +22,12 @@ public class CAsm_Util {
 
     }
 
-    /* looks through an array of numbers and finds the highest number of digits*/
+    /**
+     * Looks through an array of numbers and finds the highest number of digits
+     *
+     * @param nums
+     * @return
+     */
     public static int maxDigits(int[] nums) {
 
         int max = 0;
