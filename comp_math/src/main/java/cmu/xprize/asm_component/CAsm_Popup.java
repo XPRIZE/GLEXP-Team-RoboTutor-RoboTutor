@@ -8,10 +8,10 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import java.util.ArrayList;
 import java.util.List;
-import cmu.xprize.comp_writing.simple.CGlyphController_Simple;
-import cmu.xprize.comp_writing.simple.IGlyphController_Simple;
-import cmu.xprize.comp_writing.simple.IWritingComponent_Simple;
-import cmu.xprize.comp_writing.simple.ICharRecListener_Simple;
+import cmu.xprize.comp_writebox.CGlyphController_Simple;
+import cmu.xprize.comp_writebox.IGlyphController_Simple;
+import cmu.xprize.comp_writebox.IWritingComponent_Simple;
+import cmu.xprize.comp_writebox.ICharRecListener_Simple;
 import cmu.xprize.ltkplus.CRecResult;
 import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.GCONST;
@@ -66,7 +66,7 @@ public class CAsm_Popup extends PopupWindow implements IWritingComponent_Simple 
 
         // create a new view
         fw = (CGlyphController_Simple) LayoutInflater.from(context)
-                .inflate(cmu.xprize.comp_writing.R.layout.simple_input_comp, null, false); // MATHFIX_WRITE √√√ this should be R.layout.simple_input_comp
+                .inflate(cmu.xprize.comp_writebox.R.layout.simple_input_comp, null, false); // MATHFIX_WRITE √√√ this should be R.layout.simple_input_comp
 
         // Update the last child flag
         //

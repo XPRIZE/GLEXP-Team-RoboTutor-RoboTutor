@@ -33,7 +33,7 @@ import java.util.Random;
 import cmu.xprize.asm_component.ui.CAsm_LayoutManagerInterface;
 import cmu.xprize.asm_component.ui.CAsm_LayoutManager_NewMath;
 import cmu.xprize.comp_logging.CErrorManager;
-import cmu.xprize.comp_writing.simple.ICharRecListener_Simple;
+import cmu.xprize.comp_writebox.ICharRecListener_Simple;
 import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.ILoadableObject;
@@ -1001,7 +1001,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
         if (!mPopup.isActive && !mPopupSupplement.isActive) {
 
-            applyBehavior(ASM_CONST.START_WRITING_BEHAVIOR); // MATHFIX_WRITE this prevents scaffolding
+            applyBehavior(ASM_CONST.START_WRITING_BEHAVIOR); // MATHFIX_WRITE this prevents scaffolding from popping up
 
             // MATHFIX_WRITE is there a simpler way to do this?
             ArrayList<ICharRecListener_Simple> listeners = new ArrayList<>();
@@ -1021,7 +1021,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             else {
                 mPopup.update(t2, 60, 20, 500, 500);
 
-                mPopup.setExpectedDigit(getCorrectDigit().toString());    // MATHFIX_WRITE does this get used?
+                mPopup.setExpectedDigit(getCorrectDigit().toString());    // MATHFIX_WRITE NEXT NEXT NEXT does this get used?
                 Log.d(TAG, "Correct Answer Digit: " + getCorrectDigit().toString());
             }
 

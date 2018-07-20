@@ -1,4 +1,4 @@
-package cmu.xprize.comp_writing.simple;
+package cmu.xprize.comp_writebox;
 
 import cmu.xprize.ltkplus.CRecResult;
 

@@ -16,7 +16,7 @@
 //
 //*********************************************************************************
 
-package cmu.xprize.comp_writing.simple;
+package cmu.xprize.comp_writebox;
 
 import android.content.Context;
 import android.graphics.PointF;
@@ -36,14 +36,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 import cmu.xprize.comp_logging.CErrorManager;
-import cmu.xprize.comp_writing.CWritingComponent;
-import cmu.xprize.comp_writing.R;
-import cmu.xprize.comp_writing.WR_CONST;
-import cmu.xprize.util.TCONST;
 
 
 /**
- * Code refactored from {@link cmu.xprize.comp_writing.CGlyphController} by Kevin DeLand on 7/20/2018
+ * Code refactored by Kevin DeLand on 7/20/2018
  */
 @RemoteViews.RemoteView
 public class CGlyphController_Simple extends PercentRelativeLayout implements View.OnTouchListener, IGlyphController_Simple {
@@ -214,88 +210,6 @@ public class CGlyphController_Simple extends PercentRelativeLayout implements Vi
             try {
                 queueMap.remove(this);
 
-                switch(_command) {
-
-                    // MATHFIX_WRITE clean up... these are used in word_copy/animator_graph.json
-                    case WR_CONST.SHOW_SAMPLE:
-
-                        mGlyphInput.showSampleChar(true); // shows the traceable outline
-                        break;
-
-                    case WR_CONST.HIDE_SAMPLE:
-
-                        mGlyphInput.showSampleChar(false); // hides the traceable outline
-                        break;
-
-                    case WR_CONST.ERASE_GLYPH:
-
-                        eraseGlyph(); // erase the user-drawn glyph
-                        break;
-
-                    case TCONST.HIGHLIGHT:
-
-                        mGlyphInput.setBoxColor(WR_CONST.HLCOLOR);
-                        mGlyphInput.invalidate();
-
-                        post(TCONST.SHOW_NORMAL, WR_CONST.HIGHLIGHT_TIME);
-                        break;
-
-                    case TCONST.SHOW_NORMAL:
-//
-//                        mGlyphInput.setBoxColor(WR_CONST.BOX_COLOR);
-//                        mGlyphInput.invalidate();
-//
-//                        mWritingComponent.applyBehavior(WR_CONST.ACTION_COMPLETE);
-                        break;
-
-                    case WR_CONST.RIPPLE_DEMO:
-
-//                        // MATHFIX_WRITE DELETE
-//                        mGlyphReplay.setPointAtStroke(true);
-//                        mGlyphInput.replayGlyph(WR_CONST.REPLAY_PROTOGLYPH);
-
-                        break;
-
-                    case WR_CONST.RIPPLE_REPLAY:
-
-//                        // // MATHFIX_WRITE DELETE
-//                        mGlyphReplay.setPointAtStroke(false);
-//                        mGlyphInput.replayGlyph(WR_CONST.REPLAY_USERGLYPH);
-                        break;
-
-                    case WR_CONST.RIPPLE_PROTO:
-
-                        // MATHFIX_WRITE DELETE
-//                        mGlyphReplay.setPointAtStroke(false);
-//                        mGlyphInput.replayGlyph(WR_CONST.REPLAY_PROTOGLYPH);
-                        break;
-
-                    case WR_CONST.ANIMATE_OVERLAY:
-
-                        mGlyphInput.showSampleChar(true);
-                        mGlyphInput.animateOverlay();
-                        break;
-
-                    case WR_CONST.ANIMATE_ALIGN:
-
-                        mGlyphInput.showSampleChar(false);
-                        mGlyphInput.animateOverlay();
-                        break;
-
-                    case WR_CONST.DEMO_PROTOGLYPH:
-
-//                        // MATHFIX_WRITE DELETE
-//                        mGlyphReplay.setPointAtStroke(true);
-//                        mGlyphInput.replayGlyph(WR_CONST.REPLAY_PROTOGLYPH);
-                        break;
-
-                    case WR_CONST.ANIMATE_PROTOGLYPH:
-
-                        // MATHFIX_WRITE DELETE
-//                        mGlyphReplay.setPointAtStroke(false);
-//                        mGlyphInput.replayGlyph(WR_CONST.REPLAY_PROTOGLYPH);
-                        break;
-                }
             }
             catch(Exception e) {
                 CErrorManager.logEvent(TAG, "RUN Error:", e, false);
@@ -303,35 +217,6 @@ public class CGlyphController_Simple extends PercentRelativeLayout implements Vi
         }
     }
 
-
-    /**
-     *  Disable the input queues permenantly in prep for destruction
-     *  walks the queue chain to diaable scene queue
-     *
-     */
-    private void terminateQueue() {
-
-        // disable the input queue permenantly in prep for destruction
-        //
-        _qDisabled = true;
-        flushQueue();
-    }
-
-
-    /**
-     * Remove any pending scenegraph commands.
-     *
-     */
-    private void flushQueue() {
-
-        Iterator<?> tObjects = queueMap.entrySet().iterator();
-
-        while(tObjects.hasNext() ) {
-            Map.Entry entry = (Map.Entry) tObjects.next();
-
-            mainHandler.removeCallbacks((CWritingComponent.Queue)(entry.getValue()));
-        }
-    }
 
 
     /**

@@ -11,7 +11,7 @@ import android.view.MotionEvent;
 import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 
-import cmu.xprize.comp_writing.simple.ICharRecListener_Simple;
+import cmu.xprize.comp_writebox.ICharRecListener_Simple;
 
 /**
  *

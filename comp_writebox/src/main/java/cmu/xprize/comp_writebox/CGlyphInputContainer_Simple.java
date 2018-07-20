@@ -11,10 +11,8 @@
  limitations under the License.
 */
 
-package cmu.xprize.comp_writing.simple;
+package cmu.xprize.comp_writebox;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -41,27 +39,20 @@ import android.view.View.OnTouchListener;
 
 import java.util.Locale;
 
-import cmu.xprize.comp_writing.CGlyphReplayContainer;
-import cmu.xprize.comp_writing.IGlyphReplayListener;
-import cmu.xprize.comp_writing.R;
-import cmu.xprize.comp_writing.WR_CONST;
 import cmu.xprize.ltkplus.CGlyph;
 import cmu.xprize.ltkplus.CRecResult;
 import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.ltkplus.IGlyphSink;
 import cmu.xprize.ltkplus.IGlyphSource;
-import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.CLinkedScrollView;
 import cmu.xprize.util.TCONST;
 
-import static cmu.xprize.util.TCONST.GRAPH_MSG;
-
 
 /**
- * Code refactored from {@link cmu.xprize.comp_writing.CGlyphInputContainer} by Kevin DeLand on 7/20/2018
+ * Code refactored by Kevin DeLand on 7/20/2018
  */
-public class CGlyphInputContainer_Simple extends View implements IGlyphSource, OnTouchListener, IGlyphReplayListener {
+public class CGlyphInputContainer_Simple extends View implements IGlyphSource, OnTouchListener {
 
     private boolean               DBG           = false;
     private static final float    FONT_MARGIN   = 30f;
@@ -126,7 +117,7 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
     private int                   _fontVOffset       = 0;
     private float                 _stroke_weight     = 45f;
     private int                   _glyphColor        = Color.BLACK;
-    private int                   _boxColor          = WR_CONST.BOX_COLOR;
+    private int                   _boxColor          = WRITEBOX_CONST.BOX_COLOR;
 
     private boolean               mLogGlyphs = true;
 
@@ -148,7 +139,6 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
     private static int            RECDELAY   = 700;              // Just want the end timeout
     private static int            RECDELAYNT = RECDELAY+500;      // inhibit ticks
 
-    private CGlyphReplayContainer mReplayComp;
     private boolean               isPlaying  = false;
 
     private boolean               _drawUpper = false;
@@ -329,7 +319,7 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
             _isDrawing    = true;
 
             if(_drawGlyph == null) {
-                Log.e(GRAPH_MSG, "CGlyphInputContainer.startTouch: _drawGlyph Creation Failed");
+                Log.e(TCONST.GRAPH_MSG, "CGlyphInputContainer.startTouch: _drawGlyph Creation Failed");
             }
         }
 
@@ -550,7 +540,7 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
         }
         delta = _time - _prevTime;
 
-        Log.v(GRAPH_MSG, "CGlyphInputContainer.onTouch: Touch Time: " + _time + "  :  " + delta);
+        Log.v(TCONST.GRAPH_MSG, "CGlyphInputContainer.onTouch: Touch Time: " + _time + "  :  " + delta);
 
         return result;
     }
@@ -676,7 +666,7 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
             //
             _dotSize = _viewBnds.width() / TCONST.DOT_SIZE;
 
-            Log.v(GRAPH_MSG, "CGlyphInputContainer.onLayout: Height: " + getHeight() + "  Width: " + getWidth());
+            Log.v(TCONST.GRAPH_MSG, "CGlyphInputContainer.onLayout: Height: " + getHeight() + "  Width: " + getWidth());
 
             rebuildProtoType(TCONST.VIEW_SCALED, _viewBnds);
 
@@ -797,7 +787,7 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
             if(_sampleExpected != "" && _showSampleChar) {
                 getFontCharBounds(_sampleExpected);
 
-                mPaint.setColor(WR_CONST.SAMPLE_COLOR);
+                mPaint.setColor(WRITEBOX_CONST.SAMPLE_COLOR);
                 canvas.drawText(_sampleExpected, _sampleHorzAdjusted, _sampleVertAdjusted, mPaint);
             }
 
@@ -863,150 +853,6 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
     }
 
 
-    public void hideUserGlyph() {
-        _showUserGlyph = false;
-        invalidate();
-    }
-
-    public void replayGlyph(String replayTarget) {
-
-        if(!isPlaying) {
-
-            isPlaying  = true;
-
-            switch(replayTarget) {
-
-                case WR_CONST.REPLAY_PROTOGLYPH:
-                    _animGlyph = _protoGlyph;
-                    break;
-
-                case WR_CONST.REPLAY_USERGLYPH:
-                    _animGlyph = _userGlyph;
-                    break;
-
-                case WR_CONST.REPLAY_DEFAULT:
-                    if (_showUserGlyph)
-                        _animGlyph = _userGlyph;
-                    else
-                        _animGlyph = _protoGlyph;
-                    break;
-            }
-
-            if(_animGlyph != null) {
-
-                // Ensure this field is visible.
-                //
-                // mWritingComponent.autoScroll(mGlyphController); // MATHFIX_WRITE don't need
-
-                switch (_animGlyph.getDrawnState()) {
-
-                    case TCONST.STROKE_ORIGINAL:
-
-                        mReplayComp.replayGlyph(_animGlyph, _baseLine, CGlyphReplayContainer.ALIGN_ORIGVIEW | CGlyphReplayContainer.SCALE_TIME, _viewBnds, this);
-                        break;
-
-                    case TCONST.STROKE_OVERLAY:
-
-                        int inset = (int) (_stroke_weight / 2);
-                        Rect protoBnds = new Rect(_fontCharBnds);
-
-                        protoBnds.inset(inset, inset);
-
-                        mReplayComp.replayGlyph(_animGlyph, _baseLine, CGlyphReplayContainer.ALIGN_CONTAINER | CGlyphReplayContainer.SCALE_TIME, protoBnds, this);
-                        break;
-
-                }
-            }
-        }
-
-    }
-
-
-    /**
-     * This is the animation of the the user-drawn glyph scaling into the right size,
-     */
-    public void animateOverlay() {
-
-        AnimatorSet animator = new AnimatorSet();
-
-        RectF glyphBnds = null;
-        RectF protoBnds = null;
-
-        float inset = _stroke_weight / 2;
-
-        if(_showUserGlyph)
-            _animGlyph = _userGlyph;
-        else
-            _animGlyph = _protoGlyph;
-
-        if(_animGlyph != null) {
-
-            PointF wayPoints[]   = new PointF[2];
-            PointF scalePoints[] = new PointF[2];
-            PointF posFinal      = new PointF();
-
-            glyphBnds = _animGlyph.getStrokeBoundingBox();
-            protoBnds = new RectF(_fontCharBnds);
-
-            protoBnds.inset(inset, inset);
-
-            // Go from the current drawn state to the alternate state
-            //
-            switch(_animGlyph.getDrawnState()) {
-
-                case TCONST.STROKE_ORIGINAL:
-                    wayPoints[0] = new PointF(glyphBnds.left, glyphBnds.top);
-                    wayPoints[1] = new PointF(protoBnds.left, protoBnds.top);
-
-                    scalePoints[0] = new PointF(1.0f, 1.0f);
-                    scalePoints[1] = new PointF(protoBnds.width() / glyphBnds.width(), protoBnds.height() / glyphBnds.height());
-
-                    _animGlyph.setDrawnState(TCONST.STROKE_OVERLAY);
-                    break;
-
-                case TCONST.STROKE_OVERLAY:
-                    wayPoints[0] = new PointF(protoBnds.left, protoBnds.top);
-                    wayPoints[1] = new PointF(glyphBnds.left, glyphBnds.top);
-
-                    scalePoints[0] = new PointF(protoBnds.width() / glyphBnds.width(), protoBnds.height() / glyphBnds.height());
-                    scalePoints[1] = new PointF(1.0f, 1.0f);
-
-                    _animGlyph.setDrawnState(TCONST.STROKE_ORIGINAL);
-                    break;
-            }
-
-
-            Animator translator = CAnimatorUtil.configTranslator(this, 1500, 0, wayPoints);
-            Animator scaler     = CAnimatorUtil.configScaler(this, 1500, 0, scalePoints);
-
-            animator.playTogether(translator, scaler);
-
-            animator.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationCancel(Animator arg0) {
-                    //Functionality here
-                }
-
-                @Override
-                public void onAnimationStart(Animator arg0) {
-                    //Functionality here
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-
-                    // mWritingComponent.applyBehavior(WR_CONST.ACTION_COMPLETE); // MATHFIX_WRITE don't need
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator arg0) {
-                    //Functionality here
-                }
-            });
-
-            animator.start();
-        }
-    }
 
 
     public void flashOverlay() {
@@ -1016,24 +862,6 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
             invalidate();
         }
     }
-
-
-    @Override
-    public boolean applyEvent(String event) {
-
-        boolean result = false;
-
-        switch(event) {
-            case WR_CONST.REPLAY_COMPLETE:
-                isPlaying = false;
-                break;
-        }
-
-        // result = mWritingComponent.applyBehavior(event); // MATHFIX_WRITE don't need
-
-        return result;
-    }
-
 
     public boolean toggleSampleChar() {
 
@@ -1149,7 +977,7 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
         rebuildGlyph();
         invalidate();
 
-        Log.v(GRAPH_MSG, "CGlyphInputContainer.toggleDebugBounds: " + DBG);
+        Log.v(TCONST.GRAPH_MSG, "CGlyphInputContainer.toggleDebugBounds: " + DBG);
 
         return DBG;
     }
@@ -1290,6 +1118,7 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
         invalidate();
     }
 
+    // MATHFIX_WRITE NEXT NEXT NEXT remove
     /**
      * used for mercy rule
      *
@@ -1299,6 +1128,7 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
         _correct = correct;
     }
 
+    // MATHFIX_WRITE NEXT NEXT NEXT remove
     // For write.missingLtr: To make Glyph behave as simple text stimulus.
     public void setIsStimulus() {
 
@@ -1311,11 +1141,13 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
         return mIsStimulus;
     }
 
+    // MATHFIX_WRITE NEXT NEXT NEXT is this needed?
     public void setExpectedChar(String protoChar) {
 
         _sampleExpected = protoChar; // MATHFIX_WRITE expected
     }
 
+    // MATHFIX_WRITE NEXT NEXT NEXT remove
     public boolean checkAnswer(String resp, boolean isAnswerCaseSensitive) {
 
         if(!isAnswerCaseSensitive) {
@@ -1358,7 +1190,7 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
 
         if(_inhibit) {
 
-            Log.v(GRAPH_MSG, "CGlyphInputContainer.ihibitInput: mute " + _sampleExpected);
+            Log.v(TCONST.GRAPH_MSG, "CGlyphInputContainer.ihibitInput: mute " + _sampleExpected);
 
             if(_counter != null)
                 _counter.cancel();
@@ -1374,7 +1206,7 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
             if(!mHasGlyph && !mIsStimulus)
                this.setOnTouchListener(this);
 
-            Log.v(GRAPH_MSG, "CGlyphInputContainer.inhibitInput: UN-mute: " + _sampleExpected);
+            Log.v(TCONST.GRAPH_MSG, "CGlyphInputContainer.inhibitInput: UN-mute: " + _sampleExpected);
         }
     }
 
@@ -1448,7 +1280,7 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
             }
 
             setHasGlyph(true);
-            Log.v(GRAPH_MSG, "CGlyphInputContainer: post pending rRecognition Done");
+            Log.v(TCONST.GRAPH_MSG, "CGlyphInputContainer: post pending rRecognition Done");
 
             _recognizer.postToQueue(CGlyphInputContainer_Simple.this, _drawGlyph);
 
@@ -1472,13 +1304,6 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
             // mGlyphController.setProtoTypeDirty(false);
         }
     }
-
-
-    public void setReplayComp(CGlyphReplayContainer comp) {
-
-        mReplayComp = comp;
-    }
-
 
     //*******************************************************************************************
     //*******************************************************************************************
