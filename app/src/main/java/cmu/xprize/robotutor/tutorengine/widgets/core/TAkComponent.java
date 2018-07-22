@@ -532,7 +532,7 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
             public void run() {
                 applyEventNode("NEXT");
             }
-        }, 3000); //Timer is in ms heree
+        }, 1000); //Timer is in ms heree
     }
 
     public void judge(){
