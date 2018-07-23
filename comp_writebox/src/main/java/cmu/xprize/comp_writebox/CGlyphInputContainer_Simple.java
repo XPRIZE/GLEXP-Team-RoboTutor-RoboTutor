@@ -339,12 +339,6 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
     }
 
 
-    public void setBoxColor(int newColor) {
-
-        _boxColor = newColor;
-    }
-
-
     private void setHasGlyph(boolean hasGlyph) {
 
         final boolean needsRefresh = mHasGlyph != hasGlyph;
@@ -852,59 +846,6 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
 
     }
 
-
-
-
-    public void flashOverlay() {
-
-        if(_userGlyph != null && _sampleExpected != "") {
-            _bitmapDirty = true;
-            invalidate();
-        }
-    }
-
-    public boolean toggleSampleChar() {
-
-        showSampleChar(!_showSampleChar);
-
-        rebuildGlyph();
-        invalidate();
-
-        return _showSampleChar;
-    }
-
-
-    /**
-     * Shows and hides the traceable sample character outline
-     *
-     * @param show
-     */
-    public void showSampleChar(boolean show) {
-
-        _showSampleChar = show;
-        invalidate();
-    }
-
-
-    public boolean toggleProtoGlyph() {
-
-        _showProtoGlyph = !_showProtoGlyph;
-        _showUserGlyph  = !_showProtoGlyph;
-
-        // Show the save button for dirty protoglyphs - i.e. changed but unsaved
-        //
-        // MATHFIX_WRITE DELETE doesn't do anything
-//        if(mGlyphController != null) {
-//            boolean isDirty = (_protoGlyph != null)? _protoGlyph.getDirty():false;
-//            mGlyphController.setProtoTypeDirty(_showProtoGlyph ?  isDirty: false);
-//        }
-
-        rebuildGlyph();
-        invalidate();
-
-        return _showProtoGlyph;
-    }
-
     private void rebuildGlyph() {
 
         Rect protoBnds = null;
@@ -1064,11 +1005,6 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
         else
             _protoGlyph = null;
 
-        // MATHFIX_WRITE DELETE doesn't do anything
-        // Remove the save button
-//        if(mGlyphController != null)
-//            mGlyphController.setProtoTypeDirty(false);
-
         _glyphColor = TCONST.colorMap.get(TCONST.COLORNORMAL);
 
         // Reset the flag so onStartWriting events will fire
@@ -1098,74 +1034,11 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
     }
 
 
-    /**
-     * Updates whether glyph is correct, and displays it in the proper color
-     *
-     * @param correct
-     */
-    public void updateAndDisplayCorrectStatus(boolean correct) {
-
-        _correct = correct;
-
-        if(correct) {
-
-            _glyphColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
-        }
-        else {
-            _glyphColor = TCONST.colorMap.get(TCONST.COLORWRONG);
-        }
-
-        invalidate();
-    }
-
-    // MATHFIX_WRITE NEXT NEXT NEXT remove
-    /**
-     * used for mercy rule
-     *
-     * @param correct
-     */
-    public void updateCorrectStatus(boolean correct) {
-        _correct = correct;
-    }
-
-    // MATHFIX_WRITE NEXT NEXT NEXT remove
-    // For write.missingLtr: To make Glyph behave as simple text stimulus.
-    public void setIsStimulus() {
-
-        mIsStimulus = true;
-        this.setOnTouchListener(null);
-    }
-
-    public boolean checkIsStimulus() {
-
-        return mIsStimulus;
-    }
 
     // MATHFIX_WRITE NEXT NEXT NEXT is this needed?
     public void setExpectedChar(String protoChar) {
 
         _sampleExpected = protoChar; // MATHFIX_WRITE expected
-    }
-
-    // MATHFIX_WRITE NEXT NEXT NEXT remove
-    public boolean checkAnswer(String resp, boolean isAnswerCaseSensitive) {
-
-        if(!isAnswerCaseSensitive) {
-            return _sampleExpected.toLowerCase().equals(resp.toLowerCase());
-        }
-
-        return _sampleExpected.equals(resp);
-    }
-
-
-    public void setProtoGlyph(CGlyph protoGlyph) {
-
-        // If the prototype is not yet created in the glyphs Zip then this could be null
-        //
-        if(protoGlyph != null) {
-            _protoGlyph = protoGlyph;
-            _protoGlyph.setDotSize(_dotSize);
-        }
     }
 
     public boolean isCorrect() {
@@ -1271,12 +1144,6 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
             else {
                 _protoGlyph = _drawGlyph;
                 _protoGlyph.setDirty(true);
-
-                // Show the save button for this glyph
-//                //
-                // MATHFIX_WRITE DELETE doesn't do anything
-//                if(mGlyphController != null)
-//                    mGlyphController.setProtoTypeDirty(true);
             }
 
             setHasGlyph(true);
@@ -1300,8 +1167,7 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
             _protoGlyph.saveGlyphPrototype("SHAPEREC_ALPHANUM", "", _sampleExpected, _sampleExpected);
             _protoGlyph.setDirty(false);
 
-            // MATHFIX_WRITE DELETE doesn't do anything
-            // mGlyphController.setProtoTypeDirty(false);
+
         }
     }
 

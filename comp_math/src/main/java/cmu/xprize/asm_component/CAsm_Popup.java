@@ -74,7 +74,7 @@ public class CAsm_Popup extends PopupWindow implements IWritingComponent_Simple 
         fw.setWritingController(this);
         fw.showBaseLine(false);
 
-        layout.addView(fw);
+        layout.addView(fw); // MATHFIX_WRITE MATHFIX_LAYOUT where FingerWriter is added to view
         layout.requestLayout();
     }
 

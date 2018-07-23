@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -183,7 +184,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         //Scontent = (CAsm_LetterBoxLayout) findViewById(R.id.Scontent);
         //Scontent.setOnClickListener(this);
 
-        mPopup           = new CAsm_Popup(mContext);
+        mPopup           = new CAsm_Popup(mContext); // MATHFIX_2 POPUP
         mPopupSupplement = new CAsm_Popup(mContext);
 
         // Capture the local broadcast manager
@@ -280,30 +281,39 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         alleyMargin = (int) (ASM_CONST.alleyMargin * scale);
 
 
-
         // MATHFIX_BUILD use this conditional to reproduce the code, one part at a time
         if (ASM_CONST.USE_NEW_MATH) {
-            Log.wtf("UI_REF", "wtf1");
+
             _layoutManager = new CAsm_LayoutManager_NewMath(this, mContext);
-            Log.wtf("UI_REF", "wtf2");
+
             _layoutManager.initialize();
-            Log.wtf("UI_REF", "wtf3");
+
             _layoutManager.initializeProblem(dataset[0], dataset[1], dataset[2], operation);
-            Log.wtf("UI_REF", "wtf4");
-
-            _layoutManager.emphasizeCurrentDigitColumn("one");
-
-
-            // this should be moved into the delayed scaffolding
-            _layoutManager.showDotBagsForDigit("one", dataset[0], dataset[1]);
 
         }
 
-        updateAllAlleyForAddSubtract();
+        if (ASM_CONST.USE_NEW_MATH) {
+            setDebugNewMathButtons();
+        }
+
+        if (ASM_CONST.USE_NEW_MATH) {
+            String currentDigit = "one";
+
+            //_layoutManager.emphasizeCurrentDigitColumn("one");
+            _layoutManager.emphasizeCurrentDigitColumn(currentDigit);
+
+            // this should be moved into the delayed scaffolding
+            _layoutManager.showDotBagsForDigit(currentDigit, dataset[0], dataset[1]);
+
+        }
 
 
 
         if (!ASM_CONST.USE_NEW_MATH) {
+
+            updateAllAlleyForAddSubtract();
+
+
             setMechanics();
 
 
@@ -333,6 +343,78 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             });
         }
     }
+
+    /**
+     * Give behavior to debug buttons so we can easily test UI functionality.
+     */
+    private void setDebugNewMathButtons() {
+        // MATHFIX_3 NEXT NEXT NEXT... step through the animation sequence, for one digit
+
+        LinearLayout buttonMenu = findViewById(R.id.debug_button_menu);
+        String[] debugButtons = {"DIGIT_ONE", "DIGIT_TEN", "DIGIT_HUN",
+                "WIGGLY_TOP", "WIGGLY_OP", "WIGGLY_MID",
+                "WRONG",
+                "POPUP_ONE", "POPUP_TEN", "POPUP_HUN"};
+
+        for(String tag : debugButtons) {
+            Button button = new Button(mContext);
+            button.setText(tag);
+            button.setTag(tag);
+            button.setOnClickListener(_debugButtonListener);
+
+            buttonMenu.addView(button);
+        }
+
+    }
+
+    /**
+     * For defining debug button behavior
+     */
+    OnClickListener _debugButtonListener = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch(view.getTag().toString()) {
+
+                case "DIGIT_ONE":
+                    _layoutManager.emphasizeCurrentDigitColumn("one");
+                    _layoutManager.showDotBagsForDigit("one", dataset[0], dataset[1]);
+                    break;
+
+                case "DIGIT_TEN":
+                    _layoutManager.emphasizeCurrentDigitColumn("ten");
+                    _layoutManager.showDotBagsForDigit("ten", dataset[0], dataset[1]);
+                    break;
+
+                case "DIGIT_HUN":
+                    _layoutManager.emphasizeCurrentDigitColumn("hun");
+                    _layoutManager.showDotBagsForDigit("hun", dataset[0], dataset[1]);
+                break;
+
+                case "WIGGLY_TOP":
+                    _layoutManager.wiggleDigitAndDotbag("top", "one");
+                    break;
+
+                case "WIGGLY_OP":
+                    _layoutManager.wiggleDigitAndDotbag("op", null);
+                    break;
+
+                case "WIGGLY_MID":
+                    _layoutManager.wiggleDigitAndDotbag("mid", "one");
+                    break;
+
+                case "WRONG":
+                    _layoutManager.wrongDigit("one");
+                    break;
+
+                case "POPUP_ONE":
+                case "POPUP_TEN":
+                case "POPUP_HUN":
+                    // MATHFIX_3 do me next
+                    // show popup
+                    break;
+            }
+        }
+    };
 
     /**
      * for debugging the entire layout tree
@@ -390,7 +472,6 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             updateAlley(0, 0, ASM_CONST.ANIMATOR3, operation, false); // EXTRA SPACE animator alley
             updateAlley(1, 0, ASM_CONST.ANIMATOR2, operation, false); // EXTRA SPACE animator alley
             updateAlley(2, 0, ASM_CONST.ANIMATOR1, operation, false); // EXTRA SPACE animator alley
-            // MATHFIX_2 may need this
             updateAlley(3, 0, ASM_CONST.CARRY_BRW, operation, true);  // carry/borrow alley
 
         }
@@ -597,7 +678,6 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
         if(curOverheadCol >= 0) {
 
-            // MATHFIX_2 this is a mess, fix reference
             if ((allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(0).getText().equals("") // √√√
                     || allAlleys.get(curOverheadCol).getTextLayout().getTextLayout(digitIndex).getText(0).getCurrentTextColor() == Color.RED) && curOverheadCol > 9) { // √√√
                 ASM_CONST.logAnnoyingReference(curOverheadCol, digitIndex, 0, "check if blank or red");
@@ -649,7 +729,6 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
-                // MATHFIX_2 make it clearer which object is referenced
                 CAnimatorUtil.zoomInOut(opAlley.getTextLayout().getTextLayout(0).getText(1), 2.5f, 1500L); // √√√
                 ASM_CONST.logAnnoyingReference(ASM_CONST.OPERATOR_ROW - 1, 0, 1, "zoomInOut");
             }
@@ -949,6 +1028,10 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     public boolean getClickPaused() {return clickPaused;}
 
 
+    /**
+     * MATHFIX_UI done
+     * @param t
+     */
     public void highlightText(final CAsm_Text t) {
         //Useful to highlight individual Text-fields to call importance to them.
         int colorStart = Color.YELLOW;
@@ -983,6 +1066,9 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     }
 
 
+    /**
+     * MATHFIX_UI done
+     */
     public void highlightCurrentColumn() {
         //Highlights user's active column.
         for (CAsm_Alley alley: allAlleys) {

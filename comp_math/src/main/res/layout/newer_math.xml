@@ -6,6 +6,18 @@
     android:layout_height="match_parent">
 
 
+    <LinearLayout
+        android:id="@+id/debug_button_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+    </LinearLayout>
+
+
     <!-- Guidelines -->
     <android.support.constraint.Guideline
         android:id="@+id/operator_left"

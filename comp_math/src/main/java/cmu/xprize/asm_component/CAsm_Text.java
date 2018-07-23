@@ -80,7 +80,7 @@ public class CAsm_Text extends TextView implements ICharRecListener_Simple {
     public void setResult(){
 
         setEnabled(true);
-        setBackground(getResources().getDrawable(R.drawable.back));
+        setBackground(getResources().getDrawable(R.drawable.back)); // MATHFIX_LAYOUT tap square?
         setWritable(true);
 
     }

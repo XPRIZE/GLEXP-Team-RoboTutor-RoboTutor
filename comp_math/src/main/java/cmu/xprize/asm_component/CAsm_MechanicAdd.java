@@ -32,6 +32,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         int             totalValue = 0;
 
         for (CAsm_Alley alley: allAlleys) {
+            // MATHFIX_2 this must be carrying?
             if (allAlleys.indexOf(alley) == overheadIndex) {
                 CAsm_Text cur = alley.getTextLayout().getTextLayout(mComponent.digitIndex).getText(1); // √√√
                 ASM_CONST.logAnnoyingReference(alley.getId(), mComponent.digitIndex, 1, "nextDigit()");

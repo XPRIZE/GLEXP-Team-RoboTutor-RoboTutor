@@ -35,9 +35,26 @@ public interface CAsm_LayoutManagerInterface {
 
     /**
      * Show the DotBag with Dots for the given digit
+     *
      * @param digit
      * @param op1
      * @param op2
      */
     void showDotBagsForDigit(String digit, int op1, int op2);
+
+
+    /**
+     * Wiggle the digit and dotbag left and right.
+     *
+     * @param numLocation
+     * @param digit
+     */
+    void wiggleDigitAndDotbag(String numLocation, String digit);
+
+    /**
+     * Whatever the number you just wrote, mark it wrong.
+     *
+     * @param digit
+     */
+    void wrongDigit(String digit);
 }

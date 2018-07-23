@@ -106,7 +106,7 @@ public class ASM_CONST {
     public static final String HIGHLIGHT_RESULT   = "HIGHLIGHT_RESULT";
 
     // DEBUG VARIABLES
-    public static final boolean USE_NEW_MATH = false;
+    public static final boolean USE_NEW_MATH = true;
     public static final String TAG_DEBUG_MATHFIX = "MATHFIX";
     public static final String TAG_DEBUG_MATHFIX_UI_REF = "MATHFIX_UI_REF";
     public static final String ANNOYING_REFERENCE_STRING = "Alley(%d).Layout().Layout(%d).Text(%d) -- %s";

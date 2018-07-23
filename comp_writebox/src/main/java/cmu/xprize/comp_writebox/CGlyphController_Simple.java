@@ -89,7 +89,7 @@ public class CGlyphController_Simple extends PercentRelativeLayout implements Vi
         super.onFinishInflate();
 
         mDrawnContainer  = (FrameLayout)findViewById(R.id.drawn_container);
-        mGlyphInput      = (CGlyphInputContainer_Simple) findViewById(R.id.drawn_box);
+        mGlyphInput      = (CGlyphInputContainer_Simple) findViewById(R.id.drawn_box); // MATHFIX_WRITE hello there
 
         // Update the control aspect ratio based on the prototype font used in the drawn control
         //
