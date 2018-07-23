@@ -148,7 +148,7 @@ public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics
         final CAsm_Dot oldDot = clickedDot;
         final CAsm_Dot newDot;
         if(resultBag.getCols() < 10)
-            newDot = resultBag.addDot(0, resultBag.getCols());
+            newDot = resultBag.addDot(0, resultBag.getCols()); // MATHFIX_3 NEXT NEXT NEXT where does add happen?
         else {
             newDot = resultBag.addDot(1, resultBag.getOverflowNum());
             resultBag.addOverflowNum();
