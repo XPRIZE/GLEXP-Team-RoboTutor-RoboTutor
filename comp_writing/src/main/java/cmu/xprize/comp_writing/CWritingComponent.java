@@ -1085,7 +1085,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 // Last is used for display updates - limits the extent of the baseline
                 v.setIsLast(i1 ==  mAnswer.length()-1);
-
+                v.setRespIndex(i1);
                 String expectedChar = mAnswer.substring(i1,i1+1);
 
                 v.setExpectedChar(expectedChar);
@@ -1101,7 +1101,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 v.setLinkedScroll(mDrawnScroll);
                 v.setWritingController(this);
-
+                v.setResponseView(mResponseViewList);
                 //amogh added
                 resp = (CStimulusController)LayoutInflater.from(getContext())
                         .inflate(R.layout.recog_resp_comp, null, false);

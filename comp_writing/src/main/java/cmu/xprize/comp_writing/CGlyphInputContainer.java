@@ -38,6 +38,7 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.LinearLayout;
 
 import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.GCONST;
@@ -63,12 +64,14 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private boolean               _recPending = false;
     private int                   _recIndex;
     private boolean               _inhibit    = false;
+    protected int                 _respIndex;
 
     private IWritingComponent     mWritingComponent;
     private IGlyphController      mGlyphController;
     private CLinkedScrollView     mScrollView;
     private Boolean               _touchStarted = false;
     private int[]                 _screenCoord = new int[2];
+    private LinearLayout _responseView;
 
     private Paint                 mPaint;
     private Paint                 mPaintBG;
@@ -264,6 +267,10 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         mWritingComponent = writingController;
     }
 
+    public void setResponseView(LinearLayout responseView){
+        _responseView = responseView;
+    }
+
 
     public void setInputManager(IGlyphController glyphController) {
 
@@ -375,6 +382,10 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
      */
     public void setIsLast(boolean isLast) {
         _isLast = isLast;
+    }
+
+    public void setRespIndex(int index){
+        _respIndex = index;
     }
 
     /**
@@ -517,7 +528,8 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                 if(_drawGlyph != null) {
                     if (mHasGlyph){
                         erase();
-
+                        CStimulusController resp = (CStimulusController)_responseView.getChildAt(_respIndex);
+                        resp.setStimulusChar("",false);
                     }
                     moveTouch(x, y);
                 }

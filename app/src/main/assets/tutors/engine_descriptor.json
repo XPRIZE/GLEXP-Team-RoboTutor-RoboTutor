@@ -16,7 +16,7 @@
 
 
   // This maps a "variant" i.e. arbitrary name to the tutor/featureset that define a
-  // path through the given tutors anumation_graph.
+  // path through the given tutors animation_graph.
   //
   "tutorVariants": {
 
@@ -169,6 +169,16 @@
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
       "features": "FTR_MISSING_LTR"
+    },
+    "write.sen.corr": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_SEN:FTR_SEN_CORR"
+    },
+    "write.sen.copy": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_SEN"
     },
     "story.echo": {
       "type": "TUTORVAR_MAP",

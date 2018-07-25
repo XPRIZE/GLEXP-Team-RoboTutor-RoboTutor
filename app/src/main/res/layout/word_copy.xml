@@ -94,7 +94,7 @@
         android:id="@+id/SresponseviewFrame"
         android:layout_below="@id/SstimulusBG"
         android:layout_width="match_parent"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_heightPercent="10%">
 
         <cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView

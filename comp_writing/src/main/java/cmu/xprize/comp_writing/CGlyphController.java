@@ -33,6 +33,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 
 import java.util.ArrayList;
@@ -192,6 +193,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         mGlyphInput.setIsLast(isLast);
     }
 
+    public void setRespIndex(int index){ mGlyphInput.setRespIndex(index);}
 
     public class insLSpaceClickListener implements View.OnClickListener {
         @Override
@@ -394,6 +396,9 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         mGlyphReplay.setWritingController(writingController);
     }
 
+    public void setResponseView(LinearLayout responseView){
+        mGlyphInput.setResponseView(responseView);
+    }
 
     public boolean toggleSampleChar() {
         return mGlyphInput.toggleSampleChar();
