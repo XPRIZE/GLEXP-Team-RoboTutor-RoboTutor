@@ -16,12 +16,15 @@ import cmu.xprize.util.TCONST;
  */
 public class CAsm_MechanicAdd extends CAsm_MechanicBase implements IDotMechanics {
 
-    public CAsm_MechanicAdd(CAsm_Component mComponent) {super.init(mComponent);}
-
-    protected String operation = "+";
+    public CAsm_MechanicAdd(CAsm_Component mComponent) {
+        super.init(mComponent);
+    }
 
     static final String TAG = "CAsm_MechanicAdd";
 
+    /**
+     * Called by C_Component.nextDigit()
+     */
     @Override
     public void nextDigit() {
 

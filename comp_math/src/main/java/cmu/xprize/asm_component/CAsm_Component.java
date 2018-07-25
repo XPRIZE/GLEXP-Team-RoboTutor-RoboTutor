@@ -128,7 +128,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     protected CAsm_Popup mPopupSupplement;
     private boolean hasTwoPopup = false;
 
-    private boolean clickPaused = false;
+    public boolean clickPaused = false;
     protected int overheadCorrect = ASM_CONST.NO_INPUT;
     protected int resultCorrect = ASM_CONST.NO_INPUT;
     protected String curNode = "";
@@ -460,6 +460,10 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         task      = data.task;
     }
 
+    // ----------------------------------
+    // --------- INITIALIZATION ---------
+    // ----------------------------------
+
     /**
      * this initializes alleys to hold Digits and DotBags
      */
@@ -517,6 +521,62 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         }
     }
 
+    // MATHFIX_CLEAN move to initialization
+    private void updateAlley(int index, int val, int id, String operation, boolean clickable) {
+
+        CAsm_Alley currAlley;
+
+        if (index + 1 > numAlleys) {
+            currAlley = addAlley(index);
+        }
+        else {
+            currAlley = allAlleys.get(index);
+        }
+
+        // MATHFIX_3 next, use numSlots. Update views to be consistent. Might have to move to LinearLayout
+        // change the text digits to be "val"
+        // change the dotbags to use image "curImage"
+        // change the operation to be "operation" (+/-)
+        // numSlots = maxDigits(dataset) + 1 (for the operator)
+        currAlley.update(val, curImage, id, operation, clickable, numSlots);
+    }
+
+    // MATHFIX_CLEAN move to initialization
+    private CAsm_Alley addAlley(int index ) {
+
+        CAsm_Alley newAlley = new CAsm_Alley(mContext); // MATHFIX_LAYOUT TextLayout created here.
+
+        // MATHFIX_LAYOUT LayoutParams
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT);
+        lp.setMargins(0, 0, 0, alleyMargin);
+        newAlley.setLayoutParams(lp);
+
+        //Scontent.addView(newAlley, index);
+        // MATHFIX_LAYOUT where alley View gets added
+        addView(newAlley, index);
+        allAlleys.add(index, newAlley);
+        Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "addView CAsm_Alley:" + index + " to CAsm_Component");
+
+        numAlleys++;
+
+        return newAlley;
+    }
+
+    private void delAlley() {
+
+        int index = numAlleys - 1;
+        CAsm_Alley toRemove = allAlleys.get(index);
+
+        toRemove.removeAllViews();
+        //Scontent.removeView(toRemove);
+        removeView(toRemove);
+        allAlleys.remove(index);
+
+        numAlleys--;
+    }
+
 
     private void setSound() {
 
@@ -536,10 +596,6 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
     private void setMechanics() {
 
-        if ((mechanics.getOperation()).equals(operation)) {
-            return; // no need to change mechanics
-        }
-
         switch(operation) {
 
             case "+":
@@ -551,6 +607,10 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         }
     }
 
+
+    // ----------------------------------
+    // --------- NEXT DIGIT --------------
+    // ----------------------------------
 
     public void nextDigit() {
 
@@ -573,6 +633,8 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         //
         clearZeroFeatures();
         setZeroFeatures();
+
+        nextPlaceValue();
 
     }
 
@@ -627,6 +689,34 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     }
 
 
+    private void nextPlaceValue() {
+        placeValIndex++;
+        chimes = ASM_CONST.CHIMES[placeValIndex % 4 + 1];
+        String [] firstRowChimes = chimes;
+        String [] secondRowChimes = ASM_CONST.CHIMES[(placeValIndex - 1) % 4 + 1];
+        for(int i = 0;i < 10; i++){
+            twoRowschimes[i]  = firstRowChimes[i];
+        }
+        for(int i = 10;i< 19; i++){
+            twoRowschimes[i]  = secondRowChimes[i-10+1];
+        }
+        for (CAsm_Alley alley: allAlleys) {
+            CAsm_DotBag dotBag = alley.getDotBag();
+            if(dotBag.getRows() == 1){
+                dotBag.setChimes(chimes);
+                dotBag.setChimeIndex(-1);
+            }else{
+                dotBag.setChimes(twoRowschimes);
+                dotBag.setChimeIndex(-1);
+            }
+        }
+    }
+
+
+
+    // --------------------------------------
+    // --------- SHOW DOT BAGS --------------
+    // --------------------------------------
 
     public void setDotBagsVisible(Boolean _dotbagsVisible) {
 
@@ -668,6 +758,11 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             }
         });
     }
+
+
+    // --------------------------------------
+    // --------- SHOW TUTORIAL --------------
+    // --------------------------------------
 
     public void animateTutorial(Integer pace) {
         animateTutorial(digitIndex, digitIndex, pace);
@@ -712,64 +807,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             mechanics.preClickSetup();
     }
 
-
-
-
-    /**
-     * TODO: Generalize
-     */
-    public void zoomOperator() {
-
-        Handler           h = new Handler();
-        final CAsm_Alley  opAlley = allAlleys.get(ASM_CONST.OPERATOR_ROW - 1);
-
-        pointAtOperator();
-
-        //wiggle operator
-        h.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                CAnimatorUtil.zoomInOut(opAlley.getTextLayout().getTextLayout(0).getText(1), 2.5f, 1500L); // √√√
-                ASM_CONST.logAnnoyingReference(ASM_CONST.OPERATOR_ROW - 1, 0, 1, "zoomInOut");
-            }
-        }, 20);
-    }
-
-
-    /**
-     * TODO: Generalize
-     */
-    public void pointAtOperator() {
-
-        CAsm_Alley  opAlley  = allAlleys.get(ASM_CONST.OPERATOR_ROW - 1);
-        View        operator = opAlley.getTextLayout().getTextLayout(0).getText(1); // √√√
-        ASM_CONST.logAnnoyingReference(ASM_CONST.OPERAND_ROW - 1, 0, 1, "pointAtOperator");
-
-        operator.getLocationOnScreen(_screenCoord);
-
-        PointF targetPoint = new PointF(_screenCoord[0] + operator.getWidth(), _screenCoord[1] + operator.getHeight());
-
-        // Let the persona know where to look
-        Intent msg = new Intent(TCONST.POINTAT);
-        msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
-
-        bManager.sendBroadcast(msg);
-    }
-
-
-    protected void broadcastLocation(String Action, PointF touchPt) {
-
-        getLocationOnScreen(_screenCoord);
-
-        // Let the persona know where to look
-        Intent msg = new Intent(Action);
-        msg.putExtra(TCONST.SCREENPOINT, new float[]{touchPt.x + _screenCoord[0], (float) touchPt.y + _screenCoord[1]});
-
-        bManager.sendBroadcast(msg);
-    }
-
-
-    public int wiggleDigitAndDotbag(final CAsm_Alley curAlley, int delayTime, final int curDigitIndex, int startRow, int pace) {
+    private int wiggleDigitAndDotbag(final CAsm_Alley curAlley, int delayTime, final int curDigitIndex, int startRow, int pace) {
 
         final CAsm_DotBag curDB = curAlley.getDotBag();
         final CAsm_TextLayout curTextLayout;
@@ -821,70 +859,46 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
 
 
-    private void updateAlley(int index, int val, int id, String operation, boolean clickable) {
+    // -------------------------------------------
+    // --------- EMPHASIZE OPERATOR --------------
+    // -------------------------------------------
 
-        CAsm_Alley currAlley;
+    public void zoomOperator() {
 
-        if (index + 1 > numAlleys) {
-            currAlley = addAlley(index);
-        }
-        else {
-            currAlley = allAlleys.get(index);
-        }
+        Handler           h = new Handler();
+        final CAsm_Alley  opAlley = allAlleys.get(ASM_CONST.OPERATOR_ROW - 1);
 
-        // MATHFIX_3 next, use numSlots. Update views to be consistent. Might have to move to LinearLayout
-        // change the text digits to be "val"
-        // change the dotbags to use image "curImage"
-        // change the operation to be "operation" (+/-)
-        // numSlots = maxDigits(dataset) + 1 (for the operator)
-        currAlley.update(val, curImage, id, operation, clickable, numSlots);
-    }
+        pointAtOperator();
 
-
-    private CAsm_Alley addAlley(int index ) {
-
-        CAsm_Alley newAlley = new CAsm_Alley(mContext); // MATHFIX_LAYOUT TextLayout created here.
-
-        // MATHFIX_LAYOUT LayoutParams
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT);
-        lp.setMargins(0, 0, 0, alleyMargin);
-        newAlley.setLayoutParams(lp);
-
-        //Scontent.addView(newAlley, index);
-        // MATHFIX_LAYOUT where alley View gets added
-        addView(newAlley, index);
-        allAlleys.add(index, newAlley);
-        Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "addView CAsm_Alley:" + index + " to CAsm_Component");
-
-        numAlleys++;
-
-        return newAlley;
-    }
-
-    public void nextPlaceValue() {
-        placeValIndex++;
-        chimes = ASM_CONST.CHIMES[placeValIndex % 4 + 1];
-        String [] firstRowChimes = chimes;
-        String [] secondRowChimes = ASM_CONST.CHIMES[(placeValIndex - 1) % 4 + 1];
-        for(int i = 0;i < 10; i++){
-            twoRowschimes[i]  = firstRowChimes[i];
-        }
-        for(int i = 10;i< 19; i++){
-            twoRowschimes[i]  = secondRowChimes[i-10+1];
-        }
-        for (CAsm_Alley alley: allAlleys) {
-            CAsm_DotBag dotBag = alley.getDotBag();
-            if(dotBag.getRows() == 1){
-                dotBag.setChimes(chimes);
-                dotBag.setChimeIndex(-1);
-            }else{
-                dotBag.setChimes(twoRowschimes);
-                dotBag.setChimeIndex(-1);
+        //wiggle operator
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                CAnimatorUtil.zoomInOut(opAlley.getTextLayout().getTextLayout(0).getText(1), 2.5f, 1500L); // √√√
+                ASM_CONST.logAnnoyingReference(ASM_CONST.OPERATOR_ROW - 1, 0, 1, "zoomInOut");
             }
-        }
+        }, 20);
     }
+
+
+
+    public void pointAtOperator() {
+
+        CAsm_Alley  opAlley  = allAlleys.get(ASM_CONST.OPERATOR_ROW - 1);
+        View        operator = opAlley.getTextLayout().getTextLayout(0).getText(1); // √√√
+        ASM_CONST.logAnnoyingReference(ASM_CONST.OPERAND_ROW - 1, 0, 1, "pointAtOperator");
+
+        operator.getLocationOnScreen(_screenCoord);
+
+        PointF targetPoint = new PointF(_screenCoord[0] + operator.getWidth(), _screenCoord[1] + operator.getHeight());
+
+        // Let the persona know where to look
+        Intent msg = new Intent(TCONST.POINTAT);
+        msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
+
+        bManager.sendBroadcast(msg);
+    }
+
 
     public void playChime() {
 
@@ -895,20 +909,8 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     }
 
 
-    private void delAlley() {
 
-        int index = numAlleys - 1;
-        CAsm_Alley toRemove = allAlleys.get(index);
-
-        toRemove.removeAllViews();
-        //Scontent.removeView(toRemove);
-        removeView(toRemove);
-        allAlleys.remove(index);
-
-        numAlleys--;
-
-    }
-
+    // MATHFIX_CLEAN called by T
     /**
      * Compares the digit written in the box to the Whole expected answer. Note that this will only ever
      * return true for answers with 1 digit. For >1 digit numbers, "corValue" will always be >1 digit,
@@ -928,14 +930,11 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     }
 
 
-    public Integer getCorrectDigit() {
-        return corDigit;
-    }
+    // ------------------------------------------------------------
+    // --------- called by TComponent... tutor logic --------------
+    // ------------------------------------------------------------
 
-    public Integer getCorrectCarryBrw() {
-        return overheadVal;
-    }
-
+    // MATHFIX_CLEAN called by T
     public boolean isDigitCorrect() {
 
         overheadCorrect = ASM_CONST.NO_INPUT;
@@ -1008,7 +1007,7 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         return bottomCorrect;
     }
 
-    public void wrongDigit(final CAsm_Text t) {
+    private void wrongDigit(final CAsm_Text t) {
             //Indicates that the digit the user entered is wrong w/ red text.
             t.setTextColor(Color.RED);
             clickPaused = true;
@@ -1019,17 +1018,30 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
                     t.setText("");
                     t.setTextColor(Color.BLACK);
                     clickPaused = false;
-                    setDotBagsVisible(true, digitIndex, mechanics.getCurRow()-2);
+                    setDotBagsVisible(true, digitIndex, 0);
                 }
             }, 1500);
     }
 
-
-    public boolean getClickPaused() {return clickPaused;}
+    /**
+     * CALLED BY ANIMATOR_GRAPH
+     */
+    public void highlightCurrentColumn() {
+        //Highlights user's active column.
+        for (CAsm_Alley alley: allAlleys) {
+            try {
+                CAsm_Text text = alley.getTextLayout().getTextLayout(digitIndex).getText(1); // √√√
+                ASM_CONST.logAnnoyingReference(alley.getId(), digitIndex, 1, "highlightCurrentColumn");
+                if (text.getDigit() != null || text.isWritable) {highlightText(text); }
+            } catch (NullPointerException e) { continue;}
+        }
+    }
 
 
     /**
-     * MATHFIX_UI done
+     * CALLED BY
+     *  THIS
+     *  MECHANIC_BASE/SUBTRACT
      * @param t
      */
     public void highlightText(final CAsm_Text t) {
@@ -1066,21 +1078,10 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     }
 
 
+
     /**
-     * MATHFIX_UI done
+     * CALLED BY MECHANIC_BASE
      */
-    public void highlightCurrentColumn() {
-        //Highlights user's active column.
-        for (CAsm_Alley alley: allAlleys) {
-            try {
-                CAsm_Text text = alley.getTextLayout().getTextLayout(digitIndex).getText(1); // √√√
-                ASM_CONST.logAnnoyingReference(alley.getId(), digitIndex, 1, "highlightCurrentColumn");
-                if (text.getDigit() != null || text.isWritable) {highlightText(text); }
-            } catch (NullPointerException e) { continue;}
-        }
-    }
-
-
     public void updateText(CAsm_Text t1, CAsm_Text t2, boolean isClickingBorrowing) {
 
         isWriting = true;
@@ -1101,14 +1102,14 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
             if(isClickingBorrowing) {
                 mPopup.update(t2, 120, -500, 500, 500);
 
-                mPopup.setExpectedDigit(getCorrectCarryBrw().toString());
-                Log.d(TAG, "Correct Carry Digit: " + getCorrectCarryBrw().toString());
+                mPopup.setExpectedDigit(overheadVal.toString());
+                Log.d(TAG, "Correct Carry Digit: " + overheadVal.toString());
             }
             else {
                 mPopup.update(t2, 60, 20, 500, 500);
 
-                mPopup.setExpectedDigit(getCorrectDigit().toString());    // MATHFIX_WRITE NEXT NEXT NEXT does this get used?
-                Log.d(TAG, "Correct Answer Digit: " + getCorrectDigit().toString());
+                mPopup.setExpectedDigit(corDigit.toString());    // MATHFIX_WRITE NEXT NEXT NEXT does this get used?
+                Log.d(TAG, "Correct Answer Digit: " + corDigit.toString());
             }
 
             mPopup.isActive = true;
@@ -1136,6 +1137,13 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     }
 
 
+    /**
+     * Exit the write box.
+     *
+     * CALLED BY
+     *  THIS
+     *  MECHANIC_BASE
+     */
     public void exitWrite() {
 
         mPopup.isActive = false;
@@ -1146,12 +1154,10 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
         mPopupSupplement.enable(false,null);
         mPopupSupplement.dismiss();
 
-        restartHesitationTimer(3000);
-    }
 
-
-    public void restartHesitationTimer(int delayTime) {
-
+        // restart the hesitation timer
+        // formerly the method restartHesitationTimer()
+        int delayTime = 3000;
         if(isWriting && !hasShown) {
 
             startTime = System.currentTimeMillis();
@@ -1159,8 +1165,14 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
 
             postEvent(ASM_CONST.SHOW_SCAFFOLD_BEHAVIOR, delayTime);
         }
+
     }
 
+
+
+    // ---------------------------------------------
+    // --------- on char recognition ---------------
+    // ---------------------------------------------
 
     // MATHFIX_WRITE NEXT can this be simpler?
     // MATHFIX_WRITE NEXT can we change the digit from here?
@@ -1181,6 +1193,10 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     }
 
 
+    // -----------------------------------------------------
+    // --------- touches handled by MECHANIC ---------------
+    // -----------------------------------------------------
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         final int action = MotionEventCompat.getActionMasked(event);
@@ -1191,14 +1207,11 @@ public class CAsm_Component extends LinearLayout implements IBehaviorManager, IL
     }
 
 
-    public void addMapToTutor(String key, String value) {
-    }
 
+    // --------------------------------------------------
+    // --------- overridden by TComponent ---------------
+    // --------------------------------------------------
     public void delAddFeature(String delFeature, String addFeature) {
-    }
-
-    public void applyEventNode(String nodeName) {
-
     }
 
 

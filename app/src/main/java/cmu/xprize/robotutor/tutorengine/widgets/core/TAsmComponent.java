@@ -241,7 +241,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObject, IData
     }
 
 
-    public void saveCurFeaturesAboutOverhead() {
+    private void saveCurFeaturesAboutOverhead() {
 
         if (mTutor.testFeature(TCONST.ASM_RA_START)) curFeatures.add(TCONST.ASM_RA_START);
         if (mTutor.testFeature(TCONST.ASM_NEXT_NUMBER)) curFeatures.add(TCONST.ASM_NEXT_NUMBER);
@@ -251,7 +251,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObject, IData
     }
 
 
-    public void delCurFeaturesAboutOverhead() {
+    private void delCurFeaturesAboutOverhead() {
 
         retractFeature(TCONST.ASM_RA_START);
         retractFeature(TCONST.ASM_NEXT_NUMBER);
@@ -260,12 +260,13 @@ public class TAsmComponent extends CAsm_Component implements ITutorObject, IData
         retractFeature(TCONST.ASM_RESULT_NEXT_OR_LAST);
     }
 
-    public void retrieveCurFeaturesAboutOverhead() {
+    private void retrieveCurFeaturesAboutOverhead() {
         for (int i = 0; i < curFeatures.size(); i++) {
             publishFeature(curFeatures.get(i));
         }
     }
 
+    // might be called by AG
     public void reset() {
 
         retractFeature(TCONST.FTR_COMPLETE);
@@ -279,38 +280,57 @@ public class TAsmComponent extends CAsm_Component implements ITutorObject, IData
         retractFeature(TCONST.ASM_ALL_DOTS_DOWN);
     }
 
-    public void resetAll() {
+
+    private void resetAllFeatures() {
         retractFeature(TCONST.GENERIC_RIGHT);
         retractFeature(TCONST.GENERIC_WRONG);
         retractFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
         retractFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
 
-        resetAllAboutAdd();
-        resetAllAboutSub();
-        resetAllAboutMulti();
+        resetAddFeatures();
+        resetSubFeatures();
+        resetMultiFeatures();
     }
 
-    public void resetAllAboutAdd() {
-        retractFeature(TCONST.ASM_ADD);
-        retractFeature(TCONST.ASM_ADD_PROMPT);
-        retractFeature(TCONST.ASM_ADD_PROMPT_COUNT_FROM);
-        retractFeature(TCONST.ASM_ALL_DOTS_DOWN);
+    private void resetAddFeatures() {
+        String[] ADD_FEATURES = new String[]{
+                TCONST.ASM_ADD,
+                TCONST.ASM_ADD_PROMPT,
+                TCONST.ASM_ADD_PROMPT_COUNT_FROM,
+                TCONST.ASM_ALL_DOTS_DOWN};
+
+        for (String feature : ADD_FEATURES) {
+            retractFeature(feature);
+        }
     }
 
-    public void resetAllAboutSub() {
-        retractFeature(TCONST.ASM_SUB);
-        retractFeature(TCONST.ASM_SUB_PROMPT);
+    private void resetSubFeatures() {
+        String[] SUB_FEATURES = new String[]{
+                TCONST.ASM_SUB,
+                TCONST.ASM_SUB_PROMPT
+        };
+
+        for (String feature : SUB_FEATURES) {
+            retractFeature(feature);
+        }
     }
 
-    public void resetAllAboutMulti() {
-        retractFeature(TCONST.ASM_MULTI);
-        retractFeature(TCONST.ASM_MULTI_PROMPT);
-        retractFeature(TCONST.ASM_RA_START);
-        retractFeature(TCONST.ASM_NEXT_NUMBER);
-        retractFeature(TCONST.ASM_NEXT_RESULT);
-        retractFeature(TCONST.ASM_RESULT_FIRST_TWO);
-        retractFeature(TCONST.ASM_RESULT_NEXT_OR_LAST);
-        retractFeature(TCONST.ASM_REPEATED_ADD_DOWN);
+    private void resetMultiFeatures() {
+        // MATHFIX_CLEAN these can be gone from animator_graph
+        String[] MULTI_FEATURES = new String[]{
+                TCONST.ASM_MULTI,
+                TCONST.ASM_MULTI_PROMPT,
+                TCONST.ASM_RA_START,
+                TCONST.ASM_NEXT_NUMBER,
+                TCONST.ASM_NEXT_RESULT,
+                TCONST.ASM_RESULT_FIRST_TWO,
+                TCONST.ASM_RESULT_NEXT_OR_LAST,
+                TCONST.ASM_REPEATED_ADD_DOWN
+        };
+
+        for (String feature : MULTI_FEATURES) {
+            retractFeature(feature);
+        }
     }
 
     /**
@@ -408,7 +428,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObject, IData
         //
         if (mTutor.testFeatureSet(TCONST.GENERIC_WRONG))
                             retractFeature(TCONST.ALL_CORRECT);
-        resetAll();
+        resetAllFeatures();
 
         super.next();
         resetPlaceValue();
@@ -426,6 +446,10 @@ public class TAsmComponent extends CAsm_Component implements ITutorObject, IData
     }
 
 
+
+    // ---------------------------
+    // ---------for demos --------
+    // ---------------------------
     /**
      *
      * @param dataPacket
@@ -750,7 +774,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObject, IData
 
         reset();
         super.nextDigit();
-        nextPlaceValue();
+
 
         retrieveCurFeaturesAboutOverhead();
     }
@@ -987,28 +1011,6 @@ public class TAsmComponent extends CAsm_Component implements ITutorObject, IData
         postEvent(ASM_CONST.INPUT_BEHAVIOR);
     }
 
-    public void applyEventNode(String nodeName) {
-        IScriptable2 obj = null;
-
-        if(nodeName != null && !nodeName.equals("")) {
-            try {
-                obj = mTutor.getScope().mapSymbol(nodeName);
-
-                if(obj.testFeatures()) {
-                    obj.applyNode();
-                }
-
-            } catch (Exception e) {
-                // TODO: Manage invalid Behavior
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void exitWrite() {
-        super.exitWrite();
-    }
-
     public void highlightOverhead() {
          mechanics.highlightOverhead();
     }
@@ -1017,10 +1019,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObject, IData
          mechanics.highlightResult();
     }
 
-    public void addMapToTutor(String key, String value) {
-        mTutor.getScope().addUpdateVar(name() + key, new TString(value));
-    }
-
+    @Override
     public void delAddFeature(String delFeature, String addFeature) {
         retractFeature(delFeature);
         publishFeature(addFeature);

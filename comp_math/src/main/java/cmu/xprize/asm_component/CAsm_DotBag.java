@@ -315,7 +315,7 @@ public class CAsm_DotBag extends TableLayout {
     protected void onDraw(Canvas canvas) {
 
         if (drawBorder) {
-            canvas.drawRoundRect(bounds, size / 2, size / 2, borderPaint); // MATHFIX_3 NEXT here's where the dotbag is drawn!!!
+            canvas.drawRoundRect(bounds, size / 2, size / 2, borderPaint); // MATHFIX_3 NEXT NEXT NEXT here's where the dotbag is drawn!!!
             // TODO: make opaque
 
         }

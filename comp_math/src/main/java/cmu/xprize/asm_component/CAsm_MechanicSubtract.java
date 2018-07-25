@@ -16,7 +16,6 @@ import cmu.xprize.util.TCONST;
 public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMechanics {
 
     static final String TAG = "CAsm_MechanicSubtract";
-    protected String operation = "-";
 
     private int dotOffset;
 
@@ -32,8 +31,14 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
     private int borrowBlockStartIndex = -1;
     private int borrowBlockEndIndex = -1;
 
-    public CAsm_MechanicSubtract(CAsm_Component mComponent) {super.init(mComponent);}
+    public CAsm_MechanicSubtract(CAsm_Component mComponent) {
+        super.init(mComponent);
+    }
 
+
+    /**
+     * Called by C_Component.nextDigit()
+     */
     @Override
     public void nextDigit() {
 
@@ -503,11 +508,6 @@ public class CAsm_MechanicSubtract extends CAsm_MechanicBase implements IDotMech
             if (!borrowableText.getIsStruck() && !borrowableText.getText().equals(""))
                 mComponent.highlightText(borrowableText);
         }
-    }
-
-    @Override
-    public void highlightResult() {
-        super.highlightResult();
     }
 
 }

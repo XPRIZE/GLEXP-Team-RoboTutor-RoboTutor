@@ -15,7 +15,6 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     protected ArrayList<CAsm_Alley> allAlleys;
     protected CAsm_Component mComponent;
-    protected String operation = "";
 
     float scale;
 
@@ -46,6 +45,9 @@ public class CAsm_MechanicBase implements IDotMechanics {
     }
 
 
+    /**
+     * Called by C_Component.nextDigit()
+     */
     public void nextDigit(){
 
         for (CAsm_Alley alley: allAlleys) {
@@ -86,7 +88,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
         if(mComponent != null) {
 
-            if (mComponent.getClickPaused()) {
+            if (mComponent.clickPaused) {
                 return;
             }
 
@@ -119,8 +121,6 @@ public class CAsm_MechanicBase implements IDotMechanics {
             }
         }
     }
-
-    public String getOperation() {return operation;}
 
     /**
      * If user input the overhead value correctly
@@ -193,7 +193,5 @@ public class CAsm_MechanicBase implements IDotMechanics {
         ASM_CONST.logAnnoyingReference(resultIndex, mComponent.digitIndex, 1, "highlightOverheadOrResult()");
         mComponent.delAddFeature(TCONST.ASM_ALL_DOTS_DOWN, "");
     }
-
-    public int getCurRow() { return 2; }
 
 }
