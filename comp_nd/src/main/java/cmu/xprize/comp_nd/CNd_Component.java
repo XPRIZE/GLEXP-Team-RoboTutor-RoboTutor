@@ -82,6 +82,9 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
     }
 
+    /**
+     * called by AG
+     */
     public void next() {
 
         try {
@@ -101,7 +104,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         return _dataIndex >= dataSource.length;
     }
 
-    protected void updateDataSet(CNd_Data data) {
+    private void updateDataSet(CNd_Data data) {
 
         // first load dataset into fields
         loadDataSet(data);
@@ -113,9 +116,6 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
             _correctChoice = "right";
         }
 
-        // ND_CLEAN simplify... make this consistent w/ animator graph
-        updateStimulus();
-
     }
 
     /**
@@ -123,7 +123,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
      *
      * @param data the current element in the DataSource array.
      */
-    protected void loadDataSet(CNd_Data data) {
+    private void loadDataSet(CNd_Data data) {
         level = data.level;
         task = data.task;
         layout = data.layout;
@@ -149,9 +149,9 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
 
     /**
-     * Updates the stimulus.
+     * Called by AG: Updates the stimulus.
      */
-    protected void updateStimulus() {
+    public void updateStimulus() {
 
         setVisibility(VISIBLE);
 
@@ -164,6 +164,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     }
 
     /**
+     * Called by LayoutManager
      * Can be left or right
      *
      * @param studentChoice can be "left" or "right".
@@ -173,14 +174,33 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         Log.d(TAG, String.format(Locale.US, "The student chose the number on the %s. The correct answer is on the %s", studentChoice, _correctChoice));
 
         if (studentChoice.equals(_correctChoice)) {
-            // ND_BUILD do something... move on in animator_graph
+
             Log.d(TAG, "CORRECT!");
+            applyBehavior("ND_RIGHT");
         } else {
-            // ND_BUILD do something... move on in animator_graph
+
             Log.d(TAG, "WRONG!");
+            applyBehavior("ND_WRONG");
         }
 
     }
+
+    /**
+     * Called by AG
+     */
+    public void doTheWrongThing() {
+        Log.d(TAG, "Doing the wrong thing");
+        // ND_BUILD do something... move on in animator_graph
+    }
+
+    /**
+     * Called by AG
+     */
+    public void doTheRightThing() {
+        Log.d(TAG, "Doing the right thing");
+        applyBehavior("ND_NEXT"); // ND_BUILD √√√ do something... go to next node (UPDATE_STIMULUS)
+    }
+
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables

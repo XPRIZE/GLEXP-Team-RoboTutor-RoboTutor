@@ -10,6 +10,37 @@
       "version": "1.0.0",
       "rootnode": "INTRO_STATE",
 
+      "queueMap": {
+
+        "ND_RIGHT": {
+          "type": "QUEUE",
+          "COMMENT": "Right behavior",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "ch.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"event"},
+            {"name": "ND_WRONG", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "doTheRightThing", "parms": "", "features":""}
+
+          ],
+          "preexit": [],
+          "edges": []
+        },
+
+        "ND_WRONG": {
+          "type": "QUEUE",
+          "COMMENT": "Wrong behavior",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "d.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"event"},
+            {"name": "ND_WRONG", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "doTheWrongThing", "parms": "", "features":""}
+
+          ],
+          "preexit": [],
+          "edges": []
+        }
+
+      },
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
@@ -19,7 +50,7 @@
           "COMMENT": "Intro Clip - we only ever visit this node once",
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
-          "preenter": ["SET_VERSION", "SET_DATASOURCE"],
+          "preenter": ["SET_VERSION", "SET_DATASOURCE", "SET_WRONG_BEHAVIOR", "SET_RIGHT_BEHAVIOR", "SET_NEXT_BEHAVIOR"],
           "preexit": [],
           "edges": [
             {
@@ -95,7 +126,8 @@
           "COMMENT": "????",
           "tracks": [
               
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""}
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "a.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"}
 
 
             ]
@@ -106,7 +138,9 @@
           "reuse": true,
           "tracks": [
               
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""}
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
+            {"name": "UPDATE_STIMULUS", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "updateStimulus"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "b.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"}
             // ND_CLEAN simplify... get rid of some of these graph steps
     
           ]
@@ -181,6 +215,12 @@
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
         "SET_DATASOURCE":{"type": "COMMAND", "id": "SNumDiscr", "method": "setDataSource", "parms": "LOCAL_FILE:String","features":""},
+
+        // this is so unnecessary
+        "SET_WRONG_BEHAVIOR": {"type": "COMMAND", "id": "SNumDiscr", "method": "setStickyBehavior", "parms": "ND_WRONG:String|ND_WRONG:String" ,"features":""},
+        "SET_RIGHT_BEHAVIOR": {"type": "COMMAND", "id": "SNumDiscr", "method": "setStickyBehavior", "parms": "ND_RIGHT:String|ND_RIGHT:String" ,"features":""},
+
+        "SET_NEXT_BEHAVIOR": {"type": "COMMAND", "id": "SNumDiscr", "method": "setStickyBehavior", "parms": "ND_NEXT:String|NEXTNODE:String" ,"features":""},
 
         "NEXT_DATASET": {"type": "COMMAND", "id": "SNumDiscr", "method": "next", "features": ""},
         "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"},

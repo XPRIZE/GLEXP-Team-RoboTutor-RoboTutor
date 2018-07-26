@@ -32,7 +32,7 @@ public class CNd_LayoutManager_BaseTen implements CNd_LayoutManagerInterface {
 
     @Override
     public void initialize() {
-        CNd_Component.inflate(_context, R.layout.nd_layout, _component);
+        CNd_Component.inflate(_context, R.layout.nd_layout_2, _component);
     }
 
     @Override
