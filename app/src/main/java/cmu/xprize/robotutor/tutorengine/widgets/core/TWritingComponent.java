@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import org.json.JSONObject;
 
@@ -145,7 +146,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
         mResponseViewScroll = (CLinkedScrollView) findViewById(R.id.Sresponseview);
         mResponseViewList = (LinearLayout) findViewById(R.id.SresponseviewList);
-
+        mResponseScrollLayout = (RelativeLayout)  findViewById(R.id.Sresponsescrolllayout);
         mDrawnScroll = (CLinkedScrollView) findViewById(R.id.SfingerWriter);
         mGlyphList   = (LinearLayout) findViewById(R.id.Sdrawn_glyphs);
         mGlyphList.setClipChildren(false);

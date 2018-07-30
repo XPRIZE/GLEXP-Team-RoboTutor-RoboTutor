@@ -35,6 +35,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import org.json.JSONObject;
 
@@ -92,6 +93,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected LinearLayout      mResponseViewList;
     protected LinearLayout      mGlyphList;
     protected LinearLayout      mGlyphAnswerList;
+    protected RelativeLayout    mResponseScrollLayout;
+
+    protected View mHighlightErrorBoxView;
 
     protected int               mMaxLength   = 0; //GCONST.ALPHABET.length();                // Maximum string length
 
@@ -196,7 +200,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         // Setup the Recycler for the recognized input views
         mRecognizedScroll = (CLinkedScrollView) findViewById(R.id.Sresponse);
         mRecogList = (LinearLayout) findViewById(R.id.Srecognized_glyphs);
-
         // Note: this is used in the GlyphRecognizer project to initialize the sample
         //
         for(int i1 =0 ; i1 < mStimulusData.length ; i1++)
@@ -390,6 +393,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             String charExpected = gController.getExpectedChar();
             resp.setStimulusChar(mResponse,false);
 //            updateResponseView(mResponse);
+        //amogh added to handle spaces.
         if(_isValid){
             if(_spaceIndices.contains(mActiveIndex-1)){
                 CGlyphController    gControllerSpace = (CGlyphController)mGlyphList.getChildAt(mActiveIndex-1);
@@ -399,6 +403,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 gControllerSpace.updateCorrectStatus(_isValid);
             }
         }
+        //amogh add ends
         // Update the controller feedback colors
         //
         mActiveController.updateCorrectStatus(_isValid);
@@ -988,6 +993,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mAudioStimulus = data.audioStimulus;
         mAnswer = data.answer;
 
+        //amogh added
+        //load the indices for the different corrections
+        if(activityFeature.contains("FTR_SEN_CORR")){
+
+        }
         // Add the recognized response display containers
         //
         _spaceIndices.clear();
@@ -999,6 +1009,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             // mAudioStimulus = getStoryAudio(storyName, storyLine);
             // mAnswer = mStimulus;
         }
+
+        //amogh added to debug
+//        try = (View) LayoutInflater.from(getContext()).inflate((R.drawable.highlight_error,null,false));
 
         if(!singleStimulus) {
             for(int i1 =0 ; i1 < mStimulus.length() ; i1++)
@@ -1071,11 +1084,49 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     }
                     mGlyphList.addView(v);
                 }
-
                 v.setLinkedScroll(mDrawnScroll);
                 v.setWritingController(this);
             }
-        } else {
+        }
+        //amogh added
+        //add for sentence correction
+        else if(activityFeature.contains("FTR_SEN_CORR")){
+            for(int i1 =0 ; i1 < mStimulus.length() ; i1++)
+            {
+                // create a new view
+                v = (CGlyphController)LayoutInflater.from(getContext())
+                        .inflate(R.layout.drawn_input_comp, null, false);
+
+                // Last is used for display updates - limits the extent of the baseline
+                v.setIsLast(i1 ==  mStimulus.length()-1);
+                v.setRespIndex(i1);
+                //amogh needs edits, need a proper computation function to be able to calculate the differences between the
+                String expectedChar = mAnswer.substring(i1,i1+1);
+
+                v.setExpectedChar(expectedChar);
+
+                if(!expectedChar.equals(" ")) {
+                    v.setProtoGlyph(_glyphSet.cloneGlyph(expectedChar));
+                }
+                else{
+                    _spaceIndices.add(i1);
+                }
+
+                mGlyphList.addView(v);
+                v.toggleProtoGlyph();
+                v.setLinkedScroll(mDrawnScroll);
+                v.setWritingController(this);
+                v.setResponseView(mResponseViewList);
+                //amogh added
+                resp = (CStimulusController)LayoutInflater.from(getContext())
+                        .inflate(R.layout.recog_resp_comp, null, false);
+                mResponseViewList.addView(resp);
+                resp.setLinkedScroll(mDrawnScroll);
+                resp.setWritingController(this);
+                //amogh add finish
+            }
+        }
+        else {
 
             for(int i1 =0 ; i1 < mAnswer.length() ; i1++)
             {
@@ -1098,7 +1149,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 }
 
                 mGlyphList.addView(v);
-
+                v.toggleProtoGlyph();
                 v.setLinkedScroll(mDrawnScroll);
                 v.setWritingController(this);
                 v.setResponseView(mResponseViewList);
@@ -1111,6 +1162,23 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 //amogh add finish
             }
         }
+        //amogh added
+        //adding the view for highlight error box:
+        mHighlightErrorBoxView = new View (getContext());
+        mHighlightErrorBoxView.setLayoutParams(new LayoutParams(60,60));
+//        mHighlightErrorBoxView.setId();
+        mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
+//        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
+//        mp.setMargins(100,00,0,100);
+        mHighlightErrorBoxView.setX((float)300.00);
+//        mHighlightErrorBoxView.setLeft(1000);
+        mResponseScrollLayout.addView(mHighlightErrorBoxView);
+        mHighlightErrorBoxView.postDelayed(new Runnable() {
+            public void run() {
+                mHighlightErrorBoxView.setVisibility(View.GONE);
+            }
+        }, 5000);
+        //amogh added ends
     }
 
     //************************************************************************

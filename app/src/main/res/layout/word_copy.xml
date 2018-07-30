@@ -106,17 +106,29 @@
             android:layout_gravity="center_horizontal"
             app:show_tracker="true"
             android:background="@null">
-
-            <LinearLayout
-                android:id="@+id/SresponseviewList"
+            <RelativeLayout
+                android:id="@+id/Sresponsescrolllayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
                 android:background="@null">
-            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/SresponseviewList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@null">
+                </LinearLayout>
+                <!--<View-->
+                    <!--android:id="@+id/ShighlighterrorBox"-->
+                    <!--android:layout_width="60dp"-->
+                    <!--android:layout_height="60dp"-->
+                    <!--android:background="@drawable/highlight_error"/>-->
+            </RelativeLayout>
 
         </cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView>
 
@@ -142,8 +154,8 @@
             android:orientation="horizontal"
             android:animateLayoutChanges="true"
             android:background="@null">
-        </LinearLayout>
 
+        </LinearLayout>
     </cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView>
 
 

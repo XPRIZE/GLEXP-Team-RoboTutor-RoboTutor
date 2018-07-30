@@ -1072,7 +1072,9 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             boolean isDirty = (_protoGlyph != null)? _protoGlyph.getDirty():false;
             mGlyphController.setProtoTypeDirty(_showProtoGlyph ?  isDirty: false);
         }
-
+//        if (mHasGlyph==false){
+//            mHasGlyph = true;
+//        }
         rebuildGlyph();
         invalidate();
 

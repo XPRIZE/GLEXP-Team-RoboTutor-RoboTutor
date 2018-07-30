@@ -10,7 +10,7 @@
 
 		{"type": "COMMAND", "id": "SaudioReplay",   "method": "setVisibility", "parms": "VISIBLE:String", "features":"FTR_DICTATION"},
 		{"type": "COMMAND", "id": "SstimulusFrame", "method": "setVisibility", "parms": "VISIBLE:String", "features":"!FTR_DICTATION"},
-		  {"type": "COMMAND", "id": "Sresponseviewframe", "method": "setVisibility", "parms": "VISIBLE:String", "features":"FTR_SEN"}
+		  {"type": "COMMAND", "id": "SresponseviewFrame", "method": "setVisibility", "parms": "VISIBLE:String", "features":"FTR_SEN"}
 	  ],
 	  "onenter":[
 	  ],
