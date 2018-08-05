@@ -170,15 +170,35 @@
       "tutorName": "word_copy",
       "features": "FTR_MISSING_LTR"
     },
-    "write.sen.corr": {
+    "write.sen.corr.easy": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
-      "features": "FTR_SEN:FTR_SEN_CORR"
+      "features": "FTR_SEN:FTR_SEN_CORR:FTR_SEN_EASY"
     },
-    "write.sen.copy": {
+    "write.sen.corr.med": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
-      "features": "FTR_SEN"
+      "features": "FTR_SEN:FTR_SEN_CORR:FTR_SEN_MED"
+    },
+    "write.sen.corr.diff": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_SEN:FTR_SEN_CORR:FTR_SEN_DIFF"
+    },
+    "write.sen.copy.easy": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_SEN:FTR_SEN_EASY"
+    },
+    "write.sen.copy.med": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_SEN:FTR_SEN_MED"
+    },
+    "write.sen.copy.diff": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_SEN:FTR_SEN_DIFF"
     },
     "story.echo": {
       "type": "TUTORVAR_MAP",
