@@ -90,7 +90,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected ImageButton       mReplayButton;
 
     protected LinearLayout      mRecogList;
-    protected LinearLayout      mResponseViewList;
+    protected LinearLayout      mResponseViewList; //amogh added
     protected LinearLayout      mGlyphList;
     protected LinearLayout      mGlyphAnswerList;
     protected RelativeLayout    mResponseScrollLayout;
@@ -128,7 +128,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected int               _dataIndex = 0;
     protected boolean           _dataEOI   = false;
 
-    public    boolean           _immediateFeedback = true;
+    public    boolean           _immediateFeedback = false;
 
     protected LocalBroadcastManager bManager;
 
@@ -141,6 +141,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public boolean              random       = false;
     public boolean              singleStimulus = false;
     public CWr_Data[]           dataSource;
+
+    //amogh added for sentence correction
+    protected  List<Integer>    deleteCorrIndices = new ArrayList<>(Arrays.asList(0,1,14));
+    protected  List<Integer>    insertCorrIndices = new ArrayList<>(Arrays.asList(0,2));
+    protected  List<Integer>    changeCorrIndices = new ArrayList<>(Arrays.asList(0));
+    protected int correctionAttempts = 0;
+    //amogh add ends
 
     final private String  TAG        = "CWritingComponent";
 
@@ -284,11 +291,35 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
      *
      * @param child
      */
+    //amogh edited
     public void deleteItem(View child) {
         int index = mGlyphList.indexOfChild(child);
-
-        mGlyphList.removeViewAt(index);
-        mResponseViewList.removeViewAt(index);
+        if (! deleteCorrIndices.contains(index)) {
+            mGlyphList.removeViewAt(index);
+            mResponseViewList.removeViewAt(index);
+        }
+        else{
+            correctionAttempts++;
+            if (correctionAttempts > 2){
+                mHighlightErrorBoxView = new View (getContext());
+                int wid = mResponseViewList.getChildAt(index+3).getLeft() - mResponseViewList.getChildAt(index).getLeft();
+                mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid,60));
+//        mHighlightErrorBoxView.setId();
+                mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
+//        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
+//        mp.setMargins(100,00,0,100);
+//                mHighlightErrorBoxView.setX((float)300.00);
+                int pos = mResponseViewList.getChildAt(index).getLeft();
+                mHighlightErrorBoxView.setX((float)pos);
+//        mHighlightErrorBoxView.setLeft(1000);
+                mResponseScrollLayout.addView(mHighlightErrorBoxView);
+                mHighlightErrorBoxView.postDelayed(new Runnable() {
+                    public void run() {
+                        mHighlightErrorBoxView.setVisibility(View.GONE);
+                    }
+                }, 5000);
+            }
+        }
 //        mRecogList.removeViewAt(index); //amogh commented to avoid removal from stimulus
     }
 
@@ -315,30 +346,33 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //        r.setLinkedScroll(mDrawnScroll);         //amogh commented to avoid removal from stimulus
 //        r.setWritingController(this);          //amogh commented to avoid removal from stimulus
 
+//amogh added for adding a view to the response view also, and also to check if the letter
+        if (!insertCorrIndices.contains(index+inc)) {
 
-        r = (CStimulusController)LayoutInflater.from(getContext())  //amogh added
-                                    .inflate(R.layout.recog_resp_comp, null, false);   //amogh added
-        mResponseViewList.addView(r, index + inc);          //amogh added
+            r = (CStimulusController) LayoutInflater.from(getContext())
+                    .inflate(R.layout.recog_resp_comp, null, false);
+            mResponseViewList.addView(r, index + inc);
 
-        r.setLinkedScroll(mDrawnScroll);         //amogh added
-        r.setWritingController(this);          //amogh added
+            r.setLinkedScroll(mDrawnScroll);
+            r.setWritingController(this);
+            //amogh added ends
 
+            // create a new view
+            v = (CGlyphController) LayoutInflater.from(getContext())
+                    .inflate(R.layout.drawn_input_comp, null, false);
 
-        // create a new view
-        v = (CGlyphController)LayoutInflater.from(getContext())
-                                    .inflate(R.layout.drawn_input_comp, null, false);
+            // Update the last child flag
+            //
+            if (index == mGlyphList.getChildCount() - 1) {
+                ((CGlyphController) child).setIsLast(false);
+                v.setIsLast(true);
+            }
 
-        // Update the last child flag
-        //
-        if(index == mGlyphList.getChildCount()-1) {
-            ((CGlyphController)child).setIsLast(false);
-            v.setIsLast(true);
+            mGlyphList.addView(v, index + inc);
+
+            v.setLinkedScroll(mDrawnScroll);
+            v.setWritingController(this);
         }
-
-        mGlyphList.addView(v, index + inc);
-
-        v.setLinkedScroll(mDrawnScroll);
-        v.setWritingController(this);
     }
 
 
@@ -346,7 +380,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
      *
      */
     public void clear() {
-
         // Add the recognized response display containers
         //
         mRecogList.removeAllViews();
@@ -1113,7 +1146,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 }
 
                 mGlyphList.addView(v);
-                v.toggleProtoGlyph();
+                v.toggleProtoGlyph(); //toggle (ie show sample glyph) when in the sentence correction mode
                 v.setLinkedScroll(mDrawnScroll);
                 v.setWritingController(this);
                 v.setResponseView(mResponseViewList);
@@ -1149,7 +1182,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 }
 
                 mGlyphList.addView(v);
-                v.toggleProtoGlyph();
+//                v.toggleProtoGlyph();
                 v.setLinkedScroll(mDrawnScroll);
                 v.setWritingController(this);
                 v.setResponseView(mResponseViewList);
