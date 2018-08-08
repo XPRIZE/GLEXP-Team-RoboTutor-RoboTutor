@@ -844,13 +844,13 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             mPaint.setColor(_glyphColor);
             mPaint.setStyle(Paint.Style.STROKE);
             mPaint.setStrokeWidth(_stroke_weight);
-
-            // Redraw the current glyph path
-            //
+//
+//            // Redraw the current glyph path
+//            //
             if(_showUserGlyph && _userGlyph != null) {
                 _userGlyph.drawGylyph(canvas,  mPaint, _viewBnds);
             }
-
+//
             // Redraw the current prototype glyph path
             //
             if(_showProtoGlyph && _protoGlyph != null) {

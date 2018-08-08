@@ -1124,6 +1124,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         //amogh added
         //add for sentence correction
         else if(activityFeature.contains("FTR_SEN_CORR")){
+            //load glyph input container
             for(int i1 =0 ; i1 < mStimulus.length() ; i1++)
             {
                 // create a new view
@@ -1147,6 +1148,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 mGlyphList.addView(v);
                 v.toggleProtoGlyph(); //toggle (ie show sample glyph) when in the sentence correction mode
+                v.toggleSampleChar();
                 v.setLinkedScroll(mDrawnScroll);
                 v.setWritingController(this);
                 v.setResponseView(mResponseViewList);
