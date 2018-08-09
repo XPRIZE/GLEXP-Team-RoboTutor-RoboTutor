@@ -32,7 +32,10 @@
         android:layout_alignParentRight="true"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:textAlignment="center"
         android:textColor="#000"
+        android:background="#FFF"
         android:textSize="30sp"
         app:layout_widthPercent="50%"
         app:layout_heightPercent="20%"/>
@@ -45,7 +48,10 @@
         android:layout_below="@+id/Sword1"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:textAlignment="center"
         android:textColor="#000"
+        android:background="#FFF"
         android:textSize="30sp"
         app:layout_widthPercent="50%"
         app:layout_heightPercent="20%"/>
@@ -58,7 +64,10 @@
         android:layout_below="@+id/Sword2"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:textAlignment="center"
         android:textColor="#000"
+        android:background="#FFF"
         android:textSize="30sp"
         app:layout_widthPercent="50%"
         app:layout_heightPercent="20%"/>
@@ -71,8 +80,12 @@
         android:layout_below="@+id/Sword3"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:textAlignment="center"
         android:textColor="#000"
+        android:background="#FFF"
         android:textSize="30sp"
+        android:text="asdf"
         app:layout_widthPercent="50%"
         app:layout_heightPercent="20%"/>
 

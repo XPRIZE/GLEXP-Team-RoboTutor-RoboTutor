@@ -56,14 +56,14 @@ import static cmu.xprize.util.TCONST.TYPE_AUDIO;
 /**
  *  The Reading Tutor Component
  */
-public class CRt_Component extends ViewAnimator implements IEventListener, IVManListener, IAsrEventListener, ILoadableObject, IPublisher {
+public class CQn_Component extends ViewAnimator implements IEventListener, IVManListener, IAsrEventListener, ILoadableObject, IPublisher {
 
     private Context                 mContext;
 
     protected ListenerBase          mListener;
     protected TTSsynthesizer        mSynthesizer;
 
-    protected ICRt_ViewManager mViewManager;                                   // Created in TRt_Component sub-class in the tutor domain
+    protected ICQn_ViewManager mViewManager;                                   // Created in TQn_Component sub-class in the tutor domain
     protected String                mDataSource;
 
     private ArrayList<String>       sentences              = null;                  //list of sentences of the given passage
@@ -111,27 +111,27 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     static public HashMap<String, Class> viewClassMap = new HashMap<String, Class>();
 
     static {
-        viewClassMap.put("ASB_Data", CRt_ViewManagerASB.class);
-        viewClassMap.put("MARi_Data", CRt_ViewManagerMari.class);
+        viewClassMap.put("ASB_Data", CQn_ViewManagerASB.class);
+        viewClassMap.put("MARi_Data", CQn_ViewManagerMari.class);
     }
 
-    static final String TAG = "CRt_Component";
+    static final String TAG = "CQn_Component";
 
 
-    public CRt_Component(Context context) {
+    public CQn_Component(Context context) {
         super(context);
         init(context, null);
     }
 
-    public CRt_Component(Context context, AttributeSet attrs) {
+    public CQn_Component(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
 
     public void init(Context context, AttributeSet attrs) {
-
-        inflate(getContext(), R.layout.rt__component, this);
+        Log.d(TAG, "init: "+context.getPackageName());
+        inflate(getContext(), R.layout.qn_component, this);
 
         mContext = context;
 
@@ -161,7 +161,7 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
 
 
     protected void prepareListener(TTSsynthesizer rootTTS) {
-
+        Log.d("ULANI", "prepareListener: generate TTSYNTHESIZER ");
         // Generate a Project Listen type listener
         // Attach the speech recognizer.
         mListener = new ListenerPLRT();
@@ -181,9 +181,29 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     }
 
     public void nextNode() {
-
     }
 
+    public void setRandomGenericQuestion() {
+        mViewManager.setRandomGenericQuestion();
+    }
+
+    public void setClozeQuestion() {
+        mViewManager.setClozeQuestion();
+    }
+
+    public void genericQuestions() {
+        mViewManager.genericQuestions();
+    }
+
+    public void displayGenericQuestion() {
+        mViewManager.displayGenericQuestion();
+    }
+
+    public void displayClozeQuestion() {
+        mViewManager.displayClozeQuestion();
+    }
+
+    public void hasClozeDistractor() {mViewManager.displayClozeQuestion();}
     /**
      *
      * @param language Feature string (e.g. LANG_EN)
@@ -224,12 +244,22 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
 
 
     public int addPage(View newView) {
-
+        Log.d(TAG, "addPage: ");
+//        System.out.println(newView.ge);
         int insertNdx = super.getChildCount();
+        System.out.println(insertNdx);
         super.addView((View) newView, insertNdx);
 
         return insertNdx;
     }
+
+//    public int addPage(ViewGroup newView) {
+//
+//        int insertNdx = newView.getChildCount();
+//        super.addView((View) newView, insertNdx);
+//
+//        return insertNdx;
+//    }
 
 
     /**
@@ -238,6 +268,8 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
      * @param index
      */
     public void animatePageFlip(boolean forward, int index) {
+        Log.d("ULANI", "INSIDE animatePageFlip, mCurrViewIndex = "+index + ", Flipping page");
+
 
         if (forward) {
             if (_scrollVertical)
@@ -251,6 +283,8 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
             else
                 setInAnimation(slide_left_to_right);
         }
+        Log.d("ULANI", "SETDISPLAYEDCHILD to be mCurrViewIndex");
+
         setDisplayedChild(index);
     }
 
@@ -282,6 +316,10 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     public void applyBehaviorNode(String nodeName) {
     }
 
+
+
+    public void stopAudio(){
+    }
 
     // IBehaviorManager Interface END
     //************************************************************************
@@ -563,24 +601,35 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     public void loadStory(String EXTERNPATH, String viewType, String assetLocation, String SHAREDEXTERNPATH) {
 
         Log.d(TCONST.DEBUG_STORY_TAG, String.format("assetLocation=%s -- EXTERNPATH=%s", assetLocation, EXTERNPATH));
-
+        System.out.println("viewtype "+viewType);
         Class<?> storyClass = viewClassMap.get(viewType);
-
+        System.out.println(storyClass.getCanonicalName());
         try {
             // Generate the View manager for the storyName - specified in the data
             //
             // ooooh maybe check if it's math and make text closer to image
-            mViewManager = (ICRt_ViewManager)storyClass.getConstructor(new Class[]{CRt_Component.class, ListenerBase.class}).newInstance(this,mListener);
+            mViewManager = (ICQn_ViewManager) storyClass.getConstructor(CQn_Component.class, ListenerBase.class).newInstance(this, mListener);
+            System.out.println(mViewManager);
 
+            Log.d(TAG, "loadStory: loaded mviewmanager");
+            Log.d(TAG, "loadStory: "+TCONST.STORYDATA);
             // ZZZ it loads the story data JUST FINE
             String jsonData = JSON_Helper.cacheDataByName(EXTERNPATH + TCONST.STORYDATA);
             Log.d(TCONST.DEBUG_STORY_TAG, "logging jsonData:");
-
             mViewManager.loadJSON(new JSONObject(jsonData), null);
+
+            // uhq
+            String jsonMcq = JSON_Helper.cacheDataByName(EXTERNPATH + TCONST.STORYMCQ);
+            System.out.println("JSON MCQ: "+ jsonMcq);
+            Log.d(TCONST.DEBUG_STORY_TAG, "logging jsonMcq:");
+            mViewManager.loadJSON(new JSONObject(jsonMcq), null);
 
         } catch (Exception e) {
             // TODO: Manage Exceptions
             CErrorManager.logEvent(TAG, "Story Parse Error: ", e, false);
+            if (e.getCause()!=null) {
+                Log.d(TAG, "loadStory: "+e.getCause());
+            }
         }
 
         if (assetLocation.equals(TCONST.EXTERN_SHARED)) {
@@ -768,6 +817,7 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     private void enQueue(Queue qCommand, Long delay) {
 
         if (!_qDisabled) {
+            Log.i("ULANI","enQueue: command = "+qCommand.getCommand()+"; Put command in queue");
             queueMap.put(qCommand, qCommand);
 
             if (delay > 0L) {

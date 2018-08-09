@@ -67,7 +67,21 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryQuestions", "method": "logState", "parms": "type#behavior,value#SPEAK_UTTERANCE_BEHAVIOR:String", "features": ""},
 
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SstoryQuestions.utterance}}.mp3", "listeners": "SstoryQuestions", "oncomplete": "TRACK_SEGMENT" , "soundpackage": "story", "mode": "flow", "features": ""}
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SstoryQuestions.utterance}}.mp3", "listeners": "SstoryQuestions", "oncomplete": "TRACK_SEGMENT" , "soundpackage": "story", "mode": "", "features": ""}
+          ],
+          "preexit": [],
+          "edges": []
+        },
+
+        "SPEAK_CLOZE_UTTERANCE_BEHAVIOR": {
+          "type": "QUEUE",
+          "COMMENT": "Speak the current word and continue to next.",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryQuestions", "method": "logState", "parms": "type#behavior,value#SPEAK_CLOZE_UTTERANCE_BEHAVIOR:String", "features": ""},
+
+            {"type": "QUEUEDAUDIO", "command": "PLAY_CLOZE", "soundsource": "{{SstoryQuestions.utterance}}.mp3", "listeners": "SstoryQuestions", "oncomplete": "TRACK_SEGMENT" , "soundpackage": "story", "mode": "", "features": ""}
           ],
           "preexit": [],
           "edges": []
@@ -118,7 +132,9 @@
             {"constraint": "ECHO_LINEMODE", "edge": "ECHO_LINE_NODE"},
             {"constraint": "PARROT_LINEMODE", "edge": "PARROT_LINE_NODE"},
             {"constraint": "STORY_COMPLETE", "edge": "NEXT_SCENE"},
+//            {"constraint": "PAGE_COMPLETE", "edge": "GENERIC_QUESTION_NODE"},
             {"constraint": "PAGE_COMPLETE", "edge": "NEXT_PAGE_NODE"},
+            {"constraint": "CLOZE_PAGE_COMPLETE", "edge": "PRESENT_CLOZE"},
             {"constraint": "PARAGRAPH_COMPLETE", "edge": "NEXT_PARA_NODE"},
             {"constraint": "LINE_COMPLETE", "edge": "NEXT_LINE_NODE"},
             {"constraint": "", "edge": "NEXT_WORD_NODE"}
@@ -130,7 +146,7 @@
           "COMMENT": "",
           "maptype": "actionMap",
           "mapname": "START_STORY",
-          "preenter": ["SET_NARRATOR", "SET_UTTERANCE"],
+          "preenter": ["SET_NARRATOR", "SET_UTTERANCE", "SET_CLOZE_QUESTION"],
           "preexit": [],
           "edges": [
             {"constraint": "", "edge": "LISTEN"}
@@ -140,7 +156,7 @@
         "LISTEN": {
           "COMMENT": "",
           "type": "node",
-          "preenter": ["SET_UTTERANCE_BEHAVIOR", "SET_HYPOTHESIS_BEHAVIOR", "SET_ONCLICK_SPEAK_WORD", "TIMER_HINT_BUTTON"],
+          "preenter": ["SET_UTTERANCE_BEHAVIOR", "SET_HYPOTHESIS_BEHAVIOR", "TIMER_HINT_BUTTON"],
           "maptype": "moduleMap",
           "mapname": "LISTENING",
           "preexit": ["CLR_HYPOTHESIS_BEHAVIOR", "CLR_ONCLICK", "TIMER_CANCEL_HINT_BUTTON"],
@@ -150,7 +166,19 @@
             {"constraint": "", "edge": "WRONG"}
           ]
         },
-
+        "CLOZE_LISTEN": {
+          "COMMENT": "",
+          "type": "node",
+          "preenter": ["SET_CLOZE_UTTERANCE_BEHAVIOR", "SET_HYPOTHESIS_BEHAVIOR", "SET_ONCLICK_SPEAK_WORD", "TIMER_HINT_BUTTON"],
+          "maptype": "moduleMap",
+          "mapname": "CLOZE_LISTENING",
+          "preexit": ["CLR_HYPOTHESIS_BEHAVIOR", "CLR_ONCLICK", "TIMER_CANCEL_HINT_BUTTON"],
+          "edges": [
+            {"constraint": "", "edge": "CORRECT"},
+            {"constraint": "SECOND_ERROR", "edge": "WRONG_2"},
+            {"constraint": "", "edge": "WRONG"}
+          ]
+        },
         "CORRECT": {
           "COMMENT": "When user inputs a correct answer...",
           "type": "node",
@@ -234,14 +262,13 @@
             {"constraint": "", "edge": "LISTEN"}
           ]
         },
-
         "NEXT_PARA_NODE": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
           "maptype": "actionMap",
           "mapname": "NEXT_PARA",
           "preenter": [],
-          "preexit": [],
+          "preexit": ["CHECK_CLOZE"],
           "edges": [
             {"constraint": "", "edge": "LISTEN"}
           ]
@@ -259,6 +286,52 @@
           ]
         },
 
+        "PRESENT_CLOZE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype": "moduleMap",
+          "mapname": "DISPLAY_CLOZE_QUESTION",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "", "edge": "AWAIT_CLOZE_RESPONSE"}
+          ]
+        },
+
+        "CLOZE_GOOD": {
+          "COMMENT": "When user inputs a correct answer...",
+          "type": "NODE",
+          "maptype": "moduleMap",
+          "mapname": "PLAYCLOZECORRECT",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "", "edge": "NEXT_STEP"}
+          ]
+        },
+        "CLOZE_BAD": {
+          "COMMENT": "When user inputs a correct answer...",
+          "type": "NODE",
+          "maptype": "moduleMap",
+          "mapname": "PLAYCLOZEWRONG",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "", "edge": "AWAIT_CLOZE_RESPONSE"}
+          ]
+        },
+        "NEXT_CLOZE_PAGE_NODE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype": "moduleMap",
+          "mapname": "CLOZEPAGEFLIP",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "HAS_CLOZE_QUESTION", "edge": "CLOZE_LISTEN"}
+          ]
+        },
+
         "NEXT_SCENE": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene in the scenegraph",
@@ -267,6 +340,31 @@
           "preenter": [],
           "preexit": [],
           "edges": [
+          ]
+        },
+
+        "GENERIC_QUESTION_NODE": {
+          "type": "NODE",
+          "COMMENT": "After a page, insert generic question",
+          "maptype": "moduleMap",
+          "mapname": "INSERT_GENERIC_QUESTION", // plays the question audio
+          "preenter": ["SET_GENERIC_QUESTION", "DISPLAY_GENERIC_QUESTION"], // figures out which question to ask, then set up the display on screen
+          "preexit": [],
+          "edges": [
+            {"constraint": "QUESTION_COMPLETE", "edge": "NEXT_PAGE_NODE"}
+          ]
+        },
+
+        "AWAIT_CLOZE_RESPONSE": {
+          "COMMENT": "",
+          "type": "NODE",
+          "preenter": [],
+          "maptype": "moduleMap",
+          "mapname": "LISTENING",
+          "preexit": [],
+          "edges": [
+            {"constraint":"CLOZE_CORRECT", "edge":"CLOZE_GOOD"},
+            {"constraint":"", "edge":"CLOZE_BAD"}
           ]
         }
       },
@@ -291,13 +389,33 @@
           ]
         },
 
+        "DISPLAY_CLOZE_QUESTION": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "uhq",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryQuestions", "method": "logState", "parms": "type#node,value#DISPLAY_CLOZE_QUESTION:String", "features": ""},
+            {"type": "COMMAND", "id": "SstoryQuestions", "method": "displayClozeQuestion", "parms": "" , "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "cloze_questions/Which word belongs here.mp3", "mode": "flow", "features": ""}
+          ]
+        },
+
+
         "LISTENING": {
           "type": "MODULE",
           "reuse": true,
           "COMMENT": "Listening Module",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryQuestions", "method": "logState", "parms": "type#node,value#LISTENING:String", "features": ""},
-
+            {"type": "COMMAND", "cmd": "WAIT"}
+          ]
+        },
+        "CLOZE_LISTENING": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "Listening Module",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryQuestions", "method": "logState", "parms": "type#node,value#CLOZE_LISTENING:String", "features": ""},
             {"type": "COMMAND", "cmd": "WAIT"}
           ]
         },
@@ -308,6 +426,27 @@
           "COMMENT": "TBD",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryQuestions", "method": "logState", "parms": "type#node,value#PLAYCORRECT:String", "features": ""}
+
+          ]
+        },
+
+        "PLAYCLOZECORRECT": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryQuestions", "method": "logState", "parms": "type#node,value#PLAYCLOZECORRECT:String", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "cloze_questions/Way to go.mp3", "mode": "flow", "features": ""}
+
+          ]
+        },
+        "PLAYCLOZEWRONG": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryQuestions", "method": "logState", "parms": "type#node,value#PLAYCLOZEWRONG:String", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "cloze_questions/Try again.mp3", "mode": "flow", "features": ""}
 
           ]
         },
@@ -343,7 +482,13 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryQuestions", "method": "logState", "parms": "type#node,value#CHECK_COMPLETE:String", "features": ""},
 
-            {"type": "COMMAND", "id": "SstoryQuestions", "method": "setSpeakButton",        "parms": "HIDE:String",    "features": ""}
+            {"type": "COMMAND", "id": "SstoryQuestions", "method": "setSpeakButton",        "parms": "HIDE:String",    "features": ""},
+            {"type": "COMMAND", "id": "SstoryQuestions", "method": "setPageFlipButton",        "parms": "HIDE:String",    "features": ""}
+            //{"type": "COMMAND", "id": "SstoryQuestions", "method": "setSpeakButton",        "parms": "DISABLE:String",    "features": ""},
+            //{"type": "COMMAND", "id": "SstoryQuestions", "method": "setPageFlipButton",        "parms": "DISABLE:String",    "features": ""}
+
+
+
           ]
         },
 
@@ -387,6 +532,18 @@
           ]
         },
 
+        "CLOZEPAGEFLIP": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryQuestions", "method": "logState", "parms": "type#node,value#CLOZEPAGEFLIP:String", "features": ""},
+
+            {"type": "COMMAND", "id": "SstoryQuestions", "method": "post", "parms": "NEXT_CLOZE_PAGE:String|500:long" , "features": "!FTR_MANUAL"},
+            {"type": "COMMAND", "id": "SstoryQuestions", "method": "post", "parms": "NEXT_CLOZE_PAGE:String"          , "features": "FTR_MANUAL"}
+          ]
+        },
+
         "SCENEFLIP": {
           "type": "MODULE",
           "reuse": true,
@@ -418,6 +575,37 @@
             {"type": "COMMAND", "id": "SstoryQuestions", "method": "setHighLight", "parms": "red:String"},
             {"type": "COMMAND", "id": "SstoryQuestions", "method": "continueListening"  , "features": ""}
           ]
+        },
+
+        "INSERT_GENERIC_QUESTION": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryQuestions", "method": "logState", "parms": "type#node,value#INSERT_GENERIC_QUESTION:String", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SstoryQuestions.questionAudio}}", "mode": "flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "generic_questions/5 second pause.mp3", "mode": "flow", "features": ""},
+            {"type": "COMMAND", "id": "SstoryQuestions", "method": "genericQuestions" , "features": ""}
+          ]
+        },
+
+        "PROMPT_CLOZE": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryQuestions", "method": "logState", "parms": "type#node,value#PROMPT_CLOZE:String", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "cloze_questions/Which word belongs here.mp3", "mode": "flow", "features": ""}
+          ]
+        },
+        "SHOW_CLOZE": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryQuestions", "method": "logState", "parms": "type#node,value#SHOW_CLOZE:String", "features": ""},
+            {"type": "COMMAND", "id": "SstoryQuestions", "method": "displayClozeQuestion" , "features": ""}
+          ]
         }
       },
 
@@ -437,6 +625,8 @@
         "RESET_WORD_EVENT": {"type": "COMMAND", "id": "SstoryQuestions", "method": "setVolatileBehavior", "parms": "ASR_WORD_EVENT:String|NULL:String" , "features": ""},
 
         "SET_UTTERANCE_BEHAVIOR":  {"type": "COMMAND", "id": "SstoryQuestions", "method": "setStickyBehavior", "parms": "UTTERANCE_COMPLETE_EVENT:String|NEXT_NODE:String" , "features": ""},
+        "SET_CLOZE_RESPONSE_BEHAVIOR":  {"type": "COMMAND", "id": "SstoryQuestions", "method": "setStickyBehavior", "parms": "ON_CLICK:String|NEXT_NODE:String" , "features": ""},
+
         "SET_HYPOTHESIS_BEHAVIOR": {"type": "COMMAND", "id": "SstoryQuestions", "method": "setVolatileBehavior", "parms": "ASR_RECOGNITION_EVENT:String|NEXT_NODE:String" , "features": ""},
         "CLR_HYPOTHESIS_BEHAVIOR": {"type": "COMMAND", "id": "SstoryQuestions", "method": "setVolatileBehavior", "parms": "ASR_RECOGNITION_EVENT:String|NULL:String" , "features": ""},
 
@@ -446,8 +636,12 @@
         "NEXT_WORD": {"type": "COMMAND", "id": "SstoryQuestions", "method": "nextWord" , "features": ""},
         "ECHO_LINE": {"type": "COMMAND", "id": "SstoryQuestions", "method": "echoLine" , "features": ""},
         "NEXT_LINE": {"type": "COMMAND", "id": "SstoryQuestions", "method": "nextLine" , "features": ""},
+
         "NEXT_PARA": {"type": "COMMAND", "id": "SstoryQuestions", "method": "nextPara" , "features": ""},
         "NEXT_PAGE": {"type": "COMMAND", "id": "SstoryQuestions", "method": "nextPage" , "features": ""},
+
+
+        // uhq
 
         "SET_ONCLICK_SPEAK_WORD": {"type": "COMMAND", "id": "SstoryQuestions", "method": "setVolatileBehavior", "parms": "ON_CLICK:String|SPEAK_WORD_BEHAVIOR:String" , "features": "FTR_USER_READ|FTR_USER_READING"},
         "CLR_ONCLICK":            {"type": "COMMAND", "id": "SstoryQuestions", "method": "setVolatileBehavior", "parms": "ON_CLICK:String|NULL:String" , "features": ""},
@@ -474,12 +668,20 @@
         "SET_SPEAK_EVENT":      {"type": "COMMAND", "id": "SstoryQuestions", "method": "setVolatileBehavior",   "parms": "SPEAK_EVENT:String|SPEAK_WORD_BEHAVIOR:String" , "features": ""},
         "CLR_SPEAK_EVENT":      {"type": "COMMAND", "id": "SstoryQuestions", "method": "setVolatileBehavior",   "parms": "SPEAK_EVENT:String|NULL:String" , "features": ""},
 
-        "SET_SPEAK_WORD":      {"type": "COMMAND", "id": "SstoryQuestions", "method": "setStickyBehavior",   "parms": "SPEAK_CLICK:String|SPEAK_WORD_BEHAVIOR:String" , "features": ""},
-        "SET_SPEAK_SENTENCE":  {"type": "COMMAND", "id": "SstoryQuestions", "method": "setVolatileBehavior", "parms": "SPEAK_CLICK:String|SPEAK_SENTENCE_BEHAVIOR:String" , "features": ""},
+        //"SET_SPEAK_WORD":      {"type": "COMMAND", "id": "SstoryQuestions", "method": "setStickyBehavior",   "parms": "SPEAK_CLICK:String|SPEAK_WORD_BEHAVIOR:String" , "features": ""},
+        //"SET_SPEAK_SENTENCE":  {"type": "COMMAND", "id": "SstoryQuestions", "method": "setVolatileBehavior", "parms": "SPEAK_CLICK:String|SPEAK_SENTENCE_BEHAVIOR:String" , "features": ""},
         "RESET_SPEAK_ONCLICK": {"type": "COMMAND", "id": "SstoryQuestions", "method": "setVolatileBehavior", "parms": "SPEAK_CLICK:String|NULL:String" , "features": ""},
 
         "SET_NARRATOR":        {"type": "COMMAND", "id": "SstoryQuestions", "method": "setStickyBehavior", "parms": "NARRATE_STORY:String|NARRATE_SENTENCE_BEHAVIOR:String" , "features": ""},
         "SET_UTTERANCE":       {"type": "COMMAND", "id": "SstoryQuestions", "method": "setStickyBehavior", "parms": "SPEAK_UTTERANCE:String|SPEAK_UTTERANCE_BEHAVIOR:String" , "features": ""},
+        "SET_CLOZE_UTTERANCE":       {"type": "COMMAND", "id": "SstoryQuestions", "method": "setStickyBehavior", "parms": "SPEAK_CLOZE_UTTERANCE:String|SPEAK_CLOZE_UTTERANCE_BEHAVIOR:String" , "features": ""},
+
+        "SET_GENERIC_QUESTION": {"type": "COMMAND", "id": "SstoryQuestions", "method": "setRandomGenericQuestion", "parms": "" , "features": ""},
+
+        "DISPLAY_GENERIC_QUESTION": {"type": "COMMAND", "id": "SstoryQuestions", "method": "displayGenericQuestion", "parms": "" , "features": ""},
+        "SET_CLOZE_QUESTION": {"type": "COMMAND", "id": "SstoryQuestions", "method": "setClozeQuestion", "parms": "" , "features": ""},
+        "CHECK_CLOZE": {"type": "COMMAND", "id": "SstoryQuestions", "method": "hasClozeDistractor", "parms": "" , "features": ""},
+
 
         "EMPTY_ACTION":    {"type": "COMMAND", "cmd": "NOOP"},
         "GOTONEXTSCENE":   {"type": "COMMAND", "cmd": "NEXTSCENE"},
@@ -520,14 +722,14 @@
 
         "PAGE_COMPLETE": {
           "type": "CONDITION",
-          "If": "({{SstoryQuestions.paraState}}=='LAST') && ({{SstoryQuestions.lineState}}=='LAST') && ({{SstoryQuestions.wordState}}=='LAST')",
+          "If": "({{SstoryQuestions.showCloze}}=='FALSE') && ({{SstoryQuestions.paraState}}=='LAST') && ({{SstoryQuestions.lineState}}=='LAST') && ({{SstoryQuestions.wordState}}=='LAST')", //({{SstoryQuestions.questionState}}=='FTR_INCOMPLETE') && && ({{SstoryQuestions.distractor}}=='FALSE')
           "Then": "true",
           "Else": "false"
         },
 
         "PARAGRAPH_COMPLETE": {
           "type": "CONDITION",
-          "If": "({{SstoryQuestions.lineState}}=='LAST') && ({{SstoryQuestions.wordState}}=='LAST')",
+          "If": "({{SstoryQuestions.showCloze}}=='FALSE') && ({{SstoryQuestions.lineState}}=='LAST') && ({{SstoryQuestions.wordState}}=='LAST')",
           "Then": "true",
           "Else": "false"
         },
@@ -535,6 +737,20 @@
         "LINE_COMPLETE": {
           "type": "CONDITION",
           "If": "{{SstoryQuestions.wordState}}=='LAST'",
+          "Then": "true",
+          "Else": "false"
+        },
+
+        "QUESTION_COMPLETE": {
+          "type": "CONDITION",
+          "If": "{{SstoryQuestions.questionState}}=='FTR_COMPLETE'",
+          "Then": "true",
+          "Else": "false"
+        },
+
+        "SILENCE_COMPLETE": {
+          "type": "CONDITION",
+          "If": "{{SstoryQuestions.silenceState}}=='FTR_COMPLETE'",
           "Then": "true",
           "Else": "false"
         },
@@ -566,6 +782,27 @@
         "FTR_WRONG": {
           "type": "CONDITION",
           "test": "FTR_WRONG"
+        },
+
+        "HAS_CLOZE_QUESTION": {
+          "type": "CONDITION",
+          "If": "{{SstoryQuestions.distractor}}=='TRUE'",
+          "Then": "true",
+          "Else": "false"
+        },
+        "CLOZE_CORRECT": {
+          "type": "CONDITION",
+          "test": "CLOZE_CORRECT"
+        },
+        "CLOZE_WRONG": {
+          "type": "CONDITION",
+          "test": "CLOZE_WRONG"
+        },
+        "CLOZE_PAGE_COMPLETE": {
+          "type": "CONDITION",
+          "If": "({{SstoryQuestions.showCloze}}=='TRUE') && ({{SstoryQuestions.paraState}}=='LAST') && ({{SstoryQuestions.lineState}}=='LAST') && ({{SstoryQuestions.wordState}}=='LAST')",
+          "Then": "true",
+          "Else": "false"
         }
       }
     }

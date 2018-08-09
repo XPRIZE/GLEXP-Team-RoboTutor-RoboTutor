@@ -18,17 +18,21 @@
 
 package cmu.xprize.comp_questions;
 
-public interface IRtComponent {
+public interface IQnComponent {
 
     void seekToPage(int pageIndex);
 
     void nextPage();
+
+//    void nextClozePage();
 
     void prevPage();
 
     void seekToParagraph(int paraIndex);
 
     void nextPara();
+
+//    void nextClozePara();
 
     void prevPara();
 
@@ -39,6 +43,8 @@ public interface IRtComponent {
     void parrotLine();
 
     void nextLine();
+
+//    void nextClozeLine();
 
     void prevLine();
 
@@ -53,5 +59,18 @@ public interface IRtComponent {
     public boolean endOfData();
 
     public void continueListening();
+
+    void genericQuestions();
+
+    void setRandomGenericQuestion();
+
+    void displayGenericQuestion();
+
+    void displayClozeQuestion();
+
+    void setClozeQuestion();
+
+    void hasClozeDistractor();
+
 
 }

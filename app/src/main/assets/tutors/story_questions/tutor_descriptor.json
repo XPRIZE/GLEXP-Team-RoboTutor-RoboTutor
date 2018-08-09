@@ -1,22 +1,16 @@
 {
-  //"language":"LANG_SW",
+	//  "language":"LANG_SW",
 
-  "scenedata": [
-	{
-	  "id":"story_questions",
-
-	  "oncreate":[
-        {"type": "COMMAND", "id": "SinputBG", "method": "setBackground", "parms": "#A5C4D4:String", "features":"FTR_LETTERS|FTR_NUMBERS"},
-
-		{"type": "COMMAND", "id": "SaudioReplay",   "method": "setVisibility", "parms": "VISIBLE:String", "features":"FTR_DICTATION"},
-		{"type": "COMMAND", "id": "SstimulusFrame", "method": "setVisibility", "parms": "VISIBLE:String", "features":"!FTR_DICTATION"}
-
-	  ],
-	  "onenter":[
-	  ],
-	  "features":""
-	}
-  ],
+	"scenedata": [
+		{
+			"id":"story_questions",
+			"oncreate":[
+			],
+			"onenter":[
+			],
+			"features":""
+		}
+	],
 
 	// This maps soundpackages in type_audio (the soundMap <key>) to audio resources
 	//
@@ -27,22 +21,13 @@
 	// path     - the resource path relative to assets/tutors/trackdata/LIBRARY/audio/<language>
 
 	"soundMap" : {
-		"tutor_effect":  {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/writing"},
+		"tutor_effect":  {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/story_reading"},
 		"xprize_effect": {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/global"},
-		"default":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/writing"},
+		"default":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/story_reading"},
 		"xprize":        {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global"},
-		"counting":      {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/counting"},
-		"arithmetic":    {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/arithmetic"},
-		"_ask":          {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/ask"},
 		"words":         {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/literacy"},
-        "numbers":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/numbers"},
-        "letters":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/letters"},
-		"lettersPrompt": {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/EnglishNamed/Leonora/morePrompts/3"},
-		"missingLtr":    {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/EnglishNamed/Filipo/WRITE/noEnglish"},
-		"new":			{"type": "SOUNDMAP", "language": "LANG_AUTO", "path": "cmu/xprize/EnglishNamed/Leonora/Tanzanian"}
-
+		"story":         {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/story_reading/n/n_n - replaced in TRtcomponent:setDataSource"}
 	},
-
 
 	"navigatorType":"SIMPLE_NAVIGATOR"
 }

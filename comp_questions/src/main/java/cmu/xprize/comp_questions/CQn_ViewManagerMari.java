@@ -45,7 +45,7 @@ import edu.cmu.xprize.listener.ListenerBase;
  *   This view manager emulates the same student interaction that was present in the
  *   initial release of the MARi reading tutor.
  */
-public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
+public class CQn_ViewManagerMari implements ICQn_ViewManager, ILoadableObject {
 
     private ListenerBase            mListener;
     private IVManListener mOwner;
@@ -76,10 +76,10 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
     public CMari_Data rhymes[];
 
 
-    static final String TAG = "CRt_ViewManagerMari";
+    static final String TAG = "CQn_ViewManagerMari";
 
 
-    public CRt_ViewManagerMari(CRt_Component parent, ListenerBase listener) {
+    public CQn_ViewManagerMari(CQn_Component parent, ListenerBase listener) {
 
         mPageText = (TextView) parent.findViewById(R.id.SstoryText);
         mListener = listener;
@@ -191,6 +191,36 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
         return true;
     }
 
+    @Override
+    public void setRandomGenericQuestion(){
+
+    }
+
+    @Override
+    public void setClozeQuestion(){
+
+    }
+
+
+    @Override
+    public void genericQuestions(){
+
+    }
+
+    @Override
+    public void displayGenericQuestion(){
+
+    }
+
+    @Override
+    public void displayClozeQuestion(){
+
+    }
+
+    @Override
+    public void hasClozeDistractor(){
+
+    }
 
     public void execCommand(String command, Object target ) {
 
@@ -199,7 +229,6 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
         switch(command) {
         }
     }
-
 
     @Override
     public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult) {
@@ -590,6 +619,58 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
         matcher.appendTail(sb);
         System.out.println(sb.toString());
         sentences = new ArrayList<String>(Arrays.asList(sb.toString().split("\\.")));
+    }
+
+    @Override
+    public int getmCurrPara(){
+        return 0;
+    }
+
+    @Override
+    public int getmCurrLine(){
+        return 0;
+    }
+
+    @Override
+    public int getmParaCount(){
+        return 0;
+    }
+
+    @Override
+    public int getmLineCount(){
+        return 0;
+    }
+    @Override
+    public int getSegmentNdx(){
+        return 0;
+    }
+    @Override
+    public int getNumSegments(){
+        return 0;
+    }
+    @Override
+    public int getUtteranceNdx(){
+        return 0;
+    }
+    @Override
+    public int getNumUtterance(){
+        return 0;
+    }
+    @Override
+    public boolean getEndOfSentence(){
+        return true;
+    }
+    @Override
+    public CASB_Narration[] getRawNarration(){
+        return null;
+    }
+    @Override
+    public int getUtterancePrev(){
+        return 0;
+    }
+    @Override
+    public int getSegmentPrev(){
+        return 0;
     }
 }
 

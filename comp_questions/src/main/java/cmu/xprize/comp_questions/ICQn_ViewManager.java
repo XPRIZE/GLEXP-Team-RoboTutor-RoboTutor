@@ -21,7 +21,7 @@ package cmu.xprize.comp_questions;
 import cmu.xprize.util.ILoadableObject;
 import edu.cmu.xprize.listener.ListenerBase;
 
-public interface ICRt_ViewManager extends ILoadableObject {
+public interface ICQn_ViewManager extends ILoadableObject {
 
     public void initStory(IVManListener owner, String assetPath, String assetLocation);
 
@@ -33,11 +33,15 @@ public interface ICRt_ViewManager extends ILoadableObject {
 
     void nextPage();
 
+//    void nextClozePage();
+
     void prevPage();
 
     void seekToParagraph(int paraIndex);
 
     void nextPara();
+
+//    void nextClozePara();
 
     void prevPara();
 
@@ -49,6 +53,8 @@ public interface ICRt_ViewManager extends ILoadableObject {
 
     void nextLine();
 
+//    void nextClozeLine();
+
     void prevLine();
 
     void seekToWord(int wordIndex);
@@ -58,6 +64,18 @@ public interface ICRt_ViewManager extends ILoadableObject {
     void prevWord();
 
     void setHighLight(String highlight, boolean update);
+
+    void genericQuestions();
+
+    void displayGenericQuestion();
+
+    void setRandomGenericQuestion();
+
+    void setClozeQuestion();
+
+    void displayClozeQuestion();
+
+    void hasClozeDistractor();
 
     public boolean endOfData();
 
@@ -69,10 +87,26 @@ public interface ICRt_ViewManager extends ILoadableObject {
 
     public void continueListening();
 
-
     public void setSpeakButton(String command);
 
     public void setPageFlipButton(String command);
 
     public void execCommand(String _command, Object _target);
+
+    public int getmCurrPara();
+
+    public int getmCurrLine();
+
+    public int getmParaCount();
+
+    public int getmLineCount();
+    public int getSegmentNdx();
+    public int getNumSegments();
+    public int getUtteranceNdx();
+    public int getNumUtterance();
+    public boolean getEndOfSentence();
+
+    public CASB_Narration[] getRawNarration();
+    public int getUtterancePrev();
+    public int getSegmentPrev();
 }

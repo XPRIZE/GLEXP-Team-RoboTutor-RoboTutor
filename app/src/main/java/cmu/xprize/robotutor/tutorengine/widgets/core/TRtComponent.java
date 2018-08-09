@@ -531,6 +531,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
 
             } else if (dataNameDescriptor.startsWith(TCONST.ENCODED_FOLDER)) {
+                System.out.println("ENCODED FOLDER");
 
                 // ZZZ detect story [encfolder]
                 // "story.parrot::0..10.SD_OFF1_DES.34" --> "[encfolder]0..10.SD_OFF1_DES.34"
@@ -706,6 +707,9 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         catch (Exception e) {
             CErrorManager.logEvent(TAG, "Invalid Data Source for : " + mTutor.getTutorName(), e, false);
         }
+        System.out.println("AUDIOSOURCEPATH: "+AUDIOSOURCEPATH);
+        System.out.println("STORYSOURCEPATH: "+STORYSOURCEPATH);
+        System.out.println("DATASOURCEPATH: "+DATASOURCEPATH);
     }
 
 

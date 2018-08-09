@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/story_questions"
     android:layout_width="match_parent"
@@ -22,9 +23,6 @@
         android:scaleType="fitCenter"
         app:layout_widthPercent="50%" />
 
-    <!--Note: must wrap content height as any vertical centering
-    is not accounted for by the text "layout" - -->
-
     <TextView
         android:id="@+id/SstoryText"
         android:layout_width="wrap_content"
@@ -36,6 +34,57 @@
         android:textColor="#000"
         android:textSize="30sp"
         app:layout_widthPercent="50%" />
+
+    <TextView
+        android:id="@+id/Sword1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:textColor="#000"
+        android:textSize="30sp"
+        app:layout_widthPercent="50%"
+        app:layout_heightPercent="20%"/>
+
+    <TextView
+        android:id="@+id/Sword2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Sword1"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:textColor="#000"
+        android:textSize="30sp"
+        app:layout_widthPercent="50%"
+        app:layout_heightPercent="20%"/>
+
+    <TextView
+        android:id="@+id/Sword3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Sword2"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:textColor="#000"
+        android:textSize="30sp"
+        app:layout_widthPercent="50%"
+        app:layout_heightPercent="20%"/>
+
+    <TextView
+        android:id="@+id/Sword4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Sword3"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:textColor="#000"
+        android:textSize="30sp"
+        app:layout_widthPercent="50%"
+        app:layout_heightPercent="20%"/>
 
     <ImageButton
         android:id="@+id/Sspeak"
@@ -58,7 +107,6 @@
         android:layout_marginRight="250dp"
         android:background="#ffffff"
         android:src="@drawable/page_flip_button" />
-
 
     <FrameLayout
         android:id="@+id/SfullViewQuestion"
