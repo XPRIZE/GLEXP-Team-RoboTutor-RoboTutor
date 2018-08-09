@@ -1139,6 +1139,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 v.setExpectedChar(expectedChar);
 
+                //amogh comment - need to check conditions. eg see the next if else.
+                String stimulusChar = mStimulus.substring(i1, i1 + 1);
+                if(!expectedChar.equals(" ")) {
+                    v.setStimuliGlyph(_glyphSet.cloneGlyph(stimulusChar));
+                }
+
                 if(!expectedChar.equals(" ")) {
                     v.setProtoGlyph(_glyphSet.cloneGlyph(expectedChar));
                 }
@@ -1147,14 +1153,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 }
 
                 mGlyphList.addView(v);
-                v.toggleProtoGlyph(); //toggle (ie show sample glyph) when in the sentence correction mode
-                v.toggleSampleChar();
+//                v.toggleProtoGlyph(); //toggle (ie show sample glyph) when in the sentence correction mode
+//                v.toggleSampleChar();
                 v.setLinkedScroll(mDrawnScroll);
                 v.setWritingController(this);
                 v.setResponseView(mResponseViewList);
                 //amogh added
                 resp = (CStimulusController)LayoutInflater.from(getContext())
                         .inflate(R.layout.recog_resp_comp, null, false);
+                resp.setStimulusChar(stimulusChar,true);
                 mResponseViewList.addView(resp);
                 resp.setLinkedScroll(mDrawnScroll);
                 resp.setWritingController(this);
@@ -1198,6 +1205,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             }
         }
         //amogh added
+
+        /*
         //adding the view for highlight error box:
         mHighlightErrorBoxView = new View (getContext());
         mHighlightErrorBoxView.setLayoutParams(new LayoutParams(60,60));
@@ -1213,6 +1222,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 mHighlightErrorBoxView.setVisibility(View.GONE);
             }
         }, 5000);
+
+        */
         //amogh added ends
     }
 

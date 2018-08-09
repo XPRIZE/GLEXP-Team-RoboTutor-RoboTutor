@@ -320,6 +320,12 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         mGlyphInput.setProtoGlyph(protoGlyph);
     }
 
+    //amogh added
+    public void setStimuliGlyph(CGlyph stimuliGlyph) {
+        mGlyphInput.setStimuliGlyph(stimuliGlyph);
+    }
+    //amogh added ends
+
     public int getAttempt() {
         return _attempt;
     }

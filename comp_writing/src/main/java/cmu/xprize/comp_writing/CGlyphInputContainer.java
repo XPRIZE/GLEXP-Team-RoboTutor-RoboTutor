@@ -86,12 +86,14 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private CGlyph                _protoGlyph   = null;
     private CGlyph                _drawGlyph    = null;
     private CGlyph                _animGlyph    = null;
+    private CGlyph                _stimuliGlyph = null;   //glyph to load stimulus in sentence correction activities // amogh added
     private boolean               _isDrawing    = false;
     private boolean               _restartGlyph = true;
 
     private boolean               _showSampleChar = false;
     private boolean               _showUserGlyph  = true;
     private boolean               _showProtoGlyph = false;
+    private boolean               _showStimuliGlyph = true;
 
     static private Bitmap         _bitmap;
     private boolean               _bitmapDirty       = false;
@@ -857,6 +859,12 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                 _protoGlyph.drawGylyph(canvas,  mPaint, _viewBnds);
             }
 
+            //amogh added
+            if(_showStimuliGlyph && _stimuliGlyph != null) {
+                _stimuliGlyph.drawGylyph(canvas,  mPaint, _viewBnds);
+            }
+            //amogh added ends
+
             if(_isDrawing) {
                 _drawGlyph.drawGylyph(canvas,  mPaint, _viewBnds);
             }
@@ -1328,6 +1336,14 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         return _sampleExpected.equals(resp);
     }
 
+    //amogh added
+    public void setStimuliGlyph(CGlyph stimuliGlyph){
+        if(stimuliGlyph != null) {
+            _stimuliGlyph = stimuliGlyph;
+            _stimuliGlyph.setDotSize(_dotSize);
+        }
+    }
+    //amogh added ends
 
     public void setProtoGlyph(CGlyph protoGlyph) {
 
