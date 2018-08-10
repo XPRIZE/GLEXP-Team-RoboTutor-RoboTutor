@@ -8,6 +8,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -505,12 +506,33 @@ public class TAkComponent extends CAk_Component implements ITutorObjectImpl, IDa
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                applyEventNode("NEXT");
                 ongoingAnimator.remove(finishLineAnimator);
+                postSplashScreen();
             }
         });
 
         finishLineAnimator.start();
+    }
+
+    public void postSplashScreen() {
+        final PercentRelativeLayout percentLayout = (PercentRelativeLayout) getChildAt(0);
+
+        final ImageView splashScreen = new ImageView(mContext);
+        splashScreen.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        LayoutParams params = new LayoutParams(getWidth(), getHeight());
+        params.addRule(CENTER_HORIZONTAL);
+        splashScreen.setImageResource(cmu.xprize.ak_component.R.drawable.splash);
+
+        percentLayout.addView(splashScreen, params);
+
+        splashScreen.bringToFront();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                applyEventNode("NEXT");
+            }
+        }, 1000); //Timer is in ms heree
     }
 
     public void judge(){
