@@ -182,10 +182,12 @@ public class CAkPlayer extends LinearLayout{
         touchX = event.getX()/xratio; touchY = event.getY()/yratio;}
 
         //Change to left lane
-        float line1 = (float)(-1.018*touchY +1678);
+        //float line1 = (float)(-1.018*touchY +1678);
+        float line1 = (float)(-1.018*touchY +1287); // 400 pixel offset to exapnd left tap area
         float line2 = (float)(-0.3353*touchY+1398);
         float line3 = (float)(0.3736*touchY+1101);
-        float line4 = (float)(0.9898*touchY+860);
+        //float line4 = (float)(0.9898*touchY+860);
+        float line4 = (float)(0.9898*touchY+1260); // 400 pixel offset to expand right tap area
         if(touchY>750){
             if (touchX>=line1 && touchX<line2){
                 lane = Lane.LEFT;
