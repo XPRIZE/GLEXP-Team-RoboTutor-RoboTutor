@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package edu.cmu.xprize.listener;
+package cmu.xprize.comp_logging;
 
 import java.io.IOException;
 import java.io.InputStream;

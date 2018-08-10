@@ -61,6 +61,8 @@ import edu.cmu.pocketsphinx.FsgModel;
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
 
+import static cmu.xprize.comp_logging.CAudioLogThread.BUFFER_SIZE;
+import static cmu.xprize.comp_logging.CAudioLogThread.readBuffer;
 import static java.lang.String.format;
 
 /**
@@ -192,7 +194,7 @@ public class SpeechRecognizer {
      */
     public void setRestartListener(boolean pause) {
 
-        if(recognizerThread != null) {
+        if (recognizerThread != null) {
             setPauseRecognizer(pause);
 
             // If restarting then the recognizer is paused at this point -
@@ -216,7 +218,7 @@ public class SpeechRecognizer {
      */
     public void setPauseRecognizer(boolean pausing) {
 
-        if(recognizerThread != null) {
+        if (recognizerThread != null) {
 
             // If we are releasing the thread and it is paused then notify the monitor
             // Don't send notifies when not required
@@ -233,7 +235,7 @@ public class SpeechRecognizer {
                     try {
                         recognizerThread.notify();
                     }
-                    catch(Exception e) {
+                    catch (Exception e) {
                         Log.d("ASR", "Exception: " + e);
                     }
                 }
@@ -245,7 +247,7 @@ public class SpeechRecognizer {
             // Wait for the thread to pause - Once inside this block we know the
             // recognizerThread is sitting at PAUSED_TAG (search text)
             //
-            else if(pausing && !isPausedRecognizer) {
+            else if (pausing && !isPausedRecognizer) {
 
                 isPausedRecognizer = true;
 
@@ -287,7 +289,7 @@ public class SpeechRecognizer {
         }
 
         // Release the resource and reset the flag so it will restart if
-        // there is a new recognizerthread created.
+        // there is a new recognizer thread created.
         //
         recognizerThread = null;
         isDecoding       = false;
@@ -316,7 +318,7 @@ public class SpeechRecognizer {
             // processing results by the time this happens so in general you don't want the final
             // hypothesis.
             //
-            if(wantFinal)
+            if (wantFinal)
                 postResult(hypothesis, TCONST.FINAL_HYPOTHESIS);
         }
         return result;
@@ -412,7 +414,7 @@ public class SpeechRecognizer {
 
         boolean _listening = false;
 
-        if(isRunningRecognizer && !isPausedRecognizer) {
+        if (isRunningRecognizer && !isPausedRecognizer) {
             _listening = true;
         }
 
@@ -449,44 +451,43 @@ public class SpeechRecognizer {
 
                 String     lastAudioEvent = TCONST.UNKNOWN_TYPE;
 
-                AudioRecord recorder = null;
+//                AudioRecord recorder = null;
 
-                try {
-                    recorder = new AudioRecord(
-                            AudioSource.VOICE_RECOGNITION, sampleRate,
-                            AudioFormat.CHANNEL_IN_MONO,
-                            AudioFormat.ENCODING_PCM_16BIT, 8192);
-                }
-                catch(Exception e) {
-                    Log.d("ASR", "AudioRecorder Create Failed: " + e);
-                }
+//                try {
+//                    recorder = new AudioRecord(AudioSource.VOICE_RECOGNITION, sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, 8192);
+//                }
+//                catch (Exception e) {
+//                    Log.d("ASR", "AudioRecorder Create Failed: " + e);
+//                }
+
                 isRunningRecognizer = true;
 
                 // Collect audio samples continuously while not paused and until the
                 // Thread is killed.  This allow UI/UX activity while the listener is still
                 // listening to the mic
                 //
-                while(isRunningRecognizer) {
+                while (isRunningRecognizer) {
 
                     // We always start the thread in the paused state
                     //
                     if (isPausedRecognizer) {
 
                         try {
-                            recorder.stop();
+//                            recorder.stop();
                             isRecording = false;
 
-                            // If we are starting a new uttereance stop recording and
+                            // If we are starting a new utterance stop recording and
                             // flush the input - i.e. clear the recorder
                             //
-                            if(!isDecoding) {
+                            if (!isDecoding) {
 
-                                recorder.stop();
+//                                recorder.stop();
 
                                 do {
-                                    nread = recorder.read(buffer, 0, buffer.length);
-
-                                }while(nread > 0);
+//                                    nread = recorder.read(buffer, 0, buffer.length);
+                                    nread = readBuffer(buffer, BUFFER_SIZE);
+                                    Log.i("ASR", "Flush buffer: nread = " + nread);
+                                } while (nread > 0);
                             }
 
                             // PAUSED_TAG
@@ -495,7 +496,7 @@ public class SpeechRecognizer {
                             // TODO: understand why interrupt causes freeze while in wait state
                             // You should not interrupt() while in a wait
                             //
-                            while(isPausedRecognizer) {
+                            while (isPausedRecognizer) {
                                 Log.i("ASR","Recognizer Paused");
                                 recognizerThread.wait();
                             }
@@ -506,23 +507,23 @@ public class SpeechRecognizer {
                         }
                     }
 
-                    // Thread interrupt is not currently used but this is the recommened mechanism
+                    // Thread interrupt is not currently used but this is the recommended mechanism
                     // should it be required.
                     //
-                    if(isInterrupted()) {
+                    if (isInterrupted()) {
                         isRunningRecognizer = false;
                     }
 
-                    if(!isRunningRecognizer) {
+                    if (!isRunningRecognizer) {
                         Log.d("ASR", "Terminating ASR Thread");
                         continue;
                     }
 
                     // We start the thread with the decoder stopped and also when we
-                    // restart for a new utterance - we end the uttereance prior to
+                    // restart for a new utterance - we end the utterance prior to
                     // the decoder fsgsearch update
                     //
-                    if(!isDecoding) {
+                    if (!isDecoding) {
                         Log.i("ASR","Start Decoder");
 
                         // label utterance with passed-in id
@@ -537,45 +538,45 @@ public class SpeechRecognizer {
 
                     // Ensure we are recording while the thread is running.
                     //
-                    if(!isRecording) {
+                    if (!isRecording) {
 
 //                        Don't want to do this - misses front end of utterance
 //
                         // Flush the input buffer
 //                        int readf = recorder.read(buffer, 0, buffer.length);
 //
-//                        if(readf > 0) {
+//                        if (readf > 0) {
 //                            Log.i("ASR", "Flushed input buffer: " + readf);
 //                        }
 
 
                         Log.i("ASR", "Resume recording");
-                        recorder.startRecording();
+//                        recorder.startRecording();
                         isRecording = true;
                         nread       = 0;
                     }
                     else {
                         // Clean out the buffered input
-                        nread = recorder.read(buffer, 0, buffer.length);
+//                        nread = recorder.read(buffer, 0, buffer.length);
+                        nread = readBuffer(buffer, BUFFER_SIZE);
+                        Log.i("ASR", "Clean out buffer: nread = " + nread);
                     }
                     //Log.i("ASR","ASR RAW-BYTES: " + nread);
 
-                    if (-1 == nread) {
+                    if (nread == AudioRecord.ERROR_INVALID_OPERATION || nread == AudioRecord.ERROR_BAD_VALUE) {
                         Log.i("ASR","Read Error");
                         throw new RuntimeException("error reading audio buffer");
 
                     } else if (nread > 0) {
 
-                        double RMS = publishRMS(buffer, nread);
-
                         // This filters low power segments that otherwise cause false positives
                         // in number_speaking tutor
                         //
-                        //`if(RMS > 4)
-                        {
-                            //ASRTimer = System.currentTimeMillis();
+//                        double RMS = publishRMS(buffer, nread);
+//                        if (RMS > 4) {
+                            ASRTimer = System.currentTimeMillis();
                             decoder.processRaw(buffer, nread, false, false);
-                            //Log.d("ASR", "Time in processRaw: " + (System.currentTimeMillis() - ASRTimer));
+                            Log.d("ASR", "Time in processRaw: " + (System.currentTimeMillis() - ASRTimer));
 
                             nSamples += nread;
 
@@ -590,7 +591,7 @@ public class SpeechRecognizer {
                                 // 1. The last time the mic heard anything
                                 // 2. The last time the mic went silent.
 
-                                //Log.i("ASR","State Changed: " + inSpeech);
+                                Log.i("ASR","State Changed: " + inSpeech);
 
                                 if (inSpeech) {
                                     eventManager.fireStaticEvent(TCONST.SOUND_EVENT);
@@ -605,9 +606,9 @@ public class SpeechRecognizer {
 
                             // Get the hypothesis words from the Sphinx decoder
                             //
-                            //ASRTimer = System.currentTimeMillis();
+                            ASRTimer = System.currentTimeMillis();
                             Hypothesis hypothesis = decoder.hyp();
-                            //Log.d("ASR", "Time in Decoder: " + (System.currentTimeMillis() - ASRTimer));
+                            Log.d("ASR", "Time in Decoder: " + (System.currentTimeMillis() - ASRTimer));
 
                             // If there is a valid hypothesis string from the decoder continue
                             // Once the decoder returns a hypothesis it will not go back to
@@ -624,7 +625,7 @@ public class SpeechRecognizer {
                                         break;
                                 }
                             }
-                        }
+//                        }
                     }
 
                     // While running we continuously watch for timed event firings (timeouts)
@@ -634,16 +635,16 @@ public class SpeechRecognizer {
 
                 Log.i("ASR","Stop session");
 
-                recorder.stop();
-                nread = recorder.read(buffer, 0, buffer.length);
-                recorder.release();
+//                recorder.stop();
+//                nread = recorder.read(buffer, 0, buffer.length);
+                nread = readBuffer(buffer, BUFFER_SIZE);
+                Log.i("ASR", "Read buffer: nread = " + nread);
+//                recorder.release();
                 decoder.processRaw(buffer, nread, false, false);
                 nSamples += nread;
                 decoder.endUtt();
                 // Remove all pending notifications.
                 mainHandler.removeCallbacksAndMessages(null);
-                // convert raw capture to wav format
-                //convertRawToWav(new File(captureDir, label + ".raw"), new File(captureDir, label + ".wav"));
             }
         }
     }
@@ -692,7 +693,7 @@ public class SpeechRecognizer {
         // Update the eventTimer to indicate the last thing that happened
         // Updating the word event resets silence and noise
         //
-        if(hypChanged) {
+        if (hypChanged) {
             eventManager.fireStaticEvent(TCONST.WORD_EVENT);
             eventManager.updateStartTime(TCONST.TIMEDWORD_EVENT,
                     TCONST.TIMEDSILENCE_EVENT | TCONST.TIMEDSOUND_EVENT);
@@ -815,16 +816,16 @@ public class SpeechRecognizer {
         double sum = 0;
         Short  peak= 0;
 
-        if(count > 0) {
+        if (count > 0) {
             for (int i1 = 0; i1 < count; i1++) {
                 Short sample = buffer[i1];
 
                 sum = Math.pow(sample, 2);
 
-                if(sample > peak)
+                if (sample > peak)
                     peak = sample;
 
-                if(sample > mPeak)
+                if (sample > mPeak)
                     mPeak = sample;
             }
 
@@ -834,43 +835,6 @@ public class SpeechRecognizer {
         }
 
         return RMS;
-    }
-
-
-    /**
-     * utility to convert raw audio capture file to wav format. Assumes 16Khz mono
-     */
-    public static void convertRawToWav(File rawFile, File wavFile) {
-        InputStream input = null;
-        OutputStream output = null;
-        try {
-            input = new FileInputStream(rawFile);
-            output = new FileOutputStream(wavFile);
-            // first write appropriate wave file header
-            ByteArrayOutputStream hdrBytes = new ByteArrayOutputStream();
-            new WaveHeader(WaveHeader.FORMAT_PCM, (short) 1, 16000, (short) 16, (int) rawFile.length()).write(hdrBytes);
-            output.write(hdrBytes.toByteArray());
-            // then copy raw bytes to output file
-            byte[] buffer = new byte[4096];
-            int nRead;
-            while ((nRead = input.read(buffer)) > 0) {
-                output.write(buffer, 0, nRead);
-            }
-            // finish up
-            output.close();
-            input.close();
-            // on success, delete raw file
-            rawFile.delete();
-        } catch (Exception e) {
-            Log.e("convertRawToWav", "Exception " + e.getMessage());
-        } finally {
-            try {
-                if (input != null) input.close();
-                if (output != null) output.close();
-            } catch (IOException e) {
-                Log.e("convertRawToWav", "Closing streams: " + e.getMessage());
-            }
-        }
     }
 
 
@@ -970,7 +934,7 @@ public class SpeechRecognizer {
 
             Log.d("ASR", "Handle Recognizer ResultEvent");
 
-            switch(resultType) {
+            switch (resultType) {
                 case TCONST.FINAL_HYPOTHESIS:
                     listener.onResult(hypothesis);
                     break;
@@ -1082,7 +1046,7 @@ public class SpeechRecognizer {
          */
         public synchronized void configTimedEvent(int eventType, long newTimeout) {
 
-            switch(eventType) {
+            switch (eventType) {
 
                 case TCONST.TIMEDSTART_EVENT:
                     Log.d("ASR", "CONFIG TIMED START: " + newTimeout);
@@ -1122,7 +1086,7 @@ public class SpeechRecognizer {
          */
         public synchronized void resetTimedEvent(int resetMap) {
 
-            if((resetMap & TCONST.TIMEDSTART_EVENT) != 0) {
+            if ((resetMap & TCONST.TIMEDSTART_EVENT) != 0) {
 
                 Log.d("ASR", "RESET TIMED START: ");
                 WaitAfterStart   = false;
@@ -1131,7 +1095,7 @@ public class SpeechRecognizer {
                 startTime        = Long.MAX_VALUE;
             }
 
-            if((resetMap & TCONST.TIMEDSILENCE_EVENT) != 0) {
+            if ((resetMap & TCONST.TIMEDSILENCE_EVENT) != 0) {
 
                 Log.d("ASR", "RESET TIMED SILENCE: ");
                 WaitAfterSilence   = false;
@@ -1140,7 +1104,7 @@ public class SpeechRecognizer {
                 lastSilence        = Long.MAX_VALUE;
             }
 
-            if((resetMap & TCONST.TIMEDSOUND_EVENT) != 0) {
+            if ((resetMap & TCONST.TIMEDSOUND_EVENT) != 0) {
                 Log.d("ASR", "RESET TIMED SOUND: ");
                 WaitAfterSound   = false;
                 isNoiseTriggered = false;
@@ -1148,7 +1112,7 @@ public class SpeechRecognizer {
                 lastSoundHeard   = Long.MAX_VALUE;
             }
 
-            if((resetMap & TCONST.TIMEDWORD_EVENT) != 0) {
+            if ((resetMap & TCONST.TIMEDWORD_EVENT) != 0) {
 
                 Log.d("ASR", "RESET TIMED WORD: ");
                 WaitAfterWord    = false;
@@ -1168,7 +1132,7 @@ public class SpeechRecognizer {
          */
         public synchronized void configStaticEvent(int eventType, boolean listen) {
 
-            switch(eventType) {
+            switch (eventType) {
 
                 case TCONST.SILENCE_EVENT:
                     listenForSilence  = listen;
@@ -1251,15 +1215,15 @@ public class SpeechRecognizer {
                     break;
             }
 
-            if((resetMap & TCONST.TIMEDSILENCE_EVENT) != 0) {
+            if ((resetMap & TCONST.TIMEDSILENCE_EVENT) != 0) {
                 isSilenceTriggered = false;
                 lastSilence        = Long.MAX_VALUE;
             }
-            if((resetMap & TCONST.TIMEDSOUND_EVENT) != 0) {
+            if ((resetMap & TCONST.TIMEDSOUND_EVENT) != 0) {
                 isNoiseTriggered = false;
                 lastSoundHeard   = Long.MAX_VALUE;
             }
-            if((resetMap & TCONST.TIMEDWORD_EVENT) != 0) {
+            if ((resetMap & TCONST.TIMEDWORD_EVENT) != 0) {
                 isWordTriggered = false;
                 lastWordHeard   = Long.MAX_VALUE;
             }
@@ -1276,19 +1240,19 @@ public class SpeechRecognizer {
 
             switch (eventType) {
                 case TCONST.SILENCE_EVENT:
-                    if(listenForSilence) {
+                    if (listenForSilence) {
                         Log.i("ASR", "Silence Started");
                         mainHandler.post(new timeOutEvent(TCONST.SILENCE_EVENT));
                     }
                     break;
                 case TCONST.SOUND_EVENT:
-                    if(listenForSound) {
+                    if (listenForSound) {
                         Log.i("ASR", "Sound Heard");
                         mainHandler.post(new timeOutEvent(TCONST.SOUND_EVENT));
                     }
                     break;
                 case TCONST.WORD_EVENT:
-                    if(listenForWords) {
+                    if (listenForWords) {
                         Log.i("ASR", "Word Heard - Hyp updated");
                         mainHandler.post(new timeOutEvent(TCONST.WORD_EVENT));
                     }
@@ -1355,7 +1319,7 @@ public class SpeechRecognizer {
                 }
             }
 
-            else if(WaitAfterWord && isWordTriggered) {
+            else if (WaitAfterWord && isWordTriggered) {
 
                 if (attemptGap > wordHeardTimeout) {
                     resetTimedEvent(TCONST.TIMEDWORD_EVENT);
