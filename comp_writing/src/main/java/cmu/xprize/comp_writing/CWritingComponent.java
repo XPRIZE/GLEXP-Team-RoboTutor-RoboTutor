@@ -143,9 +143,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public CWr_Data[]           dataSource;
 
     //amogh added for sentence correction
-    protected  List<Integer>    deleteCorrIndices = new ArrayList<>(Arrays.asList(0,1,14));
-    protected  List<Integer>    insertCorrIndices = new ArrayList<>(Arrays.asList(0,2));
-    protected  List<Integer>    changeCorrIndices = new ArrayList<>(Arrays.asList(0));
+    protected  List<Integer>    deleteCorrectionIndices = new ArrayList<>(Arrays.asList(0,1,14));
+    protected  List<Integer>    insertCorrectionIndices = new ArrayList<>(Arrays.asList(0,2));
+    protected  List<Integer>    changeCorrectionIndices = new ArrayList<>(Arrays.asList(0));
     protected int correctionAttempts = 0;
     //amogh add ends
 
@@ -294,7 +294,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     //amogh edited
     public void deleteItem(View child) {
         int index = mGlyphList.indexOfChild(child);
-        if (! deleteCorrIndices.contains(index)) {
+        if (! deleteCorrectionIndices.contains(index)) {
             mGlyphList.removeViewAt(index);
             mResponseViewList.removeViewAt(index);
         }
@@ -302,14 +302,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             correctionAttempts++;
             if (correctionAttempts > 2){
                 mHighlightErrorBoxView = new View (getContext());
-                int wid = mResponseViewList.getChildAt(index+3).getLeft() - mResponseViewList.getChildAt(index).getLeft();
-                mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid,60));
+                int wid = mResponseViewList.getChildAt(index+3).getLeft() - mResponseViewList.getChildAt(index+2).getLeft();
+                mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid,90));
 //        mHighlightErrorBoxView.setId();
                 mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
 //        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
 //        mp.setMargins(100,00,0,100);
 //                mHighlightErrorBoxView.setX((float)300.00);
-                int pos = mResponseViewList.getChildAt(index).getLeft();
+                int pos = mResponseViewList.getChildAt(index+2).getLeft();
                 mHighlightErrorBoxView.setX((float)pos);
 //        mHighlightErrorBoxView.setLeft(1000);
                 mResponseScrollLayout.addView(mHighlightErrorBoxView);
@@ -317,7 +317,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     public void run() {
                         mHighlightErrorBoxView.setVisibility(View.GONE);
                     }
-                }, 5000);
+                }, 2000);
             }
         }
 //        mRecogList.removeViewAt(index); //amogh commented to avoid removal from stimulus
@@ -347,7 +347,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //        r.setWritingController(this);          //amogh commented to avoid removal from stimulus
 
 //amogh added for adding a view to the response view also, and also to check if the letter
-        if (!insertCorrIndices.contains(index+inc)) {
+        if (!insertCorrectionIndices.contains(index+inc)) {
 
             r = (CStimulusController) LayoutInflater.from(getContext())
                     .inflate(R.layout.recog_resp_comp, null, false);
@@ -428,6 +428,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //            updateResponseView(mResponse);
         //amogh added to handle spaces.
         if(_isValid){
+
             if(_spaceIndices.contains(mActiveIndex-1)){
                 CGlyphController    gControllerSpace = (CGlyphController)mGlyphList.getChildAt(mActiveIndex-1);
                 CStimulusController respSpace = (CStimulusController)mResponseViewList.getChildAt(mActiveIndex-1);
@@ -1121,10 +1122,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 v.setWritingController(this);
             }
         }
+
         //amogh added
         //add for sentence correction
         else if(activityFeature.contains("FTR_SEN_CORR")){
             //load glyph input container
+            int expectedIndex = 0; //in order to set the expected answer correctly
             for(int i1 =0 ; i1 < mStimulus.length() ; i1++)
             {
                 // create a new view
@@ -1133,15 +1136,19 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 // Last is used for display updates - limits the extent of the baseline
                 v.setIsLast(i1 ==  mStimulus.length()-1);
-                v.setRespIndex(i1);
-                //amogh needs edits, need a proper computation function to be able to calculate the differences between the
-                String expectedChar = mAnswer.substring(i1,i1+1);
+                v.setRespIndex(i1); //to remove the letter from the response when the glyph is removed by swiping on a glyph
+                //amogh comment - needs edits, need a proper computation function to be able to calculate the differences between the
+                //
+                if(!deleteCorrectionIndices.contains(i1)){
+                    expectedIndex++;
+                }
+                String expectedChar = mAnswer.substring(expectedIndex,expectedIndex+1);
 
                 v.setExpectedChar(expectedChar);
 
                 //amogh comment - need to check conditions. eg see the next if else.
-                String stimulusChar = mStimulus.substring(i1, i1 + 1);
-                if(!expectedChar.equals(" ")) {
+                String stimulusChar = mStimulus.substring(i1,i1+1);
+                if(!stimulusChar.equals(" ")) {
                     v.setStimuliGlyph(_glyphSet.cloneGlyph(stimulusChar));
                 }
 
@@ -1152,21 +1159,24 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     _spaceIndices.add(i1);
                 }
 
+                v.toggleStimuliGlyph();
                 mGlyphList.addView(v);
 //                v.toggleProtoGlyph(); //toggle (ie show sample glyph) when in the sentence correction mode
 //                v.toggleSampleChar();
                 v.setLinkedScroll(mDrawnScroll);
                 v.setWritingController(this);
+
+                // setting the response view and loading glyph controllers
                 v.setResponseView(mResponseViewList);
-                //amogh added
                 resp = (CStimulusController)LayoutInflater.from(getContext())
                         .inflate(R.layout.recog_resp_comp, null, false);
                 resp.setStimulusChar(stimulusChar,true);
                 mResponseViewList.addView(resp);
                 resp.setLinkedScroll(mDrawnScroll);
                 resp.setWritingController(this);
-                //amogh add finish
             }
+        //amogh add finish
+
         }
         else {
 
@@ -1231,6 +1241,47 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     //************************************************************************
     // Tutor Scriptable methods  Start
 
+
+    //amogh added
+    //functions to modify the indices in sentence correction activities
+
+    private void incrementCorrectionLists(int index){
+        for (int i=0; i<deleteCorrectionIndices.size(); i++)
+        {
+            if (deleteCorrectionIndices.get(i) > index){
+                deleteCorrectionIndices.set(i, deleteCorrectionIndices.get(i).intValue() + 1);
+            }
+
+            if (changeCorrectionIndices.get(i) > index){
+                changeCorrectionIndices.set(i, changeCorrectionIndices.get(i).intValue() + 1);
+            }
+
+            if (insertCorrectionIndices.get(i) > index){
+                changeCorrectionIndices.set(i, changeCorrectionIndices.get(i).intValue() + 1);
+            }
+
+        }
+    }
+
+    private void decrementCorrectionLists(int index){
+        for (int i=0; i<deleteCorrectionIndices.size(); i++)
+        {
+            if (deleteCorrectionIndices.get(i) > index){
+                deleteCorrectionIndices.set(i, deleteCorrectionIndices.get(i).intValue() - 1);
+            }
+
+            if (changeCorrectionIndices.get(i) > index){
+                changeCorrectionIndices.set(i, changeCorrectionIndices.get(i).intValue() - 1);
+            }
+
+            if (insertCorrectionIndices.get(i) > index){
+                changeCorrectionIndices.set(i, changeCorrectionIndices.get(i).intValue() - 1);
+            }
+
+        }
+    }
+
+    //amogh added ends
 
     public void setConstraint(String constraint) {
 

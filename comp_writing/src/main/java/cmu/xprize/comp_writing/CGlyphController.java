@@ -415,6 +415,9 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     public boolean toggleDebugBounds() {
         return mGlyphInput.toggleDebugBounds();
     }
+    public boolean toggleStimuliGlyph() {
+        return mGlyphInput.toggleStimuliGlyph();
+    }
     public void selectFont(String fontID) {
         mGlyphInput.selectFont(fontID);
     }

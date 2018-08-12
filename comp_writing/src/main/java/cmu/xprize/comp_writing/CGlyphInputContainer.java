@@ -93,7 +93,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private boolean               _showSampleChar = false;
     private boolean               _showUserGlyph  = true;
     private boolean               _showProtoGlyph = false;
-    private boolean               _showStimuliGlyph = true;
+    private boolean               _showStimuliGlyph = false;
 
     static private Bitmap         _bitmap;
     private boolean               _bitmapDirty       = false;
@@ -1088,7 +1088,15 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         return _showProtoGlyph;
     }
-
+    //amogh added
+    public boolean toggleStimuliGlyph(){
+        _showStimuliGlyph = !_showStimuliGlyph;
+        if(_showStimuliGlyph){
+            mHasGlyph = true; // so that when overwriting, erasing the glyph is easy.
+        }
+        return _showStimuliGlyph;
+    }
+    //amogh added finished
     private void rebuildGlyph() {
 
         Rect protoBnds = null;
@@ -1239,7 +1247,11 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     }
 
 
-    private void clear() {
+    private void    clear() {
+
+        if (_showStimuliGlyph == true){
+            _showStimuliGlyph = false;
+        }
 
         // Create a path object to hold the vector stream
 
