@@ -163,10 +163,21 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         _layoutManager.displayDigits(dataset[0], dataset[1]);
         _layoutManager.displayConcreteRepresentations(dataset[0], dataset[1]);
 
-        // ND_BUILD after saying the right prompt...
         _layoutManager.enableChooseNumber(true);
 
     }
+
+    /**
+     * ND_SCAFFOLD repeat for each column
+     * ND_SCAFFOLD highlight/lowlight the digit and things
+     * ND_SCAFFOLD disable clicking
+     * ND_SCAFFOLD when finished, postEvent to go to next node
+     */
+    public void highlightOnesColumn() {
+
+    }
+
+
 
     /**
      * Called by LayoutManager
@@ -195,7 +206,6 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
      */
     public void doTheWrongThing() {
         Log.d(TAG, "Doing the wrong thing");
-        // ND_BUILD do something... move on in animator_graph
         applyBehavior("FEEDBACK_SHOWN");
     }
 
@@ -204,7 +214,6 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
      */
     public void doTheRightThing() {
         Log.d(TAG, "Doing the right thing");
-        //applyBehavior("ND_NEXT"); // ND_BUILD √√√ do something... go to next node (UPDATE_STIMULUS)
         applyBehavior("FEEDBACK_SHOWN");
     }
 

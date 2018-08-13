@@ -11,6 +11,7 @@
       "rootnode": "INTRO_STATE",
 
       "queueMap": {
+        // ND_SCAFFOLD how to give feedback?
 
       },
       "nodeMap": {
@@ -136,7 +137,6 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
             {"name": "UPDATE_STIMULUS", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "updateStimulus"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "b.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"}
-            // ND_CLEAN simplify... get rid of some of these graph steps
     
           ]
         },
@@ -209,9 +209,23 @@
 
 
             {"type": "COMMAND", "cmd": "WAIT"}
-            // ND_BUILD advance on proper click
-            // ND_BUILD √√√ put two obvious buttons
-            // ND_BUILD make buttons more obvious
+          ]
+        },
+
+        // ND_SCAFFOLD how to make this work?
+        "ND_SCAFFOLD": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#ND_SCAFFOLD:String", "features":""},
+
+
+            // ND_SCAFFOLD setVolatileBehavior to trigger when done with scaffolding
+            // {"type": "COMMAND", "id": "SNumDiscr", "method": "setVolatileBehavior", "parms": "SELECT_ANSWER_EVENT:String|NEXTNODE:String" ,"features":""},
+
+
+            {"type": "COMMAND", "cmd": "WAIT"}
           ]
         }
 

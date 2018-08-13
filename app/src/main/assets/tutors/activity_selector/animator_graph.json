@@ -34,6 +34,7 @@
           ]
         },
 
+        // ND_SCAFFOLD mimic this.
         "INPUT_HESITATION_FEEDBACK": {
           "type": "QUEUE",
           "COMMENT": "prompt when user hesitates when they should be writing.",
