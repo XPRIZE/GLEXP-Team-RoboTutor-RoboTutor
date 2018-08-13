@@ -146,6 +146,7 @@ public class CNd_LayoutManager_BaseTen implements CNd_LayoutManagerInterface {
         @Override
         public void onClick(View view) {
             _component.registerStudentChoice(_choice);
+            _component.applyBehavior("SELECT_ANSWER_EVENT");
         }
     }
 

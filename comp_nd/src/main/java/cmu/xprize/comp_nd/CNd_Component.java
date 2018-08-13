@@ -87,6 +87,11 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
      */
     public void next() {
 
+        Log.wtf(TAG, "NEXT_NEXT_NEXT");
+
+        retractFeature("FTR_CORRECT");
+        retractFeature("FTR_WRONG");
+
         try {
             if (dataSource != null) {
                 updateDataSet(dataSource[_dataIndex]);
@@ -176,11 +181,11 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         if (studentChoice.equals(_correctChoice)) {
 
             Log.d(TAG, "CORRECT!");
-            applyBehavior("ND_RIGHT");
+            publishFeature("FTR_CORRECT");
         } else {
 
             Log.d(TAG, "WRONG!");
-            applyBehavior("ND_WRONG");
+            publishFeature("FTR_WRONG");
         }
 
     }
@@ -191,6 +196,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     public void doTheWrongThing() {
         Log.d(TAG, "Doing the wrong thing");
         // ND_BUILD do something... move on in animator_graph
+        applyBehavior("FEEDBACK_SHOWN");
     }
 
     /**
@@ -198,7 +204,8 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
      */
     public void doTheRightThing() {
         Log.d(TAG, "Doing the right thing");
-        applyBehavior("ND_NEXT"); // ND_BUILD √√√ do something... go to next node (UPDATE_STIMULUS)
+        //applyBehavior("ND_NEXT"); // ND_BUILD √√√ do something... go to next node (UPDATE_STIMULUS)
+        applyBehavior("FEEDBACK_SHOWN");
     }
 
 
@@ -206,6 +213,14 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     // TClass domain where TScope lives providing access to tutor scriptables
     //
     public boolean applyBehavior(String event){ return false;}
+
+    // Overridden in TClass.
+    // TODO fix this freakin' architecture...
+    public void publishFeature(String feature) { }
+
+    // Overridden in TClass.
+    // TODO fix this freakin' architecture...
+    public void retractFeature(String feature) {}
 
     /**
      * Load the data source

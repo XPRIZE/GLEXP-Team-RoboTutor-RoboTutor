@@ -12,34 +12,6 @@
 
       "queueMap": {
 
-        "ND_RIGHT": {
-          "type": "QUEUE",
-          "COMMENT": "Right behavior",
-          "preenter": [],
-          "reuse": true,
-          "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "ch.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"event"},
-            {"name": "ND_WRONG", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "doTheRightThing", "parms": "", "features":""}
-
-          ],
-          "preexit": [],
-          "edges": []
-        },
-
-        "ND_WRONG": {
-          "type": "QUEUE",
-          "COMMENT": "Wrong behavior",
-          "preenter": [],
-          "reuse": true,
-          "tracks": [
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "d.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"event"},
-            {"name": "ND_WRONG", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "doTheWrongThing", "parms": "", "features":""}
-
-          ],
-          "preexit": [],
-          "edges": []
-        }
-
       },
       "nodeMap": {
 
@@ -85,20 +57,43 @@
           "preexit": [],
           "edges":
                   [
-                    {"constraint": "FTR_EOD", "edge": "NEXT_SCENE"},
-                    {"constraint": "", "edge":"UPDATE_STIMULUS"}
+                    {"constraint": "FTR_CORRECT", "edge": "ND_CORRECT"},
+                    {"constraint": "", "edge":"ND_WRONG"}
 
                   ]
         },
 
-        "PROBLEMCORRECT": {
-          "COMMENT": "When user inputs a correct answer...",
-          "type": "node",
-          "maptype": "moduleMap",
-          "mapname": "PLAYCOMPLETE",
+        "ND_CORRECT": {
+          "type": "NODE",
+          "COMMENT": "Play correct response",
+          "maptype":"moduleMap",
+          "mapname": "ND_PLAYCORRECT",
           "preenter": [],
           "preexit": [],
           "edges": [
+            {
+              "constraint": "FTR_EOD",
+              "edge": "NEXT_SCENE"
+            },
+            {
+              "constraint": "",
+              "edge": "UPDATE_STIMULUS"
+            }
+          ]
+        },
+
+        "ND_WRONG": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "maptype":"moduleMap",
+          "mapname": "ND_PLAYWRONG",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "USER_INPUT"
+            }
           ]
         },
 
@@ -157,29 +152,40 @@
           ]
         },
 
-        "PLAYCOMPLETE": {
+        "ND_PLAYCORRECT": {
           "type": "MODULE",
+          "COMMENT": "Feedback for Correct",
+          "preenter": [],
           "reuse": true,
-          "COMMENT": "TBD",
           "tracks": [
-            
-              {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE:String", "features":""},
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#ND_PLAYCORRECT:String", "features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "ch.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"},
+            {"type": "COMMAND", "id": "SNumDiscr", "method": "setVolatileBehavior", "parms": "FEEDBACK_SHOWN:String|NEXTNODE:String" ,"features":""},
+            {"name": "ND_WRONG", "type": "COMMAND", "id": "SNumDiscr", "method": "doTheRightThing", "parms": "", "features":""},
+            {"type": "COMMAND", "cmd": "WAIT"  }
 
-
-            {"type": "COMMAND", "cmd": "WAIT"}
-          ]
+          ],
+          "preexit": [],
+          "edges": []
         },
 
-        "PLAYWRONG": {
+        "ND_PLAYWRONG": {
           "type": "MODULE",
+          "COMMENT": "Feedback for Wrong",
+          "preenter": [],
           "reuse": true,
-          "COMMENT": "TBD",
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#ND_PLAYWRONG:String", "features":""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "d.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"},
+            {"type": "COMMAND", "id": "SNumDiscr", "method": "setVolatileBehavior", "parms": "FEEDBACK_SHOWN:String|NEXTNODE:String" ,"features":""},
+            {"name": "ND_WRONG", "type": "COMMAND", "id": "SNumDiscr", "method": "doTheWrongThing", "parms": "", "features":""},
+            {"type": "COMMAND", "cmd": "WAIT"  }
 
-              {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#PLAYWRONG:String", "features":""}
-
-          ]
+          ],
+          "preexit": [],
+          "edges": []
         },
+
 
         "EMPTYMODULE": {
           "type": "MODULE",
@@ -198,6 +204,8 @@
           "COMMENT": "TBD",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#WAIT_FOR_INPUT:String", "features":""},
+
+            {"type": "COMMAND", "id": "SNumDiscr", "method": "setVolatileBehavior", "parms": "SELECT_ANSWER_EVENT:String|NEXTNODE:String" ,"features":""},
 
 
             {"type": "COMMAND", "cmd": "WAIT"}
@@ -233,6 +241,10 @@
 
         "COMMENT": "@@@@@  CConstraints @@@@@ ",
 
+        "FTR_CORRECT": {
+          "type": "CONDITION",
+          "test": "FTR_CORRECT"
+        },
         "FTR_EOD": {
           "type": "CONDITION",
           "test": "FTR_EOD"
