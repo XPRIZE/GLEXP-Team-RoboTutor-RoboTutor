@@ -29,6 +29,7 @@ import static cmu.xprize.comp_nd.ND_CONST.NO_DIGIT;
 import static cmu.xprize.comp_nd.ND_CONST.ONE_DIGIT;
 import static cmu.xprize.comp_nd.ND_CONST.TEN_DIGIT;
 import static cmu.xprize.util.MathUtil.getHunsDigit;
+import static cmu.xprize.util.MathUtil.getOnesDigit;
 import static cmu.xprize.util.MathUtil.getTensDigit;
 
 /**
@@ -42,12 +43,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     // (1) modify DS √√√
     // (2) modify CNd_Data √√√
     // (3) if (isWE)... ag? publishFeature? updateStimulus?
-    // (4) goThruScaffolding()... check if is correct
     // (8) perform on incorrect answer
-
-    // NEXT: IMPORT
-    // - layout √√√
-    // - highlightUnits... (trace through and make it work)
 
     // AUDIO:
         // PROMPTS:
@@ -253,6 +249,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
      */
 
 
+
     private String _currentHighlightDigit = null;
 
     /**
@@ -262,7 +259,9 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         Log.wtf("THIS_IS_A_TEST", "highlight huns at " + System.currentTimeMillis());
         _layoutManager.highlightDigit(HUN_DIGIT);
         _currentHighlightDigit = HUN_DIGIT;
+        publishDigitAudioValues(HUN_DIGIT);
     }
+
 
     /**
      * highlight digit and concretes in tens column
@@ -271,6 +270,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         Log.wtf("THIS_IS_A_TEST", "highlight tens at " + System.currentTimeMillis());
         _layoutManager.highlightDigit(TEN_DIGIT);
         _currentHighlightDigit = TEN_DIGIT;
+        publishDigitAudioValues(TEN_DIGIT);
     }
 
     /**
@@ -280,6 +280,40 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         Log.wtf("THIS_IS_A_TEST", "highlight ones at " + System.currentTimeMillis());
         _layoutManager.highlightDigit(ONE_DIGIT);
         _currentHighlightDigit = ONE_DIGIT;
+        publishDigitAudioValues(ONE_DIGIT);
+    }
+
+    private void publishDigitAudioValues(String digit) {
+
+        int digitLeft = 0, digitRight = 0;
+        switch(digit) {
+            case HUN_DIGIT:
+                digitLeft = getHunsDigit(dataset[0]);
+                digitRight = getHunsDigit(dataset[1]);
+                break;
+
+            case TEN_DIGIT:
+                digitLeft = getTensDigit(dataset[0]);
+                digitRight = getTensDigit(dataset[1]);
+                break;
+
+            case ONE_DIGIT:
+                digitLeft = getOnesDigit(dataset[0]);
+                digitRight = getOnesDigit(dataset[1]);
+                break;
+        }
+
+        publishValue(".digitMore",
+                String.valueOf(digitLeft > digitRight ?
+                        digitLeft : digitRight));
+
+        publishValue(".digitCompare", digitLeft == digitRight ?
+                //"is equal to" : "is greater than");
+                "k" : "r"); // temporary placeholder
+
+        publishValue(".digitLess",
+                String.valueOf(digitLeft > digitRight ?
+                        digitRight: digitLeft));
     }
 
     /**
@@ -380,6 +414,11 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     // Overridden in TClass.
     // TODO fix this freakin' architecture...
     public void retractFeature(String feature) {}
+
+    // Overridden in TClass.
+    // TODO fix this freakin' architecture...
+    public void publishValue(String varName, String value) {
+    }
 
     /**
      * Load the data source

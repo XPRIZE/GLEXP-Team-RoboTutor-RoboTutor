@@ -17,7 +17,9 @@
           "tracks": [
             {"name": "DISABLE TAPPING", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "lockUserInput"},
             {"name": "HIGHLIGHT_UNITS", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightHunsColumn"},
-            {"name": "first compare hundreds", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "z.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"},
+            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitMore}}.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"},
+            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitCompare}}.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"},
+            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitLess}}.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"},
             {"name": "CHECK HIGHLIGHT NEXT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightNextScaffoldDigit"}
 
           ]
@@ -27,7 +29,9 @@
           "type": "QUEUE",
           "tracks": [
             {"name": "NEXT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightTensColumn"},
-            {"name": "then compare tens", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "y.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"},
+            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitMore}}.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"},
+            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitCompare}}.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"},
+            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitLess}}.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"},
             {"name": "CHECK HIGHLIGHT NEXT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightNextScaffoldDigit"}
           ]
         },
@@ -36,7 +40,9 @@
           "type": "QUEUE",
           "tracks": [
             {"name": "NEXT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightOnesColumn"},
-            {"name": "then compare ones", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "w.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"},
+            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitMore}}.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"},
+            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitCompare}}.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"},
+            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitLess}}.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"},
             {"name": "CHECK HIGHLIGHT NEXT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightNextScaffoldDigit"}
           ]
         },
