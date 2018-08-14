@@ -143,9 +143,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public CWr_Data[]           dataSource;
 
     //amogh added for sentence correction
-    protected  List<Integer>    deleteCorrectionIndices = new ArrayList<>(Arrays.asList(0,1,14));
-    protected  List<Integer>    insertCorrectionIndices = new ArrayList<>(Arrays.asList(0,2));
-    protected  List<Integer>    changeCorrectionIndices = new ArrayList<>(Arrays.asList(0));
+    protected  List<Integer>    deleteCorrectionIndices = new ArrayList<>();
+    protected  List<Integer>    insertCorrectionIndices = new ArrayList<>();
+    protected  List<Integer>    changeCorrectionIndices = new ArrayList<>();
+
+//    protected  List<Integer>    deleteCorrectionIndices = new ArrayList<>(Arrays.asList());
+//    protected  List<Integer>    insertCorrectionIndices = new ArrayList<>(Arrays.asList());
+//    protected  List<Integer>    changeCorrectionIndices = new ArrayList<>(Arrays.asList());
+
     protected int correctionAttempts = 0;
     //amogh add ends
 
@@ -426,7 +431,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             String charExpected = gController.getExpectedChar();
             resp.setStimulusChar(mResponse,false);
 //            updateResponseView(mResponse);
-        //amogh added to handle spaces.
+        //amogh added to handle spacing.
         if(_isValid){
 
             if(_spaceIndices.contains(mActiveIndex-1)){
@@ -437,11 +442,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 gControllerSpace.updateCorrectStatus(_isValid);
             }
         }
+        else{
+//            mActiveController.
+        }
         //amogh add ends
         // Update the controller feedback colors
         //
         mActiveController.updateCorrectStatus(_isValid);
-
 
 
         if(!singleStimulus) {
@@ -1161,7 +1168,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 v.toggleStimuliGlyph();
                 mGlyphList.addView(v);
-//                v.toggleProtoGlyph(); //toggle (ie show sample glyph) when in the sentence correction mode
+//                v.toggleProtoGlyph(); //can help to debug and see the expected character
 //                v.toggleSampleChar();
                 v.setLinkedScroll(mDrawnScroll);
                 v.setWritingController(this);

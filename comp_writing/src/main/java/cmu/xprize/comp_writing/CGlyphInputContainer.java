@@ -1303,7 +1303,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         _correct = correct;
 
         if(correct) {
-
             _glyphColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
         }
         else {
