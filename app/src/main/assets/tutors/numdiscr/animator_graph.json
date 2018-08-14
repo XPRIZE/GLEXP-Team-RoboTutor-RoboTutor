@@ -11,9 +11,11 @@
       "rootnode": "INTRO_STATE",
 
       "queueMap": {
-        // ND_SCAFFOLD how to give feedback?
+
+        // scaffold highlighting
         "HIGHLIGHT_HUNS": {
           "type": "QUEUE",
+          "COMMENT": "highlight the hundreds column and explain how to compare numbers",
           "tracks": [
             {"name": "DISABLE TAPPING", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "lockUserInput"},
             {"name": "HIGHLIGHT_UNITS", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightHunsColumn"},
@@ -27,6 +29,7 @@
 
         "HIGHLIGHT_TENS": {
           "type": "QUEUE",
+          "COMMENT": "highlight the tens column and explain how to compare numbers",
           "tracks": [
             {"name": "NEXT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightTensColumn"},
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitMore}}.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"},
@@ -38,6 +41,7 @@
 
         "HIGHLIGHT_ONES": {
           "type": "QUEUE",
+          "COMMENT": "highlight the ones column and explain how to compare numbers",
           "tracks": [
             {"name": "NEXT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightOnesColumn"},
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitMore}}.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"},
@@ -254,19 +258,12 @@
           ]
         },
 
-        // ND_SCAFFOLD how to make this work?
         "ND_SCAFFOLD": {
           "type": "MODULE",
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#ND_SCAFFOLD:String", "features":""},
-
-
-            // ND_SCAFFOLD setVolatileBehavior to trigger when done with scaffolding
-            // {"type": "COMMAND", "id": "SNumDiscr", "method": "setVolatileBehavior", "parms": "SELECT_ANSWER_EVENT:String|NEXTNODE:String" ,"features":""},
-
-
             {"type": "COMMAND", "cmd": "WAIT"}
           ]
         }

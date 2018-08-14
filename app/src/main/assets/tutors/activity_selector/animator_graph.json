@@ -25,7 +25,7 @@
             {"name":"INTRO PROMPT", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "What would you like to do.mp3","soundpackage": "default","mode": "flow", "features": "FTR_TUTOR_SELECT"},
             {"name":"INTRO PROMPT", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "what did you think of that.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DIFFICULTY_ASSESS"},
 
-            // ND_SCAFFOLD MIMIC (1) sets behavior... hesitation feedback in 2500ms
+            // ND_SCAFFOLD_TODO hesitation might be useful
             {"name":"SET TIMED HESITATION PROMPT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "postNamed", "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|2500:Long", "features":""}
 
           ],
@@ -35,7 +35,6 @@
           ]
         },
 
-        // ND_SCAFFOLD MIMIC (2)... the event that happens
         "INPUT_HESITATION_FEEDBACK": {
           "type": "QUEUE",
           "COMMENT": "prompt when user hesitates when they should be writing.",
@@ -44,7 +43,6 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "logState", "parms": "type#feedback,value#INPUT_HESITATION_FEEDBACK:String", "features":""},
 
-            // ND_SCAFFOLD MIMIC (2)... RIPPLE_DESCRIBE
             {"name":"RIPPLE_DESCRIBE", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "postEvent", "parms": "RIPPLE_DESCRIBE:String", "features":""}
           ],
           "preexit": [
@@ -53,7 +51,6 @@
           ]
         },
 
-        // ND_SCAFFOLD MIMIC (7) Button_Description --> Audio
         "BUTTON_DESCRIPTION": {
           "type": "QUEUE",
           "COMMENT": "prompt when user hesitates when they should be writing.",
@@ -62,10 +59,8 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "logState", "parms": "type#behavior,value#BUTTON_DESCRIPTION:String", "features":""},
 
-            // ND_SCAFFOLD MIMIC (7) do the thing (point at each button)
             {"name":"POINT AT BUTTON", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "postEvent", "parms": "POINT_AT_BUTTON:String|{{activity_selector.buttonid}}:String", "features":""},
             {"name":"AUDIO - BUTTON DESCRIPTION", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{activity_selector.helpAudio}}.mp3","soundpackage": "default","mode": "flow", "features": ""},
-            // ND_SCAFFOLD MIMIC (8) post DESCRIBE_NEXT in 800 ms
             {"name":"DESCRIBE NEXT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "postNamed", "parms": "DESCRIBE_NEXT:String|DESCRIBE_NEXT:String|800:Long", "features":""}
           ],
           "preexit": [
@@ -219,11 +214,8 @@
 
             // Input must be inhibited until all the behaviors are set
             //
-            // ND_SCAFFOLD MIMIC (0,6) Describe Behavior --> Button Description
             {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "DESCRIBE_BEHAVIOR:String|BUTTON_DESCRIPTION:String" ,"features":""},
-            // ND_SCAFFOLD MIMIC (0,10) Reset hesitation feedback
             {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "DESCRIBE_COMPLETE:String|SET_HESITATION_FEEDBACK:String" ,"features":""},
-            // ND_SCAFFOLD MIMIC (0) when you select a button, clear hesitation behavior
             {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_BEHAVIOR:String|CLEAR_HESITATION_BEHAVIOR:String" ,"features":""},
 
             {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "LAUNCH_EVENT:String|LAUNCH_BEHAVIOR:String" ,"features":""},
@@ -252,11 +244,7 @@
       },
 
       "actionMap": {
-
-        // ND_SCAFFOLD MIMIC (11) how to set hesitation feedback
         "SET_HESITATION_FEEDBACK": {"type": "COMMAND", "id": "activity_selector", "method": "postNamed", "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|2000:Long", "features":""},
-        // ND_SCAFFOLD MIMIC (c) how to cancel a hesitation behavior
-        // ND_SCAFFOLD MIMIC (c)
         "CLEAR_HESITATION_BEHAVIOR":  {"type": "COMMAND", "id": "activity_selector", "method": "cancelPost", "parms": "HESITATION_PROMPT:String", "features":"" },
         "CLEAR_DESCRIBENEXT_BEHAVIOR":  {"type": "COMMAND", "id": "activity_selector", "method": "cancelPost", "parms": "DESCRIBE_NEXT:String", "features":"" },
 

@@ -246,7 +246,6 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
 
                     case TCONST.POINT_AT_BUTTON:
 
-                        // ND_SCAFFOLD MIMIC (z) point at different Views
                         SaskActivity.pointAtViewByName(_target);
                         break;
 
@@ -255,13 +254,11 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
                         cancelPointAt();
                         break;
 
-                        // ND_SCAFFOLD MIMIC (3) the hesitation feedback
                     case AS_CONST.RIPPLE_DESCRIBE:
 
                         rippleDescribe();
                         break;
 
-                        // ND_SCAFFOLD MIMIC (8)
                     case AS_CONST.DESCRIBE_NEXT:
 
                         describeNext();

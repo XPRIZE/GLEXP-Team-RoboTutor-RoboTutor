@@ -39,12 +39,11 @@ import static cmu.xprize.util.MathUtil.getTensDigit;
 public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
 
-    // ND_SCAFFOLD_TODO
-    // (1) modify DS √√√
-    // (2) modify CNd_Data √√√
-    // (3) if (isWE)... ag? publishFeature? updateStimulus?
-    // (8) perform on incorrect answer
+    // ND_SCAFFOLD_TODO BEHAVIOR
+    // (3) if (isWE), perform Scaffolding // put it right in updateStimulus (probably) NEXT NEXT NEXT
+    // (8) when incorrect answer, perform Scaffolding // put it right in xyz
 
+    // ND_SCAFFOLD_TODO PROMPTS
     // AUDIO:
         // PROMPTS:
             // "first compare the hundreds"
@@ -54,7 +53,8 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
             // "they have the same"
         // PROCEDURE:
             // record audio
-            // make new folder for ND_CONST.
+            // make new folder for ND_CONST...
+            // record numdiscr in "tutor_descriptor.json"
             // push into place using RTAsset_Publisher
 
 
@@ -240,14 +240,6 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     public void enableUserInput() {
         _layoutManager.enableChooseNumber(true);
     }
-
-    /**
-     * ND_SCAFFOLD repeat for each column
-     * ND_SCAFFOLD highlight/lowlight the digit and things
-     * ND_SCAFFOLD disable clicking
-     * ND_SCAFFOLD when finished, postEvent to go to next node
-     */
-
 
 
     private String _currentHighlightDigit = null;
