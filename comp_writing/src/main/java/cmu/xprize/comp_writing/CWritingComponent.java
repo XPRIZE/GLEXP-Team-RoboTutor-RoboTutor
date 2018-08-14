@@ -117,6 +117,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected boolean           _isValid;
     protected ArrayList<String> _attemptFTR = new ArrayList<>();
     protected ArrayList<String> _hesitationFTR = new ArrayList<>(); //amogh added
+    private int                     _hesitationNo      = 0; //amogh added
 
     protected String            mResponse;
     protected String            mStimulus;
@@ -600,7 +601,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         clearHesitationFeatures();
 
-        int hesitationNo = mActiveController.incHesitationNo();
+        int hesitationNo = incHesitationNo();
 
         // only publish attempt feature for first four attempts... next time will activate mercy rule
         if(hesitationNo <= 4)
@@ -609,11 +610,27 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         return hesitationNo;
     }
 
-    private int resetHesitationFeature(){
-        clearHesitationFeatures();;
-        mActiveController.resetHesitationNo();
+    private void resetHesitationFeature(){
+        clearHesitationFeatures();
+        resetHesitationNo();
+    }
+    //amogh added
+    private int getHesitationNo() {
+        return _hesitationNo;
     }
 
+    private int resetHesitationNo() {
+        _hesitationNo = 0;
+        return _hesitationNo;
+    }
+
+    private int incHesitationNo() {
+        if(_hesitationNo < 4) {
+            _hesitationNo++;
+        }
+        return _hesitationNo;
+    }
+    //amogh added ends
 
     /**
      * Iterates through each character in a word to see if it's been drawn completely.

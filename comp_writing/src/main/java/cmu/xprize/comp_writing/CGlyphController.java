@@ -78,7 +78,6 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     private int[]                   _screenCoord       = new int[2];
     private boolean                 _isLast;
     private int                     _attempt           = 0;
-    private int                     _hesitationNo      = 0;
 
     protected final Handler         mainHandler = new Handler(Looper.getMainLooper());
     protected HashMap               queueMap    = new HashMap();
@@ -336,23 +335,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         return _attempt;
     }
 
-    //amogh added
-    public int getHesitationNo() {
-        return _hesitationNo;
-    }
 
-    public int resetHesitationNo() {
-        _hesitationNo = 0;
-        return _hesitationNo;
-    }
-
-    public int incHesitationNo() {
-        if(_hesitationNo < 4) {
-            _hesitationNo++;
-        }
-        return _hesitationNo;
-    }
-    //amogh added ends
 
     public class glyphSaveListener implements View.OnClickListener {
         @Override
