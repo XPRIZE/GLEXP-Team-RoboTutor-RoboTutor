@@ -17,6 +17,7 @@ public class CNd_Data implements ILoadableObject{
     public String task;
     public String layout;
     public int[] dataset;
+    public boolean isWorkedExample;
 
 
     @Override

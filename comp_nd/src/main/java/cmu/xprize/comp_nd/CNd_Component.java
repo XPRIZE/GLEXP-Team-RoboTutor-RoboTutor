@@ -27,12 +27,42 @@ import cmu.xprize.util.TCONST;
 
 public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
+
+    // ND_SCAFFOLD_TODO
+    // (1) modify DS √√√
+    // (2) modify CNd_Data √√√
+    // (3) if (isWE)... ag? publishFeature? updateStimulus?
+    // (4) goThruScaffolding()... use placeholder for now
+    // (5) lockScreen() √√√ prevent user from tapping
+    // (6) cycleThru()... highlightColumn, sayAudio... should be in AG
+    // (7) indicateCorrect()... see below
+    // (8) perform on incorrect answer (not today)
+
+    // NEXT: IMPORT
+    // - layout √√√
+    // - highlightUnits... (trace through and make it work)
+
+    // AUDIO:
+        // PROMPTS:
+            // "first compare the hundreds"
+            // "compare the tens"
+            // "compare the ones"
+            // "this number has more"
+            // "they have the same"
+        // PROCEDURE:
+            // record audio
+            // make new folder for ND_CONST.
+            // push into place using RTAsset_Publisher
+
+
+
     // DataSource Variables
     protected   int                   _dataIndex = 0;
     protected String level;
     protected String task;
     protected String layout;
     protected int[] dataset;
+    protected boolean isWorkedExample;
 
 
     // json loadable
@@ -89,8 +119,8 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
         Log.wtf(TAG, "NEXT_NEXT_NEXT");
 
-        retractFeature("FTR_CORRECT");
-        retractFeature("FTR_WRONG");
+        retractFeature(ND_CONST.FTR_CORRECT);
+        retractFeature(ND_CONST.FTR_WRONG);
 
         try {
             if (dataSource != null) {
@@ -133,14 +163,17 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         task = data.task;
         layout = data.layout;
         dataset = data.dataset;
+        isWorkedExample = data.isWorkedExample;
 
     }
 
     /**
      * Point at a view
+     * ND_SCAFFOLD_TODO (7) point at the left or right guy
      */
     public void pointAtSomething() {
-        View v = findViewById(R.id.num_discrim_layout);
+        View v = findViewById(R.id.num_discrim_layout); // left ? left : right;
+
 
         int[] screenCoord = new int[2];
 
@@ -152,7 +185,6 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         bManager.sendBroadcast(msg);
     }
 
-
     /**
      * Called by AG: Updates the stimulus.
      */
@@ -163,8 +195,15 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         _layoutManager.displayDigits(dataset[0], dataset[1]);
         _layoutManager.displayConcreteRepresentations(dataset[0], dataset[1]);
 
+        Log.wtf("CHOOSE_ME", "y u no work?");
         _layoutManager.enableChooseNumber(true);
 
+    }
+
+
+    // (5) prevent user
+    public void lockUserInput() {
+        _layoutManager.enableChooseNumber(false);
     }
 
     /**
@@ -192,11 +231,11 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         if (studentChoice.equals(_correctChoice)) {
 
             Log.d(TAG, "CORRECT!");
-            publishFeature("FTR_CORRECT");
+            publishFeature(ND_CONST.FTR_CORRECT);
         } else {
 
             Log.d(TAG, "WRONG!");
-            publishFeature("FTR_WRONG");
+            publishFeature(ND_CONST.FTR_WRONG);
         }
 
     }
@@ -206,7 +245,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
      */
     public void doTheWrongThing() {
         Log.d(TAG, "Doing the wrong thing");
-        applyBehavior("FEEDBACK_SHOWN");
+        applyBehaviorNode(ND_CONST.NEXTNODE);
     }
 
     /**
@@ -214,7 +253,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
      */
     public void doTheRightThing() {
         Log.d(TAG, "Doing the right thing");
-        applyBehavior("FEEDBACK_SHOWN");
+        applyBehaviorNode(ND_CONST.NEXTNODE);
     }
 
 
@@ -222,6 +261,10 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     // TClass domain where TScope lives providing access to tutor scriptables
     //
     public boolean applyBehavior(String event){ return false;}
+
+    // Overridden in TClass.
+    // TODO fix this freakin' architecture...
+    public void applyBehaviorNode(String event) { }
 
     // Overridden in TClass.
     // TODO fix this freakin' architecture...

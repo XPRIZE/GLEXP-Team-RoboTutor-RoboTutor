@@ -45,4 +45,12 @@ public interface CNd_LayoutManagerInterface {
      * @param enable
      */
     void enableChooseNumber(boolean enable);
+
+
+    /**
+     * Highlight a digit for both numbers.
+     *
+     * @param digit
+     */
+    void highlightDigit(String digit);
 }

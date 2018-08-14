@@ -160,7 +160,6 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#ND_PLAYCORRECT:String", "features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "ch.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"},
-            {"type": "COMMAND", "id": "SNumDiscr", "method": "setVolatileBehavior", "parms": "FEEDBACK_SHOWN:String|NEXTNODE:String" ,"features":""},
             {"name": "ND_WRONG", "type": "COMMAND", "id": "SNumDiscr", "method": "doTheRightThing", "parms": "", "features":""},
             {"type": "COMMAND", "cmd": "WAIT"  }
 
@@ -177,7 +176,6 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#ND_PLAYWRONG:String", "features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "d.mp3",            "soundpackage":"letters",        "volume": 1.0, "mode":"flow"},
-            {"type": "COMMAND", "id": "SNumDiscr", "method": "setVolatileBehavior", "parms": "FEEDBACK_SHOWN:String|NEXTNODE:String" ,"features":""},
             {"name": "ND_WRONG", "type": "COMMAND", "id": "SNumDiscr", "method": "doTheWrongThing", "parms": "", "features":""},
             {"type": "COMMAND", "cmd": "WAIT"  }
 

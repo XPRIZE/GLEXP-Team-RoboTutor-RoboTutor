@@ -8,6 +8,17 @@
     android:background="@android:color/white">
 
 
+  <!-- this is a placeholder -->
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/debug_text"
+      android:text="placeholder"
+      android:textSize="40sp"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"/>
+
   <!-- ND_SCAFFOLD make buttons more obvious-->
 
   <!-- Guidelines -->

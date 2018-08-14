@@ -266,6 +266,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     }
 
 
+    // ND_SCAFFOLD MIMIC (4) rippleDescribe
     public void rippleDescribe() {
         _describeIndex = 0;
 
@@ -273,6 +274,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     }
 
 
+    // ND_SCAFFOLD MIMIC (4) describeNext
     public void describeNext() {
 
         // In debug selector mode - _activeLayout may be null
@@ -281,16 +283,19 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
             if (_describeIndex < _activeLayout.items.length) {
 
+                // ND_SCAFFOLD MIMIC (5) the actual behavior!!!
                 publishValue(AS_CONST.VAR_BUTTONID, _activeLayout.items[_describeIndex].componentID);
                 publishValue(AS_CONST.VAR_BUT_BEHAVIOR, _activeLayout.items[_describeIndex].behavior);
                 publishValue(AS_CONST.VAR_HELP_AUDIO, _activeLayout.items[_describeIndex].help);
                 publishValue(AS_CONST.VAR_PROMPT_AUDIO, _activeLayout.items[_describeIndex].prompt);
 
+                // ND_SCAFFOLD MIMIC (5) describe the button.
                 applyBehavior(AS_CONST.DESCRIBE_BEHAVIOR);
 
                 _describeIndex++;
             } else {
 
+                // ND_SCAFFOLD MIMIC (9) we're done here. Reset scaffolding.
                 applyBehavior(AS_CONST.DESCRIBE_COMPLETE);
             }
         }
