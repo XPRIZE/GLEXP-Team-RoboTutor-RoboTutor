@@ -1646,6 +1646,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         //clear the hesitation number in feedback
                         resetHesitationFeature();
                         break;
+
+                    case WR_CONST.INC_HESITATION:
+                        updateHesitationFeature();
                     //amogh added ends
 
                     case TCONST.APPLY_BEHAVIOR:

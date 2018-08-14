@@ -21,7 +21,8 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "logState", "parms": "type#feedback,value#INPUT_HESITATION_FEEDBACK:String", "features":""},
 
             //Increase the hesitation count and release the corresponding feature
-            {"name": "Increase hesitation number",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateHesitationFeature",       "parms": "",  "features":"FTR_SEN" },
+//            {"name": "Increase hesitation number",  "type": "COMMAND", "id": "SWordCopy", "method": "updateHesitationFeature",       "parms": "",  "features":"" }, //amogh added
+            {"name": "Increment hesitation", "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "INC_HESITATION:String", "features":"FTR_SEN"}, //amogh added
 
             {"name": "Disable Input",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "TRUE:Boolean",  "features":"" },
 
@@ -78,6 +79,7 @@
 
 
             {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_INPUT_HESITATION_POSTING",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_INPUT_HESITATION_POSTING:String" ,"features":""},
+            {"name":"SetVolatile - WRITE_BEHAVIOR - RESET_HESITATION_NUMBER",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|RESET_HESITATION_NUMBER:String" ,"features":""}, //amogh added
             {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":""},
 
             {"name": "Enable Input",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "FALSE:Boolean", "features":""}
@@ -851,6 +853,7 @@
             {"name":"Play - .audiostimulus", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim2}}.mp3","soundpackage": "words","mode":"flow", "features": "FTR_MISSING_LTR"},
 
             {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_INPUT_HESITATION_POSTING",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_INPUT_HESITATION_POSTING:String" ,"features":""},
+            {"name":"SetVolatile - WRITE_BEHAVIOR - RESET_HESITATION_NUMBER",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|RESET_HESITATION_NUMBER:String" ,"features":""}, //amogh added
             {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":""}
           ]
         },
@@ -1004,7 +1007,7 @@
 
 
         "CANCEL_INPUT_HESITATION_POSTING": {"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "cancelPost", "parms": "HESITATION_PROMPT:String",    "features":""},
-        "RESET_HESITATION_NUMBER": {"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "post", "parms": "RESET_HESITATION:String",    "features":""},
+        "RESET_HESITATION_NUMBER": {"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "RESET_HESITATION:String",    "features":""},
 
         "FW_DISABLE":{"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "inhibitInput", "parms": "TRUE:Boolean","features":""},
         //disable FingerWriting

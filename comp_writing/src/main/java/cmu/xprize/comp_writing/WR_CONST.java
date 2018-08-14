@@ -72,6 +72,7 @@ public class WR_CONST {
     public static final String CLEAR_ATTEMPT            = "CLEAR_ATTEMPT";
     public static final String CLEAR_HESITATION         = "CLEAR_HESITATION"; //amogh added
     public static final String RESET_HESITATION         = "RESET_HESITATION"; //amogh added
+    public static final String INC_HESITATION           = "INC_HESITATION"; //amogh added
 
 
     public static final String CANDIDATE_VAR            = ".candidate";
