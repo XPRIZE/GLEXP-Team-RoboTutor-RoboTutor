@@ -34,6 +34,12 @@ public final class ND_CONST {
     static final String NEXTNODE = "NEXTNODE";
 
 
+    // queueMap entries
+    public static final String HIGHLIGHT_HUNS = "HIGHLIGHT_HUNS";
+    public static final String HIGHLIGHT_TENS = "HIGHLIGHT_TENS";
+    public static final String HIGHLIGHT_ONES = "HIGHLIGHT_ONES";
+    public static final String INDICATE_CORRECT = "INDICATE_CORRECT";
+
 
     // for Logging
     static final String LOG_SCAFFOLD = "ND_SCAFFOLD";

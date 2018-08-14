@@ -21,6 +21,16 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.comp_nd.ND_CONST.HIGHLIGHT_ONES;
+import static cmu.xprize.comp_nd.ND_CONST.HIGHLIGHT_TENS;
+import static cmu.xprize.comp_nd.ND_CONST.HUN_DIGIT;
+import static cmu.xprize.comp_nd.ND_CONST.INDICATE_CORRECT;
+import static cmu.xprize.comp_nd.ND_CONST.NO_DIGIT;
+import static cmu.xprize.comp_nd.ND_CONST.ONE_DIGIT;
+import static cmu.xprize.comp_nd.ND_CONST.TEN_DIGIT;
+import static cmu.xprize.util.MathUtil.getHunsDigit;
+import static cmu.xprize.util.MathUtil.getTensDigit;
+
 /**
  * Generated automatically w/ code written by Kevin DeLand
  */
@@ -32,11 +42,8 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     // (1) modify DS √√√
     // (2) modify CNd_Data √√√
     // (3) if (isWE)... ag? publishFeature? updateStimulus?
-    // (4) goThruScaffolding()... use placeholder for now
-    // (5) lockScreen() √√√ prevent user from tapping
-    // (6) cycleThru()... highlightColumn, sayAudio... should be in AG
-    // (7) indicateCorrect()... see below
-    // (8) perform on incorrect answer (not today)
+    // (4) goThruScaffolding()... check if is correct
+    // (8) perform on incorrect answer
 
     // NEXT: IMPORT
     // - layout √√√
@@ -81,8 +88,8 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     // TUTOR STATE
     protected String _correctChoice; // can be "left" or "right"
 
-    // might need?
-    private LocalBroadcastManager bManager;
+    // Needed for sending broadcasts to RoboFinger
+    private LocalBroadcastManager _bManager;
 
 
     static final String TAG = "CNd_Component";
@@ -104,6 +111,8 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     protected void init(Context context, AttributeSet attrs) {
 
         mContext = context;
+
+        _bManager = LocalBroadcastManager.getInstance(getContext());
 
         _layoutManager = new CNd_LayoutManager_BaseTen(this, context);
 
@@ -167,9 +176,35 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
     }
 
+    public void pointAtCorrectDigit() {
+        // ND_SCAFFOLD_TODO (7) point at the left or right guy
+
+        Log.wtf("THIS_IS_A_TEST", "pointing to " + _correctChoice);
+
+        View digitView;
+        if (_correctChoice.equals("left")) {
+            digitView = findViewById(R.id.symbol_left_num);
+        } else {
+            digitView = findViewById(R.id.symbol_right_num);
+        }
+
+        Log.wtf("THIS_IS_A_TEST", "pointing to " + digitView);
+
+        int[] screenCoord = new int[2];
+        digitView.getLocationOnScreen(screenCoord);
+
+        PointF targetPoint = new PointF(screenCoord[0] + digitView.getWidth()/2,
+                screenCoord[1] + digitView.getHeight()/2);
+
+        Intent msg = new Intent(TCONST.POINTAT);
+        msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
+
+        _bManager.sendBroadcast(msg);
+
+    }
+
     /**
      * Point at a view
-     * ND_SCAFFOLD_TODO (7) point at the left or right guy
      */
     public void pointAtSomething() {
         View v = findViewById(R.id.num_discrim_layout); // left ? left : right;
@@ -182,7 +217,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         Intent msg = new Intent(TCONST.POINTAT);
         msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
 
-        bManager.sendBroadcast(msg);
+        _bManager.sendBroadcast(msg);
     }
 
     /**
@@ -206,14 +241,86 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         _layoutManager.enableChooseNumber(false);
     }
 
+    public void enableUserInput() {
+        _layoutManager.enableChooseNumber(true);
+    }
+
     /**
      * ND_SCAFFOLD repeat for each column
      * ND_SCAFFOLD highlight/lowlight the digit and things
      * ND_SCAFFOLD disable clicking
      * ND_SCAFFOLD when finished, postEvent to go to next node
      */
-    public void highlightOnesColumn() {
 
+
+    private String _currentHighlightDigit = null;
+
+    /**
+     * highlight digit and concretes in huns column
+     */
+    public void highlightHunsColumn() {
+        Log.wtf("THIS_IS_A_TEST", "highlight huns at " + System.currentTimeMillis());
+        _layoutManager.highlightDigit(HUN_DIGIT);
+        _currentHighlightDigit = HUN_DIGIT;
+    }
+
+    /**
+     * highlight digit and concretes in tens column
+     */
+    public void highlightTensColumn() {
+        Log.wtf("THIS_IS_A_TEST", "highlight tens at " + System.currentTimeMillis());
+        _layoutManager.highlightDigit(TEN_DIGIT);
+        _currentHighlightDigit = TEN_DIGIT;
+    }
+
+    /**
+     * highlight digit and concretes in ones column
+     */
+    public void highlightOnesColumn() {
+        Log.wtf("THIS_IS_A_TEST", "highlight ones at " + System.currentTimeMillis());
+        _layoutManager.highlightDigit(ONE_DIGIT);
+        _currentHighlightDigit = ONE_DIGIT;
+    }
+
+    /**
+     * decide whether to highlight next digit, or indicate the correct answer
+     */
+    public void highlightNextScaffoldDigit() {
+
+        if (_currentHighlightDigit == null) return;
+
+        switch(_currentHighlightDigit) {
+            case HUN_DIGIT:
+                if (getHunsDigit(dataset[0]) == getHunsDigit(dataset[1])) {
+                    applyBehaviorNode(HIGHLIGHT_TENS);
+                } else {
+                    applyBehaviorNode(INDICATE_CORRECT);
+                }
+                break;
+
+            case TEN_DIGIT:
+                if (getTensDigit(dataset[0]) == getTensDigit(dataset[1])) {
+                    applyBehaviorNode(HIGHLIGHT_ONES);
+                } else {
+                    applyBehaviorNode(INDICATE_CORRECT);
+                }
+                break;
+
+            case ONE_DIGIT:
+                // they are equal... this functionality does not yet exist
+                if (getHunsDigit(dataset[0]) == getHunsDigit(dataset[1])) {
+                    applyBehaviorNode(INDICATE_CORRECT);
+                } else {
+                    applyBehaviorNode(INDICATE_CORRECT);
+                }
+                break;
+        }
+
+    }
+
+    public void clearHighlight() {
+        Log.wtf("THIS_IS_A_TEST", "clear highlight at " + System.currentTimeMillis());
+        _layoutManager.highlightDigit(NO_DIGIT);
     }
 
 

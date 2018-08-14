@@ -23,4 +23,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <cmu.xprize.robotutor.tutorengine.widgets.core.THandAnimation
+        android:id="@+id/ShandAnimator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        app:scale_factor="0.3"
+        android:background="@null"/>
+
 </cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>

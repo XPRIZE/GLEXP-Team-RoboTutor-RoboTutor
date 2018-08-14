@@ -11,6 +11,7 @@ import cmu.xprize.comp_nd.CNd_Component;
 import cmu.xprize.comp_nd.R;
 import cmu.xprize.util.MathUtil;
 
+import static cmu.xprize.comp_nd.ND_CONST.HIGHLIGHT_HUNS;
 import static cmu.xprize.comp_nd.ND_CONST.HUN_DIGIT;
 import static cmu.xprize.comp_nd.ND_CONST.LEFT_NUM;
 import static cmu.xprize.comp_nd.ND_CONST.MAX_HUNS;
@@ -265,6 +266,17 @@ public class CNd_LayoutManager_BaseTen implements CNd_LayoutManagerInterface {
 
                     }
                 }
+            }
+        });
+
+
+
+        _component.findViewById(R.id.debug_nd_2).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                _component.applyBehaviorNode(HIGHLIGHT_HUNS);
             }
         });
     }
