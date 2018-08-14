@@ -116,6 +116,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected boolean           _metricValid;
     protected boolean           _isValid;
     protected ArrayList<String> _attemptFTR = new ArrayList<>();
+    protected ArrayList<String> _hesitationFTR = new ArrayList<>(); //amogh added
 
     protected String            mResponse;
     protected String            mStimulus;
@@ -186,6 +187,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         _attemptFTR.add(WR_CONST.FTR_ATTEMPT_2);
         _attemptFTR.add(WR_CONST.FTR_ATTEMPT_3);
         _attemptFTR.add(WR_CONST.FTR_ATTEMPT_4);
+
+        //amogh added
+        _hesitationFTR.add(WR_CONST.FTR_HESITATION_1);
+        _hesitationFTR.add(WR_CONST.FTR_HESITATION_2);
+        _hesitationFTR.add(WR_CONST.FTR_HESITATION_3);
+        _hesitationFTR.add(WR_CONST.FTR_HESITATION_4);
+        //amogh added finished
 
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(getContext());
@@ -286,6 +294,27 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         bManager.sendBroadcast(msg);
     }
 
+    //amogh added to check animator graph
+    public void showHighlightBox(){
+        mHighlightErrorBoxView = new View (getContext());
+        int wid = 60;
+        mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid,90));
+//        mHighlightErrorBoxView.setId();
+        mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
+//        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
+//        mp.setMargins(100,00,0,100);
+//                mHighlightErrorBoxView.setX((float)300.00);
+//        int pos = mResponseViewList.getChildAt(index+2).getLeft();
+        mHighlightErrorBoxView.setX(100);
+//        mHighlightErrorBoxView.setLeft(1000);
+        mResponseScrollLayout.addView(mHighlightErrorBoxView);
+//        mHighlightErrorBoxView.postDelayed(new Runnable() {
+//            public void run() {
+//                mHighlightErrorBoxView.setVisibility(View.GONE);
+//            }
+//        }, 2000);
+    }
+    //amogh added ends
 
     //************************************************************************
     //************************************************************************
@@ -540,7 +569,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             retractFeature(attempt);
         }
     }
+    //amogh added
+    private void clearHesitationFeatures() {
 
+        for (String hes : _hesitationFTR) {
+            retractFeature(hes);
+        }
+    }
+    //amogh added ends
 
     /**
      * Updates and returns the student attempt. Also returns which attempt the student is on.
@@ -558,6 +594,24 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             publishFeature(_attemptFTR.get(attempt-1));
 
         return attempt;
+    }
+
+    private int updateHesitationFeature() {
+
+        clearHesitationFeatures();
+
+        int hesitationNo = mActiveController.incHesitationNo();
+
+        // only publish attempt feature for first four attempts... next time will activate mercy rule
+        if(hesitationNo <= 4)
+            publishFeature(_attemptFTR.get(hesitationNo-1));
+
+        return hesitationNo;
+    }
+
+    private int resetHesitationFeature(){
+        clearHesitationFeatures();;
+        mActiveController.resetHesitationNo();
     }
 
 
@@ -1146,10 +1200,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 v.setRespIndex(i1); //to remove the letter from the response when the glyph is removed by swiping on a glyph
                 //amogh comment - needs edits, need a proper computation function to be able to calculate the differences between the
                 //
+
+                String expectedChar = mAnswer.substring(expectedIndex,expectedIndex+1);
                 if(!deleteCorrectionIndices.contains(i1)){
                     expectedIndex++;
                 }
-                String expectedChar = mAnswer.substring(expectedIndex,expectedIndex+1);
 
                 v.setExpectedChar(expectedChar);
 
@@ -1223,24 +1278,26 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
         //amogh added
 
-        /*
-        //adding the view for highlight error box:
-        mHighlightErrorBoxView = new View (getContext());
-        mHighlightErrorBoxView.setLayoutParams(new LayoutParams(60,60));
-//        mHighlightErrorBoxView.setId();
-        mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
-//        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
-//        mp.setMargins(100,00,0,100);
-        mHighlightErrorBoxView.setX((float)300.00);
-//        mHighlightErrorBoxView.setLeft(1000);
-        mResponseScrollLayout.addView(mHighlightErrorBoxView);
-        mHighlightErrorBoxView.postDelayed(new Runnable() {
-            public void run() {
-                mHighlightErrorBoxView.setVisibility(View.GONE);
-            }
-        }, 5000);
 
-        */
+        //adding the view for highlight error box:
+//        mHighlightErrorBoxView = new View (getContext());
+//        mHighlightErrorBoxView.setLayoutParams(new LayoutParams(60,60));
+////        mHighlightErrorBoxView.setId();
+//        mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
+////        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
+////        mp.setMargins(100,00,0,100);
+//        mHighlightErrorBoxView.setX((float)300.00);
+////        mHighlightErrorBoxView.setLeft(1000);
+//        mResponseScrollLayout.addView(mHighlightErrorBoxView);
+////        mHighlightErrorBoxView.postDelayed(new Runnable() {
+////            public void run() {
+////                mHighlightErrorBoxView.setVisibility(View.GONE);
+////            }
+////        }, 5000);
+
+
+//        showHighlightBox();
+
         //amogh added ends
     }
 
@@ -1562,6 +1619,17 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         //
                         clearAttemptFeatures();
                         break;
+                    //amogh added
+                    case WR_CONST.CLEAR_HESITATION:
+                        //clear the hesitation number in feedback
+                        clearHesitationFeatures();
+                        break;
+
+                    case WR_CONST.RESET_HESITATION:
+                        //clear the hesitation number in feedback
+                        resetHesitationFeature();
+                        break;
+                    //amogh added ends
 
                     case TCONST.APPLY_BEHAVIOR:
 

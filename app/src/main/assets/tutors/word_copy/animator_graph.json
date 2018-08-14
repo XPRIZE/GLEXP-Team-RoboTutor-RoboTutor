@@ -20,6 +20,9 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "logState", "parms": "type#feedback,value#INPUT_HESITATION_FEEDBACK:String", "features":""},
 
+            //Increase the hesitation count and release the corresponding feature
+            {"name": "Increase hesitation number",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateHesitationFeature",       "parms": "",  "features":"FTR_SEN" },
+
             {"name": "Disable Input",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "TRUE:Boolean",  "features":"" },
 
             // Dictation Hesitation
@@ -67,6 +70,12 @@
             // For write.missingLtr Hesitation
             {"name":"PLAY - Write the missing letter in", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim1}}.mp3", "soundpackage":"missingLtr", "volume": 1.0, "mode":"flow", "features": "FTR_MISSING_LTR&!FTR_DICTATION"},
             {"name":"Play - .audiostimulus", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim2}}.mp3","soundpackage": "words","mode":"flow", "features": "FTR_MISSING_LTR&!FTR_DICTATION"},
+
+            //hesitation behaviors for sentence activities
+
+
+
+
 
             {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_INPUT_HESITATION_POSTING",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_INPUT_HESITATION_POSTING:String" ,"features":""},
             {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":""},
@@ -123,6 +132,25 @@
           ]
         },
 
+        //amogh added
+        "NEW_GENERAL_CORRECT_BEHAVIOR": {
+          "type": "QUEUE",
+          "COMMENT": "Do this when they get a character correct",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            //{"name": "Count correct", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "countCorrect", "parms": "", "features":""},
+            //amogh added
+                        {"name": "Disable Replay", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "", "features":""}
+            //amogh added ends
+          ],
+          "preexit": [
+          ],
+          "edges": [
+          ]
+        },
+        //amogh added ends
+
         "GENERAL_CORRECT_BEHAVIOR": {
           "type": "QUEUE",
           "COMMENT": "Do this when they get a character correct",
@@ -132,6 +160,9 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "logState", "parms": "type#behavior,value#GENERAL_CORRECT_BEHAVIOR:String", "features":""},
 
             //{"name": "Count correct", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "countCorrect", "parms": "", "features":""},
+            //amogh added
+            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "", "features":""},
+            //amogh added ends
 
             {"name": "Disable Replay", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "enableReplayButton", "parms": "FALSE:Boolean", "features":"FTR_DICTATION"},
 
@@ -776,6 +807,8 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "logState", "parms": "type#node,value#PLAYWORD:String", "features":""},
 
+
+
             {"name": "Disable Input",   "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "TRUE:Boolean",  "features":""},
 
             {"name":"Zoom Sstimulus",  "type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":"!FTR_DICTATION"},
@@ -838,6 +871,7 @@
             {"name":"SetSticky - ",  "type": "COMMAND", "id": "SWordCopy", "method": "setStickyBehavior", "parms": "ON_ERROR:String|GENERAL_ERROR_BEHAVIOR:String" ,    "features":""},
             {"name":"SetSticky - ",  "type": "COMMAND", "id": "SWordCopy", "method": "setStickyBehavior", "parms": "ON_CORRECT:String|GENERAL_CORRECT_BEHAVIOR:String", "features":""},
             {"name":"SetSticky - ",  "type": "COMMAND", "id": "SWordCopy", "method": "setStickyBehavior", "parms": "MERCY_RULE:String|MERCY_RULE_BEHAVIOR:String" ,     "features":""},
+            {"name":"SetSticky - ",  "type": "COMMAND", "id": "SWordCopy", "method": "setStickyBehavior", "parms": "ON_CORRECT:String|NEW_GENERAL_CORRECT_BEHAVIOR:String", "features":""},
 
             // NOTE: Due to a limitation in the queue architecture you should only enable one of ON_ERROR | ON_METRIC_ERROR | ON_CHAR_ERROR
 
@@ -970,6 +1004,7 @@
 
 
         "CANCEL_INPUT_HESITATION_POSTING": {"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "cancelPost", "parms": "HESITATION_PROMPT:String",    "features":""},
+        "RESET_HESITATION_NUMBER": {"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "post", "parms": "RESET_HESITATION:String",    "features":""},
 
         "FW_DISABLE":{"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "inhibitInput", "parms": "TRUE:Boolean","features":""},
         //disable FingerWriting

@@ -13,6 +13,8 @@ public interface IGlyphController {
     public void inhibitInput(boolean newState);
 
     public int incAttempt();
+    public int incHesitationNo(); //amogh added
+    public void resetHesitationNo();
 
     public void setLinkedScroll(CLinkedScrollView linkedScroll);
     public void setItemGlyph(int index, int glyph);

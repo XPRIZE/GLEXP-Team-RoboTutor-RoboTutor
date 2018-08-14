@@ -33,6 +33,14 @@ public class WR_CONST {
     public static final String FTR_ATTEMPT_3            = "FTR_ATTEMPT_3";
     public static final String FTR_ATTEMPT_4            = "FTR_ATTEMPT_4";
 
+    //amogh added
+    public static final String FTR_HESITATION_1            = "FTR_HESITATION_1";
+    public static final String FTR_HESITATION_2            = "FTR_HESITATION_2";
+    public static final String FTR_HESITATION_3            = "FTR_HESITATION_3";
+    public static final String FTR_HESITATION_4            = "FTR_HESITATION_4";
+    //amogh add finish
+
+
     public static final String ACTION_COMPLETE          = "ACTION_COMPLETE";
     public static final String RIPPLE_REPLAY            = "RIPPLE_REPLAY";
     public static final String RIPPLE_HIGHLIGHT         = "RIPPLE_HIGHLIGHT";
@@ -62,6 +70,9 @@ public class WR_CONST {
     public static final String HIDE_SAMPLES             = "HIDE_SAMPLES";
     public static final String INHIBIT_OTHERS           = "INHIBIT_OTHERS";
     public static final String CLEAR_ATTEMPT            = "CLEAR_ATTEMPT";
+    public static final String CLEAR_HESITATION         = "CLEAR_HESITATION"; //amogh added
+    public static final String RESET_HESITATION         = "RESET_HESITATION"; //amogh added
+
 
     public static final String CANDIDATE_VAR            = ".candidate";
     public static final String EXPECTED_VAR             = ".expected";
