@@ -47,7 +47,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="@+id/midline"
         app:layout_constraintBottom_toBottomOf="@id/numberBaseLine"
-        android:background="@drawable/rectangle">
+        android:background="@drawable/nd_number_button">
 
         <TextView
             android:id="@+id/symbol_left_hun"
@@ -326,7 +326,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/midline"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/numberBaseLine"
-        android:background="@drawable/rectangle"
+        android:background="@drawable/nd_number_button"
         >
 
         <TextView

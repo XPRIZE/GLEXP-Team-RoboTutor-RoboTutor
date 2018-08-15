@@ -178,8 +178,8 @@ public class CNd_LayoutManager_BaseTen implements CNd_LayoutManagerInterface {
     @Override
     public void enableChooseNumber(boolean enable) {
 
-        Log.wtf("CHOOSE_ME", "y u no work?");
-
+        // ND_SCAFFOLD fix this ... make button only press sometimes
+        // // ND_SCAFFOLD https://stackoverflow.com/questions/5790454/disable-button-with-custom-background-android
         View chooseLeft = _component.findViewById(R.id.symbol_left_num);
         chooseLeft.setOnClickListener(enable ? new ChooseListener("left"): null);
 
