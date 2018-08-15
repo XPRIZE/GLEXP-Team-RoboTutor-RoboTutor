@@ -42,10 +42,23 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     // ND_SCAFFOLD_TODO BEHAVIOR
     // (3) if (isWE), perform Scaffolding // put it right in updateStimulus (probably) NEXT NEXT NEXT
     // (8) when incorrect answer, perform Scaffolding // put it right in xyz
+    // when incorrect answer, don't perform the final step of telling them which number
 
     // ND_SCAFFOLD_TODO PROMPTS
     // AUDIO:
-        // PROMPTS:
+        // PROMPTS: see ~/RoboTutor/ProtoAssets/ProtoAssets_ND/assets/audio/sw/cmu/xprize/proto_nd
+
+    // Let's compare numbers √√√
+    // Which number is bigger? √√√
+    // Correct! √√√
+    // Try again. √√√
+    // so tap on this number √√√
+    // is the same as √√√
+    // is more than √√√
+    // "so compare these numbers"
+
+
+
             // "first compare the hundreds"
             // "compare the tens"
             // "compare the ones"
@@ -172,8 +185,11 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
     }
 
+    /**
+     * points at the correct digit
+     */
     public void pointAtCorrectDigit() {
-        // ND_SCAFFOLD_TODO (7) point at the left or right guy
+        // point at the left or right guy
 
         Log.wtf("THIS_IS_A_TEST", "pointing to " + _correctChoice);
 
@@ -301,7 +317,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
         publishValue(".digitCompare", digitLeft == digitRight ?
                 //"is equal to" : "is greater than");
-                "k" : "r"); // temporary placeholder
+                "is the same as" : "is more than"); // temporary placeholder
 
         publishValue(".digitLess",
                 String.valueOf(digitLeft > digitRight ?

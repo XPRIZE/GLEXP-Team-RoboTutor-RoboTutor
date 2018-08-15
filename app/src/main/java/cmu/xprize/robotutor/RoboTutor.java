@@ -67,6 +67,7 @@ import edu.cmu.xprize.listener.ListenerBase;
 
 import static cmu.xprize.util.TCONST.CODE_DROP_1_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.GRAPH_MSG;
+import static cmu.xprize.util.TCONST.PROTOTYPE_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.ROBOTUTOR_ASSET_PATTERN;
 
 
@@ -417,6 +418,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 // ZZZ comment out old pattern
                 tutorAssetManager.updateAssetPackages(ROBOTUTOR_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH );
                 tutorAssetManager.updateAssetPackages(CODE_DROP_1_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
+                tutorAssetManager.updateAssetPackages(PROTOTYPE_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
 
                 // Create the one system levelFolder LTKPLUS recognizer
                 //
