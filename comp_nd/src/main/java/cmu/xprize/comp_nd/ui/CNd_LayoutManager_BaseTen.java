@@ -49,7 +49,6 @@ public class CNd_LayoutManager_BaseTen implements CNd_LayoutManagerInterface {
     public void initialize() {
         CNd_Component.inflate(_context, R.layout.nd_layout_3, _component);
 
-        // ND_SCAFFOLD_TODO move this to scaffolding
         setDebugButtonBehavior();
     }
 
@@ -271,6 +270,7 @@ public class CNd_LayoutManager_BaseTen implements CNd_LayoutManagerInterface {
 
 
 
+        // ND_SCAFFOLD move this to scaffolding
         _component.findViewById(R.id.debug_nd_2).setOnClickListener(new View.OnClickListener() {
 
             @Override

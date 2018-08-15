@@ -21,6 +21,7 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.comp_nd.ND_CONST.HIGHLIGHT_HUNS;
 import static cmu.xprize.comp_nd.ND_CONST.HIGHLIGHT_ONES;
 import static cmu.xprize.comp_nd.ND_CONST.HIGHLIGHT_TENS;
 import static cmu.xprize.comp_nd.ND_CONST.HUN_DIGIT;
@@ -39,12 +40,12 @@ import static cmu.xprize.util.MathUtil.getTensDigit;
 public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
 
-    // ND_SCAFFOLD_TODO BEHAVIOR
+    // ND_SCAFFOLD BEHAVIOR
     // (3) if (isWE), perform Scaffolding // put it right in updateStimulus (probably) NEXT NEXT NEXT
     // (8) when incorrect answer, perform Scaffolding // put it right in xyz
     // when incorrect answer, don't perform the final step of telling them which number
 
-    // ND_SCAFFOLD_TODO PROMPTS
+    // ND_SCAFFOLD PROMPTS
     // AUDIO:
         // PROMPTS: see ~/RoboTutor/ProtoAssets/ProtoAssets_ND/assets/audio/sw/cmu/xprize/proto_nd
 
@@ -71,6 +72,15 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
             // push into place using RTAsset_Publisher
 
 
+    // ND_SCAFFOLD PROMPTS 2
+    // Tap on the bigger number
+    // "so compare tens"
+    // "so X is bigger than Y"
+    // "so this number is bigger"
+    // "now say this number"
+    //
+
+    //
 
     // DataSource Variables
     protected   int                   _dataIndex = 0;
@@ -206,7 +216,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         digitView.getLocationOnScreen(screenCoord);
 
         PointF targetPoint = new PointF(screenCoord[0] + digitView.getWidth()/2,
-                screenCoord[1] + digitView.getHeight()/2);
+                screenCoord[1] + digitView.getHeight());
 
         Intent msg = new Intent(TCONST.POINTAT);
         msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
@@ -245,6 +255,15 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         Log.wtf("CHOOSE_ME", "y u no work?");
         _layoutManager.enableChooseNumber(true);
 
+    }
+
+    /**
+     * if it's a worked example, do the scaffolding
+     */
+    public void playWorkedExample() {
+        if(isWorkedExample) {
+            applyBehaviorNode(HIGHLIGHT_HUNS);
+        }
     }
 
 
@@ -394,7 +413,12 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
      */
     public void doTheWrongThing() {
         Log.d(TAG, "Doing the wrong thing");
+
+        applyBehaviorNode(HIGHLIGHT_HUNS);
+
         applyBehaviorNode(ND_CONST.NEXTNODE);
+
+
     }
 
     /**

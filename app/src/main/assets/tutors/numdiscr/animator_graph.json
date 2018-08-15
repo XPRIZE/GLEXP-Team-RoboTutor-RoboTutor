@@ -224,6 +224,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#ND_PLAYWRONG:String", "features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
+            // ND_SCAFFOLD put feedback here
             {"name": "ND_WRONG", "type": "COMMAND", "id": "SNumDiscr", "method": "doTheWrongThing", "parms": "", "features":""},
             {"type": "COMMAND", "cmd": "WAIT"  }
 
@@ -252,6 +253,7 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#WAIT_FOR_INPUT:String", "features":""},
 
             {"type": "COMMAND", "id": "SNumDiscr", "method": "setVolatileBehavior", "parms": "SELECT_ANSWER_EVENT:String|NEXTNODE:String" ,"features":""},
+            {"type": "COMMAND", "id": "SNumDiscr", "method": "playWorkedExample", "parms": "" ,"features":""},
 
 
             {"type": "COMMAND", "cmd": "WAIT"}
