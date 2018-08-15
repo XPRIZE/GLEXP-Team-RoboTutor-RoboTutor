@@ -1312,6 +1312,22 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         invalidate();
     }
 
+    public void displayCorrectStatus() {
+
+        Boolean correct = _correct;
+
+        if(correct) {
+            _glyphColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
+        }
+        else {
+            _glyphColor = TCONST.colorMap.get(TCONST.COLORWRONG);
+        }
+
+        invalidate();
+    }
+
+
+
     /**
      * used for mercy rule
      *

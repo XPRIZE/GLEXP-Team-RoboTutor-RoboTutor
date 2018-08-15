@@ -148,6 +148,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected  List<Integer>    deleteCorrectionIndices = new ArrayList<>();
     protected  List<Integer>    insertCorrectionIndices = new ArrayList<>();
     protected  List<Integer>    changeCorrectionIndices = new ArrayList<>();
+    protected  List<Integer>    currentWordIndices = new ArrayList<>();
+
 
 //    protected  List<Integer>    deleteCorrectionIndices = new ArrayList<>(Arrays.asList());
 //    protected  List<Integer>    insertCorrectionIndices = new ArrayList<>(Arrays.asList());
@@ -296,9 +298,47 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     //amogh added to check animator graph
-    public void showHighlightBox(){
+
+    public void showHighlightBox2(){
         mHighlightErrorBoxView = new View (getContext());
-        int wid = 60;
+        mHighlightErrorBoxView.setLayoutParams(new LayoutParams(60,90));
+//        mHighlightErrorBoxView.setId();
+        mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
+//        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
+//        mp.setMargins(100,00,0,100);
+//                mHighlightErrorBoxView.setX((float)300.00);
+//        int pos = mResponseViewList.getChildAt(index+2).getLeft();
+        mHighlightErrorBoxView.setX(100);
+//        mHighlightErrorBoxView.setLeft(1000);
+        mResponseScrollLayout.addView(mHighlightErrorBoxView);
+        mHighlightErrorBoxView.postDelayed(new Runnable() {
+            public void run() {
+                mHighlightErrorBoxView.setVisibility(View.GONE);
+            }
+        }, 5000);
+    }
+    public void showHighlightBox(int level){
+        mHighlightErrorBoxView = new View (getContext());
+//        int level = 0;
+        int wid = 0;
+        switch (level){
+            case 1:
+                break;
+            case 2:
+                int left = mResponseViewList.getChildAt(0).getLeft();
+                int right = mResponseViewList.getChildAt(mResponseViewList.getChildCount()-1).getRight();
+                wid = right-left;
+                mHighlightErrorBoxView.setX((float)left);
+                break;
+            case 3:
+//                int left = mResponseViewList.getChildAt(0).getLeft();
+//                int right = mResponseViewList.getChildAt(mResponseViewList.getChildCount()-1).getRight();
+//                wid = right-left;
+//                mHighlightErrorBoxView.setX((float)left);
+                break;
+            case 4:
+                break;
+        }
         mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid,90));
 //        mHighlightErrorBoxView.setId();
         mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
@@ -309,11 +349,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mHighlightErrorBoxView.setX(100);
 //        mHighlightErrorBoxView.setLeft(1000);
         mResponseScrollLayout.addView(mHighlightErrorBoxView);
-//        mHighlightErrorBoxView.postDelayed(new Runnable() {
-//            public void run() {
-//                mHighlightErrorBoxView.setVisibility(View.GONE);
-//            }
-//        }, 2000);
+        mHighlightErrorBoxView.postDelayed(new Runnable() {
+            public void run() {
+                mHighlightErrorBoxView.setVisibility(View.GONE);
+            }
+        }, 5000);
     }
     //amogh added ends
 
@@ -428,11 +468,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         mActiveController = glyphController;
 
-        mActiveIndex = mGlyphList.indexOfChild((View)mActiveController);
+        mActiveIndex = mGlyphList.indexOfChild((View) mActiveController);
 
-        CRecResult          candidate      = _ltkPlusCandidates[0];
-        CStimulusController stimController = (CStimulusController)mRecogList.getChildAt(mActiveIndex);
-        CGlyphController    gController = (CGlyphController)mGlyphList.getChildAt(mActiveIndex);
+        CRecResult candidate = _ltkPlusCandidates[0];
+        CStimulusController stimController = (CStimulusController) mRecogList.getChildAt(mActiveIndex);
+        CGlyphController gController = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
 
         publishValue(WR_CONST.CANDIDATE_VAR, candidate.getRecChar().toLowerCase());
         publishValue(WR_CONST.EXPECTED_VAR, mActiveController.getExpectedChar().toLowerCase());
@@ -450,84 +490,111 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         // Check answer
         mResponse = candidate.getRecChar();
-        _charValid   = gController.checkAnswer(mResponse, isAnswerCaseSensitive ) ;
+        _charValid = gController.checkAnswer(mResponse, isAnswerCaseSensitive);
 
         _metricValid = _metric.testConstraint(candidate.getGlyph(), this);
-        _isValid     = _charValid && _metricValid; // _isValid essentially means "is a correct drawing"
+        _isValid = _charValid && _metricValid; // _isValid essentially means "is a correct drawing"
 
         //amogh added to set the valid character in response.
 
-            CStimulusController resp = (CStimulusController)mResponseViewList.getChildAt(mActiveIndex);
-            String charExpected = gController.getExpectedChar();
-            resp.setStimulusChar(mResponse,false);
+        CStimulusController resp = (CStimulusController) mResponseViewList.getChildAt(mActiveIndex);
+        String charExpected = gController.getExpectedChar();
+        resp.setStimulusChar(mResponse, false);
 //            updateResponseView(mResponse);
         //amogh added to handle spacing.
-        if(_isValid){
+        if (_isValid) {
 
-            if(_spaceIndices.contains(mActiveIndex-1)){
-                CGlyphController    gControllerSpace = (CGlyphController)mGlyphList.getChildAt(mActiveIndex-1);
-                CStimulusController respSpace = (CStimulusController)mResponseViewList.getChildAt(mActiveIndex-1);
-                respSpace.setStimulusChar("",false);
+            if (_spaceIndices.contains(mActiveIndex - 1)) {
+                CGlyphController gControllerSpace = (CGlyphController) mGlyphList.getChildAt(mActiveIndex - 1);
+                CStimulusController respSpace = (CStimulusController) mResponseViewList.getChildAt(mActiveIndex - 1);
+                respSpace.setStimulusChar("", false);
                 gControllerSpace.setIsStimulus("");
                 gControllerSpace.updateCorrectStatus(_isValid);
             }
-        }
-        else{
+        } else {
 //            mActiveController.
         }
         //amogh add ends
-        // Update the controller feedback colors
-        //
-        mActiveController.updateCorrectStatus(_isValid);
+
+        if (!activityFeature.contains("FTR_SEN_MED")){
+            // Update the controller feedback colors
+            //
+            mActiveController.updateCorrectStatus(_isValid);
 
 
-        if(!singleStimulus) {
-            stimController.updateStimulusState(_isValid);
-        }
+            if (!singleStimulus) {
+                stimController.updateStimulusState(_isValid);
+            }
 
-        // Depending upon the result we allow the controller to disable other fields if it is working
-        // in Immediate feedback mode
-        // TODO: check if we need to constrain this to immediate feedback mode
-        //
-        inhibitInput(mActiveController, !_isValid);
+            // Depending upon the result we allow the controller to disable other fields if it is working
+            // in Immediate feedback mode
+            // TODO: check if we need to constrain this to immediate feedback mode
+            //
+            inhibitInput(mActiveController, !_isValid);
 
-        // Publish the state features.
-        //
-        publishState();
+            // Publish the state features.
+            //
+            publishState();
 
-        // Fire the appropriate behavior
-        //
-        if(isComplete()) {
+            // Fire the appropriate behavior
+            //
+            if (isComplete()) {
 
-            applyBehavior(WR_CONST.DATA_ITEM_COMPLETE); // goto node "ITEM_COMPLETE_BEHAVIOR" -- run when item is complete...
-        }
-        else {
-
-            if(!_isValid) {
-
-                // lots of fun feature updating here
-                publishFeature(WR_CONST.FTR_HAD_ERRORS);
-
-                int attempt = updateAttemptFeature();
-
-                if(attempt > 4) {
-                    applyBehavior(WR_CONST.MERCY_RULE); // goto node "MERCY_RULE_BEHAVIOR"
-                } else {
-                    applyBehavior(WR_CONST.ON_ERROR); // goto node "GENERAL_ERROR_BEHAVIOR"
-                }
-
-                if (!_charValid)
-                    applyBehavior(WR_CONST.ON_CHAR_ERROR);
-                else if (!_metricValid)
-                    applyBehavior(WR_CONST.ON_METRIC_ERROR);
+                applyBehavior(WR_CONST.DATA_ITEM_COMPLETE); // goto node "ITEM_COMPLETE_BEHAVIOR" -- run when item is complete...
             }
             else {
-                updateStalledStatus();
 
-                applyBehavior(WR_CONST.ON_CORRECT); //goto node "GENERAL_CORRECT_BEHAVIOR"
+                if (!_isValid) {
+
+                    // lots of fun feature updating here
+                    publishFeature(WR_CONST.FTR_HAD_ERRORS);
+
+                    int attempt = updateAttemptFeature();
+
+                    if (attempt > 4) {
+                        applyBehavior(WR_CONST.MERCY_RULE); // goto node "MERCY_RULE_BEHAVIOR"
+                    } else {
+                        applyBehavior(WR_CONST.ON_ERROR); // goto node "GENERAL_ERROR_BEHAVIOR"
+                    }
+
+                    if (!_charValid)
+                        applyBehavior(WR_CONST.ON_CHAR_ERROR);
+                    else if (!_metricValid)
+                        applyBehavior(WR_CONST.ON_METRIC_ERROR);
+                } else {
+                    updateStalledStatus();
+
+                    applyBehavior(WR_CONST.ON_CORRECT); //goto node "GENERAL_CORRECT_BEHAVIOR"
+                }
             }
         }
+        // for sentence activities (word level and sentence level feedback)
+        else{
+            currentWordIndices.add(mActiveIndex);
+            //for immediate feedback
+            if(activityFeature.contains("FTR_SEN_EASY")){
 
+            }
+            //for word level feedback
+            else if(activityFeature.contains("FTR_SEN_MED")){
+                if (_spaceIndices.contains(mActiveIndex - 1)) {
+
+//                    CGlyphController gControllerSpace = (CGlyphController) mGlyphList.getChildAt(mActiveIndex - 1);
+//                    CStimulusController respSpace = (CStimulusController) mResponseViewList.getChildAt(mActiveIndex - 1);
+//                    respSpace.setStimulusChar("", false);
+//                    gControllerSpace.setIsStimulus("");
+//                    gControllerSpace.updateCorrectStatus(_isValid);
+                    for (int wordIndex : currentWordIndices){
+                        CGlyphController gControllerWord = (CGlyphController) mGlyphList.getChildAt(wordIndex);//amogh change name
+                        CStimulusController stimulusSpaceWord = (CStimulusController) mRecogList.getChildAt(wordIndex);
+                        gControllerWord.displayCorrectStatus();
+                        stimulusSpaceWord.updateStimulusState(gControllerWord.isCorrect());
+                    }
+                    currentWordIndices.clear();
+                    currentWordIndices.add(mActiveIndex);
+                }
+            }
+        }
         return _isValid;
     }
 
@@ -564,7 +631,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     /**
      * Retracts all features that indicate which attempt the student is on
      */
-    private void clearAttemptFeatures() {
+    private void  clearAttemptFeatures() {
 
         for (String attempt : _attemptFTR) {
             retractFeature(attempt);
@@ -605,7 +672,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         // only publish attempt feature for first four attempts... next time will activate mercy rule
         if(hesitationNo <= 4)
-            publishFeature(_attemptFTR.get(hesitationNo-1));
+            publishFeature(_hesitationFTR.get(hesitationNo-1));
 
         return hesitationNo;
     }

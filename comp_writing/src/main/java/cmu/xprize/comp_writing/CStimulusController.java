@@ -235,6 +235,7 @@ public class CStimulusController extends RelativeLayout implements IEventListene
     }
 
 
+
     public boolean testStimulus(String resp) {
         return mStimulusString.equals(resp);
     }
