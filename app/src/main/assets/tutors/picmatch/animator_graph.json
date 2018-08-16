@@ -1,0 +1,235 @@
+{
+  "animatorMap": {
+    "COMMENT": "PictureMatch",
+
+    "picmatch": {
+
+      "type": "ANIMATOR",
+      "title": "PictureMatch",
+      "COMMENT": "PictureMatch",
+      "version": "1.0.0",
+      "rootnode": "INTRO_STATE",
+
+      "nodeMap": {
+
+        "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        "INTRO_STATE": {
+          "type": "NODE",
+          "COMMENT": "Intro Clip - we only ever visit this node once",
+          "maptype":"moduleMap",
+          "mapname": "PLAYINTRO",
+          "preenter": ["SET_VERSION", "SET_DATASOURCE"],
+          "preexit": [],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "UPDATE_STIMULUS"
+            }
+          ]
+        },
+
+        "UPDATE_STIMULUS": {
+          "type": "NODE",
+          "COMMENT": "We may say or show the stimulus at this point",
+          "maptype":"moduleMap",
+          "mapname": "UPDATESTIMULUS",
+          "preenter": ["NEXT_DATASET"],
+          "preexit": [],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "USER_INPUT"
+            }
+          ]
+        },
+
+
+        "USER_INPUT": {
+          "COMMENT":"Wait for the user to touch",
+          "type": "node",
+          "maptype":"moduleMap",
+          "mapname": "USERINPUT",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+              {
+              "constraint":"FTR_CORRECT",
+              "edge": "PLAY_CORRECT"
+              },
+              {
+              "constraint": "",
+              "edge": "PLAY_WRONG"
+              }
+          ]
+        },
+
+        "PLAY_CORRECT": {
+          "COMMENT": "When user inputs a correct answer...",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "PLAYCORRECT",
+          "preenter": [],
+          "preexit": [],
+            "edges": [
+              {
+                "constraint": "FTR_EOD",
+                "edge": "NEXT_SCENE"
+              },
+              {
+                "constraint": "",
+                "edge": "UPDATE_STIMULUS"
+              }
+            ]
+        },
+
+        "PLAY_WRONG": {
+          "COMMENT": "When user inputs a correct answer...",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "PLAYWRONG",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+              {
+                "constraint": "",
+                "edge": "USER_INPUT"
+              }
+            ]
+        },
+
+        "NEXT_SCENE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene",
+          "maptype": "actionMap",
+          "mapname": "NEXTSCENE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+
+          ]
+        }
+
+      },
+
+      "moduleMap": {
+
+        "COMMENT": "@@@@@  CModules  @@@@@",
+
+        "PLAYINTRO": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+              
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SPictureMatch", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""}
+
+
+            ]
+        },
+
+        "UPDATESTIMULUS": {
+          "type": "MODULE",
+          "reuse": true,
+          "tracks": [
+              
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SPictureMatch", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""}
+    
+          ]
+        },
+
+        "NEXTPROBLEM": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SPictureMatch", "method": "logState", "parms": "type#node,value#NEXT_PROBLEM:String", "features":""},
+
+            {"type": "COMMAND", "id": "SPictureMatch", "method": "next", "features": ""}
+          ]
+        },
+
+        "PLAYCORRECT": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            
+              {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SPictureMatch", "method": "logState", "parms": "type#node,value#PLAYCORRECT:String", "features":""},
+
+              {"name":"PLAY", "type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3", "soundpackage":"replaceme","mode":"flow", "features": ""} // ALAN_HILL audio is played
+          ]
+        },
+
+        "PLAYWRONG": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+
+              {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SPictureMatch", "method": "logState", "parms": "type#node,value#PLAYWRONG:String", "features":""},
+
+              {"name":"PLAY",  "type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3", "soundpackage":"replaceme", "mode":"flow", "features": ""} // ALAN_HILL audio is played
+
+          ]
+        },
+
+        "EMPTYMODULE": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            
+              {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SPictureMatch", "method": "logState", "parms": "type#node,value#EMPTYMODULE:String", "features":""}
+              
+          ]
+        },
+
+        "USERINPUT": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SPictureMatch", "method": "logState", "parms": "type#node,value#WAIT_FOR_INPUT:String", "features":""},
+
+            {"type": "COMMAND", "id": "SPictureMatch", "method": "setVolatileBehavior", "parms": "STUDENT_CHOICE_EVENT:String|NEXTNODE:String" ,"features":""},
+
+            {"type": "COMMAND", "cmd": "WAIT"}
+          ]
+        }
+
+      },
+
+      "actionMap": {
+
+        "COMMENT": "@@@@@  CActions @@@@@ ",
+
+        "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "SPictureMatch", "method": "setDataSource", "parms": "LOCAL_FILE:String","features":""}, // ALAN_HILL example of Component method being called by animator graph
+
+        "NEXT_DATASET": {"type": "COMMAND", "id": "SPictureMatch", "method": "next", "features": ""}, // ALAN_HILL example of Component method being called by animator graph
+        "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"},
+
+        "NEXTSCENE": {"type":"COMMAND", "cmd": "NEXTSCENE"}
+
+      },
+
+      "constraintMap": {
+
+        "COMMENT": "@@@@@  CConstraints @@@@@ ",
+
+        "FTR_EOD": {
+          "type": "CONDITION",
+          "test": "FTR_EOD"
+        },
+
+
+        "FTR_CORRECT":{
+          "type": "CONDITION",
+          "test":"FTR_CORRECT"
+        }
+
+      }
+    }
+  }
+}

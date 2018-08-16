@@ -90,11 +90,10 @@ import static cmu.xprize.util.TCONST.ROBOTUTOR_ASSET_PATTERN;
 public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     // VARIABLES FOR QUICK DEBUG LAUNCH
-
     private static final boolean QUICK_DEBUG = false;
     private static final String debugTutorVariant = "story.pic.hear";
     private static final String debugTutorId = "story.pic.hear::story_30";
-    private static final String debugTutorFile = "[encfolder]story_30";
+    private static final String debugTutorFile = "[file]picmatch_sample.json";
     //private static final String debugTutorVariant = "numdiscr";
     //private static final String debugTutorVariant = "math";
     //private static final String debugTutorId = "numdiscr:sample";
@@ -105,8 +104,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";
 
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
-
-
 
     private CTutorEngine        tutorEngine;
     private CMediaController    mMediaController;

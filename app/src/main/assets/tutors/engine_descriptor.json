@@ -20,6 +20,12 @@
   //
   "tutorVariants": {
 
+    "picmatch": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "picmatch",
+      "features": ""
+    },
+
     "numberscale": {
       "type": "TUTORVAR_MAP",
       "tutorName": "numberscale",
@@ -243,6 +249,22 @@
   // else it is pushed in with a prefixed component:datasource compound specification.
   //
   "bindingPatterns": {
+
+
+    "picmatch": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "picmatch": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SPictureMatch",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
 
     "numberscale": {
       "type": "TUTORDATA_MAP",

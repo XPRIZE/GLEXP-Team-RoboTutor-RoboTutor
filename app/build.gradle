@@ -224,5 +224,6 @@ dependencies {
     compile project(path: ':comp_counting2')
     compile project(path: ':comp_numberscale')
     compile project(path: ':comp_nd')
+    compile project(path: ':comp_picmatch')
 }
 
