@@ -157,7 +157,7 @@
             
               {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SPictureMatch", "method": "logState", "parms": "type#node,value#PLAYCORRECT:String", "features":""},
 
-              {"name":"PLAY", "type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3", "soundpackage":"replaceme","mode":"flow", "features": ""} // ALAN_HILL audio is played
+              {"name":"PLAY", "type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3", "soundpackage":"replaceme","mode":"flow", "features": ""} // ALAN_HILL (4) audio is played
           ]
         },
 
@@ -169,7 +169,7 @@
 
               {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SPictureMatch", "method": "logState", "parms": "type#node,value#PLAYWRONG:String", "features":""},
 
-              {"name":"PLAY",  "type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3", "soundpackage":"replaceme", "mode":"flow", "features": ""} // ALAN_HILL audio is played
+              {"name":"PLAY",  "type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3", "soundpackage":"replaceme", "mode":"flow", "features": ""} // ALAN_HILL (4) audio is played
 
           ]
         },
@@ -205,9 +205,9 @@
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "SPictureMatch", "method": "setDataSource", "parms": "LOCAL_FILE:String","features":""}, // ALAN_HILL example of Component method being called by animator graph
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "SPictureMatch", "method": "setDataSource", "parms": "LOCAL_FILE:String","features":""}, // ALAN_HILL (2) example of Component method being called by animator graph
 
-        "NEXT_DATASET": {"type": "COMMAND", "id": "SPictureMatch", "method": "next", "features": ""}, // ALAN_HILL example of Component method being called by animator graph
+        "NEXT_DATASET": {"type": "COMMAND", "id": "SPictureMatch", "method": "next", "features": ""}, // ALAN_HILL (2)  example of Component method being called by animator graph
         "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"},
 
         "NEXTSCENE": {"type":"COMMAND", "cmd": "NEXTSCENE"}

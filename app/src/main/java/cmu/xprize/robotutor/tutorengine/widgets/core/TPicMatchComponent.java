@@ -150,6 +150,7 @@ public class TPicMatchComponent extends CPicMatch_Component implements ITutorObj
 
     /**
      * @param dataNameDescriptor
+     * ALAN_HILL (2) this is called by animator_graph
      */
     public void setDataSource(String dataNameDescriptor) {
 

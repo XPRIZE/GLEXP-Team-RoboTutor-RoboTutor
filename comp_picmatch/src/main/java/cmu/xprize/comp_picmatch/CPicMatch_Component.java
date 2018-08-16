@@ -89,6 +89,7 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
 
     }
 
+    // ALAN_HILL (2) this is called by animator_graph
     public void next() {
 
         try {
@@ -184,13 +185,13 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
             retractFeature("FTR_WRONG");
 
             if(prompt.equals(images[_index])) {
-                publishFeature("FTR_CORRECT"); // ALAN_HILL search animator graph for this term
+                publishFeature("FTR_CORRECT"); // ALAN_HILL (3) search animator graph for this term
             } else {
-                publishFeature("FTR_WRONG"); // ALAN_HILL search animator graph for this term
+                publishFeature("FTR_WRONG"); // ALAN_HILL (3) search animator graph for this term
             }
 
 
-            applyBehavior("STUDENT_CHOICE_EVENT"); // ALAN_HILL search animator graph for this term
+            applyBehavior("STUDENT_CHOICE_EVENT"); // ALAN_HILL (3) search animator graph for this term
         }
     };
 

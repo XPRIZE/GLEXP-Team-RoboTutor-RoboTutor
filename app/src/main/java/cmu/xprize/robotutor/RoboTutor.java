@@ -91,8 +91,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     // VARIABLES FOR QUICK DEBUG LAUNCH
     private static final boolean QUICK_DEBUG = false;
-    private static final String debugTutorVariant = "story.pic.hear";
-    private static final String debugTutorId = "story.pic.hear::story_30";
+    private static final String debugTutorVariant = "picmatch";
+    private static final String debugTutorId = "picmatch_sample";
     private static final String debugTutorFile = "[file]picmatch_sample.json";
     //private static final String debugTutorVariant = "numdiscr";
     //private static final String debugTutorVariant = "math";

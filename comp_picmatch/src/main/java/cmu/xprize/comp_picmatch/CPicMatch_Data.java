@@ -12,7 +12,7 @@ import cmu.xprize.util.JSON_Helper;
 
 public class CPicMatch_Data implements ILoadableObject{
 
-    // ALAN_HILL here is where the data source is defined
+    // ALAN_HILL (1) here is where the data source is defined
 
     // json loadable
     public String level;
