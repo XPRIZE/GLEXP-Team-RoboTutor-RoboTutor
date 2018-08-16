@@ -170,35 +170,35 @@
       "tutorName": "word_copy",
       "features": "FTR_MISSING_LTR"
     },
-    "write.sen.corr.easy": {
+    "write.sen.corr.ltr": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
-      "features": "FTR_SEN:FTR_SEN_CORR:FTR_SEN_EASY"
+      "features": "FTR_SEN:FTR_SEN_CORR:FTR_SEN_LTR" //immediate letter level feedback
     },
-    "write.sen.corr.med": {
+    "write.sen.corr.wrd": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
-      "features": "FTR_SEN:FTR_SEN_CORR:FTR_SEN_MED"
+      "features": "FTR_SEN:FTR_SEN_CORR:FTR_SEN_WRD" //word level feedback
     },
-    "write.sen.corr.diff": {
+    "write.sen.corr.sen": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
-      "features": "FTR_SEN:FTR_SEN_CORR:FTR_SEN_DIFF"
+      "features": "FTR_SEN:FTR_SEN_CORR:FTR_SEN_SEN" //sentence level feedback
     },
-    "write.sen.copy.easy": {
+    "write.sen.copy.ltr": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
-      "features": "FTR_SEN:FTR_SEN_EASY"
+      "features": "FTR_SEN:FTR_SEN_LTR" //immediate letter level feedback
     },
-    "write.sen.copy.med": {
+    "write.sen.copy.wrd": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
-      "features": "FTR_SEN:FTR_SEN_MED"
+      "features": "FTR_SEN:FTR_SEN_WRD" //word level feedback
     },
-    "write.sen.copy.diff": {
+    "write.sen.copy.sen": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
-      "features": "FTR_SEN:FTR_SEN_DIFF"
+      "features": "FTR_SEN:FTR_SEN_SEN" //sentence level feedback
     },
     "story.echo": {
       "type": "TUTORVAR_MAP",

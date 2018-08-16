@@ -83,6 +83,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     protected HashMap               queueMap    = new HashMap();
     protected boolean               _qDisabled  = false;
 
+    private int wordIndex = 0;
 
     private LocalBroadcastManager   bManager;
 
@@ -324,6 +325,8 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     public void setStimuliGlyph(CGlyph stimuliGlyph) {
         mGlyphInput.setStimuliGlyph(stimuliGlyph);
     }
+    public void setWordIndex(int i){wordIndex = i;}
+    public int getWordIndex(){return wordIndex;}
     //amogh added ends
 
     public int getAttempt() {

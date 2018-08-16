@@ -153,7 +153,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private boolean               _correct   = false;
 
 
-
     private static final String   TAG = "CGlyphInputContainer";
 
 

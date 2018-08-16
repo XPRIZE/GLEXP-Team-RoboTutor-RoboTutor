@@ -295,7 +295,6 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
     }
 
 
-
     //************************************************************************
     //************************************************************************
     // Tutor Scriptable methods  Start

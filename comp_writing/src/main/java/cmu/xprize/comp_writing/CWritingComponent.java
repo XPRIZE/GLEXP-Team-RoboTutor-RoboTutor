@@ -136,7 +136,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     protected String            activityFeature; // features of current activity e.g. FTR_LETTERS:FTR_DICTATION
 
-    protected List<Integer>     _spaceIndices = new ArrayList<Integer>();
 
     // json loadable
     public String               bootFeatures = EMPTY;
@@ -145,10 +144,18 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public CWr_Data[]           dataSource;
 
     //amogh added for sentence correction
+    protected List<Integer>     _spaceIndices = new ArrayList<Integer>(); //indices with space for
+    protected int currentWordIndex = 0;
+
     protected  List<Integer>    deleteCorrectionIndices = new ArrayList<>();
     protected  List<Integer>    insertCorrectionIndices = new ArrayList<>();
     protected  List<Integer>    changeCorrectionIndices = new ArrayList<>();
     protected  List<Integer>    currentWordIndices = new ArrayList<>();
+
+
+    protected HashMap<String,HashMap<String,ArrayList<Integer>>>  corrections = new HashMap<>();
+    protected HashMap<Integer,ArrayList<Integer>> wordIndices = new HashMap<>();
+    protected HashMap<Integer,Boolean> wordStatus = new HashMap<>();
 
 
 //    protected  List<Integer>    deleteCorrectionIndices = new ArrayList<>(Arrays.asList());
@@ -297,6 +304,40 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         bManager.sendBroadcast(msg);
     }
 
+    //amogh added to initialise the correction hashmap
+    public void initialiseCorrectionHashMap() {
+        ArrayList<Integer> replaceCapitalize= new ArrayList<Integer>(Arrays.asList(0,4));
+        ArrayList<Integer> insertPunctuationIndices = new ArrayList<Integer>(Arrays.asList(2,21));
+        ArrayList<Integer> replaceCapitalizeIndices = new ArrayList<Integer>(Arrays.asList(0,4));
+        HashMap<String,ArrayList<Integer>> insertMap = new HashMap<String, ArrayList<Integer>>();
+        HashMap<String,ArrayList<Integer>> replaceMap = new HashMap<String, ArrayList<Integer>>();
+        insertMap.put("Punctuation",insertPunctuationIndices);
+        replaceMap.put("Capitalize",replaceCapitalizeIndices);
+        corrections.put("Insert", insertMap);
+        corrections.put("Replace", replaceMap);
+    }
+
+    public void initialiseWordIndices(){
+        ArrayList<Integer> Indices;
+        wordIndices.put(0,new ArrayList<Integer>(Arrays.asList(0,1,2,3)));
+        wordIndices.put(1,new ArrayList<Integer>(Arrays.asList(4,5,6,7,8,9,10,11,12,13)));
+        wordIndices.put(2,new ArrayList<Integer>(Arrays.asList(14,15,16)));
+        wordIndices.put(3,new ArrayList<Integer>(Arrays.asList(17,18,19,20,21)));
+    }
+
+    public void updateWord(){
+        ArrayList<Integer> wordInd= wordIndices.get(currentWordIndex);
+        for (int i : wordInd){
+            CStimulusController respController = (CStimulusController) mResponseViewList.getChildAt(i);
+            CGlyphController g = (CGlyphController) mGlyphList.getChildAt(i);
+            Boolean stat = g.isCorrect();
+
+            respController.updateStimulusState(stat);
+
+        }
+    }
+
+    //amogh add initialising hashmap ends
     //amogh added to check animator graph
 
     public void showHighlightBox2(){
@@ -317,16 +358,20 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             }
         }, 5000);
     }
-    public void showHighlightBox(int level){
+    public void showHighlightBox(Integer level){
         mHighlightErrorBoxView = new View (getContext());
-//        int level = 0;
+//        int level = 0;    protected List<Integer>     _spaceIndices = new ArrayList<Integer>();
+
         int wid = 0;
         switch (level){
             case 1:
-                break;
+//                break;
             case 2:
-                int left = mResponseViewList.getChildAt(0).getLeft();
-                int right = mResponseViewList.getChildAt(mResponseViewList.getChildCount()-1).getRight();
+                ArrayList<Integer> wordInd = wordIndices.get(currentWordIndex);
+                int leftLetter = wordInd.get(0);
+                int left = mResponseViewList.getChildAt(leftLetter).getLeft();
+                int rightLetter = wordInd.get(wordInd.size()-1);
+                int right = mResponseViewList.getChildAt(rightLetter-1).getRight();
                 wid = right-left;
                 mHighlightErrorBoxView.setX((float)left);
                 break;
@@ -335,6 +380,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //                int right = mResponseViewList.getChildAt(mResponseViewList.getChildCount()-1).getRight();
 //                wid = right-left;
 //                mHighlightErrorBoxView.setX((float)left);
+                wordInd = wordIndices.get(currentWordIndex);
+                leftLetter = wordInd.get(0);
+                left = mResponseViewList.getChildAt(leftLetter).getLeft();
+                rightLetter = wordInd.get(1);
+                right = mResponseViewList.getChildAt(rightLetter-1).getRight();
+                wid = right-left;
+                mHighlightErrorBoxView.setX((float)left);
                 break;
             case 4:
                 break;
@@ -346,7 +398,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //        mp.setMargins(100,00,0,100);
 //                mHighlightErrorBoxView.setX((float)300.00);
 //        int pos = mResponseViewList.getChildAt(index+2).getLeft();
-        mHighlightErrorBoxView.setX(100);
+//        mHighlightErrorBoxView.setX(100);
 //        mHighlightErrorBoxView.setLeft(1000);
         mResponseScrollLayout.addView(mHighlightErrorBoxView);
         mHighlightErrorBoxView.postDelayed(new Runnable() {
@@ -516,7 +568,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
         //amogh add ends
 
-        if (!activityFeature.contains("FTR_SEN_MED")){
+        if (!activityFeature.contains("FTR_SEN_WRD")){
             // Update the controller feedback colors
             //
             mActiveController.updateCorrectStatus(_isValid);
@@ -570,13 +622,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
         // for sentence activities (word level and sentence level feedback)
         else{
-            currentWordIndices.add(mActiveIndex);
+//            currentWordIndices.add(mActiveIndex);
             //for immediate feedback
-            if(activityFeature.contains("FTR_SEN_EASY")){
+            if(activityFeature.contains("FTR_SEN_LTR")){
 
             }
             //for word level feedback
-            else if(activityFeature.contains("FTR_SEN_MED")){
+            else if(activityFeature.contains("FTR_SEN_WRD")){
                 if (_spaceIndices.contains(mActiveIndex - 1)) {
 
 //                    CGlyphController gControllerSpace = (CGlyphController) mGlyphList.getChildAt(mActiveIndex - 1);
@@ -584,15 +636,17 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //                    respSpace.setStimulusChar("", false);
 //                    gControllerSpace.setIsStimulus("");
 //                    gControllerSpace.updateCorrectStatus(_isValid);
-                    for (int wordIndex : currentWordIndices){
-                        CGlyphController gControllerWord = (CGlyphController) mGlyphList.getChildAt(wordIndex);//amogh change name
-                        CStimulusController stimulusSpaceWord = (CStimulusController) mRecogList.getChildAt(wordIndex);
-                        gControllerWord.displayCorrectStatus();
-                        stimulusSpaceWord.updateStimulusState(gControllerWord.isCorrect());
-                    }
-                    currentWordIndices.clear();
-                    currentWordIndices.add(mActiveIndex);
+//                    for (int wordIndex : currentWordIndices){
+//                        CGlyphController gControllerWord = (CGlyphController) mGlyphList.getChildAt(wordIndex);//amogh change name
+//                        CStimulusController stimulusSpaceWord = (CStimulusController) mRecogList.getChildAt(wordIndex);
+//                        gControllerWord.displayCorrectStatus();
+//                        stimulusSpaceWord.updateStimulusState(gControllerWord.isCorrect());
+//                    }
+//                    currentWordIndices.clear();
+//                    currentWordIndices.add(mActiveIndex);
+                    updateWord();
                 }
+
             }
         }
         return _isValid;
@@ -1303,6 +1357,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 }
                 else{
                     _spaceIndices.add(i1);
+
+                    mActiveController.setWordIndex(currentWordIndex);
+                    currentWordIndex++;
                 }
 
                 v.toggleStimuliGlyph();
@@ -1359,6 +1416,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 resp.setWritingController(this);
                 //amogh add finish
             }
+            initialiseCorrectionHashMap(); //amogh added
+            initialiseWordIndices(); //amogh added
         }
         //amogh added
 
