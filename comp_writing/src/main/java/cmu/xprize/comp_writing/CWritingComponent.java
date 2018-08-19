@@ -24,6 +24,7 @@ package cmu.xprize.comp_writing;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PointF;
+import android.graphics.Point;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.percent.PercentRelativeLayout;
@@ -45,6 +46,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
 
 import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.ltkplus.CGlyphMetricConstraint;
@@ -204,6 +206,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         _hesitationFTR.add(WR_CONST.FTR_HESITATION_3);
         _hesitationFTR.add(WR_CONST.FTR_HESITATION_4);
         //amogh added finished
+
 
         // Capture the local broadcast manager
         bManager = LocalBroadcastManager.getInstance(getContext());
@@ -1676,7 +1679,168 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             return true;
         }
     }
+//amogh added class to handle string computations
+private static enum EditOperation {
+    INSERT     ("I",'a',0),
+    REPLACE ("R",'a',0),
+    DELETE     ("D",'a',0),
+    NONE       ("N",'a',0);
 
+    private String operation;
+    private  char value;
+    private  int index;
+
+
+    private EditOperation(String operation,char value, int index) {
+        this.operation = operation;
+        this.index = index;
+        this.value = value;
+    }
+
+    // private EditOperation(String operation,int index) {
+    //     this.operation = operation;
+    //      this.value = "";
+    //     this.index = index;
+    // }
+
+    // private EditOperation(String operation) {
+    //     this.operation = operation;
+    //     this.value = "";
+    //     this.index = 0;
+    // }
+    @Override
+    public String toString() {
+        return operation;
+    }
+
+    public void setValue(char value){
+        this.value = value;
+    }
+    public void setIndex(int index){
+        this.index = index;
+    }
+
+    public char getValue(){
+        return this.value;
+    }
+    public int getIndex(){
+        return this.index;
+    }
+}
+
+
+    public static ArrayList computeListStringOperations(String string1, String string2) {
+
+        ArrayList<EditOperation> listOperations = new ArrayList<EditOperation>();
+
+        string1 = "\u0000" + string1;
+        string2 = "\u0000" + string2;
+
+        final int n = string1.length();
+        final int m = string2.length();
+        // System.out.println("__m__"+m+n);
+        final int[][] d = new int[m + 1][n + 1];
+        final Map<Point, Point> parentMap = new HashMap<>();
+
+        for (int i = 1; i <= m; ++i) {
+            d[i][0] = i;
+        }
+
+        for (int j = 1; j <= n; ++j) {
+            d[0][j] = j;
+        }
+
+        for (int j = 1; j <= n; ++j) {
+            for (int i = 1; i <= m; ++i) {
+                final int delta = (string1.charAt(j - 1) == string2.charAt(i - 1)) ? 0 : 1;
+
+                int tentativeDistance = d[i - 1][j] + 1;
+                String editOperation = "insert";
+
+                if (tentativeDistance > d[i][j - 1] + 1) {
+                    tentativeDistance = d[i][j - 1] + 1;
+                    editOperation = "delete";
+                }
+
+                if (tentativeDistance > d[i - 1][j - 1] + delta) {
+                    tentativeDistance = d[i - 1][j - 1] + delta;
+                    editOperation = "replace";
+                }
+
+                d[i][j] = tentativeDistance;
+
+                switch (editOperation) {
+                    case "replace":
+                        parentMap.put(new Point(i, j), new Point(i - 1, j - 1));
+                        break;
+
+                    case "insert":
+                        parentMap.put(new Point(i, j), new Point(i - 1, j));
+                        break;
+
+                    case "delete":
+                        parentMap.put(new Point(i, j), new Point(i, j - 1));
+                        break;
+                }
+            }
+        }
+
+        Point current = new Point(m, n);
+        // System.out.println("__mn__"+m+" , "+n);
+
+        while (true) {
+            Point predecessor = parentMap.get(current);
+
+            if (predecessor == null) {
+                break;
+            }
+            EditOperation e;
+            // System.out.println("__current__"+current.x+" , "+current.y);
+            // System.out.println("__predecessor__"+predecessor.x+" , "+predecessor.y);
+
+            if (current.x != predecessor.x && current.y != predecessor.y) {
+                final char schar = string1.charAt(predecessor.y);
+                final char zchar = string2.charAt(predecessor.x);
+
+                if(schar != zchar){
+//                    System.out.println("____substitute____" + schar +"__with___"+zchar+"___at___"+ (current.x-2));
+                    e = EditOperation.REPLACE;
+                    e.setValue(zchar);
+                    e.setIndex(current.x-2);
+                }
+                else{
+                    System.out.println("____no change____" + schar +"__with___"+zchar+"___at___"+ (current.x-2));
+                    e = EditOperation.NONE;
+                    e.setValue(zchar);
+                    e.setIndex(current.x-2);
+                }
+                listOperations.add(e);
+            } else if (current.x != predecessor.x) {
+//                System.out.println("____inserting____" + string2.charAt(current.y-1) + "___at___"+ (predecessor.y-2));
+                e = EditOperation.INSERT;
+                e.setValue(string2.charAt(current.y-1));
+                e.setIndex(predecessor.y-2);
+                listOperations.add(e);
+            } else {
+//                System.out.println("____delete____" + string1.charAt(current.y-1) +"___at___"+ (current.y-2));
+                e = EditOperation.DELETE;
+                e.setValue(string1.charAt(current.y-1));
+                e.setIndex(current.y-2);
+                listOperations.add(e);
+            }
+
+            current = predecessor;
+        }
+        Collections.reverse(listOperations);
+        listOperations.remove(0);
+        String ops = "";
+        for (EditOperation elem : listOperations){
+            ops = ops + elem.toString();
+        }
+        String a = ops;
+        return listOperations;
+    }
+    //amogh added ends
 
     //************************************************************************
     //************************************************************************
