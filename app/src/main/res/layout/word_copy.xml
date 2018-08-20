@@ -134,18 +134,48 @@
 
     </cmu.xprize.robotutor.tutorengine.widgets.core.TSceneFrameLayout>
 
+    <!--<cmu.xprize.robotutor.tutorengine.widgets.core.TImageButton-->
+        <!--android:id="@+id/Sreplay"-->
+        <!--android:background="@null"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:visibility="invisible"-->
+        <!--android:src="@drawable/replay_button"/>-->
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TImageButton
+        android:id="@+id/buttonleft"
+        android:layout_below="@id/SresponseviewBG"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:paddingTop="40dp"
+        android:rotation="180"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/arrow_up" />
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TImageButton
+        android:id="@+id/buttonright"
+        android:layout_below="@id/SresponseviewBG"
+        android:layout_alignRight="@+id/SfingerWriter"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:paddingBottom="40dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/arrow_up"
+        android:text="Button" />
+
     <cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView
         android:id="@+id/SfingerWriter"
         android:layout_below="@id/SresponseviewBG"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
         app:layout_heightPercent="60%"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:scrollbars="none"
         android:layout_centerHorizontal="true"
         android:background="@null">
 
         <LinearLayout
             android:id="@+id/Sdrawn_glyphs"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"

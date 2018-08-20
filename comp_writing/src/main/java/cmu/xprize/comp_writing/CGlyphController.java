@@ -461,7 +461,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     }
     public void displayCorrectStatus() {
         mGlyphInput.displayCorrectStatus();
-    }
+    } //amogh added
 
     public boolean getGlyphStarted() {
         return mGlyphInput.getGlyphStarted();

@@ -91,6 +91,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected int               mActiveIndex;
 
     protected ImageButton       mReplayButton;
+    protected ImageButton       mScrollRightButton;
+    protected ImageButton       mScrollLeftButton;
 
     protected LinearLayout      mRecogList;
     protected LinearLayout      mResponseViewList; //amogh added
@@ -1706,18 +1708,22 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             String word = wordsAnswer[j];
             int lengthWord = word.length();
             wordIndices = new ArrayList<>();
+            // adding all indices for each word
             for (int i = 0; i<lengthWord; i++){
                 wordIndices.add(letterIndex+i);
             }
-            letterIndex += (lengthWord+1);
+
             Word w = new Word(j , word, wordIndices);
             mListWords.add(w);
+            // moving on to the next word
+            letterIndex += (lengthWord+1);
         }
     }
 
     public class Word{
 //        private ArrayList<Integer> listIndicesStimulus;
-        private ArrayList<Integer> listIndicesAnswer;
+        private ArrayList<Integer> listIndicesAnswer; //stores the indices of the letters for this word
+        private ArrayList<Boolean> listCorrectStatus; //stores the status of each word, updated after each word is evaluated
 //        private String wordStimulus;
         private String wordAnswer;
         private int index;
@@ -1726,7 +1732,22 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             this.wordAnswer = wordAnswer;
             this.listIndicesAnswer = listIndicesAnswer;
         }
-    }
+
+        public void updateWord(){
+            //if all the letters are correct turn green.
+//                check and
+                listCorrectStatus = new ArrayList<>();
+                for (int i : listIndicesAnswer){
+//                    CStimulusController respController = (CStimulusController) mResponseViewList.getChildAt(i);
+                    CGlyphController g = (CGlyphController) mGlyphList.getChildAt(i);
+                    Boolean status = g.isCorrect();
+                    listCorrectStatus.add(status);
+                    }
+                }
+            //if even one letter is wrong, put it's index in the queue and turn it red.(see how scaffolding at its word level can be called)
+            //
+        }
+
     //amogh added ends
 
 //amogh added class to handle string computations

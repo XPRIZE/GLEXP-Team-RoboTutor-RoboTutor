@@ -193,7 +193,7 @@
     "write.sen.copy.wrd": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
-      "features": "FTR_SEN:FTR_SEN_WRD" //word level feedback
+      "features": "FTR_SEN:FTR_SEN_COPY:FTR_SEN_WRD" //word level feedback
     },
     "write.sen.copy.sen": {
       "type": "TUTORVAR_MAP",

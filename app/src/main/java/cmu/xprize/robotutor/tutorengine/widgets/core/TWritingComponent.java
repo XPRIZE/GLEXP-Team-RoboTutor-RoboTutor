@@ -152,6 +152,17 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         mGlyphList.setClipChildren(false);
 
         mReplayButton = (ImageButton) findViewById(R.id.Sreplay);
+        //amogh added for scrolling fingerwriter
+        mScrollRightButton = (ImageButton) findViewById(R.id.buttonright);
+        mScrollLeftButton = (ImageButton) findViewById(R.id.buttonleft);
+        mScrollRightButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                mDrawnScroll.scrollTo((int)mDrawnScroll.getScrollX() + 10, (int)mDrawnScroll.getScrollY());
+            }
+        });
+        //amogh added ends
 
 // TODO: DEBUG only
 //        mRecogList.setOnTouchListener(new RecogTouchListener());
