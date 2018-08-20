@@ -171,6 +171,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //    protected  List<Integer>    changeCorrectionIndices = new ArrayList<>(Arrays.asList());
 
     protected int correctionAttempts = 0;
+
+    protected String punctuationSymbols = ",.;:-_";
     //amogh add ends
 
     final private String  TAG        = "CWritingComponent";
@@ -334,17 +336,17 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         wordIndices.put(3,new ArrayList<Integer>(Arrays.asList(17,18,19,20,21)));
     }
 
-    public void updateWord(){
-        ArrayList<Integer> wordInd= wordIndices.get(currentWordIndex);
-        for (int i : wordInd){
-            CStimulusController respController = (CStimulusController) mResponseViewList.getChildAt(i);
-            CGlyphController g = (CGlyphController) mGlyphList.getChildAt(i);
-            Boolean stat = g.isCorrect();
-
-            respController.updateStimulusState(stat);
-
-        }
-    }
+//    public void updateWord(){
+//        ArrayList<Integer> wordInd= wordIndices.get(currentWordIndex);
+//        for (int i : wordInd){
+//            CStimulusController respController = (CStimulusController) mResponseViewList.getChildAt(i);
+//            CGlyphController g = (CGlyphController) mGlyphList.getChildAt(i);
+//            Boolean stat = g.isCorrect();
+//
+//            respController.updateStimulusState(stat);
+//
+//        }
+//    }
 
     //amogh add initialising hashmap ends
     //amogh added to check animator graph
@@ -374,12 +376,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         int wid = 0;
         switch (level){
             case 1:
+                mListWords.get(currentWordIndex).updateWordCorrectStatus();
 //                break;
             case 2:
-                ArrayList<Integer> wordInd = wordIndices.get(currentWordIndex);
-                int leftLetter = wordInd.get(0);
+                ArrayList<Integer> wordIndices = mListWords.get(currentWordIndex).getWordIndices();
+                int leftLetter = wordIndices.get(0);
                 int left = mResponseViewList.getChildAt(leftLetter).getLeft();
-                int rightLetter = wordInd.get(wordInd.size()-1);
+                int rightLetter = wordIndices.get(wordIndices.size()-1);
                 int right = mResponseViewList.getChildAt(rightLetter-1).getRight();
                 wid = right-left;
                 mHighlightErrorBoxView.setX((float)left);
@@ -389,13 +392,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //                int right = mResponseViewList.getChildAt(mResponseViewList.getChildCount()-1).getRight();
 //                wid = right-left;
 //                mHighlightErrorBoxView.setX((float)left);
-                wordInd = wordIndices.get(currentWordIndex);
-                leftLetter = wordInd.get(0);
-                left = mResponseViewList.getChildAt(leftLetter).getLeft();
-                rightLetter = wordInd.get(1);
-                right = mResponseViewList.getChildAt(rightLetter-1).getRight();
-                wid = right-left;
-                mHighlightErrorBoxView.setX((float)left);
+                Word word = mListWords.get(currentWordIndex);
+                ArrayList<Boolean> lettersStatus = word.getLettersStatus();
+                int wrongIndex = lettersStatus.indexOf(false);
+                if (wrongIndex != -1){
+                    left = mResponseViewList.getChildAt(wrongIndex).getLeft();
+                    right = mResponseViewList.getChildAt(wrongIndex).getRight();
+                    wid = right-left;
+                    mHighlightErrorBoxView.setX((float)left);
+                }
                 break;
             case 4:
                 break;
@@ -638,8 +643,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             }
             //for word level feedback
             else if(activityFeature.contains("FTR_SEN_WRD")){
-                if (_spaceIndices.contains(mActiveIndex - 1)) {
-
+                if (_spaceIndices.contains(mActiveIndex - 1) || punctuationSymbols.contains(mResponse)) {
+                    //get the current word and update the
+                    mListWords.get(currentWordIndex).updateWordCorrectStatus();
 //                    CGlyphController gControllerSpace = (CGlyphController) mGlyphList.getChildAt(mActiveIndex - 1);
 //                    CStimulusController respSpace = (CStimulusController) mResponseViewList.getChildAt(mActiveIndex - 1);
 //                    respSpace.setStimulusChar("", false);
@@ -653,7 +659,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //                    }
 //                    currentWordIndices.clear();
 //                    currentWordIndices.add(mActiveIndex);
-                    updateWord();
+//                    updateWord();
                 }
 
             }
@@ -1727,15 +1733,20 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //        private String wordStimulus;
         private String wordAnswer;
         private int index;
+        private boolean isCorrect;
         public Word(int index, String wordAnswer, ArrayList<Integer> listIndicesAnswer) {
             this.index = index;
             this.wordAnswer = wordAnswer;
             this.listIndicesAnswer = listIndicesAnswer;
         }
-
-        public void updateWord(){
-            //if all the letters are correct turn green.
-//                check and
+        public ArrayList<Integer> getWordIndices(){
+            return listIndicesAnswer;
+        }
+        public ArrayList<Boolean> getLettersStatus() {
+            return listCorrectStatus;
+        }
+        public void updateWordCorrectStatus(){
+            //update the correct status corresponding to the words
                 listCorrectStatus = new ArrayList<>();
                 for (int i : listIndicesAnswer){
 //                    CStimulusController respController = (CStimulusController) mResponseViewList.getChildAt(i);
@@ -1743,10 +1754,37 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     Boolean status = g.isCorrect();
                     listCorrectStatus.add(status);
                     }
+                    //evaluate the word's correct status, and accordingly increase the correction attempts and teh current word index.
+                for(boolean letterCorrect : listCorrectStatus){
+                    if (letterCorrect == false){
+                        isCorrect = false;
+                        correctionAttempts++;
+                        break;
+                    }
+                    else{
+                        isCorrect = true;
+                        //increase current word index
+                        if(currentWordIndex != mListWords.size()-1){
+                            currentWordIndex++;
+                        }
+                        updateWordStimulus();
+                        //reset the word mistake count
+                        correctionAttempts = 0;
+                    }
                 }
+        }
+
+        public void updateWordStimulus(){
+            if (isCorrect){
+                for(int index : listIndicesAnswer){
+                    CStimulusController respController = (CStimulusController) mResponseViewList.getChildAt(index);
+                    respController.updateStimulusState(listCorrectStatus.get(index));
+                }
+            }
+        }
             //if even one letter is wrong, put it's index in the queue and turn it red.(see how scaffolding at its word level can be called)
             //
-        }
+    }
 
     //amogh added ends
 

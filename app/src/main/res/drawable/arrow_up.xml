@@ -2,11 +2,11 @@
     <item>
         <shape>
             <solid android:color="@android:color/transparent"/>
-            <size android:width="2dp" android:height="70dp"/>
+            <size android:width="6dp" android:height="70dp"/>
         </shape>
     </item>
 
-    <item android:bottom="29dp">
+    <item android:bottom="28dp">
         <rotate
             android:fromDegrees="-45"
             android:toDegrees="45">
@@ -20,7 +20,7 @@
         </rotate>
     </item>
 
-    <item android:top="29dp">
+    <item android:top="28dp">
         <rotate
             android:fromDegrees="45"
             android:toDegrees="45">

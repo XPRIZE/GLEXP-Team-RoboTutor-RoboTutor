@@ -145,6 +145,7 @@
     <cmu.xprize.robotutor.tutorengine.widgets.core.TImageButton
         android:id="@+id/buttonleft"
         android:layout_below="@id/SresponseviewBG"
+        android:background="@null"
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:paddingTop="40dp"
@@ -154,6 +155,7 @@
     <cmu.xprize.robotutor.tutorengine.widgets.core.TImageButton
         android:id="@+id/buttonright"
         android:layout_below="@id/SresponseviewBG"
+        android:background="@null"
         android:layout_alignRight="@+id/SfingerWriter"
         android:layout_width="50dp"
         android:layout_height="match_parent"
@@ -165,8 +167,8 @@
     <cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView
         android:id="@+id/SfingerWriter"
         android:layout_below="@id/SresponseviewBG"
-        android:paddingLeft="50dp"
-        android:paddingRight="50dp"
+        android:paddingLeft="70dp"
+        android:paddingRight="70dp"
         app:layout_heightPercent="60%"
         android:layout_width="match_parent"
         android:scrollbars="none"

@@ -25,6 +25,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -155,11 +156,31 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         //amogh added for scrolling fingerwriter
         mScrollRightButton = (ImageButton) findViewById(R.id.buttonright);
         mScrollLeftButton = (ImageButton) findViewById(R.id.buttonleft);
+        mScrollLeftButton.setVisibility(View.INVISIBLE);
         mScrollRightButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 mDrawnScroll.scrollTo((int)mDrawnScroll.getScrollX() + 10, (int)mDrawnScroll.getScrollY());
+            }
+        });
+        mDrawnScroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                int scrollX = mDrawnScroll.getScrollX(); // For HorizontalScrollView
+//                int maxScrollX = mDrawnScroll.getChildAt(0).getWidth();
+                int maxScrollX = 4776;
+                if (scrollX > 0){
+                    mScrollLeftButton.setVisibility(View.VISIBLE);
+                }
+                else{
+                    mScrollLeftButton.setVisibility(View.INVISIBLE);
+                }
+                if (scrollX < maxScrollX){
+                    mScrollRightButton.setVisibility(View.VISIBLE);
+                }
+                else{
+                    mScrollRightButton.setVisibility(View.INVISIBLE);
+                }
             }
         });
         //amogh added ends
