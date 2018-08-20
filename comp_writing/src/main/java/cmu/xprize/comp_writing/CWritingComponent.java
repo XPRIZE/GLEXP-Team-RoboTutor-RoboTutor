@@ -40,6 +40,7 @@ import android.widget.RelativeLayout;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -145,9 +146,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public boolean              singleStimulus = false;
     public CWr_Data[]           dataSource;
 
-    //amogh added for sentence correction
+    //amogh added
+    // for sentence correction
     protected List<Integer>     _spaceIndices = new ArrayList<Integer>(); //indices with space for
     protected int currentWordIndex = 0;
+    protected ArrayList<Word> mListWords;
+
 
     protected  List<Integer>    deleteCorrectionIndices = new ArrayList<>();
     protected  List<Integer>    insertCorrectionIndices = new ArrayList<>();
@@ -1228,6 +1232,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mStimulus = data.stimulus;
         mAudioStimulus = data.audioStimulus;
         mAnswer = data.answer;
+        //amogh comments
+            //remember to empty the containers when new word arrives
+        //amogh comments end
+
+        //amogh added to initialise words
+        if(activityFeature.contains("FTR_SEN")){
+            mListWords = new ArrayList<>();
+            initialiseListWords(mStimulus,mAnswer);
+        }
 
         //amogh added
         //load the indices for the different corrections
@@ -1679,6 +1692,43 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             return true;
         }
     }
+
+    //amogh added
+    //class to handle word related operations
+    private void initialiseListWords(String stimulus, String answer){
+//        String[] wordsStimulus = mStimulus.split(" ");
+        String[] wordsAnswer = mAnswer.split(" ");
+        int lengthSentence = wordsAnswer.length;
+        int letterIndex = 0;
+        ArrayList<Integer> wordIndices;
+        // iterating over each word.
+        for (int j = 0; j<lengthSentence; j++){
+            String word = wordsAnswer[j];
+            int lengthWord = word.length();
+            wordIndices = new ArrayList<>();
+            for (int i = 0; i<lengthWord; i++){
+                wordIndices.add(letterIndex+i);
+            }
+            letterIndex += (lengthWord+1);
+            Word w = new Word(j , word, wordIndices);
+            mListWords.add(w);
+        }
+    }
+
+    public class Word{
+//        private ArrayList<Integer> listIndicesStimulus;
+        private ArrayList<Integer> listIndicesAnswer;
+//        private String wordStimulus;
+        private String wordAnswer;
+        private int index;
+        public Word(int index, String wordAnswer, ArrayList<Integer> listIndicesAnswer) {
+            this.index = index;
+            this.wordAnswer = wordAnswer;
+            this.listIndicesAnswer = listIndicesAnswer;
+        }
+    }
+    //amogh added ends
+
 //amogh added class to handle string computations
 private static enum EditOperation {
     INSERT     ("I",'a',0),
