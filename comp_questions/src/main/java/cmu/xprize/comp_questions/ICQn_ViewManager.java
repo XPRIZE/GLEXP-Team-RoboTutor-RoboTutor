@@ -29,19 +29,20 @@ public interface ICQn_ViewManager extends ILoadableObject {
 
     void startStory();
 
+    //UHQ
+    void setPictureMatch();
+
+    void setClozePage();
+
     void seekToPage(int pageIndex);
 
     void nextPage();
-
-//    void nextClozePage();
 
     void prevPage();
 
     void seekToParagraph(int paraIndex);
 
     void nextPara();
-
-//    void nextClozePara();
 
     void prevPara();
 
@@ -53,8 +54,6 @@ public interface ICQn_ViewManager extends ILoadableObject {
 
     void nextLine();
 
-//    void nextClozeLine();
-
     void prevLine();
 
     void seekToWord(int wordIndex);
@@ -65,6 +64,7 @@ public interface ICQn_ViewManager extends ILoadableObject {
 
     void setHighLight(String highlight, boolean update);
 
+    //UHQ
     void genericQuestions();
 
     void displayGenericQuestion();
@@ -75,7 +75,11 @@ public interface ICQn_ViewManager extends ILoadableObject {
 
     void displayClozeQuestion();
 
+    void displayPictureMatching();
+
     void hasClozeDistractor();
+
+    void hasQuestion();
 
     public boolean endOfData();
 
@@ -93,20 +97,20 @@ public interface ICQn_ViewManager extends ILoadableObject {
 
     public void execCommand(String _command, Object _target);
 
-    public int getmCurrPara();
-
-    public int getmCurrLine();
-
-    public int getmParaCount();
-
-    public int getmLineCount();
-    public int getSegmentNdx();
-    public int getNumSegments();
-    public int getUtteranceNdx();
-    public int getNumUtterance();
-    public boolean getEndOfSentence();
-
-    public CASB_Narration[] getRawNarration();
-    public int getUtterancePrev();
-    public int getSegmentPrev();
+//    public int getmCurrPara();
+//
+//    public int getmCurrLine();
+//
+//    public int getmParaCount();
+//
+//    public int getmLineCount();
+//    public int getSegmentNdx();
+//    public int getNumSegments();
+//    public int getUtteranceNdx();
+//    public int getNumUtterance();
+//    public boolean getEndOfSentence();
+//
+//    public CASB_Narration[] getRawNarration();
+//    public int getUtterancePrev();
+//    public int getSegmentPrev();
 }

@@ -213,12 +213,32 @@ public class CQn_ViewManagerMari implements ICQn_ViewManager, ILoadableObject {
     }
 
     @Override
+    public void setPictureMatch(){
+
+    }
+
+    @Override
+    public void setClozePage(){
+
+    }
+
+    @Override
+    public void displayPictureMatching(){
+
+    }
+
+    @Override
     public void displayClozeQuestion(){
 
     }
 
     @Override
     public void hasClozeDistractor(){
+
+    }
+
+    @Override
+    public void hasQuestion(){
 
     }
 
@@ -621,57 +641,6 @@ public class CQn_ViewManagerMari implements ICQn_ViewManager, ILoadableObject {
         sentences = new ArrayList<String>(Arrays.asList(sb.toString().split("\\.")));
     }
 
-    @Override
-    public int getmCurrPara(){
-        return 0;
-    }
-
-    @Override
-    public int getmCurrLine(){
-        return 0;
-    }
-
-    @Override
-    public int getmParaCount(){
-        return 0;
-    }
-
-    @Override
-    public int getmLineCount(){
-        return 0;
-    }
-    @Override
-    public int getSegmentNdx(){
-        return 0;
-    }
-    @Override
-    public int getNumSegments(){
-        return 0;
-    }
-    @Override
-    public int getUtteranceNdx(){
-        return 0;
-    }
-    @Override
-    public int getNumUtterance(){
-        return 0;
-    }
-    @Override
-    public boolean getEndOfSentence(){
-        return true;
-    }
-    @Override
-    public CASB_Narration[] getRawNarration(){
-        return null;
-    }
-    @Override
-    public int getUtterancePrev(){
-        return 0;
-    }
-    @Override
-    public int getSegmentPrev(){
-        return 0;
-    }
 }
 
 

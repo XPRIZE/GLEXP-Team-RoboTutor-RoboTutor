@@ -26,8 +26,6 @@ import java.util.HashMap;
 
 public class TCONST {
 
-//    sdcard/robotutor_assets/assets/audio/en/cmu/xprize/activity_selector/d39950ec96e6a5361508996ce7ae6444.mp3
-
     // These features are based on the current tutor selection model
     // When no tutor has been selected it should run the tutor select
     // and when it finishes it should run the difficulty select until
@@ -231,14 +229,16 @@ public class TCONST {
     public static final String FTR_USER_REVEAL     = "FTR_USER_REVEAL";
     public static final String FTR_USER_PARROT     = "FTR_USER_PARROT";
     public static final String FTR_USER_READING    = "FTR_USER_READING";
-    public static final String FTR_USER_COMPREHENSION    = "FTR_USER_COMPREHENSION";
+    // UHQ
+    public static final String FTR_GEN             = "FTR_GEN";
+    public static final String FTR_PIC             = "FTR_PIC";
+    public static final String FTR_CLO             = "FTR_CLO";
 
 
     public static final String NARRATE_STORY       = "NARRATE_STORY";
     public static final String TRACK_NARRATION     = "TRACK_NARRATION";
     public static final String START_NARRATION     = "START_NARRATION";
     public static final String SPEAK_UTTERANCE     = "SPEAK_UTTERANCE";
-//UHQ
 
     public static final String SPEAK_EVENT         = "SPEAK_EVENT";
 
@@ -249,7 +249,6 @@ public class TCONST {
     public static final int    MAX_AKDATA          = 10;
 
     public static final String FTR_COMPLETE      = "FTR_COMPLETE";
-    public static final String FTR_INCOMPLETE      = "FTR_INCOMPLETE";
     public static final String FTR_PROMPT        = "FTR_PROMPT";
     public static final String FTR_PAGE_PROMPT   = "FTR_PAGE_PROMPT";
 
@@ -269,6 +268,8 @@ public class TCONST {
     public static final String NEXT_PAGE                  = "NEXT_PAGE";
     public static final String CLOZE_CORRECT              = "CLOZE_CORRECT";
     public static final String CLOZE_WRONG                = "CLOZE_WRONG";
+    public static final String PICMATCH_CORRECT              = "PICMATCH_CORRECT";
+    public static final String PICMATCH_WRONG                = "PICMATCH_WRONG";
     public static String TARGET                                  = "";
     public static final String NEXT_SCENE                 = "NEXT_SCENE";
     public static final String NEXT_WORD                  = "NEXT_WORD";
@@ -792,6 +793,7 @@ public class TCONST {
     public static final String RTC_VAR_LINESTATE   = ".lineState";
     public static final String RTC_VAR_WORDSTATE   = ".wordState";
     public static final String SHOW_CLOZE          = ".showCloze";
+    public static final String SHOW_PICMATCH        = ".showPicMatch";
     public static final String RTC_VAR_ATTEMPT     = ".attempt";
     public static final String LAST                = "LAST";
     public static final String NOT_LAST            = "NOT_LAST";

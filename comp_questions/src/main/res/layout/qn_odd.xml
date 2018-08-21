@@ -24,6 +24,48 @@
         app:layout_widthPercent="50%" />
 
     <TextView
+        android:id="@+id/SstoryTextPicMatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="60dp"
+        android:gravity="center"
+        android:text=""
+        android:textColor="#000"
+        android:textSize="25sp"
+        app:layout_widthPercent="100%" />
+
+    <ImageView
+        android:id="@+id/SpageImage1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/SstoryTextPicMatch"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="30dp"
+        android:scaleType="fitCenter"
+        app:layout_widthPercent="30%" />
+
+    <ImageView
+        android:id="@+id/SpageImage2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/SstoryTextPicMatch"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="30dp"
+        android:scaleType="fitCenter"
+        app:layout_widthPercent="30%" />
+
+    <ImageView
+        android:id="@+id/SpageImage3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/SstoryTextPicMatch"
+        android:layout_alignParentRight="true"
+        android:layout_margin="30dp"
+        android:scaleType="fitCenter"
+        app:layout_widthPercent="30%" />
+
+    <TextView
         android:id="@+id/SstoryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

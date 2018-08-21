@@ -161,7 +161,6 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
 
 
     protected void prepareListener(TTSsynthesizer rootTTS) {
-        Log.d("ULANI", "prepareListener: generate TTSYNTHESIZER ");
         // Generate a Project Listen type listener
         // Attach the speech recognizer.
         mListener = new ListenerPLRT();
@@ -203,7 +202,19 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
         mViewManager.displayClozeQuestion();
     }
 
+    public void setPictureMatch() {
+        mViewManager.setPictureMatch();
+    }
+
+    public void setClozePage() {
+        mViewManager.setClozePage();
+    }
+
+    public void displayPictureMatching() { mViewManager.displayPictureMatching(); }
+
     public void hasClozeDistractor() {mViewManager.displayClozeQuestion();}
+
+    public void hasQuestion() {mViewManager.hasQuestion();}
     /**
      *
      * @param language Feature string (e.g. LANG_EN)
@@ -245,21 +256,11 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
 
     public int addPage(View newView) {
         Log.d(TAG, "addPage: ");
-//        System.out.println(newView.ge);
         int insertNdx = super.getChildCount();
-        System.out.println(insertNdx);
         super.addView((View) newView, insertNdx);
 
         return insertNdx;
     }
-
-//    public int addPage(ViewGroup newView) {
-//
-//        int insertNdx = newView.getChildCount();
-//        super.addView((View) newView, insertNdx);
-//
-//        return insertNdx;
-//    }
 
 
     /**
@@ -268,9 +269,6 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
      * @param index
      */
     public void animatePageFlip(boolean forward, int index) {
-        Log.d("ULANI", "INSIDE animatePageFlip, mCurrViewIndex = "+index + ", Flipping page");
-
-
         if (forward) {
             if (_scrollVertical)
                 setInAnimation(slide_bottom_up);
@@ -283,8 +281,6 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
             else
                 setInAnimation(slide_left_to_right);
         }
-        Log.d("ULANI", "SETDISPLAYEDCHILD to be mCurrViewIndex");
-
         setDisplayedChild(index);
     }
 
@@ -601,15 +597,12 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
     public void loadStory(String EXTERNPATH, String viewType, String assetLocation, String SHAREDEXTERNPATH) {
 
         Log.d(TCONST.DEBUG_STORY_TAG, String.format("assetLocation=%s -- EXTERNPATH=%s", assetLocation, EXTERNPATH));
-        System.out.println("viewtype "+viewType);
         Class<?> storyClass = viewClassMap.get(viewType);
-        System.out.println(storyClass.getCanonicalName());
         try {
             // Generate the View manager for the storyName - specified in the data
             //
             // ooooh maybe check if it's math and make text closer to image
             mViewManager = (ICQn_ViewManager) storyClass.getConstructor(CQn_Component.class, ListenerBase.class).newInstance(this, mListener);
-            System.out.println(mViewManager);
 
             Log.d(TAG, "loadStory: loaded mviewmanager");
             Log.d(TAG, "loadStory: "+TCONST.STORYDATA);
@@ -618,9 +611,8 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
             Log.d(TCONST.DEBUG_STORY_TAG, "logging jsonData:");
             mViewManager.loadJSON(new JSONObject(jsonData), null);
 
-            // uhq
+            // UHQ load the relevant mcq json data for cloze questions
             String jsonMcq = JSON_Helper.cacheDataByName(EXTERNPATH + TCONST.STORYMCQ);
-            System.out.println("JSON MCQ: "+ jsonMcq);
             Log.d(TCONST.DEBUG_STORY_TAG, "logging jsonMcq:");
             mViewManager.loadJSON(new JSONObject(jsonMcq), null);
 
@@ -817,7 +809,6 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
     private void enQueue(Queue qCommand, Long delay) {
 
         if (!_qDisabled) {
-            Log.i("ULANI","enQueue: command = "+qCommand.getCommand()+"; Put command in queue");
             queueMap.put(qCommand, qCommand);
 
             if (delay > 0L) {

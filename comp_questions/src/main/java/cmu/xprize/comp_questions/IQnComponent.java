@@ -24,15 +24,11 @@ public interface IQnComponent {
 
     void nextPage();
 
-//    void nextClozePage();
-
     void prevPage();
 
     void seekToParagraph(int paraIndex);
 
     void nextPara();
-
-//    void nextClozePara();
 
     void prevPara();
 
@@ -43,8 +39,6 @@ public interface IQnComponent {
     void parrotLine();
 
     void nextLine();
-
-//    void nextClozeLine();
 
     void prevLine();
 
@@ -68,9 +62,16 @@ public interface IQnComponent {
 
     void displayClozeQuestion();
 
+    void setPictureMatch();
+
+    void setClozePage();
+
+    void displayPictureMatching();
+
     void setClozeQuestion();
 
     void hasClozeDistractor();
 
+    void hasQuestion();
 
 }
