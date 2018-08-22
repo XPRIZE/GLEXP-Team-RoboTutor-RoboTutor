@@ -535,9 +535,11 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
     }
 
     private void updateImageButtons(){
-        if (show_image_options){
+        disableImageButtons();
+        if (show_image_options && picture_match_mode){
             mMatchImageRight.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    disableImageButtons();
                     Log.v(QGRAPH_MSG, "event.click: " + " CQn_ViewManagerASB: RIGHTIMAGE");
                     Log.d(TAG, "onClick: target "+TCONST.TARGET);
                     Log.d("ULANI", "onClick: mMatchImageRight: picmatch_answer = "+picmatch_answer);
@@ -558,10 +560,10 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             });
             mMatchImageCenter.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    disableImageButtons();
                     Log.v(QGRAPH_MSG, "event.click: " + " CQn_ViewManagerASB: CENTERIMAGE");
                     Log.d(TAG, "onClick: target "+TCONST.TARGET);
                     Log.d("ULANI", "onClick: mMatchImageCenter: picmatch_answer = "+picmatch_answer);
-
                     if (picmatch_answer == 1){
                         Log.d(TAG, "onClick: correct");
                         mParent.publishFeature(TCONST.PICMATCH_CORRECT);
@@ -579,6 +581,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             });
             mMatchImageLeft.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    disableImageButtons();
                     Log.v(QGRAPH_MSG, "event.click: " + " CQn_ViewManagerASB: LEFTIMAGE");
                     Log.d(TAG, "onClick: target "+TCONST.TARGET);
                     Log.d("ULANI", "onClick: mMatchImageLeft: picmatch_answer = "+picmatch_answer);
@@ -597,20 +600,36 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                     mParent.nextNode();
                 }
             });
-            setButtonState(mMatchImageLeft, "ENABLE");
-            setButtonState(mMatchImageLeft, "SHOW");
-            setButtonState(mMatchImageCenter, "ENABLE");
-            setButtonState(mMatchImageCenter, "SHOW");
-            setButtonState(mMatchImageRight, "ENABLE");
-            setButtonState(mMatchImageRight, "SHOW");
+            showImageButtons();
         } else {
-            setButtonState(mMatchImageLeft, "DISABLE");
-            setButtonState(mMatchImageLeft, "HIDE");
-            setButtonState(mMatchImageCenter, "DISABLE");
-            setButtonState(mMatchImageCenter, "HIDE");
-            setButtonState(mMatchImageRight, "DISABLE");
-            setButtonState(mMatchImageRight, "HIDE");
+            hideImageButtons();
         }
+    }
+
+    public void showImageButtons(){
+        setButtonState(mMatchImageLeft, "SHOW");
+        setButtonState(mMatchImageCenter, "SHOW");
+        setButtonState(mMatchImageRight, "SHOW");
+    }
+
+    @Override
+    public void enableImageButtons(){
+        setButtonState(mMatchImageLeft, "ENABLE");
+        setButtonState(mMatchImageCenter, "ENABLE");
+        setButtonState(mMatchImageRight, "ENABLE");
+    }
+
+    public void hideImageButtons(){
+        setButtonState(mMatchImageLeft, "HIDE");
+        setButtonState(mMatchImageCenter, "HIDE");
+        setButtonState(mMatchImageRight, "HIDE");
+    }
+
+    @Override
+    public void disableImageButtons(){
+        setButtonState(mMatchImageLeft, "DISABLE");
+        setButtonState(mMatchImageCenter, "DISABLE");
+        setButtonState(mMatchImageRight, "DISABLE");
     }
 
     /**
@@ -620,9 +639,9 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
      *
      */
     public void flipPage() {
-        Log.d("ULANI", "flipPage: ");
+        Log.d("ULANI", "flipPage: show_image_options = "+show_image_options);
         if (mCurrPage % 2 == 0) {
-//            mOddPage.setVisibility(View.VISIBLE);
+            if (mCurrPage > 0) mPageText.setText(" ");
             mCurrViewIndex = mOddIndex;
             mMatchImageLeft = mOddPage.findViewById(R.id.SpageImage1);
             mMatchImageCenter = mOddPage.findViewById(R.id.SpageImage2);
@@ -636,7 +655,6 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             mWord3Text = (TextView) mOddPage.findViewById(R.id.Sword3);
             mWord4Text = (TextView) mOddPage.findViewById(R.id.Sword4);
         } else {
-//            mEvenPage.setVisibility(View.VISIBLE);
             mCurrViewIndex = mEvenIndex;
             mMatchImageLeft = mEvenPage.findViewById(R.id.SpageImage1);
             mMatchImageCenter = mEvenPage.findViewById(R.id.SpageImage2);
@@ -662,6 +680,9 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 mPageText = mEvenPage.findViewById(R.id.SstoryTextPicMatch);
             }
             updateImageButtons();
+        } else {
+            hideImageButtons();
+            disableImageButtons();
         }
 
     }
@@ -695,9 +716,10 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                     in = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image); // ZZZ load image
                 }
                 mPageImage.setImageBitmap(BitmapFactory.decodeStream(in));
-//                mMatchImageRight.setImageBitmap(null);
-//                mMatchImageCenter.setImageBitmap(null);
-//                mMatchImageLeft.setImageBitmap(null);
+                mPageImage.bringToFront();
+                mMatchImageLeft.setImageBitmap(null);
+                mMatchImageRight.setImageBitmap(null);
+                mMatchImageCenter.setImageBitmap(null);
 
             } catch (IOException e) {
                 mPageImage.setImageBitmap(null);
@@ -2109,30 +2131,26 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         InputStream in1;
         InputStream in2;
         InputStream in3;
-        ArrayList<Integer> inds = new ArrayList<>();
+        ArrayList<String> imgs = new ArrayList<>();
         for (int i = mCurrPage+1; i < data.length-1; i++){
-            inds.add(i);
+            if (!imgs.contains(data[i].image)){
+                imgs.add(data[i].image);
+            }
         }
-        Collections.shuffle(inds);
-        int rand = inds.get(0);
-        int rand1 = inds.get(1);
+        Collections.shuffle(imgs);
+        String randImg1 = imgs.get(0);
+        String randImg2 = imgs.get(1);
         try {
             if (assetLocation.equals(TCONST.EXTERN)) {
                 Log.d(TCONST.DEBUG_STORY_TAG, "loading image " + mAsset + data[mCurrPage].image+" "+mCurrPage);
-
                 in1 = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
-                in2 = new FileInputStream(mAsset + data[rand].image); // ZZZ load image
-                in3 = new FileInputStream(mAsset + data[rand1].image);
-//            } else if (assetLocation.equals(TCONST.EXTERN_SHARED)) {
-//                Log.d(TCONST.DEBUG_STORY_TAG, "loading shared image " + mAsset + data[mCurrPage].image);
-//                in1 = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
-//                in2 = new FileInputStream(mAsset + data[rand].image); // ZZZ load image
-//                in3 = new FileInputStream(mAsset + data[rand1].image);
+                in2 = new FileInputStream(mAsset + randImg1); // ZZZ load image
+                in3 = new FileInputStream(mAsset + randImg2);
             } else {
                 Log.d(TCONST.DEBUG_STORY_TAG, "loading image from asset" + mAsset + data[mCurrPage].image);
                 in1 = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image); // ZZZ load image
-                in2 = JSON_Helper.assetManager().open(mAsset + data[rand].image); // ZZZ load image
-                in3 = JSON_Helper.assetManager().open(mAsset + data[rand1].image);
+                in2 = JSON_Helper.assetManager().open(mAsset + randImg1); // ZZZ load image
+                in3 = JSON_Helper.assetManager().open(mAsset + randImg2);
             }
             int targetIdx = getRandomNumberInRange(0, 2);
             this.picmatch_answer = targetIdx;
@@ -2157,7 +2175,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         mMatchImageCenter.bringToFront();
         mMatchImageRight.bringToFront();
         show_image_options = true;
-        Log.d(TAG, "displayPictureMatching: show_image_options = "+show_image_options);
+        Log.d(TAG, "displayPictureMatching: show_image_options = "+show_image_options+ " picture_match_node = "+picture_match_mode);
         updateImageButtons();
         mParent.animatePageFlip(true, mCurrViewIndex);
     }

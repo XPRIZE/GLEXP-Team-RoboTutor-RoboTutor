@@ -560,6 +560,15 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
         mViewManager.setPageFlipButton(command);
     }
 
+    public void enableImageButtons(){
+        mViewManager.enableImageButtons();
+    }
+
+    public void disableImageButtons(){
+        mViewManager.disableImageButtons();
+    }
+
+
     // Tutor methods  End
     //************************************************************************
     //************************************************************************

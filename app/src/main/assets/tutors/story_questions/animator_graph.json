@@ -133,10 +133,10 @@
             {"constraint": "STORY_COMPLETE", "edge": "NEXT_SCENE"},
 //            {"constraint": "PAGE_COMPLETE", "edge": "GENERIC_QUESTION_NODE"},
 //            {"constraint": "PAGE_COMPLETE", "edge": "NEXT_PAGE_NODE"},
-//            {"constraint": "PAGE_COMPLETE", "edge": "CLOZE_PAGE_NODE"},
-            {"constraint": "PAGE_COMPLETE", "edge": "PICTURE_MATCH_NODE"},
-//            {"constraint": "TEST_SHOW_CLZ", "edge": "PRESENT_CLOZE"},
-            {"constraint": "TEST_SHOW_PM", "edge": "PRESENT_PICMATCH"},
+            {"constraint": "PAGE_COMPLETE", "edge": "CLOZE_PAGE_NODE"},
+//            {"constraint": "PAGE_COMPLETE", "edge": "PICTURE_MATCH_NODE"},
+            {"constraint": "TEST_SHOW_CLZ", "edge": "PRESENT_CLOZE"},
+//            {"constraint": "TEST_SHOW_PM", "edge": "PRESENT_PICMATCH"},
             {"constraint": "PARAGRAPH_COMPLETE", "edge": "NEXT_PARA_NODE"},
             {"constraint": "LINE_COMPLETE", "edge": "NEXT_LINE_NODE"},
             {"constraint": "", "edge": "NEXT_WORD_NODE"}
@@ -354,7 +354,7 @@
           "maptype": "moduleMap",
           "mapname": "PLAYCLOZEWRONG",
           "preenter": [],
-          "preexit": [],
+          "preexit": ["ENABLE_PM_BUTTONS"],
           "edges": [
             {"constraint": "", "edge": "AWAIT_PICMATCH_RESPONSE"}
           ]
@@ -367,7 +367,7 @@
           "preenter": [],
           "preexit": [],
           "edges": [
-            {"constraint": "", "edge": "NEXT_STEP"}
+            {"constraint": "", "edge": "NEXT_PAGE_NODE"}
           ]
         },
         "CLOZE_BAD": {
@@ -481,7 +481,10 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryQuestions", "method": "logState", "parms": "type#node,value#DISPLAY_PICTURE_MATCHING:String", "features": ""},
             {"type": "COMMAND", "id": "SstoryQuestions", "method": "displayPictureMatching", "parms": "" , "features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "picture_matching/Which picture shows.mp3", "mode": "flow", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "picture_matching/what you just heard.mp3", "mode": "flow", "features": ""} //TODO: add flag for "what you just read"
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "picture_matching/what you just heard.mp3", "mode": "flow", "features": "FTR_USER_HEAR"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "picture_matching/what you just read.mp3", "mode": "flow", "features": "FTR_USER_READ"}, //TODO: test flag for "what you just read"
+            {"type": "COMMAND", "id": "SstoryQuestions", "method": "enableImageButtons", "parms": "" , "features": ""}
+
           ]
         },
 
@@ -781,6 +784,8 @@
 
         "SET_PICTURE_MATCH": {"type": "COMMAND", "id": "SstoryQuestions", "method": "setPictureMatch", "parms": "" , "features": ""},
         "SET_CLOZE_PAGE": {"type": "COMMAND", "id": "SstoryQuestions", "method": "setClozePage", "parms": "" , "features": ""},
+        "ENABLE_PM_BUTTONS": {"type": "COMMAND", "id": "SstoryQuestions", "method": "enableImageButtons", "parms": "" , "features": ""},
+        "DISABLE_PM_BUTTONS": {"type": "COMMAND", "id": "SstoryQuestions", "method": "disableImageButtons", "parms": "" , "features": ""},
 
 
 //        "EMPTY_ACTION":    {"type": "COMMAND", "cmd": "NOOP"},

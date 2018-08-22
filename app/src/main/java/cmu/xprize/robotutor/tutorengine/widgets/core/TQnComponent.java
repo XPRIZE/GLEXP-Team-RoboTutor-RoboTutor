@@ -68,34 +68,34 @@ public class TQnComponent extends CQn_Component implements IBehaviorManager, ITu
 
 
         //UHQ
-    private int                     mCurrPara;
-    private int                     mCurrLine;
-    private int                     mCurrWord;
-    private int                     mHeardWord;
-    private String[]                wordsToSpeak;                        // current sentence words to hear
-
-
-    private CASB_Narration[]        rawNarration;                        // The narration segmentation info for the active sentence
-    private String                  rawSentence;                         // currently displayed sentence that need to be recognized
-    private CASB_Seg                narrationSegment;
-    private String[]                splitSegment;
-    private int                     splitIndex = TCONST.INITSPLIT;
-    private boolean                 endOfSentence = false;
-    private ArrayList<String>       spokenWords;
-    private int                     utteranceNdx;
-    private int                     segmentNdx;
-
-    private int                     numUtterance;
-    private CASB_Narration          currUtterance;
-    private CASB_Seg[]              segmentArray;
-    private int                     numSegments;
-    private int                     utterancePrev;
-    private int                     segmentPrev;
-    private int                     segmentCurr;
-
-    private int                     mParaCount;
-    private int                     mLineCount;
-    private int                     attemptNum = 1;
+//    private int                     mCurrPara;
+//    private int                     mCurrLine;
+//    private int                     mCurrWord;
+//    private int                     mHeardWord;
+//    private String[]                wordsToSpeak;                        // current sentence words to hear
+//
+//
+//    private CASB_Narration[]        rawNarration;                        // The narration segmentation info for the active sentence
+//    private String                  rawSentence;                         // currently displayed sentence that need to be recognized
+//    private CASB_Seg                narrationSegment;
+//    private String[]                splitSegment;
+//    private int                     splitIndex = TCONST.INITSPLIT;
+//    private boolean                 endOfSentence = false;
+//    private ArrayList<String>       spokenWords;
+//    private int                     utteranceNdx;
+//    private int                     segmentNdx;
+//
+//    private int                     numUtterance;
+//    private CASB_Narration          currUtterance;
+//    private CASB_Seg[]              segmentArray;
+//    private int                     numSegments;
+//    private int                     utterancePrev;
+//    private int                     segmentPrev;
+//    private int                     segmentCurr;
+//
+//    private int                     mParaCount;
+//    private int                     mLineCount;
+//    private int                     attemptNum = 1;
 
 
 
@@ -927,7 +927,6 @@ public class TQnComponent extends CQn_Component implements IBehaviorManager, ITu
         super.startStory();
     }
 
-
         public TBoolean test() {
         boolean correct = isCorrect();
 
@@ -943,6 +942,14 @@ public class TQnComponent extends CQn_Component implements IBehaviorManager, ITu
         public void setPageFlipButton(String command) {
         super.setPageFlipButton(command);
     }
+
+        public void enableImageButtons(){
+            super.enableImageButtons();
+        }
+
+        public void disableImageButtons(){
+            super.disableImageButtons();
+        }
 
         public void setSpeakButton(String command) {
         super.setSpeakButton(command);
@@ -1107,8 +1114,32 @@ public class TQnComponent extends CQn_Component implements IBehaviorManager, ITu
         }
 
         @Override
+        public void displayClozeQuestion(){
+            mViewManager.displayClozeQuestion();
+        }
+
+        @Override
+        public void setPictureMatch() {
+            super.setPictureMatch();
+        }
+
+        @Override
+        public void setClozePage() {
+            super.setClozePage();
+        }
+
+        @Override
         public void hasClozeDistractor(){
             mViewManager.hasClozeDistractor();
+        }
+
+        public void hasQuestion(){
+            mViewManager.hasQuestion();
+        }
+
+        @Override
+        public void displayPictureMatching(){
+            mViewManager.displayPictureMatching();
         }
 
         @Override

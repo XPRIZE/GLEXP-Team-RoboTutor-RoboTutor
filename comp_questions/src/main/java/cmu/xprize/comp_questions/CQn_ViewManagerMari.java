@@ -242,6 +242,16 @@ public class CQn_ViewManagerMari implements ICQn_ViewManager, ILoadableObject {
 
     }
 
+    @Override
+    public void enableImageButtons(){
+
+    }
+
+    @Override
+    public void disableImageButtons(){
+
+    }
+
     public void execCommand(String command, Object target ) {
 
         long    delay  = 0;

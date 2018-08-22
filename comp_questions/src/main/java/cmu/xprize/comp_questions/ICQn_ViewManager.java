@@ -95,6 +95,10 @@ public interface ICQn_ViewManager extends ILoadableObject {
 
     public void setPageFlipButton(String command);
 
+    public void enableImageButtons();
+
+    public void disableImageButtons();
+
     public void execCommand(String _command, Object _target);
 
 //    public int getmCurrPara();

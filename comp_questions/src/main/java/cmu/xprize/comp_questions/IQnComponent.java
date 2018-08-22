@@ -72,6 +72,10 @@ public interface IQnComponent {
 
     void hasClozeDistractor();
 
+    void enableImageButtons();
+
+    void disableImageButtons();
+
     void hasQuestion();
 
 }
