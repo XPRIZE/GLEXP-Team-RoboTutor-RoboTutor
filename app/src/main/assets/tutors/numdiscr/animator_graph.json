@@ -56,6 +56,20 @@
           "tracks": [
             {"name": "POINT AT CORRECT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "pointAtCorrectDigit"},
             {"name": "point at this number", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "so tap on this number.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
+
+            // ND_SCAFFOLD NEXT(1) make sure to check for correct features
+            {"name": "hundy boi", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.hun}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
+            {"name": "and",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Na.mp3",            "soundpackage":"xprize",        "volume": 1.0, "mode":"flow"},
+            {"name": "tenny boi", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.ten}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
+            {"name": "and",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Na.mp3",            "soundpackage":"xprize",        "volume": 1.0, "mode":"flow"},
+            {"name": "wunny boi", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.one}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
+            // so
+            // {mia x}
+            // na
+            // {y-ini}
+            // na
+            // {z}
+            // is the bigger number
             {"name": "CLEAR HIGHLIGHT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "clearHighlight"},
             {"name": "DISABLE TAPPING", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "enableUserInput"}
           ]
@@ -209,6 +223,7 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#ND_PLAYCORRECT:String", "features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Correct.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
             {"name": "ND_WRONG", "type": "COMMAND", "id": "SNumDiscr", "method": "doTheRightThing", "parms": "", "features":""},
+            // ND_SCAFFOLD say the correct number
             {"type": "COMMAND", "cmd": "WAIT"  }
 
           ],
@@ -224,7 +239,6 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#ND_PLAYWRONG:String", "features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
-            // ND_SCAFFOLD put feedback here
             {"name": "ND_WRONG", "type": "COMMAND", "id": "SNumDiscr", "method": "doTheWrongThing", "parms": "", "features":""},
             {"type": "COMMAND", "cmd": "WAIT"  }
 

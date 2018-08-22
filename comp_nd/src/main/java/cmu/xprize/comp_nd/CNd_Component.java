@@ -40,12 +40,12 @@ import static cmu.xprize.util.MathUtil.getTensDigit;
 public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
 
-    // ND_SCAFFOLD BEHAVIOR
+    // ND_SCAFFOLD √√√ BEHAVIOR
     // (3) if (isWE), perform Scaffolding // put it right in updateStimulus (probably) NEXT NEXT NEXT
     // (8) when incorrect answer, perform Scaffolding // put it right in xyz
     // when incorrect answer, don't perform the final step of telling them which number
 
-    // ND_SCAFFOLD PROMPTS
+    // ND_SCAFFOLD √√√ PROMPTS
     // AUDIO:
         // PROMPTS: see ~/RoboTutor/ProtoAssets/ProtoAssets_ND/assets/audio/sw/cmu/xprize/proto_nd
 
@@ -252,8 +252,17 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         _layoutManager.displayDigits(dataset[0], dataset[1]);
         _layoutManager.displayConcreteRepresentations(dataset[0], dataset[1]);
 
-        Log.wtf("CHOOSE_ME", "y u no work?");
         _layoutManager.enableChooseNumber(true);
+
+        // ND_SCAFFOLD √√√ do something to publish values, for when we need to speak them
+        // to publish:
+        // - hundreds
+        boolean chooseLeft = dataset[0] > dataset[1];
+        publishValue(".hun", String.valueOf((chooseLeft ? getHunsDigit(dataset[0]) : getHunsDigit(dataset[1])) * 100));
+        publishValue(".ten", String.valueOf((chooseLeft ? getTensDigit(dataset[0]) : getHunsDigit(dataset[1])) * 10));
+        publishValue(".one", String.valueOf((chooseLeft ? getHunsDigit(dataset[0]) : getHunsDigit(dataset[1]))));
+        // - twenties
+        // - ones
 
     }
 

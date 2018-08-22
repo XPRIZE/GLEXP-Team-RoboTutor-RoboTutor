@@ -739,8 +739,8 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
             //Publish features and values for each digit of first operand so that audios for each digit can be played separately
             if(operand1Digits[0] >= 100) {
-                publishFeature(BP_CONST.FTR_ANS_STIM_ONE_HUNDREDS);
-                publishValue(BP_CONST.ANS_VAR_STIM_ONE_HUNDREDS, operand1Digits[0]);
+                publishFeature(BP_CONST.FTR_ANS_STIM_ONE_HUNDREDS); // ND_SCAFFOLD NEXT(1) make sure to publish the right features (e.g.. don't play hundred when it's a 2digit)
+                publishValue(BP_CONST.ANS_VAR_STIM_ONE_HUNDREDS, operand1Digits[0]); // ND_SCAFFOLD √√√ mimic this
             }
             else {
                 removeFeature(BP_CONST.FTR_ANS_STIM_ONE_HUNDREDS);

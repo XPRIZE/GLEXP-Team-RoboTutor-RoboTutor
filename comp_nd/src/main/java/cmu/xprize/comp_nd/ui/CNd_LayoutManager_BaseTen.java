@@ -1,5 +1,8 @@
 package cmu.xprize.comp_nd.ui;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
@@ -9,15 +12,12 @@ import android.widget.TextView;
 
 import cmu.xprize.comp_nd.CNd_Component;
 import cmu.xprize.comp_nd.R;
-import cmu.xprize.util.MathUtil;
 
-import static cmu.xprize.comp_nd.ND_CONST.HIGHLIGHT_HUNS;
 import static cmu.xprize.comp_nd.ND_CONST.HUN_DIGIT;
 import static cmu.xprize.comp_nd.ND_CONST.LEFT_NUM;
 import static cmu.xprize.comp_nd.ND_CONST.MAX_HUNS;
 import static cmu.xprize.comp_nd.ND_CONST.MAX_ONES;
 import static cmu.xprize.comp_nd.ND_CONST.MAX_TENS;
-import static cmu.xprize.comp_nd.ND_CONST.NO_DIGIT;
 import static cmu.xprize.comp_nd.ND_CONST.ONE_DIGIT;
 import static cmu.xprize.comp_nd.ND_CONST.RIGHT_NUM;
 import static cmu.xprize.comp_nd.ND_CONST.TEN_DIGIT;
@@ -235,49 +235,106 @@ public class CNd_LayoutManager_BaseTen implements CNd_LayoutManagerInterface {
     }
 
 
-    private String currentHighlight;
 
     private void setDebugButtonBehavior() {
         _component.findViewById(R.id.debug_nd_1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (currentHighlight == null) {
-                    highlightDigit(HUN_DIGIT);
-                    currentHighlight = HUN_DIGIT;
-                } else {
-                    switch(currentHighlight) {
-
-                        case HUN_DIGIT:
-                            highlightDigit(TEN_DIGIT);
-                            currentHighlight = TEN_DIGIT;
-                            break;
-
-                        case TEN_DIGIT:
-                            highlightDigit(ONE_DIGIT);
-                            currentHighlight = ONE_DIGIT;
-                            break;
-
-                        case ONE_DIGIT:
-                            highlightDigit(NO_DIGIT);
-                            currentHighlight = null;
-                            break;
-
-                    }
-                }
+                final TextView htv = _component.findViewById(R.id.symbol_left_hun);
+                final TextView ttv = _component.findViewById(R.id.symbol_left_ten);
+                final TextView otv = _component.findViewById(R.id.symbol_left_one);
+                makeNumbersBig(htv, ttv, otv, "left");
             }
         });
 
-
-
-        // ND_SCAFFOLD move this to scaffolding
         _component.findViewById(R.id.debug_nd_2).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
-                _component.applyBehaviorNode(HIGHLIGHT_HUNS);
+
+                moveTextboxToCenter();
+            }
+        });
+
+
+        _component.findViewById(R.id.debug_nd_3).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                final TextView htv = _component.findViewById(R.id.symbol_right_hun);
+                final TextView ttv = _component.findViewById(R.id.symbol_right_ten);
+                final TextView otv = _component.findViewById(R.id.symbol_right_one);
+                makeNumbersBig(htv, ttv, otv, "right");
+
             }
         });
     }
+
+    private AnimatorSet mCurrentAnimator;
+
+    private AnimatorSet moveTextboxToCenter() {
+
+        final View rightDigits = _component.findViewById(R.id.symbol_right_num);
+
+        final View endView = _component.findViewById(R.id.symbol_center_num);
+        endView.setVisibility(View.INVISIBLE);
+
+        float dx = rightDigits.getX() - endView.getX();
+        float dy = rightDigits.getY() - endView.getY();
+
+        endView.setTranslationX(-dx);
+        endView.setTranslationX(-dy);
+
+        AnimatorSet xy = new AnimatorSet();
+
+        xy.playTogether(
+                ObjectAnimator.ofFloat(endView, "translationX", 0),
+                ObjectAnimator.ofFloat(endView, "translationY", 0)
+        );
+
+        return xy;
+
+
+    }
+
+    /**
+     * See https://stackoverflow.com/questions/30324135/animation-of-android-textviews-text-size-and-not-the-entire-textview
+     */
+    private void makeNumbersBig(final TextView htv, final TextView ttv, final TextView otv, String lr) {
+        final float startSize = 100;
+        final float endSize = 400;
+
+        long animationDuration = 2000; // Animation duration in ms
+
+
+        AnimatorSet set = new AnimatorSet();
+
+        boolean zoom = lr.equals("left") ? _lZoom : _rZoom;
+        ValueAnimator digitAnimator = ValueAnimator.ofFloat(!zoom? startSize : endSize, !zoom ? endSize : startSize);
+
+        if(lr.equals("left")) _lZoom = !_lZoom;
+        else _rZoom = !_rZoom;
+
+        ValueAnimator.AnimatorUpdateListener myUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float animatedValue = (float) valueAnimator.getAnimatedValue();
+                htv.setTextSize(animatedValue);
+                ttv.setTextSize(animatedValue);
+                otv.setTextSize(animatedValue);
+            }
+        };
+        digitAnimator.addUpdateListener(myUpdateListener);
+
+        set.playTogether(digitAnimator, moveTextboxToCenter());
+        set.setDuration(animationDuration);
+
+        set.start();
+    }
+
+    private boolean _lZoom = false;
+    private boolean _rZoom = false;
 }

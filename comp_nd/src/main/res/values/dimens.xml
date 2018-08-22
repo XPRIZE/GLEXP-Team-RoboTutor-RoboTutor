@@ -16,7 +16,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="ten_bar_filler">0.5dp</dimen>
     <dimen name="one_block_filler">2dp</dimen>
-    <dimen name="nd_one_block_size">9dp</dimen>
+    <dimen name="nd_one_block_size">8dp</dimen>
 
     <dimen name="add_subtract_100_size">90dp</dimen>
     <dimen name="add_subtract_10_height">90dp</dimen>
@@ -31,4 +31,6 @@
     <dimen name="nd_100_size">100dp</dimen>
     <dimen name="nd_10_height">100dp</dimen>
     <dimen name="nd_digit_spacer">0dp</dimen>
+    <dimen name="nd_digit_textsize">100sp</dimen>
+    <dimen name="nd_digit_textsize_zoom">400sp</dimen>
 </resources>

@@ -22,6 +22,7 @@
 	"soundMap" : {
 		"letters":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/literacy"},
 		"numbers": {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/numbers"},
+		"xprize":        {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global"},
 		"proto": {"type": "SOUNDMAP", "language": "LANG_AUTO", "path": "cmu/xprize/proto_nd"}
 	},
 
