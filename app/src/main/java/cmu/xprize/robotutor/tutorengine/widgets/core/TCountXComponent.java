@@ -300,8 +300,20 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
         Log.d("PlayChime", currentChime);
         scope.addUpdateVar("CountChime", new TString(currentChime));
         scope.addUpdateVar("OctaveChime", new TString(octaveChime));
-        scope.addUpdateVar("CurrentCount", new TString(String.valueOf(currentCount)));
+        if (mode == "placevalue"){
+            scope.addUpdateVar("CurrentCount", new TString(String.valueOf(currentValue)));
+        } else {
+            scope.addUpdateVar("CurrentCount", new TString(String.valueOf(currentCount)));
+        }
 
+
+        postEvent(COUNTX_CONST.PLAY_CHIME);
+    }
+
+    @Override
+    public void playCount(int count){
+        TScope scope = mTutor.getScope();
+        scope.addUpdateVar("CurrentCount", new TString(String.valueOf(count)));
         postEvent(COUNTX_CONST.PLAY_CHIME);
     }
 
@@ -313,6 +325,9 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
         scope.addUpdateVar("FinalCount", new TString(String.valueOf(currentCount)));
 
     }
+
+
+
 
 
 

@@ -11,8 +11,22 @@ public class COUNTX_CONST {
     // drawing parameters
     public static final int COLOR_PINK = Color.rgb(255, 180, 180);
     public static final int COLOR_BACKGROUND = Color.rgb(230, 230, 230);
+    public static final int COLOR_DARKGREEN =  Color.rgb(144,238,144);
+    public static final int COLOR_LIGHTGREEN =  Color.rgb(239, 252, 240);
+    public static final int COLOR_BLUE = Color.rgb(51, 181, 229);
+    public static final int TEXT_SIZE = 150;
+    public static final int RESULT_SIZE = 200;
+
+    public static final int COLOR_GREY = Color.rgb(238, 238, 238);
+    public static final int COLOR_DARKGREY = Color.rgb(147, 147, 147);
+
     public static final int DRAWABLE_RADIUS = 100;
     public static final int BOX_MARGIN = 100;
+    public static final int BOX_MARGINRIGHT = 100;
+    public static final int BOX_MARGINBOTTOM = 300;
+    public static final int BOX_TEXTBOTTOM = 100;
+
+    public static final int BOXM = 50;
     public static final int GRID_MARGIN = 30;
     public static final float BOX_BOUNDARY_STROKE_WIDTH = 5.0f;
 

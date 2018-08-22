@@ -17,6 +17,7 @@ class TenFrame {
     int holeWidth;
     int holeHeight;
     boolean line;
+    boolean placevalue;
 
     TenFrame(int startX, int startY, int holeWidth, int holeHeight,boolean isline) {
         this.startX = startX;
@@ -24,7 +25,18 @@ class TenFrame {
         this.holeWidth = holeWidth;
         this.holeHeight = holeHeight;
         this.line = isline;
+        this.placevalue = false;
     }
+
+    TenFrame(int startX, int startY, int holeWidth, int holeHeight,boolean isline, boolean placevalue) {
+        this.startX = startX;
+        this.startY = startY;
+        this.holeWidth = holeWidth;
+        this.holeHeight = holeHeight;
+        this.line = isline;
+        this.placevalue = placevalue;
+    }
+
 
     /** holds the coordinates for a TenFrame **/
     class XY {
@@ -44,20 +56,57 @@ class TenFrame {
      * @return
      */
     XY getLocationOfIthObject(int i) {
-        if (i <= 0 || i > 10) {
-            return null;
-        } else if (i < 6 || line) {
-            // first row
-            int x = startX + holeWidth * (i - 1) + holeWidth / 2;
-            int y = startY + holeHeight / 2;
-            return new XY(x, y);
+        if (placevalue){
+            if (line){
+                if (i < 0 || i > 10) {
+                    return null;
+                } else {
+                    int x = startX+holeWidth/2;
+                    int y = startY + holeHeight*(i-1)+holeHeight/2;
+                    return new XY (x,y);
+
+                }
+
+            } else {
+                if (i < 0 || i > 9) {
+                    return null;
+                } else if (i<4) {
+                    //first col
+
+                    int x = startX+holeWidth/2;
+                    int y = startY+holeHeight*(i-1)+holeHeight/2;
+                    return new XY(x, y);
+                } else if (i<7) {
+                    int x = startX+holeWidth*3/2;
+                    int y = startY + holeHeight*(i-4)+holeHeight/2;
+                    return new XY (x,y);
+
+                } else{
+                    int x = startX+holeWidth*5/2;
+                    int y = startY + holeHeight*(i-7)+holeHeight/2;
+                    return new XY (x,y);
+                }
+
+            }
+
         } else {
-            // second row
-            int x = startX + holeWidth * (i - 6) + holeWidth / 2;
-            int y = startY + holeHeight * 3/2;
-            return new XY (x,y);
+            if (i <= 0 || i > 10) {
+                return null;
+            } else if (i < 6 || line) {
+                // first row
+                int x = startX + holeWidth * (i - 1) + holeWidth / 2;
+                int y = startY + holeHeight / 2;
+                return new XY(x, y);
+            } else {
+                // second row
+                int x = startX + holeWidth * (i - 6) + holeWidth / 2;
+                int y = startY + holeHeight * 3/2;
+                return new XY (x,y);
+
+            }
 
         }
+
     }
 
     /**

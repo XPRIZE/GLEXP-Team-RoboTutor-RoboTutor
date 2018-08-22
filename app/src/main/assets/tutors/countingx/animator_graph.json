@@ -184,6 +184,8 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE2:String", "features":""},
 
+            {"type": "COMMAND", "id": "SCountingX", "method": "demonstrateTenFrame", "parms":"", "features":""},
+
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{FinalCount}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"flow", "features": ""},
 
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE2:String", "features":""}

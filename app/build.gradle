@@ -85,107 +85,10 @@ android {
 
         // This release includes the DEBUG selector and other various debug support features.
         //
-        release_dbg {
-            buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, FALSE
-            buildConfigField BOOLEAN, SHOW_TUTORVERSION, TRUE
-            buildConfigField BOOLEAN, SHOW_DEBUGLAUNCHER, TRUE
-            buildConfigField BOOLEAN, LANGUAGE_SWITCH, TRUE
-            buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
-            buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_UNDEFINED
-            buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
 
-            debuggable true
-            signingConfig signingConfigs.android
-        }
-
-        release_dbg_no_demo {
-            buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, FALSE
-            buildConfigField BOOLEAN, SHOW_TUTORVERSION, TRUE
-            buildConfigField BOOLEAN, SHOW_DEBUGLAUNCHER, TRUE
-            buildConfigField BOOLEAN, LANGUAGE_SWITCH, TRUE
-            buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
-            buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_UNDEFINED
-            buildConfigField BOOLEAN, SHOW_DEMO_VIDS, FALSE
-
-            signingConfig signingConfigs.android
-        }
-
-        // These releases will remove the language selection toggle switch if present in the UI
-        // They also override the LANG_<ID> in the enginedescriptor to force a default language
-        //
-        release_sw {
-            buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, TRUE
-            buildConfigField BOOLEAN, SHOW_TUTORVERSION, TRUE
-            buildConfigField BOOLEAN, SHOW_DEBUGLAUNCHER, FALSE
-            buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
-            buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
-            buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
-            buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
-
-            debuggable true
-            signingConfig signingConfigs.android
-        }
-
-        release_sw_xprize {
-            buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, TRUE
-            buildConfigField BOOLEAN, SHOW_TUTORVERSION, FALSE
-            buildConfigField BOOLEAN, SHOW_DEBUGLAUNCHER, FALSE
-            buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
-            buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
-            buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
-            buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
-
-            debuggable true
-            signingConfig signingConfigs.android
-        }
-
-        release_en {
-            buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, TRUE
-            buildConfigField BOOLEAN, SHOW_TUTORVERSION, TRUE
-            buildConfigField BOOLEAN, SHOW_DEBUGLAUNCHER, FALSE
-            buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
-            buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
-            buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
-            buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
-
-            signingConfig signingConfigs.android
-        }
-
-        release_en_xprize {
-            buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, TRUE
-            buildConfigField BOOLEAN, SHOW_TUTORVERSION, FALSE
-            buildConfigField BOOLEAN, SHOW_DEBUGLAUNCHER, FALSE
-            buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
-            buildConfigField BOOLEAN, NO_ASR_APPS, FALSE
-            buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_ENGLISH
-            buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
-
-            signingConfig signingConfigs.android
-        }
-
-        release_sw_noasr {
-            buildConfigField BOOLEAN, LANGUAGE_OVERRIDE, TRUE
-            buildConfigField BOOLEAN, SHOW_TUTORVERSION, TRUE
-            buildConfigField BOOLEAN, SHOW_DEBUGLAUNCHER, FALSE
-            buildConfigField BOOLEAN, LANGUAGE_SWITCH, FALSE
-            buildConfigField BOOLEAN, NO_ASR_APPS, TRUE
-            buildConfigField STRING, LANGUAGE_FEATURE_ID, LANGUAGE_SWAHILI
-            buildConfigField BOOLEAN, SHOW_DEMO_VIDS, TRUE
-        }
     }
 
     // define apk naming behavior
-    applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            def project = "robotutor"
-            def SEP = "."
-            def buildType = variant.variantData.variantConfiguration.buildType.name
-            def version = variant.versionName
-
-            def newApkName = project + SEP + buildType + SEP + version + ".apk"
-            output.outputFile = new File(output.outputFile.parent, newApkName)
-        }
-    }
 
     lintOptions {
         // set to true to turn off analysis progress reporting by lint

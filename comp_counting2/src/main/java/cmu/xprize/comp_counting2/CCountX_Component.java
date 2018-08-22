@@ -11,6 +11,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -43,7 +44,13 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     private RelativeLayout Scontent;
     private CCountX_SurfaceView surfaceView;
     private TextView counterText;
+    private TextView counterTextTen;
+    private TextView counterTextHundred;
+    private TextView counterTextSum;
     private TextView stimulusText;
+    protected TextView checkOne;
+    protected TextView checkTen;
+    protected TextView checkHundred;
 
     // DataSource Variables
     protected int _dataIndex = 0;
@@ -54,10 +61,14 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     protected int countStart;
     protected int countTarget;
     protected int currentCount;
+    protected int currentValue;
     protected int delta;
     protected int tenPower;
     protected int drawIndex;
+    protected String mode = "";
+    protected float bedge;
     protected boolean tenInited=false;
+
 
     // json loadable
     public String bootFeatures;
@@ -112,6 +123,9 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         surfaceView = (CCountX_SurfaceView) findViewById(R.id.imageSurface);
         surfaceView.setComponent(this);
         counterText = (TextView) findViewById(R.id.counterText);
+        checkOne = (TextView) findViewById(R.id.checkOne);
+        checkTen = (TextView) findViewById(R.id.checkTen);
+        checkHundred = (TextView) findViewById(R.id.checkHundred);
         stimulusText = (TextView) findViewById(R.id.stimulusText);
 
         bManager = LocalBroadcastManager.getInstance(getContext());
@@ -178,7 +192,11 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
 
         resetView();
-        surfaceView.initTenFrame();
+        if(mode != "placevalue"){
+        surfaceView.initTenFrame();}
+        else{
+            surfaceView.initTenFramePlaceValue();
+        }
         //surfaceView.resetCounter(); // functionality already called above
 
         // reset vieresetView();
@@ -198,15 +216,23 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         task = data.task;
         layout = data.layout; // NOV_1 make this consistent w/ Anthony
         countStart = data.dataset[0];
-
-        if (data.tenPower.equals("one")){
-            tenPower = 1;
-        } else if (data.tenPower.equals("ten")){
-            tenPower = 10;
-        } else {
+        if (data.tenPower.length==1){
+            mode = "countingx";
+            if (data.tenPower.equals("one")){
+                tenPower = 1;
+            } else if (data.tenPower.equals("ten")){
+                tenPower = 10;
+            } else {
                 tenPower = 100;
+            }
+            countTarget = data.dataset[1]*tenPower;
+
+        } else {
+            mode = "placevalue";
+            countTarget = data.dataset[1];
+            tenPower = 1;
         }
-        countTarget = data.dataset[1]*tenPower;
+
 
         Log.d(TCONST.COUNTING_DEBUG_LOG, "target=" + countTarget + ";index=" + _dataIndex);
     }
@@ -217,11 +243,18 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     protected void resetView() {
 
         // reset the TextView
-        String initialCount = String.valueOf(countStart);
-        counterText.setText(initialCount);
+
+        if (mode=="placevalue"){
+            surfaceView.clearObjectsToNumber(countStart);
+        } else {
+            String initialCount = String.valueOf(countStart);
+            counterText.setText(initialCount);
+            surfaceView.clearObjectsToNumber(countStart);
+        }
+
 
         // reset the surfaceView
-        surfaceView.clearObjectsToNumber(countStart);
+
     }
 
     public void updateCount(int count) {
@@ -232,6 +265,52 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
         if(currentCount == countTarget) {
             applyBehavior(COUNTX_CONST.DONE_COUNTING_TO_N);
+        }
+    }
+
+    public void updateCountPlaceValue(int hundred, int ten, int one,int currentV){
+//        String initialOne = String.valueOf(one);
+//        counterText.setText(initialOne);
+//
+//        String initialTen = String.valueOf(ten*10);
+//        counterTextTen.setText(initialTen);
+//
+//        String initialHundred = String.valueOf(hundred*100);
+//        counterTextHundred.setText(initialHundred);
+//
+//        String sum = String.valueOf(hundred*100+ten*10+one);
+//        counterTextSum.setText(sum);
+
+        if(one == countTarget%10) {
+            surfaceView.reachTarget[2] = true;
+        }
+
+        if(ten*10 == countTarget%100-countTarget%10){
+            surfaceView.reachTarget[1] = true;
+
+        }
+
+        if(hundred*100 == countTarget-countTarget%100){
+            surfaceView.reachTarget[0] = true;
+
+        }
+        currentValue = currentV;
+        if(surfaceView.reachTarget[0] && surfaceView.reachTarget[1] && surfaceView.reachTarget[2]) {
+            applyBehavior(COUNTX_CONST.DONE_COUNTING_TO_N);
+        }
+    }
+
+    public void setCheck(boolean hundred,boolean ten,boolean one){
+        if (hundred){
+            checkHundred.setVisibility(View.VISIBLE);
+        }
+
+        if(ten){
+            checkTen.setVisibility(View.VISIBLE);
+        }
+
+        if(one){
+            checkOne.setVisibility(View.VISIBLE);
         }
     }
 
@@ -283,6 +362,10 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
     }
 
+    public void playCount(int count){
+
+    }
+
     /**
      * Overridden by child class.
      */
@@ -290,11 +373,55 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
     }
 
-    public void demonstrateTenFrame() {
+    public void setBedge(float length){
+        if(bedge == 0){
+            bedge = length;
+        }
+    }
 
-        surfaceView.showTenFrame();
-        isRunning = true;
-        mainHandler.post(animationRunnable);
+    public void demonstrateTenFrame() {
+        if (mode == "placevalue"){
+            checkHundred.setVisibility(View.INVISIBLE);
+            checkTen.setVisibility(View.INVISIBLE);
+            checkOne.setVisibility(View.INVISIBLE);
+            surfaceView.displayAddition("hundred");
+            playCount(countTarget-countTarget%100);
+            new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            surfaceView.displayAddition("ten");
+                            playCount(countTarget%100-countTarget%10);
+                        }
+                    },
+                    4000
+            );
+
+            new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            surfaceView.displayAddition("one");
+                            playCount(countTarget%10);
+                        }
+                    },
+                    8000
+            );
+            new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            surfaceView.displayAddition("final");
+                            playCount(countTarget);
+                        }
+                    },
+                    12000
+            );
+        } else {
+            surfaceView.showTenFrame();
+            isRunning = true;
+            mainHandler.post(animationRunnable);
+        }
         //surfaceView.moveItemsToTenFrame();
     }
 
