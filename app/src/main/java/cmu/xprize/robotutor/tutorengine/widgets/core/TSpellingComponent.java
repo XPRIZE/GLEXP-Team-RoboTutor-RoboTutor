@@ -52,7 +52,7 @@ public class TSpellingComponent extends CSpelling_Component implements ITutorObj
 
     private HashMap<String,String>  _StringVar  = new HashMap<>();
     private HashMap<String,Integer> _IntegerVar = new HashMap<>();
-    private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
+//    private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
 
     static final String TAG = "TSpellingComponent";
 

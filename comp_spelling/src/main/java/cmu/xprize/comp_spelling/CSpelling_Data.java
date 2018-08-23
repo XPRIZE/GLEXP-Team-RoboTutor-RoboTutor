@@ -18,6 +18,7 @@ public class CSpelling_Data implements ILoadableObject{
     public String level;
     public String task;
     public String layout;
+    public String image;
     public String[] word;
 
 

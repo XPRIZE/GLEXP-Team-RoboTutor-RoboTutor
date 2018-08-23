@@ -2,6 +2,7 @@ package cmu.xprize.comp_spelling;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.content.Intent;
 import android.graphics.PointF;
 import android.support.constraint.ConstraintLayout;
@@ -60,8 +61,17 @@ public class CLetter_Tile extends TextView {
 
         this.setText(" " + _letter + " ");
         this.setId(letterIndex);
-        this.setTextSize(TypedValue.COMPLEX_UNIT_SP, 60);
-        this.setBackgroundColor(17170456);
+        this.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50);
+        this.setTextColor(Color.WHITE);
+        this.setBackgroundColor(Color.rgb(240, 200, 65));
+        this.setPadding(15,15,15,15);
+
+        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        llp.setMargins(50, 0, 0, 0);
+        llp.width = 200;
+        llp.height = 200;
+        this.setLayoutParams(llp);
+
 //        letter.setBackgroundColor(getResources().getColor(R.color.abc_tint_switch_thumb));
 
 //        LayoutParams layoutParams = this.getLayoutParams();

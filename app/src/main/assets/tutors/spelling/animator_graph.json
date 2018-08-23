@@ -1,5 +1,6 @@
 {
   "animatorMap": {
+
     "COMMENT": "Spelling",
 
     "spelling": {
@@ -52,22 +53,46 @@
           "mapname": "USERINPUT",
           "preenter": [],
           "preexit": [],
-          "edges":
-                  [
-                    {"constraint": "FTR_EOD", "edge": "NEXT_SCENE"},
-                    {"constraint": "", "edge":"UPDATE_STIMULUS"}
-
-                  ]
+          "edges": [
+            {"constraint": "FTR_CORRECT", "edge":"CORRECT"},
+            {"constraint": "FTR_INCORRECT", "edge":"INCORRECT"}
+          ]
         },
 
-        "PROBLEMCORRECT": {
-          "COMMENT": "When user inputs a correct answer...",
+        "CORRECT": {
+          "COMMENT": "When user selects a correct syllable",
           "type": "node",
           "maptype": "moduleMap",
-          "mapname": "PLAYCOMPLETE",
+          "mapname": "PLAYCORRECT",
           "preenter": [],
           "preexit": [],
           "edges": [
+            {"constraint": "FTR_EOP", "edge": "NEXT_PROBLEM"},
+            {"constraint": "", "edge": "USER_INPUT"}
+          ]
+        },
+
+        "INCORRECT": {
+          "COMMENT": "When user selects an incorrect syllable",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "PLAYINCORRECT",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "", "edge": "USER_INPUT"}
+          ]
+        },
+
+        "NEXT_PROBLEM": {
+          "COMMENT": "",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "NEXTPROBLEM",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "", "edge": "UPDATE_STIMULUS"}
           ]
         },
 
@@ -76,10 +101,9 @@
           "COMMENT": "When module is complete - move to next scene",
           "maptype": "actionMap",
           "mapname": "NEXTSCENE",
-          "preenter": [],
+          "preenter": ["PLAYEXITCLIP"],
           "preexit": [],
           "edges": [
-
           ]
         }
 
@@ -94,20 +118,49 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
-              
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""}
-
-
-            ]
+//            {"name":"Intro clip", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+          ]
         },
 
         "UPDATESTIMULUS": {
           "type": "MODULE",
           "reuse": true,
           "tracks": [
-              
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""}
-    
+//            {"name":"Beginning of item clip", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+
+          ]
+        },
+
+        "PLAYCORRECT": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#PLAYCORRECT:String", "features":""},
+            {"name":"Read syllable", "type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","mode":"flow", "features": ""}
+          ]
+        },
+
+        "PLAYINCORRECT": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#PLAYINCORRECT:String", "features":""},
+            {"name":"Read syllable", "type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","mode":"flow", "features": ""},
+            {"name": "After incorrect clip", "type": "AUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+          ]
+        },
+
+        "PLAYEXITCLIP": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#PLAYEXITCLIP:String", "features":""},
+            {"name": "Exit clip", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
           ]
         },
 
@@ -116,44 +169,8 @@
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#NEXT_PROBLEM:String", "features":""},
-
-            {"type": "COMMAND", "id": "SSpelling", "method": "next", "features": ""}
-          ]
-        },
-
-        "PLAYCOMPLETE": {
-          "type": "MODULE",
-          "reuse": true,
-          "COMMENT": "TBD",
-          "tracks": [
-            
-              {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE:String", "features":""},
-
-
-            {"type": "COMMAND", "cmd": "WAIT"}
-          ]
-        },
-
-        "PLAYWRONG": {
-          "type": "MODULE",
-          "reuse": true,
-          "COMMENT": "TBD",
-          "tracks": [
-
-              {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#PLAYWRONG:String", "features":""},
-
-          ]
-        },
-
-        "EMPTYMODULE": {
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "????",
-          "tracks": [
-            
-              {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#EMPTYMODULE:String", "features":""}
-              
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#NEXTPROBLEM:String", "features":""},
+            {"name": "Problem correct clip", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
           ]
         },
 
@@ -164,12 +181,10 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#WAIT_FOR_INPUT:String", "features":""},
 
-            {"type": "COMMAND", "id": "SSpelling", "method": "setVolatileBehavior", "parms": "DONE_WITH_WORD:String|NEXTNODE:String", "features": ""}, // NAPOL this is how you go to the next node in an animator graph
-
+            {"type": "COMMAND", "id": "SSpelling", "method": "setVolatileBehavior", "parms": "NEXT_NODE:String|NEXTNODE:String", "features": ""},
             {"type": "COMMAND", "cmd": "WAIT"}
           ]
         }
-
       },
 
       "actionMap": {
@@ -183,19 +198,33 @@
         "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"},
 
         "NEXTSCENE": {"type":"COMMAND", "cmd": "NEXTSCENE"}
-
       },
 
       "constraintMap": {
-
         "COMMENT": "@@@@@  CConstraints @@@@@ ",
 
         "FTR_EOD": {
           "type": "CONDITION",
           "test": "FTR_EOD"
-        }
+        },
 
+        // End of Problem
+        "FTR_EOP": {
+          "type": "CONDITION",
+          "test": "FTR_EOP"
+        },
+
+        "FTR_CORRECT":{
+          "type": "CONDITION",
+          "test":"FTR_CORRECT"
+        },
+
+        "FTR_INCORRECT":{
+          "type": "CONDITION",
+          "test":"FTR_INCORRECT"
+        }
       }
     }
   }
 }
+
