@@ -2,6 +2,8 @@ package cmu.xprize.comp_spelling;
 
 import org.json.JSONObject;
 
+import java.util.List;
+
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -16,7 +18,7 @@ public class CSpelling_Data implements ILoadableObject{
     public String level;
     public String task;
     public String layout;
-    public String word;
+    public String[] word;
 
 
     @Override

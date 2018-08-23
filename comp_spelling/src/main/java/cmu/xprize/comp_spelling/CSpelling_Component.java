@@ -45,7 +45,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     protected String task;
     protected String layout;
 
-    protected String _word;
+    protected List<String> _word;
     protected int _currentWordIndex ;
     protected List<String> _selectableLetters;
     protected List<String> _selectedLetters;
@@ -67,7 +67,6 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 
     private LocalBroadcastManager bManager;
 
-
     static final String TAG = "CSpelling_Component";
 
 
@@ -88,7 +87,8 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     public void onLetterTouch(String letter, int index) {
         Log.d("ddd", "touch: " + letter);
 
-        String current = "" + _word.charAt(_currentWordIndex);
+        String current = "" + _word.get(_currentWordIndex);
+        Log.d("ddd", "current index: " + _currentWordIndex);
         Log.d("ddd", "current: " + current);
 
         if (letter.equalsIgnoreCase(current)) {
@@ -127,7 +127,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
             Log.d("ddd", "selected letter: " + l);
         }
 
-        for (int k = _word.length(); k > j; k--) {
+        for (int k = _word.size(); k > j; k--) {
             CLetter_Tile letter = new CLetter_Tile(mContext, "_", k, this);
             mSelectedLetterHolder.addView(letter);
         }
@@ -154,16 +154,6 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         mLetterHolder = (LinearLayout) findViewById(R.id.letterHolder);
         mSelectedLetterHolder = (LinearLayout) findViewById(R.id.blankHolder);
 
-        Log.d("ddd", "init: " + _word);
-        _word = "universe";
-        _currentWordIndex = 0;
-        _selectableLetters = new ArrayList<>(Arrays.asList(_word.split("")));
-        Collections.shuffle(_selectableLetters);
-        _selectedLetters = new ArrayList<String>();
-
-        Log.d("ddd", "selectable letters: " + _selectableLetters);
-
-        updateLetter();
 
 //        valueTV.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
 
@@ -207,15 +197,22 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         level = data.level;
         task = data.task;
         layout = data.layout;
-        _word = data.word;
+        _word = new ArrayList<>(Arrays.asList(data.word));
 
+        Log.d("ddd", "init: " + _word);
+        _currentWordIndex = 0;
+//        _selectableLetters = new ArrayList<>(Arrays.asList(_word.split("")));
+        _selectableLetters = new ArrayList<>(_word);
+        Collections.shuffle(_selectableLetters);
+        _selectedLetters = new ArrayList<>();
+
+        Log.d("ddd", "selectable letters: " + _selectableLetters);
+
+        updateLetter();
         // for each character in word, insert a new empty space into SPACES
         // for each character in word, add to the list. Then add distractors. Then JUMBLE.
 
-
         // next ???
-
-
     }
 
     /**
