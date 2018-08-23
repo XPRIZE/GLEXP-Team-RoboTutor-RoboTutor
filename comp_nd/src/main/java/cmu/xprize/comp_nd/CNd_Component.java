@@ -259,8 +259,8 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         // - hundreds
         boolean chooseLeft = dataset[0] > dataset[1];
         publishValue(".hun", String.valueOf((chooseLeft ? getHunsDigit(dataset[0]) : getHunsDigit(dataset[1])) * 100));
-        publishValue(".ten", String.valueOf((chooseLeft ? getTensDigit(dataset[0]) : getHunsDigit(dataset[1])) * 10));
-        publishValue(".one", String.valueOf((chooseLeft ? getHunsDigit(dataset[0]) : getHunsDigit(dataset[1]))));
+        publishValue(".ten", String.valueOf((chooseLeft ? getTensDigit(dataset[0]) : getTensDigit(dataset[1])) * 10));
+        publishValue(".one", String.valueOf((chooseLeft ? getOnesDigit(dataset[0]) : getOnesDigit(dataset[1]))));
         // - twenties
         // - ones
 

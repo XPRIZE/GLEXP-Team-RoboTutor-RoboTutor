@@ -18,6 +18,7 @@
           "COMMENT": "highlight the hundreds column and explain how to compare numbers",
           "tracks": [
             {"name": "DISABLE TAPPING", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "lockUserInput"},
+            {"name": "first compare hundreds", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "first compare the hundreds.mp3", "soundpackage": "proto", "volume": 1.0, "mode":"flow"},
             {"name": "HIGHLIGHT_UNITS", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightHunsColumn"},
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitMore}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitCompare}}.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
@@ -31,6 +32,7 @@
           "type": "QUEUE",
           "COMMENT": "highlight the tens column and explain how to compare numbers",
           "tracks": [
+            {"name": "compare tens", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "now compare the tens.mp3", "soundpackage": "proto", "volume": 1.0, "mode":"flow"},
             {"name": "NEXT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightTensColumn"},
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitMore}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitCompare}}.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
@@ -43,6 +45,7 @@
           "type": "QUEUE",
           "COMMENT": "highlight the ones column and explain how to compare numbers",
           "tracks": [
+            {"name": "now compare ones", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "now compare the ones.mp3", "soundpackage": "proto", "volume": 1.0, "mode":"flow"},
             {"name": "NEXT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightOnesColumn"},
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitMore}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitCompare}}.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
@@ -55,8 +58,7 @@
           "type": "QUEUE",
           "tracks": [
             {"name": "POINT AT CORRECT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "pointAtCorrectDigit"},
-            {"name": "point at this number", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "so tap on this number.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
-
+            {"name": "point at this number", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "so.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
             // ND_SCAFFOLD NEXT(1) make sure to check for correct features
             {"name": "hundy boi", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.hun}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
             {"name": "and",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Na.mp3",            "soundpackage":"xprize",        "volume": 1.0, "mode":"flow"},
@@ -70,6 +72,7 @@
             // na
             // {z}
             // is the bigger number
+            {"name": "point at this number", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "is the bigger number.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
             {"name": "CLEAR HIGHLIGHT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "clearHighlight"},
             {"name": "DISABLE TAPPING", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "enableUserInput"}
           ]
@@ -198,7 +201,7 @@
               
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
             {"name": "UPDATE_STIMULUS", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "updateStimulus"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Which number is bigger.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "tap on the bigger number.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"}
     
           ]
         },
