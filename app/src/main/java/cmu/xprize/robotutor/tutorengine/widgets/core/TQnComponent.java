@@ -994,11 +994,11 @@ public class TQnComponent extends CQn_Component implements IBehaviorManager, ITu
         else
             publishFeature(TCONST.GENERIC_WRONG);
     }
-        @Override
-        public void stopAudio(){
-            mMediaManager.dispMediaPlayers();
-            CMediaManager.PlayerManager p = mMediaManager.getPlaying();
-            p.stop();
+    @Override
+    public void stopAudio(){
+        mMediaManager.dispMediaPlayers();
+        CMediaManager.PlayerManager p = mMediaManager.getPlaying();
+        p.stop();
     }
 
         public void reset() {

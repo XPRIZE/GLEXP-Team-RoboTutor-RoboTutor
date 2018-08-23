@@ -265,6 +265,7 @@ public class CSceneGraph  {
                             // completion event from the current action or some external user event.
                             //
                             case TCONST.WAIT:
+                                System.out.println("WAITING in CSCENEGRAPH");
                                 break;
 
                             default:
@@ -300,6 +301,8 @@ public class CSceneGraph  {
                         _sceneGraph.play();
                         break;
 
+                    case TCONST.PLAY_CLOZE:
+                        _sceneGraph.play(TCONST.CLOZE_END);
 
                     case TCONST.STOP:
                         _sceneGraph.stop();

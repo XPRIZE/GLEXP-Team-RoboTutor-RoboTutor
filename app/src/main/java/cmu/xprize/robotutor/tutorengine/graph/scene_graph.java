@@ -251,6 +251,11 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
         _currNode.play();
     }
 
+    @Override
+    public void play(Long duration) {
+        _currNode.play(duration);
+    }
+
 
     @Override
     public void stop() {

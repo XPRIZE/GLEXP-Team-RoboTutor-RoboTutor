@@ -83,10 +83,10 @@ import static cmu.xprize.util.TCONST.ROBOTUTOR_ASSET_PATTERN;
 public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     // VARIABLES FOR QUICK DEBUG LAUNCH
-    private static final boolean QUICK_DEBUG = false;
-    private static final String debugTutorVariant = "story_reading";
-    private static final String debugTutorId = "story_reading:1_10";
-    private static final String debugTutorFile = "[file]story_reading_1_10.json";
+    private static final boolean QUICK_DEBUG = true;
+    private static final String debugTutorVariant = "story.generic";
+    private static final String debugTutorId = "story.generic::story_30";
+    private static final String debugTutorFile = "[encfolder]story_30";
 
     private CTutorEngine        tutorEngine;
     private CMediaController    mMediaController;

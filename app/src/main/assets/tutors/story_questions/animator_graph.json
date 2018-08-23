@@ -133,10 +133,10 @@
             {"constraint": "STORY_COMPLETE", "edge": "NEXT_SCENE"},
 //            {"constraint": "PAGE_COMPLETE", "edge": "GENERIC_QUESTION_NODE"},
 //            {"constraint": "PAGE_COMPLETE", "edge": "NEXT_PAGE_NODE"},
-            {"constraint": "PAGE_COMPLETE", "edge": "CLOZE_PAGE_NODE"},
-//            {"constraint": "PAGE_COMPLETE", "edge": "PICTURE_MATCH_NODE"},
-            {"constraint": "TEST_SHOW_CLZ", "edge": "PRESENT_CLOZE"},
-//            {"constraint": "TEST_SHOW_PM", "edge": "PRESENT_PICMATCH"},
+//            {"constraint": "PAGE_COMPLETE", "edge": "CLOZE_PAGE_NODE"},
+            {"constraint": "PAGE_COMPLETE", "edge": "PICTURE_MATCH_NODE"},
+//            {"constraint": "TEST_SHOW_CLZ", "edge": "PRESENT_CLOZE"},
+            {"constraint": "TEST_SHOW_PM", "edge": "PRESENT_PICMATCH"},
             {"constraint": "PARAGRAPH_COMPLETE", "edge": "NEXT_PARA_NODE"},
             {"constraint": "LINE_COMPLETE", "edge": "NEXT_LINE_NODE"},
             {"constraint": "", "edge": "NEXT_WORD_NODE"}
@@ -425,7 +425,7 @@
           "preexit": [],
           "edges": [
             {"constraint":"CLOZE_CORRECT", "edge":"CLOZE_GOOD"},
-            {"constraint":"", "edge":"CLOZE_BAD"}
+            {"constraint":"CLOZE_WRONG", "edge":"CLOZE_BAD"}
           ]
         },
         "AWAIT_PICMATCH_RESPONSE": {
@@ -842,7 +842,7 @@
 
         "LINE_COMPLETE": {
           "type": "CONDITION",
-          "If": "{{SstoryQuestions.wordState}}=='LAST'",
+          "If": "({{SstoryQuestions.showPicMatch}}=='FALSE') && ({{SstoryQuestions.showCloze}}=='FALSE') && ({{SstoryQuestions.wordState}}=='LAST')",
           "Then": "true",
           "Else": "false"
         },

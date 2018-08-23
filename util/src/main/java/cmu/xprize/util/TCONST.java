@@ -233,6 +233,7 @@ public class TCONST {
     public static final String FTR_GEN             = "FTR_GEN";
     public static final String FTR_PIC             = "FTR_PIC";
     public static final String FTR_CLO             = "FTR_CLO";
+    public static final String STOP_AUDIO          = "STOP_AUDIO";
 
 
     public static final String NARRATE_STORY       = "NARRATE_STORY";

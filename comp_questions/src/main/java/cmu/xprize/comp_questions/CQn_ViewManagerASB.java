@@ -82,6 +82,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
     private ViewGroup               mEvenPage;
 
     // uhq
+    private int                     numWordsCurPage;
     private int                     picmatch_answer;
     private boolean                 picture_match_mode = false;
     private boolean                 cloze_page_mode = false;
@@ -243,13 +244,24 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
      * @param assetPath
      */
     public void initStory(IVManListener owner, String assetPath, String location) {
-        if (cloze_page_mode){
-            for(int i = 0; i < questions.length; i++){
-                if (questions[i].distractor != null) {
-                    clozeIndices.add(i+1);
-                }
+        for(int i = 0; i < questions.length; i++){
+            if (questions[i].distractor != null) {
+                clozeIndices.add(i+1);
             }
         }
+        int numPara = 0;
+        int numLineCountdown = 0;
+        for(int i = 0; i < data.length; i++){
+            numPara += data[i].text.length;
+            for(int j = 0; j < data[i].text.length; j++){
+                numLineCountdown += data[i].text[j].length;
+            }
+        }
+        Log.d("CLOZEPAGEISSUE", "initStory: questions.length = "+questions.length);
+        Log.d("CLOZEPAGEISSUE", "initStory: numpara = "+numPara);
+        Log.d("CLOZEPAGEISSUE", "initStory: numlines = "+numLineCountdown);
+        //If numlines > numquestions theres something wrong
+        Log.d("CLOZEPAGEISSUE", "initStory: data.length (number of pages) = "+data.length);
         mCurrLineInStory = 0;
         mOwner        = owner;
         mAsset        = assetPath; // ZZZ assetPath... TCONST.EXTERN
@@ -273,13 +285,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
     @Override
     public void setPictureMatch(){
-        Log.d("ULANI", "setPictureMatch: ");
         if ((data.length - 1) - mCurrPage >= 3){
-//            if (data[mCurrPage].image != data[mCurrPage-1].image) {
-//
-//            }
-//            Log.d("ULANI", "setPictureMatch: currpageimage " + data[mCurrPage].image);
-//            Log.d("ULANI", "setPictureMatch: lastpageimage " + data[mCurrPage-1].image);
             picture_match_mode = true;
         } else {
             //UHQ: ensure that the last 2 pages are just regular pages, because no more pics to use
@@ -289,7 +295,36 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
     @Override
     public void setClozePage(){
-        cloze_page_mode = true;
+        //Log.d("ULANICLOZEPAGEISSUE", "setClozePage: ");
+        int paracount = data[mCurrPage+1].text.length;
+        int numLines = 0;
+        numWordsCurPage = 0;
+        for(int i = 0; i < paracount; i++){
+            int linecount = data[mCurrPage+1].text[i].length;
+            numLines+=linecount;
+            for (int j = 0; j < linecount;j++){
+                int utteranceLen = data[mCurrPage+1].text[i][j].narration.length;
+                for(int k = 0; k < utteranceLen; k++){
+                    numWordsCurPage+=data[mCurrPage+1].text[i][j].narration[k].segmentation.length;
+
+                }
+
+            }
+        }
+        Log.d("ULANISTOPAUDIO", "setClozePage: numwordscurpage= " +numWordsCurPage);
+        int sum=mCurrLineInStory+numLines;
+//        Log.d("ULANICLOZEPAGEISSUE", "setClozePage: numTotalLines = "+sum);
+//        Log.d("CLOZEPAGEISSUE", "setClozePage: mcurrlineinstory= "+mCurrLineInStory+" mcurrpage = "+mCurrPage);
+//        Log.d("CLOZEPAGEISSUE", "setClozePage: clozeIndices = "+clozeIndices.toString());
+        if(this.clozeIndices.contains(mCurrLineInStory+numLines)){
+            clozeQuestion = questions[sum-1];
+            TCONST.TARGET = clozeQuestion.target;
+            Log.d(TAG, "setClozePage: clozepagenode = true");
+            cloze_page_mode = true;
+            updateClozeButtons();
+        } else {
+            cloze_page_mode = false;
+        }
     }
 
     /**
@@ -462,11 +497,14 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 if (mWord1Text.getText().toString().equals(TCONST.TARGET)){
                     mWord1Text.setBackgroundColor(6618880);
                     Log.d(TAG, "onClick: correct");
+                    mParent.retractFeature(TCONST.CLOZE_WRONG);
                     mParent.publishFeature(TCONST.CLOZE_CORRECT);
                     mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
+                    isClozePage = false;
                 }else{
                     mWord1Text.setBackgroundColor(16724480);
                     Log.d(TAG, "onClick: incorrect");
+                    mParent.retractFeature(TCONST.CLOZE_CORRECT);
                     mParent.publishFeature(TCONST.CLOZE_WRONG);
                 }
                 mParent.nextNode();
@@ -481,11 +519,14 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 if (mWord2Text.getText().toString().equals(TCONST.TARGET)){
                     mWord1Text.setBackgroundColor(6618880);
                     Log.d(TAG, "onClick: correct");
+                    mParent.retractFeature(TCONST.CLOZE_WRONG);
                     mParent.publishFeature(TCONST.CLOZE_CORRECT);
                     mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
+                    isClozePage = false;
                 }else{
                     mWord1Text.setBackgroundColor(16724480);
                     Log.d(TAG, "onClick: incorrect");
+                    mParent.retractFeature(TCONST.CLOZE_CORRECT);
                     mParent.publishFeature(TCONST.CLOZE_WRONG);
                 }
                 mParent.nextNode();
@@ -501,11 +542,14 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 if (mWord3Text.getText().toString().equals(TCONST.TARGET)){
                     mWord1Text.setBackgroundColor(6618880);
                     Log.d(TAG, "onClick: correct");
+                    mParent.retractFeature(TCONST.CLOZE_WRONG);
                     mParent.publishFeature(TCONST.CLOZE_CORRECT);
                     mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
+                    isClozePage = false;
                 }else{
                     mWord1Text.setBackgroundColor(16724480);
                     Log.d(TAG, "onClick: incorrect");
+                    mParent.retractFeature(TCONST.CLOZE_CORRECT);
                     mParent.publishFeature(TCONST.CLOZE_WRONG);
                 }
                 mParent.nextNode();
@@ -521,11 +565,14 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 if (mWord4Text.getText().toString().equals(TCONST.TARGET)){
                     mWord1Text.setBackgroundColor(6618880);
                     Log.d(TAG, "onClick: correct");
+                    mParent.retractFeature(TCONST.CLOZE_WRONG);
                     mParent.publishFeature(TCONST.CLOZE_CORRECT);
                     mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
+                    isClozePage = false;
                 }else{
                     mWord1Text.setBackgroundColor(16724480);
                     Log.d(TAG, "onClick: wrong");
+                    mParent.retractFeature(TCONST.CLOZE_CORRECT);
                     mParent.publishFeature(TCONST.CLOZE_WRONG);
                 }
                 mParent.nextNode();
@@ -539,65 +586,50 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         if (show_image_options && picture_match_mode){
             mMatchImageRight.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    disableImageButtons();
-                    Log.v(QGRAPH_MSG, "event.click: " + " CQn_ViewManagerASB: RIGHTIMAGE");
-                    Log.d(TAG, "onClick: target "+TCONST.TARGET);
-                    Log.d("ULANI", "onClick: mMatchImageRight: picmatch_answer = "+picmatch_answer);
-                    if (picmatch_answer == 2){
-                        Log.d(TAG, "onClick: correct");
-                        mParent.publishFeature(TCONST.PICMATCH_CORRECT);
-                        mParent.retractFeature(TCONST.PICMATCH_WRONG);
-                        picture_match_mode = false;
-                        show_image_options = false;
-                        hasQuestion();
-                    }else{
-                        Log.d(TAG, "onClick: wrong");
-                        mParent.retractFeature(TCONST.PICMATCH_CORRECT);
-                        mParent.publishFeature(TCONST.PICMATCH_WRONG);
-                    }
-                    mParent.nextNode();
+                disableImageButtons();
+                if (picmatch_answer == 2){
+                    mParent.publishFeature(TCONST.PICMATCH_CORRECT);
+                    mParent.retractFeature(TCONST.PICMATCH_WRONG);
+                    picture_match_mode = false;
+                    show_image_options = false;
+                    hasQuestion();
+                }else{
+                    mParent.retractFeature(TCONST.PICMATCH_CORRECT);
+                    mParent.publishFeature(TCONST.PICMATCH_WRONG);
+                }
+                mParent.nextNode();
                 }
             });
             mMatchImageCenter.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    disableImageButtons();
-                    Log.v(QGRAPH_MSG, "event.click: " + " CQn_ViewManagerASB: CENTERIMAGE");
-                    Log.d(TAG, "onClick: target "+TCONST.TARGET);
-                    Log.d("ULANI", "onClick: mMatchImageCenter: picmatch_answer = "+picmatch_answer);
-                    if (picmatch_answer == 1){
-                        Log.d(TAG, "onClick: correct");
-                        mParent.publishFeature(TCONST.PICMATCH_CORRECT);
-                        mParent.retractFeature(TCONST.PICMATCH_WRONG);
-                        picture_match_mode = false;
-                        show_image_options = false;
-                        hasQuestion();
-                    }else{
-                        Log.d(TAG, "onClick: wrong");
-                        mParent.retractFeature(TCONST.PICMATCH_CORRECT);
-                        mParent.publishFeature(TCONST.PICMATCH_WRONG);
-                    }
-                    mParent.nextNode();
+                disableImageButtons();
+                if (picmatch_answer == 1){
+                    mParent.publishFeature(TCONST.PICMATCH_CORRECT);
+                    mParent.retractFeature(TCONST.PICMATCH_WRONG);
+                    picture_match_mode = false;
+                    show_image_options = false;
+                    hasQuestion();
+                }else{
+                    mParent.retractFeature(TCONST.PICMATCH_CORRECT);
+                    mParent.publishFeature(TCONST.PICMATCH_WRONG);
+                }
+                mParent.nextNode();
                 }
             });
             mMatchImageLeft.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    disableImageButtons();
-                    Log.v(QGRAPH_MSG, "event.click: " + " CQn_ViewManagerASB: LEFTIMAGE");
-                    Log.d(TAG, "onClick: target "+TCONST.TARGET);
-                    Log.d("ULANI", "onClick: mMatchImageLeft: picmatch_answer = "+picmatch_answer);
-                    if (picmatch_answer == 0){
-                        Log.d(TAG, "onClick: wrong");
-                        mParent.publishFeature(TCONST.PICMATCH_CORRECT);
-                        mParent.retractFeature(TCONST.PICMATCH_WRONG);
-                        picture_match_mode = false;
-                        show_image_options = false;
-                        hasQuestion();
-                    }else{
-                        Log.d(TAG, "onClick: correct");
-                        mParent.retractFeature(TCONST.PICMATCH_CORRECT);
-                        mParent.publishFeature(TCONST.PICMATCH_WRONG);
-                    }
-                    mParent.nextNode();
+                disableImageButtons();
+                if (picmatch_answer == 0){
+                    mParent.publishFeature(TCONST.PICMATCH_CORRECT);
+                    mParent.retractFeature(TCONST.PICMATCH_WRONG);
+                    picture_match_mode = false;
+                    show_image_options = false;
+                    hasQuestion();
+                }else{
+                    mParent.retractFeature(TCONST.PICMATCH_CORRECT);
+                    mParent.publishFeature(TCONST.PICMATCH_WRONG);
+                }
+                mParent.nextNode();
                 }
             });
             showImageButtons();
@@ -639,7 +671,6 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
      *
      */
     public void flipPage() {
-        Log.d("ULANI", "flipPage: show_image_options = "+show_image_options);
         if (mCurrPage % 2 == 0) {
             if (mCurrPage > 0) mPageText.setText(" ");
             mCurrViewIndex = mOddIndex;
@@ -696,11 +727,8 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
     }
 
     private void configurePageImage() {
-        Log.d("ULANI", "configurePageImage: ");
         if (picture_match_mode){
-//            if (show_image_options){
-
-//            }
+            // Do nothing because updateImageButtons will handle it
         } else {
             InputStream in;
             try {
@@ -1258,6 +1286,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
 
     private void trackNarration(boolean start) {
+        Log.d("PLS", "trackNarration: "+mCurrLineInStory);
         if (start) {
 
             mHeardWord    = 0;
@@ -1344,6 +1373,9 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 // i.e. the audio plays and this highlights words based on prerecorded durations.
                 //
                 else {
+//                    if (mCurrPage>0 && numWordsCurPage==2){
+//                        mParent.stopAudio();
+//                    }
                     postDelayedTracker();
                 }
             }
@@ -1353,6 +1385,12 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             else {
                 mParent.post(TCONST.TRACK_NARRATION, 0);
             }
+            if (mCurrPage>0 && numWordsCurPage==1 && cloze_page_mode){
+                Log.d("ULANISTOPAUDIO", "postDelayedTracker: "+narrationSegment.word+" "+narrationSegment.start+" "+narrationSegment.end);
+                mParent.post(TCONST.STOP_AUDIO, new Long(0));
+                mParent.post(TCONST.NEXT_NODE, new Long(2000));
+            }
+
         }
     }
 
@@ -1360,22 +1398,33 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
     private void postDelayedTracker() {
 
         narrationSegment = rawNarration[utteranceNdx].segmentation[segmentNdx];
-
         segmentCurr = utterancePrev + narrationSegment.end;
+        Log.d("ULANISTOPAUDIO", "postDelayedTracker: "+narrationSegment.word+" "+segmentCurr+" "+segmentPrev);
 
+//        if (mCurrPage>0 && numWordsCurPage==2){
+//            Log.d("ULANISTOPAUDIO", "postDelayedTracker: "+narrationSegment.word+" "+narrationSegment.start+" "+narrationSegment.end);
+//            mParent.post(TCONST.TRACK_NARRATION, new Long(0));
+//        }else{
         mParent.post(TCONST.TRACK_NARRATION, new Long((segmentCurr - segmentPrev) * 10));
-
         segmentPrev = segmentCurr;
+    //}
+    }
+
+    private void postDelayedStopAudio(){
+        int seg_length = rawNarration[utteranceNdx].segmentation.length;
+        int lastWordStart = rawNarration[utteranceNdx].segmentation[seg_length-1].start;
+        mParent.post(TCONST.STOP_AUDIO, new Long(lastWordStart * 10));
     }
 
 
     private void trackSegment() {
 
         if (!endOfSentence) {
-
+            Log.d("STOPAUDIOO", "trackSegment: "+rawNarration[utteranceNdx].segmentation[segmentNdx]);
             // Tell the script to speak the new utterance
             //
             mParent.applyBehavior(TCONST.SPEAK_UTTERANCE);
+
             postDelayedTracker();
         } else {
             mParent.applyBehavior(TCONST.UTTERANCE_COMPLETE_EVENT);
@@ -1390,7 +1439,6 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         switch (command) {
 
             case TCONST.START_NARRATION:
-
                 trackNarration(true);
                 break;
 
@@ -1407,17 +1455,18 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 break;
 
             case TCONST.TRACK_NARRATION:
-
                 trackNarration(false);
                 break;
 
-            case TCONST.TRACK_SEGMENT:
+            case TCONST.STOP_AUDIO:
+                mParent.stopAudio();
+                break;
 
+            case TCONST.TRACK_SEGMENT:
                 trackSegment();
                 break;
 
             case TCONST.NEXT_NODE:
-
                 mParent.nextNode();
                 break;
 
@@ -1430,14 +1479,12 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         }
     }
 
-
-
     /**
      * Push the state out to the tutor domain.
      *
      */
     private void publishStateValues() {
-        Log.d(TAG, "publishStateValues: mCurrWord = " + mCurrWord + ", mWordCount = " + mWordCount);
+//        Log.d(TAG, "publishStateValues: mCurrWord = " + mCurrWord + ", mWordCount = " + mWordCount);
 
         String cummulativeState = TCONST.RTC_CLEAR;
 
@@ -1475,7 +1522,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                     hearRead = TCONST.FTR_USER_HEAR;
                     mParent.retractFeature(FTR_USER_READING);
 
-                    Log.d("ISREADING", "NO");
+                    //Log.d("ISREADING", "NO");
 
                     cummulativeState = TCONST.RTC_LINECOMPLETE;
                     mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.LAST);
@@ -1490,7 +1537,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
                     if (mParent.testFeature(TCONST.FTR_USER_PARROT)) mParent.publishValue(TCONST.RTC_VAR_PARROTSTATE, TCONST.TRUE);
 
-                    Log.d("ISREADING", "YES");
+                    //Log.d("ISREADING", "YES");
 
                     cummulativeState = TCONST.RTC_LINECOMPLETE;
                     mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.LAST);
@@ -1523,7 +1570,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         } else
             mParent.publishValue(TCONST.RTC_VAR_PAGESTATE, TCONST.NOT_LAST);
 
-
+        //Log.d("ULANI", "publishStateValues: isclozepage = "+isClozePage+ " cloze_page_node = "+cloze_page_mode);
         hasQuestion();
 
         // Publish the cumulative state out to the scripting scope in the tutor
@@ -1537,19 +1584,22 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
     /**
      *  Configure for specific Page
      *  Assumes current storyName
-     *
+     *  Only called once to find the first page of the story
      * @param pageIndex
      */
     @Override
     public void seekToPage(int pageIndex) {
+//        Log.d("CLOZEPAGEISSUE", "seekToPage: pageIndex = "+pageIndex+" mcurrPage = "+mCurrPage);
         mCurrPage = pageIndex;
-
         if (mCurrPage > mPageCount-1) mCurrPage = mPageCount-1;
         if (mCurrPage < TCONST.ZERO)  mCurrPage = TCONST.ZERO;
         int numLinesCurPage = data[mCurrPage].text.length;
+//        Log.d("CLOZEPAGEISSUE", "seekToPage: numLinesCurPage = "+numLinesCurPage);
+//        Log.d("CLOZEPAGEISSUE", "seekToPage: mCurrLineInStory = "+mCurrLineInStory);
         this.numTotalLines+=numLinesCurPage;
         if (cloze_page_mode){
             if (clozeIndices.contains(this.numTotalLines)){
+//                Log.d(TAG, "seekToPage: numtotallines = "+numTotalLines);
                 this.isClozePage = true;
                 incClozePage(TCONST.ZERO);
                 mParent.publishValue(TCONST.HAS_DISTRACTOR, TCONST.TRUE);
@@ -1565,11 +1615,19 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
     @Override
     public void nextPage() {
-        Log.d("ULANI", "nextPage: ");
+//        Log.d("ULANICLOZEPAGEISSUE", "nextPage: mcurrpage = "+mCurrPage);
         if (mCurrPage < mPageCount-1) {
-            int numLinesCurPage = data[mCurrPage+1].text.length;
-            this.numTotalLines+=numLinesCurPage;
+            int paracount = data[mCurrPage].text.length;
+            int numLinesNextPage = 0;
+            for(int i = 0; i < paracount; i++){
+                numLinesNextPage+=data[mCurrPage].text[i].length;
+            }
+
+//            Log.d("ULANICLOZEPAGEISSUE", "nextPage: "+data[mCurrPage].text[mCurrPara][mCurrLine]);
+            //Log.d("CLOZEPAGEISSUE", "seekToPage: numLinesCurPage (mcurrpage+1) = "+numLinesNextPage);
+            this.numTotalLines+=numLinesNextPage;
             if (cloze_page_mode){
+                // Check if the next page has a cloze question before incrementing the page
                 if (this.clozeIndices.contains(this.numTotalLines)){
                     this.isClozePage = true;
                     mParent.publishValue(TCONST.HAS_DISTRACTOR, TCONST.TRUE);
@@ -1602,19 +1660,15 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
     }
 
     private void incPage(int direction) {
-        Log.d("ULANI", "incPage: ");
+        //MCURRPAGE BEING INCREMENTED
         mCurrPage += direction;
 
         // This configures the target display components to be populated with data.
         // mPageImage - mPageText
         //
-        Log.d("ULANI", "incPage: mEvenIndex = "+mEvenIndex);
-        Log.d("ULANI", "incPage: mCurrViewIndex = "+mCurrViewIndex);
         flipPage();
 
         configurePageImage();
-        Log.d("ULANI", "incPage: check mCurrViewIndex = "+mCurrViewIndex);
-        Log.d("ULANI", "incPage: mOddIndex = "+mOddIndex);
         // Update the state vars
         // Note that this must be done after flip and configure so the target text and image views
         // are defined
@@ -1624,6 +1678,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
     }
 
     private void incClozePage(int direction) {
+        //MCURRPAGE BEING INCREMENTED
         mCurrPage += direction;
 
         // This configures the target display components to be populated with data.
@@ -1694,7 +1749,8 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
     // NOTE: we reset mCurrLine and mCurrWord
     private void incPara(int incr) {
         mCurrPara += incr;
-
+        System.out.println("ULANISTOPAUDIO: incpara "+mCurrPara+" "+mParaCount+" "+mCurrLine+" "+mLineCount);
+//        if (mCurrPara == mParaCount && mLineCount == 1) postDelayedStopAudio();
         // Update the state vars
         //
         seekToStoryPosition(mCurrPage, mCurrPara, TCONST.ZERO, TCONST.ZERO);
@@ -1703,6 +1759,9 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
     // NOTE: we reset mCurrLine and mCurrWord
     private void incClozePara(int incr) {
         mCurrPara += incr;
+        System.out.println("ULANISTOPAUDIO: incclozepara "+mCurrPara+" "+mParaCount+" "+mCurrLine+" "+mLineCount);
+
+//        if (mCurrPara == mParaCount && mLineCount == 1) postDelayedStopAudio();
 
         // Update the state vars
         //
@@ -1718,6 +1777,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
      */
     @Override
     public void seekToLine(int lineIndex) {
+//        Log.d(TAG, "seekToLine: ");
         mCurrLine = lineIndex;
 
         if (mCurrLine > mLineCount-1) mCurrLine = mLineCount-1;
@@ -1736,6 +1796,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
     @Override
     public void nextLine() {
+//        Log.d(TAG, "nextLine: ");
         if (mCurrLine < mLineCount-1) {
             if (cloze_page_mode){
                 if (this.isClozePage){
@@ -1747,7 +1808,6 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 incLine(TCONST.INCR);
             }
         }
-        mCurrLineInStory+=1;
     }
 
     @Override
@@ -1756,7 +1816,6 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         if (mCurrLine > 0 ) {
             incLine(TCONST.DECR);
         }
-        mCurrLineInStory-=1;
 
     }
 
@@ -1765,6 +1824,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
      *
      */
     private void incLine(int incr) {
+//        Log.d("ULANI", "incLine: ");
         // reset boot flag to
         //
         if (storyBooting) {
@@ -1772,9 +1832,9 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             storyBooting = false;
             speakOrListen();
         } else {
-
             mCurrLine += incr;
-
+            System.out.println("ULANISTOPAUDIO: incline "+mCurrPara+" "+mParaCount+" "+mCurrLine+" "+mLineCount);
+//            if (mCurrPara == mParaCount && mCurrLine == mLineCount) postDelayedStopAudio();
             // Update the state vars
             //
             seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
@@ -1786,7 +1846,8 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
      *
      */
     private void incClozeLine(int incr) {
-
+//        Log.d(TAG, "incClozeLine: ");
+//        Log.d("CLOZEPAGEINCLINE", "incClozeLine: ");
         // reset boot flag to
         //
         if (storyBooting) {
@@ -1796,6 +1857,9 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         } else {
 
             mCurrLine += incr;
+            System.out.println("ULANISTOPAUDIO: incclozeline "+mCurrPara+" "+mParaCount+" "+mCurrLine+" "+mLineCount);
+//            if (mCurrPara == mParaCount && mCurrLine == mLineCount) postDelayedStopAudio();
+//            Log.d("CLOZEPAGEINCLINE", "incClozeLine: number of lines left = "+numLinesCountdown);
 
             // Update the state vars
             //
@@ -1829,7 +1893,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
         mParent.publishValue(TCONST.RTC_VAR_PARROTSTATE, TCONST.FALSE);
 
-        Log.d(TAG, "parrotLine");
+//        Log.d(TAG, "parrotLine");
 
         seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
     }
@@ -1896,6 +1960,9 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
      * @param incr
      */
     private void incWord(int incr) {
+        Log.d("ULANISTOPAUDIO", "incWord: numWordsCurPage = "+numWordsCurPage);
+        if(mCurrPage!=0) numWordsCurPage-=1;
+
         mCurrWord += incr;
 
         // For instances where we are advancing the word manually through a script it is required
@@ -1911,6 +1978,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         // Update the sentence display
         //
         UpdateDisplay();
+
     }
 
     /**
@@ -1976,12 +2044,15 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
      */
     @Override
     public void setHighLight(String highlight, boolean update) {
-
-        mCurrHighlight = highlight;
+        Log.d(TAG, "setHighLight: "+highlight);
+        mCurrHighlight =  highlight;
 
         // Update the sentence display
         //
         if (update)
+            if (mCurrPage>0 && numWordsCurPage==1){
+                mParent.stopAudio();
+            }
             UpdateDisplay();
     }
 
@@ -2031,32 +2102,38 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
      */
     @Override
     public void setClozeQuestion(){
-        int numLinesCurPage = data[mCurrPage].text.length;
-        this.clozeQuestion = questions[numLinesCurPage-1];
-        if (questions[numLinesCurPage-1].distractor.nonsensical != null && questions[numLinesCurPage-1].distractor.nonsensical.length > 0){
-            hasNonsensical = true;
+//        Log.d(TAG, "setClozeQuestion: ");
+        if (isClozePage){
+            int numLinesCurPage = data[mCurrPage].text.length;
+            this.clozeQuestion = questions[numLinesCurPage-1];
+            if (questions[numLinesCurPage-1].distractor.nonsensical != null && questions[numLinesCurPage-1].distractor.nonsensical.length > 0){
+                hasNonsensical = true;
+            }
+            if (questions[numLinesCurPage-1].distractor.ungrammatical != null && questions[numLinesCurPage-1].distractor.ungrammatical.length > 0){
+                hasUngrammatical = true;
+            }
+            if (questions[numLinesCurPage-1].distractor.plausible != null && questions[numLinesCurPage-1].distractor.plausible.length > 0){
+                hasPlausible = true;
+            }
         }
-        if (questions[numLinesCurPage-1].distractor.ungrammatical != null && questions[numLinesCurPage-1].distractor.ungrammatical.length > 0){
-            hasUngrammatical = true;
-        }
-        if (questions[numLinesCurPage-1].distractor.plausible != null && questions[numLinesCurPage-1].distractor.plausible.length > 0){
-            hasPlausible = true;
-        }
+
+//        updateClozeButtons();
     }
 
-    private void printArray(ArrayList<String> a){
-        for (String s : a){
+    private void printArray(List<Integer> a){
+        for (Integer s : a){
             System.out.println(s);
         }
     }
 
     @Override
     public void displayClozeQuestion(){
-        clozeQuestion = questions[mCurrLineInStory-1];
+//        Log.d("ULANICLOZEPAGEISSUE", "displayClozeQuestion: mCurrLineInStory = "+mCurrLineInStory+" mcurrpage = "+mCurrPage+" "+data[mCurrPage].text[mCurrPara]);
+//        this.clozeQuestion = questions[mCurrLineInStory-1];
         ArrayList<String> nonsensical = new ArrayList<>(Arrays.asList(clozeQuestion.distractor.nonsensical));
         ArrayList<String> ungrammatical = new ArrayList<>(Arrays.asList(clozeQuestion.distractor.ungrammatical));
         ArrayList<String> plausible = new ArrayList<>(Arrays.asList(clozeQuestion.distractor.plausible));
-        TCONST.TARGET = clozeQuestion.target;
+//        TCONST.TARGET = clozeQuestion.target;
         Collections.shuffle(nonsensical);
         Collections.shuffle(ungrammatical);
         Collections.shuffle(plausible);
@@ -2112,7 +2189,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         mWord4Text.setVisibility(View.VISIBLE);
         mWord4Text.bringToFront();
         if(this.isClozePage) {
-            Log.d(TAG, "updateClozeButtons: isclozepage");
+//            Log.d(TAG, "updateClozeButtons: isclozepage");
             setButtonState(mWord1Text, "ENABLE");
             setButtonState(mWord1Text, "SHOW");
             setButtonState(mWord2Text, "ENABLE");
@@ -2142,12 +2219,12 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         String randImg2 = imgs.get(1);
         try {
             if (assetLocation.equals(TCONST.EXTERN)) {
-                Log.d(TCONST.DEBUG_STORY_TAG, "loading image " + mAsset + data[mCurrPage].image+" "+mCurrPage);
+//                Log.d(TCONST.DEBUG_STORY_TAG, "loading image " + mAsset + data[mCurrPage].image+" "+mCurrPage);
                 in1 = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
                 in2 = new FileInputStream(mAsset + randImg1); // ZZZ load image
                 in3 = new FileInputStream(mAsset + randImg2);
             } else {
-                Log.d(TCONST.DEBUG_STORY_TAG, "loading image from asset" + mAsset + data[mCurrPage].image);
+//                Log.d(TCONST.DEBUG_STORY_TAG, "loading image from asset" + mAsset + data[mCurrPage].image);
                 in1 = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image); // ZZZ load image
                 in2 = JSON_Helper.assetManager().open(mAsset + randImg1); // ZZZ load image
                 in3 = JSON_Helper.assetManager().open(mAsset + randImg2);
@@ -2175,16 +2252,17 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         mMatchImageCenter.bringToFront();
         mMatchImageRight.bringToFront();
         show_image_options = true;
-        Log.d(TAG, "displayPictureMatching: show_image_options = "+show_image_options+ " picture_match_node = "+picture_match_mode);
         updateImageButtons();
         mParent.animatePageFlip(true, mCurrViewIndex);
     }
 
     @Override
     public void hasClozeDistractor(){
-//        if (cloze_page_mode){
+//        Log.d("ULANI", "hasClozeDistractor: numTotalLines = "+this.numTotalLines + " mCurrLineInStory = "+mCurrLineInStory+" isclozepage = "+isClozePage);
+//        Log.d("ULANI", "hasClozeDistractor: cloze_page_mode = "+cloze_page_mode+" mcurrpara = "+mCurrPara+" mparacount ="+mParaCount+" mcurrpage = "+mCurrPage+" mpagecount = "+mPageCount);
         if (mCurrPage <= mPageCount-1) {
-            if (cloze_page_mode && this.clozeIndices.contains(this.numTotalLines) && mCurrLineInStory == numTotalLines-1){
+            if (isClozePage && mCurrPara >= mParaCount-1){
+//                Log.d(TAG, "hasClozeDistractor: clozeIndices contains numTotalLines");
                 mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.TRUE);
                 mParent.publishValue(TCONST.SHOW_PICMATCH, TCONST.FALSE);
             } else {
@@ -2192,25 +2270,24 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 mParent.publishValue(TCONST.SHOW_PICMATCH, TCONST.FALSE);
             }
         }
-//        }
     }
 
     @Override
     public void hasQuestion(){
+        //TODO: either call one or the other depending on ftr
         hasClozeDistractor();
         hasPictureMatch();
     }
 
     public void hasPictureMatch(){
-
-        Log.d("ULANI", "hasPictureMatch: picture_match_mode = "+picture_match_mode);
-        if (picture_match_mode && mCurrPara >= mParaCount-1 && mCurrPage % 2 == 1){
+        if (picture_match_mode && mCurrPara >= mParaCount-1 && mCurrPage % 2 == 1) {
             mParent.publishValue(TCONST.SHOW_PICMATCH, TCONST.TRUE);
             mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
-        } else {
-            mParent.publishValue(TCONST.SHOW_PICMATCH, TCONST.FALSE);
-            mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
         }
+//        } else {
+//            mParent.publishValue(TCONST.SHOW_PICMATCH, TCONST.FALSE);
+//            mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
+//        }
     }
 
 
@@ -2225,7 +2302,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             for (int i = 0; i < wordsToDisplay.length; i++) {
 
                 String styledWord = wordsToDisplay[i];                           // default plain
-                Log.d(TAG, "Styled word: " + styledWord);
+//                Log.d(TAG, "Styled word: " + styledWord);
 
                 if (i < mCurrWord) {
                     styledWord = "<font color='#00B600'>" + styledWord + "</font>";
@@ -2257,7 +2334,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
             mPageText.setText(Html.fromHtml(content));
 
-            Log.d(TAG, "Story Sentence Text: " + content);
+//            Log.d(TAG, "Story Sentence Text: " + content);
 
             if (showWords && (showFutureWords || mCurrWord > 0)) broadcastActiveTextPos(mPageText, wordsToDisplay);
 

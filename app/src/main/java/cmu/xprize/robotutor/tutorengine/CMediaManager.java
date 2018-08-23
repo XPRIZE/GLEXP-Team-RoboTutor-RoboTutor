@@ -21,6 +21,8 @@ package cmu.xprize.robotutor.tutorengine;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.MediaPlayer;
+import android.os.Handler;
+import android.support.annotation.IntegerRes;
 import android.util.Log;
 
 import java.io.FileInputStream;
@@ -415,8 +417,8 @@ public class CMediaManager {
         mTimeLineMap.put(key, owner);
     }
 
-
     public type_timelineFL removeTimeLine(String key) {
+        Log.d("ULANI", "CMediaManager: removeTimeLine: KEY = "+key);
         return mTimeLineMap.remove(key);
     }
 
@@ -434,7 +436,16 @@ public class CMediaManager {
     //*************  Timeline Management END
     //********************************************************************
 
+    public PlayerManager getPlaying(){
+        for(PlayerManager playerInstance : mPlayerCache) {
 
+            if(playerInstance.isPlaying()) {
+                Log.v(GRAPH_MSG, "CMediaManager.playermanager.attachexisting: manager = "+playerInstance.mDataSource);
+                return playerInstance;
+            }
+        }
+        return null;
+    }
 
 
     //********************************************************************
@@ -442,7 +453,10 @@ public class CMediaManager {
 
 
     public PlayerManager attachMediaPlayer(String dataSource, String location, IMediaListener owner) {
-
+        System.out.println("ATTACHMEDIAPLAYER");
+        System.out.println("DATASOURCE: "+dataSource);
+        System.out.println("LOCATION: "+location);
+        System.out.println("OWNER: "+owner.sourceName()+ " => "+owner.resolvedName());
         PlayerManager manager = null;
 
         // First look for an unattached (cached) controller that uses this datasource and reuse it.
@@ -450,7 +464,7 @@ public class CMediaManager {
         for(PlayerManager playerInstance : mPlayerCache) {
 
             if(!playerInstance.isAttached() && playerInstance.compareSource(dataSource)) {
-                Log.v(GRAPH_MSG, "CMediaManager.playermanager.attachexisting:");
+                Log.v(GRAPH_MSG, "CMediaManager.playermanager.attachexisting: manager = "+playerInstance.mDataSource);
 
                 manager = playerInstance;
                 manager.attach(owner);
@@ -514,22 +528,29 @@ public class CMediaManager {
      * @param owner
      */
     public void  detachMediaPlayer(Object owner) {
-
+        Log.d("ULANI", "detachMediaPlayer: ");
         // First look for an unattached (cached) controller that uses this datasource and reuse it.
         //
         for(PlayerManager managerInstance : mPlayerCache) {
 
             if(managerInstance.compareOwner(owner)) {
-
+                Log.d(TAG, "detachMediaPlayer: managerInstance = "+managerInstance.mDataSource);
                 managerInstance.detach();
             }
         }
     }
 
+    public void dispMediaPlayers(){
+        int count = 0;
+        for(PlayerManager managerInstance : mPlayerCache){
+            Log.d(TAG, "dispMediaPlayers: datasource"+Integer.toString(count)+" = "+managerInstance.mDataSource);
+            count++;
+        }
+    }
 
     public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
-        private IMediaListener mOwner;
+        private  IMediaListener mOwner;
 
         private MediaPlayer  mPlayer        = null;
         private boolean      mPlaying       = false;
@@ -555,6 +576,9 @@ public class CMediaManager {
             createPlayer(mDataSource, location);
         }
 
+        public int getCurrentPosition(){
+            return mPlayer.getCurrentPosition();
+        }
 
         protected void createPlayer(String dataSource, String location) {
 
@@ -681,7 +705,7 @@ public class CMediaManager {
         // TODO : need tighter control over media player lifetime - running out of resources
         // since they aren't being released.
         public void play() {
-
+            System.out.println("PLAYING SOMETHING");
             if(!mPlaying && mIsAlive) {
 
                 if(mIsReady) {
@@ -699,7 +723,41 @@ public class CMediaManager {
             }
         }
 
+        Runnable stopPlayerTask = new Runnable(){
+            @Override
+            public void run() {
+                Log.d("ULANI", "run: narrationsegment PAUSED");
+                mPlayer.pause();
+                seek(575);
+                mPlayer.start();
+            }};
 
+        Handler handler = new Handler();
+
+        public void play(Long duration) {
+            System.out.println("Playing something with total duration below");
+            System.out.println(mPlayer.getDuration());
+//            sLog.d("ULANI", "playing something with total duration: "+ Integer.toString(mPlayer.getDuration()));
+            if(!mPlaying && mIsAlive) {
+
+                if(mIsReady) {
+                    // TODO: this will need a tweak for background music etc.
+                    mMediaController.startSpeaking();
+
+                    Log.v(GRAPH_MSG, "CMediaManager.playermanager.play: " + mDataSource);
+                    handler.postDelayed(stopPlayerTask, duration);
+
+                    mPlayer.start();
+
+                    mPlaying       = true;
+                    mDeferredStart = false;
+                }
+                else
+                    mDeferredStart = true;
+            }
+        }
+
+        // UHQ : STOP THE TRACK WITH THIS
         public void stop() {
 
             Log.v(GRAPH_MSG, "CMediaManager.playermanager.stop: " + mDataSource);
