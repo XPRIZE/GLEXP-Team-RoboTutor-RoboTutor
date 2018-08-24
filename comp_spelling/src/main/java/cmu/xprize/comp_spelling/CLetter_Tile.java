@@ -96,10 +96,18 @@ public class CLetter_Tile extends TextView {
     protected void init(Context context, AttributeSet attrs) {
     }
 
+    protected void indicateError() {
+        this.setBackgroundColor(Color.rgb(240, 100, 100));
+    }
+
+    protected void revertColor() {
+        this.setBackgroundColor(Color.rgb(240, 200, 65));
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            _parent.onLetterTouch(_letter, _index);
+            _parent.onLetterTouch(_letter, _index, this);
         }
 
         return true;

@@ -78,6 +78,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     protected Context mContext;
 
     private LocalBroadcastManager bManager;
+    private CLetter_Tile wrongLetter;
 
     static final String TAG = "CSpelling_Component";
     static final String IMAGES_PATH = "/storage/self/primary/robotutor_assets/assets/spelling/images/";
@@ -153,7 +154,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         init(context, attrs);
     }
 
-    public void onLetterTouch(String letter, int index) {
+    public void onLetterTouch(String letter, int index, CLetter_Tile lt) {
         Log.d("ddd", "touch: " + letter);
 
         retractFeature(FTR_CORRECT);
@@ -186,10 +187,17 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 //            applyBehaviorNode("NEXTNODE");
         } else {
             Log.d("ddd", "incorrect: " + letter);
+            lt.indicateError();
+            wrongLetter = lt;
             publishFeature(FTR_INCORRECT);
             applyBehavior("NEXT_NODE");
             Log.d("ddd", "features: " + _FeatureMap.toString());
         }
+    }
+
+    public void revertColor() {
+        wrongLetter.revertColor();
+        wrongLetter = null;
     }
 
     public void updateImage() {

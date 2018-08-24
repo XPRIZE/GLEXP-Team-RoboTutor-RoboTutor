@@ -149,8 +149,9 @@
           "COMMENT": "TBD",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#PLAYINCORRECT:String", "features":""},
-            {"name":"Read syllable", "type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","mode":"flow", "features": ""},
-            {"name": "After incorrect clip", "type": "AUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+//            {"name":"Read syllable", "type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","mode":"flow", "features": ""},
+            {"name": "After incorrect clip", "type": "AUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"name": "Revert color", "type": "COMMAND", "id": "SSpelling", "method": "revertColor", "features": ""}
           ]
         },
 
