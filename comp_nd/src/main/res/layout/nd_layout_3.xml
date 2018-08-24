@@ -108,7 +108,7 @@
 
             <ImageView
                 android:id="@+id/left_hun_1"
-                android:src="@drawable/blue_100"
+                android:src="@drawable/circle_green_100"
                 android:layout_width="@dimen/nd_100_size"
                 android:layout_height="@dimen/nd_100_size"
                 android:layout_margin="@dimen/nd_inner_100_margin"
@@ -116,7 +116,7 @@
 
             <ImageView
                 android:id="@+id/left_hun_2"
-                android:src="@drawable/blue_100"
+                android:src="@drawable/circle_green_100"
                 android:layout_width="@dimen/nd_100_size"
                 android:layout_height="@dimen/nd_100_size"
                 android:layout_margin="@dimen/nd_inner_100_margin"
@@ -124,7 +124,7 @@
 
             <ImageView
                 android:id="@+id/left_hun_3"
-                android:src="@drawable/blue_100"
+                android:src="@drawable/circle_green_100"
                 android:layout_width="@dimen/nd_100_size"
                 android:layout_height="@dimen/nd_100_size"
                 android:layout_margin="@dimen/nd_inner_100_margin"
@@ -132,7 +132,7 @@
 
             <ImageView
                 android:id="@+id/left_hun_4"
-                android:src="@drawable/blue_100"
+                android:src="@drawable/circle_green_100"
                 android:layout_width="@dimen/nd_100_size"
                 android:layout_height="@dimen/nd_100_size"
                 android:layout_margin="@dimen/nd_inner_100_margin"/>
@@ -161,63 +161,63 @@
                     android:layout_width="10dp"
                     android:layout_height="@dimen/nd_10_height"
                     android:layout_marginLeft="0dp"
-                    android:src="@drawable/blue_10"/>
+                    android:src="@drawable/circle_green_10"/>
 
                 <ImageView
                     android:id="@+id/left_ten_2"
                     android:layout_width="10dp"
                     android:layout_height="@dimen/nd_10_height"
                     android:layout_marginLeft="@dimen/baseten_tenspacer"
-                    android:src="@drawable/blue_10"/>
+                    android:src="@drawable/circle_green_10"/>
 
                 <ImageView
                     android:id="@+id/left_ten_3"
                     android:layout_width="10dp"
                     android:layout_height="@dimen/nd_10_height"
                     android:layout_marginLeft="@dimen/baseten_tenspacer"
-                    android:src="@drawable/blue_10"/>
+                    android:src="@drawable/circle_green_10"/>
 
                 <ImageView
                     android:id="@+id/left_ten_4"
                     android:layout_width="10dp"
                     android:layout_height="@dimen/nd_10_height"
                     android:layout_marginLeft="@dimen/baseten_tenspacer"
-                    android:src="@drawable/blue_10"/>
+                    android:src="@drawable/circle_green_10"/>
 
                 <ImageView
                     android:id="@+id/left_ten_5"
                     android:layout_width="10dp"
                     android:layout_height="@dimen/nd_10_height"
                     android:layout_marginLeft="@dimen/baseten_tenspacer"
-                    android:src="@drawable/blue_10"/>
+                    android:src="@drawable/circle_green_10"/>
 
                 <ImageView
                     android:id="@+id/left_ten_6"
                     android:layout_width="10dp"
                     android:layout_height="@dimen/nd_10_height"
                     android:layout_marginLeft="@dimen/baseten_tenspacer"
-                    android:src="@drawable/blue_10"/>
+                    android:src="@drawable/circle_green_10"/>
 
                 <ImageView
                     android:id="@+id/left_ten_7"
                     android:layout_width="10dp"
                     android:layout_height="@dimen/nd_10_height"
                     android:layout_marginLeft="@dimen/baseten_tenspacer"
-                    android:src="@drawable/blue_10"/>
+                    android:src="@drawable/circle_green_10"/>
 
                 <ImageView
                     android:id="@+id/left_ten_8"
                     android:layout_width="10dp"
                     android:layout_height="@dimen/nd_10_height"
                     android:layout_marginLeft="@dimen/baseten_tenspacer"
-                    android:src="@drawable/blue_10"/>
+                    android:src="@drawable/circle_green_10"/>
 
                 <ImageView
                     android:id="@+id/left_ten_9"
                     android:layout_width="10dp"
                     android:layout_height="@dimen/nd_10_height"
                     android:layout_marginLeft="@dimen/baseten_tenspacer"
-                    android:src="@drawable/blue_10"/>
+                    android:src="@drawable/circle_green_10"/>
 
             </LinearLayout>
         </LinearLayout>
@@ -240,14 +240,14 @@
                 <!-- LEFT ONES -->
                 <ImageView
                     android:id="@+id/left_one_1"
-                    android:src="@drawable/blue_1"
+                    android:src="@drawable/circle_green_1"
                     android:layout_width="@dimen/nd_one_block_size"
                     android:layout_height="@dimen/nd_one_block_size"
                     />
 
                 <ImageView
                     android:id="@+id/left_one_2"
-                    android:src="@drawable/blue_1"
+                    android:src="@drawable/circle_green_1"
                     android:layout_width="@dimen/nd_one_block_size"
                     android:layout_height="@dimen/nd_one_block_size"
                     android:layout_marginLeft="0dp"
@@ -256,7 +256,7 @@
 
                 <ImageView
                     android:id="@+id/left_one_3"
-                    android:src="@drawable/blue_1"
+                    android:src="@drawable/circle_green_1"
                     android:layout_width="@dimen/nd_one_block_size"
                     android:layout_height="@dimen/nd_one_block_size"
                     android:layout_marginLeft="0dp"
@@ -265,7 +265,7 @@
 
                 <ImageView
                     android:id="@+id/left_one_4"
-                    android:src="@drawable/blue_1"
+                    android:src="@drawable/circle_green_1"
                     android:layout_width="@dimen/nd_one_block_size"
                     android:layout_height="@dimen/nd_one_block_size"
                     android:layout_marginLeft="0dp"
@@ -274,7 +274,7 @@
 
                 <ImageView
                     android:id="@+id/left_one_5"
-                    android:src="@drawable/blue_1"
+                    android:src="@drawable/circle_green_1"
                     android:layout_width="@dimen/nd_one_block_size"
                     android:layout_height="@dimen/nd_one_block_size"
                     android:layout_marginLeft="0dp"
@@ -283,7 +283,7 @@
 
                 <ImageView
                     android:id="@+id/left_one_6"
-                    android:src="@drawable/blue_1"
+                    android:src="@drawable/circle_green_1"
                     android:layout_width="@dimen/nd_one_block_size"
                     android:layout_height="@dimen/nd_one_block_size"
                     android:layout_marginLeft="0dp"
@@ -292,7 +292,7 @@
 
                 <ImageView
                     android:id="@+id/left_one_7"
-                    android:src="@drawable/blue_1"
+                    android:src="@drawable/circle_green_1"
                     android:layout_width="@dimen/nd_one_block_size"
                     android:layout_height="@dimen/nd_one_block_size"
                     android:layout_marginLeft="0dp"
@@ -301,7 +301,7 @@
 
                 <ImageView
                     android:id="@+id/left_one_8"
-                    android:src="@drawable/blue_1"
+                    android:src="@drawable/circle_green_1"
                     android:layout_width="@dimen/nd_one_block_size"
                     android:layout_height="@dimen/nd_one_block_size"
                     android:layout_marginLeft="0dp"
@@ -310,7 +310,7 @@
 
                 <ImageView
                     android:id="@+id/left_one_9"
-                    android:src="@drawable/blue_1"
+                    android:src="@drawable/circle_green_1"
                     android:layout_width="@dimen/nd_one_block_size"
                     android:layout_height="@dimen/nd_one_block_size"
                     android:layout_marginLeft="0dp"
@@ -392,7 +392,7 @@
 
             <ImageView
                 android:id="@+id/right_hun_1"
-                android:src="@drawable/blue_100"
+                android:src="@drawable/circle_green_100"
                 android:layout_width="@dimen/nd_100_size"
                 android:layout_height="@dimen/nd_100_size"
                 android:layout_margin="@dimen/nd_inner_100_margin"
@@ -400,7 +400,7 @@
 
             <ImageView
                 android:id="@+id/right_hun_2"
-                android:src="@drawable/blue_100"
+                android:src="@drawable/circle_green_100"
                 android:layout_width="@dimen/nd_100_size"
                 android:layout_height="@dimen/nd_100_size"
                 android:layout_margin="@dimen/nd_inner_100_margin"
@@ -408,7 +408,7 @@
 
             <ImageView
                 android:id="@+id/right_hun_3"
-                android:src="@drawable/blue_100"
+                android:src="@drawable/circle_green_100"
                 android:layout_width="@dimen/nd_100_size"
                 android:layout_height="@dimen/nd_100_size"
                 android:layout_margin="@dimen/nd_inner_100_margin"
@@ -416,7 +416,7 @@
 
             <ImageView
                 android:id="@+id/right_hun_4"
-                android:src="@drawable/blue_100"
+                android:src="@drawable/circle_green_100"
                 android:layout_width="@dimen/nd_100_size"
                 android:layout_height="@dimen/nd_100_size"
                 android:layout_margin="@dimen/nd_inner_100_margin"/>
@@ -443,63 +443,63 @@
                     android:layout_width="10dp"
                     android:layout_height="@dimen/nd_10_height"
                     android:layout_marginLeft="0dp"
-                    android:src="@drawable/blue_10"/>
+                    android:src="@drawable/circle_green_10"/>
 
                 <ImageView
                     android:id="@+id/right_ten_2"
                     android:layout_width="10dp"
                     android:layout_height="@dimen/nd_10_height"
                     android:layout_marginLeft="@dimen/baseten_tenspacer"
-                    android:src="@drawable/blue_10"/>
+                    android:src="@drawable/circle_green_10"/>
 
                 <ImageView
                     android:id="@+id/right_ten_3"
                     android:layout_width="10dp"
                     android:layout_height="@dimen/nd_10_height"
                     android:layout_marginLeft="@dimen/baseten_tenspacer"
-                    android:src="@drawable/blue_10"/>
+                    android:src="@drawable/circle_green_10"/>
 
                 <ImageView
                     android:id="@+id/right_ten_4"
                     android:layout_width="10dp"
                     android:layout_height="@dimen/nd_10_height"
                     android:layout_marginLeft="@dimen/baseten_tenspacer"
-                    android:src="@drawable/blue_10"/>
+                    android:src="@drawable/circle_green_10"/>
 
                 <ImageView
                     android:id="@+id/right_ten_5"
                     android:layout_width="10dp"
                     android:layout_height="@dimen/nd_10_height"
                     android:layout_marginLeft="@dimen/baseten_tenspacer"
-                    android:src="@drawable/blue_10"/>
+                    android:src="@drawable/circle_green_10"/>
 
                 <ImageView
                     android:id="@+id/right_ten_6"
                     android:layout_width="10dp"
                     android:layout_height="@dimen/nd_10_height"
                     android:layout_marginLeft="@dimen/baseten_tenspacer"
-                    android:src="@drawable/blue_10"/>
+                    android:src="@drawable/circle_green_10"/>
 
                 <ImageView
                     android:id="@+id/right_ten_7"
                     android:layout_width="10dp"
                     android:layout_height="@dimen/nd_10_height"
                     android:layout_marginLeft="@dimen/baseten_tenspacer"
-                    android:src="@drawable/blue_10"/>
+                    android:src="@drawable/circle_green_10"/>
 
                 <ImageView
                     android:id="@+id/right_ten_8"
                     android:layout_width="10dp"
                     android:layout_height="@dimen/nd_10_height"
                     android:layout_marginLeft="@dimen/baseten_tenspacer"
-                    android:src="@drawable/blue_10"/>
+                    android:src="@drawable/circle_green_10"/>
 
                 <ImageView
                     android:id="@+id/right_ten_9"
                     android:layout_width="10dp"
                     android:layout_height="@dimen/nd_10_height"
                     android:layout_marginLeft="@dimen/baseten_tenspacer"
-                    android:src="@drawable/blue_10"/>
+                    android:src="@drawable/circle_green_10"/>
 
             </LinearLayout>
         </LinearLayout>
@@ -521,14 +521,14 @@
                 <!-- LEFT ONES -->
                 <ImageView
                     android:id="@+id/right_one_1"
-                    android:src="@drawable/blue_1"
+                    android:src="@drawable/circle_green_1"
                     android:layout_width="@dimen/nd_one_block_size"
                     android:layout_height="@dimen/nd_one_block_size"
                     />
 
                 <ImageView
                     android:id="@+id/right_one_2"
-                    android:src="@drawable/blue_1"
+                    android:src="@drawable/circle_green_1"
                     android:layout_width="@dimen/nd_one_block_size"
                     android:layout_height="@dimen/nd_one_block_size"
                     android:layout_marginLeft="0dp"
@@ -537,7 +537,7 @@
 
                 <ImageView
                     android:id="@+id/right_one_3"
-                    android:src="@drawable/blue_1"
+                    android:src="@drawable/circle_green_1"
                     android:layout_width="@dimen/nd_one_block_size"
                     android:layout_height="@dimen/nd_one_block_size"
                     android:layout_marginLeft="0dp"
@@ -546,7 +546,7 @@
 
                 <ImageView
                     android:id="@+id/right_one_4"
-                    android:src="@drawable/blue_1"
+                    android:src="@drawable/circle_green_1"
                     android:layout_width="@dimen/nd_one_block_size"
                     android:layout_height="@dimen/nd_one_block_size"
                     android:layout_marginLeft="0dp"
@@ -555,7 +555,7 @@
 
                 <ImageView
                     android:id="@+id/right_one_5"
-                    android:src="@drawable/blue_1"
+                    android:src="@drawable/circle_green_1"
                     android:layout_width="@dimen/nd_one_block_size"
                     android:layout_height="@dimen/nd_one_block_size"
                     android:layout_marginLeft="0dp"
@@ -564,7 +564,7 @@
 
                 <ImageView
                     android:id="@+id/right_one_6"
-                    android:src="@drawable/blue_1"
+                    android:src="@drawable/circle_green_1"
                     android:layout_width="@dimen/nd_one_block_size"
                     android:layout_height="@dimen/nd_one_block_size"
                     android:layout_marginLeft="0dp"
@@ -573,7 +573,7 @@
 
                 <ImageView
                     android:id="@+id/right_one_7"
-                    android:src="@drawable/blue_1"
+                    android:src="@drawable/circle_green_1"
                     android:layout_width="@dimen/nd_one_block_size"
                     android:layout_height="@dimen/nd_one_block_size"
                     android:layout_marginLeft="0dp"
@@ -582,7 +582,7 @@
 
                 <ImageView
                     android:id="@+id/right_one_8"
-                    android:src="@drawable/blue_1"
+                    android:src="@drawable/circle_green_1"
                     android:layout_width="@dimen/nd_one_block_size"
                     android:layout_height="@dimen/nd_one_block_size"
                     android:layout_marginLeft="0dp"
@@ -591,7 +591,7 @@
 
                 <ImageView
                     android:id="@+id/right_one_9"
-                    android:src="@drawable/blue_1"
+                    android:src="@drawable/circle_green_1"
                     android:layout_width="@dimen/nd_one_block_size"
                     android:layout_height="@dimen/nd_one_block_size"
                     android:layout_marginLeft="0dp"
