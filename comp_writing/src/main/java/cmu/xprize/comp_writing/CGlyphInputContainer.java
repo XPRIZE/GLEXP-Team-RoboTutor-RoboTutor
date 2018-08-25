@@ -1403,12 +1403,12 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         if(_inhibit) {
 
-            Log.v(GRAPH_MSG, "CGlyphInputContainer.ihibitInput: mute " + _sampleExpected);
+            Log.v(GRAPH_MSG, "CGlyphInputContainer.in--hibitInput: mute " + _sampleExpected);
 
             if(_counter != null)
                 _counter.cancel();
 
-            this.setOnTouchListener(this);
+            this.setOnTouchListener(null); //set this to null if input is to be inhibit.
 
             // If user is in the process of writing in this field then clear it.
             //

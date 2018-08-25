@@ -1769,7 +1769,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         correctionAttempts = 0;
                     }
                 }
-            updateWordStimulus();
+//            updateWordStimulus(); //amogh this is here only for debugging purposes, actually will be called from the animator graph
+            inhibitWordInput(); // amogh added - this is here only for debugging purposes, actually will be called by the animator graph.
         }
 
         public void updateWordStimulus(){
@@ -1780,8 +1781,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 }
 //            }
         }
-            //if even one letter is wrong, put it's index in the queue and turn it red.(see how scaffolding at its word level can be called)
-            //
+
+        public void inhibitWordInput(){
+            for(int index : listIndicesAnswer){
+                CGlyphController glyphController = (CGlyphController) mGlyphList.getChildAt(index);
+                glyphController.inhibitInput(true);
+            }
+        }
     }
 
     //amogh added ends
