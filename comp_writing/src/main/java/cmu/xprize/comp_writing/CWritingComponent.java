@@ -376,7 +376,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         int wid = 0;
         switch (level){
             case 1:
-                mListWords.get(currentWordIndex).updateWordCorrectStatus();
+//                mListWords.get(currentWordIndex).updateWordCorrectStatus();
 //                break;
             case 2:
                 ArrayList<Integer> wordIndices = mListWords.get(currentWordIndex).getWordIndices();
@@ -546,7 +546,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         // Avoid caseSensitive for words activity
         boolean isAnswerCaseSensitive = true;
-
         boolean isWordActivity = activityFeature.contains("FTR_WORDS");
         boolean isMissingLtrActivity = activityFeature.contains("FTR_MISSING_LTR");
 
@@ -638,28 +637,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         else{
 //            currentWordIndices.add(mActiveIndex);
             //for immediate feedback
-            if(activityFeature.contains("FTR_SEN_LTR")){
+            if(activityFeature.contains("FTR_SEN_WRD")){
+                if (_spaceIndices.contains(mActiveIndex - 1))
+                        {
+                                currentWordIndex++;
+                        }
 
-            }
-            //for word level feedback
-            else if(activityFeature.contains("FTR_SEN_WRD")){
-                if (_spaceIndices.contains(mActiveIndex - 1) || punctuationSymbols.contains(mResponse)) {
+                if (_spaceIndices.contains(mActiveIndex - 1) || punctuationSymbols.contains(mResponse) || correctionAttempts > 0) {
                     //get the current word and update the
                     mListWords.get(currentWordIndex).updateWordCorrectStatus();
-//                    CGlyphController gControllerSpace = (CGlyphController) mGlyphList.getChildAt(mActiveIndex - 1);
-//                    CStimulusController respSpace = (CStimulusController) mResponseViewList.getChildAt(mActiveIndex - 1);
-//                    respSpace.setStimulusChar("", false);
-//                    gControllerSpace.setIsStimulus("");
-//                    gControllerSpace.updateCorrectStatus(_isValid);
-//                    for (int wordIndex : currentWordIndices){
-//                        CGlyphController gControllerWord = (CGlyphController) mGlyphList.getChildAt(wordIndex);//amogh change name
-//                        CStimulusController stimulusSpaceWord = (CStimulusController) mRecogList.getChildAt(wordIndex);
-//                        gControllerWord.displayCorrectStatus();
-//                        stimulusSpaceWord.updateStimulusState(gControllerWord.isCorrect());
-//                    }
-//                    currentWordIndices.clear();
-//                    currentWordIndices.add(mActiveIndex);
-//                    updateWord();
                 }
 
             }
@@ -1245,6 +1231,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         //amogh comments end
 
         //amogh added to initialise words
+        correctionAttempts = 0;
+        currentWordIndex = 0; //setting to 0 initially
+
         if(activityFeature.contains("FTR_SEN")){
             mListWords = new ArrayList<>();
             initialiseListWords(mStimulus,mAnswer);
@@ -1725,15 +1714,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             letterIndex += (lengthWord+1);
         }
     }
-
+    //amogh added
     public class Word{
 //        private ArrayList<Integer> listIndicesStimulus;
         private ArrayList<Integer> listIndicesAnswer; //stores the indices of the letters for this word
-        private ArrayList<Boolean> listCorrectStatus; //stores the status of each word, updated after each word is evaluated
+        private ArrayList<Boolean> listCorrectStatus; //stores the status of each word (not correct may also mean that there are no glyphs present inside ), updated after each word is evaluated
+        private ArrayList<Boolean> listHasGlyph; //stores the boolean which says if a glyph is present in the controller or not.
 //        private String wordStimulus;
         private String wordAnswer;
         private int index;
-        private boolean isCorrect;
+        private boolean wordIsCorrect;
         public Word(int index, String wordAnswer, ArrayList<Integer> listIndicesAnswer) {
             this.index = index;
             this.wordAnswer = wordAnswer;
@@ -1745,42 +1735,50 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         public ArrayList<Boolean> getLettersStatus() {
             return listCorrectStatus;
         }
+
         public void updateWordCorrectStatus(){
-            //update the correct status corresponding to the words
                 listCorrectStatus = new ArrayList<>();
+                listHasGlyph = new ArrayList<>();
+
+                //update the correct status and the status of having glyphs for the letters of this word
                 for (int i : listIndicesAnswer){
 //                    CStimulusController respController = (CStimulusController) mResponseViewList.getChildAt(i);
                     CGlyphController g = (CGlyphController) mGlyphList.getChildAt(i);
                     Boolean status = g.isCorrect();
                     listCorrectStatus.add(status);
+                    listHasGlyph.add(g.hasGlyph());
                     }
-                    //evaluate the word's correct status, and accordingly increase the correction attempts and teh current word index.
-                for(boolean letterCorrect : listCorrectStatus){
-                    if (letterCorrect == false){
-                        isCorrect = false;
+
+                    //evaluate the word's correct status, and accordingly increase the correction attempts and the current word index.
+                for(int i = 0;i<listCorrectStatus.size();i++){
+                    //when not correct and glyph present
+                    if (listCorrectStatus.get(i) == false && listHasGlyph.get(i)){
+                        wordIsCorrect = false;
                         correctionAttempts++;
                         break;
                     }
-                    else{
-                        isCorrect = true;
+                    //when correct and glyph present
+                    else if (listHasGlyph.get(i) && listCorrectStatus.get(i)){
+                        wordIsCorrect = true;
                         //increase current word index
                         if(currentWordIndex != mListWords.size()-1){
                             currentWordIndex++;
                         }
-                        updateWordStimulus();
+
                         //reset the word mistake count
                         correctionAttempts = 0;
                     }
                 }
+            updateWordStimulus();
         }
 
         public void updateWordStimulus(){
-            if (isCorrect){
+//            if (wordIsCorrect){
                 for(int index : listIndicesAnswer){
-                    CStimulusController respController = (CStimulusController) mResponseViewList.getChildAt(index);
-                    respController.updateStimulusState(listCorrectStatus.get(index));
+                    CStimulusController responseController = (CStimulusController) mResponseViewList.getChildAt(index);
+                    responseController.updateResponseState(listCorrectStatus.get(index));
                 }
-            }
+//            }
         }
             //if even one letter is wrong, put it's index in the queue and turn it red.(see how scaffolding at its word level can be called)
             //
