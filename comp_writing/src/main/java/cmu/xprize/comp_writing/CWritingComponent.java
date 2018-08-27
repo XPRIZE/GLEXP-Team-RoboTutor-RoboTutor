@@ -90,6 +90,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     private   IGlyphController  mActiveController;
     protected int               mActiveIndex;
 
+    protected Word              mActiveWord;// amogh added
+    protected String            mWrittenSentence; // amogh added
+    protected ArrayList         mEditOperations; //amogh added
+
     protected ImageButton       mReplayButton;
     protected ImageButton       mScrollRightButton;
     protected ImageButton       mScrollLeftButton;
@@ -158,7 +162,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected  List<Integer>    deleteCorrectionIndices = new ArrayList<>();
     protected  List<Integer>    insertCorrectionIndices = new ArrayList<>();
     protected  List<Integer>    changeCorrectionIndices = new ArrayList<>();
-    protected  List<Integer>    currentWordIndices = new ArrayList<>();
 
 
     protected HashMap<String,HashMap<String,ArrayList<Integer>>>  corrections = new HashMap<>();
@@ -169,8 +172,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //    protected  List<Integer>    deleteCorrectionIndices = new ArrayList<>(Arrays.asList());
 //    protected  List<Integer>    insertCorrectionIndices = new ArrayList<>(Arrays.asList());
 //    protected  List<Integer>    changeCorrectionIndices = new ArrayList<>(Arrays.asList());
-
-    protected int correctionAttempts = 0;
 
     protected String punctuationSymbols = ",.;:-_";
     //amogh add ends
@@ -440,8 +441,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             mResponseViewList.removeViewAt(index);
         }
         else{
-            correctionAttempts++;
-            if (correctionAttempts > 2){
+//            correctionAttempts++;
+//            if (correctionAttempts > 2){
                 mHighlightErrorBoxView = new View (getContext());
                 int wid = mResponseViewList.getChildAt(index+3).getLeft() - mResponseViewList.getChildAt(index+2).getLeft();
                 mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid,90));
@@ -459,7 +460,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         mHighlightErrorBoxView.setVisibility(View.GONE);
                     }
                 }, 2000);
-            }
+//            }
         }
 //        mRecogList.removeViewAt(index); //amogh commented to avoid removal from stimulus
     }
@@ -555,6 +556,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         // Check answer
         mResponse = candidate.getRecChar();
+        gController.setRecognisedChar(mResponse);
         _charValid = gController.checkAnswer(mResponse, isAnswerCaseSensitive);
 
         _metricValid = _metric.testConstraint(candidate.getGlyph(), this);
@@ -566,22 +568,27 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         String charExpected = gController.getExpectedChar();
         resp.setStimulusChar(mResponse, false);
 //            updateResponseView(mResponse);
-        //amogh added to handle spacing.
-        if (_isValid) {
 
+        //amogh added to handle spacing.
+        //currently -> when the next letter is valid and the previous glyph is supposed to be space. Needs to change.
+        if (_isValid) {
+            // when the next letter is valid and the previous glyph is supposed to be space. Needs to change.
             if (_spaceIndices.contains(mActiveIndex - 1)) {
-                CGlyphController gControllerSpace = (CGlyphController) mGlyphList.getChildAt(mActiveIndex - 1);
-                CStimulusController respSpace = (CStimulusController) mResponseViewList.getChildAt(mActiveIndex - 1);
-                respSpace.setStimulusChar("", false);
-                gControllerSpace.setIsStimulus("");
-                gControllerSpace.updateCorrectStatus(_isValid);
+//                CGlyphController gControllerSpace = (CGlyphController) mGlyphList.getChildAt(mActiveIndex - 1);
+//                CStimulusController respSpace = (CStimulusController) mResponseViewList.getChildAt(mActiveIndex - 1);
+//                respSpace.setStimulusChar("", false);
+//                gControllerSpace.setIsStimulus("");
+//                gControllerSpace.updateCorrectStatus(_isValid);
             }
-        } else {
+        }
+
+        else {
 //            mActiveController.
         }
         //amogh add ends
 
-        if (!activityFeature.contains("FTR_SEN_WRD")){
+        // when not a word or sentence level feedback activity
+        if (!(activityFeature.contains("FTR_SEN_WRD") || activityFeature.contains("FTR_SEN_SEN"))){
             // Update the controller feedback colors
             //
             mActiveController.updateCorrectStatus(_isValid);
@@ -635,22 +642,98 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
         // for sentence activities (word level and sentence level feedback)
         else{
-//            currentWordIndices.add(mActiveIndex);
-            //for immediate feedback
+
+            //for word level feedback
             if(activityFeature.contains("FTR_SEN_WRD")){
-                if (_spaceIndices.contains(mActiveIndex - 1))
-                        {
-                                currentWordIndex++;
+                mActiveWord = mListWords.get(currentWordIndex);
+                int attempts = mActiveWord.getAttempt();
+
+                //when the word is being written and evaluated for the first time
+                if(attempts == 0){
+
+                    //if punctuation is written or the previous space is left empty
+                    CGlyphController previousController = (CGlyphController) mGlyphList.getChildAt(mActiveIndex - 1);
+                    if (mActiveIndex > 0 && (previousController.getRecognisedChar().equals("") || punctuationSymbols.contains(mResponse))) {
+
+                        //get the current word and call update word correct status.
+                        boolean currentWordStatus = mActiveWord.getWordCorrectStatus();
+
+                        //word is correct and correctionAttempts = 0
+                        if(2==2){
+                            applyBehavior(WR_CONST.ON_CORRECT);
                         }
 
-                if (_spaceIndices.contains(mActiveIndex - 1) || punctuationSymbols.contains(mResponse) || correctionAttempts > 0) {
-                    //get the current word and update the
-                    mListWords.get(currentWordIndex).updateWordCorrectStatus();
+                        //word is not correct and correctionAttempts > 0
+                        else{
+                            attempts = updateAttemptFeature();
+                            applyBehavior(WR_CONST.ON_ERROR);
+                        }
+                    }
                 }
 
+                //when incorrect attempt has been made on this word before
+                else{
+
+                    boolean currentWordStatus = mActiveWord.getWordCorrectStatus();
+
+                    //when the written word is correct after a correction
+                    if(currentWordStatus){
+                        applyBehavior(WR_CONST.ON_CORRECT);
+                    }
+
+                    //if the word is still not correct
+                    else{
+
+                        // increase attempts and update the released feature
+                        attempts = updateAttemptFeature();
+                        if(attempts > 4){
+                            applyBehavior(WR_CONST.MERCY_RULE);
+                        }
+                        else{
+                            applyBehavior(WR_CONST.ON_ERROR);
+                        }
+                    }
+                }
+            }
+
+            //for sentence level feedback
+            else if(activityFeature.contains("FTR_SEN_SEN")){
+                //evaluate on punctuation
+                if("!?.".contains(mResponse))
+                {
+                    mWrittenSentence = getWrittenSentence();
+                    // when the written sentence is correct
+                    if (mWrittenSentence.equals(mAnswer)) {
+                        applyBehavior(WR_CONST.ON_CORRECT);
+                    }
+                    //when the written sentence does not match the expected answer
+                    else{
+                        mEditOperations = computeListStringOperations(mWrittenSentence, mAnswer);
+                    }
+                }
+                else
+                {
+
+                }
             }
         }
         return _isValid;
+    }
+
+    //amogh added function to get user written sentence.
+    public String getWrittenSentence(){
+        String sen = "";
+        for (int i = 0; i < mGlyphList.getChildCount(); i++){
+            CGlyphController controller = (CGlyphController) mGlyphList.getChildAt(i);
+            String recChar = controller.getRecognisedChar();
+            if(recChar.equals("")){
+                sen += " ";
+            }
+            else{
+                sen += recChar;
+            }
+        }
+        return sen;
     }
 
     /**
@@ -692,7 +775,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             retractFeature(attempt);
         }
     }
-    //amogh added
+    //amocorrectionAttgh added
     private void clearHesitationFeatures() {
 
         for (String hes : _hesitationFTR) {
@@ -709,12 +792,17 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     private int updateAttemptFeature() {
 
         clearAttemptFeatures();
-
-        int attempt = mActiveController.incAttempt();
-
+        int attempt;
         // only publish attempt feature for first four attempts... next time will activate mercy rule
-        if(attempt <= 4)
-            publishFeature(_attemptFTR.get(attempt-1));
+        if(activityFeature.contains("FTR_SEN_WRD")){
+            attempt = mActiveWord.incAttempt();
+        }
+        else{
+            attempt = mActiveController.incAttempt();
+        }
+
+        if (attempt <= 4)
+            publishFeature(_attemptFTR.get(attempt - 1));
 
         return attempt;
     }
@@ -1231,8 +1319,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         //amogh comments end
 
         //amogh added to initialise words
-        correctionAttempts = 0;
         currentWordIndex = 0; //setting to 0 initially
+        mWrittenSentence = "";
 
         if(activityFeature.contains("FTR_SEN")){
             mListWords = new ArrayList<>();
@@ -1371,8 +1459,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 else{
                     _spaceIndices.add(i1);
 
-                    mActiveController.setWordIndex(currentWordIndex);
-                    currentWordIndex++;
+//                    mActiveController.setWordIndex(currentWordIndex);
+//                    currentWordIndex++;
                 }
 
                 v.toggleStimuliGlyph();
@@ -1714,13 +1802,27 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             letterIndex += (lengthWord+1);
         }
     }
-    //amogh added
+
+    //called by ON_CORRECT
+    public void inhibitWordInput(){
+        mActiveWord.inhibitWordInput();
+    }
+    public void updateWordResponse(){
+        mActiveWord.updateWordResponse();
+    }
+    public int updateCurrentWordIndex(){
+        currentWordIndex++;
+        return currentWordIndex;
+    }
+
+
     public class Word{
 //        private ArrayList<Integer> listIndicesStimulus;
         private ArrayList<Integer> listIndicesAnswer; //stores the indices of the letters for this word
         private ArrayList<Boolean> listCorrectStatus; //stores the status of each word (not correct may also mean that there are no glyphs present inside ), updated after each word is evaluated
         private ArrayList<Boolean> listHasGlyph; //stores the boolean which says if a glyph is present in the controller or not.
 //        private String wordStimulus;
+        private int attempt;
         private String wordAnswer;
         private int index;
         private boolean wordIsCorrect;
@@ -1736,7 +1838,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             return listCorrectStatus;
         }
 
-        public void updateWordCorrectStatus(){
+        public boolean getWordCorrectStatus(){
                 listCorrectStatus = new ArrayList<>();
                 listHasGlyph = new ArrayList<>();
 
@@ -1747,37 +1849,33 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     Boolean status = g.isCorrect();
                     listCorrectStatus.add(status);
                     listHasGlyph.add(g.hasGlyph());
-                    }
+                }
 
-                    //evaluate the word's correct status, and accordingly increase the correction attempts and the current word index.
-                for(int i = 0;i<listCorrectStatus.size();i++){
-                    //when not correct and glyph present
+                    //evaluate the word's correct status
+                for(int i = 0; i < listCorrectStatus.size(); i++){
+                    //when not correct and glyph present -> set wordIsCorrect to false
                     if (listCorrectStatus.get(i) == false && listHasGlyph.get(i)){
                         wordIsCorrect = false;
-                        correctionAttempts++;
                         break;
                     }
-                    //when correct and glyph present
+                    //when correct and glyph present  set wordIsCorrect to True.
                     else if (listHasGlyph.get(i) && listCorrectStatus.get(i)){
                         wordIsCorrect = true;
-                        //increase current word index
-                        if(currentWordIndex != mListWords.size()-1){
-                            currentWordIndex++;
-                        }
-
-                        //reset the word mistake count
-                        correctionAttempts = 0;
                     }
                 }
+
+                return wordIsCorrect;
+
 //            updateWordStimulus(); //amogh this is here only for debugging purposes, actually will be called from the animator graph
-            inhibitWordInput(); // amogh added - this is here only for debugging purposes, actually will be called by the animator graph.
+//            inhibitWordInput(); // amogh added - this is here only for debugging purposes, actually will be called by the animator graph.
         }
 
-        public void updateWordStimulus(){
+        public void updateWordResponse(){
 //            if (wordIsCorrect){
-                for(int index : listIndicesAnswer){
+                for(int i = 0; i < listCorrectStatus.size(); i++){
+                    int index = listIndicesAnswer.get(i);
                     CStimulusController responseController = (CStimulusController) mResponseViewList.getChildAt(index);
-                    responseController.updateResponseState(listCorrectStatus.get(index));
+                    responseController.updateResponseState(listCorrectStatus.get(i));
                 }
 //            }
         }
@@ -1787,6 +1885,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 CGlyphController glyphController = (CGlyphController) mGlyphList.getChildAt(index);
                 glyphController.inhibitInput(true);
             }
+        }
+
+        public int incAttempt(){
+            attempt++;
+            return attempt;
+        }
+
+        public int getAttempt(){
+            return attempt;
         }
     }
 

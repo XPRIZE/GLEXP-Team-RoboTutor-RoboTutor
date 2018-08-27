@@ -338,7 +338,13 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         return _attempt;
     }
 
+    public void setRecognisedChar(String recChar){
+        mGlyphInput.setRecognisedChar(recChar);
+    }
 
+    public String getRecognisedChar(){
+        return mGlyphInput.getRecognisedChar();
+    }
 
     public class glyphSaveListener implements View.OnClickListener {
         @Override

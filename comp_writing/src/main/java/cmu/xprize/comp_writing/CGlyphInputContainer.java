@@ -100,6 +100,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private String                _ltkPlusResult;
 
     private String                _sampleExpected     = "";     // The expected character
+    private String                _recognisedChar     = "";
     private float                 _sampleHorzAdjusted = 0;
     private float                 _sampleVertAdjusted = 0;
 
@@ -529,6 +530,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                 if(_drawGlyph != null) {
                     if (mHasGlyph){
                         erase();
+                        _recognisedChar = "";
                         CStimulusController resp = (CStimulusController)_responseView.getChildAt(_respIndex);
                         resp.setStimulusChar("",false);
                     }
@@ -1353,6 +1355,14 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         _sampleExpected = protoChar;
     }
 
+    public void setRecognisedChar(String recChar){
+        _recognisedChar = recChar;
+    }
+
+    public String getRecognisedChar(){
+        return _recognisedChar;
+    }
+
     public boolean checkAnswer(String resp, boolean isAnswerCaseSensitive) {
 
         if(!isAnswerCaseSensitive) {
@@ -1408,7 +1418,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             if(_counter != null)
                 _counter.cancel();
 
-            this.setOnTouchListener(null); //set this to null if input is to be inhibit.
+            this.setOnTouchListener(this); //set this to null if input is to be inhibit.
 
             // If user is in the process of writing in this field then clear it.
             //
