@@ -659,7 +659,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         boolean currentWordStatus = mActiveWord.getWordCorrectStatus();
 
                         //word is correct and correctionAttempts = 0
-                        if(2==2){
+                        if(currentWordStatus){
                             applyBehavior(WR_CONST.ON_CORRECT);
                         }
 

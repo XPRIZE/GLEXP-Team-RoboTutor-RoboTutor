@@ -326,6 +326,10 @@
             {"name": "prompt - Not quite, Try again", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3","soundpackage": "arithmetic","mode": "flow", "features": "FTR_ATTEMPT_1"},
             {"name": "ERASE GLYPH", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "ERASE_GLYPH:String", "features":"FTR_ATTEMPT_1"},
 
+            //sentence writing first error
+            // 1. word level- change stimulus color for complete word
+
+
 
             // 2nd-3rd wrong attempt - show overlay
             //
