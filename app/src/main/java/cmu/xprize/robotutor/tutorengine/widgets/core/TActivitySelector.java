@@ -74,6 +74,15 @@ import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
 public class TActivitySelector extends CActivitySelector implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource, IPublisher, ITutorLogger {
 
+
+    // NEW_MENU TODO:
+    // NEW_MENU (1) √√√ how to retrieve next skill?
+    // NEW_MENU (2) √√√ how to change button images?
+    // NEW_MENU (3) √√√ how to retrieve button image for each tutor? (SEE BOJACK)
+    // NEW_MENU (4) how to *not* go to rating menu
+    // NEW_MENU (5) make button look tappable
+    // NEW_MENU (6) variability (e.g. next tutor, etc)
+
     private static boolean          DEBUG_LANCHER = false;
     public  static String           DEBUG_TUTORID = "";
 
@@ -246,13 +255,22 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             SaskActivity.setVisibility(VISIBLE);
             SdebugActivity.setVisibility(GONE);
 
+            // NEW_MENU (4) now there's only one menu!
             for (CAsk_Data layout : dataSource) {
 
                 if (layout.name.equals(name)) {
 
                     _activeLayout = layout;
 
-                    SaskActivity.setDataSource(layout);
+                    SaskActivity.setDataSource(layout); // NEW_MENU (2) √√√ images set inside
+
+                    if (name.equals(TCONST.FTR_TUTOR_SELECT)) {
+                        CAt_Data[] nextTutors = new CAt_Data[3];
+                        nextTutors[0] = (CAt_Data) writeTransitions.get(writingTutorID);
+                        nextTutors[1] = (CAt_Data) storyTransitions.get(storiesTutorID);
+                        nextTutors[2] = (CAt_Data) mathTransitions.get(mathTutorID);
+                        SaskActivity.setButtonImages(nextTutors); // NEW_MENU (6) can possibly be next.next
+                    }
                     break;
                 }
             }
@@ -1733,7 +1751,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writePlacementIndex = %d", writingPlacementIndex));
             writingTutorID = writePlacementTutor.tutor; // YYY tutor gets chosen here
         } else {
-            writingTutorID = prefs.getString(TCONST.SKILL_WRITING, rootSkillWrite);
+            writingTutorID = prefs.getString(TCONST.SKILL_WRITING, rootSkillWrite); // NEW_MENU (1) √√√ here is where the next skill is retrieved
         }
         RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writingTutorID = %s", writingTutorID));
 

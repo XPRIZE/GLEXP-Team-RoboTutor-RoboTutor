@@ -36,7 +36,7 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
 
     protected Context           mContext;
 
-    protected CAskComponent     SaskActivity;
+    protected CAskComponent     SaskActivity; // NEW_MENU (2) √√√ sets images
     protected CDebugComponent   SdebugActivity;
 
     protected final Handler     mainHandler  = new Handler(Looper.getMainLooper());
@@ -44,6 +44,7 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     protected HashMap           nameMap      = new HashMap();
     protected boolean           _qDisabled   = false;
 
+    // NEW_MENU (4) trace me!
     protected CAsk_Data         _activeLayout;
     protected int               _describeIndex;
 

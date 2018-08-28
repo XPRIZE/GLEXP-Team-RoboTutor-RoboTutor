@@ -19,6 +19,7 @@ import java.util.HashMap;
 import cmu.xprize.util.CAt_Data;
 import cmu.xprize.util.CTutorData_Metadata;
 import cmu.xprize.util.IButtonController;
+import cmu.xprize.util.TCONST;
 import cmu.xprize.util.TCONST.Thumb;
 
 import static cmu.xprize.comp_debug.CD_CONST.SELECT_MATH;
@@ -356,6 +357,17 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
         int thumbId;
 
+        // NEW_MENU (3) √√√ here's where images are retrieved!!!
+        // https://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
+        thumbId = getThumbId(tutorThumb);
+        ScurrentTutorImage.setImageResource(thumbId);
+        ScurrentTutorImage.setPadding(36, 36, 36, 36);
+        ScurrentTutorImage.setBackground(getResources().getDrawable(R.drawable.outline_current_large, null));
+
+    }
+
+    public static int getThumbId(Thumb tutorThumb) {
+        int thumbId;
         switch(tutorThumb) {
             case AKIRA:
                 thumbId = R.drawable.thumb_akira;
@@ -435,10 +447,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                 break;
 
         }
-        ScurrentTutorImage.setImageResource(thumbId);
-        ScurrentTutorImage.setPadding(36, 36, 36, 36);
-        ScurrentTutorImage.setBackground(getResources().getDrawable(R.drawable.outline_current_large, null));
-
+        return thumbId;
     }
 
 

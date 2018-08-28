@@ -37,7 +37,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cmu.xprize.comp_debug.CDebugComponent;
+import cmu.xprize.util.CAt_Data;
 import cmu.xprize.util.CClassMap;
+import cmu.xprize.util.CTutorData_Metadata;
 import cmu.xprize.util.IButtonController;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
@@ -200,7 +203,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
                     tView.setText(element.resource);
                     break;
 
-                case ASK_CONST.IMAGEBUTTON:
+                case ASK_CONST.IMAGEBUTTON: // NEW_MENU (2) √√√ here is where the images are set!!!
                     int test = getResources().getIdentifier(element.componentID, "id", packageName);
 
                     ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
@@ -224,6 +227,28 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
         enableButtons(true);
         requestLayout();
+    }
+
+    /**
+     * NEW_MENU √√√
+     * sets the button images to show next tutor, instead of separate for reading, writing, math
+     * @param nextActivities
+     */
+    public void setButtonImages(CAt_Data[] nextActivities) {
+
+        Log.wtf("NEW_MENU", nextActivities[0].tutor_id + " " + nextActivities[1].tutor_id + " " + nextActivities[2].tutor_id);
+
+        for(int i = 0; i < nextActivities.length; i++) {
+            CAskElement element = mDataSource.items[i];
+            ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+
+            TCONST.Thumb resource = CTutorData_Metadata.getThumbImage(nextActivities[i]);
+            Log.wtf("NEW_MENU", resource.toString());
+
+            //  √√√NEW_MENU very hacky!
+            ibView.setImageResource(CDebugComponent.getThumbId(resource));
+
+        }
     }
 
     private void releaseReferences() {

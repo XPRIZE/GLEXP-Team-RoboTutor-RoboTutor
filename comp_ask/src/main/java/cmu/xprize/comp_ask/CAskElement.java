@@ -14,7 +14,7 @@ public class CAskElement implements ILoadableObject {
 
     // json loadable
     public String                   datatype         = null;   // "text" OR "image"
-    public String                   resource         = null;   // resource ID OR text literal
+    public String                   resource         = null;   // resource ID OR text literal // NEW_MENU (2) √√√ trace me
     public String                   componentID      = null;   // The target UI element in Layout
 
     public String                   behavior         = null;   // The button behavior

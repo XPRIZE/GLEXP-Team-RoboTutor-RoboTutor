@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- NEW_MENU (5) make buttons look nicer on tap -->
     <!--The order of these matters - the first matched gets drawn-->
     <item
         app:state_highlight="true"
