@@ -1815,6 +1815,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         return currentWordIndex;
     }
 
+    public void updateLettersWordResponse(){
+        mActiveWord.updateLettersWordResponse();
+    }
+
 
     public class Word{
 //        private ArrayList<Integer> listIndicesStimulus;
@@ -1871,13 +1875,21 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
 
         public void updateWordResponse(){
-//            if (wordIsCorrect){
+            boolean wordStatus = wordIsCorrect;
+            // change the color for all letters according to the state of the word.
                 for(int i = 0; i < listCorrectStatus.size(); i++){
                     int index = listIndicesAnswer.get(i);
                     CStimulusController responseController = (CStimulusController) mResponseViewList.getChildAt(index);
-                    responseController.updateResponseState(listCorrectStatus.get(i));
+                    responseController.updateResponseState(wordStatus);
                 }
-//            }
+        }
+
+        public void updateLettersWordResponse(){
+            for(int i = 0; i < listCorrectStatus.size(); i++){
+                int index = listIndicesAnswer.get(i);
+                CStimulusController responseController = (CStimulusController) mResponseViewList.getChildAt(index);
+                responseController.updateResponseState(listCorrectStatus.get(i));
+            }
         }
 
         public void inhibitWordInput(){

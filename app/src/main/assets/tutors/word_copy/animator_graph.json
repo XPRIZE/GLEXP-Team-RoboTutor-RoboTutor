@@ -35,9 +35,9 @@
 
             // Zoom and highlight Stimulus
             {"name": "Zoom Sstimulus",     "type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1250:Long","features":"!FTR_DICTATION"},
-            {"name": "Highlight Stimulus", "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "STIMULUS_HIGHLIGHT:String|1250:Integer", "features":"!FTR_DICTATION&!FTR_WORDS"},
+            {"name": "Highlight Stimulus", "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "STIMULUS_HIGHLIGHT:String|1250:Integer", "features":"!FTR_DICTATION&!FTR_WORDS&!FTR_SEN"},
             // Hightlight all glyphs and point at first glyph
-            {"name":"Highlight glyphs", "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "GLYPH_HIGHLIGHT:String|2500:Integer", "features":"!FTR_DICTATION"},
+            {"name":"Highlight glyphs", "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "GLYPH_HIGHLIGHT:String|2500:Integer", "features":"!FTR_DICTATION&!FTR_SEN"},
             {"name":"Point at Glyph",   "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "POINT_AT_GLYPH:String|2000:Integer",  "features":"!FTR_DICTATION&!FTR_SEN"},
 
             {"name": "Write Prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "How many things are here.mp3", "soundpackage":"arithmetic", "mode":"flow", "features": "FTR_DOTCOUNT"},
@@ -181,7 +181,7 @@
 
             {"name": "GOOD - feedback", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Good.mp3","soundpackage": "default","mode": "flow", "features": "FTR_ATTEMPT_4&!FTR_SEN"},
 
-            {"name": "DELAYED Highlight Next", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIGHLIGHT_NEXT:String|0:Integer",    "features":"FTR_INPUT_STALLED&!FTR_SEN"},
+//            {"name": "DELAYED Highlight Next", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIGHLIGHT_NEXT:String|0:Integer",    "features":"FTR_INPUT_STALLED&!FTR_SEN"},
 
             // functions to be called for sentence writing
             // 1. word level feedback (the three things below and clearing the attempt index)
@@ -318,7 +318,7 @@
             //{"name": "Count incorrect", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "countIncorrect", "parms": "", "features":""},
 
             {"name": "Disable Replay",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "enableReplayButton", "parms": "FALSE:Boolean", "features":"FTR_DICTATION"},
-            {"name": "Disable Input",   "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "TRUE:Boolean",  "features":""},
+            {"name": "Disable Input",   "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "TRUE:Boolean",  "features":"!FTR_SEN"},
 
 
             // 1st wrong attempt
@@ -836,7 +836,7 @@
             {"name": "Disable Input",   "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "TRUE:Boolean",  "features":""},
 
             {"name":"Zoom Sstimulus",  "type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":"!FTR_DICTATION"},
-            {"name":"Highlight Stimulus",         "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "STIMULUS_HIGHLIGHT:String|1000:Integer", "features":"!FTR_DICTATION&!FTR_WORDS"},
+            {"name":"Highlight Stimulus",         "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "STIMULUS_HIGHLIGHT:String|1000:Integer", "features":"!FTR_DICTATION&!FTR_WORDS&!FTR_SEN"},
 
             // Show trace line for write.trc
             {"name": "SHOW SAMPLE",          "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent",    "parms": "SHOW_TRACELINE:String",    "features":"FTR_TRACE"},
