@@ -714,7 +714,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     }
                     //when the written sentence does not match the expected answer
                     else{
-                        mEditOperations = computeListStringOperations(mWrittenSentence, mAnswer);
+                        mEditOperations = computeEditsAndAlignedStrings(mWrittenSentence, mAnswer);
                     }
                 }
                 else
@@ -1311,8 +1311,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
      * XYZ
      */
     public void updateText(CWr_Data data) {
-        ArrayList a = computeListStringOperations("mt",
-                                                  "Mint");
+        ArrayList a = computeEditsAndAlignedStrings("mr prresident",
+                                                  "Mr. President");
         CStimulusController r;
         CGlyphController    v;
         CStimulusController resp; //amogh added
@@ -1962,8 +1962,8 @@ private static class EditOperation {
     }
 }
 
-
-    public static ArrayList computeListStringOperations(String string1, String string2) {
+    //amogh comment -> when cleaning the code, make sure that editoperations is removed and only strings are used.
+    public static ArrayList computeEditsAndAlignedStrings(String string1, String string2) {
 
         ArrayList<EditOperation> listOperations = new ArrayList<EditOperation>();
 
@@ -2019,6 +2019,9 @@ private static class EditOperation {
             }
         }
 
+        final StringBuilder topLineBuilder      = new StringBuilder(n + m);
+        final StringBuilder bottomLineBuilder = new StringBuilder(n + m);
+
         Point current = new Point(m, n);
         // System.out.println("__mn__"+m+" , "+n);
         //backtracking through the parent map which stores the arrows for how we arrived there
@@ -2035,6 +2038,9 @@ private static class EditOperation {
                 final char schar = string1.charAt(predecessor.y);
                 final char zchar = string2.charAt(predecessor.x);
 
+                topLineBuilder.append(schar);
+                bottomLineBuilder.append(zchar);
+
                 if(schar != zchar){
 //                    System.out.println("____substitute____" + schar +"__with___"+zchar+"___at___"+ (current.x-2));
                     EditOperation e = new EditOperation("R",zchar,current.x-2);
@@ -2050,12 +2056,16 @@ private static class EditOperation {
             else if (current.x != predecessor.x) {
 //                System.out.println("____inserting____" + string2.charAt(current.y-1) + "___at___"+ (predecessor.y-2));
 //                char a = string2.charAt(predecessor.x);
+                topLineBuilder.append("-");
+                bottomLineBuilder.append(string2.charAt(predecessor.x));
                 EditOperation e = new EditOperation("I", string2.charAt(current.y),predecessor.y - 1);
                 listOperations.add(e);
             }
 
             else {
 //                System.out.println("____delete____" + string1.charAt(current.y-1) +"___at___"+ (current.y-2));
+                topLineBuilder.append(string1.charAt(predecessor.y));
+                bottomLineBuilder.append('-');
                 EditOperation e = new EditOperation("D", string1.charAt(current.y-1), current.y-2);
                 listOperations.add(e);
             }
@@ -2063,15 +2073,26 @@ private static class EditOperation {
             current = predecessor;
         }
         Collections.reverse(listOperations);
+
+        topLineBuilder     .deleteCharAt(topLineBuilder.length() - 1);
+        bottomLineBuilder .deleteCharAt(bottomLineBuilder.length() - 1);
         listOperations.remove(0);
+
+        topLineBuilder     .reverse();
+        bottomLineBuilder .reverse();
+
         //to debug and see the edit sequence:
-        String ops = "";
+        StringBuilder ops = new StringBuilder();
         ArrayList<Integer> changeIndices = new ArrayList<Integer>();
         for (EditOperation elem : listOperations){
-            ops = ops + elem.toString();
+            ops = ops.append(elem.toString());
             changeIndices.add(elem.getIndex());
         }
-        return listOperations;
+        ArrayList<StringBuilder> results = new ArrayList<StringBuilder>();
+        results.add(topLineBuilder);
+        results.add(bottomLineBuilder);
+        results.add(ops);
+        return results;
     }
     //amogh added ends
 
