@@ -1311,9 +1311,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
      * XYZ
      */
     public void updateText(CWr_Data data) {
-        ArrayList a = computeListStringOperations("abcde",
-                                                  "fghij");
-        int b = 0;
+        ArrayList a = computeListStringOperations("mt",
+                                                  "Mint");
         CStimulusController r;
         CGlyphController    v;
         CStimulusController resp; //amogh added
@@ -2042,7 +2041,7 @@ private static class EditOperation {
                     listOperations.add(e);
                 }
                 else{
-                    System.out.println("____no change____" + schar +"__with___"+zchar+"___at___"+ (current.x-2));
+//                    System.out.println("____no change____" + schar +"__with___"+zchar+"___at___"+ (current.x-2));
                     EditOperation e = new EditOperation("N", zchar, current.x -2);
                     listOperations.add(e);
                 }
@@ -2050,7 +2049,8 @@ private static class EditOperation {
 
             else if (current.x != predecessor.x) {
 //                System.out.println("____inserting____" + string2.charAt(current.y-1) + "___at___"+ (predecessor.y-2));
-                EditOperation e = new EditOperation("I", string2.charAt(current.y-1),predecessor.y - 2);
+//                char a = string2.charAt(predecessor.x);
+                EditOperation e = new EditOperation("I", string2.charAt(current.y),predecessor.y - 1);
                 listOperations.add(e);
             }
 
