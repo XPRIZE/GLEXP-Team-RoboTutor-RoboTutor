@@ -8,7 +8,8 @@ public interface IGlyphController {
 
     public void setProtoTypeDirty(boolean isDirty);
 
-    public void updateCorrectStatus(boolean correct);
+    public void updateAndDisplayCorrectStatus(boolean correct);
+    public void updateCorrectStatus(boolean correct); //amogh added
     public boolean firePendingRecognition();
     public void inhibitInput(boolean newState);
 

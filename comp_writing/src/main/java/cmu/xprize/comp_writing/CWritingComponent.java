@@ -300,6 +300,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         mRecognizedScroll.setLinkedScroll(mDrawnScroll);
         mDrawnScroll.setLinkedScroll(mRecognizedScroll);
+
     }
 
 
@@ -562,8 +563,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         _metricValid = _metric.testConstraint(candidate.getGlyph(), this);
         _isValid = _charValid && _metricValid; // _isValid essentially means "is a correct drawing"
 
-        //amogh added to set the valid character in response.
 
+
+
+        //amogh added to set the valid character in response.
         CStimulusController resp = (CStimulusController) mResponseViewList.getChildAt(mActiveIndex);
         String charExpected = gController.getExpectedChar();
         resp.setStimulusChar(mResponse, false);
@@ -589,11 +592,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         // when not a word or sentence level feedback activity
         if (!(activityFeature.contains("FTR_SEN_WRD") || activityFeature.contains("FTR_SEN_SEN"))){
+
+            //update the controller's correct status
+            mActiveController.updateAndDisplayCorrectStatus(_isValid);
+
             // Update the controller feedback colors
-            //
-            mActiveController.updateCorrectStatus(_isValid);
-
-
             if (!singleStimulus) {
                 stimController.updateStimulusState(_isValid);
             }
@@ -642,6 +645,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
         // for sentence activities (word level and sentence level feedback)
         else{
+
+            //update the controller's correct status
+            mActiveController.updateCorrectStatus(_isValid);
 
             //for word level feedback
             if(activityFeature.contains("FTR_SEN_WRD")){
@@ -742,7 +748,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
      */
     public void mercyRuleCleanup() {
 
-        mActiveController.updateCorrectStatus(true);
+        mActiveController.updateAndDisplayCorrectStatus(true);
         if(isComplete()) {
             applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
         } else {
@@ -1305,7 +1311,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
      * XYZ
      */
     public void updateText(CWr_Data data) {
-
+        ArrayList a = computeListStringOperations("abcde",
+                                                  "fghij");
+        int b = 0;
         CStimulusController r;
         CGlyphController    v;
         CStimulusController resp; //amogh added
@@ -1414,7 +1422,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     v.setIsStimulus(Char);
                     if(!Char.equals(" ")) {
                         v.setProtoGlyph(_glyphSet.cloneGlyph(Char));
-                        v.updateCorrectStatus(true);
+                        v.updateAndDisplayCorrectStatus(true);
                     }
                     mGlyphList.addView(v);
                 }
@@ -1912,11 +1920,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     //amogh added ends
 
 //amogh added class to handle string computations
-private static enum EditOperation {
-    INSERT     ("I",'a',0),
-    REPLACE ("R",'a',0),
-    DELETE     ("D",'a',0),
-    NONE       ("N",'a',0);
+private static class EditOperation {
 
     private String operation;
     private  char value;
@@ -1940,7 +1944,6 @@ private static enum EditOperation {
     //     this.value = "";
     //     this.index = 0;
     // }
-    @Override
     public String toString() {
         return operation;
     }
@@ -2019,14 +2022,13 @@ private static enum EditOperation {
 
         Point current = new Point(m, n);
         // System.out.println("__mn__"+m+" , "+n);
-
+        //backtracking through the parent map which stores the arrows for how we arrived there
         while (true) {
             Point predecessor = parentMap.get(current);
 
             if (predecessor == null) {
                 break;
             }
-            EditOperation e;
             // System.out.println("__current__"+current.x+" , "+current.y);
             // System.out.println("__predecessor__"+predecessor.x+" , "+predecessor.y);
 
@@ -2036,28 +2038,25 @@ private static enum EditOperation {
 
                 if(schar != zchar){
 //                    System.out.println("____substitute____" + schar +"__with___"+zchar+"___at___"+ (current.x-2));
-                    e = EditOperation.REPLACE;
-                    e.setValue(zchar);
-                    e.setIndex(current.x-2);
+                    EditOperation e = new EditOperation("R",zchar,current.x-2);
+                    listOperations.add(e);
                 }
                 else{
                     System.out.println("____no change____" + schar +"__with___"+zchar+"___at___"+ (current.x-2));
-                    e = EditOperation.NONE;
-                    e.setValue(zchar);
-                    e.setIndex(current.x-2);
+                    EditOperation e = new EditOperation("N", zchar, current.x -2);
+                    listOperations.add(e);
                 }
-                listOperations.add(e);
-            } else if (current.x != predecessor.x) {
+            }
+
+            else if (current.x != predecessor.x) {
 //                System.out.println("____inserting____" + string2.charAt(current.y-1) + "___at___"+ (predecessor.y-2));
-                e = EditOperation.INSERT;
-                e.setValue(string2.charAt(current.y-1));
-                e.setIndex(predecessor.y-2);
+                EditOperation e = new EditOperation("I", string2.charAt(current.y-1),predecessor.y - 2);
                 listOperations.add(e);
-            } else {
+            }
+
+            else {
 //                System.out.println("____delete____" + string1.charAt(current.y-1) +"___at___"+ (current.y-2));
-                e = EditOperation.DELETE;
-                e.setValue(string1.charAt(current.y-1));
-                e.setIndex(current.y-2);
+                EditOperation e = new EditOperation("D", string1.charAt(current.y-1), current.y-2);
                 listOperations.add(e);
             }
 
@@ -2065,11 +2064,13 @@ private static enum EditOperation {
         }
         Collections.reverse(listOperations);
         listOperations.remove(0);
+        //to debug and see the edit sequence:
         String ops = "";
+        ArrayList<Integer> changeIndices = new ArrayList<Integer>();
         for (EditOperation elem : listOperations){
             ops = ops + elem.toString();
+            changeIndices.add(elem.getIndex());
         }
-        String a = ops;
         return listOperations;
     }
     //amogh added ends

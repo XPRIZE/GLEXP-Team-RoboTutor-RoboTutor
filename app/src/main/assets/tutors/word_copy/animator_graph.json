@@ -324,20 +324,25 @@
             // 1st wrong attempt
             //
             {"name": "prompt - Not quite, Try again", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3","soundpackage": "arithmetic","mode": "flow", "features": "FTR_ATTEMPT_1"},
-            {"name": "ERASE GLYPH", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "ERASE_GLYPH:String", "features":"FTR_ATTEMPT_1"},
+            {"name": "ERASE GLYPH", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "ERASE_GLYPH:String", "features":"FTR_ATTEMPT_1&!FTR_SEN"},
 
-            //sentence writing first error
-            // 1. word level- change stimulus color for complete word
-
+              //sentence writing first error
+              // 1. word level- change stimulus color for complete word
+            {"name": "update the response colors for each letter in word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateLettersWordResponse", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_ATTEMPT2"},
 
 
             // 2nd-3rd wrong attempt - show overlay
-            //
+
             {"name": "OVERLAY Animation", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "ANIMATE_OVERLAY:String", "features":"!FTR_ATTEMPT_1"},
             {"name": "prompt - MAKE IT LOOK...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Try to make it look more like this.mp3", "soundpackage": "default", "mode": "flow", "features": "!FTR_ATTEMPT_1"},
             {"name": "ERASE GLYPH", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "ERASE_GLYPH:String", "features":"!FTR_ATTEMPT_1"},
             {"name": "HIDE SAMPLE", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_SAMPLE:String", "features":"!FTR_ATTEMPT_1"},
             {"name": "Disable Input",   "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "TRUE:Boolean",  "features":"!FTR_ATTEMPT_1"},
+
+              //sentence writing 2nd error
+              // 1. word level- change stimulus color for complete word
+            {"name": "update the response colors for each letter in word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateWordResponse", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_ATTEMPT1"},
+
 
             // For dictation activity
 
