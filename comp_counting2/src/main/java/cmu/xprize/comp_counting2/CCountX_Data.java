@@ -18,6 +18,7 @@ public class CCountX_Data implements ILoadableObject{
     public String layout;
     public int[] dataset;
     public String[] tenPower;//"one","ten","hundred"
+    public int difficulty;
 
 
     @Override

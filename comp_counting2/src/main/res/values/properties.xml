@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RoboTutor">
+        <attr name="radAlley" format="float"/>
+        <attr name="dataSource" format="string"/>
+
+        <attr name="isResponse" format="boolean" />
+        <attr name="aspectratio" format="float"/>
+        <attr name="strokeweight" format="float"/>
+        <attr name="textcolor" format="color" />
+        <attr name="linked_views" format="string"/>
+        <attr name="type_face" format="string"/>
+        <attr name="border_width" format="float"/>
+    </declare-styleable>
+</resources>

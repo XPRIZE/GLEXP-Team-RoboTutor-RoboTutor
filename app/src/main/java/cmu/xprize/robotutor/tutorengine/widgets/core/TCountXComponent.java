@@ -3,9 +3,15 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,6 +24,7 @@ import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.comp_logging.PerformanceLogItem;
+import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
@@ -38,6 +45,18 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+
+import cmu.xprize.robotutor.R;
+import cmu.xprize.comp_counting2.CGlyphController_Simple;
+import cmu.xprize.comp_counting2.CGlyphInputContainer_Simple;
+import cmu.xprize.comp_counting2.IGlyphController_Simple;
+import cmu.xprize.comp_counting2.IWritingComponent_Simple;
+import cmu.xprize.ltkplus.CRecResult;
+import cmu.xprize.ltkplus.CRecognizerPlus;
+import cmu.xprize.ltkplus.GCONST;
+import cmu.xprize.ltkplus.IGlyphSink;
+import cmu.xprize.util.TCONST;
+
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 /**
@@ -46,6 +65,7 @@ import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 public class TCountXComponent extends CCountX_Component implements ITutorObjectImpl, IDataSink, IPublisher, ITutorLogger, IBehaviorManager, IEventSource {
 
+    private Context mContext;
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
     private CMediaManager mMediaManager;
@@ -56,6 +76,21 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
     private HashMap<String,String>  _StringVar  = new HashMap<>();
     private HashMap<String,Integer> _IntegerVar = new HashMap<>();
     private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
+
+
+    CGlyphController_Simple _controller_1;
+    CGlyphInputContainer_Simple _inputContainer_1;
+
+
+    // you do need these
+    CGlyphController_Simple _controller_2;
+    CGlyphInputContainer_Simple _inputContainer_2;
+
+    // Views to help you
+    TextView _resultDisplay_1;
+    TextView _resultDisplay_2;
+    Spinner _boostSpinner;
+    String[] BOOST_VALS = {GCONST.NO_BOOST, GCONST.BOOST_ALPHA, GCONST.BOOST_DIGIT, GCONST.FORCE_DIGIT};
 
     static final String TAG = "TCountComponent";
 
@@ -79,14 +114,81 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
     public void init(Context context, AttributeSet attrs) {
         super.init(context, attrs);
 
+        mContext = context;
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
     }
 
     @Override
     public void onCreate() {
+
         trackAndLogPerformance("START");
+        _recognizer = CRecognizerPlus.getInstance();
+        _glyphSet   = _recognizer.getGlyphPrototypes(); //new GlyphSet(TCONST.ALPHABET);
+
+        _recognizer.setClassBoost(GCONST.FORCE_DIGIT); // reset boost which may have been set from Asm
+
+
+
+
+        _controller_1 = findViewById(R.id.glyph_controller_1);
+        _inputContainer_1 = findViewById(R.id.drawn_box_1);
+        _resultDisplay_1 = findViewById(R.id.result_display_1);
+
+        _controller_1.setInputContainer(_inputContainer_1);
+        _controller_1.setIsLast(true);
+        _controller_1.showBaseLine(false);
+        _controller_1.setWritingController(new OnCharacterRecognizedListener(_controller_1, _resultDisplay_1));
+
+
+
+        _controller_2 = findViewById(R.id.glyph_controller_2);
+        _inputContainer_2 = findViewById(R.id.drawn_box_2);
+        _resultDisplay_2 = findViewById(R.id.result_display_2);
+        _controller_2.setInputContainer(_inputContainer_2);
+        _controller_2.setIsLast(true);
+        _controller_2.showBaseLine(false);
+        _controller_2.setWritingController(new OnCharacterRecognizedListener(_controller_2, _resultDisplay_2));
+
+
+
     }
+
+
+    private class OnCharacterRecognizedListener implements IWritingComponent_Simple {
+
+        CGlyphController_Simple _controller;
+        TextView _resultDisplay;
+
+        OnCharacterRecognizedListener(CGlyphController_Simple controller, TextView display) {
+
+            this._controller = controller;
+            this._resultDisplay = display;
+        }
+
+        /**
+         * This is called when the recognizer is finished
+         * @param child
+         * @param _ltkPlusCandidates
+         * @return
+         */
+        @Override
+        public boolean updateStatus(IGlyphController_Simple child, CRecResult[] _ltkPlusCandidates) {
+
+            CRecResult candidate = _ltkPlusCandidates[0];
+
+            Log.i(TAG, "the answer is... " + candidate.getRecChar() + "!!!");
+
+            _resultDisplay.setText(candidate.getRecChar());
+
+            _controller.eraseGlyph();
+
+            return false;
+        }
+    }
+
+
+
 
     @Override
     public void onDestroy() {
@@ -626,6 +728,9 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
     public String getEventSourceType() {
         return "Counting_Component";
     }
+
+
+
 
 
     // IBehaviorManager Interface END

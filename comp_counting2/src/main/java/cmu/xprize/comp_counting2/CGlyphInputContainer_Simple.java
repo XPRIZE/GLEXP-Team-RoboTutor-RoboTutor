@@ -36,10 +36,11 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.RemoteViews;
 
 import java.util.Locale;
 
-import cmu.xprize.hellowriting.R;
+import cmu.xprize.comp_counting2.R;
 import cmu.xprize.ltkplus.CGlyph;
 import cmu.xprize.ltkplus.CRecResult;
 import cmu.xprize.ltkplus.CRecognizerPlus;
@@ -47,6 +48,7 @@ import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.ltkplus.IGlyphSink;
 import cmu.xprize.ltkplus.IGlyphSource;
 import cmu.xprize.util.TCONST;
+
 
 
 /**
@@ -1189,7 +1191,7 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
         //
         _ltkPlusResult = _ltkPlusCandidates[0].getRecChar();
 
-        isValid = mWritingComponent.updateStatus(mGlyphController, _ltkPlusCandidates); // MATHFIX_WRITE simplify...
+         isValid = mWritingComponent.updateStatus(mGlyphController, _ltkPlusCandidates); // MATHFIX_WRITE simplify...
 
         // Stop listening to glyph draw events - when there is a glyph
         //

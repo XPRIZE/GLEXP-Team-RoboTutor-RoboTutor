@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.ltkplus.CGlyphSet;
+import cmu.xprize.ltkplus.IGlyphSink;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -66,8 +68,17 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     protected int tenPower;
     protected int drawIndex;
     protected String mode = "";
+    protected int difficulty = 0;
     protected float bedge;
     protected boolean tenInited=false;
+
+
+    protected int[] write_numbers;
+
+
+
+    protected IGlyphSink _recognizer;
+    protected CGlyphSet _glyphSet;
 
 
     // json loadable
@@ -231,6 +242,14 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
             mode = "placevalue";
             countTarget = data.dataset[1];
             tenPower = 1;
+            difficulty = data.difficulty;
+            write_numbers =new int[]{0,0,0};
+            int one = countTarget%10;
+            int ten = countTarget%100-one;
+            int hundred  = countTarget - ten-one;
+
+
+
         }
 
 
@@ -384,39 +403,83 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
             checkHundred.setVisibility(View.INVISIBLE);
             checkTen.setVisibility(View.INVISIBLE);
             checkOne.setVisibility(View.INVISIBLE);
-            surfaceView.displayAddition("hundred");
-            playCount(countTarget-countTarget%100);
-            new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            surfaceView.displayAddition("ten");
-                            playCount(countTarget%100-countTarget%10);
-                        }
-                    },
-                    4000
-            );
 
-            new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            surfaceView.displayAddition("one");
-                            playCount(countTarget%10);
-                        }
-                    },
-                    8000
-            );
-            new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            surfaceView.displayAddition("final");
-                            playCount(countTarget);
-                        }
-                    },
-                    12000
-            );
+            if (difficulty == 0) {
+                surfaceView.displayAddition("hundred");
+                playCount(countTarget-countTarget%100);
+                new java.util.Timer().schedule(
+                        new java.util.TimerTask() {
+                            @Override
+                            public void run() {
+                                surfaceView.displayAddition("ten");
+                                playCount(countTarget%100-countTarget%10);
+                            }
+                        },
+                        4000
+                );
+
+                new java.util.Timer().schedule(
+                        new java.util.TimerTask() {
+                            @Override
+                            public void run() {
+                                surfaceView.displayAddition("one");
+                                playCount(countTarget%10);
+                            }
+                        },
+                        8000
+                );
+                new java.util.Timer().schedule(
+                        new java.util.TimerTask() {
+                            @Override
+                            public void run() {
+                                surfaceView.displayAddition("final");
+                                playCount(countTarget);
+                            }
+                        },
+                        12000
+                );
+
+
+            } else if (difficulty == 1){
+                surfaceView.displayAddition("hundred");
+                playCount(countTarget-countTarget%100);
+                new java.util.Timer().schedule(
+                        new java.util.TimerTask() {
+                            @Override
+                            public void run() {
+                                surfaceView.displayAddition("ten");
+                                playCount(countTarget%100-countTarget%10);
+                            }
+                        },
+                        4000
+                );
+
+                new java.util.Timer().schedule(
+                        new java.util.TimerTask() {
+                            @Override
+                            public void run() {
+                                surfaceView.displayAddition("one");
+                                playCount(countTarget%10);
+                            }
+                        },
+                        8000
+                );
+
+                //draw the writting box for students to write result.
+                surfaceView.displayWrittingBox("result");
+
+
+
+
+
+
+
+
+
+            } else {
+
+            }
+
         } else {
             surfaceView.showTenFrame();
             isRunning = true;

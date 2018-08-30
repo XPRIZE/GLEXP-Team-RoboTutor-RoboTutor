@@ -88,89 +88,69 @@
 
     <TextView
         android:id="@+id/result_display_1"
-        android:layout_width="200sp"
-        android:layout_height="200sp"
+        android:layout_width="150sp"
+        android:layout_height="150sp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="244dp"
-        android:layout_marginTop="416dp"
+        android:layout_marginStart="379dp"
+        android:layout_marginTop="164dp"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="80sp" />
+
+
+    <TextView
+        android:id="@+id/result_display_2"
+        android:layout_width="150sp"
+        android:layout_height="150sp"
+        android:layout_alignTop="@+id/glyph_controller_1"
+        android:layout_centerHorizontal="true"
         android:background="@android:color/white"
         android:gravity="center"
         android:textColor="@android:color/black"
         android:textSize="80sp" />
 
     <TextView
-        android:id="@+id/result_display_2"
-        android:layout_width="200sp"
-        android:layout_height="200sp"
-        android:layout_alignTop="@+id/result_display_1"
-        android:layout_toEndOf="@+id/stimulusText"
+        android:id="@+id/result_display_3"
+        android:layout_width="150sp"
+        android:layout_height="150sp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/result_display_2"
+        android:layout_marginEnd="379dp"
         android:background="@android:color/white"
         android:gravity="center"
         android:textColor="@android:color/black"
         android:textSize="80sp" />
 
-
     <cmu.xprize.comp_counting2.CGlyphController_Simple
         android:id="@+id/glyph_controller_1"
         android:layout_width="200sp"
         android:layout_height="200sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/result_display_1"
+        android:layout_marginBottom="239dp"
         android:adjustViewBounds="true"
-        android:background="@null"
-        android:layout_margin="20dp">
+        android:background="@null">
 
 
         <!-- NOTE: aspect here is just a reminder that this object has it aspect set programmatically-->
         <FrameLayout
             android:id="@+id/drawn_container_1"
-            app:layout_heightPercent="100%"
-            app:layout_aspectRatio = "100%"
-            android:background="@null">
+            android:background="@null"
+            app:layout_aspectRatio="100%"
+            app:layout_heightPercent="100%">
 
-            <cmu.xprize.comp_counting2.CGlyphController_Simple
+            <cmu.xprize.comp_counting2.CGlyphInputContainer_Simple
                 android:id="@+id/drawn_box_1"
-                android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                app:strokeweight = "5"
-                android:background="@null" />
+                android:layout_height="match_parent"
+                android:background="@null"
+                app:strokeweight="5" />
 
         </FrameLayout>
 
     </cmu.xprize.comp_counting2.CGlyphController_Simple>
-
-    <cmu.xprize.hellowriting.write.CGlyphController_Simple
-        android:id="@+id/glyph_controller_2"
-        android:layout_width="200sp"
-        android:layout_height="200sp"
-        android:adjustViewBounds="true"
-        android:background="@null"
-        android:layout_margin="20dp">
-
-
-        <!-- NOTE: aspect here is just a reminder that this object has it aspect set programmatically-->
-        <FrameLayout
-            android:id="@+id/drawn_container_2"
-            app:layout_heightPercent="100%"
-            app:layout_aspectRatio = "100%"
-            android:background="@null">
-
-            <cmu.xprize.hellowriting.write.CGlyphInputContainer_Simple
-                android:id="@+id/drawn_box_2"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                app:strokeweight = "5"
-                android:background="@null" />
-
-        </FrameLayout>
-
-    </cmu.xprize.hellowriting.write.CGlyphController_Simple>
-
-
-
-
-
-
-
 
 
 </RelativeLayout>

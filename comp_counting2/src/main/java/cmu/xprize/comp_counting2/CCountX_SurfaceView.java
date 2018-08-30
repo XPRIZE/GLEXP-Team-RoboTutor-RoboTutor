@@ -40,6 +40,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
     private Vector<Countable> _countablesHundred;
     private boolean tappable;
     private boolean[] drawResult = {false,false,false,false};
+    private String writting_box = "";
 
 
 
@@ -359,6 +360,12 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
     }
 
 
+    public void displayWrittingBox(String type){
+        writting_box = type;
+        redraw();
+    }
+
+
     public void wiggleFruit() {
 
         doneMovingToTenFrame = true;
@@ -587,9 +594,12 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                 drawRectangleBoundary(canvas);
 
             } else{
-                drawRectangles(canvas);
 
-                if(!drawResult[0] && !drawResult[1] && !drawResult[2]){
+                //in the place value mode.
+                drawRectangles(canvas);
+                //first draw the Rectangeles
+
+                if(!drawResult[0] && !drawResult[1] && !drawResult[2] && !drawResult[3]){
                     for (Countable c : _countables) {
                         c.draw(canvas, _paint);
                     }
@@ -657,6 +667,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
 
 
+
     private void drawRectangles(Canvas canvas){
         int margin = COUNTX_CONST.BOX_MARGIN;
         int marginright = COUNTX_CONST.BOX_MARGINRIGHT;
@@ -701,18 +712,8 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         text.setTextSize(COUNTX_CONST.TEXT_SIZE);
         text.setTextAlign(Paint.Align.CENTER);
         text.setFakeBoldText(true);
-//        text.setTextAlign(Align.LEFT);
 
         Bitmap immutableBackgroundBmp = BitmapFactory.decodeResource(getResources(), R.drawable.greyb);
-//        Bitmap backgroundBmp = Bitmap.createScaledBitmap(immutableBackgroundBmp, (int)(rectWidth),
-//                (int)(down-up), false);
-//        Bitmap backgroundOneBmp = Bitmap.createScaledBitmap(immutableBackgroundBmp, (int)(rectWidth/2),
-//                (int)(down-up), false);
-
-
-//        Paint lightgrey = new Paint();
-//        lightgreen.setStyle(Paint.Style.FILL);
-//        lightgreen.setColor(COUNTX_CONST.COLOR_grey);
 
         if (drawResult[0] || drawResult[1] || drawResult[2]) {
 

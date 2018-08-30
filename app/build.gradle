@@ -3,7 +3,6 @@ apply plugin: 'com.android.application'
 android {
 
     compileSdkVersion rootProject.ext.rtCompileSdkVersion
-    buildToolsVersion rootProject.ext.rtBuildToolsVersion
     defaultConfig {
         applicationId "cmu.xprize.robotutor"
         minSdkVersion rootProject.ext.rtMinSdkVersion
@@ -98,6 +97,7 @@ android {
         // if true, only report errors
         ignoreWarnings true
     }
+    buildToolsVersion '27.0.3'
 }
 
 dependencies {
@@ -125,5 +125,6 @@ dependencies {
     compile project(path: ':comp_counting')
     compile project(path: ':comp_counting2')
     compile project(path: ':comp_numberscale')
+    implementation 'com.android.support:support-v4:25.2.0'
 }
 
