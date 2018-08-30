@@ -443,6 +443,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         if(canDelete){
             mGlyphList.removeViewAt(index);
             mResponseViewList.removeViewAt(index);
+            mEditSequence = getUpdatedEditSequence();
         }
         else
         {
@@ -501,32 +502,38 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //        r.setWritingController(this);          //amogh commented to avoid removal from stimulus
 
 //amogh added for adding a view to the response view also, and also to check if the letter
-        if (!insertCorrectionIndices.contains(index+inc)) {
+            boolean canInsert = checkInsert(mEditSequence, index + inc);
+            if (canInsert){
+                r = (CStimulusController) LayoutInflater.from(getContext())
+                        .inflate(R.layout.recog_resp_comp, null, false);
+                mResponseViewList.addView(r, index + inc);
 
-            r = (CStimulusController) LayoutInflater.from(getContext())
-                    .inflate(R.layout.recog_resp_comp, null, false);
-            mResponseViewList.addView(r, index + inc);
+                r.setLinkedScroll(mDrawnScroll);
+                r.setWritingController(this);
+                //amogh added ends
 
-            r.setLinkedScroll(mDrawnScroll);
-            r.setWritingController(this);
-            //amogh added ends
+                // create a new view
+                v = (CGlyphController) LayoutInflater.from(getContext())
+                        .inflate(R.layout.drawn_input_comp, null, false);
 
-            // create a new view
-            v = (CGlyphController) LayoutInflater.from(getContext())
-                    .inflate(R.layout.drawn_input_comp, null, false);
+                // Update the last child flag
+                //
+                if (index == mGlyphList.getChildCount() - 1) {
+                    ((CGlyphController) child).setIsLast(false);
+                    v.setIsLast(true);
+                }
 
-            // Update the last child flag
-            //
-            if (index == mGlyphList.getChildCount() - 1) {
-                ((CGlyphController) child).setIsLast(false);
-                v.setIsLast(true);
+                mGlyphList.addView(v, index + inc);
+
+                v.setLinkedScroll(mDrawnScroll);
+                v.setWritingController(this);
+
+                mEditSequence = getUpdatedEditSequence();
+            }
+            else{
+                //increase attempt number for the word or the sentence!
             }
 
-            mGlyphList.addView(v, index + inc);
-
-            v.setLinkedScroll(mDrawnScroll);
-            v.setWritingController(this);
-        }
     }
 
 
@@ -722,6 +729,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 if("!?.".contains(mResponse))
                 {
                     mWrittenSentence = getWrittenSentence();
+
                     // evaluated on end sentence punctuation, when the written sentence is correct: apply ON_CORRECT behavior
                     if (mWrittenSentence.equals(mAnswer)) {
                         applyBehavior(WR_CONST.ON_CORRECT);
@@ -729,12 +737,32 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                     //when the written sentence does not match the expected answer
                     else{
-                        mEditOperations = computeEditsAndAlignedStrings(mWrittenSentence, mAnswer);
+                        ArrayList edits= computeEditsAndAlignedStrings(mWrittenSentence, mAnswer);
+
                     }
                 }
+                //when not end punctuation, normal recognition
                 else
                 {
 
+                }
+
+                // when edit mode is on
+                if (editMode == true){
+                    //recognition is done for the glyph drawn
+                    //if it is not drawn at the place that it should have been drawn:
+                    boolean canReplace = checkReplace(mEditSequence, mActiveIndex);
+                    if(canReplace){
+                        //check if the correct glyph is drawn.
+                        ArrayList stringEditResult = computeEditsAndAlignedStrings(mWrittenSentence, mAnswer);
+//                        String
+                        //when the correct glyph is drawn
+//                        if(mResponse.equals())
+                    }
+                    //if it is not drawn at the right place
+                    else{
+                        //if incorrect one is drawn, release the error feature and increment the attempts
+                    }
                 }
             }
         }
@@ -742,37 +770,59 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     //amogh added functions to test the edits.
+        //to update the mEditSequence after every change
 
-        public boolean checkDelete (StringBuilder editSequence, int index){
-            for (int i = 0; i <= index; i++){
-                char c = editSequence.charAt(i);
-                if (c == 'I'){
-                    index++;
-                }
+    public StringBuilder getUpdatedEditSequence(){
+        String writtenSentence = getWrittenSentence();
+        ArrayList<StringBuilder> edits = computeEditsAndAlignedStrings(writtenSentence, mAnswer);
+        StringBuilder newEditSequence = edits.get(2);
+        return newEditSequence;
+    }
+
+    public boolean checkDelete (StringBuilder editSequence, int index){
+        for (int i = 0; i <= index; i++){
+            char c = editSequence.charAt(i);
+            if (c == 'I'){
+                index++;
             }
-            if(editSequence.charAt(index) == 'D'){
+        }
+        if(editSequence.charAt(index) == 'D'){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean checkInsert (StringBuilder editSequence, int index){
+        for (int i = 0; i <= index; i++){
+            char c = editSequence.charAt(i);
+            if (c == 'I'){
+                index++;
+            }
+        }
+        if(editSequence.charAt(index) == 'I'){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean checkReplace(StringBuilder editSequence, int index){
+        for (int i = 0; i <= index; i++){
+            char c = editSequence.charAt(i);
+            if (c == 'I'){
+                index++;
+            }
+            if(editSequence.charAt(index) == 'R'){
                 return true;
             }
             else{
                 return false;
             }
         }
-
-        public boolean checkInsert (StringBuilder editSequence, int index){
-            for (int i = 0; i <= index; i++){
-                char c = editSequence.charAt(i);
-                if (c == 'I'){
-                    index++;
-                }
-            }
-            if(editSequence.charAt(index) == 'I'){
-                return true;
-            }
-            else{
-                return false;
-            }
-        }
-
+    }
     //amogh added ends
 
     //amogh added function to get user written sentence.
