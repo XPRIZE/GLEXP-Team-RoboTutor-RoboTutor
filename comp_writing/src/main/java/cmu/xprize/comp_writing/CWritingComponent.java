@@ -69,6 +69,7 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.util.TCONST.EMPTY;
+import static cmu.xprize.util.TCONST.PAGEFLIP_BUTTON;
 
 
 /**
@@ -92,6 +93,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     protected Word              mActiveWord;// amogh added
     protected String            mWrittenSentence; // amogh added
+    protected StringBuilder     mEditSequence; // amogh added
     protected ArrayList         mEditOperations; //amogh added
 
     protected ImageButton       mReplayButton;
@@ -437,33 +439,42 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     //amogh edited
     public void deleteItem(View child) {
         int index = mGlyphList.indexOfChild(child);
-        if (! deleteCorrectionIndices.contains(index)) {
+        boolean canDelete = checkDelete(mEditSequence, index);
+        if(canDelete){
             mGlyphList.removeViewAt(index);
             mResponseViewList.removeViewAt(index);
         }
-        else{
-//            correctionAttempts++;
-//            if (correctionAttempts > 2){
-                mHighlightErrorBoxView = new View (getContext());
-                int wid = mResponseViewList.getChildAt(index+3).getLeft() - mResponseViewList.getChildAt(index+2).getLeft();
-                mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid,90));
-//        mHighlightErrorBoxView.setId();
-                mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
-//        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
-//        mp.setMargins(100,00,0,100);
-//                mHighlightErrorBoxView.setX((float)300.00);
-                int pos = mResponseViewList.getChildAt(index+2).getLeft();
-                mHighlightErrorBoxView.setX((float)pos);
-//        mHighlightErrorBoxView.setLeft(1000);
-                mResponseScrollLayout.addView(mHighlightErrorBoxView);
-                mHighlightErrorBoxView.postDelayed(new Runnable() {
-                    public void run() {
-                        mHighlightErrorBoxView.setVisibility(View.GONE);
-                    }
-                }, 2000);
-//            }
+        else
+        {
+            //code to increase attempt for a word or universally.
         }
-//        mRecogList.removeViewAt(index); //amogh commented to avoid removal from stimulus
+//        if (! deleteCorrectionIndices.contains(index)) {
+//            mGlyphList.removeViewAt(index);
+//            mResponseViewList.removeViewAt(index);
+//        }
+//        else{
+////            correctionAttempts++;
+////            if (correctionAttempts > 2){
+//                mHighlightErrorBoxView = new View (getContext());
+//                int wid = mResponseViewList.getChildAt(index+3).getLeft() - mResponseViewList.getChildAt(index+2).getLeft();
+//                mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid,90));
+////        mHighlightErrorBoxView.setId();
+//                mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
+////        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
+////        mp.setMargins(100,00,0,100);
+////                mHighlightErrorBoxView.setX((float)300.00);
+//                int pos = mResponseViewList.getChildAt(index+2).getLeft();
+//                mHighlightErrorBoxView.setX((float)pos);
+////        mHighlightErrorBoxView.setLeft(1000);
+//                mResponseScrollLayout.addView(mHighlightErrorBoxView);
+//                mHighlightErrorBoxView.postDelayed(new Runnable() {
+//                    public void run() {
+//                        mHighlightErrorBoxView.setVisibility(View.GONE);
+//                    }
+//                }, 2000);
+////            }
+//        }
+////        mRecogList.removeViewAt(index); //amogh commented to avoid removal from stimulus
     }
 
 
@@ -704,14 +715,18 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
             //for sentence level feedback
             else if(activityFeature.contains("FTR_SEN_SEN")){
+
+                boolean editMode = false;
+
                 //evaluate on punctuation
                 if("!?.".contains(mResponse))
                 {
                     mWrittenSentence = getWrittenSentence();
-                    // when the written sentence is correct
+                    // evaluated on end sentence punctuation, when the written sentence is correct: apply ON_CORRECT behavior
                     if (mWrittenSentence.equals(mAnswer)) {
                         applyBehavior(WR_CONST.ON_CORRECT);
                     }
+
                     //when the written sentence does not match the expected answer
                     else{
                         mEditOperations = computeEditsAndAlignedStrings(mWrittenSentence, mAnswer);
@@ -725,6 +740,40 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
         return _isValid;
     }
+
+    //amogh added functions to test the edits.
+
+        public boolean checkDelete (StringBuilder editSequence, int index){
+            for (int i = 0; i <= index; i++){
+                char c = editSequence.charAt(i);
+                if (c == 'I'){
+                    index++;
+                }
+            }
+            if(editSequence.charAt(index) == 'D'){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+
+        public boolean checkInsert (StringBuilder editSequence, int index){
+            for (int i = 0; i <= index; i++){
+                char c = editSequence.charAt(i);
+                if (c == 'I'){
+                    index++;
+                }
+            }
+            if(editSequence.charAt(index) == 'I'){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+
+    //amogh added ends
 
     //amogh added function to get user written sentence.
     public String getWrittenSentence(){
@@ -741,6 +790,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
         return sen;
     }
+    //amogh added ends
 
     /**
      * Designed to enable character-level mercy rule on multi-char sequences...
