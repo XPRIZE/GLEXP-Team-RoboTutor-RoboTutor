@@ -21,7 +21,7 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "logState", "parms": "type#feedback,value#INPUT_HESITATION_FEEDBACK:String", "features":""},
 
             //Increase the hesitation count and release the corresponding feature
-//            {"name": "Increase hesitation number",  "type": "COMMAND", "id": "SWordCopy", "method": "updateHesitationFeature",       "parms": "",  "features":"" }, //amogh added
+//            {"name": "Increase hesitation number",  "type": "COMMAND", "id": "SWordCopy", "method": "teteHesitationFeature",       "parms": "",  "features":"" }, //amogh added
             {"name": "Increment hesitation", "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "INC_HESITATION:String", "features":"FTR_SEN"}, //amogh added
 
             {"name": "Disable Input",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "TRUE:Boolean",  "features":"" },

@@ -677,6 +677,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                     //if punctuation is written or the previous space is left empty
                     CGlyphController previousController = (CGlyphController) mGlyphList.getChildAt(mActiveIndex - 1);
+                    //dont evaluate the current word immediately afte the last word was evaluated(due to hesitation or punctuation,)
+//                    boolean previousWordEvaluated;
+//                    if (currentWordIndex > 0 && !mListWords.get(currentWordIndex - 1).getWordCorrectStatus()){
+//                        previousWordEvaluated = false;
+//                    }
+//                    else{
+//                        previousWordEvaluated = true;
+//                    }
                     if (mActiveIndex > 0 && (previousController.getRecognisedChar().equals("") || punctuationSymbols.contains(mResponse))) {
 
                         //get the current word and call update word correct status.
@@ -810,18 +818,18 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     public boolean checkReplace(StringBuilder editSequence, int index){
-        for (int i = 0; i <= index; i++){
+        for (int i = 0; i <= index; i++) {
             char c = editSequence.charAt(i);
-            if (c == 'I'){
+            if (c == 'I') {
                 index++;
             }
+        }
             if(editSequence.charAt(index) == 'R'){
                 return true;
             }
             else{
                 return false;
             }
-        }
     }
     //amogh added ends
 
@@ -1411,8 +1419,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
      * XYZ
      */
     public void updateText(CWr_Data data) {
-        ArrayList a = computeEditsAndAlignedStrings("mr prresident",
-                                                  "Mr. President");
+//        ArrayList a = computeEditsAndAlignedStrings("mr prresident",
+//                                                  "Mr. President");
         CStimulusController r;
         CGlyphController    v;
         CStimulusController resp; //amogh added
