@@ -713,8 +713,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         applyBehavior(WR_CONST.ON_CORRECT);
                     }
 
-                    //if the word is still not correct
-                    else{
+                    //if the word is still not correct and the current attempt is wrong.
+                    else if(!_isValid){
 
                         // increase attempts and update the released feature
                         attempts = updateAttemptFeature();
@@ -1972,14 +1972,21 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                     //evaluate the word's correct status
                 for(int i = 0; i < listCorrectStatus.size(); i++){
+
                     //when not correct and glyph present -> set wordIsCorrect to false
                     if (listCorrectStatus.get(i) == false && listHasGlyph.get(i)){
                         wordIsCorrect = false;
                         break;
                     }
-                    //when correct and glyph present  set wordIsCorrect to True.
+
+                    //when correct and glyph present set wordIsCorrect to True.
                     else if (listHasGlyph.get(i) && listCorrectStatus.get(i)){
                         wordIsCorrect = true;
+                    }
+
+                    // for the remaining case(when the glyph is not present)
+                    else {
+                        return false;
                     }
                 }
 
