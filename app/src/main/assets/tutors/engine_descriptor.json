@@ -199,6 +199,36 @@
       "type": "TUTORVAR_MAP",
       "tutorName": "story_reading",
       "features": "FTR_USER_PARROT"
+    },
+    "story.gen.hide": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_questions",
+      "features": "FTR_USER_HIDE:FTR_GEN"
+    },
+    "story.clo.hear": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_questions",
+      "features": "FTR_USER_HEAR:FTR_CLO"
+    },
+    "story.pic.hear": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_questions",
+      "features": "FTR_USER_HEAR:FTR_PIC"
+    },
+    "story.gen.hear": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_questions",
+      "features": "FTR_USER_HEAR:FTR_GEN"
+    },
+//    "story.mix.hear": {
+//      "type": "TUTORVAR_MAP",
+//      "tutorName": "story_questions",
+//      "features": "FTR_USER_HEAR:FTR_MIX"
+//    },
+    "story.pic.hide": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_questions",
+      "features": "FTR_USER_HIDE:FTR_PIC"
     }
   },
 
@@ -315,6 +345,20 @@
           "databindings": [
             {
               "name": "SAddSubtract",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
+    "story_questions": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "story_questions": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SstoryQuestions",
               "datasource": ""
             }
           ]

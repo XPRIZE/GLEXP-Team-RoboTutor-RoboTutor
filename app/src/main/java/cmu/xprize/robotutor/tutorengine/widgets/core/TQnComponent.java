@@ -943,18 +943,41 @@ public class TQnComponent extends CQn_Component implements IBehaviorManager, ITu
         super.setPageFlipButton(command);
     }
 
-        public void enableImageButtons(){
-            super.enableImageButtons();
-        }
+        public void enableImageButtons(){super.enableImageButtons();}
 
-        public void disableImageButtons(){
-            super.disableImageButtons();
-        }
+        public void disableImageButtons(){super.disableImageButtons();}
+
+        public void resetImageButtons(){super.resetImageButtons();}
+
+        public void showImageButtons(){super.showImageButtons();}
+
+        public void hideImageButtons(){super.hideImageButtons();}
+
+        public void enableClozeButtons(){super.enableClozeButtons();}
+
+        public void disableClozeButtons(){super.disableClozeButtons();}
+
+        public void resetClozeButtons(){super.resetClozeButtons();}
+
+        public void showClozeButtons(){super.showClozeButtons();}
+
+        public void hideClozeButtons(){super.hideClozeButtons();}
+
+        public void showClozeWordInBlank(){super.showClozeWordInBlank();}
+
+        public void hideClozeWordInBlank(){super.hideClozeWordInBlank();}
+
+        public void publishClozeWord(){super.publishClozeWord();}
+
+        public void highlightClozeWord(){super.highlightClozeWord();}
+
+        public void undoHighlightClozeWord(){super.undoHighlightClozeWord();}
+
+        public void playClozeSentence(){super.playClozeSentence();}
 
         public void setSpeakButton(String command) {
         super.setSpeakButton(command);
     }
-
 
         public void onButtonClick(String buttonName) {
 

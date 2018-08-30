@@ -234,6 +234,8 @@ public class TCONST {
     public static final String FTR_PIC             = "FTR_PIC";
     public static final String FTR_CLO             = "FTR_CLO";
     public static final String STOP_AUDIO          = "STOP_AUDIO";
+    public static final String RTC_VAR_CLOZEWORD   = ".clozeWord";
+    public static final String REMOVE_CLOZE_FROM_BLANK = "REMOVE_CLOZE_FROM_BLANK";
 
 
     public static final String NARRATE_STORY       = "NARRATE_STORY";
@@ -453,6 +455,8 @@ public class TCONST {
     public static final String PLAY            = "PLAY";
     //UHQ
     public static final String PLAY_CLOZE      = "PLAY_CLOZE";
+    public static final String CLZ_ANIM_INCOMPLETE = "CLZ_ANIM_INCOMPLETE";
+    public static final String CLZ_ANIM_COMPLETE = "CLZ_ANIM_COMPLETE";
     public static long CLOZE_END               = 0L;
     public static final String STOP            = "STOP";
     public static final String NEXT            = "NEXT";
@@ -779,6 +783,9 @@ public class TCONST {
 
     public static final String RTC_VAR_ECHOSTATE   = ".echoState";
     public static final String RTC_VAR_PARROTSTATE = ".parrotState";
+    public static final String RTC_VAR_QNSTATE = ".qnState";
+    public static final String RTC_VAR_CLZSTATE = ".clzState";
+    public static final String RTC_VAR_PMSTATE = ".pmState";
     // Generic question state flag
     public static final String RTC_VAR_QUESTIONSTATE = ".questionState";
     public static final String RTC_VAR_CLOZESTATE = ".clozeState";

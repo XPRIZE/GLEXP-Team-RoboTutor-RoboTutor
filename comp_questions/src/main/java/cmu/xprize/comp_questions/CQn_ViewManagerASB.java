@@ -20,12 +20,15 @@ package cmu.xprize.comp_questions;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.text.Html;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -83,24 +86,39 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
     // uhq
     private int                     numWordsCurPage;
+    private boolean                 replayCloze = false;
+    private int                     clozeWordsCounter = 0;
+    private String                  oldClozePageText;
+    private TextView                curClozeTextView;
+    private String                  clozeWordToPlay;
     private int                     picmatch_answer;
     private boolean                 picture_match_mode = false;
     private boolean                 cloze_page_mode = false;
     private boolean                 isClozePage = false;
-    private boolean                 match_is_right;
     private ViewGroup               mPicturePage;
-    private ImageView               mMatchImageLeft;
-    private ImageView               mMatchImageRight;
-    private ImageView               mMatchImageCenter;
+    private int                     numPicMatch;
+    private ImageView               mMatchImage1;
+    private ImageView               mMatchImage3;
+    private ImageView               mMatchImage2;
+    private ImageView               mMatchImage4;
+    private ViewGroup               mImageFrame1;
+    private ViewGroup               mImageFrame2;
+    private ViewGroup               mImageFrame3;
+    private ViewGroup               mImageFrame4;
+    private ViewGroup               mImageGrid;
     private boolean                 show_image_options = false;
 
-    private int                     mPictureIndex;
     private ViewGroup               mQuestionPage;
     private int                     mQuestionIndex;
     private TextView                mWord1Text;
     private TextView                mWord2Text;
     private TextView                mWord3Text;
     private TextView                mWord4Text;
+    private ViewGroup               mWordFrame1;
+    private ViewGroup               mWordFrame2;
+    private ViewGroup               mWordFrame3;
+    private ViewGroup               mWordFrame4;
+
     private ClozeQuestion           clozeQuestion;
 
     private int                     mOddIndex;
@@ -215,17 +233,17 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         mOddPage = (ViewGroup) android.support.percent.PercentRelativeLayout.inflate(mContext, R.layout.qn_odd, null);
         mEvenPage = (ViewGroup) android.support.percent.PercentRelativeLayout.inflate(mContext, R.layout.qn_even, null);
         mQuestionPage = (ViewGroup) android.support.percent.PercentRelativeLayout.inflate(mContext, R.layout.qn_generic, null);
-        mPicturePage = (ViewGroup) android.support.percent.PercentRelativeLayout.inflate(mContext, R.layout.qn_picture, null);
+//        mPicturePage = (ViewGroup) android.support.percent.PercentRelativeLayout.inflate(mContext, R.layout.qn_picture, null);
 
         mOddPage.setVisibility(View.GONE);
         mEvenPage.setVisibility(View.GONE);
         mQuestionPage.setVisibility(View.GONE);
-        mPicturePage.setVisibility(View.GONE);
+//        mPicturePage.setVisibility(View.GONE);
 
         mOddIndex  = mParent.addPage(mOddPage);
         mEvenIndex = mParent.addPage(mEvenPage);
         mQuestionIndex = mParent.addPage(mQuestionPage);
-        mPictureIndex = mParent.addPage(mPicturePage);
+//        mPictureIndex = mParent.addPage(mPicturePage);
         mListener = listener;
 
         clozeIndices = new ArrayList<>();
@@ -257,11 +275,6 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 numLineCountdown += data[i].text[j].length;
             }
         }
-        Log.d("CLOZEPAGEISSUE", "initStory: questions.length = "+questions.length);
-        Log.d("CLOZEPAGEISSUE", "initStory: numpara = "+numPara);
-        Log.d("CLOZEPAGEISSUE", "initStory: numlines = "+numLineCountdown);
-        //If numlines > numquestions theres something wrong
-        Log.d("CLOZEPAGEISSUE", "initStory: data.length (number of pages) = "+data.length);
         mCurrLineInStory = 0;
         mOwner        = owner;
         mAsset        = assetPath; // ZZZ assetPath... TCONST.EXTERN
@@ -272,6 +285,22 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
         if (mParent.testFeature(TCONST.FTR_USER_HIDE)) showWords = false;
         if (mParent.testFeature(TCONST.FTR_USER_REVEAL)) showFutureWords = showFutureContent = false;
+
+        //uhq
+        if (mParent.testFeature(TCONST.FTR_CLO)) {
+            mParent.publishValue(TCONST.RTC_VAR_CLZSTATE, TCONST.TRUE);
+            mParent.publishValue(TCONST.RTC_VAR_QNSTATE, TCONST.FALSE);
+            mParent.publishValue(TCONST.RTC_VAR_PMSTATE, TCONST.FALSE);
+        }else if (mParent.testFeature(TCONST.FTR_GEN)) {
+            mParent.publishValue(TCONST.RTC_VAR_CLZSTATE, TCONST.FALSE);
+            mParent.publishValue(TCONST.RTC_VAR_QNSTATE, TCONST.TRUE);
+            mParent.publishValue(TCONST.RTC_VAR_PMSTATE, TCONST.FALSE);
+        } else if (mParent.testFeature(TCONST.FTR_PIC)) {
+            mParent.publishValue(TCONST.RTC_VAR_CLZSTATE, TCONST.FALSE);
+            mParent.publishValue(TCONST.RTC_VAR_QNSTATE, TCONST.FALSE);
+            mParent.publishValue(TCONST.RTC_VAR_PMSTATE, TCONST.TRUE);
+        }
+
 
         Log.d(TAG, "initStory: showWords = " + showWords + ", showFutureWords = " + showFutureWords + ", showFutureContent = " + showFutureContent);
 
@@ -284,8 +313,9 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
     }
 
     @Override
+    //Called by animator graph before flipping the page
     public void setPictureMatch(){
-        if ((data.length - 1) - mCurrPage >= 3){
+        if ((data.length - 1) - mCurrPage >= 3 && data[mCurrPage+1].image != null){
             picture_match_mode = true;
         } else {
             //UHQ: ensure that the last 2 pages are just regular pages, because no more pics to use
@@ -295,7 +325,6 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
     @Override
     public void setClozePage(){
-        //Log.d("ULANICLOZEPAGEISSUE", "setClozePage: ");
         int paracount = data[mCurrPage+1].text.length;
         int numLines = 0;
         numWordsCurPage = 0;
@@ -306,20 +335,14 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 int utteranceLen = data[mCurrPage+1].text[i][j].narration.length;
                 for(int k = 0; k < utteranceLen; k++){
                     numWordsCurPage+=data[mCurrPage+1].text[i][j].narration[k].segmentation.length;
-
                 }
 
             }
         }
-        Log.d("ULANISTOPAUDIO", "setClozePage: numwordscurpage= " +numWordsCurPage);
         int sum=mCurrLineInStory+numLines;
-//        Log.d("ULANICLOZEPAGEISSUE", "setClozePage: numTotalLines = "+sum);
-//        Log.d("CLOZEPAGEISSUE", "setClozePage: mcurrlineinstory= "+mCurrLineInStory+" mcurrpage = "+mCurrPage);
-//        Log.d("CLOZEPAGEISSUE", "setClozePage: clozeIndices = "+clozeIndices.toString());
         if(this.clozeIndices.contains(mCurrLineInStory+numLines)){
             clozeQuestion = questions[sum-1];
             TCONST.TARGET = clozeQuestion.target;
-            Log.d(TAG, "setClozePage: clozepagenode = true");
             cloze_page_mode = true;
             updateClozeButtons();
         } else {
@@ -348,9 +371,6 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 hearRead = FTR_USER_READ;
                 mParent.publishFeature(FTR_USER_READING);
             }
-//            if (mParent.testFeature(TCONST.FTR_PIC)){
-//                picture_match_mode = true;
-//            }
 
             storyBooting = false;
             speakOrListen();
@@ -480,188 +500,573 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
     private void updateClozeButtons(){
         Log.d(TAG, "updateClozeButtons: ");
-        setButtonState(mWord1Text, "DISABLE");
-        setButtonState(mWord1Text, "HIDE");
-        setButtonState(mWord2Text, "DISABLE");
-        setButtonState(mWord2Text, "HIDE");
-        setButtonState(mWord3Text, "DISABLE");
-        setButtonState(mWord3Text, "HIDE");
-        setButtonState(mWord4Text, "DISABLE");
-        setButtonState(mWord4Text, "HIDE");
-
-        mWord1Text.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Log.v(QGRAPH_MSG, "event.click: " + " CQn_ViewManagerASB: WORD1");
-                Log.d(TAG, "onClick: "+mWord1Text.getText().toString());
-                Log.d(TAG, "onClick: target "+TCONST.TARGET);
-                if (mWord1Text.getText().toString().equals(TCONST.TARGET)){
-                    mWord1Text.setBackgroundColor(6618880);
-                    Log.d(TAG, "onClick: correct");
-                    mParent.retractFeature(TCONST.CLOZE_WRONG);
-                    mParent.publishFeature(TCONST.CLOZE_CORRECT);
-                    mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
-                    isClozePage = false;
-                }else{
-                    mWord1Text.setBackgroundColor(16724480);
-                    Log.d(TAG, "onClick: incorrect");
-                    mParent.retractFeature(TCONST.CLOZE_CORRECT);
-                    mParent.publishFeature(TCONST.CLOZE_WRONG);
+        disableClozeButtons();
+        if (isClozePage){
+            mWord1Text.setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            Log.d(TAG, "onTouch: storyquestions.currword = "+printArray(wordsToSpeak)+ " "+ mCurrWord);
+                            mParent.updateViewColor(mWordFrame1, Color.LTGRAY);
+                            break;
+                        case MotionEvent.ACTION_CANCEL:
+                            mParent.updateViewColor(mWordFrame1, Color.WHITE);
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            disableImageButtons();
+                            if (mWord1Text.getText().toString().equals(TCONST.TARGET)){
+                                mParent.updateViewColor(mWordFrame1, Color.GREEN);
+                                mParent.retractFeature(TCONST.CLOZE_WRONG);
+                                mParent.publishFeature(TCONST.CLOZE_CORRECT);
+                                mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
+                                isClozePage = false;
+                                replayCloze = true;
+                            }else{
+                                mParent.updateViewColor(mWordFrame1, Color.RED);
+                                mParent.retractFeature(TCONST.CLOZE_CORRECT);
+                                mParent.publishFeature(TCONST.CLOZE_WRONG);
+                            }
+                            mParent.nextNode();
+                            break;
+                    }
+                    return true;
                 }
-                mParent.nextNode();
-            }
-        });
+            });
+            mWord2Text.setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            mParent.updateViewColor(mWordFrame2, Color.LTGRAY);
+                            break;
+                        case MotionEvent.ACTION_CANCEL:
+                            mParent.updateViewColor(mWordFrame2, Color.WHITE);
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            disableImageButtons();
+                            if (mWord2Text.getText().toString().equals(TCONST.TARGET)){
+                                mParent.updateViewColor(mWordFrame2, Color.GREEN);
+                                mParent.retractFeature(TCONST.CLOZE_WRONG);
+                                mParent.publishFeature(TCONST.CLOZE_CORRECT);
+                                mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
+                                isClozePage = false;
+                                replayCloze = true;
 
-        mWord2Text.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Log.v(QGRAPH_MSG, "event.click: " + " CQn_ViewManagerASB: WORD2");
-                Log.d(TAG, "onClick: "+mWord2Text.getText().toString());
-                Log.d(TAG, "onClick: target "+TCONST.TARGET);
-                if (mWord2Text.getText().toString().equals(TCONST.TARGET)){
-                    mWord1Text.setBackgroundColor(6618880);
-                    Log.d(TAG, "onClick: correct");
-                    mParent.retractFeature(TCONST.CLOZE_WRONG);
-                    mParent.publishFeature(TCONST.CLOZE_CORRECT);
-                    mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
-                    isClozePage = false;
-                }else{
-                    mWord1Text.setBackgroundColor(16724480);
-                    Log.d(TAG, "onClick: incorrect");
-                    mParent.retractFeature(TCONST.CLOZE_CORRECT);
-                    mParent.publishFeature(TCONST.CLOZE_WRONG);
+                            }else{
+                                mParent.updateViewColor(mWordFrame2, Color.RED);
+                                mParent.retractFeature(TCONST.CLOZE_CORRECT);
+                                mParent.publishFeature(TCONST.CLOZE_WRONG);
+                            }
+                            mParent.nextNode();
+                            break;
+                    }
+                    return true;
                 }
-                mParent.nextNode();
+            });
+            mWord3Text.setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            mParent.updateViewColor(mWordFrame3, Color.LTGRAY);
+                            break;
+                        case MotionEvent.ACTION_CANCEL:
+                            mParent.updateViewColor(mWordFrame3, Color.WHITE);
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            disableImageButtons();
+                            if (mWord3Text.getText().toString().equals(TCONST.TARGET)){
+                                mParent.updateViewColor(mWordFrame3, Color.GREEN);
+                                mParent.retractFeature(TCONST.CLOZE_WRONG);
+                                mParent.publishFeature(TCONST.CLOZE_CORRECT);
+                                mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
+                                isClozePage = false;
+                                replayCloze = true;
 
-            }
-        });
-
-        mWord3Text.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Log.v(QGRAPH_MSG, "event.click: " + " CQn_ViewManagerASB: WORD3");
-                Log.d(TAG, "onClick: "+mWord3Text.getText().toString());
-                Log.d(TAG, "onClick: target "+TCONST.TARGET);
-                if (mWord3Text.getText().toString().equals(TCONST.TARGET)){
-                    mWord1Text.setBackgroundColor(6618880);
-                    Log.d(TAG, "onClick: correct");
-                    mParent.retractFeature(TCONST.CLOZE_WRONG);
-                    mParent.publishFeature(TCONST.CLOZE_CORRECT);
-                    mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
-                    isClozePage = false;
-                }else{
-                    mWord1Text.setBackgroundColor(16724480);
-                    Log.d(TAG, "onClick: incorrect");
-                    mParent.retractFeature(TCONST.CLOZE_CORRECT);
-                    mParent.publishFeature(TCONST.CLOZE_WRONG);
+                            }else{
+                                mParent.updateViewColor(mWordFrame3, Color.RED);
+                                mParent.retractFeature(TCONST.CLOZE_CORRECT);
+                                mParent.publishFeature(TCONST.CLOZE_WRONG);
+                            }
+                            mParent.nextNode();
+                            break;
+                    }
+                    return true;
                 }
-                mParent.nextNode();
-
-            }
-        });
-
-        mWord4Text.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Log.v(QGRAPH_MSG, "event.click: " + " CQn_ViewManagerASB: WORD4");
-                Log.d(TAG, "onClick: "+mWord4Text.getText().toString());
-                Log.d(TAG, "onClick: target "+TCONST.TARGET);
-                if (mWord4Text.getText().toString().equals(TCONST.TARGET)){
-                    mWord1Text.setBackgroundColor(6618880);
-                    Log.d(TAG, "onClick: correct");
-                    mParent.retractFeature(TCONST.CLOZE_WRONG);
-                    mParent.publishFeature(TCONST.CLOZE_CORRECT);
-                    mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
-                    isClozePage = false;
-                }else{
-                    mWord1Text.setBackgroundColor(16724480);
-                    Log.d(TAG, "onClick: wrong");
-                    mParent.retractFeature(TCONST.CLOZE_CORRECT);
-                    mParent.publishFeature(TCONST.CLOZE_WRONG);
+            });
+            mWord4Text.setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            mParent.updateViewColor(mWordFrame4, Color.LTGRAY);
+                            break;
+                        case MotionEvent.ACTION_CANCEL:
+                            mParent.updateViewColor(mWordFrame4, Color.WHITE);
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            disableImageButtons();
+                            if (mWord4Text.getText().toString().equals(TCONST.TARGET)){
+                                mParent.updateViewColor(mWordFrame4, Color.GREEN);
+                                mParent.retractFeature(TCONST.CLOZE_WRONG);
+                                mParent.publishFeature(TCONST.CLOZE_CORRECT);
+                                mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
+                                isClozePage = false;
+                                replayCloze = true;
+                            }else{
+                                mParent.updateViewColor(mWordFrame4, Color.RED);
+                                mParent.retractFeature(TCONST.CLOZE_CORRECT);
+                                mParent.publishFeature(TCONST.CLOZE_WRONG);
+                            }
+                            mParent.nextNode();
+                            break;
+                    }
+                    return true;
                 }
-                mParent.nextNode();
-            }
-        });
+            });
+        }
+    }
+
+
+    /**
+     * Repeats a string n times
+     * @param s string to be repeated
+     * @param n number of times to repeat
+     * @return a new string consisting of s, repeated n times
+     */
+    public String repeat(String s, int n) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            builder.append(s);
+        }
+        return builder.toString();
+    }
+
+
+    /**
+     * Used in animating the presentation of the cloze choices.
+     * Displays the cloze word in the blank in the cloze sentence.
+     * Is called once for each of the four cloze words, and always called before publishClozeWord.
+     */
+    public void showClozeWordInBlank(){
+        int wordlen = this.clozeWordToPlay.length();
+        int spacelen = wordlen <= 12 ? (12 - wordlen)/2 : 1;
+        //TODO: specify whitespace in html tags
+        String sideSpace = repeat("&ensp;", spacelen);
+        String newWord = "<u>"+ sideSpace + this.clozeWordToPlay + sideSpace+"</u>";
+//        this.oldClozePageText = mPageText.getText().toString();
+        this.oldClozePageText = this.oldClozePageText.replace("#AAAAAA", "#000000");
+        this.oldClozePageText = this.oldClozePageText.replace("#00B600", "#000000");
+        Log.d(TAG, "showClozeWordInBlank: oldClozePageText = "+this.oldClozePageText);
+        String pageTextHTML = this.oldClozePageText.replace("____________", newWord);
+        mParent.updateTextviewHTML(mPageText, pageTextHTML);
+    }
+
+    public void hideClozeWordInBlank(){
+        mParent.updateTextviewHTML(mPageText, this.oldClozePageText);
+    }
+
+    /**
+     * Called by animator_graph as the GET_CLOZE_WORD command.
+     * Publishes the current cloze word that is being displayed in the blank in the cloze sentence,
+     * so that the animator graph can use it.
+     * Converts word to uppercase before publishing because its the way the segmented word files in
+     * cmu/xprize/literacy are apparently formatted.
+     */
+    public void publishClozeWord(){
+        if (this.clozeWordsCounter==0){
+            this.clozeWordToPlay = mWord1Text.getText().toString();
+            this.curClozeTextView = mWord1Text;
+            mParent.updateVisibility(mWord1Text, "SHOW");
+            mParent.updateVisibility(mWordFrame1, "SHOW");
+
+        }else if(clozeWordsCounter==1){
+            this.clozeWordToPlay = mWord2Text.getText().toString();
+            this.curClozeTextView = mWord2Text;
+            mParent.updateVisibility(mWord2Text, "SHOW");
+            mParent.updateVisibility(mWordFrame2, "SHOW");
+        }else if(clozeWordsCounter==2){
+            this.clozeWordToPlay = mWord3Text.getText().toString();
+            this.curClozeTextView = mWord3Text;
+            mParent.updateVisibility(mWord3Text, "SHOW");
+            mParent.updateVisibility(mWordFrame3, "SHOW");
+        }else {
+            this.clozeWordToPlay = mWord4Text.getText().toString();
+            this.curClozeTextView = mWord4Text;
+            mParent.updateVisibility(mWord4Text, "SHOW");
+            mParent.updateVisibility(mWordFrame4, "SHOW");
+        }
+        Log.d(TAG, "publishClozeWord: clozeWordToPlay = "+this.clozeWordToPlay);
+        this.clozeWordsCounter += 1;
+        mParent.publishValue(TCONST.RTC_VAR_CLOZEWORD, this.clozeWordToPlay.toUpperCase());
+    }
+
+    public void highlightClozeWord(){
+        Log.d(TAG, "highlightClozeWord: ");
+        mParent.updateTextColor(this.curClozeTextView, Color.GREEN);
+        mParent.updateTextSize(this.curClozeTextView, 40);
 
     }
 
+    public void undoHighlightClozeWord(){
+        Log.d(TAG, "undoHighlightClozeWord: ");
+        mParent.updateTextColor(this.curClozeTextView, Color.BLACK);
+        mParent.updateTextSize(this.curClozeTextView, 30);
+        if (this.curClozeTextView == mWord4Text) {
+            mParent.retractFeature(TCONST.CLZ_ANIM_INCOMPLETE);
+            mParent.publishFeature(TCONST.CLZ_ANIM_COMPLETE);
+            enableClozeButtons();
+            this.clozeWordsCounter = 0;
+        }else{
+            mParent.publishFeature(TCONST.CLZ_ANIM_INCOMPLETE);
+        }
+        mParent.post(TCONST.NEXT_NODE, 2000);
+    }
+
+    public void playClozeSentence(){
+        //segmentNdx = 0;
+        //trackNarration(true);
+        String filename = currUtterance.audio.toLowerCase();
+        if (filename.endsWith(".wav") || filename.endsWith(".mp3")) {
+            filename = filename.substring(0,filename.length()-4);
+        }
+
+        // Publish the current utterance within sentence
+        //
+        mParent.publishValue(TCONST.RTC_VAR_UTTERANCE,  filename);
+        // NOTE: Due to inconsistencies in the segmentation data, you cannot depend on it
+        // having precise timing information.  As a result the segment may timeout before the
+        // audio has completed. To avoid this we use oncomplete in type_audio to push an
+        // TRACK_SEGMENT back to this components queue.
+        // Tell the script to speak the new uttereance
+        //
+        Log.d(TAG, "playClozeSentence: curutterance = "+currUtterance);
+        mParent.applyBehavior(TCONST.SPEAK_UTTERANCE);
+
+        postDelayedTracker();
+
+//
+    }
+
+    /**
+     * Disables all the TextButtons in the current cloze page.
+     */
+    public void disableClozeButtons(){
+        setButtonState(mWord1Text, "DISABLE");
+        setButtonState(mWord2Text, "DISABLE");
+        setButtonState(mWord3Text, "DISABLE");
+        setButtonState(mWord4Text, "DISABLE");
+    }
+
+    public void hideClozeButtons(){
+        setButtonState(mWord1Text, "HIDE");
+        setButtonState(mWord2Text, "HIDE");
+        setButtonState(mWord3Text, "HIDE");
+        setButtonState(mWord4Text, "HIDE");
+        mWordFrame1.setVisibility(View.INVISIBLE);
+        mWordFrame2.setVisibility(View.INVISIBLE);
+        mWordFrame3.setVisibility(View.INVISIBLE);
+        mWordFrame4.setVisibility(View.INVISIBLE);
+    }
+
+    public void showClozeButtons(){
+        setButtonState(mWord1Text, "SHOW");
+        setButtonState(mWord2Text, "SHOW");
+        setButtonState(mWord3Text, "SHOW");
+        setButtonState(mWord4Text, "SHOW");
+        mWordFrame1.setVisibility(View.VISIBLE);
+        mWordFrame2.setVisibility(View.VISIBLE);
+        mWordFrame3.setVisibility(View.VISIBLE);
+        mWordFrame4.setVisibility(View.VISIBLE);
+    }
+
+    public void enableClozeButtons(){
+        setButtonState(mWord1Text, "ENABLE");
+        setButtonState(mWord2Text, "ENABLE");
+        setButtonState(mWord3Text, "ENABLE");
+        setButtonState(mWord4Text, "ENABLE");
+    }
+
+    public void resetClozeButtons(){
+        mParent.updateViewColor(mWordFrame1, Color.WHITE);
+        mParent.updateViewColor(mWordFrame2, Color.WHITE);
+        mParent.updateViewColor(mWordFrame3, Color.WHITE);
+        mParent.updateViewColor(mWordFrame4, Color.WHITE);
+    }
+
     private void updateImageButtons(){
+        Log.d(TAG, "updateImageButtons: ");
         disableImageButtons();
         if (show_image_options && picture_match_mode){
-            mMatchImageRight.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                disableImageButtons();
-                if (picmatch_answer == 2){
-                    mParent.publishFeature(TCONST.PICMATCH_CORRECT);
-                    mParent.retractFeature(TCONST.PICMATCH_WRONG);
-                    picture_match_mode = false;
-                    show_image_options = false;
-                    hasQuestion();
-                }else{
-                    mParent.retractFeature(TCONST.PICMATCH_CORRECT);
-                    mParent.publishFeature(TCONST.PICMATCH_WRONG);
-                }
-                mParent.nextNode();
-                }
-            });
-            mMatchImageCenter.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                disableImageButtons();
-                if (picmatch_answer == 1){
-                    mParent.publishFeature(TCONST.PICMATCH_CORRECT);
-                    mParent.retractFeature(TCONST.PICMATCH_WRONG);
-                    picture_match_mode = false;
-                    show_image_options = false;
-                    hasQuestion();
-                }else{
-                    mParent.retractFeature(TCONST.PICMATCH_CORRECT);
-                    mParent.publishFeature(TCONST.PICMATCH_WRONG);
-                }
-                mParent.nextNode();
-                }
-            });
-            mMatchImageLeft.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                disableImageButtons();
-                if (picmatch_answer == 0){
-                    mParent.publishFeature(TCONST.PICMATCH_CORRECT);
-                    mParent.retractFeature(TCONST.PICMATCH_WRONG);
-                    picture_match_mode = false;
-                    show_image_options = false;
-                    hasQuestion();
-                }else{
-                    mParent.retractFeature(TCONST.PICMATCH_CORRECT);
-                    mParent.publishFeature(TCONST.PICMATCH_WRONG);
-                }
-                mParent.nextNode();
-                }
-            });
+            Log.d(TAG, "updateImageButtons: picmatch_answer = "+picmatch_answer);
+            if(this.numPicMatch>=2){
+                mMatchImage1.setOnTouchListener(new OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                mParent.updateViewAlpha(mMatchImage1, (float) 0.5);
+                                break;
+                            case MotionEvent.ACTION_CANCEL:
+                                mParent.updateViewAlpha(mMatchImage1, (float) 1.0);
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                mParent.updateViewAlpha(mMatchImage1, (float) 1.0);
+                                disableImageButtons();
+                                if (picmatch_answer == 0){
+                                    mParent.updateViewColor(mImageFrame1, Color.GREEN);
+                                    mParent.publishFeature(TCONST.PICMATCH_CORRECT);
+                                    mParent.retractFeature(TCONST.PICMATCH_WRONG);
+                                    picture_match_mode = false;
+                                    show_image_options = false;
+                                    hasQuestion();
+                                }else{
+                                    mParent.updateViewColor(mImageFrame1, Color.RED);
+                                    mParent.retractFeature(TCONST.PICMATCH_CORRECT);
+                                    mParent.publishFeature(TCONST.PICMATCH_WRONG);
+                                }
+                                mParent.nextNode();
+                                break;
+                        }
+                        return true;
+                    }
+                });
+
+                mMatchImage2.setOnTouchListener(new OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                mParent.updateViewAlpha(mMatchImage2, (float) 0.5);
+                                break;
+                            case MotionEvent.ACTION_CANCEL:
+                                mParent.updateViewAlpha(mMatchImage2, (float) 1.0);
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                mParent.updateViewAlpha(mMatchImage2, (float) 1.0);
+                                disableImageButtons();
+                                if (picmatch_answer == 1){
+                                    mParent.updateViewColor(mImageFrame2, Color.GREEN);
+                                    mParent.publishFeature(TCONST.PICMATCH_CORRECT);
+                                    mParent.retractFeature(TCONST.PICMATCH_WRONG);
+                                    picture_match_mode = false;
+                                    show_image_options = false;
+                                    hasQuestion();
+                                }else{
+                                    mParent.updateViewColor(mImageFrame2, Color.RED);
+                                    mParent.retractFeature(TCONST.PICMATCH_CORRECT);
+                                    mParent.publishFeature(TCONST.PICMATCH_WRONG);
+                                }
+                                mParent.nextNode();
+                                break;
+                        }
+                        return true;
+                    }
+                });
+            }
+            if (this.numPicMatch >=3){
+                mMatchImage3.setOnTouchListener(new OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                mParent.updateViewAlpha(mMatchImage3, (float) 0.5);
+                                break;
+                            case MotionEvent.ACTION_CANCEL:
+                                mParent.updateViewAlpha(mMatchImage3, (float) 1.0);
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                mParent.updateViewAlpha(mMatchImage3, (float) 1.0);
+                                disableImageButtons();
+                                if (picmatch_answer == 2){
+                                    mParent.updateViewColor(mImageFrame3, Color.GREEN);
+                                    mParent.publishFeature(TCONST.PICMATCH_CORRECT);
+                                    mParent.retractFeature(TCONST.PICMATCH_WRONG);
+                                    picture_match_mode = false;
+                                    show_image_options = false;
+                                    hasQuestion();
+                                }else{
+                                    mParent.updateViewColor(mImageFrame3, Color.RED);
+                                    mParent.retractFeature(TCONST.PICMATCH_CORRECT);
+                                    mParent.publishFeature(TCONST.PICMATCH_WRONG);
+                                }
+                                mParent.nextNode();
+                                break;
+                        }
+                        return true;
+                    }
+                });
+            }
+            if(this.numPicMatch==4){
+                mMatchImage4.setOnTouchListener(new OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                mParent.updateViewAlpha(mMatchImage4, (float) 0.5);
+                                break;
+                            case MotionEvent.ACTION_CANCEL:
+                                mParent.updateViewAlpha(mMatchImage4, (float) 1.0);
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                mParent.updateViewAlpha(mMatchImage4, (float) 1.0);
+                                disableImageButtons();
+                                if (picmatch_answer == 3){
+                                    mParent.updateViewColor(mImageFrame4, Color.GREEN);
+                                    mParent.publishFeature(TCONST.PICMATCH_CORRECT);
+                                    mParent.retractFeature(TCONST.PICMATCH_WRONG);
+                                    picture_match_mode = false;
+                                    show_image_options = false;
+                                    hasQuestion();
+                                }else{
+                                    mParent.updateViewColor(mImageFrame4, Color.RED);
+                                    mParent.retractFeature(TCONST.PICMATCH_CORRECT);
+                                    mParent.publishFeature(TCONST.PICMATCH_WRONG);
+                                }
+                                mParent.nextNode();
+                                break;
+                        }
+                        return true;
+                    }
+                });
+            }
             showImageButtons();
         } else {
             hideImageButtons();
         }
     }
 
+    @Override
+    public void resetImageButtons(){
+        if(this.numPicMatch>=3){
+            mParent.updateViewColor(mImageFrame1, Color.WHITE);
+            mParent.updateViewColor(mImageFrame2, Color.WHITE);
+            mParent.updateViewAlpha(mImageFrame1, (float) 1.0);
+            mParent.updateViewAlpha(mImageFrame2, (float) 1.0);
+            mParent.updateViewColor(mImageFrame3, Color.WHITE);
+            mParent.updateViewAlpha(mImageFrame3, (float) 1.0);
+        }
+        if(this.numPicMatch==4){
+            mParent.updateViewColor(mImageFrame1, Color.WHITE);
+            mParent.updateViewColor(mImageFrame2, Color.WHITE);
+            mParent.updateViewAlpha(mImageFrame1, (float) 1.0);
+            mParent.updateViewAlpha(mImageFrame2, (float) 1.0);
+            mParent.updateViewColor(mImageFrame3, Color.WHITE);
+            mParent.updateViewAlpha(mImageFrame3, (float) 1.0);
+            mParent.updateViewColor(mImageFrame4, Color.WHITE);
+            mParent.updateViewAlpha(mImageFrame4, (float) 1.0);
+        }
+        if(this.numPicMatch==2){
+            mParent.updateViewColor(mImageFrame1, Color.WHITE);
+            mParent.updateViewColor(mImageFrame2, Color.WHITE);
+            mParent.updateViewAlpha(mImageFrame1, (float) 1.0);
+            mParent.updateViewAlpha(mImageFrame2, (float) 1.0);
+        }
+    }
+
+    @Override
     public void showImageButtons(){
-        setButtonState(mMatchImageLeft, "SHOW");
-        setButtonState(mMatchImageCenter, "SHOW");
-        setButtonState(mMatchImageRight, "SHOW");
+        if(this.numPicMatch==3){
+            setButtonState(mMatchImage1, "SHOW");
+            setButtonState(mMatchImage2, "SHOW");
+            mImageFrame1.setVisibility(View.VISIBLE);
+            mImageFrame2.setVisibility(View.VISIBLE);
+            setButtonState(mMatchImage3, "SHOW");
+            mImageFrame3.setVisibility(View.VISIBLE);
+            mImageGrid.setVisibility(View.VISIBLE);
+        }
+        if(this.numPicMatch==4) {
+            setButtonState(mMatchImage1, "SHOW");
+            setButtonState(mMatchImage2, "SHOW");
+            mImageFrame1.setVisibility(View.VISIBLE);
+            mImageFrame2.setVisibility(View.VISIBLE);
+            setButtonState(mMatchImage3, "SHOW");
+            mImageFrame3.setVisibility(View.VISIBLE);
+            setButtonState(mMatchImage4, "SHOW");
+            mImageFrame4.setVisibility(View.VISIBLE);
+            mImageGrid.setVisibility(View.VISIBLE);
+        }
+        if(this.numPicMatch==2){
+            setButtonState(mMatchImage1, "SHOW");
+            setButtonState(mMatchImage2, "SHOW");
+            mImageFrame1.setVisibility(View.VISIBLE);
+            mImageFrame2.setVisibility(View.VISIBLE);
+            mImageGrid.setVisibility(View.VISIBLE);
+
+        }
     }
 
     @Override
     public void enableImageButtons(){
-        setButtonState(mMatchImageLeft, "ENABLE");
-        setButtonState(mMatchImageCenter, "ENABLE");
-        setButtonState(mMatchImageRight, "ENABLE");
+        if(this.numPicMatch==3){
+            setButtonState(mMatchImage1, "ENABLE");
+            setButtonState(mMatchImage2, "ENABLE");
+            setButtonState(mMatchImage3, "ENABLE");
+        }
+        if(this.numPicMatch==4){
+            setButtonState(mMatchImage1, "ENABLE");
+            setButtonState(mMatchImage2, "ENABLE");
+            setButtonState(mMatchImage3, "ENABLE");
+            setButtonState(mMatchImage4, "ENABLE");
+
+        }else{
+            setButtonState(mMatchImage1, "ENABLE");
+            setButtonState(mMatchImage2, "ENABLE");
+        }
     }
 
+    @Override
     public void hideImageButtons(){
-        setButtonState(mMatchImageLeft, "HIDE");
-        setButtonState(mMatchImageCenter, "HIDE");
-        setButtonState(mMatchImageRight, "HIDE");
+        Log.d(TAG, "hideImageButtons: ");
+        if(this.numPicMatch==3){
+            setButtonState(mMatchImage1, "HIDE");
+            setButtonState(mMatchImage2, "HIDE");
+            mImageFrame1.setVisibility(View.INVISIBLE);
+            mImageFrame2.setVisibility(View.INVISIBLE);
+            setButtonState(mMatchImage3, "HIDE");
+            mImageFrame3.setVisibility(View.INVISIBLE);
+            mImageGrid.setVisibility(View.INVISIBLE);
+        }
+        if(this.numPicMatch==4){
+            setButtonState(mMatchImage1, "HIDE");
+            setButtonState(mMatchImage2, "HIDE");
+            mImageFrame1.setVisibility(View.INVISIBLE);
+            mImageFrame2.setVisibility(View.INVISIBLE);
+            setButtonState(mMatchImage3, "HIDE");
+            mImageFrame3.setVisibility(View.INVISIBLE);
+            setButtonState(mMatchImage4, "HIDE");
+            mImageFrame4.setVisibility(View.INVISIBLE);
+            mImageGrid.setVisibility(View.INVISIBLE);
+        }
+        if(this.numPicMatch==2){
+            setButtonState(mMatchImage1, "HIDE");
+            setButtonState(mMatchImage2, "HIDE");
+            mImageFrame1.setVisibility(View.INVISIBLE);
+            mImageFrame2.setVisibility(View.INVISIBLE);
+            mImageGrid.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
     public void disableImageButtons(){
-        setButtonState(mMatchImageLeft, "DISABLE");
-        setButtonState(mMatchImageCenter, "DISABLE");
-        setButtonState(mMatchImageRight, "DISABLE");
+        Log.d(TAG, "disableImageButtons: ");
+        if(this.numPicMatch==3){
+            setButtonState(mMatchImage1, "DISABLE");
+            setButtonState(mMatchImage2, "DISABLE");
+            setButtonState(mMatchImage3, "DISABLE");
+        }
+        if(this.numPicMatch==4){
+            setButtonState(mMatchImage1, "DISABLE");
+            setButtonState(mMatchImage2, "DISABLE");
+            setButtonState(mMatchImage3, "DISABLE");
+            setButtonState(mMatchImage4, "DISABLE");
+        }
+        if(this.numPicMatch==2){
+            setButtonState(mMatchImage1, "DISABLE");
+            setButtonState(mMatchImage2, "DISABLE");
+        }
+        Log.d(TAG, "disableImageButtons: !!!");
     }
 
     /**
@@ -671,38 +1076,41 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
      *
      */
     public void flipPage() {
+        if (mPageCount-mCurrPage <= 3) {
+            // Last 4 images; don't randomize
+            this.numPicMatch = (mPageCount-mCurrPage)+1;
+        } else {
+            this.numPicMatch = getRandomNumberInRange(2, 4);
+        }
+        Log.d(TAG, "flipPage: asdfad "+this.numPicMatch);
+
         if (mCurrPage % 2 == 0) {
             if (mCurrPage > 0) mPageText.setText(" ");
             mCurrViewIndex = mOddIndex;
-            mMatchImageLeft = mOddPage.findViewById(R.id.SpageImage1);
-            mMatchImageCenter = mOddPage.findViewById(R.id.SpageImage2);
-            mMatchImageRight = mOddPage.findViewById(R.id.SpageImage3);
-            mPageImage = (ImageView) mOddPage.findViewById(R.id.SpageImage);
-            mPageText  = (TextView) mOddPage.findViewById(R.id.SstoryText);
-            mPageFlip = (ImageButton) mOddPage.findViewById(R.id.SpageFlip);
-            mSay      = (ImageButton) mOddPage.findViewById(R.id.Sspeak);
-            mWord1Text = (TextView) mOddPage.findViewById(R.id.Sword1);
-            mWord2Text = (TextView) mOddPage.findViewById(R.id.Sword2);
-            mWord3Text = (TextView) mOddPage.findViewById(R.id.Sword3);
-            mWord4Text = (TextView) mOddPage.findViewById(R.id.Sword4);
+            Log.d(TAG, "flipPage: asdfad moddpage");
+            mPageImage = mOddPage.findViewById(R.id.SpageImage);
+            mPageText  = mOddPage.findViewById(R.id.SstoryText);
+            mPageFlip = mOddPage.findViewById(R.id.SpageFlip);
+            mSay      = mOddPage.findViewById(R.id.Sspeak);
+            setPicMatchView(mOddPage);
+            setClozeView(mOddPage);
         } else {
             mCurrViewIndex = mEvenIndex;
-            mMatchImageLeft = mEvenPage.findViewById(R.id.SpageImage1);
-            mMatchImageCenter = mEvenPage.findViewById(R.id.SpageImage2);
-            mMatchImageRight = mEvenPage.findViewById(R.id.SpageImage3);
-            mPageImage = (ImageView) mEvenPage.findViewById(R.id.SpageImage);
-            mPageText = (TextView) mEvenPage.findViewById(R.id.SstoryText);
-            mPageFlip = (ImageButton) mEvenPage.findViewById(R.id.SpageFlip);
-            mSay = (ImageButton) mEvenPage.findViewById(R.id.Sspeak);
-            mWord1Text = (TextView) mEvenPage.findViewById(R.id.Sword1);
-            mWord2Text = (TextView) mEvenPage.findViewById(R.id.Sword2);
-            mWord3Text = (TextView) mEvenPage.findViewById(R.id.Sword3);
-            mWord4Text = (TextView) mEvenPage.findViewById(R.id.Sword4);
+            Log.d(TAG, "flipPage: asdfad mevenpage");
+            mPageImage = mEvenPage.findViewById(R.id.SpageImage);
+            mPageText = mEvenPage.findViewById(R.id.SstoryText);
+            mPageFlip = mEvenPage.findViewById(R.id.SpageFlip);
+            mSay = mEvenPage.findViewById(R.id.Sspeak);
+            setPicMatchView(mEvenPage);
+            setClozeView(mEvenPage);
         }
         // Ensure the buttons reflect the current states
         updateButtons();
         if (cloze_page_mode){
             updateClozeButtons();
+        } else {
+            hideClozeButtons();
+            disableClozeButtons();
         }
         if(picture_match_mode){
             if (mCurrPage % 2 == 0){
@@ -718,12 +1126,59 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
     }
 
+    private void setClozeView(ViewGroup vgroup){
+        mWord1Text = vgroup.findViewById(R.id.Sword1);
+        mWord2Text = vgroup.findViewById(R.id.Sword2);
+        mWord3Text = vgroup.findViewById(R.id.Sword3);
+        mWord4Text = vgroup.findViewById(R.id.Sword4);
+        mWordFrame1 = vgroup.findViewById(R.id.SwordFrame1);
+        mWordFrame2 = vgroup.findViewById(R.id.SwordFrame2);
+        mWordFrame3 = vgroup.findViewById(R.id.SwordFrame3);
+        mWordFrame4 = vgroup.findViewById(R.id.SwordFrame4);
+        mWordFrame1.setVisibility(View.INVISIBLE);
+        mWordFrame2.setVisibility(View.INVISIBLE);
+        mWordFrame3.setVisibility(View.INVISIBLE);
+        mWordFrame4.setVisibility(View.INVISIBLE);
+    }
+
+    private void setPicMatchView(ViewGroup vgroup){
+        Log.d(TAG, "setPicMatchView: aslkdjfalksdf");
+        if (this.numPicMatch==3){
+            mMatchImage1 = vgroup.findViewById(R.id.SpageImage3_1);
+            mMatchImage2 = vgroup.findViewById(R.id.SpageImage3_2);
+            mMatchImage3 = vgroup.findViewById(R.id.SpageImage3_3);
+            mImageFrame1 = vgroup.findViewById(R.id.SpageFrame3_1);
+            mImageFrame2 = vgroup.findViewById(R.id.SpageFrame3_2);
+            mImageFrame3 = vgroup.findViewById(R.id.SpageFrame3_3);
+            mImageGrid = vgroup.findViewById(R.id.ImageGrid3);
+        }
+        if (this.numPicMatch==4) {
+            mMatchImage1 = vgroup.findViewById(R.id.SpageImage4_1);
+            mMatchImage2 = vgroup.findViewById(R.id.SpageImage4_2);
+            mMatchImage3 = vgroup.findViewById(R.id.SpageImage4_3);
+            mMatchImage4 = vgroup.findViewById(R.id.SpageImage4_4);
+            mImageFrame1 = vgroup.findViewById(R.id.SpageFrame4_1);
+            mImageFrame2 = vgroup.findViewById(R.id.SpageFrame4_2);
+            mImageFrame3 = vgroup.findViewById(R.id.SpageFrame4_3);
+            mImageFrame4 = vgroup.findViewById(R.id.SpageFrame4_4);
+            mImageGrid = vgroup.findViewById(R.id.ImageGrid4);
+        }
+        if(this.numPicMatch==2) {
+            mMatchImage1 = vgroup.findViewById(R.id.SpageImage2_1);
+            mMatchImage2 = vgroup.findViewById(R.id.SpageImage2_2);
+            mImageFrame1 = vgroup.findViewById(R.id.SpageFrame2_1);
+            mImageFrame2 = vgroup.findViewById(R.id.SpageFrame2_2);
+            mImageGrid = vgroup.findViewById(R.id.ImageGrid2);
+        }
+        Log.d(TAG, "setPicMatchView: mImageGrid = null:"+(mImageGrid == null));
+    }
+
     private static int getRandomNumberInRange(int min, int max) {
         if (min >= max) {
             throw new IllegalArgumentException("max must be greater than min");
         }
         Random r = new Random();
-        return r.nextInt((max - min) + 1) + min;
+        return r.nextInt(max - min + 1) + min;
     }
 
     private void configurePageImage() {
@@ -745,9 +1200,12 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 }
                 mPageImage.setImageBitmap(BitmapFactory.decodeStream(in));
                 mPageImage.bringToFront();
-                mMatchImageLeft.setImageBitmap(null);
-                mMatchImageRight.setImageBitmap(null);
-                mMatchImageCenter.setImageBitmap(null);
+//                mImageFrame1.setVisibility(View.INVISIBLE);
+//                mImageFrame2.setVisibility(View.INVISIBLE);
+//                mImageFrame3.setVisibility(View.INVISIBLE);
+//                mMatchImage1.setImageBitmap(null);
+//                mMatchImage3.setImageBitmap(null);
+//                mMatchImage2.setImageBitmap(null);
 
             } catch (IOException e) {
                 mPageImage.setImageBitmap(null);
@@ -1281,7 +1739,8 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         // TRACK_SEGMENT back to this components queue.
         // Tell the script to speak the new uttereance
         //
-        //        mParent.applyBehavior(TCONST.SPEAK_UTTERANCE);
+        Log.d(TAG, "initSegmentation: curutterance = "+currUtterance);
+        mParent.applyBehavior(TCONST.SPEAK_UTTERANCE);
     }
 
 
@@ -1373,9 +1832,6 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 // i.e. the audio plays and this highlights words based on prerecorded durations.
                 //
                 else {
-//                    if (mCurrPage>0 && numWordsCurPage==2){
-//                        mParent.stopAudio();
-//                    }
                     postDelayedTracker();
                 }
             }
@@ -1385,35 +1841,24 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             else {
                 mParent.post(TCONST.TRACK_NARRATION, 0);
             }
-            if (mCurrPage>0 && numWordsCurPage==1 && cloze_page_mode){
-                Log.d("ULANISTOPAUDIO", "postDelayedTracker: "+narrationSegment.word+" "+narrationSegment.start+" "+narrationSegment.end);
-                mParent.post(TCONST.STOP_AUDIO, new Long(0));
-                mParent.post(TCONST.NEXT_NODE, new Long(2000));
-            }
-
         }
     }
 
 
     private void postDelayedTracker() {
-
         narrationSegment = rawNarration[utteranceNdx].segmentation[segmentNdx];
         segmentCurr = utterancePrev + narrationSegment.end;
+        if (mCurrPage>0 && numWordsCurPage==2 && cloze_page_mode && !replayCloze) segmentCurr += 10;
         Log.d("ULANISTOPAUDIO", "postDelayedTracker: "+narrationSegment.word+" "+segmentCurr+" "+segmentPrev);
 
-//        if (mCurrPage>0 && numWordsCurPage==2){
-//            Log.d("ULANISTOPAUDIO", "postDelayedTracker: "+narrationSegment.word+" "+narrationSegment.start+" "+narrationSegment.end);
-//            mParent.post(TCONST.TRACK_NARRATION, new Long(0));
-//        }else{
+        if (mCurrPage>0 && numWordsCurPage==2 && cloze_page_mode && !replayCloze){
+            Log.d("ULANISTOPAUDIO", "postDelayedTracker: stop_audio "+narrationSegment.word+" "+narrationSegment.start+" "+narrationSegment.end);
+            mParent.post(TCONST.STOP_AUDIO, new Long((segmentCurr - segmentPrev) * 10));
+        }else if (mCurrPage>0 && numWordsCurPage==1 && cloze_page_mode && !replayCloze){
+            mParent.post(TCONST.NEXT_NODE, new Long((segmentCurr - segmentPrev) * 10));
+        }
         mParent.post(TCONST.TRACK_NARRATION, new Long((segmentCurr - segmentPrev) * 10));
         segmentPrev = segmentCurr;
-    //}
-    }
-
-    private void postDelayedStopAudio(){
-        int seg_length = rawNarration[utteranceNdx].segmentation.length;
-        int lastWordStart = rawNarration[utteranceNdx].segmentation[seg_length-1].start;
-        mParent.post(TCONST.STOP_AUDIO, new Long(lastWordStart * 10));
     }
 
 
@@ -1447,6 +1892,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 break;
 
             case TCONST.NEXT_PAGE:
+                replayCloze = false; //TODO: figure out the placement of this flag
                 nextPage();
                 break;
 
@@ -1469,6 +1915,12 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             case TCONST.NEXT_NODE:
                 mParent.nextNode();
                 break;
+
+            case TCONST.CLZ_ANIM_INCOMPLETE:
+                mParent.retractFeature(TCONST.CLZ_ANIM_INCOMPLETE);
+
+            case TCONST.REMOVE_CLOZE_FROM_BLANK:
+                mParent.updateTextviewHTML(mPageText, oldClozePageText);
 
             case TCONST.SPEAK_EVENT:
 
@@ -1506,7 +1958,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         // Set the scriptable flag indicating the current state.
         //
         if (mCurrWord >= mWordCount) {
-
+            Log.d(TAG, "publishStateValues: line finished");
             // In echo mode - After line has been echoed we switch to Read mode and
             // read the next sentence.
             //
@@ -1594,12 +2046,9 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         if (mCurrPage > mPageCount-1) mCurrPage = mPageCount-1;
         if (mCurrPage < TCONST.ZERO)  mCurrPage = TCONST.ZERO;
         int numLinesCurPage = data[mCurrPage].text.length;
-//        Log.d("CLOZEPAGEISSUE", "seekToPage: numLinesCurPage = "+numLinesCurPage);
-//        Log.d("CLOZEPAGEISSUE", "seekToPage: mCurrLineInStory = "+mCurrLineInStory);
         this.numTotalLines+=numLinesCurPage;
         if (cloze_page_mode){
             if (clozeIndices.contains(this.numTotalLines)){
-//                Log.d(TAG, "seekToPage: numtotallines = "+numTotalLines);
                 this.isClozePage = true;
                 incClozePage(TCONST.ZERO);
                 mParent.publishValue(TCONST.HAS_DISTRACTOR, TCONST.TRUE);
@@ -1615,16 +2064,12 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
     @Override
     public void nextPage() {
-//        Log.d("ULANICLOZEPAGEISSUE", "nextPage: mcurrpage = "+mCurrPage);
         if (mCurrPage < mPageCount-1) {
             int paracount = data[mCurrPage].text.length;
             int numLinesNextPage = 0;
             for(int i = 0; i < paracount; i++){
                 numLinesNextPage+=data[mCurrPage].text[i].length;
             }
-
-//            Log.d("ULANICLOZEPAGEISSUE", "nextPage: "+data[mCurrPage].text[mCurrPara][mCurrLine]);
-            //Log.d("CLOZEPAGEISSUE", "seekToPage: numLinesCurPage (mcurrpage+1) = "+numLinesNextPage);
             this.numTotalLines+=numLinesNextPage;
             if (cloze_page_mode){
                 // Check if the next page has a cloze question before incrementing the page
@@ -1645,16 +2090,19 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         }
         // Actually do the page animation
         //
+//        if(cloze_page_mode && isClozePage){
+//            mParent.fadeOutView(mPageImage);
+//        } else {
         mParent.animatePageFlip(true, mCurrViewIndex);
+        Log.d(TAG, "nextPage: cloze_page_mode = "+cloze_page_mode+" isClozePage = "+isClozePage);
+//        }
     }
 
     @Override
     public void prevPage() {
-
         if (mCurrPage > 0) {
             incPage(TCONST.DECR);
         }
-
         //TODO: CHECK
         mParent.animatePageFlip(false, mCurrViewIndex);
     }
@@ -1833,8 +2281,6 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             speakOrListen();
         } else {
             mCurrLine += incr;
-            System.out.println("ULANISTOPAUDIO: incline "+mCurrPara+" "+mParaCount+" "+mCurrLine+" "+mLineCount);
-//            if (mCurrPara == mParaCount && mCurrLine == mLineCount) postDelayedStopAudio();
             // Update the state vars
             //
             seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
@@ -1846,8 +2292,6 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
      *
      */
     private void incClozeLine(int incr) {
-//        Log.d(TAG, "incClozeLine: ");
-//        Log.d("CLOZEPAGEINCLINE", "incClozeLine: ");
         // reset boot flag to
         //
         if (storyBooting) {
@@ -1857,10 +2301,6 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         } else {
 
             mCurrLine += incr;
-            System.out.println("ULANISTOPAUDIO: incclozeline "+mCurrPara+" "+mParaCount+" "+mCurrLine+" "+mLineCount);
-//            if (mCurrPara == mParaCount && mCurrLine == mLineCount) postDelayedStopAudio();
-//            Log.d("CLOZEPAGEINCLINE", "incClozeLine: number of lines left = "+numLinesCountdown);
-
             // Update the state vars
             //
             seekToClozeStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
@@ -2120,20 +2560,20 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 //        updateClozeButtons();
     }
 
-    private void printArray(List<Integer> a){
-        for (Integer s : a){
-            System.out.println(s);
+    private String printArray(String[] a){
+        String result = "";
+        for (int i = 0; i < a.length; i++){
+            result+=a[i];
+            result+=" ";
         }
+        return result;
     }
 
     @Override
     public void displayClozeQuestion(){
-//        Log.d("ULANICLOZEPAGEISSUE", "displayClozeQuestion: mCurrLineInStory = "+mCurrLineInStory+" mcurrpage = "+mCurrPage+" "+data[mCurrPage].text[mCurrPara]);
-//        this.clozeQuestion = questions[mCurrLineInStory-1];
         ArrayList<String> nonsensical = new ArrayList<>(Arrays.asList(clozeQuestion.distractor.nonsensical));
         ArrayList<String> ungrammatical = new ArrayList<>(Arrays.asList(clozeQuestion.distractor.ungrammatical));
         ArrayList<String> plausible = new ArrayList<>(Arrays.asList(clozeQuestion.distractor.plausible));
-//        TCONST.TARGET = clozeQuestion.target;
         Collections.shuffle(nonsensical);
         Collections.shuffle(ungrammatical);
         Collections.shuffle(plausible);
@@ -2177,80 +2617,162 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         Collections.shuffle(finalOrder);
         mPageImage.setImageBitmap(null);
         mWord1Text.setText(Html.fromHtml(finalOrder.get(0)));
-        mWord1Text.setVisibility(View.VISIBLE);
         mWord1Text.bringToFront();
         mWord2Text.setText(Html.fromHtml(finalOrder.get(1)));
-        mWord2Text.setVisibility(View.VISIBLE);
         mWord2Text.bringToFront();
         mWord3Text.setText(Html.fromHtml(finalOrder.get(2)));
-        mWord3Text.setVisibility(View.VISIBLE);
         mWord3Text.bringToFront();
         mWord4Text.setText(Html.fromHtml(finalOrder.get(3)));
-        mWord4Text.setVisibility(View.VISIBLE);
         mWord4Text.bringToFront();
-        if(this.isClozePage) {
-//            Log.d(TAG, "updateClozeButtons: isclozepage");
-            setButtonState(mWord1Text, "ENABLE");
-            setButtonState(mWord1Text, "SHOW");
-            setButtonState(mWord2Text, "ENABLE");
-            setButtonState(mWord2Text, "SHOW");
-            setButtonState(mWord3Text, "ENABLE");
-            setButtonState(mWord3Text, "SHOW");
-            setButtonState(mWord4Text, "ENABLE");
-            setButtonState(mWord4Text, "SHOW");
+        if (this.isClozePage) {
+            mParent.fadeOutView(mPageImage);
+//            enableClozeButtons();
+//            showClozeButtons();
         }
-        mParent.animatePageFlip(true, mCurrViewIndex);
     }
 
 
     @Override
     public void displayPictureMatching(){
-        InputStream in1;
-        InputStream in2;
-        InputStream in3;
-        ArrayList<String> imgs = new ArrayList<>();
-        for (int i = mCurrPage+1; i < data.length-1; i++){
-            if (!imgs.contains(data[i].image)){
-                imgs.add(data[i].image);
+        if (numPicMatch==2){
+            InputStream in1;
+            InputStream in2;
+            ArrayList<String> imgs = new ArrayList<>();
+            for (int i = mCurrPage+1; i < data.length-1; i++){
+                if (!imgs.contains(data[i].image)){
+                    imgs.add(data[i].image);
+                }
             }
+            Collections.shuffle(imgs);
+            String randImg1 = imgs.get(0);
+            try {
+                if (assetLocation.equals(TCONST.EXTERN)) {
+                    in1 = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
+                    in2 = new FileInputStream(mAsset + randImg1); // ZZZ load image
+                } else {
+                    in1 = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image); // ZZZ load image
+                    in2 = JSON_Helper.assetManager().open(mAsset + randImg1); // ZZZ load image
+                }
+                int targetIdx = getRandomNumberInRange(0, 1);
+                this.picmatch_answer = targetIdx;
+                if (targetIdx == 1){
+                    mMatchImage2.setImageBitmap(BitmapFactory.decodeStream(in1));
+                    mMatchImage1.setImageBitmap(BitmapFactory.decodeStream(in2));
+                } else {
+                    mMatchImage2.setImageBitmap(BitmapFactory.decodeStream(in2));
+                    mMatchImage1.setImageBitmap(BitmapFactory.decodeStream(in1));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mMatchImage1.bringToFront();
+            mMatchImage2.bringToFront();
         }
-        Collections.shuffle(imgs);
-        String randImg1 = imgs.get(0);
-        String randImg2 = imgs.get(1);
-        try {
-            if (assetLocation.equals(TCONST.EXTERN)) {
-//                Log.d(TCONST.DEBUG_STORY_TAG, "loading image " + mAsset + data[mCurrPage].image+" "+mCurrPage);
-                in1 = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
-                in2 = new FileInputStream(mAsset + randImg1); // ZZZ load image
-                in3 = new FileInputStream(mAsset + randImg2);
-            } else {
-//                Log.d(TCONST.DEBUG_STORY_TAG, "loading image from asset" + mAsset + data[mCurrPage].image);
-                in1 = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image); // ZZZ load image
-                in2 = JSON_Helper.assetManager().open(mAsset + randImg1); // ZZZ load image
-                in3 = JSON_Helper.assetManager().open(mAsset + randImg2);
+        if (numPicMatch==3){
+            InputStream in1;
+            InputStream in2;
+            InputStream in3;
+            ArrayList<String> imgs = new ArrayList<>();
+            for (int i = mCurrPage+1; i < data.length-1; i++){
+                if (!imgs.contains(data[i].image)){
+                    imgs.add(data[i].image);
+                }
             }
-            int targetIdx = getRandomNumberInRange(0, 2);
-            this.picmatch_answer = targetIdx;
-            if (targetIdx == 2){
-                mMatchImageRight.setImageBitmap(BitmapFactory.decodeStream(in1));
-                mMatchImageCenter.setImageBitmap(BitmapFactory.decodeStream(in2));
-                mMatchImageLeft.setImageBitmap(BitmapFactory.decodeStream(in3));
-            } else if (targetIdx == 1){
-                mMatchImageRight.setImageBitmap(BitmapFactory.decodeStream(in2));
-                mMatchImageCenter.setImageBitmap(BitmapFactory.decodeStream(in1));
-                mMatchImageLeft.setImageBitmap(BitmapFactory.decodeStream(in3));
-            } else {
-                mMatchImageRight.setImageBitmap(BitmapFactory.decodeStream(in2));
-                mMatchImageCenter.setImageBitmap(BitmapFactory.decodeStream(in3));
-                mMatchImageLeft.setImageBitmap(BitmapFactory.decodeStream(in1));
+            Collections.shuffle(imgs);
+            String randImg1 = imgs.get(0);
+            String randImg2 = imgs.get(1);
+            try {
+                if (assetLocation.equals(TCONST.EXTERN)) {
+                    in1 = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
+                    in2 = new FileInputStream(mAsset + randImg1); // ZZZ load image
+                    in3 = new FileInputStream(mAsset + randImg2);
+                } else {
+                    in1 = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image); // ZZZ load image
+                    in2 = JSON_Helper.assetManager().open(mAsset + randImg1); // ZZZ load image
+                    in3 = JSON_Helper.assetManager().open(mAsset + randImg2);
+                }
+                int targetIdx = getRandomNumberInRange(0, 2);
+                this.picmatch_answer = targetIdx;
+                if (targetIdx == 2){
+                    mMatchImage3.setImageBitmap(BitmapFactory.decodeStream(in1));
+                    mMatchImage2.setImageBitmap(BitmapFactory.decodeStream(in2));
+                    mMatchImage1.setImageBitmap(BitmapFactory.decodeStream(in3));
+                } else if (targetIdx == 1){
+                    mMatchImage3.setImageBitmap(BitmapFactory.decodeStream(in2));
+                    mMatchImage2.setImageBitmap(BitmapFactory.decodeStream(in1));
+                    mMatchImage1.setImageBitmap(BitmapFactory.decodeStream(in3));
+                } else {
+                    mMatchImage3.setImageBitmap(BitmapFactory.decodeStream(in2));
+                    mMatchImage2.setImageBitmap(BitmapFactory.decodeStream(in3));
+                    mMatchImage1.setImageBitmap(BitmapFactory.decodeStream(in1));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            mMatchImage1.bringToFront();
+            mMatchImage2.bringToFront();
+            mMatchImage3.bringToFront();
+        }
+        if (numPicMatch==4){
+            InputStream in1;
+            InputStream in2;
+            InputStream in3;
+            InputStream in4;
+            ArrayList<String> imgs = new ArrayList<>();
+            for (int i = mCurrPage+1; i < data.length-1; i++){
+                if (!imgs.contains(data[i].image)){
+                    imgs.add(data[i].image);
+                }
+            }
+            Collections.shuffle(imgs);
+            String randImg1 = imgs.get(0);
+            String randImg2 = imgs.get(1);
+            String randImg3 = imgs.get(2);
+            try {
+                if (assetLocation.equals(TCONST.EXTERN)) {
+                    in1 = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
+                    in2 = new FileInputStream(mAsset + randImg1); // ZZZ load image
+                    in3 = new FileInputStream(mAsset + randImg2);
+                    in4 = new FileInputStream(mAsset + randImg3);
+                } else {
+                    in1 = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image); // ZZZ load image
+                    in2 = JSON_Helper.assetManager().open(mAsset + randImg1); // ZZZ load image
+                    in3 = JSON_Helper.assetManager().open(mAsset + randImg2);
+                    in4 = JSON_Helper.assetManager().open(mAsset + randImg3);
+                }
+                int targetIdx = getRandomNumberInRange(0, 3);
+                this.picmatch_answer = targetIdx;
+                if (targetIdx == 3) {
+                    mMatchImage4.setImageBitmap(BitmapFactory.decodeStream(in1));
+                    mMatchImage3.setImageBitmap(BitmapFactory.decodeStream(in2));
+                    mMatchImage2.setImageBitmap(BitmapFactory.decodeStream(in3));
+                    mMatchImage1.setImageBitmap(BitmapFactory.decodeStream(in4));
+                }
+                if (targetIdx == 2){
+                    mMatchImage4.setImageBitmap(BitmapFactory.decodeStream(in2));
+                    mMatchImage3.setImageBitmap(BitmapFactory.decodeStream(in1));
+                    mMatchImage2.setImageBitmap(BitmapFactory.decodeStream(in4));
+                    mMatchImage1.setImageBitmap(BitmapFactory.decodeStream(in3));
+                } else if (targetIdx == 1){
+                    mMatchImage4.setImageBitmap(BitmapFactory.decodeStream(in4));
+                    mMatchImage3.setImageBitmap(BitmapFactory.decodeStream(in3));
+                    mMatchImage2.setImageBitmap(BitmapFactory.decodeStream(in1));
+                    mMatchImage1.setImageBitmap(BitmapFactory.decodeStream(in2));
+                } else {
+                    mMatchImage4.setImageBitmap(BitmapFactory.decodeStream(in4));
+                    mMatchImage3.setImageBitmap(BitmapFactory.decodeStream(in3));
+                    mMatchImage2.setImageBitmap(BitmapFactory.decodeStream(in2));
+                    mMatchImage1.setImageBitmap(BitmapFactory.decodeStream(in1));
+                }
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mMatchImage1.bringToFront();
+            mMatchImage2.bringToFront();
+            mMatchImage3.bringToFront();
+            mMatchImage4.bringToFront();
         }
-        mMatchImageLeft.bringToFront();
-        mMatchImageCenter.bringToFront();
-        mMatchImageRight.bringToFront();
         show_image_options = true;
         updateImageButtons();
         mParent.animatePageFlip(true, mCurrViewIndex);
@@ -2258,11 +2780,8 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
     @Override
     public void hasClozeDistractor(){
-//        Log.d("ULANI", "hasClozeDistractor: numTotalLines = "+this.numTotalLines + " mCurrLineInStory = "+mCurrLineInStory+" isclozepage = "+isClozePage);
-//        Log.d("ULANI", "hasClozeDistractor: cloze_page_mode = "+cloze_page_mode+" mcurrpara = "+mCurrPara+" mparacount ="+mParaCount+" mcurrpage = "+mCurrPage+" mpagecount = "+mPageCount);
         if (mCurrPage <= mPageCount-1) {
             if (isClozePage && mCurrPara >= mParaCount-1){
-//                Log.d(TAG, "hasClozeDistractor: clozeIndices contains numTotalLines");
                 mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.TRUE);
                 mParent.publishValue(TCONST.SHOW_PICMATCH, TCONST.FALSE);
             } else {
@@ -2333,7 +2852,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 content += TCONST.SENTENCE_SPACE + futureSentencesFmtd;
 
             mPageText.setText(Html.fromHtml(content));
-
+            if (cloze_page_mode) this.oldClozePageText = content;
 //            Log.d(TAG, "Story Sentence Text: " + content);
 
             if (showWords && (showFutureWords || mCurrWord > 0)) broadcastActiveTextPos(mPageText, wordsToDisplay);

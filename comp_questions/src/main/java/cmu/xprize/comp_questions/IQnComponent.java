@@ -76,6 +76,34 @@ public interface IQnComponent {
 
     void disableImageButtons();
 
+    void showImageButtons();
+
+    void hideImageButtons();
+
+    void resetImageButtons();
+
+    void resetClozeButtons();
+
+    void showClozeButtons();
+
+    void hideClozeButtons();
+
+    void enableClozeButtons();
+
+    void disableClozeButtons();
+
+    void showClozeWordInBlank();
+
+    void hideClozeWordInBlank();
+
+    void publishClozeWord();
+
+    void highlightClozeWord();
+
+    void undoHighlightClozeWord();
+
+    void playClozeSentence();
+
     void hasQuestion();
 
 }

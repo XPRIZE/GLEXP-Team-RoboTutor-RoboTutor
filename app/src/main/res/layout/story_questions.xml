@@ -18,7 +18,7 @@
         android:textColor="#FFF"
         android:text="This is the Banner Area."/>
 
-    <cmu.xprize.robotutor.tutorengine.widgets.core.TRtComponent
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TQnComponent
         android:id="@+id/SstoryQuestions"
         android:layout_below="@+id/Sbanner"
         app:layout_heightPercent="90%"

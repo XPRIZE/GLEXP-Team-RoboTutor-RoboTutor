@@ -193,69 +193,111 @@ public class CQn_ViewManagerMari implements ICQn_ViewManager, ILoadableObject {
 
     @Override
     public void setRandomGenericQuestion(){
-
     }
 
     @Override
     public void setClozeQuestion(){
-
     }
 
 
     @Override
     public void genericQuestions(){
-
     }
 
     @Override
     public void displayGenericQuestion(){
-
     }
 
     @Override
     public void setPictureMatch(){
-
     }
 
     @Override
     public void setClozePage(){
-
     }
 
     @Override
     public void displayPictureMatching(){
-
     }
 
     @Override
     public void displayClozeQuestion(){
-
     }
 
     @Override
     public void hasClozeDistractor(){
-
     }
 
     @Override
     public void hasQuestion(){
-
     }
 
     @Override
     public void enableImageButtons(){
+    }
 
+    @Override
+    public void resetImageButtons(){
+    }
+
+    @Override
+    public void showImageButtons(){
+    }
+
+    @Override
+    public void hideImageButtons(){
     }
 
     @Override
     public void disableImageButtons(){
+    }
 
+    @Override
+    public void enableClozeButtons(){
+    }
+
+    @Override
+    public void resetClozeButtons(){
+    }
+
+    @Override
+    public void showClozeButtons(){
+    }
+
+    @Override
+    public void hideClozeButtons(){
+    }
+
+    @Override
+    public void disableClozeButtons(){
+    }
+
+    @Override
+    public void showClozeWordInBlank(){
+    }
+
+    @Override
+    public void hideClozeWordInBlank(){
+    }
+
+    @Override
+    public void publishClozeWord(){
+    }
+
+    @Override
+    public void highlightClozeWord(){
+    }
+
+    @Override
+    public void undoHighlightClozeWord(){
+    }
+
+    @Override
+    public void playClozeSentence(){
     }
 
     public void execCommand(String command, Object target ) {
-
         long    delay  = 0;
-
         switch(command) {
         }
     }

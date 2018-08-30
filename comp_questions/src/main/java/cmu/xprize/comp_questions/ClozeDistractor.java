@@ -1,12 +1,15 @@
 package cmu.xprize.comp_questions;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
+
+/**
+ * uhq: Class used to parse data from mcq.json for a single cloze sentence
+ */
 public class ClozeDistractor implements ILoadableObject{
     // json loadable
     public String[] ungrammatical;

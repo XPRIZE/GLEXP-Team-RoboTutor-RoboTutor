@@ -95,9 +95,37 @@ public interface ICQn_ViewManager extends ILoadableObject {
 
     public void setPageFlipButton(String command);
 
+    public void resetImageButtons();
+
+    public void showImageButtons();
+
+    public void hideImageButtons();
+
     public void enableImageButtons();
 
     public void disableImageButtons();
+
+    public void resetClozeButtons();
+
+    public void showClozeButtons();
+
+    public void hideClozeButtons();
+
+    public void enableClozeButtons();
+
+    public void disableClozeButtons();
+
+    public void showClozeWordInBlank();
+
+    public void hideClozeWordInBlank();
+
+    public void publishClozeWord();
+
+    public void highlightClozeWord();
+
+    public void undoHighlightClozeWord();
+
+    public void playClozeSentence();
 
     public void execCommand(String _command, Object _target);
 

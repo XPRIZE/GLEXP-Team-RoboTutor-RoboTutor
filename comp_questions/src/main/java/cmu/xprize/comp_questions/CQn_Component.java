@@ -22,14 +22,17 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -98,6 +101,7 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
     private Animation slide_right_to_left;
     private Animation slide_bottom_up;
     private Animation slide_top_down;
+    private Animation fade_out;
 
 
     // json loadable
@@ -139,6 +143,7 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
         slide_right_to_left  = AnimationUtils.loadAnimation(mContext, R.anim.slide_right_to_left);
         slide_top_down       = AnimationUtils.loadAnimation(mContext, R.anim.slide_top_down);
         slide_bottom_up      = AnimationUtils.loadAnimation(mContext, R.anim.slide_bottom_up);
+        fade_out              = AnimationUtils.loadAnimation(mContext, R.anim.fade_out);
     }
 
 
@@ -262,7 +267,6 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
         return insertNdx;
     }
 
-
     /**
      *
      * @param forward
@@ -284,6 +288,38 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
         setDisplayedChild(index);
     }
 
+    public void fadeOutView(View v){
+        v.setAnimation(fade_out);
+    }
+
+    public void updateViewColor(View v, int color){
+        v.setBackgroundColor(color);
+    }
+
+    public void updateTextSize(TextView v, int size){
+        v.setTextSize(size);
+    }
+
+    public void updateTextColor(TextView v, int color){
+        v.setTextColor(color);
+    }
+
+    public void updateVisibility(View v, String state){
+        if (state == "SHOW"){
+            v.setVisibility(VISIBLE);
+        }
+        if (state == "HIDE"){
+            v.setVisibility(INVISIBLE);
+        }
+    }
+
+    public void updateViewAlpha(View v, float alpha){
+        v.setAlpha(alpha);
+    }
+
+    public void updateTextviewHTML(TextView v, String html){
+        v.setText(Html.fromHtml(html));
+    }
 
     //****** ViewManager Support - START
     //*************************************************
@@ -569,7 +605,49 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
         mViewManager.disableImageButtons();
     }
 
+    public void resetImageButtons(){
+        mViewManager.resetImageButtons();
+    }
 
+    public void showImageButtons(){
+        mViewManager.showImageButtons();
+    }
+
+    public void hideImageButtons(){
+        mViewManager.hideImageButtons();
+    }
+
+    public void enableClozeButtons(){
+        mViewManager.enableClozeButtons();
+    }
+
+    public void disableClozeButtons(){
+        mViewManager.disableClozeButtons();
+    }
+
+    public void resetClozeButtons(){
+        mViewManager.resetClozeButtons();
+    }
+
+    public void showClozeButtons(){
+        mViewManager.showClozeButtons();
+    }
+
+    public void hideClozeButtons(){
+        mViewManager.hideClozeButtons();
+    }
+
+    public void showClozeWordInBlank() { mViewManager.showClozeWordInBlank(); }
+
+    public void hideClozeWordInBlank() {mViewManager.hideClozeWordInBlank(); }
+
+    public void publishClozeWord() { mViewManager.publishClozeWord(); }
+
+    public void highlightClozeWord() { mViewManager.highlightClozeWord(); }
+
+    public void undoHighlightClozeWord() { mViewManager.undoHighlightClozeWord(); }
+
+    public void playClozeSentence() { mViewManager.playClozeSentence(); }
     // Tutor methods  End
     //************************************************************************
     //************************************************************************

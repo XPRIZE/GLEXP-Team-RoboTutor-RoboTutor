@@ -705,7 +705,7 @@ public class CMediaManager {
         // TODO : need tighter control over media player lifetime - running out of resources
         // since they aren't being released.
         public void play() {
-            System.out.println("PLAYING SOMETHING");
+            Log.d("ULANISTOPAUDIO", "play: ");
             if(!mPlaying && mIsAlive) {
 
                 if(mIsReady) {
@@ -726,17 +726,12 @@ public class CMediaManager {
         Runnable stopPlayerTask = new Runnable(){
             @Override
             public void run() {
-                Log.d("ULANI", "run: narrationsegment PAUSED");
-                mPlayer.pause();
-                seek(575);
-                mPlayer.start();
+                mPlayer.stop();
             }};
-
-        Handler handler = new Handler();
 
         public void play(Long duration) {
             System.out.println("Playing something with total duration below");
-            System.out.println(mPlayer.getDuration());
+            Log.d("ULANISTOPAUDIO", "play: "+mPlayer.getDuration()+" "+mDataSource);
 //            sLog.d("ULANI", "playing something with total duration: "+ Integer.toString(mPlayer.getDuration()));
             if(!mPlaying && mIsAlive) {
 
@@ -745,9 +740,9 @@ public class CMediaManager {
                     mMediaController.startSpeaking();
 
                     Log.v(GRAPH_MSG, "CMediaManager.playermanager.play: " + mDataSource);
-                    handler.postDelayed(stopPlayerTask, duration);
-
                     mPlayer.start();
+//                    Handler handler = new Handler();
+//                    handler.postDelayed(stopPlayerTask, duration);
 
                     mPlaying       = true;
                     mDeferredStart = false;
@@ -759,7 +754,7 @@ public class CMediaManager {
 
         // UHQ : STOP THE TRACK WITH THIS
         public void stop() {
-
+            Log.d("ULANISTOPAUDIO", "stop: ");
             Log.v(GRAPH_MSG, "CMediaManager.playermanager.stop: " + mDataSource);
 
             pause();
