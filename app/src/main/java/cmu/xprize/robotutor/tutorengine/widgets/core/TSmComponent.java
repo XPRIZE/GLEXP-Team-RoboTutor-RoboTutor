@@ -161,7 +161,7 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
 
         // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
         //
-        if(!(BuildConfig.NO_ASR_APPS && intent.equals(TCONST.STORY_INTENT))) {
+        if(!(BuildConfig.NO_ASR_APPS && (intent.equals(TCONST.STORY_INTENT) || intent.equals(TCONST.QUESTIONS_INTENT)) )) {
 
             // update the response variable  "<Sresponse>.value"
 

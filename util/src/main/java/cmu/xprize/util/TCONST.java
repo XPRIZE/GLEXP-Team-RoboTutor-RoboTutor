@@ -26,8 +26,6 @@ import java.util.HashMap;
 
 public class TCONST {
 
-//    sdcard/robotutor_assets/assets/audio/en/cmu/xprize/activity_selector/d39950ec96e6a5361508996ce7ae6444.mp3
-
     // These features are based on the current tutor selection model
     // When no tutor has been selected it should run the tutor select
     // and when it finishes it should run the difficulty select until
@@ -199,6 +197,7 @@ public class TCONST {
     public static final String RIGHTLANE           = "RIGHT";
 
     public static final String STORY_INTENT        = "story_reading";
+    public static final String QUESTIONS_INTENT        = "story_questions";
     public static final String ON_CLICK            = "ON_CLICK";
     public static final String ENCODED_FOLDER      = "[encfolder]";
     public static final String SHARED_MATH         = "[sharedmath]";
@@ -231,11 +230,20 @@ public class TCONST {
     public static final String FTR_USER_REVEAL     = "FTR_USER_REVEAL";
     public static final String FTR_USER_PARROT     = "FTR_USER_PARROT";
     public static final String FTR_USER_READING    = "FTR_USER_READING";
+    // UHQ
+    public static final String FTR_GEN             = "FTR_GEN";
+    public static final String FTR_PIC             = "FTR_PIC";
+    public static final String FTR_CLO             = "FTR_CLO";
+    public static final String STOP_AUDIO          = "STOP_AUDIO";
+    public static final String RTC_VAR_CLOZEWORD   = ".clozeWord";
+    public static final String REMOVE_CLOZE_FROM_BLANK = "REMOVE_CLOZE_FROM_BLANK";
+
 
     public static final String NARRATE_STORY       = "NARRATE_STORY";
     public static final String TRACK_NARRATION     = "TRACK_NARRATION";
     public static final String START_NARRATION     = "START_NARRATION";
     public static final String SPEAK_UTTERANCE     = "SPEAK_UTTERANCE";
+
     public static final String SPEAK_EVENT         = "SPEAK_EVENT";
 
     public static final int    INITSPLIT           = -1;
@@ -262,6 +270,11 @@ public class TCONST {
     public static final String TRACK_COMPLETE             = "TRACK_COMPLETE";
 
     public static final String NEXT_PAGE                  = "NEXT_PAGE";
+    public static final String CLOZE_CORRECT              = "CLOZE_CORRECT";
+    public static final String CLOZE_WRONG                = "CLOZE_WRONG";
+    public static final String PICMATCH_CORRECT              = "PICMATCH_CORRECT";
+    public static final String PICMATCH_WRONG                = "PICMATCH_WRONG";
+    public static String TARGET                                  = "";
     public static final String NEXT_SCENE                 = "NEXT_SCENE";
     public static final String NEXT_WORD                  = "NEXT_WORD";
 
@@ -364,7 +377,7 @@ public class TCONST {
     public static final String STORY_ASSETS       = "story";
     static final public String EXTERNAL           = "external";
     static final public String ROBOTUTOR_ASSETS   = "sdcard/robotutor_assets/assets";
-    static final public String LOCAL_STORY_AUDIO  = "sdcard/Download/RoboTutor/assets/story_reading";
+    static final public String LOCAL_STORY_AUDIO  = "sdcard/Download/RoboTutor/assets/story_questions";
 
     static final public String LTK_PROJECT_ASSETS = "projects";
     static final public String LTK_GLYPH_ASSETS   = "glyphs";
@@ -441,6 +454,11 @@ public class TCONST {
     public static final String READY           = "READY";
 
     public static final String PLAY            = "PLAY";
+    //UHQ
+    public static final String PLAY_CLOZE      = "PLAY_CLOZE";
+    public static final String CLZ_ANIM_INCOMPLETE = "CLZ_ANIM_INCOMPLETE";
+    public static final String CLZ_ANIM_COMPLETE = "CLZ_ANIM_COMPLETE";
+    public static long CLOZE_END               = 0L;
     public static final String STOP            = "STOP";
     public static final String NEXT            = "NEXT";
     public static final String GOTO_NODE       = "GOTO_NODE";
@@ -597,6 +615,7 @@ public class TCONST {
     public static final int SAYWORD        = 2;
 
     public static final String STORYDATA   = "storydata.json";
+    public static final String STORYMCQ    = "mcq.json";
     public static final String STORYINDEX  = "story_index.json";
     public static final String SOURCEFILE  = "[file]";
     public static final String ASSETFILE   = "[asset]";
@@ -658,7 +677,6 @@ public class TCONST {
     public static final String DIGIT3_WORDS_VAR  = ".digit3Words";
     public static final String DIGIT2_WORDS_VAR  = ".digit2Words";
     public static final String DIGIT1_WORDS_VAR  = ".digit1Words";
-
 
     // Generic error codes
     public static final String GENERIC_RIGHT  = "FTR_RIGHT";
@@ -766,19 +784,38 @@ public class TCONST {
 
     public static final String RTC_VAR_ECHOSTATE   = ".echoState";
     public static final String RTC_VAR_PARROTSTATE = ".parrotState";
+    public static final String RTC_VAR_QNSTATE = ".qnState";
+    public static final String RTC_VAR_CLZSTATE = ".clzState";
+    public static final String RTC_VAR_PMSTATE = ".pmState";
+    // Generic question state flag
+    public static final String RTC_VAR_QUESTIONSTATE = ".questionState";
+    public static final String RTC_VAR_CLOZESTATE = ".clozeState";
+    public static final String TO_CLOZE = ".toCloze";
+
+    public static final String RTC_VAR_SILENCESTATE = ".silenceState";
+    // Generic question audio file
+    public static final String RTC_QUESTION_AUDIO = ".questionAudio";
+    public static final String RTC_SILENCE = ".silence";
+    public static final String COMPLETE = "COMPLETE";
     public static final String RTC_VAR_PAGESTATE   = ".pageState";
     public static final String RTC_VAR_PARASTATE   = ".paraState";
     public static final String RTC_VAR_LINESTATE   = ".lineState";
     public static final String RTC_VAR_WORDSTATE   = ".wordState";
+    public static final String SHOW_CLOZE          = ".showCloze";
+    public static final String SHOW_PICMATCH        = ".showPicMatch";
     public static final String RTC_VAR_ATTEMPT     = ".attempt";
     public static final String LAST                = "LAST";
     public static final String NOT_LAST            = "NOT_LAST";
+    //UHQ
+    public static final String HAS_DISTRACTOR      = ".distractor";
+
 
     public static final String RTC_VAR_STATE         = ".storyState";
     public static final String RTC_PARAGRAPHCOMPLETE = "PARAGRAPH_COMPLETE";
     public static final String RTC_PAGECOMPLETE      = "PAGE_COMPLETE";
     public static final String RTC_STORYCMPLETE      = "STORY_COMPLETE";
     public static final String RTC_LINECOMPLETE      = "LINE_COMPLETE";
+    //Generic question state of completion
     public static final String RTC_CLEAR             = "";
 
     public static final String RTC_VAR_PROMPT      = ".prompt";

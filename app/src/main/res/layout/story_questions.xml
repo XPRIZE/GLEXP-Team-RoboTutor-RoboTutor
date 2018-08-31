@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/digit_copy">
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TBanner
+        android:id="@+id/Sbanner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/Sbanner"
+        app:layout_heightPercent="10%"
+        android:background="#800"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:textColor="#FFF"
+        android:text="This is the Banner Area."/>
+
+    <cmu.xprize.robotutor.tutorengine.widgets.core.TQnComponent
+        android:id="@+id/SstoryQuestions"
+        android:layout_below="@+id/Sbanner"
+        app:layout_heightPercent="90%"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>

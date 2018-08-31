@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/story_questions"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF">
+
+    <ImageView
+        android:id="@+id/SpageImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="30dp"
+        android:scaleType="fitCenter"
+        app:layout_widthPercent="50%" />
+
+    <FrameLayout
+        android:id="@+id/SsideViewQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="30dp"
+        android:scaleType="fitCenter"
+        app:layout_widthPercent="50%" />
+
+    <TextView
+        android:id="@+id/SstoryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_toRightOf="@+id/SpageImage"
+        android:textColor="#000"
+        android:textSize="30sp"
+        app:layout_widthPercent="50%" />
+
+    <TextView
+        android:id="@+id/Sword1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:textColor="#000"
+        android:textSize="30sp"
+        app:layout_widthPercent="50%"
+        app:layout_heightPercent="20%"/>
+
+    <TextView
+        android:id="@+id/Sword2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Sword1"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:textColor="#000"
+        android:textSize="30sp"
+        app:layout_widthPercent="50%"
+        app:layout_heightPercent="20%"/>
+
+    <TextView
+        android:id="@+id/Sword3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Sword2"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:textColor="#000"
+        android:textSize="30sp"
+        app:layout_widthPercent="50%"
+        app:layout_heightPercent="20%"/>
+
+    <TextView
+        android:id="@+id/Sword4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Sword3"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:textColor="#000"
+        android:textSize="30sp"
+        app:layout_widthPercent="50%"
+        app:layout_heightPercent="20%"/>
+
+    <ImageButton
+        android:id="@+id/Sspeak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/SstoryText"
+        android:layout_alignEnd="@+id/SstoryText"
+        android:layout_marginBottom="50dp"
+        android:layout_marginRight="250dp"
+        android:background="#ffffff"
+        android:src="@drawable/speak_button" />
+
+    <ImageButton
+        android:id="@+id/SpageFlip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/SpageImage"
+        android:layout_alignEnd="@+id/SstoryText"
+        android:layout_below="@+id/SstoryText"
+        android:layout_marginRight="250dp"
+        android:background="#ffffff"
+        android:src="@drawable/page_flip_button" />
+
+    <FrameLayout
+        android:id="@+id/SfullViewQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp" />
+
+
+</android.support.percent.PercentRelativeLayout>
+

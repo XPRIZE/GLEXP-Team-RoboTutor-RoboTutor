@@ -87,9 +87,10 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     // VARIABLES FOR QUICK DEBUG LAUNCH
     private static final boolean QUICK_DEBUG = false;
-    private static final String debugTutorVariant = "story.parrot";
-    private static final String debugTutorId = "story.parrot::ltr-A.rand.40";
-    private static final String debugTutorFile = "[sharedliteracy]ltr-A.rand.40.json";
+    private static final String debugTutorVariant = "story.pic.hear";
+    private static final String debugTutorId = "story.pic.hear::story_30";
+    private static final String debugTutorFile = "[encfolder]story_30";
+
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
 
     private CTutorEngine        tutorEngine;
@@ -146,6 +147,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     private final String ID_TAG = "StudentId";
 
     private Thread audioLogThread;
+    // TODO move to config file
+    private boolean RECORD_AUDIO = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,8 +218,10 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         Log.v(TAG, "External_Download:" + DOWNLOAD_PATH);
 
-        audioLogThread = new CAudioLogThread(readyLogPath, logFilename);
-        audioLogThread.start();
+        if (RECORD_AUDIO) {
+            audioLogThread = new CAudioLogThread(readyLogPath, logFilename);
+            audioLogThread.start();
+        }
 
         // Get the primary container for tutors
         //
@@ -792,7 +797,9 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
             TTS = null;
         }
 
-        audioLogThread.interrupt();
+        if (RECORD_AUDIO && audioLogThread != null) {
+            audioLogThread.interrupt();
+        }
 
         logManager.postDateTimeStamp(GRAPH_MSG, "RoboTutor:SessionEnd");
         logManager.stopLogging();

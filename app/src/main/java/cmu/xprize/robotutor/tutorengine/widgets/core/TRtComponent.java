@@ -531,6 +531,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
 
             } else if (dataNameDescriptor.startsWith(TCONST.ENCODED_FOLDER)) {
+                System.out.println("ENCODED FOLDER");
 
                 // ZZZ detect story [encfolder]
                 // "story.parrot::0..10.SD_OFF1_DES.34" --> "[encfolder]0..10.SD_OFF1_DES.34"
@@ -679,8 +680,8 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 String dataFile = dataNameDescriptor.substring(TCONST.ASSETFILE.length());
 
                 // Generate a langauage specific path to the data source -
-                // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
-                // e.g. tutors/word_copy/assets/data/sw/
+                // i.e. tutors/story_questions/assets/data/<iana2_language_id>/
+                // e.g. tutors/story_questions/assets/data/sw/
                 //
                 DATASOURCEPATH = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS +
                                  "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
@@ -706,6 +707,9 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         catch (Exception e) {
             CErrorManager.logEvent(TAG, "Invalid Data Source for : " + mTutor.getTutorName(), e, false);
         }
+        System.out.println("AUDIOSOURCEPATH: "+AUDIOSOURCEPATH);
+        System.out.println("STORYSOURCEPATH: "+STORYSOURCEPATH);
+        System.out.println("DATASOURCEPATH: "+DATASOURCEPATH);
     }
 
 
