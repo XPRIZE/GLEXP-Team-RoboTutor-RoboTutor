@@ -741,7 +741,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         mWrittenSentence = getWrittenSentence();
 
                         // evaluated on end sentence punctuation, when the written sentence is correct: apply ON_CORRECT behavior
-                        if (mWrittenSentence.equals(mAnswer)) {
+                        boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
+                        if (writtenSentenceIsCorrect) {
                             applyBehavior(WR_CONST.ON_CORRECT);
                         }
 
@@ -770,13 +771,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                     //check if allowed to write in the first place
                     boolean canReplace = checkReplace(mEditSequence, mActiveIndex);
+                    //if allowed to replace
                     if(canReplace){
                         //check if the correct glyph is drawn
                         //if yes, and update the edit sequence, and check if the sentence is correct now.
-                        if(mResponse.equals(getReplacementTargetString(mEditSequence, mActiveIndex))){
+                        boolean responseEqualsTargetReplacement = mResponse.equals(getReplacementTargetString(mEditSequence, mActiveIndex));
+                        if(responseEqualsTargetReplacement){
                             updateSentenceEditSequence();
                             mWrittenSentence = getWrittenSentence();
-                            if (mWrittenSentence.equals(mAnswer)) {
+                            boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
+                            if (writtenSentenceIsCorrect) {
                                 applyBehavior(WR_CONST.ON_CORRECT);
                             }
                         }
@@ -788,15 +792,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         }
                     }
 
-                    //when the glyph drawn is at the wrong place, increase the attempt and replace the old glyph that was there.
+                    //when the glyph drawn is at the wrong place, increase the attempt and replace the old glyph that was there. //amogh comment some other behavior should be called.
                     else{
 
-                    }
-                    //upon recognising, if the sentence is correct now, start the ON_CORRECT behavior
-
-                    mWrittenSentence = getWrittenSentence();
-                    if(mWrittenSentence.equals(mAnswer)){
-                        applyBehavior(WR_CONST.ON_CORRECT);
+                        updateAttemptFeature();
+                        applyBehavior(WR_CONST.ON_ERROR);
                     }
 
                 }
