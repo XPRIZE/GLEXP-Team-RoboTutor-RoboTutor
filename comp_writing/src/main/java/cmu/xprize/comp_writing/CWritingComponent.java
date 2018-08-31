@@ -94,6 +94,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected Word              mActiveWord;// amogh added
     protected String            mWrittenSentence; // amogh added
     protected StringBuilder     mEditSequence; // amogh added
+    protected StringBuilder     mAlignedSourceSentence; //amogh added
+    protected StringBuilder     mAlignedTargetSentence; //amogh added
+    protected int               mSentenceAttempts;
     protected ArrayList         mEditOperations; //amogh added
 
     protected ImageButton       mReplayButton;
@@ -128,7 +131,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected boolean           _isValid;
     protected ArrayList<String> _attemptFTR = new ArrayList<>();
     protected ArrayList<String> _hesitationFTR = new ArrayList<>(); //amogh added
-    private int                     _hesitationNo      = 0; //amogh added
+    private int                 _hesitationNo      = 0; //amogh added
 
     protected String            mResponse;
     protected String            mStimulus;
@@ -137,7 +140,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     protected CGlyphMetricConstraint _metric = new CGlyphMetricConstraint();
 
-    protected List<CWr_Data>      _data;
+    protected List<CWr_Data>    _data;
     protected int               _dataIndex = 0;
     protected boolean           _dataEOI   = false;
 
@@ -157,18 +160,18 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     //amogh added
     // for sentence correction
     protected List<Integer>     _spaceIndices = new ArrayList<Integer>(); //indices with space for
-    protected int currentWordIndex = 0;
-    protected ArrayList<Word> mListWords;
+    protected int               currentWordIndex = 0;
+    protected ArrayList<Word>   mListWords;
 
 
     protected  List<Integer>    deleteCorrectionIndices = new ArrayList<>();
     protected  List<Integer>    insertCorrectionIndices = new ArrayList<>();
     protected  List<Integer>    changeCorrectionIndices = new ArrayList<>();
 
-
-    protected HashMap<String,HashMap<String,ArrayList<Integer>>>  corrections = new HashMap<>();
-    protected HashMap<Integer,ArrayList<Integer>> wordIndices = new HashMap<>();
-    protected HashMap<Integer,Boolean> wordStatus = new HashMap<>();
+// amogh added - not very useful anymore.
+//    protected HashMap<String,HashMap<String,ArrayList<Integer>>>  corrections = new HashMap<>();
+//    protected HashMap<Integer,ArrayList<Integer>> wordIndices = new HashMap<>();
+//    protected HashMap<Integer,Boolean> wordStatus = new HashMap<>();
 
 
 //    protected  List<Integer>    deleteCorrectionIndices = new ArrayList<>(Arrays.asList());
@@ -319,26 +322,26 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         bManager.sendBroadcast(msg);
     }
 
-    //amogh added to initialise the correction hashmap
-    public void initialiseCorrectionHashMap() {
-        ArrayList<Integer> replaceCapitalize= new ArrayList<Integer>(Arrays.asList(0,4));
-        ArrayList<Integer> insertPunctuationIndices = new ArrayList<Integer>(Arrays.asList(2,21));
-        ArrayList<Integer> replaceCapitalizeIndices = new ArrayList<Integer>(Arrays.asList(0,4));
-        HashMap<String,ArrayList<Integer>> insertMap = new HashMap<String, ArrayList<Integer>>();
-        HashMap<String,ArrayList<Integer>> replaceMap = new HashMap<String, ArrayList<Integer>>();
-        insertMap.put("Punctuation",insertPunctuationIndices);
-        replaceMap.put("Capitalize",replaceCapitalizeIndices);
-        corrections.put("Insert", insertMap);
-        corrections.put("Replace", replaceMap);
-    }
-
-    public void initialiseWordIndices(){
-        ArrayList<Integer> Indices;
-        wordIndices.put(0,new ArrayList<Integer>(Arrays.asList(0,1,2,3)));
-        wordIndices.put(1,new ArrayList<Integer>(Arrays.asList(4,5,6,7,8,9,10,11,12,13)));
-        wordIndices.put(2,new ArrayList<Integer>(Arrays.asList(14,15,16)));
-        wordIndices.put(3,new ArrayList<Integer>(Arrays.asList(17,18,19,20,21)));
-    }
+//    //amogh added to initialise the correction hashmap
+//    public void initialiseCorrectionHashMap() {
+//        ArrayList<Integer> replaceCapitalize= new ArrayList<Integer>(Arrays.asList(0,4));
+//        ArrayList<Integer> insertPunctuationIndices = new ArrayList<Integer>(Arrays.asList(2,21));
+//        ArrayList<Integer> replaceCapitalizeIndices = new ArrayList<Integer>(Arrays.asList(0,4));
+//        HashMap<String,ArrayList<Integer>> insertMap = new HashMap<String, ArrayList<Integer>>();
+//        HashMap<String,ArrayList<Integer>> replaceMap = new HashMap<String, ArrayList<Integer>>();
+//        insertMap.put("Punctuation",insertPunctuationIndices);
+//        replaceMap.put("Capitalize",replaceCapitalizeIndices);
+//        corrections.put("Insert", insertMap);
+//        corrections.put("Replace", replaceMap);
+//    }
+//
+//    public void initialiseWordIndices(){
+//        ArrayList<Integer> Indices;
+//        wordIndices.put(0,new ArrayList<Integer>(Arrays.asList(0,1,2,3)));
+//        wordIndices.put(1,new ArrayList<Integer>(Arrays.asList(4,5,6,7,8,9,10,11,12,13)));
+//        wordIndices.put(2,new ArrayList<Integer>(Arrays.asList(14,15,16)));
+//        wordIndices.put(3,new ArrayList<Integer>(Arrays.asList(17,18,19,20,21)));
+//    }
 
 //    public void updateWord(){
 //        ArrayList<Integer> wordInd= wordIndices.get(currentWordIndex);
@@ -443,7 +446,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         if(canDelete){
             mGlyphList.removeViewAt(index);
             mResponseViewList.removeViewAt(index);
-            mEditSequence = getUpdatedEditSequence();
+            updateSentenceEditSequence();
         }
         else
         {
@@ -528,7 +531,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 v.setLinkedScroll(mDrawnScroll);
                 v.setWritingController(this);
 
-                mEditSequence = getUpdatedEditSequence();
+                updateSentenceEditSequence();
             }
             else{
                 //increase attempt number for the word or the sentence!
@@ -731,60 +734,92 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             //for sentence level feedback
             else if(activityFeature.contains("FTR_SEN_SEN")){
 
-                boolean editMode = false;
+                if(mSentenceAttempts == 0){
+                    //when the sentence has not been evaluated yet, evaluate on punctuation
+                    if("!?.".contains(mResponse))
+                    {
+                        mWrittenSentence = getWrittenSentence();
 
-                //evaluate on punctuation
-                if("!?.".contains(mResponse))
-                {
+                        // evaluated on end sentence punctuation, when the written sentence is correct: apply ON_CORRECT behavior
+                        if (mWrittenSentence.equals(mAnswer)) {
+                            applyBehavior(WR_CONST.ON_CORRECT);
+                        }
+
+                        //when the written sentence does not match the expected answer
+                        else{
+
+                            //update with the required changes and aligned source and target stringbuilders.
+                            updateSentenceEditSequence();
+
+                            //increase the attempt number for the sentence
+                            updateAttemptFeature();
+
+                            //make the buttons appear.
+                            activateEditMode();
+                            applyBehavior(WR_CONST.ON_ERROR);
+                        }
+                    }
+                    //when not end punctuation and attempts = 0, normal recognition only
+                    else
+                    {
+                    }
+                }
+
+                //when the sentence attempts > 0
+                else{
+
+                    //check if allowed to write in the first place
+                    boolean canReplace = checkReplace(mEditSequence, mActiveIndex);
+                    if(canReplace){
+                        //check if the correct glyph is drawn
+                        //if yes, and update the edit sequence, and check if the sentence is correct now.
+                        if(mResponse.equals(getReplacementTargetString(mEditSequence, mActiveIndex))){
+                            updateSentenceEditSequence();
+                            mWrittenSentence = getWrittenSentence();
+                            if (mWrittenSentence.equals(mAnswer)) {
+                                applyBehavior(WR_CONST.ON_CORRECT);
+                            }
+                        }
+                        // if no, revert the glyph to what it was, then increase attempt and release on error behavior.
+                        else{
+                            //revert the glyph to old one.
+                            updateAttemptFeature();
+                            applyBehavior(WR_CONST.ON_ERROR);
+                        }
+                    }
+
+                    //when the glyph drawn is at the wrong place, increase the attempt and replace the old glyph that was there.
+                    else{
+
+                    }
+                    //upon recognising, if the sentence is correct now, start the ON_CORRECT behavior
+
                     mWrittenSentence = getWrittenSentence();
-
-                    // evaluated on end sentence punctuation, when the written sentence is correct: apply ON_CORRECT behavior
-                    if (mWrittenSentence.equals(mAnswer)) {
+                    if(mWrittenSentence.equals(mAnswer)){
                         applyBehavior(WR_CONST.ON_CORRECT);
                     }
 
-                    //when the written sentence does not match the expected answer
-                    else{
-                        ArrayList edits= computeEditsAndAlignedStrings(mWrittenSentence, mAnswer);
-
-                    }
-                }
-                //when not end punctuation, normal recognition
-                else
-                {
-
-                }
-
-                // when edit mode is on
-                if (editMode == true){
-                    //recognition is done for the glyph drawn
-                    //if it is not drawn at the place that it should have been drawn:
-                    boolean canReplace = checkReplace(mEditSequence, mActiveIndex);
-                    if(canReplace){
-                        //check if the correct glyph is drawn.
-                        ArrayList stringEditResult = computeEditsAndAlignedStrings(mWrittenSentence, mAnswer);
-//                        String
-                        //when the correct glyph is drawn
-//                        if(mResponse.equals())
-                    }
-                    //if it is not drawn at the right place
-                    else{
-                        //if incorrect one is drawn, release the error feature and increment the attempts
-                    }
                 }
             }
         }
         return _isValid;
     }
 
-    //amogh added functions to test the edits.
-        //to update the mEditSequence after every change
 
-    public StringBuilder getUpdatedEditSequence(){
+    //activating edit mode
+    public void activateEditMode(){
+        //make the buttons visible
+    }
+
+    //amogh added functions to test the edits.
+
+    //to update the mEditSequence, mAlignedSourceSentence and mAlignedTargetSentence after every change
+    public void updateSentenceEditSequence(){
         String writtenSentence = getWrittenSentence();
         ArrayList<StringBuilder> edits = computeEditsAndAlignedStrings(writtenSentence, mAnswer);
-        StringBuilder newEditSequence = edits.get(2);
-        return newEditSequence;
+        mEditSequence = edits.get(2);
+        mAlignedSourceSentence = edits.get(0);
+        mAlignedTargetSentence = edits.get(1);
     }
 
     public boolean checkDelete (StringBuilder editSequence, int index){
@@ -830,6 +865,18 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             else{
                 return false;
             }
+    }
+    public String getReplacementTargetString(StringBuilder editSequence, int index){
+
+        for (int i = 0; i <= index; i++) {
+            char c = editSequence.charAt(i);
+            if (c == 'I') {
+                index++;
+            }
+        }
+
+        char replacementTargetString = mAlignedTargetSentence.charAt(index);
+        return String.valueOf(replacementTargetString);
     }
     //amogh added ends
 
@@ -910,6 +957,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         // only publish attempt feature for first four attempts... next time will activate mercy rule
         if(activityFeature.contains("FTR_SEN_WRD")){
             attempt = mActiveWord.incAttempt();
+        }
+        else if(activityFeature.contains("FTR_SEN_SEN")){
+            attempt = ++mSentenceAttempts;
         }
         else{
             attempt = mActiveController.incAttempt();
@@ -1433,10 +1483,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             //remember to empty the containers when new word arrives
         //amogh comments end
 
-        //amogh added to initialise words
+        //amogh added to initialise words, ideally should be initialised for only the sentence writing activities.
         currentWordIndex = 0; //setting to 0 initially
         mWrittenSentence = "";
+        mSentenceAttempts = 0;
 
+        //initialise the mListWords for sentence writing activities
         if(activityFeature.contains("FTR_SEN")){
             mListWords = new ArrayList<>();
             initialiseListWords(mStimulus,mAnswer);
