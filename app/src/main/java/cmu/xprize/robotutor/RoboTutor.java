@@ -38,7 +38,9 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import cmu.xprize.comp_logging.IPerfLogManager;
 import cmu.xprize.ltkplus.CRecognizerPlus;
@@ -88,6 +90,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     private static final String debugTutorVariant = "story.parrot";
     private static final String debugTutorId = "story.parrot::ltr-A.rand.40";
     private static final String debugTutorFile = "[sharedliteracy]ltr-A.rand.40.json";
+    private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
 
     private CTutorEngine        tutorEngine;
     private CMediaController    mMediaController;
@@ -156,9 +159,12 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         hotLogPathPerf = Environment.getExternalStorageDirectory() + TCONST.HOT_LOG_FOLDER_PERF;
         readyLogPathPerf = Environment.getExternalStorageDirectory() + TCONST.READY_LOG_FOLDER_PERF;
-        String initTime     = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-        String logFilename  = "RoboTutor" + "_" + BuildConfig.BUILD_TYPE + "." + BuildConfig.VERSION_NAME + "_" + initTime + "_" + Build.SERIAL;
 
+        Calendar calendar = Calendar.getInstance(Locale.US);
+        String initTime     = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss", Locale.US).format(calendar.getTime());
+        String sequenceIdString = String.format(Locale.US, "%04d", getNextLogSequenceId());
+        // NOTE: Need to include the configuration name when that is fully merged
+        String logFilename  = "RoboTutor_" + BuildConfig.BUILD_TYPE + "." + BuildConfig.VERSION_NAME + "_" + initTime + "_" + Build.SERIAL + "_" + sequenceIdString;
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onCreate");
         // Catch all errors and cause a clean exit -
@@ -796,6 +802,21 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         logManager.transferHotLogs(hotLogPath, readyLogPath);
         logManager.transferHotLogs(hotLogPathPerf, readyLogPathPerf);
 
+    }
+
+    private int getNextLogSequenceId() {
+        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+
+        // grab the current sequence id (the one we should use for this current run
+        // of the app
+        final int logSequenceId = prefs.getInt(LOG_SEQUENCE_ID, 0);
+
+        // increase the log sequence id by 1 for the next usage
+        prefs.edit()
+                .putInt(LOG_SEQUENCE_ID, logSequenceId + 1)
+                .apply();
+
+        return logSequenceId;
     }
 }
 
