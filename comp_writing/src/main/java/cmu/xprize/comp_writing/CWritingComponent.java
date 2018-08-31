@@ -701,7 +701,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 }
 
                 //when incorrect attempt has been made on this word before
-                else{
+                else if(attempts > 0){
 
                     boolean currentWordStatus = mActiveWord.getWordCorrectStatus();
 
@@ -1998,10 +1998,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         private String wordAnswer;
         private int index;
         private boolean wordIsCorrect;
+
         public Word(int index, String wordAnswer, ArrayList<Integer> listIndicesAnswer) {
             this.index = index;
             this.wordAnswer = wordAnswer;
             this.listIndicesAnswer = listIndicesAnswer;
+            this.attempt = 0;
         }
 
         public ArrayList<Integer> getWordIndices(){
