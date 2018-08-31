@@ -131,9 +131,9 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         mDeleteSpaceBut  = (ImageButton)findViewById(R.id.delete_space);
         mEraseGlyphBut   = (ImageButton)findViewById(R.id.delete_glyph);
 
-        mInsLftSpaceBut.setVisibility(VISIBLE);
-        mInsRgtSpaceBut.setVisibility(VISIBLE);
-        mDeleteSpaceBut.setVisibility(VISIBLE);
+        mInsLftSpaceBut.setVisibility(INVISIBLE);
+        mInsRgtSpaceBut.setVisibility(INVISIBLE);
+        mDeleteSpaceBut.setVisibility(INVISIBLE);
         mEraseGlyphBut.setVisibility(INVISIBLE);
 
         mGlyphReplayBut = (ImageButton)findViewById(R.id.glyph_playback);
@@ -370,6 +370,16 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         // Ensure it's off - then make a decision on visibility based on state
         //
         mEraseGlyphBut.setVisibility(show? VISIBLE:INVISIBLE);
+    }
+
+    public void showInsLftButton(boolean show){
+        mInsLftSpaceBut.setVisibility(show? VISIBLE:INVISIBLE);
+    }
+    public void showInsRgtButton(boolean show){
+        mInsRgtSpaceBut.setVisibility(show? VISIBLE:INVISIBLE);
+    }
+    public void showDeleteSpaceButton(boolean show){
+        mDeleteSpaceBut.setVisibility(show? VISIBLE:INVISIBLE);
     }
 
     @Override

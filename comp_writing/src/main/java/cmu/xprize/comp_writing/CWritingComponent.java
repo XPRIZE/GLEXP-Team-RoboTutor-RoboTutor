@@ -809,6 +809,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     //activating edit mode
     public void activateEditMode(){
         //make the buttons visible
+        for (int i = 0; i < mGlyphList.getChildCount(); i++) {
+            CGlyphController controller = (CGlyphController) mGlyphList.getChildAt(i);
+            controller.showDeleteSpaceButton(true);
+            controller.showInsLftButton(true);
+            controller.showInsRgtButton(true);
+        }
+
     }
 
     //amogh added functions to test the edits.
@@ -1684,8 +1691,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 resp.setWritingController(this);
                 //amogh add finish
             }
-            initialiseCorrectionHashMap(); //amogh added
-            initialiseWordIndices(); //amogh added
+//            initialiseCorrectionHashMap(); //amogh added
+//            initialiseWordIndices(); //amogh added
         }
         //amogh added
 
