@@ -178,7 +178,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //    protected  List<Integer>    insertCorrectionIndices = new ArrayList<>(Arrays.asList());
 //    protected  List<Integer>    changeCorrectionIndices = new ArrayList<>(Arrays.asList());
 
-    protected String punctuationSymbols = ",.;:-_";
+    protected String punctuationSymbols = ",.;:-_!?";
     //amogh add ends
 
     final private String  TAG        = "CWritingComponent";
@@ -675,20 +675,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 mActiveWord = mListWords.get(currentWordIndex);
                 int attempts = mActiveWord.getAttempt();
 
-                //when the word is being written and evaluated for the first time
-                if(attempts == 0){
+                //when the word is being written and evaluated for the first time, also making sure that its not the first box
+                if(attempts == 0 && mActiveIndex > 0){
 
                     //if punctuation is written or the previous space is left empty
                     CGlyphController previousController = (CGlyphController) mGlyphList.getChildAt(mActiveIndex - 1);
-                    //dont evaluate the current word immediately afte the last word was evaluated(due to hesitation or punctuation,)
-//                    boolean previousWordEvaluated;
-//                    if (currentWordIndex > 0 && !mListWords.get(currentWordIndex - 1).getWordCorrectStatus()){
-//                        previousWordEvaluated = false;
-//                    }
-//                    else{
-//                        previousWordEvaluated = true;
-//                    }
-                    if (mActiveIndex > 0 && (previousController.getRecognisedChar().equals("") || punctuationSymbols.contains(mResponse))) {
+                    boolean isPunctuationDrawn = punctuationSymbols.contains(mResponse);
+                    boolean nextWordStarted = previousController.getRecognisedChar().equals("") && !mActiveWord.isIndexInWord(mActiveIndex);
+                    if (nextWordStarted || isPunctuationDrawn) {
 
                         //get the current word and call update word correct status.
                         boolean currentWordStatus = mActiveWord.getWordCorrectStatus();
@@ -698,7 +692,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                             applyBehavior(WR_CONST.ON_CORRECT);
                         }
 
-                        //word is not correct and correctionAttempts > 0
+                        //word is not correct and correctionAttempts = 0
                         else{
                             attempts = updateAttemptFeature();
                             applyBehavior(WR_CONST.ON_ERROR);
@@ -2009,11 +2003,22 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             this.wordAnswer = wordAnswer;
             this.listIndicesAnswer = listIndicesAnswer;
         }
+
         public ArrayList<Integer> getWordIndices(){
             return listIndicesAnswer;
         }
+
         public ArrayList<Boolean> getLettersStatus() {
             return listCorrectStatus;
+        }
+
+        public boolean isIndexInWord(int index){
+            if(listIndicesAnswer.contains(index)){
+                return true;
+            }
+            else{
+                return false;
+            }
         }
 
         public boolean getWordCorrectStatus(){
