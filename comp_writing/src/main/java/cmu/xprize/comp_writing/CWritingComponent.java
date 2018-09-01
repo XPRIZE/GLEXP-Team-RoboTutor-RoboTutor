@@ -386,21 +386,22 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //                mListWords.get(currentWordIndex).updateWordCorrectStatus();
 //                break;
             case 2:
-                ArrayList<Integer> wordIndices = mListWords.get(currentWordIndex).getWordIndices();
-                int leftLetter = wordIndices.get(0);
-                int left = mResponseViewList.getChildAt(leftLetter).getLeft();
-                int rightLetter = wordIndices.get(wordIndices.size()-1);
-                int right = mResponseViewList.getChildAt(rightLetter-1).getRight();
-                wid = right-left;
-                mHighlightErrorBoxView.setX((float)left);
+                // if the word has been attempted once, box the whole mActiveWord
+                    ArrayList<Integer> wordIndices = mActiveWord.getWordIndices();
+                    int leftLetterIndex = wordIndices.get(0);
+                    int left = mResponseViewList.getChildAt(leftLetterIndex).getLeft();
+                    int rightLetterIndex = wordIndices.get(wordIndices.size()-1);
+                    int right = mResponseViewList.getChildAt(rightLetterIndex).getRight();
+                    wid = right-left;
+                    mHighlightErrorBoxView.setX((float)left);
+
                 break;
             case 3:
 //                int left = mResponseViewList.getChildAt(0).getLeft();
 //                int right = mResponseViewList.getChildAt(mResponseViewList.getChildCount()-1).getRight();
 //                wid = right-left;
 //                mHighlightErrorBoxView.setX((float)left);
-                Word word = mListWords.get(currentWordIndex);
-                ArrayList<Boolean> lettersStatus = word.getLettersStatus();
+                ArrayList<Boolean> lettersStatus = mActiveWord.getLettersStatus();
                 int wrongIndex = lettersStatus.indexOf(false);
                 if (wrongIndex != -1){
                     left = mResponseViewList.getChildAt(wrongIndex).getLeft();
@@ -412,21 +413,23 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             case 4:
                 break;
         }
-        mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid,90));
+        if (mActiveWord.getAttempt() > 0) {
+            mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid, 90));
 //        mHighlightErrorBoxView.setId();
-        mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
+            mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
 //        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
 //        mp.setMargins(100,00,0,100);
 //                mHighlightErrorBoxView.setX((float)300.00);
 //        int pos = mResponseViewList.getChildAt(index+2).getLeft();
 //        mHighlightErrorBoxView.setX(100);
 //        mHighlightErrorBoxView.setLeft(1000);
-        mResponseScrollLayout.addView(mHighlightErrorBoxView);
-        mHighlightErrorBoxView.postDelayed(new Runnable() {
-            public void run() {
-                mHighlightErrorBoxView.setVisibility(View.GONE);
-            }
-        }, 5000);
+            mResponseScrollLayout.addView(mHighlightErrorBoxView);
+            mHighlightErrorBoxView.postDelayed(new Runnable() {
+                public void run() {
+                    mHighlightErrorBoxView.setVisibility(View.GONE);
+                }
+            }, 5000);
+        }
     }
     //amogh added ends
 
