@@ -1,10 +1,12 @@
 package cmu.xprize.comp_debug;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.percent.PercentRelativeLayout;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -19,6 +21,7 @@ import java.util.HashMap;
 import cmu.xprize.util.CAt_Data;
 import cmu.xprize.util.CTutorData_Metadata;
 import cmu.xprize.util.IButtonController;
+import cmu.xprize.util.TCONST;
 import cmu.xprize.util.TCONST.Thumb;
 
 import static cmu.xprize.comp_debug.CD_CONST.SELECT_MATH;
@@ -59,6 +62,21 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
     //private CSm_Component customView;
     private CDebugAdapter gridAdapter;
 
+
+    // CUSTOM_MENU (0) stash changes, checkout new branch from dev, unstash and commit
+    // CUSTOM_MENU (a2) merge num_compare
+    // CUSTOM_MENU (a2) merge kevin_asm into development
+    // CUSTOM_MENU (a3) add numcompare data sources
+    // CUSTOM_MENU (a3) test numcompare data sources briefly
+    // CUSTOM_MENU (a4) add numcompare menu (mimic 1)
+
+    // CUSTOM_MENU (b2) merge sentence_writing
+    // CUSTOM_MENU (b2) checkout amogh branch https://github.com/RoboTutorLLC/RoboTutor/pull/374
+    // CUSTOM_MENU (b2) test amogh branch
+    // CUSTOM_MENU (b2) merge amogh into development
+    // CUSTOM_MENU (b3) get list of tutor_desc, tutor_id, tutor_data.
+    // CUSTOM_MENU (b4) add sentence menu (mimic 1)
+
     private LinearLayout customView;
     //private Button SBpopCustom;
     Button SAsmCustom;
@@ -75,6 +93,21 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
     Button SBPopShapes;
     Button SBPopExpressions;
     //private Button SWrCustom;
+
+    // num_compare
+    Button SNumCompareMenuButton;
+    boolean viewNumCompareMenu = false;
+    LinearLayout SNumCompareMenu;
+
+    // story
+    Button SComprehensionMenuButton;
+    boolean viewComprehensionMenu = false;
+    LinearLayout SComprehensionMenu;
+
+    // writing
+    Button SSentenceWritingMenuButton;
+    boolean viewSentenceWritingMenu = false;
+    LinearLayout SSentenceWritingMenu;
 
     private boolean       viewGrid = true;
 
@@ -111,6 +144,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         SAkiraCustom = (Button) findViewById(R.id.SAkiraCustom);
         SAsmCustom = (Button) findViewById(R.id.SAsmCustom);
         /* bubble pop debug views */
+        // CUSTOM_MENU √√√ (mimic) make a similar menu for each new one
         SBpopMenuButton = (Button) findViewById(R.id.SBPopMenuButton);
         SBpopMenu = (LinearLayout) findViewById(R.id.SBPopMenu);
         SBPopLetters = (Button) findViewById(R.id.SBPopLetters);
@@ -120,6 +154,19 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         SBPopShapes = (Button) findViewById(R.id.SBPopShapes);
         SBPopExpressions = (Button) findViewById(R.id.SBPopExpressions);
 
+        /* num compare debug views */
+        SNumCompareMenuButton = findViewById(R.id.SNumCompareMenuButton);
+        SNumCompareMenu = findViewById(R.id.SNumCompareMenu);
+
+        /* comprehension debug views */
+        SComprehensionMenuButton = findViewById(R.id.SComprehensionMenuButton);
+        SComprehensionMenu = findViewById(R.id.SComprehensionMenu);
+
+        /* Sentence Writing views */
+        SSentenceWritingMenuButton = findViewById(R.id.SSentenceWritingMenuButton);
+        SSentenceWritingMenu = findViewById(R.id.SSentenceWritingMenu);
+
+        initializeQA_Code_Drop2_DebugTutors();
 
         mContainer = (ViewGroup) findViewById(R.id.SdebugContainer);
 
@@ -135,7 +182,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
 
         SlaunchTutor  = (Button) findViewById(R.id.SlaunchTutor);
-        ScustomLaunch = (Button) findViewById(R.id.ScustomButton);
+        ScustomLaunch = (Button) findViewById(R.id.ScustomButton); // CUSTOM_MENU √√√
         SresetTutor   = (Button) findViewById(R.id.SresetTutor);
 
         SlaunchTutor.setOnClickListener(new View.OnClickListener() {
@@ -154,6 +201,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
         /*
          * Custom launch!
+         * CUSTOM_MENU √√√ (keep)
          */
         ScustomLaunch.setOnClickListener(new View.OnClickListener() {
 
@@ -183,6 +231,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
             @Override
             public void onClick(View view) {
 
+                // CUSTOM_MENU √√√ (keep) this
                 mButtonController.doDebugTagLaunchAction((String) view.getTag());
             }
         };
@@ -193,6 +242,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
         SAsmCustom.setOnClickListener(roboDebuggerClickListener);
 
+        // CUSTOM_MENU √√√ (mimic) menu display for each new activity
         SBpopMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -208,6 +258,31 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         SBPopNumbers.setOnClickListener(roboDebuggerClickListener);
         SBPopShapes.setOnClickListener(roboDebuggerClickListener);
         SBPopExpressions.setOnClickListener(roboDebuggerClickListener);
+
+        // CUSTOM_MENU √√√ new click listeners
+        SNumCompareMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewNumCompareMenu = !viewNumCompareMenu;
+                SNumCompareMenu.setVisibility(viewNumCompareMenu ? VISIBLE : GONE);
+            }
+        });
+
+        SComprehensionMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewComprehensionMenu = !viewComprehensionMenu;
+                SComprehensionMenu.setVisibility(viewComprehensionMenu ? VISIBLE : GONE);
+            }
+        });
+
+        SSentenceWritingMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewSentenceWritingMenu= !viewSentenceWritingMenu;
+                SSentenceWritingMenu.setVisibility(viewSentenceWritingMenu ? VISIBLE : GONE);
+            }
+        });
 
         /*
          * Reset Tutor to original
@@ -227,6 +302,85 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                 }
             }
         });
+    }
+
+
+    private void initializeQA_Code_Drop2_DebugTutors() {
+        ArrayList<CAt_Data> readingCompTutors = new ArrayList<>();
+
+        // CUSTOM_MENU √√√ (1) initialize new CAt_Data for each one we want to create
+        // CUSTOM_MENU √√√ (1) make an array of data sources, and make a custom button with a custom OnClickListener class that takes in args... for each class
+        // CUSTOM_MENU √√√ (1) we need tutor_desc, tutor_data, and tutor_id
+
+        String[] storyTypes = {"story.gen.hide",
+        "story.clo.hear",
+        "story.pic.hear",
+        "story.gen.hear",
+        "story.pic.hide"};
+
+        // CUSTOM_MENU √√√ (1) try it with story data (see RoboTutor)
+        final String tutor_desc = "story.pic.hear";
+        final String tutor_id = "story.pic.hear::story_30";
+        final String tutor_data = "[encfolder]story_30";
+
+        String[][] storyTutors = {
+                {"story.clo.hear", "story.clo.hear::story_30", "[encfolder]story_30"},
+                {"story.pic.hear", "story.pic.hear::story_30", "[encfolder]story_30"},
+                {"story.gen.hear", "story.gen.hear::story_30", "[encfolder]story_30"}
+        };
+
+
+        // CUSTOM_MENU (4) mimic this for each of the layouts
+        for (int i=0; i < storyTutors.length; i++) {
+
+            // how the fuck???
+            CAt_Data thisTutor = new CAt_Data();
+            thisTutor.tutor_desc = storyTutors[i][0];
+            thisTutor.tutor_id = storyTutors[i][1];
+            thisTutor.tutor_data = storyTutors[i][2];
+
+            Button button = makeCustomButton(thisTutor.tutor_id);
+            button.setOnClickListener(new CustomDebugClickListener(thisTutor));
+            SComprehensionMenu.addView(button);
+
+        }
+
+        String[] numTypes = {"numcompare"};
+
+        String[] writeTypes = {"write.???"};
+
+    }
+
+    /**
+     * generate a custom button to add to custom debug launch menu
+     * @param text
+     * @return
+     */
+    private Button makeCustomButton(String text) {
+        Button button = new Button(mContext);
+        button.setText(text);
+        button.setBackgroundColor(mContext.getResources().getColor(R.color.newCustomButton));
+        button.setTextColor(Color.WHITE);
+        button.setBackground(mContext.getDrawable(R.drawable.launchnormal));
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(0, 0, 50, 15);
+        button.setLayoutParams(layoutParams);
+
+        return button;
+    }
+
+    class CustomDebugClickListener implements OnClickListener {
+
+        private CAt_Data tutor;
+
+        CustomDebugClickListener(CAt_Data tutor) {
+            this.tutor = tutor;
+        }
+
+        @Override
+        public void onClick(View view) {
+            mButtonController.doLaunch(tutor.tutor_desc, TCONST.TUTOR_NATIVE, tutor.tutor_data, tutor.tutor_id);
+        }
     }
 
 
