@@ -331,12 +331,12 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
 
         // CUSTOM_MENU (4) mimic this for each of the layouts
-        for (int i=0; i < storyTutors.length; i++) {
+        for (String[] storyTutor : storyTutors) {
             //
             CAt_Data thisTutor = new CAt_Data();
-            thisTutor.tutor_desc = storyTutors[i][0];
-            thisTutor.tutor_id = storyTutors[i][1];
-            thisTutor.tutor_data = storyTutors[i][2];
+            thisTutor.tutor_desc = storyTutor[0];
+            thisTutor.tutor_id = storyTutor[1];
+            thisTutor.tutor_data = storyTutor[2];
 
             Button button = makeCustomButton(thisTutor.tutor_id);
             button.setOnClickListener(new CustomDebugClickListener(thisTutor));
@@ -350,11 +350,11 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                 {"numdiscr", "numcompare::3d.compare.mix", "[file]numcompare.3d.compare.mix.json"}
         };
         // CUSTOM_MENU (4)
-        for (int i=0; i < numCompareTutors.length; i++) {
+        for (String[] numCompareTutor : numCompareTutors) {
             CAt_Data thisTutor = new CAt_Data();
-            thisTutor.tutor_desc = numCompareTutors[i][0];
-            thisTutor.tutor_id = numCompareTutors[i][1];
-            thisTutor.tutor_data = numCompareTutors[i][2];
+            thisTutor.tutor_desc = numCompareTutor[0];
+            thisTutor.tutor_id = numCompareTutor[1];
+            thisTutor.tutor_data = numCompareTutor[2];
 
             Button button = makeCustomButton(thisTutor.tutor_id);
             button.setOnClickListener(new CustomDebugClickListener(thisTutor));
@@ -363,7 +363,21 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
 
 
-        String[] writeTypes = {"write.???"};
+        // AMOGH add data sources
+        String[][] sentenceWriteTutors = {
+                {"write.sen.corr", "write.sen::corr.1", "[file]write.sen.corr.1.json"}
+        };
+
+        for (String[] tutor : sentenceWriteTutors) {
+            CAt_Data thisTutor = new CAt_Data();
+            thisTutor.tutor_desc = tutor[0];
+            thisTutor.tutor_id = tutor[1];
+            thisTutor.tutor_data = tutor[2];
+
+            Button button = makeCustomButton(thisTutor.tutor_id);
+            button.setOnClickListener(new CustomDebugClickListener(thisTutor));
+            // SSentenceWritingMenu.addView(button); // AMOGH uncomment
+        }
 
     }
 
