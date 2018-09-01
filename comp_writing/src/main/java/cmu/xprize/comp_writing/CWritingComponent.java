@@ -379,8 +379,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public void showHighlightBox(Integer level){
         mHighlightErrorBoxView = new View (getContext());
 //        int level = 0;    protected List<Integer>     _spaceIndices = new ArrayList<Integer>();
-
         int wid = 0;
+        //switch case sets the width, and the position of the box.
         switch (level){
             case 1:
 //                mListWords.get(currentWordIndex).updateWordCorrectStatus();
@@ -401,6 +401,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //                int right = mResponseViewList.getChildAt(mResponseViewList.getChildCount()-1).getRight();
 //                wid = right-left;
 //                mHighlightErrorBoxView.setX((float)left);
+                String sourceWord = mActiveWord.getWrittenWordString();
+                String targetWord = mActiveWord.getWordAnswer();
+                EditOperation firstEdit = getFirstEditOperation(sourceWord,targetWord);
+
                 ArrayList<Boolean> lettersStatus = mActiveWord.getLettersStatus();
                 int wrongIndex = lettersStatus.indexOf(false);
                 if (wrongIndex != -1){
@@ -413,6 +417,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             case 4:
                 break;
         }
+
+        //now that the width and the position of this box has been set, set its drawable and show for some time.
         if (mActiveWord.getAttempt() > 0) {
             mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid, 90));
 //        mHighlightErrorBoxView.setId();
@@ -1973,7 +1979,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             letterIndex += (lengthWord+1);
         }
     }
-    
+
+
 
     //called by ON_CORRECT
     public void inhibitWordInput(){
@@ -2008,6 +2015,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             this.wordAnswer = wordAnswer;
             this.listIndicesAnswer = listIndicesAnswer;
             this.attempt = 0;
+        }
+
+        public String getWordAnswer(){
+            return wordAnswer;
         }
 
         public ArrayList<Integer> getWordIndices(){
@@ -2110,34 +2121,55 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             return attempt;
         }
     }
+    //Word class ends
+
+    //amogh added functions for highlight box
+    public EditOperation getFirstEditOperation(String source, String target){
+        ArrayList<StringBuilder> edits = computeEditsAndAlignedStrings(source, target);
+        StringBuilder alignedSource = edits.get(0);
+        StringBuilder alignedTarget = edits.get(1);
+        StringBuilder editSeq = edits.get(2);
+        EditOperation e;
+        char val;
+        String op;
+        for(int i = 0; i < editSeq.length(); i++){
+            char c = editSeq.charAt(i);
+            // return the first non "N" operation
+            if (c != 'N'){
+                if (c == 'I'){
+                    val = alignedTarget.charAt(i);
+                    e = new EditOperation("I", val, i);
+                    return e
+                }
+                else if(c == 'D'){
+                    val = alignedSource.charAt(i);
+                    e = new EditOperation("D", val, i);
+                    return e;
+                }
+                else if(c == 'R'){
+                    val = alignedTarget.charAt(i);
+                    e = new EditOperation("R", val, i);
+                    return e;
+                }
+            }
+        }
+    }
 
     //amogh added ends
 
 //amogh added class to handle string computations
-private static class EditOperation {
+public class EditOperation {
 
     private String operation;
     private  char value;
     private  int index;
 
-
-    private EditOperation(String operation,char value, int index) {
+    public EditOperation(String operation,char value, int index) {
         this.operation = operation;
         this.index = index;
         this.value = value;
     }
 
-    // private EditOperation(String operation,int index) {
-    //     this.operation = operation;
-    //      this.value = "";
-    //     this.index = index;
-    // }
-
-    // private EditOperation(String operation) {
-    //     this.operation = operation;
-    //     this.value = "";
-    //     this.index = 0;
-    // }
     public String toString() {
         return operation;
     }
@@ -2145,6 +2177,7 @@ private static class EditOperation {
     public void setValue(char value){
         this.value = value;
     }
+
     public void setIndex(int index){
         this.index = index;
     }
@@ -2152,13 +2185,14 @@ private static class EditOperation {
     public char getValue(){
         return this.value;
     }
+
     public int getIndex(){
         return this.index;
     }
 }
 
     //amogh comment -> when cleaning the code, make sure that editoperations is removed and only strings are used.
-    public static ArrayList computeEditsAndAlignedStrings(String string1, String string2) {
+    public ArrayList computeEditsAndAlignedStrings(String string1, String string2) {
 
         ArrayList<EditOperation> listOperations = new ArrayList<EditOperation>();
 
@@ -2289,6 +2323,9 @@ private static class EditOperation {
         results.add(ops);
         return results;
     }
+
+
+
     //amogh added ends
 
     //************************************************************************
