@@ -404,15 +404,34 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 String sourceWord = mActiveWord.getWrittenWordString();
                 String targetWord = mActiveWord.getWordAnswer();
                 EditOperation firstEdit = getFirstEditOperation(sourceWord,targetWord);
+                char firstEditOperation = firstEdit.getValue();
+                int firstEditIndex = firstEdit.getIndex();
 
-                ArrayList<Boolean> lettersStatus = mActiveWord.getLettersStatus();
-                int wrongIndex = lettersStatus.indexOf(false);
-                if (wrongIndex != -1){
-                    left = mResponseViewList.getChildAt(wrongIndex).getLeft();
-                    right = mResponseViewList.getChildAt(wrongIndex).getRight();
+                // if insert at index i -> set the box left (centre of view at i-1); set the box right (centre of view at i).
+                if(firstEditOperation == 'I'){
+                    //amogh comment add the case when the index is not first or last.
+                    left = (mResponseViewList.getChildAt(firstEditIndex - 1).getLeft() + mResponseViewList.getChildAt(firstEditIndex - 1).getRight())/2;
+                    right = (mResponseViewList.getChildAt(firstEditIndex).getLeft() + mResponseViewList.getChildAt(firstEditIndex).getRight())/2;
                     wid = right-left;
                     mHighlightErrorBoxView.setX((float)left);
                 }
+
+                //if delete at index i -> set the box as left and right for the view at i
+                if(firstEditOperation == 'D'){
+                    left = mResponseViewList.getChildAt(firstEditIndex).getLeft();
+                    right = mResponseViewList.getChildAt(firstEditIndex).getRight();
+                    wid = right-left;
+                    mHighlightErrorBoxView.setX((float)left);
+                }
+
+                //if replace at index i -> set the box as left and right for the view at i
+                if(firstEditOperation == 'R'){
+                    left = mResponseViewList.getChildAt(firstEditIndex).getLeft();
+                    right = mResponseViewList.getChildAt(firstEditIndex).getRight();
+                    wid = right-left;
+                    mHighlightErrorBoxView.setX((float)left);
+                }
+
                 break;
             case 4:
                 break;
@@ -2129,30 +2148,29 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         StringBuilder alignedSource = edits.get(0);
         StringBuilder alignedTarget = edits.get(1);
         StringBuilder editSeq = edits.get(2);
-        EditOperation e;
+        EditOperation e = new EditOperation("N",'N', 0);
         char val;
         String op;
         for(int i = 0; i < editSeq.length(); i++){
             char c = editSeq.charAt(i);
             // return the first non "N" operation
-            if (c != 'N'){
-                if (c == 'I'){
-                    val = alignedTarget.charAt(i);
-                    e = new EditOperation("I", val, i);
-                    return e
-                }
-                else if(c == 'D'){
-                    val = alignedSource.charAt(i);
-                    e = new EditOperation("D", val, i);
-                    return e;
-                }
-                else if(c == 'R'){
-                    val = alignedTarget.charAt(i);
-                    e = new EditOperation("R", val, i);
-                    return e;
-                }
+            if (c == 'I'){
+                val = alignedTarget.charAt(i);
+                e = new EditOperation("I", val, i);
+                break;
+            }
+            else if(c == 'D'){
+                val = alignedSource.charAt(i);
+                e = new EditOperation("D", val, i);
+                break;
+            }
+            else if(c == 'R'){
+                val = alignedTarget.charAt(i);
+                e = new EditOperation("R", val, i);
+                break;
             }
         }
+        return e;
     }
 
     //amogh added ends
