@@ -1,0 +1,30 @@
+{
+
+	"scenedata": [
+		{
+		  "id":"numdiscr",
+		  "oncreate":[
+		  ],
+		  "onenter":[
+		  ],
+		  "features":""
+		}
+	],
+
+	// This maps soundpackages in type_audio (the soundMap <key>) to audio resources
+	//
+	// The effect sound packages are special as it is not language sensitive
+	//
+	// type     - the classMap2 type
+	// language - the language feature to use - see TCONST.LANG_AUTO
+	// path     - the resource path relative to assets/tutors/trackdata/LIBRARY/audio/<language>
+
+	"soundMap" : {
+		"letters":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/literacy"},
+		"numbers": {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/numbers"},
+		"xprize":        {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global"},
+		"proto": {"type": "SOUNDMAP", "language": "LANG_AUTO", "path": "cmu/xprize/proto_nd"}
+	},
+
+	"navigatorType":"SIMPLE_NAVIGATOR"
+}

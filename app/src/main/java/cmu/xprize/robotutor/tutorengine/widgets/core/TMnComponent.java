@@ -10,7 +10,7 @@ import cmu.xprize.mn_component.CMn_Data;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
-import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
+import cmu.xprize.robotutor.tutorengine.ITutorObject;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.comp_logging.CErrorManager;
@@ -18,7 +18,7 @@ import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-public class TMnComponent extends CMn_Component  implements ITutorObjectImpl, IDataSink {
+public class TMnComponent extends CMn_Component  implements ITutorObject, IDataSink {
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
@@ -222,16 +222,6 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl, ID
     }
 
 
-    @Override
-    public CObjectDelegate getimpl() {
-        return mSceneObject;
-    }
-
-    @Override
-    public void zoomInOut(Float scale, Long duration) {
-        mSceneObject.zoomInOut(scale, duration);
-    }
-
 
     /**
      * Note that wiggle is implemented in the super class not the delegate to allow subcomponent wiggles
@@ -242,7 +232,6 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl, ID
      * @param duration
      * @param repetition
      */
-    @Override
     public void wiggle(String direction, Float magnitude, Long duration, Integer repetition ) {
         super.wiggle(direction, magnitude, duration, repetition);
     }
@@ -274,11 +263,5 @@ public class TMnComponent extends CMn_Component  implements ITutorObjectImpl, ID
     @Override
     public void wiggle(String direction, Float magnitude, Long duration, Integer repetition, String part, Integer index ) {
         super.wiggle(direction, magnitude, duration, repetition, part, index);
-    }
-
-
-    @Override
-    public void setAlpha(Float alpha) {
-        mSceneObject.setAlpha(alpha);
     }
 }

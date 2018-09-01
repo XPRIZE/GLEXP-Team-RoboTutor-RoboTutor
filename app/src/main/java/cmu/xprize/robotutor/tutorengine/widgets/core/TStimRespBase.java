@@ -32,10 +32,10 @@ import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
-import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
+import cmu.xprize.robotutor.tutorengine.ITutorObject;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 
-public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, IDataSink  {
+public class TStimRespBase extends CStimRespBase implements ITutorObject, IDataSink  {
 
 
     private CTutor          mTutor;
@@ -341,26 +341,6 @@ public class TStimRespBase extends CStimRespBase implements ITutorObjectImpl, ID
     @Override
     public void setLogManager(ILogManager logManager) {
         mSceneObject.setLogManager(logManager);
-    }
-
-    @Override
-    public CObjectDelegate getimpl() {
-        return mSceneObject;
-    }
-
-    @Override
-    public void zoomInOut(Float scale, Long duration) {
-        mSceneObject.zoomInOut(scale, duration);
-    }
-
-    @Override
-    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition ) {
-        mSceneObject.wiggle(direction, magnitude, duration, repetition);
-    }
-
-    @Override
-    public void setAlpha(Float alpha) {
-        mSceneObject.setAlpha(alpha);
     }
 
 

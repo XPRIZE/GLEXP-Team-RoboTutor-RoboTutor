@@ -19,8 +19,6 @@ import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.comp_logging.PerformanceLogItem;
-import cmu.xprize.comp_questions.CASB_Narration;
-import cmu.xprize.comp_questions.CASB_Seg;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
@@ -29,7 +27,7 @@ import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
-import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
+import cmu.xprize.robotutor.tutorengine.ITutorObject;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
@@ -53,7 +51,7 @@ import static cmu.xprize.util.TCONST.MEDIA_STORY;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
-public class TQnComponent extends CQn_Component implements IBehaviorManager, ITutorObjectImpl, Button.OnClickListener, IQnComponent, IDataSink, IEventSource, IPublisher, ITutorLogger {
+public class TQnComponent extends CQn_Component implements IBehaviorManager, ITutorObject, Button.OnClickListener, IQnComponent, IDataSink, IEventSource, IPublisher, ITutorLogger {
 
         private CTutor mTutor;
         private CObjectDelegate mSceneObject;
@@ -1030,22 +1028,6 @@ public class TQnComponent extends CQn_Component implements IBehaviorManager, ITu
         retractFeature(TCONST.GENERIC_WRONG);
     }
 
-
-        @Override
-        public void zoomInOut(Float scale, Long duration) {
-        mSceneObject.zoomInOut(scale, duration);
-    }
-
-        @Override
-        public void wiggle(String direction, Float magnitude, Long duration, Integer repetition ) {
-        mSceneObject.wiggle(direction, magnitude, duration, repetition);
-    }
-
-        @Override
-        public void setAlpha(Float alpha) {
-        mSceneObject.setAlpha(alpha);
-    }
-
         @Override
         public void seekToPage(int pageIndex) {
         mViewManager.seekToPage(pageIndex);
@@ -1220,12 +1202,6 @@ public class TQnComponent extends CQn_Component implements IBehaviorManager, ITu
         @Override
         public void setLogManager(ILogManager logManager) {
         mSceneObject.setLogManager(logManager);
-    }
-
-
-        @Override
-        public CObjectDelegate getimpl() {
-        return mSceneObject;
     }
 
 

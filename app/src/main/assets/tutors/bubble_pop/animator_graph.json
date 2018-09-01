@@ -175,6 +175,7 @@
 
             {"type": "COMMAND", "id": "SBubblePop", "method": "postEvent",           "parms": "SHOW_STIMULUS:String"                  ,  "features":"FTR_SHOW"},
 
+            // ND_SCAFFOLD NEXT(1) make sure to check for correct features
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",                "soundpackage":"missing_number", "volume": 1.0, "mode":"event",   "features": "FTR_SAY&FTR_MIS_NUM"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.questValue}}.mp3",                "soundpackage":"missing_number", "volume": 1.0, "mode":"event",   "features": "FTR_SAY&FTR_GT_LT"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Neno gani huanza na.mp3",                      "soundpackage":"xprize",          "volume": 1.0, "mode":"flow",   "features": "FTR_SAY&FTR_WORDS&FTR_WORD_STARTS_WITH"},

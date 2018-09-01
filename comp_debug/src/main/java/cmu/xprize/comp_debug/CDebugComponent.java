@@ -332,8 +332,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
         // CUSTOM_MENU (4) mimic this for each of the layouts
         for (int i=0; i < storyTutors.length; i++) {
-
-            // how the fuck???
+            //
             CAt_Data thisTutor = new CAt_Data();
             thisTutor.tutor_desc = storyTutors[i][0];
             thisTutor.tutor_id = storyTutors[i][1];
@@ -342,10 +341,27 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
             Button button = makeCustomButton(thisTutor.tutor_id);
             button.setOnClickListener(new CustomDebugClickListener(thisTutor));
             SComprehensionMenu.addView(button);
-
         }
 
-        String[] numTypes = {"numcompare"};
+
+        String[][] numCompareTutors = {
+                {"numdiscr", "numcompare::1d", "[file]numcompare.1d.json"},
+                {"numdiscr", "numcompare::2d.compare.mix", "[file]numcompare.2d.compare.mix.json"},
+                {"numdiscr", "numcompare::3d.compare.mix", "[file]numcompare.3d.compare.mix.json"}
+        };
+        // CUSTOM_MENU (4)
+        for (int i=0; i < numCompareTutors.length; i++) {
+            CAt_Data thisTutor = new CAt_Data();
+            thisTutor.tutor_desc = numCompareTutors[i][0];
+            thisTutor.tutor_id = numCompareTutors[i][1];
+            thisTutor.tutor_data = numCompareTutors[i][2];
+
+            Button button = makeCustomButton(thisTutor.tutor_id);
+            button.setOnClickListener(new CustomDebugClickListener(thisTutor));
+            SNumCompareMenu.addView(button);
+        }
+
+
 
         String[] writeTypes = {"write.???"};
 

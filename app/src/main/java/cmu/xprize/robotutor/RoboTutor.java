@@ -70,6 +70,7 @@ import edu.cmu.xprize.listener.ListenerBase;
 
 import static cmu.xprize.util.TCONST.CODE_DROP_1_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.GRAPH_MSG;
+import static cmu.xprize.util.TCONST.PROTOTYPE_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.ROBOTUTOR_ASSET_PATTERN;
 
 
@@ -86,12 +87,23 @@ import static cmu.xprize.util.TCONST.ROBOTUTOR_ASSET_PATTERN;
 public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     // VARIABLES FOR QUICK DEBUG LAUNCH
+
     private static final boolean QUICK_DEBUG = false;
     private static final String debugTutorVariant = "story.pic.hear";
     private static final String debugTutorId = "story.pic.hear::story_30";
     private static final String debugTutorFile = "[encfolder]story_30";
+    //private static final String debugTutorVariant = "numdiscr";
+    //private static final String debugTutorVariant = "math";
+    //private static final String debugTutorId = "numdiscr:sample";
+    //private static final String debugTutorId = "math:0..8.ADD-1D-V-S.rand.3";
+    //private static final String debugTutorFile = "[file]numdiscr_sample.json";
+    // private static final String debugTutorFile = "[file]math_0..800.ADD-100-V-S.incr.13.json";
+
+    //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";
 
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
+
+
 
     private CTutorEngine        tutorEngine;
     private CMediaController    mMediaController;
@@ -430,6 +442,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 // ZZZ comment out old pattern
                 tutorAssetManager.updateAssetPackages(ROBOTUTOR_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH );
                 tutorAssetManager.updateAssetPackages(CODE_DROP_1_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
+                tutorAssetManager.updateAssetPackages(PROTOTYPE_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
 
                 // Create the one system levelFolder LTKPLUS recognizer
                 //

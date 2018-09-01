@@ -228,13 +228,16 @@ public class CAsm_DotBag extends TableLayout {
         // get the row in which to place the dot
         TableRow tableRow = allTableRows.get(row);
 
+        // MATHFIX_LAYOUT Dot LayoutParams
         // initialize a new dot
         CAsm_Dot dot = new CAsm_Dot(context);
         dot.setParams(isClickable, imageName, row, col);
         dot.setLayoutParams(new TableRow.LayoutParams(size, size));
 
         // add the dot to the table
+        // MATHFIX_LAYOUT where Dot gets added to DotBag TableRow
         tableRow.addView(dot, col);
+        Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "addView CAsm_Dot to CAsm_Dotbag");
 
         // updates
         updateRows();
@@ -280,6 +283,7 @@ public class CAsm_DotBag extends TableLayout {
             setLayoutParams(params);
         }
 
+        // MATHFIX_LAYOUT TableRow LayoutParams
         TableRow tableRow = new TableRow(context);
 
         CAsm_DotBag.LayoutParams lp = new CAsm_DotBag.LayoutParams(LayoutParams.WRAP_CONTENT,
@@ -287,7 +291,9 @@ public class CAsm_DotBag extends TableLayout {
         lp.setMargins(size / 2, 0, size / 2, 0);
         tableRow.setLayoutParams(lp);
 
+        // MATHFIX_LAYOUT where TableRow gets added to DotBag
         addView(tableRow, index);
+        Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "addView TableRow to CAsm_Dotbag");
         allTableRows.add(index, tableRow);
 
         return tableRow;
@@ -309,7 +315,7 @@ public class CAsm_DotBag extends TableLayout {
     protected void onDraw(Canvas canvas) {
 
         if (drawBorder) {
-            canvas.drawRoundRect(bounds, size / 2, size / 2, borderPaint);
+            canvas.drawRoundRect(bounds, size / 2, size / 2, borderPaint); // MATHFIX_3 NEXT NEXT NEXT here's where the dotbag is drawn!!!
             // TODO: make opaque
 
         }
@@ -410,7 +416,7 @@ public class CAsm_DotBag extends TableLayout {
 
         int rowsToUse = (rows == 0)?1:rows; // to enable drawing of zero dotbag
 
-        bounds.set(borderWidth, borderWidth, size*(cols+1) - borderWidth, rowsToUse*size - borderWidth);
+        bounds.set(borderWidth, borderWidth, size*(cols+1) - borderWidth, rowsToUse*size - borderWidth); // MATHFIX_3 DotBag boundary
 
     }
 
@@ -497,11 +503,8 @@ public class CAsm_DotBag extends TableLayout {
         }
     }
 
-    public void updateSize(boolean isMultiplication) {
-        if (isMultiplication)
-            size = (int)(ASM_CONST.textBoxHeightMul * scale);
-        else
-            size = (int)(ASM_CONST.textBoxHeight * scale);
+    public void updateSize() {
+        size = (int)(ASM_CONST.textBoxHeight * scale);
     }
 
     private void updateRows() {this.rows = allTableRows.size(); }

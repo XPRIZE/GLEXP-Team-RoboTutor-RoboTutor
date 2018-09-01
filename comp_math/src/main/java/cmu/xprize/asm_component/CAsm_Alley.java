@@ -2,6 +2,7 @@ package cmu.xprize.asm_component;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 
@@ -10,8 +11,8 @@ import android.widget.LinearLayout;
  */
 public class CAsm_Alley extends LinearLayout {
 
-    private CAsm_TextLayout STextLayout;
-    private CAsm_DotBag     SdotBag;
+    private CAsm_TextLayout STextLayout; // contains numbers
+    private CAsm_DotBag     SdotBag;     // contains dots
 
     private int digitIndex;
     private int val;
@@ -62,46 +63,51 @@ public class CAsm_Alley extends LinearLayout {
         this.numSlots = _numSlots;
         this.image = _image;
 
-        SdotBag.updateSize(operation.equals("x"));
-        SdotBag.setHollow(false);
 
-        STextLayout.resetAllValues();
+        if(!ASM_CONST.USE_NEW_MATH) {
 
-        if(operation.equals("x")) {
-            if(id != ASM_CONST.OPERATION_MULTI && id != ASM_CONST.REGULAR_MULTI)
-                STextLayout.resetAllBackground();
-            STextLayout.update(id, val, operation, numSlots);
-            SdotBag.setDrawBorder(false);
-        }
-        else {
+            STextLayout.resetAllValues();
+
             if (id != ASM_CONST.OPERATOR_ROW && id != ASM_CONST.OPERAND_ROW)
-                STextLayout.resetAllBackground();
-            STextLayout.update(id, val, operation, numSlots);
+                STextLayout.resetAllBackground();               // MATHFIX_BUILD what is this?
+            STextLayout.update(id, val, operation, numSlots); // MATHFIX_BUILD what is this?
 
-            SdotBag.setDrawBorder(id != ASM_CONST.ANIMATOR1 && id != ASM_CONST.ANIMATOR2 && id != ASM_CONST.ANIMATOR3);
+            // MATHFIX_BUILD what is this?
+            // DotBag operations
+            SdotBag.updateSize();
+            SdotBag.setHollow(false);
+            SdotBag.setDrawBorder(id != ASM_CONST.ANIMATOR1 && id != ASM_CONST.ANIMATOR2 && id != ASM_CONST.ANIMATOR3); // why
+            SdotBag.setVisibility(INVISIBLE);
         }
-        SdotBag.setVisibility(INVISIBLE);
     }
 
     private void createText() {
 
         STextLayout = new CAsm_TextLayout(getContext());
 
+        // MATHFIX_LAYOUT LayoutParams
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, rightPadding, 0);
         STextLayout.setLayoutParams(lp);
+
+        // MATHFIX_LAYOUT Where TextLayout gets added to Alley
         addView(STextLayout, 0);
+        Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "addView CAsm_TextLayout to CAsm_Alley:" + id);
     }
 
     private void createDotBag() {
         // TODO: figure out why it won't show up unless updated
 
         SdotBag = new CAsm_DotBag(getContext());
+
+        // MATHFIX_LAYOUT LayoutParams
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         SdotBag.setLayoutParams(lp);
+        // MATHFIX_LAYOUT Where DotBag gets added to Alley
         addView(SdotBag, 1);
+        Log.d(ASM_CONST.TAG_DEBUG_MATHFIX, "addView CAsm_DotBag to CAsm_Alley:" + id);
 
     }
 
@@ -113,20 +119,12 @@ public class CAsm_Alley extends LinearLayout {
 
         STextLayout.performNextDigit();
 
-        if (operation.equals("x")) {
-/*            if (id == ASM_CONST.RESULT_OR_ADD_MULTI_PART1)
-                cols = 0;
-            else {
-                cols = STextLayout.getDigit(digitIndex);
-                cols = (cols != null)?cols:0;
-            }*/
-        } else {
-            if (id == ASM_CONST.RESULT_ROW)
-                cols = 0;
-            else {
-                cols = STextLayout.getDigit(digitIndex);
-                cols = (cols != null)?cols:0;
-            }
+
+        if (id == ASM_CONST.RESULT_ROW)
+            cols = 0;
+        else {
+            cols = STextLayout.getDigit(digitIndex);
+            cols = (cols != null)?cols:0;
         }
 
         if(operation.equals("-")) {
