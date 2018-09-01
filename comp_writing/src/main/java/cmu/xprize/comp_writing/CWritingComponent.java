@@ -1973,6 +1973,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             letterIndex += (lengthWord+1);
         }
     }
+    
 
     //called by ON_CORRECT
     public void inhibitWordInput(){
@@ -2024,6 +2025,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             else{
                 return false;
             }
+        }
+
+        public String getWrittenWordString(){
+                String word = "";
+                for (int i = 0; i < listIndicesAnswer.size(); i++){
+                    CGlyphController controller = (CGlyphController) mGlyphList.getChildAt(listIndicesAnswer.get(i));
+                    String recChar = controller.getRecognisedChar();
+                    word += recChar;
+                }
+                return word;
         }
 
         public boolean getWordCorrectStatus(){
