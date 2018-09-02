@@ -404,11 +404,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 String sourceWord = mActiveWord.getWrittenWordString();
                 String targetWord = mActiveWord.getWordAnswer();
                 EditOperation firstEdit = getFirstEditOperation(sourceWord,targetWord);
-                char firstEditOperation = firstEdit.getValue();
+                String firstEditOperation = firstEdit.toString();
                 int firstEditIndex = firstEdit.getIndex();
 
                 // if insert at index i -> set the box left (centre of view at i-1); set the box right (centre of view at i).
-                if(firstEditOperation == 'I'){
+                if(firstEditOperation.equals("I")){
                     //amogh comment add the case when the index is not first or last.
                     left = (mResponseViewList.getChildAt(firstEditIndex - 1).getLeft() + mResponseViewList.getChildAt(firstEditIndex - 1).getRight())/2;
                     right = (mResponseViewList.getChildAt(firstEditIndex).getLeft() + mResponseViewList.getChildAt(firstEditIndex).getRight())/2;
@@ -417,7 +417,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 }
 
                 //if delete at index i -> set the box as left and right for the view at i
-                if(firstEditOperation == 'D'){
+                if(firstEditOperation.equals("D")){
                     left = mResponseViewList.getChildAt(firstEditIndex).getLeft();
                     right = mResponseViewList.getChildAt(firstEditIndex).getRight();
                     wid = right-left;
@@ -425,7 +425,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 }
 
                 //if replace at index i -> set the box as left and right for the view at i
-                if(firstEditOperation == 'R'){
+                if(firstEditOperation.equals("R")){
                     left = mResponseViewList.getChildAt(firstEditIndex).getLeft();
                     right = mResponseViewList.getChildAt(firstEditIndex).getRight();
                     wid = right-left;

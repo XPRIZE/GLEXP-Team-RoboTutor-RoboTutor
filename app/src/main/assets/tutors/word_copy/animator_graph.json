@@ -18,6 +18,9 @@
           "preenter": ["SET_CANCEL_HESITATION_BEHAVIOR"],
           "reuse": true,
           "tracks": [
+//            sentence writing audio: The first word of a sentence starts with a big letter
+            {"name": "Write Prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.sampleaudio}}.mp3", "soundpackage":"sentences", "mode":"flow", "features": ""},
+
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "logState", "parms": "type#feedback,value#INPUT_HESITATION_FEEDBACK:String", "features":""},
 
             //Increase the hesitation count and release the corresponding feature

@@ -107,5 +107,6 @@ public class WR_CONST {
     public static final String ON_REPLAY_COMMAND        = "ON_REPLAY_COMMAND";
     public static final String WRITE_BEHAVIOR           = "WRITE_BEHAVIOR";
     public static final String CANCEL_POINTAT           = "CANCEL_POINTAT";
+
 }
 
