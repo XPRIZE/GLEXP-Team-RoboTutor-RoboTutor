@@ -222,7 +222,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         _hesitationFTR.add(WR_CONST.FTR_HESITATION_4);
 
         //amogh added to initialise the list for audio features:
-        if(activityFeature.contains("FTR_SEN")){
             _audioFTR.add(WR_CONST.FTR_AUDIO_CAP);
             _audioFTR.add(WR_CONST.FTR_AUDIO_LTR);
             _audioFTR.add(WR_CONST.FTR_AUDIO_PUNC);
@@ -232,7 +231,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             _audioFTR.add(WR_CONST.FTR_REPLACE);
 //            _audioFTR.add(WR_CONST.FTR_AUDIO_CAP);
 //            _audioFTR.add(WR_CONST.FTR_AUDIO_CAP);
-        }
         //amogh added finished
 
 

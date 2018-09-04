@@ -114,7 +114,7 @@
 
             //Punctuation
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the wrong punctuation.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_HESITATION_1"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the punctuation here.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_HESITATION_2"},4
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the punctuation here.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_HESITATION_2"},
 
                 //need to put in the applicable punctutation rule below
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Applicable punctuation rule.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_HESITATION_3"},//need applicable punctuation rules.
