@@ -10,6 +10,14 @@
       "version": "1.0.0",
       "rootnode": "DEMO_SELECT",
 
+//      "audioMap":{
+//        "COMMA": {
+//          "type":"AUDIONODE",
+//          "COMMENT":"stores audio",
+//          "tracks": [{"name": "Write Prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.sampleaudio}}.mp3", "soundpackage":"sentences", "mode":"flow", "features": ""}]
+//        }
+//      },
+
       "queueMap": {
 
         "INPUT_HESITATION_FEEDBACK": {
@@ -19,7 +27,7 @@
           "reuse": true,
           "tracks": [
 //            sentence writing audio: The first word of a sentence starts with a big letter
-            {"name": "Write Prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.sampleaudio}}.mp3", "soundpackage":"sentences", "mode":"flow", "features": ""},
+//            {"name": "Write Prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.sampleaudio}}.mp3", "soundpackage":"sentences", "mode":"flow", "features": ""},
 
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "logState", "parms": "type#feedback,value#INPUT_HESITATION_FEEDBACK:String", "features":""},
 
@@ -76,13 +84,53 @@
 
             //hesitation behaviors for sentence activities
 
-//            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "1:Integer", "features":""},
-//            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox2", "parms": "1:Integer", "features":""},
-//
+
+            // hesitation audio
+            //Letter
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the wrong word.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix this word.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_2"},
+
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here there should be a.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.letter_audio}}.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3"},
+
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "This letter is not needed.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Delete this letter.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_4"},
+
+            //Spacing
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We leave one space between words.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_HESITATION_1"},
+
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "There should be a space here.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_INSERT&FTR_HESITATION_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please write the next word starting here.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_INSERT&FTR_HESITATION_3"},
+
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "This space is not needed.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_DELETE&FTR_HESITATION_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Delete this space.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_DELETE&FTR_HESITATION_3"},
+
+            //Capitalisation
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We start a sentence or a name with a big letter.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_CAP&FTR_REPLACE&FTR_HESITATION_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Change this letter to.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_CAP&FTR_REPLACE&FTR_HESITATION_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.letter_audio}}.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_CAP&FTR_REPLACE&FTR_HESITATION_2"},
+
+            //Punctuation
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the wrong punctuation.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_PUNC&FTR_HESITATION_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the punctuation here.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_PUNC&FTR_HESITATION_2"},4
+
+                //need to put in the applicable punctutation rule below
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Applicable punctuation rule.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_PUNC&FTR_HESITATION_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here write.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_PUNC&FTR_INSERT&FTR_HESITATION_4"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordStimulus.punctuation_audio}}.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_PUNC&FTR_INSERT&FTR_HESITATION_4"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Delete this symbol.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_PUNC&FTR_DELETE&FTR_HESITATION_4"},
+
+
+
+
+            //            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "1:Integer", "features":""},
+            //            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox2", "parms": "1:Integer", "features":""},
+            //
             {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "1:Integer", "features":"FTR_HESITATION_1"},
             {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "2:Integer", "features":"FTR_HESITATION_2"},
             {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "3:Integer", "features":"FTR_HESITATION_3"},
             {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "4:Integer", "features":"FTR_HESITATION_4"},
+
 
 
             {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_INPUT_HESITATION_POSTING",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_INPUT_HESITATION_POSTING:String" ,"features":""},

@@ -198,7 +198,7 @@
     "write.sen.copy.sen": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
-      "features": "FTR_SEN:FTR_SEN_SEN" //sentence level feedback
+      "features": "FTR_SEN:FTR_SEN_COPY:FTR_SEN_SEN" //sentence level feedback
     },
     "story.echo": {
       "type": "TUTORVAR_MAP",

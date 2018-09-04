@@ -604,6 +604,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             isAnswerCaseSensitive = false;
         }
 
+        //store the previous character that was there
+        String previousRecognisedChar = gController.getRecognisedChar();
+
         // Check answer
         mResponse = candidate.getRecChar();
         gController.setRecognisedChar(mResponse);
@@ -692,6 +695,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 }
             }
         }
+
         // for sentence activities (word level and sentence level feedback)
         else{
 
@@ -753,8 +757,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 }
             }
 
-            //for sentence level feedback
-            else if(activityFeature.contains("FTR_SEN_SEN")){
+            //for sentence level feedback in the copy activity
+            else if(activityFeature.contains("FTR_SEN_SEN") && activityFeature.contains("FTR_SEN_COPY")){
 
                 if(mSentenceAttempts == 0){
                     //when the sentence has not been evaluated yet, evaluate on punctuation
@@ -809,6 +813,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         // if no, revert the glyph to what it was, then increase attempt and release on error behavior.
                         else{
                             //revert the glyph to old one.
+                            gController.toggleSampleChar();
                             updateAttemptFeature();
                             applyBehavior(WR_CONST.ON_ERROR);
                         }
@@ -816,7 +821,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                     //when the glyph drawn is at the wrong place, increase the attempt and replace the old glyph that was there. //amogh comment some other behavior should be called.
                     else{
-
+                        gController.toggleProtoGlyph();
                         updateAttemptFeature();
                         applyBehavior(WR_CONST.ON_ERROR);
                     }
@@ -1571,7 +1576,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
 
         // Add the Glyph input containers
-        //
         mGlyphList.removeAllViews();
         mGlyphList.setClipChildren(false);
 
@@ -1983,7 +1987,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         int letterIndex = 0;
         ArrayList<Integer> wordIndices;
         // iterating over each word.
-        for (int j = 0; j<lengthSentence; j++){
+        for (int j = 0; j < lengthSentence; j++){
             String word = wordsAnswer[j];
             int lengthWord = word.length();
             wordIndices = new ArrayList<>();
