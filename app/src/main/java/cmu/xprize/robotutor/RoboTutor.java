@@ -178,9 +178,9 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         Calendar calendar = Calendar.getInstance(Locale.US);
         String initTime     = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss", Locale.US).format(calendar.getTime());
-        String sequenceIdString = String.format(Locale.US, "%04d", getNextLogSequenceId());
+        String sequenceIdString = String.format(Locale.US, "%05d", getNextLogSequenceId());
         // NOTE: Need to include the configuration name when that is fully merged
-        String logFilename  = "RoboTutor_" + BuildConfig.BUILD_TYPE + "." + BuildConfig.VERSION_NAME + "_" + initTime + "_" + Build.SERIAL + "_" + sequenceIdString;
+        String logFilename  = "RoboTutor_" + BuildConfig.BUILD_TYPE + "." + BuildConfig.VERSION_NAME + "_" + sequenceIdString + "_" + initTime + "_" + Build.SERIAL;
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onCreate");
         // Catch all errors and cause a clean exit -
