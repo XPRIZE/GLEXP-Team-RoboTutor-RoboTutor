@@ -132,6 +132,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected ArrayList<String> _attemptFTR = new ArrayList<>();
     protected ArrayList<String> _hesitationFTR = new ArrayList<>(); //amogh added
     private int                 _hesitationNo      = 0; //amogh added
+    protected ArrayList<String> _audioFTR = new ArrayList<>();
 
     protected String            mResponse;
     protected String            mStimulus;
@@ -219,6 +220,19 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         _hesitationFTR.add(WR_CONST.FTR_HESITATION_2);
         _hesitationFTR.add(WR_CONST.FTR_HESITATION_3);
         _hesitationFTR.add(WR_CONST.FTR_HESITATION_4);
+
+        //amogh added to initialise the list for audio features:
+        if(activityFeature.contains("FTR_SEN")){
+            _audioFTR.add(WR_CONST.FTR_AUDIO_CAP);
+            _audioFTR.add(WR_CONST.FTR_AUDIO_LTR);
+            _audioFTR.add(WR_CONST.FTR_AUDIO_PUNC);
+            _audioFTR.add(WR_CONST.FTR_AUDIO_SPACE);
+            _audioFTR.add(WR_CONST.FTR_INSERT);
+            _audioFTR.add(WR_CONST.FTR_DELETE);
+            _audioFTR.add(WR_CONST.FTR_REPLACE);
+//            _audioFTR.add(WR_CONST.FTR_AUDIO_CAP);
+//            _audioFTR.add(WR_CONST.FTR_AUDIO_CAP);
+        }
         //amogh added finished
 
 
@@ -406,6 +420,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 EditOperation firstEdit = getFirstEditOperation(sourceWord,targetWord);
                 String firstEditOperation = firstEdit.toString();
                 int firstEditIndex = firstEdit.getIndex();
+
+                releaseAudioFeatures(firstEdit);
 
                 // if insert at index i -> set the box left (centre of view at i-1); set the box right (centre of view at i).
                 if(firstEditOperation.equals("I")){
@@ -2170,11 +2186,105 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             }
             else if(c == 'R'){
                 val = alignedTarget.charAt(i);
-                e = new EditOperation("R", val, i);
+                char prev = alignedSource.charAt(i);
+                e = new EditOperation("R", val, i, prev);
                 break;
             }
         }
         return e;
+    }
+
+    public void releaseAudioFeatures(EditOperation e){
+
+        //retract all audio features
+        for (String audioFtr : _audioFTR) {
+            retractFeature(audioFtr);
+        }
+
+        //release new features
+        String editName = e.toString();
+        int editIndex = e.getIndex();
+        String editValue = String.valueOf(e.getValue());
+
+        //for insert operation
+        if(editName.equals("I")){
+
+            publishFeature(WR_CONST.FTR_INSERT);
+
+            //insert spacing
+            if(editValue.equals("")){
+                publishFeature(WR_CONST.FTR_AUDIO_SPACE);
+            }
+
+            //insert punctuation
+            else if (punctuationSymbols.contains(editValue)){
+                publishFeature(WR_CONST.FTR_AUDIO_PUNC);
+            }
+
+            //insert letter
+            else{
+                publishFeature(WR_CONST.FTR_AUDIO_LTR);
+            }
+
+
+        }
+
+        //for relacement operation
+        else if(editName.equals("R")){
+
+            publishFeature(WR_CONST.FTR_REPLACE);
+
+            String prev = String.valueOf(e.getPrevious());
+
+            //replace with space
+            if(editValue.equals("")){
+                publishFeature(WR_CONST.FTR_AUDIO_SPACE);
+            }
+
+            //replace with an uppercase letter
+            else if(editValue.equals(prev.toLowerCase())){
+                publishFeature(WR_CONST.FTR_AUDIO_CAP);
+            }
+
+            //replace with punctuation
+            else if (punctuationSymbols.contains(editValue)){
+                publishFeature(WR_CONST.FTR_AUDIO_PUNC);
+            }
+
+            //replace with a new letter
+            else{
+                publishFeature(WR_CONST.FTR_AUDIO_LTR);
+            }
+
+        }
+
+        //for delete operation
+        else if(editName.equals("D")){
+
+            publishFeature(WR_CONST.FTR_DELETE);
+
+            //delete spacing
+            if(editValue.equals("")){
+                publishFeature(WR_CONST.FTR_AUDIO_SPACE);
+            }
+
+            //delete punctuation
+            else if (punctuationSymbols.contains(editValue)){
+                publishFeature(WR_CONST.FTR_AUDIO_PUNC);
+            }
+
+            //delete letter
+            else{
+                publishFeature(WR_CONST.FTR_AUDIO_LTR);
+            }
+
+        }
+
+        //for none operation
+        else{
+
+        }
+
     }
 
     //amogh added ends
@@ -2182,14 +2292,22 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //amogh added class to handle string computations
 public class EditOperation {
 
-    private String operation;
-    private  char value;
-    private  int index;
+    private  String  operation;
+    private  char    value;
+    private  char    previous;
+    private  int     index;
 
     public EditOperation(String operation,char value, int index) {
         this.operation = operation;
         this.index = index;
         this.value = value;
+    }
+
+    public EditOperation(String operation,char value, int index,char previous) {
+        this.operation = operation;
+        this.index = index;
+        this.value = value;
+        this.previous = previous;
     }
 
     public String toString() {
@@ -2211,6 +2329,13 @@ public class EditOperation {
     public int getIndex(){
         return this.index;
     }
+
+    public void setPrevious(char previous) {
+        this.previous = previous;
+    }
+
+    public char getPrevious(){return this.previous; }
+
 }
 
     //amogh comment -> when cleaning the code, make sure that editoperations is removed and only strings are used.

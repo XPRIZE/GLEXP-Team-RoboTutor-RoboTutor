@@ -98,6 +98,9 @@ public class WR_CONST {
     public static final String AUDIO_ANS_CONCAT_TENS     = ".audioAnsConcatTens";
     public static final String AUDIO_ANS_CONCAT_ONES     = ".audioAnsConcatOnes";
 
+    public static final String AUDIO_LETTER     = ".audioLetter";
+    public static final String AUDIO_PUNCTUATION     = ".audioPunctuation";
+
     public static final String FTR_INPUT_STALLED        = "FTR_INPUT_STALLED";
     public static final String FTR_HAD_ERRORS           = "FTR_HAD_ERRORS";
 
@@ -107,6 +110,20 @@ public class WR_CONST {
     public static final String ON_REPLAY_COMMAND        = "ON_REPLAY_COMMAND";
     public static final String WRITE_BEHAVIOR           = "WRITE_BEHAVIOR";
     public static final String CANCEL_POINTAT           = "CANCEL_POINTAT";
+
+    //amogh added audio features
+    public static final String FTR_AUDIO_CAP = "FTR_AUDIO_CAP";
+    public static final String FTR_AUDIO_PUNC = "FTR_AUDIO_PUNC";
+    public static final String FTR_AUDIO_LTR = "FTR_AUDIO_LTR";
+    public static final String FTR_AUDIO_SPACE = "FTR_AUDIO_SPACE";
+    public static final String FTR_INSERT = "FTR_INSERT";
+    public static final String FTR_DELETE = "FTR_DELETE";
+    public static final String FTR_REPLACE = "FTR_REPLACE";
+//    public static final String FTR_INSERT = "FTR_INSERT";
+//    public static final String FTR_INSERT = "";
+//    public static final String FTR_INSERT = "";
+//    public static final String FTR_INSERT = "";
+//    public static final String FTR_INSERT = "";
 
 }
 
