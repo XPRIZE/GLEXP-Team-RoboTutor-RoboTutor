@@ -32,6 +32,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 
 import java.io.File;
@@ -48,6 +49,7 @@ import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.ltkplus.IGlyphSink;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
+import cmu.xprize.robotutor.tutorengine.util.CrashHandler;
 import cmu.xprize.util.CDisplayMetrics;
 import cmu.xprize.util.CLoaderView;
 import cmu.xprize.comp_logging.CLogManager;
@@ -186,15 +188,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         // Catch all errors and cause a clean exit -
         // TODO: this doesn't work as expected
         //
-//        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-//
-//            @Override
-//            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
-//
-//                System.exit(2);
-//            }
-//        });
 
+        Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(hotLogPath));
 
         PACKAGE_NAME = getApplicationContext().getPackageName();
         ACTIVITY     = this;
@@ -276,9 +271,19 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         progressView = (CLoaderView)inflater.inflate(R.layout.progress_layout, null );
 
         masterContainer.addAndShow(progressView);
+
+        // testCrashHandler();
     }
 
 
+    /**
+     * just a fun little method that will throw a null handler exception (when on the right screen)
+     */
+    private void testCrashHandler() {
+
+        TextView x = findViewById(R.id.SBPopWords);
+        x.setText("AYY LMAO");
+    }
     /**
      * This file gets the Extras that are passed from FaceLogin and uses them to set the uniqueIDs,
      * SessionID and StudentID
