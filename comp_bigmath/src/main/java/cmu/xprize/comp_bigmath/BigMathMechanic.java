@@ -150,6 +150,8 @@ public class BigMathMechanic {
             _numDigits = String.valueOf(_data.dataset[1]).length();
         if (String.valueOf(_data.dataset[2]).length() > _numDigits)
             _numDigits = String.valueOf(_data.dataset[2]).length();
+
+        _studentActionListener.setData(data);
     }
 
     /**

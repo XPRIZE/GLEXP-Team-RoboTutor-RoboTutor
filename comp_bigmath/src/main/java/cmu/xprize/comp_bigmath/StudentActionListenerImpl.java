@@ -24,12 +24,12 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
     private final BigMathMechanic _bigMath;
     // testing vars
-    int operandA = 21;
-    int operandB = 17;
-    String operator = "-";
-    int _expectedResult;
-    boolean _isCarryOne;
-    boolean _isCarryTen;
+    private int operandA;
+    private int operandB;
+    private String operator;
+    private int _expectedResult;
+    private boolean _isCarryOne;
+    private boolean _isCarryTen;
 
 
     // need to track when we do carry
@@ -39,12 +39,61 @@ public class StudentActionListenerImpl implements StudentActionListener{
     private boolean _hasWrittenTensResult;
     private boolean _hasCarriedToHuns;
 
-    boolean _isBorrowTen;
-    boolean _isBorrowHun;
-    boolean _isDoubleBorrow; // cascade borrow from hundreds place to ones place
+    private boolean _isBorrowTen;
+    private boolean _isBorrowHun;
+    private boolean _isDoubleBorrow; // cascade borrow from hundreds place to ones place
 
     public StudentActionListenerImpl(BigMathMechanic bigMath) {
         this._bigMath = bigMath;
+    }
+
+    @Override
+    public void setData(CBigMath_Data data) {
+        operandA = data.dataset[0];
+        operandB = data.dataset[1];
+        _expectedResult = data.dataset[2];
+        operator = data.operation;
+
+        if (operator.equals("+")) setCarryLogic(operandA, operandB);
+        else setBorrowLogic(operandA, operandB);
+
+    }
+
+    /**
+     * =========================
+     * ===== carry logic =======
+     * =========================
+     *
+     * @param a
+     * @param b
+     */
+    private void setCarryLogic(int a, int b) {
+
+        // if a_one + b_one > 9, we must carry to tens column
+        _isCarryOne = getOnesDigit(a) + getOnesDigit(b) > 9;
+
+        // if (carried_ten) + a_one + b_one > 9, we must carry to the huns column
+        _isCarryTen = (_isCarryOne ? 1 : 0) + getTensDigit(a) + getTensDigit(b) > 9;
+
+    }
+
+    /**
+     * =========================
+     * ===== borrow logic ======
+     * =========================
+     * @param a
+     * @param b
+     */
+    private void setBorrowLogic(int a, int b) {
+
+        // if a_one < b_one, we need to borrow a ten from a_ten
+        _isBorrowTen = getOnesDigit(a) < getOnesDigit(b);
+
+        // if a_ten - (borrowed_ten) < b_ten, we need to borrow a hundred from a_hun
+        _isBorrowHun = getTensDigit(a) - (_isBorrowTen? 1 : 0) < getTensDigit(b);
+
+        // if we need to borrow a ten from a_ten but there are no tens, then we need to borrow from a_hun
+        _isDoubleBorrow = _isBorrowTen && getTensDigit(a) == 0;
     }
 
     @Override

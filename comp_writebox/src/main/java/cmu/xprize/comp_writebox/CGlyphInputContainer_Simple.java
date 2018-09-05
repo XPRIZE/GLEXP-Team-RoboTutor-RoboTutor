@@ -1215,7 +1215,7 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
 
         // Stop listening to glyph draw events - when there is a glyph
         //
-        inhibitInput(true);
+        // inhibitInput(true);
 
         // Reconstitute the path in the correct orientation after LTK+ post-processing
         //

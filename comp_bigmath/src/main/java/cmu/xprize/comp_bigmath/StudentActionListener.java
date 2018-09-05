@@ -9,4 +9,7 @@ package cmu.xprize.comp_bigmath;
 interface StudentActionListener {
 
     void fireAction(String selection, String action, String input);
+
+    // initialize a new problem
+    void setData(CBigMath_Data data);
 }
