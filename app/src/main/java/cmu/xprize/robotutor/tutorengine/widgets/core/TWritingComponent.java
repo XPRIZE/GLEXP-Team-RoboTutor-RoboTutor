@@ -96,7 +96,6 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     private int                     _wrong   = 0;
     private int                     _correct = 0;
-
     private ArrayList<CDataSourceImg> _dataStack  = new ArrayList<>();
 
     private HashMap<String,String>  _StringVar  = new HashMap<>();
