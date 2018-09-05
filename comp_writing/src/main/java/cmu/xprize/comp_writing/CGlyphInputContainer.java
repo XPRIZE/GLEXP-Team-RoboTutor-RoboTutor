@@ -458,7 +458,11 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         _counter.start();
 
+
+
         touchPt = new PointF(x, y);
+
+        mWritingComponent.applyBehavior(WR_CONST.ON_STOP_WRITING); //amogh added for hesitation.
 
         // Only add a new point to the glyph if it is outside the jitter tolerance
         if(testPointTolerance(x,y)) {

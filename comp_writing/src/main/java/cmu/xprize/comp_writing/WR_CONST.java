@@ -50,6 +50,7 @@ public class WR_CONST {
     public static final String FIELD_REPLAY_COMPLETE    = "FIELD_REPLAY_COMPLETE";
     public static final String REPLAY_COMPLETE          = "REPLAY_COMPLETE";
     public static final String ON_START_WRITING         = "ON_START_WRITING";
+    public static final String ON_STOP_WRITING          = "ON_STOP_WRITING";
 
     public static final String REPLAY_USERGLYPH         = "REPLAY_USERGLYPH";
     public static final String REPLAY_PROTOGLYPH        = "REPLAY_PROTOGLYPH";

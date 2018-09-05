@@ -389,85 +389,120 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }, 5000);
     }
     public void showHighlightBox(Integer level){
-        mHighlightErrorBoxView = new View (getContext());
-//        int level = 0;    protected List<Integer>     _spaceIndices = new ArrayList<Integer>();
-        int wid = 0;
-        //switch case sets the width, and the position of the box.
-        switch (level){
-            case 1:
-//                mListWords.get(currentWordIndex).updateWordCorrectStatus();
-//                break;
-            case 2:
-                // if the word has been attempted once, box the whole mActiveWord
-                    ArrayList<Integer> wordIndices = mActiveWord.getWordIndices();
-                    int leftLetterIndex = wordIndices.get(0);
-                    int left = mResponseViewList.getChildAt(leftLetterIndex).getLeft();
-                    int rightLetterIndex = wordIndices.get(wordIndices.size()-1);
-                    int right = mResponseViewList.getChildAt(rightLetterIndex).getRight();
-                    wid = right-left;
-                    mHighlightErrorBoxView.setX((float)left);
+        if (mActiveWord.getAttempt() > 0 ) {
+            mHighlightErrorBoxView = new View (getContext());
+    //        int level = 0;    protected List<Integer>     _spaceIndices = new ArrayList<Integer>();
+            int wid = 0;
+            //switch case sets the width, and the position of the box.
+            switch (level){
+                case 1:
+    //                mListWords.get(currentWordIndex).updateWordCorrectStatus();
+    //                break;
+                case 2:
+                    // if the word has been attempted once, box the whole mActiveWord
+                        ArrayList<Integer> wordIndices = mActiveWord.getWordIndices();
+                        int leftLetterIndex = wordIndices.get(0);
+                        int left = mResponseViewList.getChildAt(leftLetterIndex).getLeft();
+                        int rightLetterIndex = wordIndices.get(wordIndices.size()-1);
+                        int right = mResponseViewList.getChildAt(rightLetterIndex).getRight();
+                        wid = right-left;
+                        mHighlightErrorBoxView.setX((float)left);
 
-                break;
-            case 3:
-//                int left = mResponseViewList.getChildAt(0).getLeft();
-//                int right = mResponseViewList.getChildAt(mResponseViewList.getChildCount()-1).getRight();
-//                wid = right-left;
-//                mHighlightErrorBoxView.setX((float)left);
-                String sourceWord = mActiveWord.getWrittenWordString();
-                String targetWord = mActiveWord.getWordAnswer();
-                EditOperation firstEdit = getFirstEditOperation(sourceWord,targetWord);
-                String firstEditOperation = firstEdit.toString();
-                int firstEditIndex = firstEdit.getIndex();
+                    break;
+                case 3:
+    //                int left = mResponseViewList.getChildAt(0).getLeft();
+    //                int right = mResponseViewList.getChildAt(mResponseViewList.getChildCount()-1).getRight();
+    //                wid = right-left;
+    //                mHighlightErrorBoxView.setX((float)left);
+                    String sourceWord = mActiveWord.getWrittenWordString();
+                    String targetWord = mActiveWord.getWordAnswer();
+                    EditOperation firstEdit = getFirstEditOperation(sourceWord,targetWord);
+                    String firstEditOperation = firstEdit.toString();
+                    int firstEditIndex = mActiveWord.getWordIndices().get(0) + firstEdit.getIndex();
 
-                releaseAudioFeatures(firstEdit);
+                    releaseAudioFeatures(firstEdit);
 
-                // if insert at index i -> set the box left (centre of view at i-1); set the box right (centre of view at i).
-                if(firstEditOperation.equals("I")){
-                    //amogh comment add the case when the index is not first or last.
-                    left = (mResponseViewList.getChildAt(firstEditIndex - 1).getLeft() + mResponseViewList.getChildAt(firstEditIndex - 1).getRight())/2;
-                    right = (mResponseViewList.getChildAt(firstEditIndex).getLeft() + mResponseViewList.getChildAt(firstEditIndex).getRight())/2;
-                    wid = right-left;
-                    mHighlightErrorBoxView.setX((float)left);
-                }
+                    // if insert at index i -> set the box left (centre of view at i-1); set the box right (centre of view at i).
+                    if(firstEditOperation.equals("I")){
+                        //amogh comment add the case when the index is not first or last.
+                        left = (mResponseViewList.getChildAt(firstEditIndex - 1).getLeft() + mResponseViewList.getChildAt(firstEditIndex - 1).getRight())/2;
+                        right = (mResponseViewList.getChildAt(firstEditIndex).getLeft() + mResponseViewList.getChildAt(firstEditIndex).getRight())/2;
+                        wid = right-left;
+                        mHighlightErrorBoxView.setX((float)left);
+                    }
 
-                //if delete at index i -> set the box as left and right for the view at i
-                if(firstEditOperation.equals("D")){
-                    left = mResponseViewList.getChildAt(firstEditIndex).getLeft();
-                    right = mResponseViewList.getChildAt(firstEditIndex).getRight();
-                    wid = right-left;
-                    mHighlightErrorBoxView.setX((float)left);
-                }
+                    //if delete at index i -> set the box as left and right for the view at i
+                    if(firstEditOperation.equals("D")){
+                        left = mResponseViewList.getChildAt(firstEditIndex).getLeft();
+                        right = mResponseViewList.getChildAt(firstEditIndex).getRight();
+                        wid = right-left;
+                        mHighlightErrorBoxView.setX((float)left);
+                    }
 
-                //if replace at index i -> set the box as left and right for the view at i
-                if(firstEditOperation.equals("R")){
-                    left = mResponseViewList.getChildAt(firstEditIndex).getLeft();
-                    right = mResponseViewList.getChildAt(firstEditIndex).getRight();
-                    wid = right-left;
-                    mHighlightErrorBoxView.setX((float)left);
-                }
+                    //if replace at index i -> set the box as left and right for the view at i
+                    if(firstEditOperation.equals("R")){
+                        left = mResponseViewList.getChildAt(firstEditIndex).getLeft();
+                        right = mResponseViewList.getChildAt(firstEditIndex).getRight();
+                        wid = right-left;
+                        mHighlightErrorBoxView.setX((float)left);
+                    }
 
-                break;
-            case 4:
-                break;
-        }
+                    break;
+                case 4:
 
-        //now that the width and the position of this box has been set, set its drawable and show for some time.
-        if (mActiveWord.getAttempt() > 0) {
-            mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid, 90));
-//        mHighlightErrorBoxView.setId();
-            mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
-//        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
-//        mp.setMargins(100,00,0,100);
-//                mHighlightErrorBoxView.setX((float)300.00);
-//        int pos = mResponseViewList.getChildAt(index+2).getLeft();
-//        mHighlightErrorBoxView.setX(100);
-//        mHighlightErrorBoxView.setLeft(1000);
-            mResponseScrollLayout.addView(mHighlightErrorBoxView);
-            mHighlightErrorBoxView.postDelayed(new Runnable() {
-                public void run() {
-                    mHighlightErrorBoxView.setVisibility(View.GONE);
-                }
-            }, 5000);
+                    sourceWord = mActiveWord.getWrittenWordString();
+                    targetWord = mActiveWord.getWordAnswer();
+                    firstEdit = getFirstEditOperation(sourceWord,targetWord);
+                    firstEditOperation = firstEdit.toString();
+                    firstEditIndex = firstEdit.getIndex();
+
+                    releaseAudioFeatures(firstEdit);
+
+                    // if insert at index i -> set the box left (centre of view at i-1); set the box right (centre of view at i).
+                    if(firstEditOperation.equals("I")){
+                        //amogh comment add the case when the index is not first or last.
+                        left = (mResponseViewList.getChildAt(firstEditIndex - 1).getLeft() + mResponseViewList.getChildAt(firstEditIndex - 1).getRight())/2;
+                        right = (mResponseViewList.getChildAt(firstEditIndex).getLeft() + mResponseViewList.getChildAt(firstEditIndex).getRight())/2;
+                        wid = right-left;
+                        mHighlightErrorBoxView.setX((float)left);
+                    }
+
+                    //if delete at index i -> set the box as left and right for the view at i
+                    if(firstEditOperation.equals("D")){
+                        left = mResponseViewList.getChildAt(firstEditIndex).getLeft();
+                        right = mResponseViewList.getChildAt(firstEditIndex).getRight();
+                        wid = right-left;
+                        mHighlightErrorBoxView.setX((float)left);
+                    }
+
+                    //if replace at index i -> set the box as left and right for the view at i
+                    if(firstEditOperation.equals("R")){
+                        left = mResponseViewList.getChildAt(firstEditIndex).getLeft();
+                        right = mResponseViewList.getChildAt(firstEditIndex).getRight();
+                        wid = right-left;
+                        mHighlightErrorBoxView.setX((float)left);
+                    }
+
+                    break;
+            }
+
+            //now that the width and the position of this box has been set, set its drawable and show for some time.
+
+                mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid, 90));
+    //        mHighlightErrorBoxView.setId();
+                mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
+    //        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
+    //        mp.setMargins(100,00,0,100);
+    //                mHighlightErrorBoxView.setX((float)300.00);
+    //        int pos = mResponseViewList.getChildAt(index+2).getLeft();
+    //        mHighlightErrorBoxView.setX(100);
+    //        mHighlightErrorBoxView.setLeft(1000);
+                mResponseScrollLayout.addView(mHighlightErrorBoxView);
+                mHighlightErrorBoxView.postDelayed(new Runnable() {
+                    public void run() {
+                        mHighlightErrorBoxView.setVisibility(View.GONE);
+                    }
+                }, 2000);
         }
     }
     //amogh added ends
@@ -1542,6 +1577,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             initialiseListWords(mStimulus,mAnswer);
         }
 
+        mActiveWord = mListWords.get(0);
+
         //amogh added
         //load the indices for the different corrections
         if(activityFeature.contains("FTR_SEN_CORR")){
@@ -2469,6 +2506,11 @@ public class EditOperation {
         return results;
     }
 
+
+    public void cancelAndResetHesitation(String promptName){
+        cancelPost(promptName);
+        resetHesitationFeature();
+    }
 
 
     //amogh added ends
