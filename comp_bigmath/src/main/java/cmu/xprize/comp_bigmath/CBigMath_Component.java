@@ -30,6 +30,8 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
     protected String layout;
     protected int[] dataset;
 
+    protected  int _numDigits;
+
 
     // json loadable
     public String bootFeatures;
@@ -96,7 +98,17 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
         // first load dataset into fields
         loadDataSet(data);
 
-        updateStimulus();
+        // hacky way to do Integer.max
+        _numDigits = String.valueOf(dataset[0]).length();
+        if (String.valueOf(dataset[1]).length() > _numDigits)
+            _numDigits = String.valueOf(dataset[1]).length();
+        if (String.valueOf(dataset[2]).length() > _numDigits)
+            _numDigits = String.valueOf(dataset[2]).length();
+
+
+        loadLayout();
+
+        // ROBO_MATH continue here... do the thing (See "Step 1")
 
     }
 
@@ -141,7 +153,13 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
     /**
      * Updates the stimulus.
      */
-    protected void updateStimulus() {
+    protected void loadLayout() {
+        // ROBO_MATH this should do a lot of the things in BigMath
+
+        int[] layouts = {R.layout.bigmath_1d, R.layout.bigmath_2d, R.layout.bigmath_3d};
+        int layoutId = layouts[_numDigits - 1];
+        inflate(getContext(), layoutId, this);
+
 
     }
 

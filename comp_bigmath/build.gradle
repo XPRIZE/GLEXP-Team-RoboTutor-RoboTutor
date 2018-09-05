@@ -32,7 +32,11 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+    compile 'com.android.support.constraint:constraint-layout:1.1.2'
+
     compile project(path: ':util')
     compile project(path: ':comp_logging')
+    compile project(path: ':resources')
+    compile project(path: ':comp_writebox')
 
 }

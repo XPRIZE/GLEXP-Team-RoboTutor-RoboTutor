@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (C) 2017 The Android Open Source Project
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+       http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="contentDescription"
+    android:id="@+id/baseten_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false">
+
+    <!-- Guidelines -->
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_vertical_0"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.0"
+        />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_vertical_1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.26" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_bottom_of_top"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_0"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_4"
+        android:background="@android:color/darker_gray"
+        android:visibility="gone"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_vertical_2"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.26"
+        />
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_vertical_3"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.26"
+        />
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_vertical_4"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9"
+        />
+
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_top_of_carry"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05"
+        />
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_bottom_of_carry"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.16"
+        />
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_top_of_top"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.21"
+        />
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_bottom_of_top"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.37"
+        />
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_top_of_mid"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.42"
+        />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_bottom_of_mid"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.58" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_top_of_bottom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.63" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_bottom_of_bottom"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.79"
+        />
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_horizontal_4"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="1.0"
+        />
+
+    <!-- Top Row, First operand -->
+
+    <RelativeLayout
+        android:id="@+id/one_opA_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_3"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_top"
+        android:background="@drawable/inner_rectangle"
+        android:visibility="visible"
+        android:tag="opA">
+
+        <!-- Top Ones -->
+        <include android:id="@+id/opA_ones" layout="@layout/concrete_one_horizontal_1d"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"/>
+
+    </RelativeLayout>
+
+    <!-- Symbol opA -->
+    <LinearLayout
+        android:id="@+id/symbol_opA_num"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_1"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_top">
+
+        <TextView
+            android:id="@+id/symbol_opA_one"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="@string/digit_placeholder"
+            android:textColor="@color/addSubtractDigitColor"
+            android:textSize="@dimen/add_subtract_digit_size"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <!-- Second Row, second operand -->
+    <!-- an all-encompassing box -->
+
+    <RelativeLayout
+        android:id="@+id/one_opB_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_3"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_mid"
+        android:background="@drawable/inner_rectangle"
+        android:visibility="visible"
+        android:tag="opB">
+
+        <!-- Mid Ones -->
+        <include android:id="@+id/opB_ones" layout="@layout/concrete_one_horizontal_1d"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            />
+
+        <include android:id="@+id/opB_ones_helpers" layout="@layout/concrete_one_horizontal_helpers_1d"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            />
+
+    </RelativeLayout>
+
+
+    <!-- Symbol op B -->
+    <LinearLayout
+        android:id="@+id/symbol_opB_num"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_1"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_mid">
+
+        <TextView
+            android:id="@+id/symbol_opB_op"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="@string/operator_placeholder"
+            android:textColor="@color/addSubtractDigitColor"
+            android:textSize="@dimen/add_subtract_digit_size"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/symbol_opB_one"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="@string/digit_placeholder"
+            android:textColor="@color/addSubtractDigitColor"
+            android:textSize="@dimen/add_subtract_digit_size"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+
+    <!-- Symbol Result -->
+    <LinearLayout
+        android:id="@+id/symbol_result_num"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_1"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_bottom">
+
+        <cmu.xprize.comp_bigmath.DigitView
+            android:id="@+id/symbol_result_one"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="@string/digit_placeholder"
+            android:textColor="@color/addSubtractDigitColor"
+            android:textSize="@dimen/add_subtract_digit_size"
+            android:background="@drawable/soft_box"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/writebox_row"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_1"
+        app:layout_constraintTop_toTopOf="@+id/guideline_top_of_bottom">
+
+       <!--   <com.example.android.constraintlayoutexamples.write.CGlyphController_Simple
+            android:id="@+id/glyph_controller_one"
+            android:layout_width="@dimen/add_subtract_digit_width"
+
+            android:layout_height="100sp"
+            android:adjustViewBounds="true"
+            android:background="@null"
+            android:layout_margin="0dp">
+
+
+            <FrameLayout
+                android:id="@+id/drawn_container_one"
+                app:layout_heightPercent="100%"
+                app:layout_aspectRatio = "100%"
+                android:background="@null"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+
+                <com.example.android.constraintlayoutexamples.write.CGlyphInputContainer_Simple
+                    android:id="@+id/drawn_box_one"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    app:strokeweight = "5"
+                    android:background="@null" />
+
+            </FrameLayout>
+
+        </com.example.android.constraintlayoutexamples.write.CGlyphController_Simple> -->
+
+    </LinearLayout>
+
+
+
+    <!-- Operator line -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/add_subtract_line_thickness"
+        app:layout_constraintTop_toBottomOf="@id/guideline_top_of_bottom"
+        app:layout_constraintLeft_toLeftOf="@id/guideline_vertical_0"
+        app:layout_constraintRight_toRightOf="@id/guideline_vertical_1"
+        android:background="@color/addSubtractDigitColor"/>
+
+    <!-- Third Row, result (sum or difference) -->
+
+    <RelativeLayout
+        android:id="@+id/one_result_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_3"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_bottom"
+        android:background="@drawable/inner_rectangle"
+        android:visibility="visible">
+
+        <!-- https://developer.android.com/topic/libraries/data-binding/#includes -->
+        <!-- Result Ones -->
+        <include android:id="@+id/result_ones" layout="@layout/concrete_one_horizontal_1d"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            />
+
+        <include android:id="@+id/result_ones_helpers" layout="@layout/concrete_one_horizontal_helpers_1d"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false" />
+
+    </RelativeLayout>
+
+    <!-- Carry -->
+
+    <!-- Squares -->
+    <!-- Hundreds -->
+
+    <!-- end top block of hundreds -->
+
+    <!-- OpB hundreds -->
+
+    <!-- Result hundreds -->
+
+
+
+
+
+
+    <!-- DEBUG OPTIONS -->
+    <LinearLayout
+        android:id="@+id/debug_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/debug_carry_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="show carry hun"
+            android:onClick="showCarryHun"
+            />
+
+        <Button
+            android:id="@+id/debug_carry_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="show carry ten"
+            android:onClick="showCarryTen"
+            />
+
+        <Button
+            android:id="@+id/debug_subtract_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="minuend to result"
+            android:onClick="moveMinuendToResult"/>
+
+        <Button
+            android:id="@+id/debug_subtract_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="borrow hun"
+            android:onClick="borrowHun"/>
+
+        <Button
+            android:id="@+id/debug_subtract_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="borrow ten"
+            android:onClick="borrowTen"/>
+
+        <Button
+            android:id="@+id/debug_subtract_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="borrow hun symbol"
+            android:onClick="borrowHunSymbol"/>
+
+        <Button
+            android:id="@+id/debug_subtract_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="borrow ten symbol"
+            android:onClick="borrowTenSymbol"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/write_controller"
+        android:visibility="invisible"
+        android:layout_width="@dimen/writebox_master_size"
+        android:layout_height="@dimen/writebox_master_size"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+
+</android.support.constraint.ConstraintLayout>
