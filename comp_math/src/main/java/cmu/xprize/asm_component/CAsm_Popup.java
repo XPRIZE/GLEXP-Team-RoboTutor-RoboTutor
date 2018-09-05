@@ -124,4 +124,9 @@ public class CAsm_Popup extends PopupWindow implements IWritingComponent_Simple 
         return false;
     }
 
+    @Override
+    public boolean updateStatus(String _ltkPlusResult) {
+        return false;
+    }
+
 }

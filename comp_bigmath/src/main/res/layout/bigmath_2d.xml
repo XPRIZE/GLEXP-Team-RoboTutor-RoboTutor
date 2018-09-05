@@ -846,6 +846,7 @@
 
     <!-- there are two writing controllers, for when writing a double digit number -->
     <LinearLayout
+        android:id="@+id/write_box_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

@@ -233,7 +233,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
                 }
             }
             catch(Exception e) {
-                CErrorManager.logEvent(TAG, "Run Error:", e, false);
+                CErrorManager.logEvent(TAG, "Run Error:", e, true);
             }
         }
     }

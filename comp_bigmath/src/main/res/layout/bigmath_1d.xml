@@ -439,15 +439,50 @@
 
     </LinearLayout>
 
-    <include layout="@layout/write_controller"
-        android:visibility="invisible"
-        android:layout_width="@dimen/writebox_master_size"
-        android:layout_height="@dimen/writebox_master_size"
+    <!-- there are two writing controllers, for when writing a double digit number -->
+    <LinearLayout
+        android:id="@+id/write_box_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <include layout="@layout/write_controller"
+            android:id="@+id/write_box_left"
+            android:visibility="gone"
+            android:layout_width="@dimen/writebox_master_size"
+            android:layout_height="@dimen/writebox_master_size"
+            />
+
+        <cmu.xprize.comp_bigmath.DigitView
+            android:id="@+id/write_box_digit_left"
+            android:visibility="gone"
+            android:layout_width="@dimen/writebox_master_size"
+            android:layout_height="@dimen/writebox_master_size"
+            android:gravity="center"
+            android:background="@drawable/soft_box"
+            android:textSize="@dimen/add_subtract_big_borrow_size"/>
+
+        <include layout="@layout/write_controller"
+            android:id="@+id/write_box_right"
+            android:visibility="invisible"
+            android:layout_width="@dimen/writebox_master_size"
+            android:layout_height="@dimen/writebox_master_size"
+            />
+
+        <cmu.xprize.comp_bigmath.DigitView
+            android:id="@+id/write_box_digit_right"
+            android:visibility="gone"
+            android:layout_width="@dimen/writebox_master_size"
+            android:layout_height="@dimen/writebox_master_size"
+            android:gravity="center"
+            android:background="@drawable/soft_box"
+            android:textSize="@dimen/add_subtract_big_borrow_size"/>
+    </LinearLayout>
+
 
 
 </android.support.constraint.ConstraintLayout>

@@ -1,10 +1,14 @@
 package cmu.xprize.comp_bigmath;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PointF;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import org.json.JSONObject;
@@ -23,6 +27,9 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
 
     protected RelativeLayout Scontent;
 
+    private BigMathMechanic _mechanic;
+    private BigMathLayoutHelper _layout;
+
     // DataSource Variables
     protected   int                   _dataIndex = 0;
     protected String level;
@@ -38,6 +45,18 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
     public int rows;
     public int cols;
     public CBigMath_Data[] dataSource;
+
+
+    // CONST
+    // name of digit variables
+    private static final String ONE_DIGIT = "one";
+    private static final String TEN_DIGIT = "ten";
+    private static final String HUN_DIGIT = "hun";
+
+    // CONST name of row variables
+    private static final String OPA_LOCATION = "opA";
+    private static final String OPB_LOCATION = "opB";
+    private static final String RESULT_LOCATION = "result";
 
 
     // View Things
@@ -68,9 +87,11 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
 
         mContext = context;
 
-        inflate(getContext(), R.layout.bigmath_layout, this);
+        // inflate(getContext(), R.layout.bigmath_layout, this);
 
         Scontent = (RelativeLayout) findViewById(R.id.Scontent);
+
+        _mechanic = new BigMathMechanic(getContext(), this);
 
     }
 
@@ -84,7 +105,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
 
             }
         } catch (Exception e) {
-            CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, false);
+            CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, true);
         }
 
     }
@@ -98,17 +119,12 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
         // first load dataset into fields
         loadDataSet(data);
 
-        // hacky way to do Integer.max
-        _numDigits = String.valueOf(dataset[0]).length();
-        if (String.valueOf(dataset[1]).length() > _numDigits)
-            _numDigits = String.valueOf(dataset[1]).length();
-        if (String.valueOf(dataset[2]).length() > _numDigits)
-            _numDigits = String.valueOf(dataset[2]).length();
-
-
-        loadLayout();
+        _mechanic.setData(data);
+        _mechanic.doAllTheThings();
 
         // ROBO_MATH continue here... do the thing (See "Step 1")
+
+        // ROBO_MATH... import "BigMathLayoutHelper"
 
     }
 
@@ -132,6 +148,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
 
 
     }
+
 
     /**
      * Point at a view

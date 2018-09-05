@@ -202,7 +202,7 @@ public class TBigMathComponent extends CBigMath_Component implements ITutorObjec
                 throw (new Exception("BadDataSource"));
             }
         } catch (Exception e) {
-            CErrorManager.logEvent(TAG, "Invalid Data Source - " + dataNameDescriptor + " for : " + name() + " : ", e, false);
+            CErrorManager.logEvent(TAG, "Invalid Data Source - " + dataNameDescriptor + " for : " + name() + " : ", e, true);
         }
     }
 
