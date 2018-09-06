@@ -12,6 +12,7 @@ import cmu.xprize.util.IPublisher;
 
 import static cmu.xprize.comp_bigmath.BM_CONST.ALL_DIGITS;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_CORRECT;
+import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_PROBLEM_DONE;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_WRONG;
 import static cmu.xprize.comp_bigmath.BM_CONST.HUN_CARRY_DIGIT;
 import static cmu.xprize.comp_bigmath.BM_CONST.HUN_DIGIT;
@@ -128,7 +129,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
 
                 // ROBO_MATH here are the reactions to student input
-                // ROBO_MATH... these should be replaced with "WAIT" on the action side, and "advanceWithinAnimatorGraph" on this side
+                // ROBO_MATH... these should be replaced with "WAIT" on the action side, and 'applyBehaviorNode("NEXTNODE")' on this side
                 // ROBO_MATH... move this ish to animator graph
                 // digit names are the selection
                 case "symbol_result_hun":
@@ -189,6 +190,13 @@ public class StudentActionListenerImpl implements StudentActionListener{
                         _publisher.publishFeature(FTR_CORRECT);
                         Log.wtf("SEPTEMBER", "publishing correct");
 
+                        // ROBO_MATH temporary until we know number of digits
+                        // ROBO_MATH NEXT NEXT NEXT move into TWO digits!!!
+                        int _numDigits = 1;
+                        if (_numDigits == 1) {
+                            _publisher.publishFeature(FTR_PROBLEM_DONE);
+                        }
+
                         if(_isCarryOne) {
 
                             _hasWrittenOnesResult = true;
@@ -218,7 +226,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
                         Log.wtf("SEPTEMBER", "publishing wrong");
                     }
 
-                    // ROBO_MATH... see if this works!
+                    // ROBO_MATH √√√ see if this works!
                     Log.wtf("SEPTEMBER", "applying behavior node");
                     _behaviorManager.applyBehaviorNode(NEXTNODE);
                     break;

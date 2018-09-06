@@ -101,6 +101,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
 
     public void next() {
 
+        Log.wtf("SEPTEMBER", "index = " + _dataIndex);
         try {
             if (dataSource != null) {
                 updateDataSet(dataSource[_dataIndex]);
@@ -125,10 +126,6 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
 
         _mechanic.setData(data);
         _mechanic.doAllTheThings();
-
-        // ROBO_MATH continue here... do the thing (See "Step 1")
-
-        // ROBO_MATH... import "BigMathLayoutHelper"
 
     }
 
@@ -175,7 +172,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
      * Updates the stimulus.
      */
     protected void loadLayout() {
-        // ROBO_MATH this should do a lot of the things in BigMath
+        // ROBO_MATH √√√ this should do a lot of the things in BigMath
 
         int[] layouts = {R.layout.bigmath_1d, R.layout.bigmath_2d, R.layout.bigmath_3d};
         int layoutId = layouts[_numDigits - 1];

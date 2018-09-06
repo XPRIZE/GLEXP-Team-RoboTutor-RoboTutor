@@ -36,6 +36,7 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_MORE_PROBLEMS;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 /**
@@ -138,8 +139,12 @@ public class TBigMathComponent extends CBigMath_Component implements ITutorObjec
 
         super.next();
 
+        retractFeature(FTR_MORE_PROBLEMS);
+
         if (dataExhausted()) {
             publishFeature(BM_CONST.FEATURES.FTR_PROBLEMS_DONE);
+        } else {
+            publishFeature(FTR_MORE_PROBLEMS);
         }
     }
 

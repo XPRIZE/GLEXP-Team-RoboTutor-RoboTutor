@@ -212,6 +212,7 @@ public class BigMathMechanic {
     private void initializeLayout() {
 
         int[] layouts = {R.layout.bigmath_1d, R.layout.bigmath_2d, R.layout.bigmath_3d};
+        _viewGroup.removeAllViews(); // maybe this?
         View.inflate(_activity, layouts[_numDigits - 1], _viewGroup);
     }
     /**
