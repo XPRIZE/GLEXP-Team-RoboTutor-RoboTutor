@@ -13,8 +13,12 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
@@ -23,11 +27,11 @@ import cmu.xprize.util.TCONST;
  * Generated automatically w/ code written by Kevin DeLand
  */
 
-public class CBigMath_Component extends RelativeLayout implements ILoadableObject {
+public class CBigMath_Component extends RelativeLayout implements ILoadableObject, IBehaviorManager, IPublisher {
 
     protected RelativeLayout Scontent;
 
-    private BigMathMechanic _mechanic;
+    protected BigMathMechanic _mechanic;
     private BigMathLayoutHelper _layout;
 
     // DataSource Variables
@@ -91,8 +95,8 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
 
         Scontent = (RelativeLayout) findViewById(R.id.Scontent);
 
-        _mechanic = new BigMathMechanic(getContext(), this);
-
+        // initialize mechanic
+        _mechanic = new BigMathMechanic(getContext(), this, this, this);
     }
 
     public void next() {
@@ -183,7 +187,24 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
+    @Override
     public boolean applyBehavior(String event){ return false;}
+
+    // Overridden in TClass.
+    // TODO fix this freakin' architecture...
+    @Override
+    public void applyBehaviorNode(String event) { }
+
+    // Overridden in TClass.
+    // TODO fix this freakin' architecture...
+    @Override
+    public void setVolatileBehavior(String event, String behavior) {}
+
+    // Overridden in TClass.
+    // TODO fix this freakin' architecture...
+    @Override
+    public void setStickyBehavior(String event, String behavior) {}
+
 
     /**
      * Load the data source
@@ -200,4 +221,42 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
     public RelativeLayout getContainer() {
         return Scontent;
     }
+
+
+    // Overridden in TClass.
+    // TODO fix this freakin' architecture...
+    @Override
+    public void publishState() {}
+    // Overridden in TClass.
+    // TODO fix this freakin' architecture...
+    @Override
+    public void publishValue(String varName, String value) {}
+    // Overridden in TClass.
+    // TODO fix this freakin' architecture...
+    @Override
+    public void publishValue(String varName, int value) {}
+    // Overridden in TClass.
+    // TODO fix this freakin' architecture...
+    @Override
+    public void publishFeatureSet(String featureset) {}
+    // Overridden in TClass.
+    // TODO fix this freakin' architecture...
+    @Override
+    public void retractFeatureSet(String featureset) {}
+    // Overridden in TClass.
+    // TODO fix this freakin' architecture...
+    @Override
+    public void publishFeature(String feature) {}
+    // Overridden in TClass.
+    // TODO fix this freakin' architecture...
+    @Override
+    public void retractFeature(String feature) {}
+    // Overridden in TClass.
+    // TODO fix this freakin' architecture...
+    @Override
+    public void publishFeatureMap(HashMap featureMap) {}
+    // Overridden in TClass.
+    // TODO fix this freakin' architecture...
+    @Override
+    public void retractFeatureMap(HashMap featureMap) {}
 }

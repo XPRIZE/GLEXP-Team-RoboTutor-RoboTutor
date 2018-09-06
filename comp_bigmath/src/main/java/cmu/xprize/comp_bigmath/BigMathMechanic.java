@@ -20,6 +20,8 @@ import cmu.xprize.comp_writebox.CGlyphInputContainer_Simple;
 import cmu.xprize.comp_writebox.IGlyphController_Simple;
 import cmu.xprize.comp_writebox.IWritingComponent_Simple;
 import cmu.xprize.ltkplus.CRecResult;
+import cmu.xprize.util.IBehaviorManager;
+import cmu.xprize.util.IPublisher;
 
 import static cmu.xprize.comp_bigmath.BM_CONST.ALL_DIGITS;
 import static cmu.xprize.comp_bigmath.BM_CONST.HUN_CARRY_DIGIT;
@@ -44,6 +46,14 @@ import static cmu.xprize.util.MathUtil.getTensDigit;
 
 public class BigMathMechanic {
 
+    private final IBehaviorManager _behaviorManager;
+    private final IPublisher _publisher;
+    private Context _activity;
+    private ViewGroup _viewGroup;
+    private BigMathLayoutHelper _layout;
+    private StudentActionListener _sai;
+    private CBigMath_Data _data;
+
     // MATH_BEHAVIOR (1) add case for each digit into SAI receiver
 
     // DATA SOURCE INPUT
@@ -54,11 +64,7 @@ public class BigMathMechanic {
     //private int operandB = 386;
     //private String operator = "+";
 
-    private Context _activity;
-    private ViewGroup _viewGroup;
-    private BigMathLayoutHelper _layout;
-    private StudentActionListener _sai;
-    private CBigMath_Data _data;
+
 
     private int _numDigits;
 
@@ -127,12 +133,14 @@ public class BigMathMechanic {
 
     private StudentActionListener _studentActionListener;
 
-    public BigMathMechanic(Context activity, ViewGroup viewGroup) {
+    public BigMathMechanic(Context activity, IBehaviorManager behaviorManager, IPublisher publisher, ViewGroup viewGroup) {
+        _behaviorManager = behaviorManager;
+        _publisher = publisher;
         _activity = activity;
         _viewGroup = viewGroup;
         _layout = new BigMathLayoutHelper(activity, viewGroup);
 
-        _studentActionListener = new StudentActionListenerImpl(this); // won't always work...
+        _studentActionListener = new StudentActionListenerImpl(_behaviorManager, _publisher, this); // won't always work...
 
     }
 
@@ -504,6 +512,7 @@ public class BigMathMechanic {
             _controller.setVisibility(View.INVISIBLE);
 
             // digit name gets passed as action
+            // ROBO_MATH this is where we put a WAIT
             _studentActionListener.fireAction(_digitName, "WRITE", result);
             // ruleEngine.registerWrite(character)
 
@@ -577,7 +586,7 @@ public class BigMathMechanic {
             carryHun.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, carryHun));
+                    _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, carryHun)); // ROBO_MATH (5-WAIT)
                     _controller_master.setVisibility(View.VISIBLE);
                     carryHun.setText(""); // erase text
                 }
@@ -592,7 +601,7 @@ public class BigMathMechanic {
                 @Override
                 public void onClick(View v) {
                     _controller_master.setVisibility(View.VISIBLE);
-                    _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, carryTen));
+                    _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, carryTen)); // ROBO_MATH (5-WAIT)
                     carryTen.setText("");
                 }
             });
@@ -615,7 +624,7 @@ public class BigMathMechanic {
                 @Override
                 public void onClick(View v) {
                     _controller_master.setVisibility(View.VISIBLE);
-                    _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, hunsResult));
+                    _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, hunsResult)); // ROBO_MATH (5-WAIT)
                     hunsResult.setText("");
                 }
             });
@@ -629,7 +638,7 @@ public class BigMathMechanic {
                 @Override
                 public void onClick(View v) {
                     _controller_master.setVisibility(View.VISIBLE);
-                    _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, tensResult));
+                    _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, tensResult)); // ROBO_MATH (5-WAIT)
                     tensResult.setText("");
                 }
             });
@@ -643,7 +652,7 @@ public class BigMathMechanic {
                 @Override
                 public void onClick(View v) {
                     _controller_master.setVisibility(View.VISIBLE);
-                    _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, onesResult));
+                    _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, onesResult)); // ROBO_MATH (5-WAIT)
                     onesResult.setText("");
                 }
             });
@@ -804,7 +813,7 @@ public class BigMathMechanic {
                         if (helper != null) helper.setImageAlpha(opacity);
                     } catch (Exception e) {
                         Log.e("MATH_BEHAVIOR", "fix me... ");
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
                 }
 
@@ -1697,7 +1706,7 @@ public class BigMathMechanic {
 
             @Override
             public void onClick(View v) {
-                _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, borrowTenDigit));
+                _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, borrowTenDigit)); // ROBO_MATH (5-WAIT)
                 _controller_master.setVisibility(View.VISIBLE);
                 borrowTenDigit.setText("");
             }

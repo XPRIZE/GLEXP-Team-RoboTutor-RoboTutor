@@ -12,6 +12,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cmu.xprize.comp_bigmath.BM_CONST;
+import cmu.xprize.comp_bigmath.BigMathMechanic;
 import cmu.xprize.comp_bigmath.CBigMath_Component;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.ILogManager;
@@ -137,7 +139,7 @@ public class TBigMathComponent extends CBigMath_Component implements ITutorObjec
         super.next();
 
         if (dataExhausted()) {
-            publishFeature(TCONST.FTR_EOD);
+            publishFeature(BM_CONST.FEATURES.FTR_PROBLEMS_DONE);
         }
     }
 

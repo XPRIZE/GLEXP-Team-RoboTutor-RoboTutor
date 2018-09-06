@@ -8,66 +8,106 @@
       "title": "BigMath",
       "COMMENT": "BigMath",
       "version": "1.0.0",
-      "rootnode": "INTRO_STATE",
+      "rootnode": "INTRO",
 
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
 
-        "INTRO_STATE": {
+        "INTRO": {
           "type": "NODE",
           "COMMENT": "Intro Clip - we only ever visit this node once",
           "maptype":"moduleMap",
-          "mapname": "PLAYINTRO",
-          "preenter": ["SET_VERSION", "SET_DATASOURCE"],
+          "mapname": "INTRO",
+          "preenter": ["SET_VERSION"],
           "preexit": [],
           "edges": [
             {
               "constraint": "",
-              "edge": "UPDATE_STIMULUS"
+              "edge": "NEXT_PROBLEM"
             }
           ]
         },
 
-        "UPDATE_STIMULUS": {
+        "NEXT_PROBLEM": {
           "type": "NODE",
-          "COMMENT": "We may say or show the stimulus at this point",
+          "COMMENT": "This node presents the next problem in the data source.",
           "maptype":"moduleMap",
-          "mapname": "UPDATESTIMULUS",
-          "preenter": ["NEXT_DATASET"],
+          "mapname": "NEXTPROBLEM",
+          "preenter": [],
           "preexit": [],
           "edges": [
             {
               "constraint": "",
-              "edge": "USER_INPUT"
+              "edge": "NEXT_DIGIT"
             }
           ]
         },
 
+
+        "NEXT_DIGIT":{
+          "COMMENT":"This node moves to the next digit in the problem.",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "NEXTDIGIT",
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"USER_INPUT"}
+          ]
+        },
+
+        // ROBO_MATH
 
         "USER_INPUT": {
-          "COMMENT":"Wait for the user to touch",
+          "COMMENT":"Preps the tutor for user input, then waits for user input.",
           "type": "node",
           "maptype":"moduleMap",
           "mapname": "USERINPUT",
           "preenter": [],
           "preexit": [],
-          "edges":
-                  [
-                    {"constraint": "FTR_EOD", "edge": "NEXT_SCENE"},
-                    {"constraint": "", "edge":"UPDATE_STIMULUS"}
-
-                  ]
+          "edges": [
+            {"constraint": "FTR_CORRECT", "edge": "CORRECT_FEEDBACK"},
+            {"constraint": "", "edge": "WRONG_FEEDBACK"}
+          ]
         },
 
-        "PROBLEMCORRECT": {
-          "COMMENT": "When user inputs a correct answer...",
+        "CORRECT_FEEDBACK": {
+          "COMMENT": "Provides feedback for correct response.",
           "type": "node",
           "maptype": "moduleMap",
-          "mapname": "PLAYCOMPLETE",
+          "mapname": "CORRECTFEEDBACK",
           "preenter": [],
           "preexit": [],
           "edges": [
+            {"constraint": "FTR_PROBLEM_DONE", "edge": "PROBLEM_CORRECT"}, // if done with problem, continue to next problem
+            {"constraint": "FTR_PROBLEM_HAS_MORE", "edge": "NEXT_DIGIT"}   // if not done, progress to next digit
+          ]
+        },
+
+        "WRONG_FEEDBACK": {
+          "COMMENT": "Provides feedback for wrong response.",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "WRONGFEEDBACK",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "", "edge": "USER_INPUT"} // go back to wait for user input
+          ]
+        },
+
+        "PROBLEM_CORRECT": {
+          "COMMENT": "When user has completed a problem.",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "PROBLEMCORRECT",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "FTR_MORE_PROBLEMS", "edge": "NEXT_PROBLEM"}, // if more problems, go to next problem
+            {"constraint": "FTR_PROBLEMS_DONE", "edge": "NEXT_SCENE"}    // if problems done, go to next scene (aka finish)
           ]
         },
 
@@ -85,87 +125,101 @@
 
       },
 
+      // ROBO_MATH continue...
       "moduleMap": {
 
         "COMMENT": "@@@@@  CModules  @@@@@",
 
-        "PLAYINTRO": {
+        "INTRO": {
           "type": "MODULE",
           "reuse":true,
-          "COMMENT": "????",
+          "COMMENT": "???",
           "tracks": [
-              
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""}
-
-
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#INTRO:String", "features":""},
+            // welcome to math
+            // TEMP
+            {"name":"Introduction Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3",       "soundpackage":"temp", "volume": 1.0, "mode":"flow", "features": ""}
             ]
-        },
-
-        "UPDATESTIMULUS": {
-          "type": "MODULE",
-          "reuse": true,
-          "tracks": [
-              
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""}
-    
-          ]
         },
 
         "NEXTPROBLEM": {
           "type": "MODULE",
           "reuse": true,
-          "COMMENT": "TBD",
+          "COMMENT": "???",
           "tracks": [
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#NEXT_PROBLEM:String", "features":""},
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#NEXTPROBLEM:String", "features":""},
 
             {"type": "COMMAND", "id": "SBigMath", "method": "next", "features": ""}
           ]
         },
 
-        "PLAYCOMPLETE": {
+        "NEXTDIGIT": {
           "type": "MODULE",
           "reuse": true,
-          "COMMENT": "TBD",
+          "COMMENT": "???",
           "tracks": [
-            
-              {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE:String", "features":""},
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#NEXTDIGITs:String", "features":""}
 
+            // ROBO_MATH (3)
 
-            {"type": "COMMAND", "cmd": "WAIT"}
-          ]
-        },
+            // tap the numbers
 
-        "PLAYWRONG": {
-          "type": "MODULE",
-          "reuse": true,
-          "COMMENT": "TBD",
-          "tracks": [
-
-              {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#PLAYWRONG:String", "features":""}
-
-          ]
-        },
-
-        "EMPTYMODULE": {
-          "type": "MODULE",
-          "reuse":true,
-          "COMMENT": "????",
-          "tracks": [
-            
-              {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#EMPTYMODULE:String", "features":""}
-              
           ]
         },
 
         "USERINPUT": {
           "type": "MODULE",
           "reuse": true,
-          "COMMENT": "TBD",
+          "COMMENT": "???",
           "tracks": [
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#WAIT_FOR_INPUT:String", "features":""},
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#USERINPUT:String", "features":""},
 
-
+            // ROBO_MATH (3)
+            // ROBO_MATH (3) WAIT
+            // WAIT
             {"type": "COMMAND", "cmd": "WAIT"}
+
+          ]
+        },
+
+        "CORRECTFEEDBACK": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "???",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#CORRECTFEEDBACK:String", "features":""},
+
+            // ROBO_MATH (3)
+            // Good!
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Right.mp3", "soundpackage":"temp", "volume": 1.0, "mode":"flow", "features": ""}
+
+          ]
+        },
+
+        "WRONGFEEDBACK": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "???",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#WRONGFEEDBACK:String", "features":""},
+
+            // ROBO_MATH (3)
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3",       "soundpackage":"temp", "volume": 1.0, "mode":"flow", "features": ""}
+
+          ]
+        },
+
+        "PROBLEMCORRECT": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "???",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#PROBLEMCORRECT:String", "features":""},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3", "soundpackage":"temp", "volume": 1.0, "mode":"flow", "features": ""}
+
+            // ROBO_MATH (3)
+
           ]
         }
 
@@ -176,22 +230,46 @@
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "SBigMath", "method": "setDataSource", "parms": "LOCAL_FILE:String","features":""},
 
-        "NEXT_DATASET": {"type": "COMMAND", "id": "SBigMath", "method": "next", "features": ""},
         "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"},
 
         "NEXTSCENE": {"type":"COMMAND", "cmd": "NEXTSCENE"}
 
       },
 
+      // ROBO_MATH continue...
       "constraintMap": {
 
         "COMMENT": "@@@@@  CConstraints @@@@@ ",
 
-        "FTR_EOD": {
+        "FTR_CORRECT": {
           "type": "CONDITION",
-          "test": "FTR_EOD"
+          "test": "FTR_CORRECT"
+        },
+
+        "FTR_WRONG": {
+          "type": "CONDITION",
+          "test": "FTR_WRONG"
+        },
+
+        "FTR_PROBLEM_DONE": {
+          "type": "CONDITION",
+          "test": "FTR_PROBLEM_DONE"
+        },
+
+        "FTR_PROBLEM_HAS_MORE": {
+          "type": "CONDITION",
+          "test": "FTR_PROBLEM_HAS_MORE"
+        },
+
+        "FTR_MORE_PROBLEMS": {
+          "type": "CONDITION",
+          "test": "FTR_MORE_PROBLEMS"
+        },
+
+        "FTR_PROBLEMS_DONE": {
+          "type": "CONDITION",
+          "test": "FTR_PROBLEMS_DONE"
         }
 
       }
