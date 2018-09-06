@@ -335,6 +335,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     // amogh added highlight box.
+    //this is to show the highlight box at different levels for a given word (whole word / first edit) based on the level
+
     public void showHighlightBox(Integer level, Word w){
 
         mHighlightErrorBoxView = new View (getContext());
@@ -2126,6 +2128,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             }
             return left;
         }
+
+        public void releaseFirstWordEditAudioFeatures(){
+            EditOperation firstEdit = this.getFirstWordEditOperation();
+            releaseAudioFeatures(firstEdit);
+        }
     }
     //Word class ends
 
@@ -2252,6 +2259,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         }
 
+    }
+
+    public void releaseFirstEditAudioFeatures(){
+        if (activityFeature.contains("FTR_SEN_WRD")){
+            int wordAttempts = mActiveWord.getAttempt();
+//            if(wordAttempts > 0){  // the number of attempts can be passed through the animator graph itself.
+                mActiveWord.releaseFirstWordEditAudioFeatures();
+//            }
+        }
     }
 
     //amogh added ends
