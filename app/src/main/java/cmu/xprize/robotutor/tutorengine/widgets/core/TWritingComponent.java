@@ -160,7 +160,13 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         mScrollRightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDrawnScroll.scrollTo((int)mDrawnScroll.getScrollX() + 10, (int)mDrawnScroll.getScrollY());
+                mDrawnScroll.scrollTo((int)mDrawnScroll.getScrollX() + 200, (int)mDrawnScroll.getScrollY());
+            }
+        });
+        mScrollLeftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawnScroll.scrollTo((int)mDrawnScroll.getScrollX() - 200, (int)mDrawnScroll.getScrollY());
             }
         });
         mDrawnScroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {

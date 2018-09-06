@@ -145,30 +145,27 @@
     <cmu.xprize.robotutor.tutorengine.widgets.core.TImageButton
         android:id="@+id/buttonleft"
         android:layout_below="@id/SstimulusFrame"
+        android:layout_marginTop="50dp"
         android:background="@null"
         android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:paddingTop="320dp"
-        android:rotation="180"
+        android:layout_height="100dp"
         android:layout_alignParentLeft="true"
-        android:src="@drawable/arrow_up" />
+        android:elevation="5dp"
+        android:src="@drawable/arrow_left" />
     <cmu.xprize.robotutor.tutorengine.widgets.core.TImageButton
         android:id="@+id/buttonright"
         android:layout_below="@id/SstimulusFrame"
+        android:layout_marginTop="50dp"
         android:background="@null"
-        android:layout_alignRight="@+id/SfingerWriter"
         android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:paddingBottom="320dp"
+        android:layout_height="100dp"
         android:layout_alignParentRight="true"
-        android:src="@drawable/arrow_up"
-        android:text="Button" />
+        android:elevation="5dp"
+        android:src="@drawable/arrow_right"/>
 
     <cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView
         android:id="@+id/SfingerWriter"
         android:layout_below="@id/SresponseviewBG"
-        android:paddingLeft="70dp"
-        android:paddingRight="70dp"
         app:layout_heightPercent="60%"
         android:layout_width="match_parent"
         android:scrollbars="none"
