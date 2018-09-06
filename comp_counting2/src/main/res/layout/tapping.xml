@@ -90,46 +90,24 @@
         android:id="@+id/result_display_1"
         android:layout_width="150sp"
         android:layout_height="150sp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="379dp"
-        android:layout_marginTop="164dp"
-        android:background="@android:color/white"
-        android:gravity="center"
-        android:textColor="@android:color/black"
-        android:textSize="80sp" />
-
-
-    <TextView
-        android:id="@+id/result_display_2"
-        android:layout_width="150sp"
-        android:layout_height="150sp"
-        android:layout_alignTop="@+id/glyph_controller_1"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/white"
-        android:gravity="center"
-        android:textColor="@android:color/black"
-        android:textSize="80sp" />
-
-    <TextView
-        android:id="@+id/result_display_3"
-        android:layout_width="150sp"
-        android:layout_height="150sp"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/result_display_2"
-        android:layout_marginEnd="379dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="83dp"
+        android:layout_marginTop="254dp"
         android:background="@android:color/white"
         android:gravity="center"
         android:textColor="@android:color/black"
         android:textSize="80sp" />
+
 
     <cmu.xprize.comp_counting2.CGlyphController_Simple
         android:id="@+id/glyph_controller_1"
         android:layout_width="200sp"
         android:layout_height="200sp"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/result_display_1"
-        android:layout_marginBottom="239dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="235dp"
+        android:layout_marginEnd="106dp"
         android:adjustViewBounds="true"
         android:background="@null">
 

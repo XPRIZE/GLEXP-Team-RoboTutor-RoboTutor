@@ -3,9 +3,10 @@
 
   "dataSource": [
 
-    {"type":"CountX_Data", "level":"countx_1_10", "task":"Count to 10", "layout":"default", "dataset":[0, 149], "tenPower": ["one","ten"],"difficulty":1},
-    {"type":"CountX_Data", "level":"countx_1_10", "task":"Count to 10", "layout":"default", "dataset":[0, 10], "tenPower": ["one"],"difficulty":1}
-
-  ]
+    {"type":"CountX_Data", "level":"countx_1_10", "task":" Three digit place value ","layout":"default", "dataset":[0, 311], "tenPower": ["one","two", "hundred"] , "difficulty":1},
+    {"type":"CountX_Data", "level":"countx_1_10", "task":" Three digit place value ","layout":"default", "dataset":[0, 181], "tenPower": ["one","two", "hundred"] , "difficulty":1},
+    {"type":"CountX_Data", "level":"countx_1_10", "task":" Three digit place value ","layout":"default", "dataset":[0, 374], "tenPower": ["one","two", "hundred"] , "difficulty":2},
+    {"type":"CountX_Data", "level":"countx_1_10", "task":" Three digit place value ","layout":"default", "dataset":[0, 388], "tenPower": ["one","two", "hundred"] , "difficulty":2},
+    {"type":"CountX_Data", "level":"countx_1_10", "task":" Three digit place value ","layout":"default", "dataset":[0, 370], "tenPower": ["one","two", "hundred"] , "difficulty":2}  ]
 
 }

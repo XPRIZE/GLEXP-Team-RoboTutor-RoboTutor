@@ -39,16 +39,18 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
     private Vector<Countable> _countablesTen;
     private Vector<Countable> _countablesHundred;
     private boolean tappable;
-    private boolean[] drawResult = {false,false,false,false};
-    private String writting_box = "";
+    private boolean[] drawResult;
+    private String writting_box;
+    private boolean showTenFrame = false;
+    protected boolean[] reachTarget;
+    protected int pickedBox = 0;
 
 
 
     private TenFrame tenFrame;
     private TenFrame tenFrameTen;
     private TenFrame tenFrameHundred;
-    private boolean showTenFrame = false;
-    protected boolean[] reachTarget = {false,false,false};
+
 
 
     private int[] FRUITS = {
@@ -137,6 +139,11 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         _countables = new Vector<>();
         _countablesTen = new Vector<>();
         _countablesHundred = new Vector<>();
+
+        reachTarget = new boolean[] {false,false,false,false};
+        drawResult = new boolean[] {false,false,false,false};
+        writting_box = "";
+
 
         //resetCounter();
 
@@ -365,6 +372,39 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         redraw();
     }
 
+    public void updateWriteNumber(int writePosition, int number){
+        if (_component.writeNumbersTappbale[writePosition]){
+            _component.write_numbers[writePosition] = number;
+            if (_component.targetNumbers[writePosition] == _component.write_numbers[writePosition]){
+                _component.writeNumbersTappbale[writePosition] = false;
+                _component.playCount(_component.write_numbers[writePosition]);
+                new java.util.Timer().schedule(
+                        new java.util.TimerTask() {
+                            @Override
+                            public void run() {
+                                _component.playAudio("plus"); }},
+                        1000
+                );
+                if (pickedBox+1<=2){
+                    pickedBox=pickedBox+1;
+                    _component.changeWritePosition(pickedBox);
+                }
+            } else {
+                _component.playCount(_component.write_numbers[writePosition]);
+                new java.util.Timer().schedule(
+                        new java.util.TimerTask() {
+                            @Override
+                            public void run() {
+                                _component.playAudio("plus"); }},
+                        1000
+                );
+
+            }
+            redraw();
+        }
+
+    }
+
 
     public void wiggleFruit() {
 
@@ -476,11 +516,6 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                 float[] tenBox = getTen(left,right,boxmargin);
                 float[] hundredBox = getHundred(left,right,boxmargin);
 
-//                if(x < oneBox[0] || x > hundredBox[1] || y < up || y > down || (x>hundredBox[1] && x< tenBox[0]) ||
-//                        (x>tenBox[1] && x<oneBox[0])) {
-//                    redraw(canvas);
-//                    return true;
-//                }
 
                 Countable countable;
 
@@ -517,20 +552,27 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
                 if(_countables.size() == _component.countTarget%10) {
                     reachTarget[2] = true;
-                    _component.setCheck(false,false,true);
+                    if (_component.targetNumbers[2]!=0){
+                    _component.setCheck(false,false,true);}
 
                 }
 
                 if(_countablesTen.size()*10 == _component.countTarget%100-_component.countTarget%10){
                     reachTarget[1] = true;
-                    _component.setCheck(false,true,false);
+                    if (_component.targetNumbers[1]!=0){
+                        _component.setCheck(false,true,false);
+                    }
+
 
 
                 }
 
                 if(_countablesHundred.size()*100 == _component.countTarget-_component.countTarget%100){
                     reachTarget[0] = true;
-                    _component.setCheck(true,false,false);
+                    if(_component.targetNumbers[0]!=0){
+                        _component.setCheck(true,false,false);
+                    }
+
 
                 }
 
@@ -597,6 +639,8 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
                 //in the place value mode.
                 drawRectangles(canvas);
+
+                //drawRectangles and the texts(for the 2nd screen)
                 //first draw the Rectangeles
 
                 if(!drawResult[0] && !drawResult[1] && !drawResult[2] && !drawResult[3]){
@@ -690,17 +734,34 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
         Paint green = new Paint();
         green.setStyle(Paint.Style.STROKE);
-        green.setColor(COUNTX_CONST.COLOR_DARKGREEN);
-        green.setStrokeWidth(5);
-
-        Paint blue = new Paint();
-        green.setStyle(Paint.Style.STROKE);
         green.setColor(COUNTX_CONST.COLOR_BLUE);
         green.setStrokeWidth(10);
 
         Paint lightgreen = new Paint();
         lightgreen.setStyle(Paint.Style.FILL);
         lightgreen.setColor(COUNTX_CONST.COLOR_LIGHTGREEN);
+
+        Paint unpicked = new Paint();
+        unpicked.setStyle(Paint.Style.STROKE);
+        unpicked.setColor(COUNTX_CONST.COLOR_DARKGREY);
+        unpicked.setStrokeWidth(8);
+
+
+        Paint picked = new Paint();
+        picked.setStyle(Paint.Style.STROKE);
+        picked.setColor(COUNTX_CONST.COLOR_BLUE);
+        picked.setStrokeWidth(8);
+
+        Paint pickedFill = new Paint();
+        picked.setStyle(Paint.Style.FILL);
+        picked.setColor(COUNTX_CONST.COLOR_YELLOW);
+
+
+
+
+        Paint lightblue = new Paint();
+        lightblue.setStyle(Paint.Style.FILL);
+        lightblue.setColor(COUNTX_CONST.COLOR_BLUE);
 
         Paint grey = new Paint();
         grey.setStyle(Paint.Style.STROKE);
@@ -713,44 +774,175 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         text.setTextAlign(Paint.Align.CENTER);
         text.setFakeBoldText(true);
 
-        Bitmap immutableBackgroundBmp = BitmapFactory.decodeResource(getResources(), R.drawable.greyb);
+        Paint textGrey = new Paint();
+        textGrey.setColor(COUNTX_CONST.COLOR_DARKGREY);
+        textGrey.setTextSize(COUNTX_CONST.TEXT_SIZE);
+        textGrey.setTextAlign(Paint.Align.CENTER);
+        textGrey.setFakeBoldText(true);
 
-        if (drawResult[0] || drawResult[1] || drawResult[2]) {
+        Paint textRed = new Paint();
+        textRed.setColor(COUNTX_CONST.COLOR_RED);
+        textRed.setTextSize(COUNTX_CONST.TEXT_SIZE);
+        textRed.setTextAlign(Paint.Align.CENTER);
+        textRed.setFakeBoldText(true);
+
+
+        if (drawResult[0] || drawResult[1] || drawResult[2] || drawResult[3]) {
 
             canvas.drawRect(left, up, right, textdown, lightgreen);
             canvas.drawRect(left, up, right, textdown, green);
-
             float textXTen = (right+left)/2;
-            float textXOne = textXTen+resultfont;
-            float textXHundred =  textXTen-resultfont;
+            float textXOne = textXTen+resultfont+50;
+            float textXHundred =  textXTen-resultfont-50;
 
-            float textHeight = (textdown-up)/4;
+            float textHeight = 0;
+            boolean twoAddition = _component.twoAddition;
+            //displayOption: 0 for the three addition view. 1 for hundred and ten; 2 for ten and one.
+
+            if (!twoAddition){
+                textHeight = (textdown-up)/4;
+            } else {
+                textHeight = (textdown-up)/3;
+            }
+
+
+
             if (drawResult[0]){
-                canvas.drawText( String.valueOf(_countablesHundred.size()),textXHundred,up+textHeight-resultfont/2,text);
-                canvas.drawText( "0",textXTen,up+textHeight-resultfont/2,text);
-                canvas.drawText( "0",textXOne,up+textHeight-resultfont/2,text);
+                if(!twoAddition){
+                    canvas.drawText( String.valueOf(_countablesHundred.size()),textXHundred,up+textHeight-resultfont/2,text);
+                    canvas.drawText( "0",textXTen,up+textHeight-resultfont/2,text);
+                    canvas.drawText( "0",textXOne,up+textHeight-resultfont/2,text);
+                }
+
             }
 
             if(drawResult[1]){
-                canvas.drawText( String.valueOf(_countablesTen.size()),textXTen,up+textHeight*2-resultfont/2,text);
-                canvas.drawText( "0",textXOne,up+textHeight*2-resultfont/2,text);
+                if(!twoAddition){
+                    canvas.drawText( String.valueOf(_countablesTen.size()),textXTen,up+textHeight*2-resultfont/2,text);
+                    canvas.drawText( "0",textXOne,up+textHeight*2-resultfont/2,text);
+                } else {
+                    canvas.drawText( String.valueOf(_countablesTen.size()),textXTen,up+textHeight-resultfont/2,text);
+                    canvas.drawText( "0",textXOne,up+textHeight-resultfont/2,text);
+                }
+
             }
 
             if(drawResult[2]){
-                canvas.drawText( String.valueOf(_countables.size()*1),textXOne,up+textHeight*3-resultfont/2,text);
-                canvas.drawLine(textXHundred-resultfont/2,up+textHeight*3,textXOne+resultfont/2,up+textHeight*3, green);
-                canvas.drawText("+",textXHundred,up+textHeight*3-resultfont/2,text);
+                if (!twoAddition){
+                    canvas.drawText( String.valueOf(_countables.size()*1),textXOne,up+textHeight*3-resultfont/2,text);
+                    canvas.drawLine(textXHundred-resultfont/2,up+textHeight*3,textXOne+resultfont/2,up+textHeight*3, green);
+                    canvas.drawText("+",textXHundred,up+textHeight*3-resultfont/2,text);
+                } else {
+                    canvas.drawText( String.valueOf(_countables.size()*1),textXOne,up+textHeight*2-resultfont/2,text);
+                    canvas.drawLine(textXHundred-resultfont/2,up+textHeight*2,textXOne+resultfont/2,up+textHeight*2, green);
+                    canvas.drawText("+",textXHundred,up+textHeight*2-resultfont/2,text);
+                }
+
             }
 
             if(drawResult[3]){
-                canvas.drawText( String.valueOf(_countablesHundred.size()),textXHundred,up+textHeight*4-resultfont/2,text);
-                canvas.drawText( String.valueOf(_countablesTen.size()),textXTen,up+textHeight*4-resultfont/2,text);
-                canvas.drawText( String.valueOf(_countables.size()),textXOne,up+textHeight*4-resultfont/2,text);
+                if (!twoAddition) {
+                    canvas.drawLine(textXHundred-resultfont/2,up+textHeight*3,textXOne+resultfont/2,up+textHeight*3, green);
+                    canvas.drawText("+",textXHundred,up+textHeight*3-resultfont/2,text);
+                    canvas.drawText( String.valueOf(_countablesHundred.size()),textXHundred,up+textHeight*4-resultfont/2,text);
+                    canvas.drawText( String.valueOf(_countablesTen.size()),textXTen,up+textHeight*4-resultfont/2,text);
+                    canvas.drawText( String.valueOf(_countables.size()),textXOne,up+textHeight*4-resultfont/2,text);
+                } else {
+                    canvas.drawLine(textXHundred-resultfont/2,up+textHeight*2,textXOne+resultfont/2,up+textHeight*2, green);
+                    canvas.drawText("+",textXHundred,up+textHeight*2-resultfont/2,text);
+                    if(_countablesHundred.size() !=0 ){
+                        canvas.drawText( String.valueOf(_countablesHundred.size()),textXHundred,up+textHeight*3-resultfont/2,text);
+
+                    }
+                    canvas.drawText( String.valueOf(_countablesTen.size()),textXTen,up+textHeight*3-resultfont/2,text);
+                    canvas.drawText( String.valueOf(_countables.size()),textXOne,up+textHeight*3-resultfont/2,text);
+                }
+
+            }
+
+            if(writting_box=="result"){
+                int[] current = _component.write_numbers;
+                float[] position = {textXHundred,textXTen,textXOne};
+
+                int[] target_numbers = _component.targetNumbers;
+                float y =0;
+                int startI =0;
+                if (!twoAddition){
+                    y = up+textHeight*4-resultfont/2;
+                } else {
+                    y = up+textHeight*3-resultfont/2;
+                    startI =1;
+                }
+
+
+                for(int i = startI; i< target_numbers.length; i++){
+
+                    if (target_numbers[i] == current[i]) {
+                        canvas.drawText( String.valueOf(target_numbers[i]),position[i],y,text);
+                    } else if (current[i] == -1) {
+                        float x = position[i];
+
+                        float boxWidth = resultfont;
+                        if(i==pickedBox){
+                            canvas.drawRect(x-boxWidth/2,y-boxWidth, x+boxWidth/2,y,pickedFill);
+                            canvas.drawRect(x-boxWidth/2,y-boxWidth, x+boxWidth/2,y,picked);
+
+                        } else{
+                            canvas.drawRect(x-boxWidth/2,y-boxWidth, x+boxWidth/2,y,unpicked);
+                        }
+
+
+                    } else {
+                        canvas.drawText( String.valueOf(current[i]),position[i],y,textRed);
+                    }
+                }
+            } else if (writting_box=="addition") {
+                int[] current = _component.write_numbers;
+                float[] positionX = {textXHundred,textXTen,textXOne};
+                float[] positionY;
+                int startI = 0;
+                if (!twoAddition){
+                    positionY = new float[] {up+textHeight-resultfont/2,up+textHeight*2-resultfont/2,up+textHeight*3-resultfont/2};
+                    canvas.drawText( "0",textXOne,positionY[0],text);
+                    canvas.drawText( "0",textXTen,positionY[0],text);
+                    canvas.drawText( "0",textXOne,positionY[1],text);
+                } else {
+                    positionY = new float[] {0,up+textHeight-resultfont/2,up+textHeight*2-resultfont/2};
+                    canvas.drawText( "0",textXOne,positionY[1],text);
+                    startI =1;
+                }
+
+                int[] target_numbers = _component.targetNumbers;
+
+                for(int i = startI; i< target_numbers.length; i++){
+                     if (target_numbers[i] == current[i]) {
+                        canvas.drawText( String.valueOf(target_numbers[i]),positionX[i],positionY[i],text);
+                    } else if (current[i] == -1) {
+                        float x = positionX[i];
+                        float y = positionY[i];
+                        float boxWidth = resultfont;
+                        if(i==pickedBox){
+                            canvas.drawRect(x-boxWidth/2,y-boxWidth, x+boxWidth/2,y,pickedFill);
+                            canvas.drawRect(x-boxWidth/2,y-boxWidth, x+boxWidth/2,y,picked);
+                        } else{
+                            canvas.drawRect(x-boxWidth/2,y-boxWidth, x+boxWidth/2,y,unpicked);
+                        }
+
+
+                    }
+                    else {
+                        canvas.drawText( String.valueOf(current[i]),positionX[i],positionY[i],textRed);
+                    }
+                }
             }
 
 
 
         } else{
+
+
+            Bitmap immutableBackgroundBmp = BitmapFactory.decodeResource(getResources(), R.drawable.greyb);
+
 
 
             for (int x = 0; x <= 2; x += 1) {
@@ -761,11 +953,24 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                     float bleft = box[0];
                     float bright = box[1];
                     float boxw = box[2];
-                    canvas.drawRect(bleft,up,bright,down,lightgreen);
-                    canvas.drawRect(bleft,up,bright,down,green);
-                    canvas.drawRect(bleft,textup,bright,textdown,lightgreen);
-                    canvas.drawRect(bleft,textup,bright,textdown,green);
-                    canvas.drawText( String.valueOf(_countablesHundred.size()),bleft+boxw/2,down+COUNTX_CONST.TEXT_SIZE,text);
+                    if(_component.targetNumbers[0]==0){
+                        Bitmap oneBmp = Bitmap.createScaledBitmap(immutableBackgroundBmp, (int)boxw,
+                                (int)(down-up), false);
+                        canvas.drawBitmap(oneBmp,bleft,up,null);
+                        canvas.drawRect(bleft,up,bright,down,grey);
+                        canvas.drawRect(bleft,textup,bright,textdown,grey);
+                        canvas.drawText( String.valueOf(_countablesHundred.size()),bleft+boxw/2,down+COUNTX_CONST.TEXT_SIZE,textGrey);
+
+
+                    } else {
+                        canvas.drawRect(bleft,up,bright,down,lightgreen);
+                        canvas.drawRect(bleft,up,bright,down,green);
+                        canvas.drawRect(bleft,textup,bright,textdown,lightgreen);
+                        canvas.drawRect(bleft,textup,bright,textdown,green);
+                        canvas.drawText( String.valueOf(_countablesHundred.size()),bleft+boxw/2,down+COUNTX_CONST.TEXT_SIZE,text);
+                    }
+
+
 
 
                 } else if (x==1){
@@ -773,11 +978,25 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                     float bleft = box[0];
                     float bright = box[1];
                     float boxw = box[2];
-                    canvas.drawRect(bleft,up,bright,down,lightgreen);
-                    canvas.drawRect(bleft,up,bright,down,green);
-                    canvas.drawRect(bleft,textup,bright,textdown,lightgreen);
-                    canvas.drawRect(bleft,textup,bright,textdown,green);
-                    canvas.drawText( String.valueOf(_countablesTen.size()),bleft+boxw/2,down+COUNTX_CONST.TEXT_SIZE,text);
+
+                    if (_component.targetNumbers[1]==0){
+                        Bitmap oneBmp = Bitmap.createScaledBitmap(immutableBackgroundBmp, (int)boxw,
+                                (int)(down-up), false);
+                        canvas.drawBitmap(oneBmp,bleft,up,null);
+                        canvas.drawRect(bleft,up,bright,down,grey);
+                        canvas.drawRect(bleft,textup,bright,textdown,grey);
+                        canvas.drawText( String.valueOf(_countablesTen.size()),bleft+boxw/2,down+COUNTX_CONST.TEXT_SIZE,textGrey);
+
+
+                    } else {
+                        canvas.drawRect(bleft,up,bright,down,lightgreen);
+                        canvas.drawRect(bleft,up,bright,down,green);
+                        canvas.drawRect(bleft,textup,bright,textdown,lightgreen);
+                        canvas.drawRect(bleft,textup,bright,textdown,green);
+                        canvas.drawText( String.valueOf(_countablesTen.size()),bleft+boxw/2,down+COUNTX_CONST.TEXT_SIZE,text);
+
+
+                    }
 
 //                if (reachTarget[x]){
 ////                    canvas.drawBitmap(backgroundBmp,left+x*(rectWidth+boxmargin),up,null);
@@ -792,11 +1011,22 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                     float bleft = box[0];
                     float bright = box[1];
                     float boxw = box[2];
-                    canvas.drawRect(bleft,up,bright,down,lightgreen);
-                    canvas.drawRect(bleft,up,bright,down,green);
-                    canvas.drawRect(bleft,textup,bright,textdown,lightgreen);
-                    canvas.drawRect(bleft,textup,bright,textdown,green);
-                    canvas.drawText( String.valueOf(_countables.size()),bleft+boxw/2,down+COUNTX_CONST.TEXT_SIZE,text);
+                    if(_component.targetNumbers[2]==0){
+                        Bitmap oneBmp = Bitmap.createScaledBitmap(immutableBackgroundBmp, (int)boxw,
+                                (int)(down-up), false);
+                        canvas.drawBitmap(oneBmp,bleft,up,null);
+                        canvas.drawRect(bleft,up,bright,down,grey);
+                        canvas.drawRect(bleft,textup,bright,textdown,grey);
+                        canvas.drawText( String.valueOf(_countables.size()),bleft+boxw/2,down+COUNTX_CONST.TEXT_SIZE,textGrey);
+
+                    } else {
+                        canvas.drawRect(bleft,up,bright,down,lightgreen);
+                        canvas.drawRect(bleft,up,bright,down,green);
+                        canvas.drawRect(bleft,textup,bright,textdown,lightgreen);
+                        canvas.drawRect(bleft,textup,bright,textdown,green);
+                        canvas.drawText( String.valueOf(_countables.size()),bleft+boxw/2,down+COUNTX_CONST.TEXT_SIZE,text);
+
+                    }
 
 //
 
@@ -969,6 +1199,14 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
             _countableBitmap = result[0];
             _countableBitmapTen = result[1];
             _countableBitmapHundred = result[2];
+
+
+            reachTarget = new boolean[] {false,false,false,false};
+            drawResult = new boolean[] {false,false,false,false};
+            writting_box = "";
+
+            showTenFrame = false;
+            pickedBox = 0;
         }
 
 
