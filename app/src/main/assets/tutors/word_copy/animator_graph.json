@@ -94,37 +94,57 @@
 
             //Letter
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the wrong word.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_1&FTR_ATTEMPT_1"},
+
+
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix this word.mp3", "soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_2&FTR_ATTEMPT_1"},
 
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here there should be a.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here there should be a.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here there should be a.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3&FTR_ATTEMPT_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3&FTR_ATTEMPT_2"},
 
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "This letter is not needed.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_3"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "INSERTION ERROR delete character.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_4"}, //need to change the language to Delete this letter and record the new prompt
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "This letter is not needed.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_3&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "This letter is not needed.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_3&FTR_ATTEMPT_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "INSERTION ERROR delete character.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_4&FTR_ATTEMPT_1"}, //need to change the language to Delete this letter and record the new prompt
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "INSERTION ERROR delete character.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_4&FTR_ATTEMPT_2"}, //need to change the language to Delete this letter and record the new prompt
 
             //Spacing
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We leave one space between words.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_HESITATION_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We leave one space between words.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_HESITATION_1&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We leave one space between words.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_HESITATION_1&FTR_ATTEMPT_2"},
 
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "There should be a.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_INSERT&FTR_HESITATION_2"}, //change language to there should be a space here and record the prompt
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please write the next word starting here.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_INSERT&FTR_HESITATION_3"}, //self recorded
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "There should be a.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_INSERT&FTR_HESITATION_2&FTR_ATTEMPT_1"}, //change language to there should be a space here and record the prompt
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "There should be a.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_INSERT&FTR_HESITATION_2&FTR_ATTEMPT_2"}, //change language to there should be a space here and record the prompt
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please write the next word starting here.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_INSERT&FTR_HESITATION_3&FTR_ATTEMPT_1"}, //self recorded
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please write the next word starting here.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_INSERT&FTR_HESITATION_3&FTR_ATTEMPT_2"}, //self recorded
 
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "This space is not needed.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_DELETE&FTR_HESITATION_2"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Delete this space.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_DELETE&FTR_HESITATION_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "This space is not needed.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_DELETE&FTR_HESITATION_2&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "This space is not needed.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_DELETE&FTR_HESITATION_2&FTR_ATTEMPT_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Delete this space.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_DELETE&FTR_HESITATION_3&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Delete this space.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_SPACE&FTR_DELETE&FTR_HESITATION_3&FTR_ATTEMPT_2"},
 
             //Capitalisation
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We start a sentence or a name with a big letter.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_1"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Change this letter to.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_2"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We start a sentence or a name with a big letter.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_1&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We start a sentence or a name with a big letter.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_1&FTR_ATTEMPT_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Change this letter to.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_2&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Change this letter to.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_2&FTR_ATTEMPT_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_2&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_2&FTR_ATTEMPT_2"},
 
             //Punctuation
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the wrong punctuation.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_HESITATION_1"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the punctuation here.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_HESITATION_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the wrong punctuation.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_HESITATION_1&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the wrong punctuation.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_HESITATION_1&FTR_ATTEMPT_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the punctuation here.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_HESITATION_2&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the punctuation here.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_HESITATION_2&FTR_ATTEMPT_2"},
 
                 //need to put in the applicable punctutation rule below
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Applicable punctuation rule.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_HESITATION_3"},//need applicable punctuation rules.
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here write.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_INSERT&FTR_HESITATION_4"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordStimulus.audioPunctuation}}.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_INSERT&FTR_HESITATION_4"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Delete this symbol.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_DELETE&FTR_HESITATION_4"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Applicable punctuation rule.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_HESITATION_3&FTR_ATTEMPT_1"},//need applicable punctuation rules.
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Applicable punctuation rule.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_HESITATION_3&FTR_ATTEMPT_2"},//need applicable punctuation rules.
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here write.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_INSERT&FTR_HESITATION_4&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here write.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_INSERT&FTR_HESITATION_4&FTR_ATTEMPT_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordStimulus.audioPunctuation}}.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_INSERT&FTR_HESITATION_4&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordStimulus.audioPunctuation}}.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_INSERT&FTR_HESITATION_4&FTR_ATTEMPT_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Delete this symbol.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_DELETE&FTR_HESITATION_4&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Delete this symbol.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_PUNC&FTR_DELETE&FTR_HESITATION_4&FTR_ATTEMPT_2"},
 
             // hesitation audio ends
 
