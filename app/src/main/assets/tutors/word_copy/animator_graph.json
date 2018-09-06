@@ -93,11 +93,11 @@
             {"name": "release the audio features for the first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "releaseFirstEditAudioFeatures", "parms": "", "features":"FTR_SEN"},
 
             //Letter
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the wrong word.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_1"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix this word.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the wrong word.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_1&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix this word.mp3", "soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_2&FTR_ATTEMPT_1"},
 
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here there should be a.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.letter_audio}}.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3"},
 
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "This letter is not needed.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_3"},
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "INSERTION ERROR delete character.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_4"}, //need to change the language to Delete this letter and record the new prompt

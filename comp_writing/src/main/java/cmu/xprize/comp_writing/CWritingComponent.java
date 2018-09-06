@@ -2193,11 +2193,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             //insert punctuation
             else if (punctuationSymbols.contains(editValue)){
                 publishFeature(WR_CONST.FTR_AUDIO_PUNC);
+                publishValue(WR_CONST.AUDIO_PUNCTUATION, editValue);
             }
 
             //insert letter
             else{
                 publishFeature(WR_CONST.FTR_AUDIO_LTR);
+                publishValue(WR_CONST.AUDIO_LETTER, editValue);
             }
 
 
