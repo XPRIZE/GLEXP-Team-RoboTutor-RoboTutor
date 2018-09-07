@@ -22,8 +22,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PointF;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -157,24 +159,82 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         mScrollRightButton = (ImageButton) findViewById(R.id.buttonright);
         mScrollLeftButton = (ImageButton) findViewById(R.id.buttonleft);
         mScrollLeftButton.setVisibility(View.INVISIBLE);
-        mScrollRightButton.setOnClickListener(new View.OnClickListener() {
+
+        mScrollRightButton.setOnTouchListener(new View.OnTouchListener() {
+
+            private Handler mHandler;
+            private long mInitialDelay = 5;
+            private long mRepeatDelay = 5;
+
             @Override
-            public void onClick(View v) {
-                mDrawnScroll.scrollTo((int)mDrawnScroll.getScrollX() + 200, (int)mDrawnScroll.getScrollY());
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (mHandler != null)
+                            return true;
+                        mHandler = new Handler();
+                        mHandler.postDelayed(mAction, mInitialDelay);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (mHandler == null)
+                            return true;
+                        mHandler.removeCallbacks(mAction);
+                        mHandler = null;
+                        break;
+                }
+                return false;
             }
+
+            Runnable mAction = new Runnable() {
+                @Override
+                public void run() {
+                    mDrawnScroll.scrollTo((int) mDrawnScroll.getScrollX() + 10, (int) mDrawnScroll.getScrollY());
+                    mHandler.postDelayed(mAction, mRepeatDelay);
+                }
+            };
         });
-        mScrollLeftButton.setOnClickListener(new View.OnClickListener() {
+
+        mScrollLeftButton.setOnTouchListener(new View.OnTouchListener() {
+
+            private Handler mHandler;
+            private long mInitialDelay = 5;
+            private long mRepeatDelay = 5;
+
             @Override
-            public void onClick(View v) {
-                mDrawnScroll.scrollTo((int)mDrawnScroll.getScrollX() - 200, (int)mDrawnScroll.getScrollY());
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (mHandler != null)
+                            return true;
+                        mHandler = new Handler();
+                        mHandler.postDelayed(mAction, mInitialDelay);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (mHandler == null)
+                            return true;
+                        mHandler.removeCallbacks(mAction);
+                        mHandler = null;
+                        break;
+                }
+                return false;
             }
+
+            Runnable mAction = new Runnable() {
+                @Override
+                public void run() {
+                    mDrawnScroll.scrollTo((int) mDrawnScroll.getScrollX() - 10, (int) mDrawnScroll.getScrollY());
+                    mHandler.postDelayed(mAction, mRepeatDelay);
+                }
+            };
         });
+
         mDrawnScroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
                 int scrollX = mDrawnScroll.getScrollX(); // For HorizontalScrollView
 //                int maxScrollX = mDrawnScroll.getChildAt(0).getWidth();
-                int maxScrollX = 4776;
+                int maxScrollX = 5000;
+                int a = mDrawnScroll.getWidth();
                 if (scrollX > 0){
                     mScrollLeftButton.setVisibility(View.VISIBLE);
                 }
