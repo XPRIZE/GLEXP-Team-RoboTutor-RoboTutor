@@ -42,7 +42,9 @@ public class COUNTX_CONST {
     public static final String PLAY_TWO_ADDITION = "PLAY_TWO_ADDITION";
     public static final String PLAY_THREE_ADDITION = "PLAY_THREE_ADDITION";
     public static final String PLAY_FINAL_COUNT = "PLAY_FINAL_COUNT";
-    public static final String PLACEVALUE_INS = "PLACEVALUE_INS";
+    public static final String PLACEVALUE_INS_H = "PLACEVALUE_INS_H";
+    public static final String PLACEVALUE_INS_T = "PLACEVALUE_INS_T";
+    public static final String PLACEVALUE_INS_O = "PLACEVALUE_INS_O";
 
     public static final String DONE_COUNTING_TO_N = "DONE_COUNTING_TO_N";
 

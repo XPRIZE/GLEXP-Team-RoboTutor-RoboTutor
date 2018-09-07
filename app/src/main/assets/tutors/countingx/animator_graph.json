@@ -11,17 +11,41 @@
       "rootnode": "INTRO_STATE",
 
       "queueMap": {
-        "PLACEVALUE_INS": {
+        "PLACEVALUE_INS_H": {
           "type": "QUEUE",
           "COMMENT": "Place Value instructions",
           "preenter": [],
           "reuse": true,
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
-            {"name": "Update Stimulus Display", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "pointAtHundred", "parms": "", "features":""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "until you find.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"name": "plave value ins", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "pointAtHundred", "parms": "", "features":""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "until you find.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+
+          ],
+          "preexit":[],
+          "edges":[]
+        },
+        "PLACEVALUE_INS_T": {
+          "type": "QUEUE",
+          "COMMENT": "Place Value instructions",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
             {"name": "Update Stimulus Display", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "pointAtTen", "parms": "", "features":""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "until you find.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "until you find.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+
+          ],
+          "preexit":[],
+          "edges":[]
+        },
+        "PLACEVALUE_INS_O": {
+          "type": "QUEUE",
+          "COMMENT": "Place Value instructions",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
             {"name": "Update Stimulus Display", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "pointAtOne", "parms": "", "features":""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "until you find.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
 
@@ -82,7 +106,7 @@
           "reuse": true,
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{AudioName}}.mp3",  "soundpackage":"xprize", "volume": 0.9, "mode":"flow", "features": ""}
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{AudioName}}.mp3",  "soundpackage":"default", "volume": 0.9, "mode":"flow", "features": ""}
 
           ],
           "preexit":[],
@@ -95,10 +119,13 @@
           "reuse": true,
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
+            {"type": "COMMAND", "id": "SCountingX", "method": "higlightFirst", "parms":"", "features":""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{first}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "plus.mp3",  "soundpackage":"xprize", "volume": 0.9, "mode":"flow", "features": ""},
+            {"type": "COMMAND", "id": "SCountingX", "method": "highlightSecond", "parms":"", "features":""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{second}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "plus.mp3",  "soundpackage":"xprize", "volume": 0.9, "mode":"flow", "features": ""},
+            {"type": "COMMAND", "id": "SCountingX", "method": "highlightThird", "parms":"", "features":""},
             {"type": "COMMAND", "id": "SCountingX", "method": "playFinalCount", "parms":"", "features":""}
 
 
@@ -113,12 +140,16 @@
           "reuse": true,
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
+            {"type": "COMMAND", "id": "SCountingX", "method": "higlightFirst", "parms":"", "features":""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{first}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "plus.mp3",  "soundpackage":"xprize", "volume": 0.9, "mode":"flow", "features": ""},
+            {"type": "COMMAND", "id": "SCountingX", "method": "highlightSecond", "parms":"", "features":""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{second}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "plus.mp3",  "soundpackage":"xprize", "volume": 0.9, "mode":"flow", "features": ""},
+            {"type": "COMMAND", "id": "SCountingX", "method": "highlightThird", "parms":"", "features":""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{third}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "plus.mp3",  "soundpackage":"xprize", "volume": 0.9, "mode":"flow", "features": ""},
+            {"type": "COMMAND", "id": "SCountingX", "method": "highlightForth", "parms":"", "features":""},
             {"type": "COMMAND", "id": "SCountingX", "method": "playFinalCount", "parms":"", "features":""}
 
           ],
@@ -136,7 +167,7 @@
           "COMMENT": "Intro Clip - we only ever visit this node once",
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
-          "preenter": ["SET_VERSION","SET_PLACEVALUE_INS", "SET_DATASOURCE","SET_COUNT_BEHAVIOR", "SET_CHIME_BEHAVIOR","SET_CHIME_PLUS_BEHAVIOR","SET_AUDIO_BEHAVIOR","SET_TWO_ADDITION_BEHAVIOR","SET_THREE_ADDITION_BEHAVIOR","DISABLE_TAPPING"],
+          "preenter": ["SET_VERSION","SET_PLACEVALUE_INS_H", "SET_PLACEVALUE_INS_T","SET_PLACEVALUE_INS_O","SET_DATASOURCE","SET_COUNT_BEHAVIOR", "SET_CHIME_BEHAVIOR","SET_CHIME_PLUS_BEHAVIOR","SET_AUDIO_BEHAVIOR","SET_TWO_ADDITION_BEHAVIOR","SET_THREE_ADDITION_BEHAVIOR","DISABLE_TAPPING"],
           "preexit": [],
           "edges": [
             {
@@ -248,7 +279,8 @@
             {"name": "Update Stimulus Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "until you find.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""},
             {"name": "Update Stimulus Display", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "updateAndIndicateStimulus", "parms": "", "features":""},
             {"name": "Update Stimulus Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "this number.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""},
-            {"name": "Update Stimulus Display", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "placeValueInstruction", "parms": "", "features":""}
+            {"name": "Update Stimulus Display", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "playHundredIns", "parms": "", "features":""}
+
           ]
         },
 
@@ -270,7 +302,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE:String", "features":""},
 
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Goodjob.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
 
             {"type": "COMMAND", "id": "SCountingX", "method": "demonstrateTenFrame", "parms":"", "features":""},
 
@@ -287,7 +319,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE2:String", "features":""},
 
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good job.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Goodjob.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
 
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#node,value#PLAYCOMPLETE2:String", "features":""}
           ]
@@ -329,8 +361,9 @@
       "actionMap": {
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
-        "SET_PLACEVALUE_INS":{"type": "COMMAND", "id": "SCountingX", "method": "setStickyBehavior", "parms": "PLACEVALUE_INS:String|PLACEVALUE_INS:String" ,"features":""},
-
+        "SET_PLACEVALUE_INS_H":{"type": "COMMAND", "id": "SCountingX", "method": "setStickyBehavior", "parms": "PLACEVALUE_INS_H:String|PLACEVALUE_INS_H:String" ,"features":""},
+        "SET_PLACEVALUE_INS_T":{"type": "COMMAND", "id": "SCountingX", "method": "setStickyBehavior", "parms": "PLACEVALUE_INS_T:String|PLACEVALUE_INS_T:String" ,"features":""},
+        "SET_PLACEVALUE_INS_O":{"type": "COMMAND", "id": "SCountingX", "method": "setStickyBehavior", "parms": "PLACEVALUE_INS_O:String|PLACEVALUE_INS_O:String" ,"features":""},
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
         "SET_DATASOURCE":{"type": "COMMAND", "id": "SCountingX", "method": "setDataSource", "parms": "LOCAL_FILE:String","features":"!DATA_COUNTING"},
         "SET_COUNT_BEHAVIOR": {"type": "COMMAND", "id": "SCountingX", "method": "setStickyBehavior", "parms": "PLAY_COUNT:String|PLAY_COUNT:String" ,"features":""},

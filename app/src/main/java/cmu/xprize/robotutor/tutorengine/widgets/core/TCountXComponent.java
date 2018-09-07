@@ -471,6 +471,7 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
         scope.addUpdateVar("result",new TString(String.valueOf((int)(countTarget))));
         postEvent(COUNTX_CONST.PLAY_THREE_ADDITION);
 
+
     }
 
     @Override
@@ -478,8 +479,8 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
         TScope scope = mTutor.getScope();
         scope.addUpdateVar("AudioName", new TString(filename));
         postEvent(COUNTX_CONST.PLAY_AUDIO);
-
     }
+
 
     @Override
     public void postFinalCount() {
@@ -492,29 +493,32 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
 
     @Override
     public void playFinalCount(){
-        int count = countTarget;
-        TScope scope = mTutor.getScope();
+        if(difficulty!=1 || Arrays.equals(write_numbers, targetNumbers)){
+            int count = countTarget;
+            TScope scope = mTutor.getScope();
 //        scope.addUpdateVar("CurrentCount", new TString(String.valueOf(count)));
 //        postEvent(COUNTX_CONST.PLAY_CHIME);
-        if (count<=100||count%100==0){
-            scope.addUpdateVar("CurrentCount", new TString(String.valueOf(count)));
-            postEvent(COUNTX_CONST.PLAY_CHIME);
-        } else {
-            scope.addUpdateVar("CurrentCountt", new TString(String.valueOf((int)(count-count%100))));
-            scope.addUpdateVar("CurrentCount",new TString(String.valueOf((int)(count%100))));
-            postEvent(COUNTX_CONST.PLAY_CHIME_PLUS);
+            if (count<=100||count%100==0){
+                scope.addUpdateVar("CurrentCount", new TString(String.valueOf(count)));
+                postEvent(COUNTX_CONST.PLAY_CHIME);
+            } else {
+                scope.addUpdateVar("CurrentCountt", new TString(String.valueOf((int)(count-count%100))));
+                scope.addUpdateVar("CurrentCount",new TString(String.valueOf((int)(count%100))));
+                postEvent(COUNTX_CONST.PLAY_CHIME_PLUS);
+            }
+
+            new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            applyBehavior(COUNTX_CONST.DONE_MOVING_TO_TEN_FRAME);
+
+                        }
+                    },
+                    2500
+            );
+
         }
-
-        new java.util.Timer().schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-                        applyBehavior(COUNTX_CONST.DONE_MOVING_TO_TEN_FRAME);
-
-                    }
-                },
-                2500
-        );
 
 
 

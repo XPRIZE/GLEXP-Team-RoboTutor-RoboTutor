@@ -14,6 +14,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Vector;
 
@@ -46,6 +47,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
     protected int pickedBox = 0;
     protected boolean tapped = false;
     protected int[] sides = new int[]{0,0,0,0};
+    protected int highlight = -1;
 
 
 
@@ -376,6 +378,24 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         redraw();
     }
 
+    public void updateHighlight(int n){
+        highlight=n;
+        redraw();
+        if(_component.difficulty!=1 || !Arrays.equals(_component.write_numbers, _component.targetNumbers)){
+            if((_component.twoAddition && highlight==2)||(!_component.twoAddition && highlight==3)){
+                new java.util.Timer().schedule(
+                        new java.util.TimerTask() {
+                            @Override
+                            public void run() {
+                                highlight = -1;
+                                redraw();
+                            }},
+                        1500
+                );}
+        }
+    }
+
+
     public void updateWriteNumber(int writePosition, int number){
         final int writeP = writePosition;
         if (_component.writeNumbersTappbale[writePosition]){
@@ -387,7 +407,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                         new java.util.TimerTask() {
                             @Override
                             public void run() {
-                                _component.playAudio("plus"); }},
+                                _component.playAudio("Goodjob"); }},
                         1000
                 );
                 if (pickedBox+1<=2){
@@ -403,7 +423,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                         new java.util.TimerTask() {
                             @Override
                             public void run() {
-                                _component.playAudio("plus");
+                                _component.playAudio("thisnumber");
                                 _component.write_numbers[writeP] = -1;
                                 redraw();
                             }},
@@ -819,6 +839,8 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
             boolean twoAddition = _component.twoAddition;
             //displayOption: 0 for the three addition view. 1 for hundred and ten; 2 for ten and one.
 
+
+
             if (!twoAddition){
                 textHeight = (textdown-up)/4;
             } else {
@@ -826,9 +848,26 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
             }
 
 
+            if(highlight!=-1){
+                canvas.drawRect(textXHundred-resultfont/2,up+textHeight*(highlight+1)-resultfont*3/2, textXOne+resultfont,up+textHeight*(highlight+1)-resultfont/4,pickedFill);
+            }
+
+
+
+
+
+
+
+
+
+
 
             if (drawResult[0]){
+
+
                 if(!twoAddition){
+
+
                     canvas.drawText( String.valueOf(_countablesHundred.size()),textXHundred,up+textHeight-resultfont/2,text);
                     canvas.drawText( "0",textXTen,up+textHeight-resultfont/2,text);
                     canvas.drawText( "0",textXOne,up+textHeight-resultfont/2,text);
@@ -1244,14 +1283,15 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
             _countableBitmapTen = result[1];
             _countableBitmapHundred = result[2];
 
-//
-//            reachTarget = new boolean[] {false,false,false,false};
-//            for(int i=0;i<_component.targetNumbers.length;i++){
-//                if(_component.targetNumbers[i] == 0){
-//                    reachTarget[i] = true;
-//                }
-//            }
+
+            reachTarget = new boolean[] {false,false,false,false};
+            for(int i=0;i<_component.targetNumbers.length;i++){
+                if(_component.targetNumbers[i] == 0){
+                    reachTarget[i] = true;
+                }
+            }
             tapped = false;
+            highlight = -1;
             drawResult = new boolean[] {false,false,false,false};
             writting_box = "";
 
