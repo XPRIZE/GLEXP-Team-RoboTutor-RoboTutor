@@ -84,9 +84,9 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     // VARIABLES FOR QUICK DEBUG LAUNCH
     private static final boolean QUICK_DEBUG = true;
-    private static final String debugTutorVariant = "write.sen.copy.wrd";
+    private static final String debugTutorVariant = "write.ltr.uc.trc";
     private static final String debugTutorId = "write.wrd:story_1_1";
-    private static final String debugTutorFile = "[file]write.sen.copy.wrd.1.json";
+    private static final String debugTutorFile = "[file]write.ltr.uc.trc_vow.asc.A..Z.1.json";
 
     //amogh missing letter
 //    private static final String debugTutorFile = "[file]write.missingLtr_0.1.2.fin.s.json";

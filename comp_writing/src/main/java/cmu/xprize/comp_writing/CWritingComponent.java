@@ -1472,9 +1472,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         if(activityFeature.contains("FTR_SEN")){
             mListWords = new ArrayList<>();
             initialiseListWords(mStimulus,mAnswer);
+            mActiveWord = mListWords.get(0);
         }
 
-        mActiveWord = mListWords.get(0);
+
 
         //amogh added
         //load the indices for the different corrections
