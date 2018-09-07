@@ -345,6 +345,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         //switch case sets the width, and the position of the box.
         switch (level){
             case 1:
+                break;
             case 2:
 
                 wid = w.getWidth();
