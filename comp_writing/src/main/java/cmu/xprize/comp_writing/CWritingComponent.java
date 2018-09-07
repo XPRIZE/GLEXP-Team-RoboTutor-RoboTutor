@@ -1206,6 +1206,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
     }
 
+    //amogh added to hide the glyphs for a word only
+    public void hideCurrentWordGlyph(){
+        mActiveWord.hideWordGlyphs();
+    }
+
+    public void rippleReplayCurrentWord(String type){
+        mActiveWord.rippleReplayWord(type);
+    }
 
     public void hideSamples() {
 
@@ -2141,6 +2149,28 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             EditOperation firstEdit = this.getFirstWordEditOperation();
             releaseAudioFeatures(firstEdit);
         }
+
+        public void hideWordGlyphs(){
+            CGlyphController   v;
+
+            for(int i1 : this.listIndicesAnswer) {
+
+                v = (CGlyphController) mGlyphList.getChildAt(i1);
+
+                v.hideUserGlyph();
+            }
+        }
+
+        public void rippleReplayWord(String command){
+            CStimulusController r;
+            CGlyphController v;
+            for (int i1 : listIndicesAnswer){
+                v = (CGlyphController) mGlyphList.getChildAt(i1);
+                v.post(WR_CONST.RIPPLE_PROTO);
+                i1++;
+                rippleReplayWord();
+            }
+        }
     }
     //Word class ends
 
@@ -2530,6 +2560,9 @@ public class EditOperation {
                         hideGlyphs();
                         break;
 
+                    case WR_CONST.HIDE_CURRENT_WORD_GLYPHS:
+                        hideCurrentWordGlyph();
+
                     case WR_CONST.HIDE_SAMPLES:
                         hideSamples();
                         break;
@@ -2586,6 +2619,9 @@ public class EditOperation {
                     case WR_CONST.RIPPLE_PROTO:
 
                         rippleReplay(_command, false);
+                        break;
+                    case WR_CONST.RIPPLE_REPLAY_WORD:
+                        rippleReplayCurrentWord(_command);
                         break;
                     case WR_CONST.SHOW_TRACELINE: // Show all glyphs trace line.
 

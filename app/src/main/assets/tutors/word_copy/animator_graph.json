@@ -396,6 +396,8 @@
             //{"name": "Count incorrect", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "countIncorrect", "parms": "", "features":""},
 
             {"name": "Disable Replay",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "enableReplayButton", "parms": "FALSE:Boolean", "features":"FTR_DICTATION"},
+
+            //amogh comment sentence writing, need to review this, this plans to inhibit the input for all the CGlyphInputContainer s
             {"name": "Disable Input",   "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "TRUE:Boolean",  "features":"!FTR_SEN"},
 
 
@@ -458,7 +460,7 @@
 
             // 1st wrong attempt
             //
-            {"name": "prompt - Not quite, Try again", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3","soundpackage": "arithmetic","mode": "flow", "features": "FTR_ATTEMPT_1"},
+            {"name": "prompt - Not quite, Try again", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3","soundpackage": "arithmetic","mode": "flow", "features": "!FTR_SEN&FTR_ATTEMPT_1"},
             {"name": "ERASE GLYPH", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "ERASE_GLYPH:String", "features":"FTR_ATTEMPT_1&!FTR_SEN"},
 
               //sentence writing first error
@@ -567,11 +569,16 @@
 
             {"name": "Disable Input", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput", "parms": "TRUE:Boolean", "features":""},
 
-            {"name": "DO BETTER NEXT TIME - Feedback", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Next time you can do better.mp3","soundpackage": "xprize","mode": "flow", "features": ""},
-            {"name": "Hide Glyphs",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_GLYPHS:String", "features":""},
+            {"name": "DO BETTER NEXT TIME - Feedback", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Next time you can do better.mp3","soundpackage": "xprize","mode": "flow", "features": "!FTR_SEN"},
+            {"name": "Hide Glyphs",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_GLYPHS:String", "features":"!FTR_SEN"},
+
+            //amogh added for sentence writing
+            {"name": "Hide Current Word Glyphs",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_CURRENT_WORD_GLYPHS:String", "features":"FTR_SEN&FTR_SEN_WRD"},
+
 
             {"name": "Replay Complete behavior", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|DELAYED_NEXT_2:String" ,"features":""},
-            {"name": "Ripple Prototype",         "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "RIPPLE_PROTO:String",  "features":""},
+            {"name": "Ripple Prototype",         "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "RIPPLE_PROTO:String",  "features":"!FTR_SEN"},
+            {"name": "Word Ripple Prototype",         "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "RIPPLE_REPLAY_WORD:String",  "features":"FTR_SEN"},
 
             // Say correct answer
             //

@@ -43,6 +43,7 @@ public class WR_CONST {
 
     public static final String ACTION_COMPLETE          = "ACTION_COMPLETE";
     public static final String RIPPLE_REPLAY            = "RIPPLE_REPLAY";
+    public static final String RIPPLE_REPLAY_WORD       = "RIPPLE_REPLAY_WORD";
     public static final String RIPPLE_HIGHLIGHT         = "RIPPLE_HIGHLIGHT";
     public static final String STIMULUS_HIGHLIGHT       = "STIMULUS_HIGHLIGHT";
     public static final String GLYPH_HIGHLIGHT          = "GLYPH_HIGHLIGHT";
@@ -68,6 +69,7 @@ public class WR_CONST {
     public static final String ANIMATE_PROTOGLYPH       = "ANIMATE_PROTOGLYPH";
     public static final String HIDE_SAMPLE              = "HIDE_SAMPLE";
     public static final String HIDE_GLYPHS              = "HIDE_GLYPHS";
+    public static final String HIDE_CURRENT_WORD_GLYPHS = "HIDE_CURRENT_WORD_GLYPHS";
     public static final String HIDE_SAMPLES             = "HIDE_SAMPLES";
     public static final String INHIBIT_OTHERS           = "INHIBIT_OTHERS";
     public static final String CLEAR_ATTEMPT            = "CLEAR_ATTEMPT";
