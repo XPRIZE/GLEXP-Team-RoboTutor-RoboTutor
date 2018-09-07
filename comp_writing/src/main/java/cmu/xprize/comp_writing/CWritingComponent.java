@@ -1428,7 +1428,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 CErrorManager.logEvent(TAG, "Error no DataSource : ", null, false);
             }
         } catch (Exception e) {
-            CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, false);
+            CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, true);
         }
     }
 
@@ -1474,8 +1474,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             initialiseListWords(mStimulus,mAnswer);
             mActiveWord = mListWords.get(0);
         }
-
-
 
         //amogh added
         //load the indices for the different corrections
