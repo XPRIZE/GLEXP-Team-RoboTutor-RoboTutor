@@ -2167,8 +2167,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             for (int i1 : listIndicesAnswer){
                 v = (CGlyphController) mGlyphList.getChildAt(i1);
                 v.post(WR_CONST.RIPPLE_PROTO);
-                i1++;
-                rippleReplayWord();
             }
         }
     }
