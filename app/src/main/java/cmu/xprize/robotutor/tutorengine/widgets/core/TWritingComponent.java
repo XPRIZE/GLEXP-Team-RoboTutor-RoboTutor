@@ -249,6 +249,11 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                 }
             }
         });
+
+        if (activityFeature.contains("FTR_SEN")){
+            mScrollRightButton.setVisibility(View.VISIBLE);
+            mScrollRightButton.setVisibility(View.VISIBLE);
+        }
         //amogh added ends
 
 // TODO: DEBUG only
