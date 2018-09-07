@@ -42,10 +42,11 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
     private boolean[] drawResult;
     private String writting_box;
     private boolean showTenFrame = false;
-    protected boolean[] reachTarget;
+    protected boolean[] reachTarget = new boolean[] {false,false,false,false};
     protected int pickedBox = 0;
-    protected boolean displayWrong = true;
-    protected int[] sides = new int[]{0,0,0};
+    protected boolean tapped = false;
+    protected int[] sides = new int[]{0,0,0,0};
+
 
 
 
@@ -142,9 +143,10 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         _countablesTen = new Vector<>();
         _countablesHundred = new Vector<>();
 
-        reachTarget = new boolean[] {false,false,false,false};
+
         drawResult = new boolean[] {false,false,false,false};
         writting_box = "";
+
 
 
         //resetCounter();
@@ -531,6 +533,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
 
                 if (x>=hundredBox[0] && x<= hundredBox[1]&& !reachTarget[0]){
+                    tapped = true;
                     //tap on the hundred box
                     TenFrame.XY destination = tenFrameHundred.getLocationOfIthObject(_countablesHundred.size()+1);
 
@@ -540,6 +543,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
                 } else if(x>=tenBox[0] && x<= tenBox[1]&& !reachTarget[1]){
                     //tap on the ten box
+                    tapped = true;
 
                     TenFrame.XY destination = tenFrameTen.getLocationOfIthObject(_countablesTen.size()+1);
 
@@ -548,6 +552,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                     currentValue = _countablesTen.size()*10;
 
                 }  else if (x>=oneBox[0] && x<= oneBox[1]&& !reachTarget[2]){
+                    tapped = true;
                     //tap on the one box
                     TenFrame.XY destination = tenFrame.getLocationOfIthObject(_countables.size()+1);
 
@@ -649,6 +654,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                 sides[0] = COUNTX_CONST.BOX_MARGIN;
                 sides[1] = canvas.getWidth() - COUNTX_CONST.BOX_MARGINRIGHT;
                 sides[2] = COUNTX_CONST.BOXM;
+                sides[3] = canvas.getDensity();
 
 
                 //in the place value mode.
@@ -701,13 +707,13 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         canvas.drawRect(left, up, right, down, pink);
     }
 
-    private float[] getOne(float left, float right,float boxmargin){
+    protected float[] getOne(float left, float right,float boxmargin){
         float boxwidth = (right-left-boxmargin*2)/6;
         float[] result = {right-boxwidth,right,boxwidth};
         return result;
     }
 
-    private float[] getTen(float left, float right,float boxmargin){
+    protected float[] getTen(float left, float right,float boxmargin){
         float boxwidth = (right-left -boxmargin*2)/6;
         float bleft = left+boxwidth*3+boxmargin;
         float bright = left+boxwidth*5+boxmargin;
@@ -716,7 +722,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
     }
 
-    private float[] getHundred(float left, float right,float boxmargin){
+    protected float[] getHundred(float left, float right,float boxmargin){
         float boxwidth = (right-left -boxmargin*2)/6;
         float[] result = {left,left+boxwidth*3,boxwidth*3};
         return result;
@@ -1238,8 +1244,14 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
             _countableBitmapTen = result[1];
             _countableBitmapHundred = result[2];
 
-
-            reachTarget = new boolean[] {false,false,false,false};
+//
+//            reachTarget = new boolean[] {false,false,false,false};
+//            for(int i=0;i<_component.targetNumbers.length;i++){
+//                if(_component.targetNumbers[i] == 0){
+//                    reachTarget[i] = true;
+//                }
+//            }
+            tapped = false;
             drawResult = new boolean[] {false,false,false,false};
             writting_box = "";
 

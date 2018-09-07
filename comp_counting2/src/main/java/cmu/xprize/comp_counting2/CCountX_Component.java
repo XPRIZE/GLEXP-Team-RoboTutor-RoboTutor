@@ -379,17 +379,64 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         bManager.sendBroadcast(msg);
     }
 
+    public void placeValueInstruction(){
+        if(mode == "placevalue"){
+            postEvent(COUNTX_CONST.PLACEVALUE_INS);
+        }
+
+    }
+
 
     public void pointAtHundred(){
-        if()
+        if(!surfaceView.tapped){
+            int[] sides = surfaceView.sides;
+            float[] r = surfaceView.getHundred(sides[0],sides[1],sides[2]);
+            float left = r[0];
+            float right = r[1];
+
+
+            PointF targetPoint = new PointF((left+right)/2,surfaceView.getHeight()/2);
+            Intent msg = new Intent(TCONST.POINTAT);
+            msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
+
+            bManager.sendBroadcast(msg);
+        }
+
+
 
     }
 
     public void pointAtTen(){
+        if(!surfaceView.tapped){
+            int[] sides = surfaceView.sides;
+            float[] r = surfaceView.getTen(sides[0],sides[1],sides[2]);
+            float left = r[0];
+            float right = r[1];
+
+
+            PointF targetPoint = new PointF((left+right)/2,surfaceView.getHeight()/2);
+            Intent msg = new Intent(TCONST.POINTAT);
+            msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
+
+            bManager.sendBroadcast(msg);
+        }
 
     }
 
     public void pointAtOne(){
+        if(!surfaceView.tapped){
+            int[] sides = surfaceView.sides;
+            float[] r = surfaceView.getOne(sides[0],sides[1],sides[2]);
+            float left = r[0];
+            float right = r[1];
+
+
+            PointF targetPoint = new PointF((left+right)/2,surfaceView.getHeight()/2);
+            Intent msg = new Intent(TCONST.POINTAT);
+            msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
+
+            bManager.sendBroadcast(msg);
+        }
 
     }
 
@@ -810,6 +857,9 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
                 queueMap.remove(this);
 
                 switch(_command) {
+                    case COUNTX_CONST.PLACEVALUE_INS:
+                        applyBehavior(_command);
+                        break;
                     case COUNTX_CONST.PLAY_COUNT:
                         applyBehavior(_command);
                         break;
