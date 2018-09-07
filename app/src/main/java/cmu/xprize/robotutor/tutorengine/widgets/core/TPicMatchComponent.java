@@ -142,7 +142,7 @@ public class TPicMatchComponent extends CPicMatch_Component implements ITutorObj
 
         super.next();
 
-        if (dataExhausted()) {
+        if (isDataExhausted()) {
             publishFeature(TCONST.FTR_EOD);
         }
     }

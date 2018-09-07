@@ -6,8 +6,8 @@ import android.graphics.PointF;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,39 +22,31 @@ import cmu.xprize.util.TCONST;
 /**
  * Generated automatically w/ code written by Kevin DeLand
  */
-
 public class CPicMatch_Component extends RelativeLayout implements ILoadableObject {
+
+    static final String TAG = "CPicMatch_Component";
 
     // views
     protected ConstraintLayout Scontent;
-
     protected TextView promptView;
-    protected TextView[] optionViews;
+    protected ImageView[] optionViews;
 
     // DataSource Variables
-    protected   int                   _dataIndex = 0;
+    protected int _dataIndex = 0;
     protected String level;
     protected String task;
     protected String layout;
     protected String prompt;
     protected String[] images;
 
-
     // json loadable
     public String bootFeatures;
-    public int rows;
-    public int cols;
     public CPicMatch_Data[] dataSource;
 
-
     // View Things
-    protected Context mContext;
+    protected Context context;
 
     private LocalBroadcastManager bManager;
-
-
-    static final String TAG = "CPicMatch_Component";
-
 
     public CPicMatch_Component(Context context) {
         super(context);
@@ -73,15 +65,15 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
 
     protected void init(Context context, AttributeSet attrs) {
 
-        mContext = context;
+        this.context = context;
 
-        inflate(getContext(), R.layout.picmatch_layout, this);
+        inflate(getContext(), R.layout.picmatch_layout_2, this);
 
-        Scontent = (ConstraintLayout) findViewById(R.id.Scontent);
+        Scontent = findViewById(R.id.Scontent);
 
-        promptView = ((TextView) findViewById(R.id.prompt));
+        promptView = findViewById(R.id.prompt);
 
-        optionViews = new TextView[4];
+        optionViews = new ImageView[4];
         optionViews[0] = findViewById(R.id.option_1);
         optionViews[1] = findViewById(R.id.option_2);
         optionViews[2] = findViewById(R.id.option_3);
@@ -102,20 +94,17 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
         } catch (Exception e) {
             CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, false);
         }
-
     }
 
-    public boolean dataExhausted() {
+    public boolean isDataExhausted() {
         return _dataIndex >= dataSource.length;
     }
 
     protected void updateDataSet(CPicMatch_Data data) {
-
         // first load dataset into fields
         loadDataSet(data);
 
         updateStimulus();
-
     }
 
     /**
@@ -129,15 +118,13 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
         layout = data.layout;
         prompt = data.prompt;
         images = data.images;
-
     }
 
     /**
      * Resets the view for the next task.
      */
     protected void resetView() {
-
-
+        // TODO: complete this method?
     }
 
     /**
@@ -156,20 +143,19 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
         bManager.sendBroadcast(msg);
     }
 
-
     /**
      * Updates the stimulus.
      */
     protected void updateStimulus() {
-
         promptView.setText(prompt);
 
         for (int i = 0; i < optionViews.length; i++) {
-            optionViews[i].setText(images[i]);
+            ImageLoader.with(this.context)
+                    .loadDrawable(images[i])
+                    .into(optionViews[i]);
 
             optionViews[i].setOnClickListener(new StudentChoiceListener(i));
         }
-
     }
 
     class StudentChoiceListener implements View.OnClickListener {
@@ -193,7 +179,7 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
 
             applyBehavior("STUDENT_CHOICE_EVENT"); // ALAN_HILL (3) search animator graph for this term
         }
-    };
+    }
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
@@ -209,7 +195,7 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
     /**
      * Load the data source
      *
-     * @param jsonData
+     * @param jsonData the jason objects to be parsed and loaded
      */
     @Override
     public void loadJSON(JSONObject jsonData, IScope scope) {
