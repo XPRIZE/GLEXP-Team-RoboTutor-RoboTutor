@@ -644,7 +644,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     CGlyphController previousController = (CGlyphController) mGlyphList.getChildAt(mActiveIndex - 1);
                     boolean isPunctuationDrawn = punctuationSymbols.contains(mResponse);
                     boolean nextWordStarted = previousController.getRecognisedChar().equals("") && !mActiveWord.isIndexInWord(mActiveIndex);
-                    if (nextWordStarted || isPunctuationDrawn) {
+                    boolean isLastLetter = (mActiveIndex == mGlyphList.getChildCount() - 1);
+                    if (nextWordStarted || isPunctuationDrawn || isLastLetter) {
 
                         //get the current word and call update word correct status.
                         boolean currentWordStatus = mActiveWord.getWordCorrectStatus();
@@ -652,6 +653,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         //word is correct and correctionAttempts = 0
                         if(currentWordStatus){
                             applyBehavior(WR_CONST.ON_CORRECT);
+                            //if the last word is correct then apply the next item behavior
+                            if (isLastLetter){
+                                applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
+                            }
                         }
 
                         //word is not correct and correctionAttempts = 0
@@ -774,6 +779,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
 
     }
+
+    //amogh added function to evaluate upon hesitation.
+//    public void evaluate
 
     //amogh added functions to test the edits.
 
