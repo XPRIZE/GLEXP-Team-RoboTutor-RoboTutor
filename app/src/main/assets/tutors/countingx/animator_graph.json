@@ -11,7 +11,7 @@
       "rootnode": "INTRO_STATE",
 
       "queueMap": {
-        "PLAY_CHIME": {
+        "PLAY_COUNT": {
           "type": "QUEUE",
           "COMMENT": "Chime when user creates new object",
           "preenter": [],
@@ -21,6 +21,20 @@
 
             {"name":"Play Chimes:", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{CountChime}}.mp3", "repeat":false, "volume": "0.7", "mode":"event", "features": ""},
             {"name":"Play Chimes:", "type": "QUEUEDAUDIO", "command": "PLAY","soundpackage":"chimes", "soundsource": "{{OctaveChime}}.mp3", "repeat":false, "volume": "0.7", "mode":"event", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCount}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": ""}
+
+          ],
+          "preexit":[],
+          "edges":[]
+        },
+
+        "PLAY_CHIME": {
+          "type": "QUEUE",
+          "COMMENT": "Chime when user creates new object",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCount}}.mp3",  "soundpackage":"numbers", "volume": 1.0, "mode":"event", "features": ""}
 
           ],
@@ -98,13 +112,12 @@
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
-
         "INTRO_STATE": {
           "type": "NODE",
           "COMMENT": "Intro Clip - we only ever visit this node once",
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
-          "preenter": ["SET_VERSION", "SET_DATASOURCE", "SET_CHIME_BEHAVIOR","SET_CHIME_PLUS_BEHAVIOR","SET_AUDIO_BEHAVIOR","SET_TWO_ADDITION_BEHAVIOR","SET_THREE_ADDITION_BEHAVIOR","DISABLE_TAPPING"],
+          "preenter": ["SET_VERSION", "SET_DATASOURCE","SET_COUNT_BEHAVIOR", "SET_CHIME_BEHAVIOR","SET_CHIME_PLUS_BEHAVIOR","SET_AUDIO_BEHAVIOR","SET_TWO_ADDITION_BEHAVIOR","SET_THREE_ADDITION_BEHAVIOR","DISABLE_TAPPING"],
           "preexit": [],
           "edges": [
             {
@@ -113,6 +126,22 @@
             }
           ]
         },
+
+        "INTRO_COUNTING": {
+          "type": "NODE",
+          "COMMENT": "Intro Clip - we only ever visit this node once",
+          "maptype":"moduleMap",
+          "mapname": "PLAYINTRO",
+          "preenter": ["SET_VERSION", "SET_DATASOURCE","SET_COUNT_BEHAVIOR", "SET_CHIME_BEHAVIOR","SET_CHIME_PLUS_BEHAVIOR","SET_AUDIO_BEHAVIOR","SET_TWO_ADDITION_BEHAVIOR","SET_THREE_ADDITION_BEHAVIOR","DISABLE_TAPPING"],
+          "preexit": [],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "UPDATE_STIMULUS"
+            }
+          ]
+        },
+
 
         "UPDATE_STIMULUS": {
           "type": "NODE",
@@ -295,7 +324,7 @@
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
         "SET_DATASOURCE":{"type": "COMMAND", "id": "SCountingX", "method": "setDataSource", "parms": "LOCAL_FILE:String","features":"!DATA_COUNTING"},
-
+        "SET_COUNT_BEHAVIOR": {"type": "COMMAND", "id": "SCountingX", "method": "setStickyBehavior", "parms": "PLAY_COUNT:String|PLAY_COUNT:String" ,"features":""},
         "SET_CHIME_BEHAVIOR": {"type": "COMMAND", "id": "SCountingX", "method": "setStickyBehavior", "parms": "PLAY_CHIME:String|PLAY_CHIME:String" ,"features":""},
         "SET_CHIME_PLUS_BEHAVIOR": {"type": "COMMAND", "id": "SCountingX", "method": "setStickyBehavior", "parms": "PLAY_CHIME_PLUS:String|PLAY_CHIME_PLUS:String" ,"features":""},
         "SET_AUDIO_BEHAVIOR": {"type": "COMMAND", "id": "SCountingX", "method": "setStickyBehavior", "parms": "PLAY_AUDIO:String|PLAY_AUDIO:String" ,"features":""},

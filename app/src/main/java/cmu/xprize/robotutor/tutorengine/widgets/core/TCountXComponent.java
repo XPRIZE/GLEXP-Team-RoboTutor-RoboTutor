@@ -146,6 +146,7 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
 
     }
 
+
     public void hideRecognizer(){
         _inputContainer_1.setVisibility(View.INVISIBLE);
     }
@@ -418,7 +419,7 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
 
 
 
-        postEvent(COUNTX_CONST.PLAY_CHIME);
+        postEvent(COUNTX_CONST.PLAY_COUNT);
     }
 
     @Override
@@ -464,7 +465,7 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
     @Override
     public void playThreeAddition(){
         TScope scope = mTutor.getScope();
-        scope.addUpdateVar("first", new TString(String.valueOf((int)(targetNumbers[1]*100))));
+        scope.addUpdateVar("first", new TString(String.valueOf((int)(targetNumbers[0]*100))));
         scope.addUpdateVar("second", new TString(String.valueOf((int)(targetNumbers[1]*10))));
         scope.addUpdateVar("third",new TString(String.valueOf((int)(targetNumbers[2]))));
         scope.addUpdateVar("result",new TString(String.valueOf((int)(countTarget))));

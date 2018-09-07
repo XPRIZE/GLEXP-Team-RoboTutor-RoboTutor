@@ -256,6 +256,14 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
                 write_numbers = new int[]{0,-1,-1};
                 writeNumbersTappbale =new boolean[]{false,true,true};
                 twoAddition = true;
+            } else if(hundred!=0 && ten ==0 && one !=0 && difficulty<2) {
+                write_numbers =new int[]{-1,-1,-1};
+                writeNumbersTappbale =new boolean[]{true,true,true};
+                twoAddition = true;
+            } else if(hundred!=0 && ten !=0 && one ==0 && difficulty<2) {
+                write_numbers =new int[]{-1,-1,-1};
+                writeNumbersTappbale =new boolean[]{true,true,true};
+                twoAddition = true;
             } else {
                 write_numbers =new int[]{-1,-1,-1};
                 writeNumbersTappbale =new boolean[]{true,true,true};
@@ -371,6 +379,20 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         bManager.sendBroadcast(msg);
     }
 
+
+    public void pointAtHundred(){
+        if()
+
+    }
+
+    public void pointAtTen(){
+
+    }
+
+    public void pointAtOne(){
+
+    }
+
     /**
      * Update stimulus and point to it
      */
@@ -420,6 +442,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     public void initRecognizer(int writePosition){
     }
 
+
     public void hideRecognizer(){
 
     }
@@ -450,85 +473,65 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
             if (difficulty == 0) {
                 String[] displayOptions = {"hundred","ten","one"};
                 if(twoAddition){
-                    surfaceView.displayAddition("ten");
-                    playCount((countTarget%100-countTarget%10)*10);
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    surfaceView.displayAddition("one");
-                                    playCount(countTarget%10); }},
-                                2500
-                    );
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    surfaceView.displayAddition("sum");
-                                    playCount(countTarget);
+                    if(targetNumbers[0]==0){
+                        surfaceView.displayAddition("ten");
+                        surfaceView.displayAddition("one");
+                        surfaceView.displayAddition("result");
+                        playTwoAddition();
 
-                                }
-                            },
-                            5000
-                    );
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    applyBehavior(COUNTX_CONST.DONE_MOVING_TO_TEN_FRAME);
-
-                                }
-                            },
-                            7500
-                    );
+                    } else if (targetNumbers[1]==0){
+                        surfaceView.displayAddition("hundred");
+                        surfaceView.displayAddition("one");
+                        surfaceView.displayAddition("result");
+                        playTwoAddition();
+                    } else {
+                        surfaceView.displayAddition("hundred");
+                        surfaceView.displayAddition("ten");
+                        surfaceView.displayAddition("result");
+                        playTwoAddition();
+                    }
+//                    if(targetNumbers[0] ==0){
+//                        surfaceView.displayAddition("ten");
+//                        playCount((countTarget%100-countTarget%10)*10);
+//                    }
+//                    new java.util.Timer().schedule(
+//                            new java.util.TimerTask() {
+//                                @Override
+//                                public void run() {
+//                                    surfaceView.displayAddition("one");
+//                                    playCount(countTarget%10); }},
+//                                2500
+//                    );
+//                    new java.util.Timer().schedule(
+//                            new java.util.TimerTask() {
+//                                @Override
+//                                public void run() {
+//                                    surfaceView.displayAddition("sum");
+//                                    playCount(countTarget);
+//
+//                                }
+//                            },
+//                            5000
+//                    );
+//                    new java.util.Timer().schedule(
+//                            new java.util.TimerTask() {
+//                                @Override
+//                                public void run() {
+//                                    applyBehavior(COUNTX_CONST.DONE_MOVING_TO_TEN_FRAME);
+//
+//                                }
+//                            },
+//                            7500
+//                    );
 
 
 
 
                 } else {
                     surfaceView.displayAddition("hundred");
-                    playCount((countTarget-countTarget%100)*100);
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    surfaceView.displayAddition("ten");
-                                    playCount((countTarget%100-countTarget%10)*10);
-                                }
-                            },
-                            2500
-                    );
-
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    surfaceView.displayAddition("one");
-                                    playCount(countTarget%10);
-                                }
-                            },
-                            5000
-                    );
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    surfaceView.displayAddition("final");
-                                    playCount(countTarget);
-                                }
-                            },
-                            7500
-                    );
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    applyBehavior(COUNTX_CONST.DONE_MOVING_TO_TEN_FRAME);
-
-                                }
-                            },
-                            12000
-                    );
+                    surfaceView.displayAddition("ten");
+                    surfaceView.displayAddition("one");
+                    playTwoAddition();
 
 
 
@@ -542,47 +545,97 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
             } else if (difficulty == 1){
                 if (twoAddition){
-                    surfaceView.displayAddition("ten");
-                    playCount((countTarget%100-countTarget%10)*10);
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    surfaceView.displayAddition("one");
-                                    playCount(countTarget%10);
-                                }
-                            },
-                            2500
-                    );
+                    if(targetNumbers[0]==0){
+                        surfaceView.displayAddition("ten");
+                        playCount((targetNumbers[1]*10));
+                        new java.util.Timer().schedule(
+                                new java.util.TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        surfaceView.displayAddition("one");
+                                        playCount((targetNumbers[2]));
+                                    }
+                                },
+                                2500
+                        );
+                    } else if (targetNumbers[1] == 0){
+                        surfaceView.displayAddition("hundred");
+                        playCount((targetNumbers[0]*100));
+                        new java.util.Timer().schedule(
+                                new java.util.TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        surfaceView.displayAddition("one");
+                                        playCount((targetNumbers[2]));
+                                    }
+                                },
+                                2500
+                        );
+                    } else {
+                        surfaceView.displayAddition("hundred");
+                        playCount((targetNumbers[0]*100));
+                        new java.util.Timer().schedule(
+                                new java.util.TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        surfaceView.displayAddition("ten");
+                                        playCount((targetNumbers[1]*10));
+                                    }
+                                },
+                                2500
+                        );
+                    }
+
+
+
+
+
                 } else{
                     surfaceView.displayAddition("hundred");
                     playCount((countTarget-countTarget%100)*100);
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    surfaceView.displayAddition("ten");
-                                    playCount((countTarget%100-countTarget%10)*10);
-                                }
-                            },
-                            2500
-                    );
+                    if((countTarget%100-countTarget%10)==0){
+                        new java.util.Timer().schedule(
+                                new java.util.TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        surfaceView.displayAddition("one");
+                                        playCount(countTarget%10);
+                                    }
+                                },
+                                2500
+                        );
 
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    surfaceView.displayAddition("one");
-                                    playCount(countTarget%10);
-                                }
-                            },
-                            5000
-                    );
+
+                    } else {
+                        new java.util.Timer().schedule(
+                                new java.util.TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        surfaceView.displayAddition("ten");
+                                        playCount((countTarget%100-countTarget%10)*10);
+                                    }
+                                },
+                                2500
+                        );
+
+                        new java.util.Timer().schedule(
+                                new java.util.TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        surfaceView.displayAddition("one");
+                                        playCount(countTarget%10);
+                                    }
+                                },
+                                5000
+                        );
+
+                    }
+
                 }
 
 
                 initRecognizer(0);
-                if (twoAddition){
+                if (twoAddition && targetNumbers[0]==0){
                     changeWritePosition(1);
                     surfaceView.pickedBox = 1;
                 } else {
@@ -628,11 +681,12 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     public void updateWriteNumber(int writePosition, int number){
         surfaceView.updateWriteNumber(writePosition, number);
         if( Arrays.equals(write_numbers, targetNumbers)){
+            hideRecognizer();
             new java.util.Timer().schedule(
                     new java.util.TimerTask() {
                         @Override
                         public void run() {
-                            if(targetNumbers[0]==0 || targetNumbers[1]==0 || targetNumbers[2] == 0){
+                            if(targetNumbers[0]==0 || (targetNumbers[1]==0 && difficulty<2) || (targetNumbers[2] == 0 && difficulty<2)){
                                 playTwoAddition();
 
                             } else {
@@ -756,6 +810,9 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
                 queueMap.remove(this);
 
                 switch(_command) {
+                    case COUNTX_CONST.PLAY_COUNT:
+                        applyBehavior(_command);
+                        break;
                     case COUNTX_CONST.PLAY_THREE_ADDITION:
                         applyBehavior(_command);
                         break;

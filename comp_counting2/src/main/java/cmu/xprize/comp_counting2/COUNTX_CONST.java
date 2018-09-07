@@ -35,6 +35,7 @@ public class COUNTX_CONST {
     public static final boolean USE_JAIL_BARS = true;
 
     // actions
+    public static final String PLAY_COUNT = "PLAY_COUNT";
     public static final String PLAY_CHIME = "PLAY_CHIME";
     public static final String PLAY_CHIME_PLUS = "PLAY_CHIME_PLUS";
     public static final String PLAY_AUDIO = "PLAY_AUDIO";
