@@ -562,6 +562,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                     countable = new CountableImage(destination.x,destination.y, _countableBitmapHundred);
                     _countablesHundred.add(countable);
                     currentValue = _countablesHundred.size()*100;
+                    _component.allTaps+=1;
 
                 } else if(x>=tenBox[0] && x<= tenBox[1]&& !reachTarget[1]){
                     //tap on the ten box
@@ -572,6 +573,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                     countable = new CountableImage(destination.x,destination.y, _countableBitmapTen);
                     _countablesTen.add(countable);
                     currentValue = _countablesTen.size()*10;
+                    _component.allTaps+=1;
 
                 }  else if (x>=oneBox[0] && x<= oneBox[1]&& !reachTarget[2]){
                     tapped = true;
@@ -582,6 +584,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
                     _countables.add(countable);
                     currentValue = _countables.size();
+                    _component.allTaps+=1;
                 } else {
                     redraw(canvas);
                     return true;

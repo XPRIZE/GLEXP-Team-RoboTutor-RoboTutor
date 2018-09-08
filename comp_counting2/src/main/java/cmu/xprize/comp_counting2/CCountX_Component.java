@@ -70,6 +70,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     protected boolean twoAddition;
     protected float bedge;
     protected boolean tenInited;
+    protected int allTaps;
 
 
     protected int[] write_numbers;
@@ -136,6 +137,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         Scontent = (RelativeLayout) findViewById(R.id.Scontent);
         surfaceView = (CCountX_SurfaceView) findViewById(R.id.imageSurface);
         surfaceView.setComponent(this);
+        counterText = (TextView) findViewById(R.id.counterText);
         checkOne = (TextView) findViewById(R.id.checkOne);
         checkTen = (TextView) findViewById(R.id.checkTen);
         checkHundred = (TextView) findViewById(R.id.checkHundred);
@@ -232,6 +234,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         hideRecognizer();
         tenInited = false;
         if (data.tenPower.length==1){
+            counterText.setVisibility(View.VISIBLE);
             mode = "countingx";
             difficulty=data.difficulty;
             if (data.tenPower[0].equals("one")){
@@ -245,11 +248,13 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
 
         } else {
+            counterText.setVisibility(View.INVISIBLE);
             canWrite = false;
             mode = "placevalue";
             countTarget = data.dataset[1];
             tenPower = 1;
             difficulty = data.difficulty;
+            allTaps = 0;
 
             int one = countTarget%10;
             int ten = countTarget%100-one;
@@ -299,6 +304,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
             surfaceView.clearObjectsToNumber(countStart);
         } else {
             String initialCount = String.valueOf(countStart);
+            counterText.setText("0");
             surfaceView.clearObjectsToNumber(countStart);
         }
 
@@ -311,7 +317,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         // reset the TextView
         currentCount = count;
         String initialCount = String.valueOf(count);
-        stimulusText.setText(initialCount);
+        counterText.setText(initialCount);
 
         if(currentCount == countTarget) {
             applyBehavior(COUNTX_CONST.DONE_COUNTING_TO_N);
@@ -576,10 +582,13 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
     public void demonstrateTenFrame() {
         trackAndLogPerformance("END","END","tap");
+
+
         if (mode == "placevalue"){
             checkHundred.setVisibility(View.INVISIBLE);
             checkTen.setVisibility(View.INVISIBLE);
             checkOne.setVisibility(View.INVISIBLE);
+            trackAndLogPerformance("STARTWRITTING",String.valueOf(difficulty),"tap");
 
             if (difficulty == 0) {
                 String[] displayOptions = {"hundred","ten","one"};
@@ -768,7 +777,6 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
      */
     public void enableTapping() {
         surfaceView.enableTapping(true);
-        stimulusText.setText("0");
 
     }
 

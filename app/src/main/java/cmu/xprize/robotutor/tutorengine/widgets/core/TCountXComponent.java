@@ -401,16 +401,21 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
 
         // select which chime to play, via protected integer
         int scaledCount;
-        switch(tenPower) {
-            case 10:
-                scaledCount = currentCount / 10;
-                break;
-            case 100:
-                scaledCount = currentCount / 100;
-                break;
-            default:
-                scaledCount = currentCount;
+        if(mode != "placevalue"){
+            switch(tenPower) {
+                case 10:
+                    scaledCount = currentCount / 10;
+                    break;
+                case 100:
+                    scaledCount = currentCount / 100;
+                    break;
+                default:
+                    scaledCount = currentCount;
+            }
+        } else {
+            scaledCount = allTaps;
         }
+
         int chimeIndex = scaledCount == 0 ? 0 : (scaledCount - 1) % 10;
         String currentChime = COUNTX_CONST.CHIMES[1][chimeIndex];
         String octaveChime = COUNTX_CONST.CHIMES[2][chimeIndex];
