@@ -588,7 +588,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
             checkHundred.setVisibility(View.INVISIBLE);
             checkTen.setVisibility(View.INVISIBLE);
             checkOne.setVisibility(View.INVISIBLE);
-            trackAndLogPerformance("STARTWRITTING",String.valueOf(difficulty),"tap");
+            trackAndLogPerformance("STARTWRITING",String.valueOf(difficulty),"tap");
 
             if (difficulty == 0) {
                 String[] displayOptions = {"hundred","ten","one"};
