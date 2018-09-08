@@ -119,7 +119,6 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
 
     @Override
     public void onCreate() {
-        trackAndLogPerformance("START");
         _recognizer = CRecognizerPlus.getInstance();
         _glyphSet   = _recognizer.getGlyphPrototypes(); //new GlyphSet(TCONST.ALPHABET);
 
@@ -201,7 +200,8 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
 
     @Override
     public void onDestroy() {
-        trackAndLogPerformance("END");
+        trackAndLogPerformance("ENDPROBLEM","ENDPROBLEM","ENDPROBLEM");
+
     }
 
     @Override
@@ -278,7 +278,8 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
         }
     }
 
-    private void trackAndLogPerformance(String stage) {
+    @Override
+    protected void trackAndLogPerformance(String expected,String actual,String movement) {
 
         String tutorName = mTutor.getTutorName();
         PerformanceLogItem event = new PerformanceLogItem();
@@ -292,16 +293,22 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
         event.setTutorId(mTutor.getTutorId());
         event.setLevelName(level);
         event.setTaskName(task);
-        event.setProblemName("countingx");
+        if (mode == "placevalue"){
+            event.setProblemName("placevalue");
+        } else {
+            event.setProblemName("countingx");
+        }
+
         if(dataSource != null) {
             event.setTotalProblemsCount(dataSource.length);
         }
         event.setProblemNumber(_dataIndex);
         event.setSubstepNumber(-1);
         event.setAttemptNumber(-1);
-        event.setExpectedAnswer(stage);
-        event.setUserResponse("");
+        event.setExpectedAnswer(expected);
+        event.setUserResponse(actual);
         event.setCorrectness(TCONST.LOG_CORRECT);
+        event.setScaffolding(movement);
 
         event.setTimestamp(System.currentTimeMillis());
 
@@ -523,6 +530,12 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
 
 
 
+    }
+
+
+    @Override
+    public void displayWrittingIns(){
+        postEvent(COUNTX_CONST.WRITTING_INS);
     }
 
 

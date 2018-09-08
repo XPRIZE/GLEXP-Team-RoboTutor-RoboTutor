@@ -45,6 +45,7 @@ public class COUNTX_CONST {
     public static final String PLACEVALUE_INS_H = "PLACEVALUE_INS_H";
     public static final String PLACEVALUE_INS_T = "PLACEVALUE_INS_T";
     public static final String PLACEVALUE_INS_O = "PLACEVALUE_INS_O";
+    public static final String WRITTING_INS = "WRITTING_INS";
 
     public static final String DONE_COUNTING_TO_N = "DONE_COUNTING_TO_N";
 

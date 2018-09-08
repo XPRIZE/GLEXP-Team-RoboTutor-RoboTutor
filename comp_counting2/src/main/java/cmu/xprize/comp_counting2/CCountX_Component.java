@@ -75,6 +75,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     protected int[] write_numbers;
     protected int[] targetNumbers;
     protected boolean[] writeNumbersTappbale;
+    protected boolean canWrite;
 
 
 
@@ -135,7 +136,6 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         Scontent = (RelativeLayout) findViewById(R.id.Scontent);
         surfaceView = (CCountX_SurfaceView) findViewById(R.id.imageSurface);
         surfaceView.setComponent(this);
-        counterText = (TextView) findViewById(R.id.counterText);
         checkOne = (TextView) findViewById(R.id.checkOne);
         checkTen = (TextView) findViewById(R.id.checkTen);
         checkHundred = (TextView) findViewById(R.id.checkHundred);
@@ -234,16 +234,18 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         if (data.tenPower.length==1){
             mode = "countingx";
             difficulty=data.difficulty;
-            if (data.tenPower.equals("one")){
+            if (data.tenPower[0].equals("one")){
                 tenPower = 1;
-            } else if (data.tenPower.equals("ten")){
+            } else if (data.tenPower[0].equals("ten")){
                 tenPower = 10;
             } else {
                 tenPower = 100;
             }
-            countTarget = data.dataset[1]*tenPower;
+            countTarget = data.dataset[1];
+
 
         } else {
+            canWrite = false;
             mode = "placevalue";
             countTarget = data.dataset[1];
             tenPower = 1;
@@ -280,6 +282,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
 
         }
+        trackAndLogPerformance("START","START","tap");
 
 
         Log.d(TCONST.COUNTING_DEBUG_LOG, "target=" + countTarget + ";index=" + _dataIndex);
@@ -296,7 +299,6 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
             surfaceView.clearObjectsToNumber(countStart);
         } else {
             String initialCount = String.valueOf(countStart);
-            counterText.setText(initialCount);
             surfaceView.clearObjectsToNumber(countStart);
         }
 
@@ -309,7 +311,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         // reset the TextView
         currentCount = count;
         String initialCount = String.valueOf(count);
-        counterText.setText(initialCount);
+        stimulusText.setText(initialCount);
 
         if(currentCount == countTarget) {
             applyBehavior(COUNTX_CONST.DONE_COUNTING_TO_N);
@@ -381,31 +383,34 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
     public void playHundredIns(){
         if(mode == "placevalue"){
-            postEvent(COUNTX_CONST.PLACEVALUE_INS_H);
+            if(!surfaceView.tapped){
+                postEvent(COUNTX_CONST.PLACEVALUE_INS_H);
 
-            new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            if(!surfaceView.tapped){
-                                postEvent(COUNTX_CONST.PLACEVALUE_INS_T);
+                new java.util.Timer().schedule(
+                        new java.util.TimerTask() {
+                            @Override
+                            public void run() {
+                                if(!surfaceView.tapped){
+                                    postEvent(COUNTX_CONST.PLACEVALUE_INS_T);
+                                }
                             }
-                        }
-                    },
-                    3000
-            );
+                        },
+                        4000
+                );
 
-            new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            if(!surfaceView.tapped){
-                                postEvent(COUNTX_CONST.PLACEVALUE_INS_O);
+                new java.util.Timer().schedule(
+                        new java.util.TimerTask() {
+                            @Override
+                            public void run() {
+                                if(!surfaceView.tapped){
+                                    postEvent(COUNTX_CONST.PLACEVALUE_INS_O);
+                                }
                             }
-                        }
-                    },
-                    6000
-            );
+                        },
+                        8000
+                );
+            }
+
 
 
 
@@ -442,6 +447,23 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
             bManager.sendBroadcast(msg);
         }
+
+
+
+    }
+
+    public void pointAtWrittingBox(){
+            int[] sides = surfaceView.sides;
+            float[] r = surfaceView.getOne(sides[0],sides[1],sides[2]);
+            float left = r[0];
+            float right = r[1];
+
+
+            PointF targetPoint = new PointF((left+right)/2,surfaceView.getHeight()/2);
+            Intent msg = new Intent(TCONST.POINTAT);
+            msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
+
+            bManager.sendBroadcast(msg);
 
 
 
@@ -553,6 +575,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     }
 
     public void demonstrateTenFrame() {
+        trackAndLogPerformance("END","END","tap");
         if (mode == "placevalue"){
             checkHundred.setVisibility(View.INVISIBLE);
             checkTen.setVisibility(View.INVISIBLE);
@@ -578,58 +601,12 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
                         surfaceView.displayAddition("result");
                         playTwoAddition();
                     }
-//                    if(targetNumbers[0] ==0){
-//                        surfaceView.displayAddition("ten");
-//                        playCount((countTarget%100-countTarget%10)*10);
-//                    }
-//                    new java.util.Timer().schedule(
-//                            new java.util.TimerTask() {
-//                                @Override
-//                                public void run() {
-//                                    surfaceView.displayAddition("one");
-//                                    playCount(countTarget%10); }},
-//                                2500
-//                    );
-//                    new java.util.Timer().schedule(
-//                            new java.util.TimerTask() {
-//                                @Override
-//                                public void run() {
-//                                    surfaceView.displayAddition("sum");
-//                                    playCount(countTarget);
-//
-//                                }
-//                            },
-//                            5000
-//                    );
-//                    new java.util.Timer().schedule(
-//                            new java.util.TimerTask() {
-//                                @Override
-//                                public void run() {
-//                                    applyBehavior(COUNTX_CONST.DONE_MOVING_TO_TEN_FRAME);
-//
-//                                }
-//                            },
-//                            7500
-//                    );
-
-
-
-
                 } else {
                     surfaceView.displayAddition("hundred");
                     surfaceView.displayAddition("ten");
                     surfaceView.displayAddition("one");
                     playTwoAddition();
-
-
-
                 }
-
-
-
-
-
-
 
             } else if (difficulty == 1){
                 if (twoAddition){
@@ -646,11 +623,6 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
                     }
 
                     playTwoAddition();
-
-
-
-
-
                 } else{
                     surfaceView.displayAddition("hundred");
                     surfaceView.displayAddition("ten");
@@ -675,6 +647,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
             } else {
                 surfaceView.displayAddition("final");
+                surfaceView.displayWrittingBox("addition");
                 playCount(countTarget);
                 initRecognizer(0);
                 if (twoAddition){
@@ -684,8 +657,31 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
                     changeWritePosition(0);
                     surfaceView.pickedBox = 0;
                 }
-                //draw the writting box for students to write result.
-                surfaceView.displayWrittingBox("addition");
+                if(countTarget<=100){
+                    new java.util.Timer().schedule(
+                            new java.util.TimerTask() {
+                                @Override
+                                public void run() {
+                                    displayWrittingIns();
+                                }
+                            },
+                            2500
+                    );
+                } else {
+                    new java.util.Timer().schedule(
+                            new java.util.TimerTask() {
+                                @Override
+                                public void run() {
+                                    displayWrittingIns();
+                                }
+                            },
+                            3400
+                    );
+                }
+
+
+
+
 
 
 
@@ -747,6 +743,17 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         surfaceView.updateHighlight(-1);
     }
 
+    public void displayWrittingIns(){
+
+    }
+
+    public void enableWriting(){
+        canWrite = true;
+
+    }
+
+    protected void trackAndLogPerformance(String expected,String actual,String movement) {}
+
 
 
     /**
@@ -761,6 +768,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
      */
     public void enableTapping() {
         surfaceView.enableTapping(true);
+        stimulusText.setText("0");
 
     }
 
@@ -858,6 +866,9 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
                 queueMap.remove(this);
 
                 switch(_command) {
+                    case COUNTX_CONST.WRITTING_INS:
+                        applyBehavior(_command);
+                        break;
                     case COUNTX_CONST.PLACEVALUE_INS_H:
                         applyBehavior(_command);
                         break;

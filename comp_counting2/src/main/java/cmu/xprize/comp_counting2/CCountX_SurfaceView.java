@@ -381,26 +381,30 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
     public void updateHighlight(int n){
         highlight=n;
         redraw();
-        if(_component.difficulty!=1 || !Arrays.equals(_component.write_numbers, _component.targetNumbers)){
+        if(_component.difficulty ==1 && !Arrays.equals(_component.write_numbers, _component.targetNumbers)){
             if((_component.twoAddition && highlight==2)||(!_component.twoAddition && highlight==3)){
                 new java.util.Timer().schedule(
                         new java.util.TimerTask() {
                             @Override
                             public void run() {
                                 highlight = -1;
+                                _component.displayWrittingIns();
+
                                 redraw();
                             }},
                         1500
                 );}
         }
+
     }
 
 
     public void updateWriteNumber(int writePosition, int number){
         final int writeP = writePosition;
-        if (_component.writeNumbersTappbale[writePosition]){
+        if (_component.canWrite && _component.writeNumbersTappbale[writePosition]){
             _component.write_numbers[writePosition] = number;
             if (_component.targetNumbers[writePosition] == _component.write_numbers[writePosition]){
+                _component.trackAndLogPerformance(Integer.toString(_component.targetNumbers[writePosition]),Integer.toString(_component.write_numbers[writePosition]),"write");
                 _component.writeNumbersTappbale[writePosition] = false;
                 _component.playCount(_component.write_numbers[writePosition]);
                 new java.util.Timer().schedule(
@@ -416,14 +420,14 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                 }
                 redraw();
             } else {
-
+                _component.trackAndLogPerformance(Integer.toString(_component.targetNumbers[writePosition]),Integer.toString(_component.write_numbers[writePosition]),"write");
                 redraw();
                 _component.playCount(_component.write_numbers[writePosition]);
                 new java.util.Timer().schedule(
                         new java.util.TimerTask() {
                             @Override
                             public void run() {
-                                _component.playAudio("thisnumber");
+                                _component.playAudio("try");
                                 _component.write_numbers[writeP] = -1;
                                 redraw();
                             }},
@@ -515,12 +519,10 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                 }
 
 
-
-
+                _component.updateCount(_countables.size()*_component.tenPower);
                 redraw(canvas);
 
                 // make sure to update the TextView
-                _component.updateCount(_countables.size()*_component.tenPower);
                 //*1/*10*
                 // playChime plays the chime, AND the audio...
                 _component.playChime();

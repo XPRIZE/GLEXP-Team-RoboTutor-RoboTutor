@@ -11,6 +11,21 @@
       "rootnode": "INTRO_STATE",
 
       "queueMap": {
+        "WRITTING_INS": {
+          "type": "QUEUE",
+          "COMMENT": "Place Value instructions",
+          "preenter": [],
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
+            {"name": "plave value ins", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "pointAtWrittingBox", "parms": "", "features":""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3",  "soundpackage":"write", "volume": 1.0, "mode":"flow", "features": ""},
+            {"name": "plave value ins", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "enableWriting", "parms": "", "features":""}
+
+          ],
+          "preexit":[],
+          "edges":[]
+        },
         "PLACEVALUE_INS_H": {
           "type": "QUEUE",
           "COMMENT": "Place Value instructions",
@@ -19,7 +34,8 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
             {"name": "plave value ins", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "pointAtHundred", "parms": "", "features":""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "until you find.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tap here to add hundred.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+
 
           ],
           "preexit":[],
@@ -33,7 +49,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
             {"name": "Update Stimulus Display", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "pointAtTen", "parms": "", "features":""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "until you find.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tap here to add ten.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
 
           ],
           "preexit":[],
@@ -47,7 +63,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
             {"name": "Update Stimulus Display", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "pointAtOne", "parms": "", "features":""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "until you find.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tap here to add one.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
 
           ],
           "preexit":[],
@@ -121,10 +137,10 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
             {"type": "COMMAND", "id": "SCountingX", "method": "higlightFirst", "parms":"", "features":""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{first}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "plus.mp3",  "soundpackage":"xprize", "volume": 0.9, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "plus.mp3",  "soundpackage":"default", "volume": 0.9, "mode":"flow", "features": ""},
             {"type": "COMMAND", "id": "SCountingX", "method": "highlightSecond", "parms":"", "features":""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{second}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "plus.mp3",  "soundpackage":"xprize", "volume": 0.9, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "is.mp3",  "soundpackage":"default", "volume": 0.9, "mode":"flow", "features": ""},
             {"type": "COMMAND", "id": "SCountingX", "method": "highlightThird", "parms":"", "features":""},
             {"type": "COMMAND", "id": "SCountingX", "method": "playFinalCount", "parms":"", "features":""}
 
@@ -142,13 +158,13 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
             {"type": "COMMAND", "id": "SCountingX", "method": "higlightFirst", "parms":"", "features":""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{first}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "plus.mp3",  "soundpackage":"xprize", "volume": 0.9, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "plus.mp3",  "soundpackage":"default", "volume": 0.9, "mode":"flow", "features": ""},
             {"type": "COMMAND", "id": "SCountingX", "method": "highlightSecond", "parms":"", "features":""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{second}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "plus.mp3",  "soundpackage":"xprize", "volume": 0.9, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "plus.mp3",  "soundpackage":"default", "volume": 0.9, "mode":"flow", "features": ""},
             {"type": "COMMAND", "id": "SCountingX", "method": "highlightThird", "parms":"", "features":""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{third}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "plus.mp3",  "soundpackage":"xprize", "volume": 0.9, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "is.mp3",  "soundpackage":"default", "volume": 0.9, "mode":"flow", "features": ""},
             {"type": "COMMAND", "id": "SCountingX", "method": "highlightForth", "parms":"", "features":""},
             {"type": "COMMAND", "id": "SCountingX", "method": "playFinalCount", "parms":"", "features":""}
 
@@ -167,7 +183,7 @@
           "COMMENT": "Intro Clip - we only ever visit this node once",
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
-          "preenter": ["SET_VERSION","SET_PLACEVALUE_INS_H", "SET_PLACEVALUE_INS_T","SET_PLACEVALUE_INS_O","SET_DATASOURCE","SET_COUNT_BEHAVIOR", "SET_CHIME_BEHAVIOR","SET_CHIME_PLUS_BEHAVIOR","SET_AUDIO_BEHAVIOR","SET_TWO_ADDITION_BEHAVIOR","SET_THREE_ADDITION_BEHAVIOR","DISABLE_TAPPING"],
+          "preenter": ["SET_VERSION","SET_WRITTING_INS","SET_PLACEVALUE_INS_H", "SET_PLACEVALUE_INS_T","SET_PLACEVALUE_INS_O","SET_DATASOURCE","SET_COUNT_BEHAVIOR", "SET_CHIME_BEHAVIOR","SET_CHIME_PLUS_BEHAVIOR","SET_AUDIO_BEHAVIOR","SET_TWO_ADDITION_BEHAVIOR","SET_THREE_ADDITION_BEHAVIOR","DISABLE_TAPPING"],
           "preexit": [],
           "edges": [
             {
@@ -361,6 +377,7 @@
       "actionMap": {
 
         "COMMENT": "@@@@@  CActions @@@@@ ",
+        "SET_WRITTING_INS":{"type": "COMMAND", "id": "SCountingX", "method": "setStickyBehavior", "parms": "WRITTING_INS:String|WRITTING_INS:String" ,"features":""},
         "SET_PLACEVALUE_INS_H":{"type": "COMMAND", "id": "SCountingX", "method": "setStickyBehavior", "parms": "PLACEVALUE_INS_H:String|PLACEVALUE_INS_H:String" ,"features":""},
         "SET_PLACEVALUE_INS_T":{"type": "COMMAND", "id": "SCountingX", "method": "setStickyBehavior", "parms": "PLACEVALUE_INS_T:String|PLACEVALUE_INS_T:String" ,"features":""},
         "SET_PLACEVALUE_INS_O":{"type": "COMMAND", "id": "SCountingX", "method": "setStickyBehavior", "parms": "PLACEVALUE_INS_O:String|PLACEVALUE_INS_O:String" ,"features":""},
