@@ -322,7 +322,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                 //int bwidth = (int)((right-left-11*gmargin)/10);
 
                 Bitmap immutableBmp = BitmapFactory.decodeResource(getResources(), drawable);
-                Bitmap resizedBmp = Bitmap.createScaledBitmap(immutableBmp, getWidth()/25,
+                Bitmap resizedBmp = Bitmap.createScaledBitmap(immutableBmp, getHeight()/20,
                         getHeight()/2, false);
 
                 Bitmap[] result = {resizedBmp};
