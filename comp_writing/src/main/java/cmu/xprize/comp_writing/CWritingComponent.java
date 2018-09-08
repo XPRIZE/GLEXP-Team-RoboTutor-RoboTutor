@@ -88,7 +88,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected CLinkedScrollView mRecognizedScroll;
     protected CLinkedScrollView mResponseViewScroll;
     protected CLinkedScrollView mDrawnScroll;
-    private   IGlyphController  mActiveController;
+    private   IGlyphController   mActiveController;
     protected int               mActiveIndex;
 
     protected Word              mActiveWord;// amogh added
