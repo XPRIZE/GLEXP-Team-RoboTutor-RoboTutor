@@ -514,11 +514,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     public boolean updateStatus(IGlyphController glyphController, CRecResult[] _ltkPlusCandidates) {
 
-        if(mActiveIndex>1){
-            CGlyphController c  = (CGlyphController)  mGlyphList.getChildAt(mActiveIndex -1 );
-            c.setPreviousGlyph();
-        }
-
         mActiveController = glyphController;
 
         mActiveIndex = mGlyphList.indexOfChild((View) mActiveController);
@@ -529,7 +524,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         publishValue(WR_CONST.CANDIDATE_VAR, candidate.getRecChar().toLowerCase());
         publishValue(WR_CONST.EXPECTED_VAR, mActiveController.getExpectedChar().toLowerCase());
-
+        
 
         // Avoid caseSensitive for words activity
         boolean isAnswerCaseSensitive = true;

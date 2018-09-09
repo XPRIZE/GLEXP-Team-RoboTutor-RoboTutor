@@ -100,10 +100,11 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private boolean               _bitmapDirty       = false;
     private String                _ltkPlusResult;
 
-    private String                _sampleExpected     = "";     // The expected character
-    private String                _recognisedChar     = "";
-    private float                 _sampleHorzAdjusted = 0;
-    private float                 _sampleVertAdjusted = 0;
+    private String                _sampleExpected                   = "";     // The expected character
+    private String                _recognisedChar                   = "";
+    private String                _previousRecognisedChar           = "";
+    private float                 _sampleHorzAdjusted               = 0;
+    private float                 _sampleVertAdjusted               = 0;
 
     private Rect                  _viewBnds          = new Rect();  // The view draw bounds
     private float                 _dotSize;
@@ -496,7 +497,9 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             case MotionEvent.ACTION_DOWN:
 
                 mWritingComponent.applyBehavior(WR_CONST.WRITE_BEHAVIOR);
-
+                if(mHasGlyph){ //so that when erasing, extra dot for when erasing should not get saved in previous glyph
+                    break;
+                }
 //                if(mScrollView != null) //amogh commented, so that the existing glyph can be erased
                     mScrollView.setEnableScrolling(false); //amogh edited so that existing glyph can can be erased by drawing over it.
 
@@ -531,17 +534,20 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                 // Ensure glyph valid or this may cause issues - fixes #305
                 //
 
-                //amogh added
+                //amogh added to erase the glyph
                 if(_drawGlyph != null) {
                     if (mHasGlyph){
                         _previousUserGlyph = _userGlyph;  //saving the current glyph before erasing.
+                        _previousRecognisedChar = _recognisedChar; //saving the current recognised character before removing it.
                         erase();
                         _recognisedChar = "";
                         CStimulusController resp = (CStimulusController)_responseView.getChildAt(_respIndex);
                         resp.setStimulusChar("",false);
+                        break;
                     }
                     moveTouch(x, y);
                 }
+                //amogh added ends
 
                 break;
 
@@ -1256,7 +1262,13 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     //amogh added function to revert and set the previous glyph in place of _userglyph
     public boolean setPreviousGlyph() {
         if(_previousUserGlyph != null) {
-            _userGlyph = _previousUserGlyph;
+            _userGlyph      =   _previousUserGlyph;
+            _recognisedChar =   _previousRecognisedChar;
+            _recognisedChar =   "";
+            CStimulusController resp = (CStimulusController)_responseView.getChildAt(_respIndex);
+            resp.setStimulusChar(_previousRecognisedChar,false);
+            invalidate();            _recognisedChar = _previousRecognisedChar;
+
             return true;
         }
         else {
