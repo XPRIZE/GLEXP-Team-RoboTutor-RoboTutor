@@ -589,7 +589,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             // TODO: check if we need to constrain this to immediate feedback mode
             //
             inhibitInput(mActiveController, !_isValid);
-
+            mActiveController.inhibitInput(_isValid);
             // Publish the state features.
             //
             publishState();

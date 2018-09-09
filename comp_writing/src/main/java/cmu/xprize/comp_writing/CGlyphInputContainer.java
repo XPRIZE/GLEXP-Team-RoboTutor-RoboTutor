@@ -1422,7 +1422,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             if(_counter != null)
                 _counter.cancel();
 
-            this.setOnTouchListener(this); //set this to null if input is to be inhibit.
+            this.setOnTouchListener(null); //set this to null if input is to be inhibit.
 
             // If user is in the process of writing in this field then clear it.
             //
@@ -1580,7 +1580,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         // Stop listening to glyph draw events - when there is a glyph
         //
-        inhibitInput(true);
+//        inhibitInput(true); //amogh commented to not inhibit the input everytime that there is a glyph in the container.
 
         // Reconstitute the path in the correct orientation after LTK+ post-processing
         //
