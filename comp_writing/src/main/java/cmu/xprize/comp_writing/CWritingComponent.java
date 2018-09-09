@@ -524,7 +524,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         publishValue(WR_CONST.CANDIDATE_VAR, candidate.getRecChar().toLowerCase());
         publishValue(WR_CONST.EXPECTED_VAR, mActiveController.getExpectedChar().toLowerCase());
-        
+
 
         // Avoid caseSensitive for words activity
         boolean isAnswerCaseSensitive = true;

@@ -497,7 +497,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             case MotionEvent.ACTION_DOWN:
 
                 mWritingComponent.applyBehavior(WR_CONST.WRITE_BEHAVIOR);
-                if(mHasGlyph){ //so that when erasing, extra dot for when erasing should not get saved in previous glyph
+                if(mHasGlyph){ //so that when erasing, extra dot for when erasing should not get saved in drawglyph
                     break;
                 }
 //                if(mScrollView != null) //amogh commented, so that the existing glyph can be erased
