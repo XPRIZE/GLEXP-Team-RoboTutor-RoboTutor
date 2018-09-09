@@ -82,13 +82,14 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
     private float                 mX, mY;
 
-    private CGlyph                _userGlyph    = null;
-    private CGlyph                _protoGlyph   = null;
-    private CGlyph                _drawGlyph    = null;
-    private CGlyph                _animGlyph    = null;
-    private CGlyph                _stimuliGlyph = null;   //glyph to load stimulus in sentence correction activities // amogh added
-    private boolean               _isDrawing    = false;
-    private boolean               _restartGlyph = true;
+    private CGlyph                _userGlyph         = null;
+    private CGlyph                _protoGlyph        = null;
+    private CGlyph                _drawGlyph         = null;
+    private CGlyph                _animGlyph         = null;
+    private CGlyph                _stimuliGlyph      = null;   //glyph to load stimulus in sentence correction activities // amogh added
+    private CGlyph                _previousUserGlyph = null;   //to store the previousUserGlyph when the glyph is erased.
+    private boolean               _isDrawing         = false;
+    private boolean               _restartGlyph      = true;
 
     private boolean               _showSampleChar = false;
     private boolean               _showUserGlyph  = true;
@@ -533,6 +534,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                 //amogh added
                 if(_drawGlyph != null) {
                     if (mHasGlyph){
+                        _previousUserGlyph = _userGlyph;  //saving the current glyph before erasing.
                         erase();
                         _recognisedChar = "";
                         CStimulusController resp = (CStimulusController)_responseView.getChildAt(_respIndex);
@@ -1251,6 +1253,16 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         return _touchStarted;
     }
 
+    //amogh added function to revert and set the previous glyph in place of _userglyph
+    public boolean setPreviousGlyph() {
+        if(_previousUserGlyph != null) {
+            _userGlyph = _previousUserGlyph;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
     private void    clear() {
 
