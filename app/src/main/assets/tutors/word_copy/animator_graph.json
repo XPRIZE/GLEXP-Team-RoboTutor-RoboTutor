@@ -114,14 +114,53 @@
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here there should be a.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3&FTR_ATTEMPT_2"},
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3&FTR_ATTEMPT_2"},
 
+            //Letter
+            //REPLACE
+            //HESITATION 1
+            //ATTEMPT 1
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the wrong word.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_REPLACE&FTR_HESITATION_1&FTR_ATTEMPT_1"},
+            //ATTEMPT 2
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the wrong word.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_REPLACE&FTR_HESITATION_1&FTR_ATTEMPT_2"},
+
+            //HESITATION 2
+            //ATTEMPT 1
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix this word.mp3", "soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_REPLACE&FTR_HESITATION_2&FTR_ATTEMPT_1"},
+            //ATTEMPT 2
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix this word.mp3", "soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_REPLACE&FTR_HESITATION_2&FTR_ATTEMPT_2"},
+
+            //HESITATION 3
+            //ATTEMPT 1
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here there should be a.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_1"},
+            //ATTEMPT 2
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here there should be a.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_2"},
+
                   //DELETE
                         //HESITATION 1
                               //ATTEMPT 1
-
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the wrong word.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_1&FTR_ATTEMPT_1"},
+                        //HESITATION 1
+                              //ATTEMPT 2
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the wrong word.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_1&FTR_ATTEMPT_2"},
+                        //HESITATION 2
+                              //ATTEMPT 1
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix this word.mp3", "soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_2&FTR_ATTEMPT_1"},
+                        //HESITATION 2
+                              //ATTEMPT 1
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix this word.mp3", "soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_2&FTR_ATTEMPT_2"},
+                      //HESITATION 3
+                              //ATTEMPT 1
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "This letter is not needed.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_3&FTR_ATTEMPT_1"},
+                        //HESITATION 3
+                              //ATTEMPT 2
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "This letter is not needed.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_3&FTR_ATTEMPT_2"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "INSERTION ERROR delete character.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_4&FTR_ATTEMPT_1"}, //need to change the language to Delete this letter and record the new prompt
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "INSERTION ERROR delete character.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_4&FTR_ATTEMPT_2"}, //need to change the language to Delete this letter and record the new prompt
+                        //HESITATION 4
+                              //ATTEMPT 1
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Delete this letter.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_4&FTR_ATTEMPT_1"},
+                        //HESITATION 4
+                              //ATTEMPT 2
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Delete this letter.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_4&FTR_ATTEMPT_2"},
 
             //Spacing
                   //INSERT
