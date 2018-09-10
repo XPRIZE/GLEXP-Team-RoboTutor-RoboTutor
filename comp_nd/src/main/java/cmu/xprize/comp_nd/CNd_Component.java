@@ -15,6 +15,7 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.comp_nd.ui.CNd_LayoutManager_BaseTen;
 import cmu.xprize.comp_nd.ui.CNd_LayoutManagerInterface;
 import cmu.xprize.util.ILoadableObject;
@@ -418,10 +419,12 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
             Log.d(TAG, "CORRECT!");
             publishFeature(ND_CONST.FTR_CORRECT);
+            trackPerformance(true, studentChoice);
         } else {
 
             Log.d(TAG, "WRONG!");
             publishFeature(ND_CONST.FTR_WRONG);
+            trackPerformance(false, studentChoice);
         }
 
     }
@@ -446,6 +449,9 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         Log.d(TAG, "Doing the right thing");
         applyBehaviorNode(ND_CONST.NEXTNODE);
     }
+
+    // Must override in TClass
+   protected void trackPerformance(boolean isCorrect, String choice) {}
 
 
     // Must override in TClass

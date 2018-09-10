@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.comp_nd.CNd_Component;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.ILogManager;
@@ -22,6 +23,7 @@ import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObject;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -211,6 +213,55 @@ public class TNdComponent extends CNd_Component implements ITutorObject, IDataSi
      *
      */
 
+
+    /**
+     * This method is to separate correctness-checking which informs game behavior from
+     * tracking performance for Activity Selection and for Logging.
+     */
+    @Override
+    protected void trackPerformance(boolean correct, String choices) {
+        // XXX_LL Begin changes
+        // NEXT NEXT NEXT fix this!
+
+        if (correct) {
+            mTutor.countCorrect();
+        } else {
+            mTutor.countIncorrect();
+        }
+
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        String problemName = "ND_" + dataset[0] + "v" + dataset[1];
+
+        String promptType = isWorkedExample ? "" : "workedExample";
+
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
+        event.setGameId(mTutor.getUuid().toString());
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(mTutor.getTutorName());
+        event.setTutorId(mTutor.getTutorId());
+        event.setProblemName(problemName);
+        event.setProblemNumber(_dataIndex);
+        event.setTotalProblemsCount(mTutor.getTotalQuestions());
+        event.setTotalSubsteps(1);
+        event.setSubstepNumber(1);
+        event.setSubstepProblem(1);
+        event.setAttemptNumber(1);
+        event.setExpectedAnswer(String.valueOf(dataset[0] > dataset[1] ? dataset[0] : dataset[1]));
+        event.setDistractors(null);
+
+        // this is so convoluted...
+        event.setUserResponse(String.valueOf(choices.equals("left") ? dataset[0] : dataset[1]));
+        event.setCorrectness(correct ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+        event.setScaffolding(isWorkedExample ? null : "workedExample");
+        event.setPromptType(promptType);
+        event.setFeedbackType(null);
+
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.perfLogManager.postPerformanceLog(event);
+    }
 
 
     /**
