@@ -170,6 +170,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected  List<Integer>    changeCorrectionIndices = new ArrayList<>();
 
     protected String punctuationSymbols = ",.;:-_!?";
+    protected Map<String, String> punctuationToString;
     //amogh add ends
 
     final private String  TAG        = "CWritingComponent";
@@ -284,6 +285,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             ((CGlyphController)v).setWritingController(this);
         }
 
+        punctuationToString = new HashMap<String, String> ();
+        punctuationToString.put(",", "comma");
+        punctuationToString.put(".", "period");
+        punctuationToString.put("!", "exclamation point");
+        punctuationToString.put("?", "question mark");
+        punctuationToString.put("-","hyphen");
         // Obtain the prototype glyphs from the singleton recognizer
         //
         _recognizer = CRecognizerPlus.getInstance();
@@ -675,6 +682,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         attempts = updateAttemptFeature();
                         if(attempts > 4){
                             applyBehavior(WR_CONST.MERCY_RULE);
+                            currentWordIndex++;
                         }
                         else{
                             applyBehavior(WR_CONST.ON_ERROR);
@@ -710,6 +718,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                             //make the buttons appear.
                             activateEditMode(); //amogh comment put in animator graph
                             applyBehavior(WR_CONST.ON_ERROR);
+
+                            //amogh comment sentence writing -> initialise mListInputWords
+                            //since the aligned sentences are known, we can know the word indices for each word.
+                            mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
+
+
                         }
                     }
                     //when correct, not end punctuation and attempts = 0, normal recognition only
@@ -724,10 +738,19 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     * need to get the word attempts here. So need a class so that each word can have their own attempts. can it be the class word?
                     * */
 
+                    //need to identify the word in which the replacement is being made, if it is a space then do nothing about that sentence
+                    currentWordIndex = 0;
+                    mActiveWord = mListWordsInput.get(currentWordIndex);
+
+                    //and increment the attempt of that particular word. Accordingly, everytime that a new change is made, increment for that word and accordingly call the function from the animator graph to color that word or a sentence.
+                    // One thing to take care of, is what to do when these actions happen outside of any of the words.
+
+
+
                     //check if allowed to write here
                     boolean canReplace = checkReplace(mEditSequence, mActiveIndex);
 
-                    //if allowed to replace
+                    //if allowed to replace at this position
                     if(canReplace){
 
                         //check if the correct glyph is drawn
@@ -1857,7 +1880,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
 
 
-    //called by ON_CORRECT
+    //called by ON_CORRECT, to call on things on mActiveWord (such as updating colors or increasing the current word index.)
     public void inhibitWordInput(){
         mActiveWord.inhibitWordInput();
     }
@@ -1875,17 +1898,80 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     //amogh added place for sentence level functions and ideas
     public class Sentence{
-        private ArrayList<Integer> a;
         // should have the mAnswer ie the main sentence
         // should have the response sentence.
         //function to get the
+        private ArrayList<Word> listWordsInput;
+        private String writtenSentence;
+        private String answerSentence;
+        private StringBuilder editSequence;
+        private StringBuilder alignedSourceSentence;
+        private StringBuilder alignedTargetSentence;
+        private int sentenceAttempts;
+
+        public Sentence(String answerSentence){
+        }
+
+        public void updateSentence(){
+
+        }
+    }
+
+    //
+    public ArrayList<Word> getListWordsInputFromAlignedSentences(StringBuilder alignedSource, StringBuilder alignedTarget){
+
+        ArrayList<Word>   listWords = new ArrayList<Word>();
+        int lengthSource = alignedSource.length();
+        int wordCount = 0;
+        int letterIndex = 0;
+        ArrayList<Integer> wordIndices = new ArrayList<>();
+        String word = "";
+
+        //iterate over all the characters of the source.
+        for (int i = 0; i < lengthSource; i++){
+
+            //if the last letter or space which is not to be deleted, or space insertion needed, make a new word.
+            if((i == lengthSource - 1) || (alignedSource.charAt(i) == ' ' && alignedTarget.charAt(i) == ' ') || (alignedTarget.charAt(i) == ' ')){
+
+                //if the last letter and its not '-', include it in the word.
+                if(i == lengthSource - 1 && alignedSource.charAt(i) != '-') {
+                    word += alignedSource.charAt(i);
+                    wordIndices.add(letterIndex);
+                }
+                //when there is a space (which ought to be there), do not
+                else if(alignedSource.charAt(i) == ' ' && alignedTarget.charAt(i) == ' '){
+                }
+                // do nothing when there is supposed to be a space insertion or replacement.(ie cases where there ought to be a space but there isn't)
+                else {}
+
+                Word w = new Word(wordCount, word, wordIndices);
+                listWords.add(w);
+                word = "";
+                wordCount++;
+                wordIndices.clear();
+            }
+
+            // when new word is not to be created, add the current letter to the new word when its not '-'
+            else if(alignedSource.charAt(i) != '-'){
+                word += alignedSource.charAt(i);
+                wordIndices.add(letterIndex);
+            }
+
+            //increment the letter index whenever the character is not '-'
+            if (alignedSource.charAt(i) != '-'){
+                letterIndex++;
+            }
+        }
+
+        return listWords;
+
     }
 
     //need to get
-    public void updateListWordsInput(){
-        String writtenSentence = getWrittenSentence();
-        mListWordsInput = getListWords(writtenSentence);
-    }
+//    public void updateListWordsInput(){
+//        String writtenSentence = getWrittenSentence();
+//        mListWordsInput = getListWords(writtenSentence);
+//    }
 
     //amogh added function to get user written sentence.
     public String getWrittenSentence(){
@@ -2235,13 +2321,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             //insert punctuation
             else if (punctuationSymbols.contains(editValue)){
                 publishFeature(WR_CONST.FTR_AUDIO_PUNC);
-                publishValue(WR_CONST.AUDIO_PUNCTUATION, editValue);
+                publishValue(WR_CONST.AUDIO_PUNCTUATION, punctuationToString.get(editValue));
             }
 
             //insert letter
             else{
                 publishFeature(WR_CONST.FTR_AUDIO_LTR);
-                publishValue(WR_CONST.AUDIO_LETTER, editValue);
+                publishValue(WR_CONST.AUDIO_LETTER, editValue.toUpperCase());
             }
 
 
@@ -2267,11 +2353,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             //replace with punctuation
             else if (punctuationSymbols.contains(editValue)){
                 publishFeature(WR_CONST.FTR_AUDIO_PUNC);
+                publishValue(WR_CONST.AUDIO_PUNCTUATION, punctuationToString.get(editValue));
             }
 
             //replace with a new letter
             else{
                 publishFeature(WR_CONST.FTR_AUDIO_LTR);
+                publishValue(WR_CONST.AUDIO_LETTER, editValue.toUpperCase());
+
             }
 
         }
@@ -2294,6 +2383,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             //delete letter
             else{
                 publishFeature(WR_CONST.FTR_AUDIO_LTR);
+                publishValue(WR_CONST.AUDIO_LETTER, editValue.toUpperCase());
             }
 
         }
