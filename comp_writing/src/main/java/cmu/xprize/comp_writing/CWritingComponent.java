@@ -705,64 +705,83 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         // evaluated on end sentence punctuation, when the written sentence is correct: apply ON_CORRECT behavior
                         boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
                         if (writtenSentenceIsCorrect) {
-                            applyBehavior(WR_CONST.ON_CORRECT);
+                            applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
                         }
 
                         //when the written sentence does not match the expected answer
                         else{
 
-                            //update with the required changes and aligned source and target stringbuilders.
+                            //update mEditSequence, mAlignedTarget, mTargetSource with the required changes and aligned source and target string builders
                             updateSentenceEditSequence();
 
-                            //increase the attempt number for the sentence
+                            //increase the attempt number for the sentence (FTR_ATTEMPT_1 released)
                             updateAttemptFeature();
 
                             //make the buttons appear.
-                            activateEditMode();
+                            activateEditMode(); //amogh comment put in animator graph
                             applyBehavior(WR_CONST.ON_ERROR);
                         }
                     }
-                    //when not end punctuation and attempts = 0, normal recognition only
+                    //when correct, not end punctuation and attempts = 0, normal recognition only
                     else
-                    {
-                    }
+                    {}
                 }
 
                 //when the sentence attempts > 0
-                else{
+                else if(mSentenceAttempts == 1){
+                    /*
+                    * need to get the word attempts here. So need a class so that each word can have their own attempts. can it be the class word?
+                    * */
 
-                    //check if allowed to write in the first place
+                    //check if allowed to write here
                     boolean canReplace = checkReplace(mEditSequence, mActiveIndex);
+
                     //if allowed to replace
                     if(canReplace){
+
                         //check if the correct glyph is drawn
                         //if yes, and update the edit sequence, and check if the sentence is correct now.
                         boolean responseEqualsTargetReplacement = mResponse.equals(getReplacementTargetString(mEditSequence, mActiveIndex));
                         if(responseEqualsTargetReplacement){
                             updateSentenceEditSequence();
                             mWrittenSentence = getWrittenSentence();
+
+                            // if this correct response makes the sentence correct,
                             boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
                             if (writtenSentenceIsCorrect) {
-                                applyBehavior(WR_CONST.ON_CORRECT);
+                                applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
+                            }
+
+                            // if the response is correct, but there are more corrections to be made.
+                            else{
+                                //ask Professor Jack -> turn the letter blue?
                             }
                         }
-                        // if no, revert the glyph to what it was, then increase attempt and release on error behavior.
+
+                        // else (if incorrect letter drawn, but correct place chosen for replacement), revert the glyph to what it was, then increase attempt and release on error behavior.
                         else{
                             //revert the glyph to old one.
-                            gController.toggleSampleChar();
+                            gController.setPreviousGlyph();// put in animator graph
                             updateAttemptFeature();
                             applyBehavior(WR_CONST.ON_ERROR);
+                            // in the animator graph -> turn the word blue or red.
                         }
                     }
 
-                    //when the glyph drawn is at the wrong place, increase the attempt and replace the old glyph that was there. //amogh comment some other behavior should be called.
+                    //when the glyph drawn is at the wrong place, increase the attempt and replace the old glyph that was there.
                     else{
-                        gController.toggleProtoGlyph();
+                        gController.setPreviousGlyph();
                         updateAttemptFeature();
                         applyBehavior(WR_CONST.ON_ERROR);
                     }
-
                 }
+
+                //after sentence has been evaluated and another mistake has been made.
+                else if (mSentenceAttempts == 2){
+                    //after
+                }
+
+                //
             }
         }
         return _isValid;
@@ -839,6 +858,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 return false;
             }
     }
+
+    //gets the target character which should be replaced at an index.
     public String getReplacementTargetString(StringBuilder editSequence, int index){
 
         for (int i = 0; i <= index; i++) {
@@ -1472,7 +1493,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         //initialise the mListWords for sentence writing activities
         if(activityFeature.contains("FTR_SEN")){
             mListWords = new ArrayList<>();
-            initialiseListWords(mStimulus,mAnswer);
+            mListWords = initialiseListWords(mAnswer);
             mActiveWord = mListWords.get(0);
         }
 
@@ -1927,16 +1948,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     //amogh added
-    //class to handle word related operations
-    private void initialiseListWords(String stimulus, String answer){
+    private ArrayList<Word> initialiseListWords(String answer){
 //        String[] wordsStimulus = mStimulus.split(" ");
-        String[] wordsAnswer = mAnswer.split(" ");
-        int lengthSentence = wordsAnswer.length;
+        String[] words = answer.split(" ");
+        int lengthSentence = words.length;
         int letterIndex = 0;
         ArrayList<Integer> wordIndices;
+        ArrayList<Word>   listWords = new ArrayList<Word>();
         // iterating over each word.
         for (int j = 0; j < lengthSentence; j++){
-            String word = wordsAnswer[j];
+            String word = words[j];
             int lengthWord = word.length();
             wordIndices = new ArrayList<>();
             // adding all indices for each word
@@ -1945,10 +1966,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             }
 
             Word w = new Word(j , word, wordIndices);
-            mListWords.add(w);
+            listWords.add(w);
             // moving on to the next word
             letterIndex += (lengthWord+1);
         }
+        return listWords;
     }
 
 
@@ -1969,10 +1991,19 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mActiveWord.updateLettersWordResponse();
     }
 
+    //amogh added place for sentence level functions
+    public class Sentence{
+        private ArrayList<Integer> a;
+        // should have the mAnswer ie the main sentence
+        // should have the response sentence.
+        //function to get the
+    }
+    //amogh add ends
+
 
     public class Word{
 //        private ArrayList<Integer> listIndicesStimulus;
-        private ArrayList<Integer> listIndicesAnswer; //stores the indices of the letters for this word
+        private ArrayList<Integer> listIndicesAnswer; //stores the indices of the letters for this word (for the mAnswer String)
         private ArrayList<Boolean> listCorrectStatus; //stores the status of each word (not correct may also mean that there are no glyphs present inside ), updated after each word is evaluated
         private ArrayList<Boolean> listHasGlyph; //stores the boolean which says if a glyph is present in the controller or not.
 //        private String wordStimulus;
