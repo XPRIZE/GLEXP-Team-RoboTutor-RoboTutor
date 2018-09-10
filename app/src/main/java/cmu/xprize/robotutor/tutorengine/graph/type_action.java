@@ -382,7 +382,7 @@ public class type_action extends scene_node {
                         }
                     }
                     catch (Exception e) {
-                        CErrorManager.logEvent(_logType, "target:node.action,error:Script internal ERROR,name:" + id + ",method:" + method + ",parms:" + decodedParms + ",exception:", e, false);
+                        CErrorManager.logEvent(_logType, "target:node.action,error:Script internal ERROR,name:" + id + ",method:" + method + ",parms:" + decodedParms + ",exception:", e, true);
                     }
                     break;
             }

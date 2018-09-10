@@ -21,6 +21,7 @@ package cmu.xprize.robotutor.tutorengine;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.PowerManager;
 import android.util.Log;
@@ -37,6 +38,7 @@ import java.util.Map;
 import java.util.Random;
 
 import cmu.xprize.comp_logging.PerformanceLogItem;
+import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.graph.databinding;
@@ -223,14 +225,14 @@ public class CTutorEngine implements ILoadableObject2 {
         //
         CLogManager.setTutor(defTutor);
 
-        String featureString = RoboTutor.SELECTOR_MODE;
-
+        // NEW_MENU (4) REMOVE_SA this conditional will never happen
         if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DIFFICULTY_ASSESS)) {
             // generate a random number to choose which goodbye sound clip to use
             // IMPROVE ISSUE 119 better way to do this
             // see app/src/main/assets/tutors/activity_selector/animator_graph.json "GOODBYE_BUTTON_BEHAVIOR"
+            // NEW_MENU (4) REMOVE_SA goodbye clip should move to FTR_TUTOR_SELECT screen
             int goodbyeId = (new Random()).nextInt(TCONST.NUM_GOODBYE_SOUND_CLIPS) + 1;
-            featureString += ":" + TCONST.FTR_GOODBYE + "_" + goodbyeId;
+            //featureString += ":" + TCONST.FTR_GOODBYE + "_" + goodbyeId;
         }
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "**: Creating Tutor in startSessionManager: " + defTutor);
@@ -243,7 +245,7 @@ public class CTutorEngine implements ILoadableObject2 {
             return;
         }
 
-        createTutor(defTutor, featureString, null);
+        createTutor(defTutor, RoboTutor.SELECTOR_MODE, null);
         launchTutor(tutorBindings);
     }
 
@@ -277,7 +279,11 @@ public class CTutorEngine implements ILoadableObject2 {
         RoboTutor.masterContainer.removeView(deadTutor.getTutorContainer());
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "p4: StartSessionManager in 'CTutorEngine.destroyCurrentTutor': " + defTutor);
-        startSessionManager();
+
+        // REMOVE_SA calculate performance
+
+
+        startSessionManager(); // REMOVE_SA restart new tutor after killing old
 
         Log.d(TAG, "destroyCurrentTutor: " + deadTutor.getTutorName());
 

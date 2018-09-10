@@ -125,6 +125,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     private boolean                 engineStarted = false;
     static public boolean           STANDALONE    = false;
     static public String            SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+    static public boolean           MUST_CALCULATE_NEXT_TUTOR = false;
 //    static public String        SELECTOR_MODE = TCONST.FTR_DEBUG_SELECT;
 
 

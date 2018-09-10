@@ -208,6 +208,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
 
                             //mainHandler.post(mTutor.new Queue(TCONST.ENDTUTOR));
 
+                            // REMOVE_SA here is where the tutor ends...
                             PerformanceLogItem event = new PerformanceLogItem();
                             event.setUserId(RoboTutor.STUDENT_ID);
                             event.setSessionId(RoboTutor.SESSION_ID);

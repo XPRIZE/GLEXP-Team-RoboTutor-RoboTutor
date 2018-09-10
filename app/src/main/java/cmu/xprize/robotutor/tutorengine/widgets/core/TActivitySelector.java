@@ -76,6 +76,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
 
     // NEW_MENU TODO:
+    // NEW_MENU (0) √√√ change the menu layout
     // NEW_MENU (1) √√√ how to retrieve next skill?
     // NEW_MENU (2) √√√ how to change button images?
     // NEW_MENU (3) √√√ how to retrieve button image for each tutor? (SEE BOJACK)
@@ -128,6 +129,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
     final private String  TAG = "TActivitySelector";
     private int placementIndex;
+    private boolean needsToCalculateNextTutor = false; // initialize as false... only set after tutor launched
 
 
     public TActivitySelector(Context context) {
@@ -207,6 +209,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     }
 
 
+    // REMOVE_SA... perhaps call it here? how is TActivitySelector created?
     public void setLayout(String name) {
 
         if(name.equals(TCONST.FTR_DEBUG_SELECT)) {
@@ -255,7 +258,12 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             SaskActivity.setVisibility(VISIBLE);
             SdebugActivity.setVisibility(GONE);
 
-            // NEW_MENU (4) now there's only one menu!
+            // REMOVE_SA put it here
+            if (RoboTutor.MUST_CALCULATE_NEXT_TUTOR) {
+                processDifficultyAssessMode();
+            }
+
+            // NEW_MENU (4) REMOVE_SA now there's only one menu!
             for (CAsk_Data layout : dataSource) {
 
                 if (layout.name.equals(name)) {
@@ -415,10 +423,15 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         // Difficulty selection
         //
 
-        if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DIFFICULTY_ASSESS)) {
-            buttonid = processDifficultyAssessMode(buttonid);
+        // NEW_MENU (4) REMOVE_SA this will never happen
+        //if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DIFFICULTY_ASSESS)) {
+       // if (needsToCalculateNextTutor) {
+            // REMOVE_SA how to still register student performance without switching screens?
+            // REMOVE_SA... A-HA! this isn't happening because it's triggered by a button press..
+            // REMOVE_SA it has to happen after the tutor ends...
+         //   buttonid = processDifficultyAssessMode(buttonid);
 
-        }
+        //}
 
         // If on the Tutor Select (home) screen, or we have triggered a launch from the debug screen,
         // RoboTutor will go into an activity.
@@ -544,7 +557,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
             publishValue(TCONST.SKILL_SELECTED, activeSkill);
             publishValue(TCONST.TUTOR_SELECTED, activeTutor);
-            publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE);
+            publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE); // REMOVE_SA (x) publish
         }
 
         // check SharedPreferences
@@ -576,6 +589,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                 // If we are using the debug selector and mode is not launching a tutor then
                 // switch to debug view
                 //
+                // REMOVE_SA something going on here... "ENDTUTOR" ends the Activity Selector
                 if(DEBUG_LANCHER && RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT)) {
 
                     mTutor.post(TCONST.ENDTUTOR);
@@ -584,7 +598,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                 else {
                     // Update the tutor id shown in the log stream
 
-                    if(BuildConfig.SHOW_DEMO_VIDS) {
+                    if(BuildConfig.SHOW_DEMO_VIDS && false) {
 
 
                         String whichActivityIsNext = parseActiveTutorForTutorName(activeTutor);
@@ -737,7 +751,13 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
     }
 
+    // REMOVE_SA replacing bottom method
+    private void processDifficultyAssessMode() {
+        processDifficultyAssessMode(null);
+    }
     /**
+     * NEW_MENU (4) REMOVE_SA this should be moved into the FTR_TUTOR_SELECT screen
+     *
      * Method for processing button press on the DIFFICULTY_ASSESS screen
      * @param buttonid
      * @return new buttonid, to be used for next screen
@@ -750,7 +770,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         SharedPreferences prefs = getStudentSharedPreferences();
 
-        // Init the skill pointers
+        // NEW_MENU (4) REMOVE_SA Init the skill pointers...
+        // NEW_MENU (4) REMOVE_SA ??? figure this out
         //
         switch (activeSkill) {
 
@@ -791,7 +812,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
 
         // 2. finish RoboTutor or the ActivitySelector, if necessary
-        if(buttonid.toUpperCase().equals(AS_CONST.SELECT_EXIT)) {
+        // REMOVE_SA shouldn't happen
+        if(buttonid != null && buttonid.toUpperCase().equals(AS_CONST.SELECT_EXIT)) {
             // if EXIT, we finish the app
             mTutor.post(TCONST.FINISH);
 
@@ -799,8 +821,9 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         // if (REPEAT || AUTO) => playTutor without going to home screen
         //
-        else if (buttonid.toUpperCase().equals(AS_CONST.SELECT_REPEAT) ||
-                buttonid.toUpperCase().equals(AS_CONST.SELECT_AUTO_DIFFICULTY)){
+        // REMOVE_SA shouldn't happen
+        else if (buttonid != null &&  (buttonid.toUpperCase().equals(AS_CONST.SELECT_REPEAT) ||
+                buttonid.toUpperCase().equals(AS_CONST.SELECT_AUTO_DIFFICULTY))){
 
             buttonid = activeSkill;
 
@@ -858,11 +881,23 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         publishValue(TCONST.SKILL_STORIES, storiesTutorID);
         publishValue(TCONST.SKILL_MATH, mathTutorID);
         publishValue(TCONST.SKILL_SHAPES, shapesTutorID);
-        publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE);
+        publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE); // REMOVE_SA (x) publish
+
+        RoboTutor.MUST_CALCULATE_NEXT_TUTOR = false;
 
         return buttonid;
     }
 
+    /**
+     * same as below but don't self-assessments
+     * @param useWritingPlacement
+     * @param useMathPlacement
+     * @param prefs
+     * @return
+     */
+    private String selectNextTutor (boolean useWritingPlacement, boolean useMathPlacement, SharedPreferences prefs) {
+        return selectNextTutor(null, useWritingPlacement, useMathPlacement, prefs);
+    }
     /**
      * select Next Tutor
      * @param buttonid
@@ -881,7 +916,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         }
 
         PerformanceData performance = new PerformanceData();
-        performance.setSelfAssessment(buttonid.toUpperCase());
+        if (buttonid != null)        performance.setSelfAssessment(buttonid.toUpperCase());
         performance.setActivityType(activeTutor);
         performance.setActiveSkill(activeSkill);
 
@@ -1155,7 +1190,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         publishValue(TCONST.SKILL_STORIES, storiesTutorID);
         publishValue(TCONST.SKILL_MATH, mathTutorID);
         publishValue(TCONST.SKILL_SHAPES, shapesTutorID);
-        publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE);
+        publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE); // REMOVE_SA (x) publish
 
         editor.apply();
 
@@ -1191,7 +1226,9 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         Log.wtf("WARRIOR_MAN", "doLaunch: tutorId = " + tutorId);
 
-        RoboTutor.SELECTOR_MODE = TCONST.FTR_DIFFICULTY_ASSESS;
+        //RoboTutor.SELECTOR_MODE = TCONST.FTR_DIFFICULTY_ASSESS; // NEW_MENU (4) REMOVE_SA this should never be set... reset to "FTR_TUTOR_SELECT"
+        RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+        RoboTutor.MUST_CALCULATE_NEXT_TUTOR = true; // needs to calculate next tutor upon launch
 
         // update the response variable  "<Sresponse>.value"
 
