@@ -91,14 +91,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     private   IGlyphController   mActiveController;
     protected int               mActiveIndex;
 
-    protected Word              mActiveWord;// amogh added
-    protected String            mWrittenSentence; // amogh added
-    protected StringBuilder     mEditSequence; // amogh added
-    protected StringBuilder     mAlignedSourceSentence; //amogh added
-    protected StringBuilder     mAlignedTargetSentence; //amogh added
-    protected int               mSentenceAttempts;
-    protected ArrayList         mEditOperations; //amogh added
-
     protected ImageButton       mReplayButton;
     protected ImageButton       mScrollRightButton;
     protected ImageButton       mScrollLeftButton;
@@ -159,25 +151,23 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public CWr_Data[]           dataSource;
 
     //amogh added
-    // for sentence correction
+    // for sentence activites
     protected List<Integer>     _spaceIndices = new ArrayList<Integer>(); //indices with space for
     protected int               currentWordIndex = 0;
-    protected ArrayList<Word>   mListWords;
+    protected ArrayList<Word>   mListWordsAnswer;
+    protected ArrayList<Word>   mListWordsInput;
+    protected Word              mActiveWord;
+    protected String            mWrittenSentence;
+    protected StringBuilder     mEditSequence;
+    protected StringBuilder     mAlignedSourceSentence;
+    protected StringBuilder     mAlignedTargetSentence;
+    protected int               mSentenceAttempts;
+    //amogh added ends
 
 
     protected  List<Integer>    deleteCorrectionIndices = new ArrayList<>();
     protected  List<Integer>    insertCorrectionIndices = new ArrayList<>();
     protected  List<Integer>    changeCorrectionIndices = new ArrayList<>();
-
-// amogh added - not very useful anymore.
-//    protected HashMap<String,HashMap<String,ArrayList<Integer>>>  corrections = new HashMap<>();
-//    protected HashMap<Integer,ArrayList<Integer>> wordIndices = new HashMap<>();
-//    protected HashMap<Integer,Boolean> wordStatus = new HashMap<>();
-
-
-//    protected  List<Integer>    deleteCorrectionIndices = new ArrayList<>(Arrays.asList());
-//    protected  List<Integer>    insertCorrectionIndices = new ArrayList<>(Arrays.asList());
-//    protected  List<Integer>    changeCorrectionIndices = new ArrayList<>(Arrays.asList());
 
     protected String punctuationSymbols = ",.;:-_!?";
     //amogh add ends
@@ -635,7 +625,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
             //for word level feedback
             if(activityFeature.contains("FTR_SEN_WRD")){
-                mActiveWord = mListWords.get(currentWordIndex);
+                mActiveWord = mListWordsAnswer.get(currentWordIndex);
                 int attempts = mActiveWord.getAttempt();
 
                 //when the word is being written and evaluated for the first time, also making sure that its not the first box
@@ -727,8 +717,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     {}
                 }
 
-                //when the sentence attempts > 0
-                else if(mSentenceAttempts == 1){
+                //when the sentence attempts > 0,
+                // functions to implement -> identify the current word indices(separate), turn those red/blue(easy), turn indivdual red/blue(easy).
+                else if(mSentenceAttempts > 0){
                     /*
                     * need to get the word attempts here. So need a class so that each word can have their own attempts. can it be the class word?
                     * */
@@ -765,6 +756,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                             updateAttemptFeature();
                             applyBehavior(WR_CONST.ON_ERROR);
                             // in the animator graph -> turn the word blue or red.
+                            //set the word as red or blue depending on status.
                         }
                     }
 
@@ -800,96 +792,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     }
 
-    //amogh added function to evaluate upon hesitation.
-//    public void evaluate
 
-    //amogh added functions to test the edits.
 
-    //to update the mEditSequence, mAlignedSourceSentence and mAlignedTargetSentence after every change
-    public void updateSentenceEditSequence(){
-        String writtenSentence = getWrittenSentence();
-        ArrayList<StringBuilder> edits = computeEditsAndAlignedStrings(writtenSentence, mAnswer);
-        mEditSequence = edits.get(2);
-        mAlignedSourceSentence = edits.get(0);
-        mAlignedTargetSentence = edits.get(1);
-    }
 
-    public boolean checkDelete (StringBuilder editSequence, int index){
-        for (int i = 0; i <= index; i++){
-            char c = editSequence.charAt(i);
-            if (c == 'I'){
-                index++;
-            }
-        }
-        if(editSequence.charAt(index) == 'D'){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    public boolean checkInsert (StringBuilder editSequence, int index){
-        for (int i = 0; i <= index; i++){
-            char c = editSequence.charAt(i);
-            if (c == 'I'){
-                index++;
-            }
-        }
-        if(editSequence.charAt(index) == 'I'){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    public boolean checkReplace(StringBuilder editSequence, int index){
-        for (int i = 0; i <= index; i++) {
-            char c = editSequence.charAt(i);
-            if (c == 'I') {
-                index++;
-            }
-        }
-            if(editSequence.charAt(index) == 'R'){
-                return true;
-            }
-            else{
-                return false;
-            }
-    }
-
-    //gets the target character which should be replaced at an index.
-    public String getReplacementTargetString(StringBuilder editSequence, int index){
-
-        for (int i = 0; i <= index; i++) {
-            char c = editSequence.charAt(i);
-            if (c == 'I') {
-                index++;
-            }
-        }
-
-        char replacementTargetString = mAlignedTargetSentence.charAt(index);
-        return String.valueOf(replacementTargetString);
-    }
-    //amogh added ends
-
-    //amogh added function to get user written sentence.
-    public String getWrittenSentence(){
-        String sen = "";
-        for (int i = 0; i < mGlyphList.getChildCount(); i++){
-            CGlyphController controller = (CGlyphController) mGlyphList.getChildAt(i);
-            String recChar = controller.getRecognisedChar();
-            if(recChar.equals("")){
-                sen += " ";
-            }
-            else{
-                sen += recChar;
-            }
-        }
-        return sen;
-    }
-    //amogh added ends
 
     /**
      * Designed to enable character-level mercy rule on multi-char sequences...
@@ -1490,11 +1395,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mWrittenSentence = "";
         mSentenceAttempts = 0;
 
-        //initialise the mListWords for sentence writing activities
+        //initialise the mListWordsAnswer for sentence writing activities
         if(activityFeature.contains("FTR_SEN")){
-            mListWords = new ArrayList<>();
-            mListWords = getListWords(mAnswer);
-            mActiveWord = mListWords.get(0);
+            mListWordsAnswer = new ArrayList<>();
+            mListWordsAnswer = getListWords(mAnswer);
+            mActiveWord = mListWordsAnswer.get(0);
         }
 
         //amogh added
@@ -1689,29 +1594,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //            initialiseCorrectionHashMap(); //amogh added
 //            initialiseWordIndices(); //amogh added
         }
-        //amogh added
-
-
-        //adding the view for highlight error box:
-//        mHighlightErrorBoxView = new View (getContext());
-//        mHighlightErrorBoxView.setLayoutParams(new LayoutParams(60,60));
-////        mHighlightErrorBoxView.setId();
-//        mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
-////        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
-////        mp.setMargins(100,00,0,100);
-//        mHighlightErrorBoxView.setX((float)300.00);
-////        mHighlightErrorBoxView.setLeft(1000);
-//        mResponseScrollLayout.addView(mHighlightErrorBoxView);
-////        mHighlightErrorBoxView.postDelayed(new Runnable() {
-////            public void run() {
-////                mHighlightErrorBoxView.setVisibility(View.GONE);
-////            }
-////        }, 5000);
-
-
-//        showHighlightBox();
-
-        //amogh added ends
     }
 
     //************************************************************************
@@ -1991,13 +1873,106 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mActiveWord.updateLettersWordResponse();
     }
 
-    //amogh added place for sentence level functions
+    //amogh added place for sentence level functions and ideas
     public class Sentence{
         private ArrayList<Integer> a;
         // should have the mAnswer ie the main sentence
         // should have the response sentence.
         //function to get the
     }
+
+    //need to get
+    public void updateListWordsInput(){
+        String writtenSentence = getWrittenSentence();
+        mListWordsInput = getListWords(writtenSentence);
+    }
+
+    //amogh added function to get user written sentence.
+    public String getWrittenSentence(){
+        String sen = "";
+        for (int i = 0; i < mGlyphList.getChildCount(); i++){
+            CGlyphController controller = (CGlyphController) mGlyphList.getChildAt(i);
+            String recChar = controller.getRecognisedChar();
+            if(recChar.equals("")){
+                sen += " ";
+            }
+            else{
+                sen += recChar;
+            }
+        }
+        return sen;
+    }
+
+    //gets the target character which should be replaced at an index.
+    public String getReplacementTargetString(StringBuilder editSequence, int index){
+
+        for (int i = 0; i <= index; i++) {
+            char c = editSequence.charAt(i);
+            if (c == 'I') {
+                index++;
+            }
+        }
+
+        char replacementTargetString = mAlignedTargetSentence.charAt(index);
+        return String.valueOf(replacementTargetString);
+    }
+
+    //amogh added functions to test the edits.
+
+    //to update the mEditSequence, mAlignedSourceSentence and mAlignedTargetSentence after every change
+    public void updateSentenceEditSequence(){
+        String writtenSentence = getWrittenSentence();
+        ArrayList<StringBuilder> edits = computeEditsAndAlignedStrings(writtenSentence, mAnswer);
+        mEditSequence = edits.get(2);
+        mAlignedSourceSentence = edits.get(0);
+        mAlignedTargetSentence = edits.get(1);
+    }
+
+    public boolean checkDelete (StringBuilder editSequence, int index){
+        for (int i = 0; i <= index; i++){
+            char c = editSequence.charAt(i);
+            if (c == 'I'){
+                index++;
+            }
+        }
+        if(editSequence.charAt(index) == 'D'){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean checkInsert (StringBuilder editSequence, int index){
+        for (int i = 0; i <= index; i++){
+            char c = editSequence.charAt(i);
+            if (c == 'I'){
+                index++;
+            }
+        }
+        if(editSequence.charAt(index) == 'I'){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean checkReplace(StringBuilder editSequence, int index){
+        for (int i = 0; i <= index; i++) {
+            char c = editSequence.charAt(i);
+            if (c == 'I') {
+                index++;
+            }
+        }
+        if(editSequence.charAt(index) == 'R'){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     //amogh add ends
 
 
