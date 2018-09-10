@@ -1493,7 +1493,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         //initialise the mListWords for sentence writing activities
         if(activityFeature.contains("FTR_SEN")){
             mListWords = new ArrayList<>();
-            mListWords = initialiseListWords(mAnswer);
+            mListWords = getListWords(mAnswer);
             mActiveWord = mListWords.get(0);
         }
 
@@ -1948,7 +1948,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     //amogh added
-    private ArrayList<Word> initialiseListWords(String answer){
+    private ArrayList<Word> getListWords(String answer){
 //        String[] wordsStimulus = mStimulus.split(" ");
         String[] words = answer.split(" ");
         int lengthSentence = words.length;
