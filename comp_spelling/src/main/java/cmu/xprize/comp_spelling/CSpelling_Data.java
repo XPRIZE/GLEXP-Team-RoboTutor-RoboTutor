@@ -20,6 +20,7 @@ public class CSpelling_Data implements ILoadableObject{
     public String layout;
     public String image;
     public String[] word;
+    public String sound;
 
 
     @Override

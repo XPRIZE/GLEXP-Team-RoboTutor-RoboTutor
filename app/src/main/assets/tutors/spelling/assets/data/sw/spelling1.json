@@ -2,8 +2,8 @@
   "bootFeatures":"",
 
   "dataSource": [
-    {"type":"CSpelling_Data", "level":"spell_1", "task":"Spell numbers", "layout":"default", "word":["BA", "RA", "BA", "RA"], "image": "barabara.jpg"},
-    {"type":"CSpelling_Data", "level":"spell_1", "task":"Spell numbers", "layout":"default", "word":["BEN", "DA", "RA"], "image": "bendera.png"},
-    {"type":"CSpelling_Data", "level":"spell_1", "task":"Spell numbers", "layout":"default", "word":["A", "KA", "LA", "LA"], "image": "akalala.jpeg"}
+    {"type":"CSpelling_Data", "level":"spell_1", "task":"Spell numbers", "layout":"default", "word":["BA", "RA", "BA", "RA"], "image": "barabara.jpg", "sound": "barabara.mp3"},
+    {"type":"CSpelling_Data", "level":"spell_1", "task":"Spell numbers", "layout":"default", "word":["BEN", "DA", "RA"], "image": "bendera.png", "sound": "bendera.mp3"},
+    {"type":"CSpelling_Data", "level":"spell_1", "task":"Spell numbers", "layout":"default", "word":["A", "KA", "LA", "LA"], "image": "akalala.jpeg", "sound": "akalala.mp3"}
   ]
 }

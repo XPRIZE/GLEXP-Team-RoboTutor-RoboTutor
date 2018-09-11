@@ -86,6 +86,8 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     static final String FTR_CORRECT = "FTR_CORRECT";
     static final String FTR_INCORRECT = "FTR_INCORRECT";
     static final String FTR_EOP = "FTR_EOP";
+    static final String WORD_STIM = ".wordStim";
+    static final String SYLLABLE_STIM = ".syllableStim";
 
     static final int IMAGE_SIZE = 300;
     static final int NUM_PROBLEMS = 2;
@@ -356,6 +358,9 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 
         updateLetter();
         updateImage();
+
+        Log.d("ddd", "word stim: ");
+        publishValue(WORD_STIM, data.sound);
         // for each character in word, insert a new empty space into SPACES
         // for each character in word, add to the list. Then add distractors. Then JUMBLE.
 

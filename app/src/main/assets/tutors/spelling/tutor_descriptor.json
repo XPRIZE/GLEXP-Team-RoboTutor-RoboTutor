@@ -20,7 +20,8 @@
 	// path     - the resource path relative to assets/tutors/trackdata/LIBRARY/audio/<language>
 
 	"soundMap" : {
-		"default": {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/spelling"}
+		"default": {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/spelling"},
+		"words": {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/literacy"}
 	},
 
 	"navigatorType":"SIMPLE_NAVIGATOR"
