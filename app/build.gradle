@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
 
     compileSdkVersion rootProject.ext.rtCompileSdkVersion
+    buildToolsVersion rootProject.ext.rtBuildToolsVersion
     defaultConfig {
         applicationId "cmu.xprize.robotutor"
         minSdkVersion rootProject.ext.rtMinSdkVersion
@@ -88,6 +89,18 @@ android {
     }
 
     // define apk naming behavior
+    // define apk naming behavior
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def project = "robotutor"
+            def SEP = "."
+            def buildType = variant.variantData.variantConfiguration.buildType.name
+            def version = variant.versionName
+
+            def newApkName = project + SEP + buildType + SEP + version + ".apk"
+            output.outputFile = new File(output.outputFile.parent, newApkName)
+        }
+    }
 
     lintOptions {
         // set to true to turn off analysis progress reporting by lint
@@ -97,7 +110,6 @@ android {
         // if true, only report errors
         ignoreWarnings true
     }
-    buildToolsVersion '27.0.3'
 }
 
 dependencies {
@@ -125,6 +137,5 @@ dependencies {
     compile project(path: ':comp_counting')
     compile project(path: ':comp_counting2')
     compile project(path: ':comp_numberscale')
-    implementation 'com.android.support:support-v4:25.2.0'
 }
 
