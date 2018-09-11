@@ -734,18 +734,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 //when the sentence attempts > 0,
                 // functions to implement -> identify the current word indices(separate), turn those red/blue(easy), turn indivdual red/blue(easy).
                 else if(mSentenceAttempts > 0){
-                    /*
-                    * need to get the word attempts here. So need a class so that each word can have their own attempts. can it be the class word?
-                    * */
 
-                    //need to identify the word in which the replacement is being made, if it is a space then do nothing about that sentence
+                    //set the current active word, so that hesitation and feedback can be shown on this word.
                     currentWordIndex = getActiveWordIndex(mActiveIndex);
                     mActiveWord = mListWordsInput.get(currentWordIndex);
-
-                    //and increment the attempt of that particular word. Accordingly, everytime that a new change is made, increment for that word and accordingly call the function from the animator graph to color that word or a sentence.
-                    // One thing to take care of, is what to do when these actions happen outside of any of the words.
-
-
 
                     //check if allowed to write here
                     boolean canReplace = checkReplace(mEditSequence, mActiveIndex);
@@ -759,6 +751,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         if(responseEqualsTargetReplacement){
                             updateSentenceEditSequence();
                             mWrittenSentence = getWrittenSentence();
+
+                            //update the indices and text for words in mListWordsInput
+                            mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
 
                             // if this correct response makes the sentence correct,
                             boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
@@ -786,17 +781,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     //when the glyph drawn is at the wrong place, increase the attempt and replace the old glyph that was there.
                     else{
                         gController.setPreviousGlyph();
+                        //lets increase the attempt for this word, this will also release the corresponding feature which can then be used in the animator graph to call the functions that we want.
                         updateAttemptFeature();
                         applyBehavior(WR_CONST.ON_ERROR);
                     }
                 }
-
-                //after sentence has been evaluated and another mistake has been made.
-                else if (mSentenceAttempts == 2){
-                    //after
-                }
-
-                //
             }
         }
         return _isValid;
@@ -881,7 +870,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             attempt = mActiveWord.incAttempt();
         }
         else if(activityFeature.contains("FTR_SEN_SEN")){
-            attempt = ++mSentenceAttempts;
+            attempt = mActiveWord.incAttempt();
         }
         else{
             attempt = mActiveController.incAttempt();
@@ -1979,10 +1968,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         //if index is not present in any of the words.
         return -1;
     }
-    //need to get
-    public void updateListWordsInput(){
-        String writtenSentence = getWrittenSentence();
-        mListWordsInput = getListWords(writtenSentence);
+
+    //After some changes have been made, the word indices and the text would have been updated, but the attempts should remain the same.
+    public ArrayList<Word> getUpdatedListWordsInput(ArrayList<Word> oldListWords, StringBuilder alignedSource, StringBuilder alignedTarget){
+        ArrayList<Word> newListWords = getListWordsInputFromAlignedSentences(alignedSource,alignedTarget);
+        newListWords = oldListWords;
+        for(int i = 0; i < oldListWords.size(); i++){
+            newListWords.get(i).setAttempt(oldListWords.get(i).getAttempt());
+        }
+        return newListWords;
     }
 
     //amogh added function to get user written sentence.
@@ -2194,6 +2188,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         public int getAttempt(){
             return attempt;
+        }
+
+        public int setAttempt(int newAttempts){
+            attempt = newAttempts;
         }
 
         public int getWidth(){
