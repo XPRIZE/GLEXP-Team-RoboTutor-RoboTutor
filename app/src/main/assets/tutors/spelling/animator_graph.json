@@ -183,6 +183,7 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#WAIT_FOR_INPUT:String", "features":""},
 
             {"type": "COMMAND", "id": "SSpelling", "method": "setVolatileBehavior", "parms": "NEXT_NODE:String|NEXTNODE:String", "features": ""},
+            {"name": "Unlock", "type": "COMMAND", "id": "SSpelling", "method": "unlockLetters", "features": ""},
             {"type": "COMMAND", "cmd": "WAIT"}
           ]
         }

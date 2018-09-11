@@ -86,6 +86,8 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     static final String FTR_INCORRECT = "FTR_INCORRECT";
     static final String FTR_EOP = "FTR_EOP";
 
+    static final int IMAGE_SIZE = 300;
+
     protected HashMap<String,Boolean> _FeatureMap = new HashMap<>();
 
     @Override
@@ -160,6 +162,8 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         retractFeature(FTR_CORRECT);
         retractFeature(FTR_INCORRECT);
 
+        lockLetters();
+
         String current = "" + _word.get(_currentWordIndex);
         Log.d("ddd", "current index: " + _currentWordIndex);
         Log.d("ddd", "current: " + current);
@@ -207,6 +211,8 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 //            InputStream in = JSON_Helper.assetManager().open(IMAGES_PATH + _imageFileName);
 //            mImageStimulus.setImageBitmap(BitmapFactory.decodeStream(in));
         mImageStimulus.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+        mImageStimulus.getLayoutParams().height = IMAGE_SIZE;
+        mImageStimulus.requestLayout();
 //        } catch (IOException e) {
 //            Log.d("ddd", "image error");
 //            mImageStimulus.setImageBitmap(null);
@@ -237,6 +243,21 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         for (int k = _word.size(); k > j; k--) {
             CBlank_Letter b = new CBlank_Letter(mContext);
             mSelectedLetterHolder.addView(b);
+        }
+    }
+
+    public void lockLetters() {
+        for (int i = 0; i < mLetterHolder.getChildCount(); i++) {
+            CLetter_Tile lt = (CLetter_Tile) mLetterHolder.getChildAt(i);
+            lt.lock();
+        }
+    }
+
+    public void unlockLetters() {
+        Log.d("ddd", "unlock letters");
+        for (int i = 0; i < mLetterHolder.getChildCount(); i++) {
+            CLetter_Tile lt = (CLetter_Tile) mLetterHolder.getChildAt(i);
+            lt.unlock();
         }
     }
 

@@ -39,6 +39,7 @@ public class CLetter_Tile extends TextView {
     private String _letter;
     private int _index;
     private CSpelling_Component _parent;
+    private boolean _isLocked;
 
     public CLetter_Tile(Context context) {
         super(context);
@@ -59,6 +60,7 @@ public class CLetter_Tile extends TextView {
         _letter = letter;
         _index = letterIndex;
         _parent = parent;
+        _isLocked = false;
 
         this.setText(" " + _letter + " ");
         this.setId(letterIndex);
@@ -71,7 +73,7 @@ public class CLetter_Tile extends TextView {
         llp.setMargins(50, 0, 0, 0);
         llp.width = 200;
         llp.height = 200;
-        llp.gravity = Gravity.CENTER;
+        llp.gravity = Gravity.CENTER_HORIZONTAL;
         this.setLayoutParams(llp);
 
 //        letter.setBackgroundColor(getResources().getColor(R.color.abc_tint_switch_thumb));
@@ -104,10 +106,21 @@ public class CLetter_Tile extends TextView {
         this.setBackgroundColor(Color.rgb(240, 200, 65));
     }
 
+    protected void lock() {
+        _isLocked = true;
+    }
+
+    protected void unlock() {
+        _isLocked = false;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            _parent.onLetterTouch(_letter, _index, this);
+            Log.d("ddd", "touching: " + _isLocked);
+            if (!_isLocked) {
+                _parent.onLetterTouch(_letter, _index, this);
+            }
         }
 
         return true;
