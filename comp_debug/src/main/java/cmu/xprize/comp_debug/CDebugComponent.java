@@ -109,6 +109,26 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
     boolean viewSentenceWritingMenu = false;
     LinearLayout SSentenceWritingMenu;
 
+    // place value
+    Button SPlaceValueMenuButton;
+    boolean viewPlaceValueMenu = false;
+    LinearLayout SPlaceValueMenu;
+
+    // spelling
+    Button SSpellingMenuButton;
+    boolean viewSpellingMenu = false;
+    LinearLayout SSpellingMenu;
+
+    // picture match
+    Button SPictureMatchMenuButton;
+    boolean viewPictureMatchMenu = false;
+    LinearLayout SPictureMatchMenu;
+
+    // big math
+    Button SBigMathMenuButton;
+    boolean viewBigMathMenu = false;
+    LinearLayout SBigMathMenu;
+
     private boolean       viewGrid = true;
 
     private static String TAG = "CDebugComponent";
@@ -165,6 +185,25 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         /* Sentence Writing views */
         SSentenceWritingMenuButton = findViewById(R.id.SSentenceWritingMenuButton);
         SSentenceWritingMenu = findViewById(R.id.SSentenceWritingMenu);
+
+        /* Place Value */
+        SPlaceValueMenuButton = findViewById(R.id.SPlaceValueMenuButton);
+        SPlaceValueMenu = findViewById(R.id.SPlaceValueMenu);
+
+        /* Spelling */
+        SSpellingMenuButton = findViewById(R.id.SSpellingMenuButton);
+        SSpellingMenu = findViewById(R.id.SSpellingMenu);
+
+        /* Picture Match */
+        SPictureMatchMenuButton = findViewById(R.id.SPictureMatchMenuButton);
+        SPictureMatchMenu = findViewById(R.id.SPictureMatchMenu);
+
+        /* Big Math */
+        SBigMathMenuButton = findViewById(R.id.SBigMathMenuButton);
+        SBigMathMenu = findViewById(R.id.SBigMathMenu);
+
+
+
 
         initializeQA_Code_Drop2_DebugTutors();
 
@@ -284,6 +323,41 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
             }
         });
 
+        // CUSTOM_MENU...
+        SPlaceValueMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewPlaceValueMenu= !viewPlaceValueMenu;
+                SPlaceValueMenu.setVisibility(viewPlaceValueMenu ? VISIBLE : GONE);
+            }
+        });
+
+        SSpellingMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewSpellingMenu= !viewSpellingMenu;
+                SSpellingMenu.setVisibility(viewSpellingMenu ? VISIBLE : GONE);
+            }
+        });
+
+        SPictureMatchMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewPictureMatchMenu= !viewPictureMatchMenu;
+                SPictureMatchMenu.setVisibility(viewPictureMatchMenu ? VISIBLE : GONE);
+            }
+        });
+
+        SBigMathMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewBigMathMenu= !viewBigMathMenu;
+                SBigMathMenu.setVisibility(viewBigMathMenu ? VISIBLE : GONE);
+            }
+        });
+
+
+
         /*
          * Reset Tutor to original
          */
@@ -331,17 +405,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
 
         // CUSTOM_MENU (4) mimic this for each of the layouts
-        for (String[] storyTutor : storyTutors) {
-            //
-            CAt_Data thisTutor = new CAt_Data();
-            thisTutor.tutor_desc = storyTutor[0];
-            thisTutor.tutor_id = storyTutor[1];
-            thisTutor.tutor_data = storyTutor[2];
-
-            Button button = makeCustomButton(thisTutor.tutor_id);
-            button.setOnClickListener(new CustomDebugClickListener(thisTutor));
-            SComprehensionMenu.addView(button);
-        }
+        createCustomMenu(SComprehensionMenu, storyTutors);
 
 
         String[][] numCompareTutors = {
@@ -350,6 +414,33 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                 {"numdiscr", "numcompare::3d.compare.mix", "[file]numcompare.3d.compare.mix.json"}
         };
         // CUSTOM_MENU (4)
+        createCustomMenu(SNumCompareMenu, numCompareTutors);
+
+
+        // AMOGH add data sources
+        String[][] sentenceWriteTutors = {
+                {"write.sen.corr", "write.sen::corr.1", "[file]write.sen.corr.1.json"}
+        };
+        createCustomMenu(SSentenceWritingMenu, sentenceWriteTutors);
+
+        String[][] placeValueTutors = {
+                {"countingx", "place.value::pv-11..99.2D.diff0.1", "[file]place.value__pv-11..99.2D.diff0.1.json"},
+                {"countingx", "place.value::pv-11..99.2D.diff0.2", "[file]place.value__pv-11..99.2D.diff0.2.json"}
+        };
+        createCustomMenu(SPlaceValueMenu, placeValueTutors);
+
+        String[][] spellingTutors = {};
+        createCustomMenu(SSpellingMenu, spellingTutors);
+
+        String[][] picMatchTutors = {};
+        createCustomMenu(SPictureMatchMenu, picMatchTutors);
+
+        String[][] bigMathTutors = {};
+        createCustomMenu(SBigMathMenu, bigMathTutors);
+
+    }
+
+    private void createCustomMenu(LinearLayout menu, String[][] numCompareTutors) {
         for (String[] numCompareTutor : numCompareTutors) {
             CAt_Data thisTutor = new CAt_Data();
             thisTutor.tutor_desc = numCompareTutor[0];
@@ -358,27 +449,8 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
             Button button = makeCustomButton(thisTutor.tutor_id);
             button.setOnClickListener(new CustomDebugClickListener(thisTutor));
-            SNumCompareMenu.addView(button);
+            menu.addView(button);
         }
-
-
-
-        // AMOGH add data sources
-        String[][] sentenceWriteTutors = {
-                {"write.sen.corr", "write.sen::corr.1", "[file]write.sen.corr.1.json"}
-        };
-
-        for (String[] tutor : sentenceWriteTutors) {
-            CAt_Data thisTutor = new CAt_Data();
-            thisTutor.tutor_desc = tutor[0];
-            thisTutor.tutor_id = tutor[1];
-            thisTutor.tutor_data = tutor[2];
-
-            Button button = makeCustomButton(thisTutor.tutor_id);
-            button.setOnClickListener(new CustomDebugClickListener(thisTutor));
-            // SSentenceWritingMenu.addView(button); // AMOGH uncomment
-        }
-
     }
 
     /**

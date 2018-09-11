@@ -65,8 +65,8 @@
                     android:layout_marginBottom="15dp"
                     android:layout_marginEnd="50dp"
                     android:scaleType="fitCenter"
-                    android:padding="20dp"
-                    android:textSize="23sp"
+                    android:padding="@dimen/custom_button_padding"
+                    android:textSize="@dimen/custom_button_textSize"
                     android:textColor="#FFFFFF"
                     android:text="COMPREHENSION"/>
 
@@ -79,8 +79,8 @@
                     android:layout_marginBottom="15dp"
                     android:layout_marginEnd="50dp"
                     android:scaleType="fitCenter"
-                    android:padding="20dp"
-                    android:textSize="23sp"
+                    android:padding="@dimen/custom_button_padding"
+                    android:textSize="@dimen/custom_button_textSize"
                     android:textColor="#FFFFFF"
                     android:text="NUM COMPARE"/>
 
@@ -93,10 +93,66 @@
                     android:layout_marginBottom="15dp"
                     android:layout_marginEnd="50dp"
                     android:scaleType="fitCenter"
-                    android:padding="20dp"
-                    android:textSize="23sp"
+                    android:padding="@dimen/custom_button_padding"
+                    android:textSize="@dimen/custom_button_textSize"
                     android:textColor="#FFFFFF"
                     android:text="SENTENCE WRITING"/>
+
+                <Button
+                    android:id="@+id/SPlaceValueMenuButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/launchnormal"
+                    android:backgroundTint="@color/newCustomButton"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="50dp"
+                    android:scaleType="fitCenter"
+                    android:padding="@dimen/custom_button_padding"
+                    android:textSize="@dimen/custom_button_textSize"
+                    android:textColor="#FFFFFF"
+                    android:text="PLACE VALUE"/>
+
+                <Button
+                    android:id="@+id/SSpellingMenuButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/launchnormal"
+                    android:backgroundTint="@color/newCustomButton"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="50dp"
+                    android:scaleType="fitCenter"
+                    android:padding="@dimen/custom_button_padding"
+                    android:textSize="@dimen/custom_button_textSize"
+                    android:textColor="#FFFFFF"
+                    android:text="SPELLING"/>
+
+                <Button
+                    android:id="@+id/SPictureMatchMenuButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/launchnormal"
+                    android:backgroundTint="@color/newCustomButton"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="50dp"
+                    android:scaleType="fitCenter"
+                    android:padding="@dimen/custom_button_padding"
+                    android:textSize="@dimen/custom_button_textSize"
+                    android:textColor="#FFFFFF"
+                    android:text="PICTURE MATCH"/>
+
+                <Button
+                    android:id="@+id/SBigMathMenuButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/launchnormal"
+                    android:backgroundTint="@color/newCustomButton"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="50dp"
+                    android:scaleType="fitCenter"
+                    android:padding="@dimen/custom_button_padding"
+                    android:textSize="@dimen/custom_button_textSize"
+                    android:textColor="#FFFFFF"
+                    android:text="BIG MATH"/>
 
                 <Button
                     android:id="@+id/SAkiraCustom"
@@ -107,8 +163,8 @@
                     android:layout_marginBottom="15dp"
                     android:layout_marginEnd="50dp"
                     android:scaleType="fitCenter"
-                    android:padding="20dp"
-                    android:textSize="23sp"
+                    android:padding="@dimen/custom_button_padding"
+                    android:textSize="@dimen/custom_button_textSize"
                     android:textColor="#FFFFFF"
                     android:text="Akira"
                     android:tag="akira"/>
@@ -122,8 +178,8 @@
                     android:layout_marginBottom="15dp"
                     android:layout_marginEnd="50dp"
                     android:scaleType="fitCenter"
-                    android:padding="20dp"
-                    android:textSize="23sp"
+                    android:padding="@dimen/custom_button_padding"
+                    android:textSize="@dimen/custom_button_textSize"
                     android:textColor="#FFFFFF"
                     android:text="Add Subtract"
                     android:tag="math"/>
@@ -137,8 +193,8 @@
                     android:layout_marginBottom="15dp"
                     android:layout_marginEnd="50dp"
                     android:scaleType="fitCenter"
-                    android:padding="20dp"
-                    android:textSize="23sp"
+                    android:padding="@dimen/custom_button_padding"
+                    android:textSize="@dimen/custom_button_textSize"
                     android:textColor="#FFFFFF"
                     android:text="Tap and Count"
                     android:tag="countingx"/>
@@ -152,8 +208,8 @@
                     android:layout_marginBottom="15dp"
                     android:layout_marginEnd="50dp"
                     android:scaleType="fitCenter"
-                    android:padding="20dp"
-                    android:textSize="23sp"
+                    android:padding="@dimen/custom_button_padding"
+                    android:textSize="@dimen/custom_button_textSize"
                     android:textColor="#FFFFFF"
                     android:text="BUBBLE POP"/>
 
@@ -280,6 +336,42 @@
 
             <LinearLayout
                 android:id="@+id/SSentenceWritingMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/SPlaceValueMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/SSpellingMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/SPictureMatchMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/SBigMathMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
