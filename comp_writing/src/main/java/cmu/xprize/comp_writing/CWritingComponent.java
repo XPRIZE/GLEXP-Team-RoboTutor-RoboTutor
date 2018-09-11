@@ -720,7 +720,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                             applyBehavior(WR_CONST.ON_ERROR);
 
                             //amogh comment sentence writing -> initialise mListInputWords
-                            //since the aligned sentences are known, we can know the word indices for each word.
+                            //since the aligned sentences are known, we can know the word indices for each written word(they would be the same as the number of words that are there in the answer).
                             mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
 
 
@@ -739,7 +739,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     * */
 
                     //need to identify the word in which the replacement is being made, if it is a space then do nothing about that sentence
-                    currentWordIndex = 0;
+                    currentWordIndex = getActiveWordIndex(mActiveIndex);
                     mActiveWord = mListWordsInput.get(currentWordIndex);
 
                     //and increment the attempt of that particular word. Accordingly, everytime that a new change is made, increment for that word and accordingly call the function from the animator graph to color that word or a sentence.
@@ -1943,8 +1943,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 }
                 // do nothing when there is supposed to be a space insertion or replacement.(ie cases where there ought to be a space but there isn't)
                 else {}
-
-                Word w = new Word(wordCount, word, wordIndices);
+                ArrayList<Integer> copyWordIndices = (ArrayList<Integer>) wordIndices.clone();
+                Word w = new Word(wordCount, word, copyWordIndices);
                 listWords.add(w);
                 word = "";
                 wordCount++;
@@ -1967,11 +1967,23 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     }
 
+    //for sentence writing specifically
+    public int getActiveWordIndex(int index){
+        for(int i = 0; i < mListWordsInput.size() ; i++){
+            //check if the index is present in any of the words in mListWords.
+            boolean present = mListWordsInput.get(i).isIndexInWord(index);
+            if (present){
+                return i;
+            }
+        }
+        //if index is not present in any of the words.
+        return -1;
+    }
     //need to get
-//    public void updateListWordsInput(){
-//        String writtenSentence = getWrittenSentence();
-//        mListWordsInput = getListWords(writtenSentence);
-//    }
+    public void updateListWordsInput(){
+        String writtenSentence = getWrittenSentence();
+        mListWordsInput = getListWords(writtenSentence);
+    }
 
     //amogh added function to get user written sentence.
     public String getWrittenSentence(){
