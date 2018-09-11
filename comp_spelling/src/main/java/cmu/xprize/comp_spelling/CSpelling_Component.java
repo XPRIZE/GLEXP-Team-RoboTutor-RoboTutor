@@ -72,6 +72,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     public int rows;
     public int cols;
     public CSpelling_Data[] dataSource;
+    protected List<CSpelling_Data> _data;
 
 
     // View Things
@@ -87,6 +88,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     static final String FTR_EOP = "FTR_EOP";
 
     static final int IMAGE_SIZE = 300;
+    static final int NUM_PROBLEMS = 2;
 
     protected HashMap<String,Boolean> _FeatureMap = new HashMap<>();
 
@@ -204,6 +206,18 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         wrongLetter = null;
     }
 
+    public void setDataSource(CSpelling_Data[] dataSource) {
+        ArrayList<CSpelling_Data> dataset = new ArrayList<>(Arrays.asList(dataSource));
+
+        _data = new ArrayList<CSpelling_Data>();
+
+        // For XPrize we limit this to 10 elements from an umlimited random data set
+        // used to be : dataSet.size()
+        Collections.shuffle(dataset);
+        _data = dataset.subList(0, NUM_PROBLEMS);
+        _dataIndex = 0;
+    }
+
     public void updateImage() {
 //        try {
         Log.d("ddd", "loading image");
@@ -291,9 +305,8 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     public void next() {
 
         try {
-            if (dataSource != null) {
-                updateDataSet(dataSource[_dataIndex]);
-
+            if (_data != null) {
+                updateDataSet(_data.get(_dataIndex));
                 _dataIndex++;
             }
 
@@ -304,7 +317,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     }
 
     public boolean dataExhausted() {
-        return _dataIndex >= dataSource.length;
+        return _dataIndex >= _data.size();
     }
 
     protected void updateDataSet(CSpelling_Data data) {
@@ -378,7 +391,6 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
      * Updates the stimulus.
      */
     protected void updateStimulus() {
-
         Guideline bottomGuideline = (Guideline) findViewById(R.id.keyboardBottom);
 
     }

@@ -193,6 +193,7 @@ public class TSpellingComponent extends CSpelling_Component implements ITutorObj
 
                 String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
                 loadJSON(new JSONObject(jsonData), mTutor.getScope());
+                setDataSource(dataSource);
 
             } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
@@ -211,6 +212,7 @@ public class TSpellingComponent extends CSpelling_Component implements ITutorObj
                 JSONObject jsonObj = new JSONObject(jsonData);
                 // Load the datasource in the component module - i.e. the superclass
                 loadJSON(jsonObj, mTutor.getScope() );
+                setDataSource(dataSource);
 
                 // preprocess the datasource e.g. populate instance arrays with general types
                 //
