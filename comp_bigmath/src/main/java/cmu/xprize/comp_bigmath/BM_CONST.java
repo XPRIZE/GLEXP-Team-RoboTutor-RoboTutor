@@ -26,7 +26,6 @@ public class BM_CONST {
     public static final String OPB_LOCATION = "opB";
     public static final String RESULT_LOCATION = "result";
 
-    // ROBO_MATH continue...
     public static final class FEATURES {
         public static final String FTR_CORRECT = "FTR_CORRECT";
         public static final String FTR_WRONG = "FTR_WRONG";

@@ -150,7 +150,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         app:layout_constraintRight_toRightOf="@+id/guideline_vertical_1"
-        android:visibility="invisible">
+        android:visibility="visible">
 
         <cmu.xprize.comp_bigmath.DigitView
             android:id="@+id/symbol_carry_hun"
@@ -161,6 +161,7 @@
             android:textSize="@dimen/add_subtract_digit_size_carry"
             android:background="@drawable/soft_box"
             android:gravity="center"
+            android:visibility="invisible"
             />
 
         <cmu.xprize.comp_bigmath.DigitView
@@ -172,6 +173,7 @@
             android:textSize="@dimen/add_subtract_digit_size_carry"
             android:background="@drawable/soft_box"
             android:gravity="center"
+            android:visibility="invisible"
         />
 
 
@@ -184,7 +186,7 @@
             android:textColor="@color/addSubtractDigitCarryColor"
             android:textSize="@dimen/add_subtract_digit_size_carry"
             android:gravity="center"
-            android:visibility="visible"
+            android:visibility="invisible"
             />
     </LinearLayout>
 

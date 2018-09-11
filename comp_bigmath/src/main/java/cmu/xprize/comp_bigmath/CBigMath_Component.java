@@ -181,7 +181,6 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
      * Updates the stimulus.
      */
     protected void loadLayout() {
-        // ROBO_MATH √√√ this should do a lot of the things in BigMath
 
         int[] layouts = {R.layout.bigmath_1d, R.layout.bigmath_2d, R.layout.bigmath_3d};
         int layoutId = layouts[_numDigits - 1];

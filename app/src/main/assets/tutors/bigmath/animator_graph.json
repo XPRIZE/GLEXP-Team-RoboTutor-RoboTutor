@@ -44,7 +44,6 @@
           ]
         },
 
-
         "NEXT_DIGIT":{
           "COMMENT":"This node moves to the next digit in the problem.",
           "type":"node",
@@ -57,8 +56,6 @@
             {"constraint":"","edge":"USER_INPUT"}
           ]
         },
-
-        // ROBO_MATH
 
         "USER_INPUT": {
           "COMMENT":"Preps the tutor for user input, then waits for user input.",
@@ -125,7 +122,6 @@
 
       },
 
-      // ROBO_MATH continue...
       "moduleMap": {
 
         "COMMENT": "@@@@@  CModules  @@@@@",
@@ -159,8 +155,6 @@
           "COMMENT": "???",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#NEXTDIGITs:String", "features":""},
-
-            // ROBO_MATH (3)
             {"type": "COMMAND", "id": "SBigMath", "method": "nextDigit", "features": ""}
 
             // tap the numbers
@@ -174,12 +168,7 @@
           "COMMENT": "???",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#USERINPUT:String", "features":""},
-
-            // ROBO_MATH (3)
-            // ROBO_MATH (3) WAIT
-            // WAIT
             {"type": "COMMAND", "cmd": "WAIT"}
-
           ]
         },
 
@@ -189,11 +178,8 @@
           "COMMENT": "???",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#CORRECTFEEDBACK:String", "features":""},
-
-            // ROBO_MATH (3)
             // Good!
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Right.mp3", "soundpackage":"temp", "volume": 1.0, "mode":"flow", "features": ""}
-
           ]
         },
 
@@ -204,9 +190,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#WRONGFEEDBACK:String", "features":""},
 
-            // ROBO_MATH (3)
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3",       "soundpackage":"temp", "volume": 1.0, "mode":"flow", "features": ""}
-
           ]
         },
 
@@ -218,9 +202,6 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#PROBLEMCORRECT:String", "features":""},
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3", "soundpackage":"temp", "volume": 1.0, "mode":"flow", "features": ""}
-
-            // ROBO_MATH (3)
-
           ]
         }
 
@@ -238,7 +219,6 @@
 
       },
 
-      // ROBO_MATH continue...
       "constraintMap": {
 
         "COMMENT": "@@@@@  CConstraints @@@@@ ",

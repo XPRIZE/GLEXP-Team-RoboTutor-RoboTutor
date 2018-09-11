@@ -130,13 +130,10 @@ public class StudentActionListenerImpl implements StudentActionListener{
             switch(selection) {
 
 
-
-                // ROBO_MATH here are the reactions to student input
-                // ROBO_MATH... √√√ these should be replaced with "WAIT" on the action side, and 'applyBehaviorNode("NEXTNODE")' on this side
-                // ROBO_MATH... move this ish to animator graph
                 // digit names are the selection
                 case "symbol_result_hun":
-                    // ROBO_MATH NEXT NEXT NEXT this should be moved into nextDigit
+
+                    // NONE OF THIS IS RIGHT.... IT ONLY HANDLES TWO DIGITS AT THE MOMENT
                     expectedInput = getHunsDigit(_expectedResult);
 
                     if (input.equals(String.valueOf(expectedInput))) {
@@ -196,7 +193,8 @@ public class StudentActionListenerImpl implements StudentActionListener{
                         _publisher.retractFeature(FTR_CORRECT);
                         _publisher.publishFeature(FTR_WRONG);
                     }
-                    // ROBO_MATH √√√ see if this works!
+
+                    // move to next node
                     Log.wtf("SEPTEMBER", "applying behavior node");
                     _behaviorManager.applyBehaviorNode(NEXTNODE);
                     break;
@@ -211,8 +209,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
                         _publisher.publishFeature(FTR_CORRECT);
                         Log.wtf("SEPTEMBER", "publishing correct");
 
-                        // ROBO_MATH √√√ temporary until we know number of digits
-                        // ROBO_MATH √√√ move into TWO digits!!!
+
                         if (_numDigits == 1) {
                             _publisher.retractFeature(FTR_PROBLEM_HAS_MORE);
                             _publisher.publishFeature(FTR_PROBLEM_DONE);
@@ -222,10 +219,12 @@ public class StudentActionListenerImpl implements StudentActionListener{
                             _publisher.publishFeature(FTR_PROBLEM_HAS_MORE);
                         }
 
+                        // ROBO_MATH NEXT NEXT NEXT figure out messy carry stuff
                         if(_isCarryOne) {
 
                             _hasWrittenOnesResult = true;
                             // can't go to next digit unless we've written carry
+                            _bigMath.showCarryTen();
                             if(!_hasCarriedToTens) {
                                 break;
                             }
@@ -252,7 +251,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
                         Log.wtf("SEPTEMBER", "publishing wrong");
                     }
 
-                    // ROBO_MATH √√√ see if this works!
+                    // move to next node
                     Log.wtf("SEPTEMBER", "applying behavior node");
                     _behaviorManager.applyBehaviorNode(NEXTNODE);
                     break;

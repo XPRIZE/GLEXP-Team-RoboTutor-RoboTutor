@@ -167,20 +167,15 @@ public class BigMathMechanic {
 
     /**
      * Just a temporary placeholder to do all the things.
-     * ROBO_MATH Step 1
      */
     void doAllTheThings() {
 
-        // ROBO_MATH √√√ done
         initializeLayout();
 
-        // ROBO_MATH do
         initializeOnClickListeners();
 
-        // ROBO_MATH do
         initializeWriteInputs();
 
-        // ROBO_MATH do for each problem
         resetState();
 
         Log.wtf("DATA", _data.toString());
@@ -395,7 +390,6 @@ public class BigMathMechanic {
 
         // initialize master container
         //_controller_master = (CGlyphController_Simple) findViewById(R.id.glyph_controller);
-        // ROBO_MATH why ain't this workin?
         _controller_master = (CGlyphController_Simple) findViewById(R.id.write_box_right);//.findViewById(R.id.glyph_controller);
         _inputContainer_master = (CGlyphInputContainer_Simple) findViewById(R.id.write_box_right).findViewById(R.id.drawn_box);
         _controller_master.setInputContainer(_inputContainer_master);
@@ -516,7 +510,6 @@ public class BigMathMechanic {
             _controller.setVisibility(View.INVISIBLE);
 
             // digit name gets passed as action
-            // ROBO_MATH this is where we put a WAIT
             _studentActionListener.fireAction(_digitName, "WRITE", result);
             // ruleEngine.registerWrite(character)
 
