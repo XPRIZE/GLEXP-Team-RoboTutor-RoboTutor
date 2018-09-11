@@ -169,7 +169,7 @@
 
             {"name":"Adding 3 + 2...",    "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Subtracting 3 things minus 0 things means--.mp3",  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
 
-            {"name":"", "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_RESULT:String", "features": "" },
+            {"name":"", "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "highlightResult", "parms": "", "features": "" },
 
             {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tap here and please write your answer.mp3",    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
           ],
@@ -198,7 +198,7 @@
             {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "How many things do you get.mp3",                "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_ADD"},
             {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "How many things are left.mp3",                  "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": "ASM_SUB"},
 
-            {"name":"", "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_RESULT:String", "features": "" },
+            {"name":"", "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "highlightResult", "parms": "", "features": "" },
 
             {"name":"", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tap here and please write your answer.mp3",    "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
 
@@ -627,7 +627,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAddSubtract", "method": "logState", "parms": "type#node,value#WAIT_FOR_INPUT:String", "features":""},
 
-            {"type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_OVERHEAD:String",               "features": "ASM_SUB" },
+            {"type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverhead", "parms": "",               "features": "ASM_SUB" },
             {"type": "COMMAND", "cmd": "WAIT"}
           ]
         },
@@ -692,7 +692,7 @@
         "SET_CHIME_BEHAVIOR": {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "CHIME_FEEDBACK:String|CHIME_FEEDBACK:String" ,"features":""},
         "CLR_CHIME_BEHAVIOR": {"type": "COMMAND", "id": "SAddSubtract", "method": "setStickyBehavior", "parms": "CHIME_FEEDBACK:String|NULL:String" ,"features":""},
 
-        "HIGHLIGHT_OVERHEAD": {"type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverheadOrResult", "parms": "HIGHLIGHT_OVERHEAD:String"},
+        "HIGHLIGHT_OVERHEAD": {"type": "COMMAND", "id": "SAddSubtract", "method": "highlightOverhead", "parms": ""},
 
         "SET_DATASOURCE":{"type": "COMMAND", "id": "SAddSubtract", "method": "setDataSource", "parms": "LOCAL_FILE:String", "features":"!DATA_SADDSUBTRACT"},
         "NEXT_DATASET":{"type": "COMMAND", "id": "SAddSubtract", "method": "next" ,"features":""},

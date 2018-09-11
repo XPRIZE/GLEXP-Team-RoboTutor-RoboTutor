@@ -27,7 +27,7 @@ import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
-import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
+import cmu.xprize.robotutor.tutorengine.ITutorObject;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
@@ -37,7 +37,6 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.util.IBehaviorManager;
-import cmu.xprize.util.IEvent;
 import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.IEventSource;
 import cmu.xprize.util.IScope;
@@ -49,7 +48,7 @@ import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 import static java.lang.Thread.sleep;
 
-public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, IDataSink, IBehaviorManager, IEventSource, ITutorLogger {
+public class TAsmComponent extends CAsm_Component implements ITutorObject, IDataSink, IBehaviorManager, IEventSource, ITutorLogger {
 
     private CTutor           mTutor;
     private CObjectDelegate  mSceneObject;
@@ -105,11 +104,11 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         mSceneObject.setVisibility(visible);
     }
 
-    public void evaluateWhole () {
+    public void evaluateWhole (String character) {
 
         reset();
 
-        boolean wholeCorrect = isWholeCorrect();
+        boolean wholeCorrect = isWholeCorrect(character); // MATHFIX_WRITE here is where assessment happens
         trackAndLogPerformance();
 
 
@@ -242,7 +241,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     }
 
 
-    public void saveCurFeaturesAboutOverhead() {
+    private void saveCurFeaturesAboutOverhead() {
 
         if (mTutor.testFeature(TCONST.ASM_RA_START)) curFeatures.add(TCONST.ASM_RA_START);
         if (mTutor.testFeature(TCONST.ASM_NEXT_NUMBER)) curFeatures.add(TCONST.ASM_NEXT_NUMBER);
@@ -252,7 +251,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     }
 
 
-    public void delCurFeaturesAboutOverhead() {
+    private void delCurFeaturesAboutOverhead() {
 
         retractFeature(TCONST.ASM_RA_START);
         retractFeature(TCONST.ASM_NEXT_NUMBER);
@@ -261,12 +260,13 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         retractFeature(TCONST.ASM_RESULT_NEXT_OR_LAST);
     }
 
-    public void retrieveCurFeaturesAboutOverhead() {
+    private void retrieveCurFeaturesAboutOverhead() {
         for (int i = 0; i < curFeatures.size(); i++) {
             publishFeature(curFeatures.get(i));
         }
     }
 
+    // might be called by AG
     public void reset() {
 
         retractFeature(TCONST.FTR_COMPLETE);
@@ -280,38 +280,57 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         retractFeature(TCONST.ASM_ALL_DOTS_DOWN);
     }
 
-    public void resetAll() {
+
+    private void resetAllFeatures() {
         retractFeature(TCONST.GENERIC_RIGHT);
         retractFeature(TCONST.GENERIC_WRONG);
         retractFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_CORRECT);
         retractFeature(TCONST.ASM_DIGIT_OR_OVERHEAD_WRONG);
 
-        resetAllAboutAdd();
-        resetAllAboutSub();
-        resetAllAboutMulti();
+        resetAddFeatures();
+        resetSubFeatures();
+        resetMultiFeatures();
     }
 
-    public void resetAllAboutAdd() {
-        retractFeature(TCONST.ASM_ADD);
-        retractFeature(TCONST.ASM_ADD_PROMPT);
-        retractFeature(TCONST.ASM_ADD_PROMPT_COUNT_FROM);
-        retractFeature(TCONST.ASM_ALL_DOTS_DOWN);
+    private void resetAddFeatures() {
+        String[] ADD_FEATURES = new String[]{
+                TCONST.ASM_ADD,
+                TCONST.ASM_ADD_PROMPT,
+                TCONST.ASM_ADD_PROMPT_COUNT_FROM,
+                TCONST.ASM_ALL_DOTS_DOWN};
+
+        for (String feature : ADD_FEATURES) {
+            retractFeature(feature);
+        }
     }
 
-    public void resetAllAboutSub() {
-        retractFeature(TCONST.ASM_SUB);
-        retractFeature(TCONST.ASM_SUB_PROMPT);
+    private void resetSubFeatures() {
+        String[] SUB_FEATURES = new String[]{
+                TCONST.ASM_SUB,
+                TCONST.ASM_SUB_PROMPT
+        };
+
+        for (String feature : SUB_FEATURES) {
+            retractFeature(feature);
+        }
     }
 
-    public void resetAllAboutMulti() {
-        retractFeature(TCONST.ASM_MULTI);
-        retractFeature(TCONST.ASM_MULTI_PROMPT);
-        retractFeature(TCONST.ASM_RA_START);
-        retractFeature(TCONST.ASM_NEXT_NUMBER);
-        retractFeature(TCONST.ASM_NEXT_RESULT);
-        retractFeature(TCONST.ASM_RESULT_FIRST_TWO);
-        retractFeature(TCONST.ASM_RESULT_NEXT_OR_LAST);
-        retractFeature(TCONST.ASM_REPEATED_ADD_DOWN);
+    private void resetMultiFeatures() {
+        // MATHFIX_CLEAN these can be gone from animator_graph
+        String[] MULTI_FEATURES = new String[]{
+                TCONST.ASM_MULTI,
+                TCONST.ASM_MULTI_PROMPT,
+                TCONST.ASM_RA_START,
+                TCONST.ASM_NEXT_NUMBER,
+                TCONST.ASM_NEXT_RESULT,
+                TCONST.ASM_RESULT_FIRST_TWO,
+                TCONST.ASM_RESULT_NEXT_OR_LAST,
+                TCONST.ASM_REPEATED_ADD_DOWN
+        };
+
+        for (String feature : MULTI_FEATURES) {
+            retractFeature(feature);
+        }
     }
 
     /**
@@ -409,7 +428,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         //
         if (mTutor.testFeatureSet(TCONST.GENERIC_WRONG))
                             retractFeature(TCONST.ALL_CORRECT);
-        resetAll();
+        resetAllFeatures();
 
         super.next();
         resetPlaceValue();
@@ -427,6 +446,10 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     }
 
 
+
+    // ---------------------------
+    // ---------for demos --------
+    // ---------------------------
     /**
      *
      * @param dataPacket
@@ -694,6 +717,8 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         extractFeatureContents(builder, _FeatureMap);
 
         RoboTutor.logManager.postTutorState(TUTOR_STATE_MSG, "target#math," + logData + builder.toString());
+
+        Log.i(ASM_CONST.TAG_DEBUG_MATHFIX_UI_REF, logData);
     }
 
     // ITutorLogger - End
@@ -749,7 +774,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
 
         reset();
         super.nextDigit();
-        nextPlaceValue();
+
 
         retrieveCurFeaturesAboutOverhead();
     }
@@ -965,75 +990,36 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
     }
 
 
-    @Override
-    public CObjectDelegate getimpl() {
-        return mSceneObject;
-    }
-
-    @Override
-    public void zoomInOut(Float scale, Long duration) {
-
-    }
-
-    @Override
-    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition) {
-
-    }
-
-
-    @Override
-    public void setAlpha(Float alpha) {
-
-    }
-
-
     /**
-     * These events come from the FingerWriter Component which is connected in the Layout XML
+     * MATHFIX_WRITE These events come from the FingerWriter Component which is connected in the Layout XML
      *
-     * @param event
-     */    @Override
-    public void onEvent(IEvent event) {
+     * @param character
+     */
+    @Override
+    public void charRecCallback(String character) {
 
         retractFeature(TCONST.ASM_ALL_DOTS_DOWN);
 
         //retractFeature(TCONST.ASM_MULTI);
-        super.onEvent(event);
+        super.charRecCallback(character);
 
-        evaluateWhole();
+        // MATHFIX_WRITE this is where the digit should be updated
 
+        evaluateWhole(character);
+
+        // MATHFIX_WRITE
         postEvent(ASM_CONST.INPUT_BEHAVIOR);
     }
 
-    public void applyEventNode(String nodeName) {
-        IScriptable2 obj = null;
-
-        if(nodeName != null && !nodeName.equals("")) {
-            try {
-                obj = mTutor.getScope().mapSymbol(nodeName);
-
-                if(obj.testFeatures()) {
-                    obj.applyNode();
-                }
-
-            } catch (Exception e) {
-                // TODO: Manage invalid Behavior
-                e.printStackTrace();
-            }
-        }
+    public void highlightOverhead() {
+         mechanics.highlightOverhead();
     }
 
-    public void exitWrite() {
-        super.exitWrite();
+    public void highlightResult() {
+         mechanics.highlightResult();
     }
 
-    public void highlightOverheadOrResult(String whichToHighlight) {
-        mechanics.highlightOverheadOrResult(whichToHighlight);
-    }
-
-    public void addMapToTutor(String key, String value) {
-        mTutor.getScope().addUpdateVar(name() + key, new TString(value));
-    }
-
+    @Override
     public void delAddFeature(String delFeature, String addFeature) {
         retractFeature(delFeature);
         publishFeature(addFeature);
@@ -1043,11 +1029,9 @@ public class TAsmComponent extends CAsm_Component implements ITutorObjectImpl, I
         boolean oldState = hasShown;
         super.setDotBagsVisible(_dotbagsVisible, curDigitIndex, startRow);
 
-        if (oldState == false && hasShown == true) {
-            if (curStrategy.equals(ASM_CONST.STRATEGY_COUNT_FROM))
-                publishFeature(TCONST.ASM_ADD_PROMPT_COUNT_FROM);
-            else
-                publishFeature(TCONST.ASM_ADD_PROMPT);
+        if (!oldState && hasShown) {
+
+            publishFeature(TCONST.ASM_ADD_PROMPT);
             publishFeature(TCONST.ASM_SUB_PROMPT);
 
             if (curNode.equals(ASM_CONST.NODE_ADD_PROMPT) || curNode.equals(ASM_CONST.NODE_SUB_PROMPT)) {

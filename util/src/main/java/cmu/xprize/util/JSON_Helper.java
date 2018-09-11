@@ -433,14 +433,19 @@ public class JSON_Helper {
                         //
                         if (fieldClass.isArray()) {
 
+                            // uhq
                             // Get the array on the 1st dimension for the field (attribute)
-                            nArr = jsonObj.getJSONArray(fieldName);
+                            try {
+                                nArr = jsonObj.getJSONArray(fieldName);
+                                Class<?> elemClass = fieldClass.getComponentType();
+                                Object field_Array = Array.newInstance(elemClass, nArr.length());
+                                field.set(self, parseArray(jsonObj, self, classMap, scope, nArr, elemClass, field_Array));
+                            } catch(Exception e){
+                                JSONArray emptyArray = new JSONArray();
+                                Object field_Array = Array.newInstance(String.class, 0);
+                                field.set(self, parseArray(jsonObj, self, classMap, scope, emptyArray, String.class, field_Array));
+                            }
 
-                            Class<?> elemClass = fieldClass.getComponentType();
-
-                            Object field_Array = Array.newInstance(elemClass, nArr.length());
-
-                            field.set(self, parseArray(jsonObj, self, classMap, scope, nArr, elemClass, field_Array));
                         }
 
                         // otherwise assume it is a discrete object of ILoadable type
@@ -464,7 +469,9 @@ public class JSON_Helper {
                 }
 
             } catch (Exception e) {
+
                 CErrorManager.logEvent(TAG, "ERROR: parseSelf:", e, true);
+
             }
         }
     }
@@ -550,7 +557,7 @@ public class JSON_Helper {
             }
         }
         catch(Exception e) {
-            CErrorManager.logEvent(TAG, "Json Array Format Error: ", e, false);
+            CErrorManager.logEvent(TAG, "Json Array Format Error: ", e, true);
         }
 
         return field_Array;

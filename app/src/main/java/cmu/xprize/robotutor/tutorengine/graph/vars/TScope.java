@@ -271,7 +271,7 @@ public class TScope implements IScope2 {
                                         resultObj = mapSymbol(Symbol.toString());
 
                                         if (resultObj == null) {
-                                            CErrorManager.logEvent(TAG, "Parser Symbol not found: <" + Symbol + "> in expression" + source, null, false);
+                                            CErrorManager.logEvent(TAG, "Parser Symbol not found: <" + Symbol + "> in expression " + source, null, false);
                                         }
 
                                         result.append(resultObj.toString());

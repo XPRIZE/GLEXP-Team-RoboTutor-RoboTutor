@@ -57,11 +57,53 @@
                 android:orientation="vertical">
 
                 <Button
+                    android:id="@+id/SComprehensionMenuButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/launchnormal"
+                    android:backgroundTint="@color/newCustomButton"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="50dp"
+                    android:scaleType="fitCenter"
+                    android:padding="20dp"
+                    android:textSize="23sp"
+                    android:textColor="#FFFFFF"
+                    android:text="COMPREHENSION"/>
+
+                <Button
+                    android:id="@+id/SNumCompareMenuButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/launchnormal"
+                    android:backgroundTint="@color/newCustomButton"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="50dp"
+                    android:scaleType="fitCenter"
+                    android:padding="20dp"
+                    android:textSize="23sp"
+                    android:textColor="#FFFFFF"
+                    android:text="NUM COMPARE"/>
+
+                <Button
+                    android:id="@+id/SSentenceWritingMenuButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/launchnormal"
+                    android:backgroundTint="@color/newCustomButton"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="50dp"
+                    android:scaleType="fitCenter"
+                    android:padding="20dp"
+                    android:textSize="23sp"
+                    android:textColor="#FFFFFF"
+                    android:text="SENTENCE WRITING"/>
+
+                <Button
                     android:id="@+id/SAkiraCustom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/launchnormal"
-                    android:backgroundTint="#FF00FF"
+                    android:backgroundTint="@color/oldCustomButton"
                     android:layout_marginBottom="15dp"
                     android:layout_marginEnd="50dp"
                     android:scaleType="fitCenter"
@@ -76,7 +118,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/launchnormal"
-                    android:backgroundTint="#FF00FF"
+                    android:backgroundTint="@color/oldCustomButton"
                     android:layout_marginBottom="15dp"
                     android:layout_marginEnd="50dp"
                     android:scaleType="fitCenter"
@@ -91,7 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/launchnormal"
-                    android:backgroundTint="#FF00FF"
+                    android:backgroundTint="@color/oldCustomButton"
                     android:layout_marginBottom="15dp"
                     android:layout_marginEnd="50dp"
                     android:scaleType="fitCenter"
@@ -106,7 +148,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/launchnormal"
-                    android:backgroundTint="#FF00FF"
+                    android:backgroundTint="@color/oldCustomButton"
                     android:layout_marginBottom="15dp"
                     android:layout_marginEnd="50dp"
                     android:scaleType="fitCenter"
@@ -117,107 +159,135 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/SBPopMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <Button
-                android:id="@+id/SBPopLetters"
+            <LinearLayout
+                android:id="@+id/SBPopMenu"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/launchnormal"
-                android:backgroundTint="#FF00FF"
-                android:layout_marginBottom="15dp"
-                android:layout_marginEnd="50dp"
-                android:scaleType="fitCenter"
-                android:padding="12dp"
-                android:textSize="16sp"
-                android:textColor="#FFFFFF"
-                android:text="LETTERS"
-                android:tag="bpop.ltr.mix"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
 
-            <Button
-                android:id="@+id/SBPopWords"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/launchnormal"
-                android:backgroundTint="#FF00FF"
-                android:layout_marginBottom="15dp"
-                android:layout_marginEnd="50dp"
-                android:scaleType="fitCenter"
-                android:padding="12dp"
-                android:textSize="16sp"
-                android:textColor="#FFFFFF"
-                android:text="WORDS"
-                android:tag="bpop.wrd"/>
 
-            <Button
-                android:id="@+id/SBPopPhonemes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/launchnormal"
-                android:backgroundTint="#FF00FF"
-                android:layout_marginBottom="15dp"
-                android:layout_marginEnd="50dp"
-                android:scaleType="fitCenter"
-                android:padding="12dp"
-                android:textSize="16sp"
-                android:textColor="#FFFFFF"
-                android:text="PHONEMES"
-                android:tag="bpop.phon"/>
+                <Button
+                    android:id="@+id/SBPopLetters"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/launchnormal"
+                    android:backgroundTint="@color/oldCustomButton"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="50dp"
+                    android:scaleType="fitCenter"
+                    android:padding="12dp"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:text="LETTERS"
+                    android:tag="bpop.ltr.mix"/>
 
-            <Button
-                android:id="@+id/SBPopNumbers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/launchnormal"
-                android:backgroundTint="#FF00FF"
-                android:layout_marginBottom="15dp"
-                android:layout_marginEnd="50dp"
-                android:scaleType="fitCenter"
-                android:padding="12dp"
-                android:textSize="16sp"
-                android:textColor="#FFFFFF"
-                android:text="NUMBERS"
-                android:tag="bpop.num"/>
+                <Button
+                    android:id="@+id/SBPopWords"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/launchnormal"
+                    android:backgroundTint="@color/oldCustomButton"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="50dp"
+                    android:scaleType="fitCenter"
+                    android:padding="12dp"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:text="WORDS"
+                    android:tag="bpop.wrd"/>
 
-            <Button
-                android:id="@+id/SBPopShapes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/launchnormal"
-                android:backgroundTint="#FF00FF"
-                android:layout_marginBottom="15dp"
-                android:layout_marginEnd="50dp"
-                android:scaleType="fitCenter"
-                android:padding="12dp"
-                android:textSize="16sp"
-                android:textColor="#FFFFFF"
-                android:text="SHAPES"
-                android:tag="bpop.shp"/>
+                <Button
+                    android:id="@+id/SBPopPhonemes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/launchnormal"
+                    android:backgroundTint="@color/oldCustomButton"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="50dp"
+                    android:scaleType="fitCenter"
+                    android:padding="12dp"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:text="PHONEMES"
+                    android:tag="bpop.phon"/>
 
-            <Button
-                android:id="@+id/SBPopExpressions"
+                <Button
+                    android:id="@+id/SBPopNumbers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/launchnormal"
+                    android:backgroundTint="@color/oldCustomButton"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="50dp"
+                    android:scaleType="fitCenter"
+                    android:padding="12dp"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:text="NUMBERS"
+                    android:tag="bpop.num"/>
+
+                <Button
+                    android:id="@+id/SBPopShapes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/launchnormal"
+                    android:backgroundTint="@color/oldCustomButton"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="50dp"
+                    android:scaleType="fitCenter"
+                    android:padding="12dp"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:text="SHAPES"
+                    android:tag="bpop.shp"/>
+
+                <Button
+                    android:id="@+id/SBPopExpressions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/launchnormal"
+                    android:backgroundTint="@color/oldCustomButton"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="50dp"
+                    android:scaleType="fitCenter"
+                    android:padding="12dp"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:text="EXPRESSIONS"
+                    android:tag="bpop.ex"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/SComprehensionMenu"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/launchnormal"
-                android:backgroundTint="#FF00FF"
-                android:layout_marginBottom="15dp"
-                android:layout_marginEnd="50dp"
-                android:scaleType="fitCenter"
-                android:padding="12dp"
-                android:textSize="16sp"
-                android:textColor="#FFFFFF"
-                android:text="EXPRESSIONS"
-                android:tag="bpop.ex"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/SNumCompareMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/SSentenceWritingMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+            </LinearLayout>
 
         </LinearLayout>
-
-
-    </LinearLayout>
 
 
 

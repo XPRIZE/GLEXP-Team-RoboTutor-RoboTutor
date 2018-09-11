@@ -1,11 +1,12 @@
 package cmu.xprize.asm_component;
 
 
-import java.lang.reflect.Array;
-import java.util.HashMap;
-import java.util.Map;
+import android.graphics.Color;
+import android.util.Log;
 
-import cmu.xprize.util.TCONST;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class ASM_CONST {
 
@@ -13,15 +14,11 @@ public class ASM_CONST {
     public static final String LOCAL_FILE = "LOCAL_FILE";
     public static final String LOCAL_FILE_PATH = "/sdcard/Arithmetic/asm_data.txt";
 
-    //different strategy used in addition
-    public static final String STRATEGY_COUNT_UP = "count_up";
-    public static final String STRATEGY_COUNT_FROM = "count_from";
 
     //used to judge the current node in animator_graph
     public static final String NODE_USERINPUT = "USERINPUT";
     public static final String NODE_ADD_PROMPT = "ADD_PROMPT";
     public static final String NODE_SUB_PROMPT = "SUB_PROMPT";
-    public static final String NODE_MULTI_PROMPT = "MULTI_PROMPT";
 
     //for add and subtract
     public static final int ANIMATOR3    = 1;
@@ -32,13 +29,8 @@ public class ASM_CONST {
     public static final int OPERATOR_ROW = 6;
     public static final int RESULT_ROW   = 7;
 
-    //for multiplication
-    public static final int REGULAR_MULTI                  = 1;
-    public static final int OPERATION_MULTI                = 2;
-    public static final int RESULT_OR_ADD_MULTI_PART1     = 3;
 
     public static final int alleyMargin     = 10;
-    public static final int alleyMarginMul  = 3;
     public static final int rightPadding    = 15;
 
     public static final int textSize     = 18;  // 18
@@ -112,4 +104,19 @@ public class ASM_CONST {
     //indicate which thing to highlight
     public static final String HIGHLIGHT_OVERHEAD = "HIGHLIGHT_OVERHEAD";
     public static final String HIGHLIGHT_RESULT   = "HIGHLIGHT_RESULT";
+
+    // DEBUG VARIABLES
+    public static final boolean USE_NEW_MATH = true;
+    public static final String TAG_DEBUG_MATHFIX = "MATHFIX";
+    public static final String TAG_DEBUG_MATHFIX_UI_REF = "MATHFIX_UI_REF";
+    public static final String ANNOYING_REFERENCE_STRING = "Alley(%d).Layout().Layout(%d).Text(%d) -- %s";
+
+    public static final void logAnnoyingReference(int alleyId, int textLayoutId, int textId, String descriptor) {
+        Log.d(TAG_DEBUG_MATHFIX_UI_REF, String.format(Locale.getDefault(), ASM_CONST.ANNOYING_REFERENCE_STRING, alleyId, textLayoutId, textId, descriptor));
+    }
+
+
+    public static final int DEBUG_TEXT_COLOR = Color.parseColor("#ff22bb");
+    public static final int DEBUG_TEXTLAYOUT_1_COLOR = Color.parseColor("#22ffbb");
+    public static final int DEBUG_TEXTLAYOUT_2_COLOR = Color.parseColor("#bb22ff");
 }

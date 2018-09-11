@@ -1,6 +1,5 @@
 package cmu.xprize.asm_component;
 
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,7 +15,6 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     protected ArrayList<CAsm_Alley> allAlleys;
     protected CAsm_Component mComponent;
-    protected String operation = "";
 
     float scale;
 
@@ -28,13 +26,6 @@ public class CAsm_MechanicBase implements IDotMechanics {
     protected int firstBagIndex = 4;
     protected int secondBagIndex = 5;
     protected int resultIndex = 6;
-
-    protected int firstBagIndexForMulti = 0;
-    protected int secondBagIndexForMulti = 1;
-    protected int resultOrAddInMultiPart1 = 2;
-    protected int addInMultiPart2 = 3;
-    protected int addInMultiPart3 = 4;
-    protected int resultIndexForMultiBackup = 5;
 
     protected int clickedTextLayoutIndex = -1;
 
@@ -54,6 +45,9 @@ public class CAsm_MechanicBase implements IDotMechanics {
     }
 
 
+    /**
+     * Called by C_Component.nextDigit()
+     */
     public void nextDigit(){
 
         for (CAsm_Alley alley: allAlleys) {
@@ -75,19 +69,12 @@ public class CAsm_MechanicBase implements IDotMechanics {
         CAsm_Text text;
 
         for (CAsm_Alley alley: allAlleys) {
-            text = alley.getTextLayout().getTextLayout(mComponent.digitIndex).getText(1);
+            text = alley.getTextLayout().getTextLayout(mComponent.digitIndex).getText(1); // √√√
+            ASM_CONST.logAnnoyingReference(alley.getId(), mComponent.digitIndex, 1, "highlightDigits()");
 
-            if(!(mComponent.operation.equals("x") && allAlleys.indexOf(alley) == resultOrAddInMultiPart1)) {
-                if (!text.getIsStruck()) {
-                    CAnimatorUtil.zoomInOut(text, 1.5f, 1500L);
-                }
+            if (!text.getIsStruck()) {
+                CAnimatorUtil.zoomInOut(text, 1.5f, 1500L);
             }
-        }
-
-        if(mComponent.operation.equals("x")) {
-            CAsm_TextLayout resultTextLayout = allAlleys.get(resultOrAddInMultiPart1).getTextLayout();
-            for(int i = 1; i < resultTextLayout.getChildCount(); i++)
-                CAnimatorUtil.zoomInOut(resultTextLayout.getTextLayout(i).getText(1), 1.5f, 1500L);
         }
     }
 
@@ -101,7 +88,7 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
         if(mComponent != null) {
 
-            if (mComponent.getClickPaused()) {
+            if (mComponent.clickPaused) {
                 return;
             }
 
@@ -119,12 +106,12 @@ public class CAsm_MechanicBase implements IDotMechanics {
                     mComponent.delAddFeature(TCONST.ASM_CLICK_ON_DOT, "");
                     if (mComponent.overheadTextSupplement != null) {
                         if ((clickedText.equals(mComponent.overheadText) || clickedText.equals(mComponent.overheadTextSupplement))
-                                && mComponent.overheadText.isWritable == true && mComponent.overheadTextSupplement.isWritable == true)
-                            mComponent.updateText(mComponent.overheadTextSupplement, mComponent.overheadText, clickedTextLayoutIndex < resultIndex && !mComponent.operation.equals("x"));
+                                && mComponent.overheadText.isWritable && mComponent.overheadTextSupplement.isWritable)
+                            mComponent.updateText(mComponent.overheadTextSupplement, mComponent.overheadText, clickedTextLayoutIndex < resultIndex);
                         else
-                            mComponent.updateText(null, clickedText, clickedTextLayoutIndex < resultIndex && !mComponent.operation.equals("x"));
+                            mComponent.updateText(null, clickedText, clickedTextLayoutIndex < resultIndex);
                     } else
-                        mComponent.updateText(null, clickedText, clickedTextLayoutIndex < resultIndex && !mComponent.operation.equals("x"));
+                        mComponent.updateText(null, clickedText, clickedTextLayoutIndex < resultIndex);
                 } else {
                     clickedTextLayout.setIsClicked(true);
                     clickedText.setIsClicked(true);
@@ -134,8 +121,6 @@ public class CAsm_MechanicBase implements IDotMechanics {
             }
         }
     }
-
-    public String getOperation() {return operation;}
 
     /**
      * If user input the overhead value correctly
@@ -198,15 +183,15 @@ public class CAsm_MechanicBase implements IDotMechanics {
 
     }
 
-    public void highlightOverheadOrResult(String whichToHighlight) {
+    // Overridden by child class.
+    public void highlightOverhead() {
 
-        if (whichToHighlight.equals(ASM_CONST.HIGHLIGHT_RESULT)) {
-
-            mComponent.highlightText(allAlleys.get(resultIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1));
-            mComponent.delAddFeature(TCONST.ASM_ALL_DOTS_DOWN, "");
-        }
     }
 
-    public int getCurRow() { return 2; }
+    public void highlightResult() {
+        mComponent.highlightText(allAlleys.get(resultIndex).getTextLayout().getTextLayout(mComponent.digitIndex).getText(1)); // √√√
+        ASM_CONST.logAnnoyingReference(resultIndex, mComponent.digitIndex, 1, "highlightOverheadOrResult()");
+        mComponent.delAddFeature(TCONST.ASM_ALL_DOTS_DOWN, "");
+    }
 
 }

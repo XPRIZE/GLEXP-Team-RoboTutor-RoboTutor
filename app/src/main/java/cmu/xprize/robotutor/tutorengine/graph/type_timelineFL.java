@@ -114,7 +114,7 @@ public class type_timelineFL extends type_action implements IMediaListener {
 
     @Override
     public void globalPlay() {
-
+        Log.d("ULANI", "globalPlay: type_timelineFL");
         if(mWasPlaying) {
             mWasPlaying = false;
 

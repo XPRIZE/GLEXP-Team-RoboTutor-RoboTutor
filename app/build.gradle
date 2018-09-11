@@ -122,6 +122,7 @@ dependencies {
     compile project(':mn_component')
     compile project(':comp_listener')
     compile project(':comp_reading')
+    compile project(':comp_questions')
     compile project(':sm_component')
     compile project(':fw_component')
     compile project(':nl_component')
@@ -137,5 +138,6 @@ dependencies {
     compile project(path: ':comp_counting')
     compile project(path: ':comp_counting2')
     compile project(path: ':comp_numberscale')
+    compile project(path: ':comp_nd')
 }
 

@@ -22,7 +22,7 @@ import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
-import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
+import cmu.xprize.robotutor.tutorengine.ITutorObject;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
@@ -40,7 +40,7 @@ import static cmu.xprize.util.TCONST.QGRAPH_MSG;
  * Created by kevindeland on 10/20/17.
  */
 
-public class TCountComponent extends CCount_Component implements ITutorObjectImpl, IDataSink, IPublisher, ITutorLogger, IBehaviorManager, IEventSource {
+public class TCountComponent extends CCount_Component implements ITutorObject, IDataSink, IPublisher, ITutorLogger, IBehaviorManager, IEventSource {
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
@@ -69,7 +69,7 @@ public class TCountComponent extends CCount_Component implements ITutorObjectImp
 
     //**********************************************************
     //**********************************************************
-    //*****************  ITutorObjectImpl Implementation
+    //*****************  ITutorObject Implementation
 
     @Override
     public void init(Context context, AttributeSet attrs) {
@@ -126,27 +126,6 @@ public class TCountComponent extends CCount_Component implements ITutorObjectImp
     public void setLogManager(ILogManager logManager) {
 
     }
-
-    @Override
-    public CObjectDelegate getimpl() {
-        return null;
-    }
-
-    @Override
-    public void zoomInOut(Float scale, Long duration) {
-
-    }
-
-    @Override
-    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition) {
-
-    }
-
-    @Override
-    public void setAlpha(Float alpha) {
-
-    }
-
 
     private void reset() {
         // TODO retract Features

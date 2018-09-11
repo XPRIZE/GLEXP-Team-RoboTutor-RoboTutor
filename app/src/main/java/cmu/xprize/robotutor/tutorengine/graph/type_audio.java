@@ -22,6 +22,9 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
@@ -52,6 +55,7 @@ public class type_audio extends type_action implements IMediaListener {
     protected CMediaManager.PlayerManager mPlayer;
     protected boolean                     mPreLoaded = false;
 
+    private Timer tempTimer;
     private String mSoundSource;
     private String mSourcePath;
     private String mResolvedName;
@@ -80,6 +84,8 @@ public class type_audio extends type_action implements IMediaListener {
 
 
     public type_audio() {
+        Timer tempTimer = new Timer();
+        setTempTimer(tempTimer);
         mFileNameHasher = CFileNameHasher.getInstance();
     }
 
@@ -87,6 +93,7 @@ public class type_audio extends type_action implements IMediaListener {
      * TODO: onDestroy not being called when tutor is killed
      */
     public void onDestroy() {
+        stopTempTimer();
 
         mMediaManager.detachMediaPlayer(this);
     }
@@ -98,17 +105,19 @@ public class type_audio extends type_action implements IMediaListener {
 
     @Override
     public String sourceName() {
+        Log.d("ULANI type_audio", "sourceName: "+soundsource);
         return soundsource;
     }
 
     @Override
     public String resolvedName() {
+        Log.d("ULANI type_audio", "resolvedName: "+mResolvedName);
         return (mResolvedName == null) ? "" : mResolvedName;
     }
 
     @Override
     public void globalPause() {
-
+        Log.d("ULANI", "globalPause: wasPlaying= "+mWasPlaying);
         if (mPlayer != null) {
             if (mPlayer.isPlaying()) {
                 mWasPlaying = true;
@@ -120,7 +129,7 @@ public class type_audio extends type_action implements IMediaListener {
 
     @Override
     public void globalPlay() {
-
+        Log.d(TAG, "globalPlay: wasplaying = "+mWasPlaying);
         if (mPlayer != null) {
             if (mWasPlaying) {
                 mWasPlaying = false;
@@ -133,7 +142,7 @@ public class type_audio extends type_action implements IMediaListener {
 
     @Override
     public void globalStop() {
-
+        Log.d(TAG, "globalStop: wasplaying= "+mWasPlaying);
         if (mPlayer != null) {
             if (mPlayer.isPlaying()) {
                 mWasPlaying = true;
@@ -211,6 +220,8 @@ public class type_audio extends type_action implements IMediaListener {
      * audio players have been detached and may perform operations on a re-purposed players.
      */
     public void preLoad(IMediaListener owner) {
+        System.out.println("PRELOAD");
+        System.out.println("OWNER: "+owner.sourceName()+" => "+owner.resolvedName());
 
         // Perform late binding to the sound package.
         //
@@ -263,6 +274,7 @@ public class type_audio extends type_action implements IMediaListener {
 
     @Override
     public String applyNode() {
+        System.out.println("APPLY NODE");
 
         String status = TCONST.DONE;
 
@@ -310,6 +322,10 @@ public class type_audio extends type_action implements IMediaListener {
                     status = TCONST.WAIT;
                 }
             }
+//            else if(command.equals(TCONST.PLAY_CLOZE)){
+//                play(TCONST.CLOZE_END);
+//            }
+
         }
 
         return status;
@@ -332,9 +348,23 @@ public class type_audio extends type_action implements IMediaListener {
         return TCONST.NONE;
     }
 
+    public void setTempTimer(Timer temp) {
+        temp.scheduleAtFixedRate(
+                new TimerTask(){
+                      public void run(){
+                          if (mPlayer!= null) {
+//                              Log.d("ULANI", "TEMPTIMER: real time narrationSegment current position = " + mPlayer.getCurrentPosition());
+                          }
+                      }
+                  },0,      // run first occurrence immediately
+                100);
+        this.tempTimer = temp;
+    }
 
+    public void stopTempTimer(){
+        this.tempTimer.cancel();
+    }
     public void play() {
-
         if(mPlayer != null) {
             RoboTutor.logManager.postEvent_I(_logType, "target:node.audio,action:play,name:" + mRawName);
             mPlayer.play();
@@ -353,11 +383,29 @@ public class type_audio extends type_action implements IMediaListener {
         }
     }
 
+    public void play(long duration){
+        if(mPlayer != null) {
+            RoboTutor.logManager.postEvent_I(_logType, "target:node.audio,action:play,name:" + mRawName);
+            mPlayer.play(duration);
+
+            // AUDIOEVENT mode tracks are fire and forget - i.e. we disconnect from the player
+            // and let it continue to completion independently.
+            //
+            // This allows this Audio element to be reused immediately - So we can fire another
+            // instance of the sound while the other is still playing.
+            //
+            if(mode == TCONST.AUDIOEVENT) {
+                RoboTutor.logManager.postEvent_V(_logType, "target:node.audio,type:event,action:complete,name:" + mRawName);
+
+                mPlayer = null;
+            }
+        }
+    }
 
     public void stop() {
-
-        if(mPlayer != null)
+        if(mPlayer != null){
             mPlayer.stop();
+        }
     }
 
 

@@ -42,7 +42,7 @@ import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
-import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
+import cmu.xprize.robotutor.tutorengine.ITutorObject;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
@@ -68,7 +68,7 @@ import static cmu.xprize.util.TCONST.MEDIA_STORY;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
-public class TRtComponent extends CRt_Component implements IBehaviorManager, ITutorObjectImpl, Button.OnClickListener, IRtComponent, IDataSink, IEventSource, IPublisher, ITutorLogger {
+public class TRtComponent extends CRt_Component implements IBehaviorManager, ITutorObject, Button.OnClickListener, IRtComponent, IDataSink, IEventSource, IPublisher, ITutorLogger {
 
     private CTutor mTutor;
     private CObjectDelegate mSceneObject;
@@ -531,6 +531,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
 
             } else if (dataNameDescriptor.startsWith(TCONST.ENCODED_FOLDER)) {
+                System.out.println("ENCODED FOLDER");
 
                 // ZZZ detect story [encfolder]
                 // "story.parrot::0..10.SD_OFF1_DES.34" --> "[encfolder]0..10.SD_OFF1_DES.34"
@@ -679,8 +680,8 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 String dataFile = dataNameDescriptor.substring(TCONST.ASSETFILE.length());
 
                 // Generate a langauage specific path to the data source -
-                // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
-                // e.g. tutors/word_copy/assets/data/sw/
+                // i.e. tutors/story_questions/assets/data/<iana2_language_id>/
+                // e.g. tutors/story_questions/assets/data/sw/
                 //
                 DATASOURCEPATH = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS +
                                  "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
@@ -706,6 +707,9 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         catch (Exception e) {
             CErrorManager.logEvent(TAG, "Invalid Data Source for : " + mTutor.getTutorName(), e, false);
         }
+        System.out.println("AUDIOSOURCEPATH: "+AUDIOSOURCEPATH);
+        System.out.println("STORYSOURCEPATH: "+STORYSOURCEPATH);
+        System.out.println("DATASOURCEPATH: "+DATASOURCEPATH);
     }
 
 
@@ -977,22 +981,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         retractFeature(TCONST.GENERIC_WRONG);
     }
 
-
-    @Override
-    public void zoomInOut(Float scale, Long duration) {
-        mSceneObject.zoomInOut(scale, duration);
-    }
-
-    @Override
-    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition ) {
-        mSceneObject.wiggle(direction, magnitude, duration, repetition);
-    }
-
-    @Override
-    public void setAlpha(Float alpha) {
-        mSceneObject.setAlpha(alpha);
-    }
-
     @Override
     public void seekToPage(int pageIndex) {
         mViewManager.seekToPage(pageIndex);
@@ -1128,12 +1116,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     @Override
     public void setLogManager(ILogManager logManager) {
         mSceneObject.setLogManager(logManager);
-    }
-
-
-    @Override
-    public CObjectDelegate getimpl() {
-        return mSceneObject;
     }
 
 

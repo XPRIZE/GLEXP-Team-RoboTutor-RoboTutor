@@ -9,11 +9,11 @@ import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
-import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
+import cmu.xprize.robotutor.tutorengine.ITutorObject;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.comp_logging.ILogManager;
 
-public class TDebugComponent extends CDebugComponent implements ITutorObjectImpl {
+public class TDebugComponent extends CDebugComponent implements ITutorObject {
 
     private CTutor              mTutor;
     private CObjectDelegate     mSceneObject;
@@ -111,28 +111,6 @@ public class TDebugComponent extends CDebugComponent implements ITutorObjectImpl
     @Override
     public void setLogManager(ILogManager logManager) {
         mSceneObject.setLogManager(logManager);
-    }
-
-
-    @Override
-    public CObjectDelegate getimpl() {
-        return mSceneObject;
-    }
-
-    @Override
-    public void zoomInOut(Float scale, Long duration) {
-        mSceneObject.zoomInOut(scale, duration);
-    }
-
-    @Override
-    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition ) {
-        mSceneObject.wiggle(direction, magnitude, duration, repetition);
-    }
-
-
-    @Override
-    public void setAlpha(Float alpha) {
-        mSceneObject.setAlpha(alpha);
     }
 
 }

@@ -32,13 +32,16 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import cmu.xprize.comp_logging.IPerfLogManager;
 import cmu.xprize.ltkplus.CRecognizerPlus;
@@ -46,10 +49,12 @@ import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.ltkplus.IGlyphSink;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
+import cmu.xprize.robotutor.tutorengine.util.CrashHandler;
 import cmu.xprize.util.CDisplayMetrics;
 import cmu.xprize.util.CLoaderView;
 import cmu.xprize.comp_logging.CLogManager;
 import cmu.xprize.comp_logging.CPerfLogManager;
+import cmu.xprize.comp_logging.CAudioLogThread;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorManager;
 import cmu.xprize.robotutor.tutorengine.widgets.core.IGuidView;
@@ -67,6 +72,8 @@ import edu.cmu.xprize.listener.ListenerBase;
 
 import static cmu.xprize.util.TCONST.CODE_DROP_1_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.GRAPH_MSG;
+import static cmu.xprize.util.TCONST.PROTOTYPE_ASSET_PATTERN;
+import static cmu.xprize.util.TCONST.QA_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.ROBOTUTOR_ASSET_PATTERN;
 
 
@@ -83,10 +90,21 @@ import static cmu.xprize.util.TCONST.ROBOTUTOR_ASSET_PATTERN;
 public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     // VARIABLES FOR QUICK DEBUG LAUNCH
-    private static final boolean QUICK_DEBUG = true;
+    private static final boolean QUICK_DEBUG = false;
     private static final String debugTutorVariant = "countingx";
     private static final String debugTutorId = "place.value::pv-11.99.2D.diff0.1";
     private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.2.json";
+    //private static final String debugTutorVariant = "numdiscr";
+    //private static final String debugTutorVariant = "math";
+    //private static final String debugTutorId = "numdiscr:sample";
+    //private static final String debugTutorId = "math:0..8.ADD-1D-V-S.rand.3";
+    //private static final String debugTutorFile = "[file]numdiscr_sample.json";
+    // private static final String debugTutorFile = "[file]math_0..800.ADD-100-V-S.incr.13.json";
+
+    //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";
+
+    private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
+
 
     private CTutorEngine        tutorEngine;
     private CMediaController    mMediaController;
@@ -138,8 +156,12 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     public final static String  DOWNLOAD_PATH  = Environment.getExternalStorageDirectory() + File.separator + Environment.DIRECTORY_DOWNLOADS;
     public final static String  EXT_ASSET_PATH = Environment.getExternalStorageDirectory() + File.separator + TCONST.ROBOTUTOR_ASSET_FOLDER;
 
-    private final  String  TAG = "CRoboTutor";
+    private final String TAG = "CRoboTutor";
     private final String ID_TAG = "StudentId";
+
+    private Thread audioLogThread;
+    // TODO move to config file
+    private boolean RECORD_AUDIO = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,23 +175,19 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         hotLogPathPerf = Environment.getExternalStorageDirectory() + TCONST.HOT_LOG_FOLDER_PERF;
         readyLogPathPerf = Environment.getExternalStorageDirectory() + TCONST.READY_LOG_FOLDER_PERF;
-        String initTime     = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-        String logFilename  = "RoboTutor" + "_" + BuildConfig.BUILD_TYPE + "." + BuildConfig.VERSION_NAME + "_" + initTime + "_" + Build.SERIAL;
 
+        Calendar calendar = Calendar.getInstance(Locale.US);
+        String initTime     = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss", Locale.US).format(calendar.getTime());
+        String sequenceIdString = String.format(Locale.US, "%05d", getNextLogSequenceId());
+        // NOTE: Need to include the configuration name when that is fully merged
+        String logFilename  = "RoboTutor_" + BuildConfig.BUILD_TYPE + "." + BuildConfig.VERSION_NAME + "_" + sequenceIdString + "_" + initTime + "_" + Build.SERIAL;
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onCreate");
         // Catch all errors and cause a clean exit -
         // TODO: this doesn't work as expected
         //
-//        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-//
-//            @Override
-//            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
-//
-//                System.exit(2);
-//            }
-//        });
 
+        Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(hotLogPath));
 
         PACKAGE_NAME = getApplicationContext().getPackageName();
         ACTIVITY     = this;
@@ -205,6 +223,11 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         logManager.postEvent_I(GRAPH_MSG, "EngineVersion:" + VERSION_RT);
 
         Log.v(TAG, "External_Download:" + DOWNLOAD_PATH);
+
+        if (RECORD_AUDIO) {
+            audioLogThread = new CAudioLogThread(readyLogPath, logFilename);
+            audioLogThread.start();
+        }
 
         // Get the primary container for tutors
         //
@@ -246,9 +269,19 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         progressView = (CLoaderView)inflater.inflate(R.layout.progress_layout, null );
 
         masterContainer.addAndShow(progressView);
+
+        // testCrashHandler();
     }
 
 
+    /**
+     * just a fun little method that will throw a null handler exception (when on the right screen)
+     */
+    private void testCrashHandler() {
+
+        TextView x = findViewById(R.id.SBPopWords);
+        x.setText("AYY LMAO");
+    }
     /**
      * This file gets the Extras that are passed from FaceLogin and uses them to set the uniqueIDs,
      * SessionID and StudentID
@@ -413,6 +446,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 // ZZZ comment out old pattern
                 tutorAssetManager.updateAssetPackages(ROBOTUTOR_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH );
                 tutorAssetManager.updateAssetPackages(CODE_DROP_1_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
+                tutorAssetManager.updateAssetPackages(PROTOTYPE_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
+                tutorAssetManager.updateAssetPackages(QA_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
 
                 // Create the one system levelFolder LTKPLUS recognizer
                 //
@@ -780,6 +815,10 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
             TTS = null;
         }
 
+        if (RECORD_AUDIO && audioLogThread != null) {
+            audioLogThread.interrupt();
+        }
+
         logManager.postDateTimeStamp(GRAPH_MSG, "RoboTutor:SessionEnd");
         logManager.stopLogging();
         perfLogManager.stopLogging();
@@ -788,6 +827,21 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         logManager.transferHotLogs(hotLogPath, readyLogPath);
         logManager.transferHotLogs(hotLogPathPerf, readyLogPathPerf);
 
+    }
+
+    private int getNextLogSequenceId() {
+        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+
+        // grab the current sequence id (the one we should use for this current run
+        // of the app
+        final int logSequenceId = prefs.getInt(LOG_SEQUENCE_ID, 0);
+
+        // increase the log sequence id by 1 for the next usage
+        prefs.edit()
+                .putInt(LOG_SEQUENCE_ID, logSequenceId + 1)
+                .apply();
+
+        return logSequenceId;
     }
 }
 
