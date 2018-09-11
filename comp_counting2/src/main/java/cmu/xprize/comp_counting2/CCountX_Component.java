@@ -107,7 +107,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     private boolean isRunning = false;
 
 
-    static final String TAG = "CCount_Component";
+    static final String TAG = "CCountX_Component";
 
     // REMOVE private CCount_DotBag dotBag;
 
@@ -190,7 +190,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
                 stimulusText.setText("");
             }
         } catch (Exception e) {
-            CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, false);
+            CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, true);
         }
 
     }

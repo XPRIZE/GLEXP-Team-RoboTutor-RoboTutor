@@ -85,8 +85,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     // VARIABLES FOR QUICK DEBUG LAUNCH
     private static final boolean QUICK_DEBUG = true;
     private static final String debugTutorVariant = "countingx";
-    private static final String debugTutorId = "countingx:1_10";
-    private static final String debugTutorFile = "[file]countingx_1_10.json";
+    private static final String debugTutorId = "place.value::pv-11.99.2D.diff0.1";
+    private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.2.json";
 
     private CTutorEngine        tutorEngine;
     private CMediaController    mMediaController;
