@@ -711,17 +711,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                             //update mEditSequence, mAlignedTarget, mTargetSource with the required changes and aligned source and target string builders
                             updateSentenceEditSequence();
+                            mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
 
                             //increase the attempt number for the sentence (FTR_ATTEMPT_1 released)
-                            updateAttemptFeature();
+                            mSentenceAttempts++;
 
                             //make the buttons appear.
                             activateEditMode(); //amogh comment put in animator graph
                             applyBehavior(WR_CONST.ON_ERROR);
 
-                            //amogh comment sentence writing -> initialise mListInputWords
-                            //since the aligned sentences are known, we can know the word indices for each written word(they would be the same as the number of words that are there in the answer).
-                            mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
 
 
                         }
@@ -2192,6 +2190,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         public int setAttempt(int newAttempts){
             attempt = newAttempts;
+            return attempt;
         }
 
         public int getWidth(){
