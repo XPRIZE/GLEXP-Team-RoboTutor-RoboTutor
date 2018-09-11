@@ -13,6 +13,7 @@ import cmu.xprize.util.IPublisher;
 import static cmu.xprize.comp_bigmath.BM_CONST.ALL_DIGITS;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_CORRECT;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_PROBLEM_DONE;
+import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_PROBLEM_HAS_MORE;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_WRONG;
 import static cmu.xprize.comp_bigmath.BM_CONST.HUN_CARRY_DIGIT;
 import static cmu.xprize.comp_bigmath.BM_CONST.HUN_DIGIT;
@@ -44,6 +45,8 @@ public class StudentActionListenerImpl implements StudentActionListener{
     private boolean _isCarryOne;
     private boolean _isCarryTen;
 
+    private int _numDigits;
+
 
     // need to track when we do carry
     private boolean _hasWrittenOnesResult;
@@ -63,11 +66,12 @@ public class StudentActionListenerImpl implements StudentActionListener{
     }
 
     @Override
-    public void setData(CBigMath_Data data) {
+    public void setData(CBigMath_Data data, int numDigits) {
         operandA = data.dataset[0];
         operandB = data.dataset[1];
         _expectedResult = data.dataset[2];
         operator = data.operation;
+        _numDigits = numDigits;
 
         if (operator.equals("+")) setCarryLogic(operandA, operandB);
         else setBorrowLogic(operandA, operandB);
@@ -119,7 +123,6 @@ public class StudentActionListenerImpl implements StudentActionListener{
         // do the thing
         if (action.equals("WRITE")) {
 
-            // ROBO_MATH NEXT NEXT NEXT
             //_behaviorManager.applyBehaviorNode(NEXTNODE);
 
             // there must be a better way to organize these...
@@ -129,7 +132,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
 
                 // ROBO_MATH here are the reactions to student input
-                // ROBO_MATH... these should be replaced with "WAIT" on the action side, and 'applyBehaviorNode("NEXTNODE")' on this side
+                // ROBO_MATH... √√√ these should be replaced with "WAIT" on the action side, and 'applyBehaviorNode("NEXTNODE")' on this side
                 // ROBO_MATH... move this ish to animator graph
                 // digit names are the selection
                 case "symbol_result_hun":
@@ -159,6 +162,9 @@ public class StudentActionListenerImpl implements StudentActionListener{
                     if (input.equals(String.valueOf(expectedInput))) {
 
                         _bigMath.markDigitCorrect(TEN_DIGIT);
+                        _publisher.retractFeature(FTR_WRONG);
+                        _publisher.publishFeature(FTR_CORRECT);
+
 
                         if(_isCarryTen) {
                             _hasWrittenTensResult = true;
@@ -166,19 +172,33 @@ public class StudentActionListenerImpl implements StudentActionListener{
                                 break;
                             }
                         }
+                        if (_numDigits == 2) {
+                            _publisher.retractFeature(FTR_PROBLEM_HAS_MORE);
+                            _publisher.publishFeature(FTR_PROBLEM_DONE);
+                        } else {
+                            _bigMath._currentDigit = HUN_DIGIT;
+                            _publisher.retractFeature(FTR_PROBLEM_DONE);
+                            _publisher.publishFeature(FTR_PROBLEM_HAS_MORE);
+                        }
 
                         // ----------
                         // next digit
                         // ----------
-                        _bigMath.highlightDigitColumn(HUN_DIGIT);
-                        _bigMath.disableConcreteUnitTappingForOtherRows(HUN_DIGIT);
+
+//                        _bigMath.highlightDigitColumn(HUN_DIGIT);
+//                        _bigMath.disableConcreteUnitTappingForOtherRows(HUN_DIGIT);
                         // ----------
                         // ---end----
                         // ----------
 
                     } else {
                         _bigMath.markDigitWrong(TEN_DIGIT);
+                        _publisher.retractFeature(FTR_CORRECT);
+                        _publisher.publishFeature(FTR_WRONG);
                     }
+                    // ROBO_MATH √√√ see if this works!
+                    Log.wtf("SEPTEMBER", "applying behavior node");
+                    _behaviorManager.applyBehaviorNode(NEXTNODE);
                     break;
 
                 case "symbol_result_one":
@@ -187,14 +207,19 @@ public class StudentActionListenerImpl implements StudentActionListener{
                     if (input.equals(String.valueOf(expectedInput))) {
 
                         _bigMath.markDigitCorrect(ONE_DIGIT);
+                        _publisher.retractFeature(FTR_WRONG);
                         _publisher.publishFeature(FTR_CORRECT);
                         Log.wtf("SEPTEMBER", "publishing correct");
 
-                        // ROBO_MATH temporary until we know number of digits
-                        // ROBO_MATH NEXT NEXT NEXT move into TWO digits!!!
-                        int _numDigits = 1;
+                        // ROBO_MATH √√√ temporary until we know number of digits
+                        // ROBO_MATH √√√ move into TWO digits!!!
                         if (_numDigits == 1) {
+                            _publisher.retractFeature(FTR_PROBLEM_HAS_MORE);
                             _publisher.publishFeature(FTR_PROBLEM_DONE);
+                        } else {
+                            _bigMath._currentDigit = TEN_DIGIT;
+                            _publisher.retractFeature(FTR_PROBLEM_DONE);
+                            _publisher.publishFeature(FTR_PROBLEM_HAS_MORE);
                         }
 
                         if(_isCarryOne) {
@@ -222,6 +247,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
                     } else {
                         _bigMath.markDigitWrong(ONE_DIGIT);
+                        _publisher.retractFeature(FTR_CORRECT);
                         _publisher.publishFeature(FTR_WRONG);
                         Log.wtf("SEPTEMBER", "publishing wrong");
                     }

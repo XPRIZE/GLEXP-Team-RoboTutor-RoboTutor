@@ -158,9 +158,10 @@
           "reuse": true,
           "COMMENT": "???",
           "tracks": [
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#NEXTDIGITs:String", "features":""}
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#NEXTDIGITs:String", "features":""},
 
             // ROBO_MATH (3)
+            {"type": "COMMAND", "id": "SBigMath", "method": "nextDigit", "features": ""}
 
             // tap the numbers
 

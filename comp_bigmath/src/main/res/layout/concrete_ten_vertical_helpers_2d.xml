@@ -12,8 +12,8 @@
         android:layout_width="@dimen/add_subtract_10_height_2d"
         android:layout_height="@dimen/add_subtract_10_width_2d"
         android:src="@drawable/empty_10_h"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp" 
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="0dp" 
         android:visibility="invisible"/>
 
     <cmu.xprize.comp_bigmath.MovableImageView
@@ -22,7 +22,7 @@
         android:layout_height="@dimen/add_subtract_10_width_2d"
         android:src="@drawable/empty_10_h"
         android:layout_marginTop="@dimen/baseten_tenspacer"
-        android:layout_marginStart="8dp" 
+        android:layout_marginStart="0dp" 
         android:visibility="invisible"/>
 
     <cmu.xprize.comp_bigmath.MovableImageView
@@ -31,7 +31,7 @@
         android:layout_height="@dimen/add_subtract_10_width_2d"
         android:src="@drawable/empty_10_h"
         android:layout_marginTop="@dimen/baseten_tenspacer"
-        android:layout_marginStart="8dp" 
+        android:layout_marginStart="0dp" 
         android:visibility="invisible"/>
 
     <cmu.xprize.comp_bigmath.MovableImageView
@@ -40,7 +40,7 @@
         android:layout_height="@dimen/add_subtract_10_width_2d"
         android:src="@drawable/empty_10_h"
         android:layout_marginTop="@dimen/baseten_tenspacer"
-        android:layout_marginStart="8dp" 
+        android:layout_marginStart="0dp" 
         android:visibility="invisible"/>
 
     <cmu.xprize.comp_bigmath.MovableImageView
@@ -49,7 +49,7 @@
         android:layout_height="@dimen/add_subtract_10_width_2d"
         android:src="@drawable/empty_10_h"
         android:layout_marginTop="@dimen/baseten_tenspacer"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="0dp"
         android:visibility="invisible"/>
 
     <cmu.xprize.comp_bigmath.MovableImageView
@@ -58,7 +58,7 @@
         android:layout_height="@dimen/add_subtract_10_width_2d"
         android:src="@drawable/empty_10_h"
         android:layout_marginTop="@dimen/baseten_tenspacer"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="0dp"
         android:visibility="invisible"/>
 
     <cmu.xprize.comp_bigmath.MovableImageView
@@ -67,7 +67,7 @@
         android:layout_height="@dimen/add_subtract_10_width_2d"
         android:src="@drawable/empty_10_h"
         android:layout_marginTop="@dimen/baseten_tenspacer"
-        android:layout_marginStart="8dp" 
+        android:layout_marginStart="0dp" 
         android:visibility="invisible"/>
 
     <cmu.xprize.comp_bigmath.MovableImageView
@@ -76,7 +76,7 @@
         android:layout_height="@dimen/add_subtract_10_width_2d"
         android:src="@drawable/empty_10_h"
         android:layout_marginTop="@dimen/baseten_tenspacer"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="0dp"
         android:visibility="invisible"/>
 
     <cmu.xprize.comp_bigmath.MovableImageView
@@ -85,7 +85,7 @@
         android:layout_height="@dimen/add_subtract_10_width_2d"
         android:src="@drawable/empty_10_h"
         android:layout_marginTop="@dimen/baseten_tenspacer"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="0dp"
         android:visibility="invisible"/>
 
     <cmu.xprize.comp_bigmath.MovableImageView
@@ -94,7 +94,7 @@
         android:layout_height="@dimen/add_subtract_10_width_2d"
         android:src="@drawable/empty_10_h"
         android:layout_marginTop="@dimen/baseten_tenspacer"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="0dp"
         android:visibility="invisible"/>
 
 

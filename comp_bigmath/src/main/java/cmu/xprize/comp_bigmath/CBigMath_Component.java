@@ -23,6 +23,8 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.comp_bigmath.BM_CONST.HUN_DIGIT;
+
 /**
  * Generated automatically w/ code written by Kevin DeLand
  */
@@ -150,6 +152,13 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
 
     }
 
+
+    public void nextDigit() {
+
+        _mechanic.highlightDigitColumn(_mechanic._currentDigit);
+        _mechanic.disableConcreteUnitTappingForOtherRows(_mechanic._currentDigit);
+
+    }
 
     /**
      * Point at a view

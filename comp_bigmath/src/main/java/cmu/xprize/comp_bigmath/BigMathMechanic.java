@@ -64,6 +64,7 @@ public class BigMathMechanic {
     //private int operandB = 386;
     //private String operator = "+";
 
+    public String _currentDigit;
 
 
     private int _numDigits;
@@ -159,7 +160,9 @@ public class BigMathMechanic {
         if (String.valueOf(_data.dataset[2]).length() > _numDigits)
             _numDigits = String.valueOf(_data.dataset[2]).length();
 
-        _studentActionListener.setData(data);
+        _studentActionListener.setData(data, _numDigits);
+
+        _currentDigit = ONE_DIGIT;
     }
 
     /**
@@ -534,6 +537,8 @@ public class BigMathMechanic {
         isCarrying = false;
         hasBorrowedHun = false;
         hasBorrowedTen = false;
+
+        _currentDigit = ONE_DIGIT;
     }
 
     /**
