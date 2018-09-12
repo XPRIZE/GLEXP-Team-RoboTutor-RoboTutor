@@ -337,7 +337,10 @@
           "COMMENT": "???",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#NEXTDIGITs:String", "features":""},
-            {"type": "COMMAND", "id": "SBigMath", "method": "nextDigit", "features": ""}
+            {"type": "COMMAND", "id": "SBigMath", "method": "nextDigit", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each one to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each ten to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN"}
+
 
             // tap the numbers
 

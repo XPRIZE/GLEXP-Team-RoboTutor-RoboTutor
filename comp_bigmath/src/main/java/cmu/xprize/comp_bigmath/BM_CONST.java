@@ -33,6 +33,11 @@ public class BM_CONST {
         public static final String FTR_IS_CARRY = "FTR_IS_CARRY";
         public static final String FTR_IS_BORROW = "FTR_IS_BORROW";
 
+        // for which digit we're on
+        static final String FTR_ON_DIGIT_ONE = "FTR_ON_DIGIT_ONE";
+        static final String FTR_ON_DIGIT_TEN = "FTR_ON_DIGIT_TEN";
+        static final String FTR_ON_DIGIT_HUN = "FTR_ON_DIGIT_HUN";
+
         // for correct vs wrong answers
         public static final String FTR_CORRECT = "FTR_CORRECT";
         public static final String FTR_WRONG = "FTR_WRONG";

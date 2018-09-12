@@ -26,6 +26,9 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.comp_bigmath.BM_CONST.ALL_DIGITS;
+import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_ON_DIGIT_HUN;
+import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_ON_DIGIT_ONE;
+import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_ON_DIGIT_TEN;
 import static cmu.xprize.comp_bigmath.BM_CONST.HUN_DIGIT;
 
 /**
@@ -162,6 +165,28 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
 
         _mechanic.highlightDigitColumn(_mechanic._currentDigit);
         _mechanic.disableConcreteUnitTappingForOtherRows(_mechanic._currentDigit);
+
+        // publish the right features!!! to play audio!!!
+        switch( _mechanic._currentDigit) {
+            case ONE_DIGIT:
+                publishFeature(FTR_ON_DIGIT_ONE);
+                retractFeature(FTR_ON_DIGIT_TEN);
+                retractFeature(FTR_ON_DIGIT_HUN);
+                break;
+
+            case TEN_DIGIT:
+                retractFeature(FTR_ON_DIGIT_ONE);
+                publishFeature(FTR_ON_DIGIT_TEN);
+                retractFeature(FTR_ON_DIGIT_HUN);
+                break;
+
+            case HUN_DIGIT:
+                retractFeature(FTR_ON_DIGIT_ONE);
+                retractFeature(FTR_ON_DIGIT_TEN);
+                publishFeature(FTR_ON_DIGIT_HUN);
+                break;
+
+        }
 
     }
 
