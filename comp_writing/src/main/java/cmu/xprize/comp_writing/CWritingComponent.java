@@ -718,6 +718,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                             //make the buttons appear.
                             activateEditMode(); //amogh comment put in animator graph
+                            publishFeature(_attemptFTR.get(0));
                             applyBehavior(WR_CONST.ON_ERROR);
 
 
@@ -1883,6 +1884,20 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mActiveWord.updateLettersWordResponse();
     }
 
+    public void updateSentenceResponse(Boolean sentenceStatus) {
+        ;
+        // change the color for all letters according to the state of the sentence.
+        for (int j = 0; j < mListWordsInput.size(); j++) {
+            Word word = mListWordsInput.get(j);
+            ArrayList<Integer> wordIndices = word.getWordIndices();
+            for (int i = 0; i < wordIndices.size(); i++) {
+                int index = wordIndices.get(i);
+                CStimulusController responseController = (CStimulusController) mResponseViewList.getChildAt(index);
+                responseController.updateResponseState(sentenceStatus);
+            }
+        }
+    }
+
     //amogh added place for sentence level functions and ideas
     public class Sentence{
         // should have the mAnswer ie the main sentence
@@ -2062,6 +2077,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             return false;
         }
     }
+
 
     //amogh add ends
 
