@@ -140,8 +140,8 @@
           "COMMENT": "TBD",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#PLAYCORRECT:String", "features":""},
-            {"name":"Play syllable", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SSpelling.syllableStim}}.mp3","soundpackage": "words","mode":"flow", "features": ""},
-            {"name":"Play right", "type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","mode":"flow", "features": ""}
+            {"name":"Play syllable", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SSpelling.syllableStim}}.mp3","soundpackage": "words","mode":"flow", "features": ""}
+//            {"name":"Play right", "type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","mode":"flow", "features": ""}
           ]
         },
 
