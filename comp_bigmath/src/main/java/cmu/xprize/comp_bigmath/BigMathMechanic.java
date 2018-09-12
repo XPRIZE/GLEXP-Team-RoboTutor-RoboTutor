@@ -55,15 +55,6 @@ public class BigMathMechanic {
     private CBigMath_Data _data;
 
     // MATH_BEHAVIOR (1) add case for each digit into SAI receiver
-
-    // DATA SOURCE INPUT
-    private int operandA = 288; // in subtraction, this is the minuend
-    private int operandB = 333; // in subtraction, this is the subtrahend
-    private String operator = "+";
-    //private int operandA = 478;
-    //private int operandB = 386;
-    //private String operator = "+";
-
     public String _currentDigit;
 
 
@@ -607,13 +598,17 @@ public class BigMathMechanic {
         }
 
         // set each digit separately
-        if (_numDigits >= 3) ((TextView) findViewById(R.id.symbol_opA_hun)).setText(String.valueOf(currentOpAHun));
-        if (_numDigits >= 2) ((TextView) findViewById(R.id.symbol_opA_ten)).setText(String.valueOf(currentOpATen));
-        if (_numDigits >= 1) ((TextView) findViewById(R.id.symbol_opA_one)).setText(String.valueOf(currentOpAOne));
+        // don't set leading zeros
+        int digitsInOpA = String.valueOf(_data.dataset[0]).length();
+        if (_numDigits >= 3) ((TextView) findViewById(R.id.symbol_opA_hun)).setText(digitsInOpA >= 3 ? String.valueOf(currentOpAHun) : "");
+        if (_numDigits >= 2) ((TextView) findViewById(R.id.symbol_opA_ten)).setText(digitsInOpA >= 2 ? String.valueOf(currentOpATen) : "");
+        if (_numDigits >= 1) ((TextView) findViewById(R.id.symbol_opA_one)).setText(digitsInOpA >= 1 ? String.valueOf(currentOpAOne) : "");
 
-        if (_numDigits >= 3) ((TextView) findViewById(R.id.symbol_opB_hun)).setText(String.valueOf(currentOpBHun));
-        if (_numDigits >= 2) ((TextView) findViewById(R.id.symbol_opB_ten)).setText(String.valueOf(currentOpBTen));
-        if (_numDigits >= 1) ((TextView) findViewById(R.id.symbol_opB_one)).setText(String.valueOf(currentOpBOne));
+        int digitsInOpB = String.valueOf(_data.dataset[1]).length();
+        Log.wtf("IAMTIRED", "opB=" + _data.dataset[1] + " numDigits=" + digitsInOpB);
+        if (_numDigits >= 3) ((TextView) findViewById(R.id.symbol_opB_hun)).setText(digitsInOpB >= 3 ? String.valueOf(currentOpBHun): "");
+        if (_numDigits >= 2) ((TextView) findViewById(R.id.symbol_opB_ten)).setText(digitsInOpB >= 2 ? String.valueOf(currentOpBTen): "");
+        if (_numDigits >= 1) ((TextView) findViewById(R.id.symbol_opB_one)).setText(digitsInOpB >= 1 ? String.valueOf(currentOpBOne): "");
 
         if (_numDigits >= 3) {
             final DigitView hunsResult = ((DigitView) findViewById(R.id.symbol_result_hun));
