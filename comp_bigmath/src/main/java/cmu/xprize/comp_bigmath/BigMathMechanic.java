@@ -64,8 +64,8 @@ public class BigMathMechanic {
     private int _numDigits;
 
     //
-    private boolean EXPAND_HIT_BOX = true; // MATH_FEEDBACK (9) tap within the containing box to add/subtract. Do not tap units. // MATH_TODO fix
-    private boolean ALL_AT_ONCE = true; // MATH_FEEDBACK (9) whether to animate all dots at once
+    private boolean EXPAND_HIT_BOX = true;
+    private boolean ALL_AT_ONCE = true;
 
     // used to track UI state
     private int currentOpAHun;
@@ -211,7 +211,6 @@ public class BigMathMechanic {
     /**
      * Initialize the OnClick performance of the Views
      * TODO these could be significantly refactored
-     * MATH_FEEDBACK (9) should be dependent on EXPAND_HIT_BOX and ALL_AT_ONCE
      */
     private void initializeOnClickListeners() {
 
@@ -224,7 +223,7 @@ public class BigMathMechanic {
             for (int i=1; i <= 10; i++) {
 
                 MovableImageView oneView = _layout.getBaseTenConcreteUnitView(numLoc, ONE_DIGIT, i);
-                oneView.setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT) : new BaseTenOnClickAnimateMe(ONE_DIGIT)); // MATH_FEEDBACK √√√ (9) should animate everything instead
+                oneView.setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT) : new BaseTenOnClickAnimateMe(ONE_DIGIT));
             }
 
             // add listeners to Tens
@@ -232,7 +231,7 @@ public class BigMathMechanic {
                 for (int i=1; i <= 10; i++) {
 
                     MovableImageView tenView = _layout.getBaseTenConcreteUnitView(numLoc, TEN_DIGIT, i);
-                    tenView.setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, TEN_DIGIT) : new BaseTenOnClickAnimateMe(TEN_DIGIT)); // MATH_FEEDBACK √√√ (9) should animate everything instead
+                    tenView.setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, TEN_DIGIT) : new BaseTenOnClickAnimateMe(TEN_DIGIT));
                 }
 
             // add listeners to Hundreds
@@ -240,12 +239,12 @@ public class BigMathMechanic {
                 for (int i=1; i <= 5; i++) {
 
                     MovableImageView hunView = _layout.getBaseTenConcreteUnitView(numLoc, HUN_DIGIT, i);
-                    hunView.setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, HUN_DIGIT) : new BaseTenOnClickAnimateMe(HUN_DIGIT)); // MATH_FEEDBACK √√√ (9) should animate everything instead
+                    hunView.setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, HUN_DIGIT) : new BaseTenOnClickAnimateMe(HUN_DIGIT));
                 }
 
 
             // PART 2 (BOX) for (one, ten, hun) will move sequential ones. These may or may not (but probably will) be used.
-            _layout.getContainingBox(numLoc, ONE_DIGIT).setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT) : new BaseTenOnClickAnimateSequential(ONE_DIGIT)); // MATH_FEEDBACK (9) s
+            _layout.getContainingBox(numLoc, ONE_DIGIT).setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT) : new BaseTenOnClickAnimateSequential(ONE_DIGIT));
 
             if (_numDigits >= 2)
                 _layout.getContainingBox(numLoc, TEN_DIGIT).setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, TEN_DIGIT) :  new BaseTenOnClickAnimateSequential(TEN_DIGIT));
@@ -347,7 +346,6 @@ public class BigMathMechanic {
 
     /**
      * Click Listener that moves clicked View to the next available space.
-     * MATH_FEEDBACK (9) make a clone of this that animates everything instead
      */
     class BaseTenOnClickAnimateMe implements View.OnClickListener {
 
@@ -365,7 +363,6 @@ public class BigMathMechanic {
 
     /**
      * Click Listener that moves next available View to next available space.
-     * MATH_FEEDBACK (9) make a new one that does everything at once
      */
     class BaseTenOnClickAnimateSequential implements View.OnClickListener {
 
@@ -886,7 +883,7 @@ public class BigMathMechanic {
     public void animateMe(String digit, MovableImageView v) {
 
         Log.wtf("YELLOW", "y u no move?");
-        if (EXPAND_HIT_BOX) return; // MATH_FEEDBACK (9) might be redundant?
+        if (EXPAND_HIT_BOX) return; // might be redundant?
 
         Log.wtf("YELLOW", "y u no move?");
         if (v.isMoving || !v.isMovable) return;
@@ -903,13 +900,13 @@ public class BigMathMechanic {
     }
 
     /**
-     * MATH_FEEDBACK (9)
+     *
      * @param digit
      * @param v
      */
     public void animateNextSequential(String digit, View v) {
 
-        if (!EXPAND_HIT_BOX) return; // MATH_FEEDBACK (9) might be redundant?
+        if (!EXPAND_HIT_BOX) return; // might be redundant?
 
         String numberLoc = v.getTag().toString();
         moveSequential(numberLoc, digit);

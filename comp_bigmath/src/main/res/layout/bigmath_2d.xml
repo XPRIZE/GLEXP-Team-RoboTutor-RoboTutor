@@ -702,14 +702,6 @@
     <!-- "leave something left to write" -->
 
     <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-    <!-- MATH_FEEDBACK WRITE BOX STUFF -->
-    <!-- MATH_FEEDBACK (2) √√√ write both borrow_one digits at once -->
-    <!-- MATH_FEEDBACK (2) writing two digits could work much better... just wait for QA -->
-
-    <!-- MATH_FEEDBACK (4) √√√ when you touch a writing box w/ character on it, erase character -->
-    <!-- MATH_FEEDBACK (4) √√√ change onTouchListener -->
-    <!-- MATH_FEEDBACK (4) √√√ BMC: search "_controller_master.setWritingController", and change onTouchListener to erase digit-->
-
     <!-- MATH_FEEDBACK (5) positive / negative feedback -->
     <!-- MATH_FEEDBACK (5) MAIN: this should be in the SAI part of code. search "symbol_borrow_one_1" -->
     <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
@@ -717,10 +709,6 @@
     <!-- MATH_FEEDBACK (8) move from top row to bottom after subtract -->
     <!-- MATH_FEEDBACK (8) BigMathComponent: something like "moveSubtrahendToResult" should be called -->
     <!-- MATH_FEEDBACK (8) where is this called? put it into the borrow sequence? idk -->
-
-    <!-- MATH_FEEDBACK (9) onTouch... move all concrete representations at once-->
-    <!-- MATH_FEEDBACK (9) ?SO: can children inherit a parent's onTouch??? -->
-    <!-- MATH_FEEDBACK (9) this will get more complicated... first do them all at once, then delay them -->
 
     <!-- MATH_FEEDBACK (xx) special feedback -->
 
