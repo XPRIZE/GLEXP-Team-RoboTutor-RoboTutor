@@ -81,18 +81,16 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     private LocalBroadcastManager bManager;
     private CLetter_Tile wrongLetter;
 
-    static final String TAG = "CSpelling_Component";
-    static final String IMAGES_PATH = "/storage/self/primary/robotutor_assets/assets/spelling/images/";
-    static final String FTR_CORRECT = "FTR_CORRECT";
-    static final String FTR_INCORRECT = "FTR_INCORRECT";
-    static final String FTR_EOP = "FTR_EOP";
-    static final String WORD_STIM = ".wordStim";
-    static final String SYLLABLE_STIM = ".syllableStim";
+//    static final String FTR_EOP = "FTR_EOP";
+//    static final String WORD_STIM = ".wordStim";
+//    static final String SYLLABLE_STIM = ".syllableStim";
 
-    static final int IMAGE_SIZE = 300;
-    static final int NUM_PROBLEMS = 2;
+//    static final int IMAGE_SIZE = 300;
+//    static final int NUM_PROBLEMS = 2;
 
     protected HashMap<String,Boolean> _FeatureMap = new HashMap<>();
+
+    //region override methods
 
     @Override
     public void publishState() {
@@ -119,9 +117,6 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 
     }
 
-    // Must override in TClass
-    // TClass domain where TScope lives providing access to tutor scriptables
-    //
     @Override
     public void publishFeature(String feature) {
     }
@@ -140,6 +135,13 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     public void retractFeatureMap(HashMap featureMap) {
 
     }
+
+    // Must override in TClass
+    // TClass domain where TScope lives providing access to tutor scriptables
+    //
+    public boolean applyBehavior(String event){ return false;}
+
+    //endregion
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
@@ -163,8 +165,8 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     public void onLetterTouch(String letter, int index, CLetter_Tile lt) {
         Log.d("ddd", "touch: " + letter);
 
-        retractFeature(FTR_CORRECT);
-        retractFeature(FTR_INCORRECT);
+        retractFeature(SP_CONST.FTR_CORRECT);
+        retractFeature(SP_CONST.FTR_INCORRECT);
 
         lockLetters();
 
@@ -172,6 +174,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         Log.d("ddd", "current index: " + _currentWordIndex);
         Log.d("ddd", "current: " + current);
 
+        publishValue(SP_CONST.SYLLABLE_STIM, letter);
 
         Log.d("ddd", "features: " + _FeatureMap.toString());
         if (letter.equalsIgnoreCase(current)) {
@@ -185,10 +188,10 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 
             updateLetter();
             _currentWordIndex++;
-            publishFeature(FTR_CORRECT);
+            publishFeature(SP_CONST.FTR_CORRECT);
             if (_currentWordIndex >= _word.size()) {
                 Log.d("ddd", "end of word");
-                publishFeature(FTR_EOP);
+                publishFeature(SP_CONST.FTR_EOP);
             }
             applyBehavior("NEXT_NODE");
             Log.d("ddd", "features: " + _FeatureMap.toString());
@@ -197,7 +200,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
             Log.d("ddd", "incorrect: " + letter);
             lt.indicateError();
             wrongLetter = lt;
-            publishFeature(FTR_INCORRECT);
+            publishFeature(SP_CONST.FTR_INCORRECT);
             applyBehavior("NEXT_NODE");
             Log.d("ddd", "features: " + _FeatureMap.toString());
         }
@@ -216,18 +219,18 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         // For XPrize we limit this to 10 elements from an umlimited random data set
         // used to be : dataSet.size()
         Collections.shuffle(dataset);
-        _data = dataset.subList(0, NUM_PROBLEMS);
+        _data = dataset.subList(0, SP_CONST.NUM_PROBLEMS);
         _dataIndex = 0;
     }
 
     public void updateImage() {
 //        try {
         Log.d("ddd", "loading image");
-        String imagePath = IMAGES_PATH + _imageFileName;
+        String imagePath = SP_CONST.IMAGES_PATH + _imageFileName;
 //            InputStream in = JSON_Helper.assetManager().open(IMAGES_PATH + _imageFileName);
 //            mImageStimulus.setImageBitmap(BitmapFactory.decodeStream(in));
         mImageStimulus.setImageBitmap(BitmapFactory.decodeFile(imagePath));
-        mImageStimulus.getLayoutParams().height = IMAGE_SIZE;
+        mImageStimulus.getLayoutParams().height = SP_CONST.IMAGE_SIZE;
         mImageStimulus.requestLayout();
 //        } catch (IOException e) {
 //            Log.d("ddd", "image error");
@@ -313,14 +316,12 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
             }
 
         } catch (Exception e) {
-            CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, false);
+            CErrorManager.logEvent(SP_CONST.TAG, "Data Exhuasted: call past end of data", e, false);
         }
 
     }
 
-    public boolean dataExhausted() {
-        return _dataIndex >= _data.size();
-    }
+    public boolean dataExhausted() { return _dataIndex >= _data.size(); }
 
     protected void updateDataSet(CSpelling_Data data) {
 
@@ -342,7 +343,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         _word = new ArrayList<>(Arrays.asList(data.word));
 
         _currentWordIndex = 0;
-        retractFeature(FTR_EOP);
+        retractFeature(SP_CONST.FTR_EOP);
 //        _selectableLetters = new ArrayList<>(Arrays.asList(_word.split("")));
         _selectableLetters = new ArrayList<>(_word);
         Collections.shuffle(_selectableLetters);
@@ -360,7 +361,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         updateImage();
 
         Log.d("ddd", "word stim: ");
-        publishValue(WORD_STIM, data.sound);
+        publishValue(SP_CONST.WORD_STIM, data.sound);
         // for each character in word, insert a new empty space into SPACES
         // for each character in word, add to the list. Then add distractors. Then JUMBLE.
 
@@ -400,10 +401,6 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 
     }
 
-    // Must override in TClass
-    // TClass domain where TScope lives providing access to tutor scriptables
-    //
-    public boolean applyBehavior(String event){ return false;}
 
     /**
      * Load the data source

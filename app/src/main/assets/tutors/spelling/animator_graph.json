@@ -140,7 +140,8 @@
           "COMMENT": "TBD",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#PLAYCORRECT:String", "features":""},
-            {"name":"Read syllable", "type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","mode":"flow", "features": ""}
+            {"name":"Play syllable", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SSpelling.syllableStim}}.mp3","soundpackage": "words","mode":"flow", "features": ""},
+            {"name":"Play right", "type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","mode":"flow", "features": ""}
           ]
         },
 
@@ -150,8 +151,10 @@
           "COMMENT": "TBD",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#PLAYINCORRECT:String", "features":""},
-//            {"name":"Read syllable", "type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","mode":"flow", "features": ""},
-            {"name": "After incorrect clip", "type": "AUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"name":"Play syllable", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SSpelling.syllableStim}}.mp3","soundpackage": "words","mode":"flow", "features": ""},
+            {"name":"Please spell", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"name":"Play word", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SSpelling.wordStim}}","soundpackage": "words","mode":"flow", "features": ""},
+//            {"name": "After incorrect clip", "type": "AUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
             {"name": "Revert color", "type": "COMMAND", "id": "SSpelling", "method": "revertColor", "features": ""}
           ]
         },
@@ -162,7 +165,7 @@
           "COMMENT": "TBD",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#PLAYEXITCLIP:String", "features":""},
-            {"name": "Exit clip", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+            {"name":"Play word", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SSpelling.wordStim}}","soundpackage": "words","mode":"flow", "features": ""}
           ]
         },
 
