@@ -7,6 +7,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +34,7 @@ import static cmu.xprize.comp_bigmath.BM_CONST.OPB_LOCATION;
 import static cmu.xprize.comp_bigmath.BM_CONST.RESULT_LOCATION;
 import static cmu.xprize.comp_bigmath.BM_CONST.TEN_CARRY_DIGIT;
 import static cmu.xprize.comp_bigmath.BM_CONST.TEN_DIGIT;
+import static cmu.xprize.comp_bigmath.BM_CONST.WATERFALL_DELAY;
 import static cmu.xprize.util.MathUtil.getHunsDigit;
 import static cmu.xprize.util.MathUtil.getOnesDigit;
 import static cmu.xprize.util.MathUtil.getTensDigit;
@@ -61,7 +64,8 @@ public class BigMathMechanic {
     private int _numDigits;
 
     //
-    boolean EXPAND_HIT_BOX = false; // MATH_FEEDBACK (9) tap within the containing box to add/subtract. Do not tap units. // MATH_TODO fix
+    private boolean EXPAND_HIT_BOX = true; // MATH_FEEDBACK (9) tap within the containing box to add/subtract. Do not tap units. // MATH_TODO fix
+    private boolean ALL_AT_ONCE = true; // MATH_FEEDBACK (9) whether to animate all dots at once
 
     // used to track UI state
     private int currentOpAHun;
@@ -207,6 +211,7 @@ public class BigMathMechanic {
     /**
      * Initialize the OnClick performance of the Views
      * TODO these could be significantly refactored
+     * MATH_FEEDBACK (9) should be dependent on EXPAND_HIT_BOX and ALL_AT_ONCE
      */
     private void initializeOnClickListeners() {
 
@@ -219,7 +224,7 @@ public class BigMathMechanic {
             for (int i=1; i <= 10; i++) {
 
                 MovableImageView oneView = _layout.getBaseTenConcreteUnitView(numLoc, ONE_DIGIT, i);
-                oneView.setOnClickListener(new BaseTenOnClickAnimateMe(ONE_DIGIT)); // MATH_FEEDBACK (9) should animate everything instead
+                oneView.setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT) : new BaseTenOnClickAnimateMe(ONE_DIGIT)); // MATH_FEEDBACK √√√ (9) should animate everything instead
             }
 
             // add listeners to Tens
@@ -227,7 +232,7 @@ public class BigMathMechanic {
                 for (int i=1; i <= 10; i++) {
 
                     MovableImageView tenView = _layout.getBaseTenConcreteUnitView(numLoc, TEN_DIGIT, i);
-                    tenView.setOnClickListener(new BaseTenOnClickAnimateMe(TEN_DIGIT)); // MATH_FEEDBACK (9) should animate everything instead
+                    tenView.setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, TEN_DIGIT) : new BaseTenOnClickAnimateMe(TEN_DIGIT)); // MATH_FEEDBACK √√√ (9) should animate everything instead
                 }
 
             // add listeners to Hundreds
@@ -235,18 +240,18 @@ public class BigMathMechanic {
                 for (int i=1; i <= 5; i++) {
 
                     MovableImageView hunView = _layout.getBaseTenConcreteUnitView(numLoc, HUN_DIGIT, i);
-                    hunView.setOnClickListener(new BaseTenOnClickAnimateMe(HUN_DIGIT)); // MATH_FEEDBACK (9) should animate everything instead
+                    hunView.setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, HUN_DIGIT) : new BaseTenOnClickAnimateMe(HUN_DIGIT)); // MATH_FEEDBACK √√√ (9) should animate everything instead
                 }
 
 
             // PART 2 (BOX) for (one, ten, hun) will move sequential ones. These may or may not (but probably will) be used.
-            _layout.getContainingBox(numLoc, ONE_DIGIT).setOnClickListener(new BaseTenOnClickAnimateSequential(ONE_DIGIT));
+            _layout.getContainingBox(numLoc, ONE_DIGIT).setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT) : new BaseTenOnClickAnimateSequential(ONE_DIGIT)); // MATH_FEEDBACK (9) s
 
             if (_numDigits >= 2)
-                _layout.getContainingBox(numLoc, TEN_DIGIT).setOnClickListener(new BaseTenOnClickAnimateSequential(TEN_DIGIT));
+                _layout.getContainingBox(numLoc, TEN_DIGIT).setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, TEN_DIGIT) :  new BaseTenOnClickAnimateSequential(TEN_DIGIT));
 
             if (_numDigits >= 3)
-                _layout.getContainingBox(numLoc, HUN_DIGIT).setOnClickListener(new BaseTenOnClickAnimateSequential(HUN_DIGIT));
+                _layout.getContainingBox(numLoc, HUN_DIGIT).setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, HUN_DIGIT) : new BaseTenOnClickAnimateSequential(HUN_DIGIT));
 
         }
 
@@ -360,6 +365,7 @@ public class BigMathMechanic {
 
     /**
      * Click Listener that moves next available View to next available space.
+     * MATH_FEEDBACK (9) make a new one that does everything at once
      */
     class BaseTenOnClickAnimateSequential implements View.OnClickListener {
 
@@ -371,6 +377,22 @@ public class BigMathMechanic {
         @Override
         public void onClick(View v) {
             animateNextSequential(this._digit, v);
+        }
+    }
+
+    class BaseTenOnClickAnimateWaterfall implements View.OnClickListener {
+
+        private final String _numLoc;
+        private final String _digit;
+
+        public BaseTenOnClickAnimateWaterfall(String _numLoc, String _digit) {
+            this._numLoc = _numLoc;
+            this._digit = _digit;
+        }
+
+        @Override
+        public void onClick(View view) {
+            waterfall(_numLoc, _digit);
         }
     }
 
@@ -605,7 +627,6 @@ public class BigMathMechanic {
         if (_numDigits >= 1) ((TextView) findViewById(R.id.symbol_opA_one)).setText(digitsInOpA >= 1 ? String.valueOf(currentOpAOne) : "");
 
         int digitsInOpB = String.valueOf(_data.dataset[1]).length();
-        Log.wtf("IAMTIRED", "opB=" + _data.dataset[1] + " numDigits=" + digitsInOpB);
         if (_numDigits >= 3) ((TextView) findViewById(R.id.symbol_opB_hun)).setText(digitsInOpB >= 3 ? String.valueOf(currentOpBHun): "");
         if (_numDigits >= 2) ((TextView) findViewById(R.id.symbol_opB_ten)).setText(digitsInOpB >= 2 ? String.valueOf(currentOpBTen): "");
         if (_numDigits >= 1) ((TextView) findViewById(R.id.symbol_opB_one)).setText(digitsInOpB >= 1 ? String.valueOf(currentOpBOne): "");
@@ -812,6 +833,7 @@ public class BigMathMechanic {
                 }
 
                 _layout.getBaseTenDigitView(numberLoc, column).setAlpha(floatPacity);
+                _layout.getBaseTenDigitView(numberLoc, column).setTextColor(Color.BLACK); // idk why it's not already black? (see "addSubtractDigitColor" in colors.xml...)
             }
 
         }
@@ -864,7 +886,7 @@ public class BigMathMechanic {
     public void animateMe(String digit, MovableImageView v) {
 
         Log.wtf("YELLOW", "y u no move?");
-        if (EXPAND_HIT_BOX) return;
+        if (EXPAND_HIT_BOX) return; // MATH_FEEDBACK (9) might be redundant?
 
         Log.wtf("YELLOW", "y u no move?");
         if (v.isMoving || !v.isMovable) return;
@@ -887,10 +909,27 @@ public class BigMathMechanic {
      */
     public void animateNextSequential(String digit, View v) {
 
-        if (!EXPAND_HIT_BOX) return;
+        if (!EXPAND_HIT_BOX) return; // MATH_FEEDBACK (9) might be redundant?
 
         String numberLoc = v.getTag().toString();
         moveSequential(numberLoc, digit);
+    }
+
+
+    /**
+     * this animation is lit
+     * @param digit
+     */
+    private void waterfall(final String numLoc, final String digit) {
+
+        // try this???
+        for (int i = 0; i < getOnesDigit(_data.dataset[0]); i++)
+            (new Handler(Looper.getMainLooper())).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    moveSequential(numLoc, digit);
+                }
+            }, WATERFALL_DELAY * i);
     }
 
     /**
@@ -1620,36 +1659,6 @@ public class BigMathMechanic {
 
     /**
      *
-     * Debug button for Highlight hundreds.
-     *
-     */
-    public void highlightPvHuns() {
-        highlightUnits(OPA_LOCATION, HUN_DIGIT, true);
-        highlightUnits(OPB_LOCATION, HUN_DIGIT, true);
-        highlightUnits(RESULT_LOCATION, HUN_DIGIT, true);
-    }
-
-    /**
-     *
-     */
-    public void highlightPvTens() {
-        highlightUnits(OPA_LOCATION, TEN_DIGIT, true);
-        highlightUnits(OPB_LOCATION, TEN_DIGIT, true);
-        highlightUnits(RESULT_LOCATION, TEN_DIGIT, true);
-    }
-
-    /**
-     *
-     */
-    public void highlightPvOnes() {
-        highlightUnits(OPA_LOCATION, ONE_DIGIT, true);
-        highlightUnits(OPB_LOCATION, ONE_DIGIT, true);
-        highlightUnits(RESULT_LOCATION, ONE_DIGIT, true);
-    }
-
-
-    /**
-     *
      * Show the carry option for hundreds
      */
     public void showCarryHun() {
@@ -2004,53 +2013,6 @@ public class BigMathMechanic {
         });
 
         animSet.start();
-    }
-
-    /**
-     * Highlight the concrete unit and digit associated with a unit.
-     *
-     * @param numberLoc location of the number e.g. top, bottom, left, or right
-     * @param digit one, ten, or hun
-     * @param suppressOthers un-highlight other digits
-     */
-    private void highlightUnits(String numberLoc, @Nullable String digit, boolean suppressOthers) {
-
-
-
-
-        // cycle through each digit
-        String[] allDigits = {ONE_DIGIT, TEN_DIGIT, HUN_DIGIT};
-        for (String d : allDigits) {
-
-            // only perform highlight if it's the digit we're changing
-            // remove highlight if suppressOthers is true
-            if(d.equals(digit) || suppressOthers) {
-
-                Log.d("HIGHLIGHT", numberLoc + " " +  digit);
-
-                ImageView[] ndUnits = new ImageView[d.equals(HUN_DIGIT) ? 6 : 11];
-                for (int i = 1; i < ndUnits.length; i++) {
-
-                    ndUnits[i] = _layout.getBaseTenConcreteUnitView(numberLoc, d, i);
-                    if (ndUnits[i].getVisibility() == View.VISIBLE) {
-                        // either highlight or remove highlight
-                        // just the background
-                        // ndUnits[i].setBackgroundColor(d.equals(digit) ? getResources().getColor(R.color.bigMathHighlightColor) : Color.TRANSPARENT);
-                    }
-                }
-
-
-                TextView ndSymbolic = _layout.getBaseTenDigitView(numberLoc, d);
-                // either highlight or remove highlight
-                ndSymbolic.setBackgroundColor(d.equals(digit) ? _activity.getResources().getColor(R.color.bigMathHighlightColor): Color.TRANSPARENT);
-
-                String boxId = d + "_" + numberLoc + "_box";
-                int resID = _activity.getResources().getIdentifier(boxId, "id", _activity.getPackageName());
-                findViewById(resID).setBackgroundColor(d.equals(digit) ? _activity.getResources().getColor(R.color.bigMathHighlightColor) : Color.TRANSPARENT);
-                //findViewById(resID).setBackground(getDrawable(R.drawable.inner_rectangle));
-            }
-        }
-
     }
 
     /**

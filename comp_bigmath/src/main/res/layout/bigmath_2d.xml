@@ -472,7 +472,7 @@
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="fill_parent"
             android:text="@string/operator_placeholder"
-            android:textColor="@color/addSubtractDigitColor"
+            android:textColor="@android:color/black"
             android:textSize="@dimen/add_subtract_digit_size"
             android:gravity="center"
             />
@@ -612,7 +612,7 @@
         app:layout_constraintTop_toBottomOf="@id/guideline_top_of_bottom"
         app:layout_constraintLeft_toLeftOf="@id/guideline_vertical_0"
         app:layout_constraintRight_toRightOf="@id/guideline_vertical_1"
-        android:background="@color/addSubtractDigitColor"/>
+        android:background="@android:color/black"/>
 
     <!-- Third Row, result (sum or difference) -->
     <!-- an all-encompassing box -->

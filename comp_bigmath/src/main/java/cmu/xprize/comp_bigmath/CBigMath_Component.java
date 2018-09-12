@@ -16,6 +16,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.ltkplus.CRecognizerPlus;
+import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IPublisher;
@@ -23,6 +25,7 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.comp_bigmath.BM_CONST.ALL_DIGITS;
 import static cmu.xprize.comp_bigmath.BM_CONST.HUN_DIGIT;
 
 /**
@@ -93,6 +96,9 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
 
         mContext = context;
 
+        // force write input to a digit
+        CRecognizerPlus.getInstance().setClassBoost(GCONST.FORCE_DIGIT);
+
         // inflate(getContext(), R.layout.bigmath_layout, this);
 
         Scontent = (RelativeLayout) findViewById(R.id.Scontent);
@@ -157,6 +163,13 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
         _mechanic.highlightDigitColumn(_mechanic._currentDigit);
         _mechanic.disableConcreteUnitTappingForOtherRows(_mechanic._currentDigit);
 
+    }
+
+    /**
+     * highlight all digits!
+     */
+    public void highlightAll() {
+        _mechanic.highlightDigitColumn(ALL_DIGITS);
     }
 
     /**

@@ -382,6 +382,7 @@
           "COMMENT": "???",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#PROBLEMCORRECT:String", "features":""},
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "highlightAll", "features":""},
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3", "soundpackage":"temp", "volume": 1.0, "mode":"flow", "features": ""}
           ]

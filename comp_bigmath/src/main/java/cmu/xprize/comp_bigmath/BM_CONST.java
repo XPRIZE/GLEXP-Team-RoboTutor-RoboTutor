@@ -62,5 +62,6 @@ public class BM_CONST {
         SET_VERSION, SET_DATASOURCE, NEXTNODE, NEXTSCENE
     }
 
-
+    // various variables
+    static final int WATERFALL_DELAY = 100;
 }
