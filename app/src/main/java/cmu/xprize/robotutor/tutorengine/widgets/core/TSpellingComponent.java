@@ -3,7 +3,6 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 
 import org.json.JSONObject;
 
@@ -54,6 +53,7 @@ public class TSpellingComponent extends CSpelling_Component implements ITutorObj
     private HashMap<String,Integer> _IntegerVar = new HashMap<>();
 //    private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
 
+
     static final String TAG = "TSpellingComponent";
 
     public TSpellingComponent(Context context) {
@@ -67,6 +67,7 @@ public class TSpellingComponent extends CSpelling_Component implements ITutorObj
     public TSpellingComponent(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
+
 
     //**********************************************************
     //**********************************************************
@@ -164,6 +165,12 @@ public class TSpellingComponent extends CSpelling_Component implements ITutorObj
         }
     }
 
+    @Override
+    public String getImagePath() {
+        final String DATASOURCEPATH = TCONST.ROBOTUTOR_ASSETS + "/" + TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+        // "cmu/xprize/story_reading/shared/shared_literacy"
+        return  DATASOURCEPATH + TCONST.SHARED_LITERACY_IMAGE_FOLDER + "/";
+    }
 
     /**
      * @param dataNameDescriptor
@@ -194,6 +201,8 @@ public class TSpellingComponent extends CSpelling_Component implements ITutorObj
                 String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
                 loadJSON(new JSONObject(jsonData), mTutor.getScope());
                 setDataSource(dataSource);
+
+
 
             } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 

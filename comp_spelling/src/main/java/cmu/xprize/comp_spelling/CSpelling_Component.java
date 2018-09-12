@@ -7,23 +7,16 @@ import android.graphics.PointF;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.Guideline;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.LinearLayout;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,8 +29,6 @@ import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
-
-import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 /**
  * Generated automatically w/ code written by Kevin DeLand
@@ -89,6 +80,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 //    static final int NUM_PROBLEMS = 2;
 
     protected HashMap<String,Boolean> _FeatureMap = new HashMap<>();
+    private String IMAGES_PATH;
 
     //region override methods
 
@@ -134,6 +126,10 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     @Override
     public void retractFeatureMap(HashMap featureMap) {
 
+    }
+
+    protected String getImagePath() {
+        return null;
     }
 
     // Must override in TClass
@@ -214,19 +210,21 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     public void setDataSource(CSpelling_Data[] dataSource) {
         ArrayList<CSpelling_Data> dataset = new ArrayList<>(Arrays.asList(dataSource));
 
-        _data = new ArrayList<CSpelling_Data>();
+        _data = new ArrayList<>();
 
         // For XPrize we limit this to 10 elements from an umlimited random data set
         // used to be : dataSet.size()
         Collections.shuffle(dataset);
         _data = dataset.subList(0, SP_CONST.NUM_PROBLEMS);
         _dataIndex = 0;
+
+        IMAGES_PATH = getImagePath();
     }
 
     public void updateImage() {
 //        try {
         Log.d("ddd", "loading image");
-        String imagePath = SP_CONST.IMAGES_PATH + _imageFileName;
+        String imagePath = IMAGES_PATH + _imageFileName;
 //            InputStream in = JSON_Helper.assetManager().open(IMAGES_PATH + _imageFileName);
 //            mImageStimulus.setImageBitmap(BitmapFactory.decodeStream(in));
         mImageStimulus.setImageBitmap(BitmapFactory.decodeFile(imagePath));
@@ -303,6 +301,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         mImageStimulus = (ImageView) findViewById(R.id.imageStimulus);
 
 
+
 //        valueTV.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
 
     }
@@ -321,11 +320,12 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 
     }
 
-    public boolean dataExhausted() { return _dataIndex >= _data.size(); }
+    public boolean dataExhausted() {
+        return _dataIndex >= _data.size();
+    }
 
     protected void updateDataSet(CSpelling_Data data) {
 
-        // first load word into fields
         loadDataSet(data);
         updateStimulus();
     }

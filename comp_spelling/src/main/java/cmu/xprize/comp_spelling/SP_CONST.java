@@ -6,7 +6,7 @@ package cmu.xprize.comp_spelling;
 
 public class SP_CONST {
     public static final String TAG = "CSpelling_Component";
-    public static final String IMAGES_PATH = "/storage/self/primary/robotutor_assets/assets/spelling/images/";
+//    public static final String IMAGES_PATH = "/storage/self/primary/robotutor_assets/assets/spelling/images/";
     public static final String FTR_CORRECT = "FTR_CORRECT";
     public static final String FTR_INCORRECT = "FTR_INCORRECT";
     public static final String FTR_EOP = "FTR_EOP";
