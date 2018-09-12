@@ -126,9 +126,9 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
         // first load dataset into fields
         loadDataSet(data);
 
+        // features are published inside setData() {... _sal.setData() }
         _mechanic.setData(data);
         _mechanic.doAllTheThings();
-
     }
 
     /**
@@ -141,7 +141,6 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
         task = data.task;
         layout = data.layout;
         dataset = data.dataset;
-
     }
 
     /**

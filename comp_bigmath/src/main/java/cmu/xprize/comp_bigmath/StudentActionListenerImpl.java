@@ -12,6 +12,8 @@ import cmu.xprize.util.IPublisher;
 
 import static cmu.xprize.comp_bigmath.BM_CONST.ALL_DIGITS;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_CORRECT;
+import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_IS_BORROW;
+import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_IS_CARRY;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_PROBLEM_DONE;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_PROBLEM_HAS_MORE;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_WRONG;
@@ -73,6 +75,9 @@ public class StudentActionListenerImpl implements StudentActionListener{
         operator = data.operation;
         _numDigits = numDigits;
 
+        // retract carry and borrow features...
+        _publisher.retractFeature(FTR_IS_CARRY);
+        _publisher.retractFeature(FTR_IS_BORROW);
         if (operator.equals("+")) setCarryLogic(operandA, operandB);
         else setBorrowLogic(operandA, operandB);
 
@@ -90,7 +95,11 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
         // if a_one + b_one > 9, we must carry to tens column
         _isCarryOne = getOnesDigit(a) + getOnesDigit(b) > 9;
+        if (_isCarryOne) {
+            _publisher.publishFeature(FTR_IS_CARRY);
+        }
 
+        if (_numDigits < 3) return; // only works for hundreds...
         // if (carried_ten) + a_one + b_one > 9, we must carry to the huns column
         _isCarryTen = (_isCarryOne ? 1 : 0) + getTensDigit(a) + getTensDigit(b) > 9;
 
@@ -107,7 +116,11 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
         // if a_one < b_one, we need to borrow a ten from a_ten
         _isBorrowTen = getOnesDigit(a) < getOnesDigit(b);
+        if (_isBorrowTen) {
+            _publisher.publishFeature(FTR_IS_BORROW);
+        }
 
+        if (_numDigits < 3) return; // save this for later, when we do 3 digits
         // if a_ten - (borrowed_ten) < b_ten, we need to borrow a hundred from a_hun
         _isBorrowHun = getTensDigit(a) - (_isBorrowTen? 1 : 0) < getTensDigit(b);
 
@@ -214,16 +227,21 @@ public class StudentActionListenerImpl implements StudentActionListener{
                             _publisher.retractFeature(FTR_PROBLEM_HAS_MORE);
                             _publisher.publishFeature(FTR_PROBLEM_DONE);
                         } else {
+
+
+                            // ROBO_MATH MATH_AG move this logic to animator graph carry check should be moved here...
+
                             _bigMath._currentDigit = TEN_DIGIT;
                             _publisher.retractFeature(FTR_PROBLEM_DONE);
                             _publisher.publishFeature(FTR_PROBLEM_HAS_MORE);
                         }
 
-                        // ROBO_MATH NEXT NEXT NEXT figure out messy carry stuff
+                        // ROBO_MATH MATH_AG move to go with logic
                         if(_isCarryOne) {
 
                             _hasWrittenOnesResult = true;
                             // can't go to next digit unless we've written carry
+                            // MATH_AG this should go inside "NEXT_DIGIT"
                             _bigMath.showCarryTen();
                             if(!_hasCarriedToTens) {
                                 break;
@@ -261,13 +279,19 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
                 case "symbol_carry_ten":
 
+                    // ROBO_MATH NEXT NEXT NEXT, there should be some behavior here
+                    // ROBO_MATH NEXT NEXT NEXT, they should be written in any order (also, this is optional)
                     expectedInput = _isCarryOne ? 1 : 0; //  the zero won't get used...
 
                     if(input.equals(String.valueOf(expectedInput))) {
 
+                        // give some sort of correct feedback???
                         _bigMath.markDigitCorrect(TEN_CARRY_DIGIT);
+                        // _publisher.retractFeature(FTR_WRONG);
+                        // _publisher.publishFeature(FTR_CORRECT);
 
                         _hasCarriedToTens = true;
+                        // ROBO_MATH (xx) both of these must be done
                         if (_hasWrittenOnesResult) {
 
                             // ----------
