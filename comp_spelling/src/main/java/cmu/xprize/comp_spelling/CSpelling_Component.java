@@ -69,7 +69,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     // View Things
     protected Context mContext;
 
-    private LocalBroadcastManager bManager;
+    private LocalBroadcastManager _bManager;
     private CLetter_Tile wrongLetter;
 
 //    static final String FTR_EOP = "FTR_EOP";
@@ -230,6 +230,8 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         mImageStimulus.setImageBitmap(BitmapFactory.decodeFile(imagePath));
         mImageStimulus.getLayoutParams().height = SP_CONST.IMAGE_SIZE;
         mImageStimulus.requestLayout();
+
+        pointAtMyView();
 //        } catch (IOException e) {
 //            Log.d("ddd", "image error");
 //            mImageStimulus.setImageBitmap(null);
@@ -300,6 +302,8 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         mSelectedLetterHolder = (LinearLayout) findViewById(R.id.blankHolder);
         mImageStimulus = (ImageView) findViewById(R.id.imageStimulus);
 
+
+        _bManager = LocalBroadcastManager.getInstance(getContext());
 
 
 //        valueTV.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
@@ -389,7 +393,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         Intent msg = new Intent(TCONST.POINTAT);
         msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
 
-        bManager.sendBroadcast(msg);
+        _bManager.sendBroadcast(msg);
     }
 
 
@@ -411,6 +415,26 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     public void loadJSON(JSONObject jsonData, IScope scope) {
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
         _dataIndex = 0;
+    }
+
+    public void pointAtMyView() {
+        Log.d("ddd", "pointing");
+//        View pointAtView = findViewById(R.id.imageStimulus);
+        View pointAtView = mLetterHolder;
+
+        int[] screenCoord = new int[2];
+        pointAtView.getLocationOnScreen(screenCoord);
+
+        // Try getting actual x and y instead?
+
+        PointF targetPoint = new PointF(screenCoord[0] + pointAtView.getWidth()/2, screenCoord[1] + pointAtView.getHeight());
+
+        Intent msg = new Intent(TCONST.POINTAT);
+        msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
+
+        Log.d("ddd", "target: " + targetPoint.toString());
+        _bManager.sendBroadcast(msg);
+
     }
 
     public ConstraintLayout getContainer() {

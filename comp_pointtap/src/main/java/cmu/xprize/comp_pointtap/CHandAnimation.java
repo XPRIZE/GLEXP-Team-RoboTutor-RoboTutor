@@ -190,10 +190,11 @@ public class CHandAnimation extends PercentRelativeLayout implements Animator.An
                     break;
 
                 case TCONST.POINTAT:
-
+                    Log.d("ddd", "pointat: ");
                     _cancelAnimation = false;
 
                     if(!_inAnimation) {
+                        Log.d("ddd", "inanimation");
 
                         _inAnimation = true;
 
