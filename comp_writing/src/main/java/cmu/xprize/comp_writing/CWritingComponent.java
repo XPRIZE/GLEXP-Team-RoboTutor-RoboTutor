@@ -450,18 +450,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         int index = mGlyphList.indexOfChild(child);
 
-        // create a new view
-
-//        r = (CStimulusController)LayoutInflater.from(getContext())  //amogh commented to avoid removal from stimulus
-//                                    .inflate(R.layout.recog_resp_comp, null, false);   //amogh commented to avoid removal from stimulus
-////amogh commented to avoid removal from stimulus
-//        mRecogList.addView(r, index + inc);          //amogh commented to avoid removal from stimulus
-//
-//        r.setLinkedScroll(mDrawnScroll);         //amogh commented to avoid removal from stimulus
-//        r.setWritingController(this);          //amogh commented to avoid removal from stimulus
-
 //amogh added for adding a view to the response view also, and also to check if the letter
             boolean canInsert = checkInsert(mEditSequence, index + inc);
+
             if (canInsert){
                 r = (CStimulusController) LayoutInflater.from(getContext())
                         .inflate(R.layout.recog_resp_comp, null, false);
@@ -720,8 +711,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                             activateEditMode(); //amogh comment put in animator graph
                             publishFeature(_attemptFTR.get(0));
                             applyBehavior(WR_CONST.ON_ERROR);
-
-
 
                         }
                     }
@@ -1872,6 +1861,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public void inhibitWordInput(){
         mActiveWord.inhibitWordInput();
     }
+
     public void updateWordResponse(){
         mActiveWord.updateWordResponse();
     }
@@ -1927,6 +1917,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         int wordCount = 0;
         int letterIndex = 0;
         ArrayList<Integer> wordIndices = new ArrayList<>();
+        ArrayList<Boolean> correctIndices = new ArrayList<> ();
         String word = "";
 
         //iterate over all the characters of the source.
@@ -1937,6 +1928,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 //if the last letter and its not '-', include it in the word.
                 if(i == lengthSource - 1 && alignedSource.charAt(i) != '-') {
+                    if(alignedSource.charAt(i) == alignedTarget.charAt(i)){
+                        correctIndices.add(true);
+                    }
+                    else{
+                        correctIndices.add(false);
+                    }
                     word += alignedSource.charAt(i);
                     wordIndices.add(letterIndex);
                 }
@@ -1946,15 +1943,23 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 // do nothing when there is supposed to be a space insertion or replacement.(ie cases where there ought to be a space but there isn't)
                 else {}
                 ArrayList<Integer> copyWordIndices = (ArrayList<Integer>) wordIndices.clone();
-                Word w = new Word(wordCount, word, copyWordIndices);
+                ArrayList<Boolean> correctWordIndices= (ArrayList<Boolean>) correctIndices.clone();
+                Word w = new Word(wordCount, word, copyWordIndices, correctWordIndices);
                 listWords.add(w);
                 word = "";
                 wordCount++;
                 wordIndices.clear();
+                correctIndices.clear();
             }
 
             // when new word is not to be created, add the current letter to the new word when its not '-'
             else if(alignedSource.charAt(i) != '-'){
+                if(alignedSource.charAt(i) == alignedTarget.charAt(i)){
+                    correctIndices.add(true);
+                }
+                else{
+                    correctIndices.add(false);
+                }
                 word += alignedSource.charAt(i);
                 wordIndices.add(letterIndex);
             }
@@ -2100,6 +2105,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             this.attempt = 0;
         }
 
+        public Word(int index, String wordAnswer, ArrayList<Integer> listIndicesAnswer, ArrayList<Boolean> listCorrectStatus) {
+            this.index = index;
+            this.wordAnswer = wordAnswer;
+            this.listIndicesAnswer = listIndicesAnswer;
+            this.attempt = 0;
+            this.listCorrectStatus = listCorrectStatus;
+        }
+
         public String getWordAnswer(){
             return wordAnswer;
         }
@@ -2129,6 +2142,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     word += recChar;
                 }
                 return word;
+        }
+
+        public void evaluateLettersCorrectStatus(){
+
         }
 
         public boolean getWordCorrectStatus(){
