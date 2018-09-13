@@ -19,6 +19,7 @@ public interface IGlyphController {
     public void setItemGlyph(int index, int glyph);
     public void setWordIndex(int i); //amogh added
     public int getWordIndex(); //amogh added
+    public int getGlyphIndex();
 
     public void setExpectedChar(String sample);
     public String getExpectedChar();

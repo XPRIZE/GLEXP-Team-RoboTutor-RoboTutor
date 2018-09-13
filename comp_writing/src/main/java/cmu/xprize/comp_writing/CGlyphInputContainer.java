@@ -64,7 +64,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private boolean               _recPending = false;
     private int                   _recIndex;
     private boolean               _inhibit    = false;
-    protected int                 _respIndex;
 
     private IWritingComponent     mWritingComponent;
     private IGlyphController      mGlyphController;
@@ -388,10 +387,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         _isLast = isLast;
     }
 
-    public void setRespIndex(int index){
-        _respIndex = index;
-    }
-
     /**
      * This is used for the background when this is an ImageView
      *
@@ -541,7 +536,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                         _previousRecognisedChar = _recognisedChar; //saving the current recognised character before removing it.
                         erase();
                         _recognisedChar = "";
-                        CStimulusController resp = (CStimulusController)_responseView.getChildAt(_respIndex);
+                        CStimulusController resp = (CStimulusController)_responseView.getChildAt(this.getGlyphIndex());
                         resp.setStimulusChar("",false);
                         break;
                     }
@@ -1255,6 +1250,11 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         inhibitInput(false);
     }
 
+    public int getGlyphIndex(){
+        int index = mGlyphController.getGlyphIndex();
+        return index;
+    }
+
     public boolean getGlyphStarted() {
         return _touchStarted;
     }
@@ -1265,7 +1265,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             _userGlyph      =   _previousUserGlyph;
             _recognisedChar =   _previousRecognisedChar;
             _recognisedChar =   "";
-            CStimulusController resp = (CStimulusController)_responseView.getChildAt(_respIndex);
+            CStimulusController resp = (CStimulusController)_responseView.getChildAt(this.getGlyphIndex());
             resp.setStimulusChar(_previousRecognisedChar,false);
             invalidate();            _recognisedChar = _previousRecognisedChar;
 

@@ -1545,7 +1545,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 // Last is used for display updates - limits the extent of the baseline
                 v.setIsLast(i1 ==  mStimulus.length()-1);
-                v.setRespIndex(i1); //to remove the letter from the response when the glyph is removed by swiping on a glyph
                 //amogh comment - needs edits, need a proper computation function to be able to calculate the differences between the
                 //
 
@@ -1601,7 +1600,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 // Last is used for display updates - limits the extent of the baseline
                 v.setIsLast(i1 ==  mAnswer.length()-1);
-                v.setRespIndex(i1);
                 String expectedChar = mAnswer.substring(i1,i1+1);
 
                 v.setExpectedChar(expectedChar);

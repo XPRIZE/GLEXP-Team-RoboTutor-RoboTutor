@@ -194,7 +194,11 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         mGlyphInput.setIsLast(isLast);
     }
 
-    public void setRespIndex(int index){ mGlyphInput.setRespIndex(index);}
+
+    public int getGlyphIndex(){
+        int index = ((LinearLayout)this.getParent()).indexOfChild(this);
+        return index;
+    }
 
     public class insLSpaceClickListener implements View.OnClickListener {
         @Override
