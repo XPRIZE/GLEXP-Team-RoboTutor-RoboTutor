@@ -341,8 +341,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         int left = 0;
         //switch case sets the width, and the position of the box.
         switch (level){
+
             case 1:
+
                 break;
+
             case 2:
 
                 wid = w.getWidth();
@@ -358,6 +361,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 break;
 
             case 4:
+
                 break;
         }
 
@@ -380,8 +384,38 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     public void showHighlightBox(Integer level){
-        if (mActiveWord.getAttempt() > 0 ) {
-            showHighlightBox(level, mActiveWord);
+
+        //for sentence level, need to check if the first edit is inside a word or not.
+        if(activityFeature.contains("FTR_SEN_SEN")){
+
+            //find first edit, it can be R,I,D
+            EditOperation firstEditOperationSentence = getFirstEditOperation(mWrittenSentence, mAnswer);
+
+            //if inside a word, call highlightbox on the word
+            int editIndex = firstEditOperationSentence.getIndex();
+            int activeWordIndex = getActiveWordIndex(editIndex);
+
+            //if outside the word, highlight the error
+            if(activeWordIndex == -1){
+
+                //highlight the error according to if its insert, replace or delete
+                firstEditOperationSentence.showHighlightBox();
+            }
+
+            // if inside the word, simply follow what was happening at the word level
+            else{
+                Word firstEditWord = mListWordsInput.get(activeWordIndex);
+                if (firstEditWord.getAttempt() > 0 ) {
+                    showHighlightBox(level, firstEditWord);
+                }
+            }
+        }
+
+        //for word level
+        else{
+            if (mActiveWord.getAttempt() > 0 ) {
+                showHighlightBox(level, mActiveWord);
+            }
         }
     }
     //amogh added ends
@@ -724,8 +758,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 else if(mSentenceAttempts > 0){
 
                     //set the current active word, so that hesitation and feedback can be shown on this word.
-                    currentWordIndex = getActiveWordIndex(mActiveIndex);
-                    mActiveWord = mListWordsInput.get(currentWordIndex);
+                    currentWordIndex = getActiveWordIndex(mActiveIndex); // amogh comment, might need to handle the possibility of not being inside word.
+                    if (currentWordIndex != -1){
+                        mActiveWord = mListWordsInput.get(currentWordIndex);
+                    }
 
                     //check if allowed to write here
                     boolean canReplace = checkReplace(mEditSequence, mActiveIndex);
@@ -2247,10 +2283,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
 
         public int getFirstEditLeft(){
+            //since the first edit obtained here is wrt this word's start,
             EditOperation firstEdit = this.getFirstWordEditOperation();
             String firstEditOperation = firstEdit.toString();
-            int left = 0;
-            int firstEditIndex = this.getWordIndices().get(0) + firstEdit.getIndex();
+            int left = firstEdit.getLeft();
+            int firstEditIndex = listIndicesAnswer.get(0) + firstEdit.getIndex();
 
             // if insert at index i -> set the box left (centre of view at i-1); set the box right (centre of view at i).
             if(firstEditOperation.equals("I")){
@@ -2494,6 +2531,62 @@ public class EditOperation {
     }
 
     public char getPrevious(){return this.previous; }
+
+    public int getLeft(){
+
+        int left;
+        // if insert at index i -> set the box left (centre of view at i-1); set the box right (centre of view at i).
+        if(operation.equals("I")){
+            //amogh comment add the case when the index is not first or last.
+            left = (mResponseViewList.getChildAt(index - 1).getLeft() + mResponseViewList.getChildAt(index - 1).getRight())/2;
+            int right = (mResponseViewList.getChildAt(index).getLeft() + mResponseViewList.getChildAt(index).getRight())/2;
+//                int wid = right-left;
+        }
+
+        //if delete at index i -> set the box as left and right for the view at i
+        else if(operation.equals("D")){
+            left = mResponseViewList.getChildAt(index).getLeft();
+            int right = mResponseViewList.getChildAt(index).getRight();
+//                int wid = right-left;
+        }
+
+        //if replace at index i -> set the box as left and right for the view at i
+        else if(operation.equals("R")){
+            left = mResponseViewList.getChildAt(index).getLeft();
+            int right = mResponseViewList.getChildAt(index).getRight();
+//                int wid = right-left;
+        }
+
+        //if not insertion/deletion/replacement
+        else{
+            left = 0;
+        }
+
+        return left;
+    }
+
+    public void showHighlightBox(){
+        mHighlightErrorBoxView = new View (getContext());
+        int wid = mResponseViewList.getChildAt(0).getWidth();;
+        int left = this.getLeft();
+
+        //now that the width and the position of this box has been set, set its drawable and show for some time.
+        mHighlightErrorBoxView.setX((float)left);
+        mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid, 90));
+        mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
+        //        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
+        //        mp.setMargins(100,00,0,100);
+        //                mHighlightErrorBoxView.setX((float)300.00);
+        //        int pos = mResponseViewList.getChildAt(index+2).getLeft();
+        //        mHighlightErrorBoxView.setX(100);
+        //        mHighlightErrorBoxView.setLeft(1000);
+        mResponseScrollLayout.addView(mHighlightErrorBoxView);
+        mHighlightErrorBoxView.postDelayed(new Runnable() {
+            public void run() {
+                mHighlightErrorBoxView.setVisibility(View.GONE);
+            }
+        }, 2000);
+    }
 
 }
 
