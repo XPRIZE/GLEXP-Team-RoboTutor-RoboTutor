@@ -387,26 +387,27 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         //for sentence level, need to check if the first edit is inside a word or not.
         if(activityFeature.contains("FTR_SEN_SEN")){
+            if(mSentenceAttempts > 0) {
+                //find first edit, it can be R,I,D
+                EditOperation firstEditOperationSentence = getFirstEditOperation(mWrittenSentence, mAnswer);
 
-            //find first edit, it can be R,I,D
-            EditOperation firstEditOperationSentence = getFirstEditOperation(mWrittenSentence, mAnswer);
+                //if inside a word, call highlightbox on the word
+                int editIndex = firstEditOperationSentence.getIndex();
+                int activeWordIndex = getActiveWordIndex(editIndex);
 
-            //if inside a word, call highlightbox on the word
-            int editIndex = firstEditOperationSentence.getIndex();
-            int activeWordIndex = getActiveWordIndex(editIndex);
+                //if outside the word, highlight the error
+                if (activeWordIndex == -1) {
 
-            //if outside the word, highlight the error
-            if(activeWordIndex == -1){
+                    //highlight the error according to if its insert, replace or delete
+                    firstEditOperationSentence.showHighlightBox();
+                }
 
-                //highlight the error according to if its insert, replace or delete
-                firstEditOperationSentence.showHighlightBox();
-            }
-
-            // if inside the word, simply follow what was happening at the word level
-            else{
-                Word firstEditWord = mListWordsInput.get(activeWordIndex);
-                if (firstEditWord.getAttempt() > 0 ) {
-                    showHighlightBox(level, firstEditWord);
+                // if inside the word, simply follow what was happening at the word level
+                else {
+                    Word firstEditWord = mListWordsInput.get(activeWordIndex);
+//                    if (firstEditWord.getAttempt() > 0) {
+                        showHighlightBox(level, firstEditWord);
+//                    }
                 }
             }
         }
