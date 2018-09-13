@@ -391,9 +391,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 //find first edit, it can be R,I,D
                 EditOperation firstEditOperationSentence = getFirstEditOperation(mWrittenSentence, mAnswer);
 
-                //if inside a word, call highlightbox on the word
-                int editIndex = firstEditOperationSentence.getIndex();
-                int activeWordIndex = getActiveWordIndex(editIndex);
+                int activeWordIndex = getActiveWordIndexForEdit(firstEditOperationSentence);
 
                 //if outside the word, highlight the error
                 if (activeWordIndex == -1) {
@@ -940,6 +938,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
         return _hesitationNo;
     }
+
+    public void cancelAndResetHesitation(String promptName){
+        cancelPost(promptName);
+        resetHesitationFeature();
+    }
+
     //amogh added ends
 
     /**
@@ -1396,17 +1400,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
     }
 
-    //amogh added
-    public void updateResponseView(String a)
-    {
-        mResponseViewList.removeAllViews();
-        CStimulusController resp;
-        resp = (CStimulusController)LayoutInflater.from(getContext()).inflate(R.layout.recog_resp_comp, null, false);
-        resp.setStimulusChar(a,false);
-        mResponseViewList.addView(resp);
-        resp.setLinkedScroll(mDrawnScroll);
-        resp.setWritingController(this);
-    }
+
 
     /**
      * @param data
@@ -1633,13 +1627,17 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
     }
 
-    //************************************************************************
-    //************************************************************************
-    // Tutor Scriptable methods  Start
-
-
-    //amogh added
-    //functions to modify the indices in sentence correction activities
+    //amogh added (not used currently)
+    public void updateResponseView(String a)
+    {
+        mResponseViewList.removeAllViews();
+        CStimulusController resp;
+        resp = (CStimulusController)LayoutInflater.from(getContext()).inflate(R.layout.recog_resp_comp, null, false);
+        resp.setStimulusChar(a,false);
+        mResponseViewList.addView(resp);
+        resp.setLinkedScroll(mDrawnScroll);
+        resp.setWritingController(this);
+    }
 
     private void incrementCorrectionLists(int index){
         for (int i=0; i<deleteCorrectionIndices.size(); i++)
@@ -1899,16 +1897,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mActiveWord.inhibitWordInput();
     }
 
-    public void updateWordResponse(){
-        mActiveWord.updateWordResponse();
-    }
-    public int updateCurrentWordIndex(){
+    public int incrementCurrentWordIndex(){
         currentWordIndex++;
         return currentWordIndex;
-    }
-
-    public void updateLettersWordResponse(){
-        mActiveWord.updateLettersWordResponse();
     }
 
     public void updateSentenceResponse(Boolean sentenceStatus) {
@@ -1924,6 +1915,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             }
         }
     }
+
+    public void updateWordResponse(){
+        mActiveWord.updateWordResponse();
+    }
+
+    public void updateLettersWordResponse(){
+        mActiveWord.updateLettersWordResponse();
+    }
+
+
 
     //amogh added place for sentence level functions and ideas
     public class Sentence{
@@ -2012,7 +2013,45 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     //for sentence writing specifically
+
+    public int getActiveWordIndexForEdit(EditOperation e){
+
+        String operation = e.toString();
+        int editIndex = e.getIndex();
+
+        //check in each words indices.
+        for(int i = 0; i < mListWordsInput.size() ; i++){
+
+            //check if the index is present in any of the words in mListWords.
+            Word w = mListWordsInput.get(i);
+            boolean present;
+            ArrayList<Integer> ind = w.getWordIndices();
+
+            //check if the index at which the edit is to be made is inside the indices of one of the words
+            if(ind.contains(editIndex)){
+                present = true;
+            }
+            else{
+                present = false;
+            }
+
+            //if the edit is an insert, it is not inside a word if its at the first letter.
+            if(operation.equals("I")){
+                if(ind.get(0) == editIndex) present = false;
+            }
+
+            if (present){
+                return i;
+            }
+        }
+
+        //if index is not present in any of the words.
+        return -1;
+    }
+
     public int getActiveWordIndex(int index){
+
+        //used when user writes in an input container in sentence level feedback activity.
         for(int i = 0; i < mListWordsInput.size() ; i++){
             //check if the index is present in any of the words in mListWords.
             boolean present = mListWordsInput.get(i).isIndexInWord(index);
@@ -2020,6 +2059,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 return i;
             }
         }
+
         //if index is not present in any of the words.
         return -1;
     }
@@ -2091,7 +2131,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     public boolean checkInsert (StringBuilder editSequence, int index){
-        for (int i = 0; i <= index; i++){
+        for (int i = 0; i < index; i++){
             char c = editSequence.charAt(i);
             if (c == 'I'){
                 index++;
@@ -2591,7 +2631,8 @@ public class EditOperation {
 
 }
 
-    //amogh comment -> when cleaning the code, make sure that editoperations is removed and only strings are used.
+
+    //main function to get string edit distance.*
     public ArrayList computeEditsAndAlignedStrings(String string1, String string2) {
 
         ArrayList<EditOperation> listOperations = new ArrayList<EditOperation>();
@@ -2722,12 +2763,6 @@ public class EditOperation {
         results.add(bottomLineBuilder);
         results.add(ops);
         return results;
-    }
-
-
-    public void cancelAndResetHesitation(String promptName){
-        cancelPost(promptName);
-        resetHesitationFeature();
     }
 
 

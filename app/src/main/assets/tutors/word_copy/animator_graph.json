@@ -365,7 +365,7 @@
             // 1. word level feedback (the three things below and clearing the attempt index)
             {"name": "inhibit input for the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitWordInput", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD"},
             {"name": "update the response colors for each letter in word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateWordResponse", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD"},
-            {"name": "increment the current word index.", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateCurrentWordIndex", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD"},
+            {"name": "increment the current word index.", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "incrementCurrentWordIndex", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD"},
 
             //amogh comment - clearing attempt feature still holds for words - need to recheck for sentence writing
             {"name": "Clear attempt Index", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "CLEAR_ATTEMPT:String",  "features":""},
