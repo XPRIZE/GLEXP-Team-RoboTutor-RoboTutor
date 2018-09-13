@@ -436,6 +436,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             mGlyphList.removeViewAt(index);
             mResponseViewList.removeViewAt(index);
             updateSentenceEditSequence();
+            mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
+
         }
         else
         {
@@ -512,6 +514,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 v.setWritingController(this);
 
                 updateSentenceEditSequence();
+                mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
             }
             else{
                 //increase attempt number for the word or the sentence!
@@ -735,6 +738,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                             //update mEditSequence, mAlignedTarget, mTargetSource with the required changes and aligned source and target string builders
                             updateSentenceEditSequence();
+                            //initialising
                             mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
 
                             //increase the attempt number for the sentence (FTR_ATTEMPT_1 released)
@@ -773,10 +777,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         boolean responseEqualsTargetReplacement = mResponse.equals(getReplacementTargetString(mEditSequence, mActiveIndex));
                         if(responseEqualsTargetReplacement){
                             updateSentenceEditSequence();
-                            mWrittenSentence = getWrittenSentence();
+                            mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
 
                             //update the indices and text for words in mListWordsInput
-                            mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
 
                             // if this correct response makes the sentence correct,
                             boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
@@ -914,6 +917,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         // only publish attempt feature for first four attempts... next time will activate mercy rule
         if(hesitationNo <= 4)
             publishFeature(_hesitationFTR.get(hesitationNo-1));
+
 
         return hesitationNo;
     }
@@ -2067,7 +2071,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     //After some changes have been made, the word indices and the text would have been updated, but the attempts should remain the same.
     public ArrayList<Word> getUpdatedListWordsInput(ArrayList<Word> oldListWords, StringBuilder alignedSource, StringBuilder alignedTarget){
         ArrayList<Word> newListWords = getListWordsInputFromAlignedSentences(alignedSource,alignedTarget);
-        newListWords = oldListWords;
         for(int i = 0; i < oldListWords.size(); i++){
             newListWords.get(i).setAttempt(oldListWords.get(i).getAttempt());
         }
