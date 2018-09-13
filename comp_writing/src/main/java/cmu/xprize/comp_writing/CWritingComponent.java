@@ -2108,8 +2108,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     //to update the mEditSequence, mAlignedSourceSentence and mAlignedTargetSentence after every change
     public void updateSentenceEditSequence(){
-        String writtenSentence = getWrittenSentence();
-        ArrayList<StringBuilder> edits = computeEditsAndAlignedStrings(writtenSentence, mAnswer);
+        mWrittenSentence = getWrittenSentence();
+        ArrayList<StringBuilder> edits = computeEditsAndAlignedStrings(mWrittenSentence, mAnswer);
         mEditSequence = edits.get(2);
         mAlignedSourceSentence = edits.get(0);
         mAlignedTargetSentence = edits.get(1);
