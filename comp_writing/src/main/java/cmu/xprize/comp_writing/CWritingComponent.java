@@ -727,31 +727,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     //when the sentence has not been evaluated yet, evaluate on punctuation
                     if("!?.".contains(mResponse))
                     {
-                        mWrittenSentence = getWrittenSentence();
-
-                        // evaluated on end sentence punctuation, when the written sentence is correct: apply ON_CORRECT behavior
-                        boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
-                        if (writtenSentenceIsCorrect) {
-                            applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
-                        }
-
-                        //when the written sentence does not match the expected answer
-                        else{
-
-                            //update mEditSequence, mAlignedTarget, mTargetSource with the required changes and aligned source and target string builders
-                            updateSentenceEditSequence();
-                            //initialising
-                            mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
-
-                            //increase the attempt number for the sentence (FTR_ATTEMPT_1 released)
-                            mSentenceAttempts++;
-
-                            //make the buttons appear.
-                            activateEditMode(); //amogh comment put in animator graph
-                            publishFeature(_attemptFTR.get(0));
-                            applyBehavior(WR_CONST.ON_ERROR);
-
-                        }
+                        evaluateSentenceFirstTime();
                     }
                     //when correct, not end punctuation and attempts = 0, normal recognition only
                     else
@@ -950,6 +926,33 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         resetHesitationFeature();
     }
 
+    public void evaluateSentenceFirstTime(){
+        mWrittenSentence = getWrittenSentence();
+
+        // evaluated on end sentence punctuation, when the written sentence is correct: apply ON_CORRECT behavior
+        boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
+        if (writtenSentenceIsCorrect) {
+            applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
+        }
+
+        //when the written sentence does not match the expected answer
+        else{
+
+            //update mEditSequence, mAlignedTarget, mTargetSource with the required changes and aligned source and target string builders
+            updateSentenceEditSequence();
+            //initialising
+            mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
+
+            //increase the attempt number for the sentence (FTR_ATTEMPT_1 released)
+            mSentenceAttempts++;
+
+            //make the buttons appear.
+            activateEditMode(); //amogh comment put in animator graph
+            publishFeature(_attemptFTR.get(0));
+            applyBehavior(WR_CONST.ON_ERROR);
+
+        }
+    }
     //amogh added ends
 
     /**
@@ -2322,7 +2325,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             return left;
         }
 
-        //gets the first edit, although the index wrt its start point
+        //gets the first edit of the word, although the index wrt its start point
         public EditOperation getFirstWordEditOperation(){
             String sourceWord = this.getWrittenWordString();
             String targetWord = this.getWordAnswer();
