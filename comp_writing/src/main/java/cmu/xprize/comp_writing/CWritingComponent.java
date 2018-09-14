@@ -434,13 +434,23 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public void deleteItem(View child) {
         int index = mGlyphList.indexOfChild(child);
         boolean canDelete = checkDelete(mEditSequence, index);
+
         if(canDelete){
             mGlyphList.removeViewAt(index);
             mResponseViewList.removeViewAt(index);
             updateSentenceEditSequence();
             mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
 
+            //if the word is complete, release the ON_CORRECT feature.
+            String writtenActiveWord = mActiveWord.getWrittenWordString();
+            String writtenAnswerWord = mListWordsAnswer.get(currentWordIndex).getWordAnswer();
+            boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
+            if(writtenWordIsCorrect){
+                applyBehavior(WR_CONST.ON_CORRECT);
+            }
         }
+
+        //when cannot delete
         else
         {
             //code to increase attempt for a word or universally.
@@ -517,8 +527,18 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 updateSentenceEditSequence();
                 mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
+
+                //if the word is complete, release the ON_CORRECT feature.
+                String writtenActiveWord = mActiveWord.getWrittenWordString();
+                String writtenAnswerWord = mListWordsAnswer.get(currentWordIndex).getWordAnswer();
+                boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
+                if(writtenWordIsCorrect){
+                    applyBehavior(WR_CONST.ON_CORRECT);
+                }
             }
-            else{
+
+            //if cannot insert
+            else {
                 //increase attempt number for the word or the sentence!
             }
 
@@ -731,7 +751,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 else if(mSentenceAttempts > 0){
 
                     //set the current active word, so that hesitation and feedback can be shown on this word.
-                    currentWordIndex = getActiveWordIndex(mActiveIndex); // amogh comment, might need to handle the possibility of not being inside word.
+                    currentWordIndex = getActiveWordIndex(mActiveIndex);
                     if (currentWordIndex != -1){
                         mActiveWord = mListWordsInput.get(currentWordIndex);
                     }
@@ -757,9 +777,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                                 applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
                             }
 
-                            // if the response is correct, but there are more corrections to be made.
+                            // if the response is correct, but there are more corrections to be made, check if the word is correct, turn blue depending on what the attempt level of that sentence is.
                             else{
-                                //ask Professor Jack -> turn the letter blue?
+                                //check if the word written is correct and release ON_CORRECT. How to check that a word is written correctly? strings should match bw
+                                //not sure yet, but let's try to set the condition as the matching of strings in the mListWordsInput and mListWordsAnswer
+                                String writtenActiveWord = mActiveWord.getWrittenWordString();
+                                String writtenAnswerWord = mListWordsAnswer.get(currentWordIndex).getWordAnswer();
+                                boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
+                                if(writtenWordIsCorrect){
+                                    applyBehavior(WR_CONST.ON_CORRECT);
+                                }
                             }
                         }
 
@@ -2292,7 +2319,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             ArrayList<Integer> answerIndices = answerWord.getWordIndices();
 
             //check the letters in the words
-            boolean wordStringsEqual =getWrittenWordString().equals(answerWord.getWordAnswer());
+            boolean wordStringsEqual = getWrittenWordString().equals(answerWord.getWordAnswer());
             if(!wordStringsEqual) {
                 wordIsCorrect = false;
                 return false;
