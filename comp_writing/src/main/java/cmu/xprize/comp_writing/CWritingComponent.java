@@ -678,10 +678,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         evaluateSentenceWordLevel();
                         }
 
-                    //word is not correct and correctionAttempts = 0
+                    //word has not been evaluated ie correctionAttempts = 0 and not to be evaluated. -> just let the user write
                     else{
-                        attempts = updateAttemptFeature();
-                        applyBehavior(WR_CONST.ON_ERROR);
+//                        attempts = updateAttemptFeature();
+//                        applyBehavior(WR_CONST.ON_ERROR);
                     }
 
                 }
@@ -689,7 +689,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 //when incorrect attempt has been made on this word before
                 else if(attempts > 0){
 
-                    boolean currentWordStatus = mActiveWord.getInputWordCorrectStatus(currentWordIndex);
+                    boolean currentWordStatus = mActiveWord.updateInputWordCorrectStatus(currentWordIndex);
                     //when the replacement is valid, do nothing.
                     //when the written word is correct after a correction
                     if(currentWordStatus){
@@ -788,7 +788,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
 
-    //activating edit mode
+    //activating edit mode for sentence
     public void activateEditMode(){
         //make the buttons visible
         for (int i = 0; i < mGlyphList.getChildCount(); i++) {
@@ -933,12 +933,22 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
 
         else{
-            //when the sentence is not complete
+            //when data_item not completed.
             //see the index of all the words correct in succession, if correct, turn blue and inhibit input, if wrong, set as mActiveWord, currentWord Index, increase attempt level and disable going to future words.
             for(int i = 0; i < mListWordsInput.size(); i++){
                 Word inputWord = mListWordsInput.get(i);
+                boolean wordIsCorrect;
+
+                // so we don't evaluate the correct status everytime, check if the word has been set to correct before.
+                if(inputWord.getWordCorrectStatus()){
+                    wordIsCorrect = true;
+                }
+                else{
+                    wordIsCorrect = inputWord.updateInputWordCorrectStatus(i);
+                }
+
                 //if the word is correct update its color
-                if (inputWord.getInputWordCorrectStatus(i)){
+                if (wordIsCorrect){
                     //turn blue
                     inputWord.updateWordResponse();
                 }
@@ -947,9 +957,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 else{
                     currentWordIndex = i;
                     mActiveWord = inputWord;
-                    //increment the word's attempt level and release corresponding feature.
-                    mActiveWord.activateEditMode(); //put in animator graph
-                    updateAttemptFeature();
+                    //if this word has already been attempted(> 1 letter written), increment the word's attempt level and release corresponding feature.
+                    if(mActiveWord.getWrittenWordString().length() > 1){
+                        mActiveWord.activateEditMode(); //put in animator graph
+                        updateAttemptFeature();
+                    }
+
                     break;
                 }
             }
@@ -2268,7 +2281,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         }
 
-        public boolean getInputWordCorrectStatus(int index){
+        public boolean getWordCorrectStatus(){
+            return wordIsCorrect;
+        }
+
+        public boolean updateInputWordCorrectStatus(int index){
 
             //indices should be same and letters should be same
             Word answerWord = mListWordsAnswer.get(index);
@@ -2498,7 +2515,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         public void activateEditMode(){
             //make the buttons visible
-            for (int i = 0; i < listIndicesAnswer.size(); i++) {
+            for (int i : listIndicesAnswer) {
                 CGlyphController controller = (CGlyphController) mGlyphList.getChildAt(i);
                 controller.showDeleteSpaceButton(true);
                 controller.showInsLftButton(true);
