@@ -334,6 +334,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     // amogh added highlight box.
     //this is to show the highlight box at different levels for a given word (whole word / first edit) based on the level
 
+    //to be called by the animator graph
     public void showHighlightBox(Integer level, Word w){
 
         mHighlightErrorBoxView = new View (getContext());
@@ -383,6 +384,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }, 2000);
     }
 
+    //to be called by the animator graph
     public void showHighlightBox(Integer level){
 
         //for sentence level, need to check if the first edit is inside a word or not.
@@ -2304,6 +2306,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             return attempt;
         }
 
+        //gets the width of the word
         public int getWidth(){
             int leftLetterIndex = listIndicesAnswer.get(0);
             int left = mResponseViewList.getChildAt(leftLetterIndex).getLeft();
@@ -2312,11 +2315,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             int wid = right-left;
             return wid;
         }
+
+        //gets the left coordinate of the word
         public int getLeft(){
             int left = mResponseViewList.getChildAt(listIndicesAnswer.get(0)).getLeft();
             return left;
         }
 
+        //gets the first edit, although the index wrt its start point
         public EditOperation getFirstWordEditOperation(){
             String sourceWord = this.getWrittenWordString();
             String targetWord = this.getWordAnswer();
@@ -2324,6 +2330,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             return firstEdit;
         }
 
+        //gives the left coordinate of the first edit wrt the origin
         public int getFirstEditLeft(){
             //since the first edit obtained here is wrt this word's start,
             EditOperation firstEdit = this.getFirstWordEditOperation();
@@ -2381,6 +2388,30 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 v = (CGlyphController) mGlyphList.getChildAt(i1);
                 v.post(WR_CONST.RIPPLE_PROTO);
             }
+        }
+
+        public void showHighlightBox(){
+            mHighlightErrorBoxView = new View (getContext());
+
+            int wid = this.getWidth();
+            int left = this.getLeft();
+
+            //now that the width and the position of this box has been set, set its drawable and show for some time.
+            mHighlightErrorBoxView.setX((float)left);
+            mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid, 90));
+            mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
+            //        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
+            //        mp.setMargins(100,00,0,100);
+            //                mHighlightErrorBoxView.setX((float)300.00);
+            //        int pos = mResponseViewList.getChildAt(index+2).getLeft();
+            //        mHighlightErrorBoxView.setX(100);
+            //        mHighlightErrorBoxView.setLeft(1000);
+            mResponseScrollLayout.addView(mHighlightErrorBoxView);
+            mHighlightErrorBoxView.postDelayed(new Runnable() {
+                public void run() {
+                    mHighlightErrorBoxView.setVisibility(View.GONE);
+                }
+            }, 2000);
         }
     }
     //Word class ends
@@ -2523,6 +2554,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 mActiveWord.releaseFirstWordEditAudioFeatures();
 //            }
         }
+
     }
 
     //amogh added ends
