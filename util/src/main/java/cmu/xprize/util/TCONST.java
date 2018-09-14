@@ -875,4 +875,8 @@ public class TCONST {
     public static final String DEBUG_AUDIO_FILE = "DEBUG_AUDIO";
 
     public static final String PLACEMENT_TAG = "DEBUG_PLACEMENT";
+    public static final String MATH_PLACEMENT = "MATH_PLACEMENT";
+    public static final String MATH_PLACEMENT_INDEX = "MATH_PLACEMENT_INDEX";
+    public static final String WRITING_PLACEMENT = "WRITING_PLACEMENT";
+    public static final String WRITING_PLACEMENT_INDEX = "WRITING_PLACEMENT_INDEX";
 }

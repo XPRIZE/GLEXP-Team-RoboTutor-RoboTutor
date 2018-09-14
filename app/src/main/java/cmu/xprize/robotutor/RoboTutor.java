@@ -48,6 +48,7 @@ import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.ltkplus.IGlyphSink;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
+import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
 import cmu.xprize.robotutor.tutorengine.util.CrashHandler;
 import cmu.xprize.util.CDisplayMetrics;
@@ -70,11 +71,18 @@ import cmu.xprize.robotutor.tutorengine.CTutorAssetManager;
 import cmu.xprize.util.TTSsynthesizer;
 import edu.cmu.xprize.listener.ListenerBase;
 
+import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.LITERACY_MATRIX;
+import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.MATH_MATRIX;
+import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.SONGS_MATRIX;
+import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.STORIES_MATRIX;
+import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.UNKNOWN_MATRIX;
 import static cmu.xprize.util.TCONST.CODE_DROP_1_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.GRAPH_MSG;
+import static cmu.xprize.util.TCONST.MATH_PLACEMENT;
 import static cmu.xprize.util.TCONST.PROTOTYPE_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.QA_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.ROBOTUTOR_ASSET_PATTERN;
+import static cmu.xprize.util.TCONST.WRITING_PLACEMENT;
 
 
 /**
@@ -851,6 +859,54 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 .apply();
 
         return logSequenceId;
+    }
+
+
+    /**
+     * gets the stored data for each student based on STUDENT_ID.
+     * YYY if this is a student's first time logging in, use PLACEMENT
+     */
+    public static SharedPreferences getStudentSharedPreferences() {
+        // each ID name is composed of the STUDENT_ID plus the language i.e. EN or SW
+        String prefsName = "";
+        if(RoboTutor.STUDENT_ID != null) {
+            prefsName += RoboTutor.STUDENT_ID + "_";
+        }
+        prefsName += CTutorEngine.language;
+
+        //RoboTutor.logManager.postEvent_I(TAG, "Getting SharedPreferences: " + prefsName);
+        return RoboTutor.ACTIVITY.getSharedPreferences(prefsName, Context.MODE_PRIVATE);
+    }
+
+    /**
+     * Get the promotion mode the student is currently in
+     * @param matrix
+     * @return
+     */
+    public static String getPromotionMode(String matrix) {
+
+        SharedPreferences prefs = getStudentSharedPreferences();
+
+        boolean placement;
+        switch (matrix) {
+            case MATH_MATRIX:
+                placement = prefs.getBoolean(MATH_PLACEMENT, true);
+                break;
+
+            case LITERACY_MATRIX:
+                placement = prefs.getBoolean(WRITING_PLACEMENT, true);
+                break;
+
+            case STORIES_MATRIX:
+            case UNKNOWN_MATRIX:
+            case SONGS_MATRIX:
+            default:
+                placement = false;
+        }
+
+
+        return placement ? "PLACEMENT" : "PROMOTION";
+
     }
 }
 

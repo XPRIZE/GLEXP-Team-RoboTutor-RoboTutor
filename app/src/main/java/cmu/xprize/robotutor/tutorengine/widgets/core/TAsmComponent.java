@@ -161,6 +161,7 @@ public class TAsmComponent extends CAsm_Component implements ITutorObject, IData
         event.setTutorName(mTutor.getTutorName());
         Log.wtf("WARRIOR_MAN", mTutor.getTutorId());
         event.setTutorId(mTutor.getTutorId());
+        event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
         event.setLevelName(level);
         event.setTaskName(task);
         event.setProblemName(generateProblemName());

@@ -270,6 +270,7 @@ public class TCountXComponent extends CCountX_Component implements ITutorObject,
         event.setTutorName(tutorName);
         Log.wtf("WARRIOR_MAN", mTutor.getTutorId());
         event.setTutorId(mTutor.getTutorId());
+        event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
         event.setLevelName(level);
         event.setTaskName(task);
         if (mode == "placevalue"){

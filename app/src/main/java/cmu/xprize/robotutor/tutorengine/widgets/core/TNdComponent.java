@@ -241,6 +241,7 @@ public class TNdComponent extends CNd_Component implements ITutorObject, IDataSi
         event.setLanguage(CTutorEngine.language);
         event.setTutorName(mTutor.getTutorName());
         event.setTutorId(mTutor.getTutorId());
+        event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
         event.setProblemName(problemName);
         event.setProblemNumber(_dataIndex);
         event.setTotalProblemsCount(mTutor.getTotalQuestions());

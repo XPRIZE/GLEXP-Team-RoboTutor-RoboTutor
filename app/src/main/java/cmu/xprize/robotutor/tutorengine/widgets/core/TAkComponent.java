@@ -620,6 +620,7 @@ public class TAkComponent extends CAk_Component implements ITutorObject, IDataSi
         event.setTutorName(mTutor.getTutorName());
         Log.wtf("WARRIOR_MAN", mTutor.getTutorId());
         event.setTutorId(mTutor.getTutorId());
+        event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
         event.setLevelName(level);
         event.setTaskName(task);
         event.setProblemName(generateProblemName());

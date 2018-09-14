@@ -15,7 +15,6 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import cmu.xprize.comp_logging.CErrorManager;
-import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.comp_nd.ui.CNd_LayoutManager_BaseTen;
 import cmu.xprize.comp_nd.ui.CNd_LayoutManagerInterface;
 import cmu.xprize.util.ILoadableObject;
