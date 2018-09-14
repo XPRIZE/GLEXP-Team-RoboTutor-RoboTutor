@@ -673,31 +673,21 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     boolean nextWordStarted = previousController.getRecognisedChar().equals("") && !mActiveWord.isIndexInWord(mActiveIndex);
                     boolean isLastLetter = (mActiveIndex == mGlyphList.getChildCount() - 1);
                     if (nextWordStarted || isPunctuationDrawn || isLastLetter) {
-
-                        //get the current word and call update word correct status.
-                        boolean currentWordStatus = mActiveWord.getWordCorrectStatus();
-
-                        //word is correct and correctionAttempts = 0
-                        if(currentWordStatus){
-                            applyBehavior(WR_CONST.ON_CORRECT);
-                            //if the last word is correct then apply the next item behavior
-                            if (isLastLetter){
-                                applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
-                            }
+                        evaluateSentenceWordLevel();
                         }
 
-                        //word is not correct and correctionAttempts = 0
-                        else{
-                            attempts = updateAttemptFeature();
-                            applyBehavior(WR_CONST.ON_ERROR);
-                        }
+                    //word is not correct and correctionAttempts = 0
+                    else{
+                        attempts = updateAttemptFeature();
+                        applyBehavior(WR_CONST.ON_ERROR);
                     }
+
                 }
 
                 //when incorrect attempt has been made on this word before
                 else if(attempts > 0){
 
-                    boolean currentWordStatus = mActiveWord.getWordCorrectStatus();
+                    boolean currentWordStatus = mActiveWord.getInputWordCorrectStatus(currentWordIndex);
 
                     //when the written word is correct after a correction
                     if(currentWordStatus){
@@ -926,6 +916,45 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         resetHesitationFeature();
     }
 
+    public void evaluateSentenceWordLevel(){
+
+        mWrittenSentence = getWrittenSentence();
+        //update mEditSequence, mAlignedTarget, mTargetSource with the required changes and aligned source and target string builders
+        updateSentenceEditSequence();
+        //initialising
+        mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
+
+        // evaluated on end sentence punctuation, when the written sentence is correct: apply ON_CORRECT behavior
+        boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
+        if (writtenSentenceIsCorrect) {
+            applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
+        }
+
+        else{
+            //when the sentence is not complete
+            //see the index of all the words correct in succession, if correct, turn blue and inhibit input, if wrong, set as mActiveWord, currentWord Index, increase attempt level and disable going to future words.
+            for(int i = 0; i < mListWordsInput.size(); i++){
+                Word inputWord = mListWordsInput.get(i);
+                //if the word is correct update its color
+                if (inputWord.getInputWordCorrectStatus(i)){
+                    //turn blue
+                    inputWord.updateWordResponse();
+                }
+
+                //if the word is incorrect, update its color to red and increase attempt, set current word as this, inhibit others.
+                else{
+                    inputWord.updateWordResponse();
+                    inputWord.incAttempt();
+                    currentWordIndex = i;
+                    mActiveWord = inputWord;
+                    break;
+                }
+            }
+
+        }
+
+    }
+
     public void evaluateSentenceFirstTime(){
         mWrittenSentence = getWrittenSentence();
 
@@ -933,6 +962,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
         if (writtenSentenceIsCorrect) {
             applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
+
+            //update mEditSequence, mAlignedTarget, mTargetSource with the required changes and aligned source and target string builders
+            updateSentenceEditSequence();
+            //initialising
+            mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
         }
 
         //when the written sentence does not match the expected answer
@@ -2231,44 +2265,74 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         }
 
-        public boolean getWordCorrectStatus(){
-                listCorrectStatus = new ArrayList<>();
-                listHasGlyph = new ArrayList<>();
+        public boolean getInputWordCorrectStatus(int index){
 
-                //update the correct status and the status of having glyphs for the letters of this word
-                for (int i : listIndicesAnswer){
-//                    CStimulusController respController = (CStimulusController) mResponseViewList.getChildAt(i);
-                    CGlyphController g = (CGlyphController) mGlyphList.getChildAt(i);
-                    Boolean status = g.isCorrect();
-                    listCorrectStatus.add(status);
-                    listHasGlyph.add(g.hasGlyph());
+            //indices should be same and letters should be same
+            Word answerWord = mListWordsAnswer.get(index);
+            ArrayList<Integer> answerIndices = answerWord.getWordIndices();
+
+            //check the letters in the words
+            boolean wordStringsEqual =getWrittenWordString().equals(answerWord.getWordAnswer());
+            if(!wordStringsEqual) {
+                wordIsCorrect = false;
+                return false;
+            }
+
+            //check the position indices.
+            boolean isWordSizeSame = listIndicesAnswer.size() == answerIndices.size();
+            if(!isWordSizeSame){
+                wordIsCorrect = false;
+                return false;
+            }
+
+            for(Integer i: listIndicesAnswer) {
+                boolean answerContainsLetter = answerIndices.contains(i);
+                if(!answerContainsLetter){
+                    wordIsCorrect = false;
+                    return false;
                 }
-
-                    //evaluate the word's correct status
-                for(int i = 0; i < listCorrectStatus.size(); i++){
-
-                    //when not correct and glyph present -> set wordIsCorrect to false
-                    if (listCorrectStatus.get(i) == false && listHasGlyph.get(i)){
-                        wordIsCorrect = false;
-                        break;
-                    }
-
-                    //when correct and glyph present set wordIsCorrect to True.
-                    else if (listHasGlyph.get(i) && listCorrectStatus.get(i)){
-                        wordIsCorrect = true;
-                    }
-
-                    // for the remaining case(when the glyph is not present)
-                    else {
-                        return false;
-                    }
-                }
-
-                return wordIsCorrect;
-
-//            updateWordStimulus(); //amogh this is here only for debugging purposes, actually will be called from the animator graph
-//            inhibitWordInput(); // amogh added - this is here only for debugging purposes, actually will be called by the animator graph.
+            }
+            wordIsCorrect = true;
+            return true;
         }
+//        public boolean getWordCorrectStatus(){
+//                listCorrectStatus = new ArrayList<>();
+//                listHasGlyph = new ArrayList<>();
+//
+//                //update the correct status and the status of having glyphs for the letters of this word
+//                for (int i : listIndicesAnswer){
+////                    CStimulusController respController = (CStimulusController) mResponseViewList.getChildAt(i);
+//                    CGlyphController g = (CGlyphController) mGlyphList.getChildAt(i);
+//                    Boolean status = g.isCorrect();
+//                    listCorrectStatus.add(status);
+//                    listHasGlyph.add(g.hasGlyph());
+//                }
+//
+//                    //evaluate the word's correct status
+//                for(int i = 0; i < listCorrectStatus.size(); i++){
+//
+//                    //when not correct and glyph present -> set wordIsCorrect to false
+//                    if (listCorrectStatus.get(i) == false && listHasGlyph.get(i)){
+//                        wordIsCorrect = false;
+//                        break;
+//                    }
+//
+//                    //when correct and glyph present set wordIsCorrect to True.
+//                    else if (listHasGlyph.get(i) && listCorrectStatus.get(i)){
+//                        wordIsCorrect = true;
+//                    }
+//
+//                    // for the remaining case(when the glyph is not present)
+//                    else {
+//                        return false;
+//                    }
+//                }
+//
+//                return wordIsCorrect;
+//
+////            updateWordStimulus(); //amogh this is here only for debugging purposes, actually will be called from the animator graph
+////            inhibitWordInput(); // amogh added - this is here only for debugging purposes, actually will be called by the animator graph.
+//        }
 
         public void updateWordResponse(){
             boolean wordStatus = wordIsCorrect;
@@ -2292,6 +2356,18 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             for(int index : listIndicesAnswer){
                 CGlyphController glyphController = (CGlyphController) mGlyphList.getChildAt(index);
                 glyphController.inhibitInput(true);
+            }
+        }
+
+        public void inhibitOthers(){
+            for (int i = 0; i < mGlyphList.getChildCount(); i++){
+                CGlyphController glyphController = (CGlyphController) mGlyphList.getChildAt(index);
+                if(!listIndicesAnswer.contains(i)){
+                    glyphController.inhibitInput(true);
+                }
+                else{
+                    glyphController.inhibitInput(false);
+                }
             }
         }
 
